@@ -42,6 +42,10 @@ the recorded token streams match.
       --replay /tmp/agent-session-RUN/replay.txt \
       --candidate-env DS4_METAL_V41_BATCH_SHARED_OVERLAP=1
 
+`--order AB` is an exploratory screen; pair a promising result with `--order BA`
+using the same binary/shader hashes before treating it as balanced evidence.
+The default remains complete ABBA.
+
 Repeat `--candidate-env NAME=VALUE` to test a combination against a control
 with all those flags unset. Record single-factor studies before combinations.
 
