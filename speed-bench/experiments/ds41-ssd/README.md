@@ -626,3 +626,16 @@ restored hello is essentially flat at 4.049 to 4.029 s. Twelve-token turns
 0.573/0.844 to 0.532/0.798 s; six-token turns 0.308/0.355 to 0.286/0.326 s.
 Both fresh hello candidates beat both controls. Keep opt-in pending selection
 of the final tile size and complete-response checks. See agent-batch-overlap.json.
+
+## 37: wider selected tiles on the actual agent
+
+Tile128 permits all 38 hello tokens in one layer sweep. ABBA versus tile8:
+fresh prefill2.902->2.313s, restored4.435->3.781s. Including first decode:
+fresh2.970->2.390s (19.5%), restored4.525->4.043s (10.6%). Restored first
+decode increases from~0.09 to~0.26s, so the prefill-only gain overstates the
+response gain. Later12-token prefills0.686/0.955->0.544/0.843s; 6-token shape
+unchanged. Both hello candidates beat both controls. See agent-tile128-abba.json.
+
+Full snapshots with tile128, medium, shared overlap and all Engram experiment
+flags enabled match scalar at38/64/127/128/129/255 after2048+8decoded tokens.
+See tile128-state.txt. This is correctness evidence, not an attribution of speed.
