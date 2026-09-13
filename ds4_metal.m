@@ -17523,6 +17523,17 @@ static int ds4_gpu_stream_expert_cache_prepare_selected_batch(
         const uint32_t cache_budget =
             ds4_gpu_stream_expert_cache_configured_budget();
         uint32_t reserved_entries = g_stream_expert_cache_entry_count;
+        int32_t layer_ids[DS4_METAL_STREAM_EXPERT_CACHE_MAX_EXPERT];
+        const bool protect_layer = cache_budget >= n_total_expert &&
+            getenv("DS4_METAL_STREAMING_PREFILL_PROTECT_LAYER") != NULL;
+        if (protect_layer) {
+            for (uint32_t expert = 0; expert < n_total_expert; expert++)
+                layer_ids[expert] = (int32_t)expert;
+        }
+        /* Keep cached future-subtile experts until this layer is finished.
+         * No extra weights are loaded and the global budget remains fixed. */
+        const int32_t *protect_ids = protect_layer ? layer_ids : unique_ids;
+        const uint32_t n_protect = protect_layer ? n_total_expert : unique_count;
 
         for (uint32_t u = 0; u < unique_count; u++) {
             const uint32_t expert = (uint32_t)unique_ids[u];
@@ -17572,8 +17583,8 @@ static int ds4_gpu_stream_expert_cache_prepare_selected_batch(
                 ds4_gpu_stream_expert_cache_prepare_load_buffers(layer,
                                                                  expert,
                                                                  layer,
-                                                                 unique_ids,
-                                                                 unique_count,
+                                                                 protect_ids,
+                                                                 n_protect,
                                                                  gate_expert_bytes,
                                                                  down_expert_bytes,
                                                                  force_reuse,

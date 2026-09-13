@@ -878,3 +878,16 @@ model work33.728->34.002s (~0.8% slower). Individual decode samples overlap,
 and the second candidate prefill is slower. No robust end-to-end gain, so keep
 this experiment opt-in. See router-event-screen.json; do not promote based on
 the first candidate's apparent2% decode improvement.
+
+## 56: broad current-layer protection does not recover the regression
+
+DS4_METAL_STREAMING_PREFILL_PROTECT_LAYER initially protects every cached
+expert in the current layer during any selected batch load. No extra loads or
+budget growth. Combined with layer512, short-replay ABBA matches all phase
+logits and final state. Mean append prefill15.459->15.811s, decode18.581->18.580s;
+turn model work34.040->34.392s (~1.0% worse). Reads87.53->86.67GiB.
+
+This broad version also protects unused experts for single-batch short prompts,
+which is outside the intended future-subtile reuse case. Refine protection to
+only the duration of a selected multi-subtile layer sweep, then retest. Neither
+version is a default. See layer-pin-broad-screen.json.
