@@ -84,3 +84,13 @@ consumes 0.595s across 59 restored-process tokens; test disabling before pread.
 
 16 40-token ABBA ~2.9% faster, all logits equal. Real-agent ABBA running
 in /tmp/ds41-agent-early-abba. Keep shaders unchanged until it finishes.
+
+16 real-agent ABBA confirmed 3.7% fresh / 5.9% restored hello latency gain.
+Candidate for acceptance. 17 no-advice actual-agent ABBA running at
+/tmp/ds41-agent-noadvice-abba (existing rollback flag disables F_RDADVISE).
+18 Q8+BF16 kernel/API and synthetic test prepared; build running. Benchmark
+runners now snapshot all external Metal sources and SHA256 hashes as well
+as the executable, so later source edits cannot silently alter A/B subprocesses.
+
+17 complete: no-advice rejected, restored hello 7.9% slower. Keep advice.
+18 Q8 synthetic check running /tmp/ds41-q8-kernel.log; new code remains opt-in.

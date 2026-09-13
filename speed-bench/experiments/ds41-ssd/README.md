@@ -341,3 +341,22 @@ Actual-agent balanced trials follow; this remains opt-in pending stronger
 workload evidence. agent_abba.py fixes one executable across all eight agent
 processes and tests both fresh and restored system KV in ABBA order.
 See early-abba40.json.
+
+Real-agent ABBA confirms early loading: mean fresh hello 3.498 to 3.369 s
+(-3.7% latency), restored hello 5.005 to 4.709 s (-5.9%). Both candidates
+beat both controls in each hello condition. Later turns are broadly improved,
+with restored 12-token turns essentially flat. All runs use a fixed binary,
+private KV stores, default ctx=100000, and one output token. See agent-early-abba.json.
+
+## 17: omit selected-expert read-ahead advice (rejected)
+
+Actual-agent ABBA with `DS4_METAL_DISABLE_STREAMING_EXPERT_READAHEAD=1`:
+mean fresh hello 3.585 to 3.633 s, restored hello 5.041 to 5.441 s (7.9% slower).
+Both restored candidates were slower than both controls. Read-ahead overhead
+is real, but omitting it makes subsequent reads sufficiently slower to lose
+overall. Keep the existing default. See agent-noadvice-abba.json.
+
+The benchmark harness now copies all external Metal sources and records their
+SHA256 hashes, passing source overrides to every subprocess. This complements
+the fixed executable and allows later development without changing a running
+experiment's shaders.

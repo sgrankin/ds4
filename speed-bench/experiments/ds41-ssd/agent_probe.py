@@ -3,6 +3,7 @@
 import argparse, json, os
 from pathlib import Path
 import re, selectors, shutil, subprocess, time
+from snapshot_shaders import snapshot_shaders
 p=argparse.ArgumentParser()
 p.add_argument('output',type=Path)
 p.add_argument('--env',action='append',default=[],help='NAME=VALUE')
@@ -10,6 +11,7 @@ p.add_argument('--cache-gb',type=int)
 p.add_argument('--binary',default='./ds4-agent')
 a=p.parse_args(); a.output.mkdir(parents=True,exist_ok=False)
 binary=a.output.resolve()/'ds4-agent'; shutil.copy2(a.binary,binary)
+shaders=snapshot_shaders(a.output)
 cache=a.output.resolve()/'kv'; cache.mkdir()
 results=[]
 for mode in ['fresh','restored']:
@@ -18,6 +20,7 @@ for mode in ['fresh','restored']:
         if f.name!='sysprompt.kv': f.unlink()
     dest=a.output.resolve()/mode; dest.mkdir()
     env=os.environ.copy(); env['DS4_AGENT_CACHE_DIR']=str(cache)
+    env.update(shaders)
     for item in a.env:
         k,v=item.split('=',1); env[k]=v
     cmd=[str(binary),'--ssd-streaming','--non-interactive','-n','1',

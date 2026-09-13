@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+from snapshot_shaders import snapshot_shaders
 
 p = argparse.ArgumentParser()
 p.add_argument('output', type=Path)
@@ -32,6 +33,7 @@ a.output.mkdir(parents=True, exist_ok=False)
 # Every subprocess must use the same binary even if development continues.
 binary = a.output.resolve() / 'ds4-bench'
 shutil.copy2('./ds4-bench', binary)
+shaders = snapshot_shaders(a.output)
 reference = None
 results = []
 for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
@@ -39,6 +41,7 @@ for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
     dest.mkdir()
     env = os.environ.copy()
     env.pop(name, None)
+    env.update(shaders)
     if variant == 'candidate':
         env[name] = value
     env['DS4_METAL_GRAPH_PREFILL_PROFILE'] = '1'
