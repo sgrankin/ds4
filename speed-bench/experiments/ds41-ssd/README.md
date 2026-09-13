@@ -917,3 +917,34 @@ turn model34.067->34.344s (~0.8% slower). Both variants drift upward, but there
 is no evidence of a gain. Preserve this and the other non-winning runtime
 experiments in jj history, then restore the accepted runtime instead of leaving
 unused branches in the active code. See layer-pin-scoped-screen.json.
+
+Runtime cleanup: commit 4442d372 restores the accepted runtime from 8e8d7794.
+The wider-layer, router-event and layer-protection implementations described in
+52/55/56/58 are historical experiments, not active environment switches. Their
+implementation commits are 92e05db7, 0fb424f3, 25689657 and ec701a4a respectively.
+Benchmark runners and evidence remain in the current tree.
+
+## 59: read-ahead removal loses on restored interactive responses
+
+Complete-response ABBA (41/15/28 generated tokens per three-turn run, fresh and
+restored system KV) uses identical input/output token hashes throughout.
+Removing read-ahead changes mean summed response time:
+
+| Mode | Control | Advice off | Change |
+| --- | ---: | ---: | ---: |
+| Fresh | 8.222 s | 8.157 s | -0.8% |
+| Restored | 12.261 s | 12.623 s | +3.0% |
+
+Restored decode alone grows 6.574 -> 6.921 s (+5.3%). Both restored candidate
+runs are slower than both controls. This does not meet the objective of balanced
+agentic and interactive performance, despite the short replay's small gain.
+Keep read-ahead enabled; no full-session promotion run is warranted for the
+unconditional ablation. See noadvice-interactive.json. A future cache-state-aware
+policy would need independent evidence; it is not implemented here.
+
+Round outcome: a checked live task and reproducible working-session replay are
+now registered alongside the interactive benchmarks. All four new runtime
+experiments were committed separately and rejected on measured end-to-end time;
+the accepted runtime was restored and rebuilt. The read-ahead flag was an
+existing ablation, with this new result committed separately. No new runtime
+default is justified by this round. NEXT.md records the remaining hypotheses.
