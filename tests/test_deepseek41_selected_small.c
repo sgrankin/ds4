@@ -15,7 +15,9 @@ static void progress(void *ud, const char *event, int current, int total) {
     if (!strcmp(event, "prefill_display")) (*(unsigned *)ud)++;
 }
 int main(int argc, char **argv) {
-    if (argc != 3) { fprintf(stderr, "usage: %s MODEL PROMPT\n", argv[0]); return 2; }
+    if (argc < 3 || argc > 4) { fprintf(stderr, "usage: %s MODEL PROMPT [PREFIX]\n", argv[0]); return 2; }
+    const int initial_tokens = argc == 4 ? atoi(argv[3]) : 512;
+    if (initial_tokens < 1 || initial_tokens > 90000) return 2;
     int rc = 1;
     char err[256] = {0};
     FILE *fp = fopen(argv[2], "rb");
@@ -27,16 +29,16 @@ int main(int argc, char **argv) {
     ds4_engine_options opt = {.model_path = argv[1], .backend = DS4_BACKEND_METAL,
         .context_size = 100000, .ssd_streaming = true, .power_percent = 100};
     CHECK(ds4_engine_open(&e, &opt) == 0);
-    ds4_tokenize_text(e, text, &tokens); CHECK(tokens.len > 5127);
+    ds4_tokenize_text(e, text, &tokens); CHECK(tokens.len > initial_tokens + 48);
     CHECK(ds4_session_create(&s, e, 100000) == 0);
-    ds4_tokens prefix = tokens; prefix.len = 512;
+    ds4_tokens prefix = tokens; prefix.len = initial_tokens;
     CHECK(ds4_session_sync(s, &prefix, err, sizeof(err)) == 0);
     CHECK(ds4_session_save_snapshot(s, &initial, err, sizeof(err)) == 0);
     unsigned displays = 0;
     ds4_session_set_progress(s, progress, &displays);
     const int tails[] = {6, 8, 17, 40};
     for (size_t c = 0; c < sizeof(tails)/sizeof(tails[0]); c++) {
-        prefix.len = 512 + tails[c];
+        prefix.len = initial_tokens + tails[c];
         CHECK(unsetenv("DS4_METAL_V41_SELECTED_SMALL_PREFILL") == 0);
         CHECK(ds4_session_load_snapshot(s, &initial, err, sizeof(err)) == 0);
         displays = 0;

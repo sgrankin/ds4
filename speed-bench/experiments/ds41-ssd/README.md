@@ -442,3 +442,24 @@ Tails 6/8/17/40 after 512 tokens, each followed by eight decoded tokens, produce
 bit-identical complete snapshots. Within-process 40-token timing improves
 2.110 to 1.536 s, but cache warming favors the second run; balanced real-agent
 ABBA against early loading alone follows. See selected-small-state.txt.
+
+Actual-agent tiles versus early loading alone: fresh hello 3.346 to 3.425 s
+(slightly worse), restored hello 4.691 to 4.513 s (3.8% better). Fresh/restored
+12-token turns improve 0.922/1.177 to 0.787/1.033 s; 6-token turns improve
+0.392/0.472 to 0.350/0.387 s. Tile size/policy needs care: initial cache misses
+can outweigh the dense-kernel savings. See agent-small-vs-early.json.
+
+The same four tail/continuation snapshot checks also pass after a 2048-token
+prefix, exercising indexed attention. See selected-small-indexed-state.txt.
+
+## 23: batch the small tile's selected experts too (opt-in)
+
+`DS4_METAL_V41_SELECTED_SMALL_MOE=1`, with the small-prefill flag, enables
+the existing exact <=8-row shared/routed kernels and passes force_resident=false
+to the selected-address backend. Whole-layer prefills and multi-session callers
+retain force_resident=true. Only actual selected weights enter the cache.
+
+All four indexed-prefix tail/continuation snapshots match exactly. Warmed
+40-token comparison: scalar 2.021 s, batched selected MoE 1.068 s (within-process
+cache caveat applies). Actual-agent ABBA versus early loading alone follows.
+See selected-moe-state.txt.

@@ -41347,7 +41347,7 @@ static bool ds41_route_batch(ds41_gpu_graph *g, const ds4_model *m,
 
 static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
                            const ds4_layer_weights *l, uint32_t il, uint32_t count,
-                           bool shared_owner) {
+                           bool shared_owner, bool force_resident) {
     ds41_prefill_row *b = &g->batch;
     const uint64_t gate_row = routed_expert_row_bytes(l->ffn_gate_exps);
     const uint64_t down_row = routed_expert_row_bytes(l->ffn_down_exps);
@@ -41378,7 +41378,7 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
             gate_row * DS4_N_FF_EXP, gate_row, down_row * DS4_N_EMBD, down_row,
             DS4_N_EMBD, DS4_N_FF_EXP, DS4_N_EMBD, b->selected, b->route_weights,
             DS4_N_EXPERT, DS4_N_EXPERT_USED, DS4_SWIGLU_CLAMP_EXP, b->norm,
-            il, count, &mid_f16, true)) &&
+            il, count, &mid_f16, force_resident)) &&
         (!shared_owner || g->tp_rank != (il & 1u) ||
             ds4_gpu_add_tensor(b->routed, b->routed, b->shared, count * DS4_N_EMBD)) &&
         ds41_sum_partial_batch(g, b->routed, il, count);
@@ -41402,7 +41402,7 @@ static bool ds41_moe_exact_tiles(ds41_gpu_graph *g, const ds4_model *m,
             (uint64_t)rows * (width) * sizeof(float))) != NULL;
         DS41_PREFILL_ROWS(DS41_TILE_VIEW)
 #undef DS41_TILE_VIEW
-        if (ok) ok = ds41_moe_batch(&tile, m, l, il, rows, false);
+        if (ok) ok = ds41_moe_batch(&tile, m, l, il, rows, false, true);
 #define DS41_TILE_FREE(name, width) ds4_gpu_tensor_free(tile.batch.name);
         DS41_PREFILL_ROWS(DS41_TILE_FREE)
 #undef DS41_TILE_FREE
@@ -41845,7 +41845,9 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     const bool stage_profile = getenv("DS4_METAL_V41_STAGE_PROFILE") != NULL;
     const bool selected_small = ds41_selected_small_prefill(g, total_count);
     const bool exact_short = selected_small || ds41_exact_short_prefill(g, total_count);
-    const bool batch_moe = !exact_short && !getenv("DS4_METAL_DISABLE_V41_BATCH_MOE");
+    const bool batch_moe = (!exact_short || (selected_small &&
+        getenv("DS4_METAL_V41_SELECTED_SMALL_MOE"))) &&
+        !getenv("DS4_METAL_DISABLE_V41_BATCH_MOE");
     const bool batch_attention = !getenv("DS4_METAL_DISABLE_V41_BATCH_ATTN");
     const bool exact_moe = exact_short && !selected_small && batch_attention &&
         getenv("DS4_METAL_V41_EXACT_MOE_TILES");
@@ -42111,7 +42113,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
             }
             if (ok && (batch_moe || exact_moe)) {
                 ok = exact_moe ? ds41_moe_exact_tiles(g, m, &w->layer[il], il, count) :
-                    ds41_moe_batch(g, m, &w->layer[il], il, count, false);
+                    ds41_moe_batch(g, m, &w->layer[il], il, count, false, !selected_small);
                 if (ok) ok =
                     ds41_trace_row(g->batch.selected, DS4_N_EXPERT_USED, start, count, il, "3a-selected") &&
                     ds41_trace_row(g->batch.route_weights, DS4_N_EXPERT_USED, start, count, il, "3b-weights") &&
@@ -42317,7 +42319,7 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step_batch(ds41_gpu_graph *const *graphs
         if (ok) ok = ds41_sum_partial_batch(g, active.block, il, rows);
         if (ok) ok = ds4_gpu_dsv41_quantize(active.block, DS4_N_EMBD, rows, DS4_V41_BF16) &&
             ds41_after_attention_batch(&active, model, l, rows) &&
-            ds41_moe_batch(g, model, l, il, rows, shared_owner) &&
+            ds41_moe_batch(g, model, l, il, rows, shared_owner, true) &&
             (shared_owner ? ds4_gpu_tensor_copy(active.block, 0, active.routed, 0,
                 (uint64_t)rows * DS4_N_EMBD * sizeof(float)) :
                 ds4_gpu_add_tensor(active.block, active.routed, active.shared, rows * DS4_N_EMBD)) &&

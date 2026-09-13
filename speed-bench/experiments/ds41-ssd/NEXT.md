@@ -136,3 +136,20 @@ then validate final build/longtail/defaultactualagent.
 process only. Real-agent ABBA vsEARLY /tmp/ds41-agent-small-vs-early running.
 16min remain at16:56. If wins accept small+early with rollback and run actual
 defaults vs rollback; keep all other kernel/worker/cache tweaks opt-in.
+
+22 actualagent mixed freshhello, later6/12tokens clear10-18% improvement.
+23 selected small MoE extension prepared: explicit force_resident=false only
+inside selectedsmalltiles uses existing selected-address batch kernels; prior
+fullprefill and multi-session calls stay force_resident=true. Build running.
+At16:59 ~14minremain. Need indexedprefix2048 statecheck, evaluate23, accept
+conservative winning policy with rollback and verify actualdefaults.
+
+22 indexedprefix2048 tests all passed. 23 selected MoE indexedcheck running
+/tmp/ds41-selected-moe-check.log. ~12min remain at17:00; prioritize final
+acceptance and verification after this last experiment.
+
+23 indexedstate6/8/17/40 +8decodeall exact. Warm40t2.021->1.068s.
+Actualagent /tmp/ds41-agent-selected-moe running with baseEARLY=1,
+baseSMALL_MOE=1 (onlyaffectsselectedtiles), candidateSMALL_PREFILL=1.
+At17:01~11minremain. Acceptanceifclearwin, defaultvsrollbackABBA, then
+longtailnumericalregression andfinalnotes.
