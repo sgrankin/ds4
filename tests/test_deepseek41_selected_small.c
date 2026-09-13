@@ -36,10 +36,10 @@ int main(int argc, char **argv) {
     CHECK(ds4_session_save_snapshot(s, &initial, err, sizeof(err)) == 0);
     unsigned displays = 0;
     ds4_session_set_progress(s, progress, &displays);
-    const int tails[] = {6, 8, 17, 40};
+    const int tails[] = {2, 3, 4, 5, 6, 7, 8, 9, 17, 40};
     for (size_t c = 0; c < sizeof(tails)/sizeof(tails[0]); c++) {
         prefix.len = initial_tokens + tails[c];
-        CHECK(unsetenv("DS4_METAL_V41_SELECTED_SMALL_PREFILL") == 0);
+        CHECK(setenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS", "1", 1) == 0);
         CHECK(ds4_session_load_snapshot(s, &initial, err, sizeof(err)) == 0);
         displays = 0;
         double start = seconds();
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < 8; i++)
             CHECK(ds4_session_eval(s, tokens.v[prefix.len + i], err, sizeof(err)) == 0);
         CHECK(ds4_session_save_snapshot(s, &expected, err, sizeof(err)) == 0);
-        CHECK(setenv("DS4_METAL_V41_SELECTED_SMALL_PREFILL", "1", 1) == 0);
+        CHECK(unsetenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") == 0);
         CHECK(ds4_session_load_snapshot(s, &initial, err, sizeof(err)) == 0);
         displays = 0;
         start = seconds();
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
     rc = 0;
 done:
     if (fp) fclose(fp);
-    unsetenv("DS4_METAL_V41_SELECTED_SMALL_PREFILL");
+    unsetenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS");
     free(text); ds4_tokens_free(&tokens);
     ds4_session_snapshot_free(&initial); ds4_session_snapshot_free(&expected); ds4_session_snapshot_free(&actual);
     ds4_session_free(s); ds4_engine_close(e); return rc;

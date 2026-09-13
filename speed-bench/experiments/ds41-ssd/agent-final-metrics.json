@@ -1,0 +1,102 @@
+{
+  "prefill_ms": {
+    "fresh": {
+      "default": [
+        2917.119,
+        665.67,
+        323.448
+      ],
+      "rollback": [
+        3566.139,
+        961.782,
+        426.553
+      ]
+    },
+    "restored": {
+      "default": [
+        4417.251,
+        955.317,
+        346.927
+      ],
+      "rollback": [
+        5029.227,
+        1209.432,
+        487.018
+      ]
+    }
+  },
+  "post_prefill": [
+    {
+      "run": "0-control",
+      "mode": "fresh",
+      "prefill_to_first_output_ms": [
+        65.0,
+        69.0,
+        62.0
+      ]
+    },
+    {
+      "run": "0-control",
+      "mode": "restored",
+      "prefill_to_first_output_ms": [
+        104.0,
+        92.0,
+        70.0
+      ]
+    },
+    {
+      "run": "1-candidate",
+      "mode": "fresh",
+      "prefill_to_first_output_ms": [
+        72.0,
+        58.0,
+        67.0
+      ]
+    },
+    {
+      "run": "1-candidate",
+      "mode": "restored",
+      "prefill_to_first_output_ms": [
+        94.0,
+        108.0,
+        77.0
+      ]
+    },
+    {
+      "run": "2-candidate",
+      "mode": "fresh",
+      "prefill_to_first_output_ms": [
+        68.0,
+        78.0,
+        63.0
+      ]
+    },
+    {
+      "run": "2-candidate",
+      "mode": "restored",
+      "prefill_to_first_output_ms": [
+        99.0,
+        98.0,
+        76.0
+      ]
+    },
+    {
+      "run": "3-control",
+      "mode": "fresh",
+      "prefill_to_first_output_ms": [
+        66.0,
+        63.0,
+        65.0
+      ]
+    },
+    {
+      "run": "3-control",
+      "mode": "restored",
+      "prefill_to_first_output_ms": [
+        97.0,
+        111.0,
+        70.0
+      ]
+    }
+  ]
+}

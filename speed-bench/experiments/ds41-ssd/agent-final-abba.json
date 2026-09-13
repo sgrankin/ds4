@@ -1,0 +1,266 @@
+[
+  {
+    "variant": "control",
+    "runs": [
+      {
+        "mode": "fresh",
+        "system_kv_hit": false,
+        "turns": [
+          {
+            "prompt": 1859,
+            "cached": 0,
+            "suffix": 1859,
+            "rc": 0,
+            "ms": 14542.323
+          },
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 2955.012
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 656.938
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 309.58
+          }
+        ]
+      },
+      {
+        "mode": "restored",
+        "system_kv_hit": true,
+        "turns": [
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 4400.733
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 954.229
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 332.665
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "runs": [
+      {
+        "mode": "fresh",
+        "system_kv_hit": false,
+        "turns": [
+          {
+            "prompt": 1859,
+            "cached": 0,
+            "suffix": 1859,
+            "rc": 0,
+            "ms": 14300.343
+          },
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 3561.696
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 956.902
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 424.419
+          }
+        ]
+      },
+      {
+        "mode": "restored",
+        "system_kv_hit": true,
+        "turns": [
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 5009.513
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 1210.737
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 468.559
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "runs": [
+      {
+        "mode": "fresh",
+        "system_kv_hit": false,
+        "turns": [
+          {
+            "prompt": 1859,
+            "cached": 0,
+            "suffix": 1859,
+            "rc": 0,
+            "ms": 14250.467
+          },
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 3570.582
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 966.662
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 428.687
+          }
+        ]
+      },
+      {
+        "mode": "restored",
+        "system_kv_hit": true,
+        "turns": [
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 5048.941
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 1208.126
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 505.476
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "variant": "control",
+    "runs": [
+      {
+        "mode": "fresh",
+        "system_kv_hit": false,
+        "turns": [
+          {
+            "prompt": 1859,
+            "cached": 0,
+            "suffix": 1859,
+            "rc": 0,
+            "ms": 14358.771
+          },
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 2879.225
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 674.402
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 337.316
+          }
+        ]
+      },
+      {
+        "mode": "restored",
+        "system_kv_hit": true,
+        "turns": [
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 4433.769
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 956.405
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 361.189
+          }
+        ]
+      }
+    ]
+  }
+]

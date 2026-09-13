@@ -1,155 +1,94 @@
-# DS4.1 short-turn optimization notebook
+# DS4.1 SSD optimization handoff
 
-Updated 2026-09-13. Current round started 16:12:48 UTC; aim to work until about
-17:12:48 UTC, completing validation before stopping. Use jj; one commit per
-experiment. No concurrent GPU benchmarks. Metal execution and jj snapshotting
-need sandbox escalation, not sudo. User deferred vision reproduction.
+Round completed 2026-09-13, approximately 16:12:48-17:13 UTC. Final default
+agent ABBA, every short-tile numerical check, and both long-tail regressions
+passed. The agent and benchmark binaries are rebuilt. Use jj, one commit per
+experiment. Vision reproduction remains deferred until the user is at keyboard.
 
-## Actual user workload and current state
+## Current accepted behavior
 
-User's ad hoc ds4-agent test was "hello" and other short questions, with SSD
-streaming required. Prior 5000-token gains target a 904-token tail and do not
-address those short turns. Earlier scalar queue change helped 128-token appends
-about 9%. Actual earlier agent trace: 1907-token system prompt ~14.8 seconds;
-40-token message append ~3.8 seconds. A saved system KV avoids redoing the system
-prompt but does not itself populate the expert-weight cache.
+- Early selected-expert SSD loading overlaps shared-expert GPU computation.
+- Warm text appends below 256 remaining tokens use tiles of at most eight rows.
+  Exact dense/HC work and selected expert kernels are batched; attention retains
+  scalar causal order. These tiles never map or prefetch whole expert layers.
+- A backend capability query checks expert formats, cache capacity, address
+  kernels, and backend ablations. Unsupported cases retain scalar prefill.
+- Roll back both new defaults with DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS=1.
+- DS4_METAL_DISABLE_V41_SELECTED_SMALL_MOE=1 keeps scalar MoE inside tiles.
+- Explicit --prefill-chunk now controls DS4.1 allocation, memory estimation,
+  and admission independently of context, up to 8192 rows. Default unchanged.
+- Older accepted 768-1023-token exact tail sweeps remain enabled. Their rollback
+  is DS4_METAL_DISABLE_V41_EXACT_SHORT_PREFILL=1.
 
-Current accepted default f4d56dec: exact layer-major sweeps for 768-1023-token
-warm text tails with 8192-row prefill buffers, excluding resident-encoder mode,
-quality, imatrix and TP. 5000-token ABBA improved 68.8-70.5 to 88.6-90.0 tps.
-All logits and boundary continuation snapshots matched exactly. Rollback:
-DS4_METAL_DISABLE_V41_EXACT_SHORT_PREFILL=1. See README.md for experiments 01-12.
+## Final measured result on this machine
 
-## Working hypotheses, not established speedups
+M5 Max, 128 GiB, DeepSeek-V4.1-Flash-Q2.gguf, SSD streaming, agent ctx=100000.
+Final ABBA uses control=current defaults and candidate=short-optimization rollback.
+Fresh/restored system KV are separate processes. Three turns: hello, What is
+2 + 2?, hello, with one output token each to isolate short-prefill latency.
 
-1. Short-turn benchmark first: measure actual agent "hello" after a fresh system
-   prefill, after loading its saved KV, and after an active conversation. Record
-   absolute latency as well as tps. Distinguish KV state from expert-weight cache.
-2. Identify time spent in selected-expert SSD misses, GPU submission/drains,
-   Engram reads, and GPU kernels. Partial GPU utilization alone is not evidence
-   that fusion will improve wall time.
-3. Simple exact fusion: RMS norm + BF16 rounding; matrix output + BF16 rounding;
-   shared gate/up + activation + explicit rounding. Preserve every original
-   rounding boundary and reduction order, including inside fused kernels.
-4. KV publication: position rotation + quantization + direct cache write, removing
-   intermediate reads/copies where per-block quantization dependencies permit it.
-5. HC mixing/expansion/norm: other graph paths have fused kernels worth adapting,
-   but DS4.1 consumes the previous sublayer's mixer and has distinct BF16 rules.
-6. Small prefill batches that retain selected-expert streaming (not a complete
-   ~150 GiB full-layer sweep). Reuse input/weights and amortize dispatch, while
-   tracking how expert unions affect cache misses and causality.
-7. Decouple max context, prefill scratch capacity, and expert-cache budget.
-   Agent defaults to ctx=100000; DS4.1 picks prefill_cap from ctx (2048/4096/8192),
-   rather than independently honoring --prefill-chunk. Explore demand allocation
-   and explicit headroom; smaller buffers currently let the auto cache grow.
+| Condition | Prior path | New default |
+| --- | ---: | ---: |
+| Fresh hello, 38-token append | 3.566 s | 2.917 s |
+| Restored system KV hello | 5.029 s | 4.417 s |
+| Fresh/restored 12-token turn | 0.962/1.209 s | 0.666/0.955 s |
+| Fresh/restored 6-token turn | 0.427/0.487 s | 0.323/0.347 s |
 
-## Evidence and constraints
+Both default samples beat both rollback samples in every condition. First
+output after prefill remains about 60-110 ms, with no large decode penalty.
+System prefill itself is unchanged. Restoring system KV does not restore the
+expert-weight cache; this is why restored hello is slower than fresh-prefilled.
+Evidence: README.md experiments 13-24, agent-final-abba.json,
+agent-final-metrics.json, and final-small-state.txt.
 
-At ctx=100000, planned memory: KV/index 0.61 GiB, scratch 8.01 GiB, fixed weights
-9.37 GiB, experts 72.51 GiB, prefill reserve 7.12 GiB; total 97.61 GiB.
-Large-batch dense, attention and routed kernels differ numerically from scalar.
-Exact row projections + scalar attention + scalar MoE recover exact parity.
-Two-layer prefetch regressed; HC batching was context-dependent; eight-row MoE
-tiles in a full tail sweep regressed overall despite improving first decode.
-These opt-ins are not proof that all batching/fusion is unhelpful.
+## Validation and reproduction
 
-Use fixed input /tmp/ds41-prefill-input.c, from:
-  jj file show -r bd66c402 ds4.c > /tmp/ds41-prefill-input.c
-SHA256: 1776dbfed177ea14f3ce6cac1d8d0b1c1b44dfff2c2663769a9a5634aeec34e7
-Model: gguf/DeepSeek-V4.1-Flash-Q2.gguf. Machine: M5 Max, 128 GiB.
-run_abba.py snapshots the binary and requires matching full frontier logits.
-Use full continuation snapshots and per-step logits for changed arithmetic.
-Keep bulk logs under /tmp and durable summaries here. Update this notebook at
-experiment boundaries so a compaction can resume without losing decisions.
+Final tails 2/3/4/5/6/7/8/9/17/40 after a 2048-token indexed-attention prefix,
+each followed by eight decoded tokens, have byte-identical full continuation
+snapshots against rollback. Earlier kernel changes passed full per-step logits
+and complete snapshots; synthetic normalization/Q8 shape tests and all 65536
+Engram code/scale pairs passed. Tails 768 and 1023 plus eight decoded tokens
+also preserve complete snapshots exactly; see final-long-tail-state.txt.
 
-13 complete: actual short-agent baseline recorded in agent-short-baseline.json.
-Fresh hello 38 tokens=3.527s; restored system KV hello=4.954s; later 6-token
-turn=0.379/0.509s. Next: exact RMS norm+BF16 fusion. Cache override is
-DS4_AGENT_CACHE_DIR; marker protocol is on stderr, merged into stdout by probe.
+Commands from repo root:
 
-14 complete: cache64 first probe is inconclusive, no default change.
-15 in progress: fused weighted RMS norm+BF16, synthetic shapes/alias guards
-and full-model per-step logit/snapshot comparison before performance claims.
+    python3 speed-bench/experiments/ds41-ssd/agent_abba.py /tmp/NEW-DIR --candidate-env DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS=1
+    ./tests/test_deepseek41_selected_small gguf/DeepSeek-V4.1-Flash-Q2.gguf /tmp/ds41-prefill-input.c 2048
+    ./tests/test_deepseek41_exact_tail gguf/DeepSeek-V4.1-Flash-Q2.gguf /tmp/ds41-prefill-input.c
 
-15: synthetic and model parity passed; 40-token ABBA is flat (~13.1 tps).
-Actual agent norm probe in progress. Next experiment: move selected-expert
-readback/load initiation before shared-expert work, then flush shared GPU work
-while pending preads run. Reuse protected cache/pending-load APIs and consume
-the exact same selected IDs through the existing override.
+Do not run concurrent GPU benchmarks. Metal execution needs sandbox escalation,
+not sudo. jj mutations need escalation for its backing Git object store.
+agent_probe.py uses DS4_AGENT_CACHE_DIR to avoid the user's actual sessions.
+The ready marker is on stderr, merged into stdout by the harness. Runners copy
+the executable and all external Metal sources, recording shader hashes.
+Fixed input /tmp/ds41-prefill-input.c was extracted from commit bd66c402 ds4.c;
+SHA256 1776dbfed177ea14f3ce6cac1d8d0b1c1b44dfff2c2663769a9a5634aeec34e7.
 
-16 in progress: EARLY_EXPERT_LOAD starts exact selected reads before shared
-work, flushes shared kernels while I/O runs. Model check running. Norm actual
-agent probe also flat (3.614/5.027s hello); leave norm opt-in. Readahead advice
-consumes 0.595s across 59 restored-process tokens; test disabling before pread.
+## Experiments retained only as opt-ins
 
-16 40-token ABBA ~2.9% faster, all logits equal. Real-agent ABBA running
-in /tmp/ds41-agent-early-abba. Keep shaders unchanged until it finishes.
+- DS4_METAL_V41_FUSED_NORM: exact and ~30% faster microbenchmark; no agent gain.
+- DS4_METAL_V41_FUSED_Q8_BF16: exact, ~5% faster matrix microbenchmark; flat appends.
+- DS4_ENGRAM_DECODE_LUT: exact 256 KiB lookup; saves only ~0.02 ms per token.
+- DS4_METAL_V41_ASYNC_EXPERT_LOAD: worker-based loader slower than simple early load.
+- Smaller 64 GiB expert cache: inconclusive. No default budget change.
+- Smaller 2048-row scratch: 8.01 to 3.76 GiB, but auto expert cache grows from
+  72.51 to 76.50 GiB. Actual short-agent latency flat/slightly worse.
+- Disabling read-ahead advice: restored hello ~8% slower. Keep advice.
+- Older deeper prefetch, full-tail HC and MoE tiling results are in README.md.
 
-16 real-agent ABBA confirmed 3.7% fresh / 5.9% restored hello latency gain.
-Candidate for acceptance. 17 no-advice actual-agent ABBA running at
-/tmp/ds41-agent-noadvice-abba (existing rollback flag disables F_RDADVISE).
-18 Q8+BF16 kernel/API and synthetic test prepared; build running. Benchmark
-runners now snapshot all external Metal sources and SHA256 hashes as well
-as the executable, so later source edits cannot silently alter A/B subprocesses.
+## Remaining ideas, not established speedups
 
-17 complete: no-advice rejected, restored hello 7.9% slower. Keep advice.
-18 Q8 synthetic check running /tmp/ds41-q8-kernel.log; new code remains opt-in.
-
-18 synthetic/model parity passed; short-append ABBA /tmp/ds41-q8-abba40
-is running using frozen shaders. Next: honor explicit --prefill-chunk in
-DS41 allocation/admission/memory reports, then test 2048-row buffers with
-default 100000 context. Default cap should remain unchanged unless measured.
-
-18 complete: Q8 short-append ABBA flat (12.96 vs13.01tps mean), leave opt-in.
-19 --prefill-chunk wiring built; /tmp/ds41-chunk2048-abba40 running.
-Possible 20: tabulate exact Engram FP8+scale -> BF16 conversion (256 KiB LUT),
-exhaustively test all 65536 input pairs and rejection semantics, then profile.
-
-19 40-token logits equal; perf drifty. Chunk2048 scratch3.76GiB vs8.01,
-cache76.50GiB vs72.51, total97.36 vs97.61. Real-agent ABBA next.
-20 Engram LUT opt-in written; exhaustive CPU test running.
-
-19 complete: actual-agent chunk2048 flat fresh and slightly worse restored;
-keep default cap. Explicit --prefill-chunk fix retained.
-20 Engram LUT exhaustive 65536 cases passed, CPU row benchmark46.4ms->27.1ms
-for2000x24 rows; only ~0.02ms saved per token, leave opt-in. Model check now.
-21 ASYNC_EXPERT_LOAD reuses existing selected-event worker; committed router
-event before worker, shared encode overlaps route/load prep, joins worker on
-all exits, synchronous retry if cache entries require main-thread waits. Built.
-
-20 model parity passed too; no end-to-end claim, retained opt-in.
-21 async model check running /tmp/ds41-async-model-check.log.
-
-21 model parity passed. Direct actual-agent ASYNC vs EARLY ABBA running
-at /tmp/ds41-agent-async-vs-early, baseenv EARLY=1, candidate ASYNC=1.
-~21min remain in hour at16:51:35. Final acceptance should enable whichever
-loader wins, preserve a rollback, retest actual defaults and long-tail decode.
-
-21 complete: worker slower than simple early, keep worker opt-in.
-22 selected small tiles written: 2..8 rows, scalar attention+MoE arithmetic,
-batched exact dense+HC, skip all whole-layer mapping/read-ahead/cache seeding,
-row.streaming=true. Test tails6/8/17/40 +8decode snapshotparity beforebench.
-~18min remain at16:54:48. Need accept EARLY loader unless tiles supersede it,
-then validate final build/longtail/defaultactualagent.
-
-22 parity passed tails6/8/17/40 +8continuation; 40token2.11->1.536s within
-process only. Real-agent ABBA vsEARLY /tmp/ds41-agent-small-vs-early running.
-16min remain at16:56. If wins accept small+early with rollback and run actual
-defaults vs rollback; keep all other kernel/worker/cache tweaks opt-in.
-
-22 actualagent mixed freshhello, later6/12tokens clear10-18% improvement.
-23 selected small MoE extension prepared: explicit force_resident=false only
-inside selectedsmalltiles uses existing selected-address batch kernels; prior
-fullprefill and multi-session calls stay force_resident=true. Build running.
-At16:59 ~14minremain. Need indexedprefix2048 statecheck, evaluate23, accept
-conservative winning policy with rollback and verify actualdefaults.
-
-22 indexedprefix2048 tests all passed. 23 selected MoE indexedcheck running
-/tmp/ds41-selected-moe-check.log. ~12min remain at17:00; prioritize final
-acceptance and verification after this last experiment.
-
-23 indexedstate6/8/17/40 +8decodeall exact. Warm40t2.021->1.068s.
-Actualagent /tmp/ds41-agent-selected-moe running with baseEARLY=1,
-baseSMALL_MOE=1 (onlyaffectsselectedtiles), candidateSMALL_PREFILL=1.
-At17:01~11minremain. Acceptanceifclearwin, defaultvsrollbackABBA, then
-longtailnumericalregression andfinalnotes.
+1. Tune selected tile sizes and thresholds across cache budgets and contexts;
+   measure full response latency as well as prefill. Preserve scalar reductions.
+2. Further fuse shared gate/up and activation while preserving intermediate BF16
+   boundaries. Norm and Q8 results warn against trusting microbenchmarks alone.
+3. RoPE + quantization + direct KV cache writes, with block quantization rules intact.
+4. HC fusion must consume the previous sublayer's mixer in DS4.1, not the newly
+   computed mixer used by superficially similar graph helpers.
+5. Demand-allocate scratch or explicitly reserve headroom instead of automatically
+   giving every freed byte to expert cache. Explicit chunk control now works.
+6. Saved system-KV expert hints could warm likely weights while the user is idle;
+   include the warmup's startup/I/O cost, and never assume KV includes weights.
+7. Profile larger/long-running conversations, cache eviction and pread concurrency.
+8. Reproduce the user's original vision-enabled slowdown and session-save issue
+   interactively next time. No vision experiment was run in this round.

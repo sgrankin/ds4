@@ -463,3 +463,51 @@ All four indexed-prefix tail/continuation snapshots match exactly. Warmed
 40-token comparison: scalar 2.021 s, batched selected MoE 1.068 s (within-process
 cache caveat applies). Actual-agent ABBA versus early loading alone follows.
 See selected-moe-state.txt.
+
+Actual-agent ABBA confirms selected MoE batching: mean fresh hello 3.438 to
+2.873 s (16.4% lower latency than early loading alone), restored hello 4.717
+to 4.465 s (5.3% lower). Later 12-token turns improve 0.889/1.138 to
+0.696/0.952 s; 6-token turns 0.397/0.469 to 0.314/0.344 s. Both hello
+candidates beat both controls. See agent-selected-moe.json.
+
+## 24: accept early loading and exact selected-expert short batches
+
+The defaults now start selected SSD loads before shared-expert GPU work and
+use <=8-row exact tiles for short warm text appends. Selected expert batches
+reuse the existing address kernels. A backend capability query checks expert
+formats, cache capacity, pipeline availability, and backend ablation settings;
+unsupported configurations retain scalar prefill. Quality, imatrix, image-bearing
+and multi-rank sessions retain their previous path.
+
+Rollback both changes with `DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS=1`.
+`DS4_METAL_DISABLE_V41_SELECTED_SMALL_MOE=1` separately keeps scalar MoE
+inside tiles for diagnosis. The earlier enable flags were experiment controls;
+use the rollback flag to compare current defaults. Kernel norm/Q8 fusion,
+Engram lookup conversion, and worker-based loads remain opt-in. Cache budget,
+prefill-buffer defaults, and read-ahead advice remain unchanged.
+
+Final real-agent ABBA (control=current default, candidate=rollback), fixed
+binary and shaders, SSD streaming, ctx=100000, isolated caches, three short
+turns with one output token each:
+
+| Condition | Prior path | New default | Latency reduction |
+| --- | ---: | ---: | ---: |
+| Fresh hello, 38-token append | 3.566 s | 2.917 s | 18.2% |
+| Restored system KV hello | 5.029 s | 4.417 s | 12.2% |
+| Fresh 12-token turn | 0.962 s | 0.666 s | 30.8% |
+| Restored 12-token turn | 1.209 s | 0.955 s | 21.0% |
+| Fresh 6-token turn | 0.427 s | 0.323 s | 24.2% |
+| Restored 6-token turn | 0.487 s | 0.347 s | 28.8% |
+
+Both default samples beat both rollback samples in every short-turn condition.
+Post-prefill to first output stays in the same ~60-110 ms range, with no hidden
+second-scale first-decode penalty. System-prompt prefill itself is essentially
+unchanged. See agent-final-abba.json and agent-final-metrics.json.
+
+Final numerical regression: tails 2/3/4/5/6/7/8/9/17/40 after a 2048-token
+prefix, followed by eight decoded tokens each, have bit-identical complete
+continuation snapshots against rollback. See final-small-state.txt. The prior
+768- and 1023-token tail sweeps, each followed by eight decoded tokens, also
+remain byte-identical to scalar execution (final-long-tail-state.txt). Both
+ds4-agent and ds4-bench are rebuilt; whitespace checks pass. The round ran from
+16:12:48 to approximately 17:13 UTC on 2026-09-13, with one commit per experiment.

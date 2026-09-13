@@ -378,6 +378,9 @@ int ds4_gpu_stream_expert_cache_seed_selected(
         const ds4_gpu_stream_expert_table *table,
         const int32_t                     *selected_ids,
         uint32_t                           n_selected);
+/* Whether a selected-only batch can run without binding full expert tensors. */
+int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
+        uint32_t used, uint32_t gate_type, uint32_t down_type);
 int ds4_gpu_stream_expert_cache_begin_selected_load(
         const ds4_gpu_stream_expert_table *table,
         const int32_t                     *selected_ids,
