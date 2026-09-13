@@ -1,0 +1,66 @@
+Separate diagnostic run, not a performance trial.
+Command: python3 /tmp/ds41-profile-session.py /tmp/ds41-session-cpu-profile
+  DS4_METAL_CB_TIMES=1 DS4_REPLAY_PROFILE_MEMORY=1
+  DS4_METAL_STREAMING_EXPERT_TIMING_SUMMARY=1
+Own replay process sampled for3 seconds during first72-token decode burst.
+Full raw sample: /tmp/ds41-session-cpu-profile/sample.txt.
+
+Main thread1377 samples:922 (~67%) at ds41_moe router end_commands boundary,
+including883 waiting for current/pending Metal command buffers.149 (~11%)
+in routed MoE, mostly waiting for pending selected SSD reads.101 (~7%) in
+begin_selected_load, mostly F_RDADVISE fcntl calls; victim scanning is smaller.
+These waits include real GPU work; they do not prove67% removable overhead.
+Sampling/logging is intrusive: this burst took5.095s versus about4.02s unprofiled.
+Use ordinary ABBA for speed claims. No sudo was needed for targeted sampling.
+
+Selected main-thread evidence:
+    1377 Thread_3250079   DispatchQueue_1: com.apple.main-thread  (serial)
+    + 1377 start  (in dyld) + 6688  [0x1917a3e80]
+    +   1377 main  (in replay) + 1520  [0x104f013d0]  replay.c:76
+    +     1377 ds4_session_eval_probe_tp  (in replay) + 172  [0x104f59890]  ds4.c:72080
+    +       1377 ds4_session_eval_internal  (in replay) + 428  [0x104fd86dc]  ds4.c:71939
+    +         1219 ds41_graph_step  (in replay) + 1256  [0x104f6a460]  ds4.c:40316
+    +         ! 1187 ds41_graph_layer  (in replay) + 120  [0x104f6aab0]  ds4.c:40175
+    +         ! : 922 ds41_moe  (in replay) + 1968  [0x104f6c850]  ds4.c:39787
+    +         ! : | 922 ds4_gpu_end_commands  (in replay) + 128  [0x105021a84]  ds4_metal.m:11440
+    +         ! : |   705 ds4_gpu_finish_command_buffer  (in replay) + 132  [0x10501beb0]  ds4_metal.m:1571
+    +         ! : |   + 705 ds4_gpu_wait_command_buffer  (in replay) + 48  [0x10501a830]  ds4_metal.m:1347
+    +         ! : |   +   705 -[_MTLCommandBuffer waitUntilCompleted]  (in Metal) + 80  [0x19e851c4c]
+    +         ! : |   +     705 _pthread_cond_wait  (in libsystem_pthread.dylib) + 980  [0x191b7a1d0]
+    +         ! : |   +       705 __psynch_cvwait  (in libsystem_kernel.dylib) + 8  [0x191b3850c]
+    +         ! : |   179 ds4_gpu_finish_command_buffer  (in replay) + 116  [0x10501bea0]  ds4_metal.m:1570
+    +         ! : |   + 178 ds4_gpu_wait_pending_command_buffers  (in replay) + 168  [0x10501cf0c]  ds4_metal.m:1553
+    +         ! : |   + ! 178 ds4_gpu_wait_command_buffer  (in replay) + 48  [0x10501a830]  ds4_metal.m:1347
+    +         ! : |   + !   178 -[_MTLCommandBuffer waitUntilCompleted]  (in Metal) + 80  [0x19e851c4c]
+    +         ! : |   + !     178 _pthread_cond_wait  (in libsystem_pthread.dylib) + 980  [0x191b7a1d0]
+    +         ! : |   + !       178 __psynch_cvwait  (in libsystem_kernel.dylib) + 8  [0x191b3850c]
+    +         ! : |   + 1 ds4_gpu_wait_pending_command_buffers  (in replay) + 244  [0x10501cf58]  ds4_metal.m:1555
+    +         ! : |           1 __psynch_cvwait  (in libsystem_kernel.dylib) + 8  [0x191b3850c]
+    +         ! : 101 ds41_moe  (in replay) + 2020  [0x104f6c884]  ds4.c:39790
+    +         ! : | 39 ds4_gpu_stream_expert_cache_begin_selected_load  (in replay) + 2544  [0x105026ddc]  ds4_metal.m:16626
+    +         ! : | + 39 ds4_gpu_stream_expert_readahead_range  (in replay) + 292  [0x105027e40]  ds4_metal.m:13193
+    +         ! : | +   39 fcntl  (in libsystem_kernel.dylib) + 88  [0x191b35758]
+    +         ! : | +     39 __fcntl  (in libsystem_kernel.dylib) + 8  [0x191b358b8]
+    +         ! : | 24 ds4_gpu_stream_expert_cache_begin_selected_load  (in replay) + 2504  [0x105026db4]  ds4_metal.m:16622
+    +         ! : | + 23 ds4_gpu_stream_expert_readahead_range  (in replay) + 292  [0x105027e40]  ds4_metal.m:13193
+    +         ! : | + ! 23 fcntl  (in libsystem_kernel.dylib) + 88  [0x191b35758]
+    +         ! : | + !   23 __fcntl  (in libsystem_kernel.dylib) + 8  [0x191b358b8]
+    +         ! : | + 1 ds4_gpu_stream_expert_readahead_range  (in replay) + 68  [0x105027d60]  ds4_metal.m:13176
+    +         ! : | +   1 getenv  (in libsystem_c.dylib) + 64  [0x191a01f48]
+    +         ! : | +     1 __findenv_locked  (in libsystem_c.dylib) + 20  [0x191a01f88]
+    +         ! : | 19 ds4_gpu_stream_expert_cache_begin_selected_load  (in replay) + 2532  [0x105026dd0]  ds4_metal.m:16624
+    +         ! : | + 19 ds4_gpu_stream_expert_readahead_range  (in replay) + 292  [0x105027e40]  ds4_metal.m:13193
+    +         ! : | +   19 fcntl  (in libsystem_kernel.dylib) + 88  [0x191b35758]
+    +         ! : | +     19 __fcntl  (in libsystem_kernel.dylib) + 8  [0x191b358b8]
+    +         ! : | 12 ds4_gpu_stream_expert_cache_begin_selected_load  (in replay) + 2824  [0x105026ef4]  ds4_metal.m:16642
+    +         ! : | + 11 ds4_gpu_stream_expert_cache_prepare_load_buffers  (in replay) + 572  [0x105028108]  ds4_metal.m:15817
+    +         ! : | + ! 11 ds4_gpu_stream_expert_cache_take_reusable  (in replay) + 392  [0x10507efb4]  ds4_metal.m:15372
+    +         ! : | + !   6 ds4_gpu_stream_expert_cache_take_reusable  (in replay) + 824,832,...  [0x10507f164,0x10507f16c,...]  ds4_metal.m:15383
+    +         ! : | + !   4 ds4_gpu_stream_expert_cache_take_reusable  (in replay) + 808,628  [0x10507f154,0x10507f0a0]  ds4_metal.m:15379
+    +         ! : | + !   1 ds4_gpu_stream_expert_cache_take_reusable  (in replay) + 880  [0x10507f19c]  ds4_metal.m:15388
+    +         ! : | + 1 ds4_gpu_stream_expert_cache_prepare_load_buffers  (in replay) + 648  [0x105028154]  ds4_metal.m:15833
+    +         ! : | +   1 objc_storeStrong  (in libobjc.A.dylib) + 60  [0x1916fccdc]
+    +         ! : | +     1 objc_retain  (in libobjc.A.dylib) + 0  [0x1916f74d4]
+    +         ! : | 3 ds4_gpu_stream_expert_cache_begin_selected_load  (in replay) + 3400  [0x105027134]  ds4_metal.m:16707
+    +         ! : | + 3 ds4_gpu_stream_expert_pread_pool_begin  (in replay) + 296  [0x1050289c4]  ds4_metal.m:13529
+    +         ! : | +   3 pthread_cond_broadcast  (in libsystem_pthread.dylib) + 700  [0x191b75094]

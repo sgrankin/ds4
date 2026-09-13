@@ -853,3 +853,13 @@ miss rate. A follow-up protects cached current-layer experts for later subtiles;
 it is a separate opt-in experiment and remains unmeasured at this point.
 See session-layer512-abba.json. The control model timings closely reproduce the
 live session (94.280s prefill,196.339s decode), validating the replay's fidelity.
+
+## 54: targeted decode profiling
+
+A separate3-second sample during the replay's first decode burst finds most
+main-thread samples at router command-buffer completion, followed by waiting
+for selected SSD reads and F_RDADVISE calls. Victim scanning is a smaller cost.
+This is attribution, not removable-time accounting: Metal waits include actual
+GPU work, and tracing measurably perturbs this short run. See decode-profile.txt.
+A router-event experiment is next; a fixed-input recheck of read-ahead advice
+may also be worthwhile, because earlier advice tests used varying timestamps.
