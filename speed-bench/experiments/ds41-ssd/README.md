@@ -609,3 +609,12 @@ row counts. Full-model exactness still must be verified. The snapshot test now
 accepts DS4_TEST_EXPERT_CACHE_GB=4..96 so the same continuation checks can force
 cache reuse/eviction instead of only exercising the default 72.5 GiB cache.
 No new runtime defaults. Build succeeds; tests are queued after overlap ABBA.
+
+## 35: reclaimable OS caching of sparse Engram reads (opt-in)
+
+DS4_ENGRAM_FILE_CACHE=1 opens the Engram descriptor with F_NOCACHE disabled,
+while keeping automatic read-ahead disabled. This permits reclaimable OS file
+cache pages; it does not allocate or map a whole table or change the pinned
+expert budget. Potential benefit is repeated sparse rows, with potential file
+cache pressure in longer conversations. The default stays uncached. Existing
+Engram tests, including errors and changed file bytes, pass with the option.
