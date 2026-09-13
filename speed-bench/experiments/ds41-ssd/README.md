@@ -1024,3 +1024,22 @@ This is a free-future-information architectural bound, not a deployed speedup
 or a promise for a learned predictor. Prefill regressions are included in the
 overall number. See oracle-combined-full.json. The next full comparison retains
 per-layer validation to isolate the opportunity for prefetch alone.
+
+## 64: full-session prefetch-only oracle isolates a 12.9% decode opportunity
+
+Immediately after experiment63's final A, run BBA with the same frozen binary,
+shaders, model, tokens, route recording and control environment. Reusing that
+preceding control forms a second ABBA. complete_abba.py validates those identities
+and numerical hashes; the shared A is not an additional independent observation.
+
+Mean append prefill93.918 ->93.997s (+0.08%), decode198.199 ->172.594s (-12.9%),
+turn inference292.117 ->266.592s (-8.7%,25.5s saved). Both B decode samples are
+essentially identical and faster than both controls. Exact native routing checks,
+phase logits and final snapshots pass. This retains per-layer CPU route validation;
+it is the more relevant free-prediction bound for the current pre-attention
+loader. A real predictor adds computation, readback, errors, cache pollution and
+wasted reads. Deeper lookahead with different queues is outside this bound.
+
+See oracle-preattention-full.json, its comparison and provenance files. The
+stronger combined oracle in63 also changes the routing synchronization schedule;
+do not attribute its entire19.7% session gain to a conventional predictor.
