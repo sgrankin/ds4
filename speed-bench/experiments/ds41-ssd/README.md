@@ -797,3 +797,17 @@ also gives a whole5000-token prefill comparison: controls54.302/53.796s
 (92.08/92.94tps), selected tiles43.714/43.882s (114.38/113.94tps).
 That saves about10.25s overall, roughly23% higher throughput. This is a fixed
 5000-token benchmark, not the short agent or the complete-response measurement.
+
+## 50: final warmed fixed-input short-agent ABBA
+
+Final rebuilt binary, defaults versus DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES.
+All four trials complete; actual input and output token hashes match. Control
+is the new default, candidate the previous policy. Mean prefill (old -> new):
+fresh hello2.861->2.319s, restored hello4.421->3.697s; fresh/restored12-token
+turn0.649/0.929->0.536/0.828s. Six-token turns are flat within run variation.
+First-output response fresh hello2.930->2.399s, restored4.517->3.920s, so the
+restored first-decode penalty reduces but does not erase the first-turn gain.
+This warmed repeat avoids the earlier fresh-control outlier and suggests about
+19%/16% less hello prefill time, rather than relying on the earlier28% estimate.
+These one-output-token measurements isolate startup-to-first-token behavior;
+experiment48 measures naturally completed answers. See agent-final-warmed-abba.json.
