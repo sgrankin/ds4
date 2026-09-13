@@ -1204,3 +1204,12 @@ the broader effect includes read-task reordering. Timings are exploratory, no
 default change. See staged-experts-short-{summary,comparison,manifest}.json.
 Next extend to ordinary warm address-table execution; preserve existing
 resident/missing split behavior and check exact output again.
+
+## 75: stage gate/up on the warm address-table path
+
+Allow the same staged slots6 gate/up kernel before normal address-table down
+execution. The resident/missing split remains excluded. Short ABBA preserves
+all logits and continuation state exactly. Decode17.593->17.662s (+0.39%),
+append15.322->15.555s (+1.52%), combined32.915->33.216s (+0.91%).
+Warm staging is exercised hundreds of times, but offers no convincing win.
+Retain the opt-in flag; no default change. See staged-experts-warm-short JSON.

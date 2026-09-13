@@ -41905,7 +41905,7 @@ int ds4_gpu_routed_moe_one_tensor(
                     n_expert == 6 && n_tokens == 1 && use_iq2_selected_slots &&
                     fuse_pair_swiglu && slots_pair_swiglu_pipeline && g_batch_cb &&
                     !write_clamped_moe && !g_parallel_q8_pending &&
-                    !use_stream_expert_addr_table && !use_stream_compact_addr &&
+                    !use_stream_compact_addr &&
                     !use_stream_expert_split_deferred && stream_expert_missing_mask &&
                     !getenv("DS4_METAL_MOE_ONE_STAGE_PROFILE") &&
                     ds4_gpu_stream_expert_pending_load_matches(model_map, model_size,
