@@ -1052,3 +1052,34 @@ is 50.2973%, with 1.44245% complete six-expert coverage and layer recall
 24.4–67.4%. Native route payload, phase logits and continuation state exactly
 match baseline. This intrusive accuracy probe is not a speed benchmark; no
 predictions affect loads or execution. See gate-probe-full.json.
+
+## 66: real asynchronous gate prediction is exact but slower
+
+DS4_METAL_V41_GATE_PREFETCH=1 runs the existing gate on pre-attention norm,
+predicts into a private ID tensor, and submits one event-driven cache load.
+Attention and native routing continue while the worker prepares the load.
+Before native demand loading, join the worker and clear its selected override.
+Only native selected IDs and native weights are used for expert computation.
+The current single pending load is bounded but cannot cancel wrong reads or
+prioritize demand over them. Incompatible scalar configurations fail explicitly.
+
+Short fixed tool-session ABBA: decode18.282 ->20.422s (+11.71%); append
+15.262 ->15.154s (-0.70%); combined33.543 ->35.576s (+6.06%). Both candidate
+samples are slower than both controls. Every phase logit and final continuation
+state is byte-identical to baseline. No oracle routes are supplied.
+See gate-prefetch-short.json and gate-prefetch-short-comparison.json.
+
+Rejected for default enablement. The oracle bounds are opportunities, not
+realized gains; prediction, handoffs and extra I/O must fit inside that budget.
+A separate intrusive AB profile investigates cache traffic; its timings are
+not the headline performance comparison.
+
+The diagnostic AB also retains exact logits/state. Total expert reads rise
+87.53 ->127.24 GiB (+45.4%), misses17243 ->21526, evictions9421 ->13704.
+Pending joins2302 ->5467; exposed CPU wait1.392 ->2.373s. Native all-resident
+layer calls improve11418 ->12188 out of13720, but extra speculative traffic
+and synchronization more than consume this benefit. These counters include
+initial/append prefill traffic; pending waits are cumulative scalar-load joins.
+See gate-prefetch-profile.json. Further work should target admission by
+confidence and cache residency, demand priority, and GPU cache-hit scheduling;
+training a more accurate gate alone does not resolve the queue constraint.

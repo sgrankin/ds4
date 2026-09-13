@@ -52,8 +52,15 @@ Full-session routing results (README experiments60-64):
 Completed gate probe: existing pre-attention gate predicts 50.2973% of native
 selected experts; all-six coverage 1.44245%, per-layer recall 24.4–67.4%.
 Full native routes, logits and final state match baseline. Evidence gate-probe-full.json.
-Intrusive probe timings are not deployment performance. Next: bounded asynchronous
-real gate prefetch with native fallback, short replay ABBA first.
+Intrusive probe timings are not deployment performance. Real bounded asynchronous gate prefetch is now implemented behind
+DS4_METAL_V41_GATE_PREFETCH=1 and REJECTED for default enablement: short ABBA
+has exact logits/state but decode +11.71%, combined turn +6.06%. Evidence
+gate-prefetch-short.json and comparison. One-slot loader waits for wrong reads;
+no demand priority/cancellation. Intrusive AB profile completed: expert reads87.53->127.24GiB (+45.4%),
+pending CPU wait1.392->2.373s, joins2302->5467. Exact logits/state throughout.
+Evidence gate-prefetch-profile.json. No full trial warranted for this regression.
+Prioritize GPU cache-hit scheduling, confidence/cache-aware admission and demand
+priority before another unconditional predictor trial. All new modes default off.
 Missing-route schedule guard was tested on a one-token input and exits nonzero.
 Wrong-route injection in deferred mode also exits nonzero. Twelve Python tests
 pass, covering extraction, route parsing and balanced-continuation identity.
@@ -87,7 +94,8 @@ Route capture and probe commands are in the agent-session README.
    Current route-only recording lacks activation/miss labels. Score useful
    misses ready before deadline, wasted bytes and eviction; hot experts that
    are already cached can flatter ordinary recall.
-2. Prototype asynchronous exact-fallback prefetch. Predict into a separate,
+2. Completed experiment66: asynchronous exact-fallback prefetch regresses.
+   For a subsequent version, improve admission and demand priority. Predict into a separate,
    immutable GPU ID buffer, signal an event, and let the service worker read it
    and start loads while the main thread encodes attention. Join before native
    demand/cache mutation. Don't add a blocking CPU readback before attention or

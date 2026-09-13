@@ -141,3 +141,13 @@ normalized activation, then measures overlap with the native post-attention
 route. It never substitutes its predictions or prefetches them. This adds GPU
 work/readback and its timings are not performance results; native logits/state
 must match the baseline. Per-layer recall counters are printed at process exit.
+
+The opt-in real predictor experiment can be screened without any oracle file:
+
+    python3 speed-bench/agent-session/replay_abba.py /tmp/gate-prefetch-abba \
+      --candidate-env DS4_METAL_V41_GATE_PREFETCH=1
+
+It retains native exact routing and only speculates on cache loads. It is
+currently slower on the short tool-session screen and is disabled by default;
+see experiment66 in the SSD experiment notebook. Do not combine it with oracle
+modes, image/quality execution, or the older asynchronous expert-load experiment.
