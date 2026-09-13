@@ -1151,3 +1151,14 @@ Every prefill segment in this recording fits within2048 rows. This is evidence
 for a memory-budget tradeoff on a working session, not a universal setting.
 Experiment19 found no consistent short-interactive benefit. A large8192-token
 prefill check follows before changing any default.
+
+## 71: buffer2048 on an8192-token prefill is exact and near-neutral
+
+Fixed-input ABBA at ctx100000,8192 prefill tokens and8 teacher-forced decode
+tokens; all frontier logits match exactly. Control prefill425.89/438.45tps,
+candidate425.52/428.50tps (means432.17/427.01, candidate -1.19%). The control
+drift exceeds the mean difference. Actual layer logs confirm control2x4096
+versus candidate4x2048; the count-dependent native limit uses4096 below16384
+input rows even with8192-row allocated capacity. Therefore this does not test
+the full8192-row processing regime; test16384 before a general default change.
+See chunk2048-large8192.json.
