@@ -683,3 +683,9 @@ America/New_York and seed1234. ABBA rejects differing input/output ID hashes
 or generated counts. Real trace/elapsed timestamps stay live. Startup and
 submit-to-ready timings include work outside the prefill trace. First controlled
 confirmation is /tmp/ds41-fixed-tile128, running before any default promotion.
+
+## 41: OS caching of Engram rows did not improve short-agent latency
+
+Fresh/restored hello means 2.235/3.758 s control versus 2.274/3.780 s cached. Later turns also flat. Keep uncached default.
+These are exploratory trials with live timestamp tokens and random seeds.
+See agent-file-cache-exploratory.json. No default changed.
