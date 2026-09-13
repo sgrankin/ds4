@@ -151,3 +151,31 @@ The trace comparison reports absent intermediate captures for the unfused HC
 path; the complete residual comparison is present for every layer. These
 switches are diagnostic, not default performance changes. This establishes a
 scalar-equivalent layer-major path worth testing for formerly scalar tails.
+
+## 09: preserve the original prefix and batch only its scalar tail
+
+Opt-in `DS4_METAL_V41_EXACT_SHORT_PREFILL=1` admits warm SSD tails of
+256-1023 tokens to a separate layer-major sweep, using exact row projections,
+scalar attention and scalar routed experts. The preceding batch partitions
+stay unchanged. This targets single-GPU, non-quality, non-imatrix execution
+with at least half the experts cached. The exact arithmetic scope is thread-local
+and restored even if the sweep fails.
+
+`run_abba.py /tmp/ds41-exact-short5000 --candidate-env
+DS4_METAL_V41_EXACT_SHORT_PREFILL=1 --tokens 5000 --ctx 100000`:
+representative control 70.65 tps, candidate 93.99/88.75 tps (26-33% faster).
+All full-vocabulary frontier logits match exactly. The first control was an
+outlier at 14.31 tps; do not use it to claim a sixfold improvement. No competing
+model process or thermal warning was found, but its cause is not established.
+Raw result rows, including the outlier, are in exact-short5000.json.
+
+The sweep changes expert-cache residency: candidate first decode is about
+1.2 seconds versus 58 ms for control, and the following seven tokens run at
+12.9-13.2 versus 15.5 tps. This cost must be included when choosing a default
+threshold. Smaller-tail timing and full serialized continuation-state checks
+follow before enabling this path by default.
+
+Regression `tests/test_deepseek41_exact_tail MODEL PROMPT` passed: 257- and
+513-token tails after a restored 4096-token prefix, each followed by eight
+teacher-forced decode steps, produce bit-identical complete serialized
+snapshots (KV state, hidden state, history, and logits).

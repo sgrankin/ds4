@@ -40436,12 +40436,19 @@ static bool ds41_matmul(ds4_gpu_tensor *out, const ds4_model *m,
            (!round || ds41_bf16(out, (uint32_t)weight->dim[1]));
 }
 
+/* Scoped to one inference thread so diagnostic/short-prefill precision never
+ * changes another session's dispatch through process-wide environment writes. */
+static __thread bool ds41_exact_prefill_rows;
+static bool ds41_exact_dense_rows(void) {
+    return ds41_exact_prefill_rows || getenv("DS4_METAL_V41_EXACT_DENSE_PREFILL");
+}
+
 static bool ds41_matmul_batch(ds4_gpu_tensor *out, const ds4_model *m,
                               const ds4_tensor *weight, const ds4_gpu_tensor *in,
                               uint32_t count, bool round) {
     const uint32_t width = (uint32_t)weight->dim[0], outputs = (uint32_t)weight->dim[1];
     const bool exact_rows = count <= DS4_TP_BATCH_MAX_ROWS ||
-        getenv("DS4_METAL_V41_EXACT_DENSE_PREFILL");
+        ds41_exact_dense_rows();
     bool ok;
     /* Small decode batches retain scalar reductions before BF16 and sparse
      * routing boundaries. Preserve Metal's separate vocabulary-head dispatch. */
@@ -40907,7 +40914,7 @@ static bool ds41_hc_mix_batch(ds41_prefill_row *b, const ds4_model *m,
     const bool projected =
 #ifdef __APPLE__
         fn->type == DS4_TENSOR_F16 && count > DS4_TP_BATCH_MAX_ROWS &&
-        !getenv("DS4_METAL_V41_EXACT_DENSE_PREFILL") ?
+        !ds41_exact_dense_rows() ?
         ds4_gpu_hc_rms_scale_project_f16_tensor(b->mix, b->flat_norm,
             m->map, m->size, fn->abs_offset, DS4_N_HC * DS4_N_EMBD, 24u,
             input, count, DS4_RMS_EPS) :
@@ -41421,6 +41428,13 @@ static bool ds41_tp_batch_enabled(const ds41_gpu_graph *g) {
         !getenv("DS4_METAL_DISABLE_V41_BATCH_HC"));
 }
 
+static bool ds41_exact_short_prefill(const ds41_gpu_graph *g, uint32_t count) {
+    return g->streaming && g->tp_world == 1 && !g->quality && !g->imatrix &&
+        g->pos && count >= 256u && count < 1024u && count <= g->prefill_cap &&
+        ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u &&
+        getenv("DS4_METAL_V41_EXACT_SHORT_PREFILL");
+}
+
 static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, uint32_t remaining) {
     /* TP batches use the bulk protocol; row-gate ablations stay token-major. */
     if (!ds41_tp_batch_enabled(g) || g->imatrix ||
@@ -41440,7 +41454,7 @@ static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, uint32_t remaining) 
         ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u)
         minimum = 1024u;
 #endif
-    if (remaining < minimum) return 1;
+    if (remaining < minimum) return ds41_exact_short_prefill(g, remaining) ? remaining : 1;
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
     /* Keep a medium SSD append in one layer sweep without changing its
      * 2048-row arithmetic partitions. Tiny tails retain the exact row path. */
@@ -41711,9 +41725,10 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
         return false;
     const bool profile = getenv("DS4_METAL_GRAPH_PREFILL_PROFILE") != NULL;
     const bool stage_profile = getenv("DS4_METAL_V41_STAGE_PROFILE") != NULL;
-    const bool batch_moe = !getenv("DS4_METAL_DISABLE_V41_BATCH_MOE");
+    const bool exact_short = ds41_exact_short_prefill(g, total_count);
+    const bool batch_moe = !exact_short && !getenv("DS4_METAL_DISABLE_V41_BATCH_MOE");
     const bool batch_attention = !getenv("DS4_METAL_DISABLE_V41_BATCH_ATTN");
-    const bool batch_core = batch_attention && !getenv("DS4_METAL_DISABLE_V41_BATCH_CORE");
+    const bool batch_core = !exact_short && batch_attention && !getenv("DS4_METAL_DISABLE_V41_BATCH_CORE");
     const bool batch_hc = batch_attention && batch_moe &&
         !getenv("DS4_METAL_DISABLE_V41_BATCH_HC");
     const bool decoder_suffix = wide && total_count >= 8192u &&
@@ -41723,6 +41738,8 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     ds4_engram_history next_history = g->history;
     if (!ds41_hash_tokens(g, &next_history, tokens, total_count, &ids[0][0][0]))
         return false;
+    const bool saved_exact_rows = ds41_exact_prefill_rows;
+    ds41_exact_prefill_rows = saved_exact_rows || exact_short;
     const uint32_t initial_start = g->pos;
     g->valid = false;
     ds41_gpu_graph row = *g;
@@ -41933,7 +41950,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
                         ds41_sum_partial_batch(g, g->batch.block, il, count) &&
                         ds4_gpu_dsv41_quantize(g->batch.block, DS4_N_EMBD, count, DS4_V41_BF16);
                 } else if (ok && l->attn_output_b->type == DS4_TENSOR_Q8_0 &&
-                           !getenv("DS4_METAL_V41_EXACT_DENSE_PREFILL")) {
+                           !ds41_exact_dense_rows()) {
                     ok = ds4_gpu_dsv41_attention_output_batch(g->batch.block, g->batch.low,
                         m->map, m->size, l->attn_output_a->abs_offset, l->attn_output_b->abs_offset,
                         g->batch.heads, count) &&
@@ -42039,6 +42056,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     }
     g->pos = initial_start;
     if (ok) { g->pos += total_count; g->history = next_history; g->valid = !encoder_only; }
+    ds41_exact_prefill_rows = saved_exact_rows;
     return ok;
 }
 

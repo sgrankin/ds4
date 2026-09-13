@@ -1100,3 +1100,6 @@ tests/test_deepseek41_scalar_queue: tests/test_deepseek41_scalar_queue.c ds4.h $
 
 tests/trace_deepseek41_prefill: tests/trace_deepseek41_prefill.c ds4.c ds4.h $(CORE_OBJS)
 	$(CC) $(CFLAGS) -I. -o $@ $< $(filter-out ds4.o,$(CORE_OBJS)) $(METAL_LDLIBS)
+
+tests/test_deepseek41_exact_tail: tests/test_deepseek41_exact_tail.c ds4.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
