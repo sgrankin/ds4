@@ -318,3 +318,26 @@ The four-process 40-token append after 2048 tokens at ctx=100000 shows no
 wall-time improvement: control 13.21/13.09 tps, fused 13.05/13.23. All frontier
 logits match. Retained opt-in while measuring actual agent behavior; no default
 change justified by this sample. See norm-abba40.json.
+
+Actual agent probe with fusion: fresh/restored hello 3.614/5.027 seconds,
+versus 3.527/4.954 in the initial baseline. No measured end-to-end gain.
+The restored-process profile (three short turns plus three output tokens)
+reports 2360 layer selections, 3.641 s selected synchronization, 1.674 s pread,
+and 0.595 s read-ahead advice. Timing categories overlap. This points toward
+submission/I/O scheduling rather than treating norm microbenchmark gains as
+user-visible gains. See agent-norm.json.
+
+## 16: start selected SSD loads before shared-expert GPU work (opt-in)
+
+`DS4_METAL_V41_EARLY_EXPERT_LOAD=1` moves selected-ID synchronization before
+shared-expert computation, starts the existing protected asynchronous cache
+loader, submits shared kernels, then consumes the same IDs in routed MoE.
+Only non-quality single-rank SSD streaming is changed. No routing prediction.
+
+All 32 full logit rows and the complete serialized continuation match exactly.
+Forty-token append ABBA at ctx=100000: control 13.08/12.93 tps; early load
+13.52/13.24 (~2.9% mean throughput gain). All frontier logits match exactly.
+Actual-agent balanced trials follow; this remains opt-in pending stronger
+workload evidence. agent_abba.py fixes one executable across all eight agent
+processes and tests both fresh and restored system KV in ABBA order.
+See early-abba40.json.

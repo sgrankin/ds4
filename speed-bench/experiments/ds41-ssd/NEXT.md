@@ -76,3 +76,11 @@ Actual agent norm probe in progress. Next experiment: move selected-expert
 readback/load initiation before shared-expert work, then flush shared GPU work
 while pending preads run. Reuse protected cache/pending-load APIs and consume
 the exact same selected IDs through the existing override.
+
+16 in progress: EARLY_EXPERT_LOAD starts exact selected reads before shared
+work, flushes shared kernels while I/O runs. Model check running. Norm actual
+agent probe also flat (3.614/5.027s hello); leave norm opt-in. Readahead advice
+consumes 0.595s across 59 restored-process tokens; test disabling before pread.
+
+16 40-token ABBA ~2.9% faster, all logits equal. Real-agent ABBA running
+in /tmp/ds41-agent-early-abba. Keep shaders unchanged until it finishes.
