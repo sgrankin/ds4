@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
         displays = 0;
         start = seconds();
         CHECK(ds4_session_sync(s, &prefix, err, sizeof(err)) == 0);
-        CHECK(displays > 0);
+        CHECK(getenv("DS4_TEST_SELECTED_FALLBACK") ? displays == 0 : displays > 0);
         const double batch_seconds = seconds() - start;
         for (int i = 0; i < 8; i++)
             CHECK(ds4_session_eval(s, tokens.v[prefix.len + i], err, sizeof(err)) == 0);

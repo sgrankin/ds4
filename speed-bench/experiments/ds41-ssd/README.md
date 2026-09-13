@@ -707,3 +707,15 @@ See agent-engram-parallel-exploratory.json. No default changed.
 Fresh/restored hello 2.282/3.786 s control versus 2.294/3.756 s fused. Twelve-token turns slightly worse, six-token turns flat. Keep the exact kernel opt-in; the microbenchmark gain did not become a useful agent gain.
 These are exploratory trials with live timestamp tokens and random seeds.
 See agent-fused-shared-exploratory.json. No default changed.
+
+## 45: distinguish cache-target reserve from dynamic expert capacity
+
+The attempted4GiB stress target leaves only one dynamic expert: the target
+includes a3.99GiB prefill reserve. The runtime correctly selected scalar fallback;
+the test failed only its assertion that batching should appear, before snapshot
+comparison. No numerical mismatch or failed inference was reported.
+
+Add DS4_TEST_SELECTED_FALLBACK to explicitly validate unsupported configurations
+without expecting batched progress. Repeat with4GiB for fallback, then16GiB
+(total target, about8.9GiB dynamic capacity) to exercise real selected-batch
+evictions. Record both effective memory budgets in evidence.
