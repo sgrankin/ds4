@@ -5,6 +5,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -46,7 +47,11 @@ for i,variant in enumerate(a.order):
     for r in rows:
         for k in ['phase','context','tokens']: r[k]=int(r[k])
         for k in ['ms','first_decode_ms']: r[k]=float(r[k])
-    result=dict(variant=variant,**hashes,phases=rows,
+    cache_stats=[]
+    for line in (dest/'stderr.log').read_text().splitlines():
+        if 'streaming expert cache budget=' in line:
+            cache_stats.append(dict(re.findall(r'(hits|misses|evictions|miss_pread|pread_ms)=([0-9.]+)',line)))
+    result=dict(variant=variant,**hashes,phases=rows,cache_reports=cache_stats,
         startup_prefill_ms=rows[0]['ms'],
         append_prefill_ms=sum(r['ms'] for r in rows[1:] if r['kind']=='P'),
         decode_ms=sum(r['ms'] for r in rows if r['kind']=='D'),

@@ -1,6 +1,7 @@
 /* Replay the exact prefill/decode boundaries recorded by a real agent session.
  * Tool execution and sampling are excluded; live.py measures those separately. */
 #include "ds4.h"
+#include "ds4_gpu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -78,7 +79,13 @@ int main(int argc, char **argv) {
         REQUIRE(ds4_session_pos(session)==history.len);
         REQUIRE(ds4_session_copy_logits(session,logits,vocab)==vocab);
         REQUIRE(fwrite(logits,sizeof(float),(size_t)vocab,output)==(size_t)vocab);
-        printf("%d,%c,%d,%d,%.3f,%.3f\n",phase++,kind,history.len,count,elapsed,first);
+        printf("%d,%c,%d,%d,%.3f,%.3f\n",phase,kind,history.len,count,elapsed,first);
+        if (getenv("DS4_REPLAY_PROFILE_MEMORY")) {
+            char label[64];
+            snprintf(label,sizeof(label),"replay phase %d",phase);
+            ds4_gpu_print_memory_report(label);
+        }
+        phase++;
         fflush(stdout);
     }
     REQUIRE(feof(input) && phase>1);
