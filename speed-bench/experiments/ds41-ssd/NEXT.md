@@ -124,3 +124,15 @@ all exits, synchronous retry if cache entries require main-thread waits. Built.
 at /tmp/ds41-agent-async-vs-early, baseenv EARLY=1, candidate ASYNC=1.
 ~21min remain in hour at16:51:35. Final acceptance should enable whichever
 loader wins, preserve a rollback, retest actual defaults and long-tail decode.
+
+21 complete: worker slower than simple early, keep worker opt-in.
+22 selected small tiles written: 2..8 rows, scalar attention+MoE arithmetic,
+batched exact dense+HC, skip all whole-layer mapping/read-ahead/cache seeding,
+row.streaming=true. Test tails6/8/17/40 +8decode snapshotparity beforebench.
+~18min remain at16:54:48. Need accept EARLY loader unless tiles supersede it,
+then validate final build/longtail/defaultactualagent.
+
+22 parity passed tails6/8/17/40 +8continuation; 40token2.11->1.536s within
+process only. Real-agent ABBA vsEARLY /tmp/ds41-agent-small-vs-early running.
+16min remain at16:56. If wins accept small+early with rollback and run actual
+defaults vs rollback; keep all other kernel/worker/cache tweaks opt-in.

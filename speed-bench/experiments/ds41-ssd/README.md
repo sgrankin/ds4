@@ -423,3 +423,22 @@ over the earlier-load opt-in.
 
 All 32 full model logit rows and the complete continuation snapshot match.
 Actual-agent ABBA directly against early loading is pending.
+
+Direct ABBA loses to early loading: mean fresh hello 3.355 to 3.422 s;
+restored hello 4.684 to 4.893 s (4.5% slower). Keep the worker path opt-in.
+The earlier simple loading schedule remains the default candidate.
+See agent-async-vs-early.json.
+
+## 22: small layer-major tiles with selected-expert streaming (opt-in)
+
+`DS4_METAL_V41_SELECTED_SMALL_PREFILL=1` uses tiles of at most eight rows for
+short warm appends. Dense projections and HC work are batched with exact
+scalar reductions, while attention and routed/shared MoE retain scalar
+arithmetic. The tile keeps selected-expert streaming and skips all full-layer
+mapping, read-ahead, and cache seeding. It therefore avoids the full SSD sweep
+that made earlier short-batch attempts unattractive.
+
+Tails 6/8/17/40 after 512 tokens, each followed by eight decoded tokens, produce
+bit-identical complete snapshots. Within-process 40-token timing improves
+2.110 to 1.536 s, but cache warming favors the second run; balanced real-agent
+ABBA against early loading alone follows. See selected-small-state.txt.

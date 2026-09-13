@@ -41542,6 +41542,15 @@ static bool ds41_exact_short_prefill(const ds41_gpu_graph *g, uint32_t count) {
         ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u;
 }
 
+/* Small layer-major tiles keep the ordinary selected-expert cache. They must
+ * never map or seed a whole expert layer for a handful of tokens. */
+static bool ds41_selected_small_prefill(const ds41_gpu_graph *g, uint32_t count) {
+    return getenv("DS4_METAL_V41_SELECTED_SMALL_PREFILL") && g->streaming &&
+        g->tp_world == 1 && !g->quality && !g->imatrix && !g->image_count &&
+        !g->encoder_resident && g->pos && count >= 2u && count <= 8u &&
+        count <= g->prefill_cap;
+}
+
 static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, uint32_t remaining) {
     /* TP batches use the bulk protocol; row-gate ablations stay token-major. */
     if (!ds41_tp_batch_enabled(g) || g->imatrix ||
@@ -41561,6 +41570,8 @@ static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, uint32_t remaining) 
         ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u)
         minimum = 1024u;
 #endif
+    const uint32_t small = remaining < 8u ? remaining : 8u;
+    if (remaining < 256u && ds41_selected_small_prefill(g, small)) return small;
     if (remaining < minimum) return ds41_exact_short_prefill(g, remaining) ? remaining : 1;
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
     /* Keep a medium SSD append in one layer sweep without changing its
@@ -41832,14 +41843,15 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
         return false;
     const bool profile = getenv("DS4_METAL_GRAPH_PREFILL_PROFILE") != NULL;
     const bool stage_profile = getenv("DS4_METAL_V41_STAGE_PROFILE") != NULL;
-    const bool exact_short = ds41_exact_short_prefill(g, total_count);
+    const bool selected_small = ds41_selected_small_prefill(g, total_count);
+    const bool exact_short = selected_small || ds41_exact_short_prefill(g, total_count);
     const bool batch_moe = !exact_short && !getenv("DS4_METAL_DISABLE_V41_BATCH_MOE");
     const bool batch_attention = !getenv("DS4_METAL_DISABLE_V41_BATCH_ATTN");
-    const bool exact_moe = exact_short && batch_attention &&
+    const bool exact_moe = exact_short && !selected_small && batch_attention &&
         getenv("DS4_METAL_V41_EXACT_MOE_TILES");
     const bool batch_core = !exact_short && batch_attention && !getenv("DS4_METAL_DISABLE_V41_BATCH_CORE");
     const bool batch_hc = batch_attention && (batch_moe ||
-        (exact_short && getenv("DS4_METAL_V41_EXACT_BATCH_HC"))) &&
+        (exact_short && (selected_small || getenv("DS4_METAL_V41_EXACT_BATCH_HC")))) &&
         !getenv("DS4_METAL_DISABLE_V41_BATCH_HC");
     const bool decoder_suffix = wide && total_count >= 8192u &&
         !getenv("DS4_METAL_DISABLE_V41_DECODER_SUFFIX");
@@ -41855,7 +41867,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     ds41_gpu_graph row = *g;
     /* The complete current layer is mapped for prefill. Refresh the bounded
      * decode cache from it before advancing to the next layer. */
-    row.streaming = false;
+    row.streaming = selected_small;
     ds41_engram_prefetch engram_prefetch = {0};
     const bool overlap_engram = total_count >= 1024u &&
         !getenv("DS4_METAL_DISABLE_V41_ENGRAM_PREFETCH") &&
@@ -41864,7 +41876,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
         !getenv("DS4_METAL_DISABLE_V41_ENGRAM_PIPELINE");
     bool engram_prefetched = overlap_engram &&
         ds41_engram_prefetch_start(&engram_prefetch, g, 0, total_count);
-    bool ok = !g->streaming || metal_graph_stream_map_token(m, w);
+    bool ok = selected_small || !g->streaming || metal_graph_stream_map_token(m, w);
     /* Experimental bounded lookahead. These reads warm pageable file-cache
      * pages; they do not allocate another pinned expert cache. */
     const uint32_t prepare_count = getenv("DS4_METAL_V41_PREFETCH_TWO_LAYERS") ? 2u : 1u;
@@ -41884,9 +41896,9 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
         if (il == 2u) engram_prefetched = overlap_engram &&
             ds41_engram_prefetch_start(&engram_prefetch, g, 1, total_count);
         const double t0 = profile ? now_sec() : 0;
-        if (g->streaming) {
+        const uint32_t first_count = total_count < encoder_chunk ? total_count : encoder_chunk;
+        if (g->streaming && !selected_small) {
 #ifdef __APPLE__
-            const uint32_t first_count = total_count < encoder_chunk ? total_count : encoder_chunk;
             if (!g->encoder_resident || il >= 20)
                 ok = metal_graph_stream_prepare_join_layer(NULL, m, w, il, first_count,
                         false, true, false, false, prepare, prepare_count);
@@ -42132,7 +42144,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
             if (ds4_gpu_commands_active() && !ds4_gpu_end_commands()) ok = false;
             if (g->tp_world == 2 && ds4_gpu_tp_failed()) ok = false;
             const double t_done = profile ? now_sec() : 0;
-            if (ok && !encoder_only && off + count == total_count)
+            if (ok && !selected_small && !encoder_only && off + count == total_count)
                 ok = ds41_prefill_seed(g, m, &w->layer[il], il, count);
             if (engram_prefetched && ds41_engram_layer(il) && off + count == total_count &&
                 !ds41_engram_prefetch_join(&engram_prefetch, !ok)) ok = false;
@@ -42164,7 +42176,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     if (g->streaming) ds4_gpu_stream_expert_cache_prefetch_finish(true);
 #endif
     if (!metal_graph_stream_prepare_join_all(prepare, prepare_count)) ok = false;
-    if (g->streaming && !metal_graph_stream_map_decode_static_all(m, w)) ok = false;
+    if (g->streaming && !selected_small && !metal_graph_stream_map_decode_static_all(m, w)) ok = false;
     if (ok && !encoder_only) {
         ok = ds4_gpu_begin_commands() &&
              ds4_gpu_tensor_copy(g->residual, 0, row.residual, 0, (uint64_t)DS4_N_HC * DS4_N_EMBD * 4u) &&
