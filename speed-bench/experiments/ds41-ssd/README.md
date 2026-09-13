@@ -618,3 +618,11 @@ cache pages; it does not allocate or map a whole table or change the pinned
 expert budget. Potential benefit is repeated sparse rows, with potential file
 cache pressure in longer conversations. The default stays uncached. Existing
 Engram tests, including errors and changed file bytes, pass with the option.
+
+## 36: measure shared-expert overlap on actual agent turns
+
+At tile32, overlap ABBA reduces mean fresh hello 2.513 to 2.391 s (4.9%), but
+restored hello is essentially flat at 4.049 to 4.029 s. Twelve-token turns
+0.573/0.844 to 0.532/0.798 s; six-token turns 0.308/0.355 to 0.286/0.326 s.
+Both fresh hello candidates beat both controls. Keep opt-in pending selection
+of the final tile size and complete-response checks. See agent-batch-overlap.json.
