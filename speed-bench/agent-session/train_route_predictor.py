@@ -9,6 +9,7 @@ miss/deadline labels, so recall alone cannot justify speculative SSD reads.
 """
 import argparse
 import hashlib
+import importlib.metadata
 import json
 from pathlib import Path
 import numpy as np
@@ -138,6 +139,8 @@ def main():
     result = dict(architecture=f'5120->{a.width} tanh shared stem, 40x{a.width}->384 heads',
         parameters=5120*a.width+a.width+40*a.width*384+40*384,
         seed=a.seed, epochs=a.epochs, batch=a.batch, best_epoch=best_epoch,
+        learning_rate=.001, optimizer="Adam", mlx_version=importlib.metadata.version("mlx"),
+        numpy_version=np.__version__, script_sha256=digest(__file__),
         split_tokens=[cut1//40,(cut2-cut1)//40,(len(data)-cut2)//40],
         features_sha256=digest(a.features), routes_sha256=digest(a.routes),
         weights_sha256=digest(a.output/'best.safetensors'),

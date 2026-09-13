@@ -1231,3 +1231,22 @@ separate-task holdout avoid mixing layer rows across partitions. These are
 all-route accuracy metrics, not cache-miss/deadline metrics. predictor_holdout.py
 runs a separate isolated TTL-cache repair with independent semantic checks.
 Raw datasets and trained weights stay in /tmp. Training results follow.
+
+## 77: first dedicated predictor, rank64 shared stem
+
+Twenty Adam epochs,1,326,144 parameters,2022/674/675 train/validation/test
+tokens. Validation-selected epoch20. Held-out session top6 recall49.5265%
+versus early-gate50.4907%; all-six1.400% versus1.622%. Top12 recall64.6012%,
+all-six11.8037%. Independent TTL-cache task: six tool calls,3136 decoded
+tokens,10 agent tests and independent semantic checks pass. Top6 recall44.7108%
+versus early-gate49.3342%; all-six0.9949% versus1.2707%. Top12 recall58.7713%,
+all-six8.1609%. This is not strong enough to justify unconditional prefetch.
+
+Evidence predictor-rank64.json and predictor-ttl-holdout.json; independent token
+recording predictor-ttl-session.txt is checked in for reproducible capture.
+Checkpoint /tmp/ds41-predictor-rank64/best.safetensors (SHA in metrics).
+The standalone predictor uses fewer multiply-adds than evaluating the native
+5120x384 gate, but its deployment latency has not been measured. Validation
+was still improving at the fixed final epoch; next test width128 with60epochs.
+The separate task has now been viewed, so subsequent reuse is an exploratory
+regression check, not a fresh blind holdout. Never train on those rows.
