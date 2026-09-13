@@ -2623,6 +2623,8 @@ static id<MTLComputePipelineState> ds4_gpu_get_pipeline(
         return cached;
     }
 
+    const bool profile_create = getenv("DS4_METAL_PIPELINE_CREATE_PROFILE") != NULL;
+    const double create_start = profile_create ? ds4_gpu_now_ms() : 0.0;
     NSError *error = nil;
     NSString *name = [NSString stringWithUTF8String:function_name];
     id<MTLFunction> fn = [g_library newFunctionWithName:name];
@@ -2640,6 +2642,8 @@ static id<MTLComputePipelineState> ds4_gpu_get_pipeline(
         return nil;
     }
 
+    if (profile_create) fprintf(stderr, "ds4: Metal pipeline create %s %.3f ms\n",
+        [key UTF8String], ds4_gpu_now_ms() - create_start);
     [g_pipeline_cache setObject:pipeline forKey:key];
     return pipeline;
 }
@@ -3174,6 +3178,8 @@ static id<MTLComputePipelineState> ds4_gpu_get_mul_mv_pipeline(
         return cached;
     }
 
+    const bool profile_create = getenv("DS4_METAL_PIPELINE_CREATE_PROFILE") != NULL;
+    const double create_start = profile_create ? ds4_gpu_now_ms() : 0.0;
     MTLFunctionConstantValues *constants = [[MTLFunctionConstantValues alloc] init];
     [constants setConstantValue:&nsg type:MTLDataTypeShort atIndex:600];
 
@@ -3196,6 +3202,8 @@ static id<MTLComputePipelineState> ds4_gpu_get_mul_mv_pipeline(
         return nil;
     }
 
+    if (profile_create) fprintf(stderr, "ds4: Metal pipeline create %s %.3f ms\n",
+        [key UTF8String], ds4_gpu_now_ms() - create_start);
     [g_pipeline_cache setObject:pipeline forKey:key];
     if (fast_key_valid) {
         ds4_gpu_decode_pipeline_fast_cache_insert(

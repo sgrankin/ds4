@@ -779,3 +779,21 @@ for all three turns: fresh8.968->8.617s (~3.9% lower), restored12.657->12.085s
 prefill savings. Do not describe the larger prefill gain as a general response
 speedup. See agent-fixed-responses.json, which also records first output,
 startup and submit-to-ready wall times.
+
+## 49: pipeline creation does not explain restored first-decode delay
+
+Add opt-in DS4_METAL_PIPELINE_CREATE_PROFILE timing on pipeline-cache misses
+in the general and matrix-vector pipeline helpers. Final fixed-input agent
+probe also enables existing pread and command-buffer timing. Pipeline creation
+across the entire first user turn totals0.919ms fresh and6.006ms restored;
+restored first decode is218ms versus76ms fresh. These pipeline helpers therefore
+do not account for the extra142ms. The remaining delay needs finer attribution;
+this run does not establish whether expert I/O or GPU work dominates that gap.
+See pipeline-create-profile.json; raw logs /tmp/ds41-final-pipeline-profile.
+Profiling is disabled by default. Agent and benchmark rebuilt successfully.
+
+For experiment47, adding each run's measured4096-token prefix and904-token tail
+also gives a whole5000-token prefill comparison: controls54.302/53.796s
+(92.08/92.94tps), selected tiles43.714/43.882s (114.38/113.94tps).
+That saves about10.25s overall, roughly23% higher throughput. This is a fixed
+5000-token benchmark, not the short agent or the complete-response measurement.

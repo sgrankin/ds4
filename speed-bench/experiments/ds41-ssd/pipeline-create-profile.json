@@ -1,0 +1,157 @@
+{
+  "agent": [
+    {
+      "mode": "fresh",
+      "system_kv_hit": false,
+      "turns": [
+        {
+          "prompt": 1859,
+          "cached": 0,
+          "suffix": 1859,
+          "rc": 0,
+          "ms": 13895.63
+        },
+        {
+          "prompt": 1897,
+          "cached": 1859,
+          "suffix": 38,
+          "rc": 0,
+          "ms": 2288.497
+        },
+        {
+          "prompt": 1910,
+          "cached": 1898,
+          "suffix": 12,
+          "rc": 0,
+          "ms": 543.354
+        },
+        {
+          "prompt": 1917,
+          "cached": 1911,
+          "suffix": 6,
+          "rc": 0,
+          "ms": 335.382
+        }
+      ],
+      "startup_ms": 15990.264624997508,
+      "turn_wall_ms": [
+        2580.6461250176653,
+        821.4830830111168,
+        602.8100840048864
+      ],
+      "generations": [
+        {
+          "generated": 1,
+          "response_ms": 2365.0,
+          "decode_ms": 76.0,
+          "first_output_ms": 2365.0,
+          "input_ids_sha256": "fb71bbe3a28db7da582fada036096b492b1986429d4a4912d537c6b5fe95b4ef",
+          "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+        },
+        {
+          "generated": 1,
+          "response_ms": 614.0,
+          "decode_ms": 70.0,
+          "first_output_ms": 613.0,
+          "input_ids_sha256": "0411bc099dbff3265b117f2537f7a2e788163d1bf75db8f05b51b4195ffd9457",
+          "output_ids_sha256": "d807a221fdad3cba02dc5cec09b680daf579eac3f395372148feb211965327ff"
+        },
+        {
+          "generated": 1,
+          "response_ms": 395.0,
+          "decode_ms": 59.0,
+          "first_output_ms": 395.0,
+          "input_ids_sha256": "93b8b5bd60c4ab83b87bbd8005fb0130d49012c624c2729446f5006643875a62",
+          "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+        }
+      ],
+      "generation_limit": 1
+    },
+    {
+      "mode": "restored",
+      "system_kv_hit": true,
+      "turns": [
+        {
+          "prompt": 1897,
+          "cached": 1859,
+          "suffix": 38,
+          "rc": 0,
+          "ms": 3705.731
+        },
+        {
+          "prompt": 1910,
+          "cached": 1898,
+          "suffix": 12,
+          "rc": 0,
+          "ms": 815.323
+        },
+        {
+          "prompt": 1917,
+          "cached": 1911,
+          "suffix": 6,
+          "rc": 0,
+          "ms": 358.069
+        }
+      ],
+      "startup_ms": 341.3337079982739,
+      "turn_wall_ms": [
+        4128.603749995818,
+        1115.6665839953348,
+        631.0568749904633
+      ],
+      "generations": [
+        {
+          "generated": 1,
+          "response_ms": 3924.0,
+          "decode_ms": 218.0,
+          "first_output_ms": 3924.0,
+          "input_ids_sha256": "fb71bbe3a28db7da582fada036096b492b1986429d4a4912d537c6b5fe95b4ef",
+          "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+        },
+        {
+          "generated": 1,
+          "response_ms": 910.0,
+          "decode_ms": 94.0,
+          "first_output_ms": 910.0,
+          "input_ids_sha256": "0411bc099dbff3265b117f2537f7a2e788163d1bf75db8f05b51b4195ffd9457",
+          "output_ids_sha256": "d807a221fdad3cba02dc5cec09b680daf579eac3f395372148feb211965327ff"
+        },
+        {
+          "generated": 1,
+          "response_ms": 424.0,
+          "decode_ms": 66.0,
+          "first_output_ms": 424.0,
+          "input_ids_sha256": "93b8b5bd60c4ab83b87bbd8005fb0130d49012c624c2729446f5006643875a62",
+          "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+        }
+      ],
+      "generation_limit": 1
+    }
+  ],
+  "pipeline_creation": {
+    "fresh": [
+      {
+        "phase": 0,
+        "count": 114,
+        "total_ms": 13.106
+      },
+      {
+        "phase": 1,
+        "count": 3,
+        "total_ms": 0.919
+      }
+    ],
+    "restored": [
+      {
+        "phase": 0,
+        "count": 92,
+        "total_ms": 2.72
+      },
+      {
+        "phase": 1,
+        "count": 13,
+        "total_ms": 6.006
+      }
+    ]
+  }
+}
