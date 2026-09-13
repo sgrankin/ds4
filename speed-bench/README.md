@@ -147,7 +147,7 @@ latency, request latency and throughput. Prompts use fresh nonces;
 
 ### DS4.1 SSD agent workloads
 
-Use all three workload levels when deciding whether an optimization helps:
+Use these complementary workloads when deciding whether an optimization helps:
 
 | Workload | Purpose | Runner |
 | --- | --- | --- |

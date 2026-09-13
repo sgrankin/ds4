@@ -837,3 +837,19 @@ expert path. Distribute129 as127+2 instead. With that fix,129/511/512/513/767
 appends after2048 tokens plus8 decoded tokens match complete scalar snapshots.
 See layer512-state.txt. Separate-process full-session ABBA is running; timings
 inside the numerical test are not evidence of an end-to-end speedup.
+
+## 53: full working-session ABBA rejects wider layer sweeps as a default
+
+Fixed recording, executable and shaders; every phase's full-vocabulary logits
+and complete final continuation snapshot match across all four runs. Mean
+control append prefill94.489s, decode196.901s; layer512 prefill97.160s,
+decode198.044s. Turn model work291.389->295.204s (~1.3% slower).
+Total including initial system prefill306.419->310.163s. Keep default128.
+
+Expert reads are deterministic across each variant's repeats:670.61GiB control
+versus689.85GiB layer512. Prefill cache misses31818->33952; decode misses
+40526->40468. The regression is additional prefill I/O, not a larger decode
+miss rate. A follow-up protects cached current-layer experts for later subtiles;
+it is a separate opt-in experiment and remains unmeasured at this point.
+See session-layer512-abba.json. The control model timings closely reproduce the
+live session (94.280s prefill,196.339s decode), validating the replay's fidelity.
