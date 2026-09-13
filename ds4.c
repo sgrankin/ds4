@@ -40212,7 +40212,6 @@ typedef struct {
     ds4_gpu_tensor *predict_selected;
     metal_graph_selected_async_load predict_load;
     bool predict_active;
-    bool cache_try_active;
 #define DS41_FIELD(name, count) ds4_gpu_tensor *name;
     DS41_SCRATCH(DS41_FIELD)
 #undef DS41_FIELD
@@ -41016,21 +41015,6 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
             m->map, m->size, bias->abs_offset, 0, 0, token,
             DS4_N_EXPERT, DS4_N_EXPERT_USED, DS4_EXPERT_WEIGHT_SCALE, 0, 0, true, false,
             g->route_logits)) return false;
-#ifdef __APPLE__
-    if (g->cache_try_active) {
-        const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
-            m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
-        const int hit = ds4_gpu_dsv41_cached_moe_try(&table, routed, g->gate, g->up,
-            g->mid, g->selected, g->route_weights, g->norm,
-            DS4_N_EMBD, DS4_N_FF_EXP, DS4_SWIGLU_CLAMP_EXP);
-        if (hit < 0) return false;
-        if (hit) return ds41_shared_gate_up(g, m, l, g->shared_gate, g->shared_up,
-                g->shared_mid, g->norm, 1) &&
-            ds41_matmul(g->shared, m, l->ffn_down_shexp, g->shared_mid, true) &&
-            ds4_gpu_add_tensor(g->block, routed, g->shared, DS4_N_EMBD) &&
-            ds41_bf16(g->block, DS4_N_EMBD);
-    }
-#endif
     /* Resolve routing before shared work so selected SSD reads can overlap its
      * GPU execution. The cache loader protects live entries and the override
      * avoids paying for a second selected-ID readback in routed_moe_one. */
@@ -41686,18 +41670,6 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
             g->predict_selected = ds4_gpu_tensor_alloc(DS4_N_EXPERT_USED * sizeof(int32_t));
         if (!g->predict_selected) ds4_die("cannot allocate predicted selected IDs");
     }
-    g->cache_try_active = getenv("DS4_METAL_V41_CACHE_TRY") != NULL;
-    if (g->cache_try_active && (!g->streaming || g->quality || g->imatrix ||
-        g->image_count || g->tp_world != 1 || g->predict_active || ds41_route_oracle.active ||
-        getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD") ||
-        getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS")))
-        ds4_die("cache try requires ordinary scalar text SSD execution");
-    if (g->cache_try_active) for (uint32_t il = 0; il < DS4_N_LAYER; il++) {
-        if (w->layer[il].ffn_gate_exps->type != DS4_TENSOR_IQ2_XXS ||
-            w->layer[il].ffn_up_exps->type != DS4_TENSOR_IQ2_XXS ||
-            w->layer[il].ffn_down_exps->type != DS4_TENSOR_Q2_K)
-            ds4_die("cache try requires IQ2 gate/up and Q2 down");
-    }
     bool ok = ds41_embed(g, m, w, g->residual, g->x, token, g->pos);
     /* Unfused quality kernels bind whole expert tensors. Keep just the current
      * layer mapped, using the same admitted reserve as layer-major prefill. */
@@ -41743,7 +41715,6 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
         (void)ds4_gpu_routed_moe_set_selected_override(NULL, 0);
     }
     g->predict_active = false;
-    g->cache_try_active = false;
     if (ds4_gpu_commands_active() && !ds4_gpu_end_commands()) ok = false;
     if (layer_resident && !metal_graph_stream_map_decode_static_all(m, w)) ok = false;
     if (g->tp_world == 2 && ds4_gpu_tp_failed()) ok = false;
