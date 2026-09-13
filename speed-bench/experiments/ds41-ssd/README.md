@@ -202,3 +202,25 @@ see exact-short513.json.
 The runner now copies the executable into each experiment directory before
 starting, preventing a rebuild from changing the binary between A/B samples.
 It also accepts --gen-tokens for longer continuation measurements.
+
+## 11: reuse eight-row scalar-equivalent expert kernels
+
+`DS4_METAL_V41_EXACT_MOE_TILES=1`, together with the exact-tail opt-in,
+tiles routed/shared FFN work into at most eight rows. It reuses the backend's
+existing DS4.1 decode-batch kernels, which retain F32 intermediate values and
+scalar reduction order; it does not enable the large-batch grouped matmul.
+Token-ID views advance with each tile. HC and attention remain scalar unless
+separately requested. The final partial tile is covered by odd-length cases.
+
+At ctx=8192, 257- and 513-token restored-prefix tails plus eight continuation
+tokens have byte-identical complete snapshots. The test now checks that the
+candidate actually uses a layer-major sweep and the control stays scalar.
+Within-process timings (24.8 vs 14.0 seconds and 38.6 vs 25.9 seconds) again
+argue against enabling short SSD sweeps at every tail length.
+The ctx=100000, 5000-token fresh-process comparison includes 32 teacher-forced
+decode tokens per run and is retained in exact-tiles5000.json.
+
+Result: exact sweep control 89.36/94.57 tps; eight-row tiles 83.18/81.14 tps.
+All final logits match. Tiles reduce first decode from 1.07-1.12 seconds to
+193-205 ms, but the prefill regression is larger than that saving. Keep tiles
+opt-in. The non-tiled sweep reaches 14.9-15.1 tps over the next 31 decode tokens.

@@ -10,6 +10,10 @@ static double seconds(void) {
     clock_gettime(CLOCK_MONOTONIC, &t);
     return t.tv_sec + t.tv_nsec * 1e-9;
 }
+static void progress(void *ud, const char *event, int current, int total) {
+    (void)current; (void)total;
+    if (!strcmp(event, "prefill_display")) (*(unsigned *)ud)++;
+}
 int main(int argc, char **argv) {
     if (argc != 3) { fprintf(stderr, "usage: %s MODEL PROMPT\n", argv[0]); return 2; }
     int rc = 1;
@@ -28,13 +32,17 @@ int main(int argc, char **argv) {
     ds4_tokens prefix = tokens; prefix.len = 4096;
     CHECK(ds4_session_sync(s, &prefix, err, sizeof(err)) == 0);
     CHECK(ds4_session_save_snapshot(s, &initial, err, sizeof(err)) == 0);
+    unsigned displays = 0;
+    ds4_session_set_progress(s, progress, &displays);
     const int tails[] = {257, 513};
     for (size_t c = 0; c < sizeof(tails)/sizeof(tails[0]); c++) {
         prefix.len = 4096 + tails[c];
         CHECK(unsetenv("DS4_METAL_V41_EXACT_SHORT_PREFILL") == 0);
         CHECK(ds4_session_load_snapshot(s, &initial, err, sizeof(err)) == 0);
+        displays = 0;
         double start = seconds();
         CHECK(ds4_session_sync(s, &prefix, err, sizeof(err)) == 0);
+        CHECK(displays == 0);
         const double scalar_seconds = seconds() - start;
         /* Also cover continuation after the tail, not just its output head. */
         for (int i = 0; i < 8; i++)
@@ -42,8 +50,10 @@ int main(int argc, char **argv) {
         CHECK(ds4_session_save_snapshot(s, &expected, err, sizeof(err)) == 0);
         CHECK(setenv("DS4_METAL_V41_EXACT_SHORT_PREFILL", "1", 1) == 0);
         CHECK(ds4_session_load_snapshot(s, &initial, err, sizeof(err)) == 0);
+        displays = 0;
         start = seconds();
         CHECK(ds4_session_sync(s, &prefix, err, sizeof(err)) == 0);
+        CHECK(displays > 0);
         const double batch_seconds = seconds() - start;
         for (int i = 0; i < 8; i++)
             CHECK(ds4_session_eval(s, tokens.v[prefix.len + i], err, sizeof(err)) == 0);

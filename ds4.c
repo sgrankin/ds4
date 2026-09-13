@@ -41311,6 +41311,34 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
         ds41_sum_partial_batch(g, b->routed, il, count);
 }
 
+/* Tile routed/shared work through the existing <=8-row decode kernels.
+ * Their F32 intermediates and reductions retain scalar BF16/router boundaries. */
+static bool ds41_moe_exact_tiles(ds41_gpu_graph *g, const ds4_model *m,
+                                 const ds4_layer_weights *l, uint32_t il, uint32_t count) {
+    for (uint32_t first = 0; first < count; first += 8u) {
+        const uint32_t rows = count - first < 8u ? count - first : 8u;
+        ds41_gpu_graph tile = *g;
+        tile.pos += first;
+        memset(&tile.batch, 0, sizeof(tile.batch));
+        tile.prefill_tokens = ds4_gpu_tensor_view(g->prefill_tokens,
+            (uint64_t)first * sizeof(int32_t), (uint64_t)rows * sizeof(int32_t));
+        bool ok = tile.prefill_tokens != NULL;
+#define DS41_TILE_VIEW(name, width) \
+        if (ok) ok = (tile.batch.name = ds4_gpu_tensor_view(g->batch.name, \
+            (uint64_t)first * (width) * sizeof(float), \
+            (uint64_t)rows * (width) * sizeof(float))) != NULL;
+        DS41_PREFILL_ROWS(DS41_TILE_VIEW)
+#undef DS41_TILE_VIEW
+        if (ok) ok = ds41_moe_batch(&tile, m, l, il, rows, false);
+#define DS41_TILE_FREE(name, width) ds4_gpu_tensor_free(tile.batch.name);
+        DS41_PREFILL_ROWS(DS41_TILE_FREE)
+#undef DS41_TILE_FREE
+        ds4_gpu_tensor_free(tile.prefill_tokens);
+        if (!ok) return false;
+    }
+    return true;
+}
+
 static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model *m,
                                              const ds4_weights *w, int token, float *logits) {
     if (!g || !g->valid || g->pos >= g->ctx || token < 0 || (uint32_t)token >= DS4_N_VOCAB) return false;
@@ -41728,6 +41756,8 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     const bool exact_short = ds41_exact_short_prefill(g, total_count);
     const bool batch_moe = !exact_short && !getenv("DS4_METAL_DISABLE_V41_BATCH_MOE");
     const bool batch_attention = !getenv("DS4_METAL_DISABLE_V41_BATCH_ATTN");
+    const bool exact_moe = exact_short && batch_attention &&
+        getenv("DS4_METAL_V41_EXACT_MOE_TILES");
     const bool batch_core = !exact_short && batch_attention && !getenv("DS4_METAL_DISABLE_V41_BATCH_CORE");
     const bool batch_hc = batch_attention && (batch_moe ||
         (exact_short && getenv("DS4_METAL_V41_EXACT_BATCH_HC"))) &&
@@ -41972,24 +42002,25 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
                     ds41_trace_row(active.norm, DS4_N_EMBD, start, count, il, "3-norm") &&
                     ds41_trace_row(active.ffn_split, 24, start, count, il, "3-split");
                 DS41_STAGE("hc/ffn norm");
-                for (uint32_t t = 0; ok && (!batch_hc || !batch_moe) && t < count; t++) {
+                for (uint32_t t = 0; ok && (!batch_hc || (!batch_moe && !exact_moe)) && t < count; t++) {
                     row.pos = start + t;
 #define DS41_USE_FFN_ROW(name, width) row.name = g->rows_view[t].name;
                     DS41_PREFILL_ROWS(DS41_USE_FFN_ROW)
 #undef DS41_USE_FFN_ROW
                     if (!batch_hc) ok = ds41_graph_after_attention(&row, m, l);
-                    if (ok && !batch_moe) {
+                    if (ok && !batch_moe && !exact_moe) {
                         ok = ds41_moe(&row, m, l, il, (uint32_t)tokens[off + t]);
                         if (ok && !batch_hc) ok = ds41_graph_after_moe(&row);
                     }
                 }
-                if (ok && batch_hc && !batch_moe) ok =
+                if (ok && batch_hc && !batch_moe && !exact_moe) ok =
                     ds4_gpu_hc_expand_split_tensor(active.residual, active.block, active.after_attn,
                         active.ffn_split, DS4_N_EMBD, DS4_N_HC) &&
                     ds4_gpu_dsv41_quantize(active.residual, DS4_N_EMBD * DS4_N_HC, count, DS4_V41_BF16);
             }
-            if (ok && batch_moe) {
-                ok = ds41_moe_batch(g, m, &w->layer[il], il, count, false);
+            if (ok && (batch_moe || exact_moe)) {
+                ok = exact_moe ? ds41_moe_exact_tiles(g, m, &w->layer[il], il, count) :
+                    ds41_moe_batch(g, m, &w->layer[il], il, count, false);
                 if (ok) ok =
                     ds41_trace_row(g->batch.selected, DS4_N_EXPERT_USED, start, count, il, "3a-selected") &&
                     ds41_trace_row(g->batch.route_weights, DS4_N_EXPERT_USED, start, count, il, "3b-weights") &&
