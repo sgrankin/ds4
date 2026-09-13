@@ -563,3 +563,17 @@ Six-token turns use the same shape and are approximately flat amid run noise.
 Both hello candidates beat both controls. See agent-tile32-abba.json. One-token
 probes retain the old random seed behavior, so sampled output IDs are not a
 correctness comparison; the expanded full-state test supplies that gate.
+
+## 30: overlap selected-batch SSD binding with shared-expert GPU work
+
+Opt-in DS4_METAL_V41_BATCH_SHARED_OVERLAP=1 completes the router first, then
+queues shared-expert work. A scoped completed-router hint lets the selected
+backend flush those commands without waiting, load selected expert bytes on
+the CPU, and enqueue routed computation behind shared work. The hint is
+consumed by the backend and cleared on every caller exit. Existing cache
+in-flight lifetime protections remain active. No arithmetic or weight changes.
+
+The expanded snapshot test accepts several explicit tail lengths in one process.
+Combined tile32/medium/overlap checks have passed 12/16/24/31/32/33/64 plus eight
+continuation tokens at a 2048-token indexed prefix; larger boundaries are still
+running in /tmp/ds41-round3-expanded-state.txt. Performance gate follows.

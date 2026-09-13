@@ -15,9 +15,17 @@ static void progress(void *ud, const char *event, int current, int total) {
     if (!strcmp(event, "prefill_display")) (*(unsigned *)ud)++;
 }
 int main(int argc, char **argv) {
-    if (argc < 3 || argc > 5) { fprintf(stderr, "usage: %s MODEL PROMPT [PREFIX [TAIL]]\n", argv[0]); return 2; }
+    if (argc < 3) { fprintf(stderr, "usage: %s MODEL PROMPT [PREFIX [TAIL...]]\n", argv[0]); return 2; }
     const int initial_tokens = argc >= 4 ? atoi(argv[3]) : 512;
     if (initial_tokens < 1 || initial_tokens > 90000) return 2;
+    int max_tail = 40;
+    for (int i = 4; i < argc; i++) {
+        char *end = NULL;
+        long tail = strtol(argv[i], &end, 10);
+        if (end == argv[i] || *end || tail < 2 || tail >= 768) return 2;
+        if (tail > max_tail) max_tail = (int)tail;
+    }
+    if (initial_tokens + max_tail + 8 > 100000) return 2;
     int rc = 1;
     char err[256] = {0};
     FILE *fp = fopen(argv[2], "rb");
@@ -29,7 +37,7 @@ int main(int argc, char **argv) {
     ds4_engine_options opt = {.model_path = argv[1], .backend = DS4_BACKEND_METAL,
         .context_size = 100000, .ssd_streaming = true, .power_percent = 100};
     CHECK(ds4_engine_open(&e, &opt) == 0);
-    ds4_tokenize_text(e, text, &tokens); CHECK(tokens.len > initial_tokens + (argc == 5 ? atoi(argv[4]) : 40) + 8);
+    ds4_tokenize_text(e, text, &tokens); CHECK(tokens.len > initial_tokens + max_tail + 8);
     CHECK(ds4_session_create(&s, e, 100000) == 0);
     ds4_tokens prefix = tokens; prefix.len = initial_tokens;
     CHECK(ds4_session_sync(s, &prefix, err, sizeof(err)) == 0);
@@ -37,9 +45,8 @@ int main(int argc, char **argv) {
     unsigned displays = 0;
     ds4_session_set_progress(s, progress, &displays);
     const int tails[] = {2, 3, 4, 5, 6, 7, 8, 9, 17, 40};
-    if (argc == 5 && (atoi(argv[4]) < 2 || atoi(argv[4]) >= 768)) goto done;
-    for (size_t c = 0; c < (argc == 5 ? 1u : sizeof(tails)/sizeof(tails[0])); c++) {
-        const int tail = argc == 5 ? atoi(argv[4]) : tails[c];
+    for (size_t c = 0; c < (argc > 4 ? (size_t)(argc - 4) : sizeof(tails)/sizeof(tails[0])); c++) {
+        const int tail = argc > 4 ? atoi(argv[4 + c]) : tails[c];
         prefix.len = initial_tokens + tail;
         CHECK(setenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS", "1", 1) == 0);
         CHECK(ds4_session_load_snapshot(s, &initial, err, sizeof(err)) == 0);

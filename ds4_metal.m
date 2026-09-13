@@ -808,6 +808,7 @@ typedef struct {
 } ds4_gpu_stream_expert_timing_snapshot;
 static ds4_gpu_stream_expert_timing_snapshot g_stream_expert_timing_last_report;
 static int g_stream_prefill_batch_selected_addr_building;
+static const ds4_gpu_tensor *g_stream_expert_batch_ready;
 static int g_glm_stream_expert_addr_table_building;
 static uint64_t g_model_residency_count;
 static int g_model_residency_added_to_queue;
@@ -14485,6 +14486,10 @@ static int ds4_gpu_stream_prefill_batch_selected_addr_enabled(
     const uint32_t min_tokens =
         ds4_gpu_stream_prefill_batch_selected_addr_auto_min(n_total_expert);
     return max_tokens != 0 && n_tokens >= min_tokens && n_tokens <= max_tokens;
+}
+
+void ds4_gpu_stream_expert_batch_set_ready(const ds4_gpu_tensor *selected) {
+    g_stream_expert_batch_ready = selected;
 }
 
 int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
@@ -43749,7 +43754,13 @@ int ds4_gpu_routed_moe_batch_tensor(
         }
         if (use_cached_batch) {
             const int had_batch = g_batch_cb != nil;
-            if (had_batch && ds4_gpu_end_commands() == 0) {
+            const bool overlap_shared = use_iq2_batch_selected_addr &&
+                g_stream_expert_batch_ready == selected;
+            g_stream_expert_batch_ready = NULL;
+            /* The router was completed by the caller. Only shared-expert work
+             * remains queued, so selected IDs are safe to read while it runs. */
+            if (had_batch && (overlap_shared ? ds4_gpu_flush_commands() :
+                                               ds4_gpu_end_commands()) == 0) {
                 return 0;
             }
             g_stream_prefill_batch_selected_addr_building++;
@@ -43804,7 +43815,7 @@ int ds4_gpu_routed_moe_batch_tensor(
                     return 0;
                 }
             }
-            if (had_batch && ds4_gpu_begin_commands() == 0) {
+            if (had_batch && !overlap_shared && ds4_gpu_begin_commands() == 0) {
                 fprintf(stderr,
                         "ds4: Metal streaming prefill batch selected addr layer=%u "
                         "failed to reopen command batch after preparation\n",

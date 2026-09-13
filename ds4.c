@@ -41353,9 +41353,17 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
     const uint64_t gate_row = routed_expert_row_bytes(l->ffn_gate_exps);
     const uint64_t down_row = routed_expert_row_bytes(l->ffn_down_exps);
     bool mid_f16 = false;
-    return ds41_matmul_batch(b->route_logits, m, l->ffn_gate_inp, b->norm, count, false) &&
-        ds41_route_batch(g, m, l, count) &&
-        ((shared_owner && g->tp_rank != (il & 1u)) ||
+    bool ok = ds41_matmul_batch(b->route_logits, m, l->ffn_gate_inp, b->norm, count, false) &&
+        ds41_route_batch(g, m, l, count);
+    const bool overlap_shared = !force_resident && g->streaming &&
+        getenv("DS4_METAL_V41_BATCH_SHARED_OVERLAP") &&
+        ds4_gpu_stream_expert_batch_supported(count, DS4_N_EXPERT, DS4_N_EXPERT_USED,
+            l->ffn_gate_exps->type, l->ffn_down_exps->type);
+    if (ok && overlap_shared) {
+        ok = ds4_gpu_end_commands() && ds4_gpu_begin_commands();
+        if (ok) ds4_gpu_stream_expert_batch_set_ready(b->selected);
+    }
+    ok = ok && ((shared_owner && g->tp_rank != (il & 1u)) ||
         (ds41_matmul_batch(b->shared_gate, m, l->ffn_gate_shexp, b->norm, count, true) &&
         ds41_matmul_batch(b->shared_up, m, l->ffn_up_shexp, b->norm, count, true) &&
         ds4_gpu_swiglu_tensor(b->shared_mid, b->shared_gate, b->shared_up,
@@ -41383,6 +41391,8 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
         (!shared_owner || g->tp_rank != (il & 1u) ||
             ds4_gpu_add_tensor(b->routed, b->routed, b->shared, count * DS4_N_EMBD)) &&
         ds41_sum_partial_batch(g, b->routed, il, count);
+    if (overlap_shared) ds4_gpu_stream_expert_batch_set_ready(NULL);
+    return ok;
 }
 
 /* Tile routed/shared work through the existing <=8-row decode kernels.

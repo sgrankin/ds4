@@ -381,6 +381,10 @@ int ds4_gpu_stream_expert_cache_seed_selected(
 /* Whether a selected-only batch can run without binding full expert tensors. */
 int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
         uint32_t used, uint32_t gate_type, uint32_t down_type);
+/* Scope a completed router tensor to the next routed batch. The caller must
+ * finish its router commands first and clear this hint on every exit. This
+ * permits SSD binding to overlap subsequently queued shared-expert work. */
+void ds4_gpu_stream_expert_batch_set_ready(const ds4_gpu_tensor *selected);
 int ds4_gpu_stream_expert_cache_begin_selected_load(
         const ds4_gpu_stream_expert_table *table,
         const int32_t                     *selected_ids,
