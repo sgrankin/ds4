@@ -134,3 +134,20 @@ differences after BF16 rounding; normalized Q low-rank and K projections also
 differ. This predates wide-tail scheduling and does not depend on long-context
 cache state. The batch dense paths use different arithmetic/half intermediates.
 Detailed stage comparisons are in trace32/scalar-vs-batch.jsonl.
+
+## 08: isolate the arithmetic differences and recover exact layer parity
+
+`DS4_METAL_V41_EXACT_DENSE_PREFILL=1` expands existing exact Q8/F16 row
+projections to larger batches and retains scalar grouped attention output.
+This removes layer-0 HC mixing and Q/K differences exactly. Attention heads
+still differ in 7/32768 elements. Adding `DS4_METAL_DISABLE_V41_BATCH_CORE=1`
+removes those differences; all inputs to the routed FFN then match exactly.
+Router IDs/weights and shared-expert output match; routed output differs by
+up to 4.22e-5 before BF16, producing 192 residual differences.
+
+Adding `DS4_METAL_DISABLE_V41_BATCH_MOE=1` gives bit-identical final residuals
+at all 40 layers in the 32-token trace. All other captured vectors also match.
+The trace comparison reports absent intermediate captures for the unfused HC
+path; the complete residual comparison is present for every layer. These
+switches are diagnostic, not default performance changes. This establishes a
+scalar-equivalent layer-major path worth testing for formerly scalar tails.
