@@ -128,6 +128,13 @@ Route capture and probe commands are in the agent-session README.
 
 ## Next substantial work
 
+User-authorized queue (current): staged exact gate/up readiness while down loads;
+demand-priority bounded speculative I/O; dedicated trained predictor with
+confidence/cache-aware admission. No requantization. Keep GPU handoff removal
+and demand-sized prefill workspace on the list. Begin with staged loading;
+then collect activations/native route labels for a learned predictor. Every
+experiment gets a separate jj commit and exact-output validation.
+
 1. Evaluate the existing-gate probe, then collect pre-attention activations,
    actual selections and demand cache-miss masks across independent tasks.
    Current route-only recording lacks activation/miss labels. Score useful

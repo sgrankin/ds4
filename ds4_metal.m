@@ -718,6 +718,8 @@ static uint32_t g_stream_expert_cache_entry_count;
 static uint32_t g_stream_expert_cache_budget_override;
 static double g_stream_expert_pending_wait_ms;
 static uint64_t g_stream_expert_pending_joins;
+static uint64_t g_stream_expert_gate_probes;
+static uint64_t g_stream_expert_gate_submissions;
 static uint64_t g_stream_expert_cache_hits;
 static uint64_t g_stream_expert_cache_misses;
 static uint64_t g_stream_expert_cache_evictions;
@@ -4380,6 +4382,11 @@ void ds4_gpu_print_memory_report(const char *label) {
                     ds4_gpu_gib(limit),
                     (unsigned long long)g_model_buffer_cache_evictions);
         }
+    }
+    if (g_stream_expert_gate_probes) {
+        fprintf(stderr, "ds4:   staged experts probes=%llu submissions=%llu\n",
+            (unsigned long long)g_stream_expert_gate_probes,
+            (unsigned long long)g_stream_expert_gate_submissions);
     }
     if (g_stream_expert_pending_joins) {
         fprintf(stderr, "ds4:   streaming pending joins=%llu wait_ms=%.3f (CPU wait only)\n",
@@ -13269,6 +13276,8 @@ typedef struct {
     uint64_t read_bytes;
     double ms;
     int ok;
+    int done; /* Published under the pread-pool mutex. */
+    int gate_stage;
 } ds4_gpu_stream_expert_pread_task;
 
 typedef struct {
@@ -13485,6 +13494,9 @@ static void *ds4_gpu_stream_expert_pread_pool_worker(void *arg) {
                                                         &task->ms);
 
             pthread_mutex_lock(&g_stream_expert_pread_pool_mutex);
+            task->done = 1;
+            if (task->gate_stage)
+                pthread_cond_broadcast(&g_stream_expert_pread_pool_done_cond);
         }
 
         if (g_stream_expert_pread_pool_remaining_workers > 0 &&
@@ -13597,6 +13609,30 @@ static int ds4_gpu_stream_expert_pread_pool_wait(void) {
     }
     pthread_mutex_unlock(&g_stream_expert_pread_pool_mutex);
     return 1;
+}
+
+/* Wait for gate/up tasks only; down tasks continue on the same pool. */
+static int ds4_gpu_stream_expert_pending_gate_wait(void) {
+    ds4_gpu_stream_expert_pending_load *p = &g_stream_expert_pending_load;
+    g_stream_expert_gate_probes++;
+    pthread_mutex_lock(&g_stream_expert_pread_pool_mutex);
+    for (;;) {
+        int ready = 1, ok = 1;
+        for (uint32_t i = 0; i < p->n_tasks; i++) {
+            if (!p->tasks[i].gate_stage) continue;
+            if (!p->tasks[i].done) ready = 0;
+            else if (!p->tasks[i].ok) ok = 0;
+        }
+        if (ready || !g_stream_expert_pread_pool_remaining_workers) {
+            int down_pending = 0;
+            for (uint32_t i = 0; i < p->n_tasks; i++)
+                if (!p->tasks[i].gate_stage && !p->tasks[i].done) down_pending = 1;
+            pthread_mutex_unlock(&g_stream_expert_pread_pool_mutex);
+            return ready && ok ? (down_pending ? 2 : 1) : 0;
+        }
+        pthread_cond_wait(&g_stream_expert_pread_pool_done_cond,
+                          &g_stream_expert_pread_pool_mutex);
+    }
 }
 
 static int ds4_gpu_stream_expert_pread_pool_dispatch(
@@ -15228,6 +15264,8 @@ static void ds4_gpu_stream_expert_cache_clear_all(int reset_stats) {
     if (reset_stats) {
         g_stream_expert_pending_wait_ms = 0.0;
         g_stream_expert_pending_joins = 0;
+        g_stream_expert_gate_probes = 0;
+        g_stream_expert_gate_submissions = 0;
         g_stream_expert_cache_hits = 0;
         g_stream_expert_cache_misses = 0;
         g_stream_expert_cache_evictions = 0;
@@ -16761,6 +16799,17 @@ int ds4_gpu_stream_expert_cache_begin_selected_load(
                     1,
                     ds4_gpu_now_ms() - task_t0);
         }
+    }
+
+    if (getenv("DS4_METAL_V41_STAGED_EXPERT_LOAD")) {
+        ds4_gpu_stream_expert_pread_task ordered[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SELECTED * 3u];
+        uint32_t at = 0;
+        for (uint32_t i = 0; i < p->n_tasks; i++) if (i % 3u != 2u) {
+            ordered[at] = p->tasks[i];
+            ordered[at++].gate_stage = 1;
+        }
+        for (uint32_t i = 2; i < p->n_tasks; i += 3) ordered[at++] = p->tasks[i];
+        memcpy(p->tasks, ordered, p->n_tasks * sizeof(p->tasks[0]));
     }
 
     const uint32_t n_workers =
@@ -40564,6 +40613,7 @@ int ds4_gpu_routed_moe_one_tensor(
         bool use_stream_expert_split_candidate = false;
         bool use_stream_expert_split_deferred = false;
         bool stream_expert_split_completed = false;
+        bool staged_gate_done = false;
         uint32_t stream_expert_resident_mask = 0;
         uint32_t stream_expert_missing_mask = 0;
         __unsafe_unretained id<MTLBuffer> gate_group6_bufs[6] = { nil, nil, nil, nil, nil, nil };
@@ -41849,6 +41899,56 @@ int ds4_gpu_routed_moe_one_tensor(
                         return 0;
                     }
                 }
+                ds4_gpu_stream_expert_pending_load *pending = &g_stream_expert_pending_load;
+                if (getenv("DS4_METAL_V41_STAGED_EXPERT_LOAD") &&
+                    expert_in_dim == 5120 && expert_mid_dim == 2304 && out_dim == 5120 &&
+                    n_expert == 6 && n_tokens == 1 && use_iq2_selected_slots &&
+                    fuse_pair_swiglu && slots_pair_swiglu_pipeline && g_batch_cb &&
+                    !write_clamped_moe && !g_parallel_q8_pending &&
+                    !use_stream_expert_addr_table && !use_stream_compact_addr &&
+                    !use_stream_expert_split_deferred && stream_expert_missing_mask &&
+                    !getenv("DS4_METAL_MOE_ONE_STAGE_PROFILE") &&
+                    ds4_gpu_stream_expert_pending_load_matches(model_map, model_size,
+                        layer_index, selected_ids, n_total_expert, n_expert,
+                        gate_expert_bytes, down_expert_bytes)) {
+                    const int gate_ready = ds4_gpu_stream_expert_pending_gate_wait();
+                    if (!gate_ready) return 0;
+                    if (gate_ready == 2) {
+                        for (uint32_t i = 0; i < n_expert; i++) {
+                            if (!(stream_expert_missing_mask & (1u << i))) continue;
+                            const uint32_t source = pending->source_slots[i];
+                            uint32_t j = 0;
+                            while (j < pending->n_loads && pending->load_slots[j] != source) j++;
+                            if (j == pending->n_loads) return 0;
+                            gate_slot_bufs[i] = pending->gate_bufs[j];
+                            up_slot_bufs[i] = pending->up_bufs[j];
+                            gate_slot_offsets[i] = pending->gate_inners[j];
+                            up_slot_offsets[i] = pending->up_inners[j];
+                        }
+                        /* Pending buffers stay owned by the load until down is ready.
+                         * Protect already-resident slots before submitting GPU work. */
+                        for (uint32_t i = 0; i < n_expert; i++) {
+                            if (stream_slot_entries[i] &&
+                                !ds4_gpu_stream_expert_cache_mark_inflight(stream_slot_entries[i])) return 0;
+                        }
+                        ds4_gpu_dsv4_moe_swiglu_weight_args act = {
+                            .width = expert_mid_dim, .rows = pair_rows,
+                            .gate_row_stride = (uint64_t)expert_mid_dim * sizeof(float),
+                            .up_row_stride = (uint64_t)expert_mid_dim * sizeof(float),
+                            .mid_row_stride = (uint64_t)expert_mid_dim * sizeof(float),
+                            .weight_stride = sizeof(float), .write_clamped = 0, .clamp_value = clamp,
+                        };
+                        if (!ds4_gpu_encode_mul_mv_slots6_pair_swiglu(g_batch_cb,
+                                slots_pair_swiglu_pipeline, &gate_args, &act,
+                                gate_slot_bufs, gate_slot_offsets, up_slot_bufs, up_slot_offsets,
+                                xbuf, ds4_gpu_tensor_offset(x), gatebuf, ds4_gpu_tensor_offset(gate),
+                                upbuf, ds4_gpu_tensor_offset(up), midbuf, ds4_gpu_tensor_offset(mid),
+                                weightsbuf, ds4_gpu_tensor_offset(weights), gate_smem, 2, false) ||
+                            !ds4_gpu_flush_commands()) return 0;
+                        staged_gate_done = true;
+                        g_stream_expert_gate_submissions++;
+                    }
+                }
                 if (stream_expert_missing_mask != 0 &&
                     !use_stream_expert_split_deferred) {
                     if (!ds4_gpu_stream_expert_cache_load_selected_missing(
@@ -42081,7 +42181,9 @@ int ds4_gpu_routed_moe_one_tensor(
                 } \
             } \
         } while (0)
-        if (use_q4_gather_slots) {
+        if (staged_gate_done) {
+            /* Gate/up and activation were submitted while down weights loaded. */
+        } else if (use_q4_gather_slots) {
             ds4_gpu_q4_gather_slots6_args gate_gather_args = {
                 .expert_bytes = gate_expert_bytes,
                 .group_size = q4_group6_expert_group_size,
