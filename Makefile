@@ -1093,3 +1093,7 @@ clean:
 
 # The active tokenizer includes generated Unicode classes.
 ds4.o ds4_cpu.o ds4_cpu_test_hooks.o: ds4_qwen4_unicode.inc
+
+# Explicit model-dependent DS4.1 scalar scheduling regression.
+tests/test_deepseek41_scalar_queue: tests/test_deepseek41_scalar_queue.c ds4.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)

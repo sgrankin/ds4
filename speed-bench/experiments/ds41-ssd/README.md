@@ -64,3 +64,29 @@ The control executes 4096 batched tokens then 904 scalar steps; candidate
 executes one 5000-token sweep. Arithmetic/batch partitions differ.
 The rejected implementation is retained only as whole-tail.patch, not enabled
 in source. Runner now accepts --ctx to match the agent's 100000-token allocation.
+
+## 05: eliminate redundant scalar layer-end drains (accepted)
+
+128-token appends after a 2048-token prefill; ctx=100000. ABBA control
+15.48/15.13 tps, candidate 16.93/16.51 tps: about 9.2% faster by aggregate
+time. Both frontier full-vocabulary logit rows match across all four runs.
+Development command: `run_abba.py /tmp/ds41-scalar-queue
+--candidate-env DS4_METAL_V41_SCALAR_QUEUE=1 --tokens 2176
+--initial-tokens 2048 --ctx 100000`.
+
+Enabled by default only for single-GPU SSD-streaming DS4.1 scalar execution,
+excluding quality and imatrix modes. TP behavior is unchanged. Streaming
+route/cache checks already submit work; retain explicit drains before
+reusing the Engram input at layer 14 and at token completion.
+The rollback is now `DS4_METAL_DISABLE_V41_SCALAR_QUEUE=1` (the development
+opt-in was removed). It benefits short prefill appends, scalar tails and decode;
+it does not change the layer-major batch kernels.
+
+Regression: `make -j2 tests/test_deepseek41_scalar_queue`, then
+`./tests/test_deepseek41_scalar_queue gguf/DeepSeek-V4.1-Flash-Q2.gguf
+/tmp/ds41-prefill-input.c gguf/DeepSeek-V4.1-Flash-Vision.gguf`.
+With vision loaded: 32 complete logit rows and the serialized continuation
+snapshot are bit-identical between scalar schedules, including snapshot restore.
+Final default-enabled build also passed the same 32-row/snapshot regression
+without vision. `make -j2 ds4-bench ds4-agent tests/test_deepseek41_scalar_queue`
+completed successfully.

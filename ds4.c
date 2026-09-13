@@ -41277,8 +41277,10 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
      * layer mapped, using the same admitted reserve as layer-major prefill. */
     const bool layer_resident = g->streaming && g->quality;
     if (layer_resident && !ds4_gpu_end_commands()) ok = false;
-    const bool queue_layers = g->tp_world == 2 && !g->imatrix &&
-        !getenv("DS4_METAL_DISABLE_V41_TP_DECODE_QUEUE");
+    const bool queue_layers = !g->imatrix &&
+        ((g->tp_world == 2 && !getenv("DS4_METAL_DISABLE_V41_TP_DECODE_QUEUE")) ||
+         (g->tp_world == 1 && g->streaming && !g->quality &&
+          !getenv("DS4_METAL_DISABLE_V41_SCALAR_QUEUE")));
     for (uint32_t il = 0; ok && il < DS4_N_LAYER; il++) {
         const ds4_layer_weights *l = &w->layer[il];
         if (layer_resident)
@@ -41294,9 +41296,10 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
             ok = ds41_graph_layer(g, m, l, il, token);
 #endif
         }
-        /* TP gates already submit ordered, bounded command buffers. Drain
-         * before overwriting the first Engram table's shared input at layer
-         * 14, and before publishing the completed token to the CPU. */
+        /* TP gates and streaming route/cache checks already submit ordered
+         * command buffers. Avoid another drain at each layer boundary, but
+         * finish before overwriting the shared Engram input at layer 14 and
+         * before publishing the completed token to the CPU. */
         const bool drain = !queue_layers || il == 13 || il + 1u == DS4_N_LAYER;
         if (drain && !ds4_gpu_end_commands()) ok = false;
         if (g->tp_world == 2 && ds4_gpu_tp_failed()) ok = false;
