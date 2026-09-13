@@ -740,3 +740,13 @@ Both hello candidates beat both controls. The fresh control samples vary
 population estimate. Restored first-decode overhead persists (~0.25 versus
 ~0.09s), but total response improves. No startup work was moved; startup time
 is measured separately. See agent-fixed-tile128.json. Longer generations follow.
+
+## 47: selected tiles beat full-layer SSD sweeps on a904-token tail
+
+Separate-process fixed-input ABBA, ctx100000, prefix4096, appended904:
+full-layer exact sweep24.21/24.80tps; selected128 tiles35.37/35.08tps.
+Mean append latency36.896->25.664s, about30.4% lower (43.7% higher throughput).
+All full-vocabulary frontier logits match exactly. Prefix initialization is
+identical; the reported speed is the append, not the entire5000-token prompt.
+See tail904-selected-abba.json. Complete768/1023 continuation-state checks
+are running before default promotion.
