@@ -1250,3 +1250,19 @@ The standalone predictor uses fewer multiply-adds than evaluating the native
 was still improving at the fixed final epoch; next test width128 with60epochs.
 The separate task has now been viewed, so subsequent reuse is an exploratory
 regression check, not a fresh blind holdout. Never train on those rows.
+
+## 78: width128 predictor and longer training
+
+Predeclared width128,60epochs;2,636,928 parameters. Validation selects epoch18
+(52.1303% top6 recall); later epochs overfit. Held-out session top6 recall
+51.6123% versus early-gate50.4907%, all-six2.0407% versus1.6222%. Top12
+recall66.6716%, all-six13.9259%. Separate TTL regression task top6 recall
+46.5768% versus early-gate49.3342%; top12 recall60.9030%, all-six9.7505%.
+The task was viewed in77 and is no longer a fresh blind evaluation. Its data
+remained excluded from both training and epoch selection.
+
+Evidence predictor-rank128.json, checkpoint /tmp/ds41-predictor-rank128.
+The learned model beats the native early gate slightly within the original
+session but still generalizes worse to the separate task. No runtime predictor
+integration or speedup claim. Next score actual cache misses before spending
+SSD bandwidth; cache-residency diagnostics are being added separately.
