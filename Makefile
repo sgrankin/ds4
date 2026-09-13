@@ -1061,6 +1061,7 @@ clean:
 	rm -f tests/test_qwen4_ngrams
 	rm -f tests/test_qwen4_ngram_state
 	rm -f tests/test_web_recovery
+	rm -f tests/test_deepseek41_scalar_queue tests/test_deepseek41_exact_tail tests/trace_deepseek41_prefill
 	rm -f tests/test_metal_ssd_experts
 	rm -f tests/test_metal_command_memory
 	rm -f tests/test_deepseek41_metal
@@ -1098,7 +1099,7 @@ ds4.o ds4_cpu.o ds4_cpu_test_hooks.o: ds4_qwen4_unicode.inc
 tests/test_deepseek41_scalar_queue: tests/test_deepseek41_scalar_queue.c ds4.h $(CORE_OBJS)
 	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
 
-tests/trace_deepseek41_prefill: tests/trace_deepseek41_prefill.c ds4.c ds4.h $(CORE_OBJS)
+tests/trace_deepseek41_prefill: tests/trace_deepseek41_prefill.c ds4.c ds4.h $(filter-out ds4.o,$(CORE_OBJS))
 	$(CC) $(CFLAGS) -I. -o $@ $< $(filter-out ds4.o,$(CORE_OBJS)) $(METAL_LDLIBS)
 
 tests/test_deepseek41_exact_tail: tests/test_deepseek41_exact_tail.c ds4.h $(CORE_OBJS)

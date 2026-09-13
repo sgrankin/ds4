@@ -105,7 +105,7 @@ reproduce a vision-specific text prefill regression. The actual agent test
 also successfully saved its text-only system prompt with vision loaded.
 Sessions containing images remain outside that text-only save path.
 
-## Outcome
+## First-round outcome
 
 Six separate experiments, one accepted default performance change (scalar
 submission, commit 24914d66), and rebuilt ds4-agent/ds4-bench. The rejected
@@ -224,3 +224,58 @@ Result: exact sweep control 89.36/94.57 tps; eight-row tiles 83.18/81.14 tps.
 All final logits match. Tiles reduce first decode from 1.07-1.12 seconds to
 193-205 ms, but the prefill regression is larger than that saving. Keep tiles
 opt-in. The non-tiled sweep reaches 14.9-15.1 tps over the next 31 decode tokens.
+
+## 12: enable the measured long-tail regime by default
+
+The default now uses the exact layer-major sweep for warm text-only SSD tails
+of 768-1023 tokens when the prefill buffer holds 8192 rows and at least half the
+experts are cached. It remains single-GPU, non-quality and non-imatrix only.
+This covers the agent's default 100000-token allocation. Shorter tails and
+smaller buffer configurations retain the previous dispatch because the
+measurements did not establish a consistent win there. Sessions containing
+image spans are excluded pending the deferred vision work.
+
+Rollback: `DS4_METAL_DISABLE_V41_EXACT_SHORT_PREFILL=1`.
+The old `DS4_METAL_V41_EXACT_SHORT_PREFILL=1` remains a diagnostic force flag
+for 256-1023-token comparisons; rollback takes precedence. HC batching and
+eight-row expert tiles remain opt-in, independently of the accepted sweep.
+
+Current-default comparison:
+`run_abba.py /tmp/ds41-default-tail5000 --candidate-env
+DS4_METAL_DISABLE_V41_EXACT_SHORT_PREFILL=1 --tokens 5000 --ctx 100000
+--gen-tokens 32`. Here **control is the new default; candidate is rollback**.
+Earlier opt-in A/B commands should be run at their experiment revisions,
+because unsetting the force flag no longer disables the accepted default.
+
+`make -j2 ds4-bench ds4-agent tests/test_deepseek41_exact_tail
+ tests/test_deepseek41_scalar_queue` completed without warnings. The exact-tail
+regression now checks the actual default against rollback at 768 and 1023
+appended tokens, including explicit batch-dispatch activation and eight
+continuation steps. Diagnostic build prerequisites and clean targets also
+include the new test tools correctly.
+
+Both default-boundary regressions passed with byte-identical full snapshots:
+768-token tail 44.0 -> 35.2 seconds; 1023-token tail 60.7 -> 57.5 seconds.
+These are within-process restored-prefix timings, not the separate-process
+ABBA estimate. See default-tail-state.txt for the exact command and output.
+
+Final review also excludes the optional resident-encoder mode: its short
+chunks were already batched and must keep their existing arithmetic. The
+normal wide-prefill path used by these measurements has no resident encoder.
+
+Final ABBA: default **88.60/89.96 tps**, rollback **70.45/68.78 tps**:
+**28.3% faster by aggregate prefill time** on this 5000-token prompt.
+All full-vocabulary frontier logits match across the four fresh processes.
+First decode after the sweep costs 1.00-1.20 seconds (rollback 57 ms);
+the next 31 tokens run at 14.95-15.00 tps (rollback 15.52-15.61).
+Including all 32 decoded tokens, average measured prefill-plus-decode time
+falls from about 73.9 to 59.2 seconds, a 19.9% wall-time reduction.
+See default-tail5000.json. The final resident-encoder exclusion does not
+change this measured path: all profile rows report encoder_resident=0.
+
+Second-round outcome: six more jj experiments, one new default admission
+policy, exact logit and continuation-state checks, and rebuilt agent/benchmark.
+The batching discrepancy is arithmetic: different dense/attention/expert
+rounding, rather than a missing KV-cache update. The accepted path preserves
+the old batch prefix and uses scalar-equivalent arithmetic for its long tail.
+Vision reproduction remains deferred to the user's next keyboard session.

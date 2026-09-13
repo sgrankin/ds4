@@ -41457,10 +41457,16 @@ static bool ds41_tp_batch_enabled(const ds41_gpu_graph *g) {
 }
 
 static bool ds41_exact_short_prefill(const ds41_gpu_graph *g, uint32_t count) {
-    return g->streaming && g->tp_world == 1 && !g->quality && !g->imatrix &&
+    /* Full sweeps can lose on shorter tails and smaller buffer configurations.
+     * Keep the default within the measured 8K-buffer, long-tail regime;
+     * the diagnostic opt-in still admits shorter comparison cases. */
+    const bool enabled = !getenv("DS4_METAL_DISABLE_V41_EXACT_SHORT_PREFILL") &&
+        (getenv("DS4_METAL_V41_EXACT_SHORT_PREFILL") ||
+         (g->prefill_cap == DS41_PREFILL_CAP && count >= 768u));
+    return enabled && g->streaming && g->tp_world == 1 && !g->quality && !g->imatrix &&
+        !g->image_count && !g->encoder_resident &&
         g->pos && count >= 256u && count < 1024u && count <= g->prefill_cap &&
-        ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u &&
-        getenv("DS4_METAL_V41_EXACT_SHORT_PREFILL");
+        ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u;
 }
 
 static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, uint32_t remaining) {
@@ -41476,8 +41482,8 @@ static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, uint32_t remaining) 
      * the server's 128-token mixed quantum must not become scalar prefill. */
     if (!g->streaming && g->tp_world == 1) minimum = 8u;
 #if defined(__APPLE__) && !defined(DS4_NO_GPU)
-    /* With at least half the experts cached, warm short appends beat a full
-     * disk sweep. Leave a token-major tail to warm the following decode too. */
+    /* With at least half the experts cached, shorter warm appends beat a full
+     * disk sweep. Longer tails may use the scalar-equivalent sweep below. */
     if (g->streaming && g->pos &&
         ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u)
         minimum = 1024u;
