@@ -36,6 +36,13 @@ int main(int argc, char **argv) {
     fclose(fp); fp = NULL;
     ds4_engine_options opt = {.model_path = argv[1], .backend = DS4_BACKEND_METAL,
         .context_size = 100000, .ssd_streaming = true, .power_percent = 100};
+    const char *cache_env = getenv("DS4_TEST_EXPERT_CACHE_GB");
+    if (cache_env && cache_env[0]) {
+        char *end = NULL;
+        unsigned long gb = strtoul(cache_env, &end, 10);
+        CHECK(end != cache_env && !*end && gb >= 4 && gb <= 96);
+        opt.ssd_streaming_cache_bytes = (uint64_t)gb << 30;
+    }
     CHECK(ds4_engine_open(&e, &opt) == 0);
     ds4_tokenize_text(e, text, &tokens); CHECK(tokens.len > initial_tokens + max_tail + 8);
     CHECK(ds4_session_create(&s, e, 100000) == 0);

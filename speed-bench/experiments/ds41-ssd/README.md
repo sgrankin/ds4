@@ -600,3 +600,12 @@ Expanded tile32/medium/shared-overlap regression is complete: tails
 each followed by eight decoded tokens, all have bit-identical complete snapshots.
 See round3-expanded-state.txt. Timing within this single process is explicitly
 not an ABBA performance claim.
+
+## 34: probe selected tiles up to 128 rows and eviction pressure
+
+Extend the diagnostic tile range to 2..128 while retaining the eight-row default.
+The supported selected-address path has no grouped reduction switch at these
+row counts. Full-model exactness still must be verified. The snapshot test now
+accepts DS4_TEST_EXPERT_CACHE_GB=4..96 so the same continuation checks can force
+cache reuse/eviction instead of only exercising the default 72.5 GiB cache.
+No new runtime defaults. Build succeeds; tests are queued after overlap ABBA.
