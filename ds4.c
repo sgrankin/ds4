@@ -41900,7 +41900,8 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
      * selected-expert cache and never replace the static decode mapping. */
     row.streaming = selected_small;
     ds41_engram_prefetch engram_prefetch = {0};
-    const bool overlap_engram = total_count >= 1024u &&
+    const bool overlap_engram = (total_count >= 1024u ||
+        (selected_small && getenv("DS4_METAL_V41_SMALL_ENGRAM_PREFETCH"))) &&
         !getenv("DS4_METAL_DISABLE_V41_ENGRAM_PREFETCH") &&
         !getenv("DS4_METAL_DISABLE_V41_BATCH_ENGRAM");
     const bool pipeline_engram = overlap_engram &&

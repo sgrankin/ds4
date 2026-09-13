@@ -585,3 +585,12 @@ threshold from 256 requests to two tokens (48 requests). This reuses the same
 16 readers, disjoint outputs, bounded allocation and error propagation. The
 existing Engram hash/history/disk-row suite passes with the flag enabled.
 No default change; benchmark after the expanded GPU snapshot test completes.
+
+## 32: reuse Engram prefetch on small selected tiles (opt-in)
+
+DS4_METAL_V41_SMALL_ENGRAM_PREFETCH=1 starts the existing table reader for
+selected tiles too. Layer 0 overlaps table 0; layers 2-13 overlap table 1.
+The existing allocated staging tensor, release/acquire row publication, thread
+join, cancellation and copy path are reused. No additional admitted memory.
+This is independent of the small-batch parallel-reader flag. Built successfully;
+model snapshot and real-agent measurement follow the current expanded run.
