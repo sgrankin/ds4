@@ -391,8 +391,6 @@ int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
  * finish its router commands first and clear this hint on every exit. This
  * permits SSD binding to overlap subsequently queued shared-expert work. */
 void ds4_gpu_stream_expert_batch_set_ready(const ds4_gpu_tensor *selected);
-/* Pin cached experts between subtiles; UINT32_MAX releases the scope. */
-void ds4_gpu_stream_expert_batch_pin_layer(uint32_t layer);
 int ds4_gpu_stream_expert_cache_begin_selected_load(
         const ds4_gpu_stream_expert_table *table,
         const int32_t                     *selected_ids,

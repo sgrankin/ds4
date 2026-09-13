@@ -40835,8 +40835,6 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
         !getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS");
     const bool async_load = load_eligible && getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD");
     const bool early_load = load_eligible && !async_load;
-    const bool event_load = early_load && getenv("DS4_METAL_V41_ROUTER_EVENT");
-    uint64_t route_event = 0;
     metal_graph_selected_async_load load = {0};
     int32_t selected_ids[DS4_MAX_EXPERT_USED];
     if (async_load) {
@@ -40849,8 +40847,7 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
                 m, l, il, event, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD))
             return false;
     }
-    if (event_load && !ds4_gpu_signal_selected_readback_ready(&route_event)) return false;
-    if (early_load && !event_load) {
+    if (early_load) {
         const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
             m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
         if (!ds4_gpu_end_commands() ||
@@ -40885,17 +40882,6 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
         }
         return false;
     }
-    if (event_load) {
-        /* Signal after routing, then let shared work continue on the GPU
-         * while this thread starts selected SSD reads. No worker handoff. */
-        const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
-            m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
-        if (!ds4_gpu_commit_and_wait_selected_readback(route_event, "V4.1 router") ||
-            !ds4_gpu_tensor_read(g->selected, 0, selected_ids,
-                DS4_N_EXPERT_USED * sizeof(selected_ids[0])) ||
-            !ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
-                DS4_N_EXPERT_USED)) return false;
-    }
     if (async_load) {
         const bool flush_ok = ds4_gpu_flush_commands() != 0;
         bool loaded = metal_graph_selected_async_load_finish(&load);
@@ -40913,7 +40899,7 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
             return false;
         }
     }
-    if (early_load && ((!event_load && !ds4_gpu_flush_commands()) ||
+    if (early_load && (!ds4_gpu_flush_commands() ||
         !ds4_gpu_routed_moe_set_selected_override(selected_ids, DS4_N_EXPERT_USED)))
         return false;
     bool routed_ok;
@@ -41424,18 +41410,12 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
     return ok;
 }
 
-/* Keep each layer active across MoE subtiles, preserving exact reductions.
- * Selected subtiles reuse loaded experts before advancing to the next layer. */
+/* Tile routed/shared work through the existing <=8-row decode kernels.
+ * Their F32 intermediates and reductions retain scalar BF16/router boundaries. */
 static bool ds41_moe_exact_tiles(ds41_gpu_graph *g, const ds4_model *m,
-                                 const ds4_layer_weights *l, uint32_t il, uint32_t count,
-                                 uint32_t tile_rows, bool force_resident) {
-    const bool pin = !force_resident &&
-        getenv("DS4_METAL_STREAMING_PREFILL_PROTECT_LAYER");
-    for (uint32_t first = 0; first < count;) {
-        uint32_t rows = count - first < tile_rows ? count - first : tile_rows;
-        /* Selected-address kernels require at least two rows. Leave two
-         * rather than falling back to an unmapped full layer for one row. */
-        if (!force_resident && count - first == rows + 1u) rows--;
+                                 const ds4_layer_weights *l, uint32_t il, uint32_t count) {
+    for (uint32_t first = 0; first < count; first += 8u) {
+        const uint32_t rows = count - first < 8u ? count - first : 8u;
         ds41_gpu_graph tile = *g;
         tile.pos += first;
         memset(&tile.batch, 0, sizeof(tile.batch));
@@ -41448,22 +41428,13 @@ static bool ds41_moe_exact_tiles(ds41_gpu_graph *g, const ds4_model *m,
             (uint64_t)rows * (width) * sizeof(float))) != NULL;
         DS41_PREFILL_ROWS(DS41_TILE_VIEW)
 #undef DS41_TILE_VIEW
-        /* Only protect future-subtile reuse. The last subtile's ordinary
-         * selected-ID protection suffices, as do all single-batch prompts. */
-        if (pin) ds4_gpu_stream_expert_batch_pin_layer(
-            first + rows < count ? il : UINT32_MAX);
-        if (ok) ok = ds41_moe_batch(&tile, m, l, il, rows, false, force_resident);
+        if (ok) ok = ds41_moe_batch(&tile, m, l, il, rows, false, true);
 #define DS41_TILE_FREE(name, width) ds4_gpu_tensor_free(tile.batch.name);
         DS41_PREFILL_ROWS(DS41_TILE_FREE)
 #undef DS41_TILE_FREE
         ds4_gpu_tensor_free(tile.prefill_tokens);
-        if (!ok) {
-            if (pin) ds4_gpu_stream_expert_batch_pin_layer(UINT32_MAX);
-            return false;
-        }
-        first += rows;
+        if (!ok) return false;
     }
-    if (pin) ds4_gpu_stream_expert_batch_pin_layer(UINT32_MAX);
     return true;
 }
 
@@ -41617,14 +41588,6 @@ static uint32_t ds41_selected_tile_cap(const ds41_gpu_graph *g) {
         if (end != env && !*end && value >= 2u && value <= 128u)
             tile = (uint32_t)value;
     }
-    const char *layer_env = getenv("DS4_METAL_V41_SELECTED_LAYER_TILE");
-    if (layer_env && layer_env[0] && ds41_large_expert_cache(g) &&
-        !getenv("DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES")) {
-        char *end = NULL;
-        unsigned long value = strtoul(layer_env, &end, 10);
-        if (end != layer_env && !*end && value >= 129u && value <= 1023u)
-            tile = (uint32_t)value;
-    }
     return tile < g->prefill_cap ? tile : g->prefill_cap;
 }
 
@@ -41639,13 +41602,8 @@ static bool ds41_selected_small_prefill(const ds41_gpu_graph *g,
         count > g->prefill_cap) return false;
     const uint32_t gate_type = w->layer[0].ffn_gate_exps->type;
     const uint32_t down_type = w->layer[0].ffn_down_exps->type;
-    for (uint32_t first = 0; first < count;) {
-        uint32_t rows = count - first < 128u ? count - first : 128u;
-        if (count - first == rows + 1u) rows--;
-        if (!ds4_gpu_stream_expert_batch_supported(rows, DS4_N_EXPERT,
-            DS4_N_EXPERT_USED, gate_type, down_type)) return false;
-        first += rows;
-    }
+    if (!ds4_gpu_stream_expert_batch_supported(count, DS4_N_EXPERT,
+        DS4_N_EXPERT_USED, gate_type, down_type)) return false;
     for (uint32_t il = 1; il < DS4_N_LAYER; il++)
         if (w->layer[il].ffn_gate_exps->type != gate_type ||
             w->layer[il].ffn_down_exps->type != down_type) return false;
@@ -42224,10 +42182,8 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
                     ds4_gpu_dsv41_quantize(active.residual, DS4_N_EMBD * DS4_N_HC, count, DS4_V41_BF16);
             }
             if (ok && (batch_moe || exact_moe)) {
-                ok = exact_moe ? ds41_moe_exact_tiles(g, m, &w->layer[il], il, count, 8u, true) :
-                    selected_small && count > 128u ?
-                        ds41_moe_exact_tiles(g, m, &w->layer[il], il, count, 128u, false) :
-                        ds41_moe_batch(g, m, &w->layer[il], il, count, false, !selected_small);
+                ok = exact_moe ? ds41_moe_exact_tiles(g, m, &w->layer[il], il, count) :
+                    ds41_moe_batch(g, m, &w->layer[il], il, count, false, !selected_small);
                 if (ok) ok =
                     ds41_trace_row(g->batch.selected, DS4_N_EXPERT_USED, start, count, il, "3a-selected") &&
                     ds41_trace_row(g->batch.route_weights, DS4_N_EXPERT_USED, start, count, il, "3b-weights") &&

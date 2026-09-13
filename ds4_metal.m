@@ -809,7 +809,6 @@ typedef struct {
 static ds4_gpu_stream_expert_timing_snapshot g_stream_expert_timing_last_report;
 static int g_stream_prefill_batch_selected_addr_building;
 static const ds4_gpu_tensor *g_stream_expert_batch_ready;
-static uint32_t g_stream_expert_batch_pinned_layer = UINT32_MAX;
 static int g_glm_stream_expert_addr_table_building;
 static uint64_t g_model_residency_count;
 static int g_model_residency_added_to_queue;
@@ -14501,11 +14500,6 @@ void ds4_gpu_stream_expert_batch_set_ready(const ds4_gpu_tensor *selected) {
     g_stream_expert_batch_ready = selected;
 }
 
-void ds4_gpu_stream_expert_batch_pin_layer(uint32_t layer) {
-    g_stream_expert_batch_pinned_layer =
-        layer < DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER ? layer : UINT32_MAX;
-}
-
 int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
         uint32_t used, uint32_t gate_type, uint32_t down_type) {
     return ds4_gpu_stream_prefill_batch_selected_addr_enabled(rows, total, used,
@@ -15369,7 +15363,6 @@ static int ds4_gpu_stream_expert_cache_entry_protected(
         uint32_t protect_layer,
         const int32_t *protect_ids,
         uint32_t n_protect) {
-    if (layer == g_stream_expert_batch_pinned_layer) return 1;
     if (layer < DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER &&
         expert < DS4_METAL_STREAM_EXPERT_CACHE_MAX_EXPERT &&
         ds4_gpu_stream_expert_cache_entry_inflight(
