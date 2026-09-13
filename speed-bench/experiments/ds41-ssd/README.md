@@ -689,3 +689,9 @@ confirmation is /tmp/ds41-fixed-tile128, running before any default promotion.
 Fresh/restored hello means 2.235/3.758 s control versus 2.274/3.780 s cached. Later turns also flat. Keep uncached default.
 These are exploratory trials with live timestamp tokens and random seeds.
 See agent-file-cache-exploratory.json. No default changed.
+
+## 42: short Engram prefetch did not improve first-turn latency
+
+Fresh hello 2.290 s in both variants; restored 3.768 versus 3.764 s. Fresh six-token turn improved, but restored did not. Keep prefetch opt-in.
+These are exploratory trials with live timestamp tokens and random seeds.
+See agent-engram-prefetch-exploratory.json. No default changed.
