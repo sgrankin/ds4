@@ -378,6 +378,12 @@ int ds4_gpu_stream_expert_cache_seed_selected(
         const ds4_gpu_stream_expert_table *table,
         const int32_t                     *selected_ids,
         uint32_t                           n_selected);
+/* Exact Q8 projections, projection BF16 rounding, SwiGLU and output BF16. */
+int ds4_gpu_dsv41_shared_gate_up_bf16_rows(ds4_gpu_tensor *gate,
+        ds4_gpu_tensor *up, ds4_gpu_tensor *mid, const void *model_map,
+        uint64_t model_size, uint64_t gate_offset, uint64_t up_offset,
+        uint64_t in_dim, uint64_t out_dim, const ds4_gpu_tensor *x,
+        uint32_t rows, float clamp);
 /* Whether a selected-only batch can run without binding full expert tensors. */
 int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
         uint32_t used, uint32_t gate_type, uint32_t down_type);

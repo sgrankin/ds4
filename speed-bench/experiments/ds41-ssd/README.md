@@ -639,3 +639,18 @@ unchanged. Both hello candidates beat both controls. See agent-tile128-abba.json
 Full snapshots with tile128, medium, shared overlap and all Engram experiment
 flags enabled match scalar at38/64/127/128/129/255 after2048+8decoded tokens.
 See tile128-state.txt. This is correctness evidence, not an attribution of speed.
+
+## 38: exact shared-expert projection/activation fusion (opt-in)
+
+DS4_METAL_V41_FUSED_SHARED_BF16=1 fuses Q8 gate/up projections, their individual
+BF16 boundaries, SwiGLU, and its BF16 output boundary. The shader specializes
+the existing shared dot-product body; default DS4 kernels retain the original
+non-BF16 specialization. Scalar and <=128-row exact V4.1 calls are eligible;
+quality and TP retain the existing path. Down projection remains separate.
+
+All 32 synthetic shapes pass byte comparison for gate, up, mid and output guards.
+Warm 32-row microbench: 200 calls140.2->107.2ms (~23.5% lower); scalar warm
+control7.97ms versus candidates5.94/5.98ms (first control15.99ms includes startup).
+See shared-bf16-micro.txt. Full model ablation passes32 full-vocabulary logit rows
+and the complete serialized continuation state. Actual-agent ABBA is queued
+under /tmp/ds41-round3-trials/shared-agent.log; no end-to-end gain claimed yet.

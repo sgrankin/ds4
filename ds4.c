@@ -40791,6 +40791,27 @@ static bool ds41_attention(ds41_gpu_graph *g, const ds4_model *m,
            ds41_bf16(g->block, DS4_N_EMBD);
 }
 
+/* Preserve both projection BF16 boundaries before SwiGLU, then its BF16
+ * output boundary. The fused kernel keeps the standalone reduction trees. */
+static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
+        const ds4_layer_weights *l, ds4_gpu_tensor *gate, ds4_gpu_tensor *up,
+        ds4_gpu_tensor *mid, const ds4_gpu_tensor *in, uint32_t count) {
+    if (!g->quality && g->tp_world == 1 && count <= 128u &&
+        l->ffn_gate_shexp->type == DS4_TENSOR_Q8_0 &&
+        l->ffn_up_shexp->type == DS4_TENSOR_Q8_0 &&
+        getenv("DS4_METAL_V41_FUSED_SHARED_BF16"))
+        return ds4_gpu_dsv41_shared_gate_up_bf16_rows(gate, up, mid, m->map, m->size,
+            l->ffn_gate_shexp->abs_offset, l->ffn_up_shexp->abs_offset,
+            DS4_N_EMBD, DS4_N_FF_EXP, in, count, DS4_SWIGLU_CLAMP_EXP);
+    return (count == 1 ? ds41_matmul(gate, m, l->ffn_gate_shexp, in, true) :
+        ds41_matmul_batch(gate, m, l->ffn_gate_shexp, in, count, true)) &&
+        (count == 1 ? ds41_matmul(up, m, l->ffn_up_shexp, in, true) :
+        ds41_matmul_batch(up, m, l->ffn_up_shexp, in, count, true)) &&
+        ds4_gpu_swiglu_tensor(mid, gate, up, count * DS4_N_FF_EXP,
+            DS4_SWIGLU_CLAMP_EXP, 1.0f) &&
+        ds4_gpu_dsv41_quantize(mid, DS4_N_FF_EXP, count, DS4_V41_BF16);
+}
+
 static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
                      const ds4_layer_weights *l, uint32_t il, uint32_t token) {
     uint64_t gate_row = 0, down_row = 0;
@@ -40852,11 +40873,8 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
     }
 #endif
     if (shared_here && !shared_queued &&
-        (!ds41_matmul(g->shared_gate, m, l->ffn_gate_shexp, g->norm, true) ||
-        !ds41_matmul(g->shared_up, m, l->ffn_up_shexp, g->norm, true) ||
-        !ds4_gpu_swiglu_tensor(g->shared_mid, g->shared_gate, g->shared_up,
-                              DS4_N_FF_EXP, DS4_SWIGLU_CLAMP_EXP, 1.0f) ||
-        !ds41_bf16(g->shared_mid, DS4_N_FF_EXP) ||
+        (!ds41_shared_gate_up(g, m, l, g->shared_gate, g->shared_up,
+            g->shared_mid, g->norm, 1) ||
         !ds41_matmul(g->shared, m, l->ffn_down_shexp, g->shared_mid, true))) {
         if (load.active) {
             (void)metal_graph_selected_async_load_finish(&load);
@@ -41364,11 +41382,8 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
         if (ok) ds4_gpu_stream_expert_batch_set_ready(b->selected);
     }
     ok = ok && ((shared_owner && g->tp_rank != (il & 1u)) ||
-        (ds41_matmul_batch(b->shared_gate, m, l->ffn_gate_shexp, b->norm, count, true) &&
-        ds41_matmul_batch(b->shared_up, m, l->ffn_up_shexp, b->norm, count, true) &&
-        ds4_gpu_swiglu_tensor(b->shared_mid, b->shared_gate, b->shared_up,
-            count * DS4_N_FF_EXP, DS4_SWIGLU_CLAMP_EXP, 1.0f) &&
-        ds4_gpu_dsv41_quantize(b->shared_mid, DS4_N_FF_EXP, count, DS4_V41_BF16) &&
+        (ds41_shared_gate_up(g, m, l, b->shared_gate, b->shared_up,
+            b->shared_mid, b->norm, count) &&
         ds41_matmul_batch(b->shared, m, l->ffn_down_shexp, b->shared_mid, count, true))) &&
         (
 #ifndef __APPLE__

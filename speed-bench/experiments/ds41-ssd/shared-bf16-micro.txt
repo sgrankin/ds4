@@ -1,0 +1,9 @@
+shared rows=1 pass=0 fused=0 200 calls=15.985 ms
+shared rows=1 pass=1 fused=1 200 calls=5.978 ms
+shared rows=1 pass=2 fused=1 200 calls=5.937 ms
+shared rows=1 pass=3 fused=0 200 calls=7.970 ms
+shared rows=32 pass=0 fused=0 200 calls=140.475 ms
+shared rows=32 pass=1 fused=1 200 calls=107.232 ms
+shared rows=32 pass=2 fused=1 200 calls=107.266 ms
+shared rows=32 pass=3 fused=0 200 calls=139.994 ms
+PASS: 32 shared-expert BF16 shapes, all intermediates and guards exact

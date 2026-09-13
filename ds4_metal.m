@@ -20360,9 +20360,11 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
         uint64_t                out_dim,
         const ds4_gpu_tensor *x,
         float                   clamp,
-        int                     store_gate_up) {
+        int                     store_gate_up,
+        uint32_t n_rows, bool bf16) {
     if (!g_initialized && !ds4_gpu_init()) return 0;
-    if (!mid || !x || !model_map ||
+    if (!mid || !x || !model_map || !n_rows || n_rows > 128u ||
+        (bf16 && (!out_dim || out_dim % 2u || out_dim > 65536u)) ||
         (store_gate_up && (!gate || !up)) ||
         (in_dim & 31u) != 0 ||
         in_dim > UINT32_MAX || out_dim > UINT32_MAX ||
@@ -20377,8 +20379,8 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
             ds4_gpu_tensor_buffer(gate) : midbuf;
         id<MTLBuffer> upbuf = store_gate_up ?
             ds4_gpu_tensor_buffer(up) : midbuf;
-        const uint64_t x_bytes = in_dim * sizeof(float);
-        const uint64_t out_bytes = out_dim * sizeof(float);
+        const uint64_t x_bytes = (uint64_t)n_rows * in_dim * sizeof(float);
+        const uint64_t out_bytes = (uint64_t)n_rows * out_dim * sizeof(float);
         if (!xbuf || !gatebuf || !upbuf || !midbuf ||
             ds4_gpu_tensor_bytes(x) < x_bytes ||
             (store_gate_up && ds4_gpu_tensor_bytes(gate) < out_bytes) ||
@@ -20414,7 +20416,9 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
         ds4_gpu_q8_0_matvec_args args = ds4_gpu_make_q8_0_mv_args(in_dim, out_dim);
         ds4_gpu_mv_dispatch mv_dispatch = ds4_gpu_make_q8_0_mv_dispatch();
         args.nr0 = mv_dispatch.nr0;
-        const char *fn_name = store_gate_up ?
+        args.ne11 = args.ne1 = (int32_t)n_rows;
+        args.nb12 = args.nb13 = (uint64_t)n_rows * in_dim * sizeof(float);
+        const char *fn_name = bf16 ? "kernel_dsv41_shared_gate_up_bf16_q8_0" : store_gate_up ?
             "kernel_dsv4_shared_gate_up_swiglu_q8_0" :
             "kernel_dsv4_shared_mid_swiglu_q8_0";
         id<MTLComputePipelineState> pipeline =
@@ -20442,7 +20446,7 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
         [enc setThreadgroupMemoryLength:2u * mv_dispatch.smem atIndex:0];
         [enc dispatchThreadgroups:MTLSizeMake(((NSUInteger)out_dim + (NSUInteger)mv_dispatch.nr0 - 1u) /
                                                   (NSUInteger)mv_dispatch.nr0,
-                                              1,
+                                              n_rows,
                                               1)
              threadsPerThreadgroup:MTLSizeMake(32, (NSUInteger)mv_dispatch.nsg, 1)];
         ds4_gpu_end_compute_encoder(cb, enc);
@@ -20457,6 +20461,15 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
     }
 
     return 1;
+}
+
+int ds4_gpu_dsv41_shared_gate_up_bf16_rows(ds4_gpu_tensor *gate,
+        ds4_gpu_tensor *up, ds4_gpu_tensor *mid, const void *model_map,
+        uint64_t model_size, uint64_t gate_offset, uint64_t up_offset,
+        uint64_t in_dim, uint64_t out_dim, const ds4_gpu_tensor *x,
+        uint32_t rows, float clamp) {
+    return ds4_gpu_shared_gate_up_swiglu_q8_0_impl(gate, up, mid, model_map,
+        model_size, gate_offset, up_offset, in_dim, out_dim, x, clamp, 1, rows, true);
 }
 
 /* Decode-only fusion of the router logits matvec with the shared-expert
@@ -20693,7 +20706,7 @@ int ds4_gpu_shared_gate_up_swiglu_q8_0_tensor(
                                                    out_dim,
                                                    x,
                                                    clamp,
-                                                   1);
+                                                   1, 1, false);
 }
 
 int ds4_gpu_shared_mid_swiglu_q8_0_tensor(
@@ -20717,7 +20730,7 @@ int ds4_gpu_shared_mid_swiglu_q8_0_tensor(
                                                    out_dim,
                                                    x,
                                                    clamp,
-                                                   0);
+                                                   0, 1, false);
 }
 
 int ds4_gpu_shared_gate_up_swiglu_q8_0_model_view_tensor(
@@ -20743,7 +20756,7 @@ int ds4_gpu_shared_gate_up_swiglu_q8_0_model_view_tensor(
                                                    out_dim,
                                                    x,
                                                    clamp,
-                                                   1);
+                                                   1, 1, false);
 }
 
 int ds4_gpu_shared_gate_up_swiglu_q8_0_rows_tensor(
