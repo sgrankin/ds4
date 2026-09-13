@@ -279,3 +279,19 @@ The batching discrepancy is arithmetic: different dense/attention/expert
 rounding, rather than a missing KV-cache update. The accepted path preserves
 the old batch prefix and uses scalar-equivalent arithmetic for its long tail.
 Vision reproduction remains deferred to the user's next keyboard session.
+
+## 13: actual hello turns, fresh versus restored system KV
+
+Added `DS4_AGENT_CACHE_DIR` as an optional agent cache-directory override.
+The default remains ~/.ds4/kvcache. agent_probe.py snapshots the executable,
+uses a private cache, sends three separate turns on the real noninteractive
+readiness protocol, and limits output to one token per turn. This isolates
+prefill latency; it is not a benchmark of complete natural-language answers.
+
+`python3 speed-bench/experiments/ds41-ssd/agent_probe.py /tmp/ds41-agent-short-baseline2`
+(no vision; default ctx=100000). System prompt 1859 tokens: 14.932 seconds.
+After fresh system prefill, appends of 38/12/6 tokens took 3.527/0.981/0.379 s.
+After loading saved system KV in a new process, the same appends took
+4.954/1.203/0.509 s. The trace confirms a system KV hit. Repeated short turns
+get faster as weights warm; restoring KV does not recreate that weight cache.
+All KV files are isolated under the experiment directory. See agent-short-baseline.json.

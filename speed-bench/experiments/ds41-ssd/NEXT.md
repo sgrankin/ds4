@@ -61,3 +61,8 @@ run_abba.py snapshots the binary and requires matching full frontier logits.
 Use full continuation snapshots and per-step logits for changed arithmetic.
 Keep bulk logs under /tmp and durable summaries here. Update this notebook at
 experiment boundaries so a compaction can resume without losing decisions.
+
+13 complete: actual short-agent baseline recorded in agent-short-baseline.json.
+Fresh hello 38 tokens=3.527s; restored system KV hello=4.954s; later 6-token
+turn=0.379/0.509s. Next: exact RMS norm+BF16 fusion. Cache override is
+DS4_AGENT_CACHE_DIR; marker protocol is on stderr, merged into stdout by probe.
