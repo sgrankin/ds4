@@ -811,3 +811,29 @@ This warmed repeat avoids the earlier fresh-control outlier and suggests about
 19%/16% less hello prefill time, rather than relying on the earlier28% estimate.
 These one-output-token measurements isolate startup-to-first-token behavior;
 experiment48 measures naturally completed answers. See agent-final-warmed-abba.json.
+
+## 51: checked-in tool-using session benchmark
+
+Registry now includes speed-bench/agent-session/live.py and replay_abba.py.
+The three-turn ledger task exercises20 tools and14 generation rounds, growing
+context to8710. Independent task checks pass after every turn, including money
+precision, refund/void/retry semantics, date filtering before/after duplicate
+handling, and generated report artifacts. Baseline user turns total291.714s,
+with17.420s startup separate;94.280s prefill and196.339s decode. Fixed token
+recording session-v1.txt is checked in with summary and validation evidence.
+An earlier run hit an overstrict harness assertion on added tests, not a model
+failure; preserve existing test definitions but allow added test coverage.
+
+## 52: keep selected experts active across wider layer sweeps
+
+Experimental DS4_METAL_V41_SELECTED_LAYER_TILE=129..1023 increases the outer
+exact layer sweep while keeping selected MoE dispatches at128 rows or less.
+This aims to reuse each layer's selected weights before other layers evict them.
+Default tile128 remains unchanged. Large-cache, rollback, actual scratch cap,
+format and backend capability guards remain; check every subtile's capability.
+
+The initial129 case exposed a one-row remainder selecting the unmapped full
+expert path. Distribute129 as127+2 instead. With that fix,129/511/512/513/767
+appends after2048 tokens plus8 decoded tokens match complete scalar snapshots.
+See layer512-state.txt. Separate-process full-session ABBA is running; timings
+inside the numerical test are not evidence of an end-to-end speedup.
