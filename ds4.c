@@ -40820,6 +40820,7 @@ static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
 static struct {
     bool initialized, enabled, active, preattention, defer_check;
     FILE *record;
+    const ds41_gpu_graph *owner;
     uint32_t *words;
     size_t count, cursor;
     uint32_t pos, token, checked;
@@ -40842,6 +40843,9 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
         ds41_route_oracle.initialized = true;
         const char *record = getenv("DS4_V41_ROUTE_RECORD");
         const char *oracle = getenv("DS4_V41_ROUTE_ORACLE");
+        const bool scheduled = getenv("DS4_V41_ORACLE_PREATTENTION") ||
+                               getenv("DS4_V41_ORACLE_DEFER_CHECK");
+        if (scheduled && !oracle) ds4_die("oracle schedule requires a route recording");
         if (!record && !oracle) return;
         if (record && oracle) ds4_die("oracle recording and replay are mutually exclusive");
         const uint32_t header[] = {0x44535231, DS4_N_LAYER, DS4_N_EXPERT, DS4_N_EXPERT_USED};
@@ -40873,9 +40877,11 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
                 ds4_die("deferred oracle check requires pre-attention loading");
         }
         ds41_route_oracle.enabled = true;
+        ds41_route_oracle.owner = g;
         atexit(ds41_route_oracle_close);
     }
     if (!ds41_route_oracle.enabled) return;
+    if (ds41_route_oracle.owner != g) ds4_die("oracle supports one scalar session per process");
     if (!g->streaming || g->quality || g->imatrix || g->image_count || g->tp_world != 1 ||
         getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") ||
         getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD") ||

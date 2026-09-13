@@ -987,3 +987,24 @@ Fault injection: changing one recorded expert ID in the first decoded token
 makes deferred validation exit nonzero with "oracle prediction differs from
 exact router". No final continuation snapshot is published. Eight extraction
 and route-parser tests pass. Build succeeds without warnings.
+
+## 62: full-session route and exposed-I/O census
+
+The instrumented full replay captures 3371 scalar tokens, 134840 layer events.
+Every phase's logits and the final snapshot match the previous checked replay.
+Of those layer events, 101535 (75.3%) are all-resident, 33302 mixed and 3 all
+missing. Pending-read CPU joins total 19.858 s across 33305 joins, versus
+197.939 s of instrumented decode. This is CPU blocking at the read join only,
+not all I/O-related host overhead and not all removable wall time. Earlier
+begin-to-consumption pread_ms was not an exposed-stall metric.
+
+Route SHA256 3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43.
+See oracle-full-capture.json for cumulative per-phase counters. Timing here is
+diagnostic; a separate uninstrumented full ABBA compares default with combined
+oracle pre-attention/deferred-validation scheduling.
+
+Cheap predictors weaken on the full chronological split: at six candidates,
+previous-token recall24.5%, frequency16.0%, previous-layer transition34.6%; at
+12 candidates transition48.6%. This is within-session, all-route recall, not
+independent-task or cache-miss prediction. Don't extrapolate the short trace's
+higher recall. See route-stats-full.json and the offline route_stats.py runner.

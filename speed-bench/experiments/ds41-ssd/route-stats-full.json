@@ -1,0 +1,46 @@
+{
+  "routes_sha256": "3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43",
+  "layers": 40,
+  "experts": 384,
+  "selected": 6,
+  "tokens": 3371,
+  "train_tokens": 2022,
+  "test_tokens": 1349,
+  "warning": "Within-session chronological screen; not held-out tasks, cache misses, deadlines or speed.",
+  "prediction_budget": {
+    "6": {
+      "frequency": {
+        "layer_events": 53960,
+        "recall": 0.15963985668396344,
+        "all_selected_fraction": 0.0
+      },
+      "previous_token": {
+        "layer_events": 53760,
+        "recall": 0.24465835813492065,
+        "all_selected_fraction": 0.0011160714285714285
+      },
+      "previous_layer_transition": {
+        "layer_events": 52611,
+        "recall": 0.3455075934690464,
+        "all_selected_fraction": 0.0019957803501168955
+      }
+    },
+    "12": {
+      "frequency": {
+        "layer_events": 53960,
+        "recall": 0.24867494440326168,
+        "all_selected_fraction": 0.0005189028910303929
+      },
+      "previous_token": {
+        "layer_events": 53760,
+        "recall": 0.24465835813492065,
+        "all_selected_fraction": 0.0011160714285714285
+      },
+      "previous_layer_transition": {
+        "layer_events": 52611,
+        "recall": 0.4863589997022169,
+        "all_selected_fraction": 0.029993727547471063
+      }
+    }
+  }
+}
