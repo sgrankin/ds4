@@ -98,3 +98,5 @@ __pycache__/
 /tests/test_deepseek41_selected_small
 
 /tests/test_metal_shared_bf16
+
+/speed-bench/agent-session/replay

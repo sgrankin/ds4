@@ -1,0 +1,5 @@
+[
+  "Fix the reconciliation bugs in this project. Read README.md, inspect the relevant source and tests with tools, run the tests to observe failures, then make the smallest correct fix and rerun them. Do not change existing tests. Keep the final explanation to two sentences.",
+  "Add an optional keyword-only since=None argument to summarize. When supplied as a YYYY-MM-DD string, include only events whose date is on or after since. Deduplicate by the first occurrence of event_id across the entire input before applying this filter. Preserve the default behavior. Add a new test file for the inclusive boundary and a duplicated event straddling the cutoff, run the suite, and keep the final explanation brief.",
+  "Using tools, run the CLI on data.csv and write the resulting JSON object to result.json. Then calculate the report since 2026-08-15 and write that JSON object to recent.json. Verify both files contain integer cents. Briefly explain why deduplication must precede date filtering."
+]

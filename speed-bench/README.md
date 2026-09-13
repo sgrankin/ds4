@@ -144,3 +144,19 @@ Start the server separately with an appropriate model, context and
 `--batched-session 8`. The report includes first-token and inter-token
 latency, request latency and throughput. Prompts use fresh nonces;
 `--shared-prefix` tests cache reuse instead.
+
+### DS4.1 SSD agent workloads
+
+Use all three workload levels when deciding whether an optimization helps:
+
+| Workload | Purpose | Runner |
+| --- | --- | --- |
+| Interactive short questions | Fresh/restored first output and complete response latency | `experiments/ds41-ssd/agent_abba.py` (one token and `--gen-tokens 256`) |
+| Tool-using coding session | Checked task completion, repeated tool-result prefill and growing context | [agent-session/live.py](agent-session/README.md) |
+| Fixed coding-session replay | Identical prefill/decode work, phase logits and final continuation-state comparison | `agent-session/replay_abba.py` |
+| Fixed prefix/tail workloads | Isolate prefill thresholds and batch-size effects | `experiments/ds41-ssd/run_abba.py` |
+
+Keep SSD streaming enabled and run GPU trials serially. Kernel microbenchmarks
+and numerical regression tests support these workloads; their speedups alone
+are insufficient to change defaults. Detailed DS4.1 results and open ideas are
+in [the experiment notebook](experiments/ds41-ssd/NEXT.md).
