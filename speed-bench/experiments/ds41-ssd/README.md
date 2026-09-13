@@ -556,3 +556,10 @@ indexed 2048-token prefix, plus eight teacher-forced tokens, has a bit-identical
 full continuation snapshot. Within-process scalar 3.068 s, tile32 0.959 s is a
 correctness run with warm-cache bias, not an independent performance result.
 Actual-agent ABBA is running at /tmp/ds41-agent-tile32.
+
+Tile32 actual-agent ABBA: fresh hello 2.884 to 2.422 s (16.0% lower), restored
+4.520 to 4.083 s (9.7% lower). Twelve-token turns 0.657/0.940 to 0.572/0.826 s.
+Six-token turns use the same shape and are approximately flat amid run noise.
+Both hello candidates beat both controls. See agent-tile32-abba.json. One-token
+probes retain the old random seed behavior, so sampled output IDs are not a
+correctness comparison; the expanded full-state test supplies that gate.

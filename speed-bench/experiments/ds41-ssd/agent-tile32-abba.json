@@ -1,0 +1,458 @@
+[
+  {
+    "variant": "control",
+    "runs": [
+      {
+        "mode": "fresh",
+        "system_kv_hit": false,
+        "turns": [
+          {
+            "prompt": 1859,
+            "cached": 0,
+            "suffix": 1859,
+            "rc": 0,
+            "ms": 14897.364
+          },
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 2882.548
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 663.518
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 299.511
+          }
+        ],
+        "generations": [
+          {
+            "generated": 1,
+            "response_ms": 2946.0,
+            "decode_ms": 63.0,
+            "first_output_ms": 2945.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          },
+          {
+            "generated": 1,
+            "response_ms": 737.0,
+            "decode_ms": 74.0,
+            "first_output_ms": 737.0,
+            "output_ids_sha256": "d807a221fdad3cba02dc5cec09b680daf579eac3f395372148feb211965327ff"
+          },
+          {
+            "generated": 1,
+            "response_ms": 362.0,
+            "decode_ms": 62.0,
+            "first_output_ms": 362.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          }
+        ],
+        "generation_limit": 1
+      },
+      {
+        "mode": "restored",
+        "system_kv_hit": true,
+        "turns": [
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 4500.46
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 936.321
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 326.797
+          }
+        ],
+        "generations": [
+          {
+            "generated": 1,
+            "response_ms": 4595.0,
+            "decode_ms": 94.0,
+            "first_output_ms": 4595.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          },
+          {
+            "generated": 1,
+            "response_ms": 1028.0,
+            "decode_ms": 91.0,
+            "first_output_ms": 1028.0,
+            "output_ids_sha256": "d807a221fdad3cba02dc5cec09b680daf579eac3f395372148feb211965327ff"
+          },
+          {
+            "generated": 1,
+            "response_ms": 392.0,
+            "decode_ms": 65.0,
+            "first_output_ms": 392.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          }
+        ],
+        "generation_limit": 1
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "runs": [
+      {
+        "mode": "fresh",
+        "system_kv_hit": false,
+        "turns": [
+          {
+            "prompt": 1859,
+            "cached": 0,
+            "suffix": 1859,
+            "rc": 0,
+            "ms": 14568.264
+          },
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 2387.22
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 558.964
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 309.674
+          }
+        ],
+        "generations": [
+          {
+            "generated": 1,
+            "response_ms": 2462.0,
+            "decode_ms": 72.0,
+            "first_output_ms": 2459.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          },
+          {
+            "generated": 1,
+            "response_ms": 622.0,
+            "decode_ms": 63.0,
+            "first_output_ms": 622.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          },
+          {
+            "generated": 1,
+            "response_ms": 368.0,
+            "decode_ms": 59.0,
+            "first_output_ms": 368.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          }
+        ],
+        "generation_limit": 1
+      },
+      {
+        "mode": "restored",
+        "system_kv_hit": true,
+        "turns": [
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 4099.719
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 817.278
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 342.868
+          }
+        ],
+        "generations": [
+          {
+            "generated": 1,
+            "response_ms": 4196.0,
+            "decode_ms": 96.0,
+            "first_output_ms": 4196.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          },
+          {
+            "generated": 1,
+            "response_ms": 920.0,
+            "decode_ms": 102.0,
+            "first_output_ms": 920.0,
+            "output_ids_sha256": "d807a221fdad3cba02dc5cec09b680daf579eac3f395372148feb211965327ff"
+          },
+          {
+            "generated": 1,
+            "response_ms": 414.0,
+            "decode_ms": 71.0,
+            "first_output_ms": 414.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          }
+        ],
+        "generation_limit": 1
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "runs": [
+      {
+        "mode": "fresh",
+        "system_kv_hit": false,
+        "turns": [
+          {
+            "prompt": 1859,
+            "cached": 0,
+            "suffix": 1859,
+            "rc": 0,
+            "ms": 14681.83
+          },
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 2456.989
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 585.349
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 317.565
+          }
+        ],
+        "generations": [
+          {
+            "generated": 1,
+            "response_ms": 2527.0,
+            "decode_ms": 70.0,
+            "first_output_ms": 2527.0,
+            "output_ids_sha256": "480a4a75998fbf52e07cb42f7d2009d06745ff3905003a55d009e06249ae89ed"
+          },
+          {
+            "generated": 1,
+            "response_ms": 656.0,
+            "decode_ms": 71.0,
+            "first_output_ms": 656.0,
+            "output_ids_sha256": "d807a221fdad3cba02dc5cec09b680daf579eac3f395372148feb211965327ff"
+          },
+          {
+            "generated": 1,
+            "response_ms": 385.0,
+            "decode_ms": 67.0,
+            "first_output_ms": 385.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          }
+        ],
+        "generation_limit": 1
+      },
+      {
+        "mode": "restored",
+        "system_kv_hit": true,
+        "turns": [
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 4066.078
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 834.558
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 356.647
+          }
+        ],
+        "generations": [
+          {
+            "generated": 1,
+            "response_ms": 4144.0,
+            "decode_ms": 77.0,
+            "first_output_ms": 4144.0,
+            "output_ids_sha256": "480a4a75998fbf52e07cb42f7d2009d06745ff3905003a55d009e06249ae89ed"
+          },
+          {
+            "generated": 1,
+            "response_ms": 943.0,
+            "decode_ms": 108.0,
+            "first_output_ms": 943.0,
+            "output_ids_sha256": "d807a221fdad3cba02dc5cec09b680daf579eac3f395372148feb211965327ff"
+          },
+          {
+            "generated": 1,
+            "response_ms": 448.0,
+            "decode_ms": 91.0,
+            "first_output_ms": 448.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          }
+        ],
+        "generation_limit": 1
+      }
+    ]
+  },
+  {
+    "variant": "control",
+    "runs": [
+      {
+        "mode": "fresh",
+        "system_kv_hit": false,
+        "turns": [
+          {
+            "prompt": 1859,
+            "cached": 0,
+            "suffix": 1859,
+            "rc": 0,
+            "ms": 14510.134
+          },
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 2884.719
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 650.811
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 339.215
+          }
+        ],
+        "generations": [
+          {
+            "generated": 1,
+            "response_ms": 2951.0,
+            "decode_ms": 66.0,
+            "first_output_ms": 2950.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          },
+          {
+            "generated": 1,
+            "response_ms": 721.0,
+            "decode_ms": 70.0,
+            "first_output_ms": 720.0,
+            "output_ids_sha256": "d807a221fdad3cba02dc5cec09b680daf579eac3f395372148feb211965327ff"
+          },
+          {
+            "generated": 1,
+            "response_ms": 406.0,
+            "decode_ms": 66.0,
+            "first_output_ms": 406.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          }
+        ],
+        "generation_limit": 1
+      },
+      {
+        "mode": "restored",
+        "system_kv_hit": true,
+        "turns": [
+          {
+            "prompt": 1897,
+            "cached": 1859,
+            "suffix": 38,
+            "rc": 0,
+            "ms": 4540.38
+          },
+          {
+            "prompt": 1910,
+            "cached": 1898,
+            "suffix": 12,
+            "rc": 0,
+            "ms": 944.669
+          },
+          {
+            "prompt": 1917,
+            "cached": 1911,
+            "suffix": 6,
+            "rc": 0,
+            "ms": 370.228
+          }
+        ],
+        "generations": [
+          {
+            "generated": 1,
+            "response_ms": 4640.0,
+            "decode_ms": 100.0,
+            "first_output_ms": 4640.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          },
+          {
+            "generated": 1,
+            "response_ms": 1014.0,
+            "decode_ms": 70.0,
+            "first_output_ms": 1014.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          },
+          {
+            "generated": 1,
+            "response_ms": 430.0,
+            "decode_ms": 60.0,
+            "first_output_ms": 430.0,
+            "output_ids_sha256": "7ebe4dee69dbd76ba398e89072b4e18083dab1e43d8e491caff097209be46a8c"
+          }
+        ],
+        "generation_limit": 1
+      }
+    ]
+  }
+]
