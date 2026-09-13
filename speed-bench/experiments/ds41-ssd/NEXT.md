@@ -6,6 +6,29 @@ Run GPU benchmarks serially. Metal and jj mutations need sandbox escalation;
 profiling our own process with `sample` worked without sudo. Vision reproduction
 and the vision session-save limitation remain deferred until the user is present.
 
+## Active routing-prediction experiment
+
+User authorized investigating predicted expert prefetch. Start with an exact
+route oracle before training. Current uncommitted DS4.c diagnostic records
+scalar routes and optionally begins ordinary selected loads before attention.
+No routing replacement, extra cache, or new workers. Both ABBA variants consume
+and validate the same frozen recording. See agent-session README commands.
+Short capture: /tmp/ds41-oracle-record-short (process 39234), routes at
+/tmp/ds41-oracle-routes-short.bin; first seven replay phases (343 decode tokens).
+Next: short exact ABBA, then complete recording and full ABBA if promising.
+An oracle here is only a ceiling for this one-slot pre-attention schedule,
+not a ceiling for all possible deeper prefetch or GPU-driven scheduling.
+
+Research anchors:
+- https://arxiv.org/html/2410.22134v3 (ProMoE learned prediction and scheduling)
+- https://arxiv.org/abs/2511.10676 (pre-attention expert prediction)
+- https://arxiv.org/abs/2607.24787 (predictions only for transfers, frozen routing)
+
+Score useful misses ready before deadline, wasted bytes and eviction, not just
+all-expert prediction accuracy. For training, hold out entire sessions/tasks.
+Try earlier-activation gate and transition-statistics baselines before an MLP.
+Preserve exact execution routing; wrong predictions may cost time, not quality.
+
 ## Working-session benchmark now available
 
 Registered in `speed-bench/README.md`; instructions and source are in

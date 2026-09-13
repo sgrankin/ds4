@@ -79,3 +79,24 @@ checks. This is a small synthetic working session, not coverage of long-context
 compaction, every tool, or arbitrary coding-task quality.
 `test_trace_session.py` checks extraction boundaries and rejection of
 incomplete/unsupported traces.
+
+## Exact-route prefetch oracle (diagnostic)
+
+This deliberately uses future information. It measures scheduling opportunity,
+not achievable generation throughput. Native routing and weights still execute;
+every scalar route is checked and mismatches abort. Batched prefill is unchanged.
+The first version starts selected SSD loading before the same layer's attention,
+using the existing pending-load slot, workers and cache budget. It does not yet
+model a learned predictor, wrong predictions, or multi-layer speculative queues.
+
+    DS4_V41_ROUTE_RECORD=/tmp/routes.bin python3 speed-bench/agent-session/replay_abba.py /tmp/route-capture --candidate-env DS4_V41_ORACLE_PREATTENTION=1 --order A
+    python3 speed-bench/agent-session/replay_abba.py /tmp/route-abba --routes /tmp/routes.bin --candidate-env DS4_V41_ORACLE_PREATTENTION=1
+
+Both comparison variants load and validate the frozen route file. Only B starts
+loads before attention. The route file must come from the same token recording,
+model and scalar schedule. Its header checks model dimensions; position, input
+token, layer and ordered expert IDs are checked during execution, and unused
+trailing records cause failure. Files are native-endian uint32 data, version 1,
+for local experiments; the harness records their SHA256. Recording refuses to
+overwrite an existing file. Use one session per process, ordinary nonvision,
+single-GPU SSD mode. Do not enable oracle flags for real agent use.

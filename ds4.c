@@ -40812,6 +40812,115 @@ static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
         ds4_gpu_dsv41_quantize(mid, DS4_N_FF_EXP, count, DS4_V41_BF16);
 }
 
+/* Diagnostic oracle: exact future routes from a previous scalar replay.
+ * Never changes routing, arithmetic, cache capacity, or selected-ID readback.
+ * Single-process/single-session only; files are native-endian uint32 words. */
+static struct {
+    bool initialized, enabled, active, preattention;
+    FILE *record;
+    uint32_t *words;
+    size_t count, cursor;
+    uint32_t pos, token, checked;
+} ds41_route_oracle;
+
+static void ds41_route_oracle_close(void) {
+    if (ds41_route_oracle.record && fclose(ds41_route_oracle.record)) {
+        fprintf(stderr, "ds4: oracle route recording close failed\n");
+        _Exit(1);
+    }
+    if (ds41_route_oracle.words && ds41_route_oracle.cursor != ds41_route_oracle.count) {
+        fprintf(stderr, "ds4: oracle route recording was not fully consumed\n");
+        _Exit(1);
+    }
+    free(ds41_route_oracle.words);
+}
+
+static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
+    if (!ds41_route_oracle.initialized) {
+        ds41_route_oracle.initialized = true;
+        const char *record = getenv("DS4_V41_ROUTE_RECORD");
+        const char *oracle = getenv("DS4_V41_ROUTE_ORACLE");
+        if (!record && !oracle) return;
+        if (record && oracle) ds4_die("oracle recording and replay are mutually exclusive");
+        const uint32_t header[] = {0x44535231, DS4_N_LAYER, DS4_N_EXPERT, DS4_N_EXPERT_USED};
+        if (record) {
+            ds41_route_oracle.record = fopen(record, "wbx");
+            if (!ds41_route_oracle.record ||
+                fwrite(header, sizeof(header), 1, ds41_route_oracle.record) != 1)
+                ds4_die("cannot create oracle route recording");
+        } else {
+            FILE *f = fopen(oracle, "rb");
+            uint32_t actual[4];
+            if (!f || fread(actual, sizeof(actual), 1, f) != 1 ||
+                memcmp(actual, header, sizeof(header)) || fseek(f, 0, SEEK_END))
+                ds4_die("invalid oracle route header");
+            long bytes = ftell(f);
+            const size_t row_bytes = (3u + DS4_N_EXPERT_USED) * sizeof(uint32_t);
+            if (bytes <= (long)sizeof(header) ||
+                ((size_t)bytes - sizeof(header)) % (row_bytes * DS4_N_LAYER) ||
+                fseek(f, sizeof(header), SEEK_SET)) ds4_die("invalid oracle route length");
+            ds41_route_oracle.count = ((size_t)bytes - sizeof(header)) / sizeof(uint32_t);
+            ds41_route_oracle.words = malloc((size_t)bytes - sizeof(header));
+            if (!ds41_route_oracle.words ||
+                fread(ds41_route_oracle.words, sizeof(uint32_t), ds41_route_oracle.count, f)
+                    != ds41_route_oracle.count) ds4_die("cannot read oracle routes");
+            fclose(f);
+            ds41_route_oracle.preattention = getenv("DS4_V41_ORACLE_PREATTENTION") != NULL;
+        }
+        ds41_route_oracle.enabled = true;
+        atexit(ds41_route_oracle_close);
+    }
+    if (!ds41_route_oracle.enabled) return;
+    if (!g->streaming || g->quality || g->imatrix || g->image_count || g->tp_world != 1 ||
+        getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") ||
+        getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD") ||
+        getenv("DS4_METAL_DISABLE_STREAMING_EXPERT_EARLY_LOAD"))
+        ds4_die("oracle requires ordinary single-rank text SSD early loading");
+    ds41_route_oracle.active = true;
+    ds41_route_oracle.pos = g->pos;
+    ds41_route_oracle.token = token;
+    ds41_route_oracle.checked = 0;
+}
+
+static const int32_t *ds41_route_oracle_ids(uint32_t il) {
+    const size_t stride = 3u + DS4_N_EXPERT_USED;
+    const size_t off = ds41_route_oracle.cursor + il * stride;
+    if (off + stride > ds41_route_oracle.count) ds4_die("oracle routes exhausted");
+    const uint32_t *row = ds41_route_oracle.words + off;
+    if (row[0] != ds41_route_oracle.pos || row[1] != ds41_route_oracle.token || row[2] != il)
+        ds4_die("oracle route position/token/layer mismatch");
+    for (uint32_t j = 0; j < DS4_N_EXPERT_USED; j++)
+        if (row[3+j] >= DS4_N_EXPERT) ds4_die("invalid oracle expert ID");
+    return (const int32_t *)(row + 3);
+}
+
+static void ds41_route_oracle_check(uint32_t il, const int32_t *ids) {
+    if (!ds41_route_oracle.active) return;
+    if (il != ds41_route_oracle.checked++) ds4_die("oracle layer order mismatch");
+    if (ds41_route_oracle.record) {
+        uint32_t row[3 + DS4_MAX_EXPERT_USED];
+        row[0] = ds41_route_oracle.pos; row[1] = ds41_route_oracle.token; row[2] = il;
+        memcpy(row + 3, ids, DS4_N_EXPERT_USED * sizeof(int32_t));
+        if (fwrite(row, sizeof(uint32_t), 3u + DS4_N_EXPERT_USED, ds41_route_oracle.record)
+            != 3u + DS4_N_EXPERT_USED) ds4_die("oracle route write failed");
+    } else if (memcmp(ids, ds41_route_oracle_ids(il), DS4_N_EXPERT_USED * sizeof(int32_t)))
+        ds4_die("oracle prediction differs from exact router");
+}
+
+static bool ds41_route_oracle_prefetch(const ds4_model *m,
+                                      const ds4_layer_weights *l, uint32_t il) {
+    if (!ds41_route_oracle.active || !ds41_route_oracle.preattention) return true;
+    uint64_t gate_row, down_row;
+    if (!tensor_nbytes(l->ffn_gate_exps->type, DS4_N_EMBD, &gate_row) ||
+        !tensor_nbytes(l->ffn_down_exps->type, DS4_N_FF_EXP, &down_row)) return false;
+    const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
+        m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
+    /* Submit preceding layer work before preparing buffers. Existing cache
+     * in-flight tracking protects every buffer still referenced by that work. */
+    return ds4_gpu_flush_commands() && ds4_gpu_stream_expert_cache_begin_selected_load(
+        &table, ds41_route_oracle_ids(il), DS4_N_EXPERT_USED);
+}
+
 static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
                      const ds4_layer_weights *l, uint32_t il, uint32_t token) {
     uint64_t gate_row = 0, down_row = 0;
@@ -40852,8 +40961,9 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
             m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
         if (!ds4_gpu_end_commands() ||
             !ds4_gpu_tensor_read(g->selected, 0, selected_ids,
-                DS4_N_EXPERT_USED * sizeof(selected_ids[0])) ||
-            !ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
+                DS4_N_EXPERT_USED * sizeof(selected_ids[0]))) return false;
+        ds41_route_oracle_check(il, selected_ids);
+        if (!ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
                 DS4_N_EXPERT_USED) || !ds4_gpu_begin_commands()) return false;
     }
     const bool shared_here = !shared_owner || g->tp_rank == (il & 1u);
@@ -41441,6 +41551,7 @@ static bool ds41_moe_exact_tiles(ds41_gpu_graph *g, const ds4_model *m,
 static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model *m,
                                              const ds4_weights *w, int token, float *logits) {
     if (!g || !g->valid || g->pos >= g->ctx || token < 0 || (uint32_t)token >= DS4_N_VOCAB) return false;
+    ds41_route_oracle_begin(g, (uint32_t)token);
     uint32_t ids[2][DS4_ENGRAM_COLS];
     ds4_engram_history next_history = g->history;
     if (!ds41_hash_tokens(g, &next_history, &token, 1, &ids[0][0])) return false;
@@ -41467,6 +41578,7 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
             const uint32_t i = il == 1 ? 0 : 1;
             ok = ds4_gpu_tensor_write(g->engram_rows, 0, g->rows[i], sizeof(g->rows[i]));
         }
+        if (ok) ok = ds41_route_oracle_prefetch(m, l, il);
         if (ok) {
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
             ok = ds41_graph_decode_layer(g, m, l, il, token);
@@ -41492,6 +41604,12 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
     if (layer_resident && !metal_graph_stream_map_decode_static_all(m, w)) ok = false;
     if (g->tp_world == 2 && ds4_gpu_tp_failed()) ok = false;
     if (ok && logits) ok = ds41_graph_logits(g, m, w, logits);
+    if (ds41_route_oracle.active) {
+        if (ok && ds41_route_oracle.checked != DS4_N_LAYER) ds4_die("incomplete oracle step");
+        if (ds41_route_oracle.words)
+            ds41_route_oracle.cursor += DS4_N_LAYER * (3u + DS4_N_EXPERT_USED);
+        ds41_route_oracle.active = false;
+    }
     if (!ok) {
         g->valid = false;
         return false;

@@ -25,6 +25,7 @@ p.add_argument('--model',type=Path,default=Path('ds4flash.gguf'))
 p.add_argument('--binary',type=Path,default=HERE/'replay')
 p.add_argument('--candidate-env',action='append',required=True)
 p.add_argument('--cache-gb',type=int)
+p.add_argument('--routes',type=Path,help='Frozen exact-route oracle recording; diagnostic only')
 p.add_argument('--order',default='ABBA',choices=['ABBA','BAAB','AB','BA','A'])
 a=p.parse_args(); a.output=a.output.resolve(); a.output.mkdir(parents=True,exist_ok=False)
 binary=a.output/'replay'; shutil.copy2(a.binary,binary)
@@ -33,7 +34,11 @@ env=os.environ.copy(); env.update(snapshot_shaders(a.output))
 candidate=dict(item.split('=',1) for item in a.candidate_env)
 for name in candidate: env.pop(name,None)
 if a.cache_gb: env['DS4_REPLAY_CACHE_GB']=str(a.cache_gb)
-(a.output/'manifest.json').write_text(json.dumps(dict(replay_sha256=digest(recording),binary_sha256=digest(binary),model=str(a.model.resolve()),candidate=a.candidate_env,cache_gb=a.cache_gb,order=a.order,env={k:v for k,v in env.items() if k.startswith('DS4_')}),indent=2)+'\n')
+route_hash=None
+if a.routes:
+    routes=a.output/'routes.bin'; shutil.copy2(a.routes,routes)
+    route_hash=digest(routes); env['DS4_V41_ROUTE_ORACLE']=str(routes)
+(a.output/'manifest.json').write_text(json.dumps(dict(replay_sha256=digest(recording),binary_sha256=digest(binary),model=str(a.model.resolve()),routes_sha256=route_hash,candidate=a.candidate_env,cache_gb=a.cache_gb,order=a.order,env={k:v for k,v in env.items() if k.startswith('DS4_')}),indent=2)+'\n')
 results=[]; reference=None
 for i,variant in enumerate(a.order):
     dest=a.output/f'{i}-{variant}'; dest.mkdir()
