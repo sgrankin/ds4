@@ -594,3 +594,9 @@ The existing allocated staging tensor, release/acquire row publication, thread
 join, cancellation and copy path are reused. No additional admitted memory.
 This is independent of the small-batch parallel-reader flag. Built successfully;
 model snapshot and real-agent measurement follow the current expanded run.
+
+Expanded tile32/medium/shared-overlap regression is complete: tails
+12/16/24/31/32/33/64/127/128/255/256/511/512/767 after a 2048-token prefix,
+each followed by eight decoded tokens, all have bit-identical complete snapshots.
+See round3-expanded-state.txt. Timing within this single process is explicitly
+not an ABBA performance claim.

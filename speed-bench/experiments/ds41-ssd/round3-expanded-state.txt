@@ -1,0 +1,14 @@
+PASS: tail=12 plus 8 decoded tokens, full snapshot bit-identical; scalar 1.616s, batch 0.365s
+PASS: tail=16 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.751s, batch 0.370s
+PASS: tail=24 plus 8 decoded tokens, full snapshot bit-identical; scalar 1.110s, batch 0.533s
+PASS: tail=31 plus 8 decoded tokens, full snapshot bit-identical; scalar 1.438s, batch 0.621s
+PASS: tail=32 plus 8 decoded tokens, full snapshot bit-identical; scalar 1.465s, batch 0.644s
+PASS: tail=33 plus 8 decoded tokens, full snapshot bit-identical; scalar 1.544s, batch 0.696s
+PASS: tail=64 plus 8 decoded tokens, full snapshot bit-identical; scalar 3.209s, batch 1.259s
+PASS: tail=127 plus 8 decoded tokens, full snapshot bit-identical; scalar 6.369s, batch 2.480s
+PASS: tail=128 plus 8 decoded tokens, full snapshot bit-identical; scalar 5.976s, batch 2.450s
+PASS: tail=255 plus 8 decoded tokens, full snapshot bit-identical; scalar 12.549s, batch 5.171s
+PASS: tail=256 plus 8 decoded tokens, full snapshot bit-identical; scalar 11.997s, batch 4.951s
+PASS: tail=511 plus 8 decoded tokens, full snapshot bit-identical; scalar 26.442s, batch 13.303s
+PASS: tail=512 plus 8 decoded tokens, full snapshot bit-identical; scalar 28.085s, batch 12.621s
+PASS: tail=767 plus 8 decoded tokens, full snapshot bit-identical; scalar 41.705s, batch 19.154s
