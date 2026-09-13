@@ -15,8 +15,17 @@ p.add_argument('--ctx', type=int)
 p.add_argument('--initial-tokens', type=int)
 p.add_argument('--prompt', default='/tmp/ds41-prefill-input.c')
 p.add_argument('--vision')
+p.add_argument('--candidate-vision', help='load this encoder only in candidate runs')
 a = p.parse_args()
+if a.vision and a.candidate_vision:
+    p.error('--vision and --candidate-vision are mutually exclusive')
+if a.initial_tokens is not None and not 0 < a.initial_tokens < a.tokens:
+    p.error('--initial-tokens must be positive and less than --tokens')
+if '=' not in a.candidate_env:
+    p.error('--candidate-env must be NAME=VALUE')
 name, value = a.candidate_env.split('=', 1)
+if not name:
+    p.error('--candidate-env requires a nonempty name')
 a.output.mkdir(parents=True, exist_ok=False)
 reference = None
 results = []
@@ -36,6 +45,8 @@ for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
            '--dump-frontier-logits-dir', str(dest), '--csv', str(dest / 'speed.csv')]
     if a.vision:
         cmd += ['--vision', a.vision]
+    if a.candidate_vision and variant == 'candidate':
+        cmd += ['--vision', a.candidate_vision]
     if a.ctx:
         cmd += ['--ctx-alloc', str(a.ctx)]
     if a.initial_tokens:
