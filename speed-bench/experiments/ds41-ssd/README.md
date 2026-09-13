@@ -34,3 +34,20 @@ faster by aggregate time). All full-vocabulary final logits match exactly.
 Steady decode: 17.13/17.32 control, 16.82/17.34 candidate.
 The improvement is too small relative to run variation to change a shared
 backend default. Retain this as a documented negative/inconclusive experiment.
+
+## 03: two-layer lookahead (rejected; opt-in only)
+
+`run_abba.py /tmp/ds41-lookahead2 --candidate-env DS4_METAL_V41_PREFETCH_TWO_LAYERS=1`
+
+Control 128.12/130.04 tps; two-layer lookahead 87.49/94.07 tps.
+All final full-vocabulary logits match exactly. Explicit prefetch waits mostly
+disappear but later GPU drains grow from ~0.1-0.2 seconds to ~1.2 seconds.
+This suggests page residency/contention rather than a compute improvement.
+Keep the default one-layer pipeline. The optional experiment adds pageable
+file-cache pressure, not another pinned expert cache; it is not recommended.
+
+Actual unmodified agent with vision, default 100000-token context, `-n 1
+--non-interactive -p 'Reply with OK.' --trace /tmp/ds41-agent-vision.trace`:
+1907-token system prefill = 14805.383 ms; system prompt KV save succeeded.
+40-token append = 3814.777 ms. This reproduces slow short appends, not the
+reported large-prefill vision slowdown. No image was supplied.

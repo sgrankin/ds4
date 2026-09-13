@@ -41691,7 +41691,10 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     bool engram_prefetched = overlap_engram &&
         ds41_engram_prefetch_start(&engram_prefetch, g, 0, total_count);
     bool ok = !g->streaming || metal_graph_stream_map_token(m, w);
-    metal_graph_stream_prepare_slot prepare = {0};
+    /* Experimental bounded lookahead. These reads warm pageable file-cache
+     * pages; they do not allocate another pinned expert cache. */
+    const uint32_t prepare_count = getenv("DS4_METAL_V41_PREFETCH_TWO_LAYERS") ? 2u : 1u;
+    metal_graph_stream_prepare_slot prepare[2] = {0};
     for (uint32_t il = 0; ok && il < DS4_N_LAYER; il++) {
         if (cancel && cancel(cancel_ud)) { ok = false; break; }
         if (encoder_only && il == 20u) {
@@ -41712,7 +41715,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
             const uint32_t first_count = total_count < encoder_chunk ? total_count : encoder_chunk;
             if (!g->encoder_resident || il >= 20)
                 ok = metal_graph_stream_prepare_join_layer(NULL, m, w, il, first_count,
-                        false, true, false, false, &prepare, 1);
+                        false, true, false, false, prepare, prepare_count);
 #endif
             if (ok) ok = metal_graph_stream_map_layer(m, w, il);
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
@@ -41731,11 +41734,12 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
             }
 #endif
 #ifdef __APPLE__
-            /* CUDA reads into its device cache: warming mmap would read twice. */
-            if (ok && il + 1u < (encoder_only ? 20u : DS4_N_LAYER) &&
-                (!g->encoder_resident || il + 1u >= 20))
-                ok = metal_graph_stream_prepare_start_if_needed(NULL, m, w, il + 1u, first_count,
-                        false, true, false, false, &prepare, 1);
+            for (uint32_t ahead = 1; ok && ahead <= prepare_count &&
+                 il + ahead < (encoder_only ? 20u : DS4_N_LAYER); ahead++) {
+                if (!g->encoder_resident || il + ahead >= 20)
+                    ok = metal_graph_stream_prepare_start_if_needed(NULL, m, w, il + ahead, first_count,
+                            false, true, false, false, prepare, prepare_count);
+            }
 #endif
         }
         const double t_map = profile ? now_sec() : 0;
@@ -41957,7 +41961,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
     if (g->streaming) ds4_gpu_stream_expert_cache_prefetch_finish(true);
 #endif
-    if (!metal_graph_stream_prepare_join_all(&prepare, 1)) ok = false;
+    if (!metal_graph_stream_prepare_join_all(prepare, prepare_count)) ok = false;
     if (g->streaming && !metal_graph_stream_map_decode_static_all(m, w)) ok = false;
     if (ok && !encoder_only) {
         ok = ds4_gpu_begin_commands() &&
