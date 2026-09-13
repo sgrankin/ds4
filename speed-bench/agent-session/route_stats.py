@@ -6,14 +6,20 @@ cross-task generalization. These are all-route metrics, not miss/deadline metric
 """
 from array import array
 from collections import Counter, defaultdict
+import gzip
 import hashlib
 import json
 from pathlib import Path
 import sys
 
 
-def read_routes(path):
+def route_bytes(path):
     raw = Path(path).read_bytes()
+    return gzip.decompress(raw) if Path(path).suffix == '.gz' else raw
+
+
+def read_routes(path):
+    raw = route_bytes(path)
     if len(raw) % 4:
         raise ValueError('truncated word')
     data = array('I')
@@ -84,7 +90,7 @@ def summarize(path):
                        all_selected_fraction=sum(v == used for v in values)/len(values))
             for name, values in scores.items()
         }
-    return dict(routes_sha256=hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+    return dict(routes_sha256=hashlib.sha256(route_bytes(path)).hexdigest(),
                 layers=layers, experts=experts, selected=used, tokens=len(tokens),
                 train_tokens=split, test_tokens=len(tokens)-split,
                 warning='Within-session chronological screen; not held-out tasks, cache misses, deadlines or speed.',

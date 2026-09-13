@@ -1008,3 +1008,19 @@ previous-token recall24.5%, frequency16.0%, previous-layer transition34.6%; at
 12 candidates transition48.6%. This is within-session, all-route recall, not
 independent-task or cache-miss prediction. Don't extrapolate the short trace's
 higher recall. See route-stats-full.json and the offline route_stats.py runner.
+
+## 63: full-session ABBA confirms the combined oracle scheduling opportunity
+
+Default A versus pre-attention + deferred-validation oracle B, frozen binary,
+shaders, routes and full session. Mean append prefill94.140 ->97.418s (+3.5%),
+decode197.511 ->136.838s (-30.7%), combined turn inference291.651 ->234.256s
+(-19.7%,57.4s saved). Initial system prefill is separate. Both B decode samples
+beat both controls. Every scalar native route, phase logit and full final state
+matches. The oracle does not reduce expert data volume:670.61 ->670.63GiB,
+80144 ->80146 misses, same7822-expert cache budget. B's small cache difference
+comes with altered scheduling; don't claim identical cache traces.
+
+This is a free-future-information architectural bound, not a deployed speedup
+or a promise for a learned predictor. Prefill regressions are included in the
+overall number. See oracle-combined-full.json. The next full comparison retains
+per-layer validation to isolate the opportunity for prefetch alone.
