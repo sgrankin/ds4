@@ -701,3 +701,9 @@ See agent-engram-prefetch-exploratory.json. No default changed.
 Fresh/restored hello 2.303/3.773 s control versus 2.287/3.789 s parallel. Six-token turns 0.316/0.346 to 0.294/0.325 s; insufficient evidence to change the default.
 These are exploratory trials with live timestamp tokens and random seeds.
 See agent-engram-parallel-exploratory.json. No default changed.
+
+## 44: shared-expert fusion is exact but flat on actual agent turns
+
+Fresh/restored hello 2.282/3.786 s control versus 2.294/3.756 s fused. Twelve-token turns slightly worse, six-token turns flat. Keep the exact kernel opt-in; the microbenchmark gain did not become a useful agent gain.
+These are exploratory trials with live timestamp tokens and random seeds.
+See agent-fused-shared-exploratory.json. No default changed.
