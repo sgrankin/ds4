@@ -863,3 +863,18 @@ This is attribution, not removable-time accounting: Metal waits include actual
 GPU work, and tracing measurably perturbs this short run. See decode-profile.txt.
 A router-event experiment is next; a fixed-input recheck of read-ahead advice
 may also be worthwhile, because earlier advice tests used varying timestamps.
+
+## 55: router-event overlap is exact, but does not earn a default
+
+DS4_METAL_V41_ROUTER_EVENT reuses the Metal shared-event API: signal after
+routing, encode shared expert work after the signal, then let the CPU read IDs
+and begin SSD loads while shared GPU work continues. No worker handoff.
+The ordinary eligible scalar early-load path remains the default.
+
+ABBA on the first7 complete working-session replay phases (343 decoded tokens,
+context2665) matches every phase's full logits and final snapshot. Mean decode
+18.356->18.219s (~0.75% lower), append prefill15.372->15.783s; combined turn
+model work33.728->34.002s (~0.8% slower). Individual decode samples overlap,
+and the second candidate prefill is slower. No robust end-to-end gain, so keep
+this experiment opt-in. See router-event-screen.json; do not promote based on
+the first candidate's apparent2% decode improvement.

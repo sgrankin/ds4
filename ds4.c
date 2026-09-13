@@ -40835,6 +40835,8 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
         !getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS");
     const bool async_load = load_eligible && getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD");
     const bool early_load = load_eligible && !async_load;
+    const bool event_load = early_load && getenv("DS4_METAL_V41_ROUTER_EVENT");
+    uint64_t route_event = 0;
     metal_graph_selected_async_load load = {0};
     int32_t selected_ids[DS4_MAX_EXPERT_USED];
     if (async_load) {
@@ -40847,7 +40849,8 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
                 m, l, il, event, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD))
             return false;
     }
-    if (early_load) {
+    if (event_load && !ds4_gpu_signal_selected_readback_ready(&route_event)) return false;
+    if (early_load && !event_load) {
         const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
             m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
         if (!ds4_gpu_end_commands() ||
@@ -40882,6 +40885,17 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
         }
         return false;
     }
+    if (event_load) {
+        /* Signal after routing, then let shared work continue on the GPU
+         * while this thread starts selected SSD reads. No worker handoff. */
+        const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
+            m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
+        if (!ds4_gpu_commit_and_wait_selected_readback(route_event, "V4.1 router") ||
+            !ds4_gpu_tensor_read(g->selected, 0, selected_ids,
+                DS4_N_EXPERT_USED * sizeof(selected_ids[0])) ||
+            !ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
+                DS4_N_EXPERT_USED)) return false;
+    }
     if (async_load) {
         const bool flush_ok = ds4_gpu_flush_commands() != 0;
         bool loaded = metal_graph_selected_async_load_finish(&load);
@@ -40899,7 +40913,7 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
             return false;
         }
     }
-    if (early_load && (!ds4_gpu_flush_commands() ||
+    if (early_load && ((!event_load && !ds4_gpu_flush_commands()) ||
         !ds4_gpu_routed_moe_set_selected_override(selected_ids, DS4_N_EXPERT_USED)))
         return false;
     bool routed_ok;
