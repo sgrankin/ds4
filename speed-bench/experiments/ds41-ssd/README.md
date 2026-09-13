@@ -663,3 +663,23 @@ selected-only tiles, avoiding whole-layer SSD reads. Default remains256 and
 the existing selected-medium flag still chooses768. Benchmark904 appended
 tokens after4096, and verify768/1023 continuation snapshots, after the current
 sequential agent queue. Smaller-cache performance must be considered separately.
+
+## 40: agent timestamp/sampling confound discovered
+
+The first38-token hello append includes33 tokens of live date/time context.
+The prior agent probes also used the default random sampling seed. Although
+ABBA reduced drift and the model-dependent snapshot tests used fixed inputs,
+the agent trials did not route identical token sequences. Treat all earlier
+agent numbers as exploratory, not controlled same-input comparisons.
+
+The pending fix adds a noninteractive-only DS4_AGENT_TEST_TIME epoch override,
+freezes the probe timezone and seed, hashes actual input and generated tokens,
+and rejects ABBA mismatches. It also measures startup and submit-to-ready wall
+time. Prepared scripts are held outside the repo until the current queue
+finishes using the old scripts; final candidate selection uses the fixed probe.
+
+The fixed harness is now installed. Probe defaults freeze epoch1789319891,
+America/New_York and seed1234. ABBA rejects differing input/output ID hashes
+or generated counts. Real trace/elapsed timestamps stay live. Startup and
+submit-to-ready timings include work outside the prefill trace. First controlled
+confirmation is /tmp/ds41-fixed-tile128, running before any default promotion.

@@ -2,37 +2,47 @@
 
 ## Active round, 2026-09-13 17:18-18:18 UTC
 
-Authorized next hour. Current time about 17:39; ~39 minutes remain. Defaults
-still tile8 / selected_limit256, all new work opt-in. One jj commit per
-experiment. No simultaneous GPU benchmarks; vision deferred.
+Time about17:47, ~31min remain. Defaults still tile8/limit256, all new flags
+opt-in. No concurrent GPU runs. One jj commit per experiment. Vision deferred.
 
-Completed: profile restored hello 4.39s, 2.25s selected bind/load (1.81s pread),
-~0.94s GPU busy. Medium512 tile8 ABBA 23.05/21.92 ->27.85/29.75tps exact logits.
-Tile32 agent ABBA hello fresh2.884->2.422s restored4.520->4.083s. Shared overlap
-at tile32 fresh2.513->2.391s restored4.049->4.029s, later turns5-8% better.
-Combined tile32+medium+shared-overlap full snapshot tests all pass through767.
-Tile128+all Engram flags snapshot tails38/64/127/128/129/255 all pass.
+Important discovery: agent first38-token hello contains33 timestamp-context
+ tokens; timestamp varies each run, and sampling was unseeded. Treat prior agent
+results as exploratory! Fixed-token snapshot/bench results remain valid.
+Uncommitted ds4_agent.c adds DS4_AGENT_TEST_TIME for noninteractive datetime
+context only. Prepared /tmp/agent_probe_fixed.py and /tmp/agent_abba_fixed.py
+freeze timestamp1789319891/TZ America/New_York/seed1234, compare actual input
+and output hashes, and report startup/turn wall time. DO NOT copy these into
+repo until current queue finishes, because it is using the old scripts.
 
-Current GPU run: /tmp/ds41-agent-tile128, session49030; last control finishing.
-Candidate hello fresh~2.31s restored3.78s, but restored first decode~0.26s vs
-~0.09s prior. Include total-response cost. New flags:
-DS4_METAL_V41_SELECTED_TILE=2..128; DS4_METAL_V41_SELECTED_MEDIUM;
-DS4_METAL_V41_BATCH_SHARED_OVERLAP; DS4_METAL_V41_SMALL_ENGRAM_PREFETCH;
-DS4_ENGRAM_SMALL_BATCH_PARALLEL; DS4_ENGRAM_FILE_CACHE. All opt-in.
-Snapshot test accepts PREFIX TAIL... and DS4_TEST_EXPERT_CACHE_GB=4..96.
+Active GPU queue session25439, /tmp/ds41-round3-trials.py:
+shared-model PASS (32 full logit rows + snapshot); file-cache ABBA flat;
+Engram-prefetch ABBA firstturn flat, fresh6-token improves only; Engram-parallel
+running, then fused-shared ABBA, then 4GiB cache state tails38/129.
+Logs /tmp/ds41-round3-trials/{shared-model,file-cache,engram-prefetch,
+engram-parallel,shared-agent,cache4-state}.log. Queue stops on errors.
 
-Uncommitted work: exact shared Q8 gate/up+BF16+SwiGLU+BF16 kernel, exposed via
-DS4_METAL_V41_FUSED_SHARED_BF16. Built but not GPU-tested yet. New synthetic
-./tests/test_metal_shared_bf16 checks32 shapes/all intermediates/guards and ABBA
-microbench. Must run it, then model ablation and short-state tests before
-performance claims. Host reuses existing shared implementation with default
-arguments preserving old wrappers; shader adds BF16 template specialization.
+Committed shared Q8+BF16+SwiGLU fusion8e2e7d04; 32 synthetic shapes exact,
+32-row microbench ~24% better, scalar32-logit/snapshot test passes. Runtimeflag
+DS4_METAL_V41_FUSED_SHARED_BF16. All old defaults preserved. Current parent
+long-tail selectedlimit experiment: DS4_METAL_V41_SELECTED_LIMIT=256..1024.
 
-Next queue: shared-kernel synthetic test; actual-agent ABBA isolating Engram
-file caching, small parallel reads, Engram prefetch (tile128 held fixed); low
-4GiB expert-cache full snapshots; full-response generations; choose defaults
-and compare final ABBA/medium/long-tail regressions. More pread threads/sorted
-SSD offsets optional if time. Record outcomes/commits and rebuild final binaries.
+Validated snapshot combinations: tile32+medium+shared-overlap tails
+12/16/24/31/32/33/64/127/128/255/256/511/512/767 +8 decode after2048 exact.
+Tile128+all Engramflags tails38/64/127/128/129/255 +8 decode exact.
+Synthetic shared kernel tests/test_metal_shared_bf16 exact all intermediates.
+Exploratory tile128 agent prefill fresh2.902->2.313s restored4.435->3.781s;
+firstdecode restored .09->.26s, totalresponse4.525->4.043s. Confirm with fixed
+prompt/time/seed before choosing defaults. Tile32/shared-overlap details README.
+
+Next: finish queue, install prepared fixed harnesses and commit reproducibility
+fix. Then fixed actualagent ABBA finalists/full responses; long904 benchmark:
+DS4_METAL_V41_SELECTED_TILE=128 python3 speed-bench/experiments/ds41-ssd/run_abba.py
+/tmp/ds41-tail904-selected --candidate-env DS4_METAL_V41_SELECTED_LIMIT=1024
+--tokens5000 --initial-tokens4096 --ctx100000 (use spaces between flags/values).
+Longstate: DS4_METAL_V41_SELECTED_TILE=128 DS4_METAL_V41_SELECTED_LIMIT=1024
+./tests/test_deepseek41_exact_tail MODEL /tmp/ds41-prefill-input.c.
+Choose defaults only for demonstrated gains; small-cache medium tiles may need
+budget guard. Final tests/binaries/clean jj/notebook/goalcomplete around18:18.
 
 Round completed 2026-09-13, approximately 16:12:48-17:13 UTC. Final default
 agent ABBA, every short-tile numerical check, and both long-tail regressions

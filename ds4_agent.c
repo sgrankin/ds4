@@ -1579,6 +1579,19 @@ static void agent_worker_maybe_append_datetime_context(agent_worker *w) {
     if (w->datetime_context_injected) return;
 
     time_t now = time(NULL);
+    /* Reproducible non-interactive performance probes must route identical
+     * datetime tokens. This does not alter trace timestamps or session IDs. */
+    const char *fixed_time = getenv("DS4_AGENT_TEST_TIME");
+    if (w->cfg->non_interactive && fixed_time && fixed_time[0]) {
+        char *end = NULL;
+        errno = 0;
+        long long value = strtoll(fixed_time, &end, 10);
+        time_t candidate = (time_t)value;
+        struct tm candidate_tm;
+        if (!errno && end != fixed_time && !*end && value > 0 &&
+            (long long)candidate == value && localtime_r(&candidate, &candidate_tm))
+            now = candidate;
+    }
     struct tm tm;
     localtime_r(&now, &tm);
 

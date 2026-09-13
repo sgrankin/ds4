@@ -24,6 +24,7 @@ binary = a.output.resolve() / 'ds4-agent'
 shutil.copy2('./ds4-agent', binary)
 shaders = snapshot_shaders(a.output)
 results = []
+reference = None
 for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
     dest = a.output.resolve() / f'{i}-{variant}'
     env = os.environ.copy()
@@ -38,6 +39,11 @@ for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
     if variant == 'candidate' and a.candidate_prefill_chunk:
         cmd += ['--prefill-chunk', str(a.candidate_prefill_chunk)]
     subprocess.run(cmd, env=env, check=True)
-    results.append(dict(variant=variant,
-                        runs=json.loads((dest/'summary.json').read_text())))
+    runs=json.loads((dest/'summary.json').read_text())
+    identity={r['mode']:[(g['input_ids_sha256'],g['output_ids_sha256'],g['generated'])
+                         for g in r['generations']] for r in runs}
+    if reference is None: reference=identity
+    if identity != reference:
+        raise RuntimeError(f'Agent input or generated tokens differ: {dest}')
+    results.append(dict(variant=variant,runs=runs))
     (a.output/'summary.json').write_text(json.dumps(results, indent=2)+'\n')
