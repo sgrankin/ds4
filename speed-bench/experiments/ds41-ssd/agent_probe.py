@@ -8,6 +8,7 @@ p=argparse.ArgumentParser()
 p.add_argument('output',type=Path)
 p.add_argument('--env',action='append',default=[],help='NAME=VALUE')
 p.add_argument('--cache-gb',type=int)
+p.add_argument('--prefill-chunk',type=int)
 p.add_argument('--binary',default='./ds4-agent')
 a=p.parse_args(); a.output.mkdir(parents=True,exist_ok=False)
 binary=a.output.resolve()/'ds4-agent'; shutil.copy2(a.binary,binary)
@@ -26,6 +27,7 @@ for mode in ['fresh','restored']:
     cmd=[str(binary),'--ssd-streaming','--non-interactive','-n','1',
          '--trace',str(dest/'trace.log')]
     if a.cache_gb: cmd+=['--ssd-streaming-cache-experts',f'{a.cache_gb}GB']
+    if a.prefill_chunk: cmd+=['--prefill-chunk',str(a.prefill_chunk)]
     (dest/'command.json').write_text(json.dumps({'argv':cmd,'env':{k:v for k,v in env.items() if k.startswith('DS4_')}},indent=2))
     prompts=['hello','What is 2 + 2?','hello']
     with (dest/'stdout.log').open('wb') as out:

@@ -99,3 +99,12 @@ as the executable, so later source edits cannot silently alter A/B subprocesses.
 is running using frozen shaders. Next: honor explicit --prefill-chunk in
 DS41 allocation/admission/memory reports, then test 2048-row buffers with
 default 100000 context. Default cap should remain unchanged unless measured.
+
+18 complete: Q8 short-append ABBA flat (12.96 vs13.01tps mean), leave opt-in.
+19 --prefill-chunk wiring built; /tmp/ds41-chunk2048-abba40 running.
+Possible 20: tabulate exact Engram FP8+scale -> BF16 conversion (256 KiB LUT),
+exhaustively test all 65536 input pairs and rejection semantics, then profile.
+
+19 40-token logits equal; perf drifty. Chunk2048 scratch3.76GiB vs8.01,
+cache76.50GiB vs72.51, total97.36 vs97.61. Real-agent ABBA next.
+20 Engram LUT opt-in written; exhaustive CPU test running.

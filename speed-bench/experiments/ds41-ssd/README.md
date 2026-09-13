@@ -373,3 +373,22 @@ Warmed 1000-call 5120x5120 matrix timing: separate 33.241 ms, fused 31.624/31.68
 first separate pass 40.487 ms includes cold overhead. All 32 full-vocabulary
 model logit rows and serialized continuation state match exactly.
 Short-append ABBA pending; no default change yet. See q8-kernel.txt.
+
+Q8 short-append ABBA is flat: control 13.22/12.80 tps, candidate 13.10/12.82,
+all frontier logits identical. Keep the fusion opt-in; the microbenchmark
+gain does not establish an end-to-end gain. See q8-abba40.json.
+
+## 19: honor prefill chunk independently of maximum context
+
+DS4.1 now honors explicit `--prefill-chunk` in graph allocation, admission,
+and memory reporting, capped at the supported 8192 rows. The existing
+context-derived default is unchanged. All call sites, including imatrix and
+multiple-session admission, receive the engine setting.
+
+At ctx=100000, chunk2048 reduces scratch from 8.01 to 3.76 GiB; the automatic
+expert cache grows from 72.51 to 76.50 GiB. Total planned memory changes only
+from 97.61 to 97.36 GiB, so this is primarily a budget redistribution.
+Forty-token append ABBA: control 13.00/11.94 tps; chunk2048 13.11/12.75.
+All full-vocabulary frontier logits match. Control drift makes the timing
+inconclusive; actual-agent ABBA follows before considering a default change.
+See chunk2048-abba40.json.

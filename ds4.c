@@ -39630,7 +39630,7 @@ static ds4_context_memory glm_graph_context_memory_estimate_for_compact_cap(
 }
 
 #ifdef DS4_HAS_DEEPSEEK41_GPU
-static ds4_context_memory ds41_graph_memory(uint32_t ctx);
+static ds4_context_memory ds41_graph_memory(uint32_t ctx, uint32_t prefill_chunk);
 #endif
 static uint32_t qwen4_prefill_chunk_tokens(uint32_t ctx) {
     const char *env = getenv("DS4_QWEN4_PREFILL_CHUNK");
@@ -39673,7 +39673,7 @@ ds4_context_memory ds4_context_memory_estimate_with_prefill_mode(
     if (ds4_backend_uses_graph(backend)) {
 #ifdef DS4_HAS_DEEPSEEK41_GPU
         if (DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41)
-            return ds41_graph_memory(ctx);
+            return ds41_graph_memory(ctx, prefill_chunk);
 #endif
         if (DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_GLM_DSA) {
             const uint32_t work_ctx =
@@ -40123,7 +40123,13 @@ typedef struct {
 #undef DS41_ROW_FIELD
 } ds41_prefill_row;
 
-static uint32_t ds41_prefill_limit(uint32_t ctx) {
+static uint32_t ds41_prefill_limit(uint32_t ctx, uint32_t prefill_chunk) {
+    /* An explicit chunk bounds scratch allocation independently of context.
+     * Keep the old context-derived default and the supported 8192-row ceiling. */
+    if (prefill_chunk) {
+        const uint32_t limit = prefill_chunk < DS41_PREFILL_CAP ? prefill_chunk : DS41_PREFILL_CAP;
+        return ctx < limit ? ctx : limit;
+    }
     const uint32_t limit = ctx < 8192u || getenv("DS4_METAL_DISABLE_V41_WIDE_CHUNK") ? 2048u :
         (ctx < 16384u || getenv("DS4_METAL_DISABLE_V41_8K_CHUNK")) ? 4096u : DS41_PREFILL_CAP;
     return ctx < limit ? ctx : limit;
@@ -40134,7 +40140,7 @@ static uint32_t ds41_carry_words(uint32_t width, uint32_t format, bool compact) 
     return format == DS4_V41_CARRY_BF16 ? (width + 1u) / 2u : (width + 31u) / 32u;
 }
 
-static uint32_t ds41_carry_cap(uint32_t ctx) {
+static uint32_t ds41_carry_cap(uint32_t ctx, uint32_t prefill_chunk) {
     const bool compact = !getenv("DS4_METAL_DISABLE_V41_COMPACT_CARRY");
     const uint64_t row_bytes = ((uint64_t)ds41_carry_words(DS4_N_HC * DS4_N_EMBD,
         DS4_V41_CARRY_BF16, compact) + DS4_N_HC + 24u + DS4_N_INDEXER_TOP_K +
@@ -40142,7 +40148,7 @@ static uint32_t ds41_carry_cap(uint32_t ctx) {
     uint64_t cap = (UINT64_C(3) << 30) / row_bytes;
     if (cap > 32768u) cap = 32768u;
     if (cap > ctx) cap = ctx;
-    const uint32_t chunk = ds41_prefill_limit(ctx);
+    const uint32_t chunk = ds41_prefill_limit(ctx, prefill_chunk);
     if (!chunk) return 0;
     /* Keep the causal sweep boundary independent of the encoder tile size. */
     cap -= cap % 2048u;
@@ -40255,10 +40261,10 @@ static void ds41_graph_free(ds41_gpu_graph *g) {
     g->table[0].fd = g->table[1].fd = -1;
 }
 
-static uint64_t ds41_graph_bytes(uint32_t ctx) {
+static uint64_t ds41_graph_bytes(uint32_t ctx, uint32_t prefill_chunk) {
     const ds41_gpu_graph shape = {.ctx = ctx,
-        .prefill_cap = ds41_prefill_limit(ctx),
-        .carry_cap = ds41_carry_cap(ctx),
+        .prefill_cap = ds41_prefill_limit(ctx, prefill_chunk),
+        .carry_cap = ds41_carry_cap(ctx, prefill_chunk),
         .prefill_alias = !getenv("DS4_METAL_DISABLE_V41_PREFILL_ALIAS"),
         .compact_carry = !getenv("DS4_METAL_DISABLE_V41_COMPACT_CARRY")}, *g = &shape;
     uint64_t floats = (uint64_t)40 * 128 * 512;
@@ -40288,14 +40294,14 @@ static uint64_t ds41_graph_bytes(uint32_t ctx) {
     return floats * sizeof(float) + sizeof(*g) + (uint64_t)DS4_N_VOCAB * 4u + packed + sort;
 }
 
-static ds4_context_memory ds41_graph_memory(uint32_t ctx) {
-    ds4_context_memory m = {.prefill_cap = ds41_prefill_limit(ctx),
+static ds4_context_memory ds41_graph_memory(uint32_t ctx, uint32_t prefill_chunk) {
+    ds4_context_memory m = {.prefill_cap = ds41_prefill_limit(ctx, prefill_chunk),
                            .raw_cap = 128, .comp_cap = ctx + 1u};
     m.raw_bytes = 40u * 128u * 512u * sizeof(float);
     for (uint32_t i = 0; i < 4; i++)
         m.compressed_bytes += ((uint64_t)ctx / (i < 3 ? 2u : 1u) + 1u) *
                               (512u + 128u) * sizeof(float);
-    m.total_bytes = ds41_graph_bytes(ctx);
+    m.total_bytes = ds41_graph_bytes(ctx, prefill_chunk);
     m.scratch_bytes = m.total_bytes - m.raw_bytes - m.compressed_bytes;
     return m;
 }
@@ -40310,16 +40316,16 @@ static void ds41_graph_reset(ds41_gpu_graph *g) {
 
 static DS4_MAYBE_UNUSED bool ds41_graph_alloc(ds41_gpu_graph *g, const ds4_model *m,
                                               const ds4_weights *w, const char *path,
-                                              uint32_t ctx, bool streaming) {
+                                              uint32_t ctx, uint32_t prefill_chunk, bool streaming) {
     memset(g, 0, sizeof(*g));
     g->table[0].fd = g->table[1].fd = -1;
     if (!ctx || ctx > 1048576 || DS4_MODEL_FAMILY != DS4_MODEL_FAMILY_DEEPSEEK41) return false;
     g->ctx = ctx;
-    g->prefill_cap = ds41_prefill_limit(ctx);
-    g->carry_cap = ds41_carry_cap(ctx);
+    g->prefill_cap = ds41_prefill_limit(ctx, prefill_chunk);
+    g->carry_cap = ds41_carry_cap(ctx, prefill_chunk);
     g->compact_carry = !getenv("DS4_METAL_DISABLE_V41_COMPACT_CARRY");
     g->prefill_alias = !getenv("DS4_METAL_DISABLE_V41_PREFILL_ALIAS");
-    g->allocation_bytes = ds41_graph_bytes(ctx);
+    g->allocation_bytes = ds41_graph_bytes(ctx, prefill_chunk);
     g->streaming = streaming;
     g->tp_world = 1;
     g->token_map = malloc((size_t)DS4_N_VOCAB * sizeof(uint32_t));
@@ -40418,7 +40424,7 @@ static DS4_MAYBE_UNUSED bool ds41_graph_alloc(ds41_gpu_graph *g, const ds4_model
 #undef DS41_CARRY_ALLOC
     ds41_graph_reset(g);
     fprintf(stderr, "ds4: V4.1 static context buffers %.2f MiB (ctx=%u), Engram disk-only\n",
-            (double)ds41_graph_bytes(ctx) / 1048576.0, ctx);
+            (double)ds41_graph_bytes(ctx, prefill_chunk) / 1048576.0, ctx);
     return true;
 fail:
     ds41_graph_free(g);
@@ -64194,9 +64200,9 @@ static int ds4_engine_collect_sequential_imatrix(
         }
         if (ctx_size > 1048576 ||
             !ds41_memory_admit(e, ds4_add_sat_u64(e->ds41_session_bytes,
-                ds41_graph_bytes((uint32_t)ctx_size)), false) ||
+                ds41_graph_bytes((uint32_t)ctx_size, e->prefill_chunk)), false) ||
             !ds41_graph_alloc(&d, &e->model, &e->weights, e->model_path,
-                              (uint32_t)ctx_size, e->ssd_streaming)) return 1;
+                              (uint32_t)ctx_size, e->prefill_chunk, e->ssd_streaming)) return 1;
     } else
 #endif
     if (!glm_graph_alloc(&g, &e->model, &e->weights, ctx_size,
@@ -70955,7 +70961,7 @@ static int ds4_engine_open_internal(ds4_engine **out,
         const uint32_t ctx = opt->context_size > 0 ? (uint32_t)opt->context_size : 4096;
         const uint32_t sessions = e->placement_session_count_hint > 0 ?
             (uint32_t)e->placement_session_count_hint : 1;
-        if (!ds41_memory_admit(e, ds4_mul_sat_u64(ds41_graph_bytes(ctx), sessions), true)) {
+        if (!ds41_memory_admit(e, ds4_mul_sat_u64(ds41_graph_bytes(ctx, e->prefill_chunk), sessions), true)) {
             ds4_engine_close(e);
             *out = NULL;
             return 1;
@@ -71421,7 +71427,7 @@ static int ds4_engine_open_internal(ds4_engine **out,
             const uint32_t ctx = opt->context_size > 0 ? (uint32_t)opt->context_size : 4096;
             const uint32_t sessions = e->placement_session_count_hint > 0 ?
                 (uint32_t)e->placement_session_count_hint : 1;
-            if (!ds41_memory_admit(e, ds4_mul_sat_u64(ds41_graph_bytes(ctx), sessions), true)) {
+            if (!ds41_memory_admit(e, ds4_mul_sat_u64(ds41_graph_bytes(ctx, e->prefill_chunk), sessions), true)) {
                 ds4_engine_close(e);
                 *out = NULL;
                 return 1;
@@ -72980,9 +72986,9 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
     if (DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
         if (ctx_size > 1048576 ||
             !ds41_memory_admit(e, ds4_add_sat_u64(e->ds41_session_bytes,
-                ds41_graph_bytes((uint32_t)ctx_size)), false) ||
+                ds41_graph_bytes((uint32_t)ctx_size, e->prefill_chunk)), false) ||
             !ds41_graph_alloc(&s->ds41_graph, &e->model, &e->weights,
-                              e->model_path, (uint32_t)ctx_size, e->ssd_streaming)) {
+                              e->model_path, (uint32_t)ctx_size, e->prefill_chunk, e->ssd_streaming)) {
             free(s);
             return 1;
         }
