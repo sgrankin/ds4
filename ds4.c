@@ -41429,6 +41429,8 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
 static bool ds41_moe_exact_tiles(ds41_gpu_graph *g, const ds4_model *m,
                                  const ds4_layer_weights *l, uint32_t il, uint32_t count,
                                  uint32_t tile_rows, bool force_resident) {
+    const bool pin = !force_resident &&
+        getenv("DS4_METAL_STREAMING_PREFILL_PROTECT_LAYER");
     for (uint32_t first = 0; first < count;) {
         uint32_t rows = count - first < tile_rows ? count - first : tile_rows;
         /* Selected-address kernels require at least two rows. Leave two
@@ -41446,14 +41448,22 @@ static bool ds41_moe_exact_tiles(ds41_gpu_graph *g, const ds4_model *m,
             (uint64_t)rows * (width) * sizeof(float))) != NULL;
         DS41_PREFILL_ROWS(DS41_TILE_VIEW)
 #undef DS41_TILE_VIEW
+        /* Only protect future-subtile reuse. The last subtile's ordinary
+         * selected-ID protection suffices, as do all single-batch prompts. */
+        if (pin) ds4_gpu_stream_expert_batch_pin_layer(
+            first + rows < count ? il : UINT32_MAX);
         if (ok) ok = ds41_moe_batch(&tile, m, l, il, rows, false, force_resident);
 #define DS41_TILE_FREE(name, width) ds4_gpu_tensor_free(tile.batch.name);
         DS41_PREFILL_ROWS(DS41_TILE_FREE)
 #undef DS41_TILE_FREE
         ds4_gpu_tensor_free(tile.prefill_tokens);
-        if (!ok) return false;
+        if (!ok) {
+            if (pin) ds4_gpu_stream_expert_batch_pin_layer(UINT32_MAX);
+            return false;
+        }
         first += rows;
     }
+    if (pin) ds4_gpu_stream_expert_batch_pin_layer(UINT32_MAX);
     return true;
 }
 

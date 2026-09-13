@@ -902,3 +902,18 @@ All phase logits and full final snapshots match. This differs from the older
 short-agent rejection, which predates selected MoE batches and fixed datetime.
 No default change yet: full-session and interactive-response confirmation are
 required. See noadvice-fixed-screen.json.
+
+## 58: scoped future-subtile protection remains a non-winning experiment
+
+Replace the broad protection with a scoped Metal pin only while later selected
+MoE subtiles remain in the current layer. Clear it before the last subtile and
+on every exit; single-batch prompts are unaffected. Use a constant-time layer
+check instead of scanning a list of all expert IDs. Large-cache admission
+already guarantees one whole layer fits. No extra loads or memory budget.
+
+Short-session ABBA of512+scoped pin versus default128 is exact at every phase
+and in the full final snapshot. Mean append15.464->15.663s, decode18.603->18.681s,
+turn model34.067->34.344s (~0.8% slower). Both variants drift upward, but there
+is no evidence of a gain. Preserve this and the other non-winning runtime
+experiments in jj history, then restore the accepted runtime instead of leaving
+unused branches in the active code. See layer-pin-scoped-screen.json.
