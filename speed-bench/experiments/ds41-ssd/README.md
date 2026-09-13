@@ -1083,3 +1083,20 @@ initial/append prefill traffic; pending waits are cumulative scalar-load joins.
 See gate-prefetch-profile.json. Further work should target admission by
 confidence and cache residency, demand priority, and GPU cache-hit scheduling;
 training a more accurate gate alone does not resolve the queue constraint.
+
+## 67: execute cached experts before the routing readback
+
+Opt-in DS4_METAL_V41_CACHE_TRY runs native routing, GPU cache validation and
+sparse-address IQ2/Q2 kernels in the same submission. Missing addresses are
+skipped by existing kernels. The CPU accepts output only when validation says
+all six native experts were resident; otherwise the normal exact path replaces
+the disposable partial output before anything consumes it. Every addressable
+cache buffer is declared to Metal and protected in flight. This first version
+still synchronizes at each layer, after expert computation rather than before.
+
+Short tool-session ABBA, exact phase logits/final state: decode18.217->19.540s
+(+7.27%), append15.176->14.179s (-6.57%), combined33.393->33.719s (+0.98%).
+Both candidate decode samples are slower than both controls. Cache reads
+87.53->88.71GiB; scheduling changes cache eviction availability. Disabled by
+default. See cache-try-short-{summary,comparison,manifest}.json. Next test
+skips all speculative expert work on a miss and batches resource declarations.

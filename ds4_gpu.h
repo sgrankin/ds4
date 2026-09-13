@@ -367,6 +367,15 @@ int ds4_gpu_stream_expert_cache_prefetch(
         const ds4_gpu_stream_expert_table *next);
 void ds4_gpu_stream_expert_cache_prefetch_finish(bool cancel);
 #endif
+#ifdef __APPLE__
+/* Experimental IQ2/Q2 scalar cache execution. Returns 1 for exact all-hit
+ * output, 0 for discard-and-fallback, -1 for an execution error. */
+int ds4_gpu_dsv41_cached_moe_try(const ds4_gpu_stream_expert_table *table,
+        ds4_gpu_tensor *out, ds4_gpu_tensor *gate, ds4_gpu_tensor *up,
+        ds4_gpu_tensor *mid, const ds4_gpu_tensor *selected,
+        const ds4_gpu_tensor *weights, const ds4_gpu_tensor *x,
+        uint32_t in_dim, uint32_t mid_dim, float clamp);
+#endif
 /* Reset only the prompt-local eviction heuristic.  The resident SSD expert
  * cache itself is intentionally kept warm across sessions. */
 void ds4_gpu_stream_expert_cache_reset_route_hotness(void);
