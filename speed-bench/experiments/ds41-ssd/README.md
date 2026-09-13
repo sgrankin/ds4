@@ -119,3 +119,18 @@ arithmetic/state discrepancy before adopting different partitions; do not
 interpret a matching argmax alone as correctness. Reproducing the originally
 reported vision slowdown still needs its prompt/runtime conditions: these
 controlled text-only tests already show parity with the encoder loaded.
+
+## 07: locate existing scalar/batch divergence before changing tail scheduling
+
+Added a diagnostic-only build (`make tests/trace_deepseek41_prefill`) that
+captures the last row of intermediate tensors. Trace barriers and file I/O are
+compiled out of normal builds. `trace_deepseek41_prefill MODEL PROMPT 32
+scalar|batch OUTDIR` runs the existing scalar or batch path directly.
+`compare_trace.py CONTROL_DIR CANDIDATE_DIR` compares every captured vector.
+
+At layer 0 of a fresh 32-token prompt, normalized inputs are bit-identical.
+Mixing coefficients already differ (max 2.33e-5). Q projection has 8208/32768
+differences after BF16 rounding; normalized Q low-rank and K projections also
+differ. This predates wide-tail scheduling and does not depend on long-context
+cache state. The batch dense paths use different arithmetic/half intermediates.
+Detailed stage comparisons are in trace32/scalar-vs-batch.jsonl.

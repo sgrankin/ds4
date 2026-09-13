@@ -40595,6 +40595,29 @@ static bool ds41_hc_mix(ds41_gpu_graph *g, const ds4_model *m,
                DS4_N_HC, DS4_N_HC_SINKHORN_ITER, DS4_HC_EPS);
 }
 
+#ifdef DS4_TEST_V41_TRACE
+static const char *ds41_trace_dir;
+static uint32_t ds41_trace_pos;
+static bool ds41_trace_row(ds4_gpu_tensor *x, uint32_t width,
+                          uint32_t start, uint32_t count, uint32_t layer,
+                          const char *name) {
+    if (!ds41_trace_dir || ds41_trace_pos < start || ds41_trace_pos - start >= count)
+        return true;
+    if (!ds4_gpu_end_commands()) return false;
+    char path[512];
+    snprintf(path, sizeof(path), "%s/%02u-%s.bin", ds41_trace_dir, layer, name);
+    FILE *fp = fopen(path, "wb");
+    const float *data = ds4_gpu_tensor_contents(x);
+    bool ok = fp && data && fwrite(data + (uint64_t)(ds41_trace_pos - start) * width,
+                                  sizeof(float), width, fp) == width;
+    if (fp && fclose(fp)) ok = false;
+    return ds4_gpu_begin_commands() && ok;
+}
+#else
+#define ds41_trace_row(...) true
+#endif
+
+
 static bool ds41_attention_low(ds41_gpu_graph *g, const ds4_model *m,
                                const ds4_layer_weights *l) {
     const uint32_t groups = DS4_N_OUT_GROUP / g->tp_world;
@@ -40716,6 +40739,9 @@ static bool ds41_attention(ds41_gpu_graph *g, const ds4_model *m,
     const uint32_t heads = DS4_N_HEAD / g->tp_world;
     const uint32_t head0 = g->tp_rank * heads;
     if (!projected && !ds41_attention_project(g, m, l)) return false;
+    if (!ds41_trace_row(g->qr, DS4_N_LORA_Q, pos, 1, il, "1a-qr") ||
+        !ds41_trace_row(g->q, heads * DS4_N_HEAD_DIM, pos, 1, il, "1b-q") ||
+        !ds41_trace_row(g->kv, DS4_N_HEAD_DIM, pos, 1, il, "1c-kv")) return false;
     if (!ds41_rope(g->q, heads, DS4_N_HEAD_DIM, il, pos, false) ||
         !ds41_rope(g->kv, 1, DS4_N_HEAD_DIM, il, pos, false) ||
         !ds4_gpu_dsv41_quantize(g->kv, DS4_N_HEAD_DIM, 1, DS4_V41_FP8_E8M0) ||
@@ -41138,10 +41164,19 @@ static bool ds41_graph_after_moe(ds41_gpu_graph *g) {
         ds4_gpu_tensor_copy(g->pre, 0, g->ffn_split, 0, DS4_N_HC * sizeof(float));
 }
 
+
 static bool ds41_graph_layer(ds41_gpu_graph *g, const ds4_model *m,
                             const ds4_layer_weights *l, uint32_t il, int token) {
-    return ds41_graph_before_moe(g, m, l, il) && ds41_moe(g, m, l, il, (uint32_t)token) &&
-        ds41_graph_after_moe(g);
+    return ds41_graph_before_attention(g, m, l, il) &&
+        ds41_trace_row(g->norm, DS4_N_EMBD, g->pos, 1, il, "1-norm") &&
+        ds41_trace_row(g->attn_split, 24, g->pos, 1, il, "1-split") &&
+        ds41_attention(g, m, l, il, false) &&
+        ds41_trace_row(g->block, DS4_N_EMBD, g->pos, 1, il, "2-attn") &&
+        ds41_graph_after_attention(g, m, l) &&
+        ds41_trace_row(g->norm, DS4_N_EMBD, g->pos, 1, il, "3-norm") &&
+        ds41_trace_row(g->ffn_split, 24, g->pos, 1, il, "3-split") &&
+        ds41_moe(g, m, l, il, (uint32_t)token) && ds41_graph_after_moe(g) &&
+        ds41_trace_row(g->residual, DS4_N_HC * DS4_N_EMBD, g->pos, 1, il, "4-residual");
 }
 
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
@@ -41850,6 +41885,9 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
             }
             if (ok && batch_hc)
                 ok = ds41_before_attention_batch(g, &active, m, &w->layer[il], il, count);
+            if (ok && batch_hc) ok =
+                ds41_trace_row(active.norm, DS4_N_EMBD, start, count, il, "1-norm") &&
+                ds41_trace_row(active.attn_split, 24, start, count, il, "1-split");
             DS41_STAGE("hc/engram");
             for (uint32_t t = 0; ok && !batch_hc && t < count; t++) {
                 row.pos = start + t;
@@ -41863,6 +41901,10 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
             if (ok && batch_attention) {
                 const ds4_layer_weights *l = &w->layer[il];
                 ok = ds41_attention_project_batch(g, m, l, count);
+                if (ok) ok =
+                    ds41_trace_row(g->batch.qr, DS4_N_LORA_Q, start, count, il, "1a-qr") &&
+                    ds41_trace_row(g->batch.q, DS4_N_HEAD * DS4_N_HEAD_DIM / g->tp_world, start, count, il, "1b-q") &&
+                    ds41_trace_row(g->batch.kv, DS4_N_HEAD_DIM, start, count, il, "1c-kv");
                 DS41_STAGE("attention projections");
                 if (ok && batch_core) ok = ds41_attention_batch(g, m, l, il, count);
                 for (uint32_t t = 0; ok && !batch_core && t < count; t++) {
@@ -41893,8 +41935,12 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
                     if (ok) ok = ds41_matmul_batch(g->batch.block, m, l->attn_output_b,
                                                    g->batch.low, count, true);
                 }
+                if (ok) ok = ds41_trace_row(g->batch.block, DS4_N_EMBD, start, count, il, "2-attn");
                 DS41_STAGE("attention output");
                 if (ok && batch_hc) ok = ds41_after_attention_batch(&active, m, l, count);
+                if (ok && batch_hc) ok =
+                    ds41_trace_row(active.norm, DS4_N_EMBD, start, count, il, "3-norm") &&
+                    ds41_trace_row(active.ffn_split, 24, start, count, il, "3-split");
                 DS41_STAGE("hc/ffn norm");
                 for (uint32_t t = 0; ok && !batch_hc && t < count; t++) {
                     row.pos = start + t;
@@ -41929,6 +41975,8 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
             if (ok && wide && il + 1u < DS4_N_LAYER) {
                 ok = ds41_carry_copy(g, off, count, true);
             }
+            if (ok && batch_hc) ok = ds41_trace_row(active.residual, DS4_N_HC * DS4_N_EMBD,
+                                                                  start, count, il, "4-residual");
             const double t_encoded = profile ? now_sec() : 0;
             if (ds4_gpu_commands_active() && !ds4_gpu_end_commands()) ok = false;
             if (g->tp_world == 2 && ds4_gpu_tp_failed()) ok = false;
