@@ -1,5 +1,14 @@
 # DS4.1 SSD optimization handoff
 
+## Active round, 2026-09-13 17:18-18:18 UTC
+
+Authorized next hour: profile accepted defaults, tune exact selected tile sizes
+and the 256-767-token gap, investigate cold restored expert cache, then measure
+full generated responses and correctness. One jj commit per experiment.
+Fresh profile: /tmp/ds41-round3-profile. New experiment controls are opt-in until
+measured. Keep vision deferred. No concurrent GPU experiments.
+
+
 Round completed 2026-09-13, approximately 16:12:48-17:13 UTC. Final default
 agent ABBA, every short-tile numerical check, and both long-tail regressions
 passed. The agent and benchmark binaries are rebuilt. Use jj, one commit per

@@ -41580,8 +41580,17 @@ static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, const ds4_weights *w
         ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u)
         minimum = 1024u;
 #endif
-    const uint32_t small = remaining < 8u ? remaining : 8u;
-    if (remaining < 256u && ds41_selected_small_prefill(g, w, small)) return small;
+    uint32_t tile = 8u;
+    const char *tile_env = getenv("DS4_METAL_V41_SELECTED_TILE");
+    if (tile_env && tile_env[0]) {
+        char *end = NULL;
+        unsigned long value = strtoul(tile_env, &end, 10);
+        if (end != tile_env && !*end && value >= 2u && value <= 8u)
+            tile = (uint32_t)value;
+    }
+    const uint32_t small = remaining < tile ? remaining : tile;
+    const uint32_t selected_limit = getenv("DS4_METAL_V41_SELECTED_MEDIUM") ? 768u : 256u;
+    if (remaining < selected_limit && ds41_selected_small_prefill(g, w, small)) return small;
     if (remaining < minimum) return ds41_exact_short_prefill(g, remaining) ? remaining : 1;
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
     /* Keep a medium SSD append in one layer sweep without changing its

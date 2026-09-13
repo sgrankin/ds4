@@ -511,3 +511,19 @@ continuation snapshots against rollback. See final-small-state.txt. The prior
 remain byte-identical to scalar execution (final-long-tail-state.txt). Both
 ds4-agent and ds4-bench are rebuilt; whitespace checks pass. The round ran from
 16:12:48 to approximately 17:13 UTC on 2026-09-13, with one commit per experiment.
+
+## 25: profile accepted defaults and expose bounded tile experiments
+
+Round starts 2026-09-13 17:18 UTC. Real-agent profile at the accepted defaults
+uses isolated fresh/restored system KV, one generated token per turn. Restored
+hello is 4.394 s: 200 selected batch bindings total 2.250 s, including 1.809 s
+of parallel pread. GPU busy accumulation reaches about 0.94 s before the next
+ready marker. Fresh hello is 3.072 s with 0.594 s binding, including 0.551 s
+pread. These categories are nested/overlapping, not additive independent stages.
+See round3-profile.json; raw logs /tmp/ds41-round3-profile.
+
+Add bounded diagnostic DS4_METAL_V41_SELECTED_TILE=2..8 and opt-in
+DS4_METAL_V41_SELECTED_MEDIUM=1 to use exact small tiles below 768 remaining
+tokens. Existing default stays below 256. The model-dependent snapshot test
+accepts an optional single tail length for testing the medium gap. Benchmark
+512-token appends at ctx=100000 after a 2048-token prefix next.
