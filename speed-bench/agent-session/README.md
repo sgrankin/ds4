@@ -59,7 +59,8 @@ The checked recording is `session-v1.txt`, SHA256
 310159cecfb6688d65967cf30279e1626c15571dbedd02838549f0d1ff14f368.
 It was captured from the passing live baseline on an M5 Max /128 GiB with
 DeepSeek-V4.1-Flash-Q2, SSD streaming, context100000 and automatic cache sizing.
-It includes20 tool calls,14 generation rounds, an1859-token system prefix,
+It includes20 tool calls (7 reads,6 shell commands,3 edits,3 directory lists,
+and1 write),14 generation rounds, an1859-token system prefix,
 3371 generated tokens and final context8710. Tool/user suffixes range62-826
 tokens. Baseline user-turn wall times158.705/93.843/39.166s, total291.714s;
 startup17.420s is separate. Model prefill94.280s and decode196.339s account for

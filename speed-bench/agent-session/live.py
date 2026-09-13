@@ -38,7 +38,12 @@ cmd=[str(binary),'--ssd-streaming','--non-interactive','--seed','1234','--temp',
      '--chdir',str(project),'--trace',str(trace)]
 if a.cache_gb: cmd+=['--ssd-streaming-cache-experts',f'{a.cache_gb}GB']
 (a.output/'command.json').write_text(json.dumps(dict(argv=cmd,env={k:v for k,v in env.items() if k.startswith('DS4_') or k=='TZ'}),indent=2)+'\n')
-prompts=json.loads((HERE/'prompts.json').read_text())
+shutil.copy2(HERE/'prompts.json',a.output/'prompts.json')
+prompts=json.loads((a.output/'prompts.json').read_text())
+provenance=dict(binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
+    prompts_sha256=hashlib.sha256((a.output/'prompts.json').read_bytes()).hexdigest(),
+    shaders=json.loads((a.output/'metal/sha256.json').read_text()))
+(a.output/'provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
 checks=[]; turns=[]; submitted=0; last=None; start=time.monotonic(); startup=None
 proc=None
 try:

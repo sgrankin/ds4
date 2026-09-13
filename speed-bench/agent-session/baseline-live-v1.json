@@ -154,5 +154,12 @@
   ],
   "total_turn_ms": 291714.3807070097,
   "success": true,
-  "fixture_sha256": "99960f8ce2f967481f8844f6dc3defe9f6fddb5330545b1134aba060bd9dcfd1"
+  "fixture_sha256": "99960f8ce2f967481f8844f6dc3defe9f6fddb5330545b1134aba060bd9dcfd1",
+  "tool_types": {
+    "list": 3,
+    "read": 7,
+    "bash": 6,
+    "edit": 3,
+    "write": 1
+  }
 }
