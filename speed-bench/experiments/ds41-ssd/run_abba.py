@@ -11,6 +11,7 @@ p = argparse.ArgumentParser()
 p.add_argument('output', type=Path)
 p.add_argument('--candidate-env', required=True, help='NAME=VALUE; unset in control')
 p.add_argument('--tokens', type=int, default=2048)
+p.add_argument('--ctx', type=int)
 p.add_argument('--prompt', default='/tmp/ds41-prefill-input.c')
 p.add_argument('--vision')
 a = p.parse_args()
@@ -34,6 +35,8 @@ for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
            '--dump-frontier-logits-dir', str(dest), '--csv', str(dest / 'speed.csv')]
     if a.vision:
         cmd += ['--vision', a.vision]
+    if a.ctx:
+        cmd += ['--ctx-alloc', str(a.ctx)]
     (dest / 'command.json').write_text(json.dumps({'argv': cmd, 'variant': variant,
                                                  'env': {k: v for k, v in env.items() if k.startswith('DS4_')}}, indent=2))
     with (dest / 'run.log').open('w') as log:

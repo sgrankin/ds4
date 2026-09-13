@@ -1,0 +1,11 @@
+--- a/ds4.c
++++ b/ds4.c
+@@ -40215,6 +40215,8 @@
+     if (g->carry_cap && remaining >= 4096u &&
+         !getenv("DS4_METAL_DISABLE_V41_WIDE_PREFILL")) {
+         const uint32_t count = remaining < g->carry_cap ? remaining : g->carry_cap;
++        if (getenv("DS4_METAL_V41_PREFILL_WHOLE_TAIL") && remaining <= g->carry_cap)
++            return count;
+         return count - count % 2048u;
+     }
+     const uint32_t tail_cap = g->prefill_cap < 2048u ? g->prefill_cap : 2048u;

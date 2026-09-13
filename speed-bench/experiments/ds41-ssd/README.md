@@ -51,3 +51,16 @@ Actual unmodified agent with vision, default 100000-token context, `-n 1
 1907-token system prefill = 14805.383 ms; system prompt KV save succeeded.
 40-token append = 3814.777 ms. This reproduces slow short appends, not the
 reported large-prefill vision slowdown. No image was supplied.
+
+## 04: fold an unaligned tail into a wide sweep (rejected: logits differ)
+
+`run_abba.py /tmp/ds41-whole-tail --candidate-env DS4_METAL_V41_PREFILL_WHOLE_TAIL=1
+--tokens 5000 --ctx 100000`
+
+Control: 67.61 tps, candidate: 257.66 tps. Aborted after the first pair because
+all 129280 logits differed, max absolute difference 2.651666, RMSE 0.565702.
+Argmax was 2701 in both. This is not an accepted numerical optimization.
+The control executes 4096 batched tokens then 904 scalar steps; candidate
+executes one 5000-token sweep. Arithmetic/batch partitions differ.
+The rejected implementation is retained only as whole-tail.patch, not enabled
+in source. Runner now accepts --ctx to match the agent's 100000-token allocation.
