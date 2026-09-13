@@ -1162,3 +1162,12 @@ versus candidate4x2048; the count-dependent native limit uses4096 below16384
 input rows even with8192-row allocated capacity. Therefore this does not test
 the full8192-row processing regime; test16384 before a general default change.
 See chunk2048-large8192.json.
+
+## 72: refresh actual-agent short turns for buffer2048
+
+Fresh/restored ABBA, three short questions each, one generated token per turn;
+all input/output token hashes match. Mean fresh first-output latencies are
+2333.5/615.5/377.5ms control versus2288/579/358.5ms candidate. Restored means
+3961.5/922.5/401.5ms versus3951/908/403ms. This supports near-neutral interactive
+latency with at most a small fresh benefit; it is not a complete-response
+throughput measurement. See chunk2048-interactive-new.json.
