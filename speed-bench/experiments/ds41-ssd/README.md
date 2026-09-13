@@ -1135,3 +1135,19 @@ the final experiment. The corrected guarded schedule still waits once per layer
 and changes overlap; its negative result does not disprove a design that avoids
 those per-layer handoffs. Such a design needs guarded continuation or a different
 command-submission protocol, not just moving a wait after expert computation.
+
+## 70: smaller prefill buffer improves the full tool session modestly
+
+Restored baseline runtime; only DS4_REPLAY_PREFILL_CHUNK=2048 differs. Full
+ABBA with memory reports retains exact phase logits and final snapshot hashes.
+Mean append94.681->92.725s (-2.07%), decode198.447->192.591s (-2.95%),
+combined293.128->285.316s (-2.66%,7.812s saved), excluding system prefill.
+System prefill14.674->14.812s. Both candidates beat both controls in combined
+and decode time. Cache budget7822->8253 experts,72.51->76.50GiB; total expert
+reads670.61->582.57GiB (-13.13%), evictions72322->62834. Both repeats have
+identical traffic. See chunk2048-full-{summary,comparison,manifest}.json.
+
+Every prefill segment in this recording fits within2048 rows. This is evidence
+for a memory-budget tradeoff on a working session, not a universal setting.
+Experiment19 found no consistent short-interactive benefit. A large8192-token
+prefill check follows before changing any default.

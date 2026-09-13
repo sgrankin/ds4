@@ -65,6 +65,29 @@ Missing-route schedule guard was tested on a one-token input and exits nonzero.
 Wrong-route injection in deferred mode also exits nonzero. Twelve Python tests
 pass, covering extraction, route parsing and balanced-continuation identity.
 
+## Current continuation (experiments67-70)
+
+Experiments67-69 implemented sparse cache execution before CPU routing readback,
+then GPU all-hit guards, batched resource declarations and slab deduplication.
+Native logits and continuation state were exact. Experiment67 and preliminary68
+missed address-table maintenance and hit-path token aging; their timings are
+superseded. Corrected68 preserves identical cache traffic and is +4.29% decode,
++2.55% short-session inference. Deduplicated69 remains +4.19% decode,+3.04% turn.
+All are rejected. Code archived in jj commits458ee395,99121f52,468d504c;
+restored out in4ba2a3a3. Runtime sources are back to experiment66 baseline.
+This schedule still waits once per layer and is not the oracle's wait-free path.
+
+Experiment70 completed: chunk2048 full ABBA exact; decode -2.95%, append
+-2.07%, combined -2.665% (293.128->285.316s), reads670.61->582.57GiB.
+Budget7822->8253 experts /72.51->76.50GiB. Results chunk2048-full-*.json.
+No default changed: explicit --prefill-chunk2048 is the tested option.
+
+Experiment71 ACTIVE: /tmp/ds41-chunk2048-large8192, unified session17089.
+run_abba.py --candidate-prefill-chunk2048 --tokens8192 --ctx100000
+--gen-tokens8, normal restored binary and frozen shaders. Finish, check frontier
+logits and throughput, save evidence and decide whether this is a user-selectable
+tradeoff rather than a default. GPU runs serial; no other active trials.
+
 ## Reproduction and artifacts
 
     make ds4-agent ds4-bench speed-bench/agent-session/replay
