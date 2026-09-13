@@ -891,3 +891,14 @@ This broad version also protects unused experts for single-batch short prompts,
 which is outside the intended future-subtile reuse case. Refine protection to
 only the duration of a selected multi-subtile layer sweep, then retest. Neither
 version is a default. See layer-pin-broad-screen.json.
+
+## 57: fixed-token read-ahead ablation deserves a longer check
+
+With current selected-batch defaults, disabling selected-expert F_RDADVISE
+improves short-replay mean decode18.388->17.981s (~2.2%), with append prefill
+15.182->15.266s essentially flat. Turn model work33.570->33.246s (~1.0% lower).
+Both candidate decode samples beat both controls, though candidates vary.
+All phase logits and full final snapshots match. This differs from the older
+short-agent rejection, which predates selected MoE batches and fixed datetime.
+No default change yet: full-session and interactive-response confirmation are
+required. See noadvice-fixed-screen.json.
