@@ -8,16 +8,36 @@ and the vision session-save limitation remain deferred until the user is present
 
 ## Active routing-prediction experiment
 
-User authorized investigating predicted expert prefetch. Start with an exact
-route oracle before training. Current uncommitted DS4.c diagnostic records
-scalar routes and optionally begins ordinary selected loads before attention.
-No routing replacement, extra cache, or new workers. Both ABBA variants consume
-and validate the same frozen recording. See agent-session README commands.
-Short capture: /tmp/ds41-oracle-record-short (process 39234), routes at
-/tmp/ds41-oracle-routes-short.bin; first seven replay phases (343 decode tokens).
-Next: short exact ABBA, then complete recording and full ABBA if promising.
-An oracle here is only a ceiling for this one-slot pre-attention schedule,
-not a ceiling for all possible deeper prefetch or GPU-driven scheduling.
+User authorized predicted expert prefetch. Exact-route oracle implementation
+committed d47db637; first results b471a8ce. Short ABBA completed at
+/tmp/ds41-oracle-preattention-short: 18.405 -> 16.984 s decode (-7.7%), combined
+33.773 -> 32.813 s (-2.8%, one candidate prefill outlier). Exact routes, logits,
+full snapshot, cache misses and bytes. Evidence oracle-preattention-short.json.
+Capture /tmp/ds41-oracle-routes-short.bin is 343 tokens * 40 layers, 493936 bytes,
+SHA256 80bfffb6a8481e3762d531ff6590f4d7e5eb1cbdfcd297e9c806c375c8a7174a.
+
+Second uncommitted diagnostic adds DS4_V41_ORACLE_DEFER_CHECK to pre-attention:
+GPU-copy actual routes into a 960-byte trace, validate after each token, avoiding
+per-layer CPU route waits while retaining native weights/arithmetic. It is an
+oracle architectural bound, not usable with a fallible predictor without an
+exact GPU check/fallback mechanism. Existing cache in-flight protections apply.
+Short ABBA currently running /tmp/ds41-oracle-deferred-short (session48987),
+A = pre-attention oracle, B = pre-attention plus deferred check. First A16.590s
+and B13.316s decode, exact state/logits/routes. Wait for balanced completion.
+Binaries already rebuilt; avoid builds/CPU-heavy analysis during timed runs.
+Next: full route capture and full direct-default-vs-combined ABBA, and a separate
+profiled comparison using the new pending-read CPU wait counter.
+
+Backend diagnostic pending wait_ms measures only CPU join wait. Existing
+pread_ms includes the whole begin-to-consumption lifetime, including overlap;
+do not use it as exposed-stall time. Counters reset with cache stats.
+
+Offline route_stats.py screens previous-token, hot-frequency and previous-layer
+transition predictors. It is only a within-session chronological split and uses
+all-route recall, not cache misses/deadlines. Short recall at six candidates:
+previous token22.5%, frequency28.7%, transition45.9%; at12 transition63.0%.
+Do not confuse this with independent-task predictor validation. Eight extractor
+and route-parser tests pass. Need full-session stats before judging baselines.
 
 Research anchors:
 - https://arxiv.org/html/2410.22134v3 (ProMoE learned prediction and scheduling)

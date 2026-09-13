@@ -966,3 +966,24 @@ independent bound on the per-layer router readback dependency. See
 oracle-preattention-short.json; route capture/replay instructions are in the
 agent-session README. Existing pread_ms includes overlap duration; it cannot be
 interpreted as exposed CPU stall time when comparing these schedules.
+
+## 61: oracle-only deferred route validation isolates CPU handoff cost
+
+Add a 960-byte per-token GPU route trace and validate it at token completion.
+The host binds exact oracle addresses while the native GPU router still computes
+weights; every actual ordered expert selection must match. This removes the
+per-layer readback wait in the diagnostic. It requires perfect future knowledge;
+a real predictor needs GPU validation and fallback before execution.
+
+Short ABBA compares pre-attention alone (A) against pre-attention plus deferred
+check (B): decode 16.620 -> 13.257 s (-20.2%); combined append/decode
+31.831 -> 28.689 s (-9.9%). Both B samples beat both A samples. Full phase
+logits and final state match. This is additional to experiment60's read-overlap
+gain, but don't combine separate runs into a precise overall headline. Full
+session must compare default directly against the combined diagnostic.
+See oracle-deferred-short.json. No production default changed.
+
+Fault injection: changing one recorded expert ID in the first decoded token
+makes deferred validation exit nonzero with "oracle prediction differs from
+exact router". No final continuation snapshot is published. Eight extraction
+and route-parser tests pass. Build succeeds without warnings.

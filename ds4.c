@@ -40208,6 +40208,7 @@ typedef struct {
     ds41_prefill_row batch, *rows_view;
     ds41_prefill_row carry;
     ds4_gpu_tensor *prefill_tokens;
+    ds4_gpu_tensor *oracle_selected; /* Diagnostic deferred route validation. */
 #define DS41_FIELD(name, count) ds4_gpu_tensor *name;
     DS41_SCRATCH(DS41_FIELD)
 #undef DS41_FIELD
@@ -40227,6 +40228,7 @@ static void ds41_graph_free(ds41_gpu_graph *g) {
     ds4_gpu_decode_graphs_invalidate();
 #endif
     ds4_gpu_tensor_free(g->tp_logits_half);
+    ds4_gpu_tensor_free(g->oracle_selected);
     for (uint32_t i = 0; g->rows_view && i < g->prefill_cap; i++) {
 #define DS41_ROW_FREE(name, count) ds4_gpu_tensor_free(g->rows_view[i].name);
         DS41_PREFILL_ROWS(DS41_ROW_FREE)
@@ -40816,7 +40818,7 @@ static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
  * Never changes routing, arithmetic, cache capacity, or selected-ID readback.
  * Single-process/single-session only; files are native-endian uint32 words. */
 static struct {
-    bool initialized, enabled, active, preattention;
+    bool initialized, enabled, active, preattention, defer_check;
     FILE *record;
     uint32_t *words;
     size_t count, cursor;
@@ -40866,6 +40868,9 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
                     != ds41_route_oracle.count) ds4_die("cannot read oracle routes");
             fclose(f);
             ds41_route_oracle.preattention = getenv("DS4_V41_ORACLE_PREATTENTION") != NULL;
+            ds41_route_oracle.defer_check = getenv("DS4_V41_ORACLE_DEFER_CHECK") != NULL;
+            if (ds41_route_oracle.defer_check && !ds41_route_oracle.preattention)
+                ds4_die("deferred oracle check requires pre-attention loading");
         }
         ds41_route_oracle.enabled = true;
         atexit(ds41_route_oracle_close);
@@ -40876,6 +40881,10 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
         getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD") ||
         getenv("DS4_METAL_DISABLE_STREAMING_EXPERT_EARLY_LOAD"))
         ds4_die("oracle requires ordinary single-rank text SSD early loading");
+    if (ds41_route_oracle.defer_check && !g->oracle_selected) {
+        g->oracle_selected = ds4_gpu_tensor_alloc(DS4_N_LAYER * DS4_N_EXPERT_USED * sizeof(int32_t));
+        if (!g->oracle_selected) ds4_die("cannot allocate deferred oracle validation");
+    }
     ds41_route_oracle.active = true;
     ds41_route_oracle.pos = g->pos;
     ds41_route_oracle.token = token;
@@ -40959,12 +40968,22 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
     if (early_load) {
         const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
             m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
-        if (!ds4_gpu_end_commands() ||
-            !ds4_gpu_tensor_read(g->selected, 0, selected_ids,
-                DS4_N_EXPERT_USED * sizeof(selected_ids[0]))) return false;
-        ds41_route_oracle_check(il, selected_ids);
-        if (!ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
-                DS4_N_EXPERT_USED) || !ds4_gpu_begin_commands()) return false;
+        if (ds41_route_oracle.active && ds41_route_oracle.defer_check) {
+            /* Oracle-only bound: validate native routes after the token, so
+             * the CPU can bind exact recorded addresses without a router wait.
+             * Route weights and every arithmetic operation stay native. */
+            const uint64_t bytes = DS4_N_EXPERT_USED * sizeof(int32_t);
+            if (!ds4_gpu_tensor_copy(g->oracle_selected, il * bytes, g->selected, 0, bytes))
+                return false;
+            memcpy(selected_ids, ds41_route_oracle_ids(il), (size_t)bytes);
+        } else {
+            if (!ds4_gpu_end_commands() ||
+                !ds4_gpu_tensor_read(g->selected, 0, selected_ids,
+                    DS4_N_EXPERT_USED * sizeof(selected_ids[0]))) return false;
+            ds41_route_oracle_check(il, selected_ids);
+            if (!ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
+                    DS4_N_EXPERT_USED) || !ds4_gpu_begin_commands()) return false;
+        }
     }
     const bool shared_here = !shared_owner || g->tp_rank == (il & 1u);
     bool shared_queued = false;
@@ -41605,6 +41624,13 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
     if (g->tp_world == 2 && ds4_gpu_tp_failed()) ok = false;
     if (ok && logits) ok = ds41_graph_logits(g, m, w, logits);
     if (ds41_route_oracle.active) {
+        if (ok && ds41_route_oracle.defer_check) {
+            int32_t actual[DS4_MAX_LAYER * DS4_MAX_EXPERT_USED];
+            ok = ds4_gpu_tensor_read(g->oracle_selected, 0, actual,
+                DS4_N_LAYER * DS4_N_EXPERT_USED * sizeof(int32_t)) != 0;
+            for (uint32_t il = 0; ok && il < DS4_N_LAYER; il++)
+                ds41_route_oracle_check(il, actual + il * DS4_N_EXPERT_USED);
+        }
         if (ok && ds41_route_oracle.checked != DS4_N_LAYER) ds4_die("incomplete oracle step");
         if (ds41_route_oracle.words)
             ds41_route_oracle.cursor += DS4_N_LAYER * (3u + DS4_N_EXPERT_USED);

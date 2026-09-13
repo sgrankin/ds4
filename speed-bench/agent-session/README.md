@@ -100,3 +100,25 @@ trailing records cause failure. Files are native-endian uint32 data, version 1,
 for local experiments; the harness records their SHA256. Recording refuses to
 overwrite an existing file. Use one session per process, ordinary nonvision,
 single-GPU SSD mode. Do not enable oracle flags for real agent use.
+
+A second bound adds `DS4_V41_ORACLE_DEFER_CHECK=1` alongside pre-attention mode.
+It copies each native GPU route into a tiny per-token trace and checks all routes
+at token completion, allowing host address binding from the oracle without the
+per-layer router wait. Native routing weights remain in use. This is deliberately
+stronger future knowledge than a fallible prefetch predictor can safely exploit:
+a real implementation would need GPU-side validation and a miss/fallback path.
+Use it to distinguish synchronization opportunity from I/O overlap, never as a
+production optimization. Any route mismatch still fails the entire run.
+
+For diagnostic attribution, `DS4_METAL_STREAMING_EXPERT_TIMING_SUMMARY=1` plus
+`DS4_REPLAY_PROFILE_MEMORY=1` reports cumulative `streaming pending ... wait_ms`:
+time actually spent in pending-read joins, excluding overlap and installation.
+Collect these separately from uninstrumented headline timings.
+
+`python3 speed-bench/agent-session/route_stats.py /tmp/routes.bin` reports cheap
+previous-token, frequency and previous-layer transition prediction baselines.
+It trains on the first 60% and tests on the last 40% of one recording. This is
+an exploratory within-session split, not independent-task validation. Recall is
+across all experts, not just misses; candidate budgets and all-selected coverage
+are reported explicitly. The previous-token baseline always offers only its
+original selected set, even in the larger-budget table.
