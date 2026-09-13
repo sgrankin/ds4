@@ -695,3 +695,9 @@ See agent-file-cache-exploratory.json. No default changed.
 Fresh hello 2.290 s in both variants; restored 3.768 versus 3.764 s. Fresh six-token turn improved, but restored did not. Keep prefetch opt-in.
 These are exploratory trials with live timestamp tokens and random seeds.
 See agent-engram-prefetch-exploratory.json. No default changed.
+
+## 43: small Engram parallel reads show only a small later-turn effect
+
+Fresh/restored hello 2.303/3.773 s control versus 2.287/3.789 s parallel. Six-token turns 0.316/0.346 to 0.294/0.325 s; insufficient evidence to change the default.
+These are exploratory trials with live timestamp tokens and random seeds.
+See agent-engram-parallel-exploratory.json. No default changed.
