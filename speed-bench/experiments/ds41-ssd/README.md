@@ -537,3 +537,11 @@ probe behavior is preserved. ABBA forwards these settings and an optional fixed
 expert-cache budget. Python compilation passes. Full-response trials follow
 after the current medium-append benchmark; exact snapshots remain the stronger
 numerical gate than matching sampled outputs.
+
+## 27: exact eight-row tiles across medium appends
+
+Balanced separate-process ABBA after a 2048-token prefix, ctx=100000, 512-token
+append: controls 23.05/21.92 tps, selected-medium candidates 27.85/29.75 tps.
+Mean latency falls from 22.785 to 17.797 s, about 21.9%; all full-vocabulary
+frontier logits match exactly. See medium512-abba.json. The flag remains opt-in
+pending full continuation snapshots and boundary tests.
