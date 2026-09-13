@@ -545,3 +545,14 @@ append: controls 23.05/21.92 tps, selected-medium candidates 27.85/29.75 tps.
 Mean latency falls from 22.785 to 17.797 s, about 21.9%; all full-vocabulary
 frontier logits match exactly. See medium512-abba.json. The flag remains opt-in
 pending full continuation snapshots and boundary tests.
+
+## 28: larger exact selected-address tiles (opt-in)
+
+Extend diagnostic DS4_METAL_V41_SELECTED_TILE to 2..32; default remains eight.
+Selected-address routed kernels already preserve scalar arithmetic independently
+of row count, and the exact-dense scope selects scalar-equivalent projections.
+No grouped routed matmul is introduced. A 40-token tail with tile=32 after an
+indexed 2048-token prefix, plus eight teacher-forced tokens, has a bit-identical
+full continuation snapshot. Within-process scalar 3.068 s, tile32 0.959 s is a
+correctness run with warm-cache bias, not an independent performance result.
+Actual-agent ABBA is running at /tmp/ds41-agent-tile32.

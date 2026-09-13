@@ -41549,7 +41549,7 @@ static bool ds41_selected_small_prefill(const ds41_gpu_graph *g,
                                         const ds4_weights *w, uint32_t count) {
     if (getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") || !g->streaming ||
         g->tp_world != 1 || g->quality || g->imatrix || g->image_count ||
-        g->encoder_resident || !g->pos || count < 2u || count > 8u ||
+        g->encoder_resident || !g->pos || count < 2u || count > 32u ||
         count > g->prefill_cap) return false;
     const uint32_t gate_type = w->layer[0].ffn_gate_exps->type;
     const uint32_t down_type = w->layer[0].ffn_down_exps->type;
@@ -41585,7 +41585,7 @@ static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, const ds4_weights *w
     if (tile_env && tile_env[0]) {
         char *end = NULL;
         unsigned long value = strtoul(tile_env, &end, 10);
-        if (end != tile_env && !*end && value >= 2u && value <= 8u)
+        if (end != tile_env && !*end && value >= 2u && value <= 32u)
             tile = (uint32_t)value;
     }
     const uint32_t small = remaining < tile ? remaining : tile;
