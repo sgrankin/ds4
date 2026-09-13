@@ -1118,3 +1118,20 @@ samples (19.159s,19.076s) are slower than the first18.300s control. All variants
 have identical cache hits183997, misses17243, evictions9421 and reads87.53GiB.
 See cache-guarded-fixed-short-{summary,comparison,manifest}.json for the complete
 balanced result. No default enabled. Next isolate duplicate slab registrations.
+
+## 69: deduplicate slab resource declarations; no gain
+
+On top of corrected guarded cache execution, DS4_METAL_V41_CACHE_TRY_UNIQUE
+compacts repeated underlying Metal resources before useResources. Every unique
+resource remains declared and every potentially selected entry remains protected
+in flight. Short ABBA is exact, but decode18.531->19.307s (+4.19%), append
+15.416->15.671s (+1.65%), combined33.947->34.978s (+3.04%). Later samples
+show timing drift; both candidate decode samples still exceed both controls.
+See cache-unique-short-{summary,comparison,manifest}.json.
+
+No cache-execution variant is promoted. Experiments67-69 retain their code in
+jj history; restore these prototypes out of the active build after committing
+the final experiment. The corrected guarded schedule still waits once per layer
+and changes overlap; its negative result does not disprove a design that avoids
+those per-layer handoffs. Such a design needs guarded continuation or a different
+command-submission protocol, not just moving a wait after expert computation.

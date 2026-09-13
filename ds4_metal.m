@@ -32688,6 +32688,20 @@ static int ds4_gpu_encode_mul_mv_group6_sum6(
     return 1;
 }
 
+/* Slab-backed experts share Metal objects. Keep resource declarations exact
+ * while avoiding repeated residency/hazard processing for the same object. */
+static void ds4_gpu_use_unique_resources(id<MTLComputeCommandEncoder> enc,
+        __unsafe_unretained id<MTLResource> *resources, uint32_t count) {
+    uint32_t unique = 0;
+    for (uint32_t i = 0; i < count; i++) {
+        id<MTLResource> resource = resources[i];
+        uint32_t j = 0;
+        while (j < unique && resources[j] != resource) j++;
+        if (j == unique) resources[unique++] = resource;
+    }
+    [enc useResources:resources count:unique usage:MTLResourceUsageRead];
+}
+
 static int ds4_gpu_encode_mul_mv_addr_iq2_pair_swiglu(
         id<MTLCommandBuffer>        cb,
         id<MTLComputePipelineState> pipeline,
@@ -32758,7 +32772,9 @@ static int ds4_gpu_encode_mul_mv_addr_iq2_pair_swiglu(
             resources[2*i] = entries[i]->gate_buffer;
             resources[2*i+1] = entries[i]->up_buffer;
         }
-        [enc useResources:resources count:2*n_entries usage:MTLResourceUsageRead];
+        if (getenv("DS4_METAL_V41_CACHE_TRY_UNIQUE"))
+            ds4_gpu_use_unique_resources(enc, resources, 2*n_entries);
+        else [enc useResources:resources count:2*n_entries usage:MTLResourceUsageRead];
     } else {
     for (uint32_t i = 0; i < n_entries; i++) {
         [enc useResource:entries[i]->gate_buffer usage:MTLResourceUsageRead];
@@ -32891,7 +32907,9 @@ static int ds4_gpu_encode_mul_mv_addr_q2_sum6(
         [enc setBuffer:g_stream_expert_validate_status_buffer offset:0 atIndex:5];
         __unsafe_unretained id<MTLResource> resources[384];
         for (uint32_t i = 0; i < n_entries; i++) resources[i] = entries[i]->down_buffer;
-        [enc useResources:resources count:n_entries usage:MTLResourceUsageRead];
+        if (getenv("DS4_METAL_V41_CACHE_TRY_UNIQUE"))
+            ds4_gpu_use_unique_resources(enc, resources, n_entries);
+        else [enc useResources:resources count:n_entries usage:MTLResourceUsageRead];
     } else {
     for (uint32_t i = 0; i < n_entries; i++) {
         [enc useResource:entries[i]->down_buffer usage:MTLResourceUsageRead];
