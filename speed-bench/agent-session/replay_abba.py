@@ -9,6 +9,7 @@ import re
 from pathlib import Path
 import shutil
 import subprocess
+import statistics
 import sys
 HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE.parent/'experiments/ds41-ssd'))
@@ -58,5 +59,19 @@ for i,variant in enumerate(a.order):
         model_ms=sum(r['ms'] for r in rows))
     results.append(result)
     (a.output/'summary.json').write_text(json.dumps(results,indent=2)+'\n')
-    print(json.dumps({k:v for k,v in result.items() if k!='phases'}),flush=True)
-    logits.unlink(); snapshot.unlink()
+    print(json.dumps({k:v for k,v in result.items() if k not in ('phases','cache_reports')}),flush=True)
+    # Keep the reference bytes until all comparisons pass, for diagnosis.
+    if i: logits.unlink(); snapshot.unlink()
+for filename in ['logits.bin','snapshot.bin']:
+    (a.output/f'0-{a.order[0]}'/filename).unlink()
+comparison={}
+for variant in sorted(set(a.order)):
+    group=[r for r in results if r['variant']==variant]
+    comparison[variant]={key:statistics.mean(r[key] for r in group) for key in
+        ('startup_prefill_ms','append_prefill_ms','decode_ms','model_ms')}
+    comparison[variant]['turn_model_ms']=comparison[variant]['append_prefill_ms']+comparison[variant]['decode_ms']
+if 'A' in comparison and 'B' in comparison:
+    comparison['candidate_change_percent']={key:100*(comparison['B'][key]/comparison['A'][key]-1)
+        for key in ('append_prefill_ms','decode_ms','turn_model_ms')}
+(a.output/'comparison.json').write_text(json.dumps(comparison,indent=2)+'\n')
+print(json.dumps(comparison),flush=True)
