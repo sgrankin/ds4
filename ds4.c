@@ -41614,7 +41614,14 @@ static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, const ds4_weights *w
             tile = (uint32_t)value;
     }
     const uint32_t small = remaining < tile ? remaining : tile;
-    const uint32_t selected_limit = getenv("DS4_METAL_V41_SELECTED_MEDIUM") ? 768u : 256u;
+    uint32_t selected_limit = getenv("DS4_METAL_V41_SELECTED_MEDIUM") ? 768u : 256u;
+    const char *limit_env = getenv("DS4_METAL_V41_SELECTED_LIMIT");
+    if (limit_env && limit_env[0]) {
+        char *end = NULL;
+        unsigned long value = strtoul(limit_env, &end, 10);
+        if (end != limit_env && !*end && value >= 256u && value <= 1024u)
+            selected_limit = (uint32_t)value;
+    }
     if (remaining < selected_limit && ds41_selected_small_prefill(g, w, small)) return small;
     if (remaining < minimum) return ds41_exact_short_prefill(g, remaining) ? remaining : 1;
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)

@@ -654,3 +654,12 @@ control7.97ms versus candidates5.94/5.98ms (first control15.99ms includes startu
 See shared-bf16-micro.txt. Full model ablation passes32 full-vocabulary logit rows
 and the complete serialized continuation state. Actual-agent ABBA is queued
 under /tmp/ds41-round3-trials/shared-agent.log; no end-to-end gain claimed yet.
+
+## 39: compare selected tiles with the established long-tail sweep
+
+Add DS4_METAL_V41_SELECTED_LIMIT=256..1024 as a bounded diagnostic override.
+With tile128 this can replace an exact 768-1023-token full-layer sweep with
+selected-only tiles, avoiding whole-layer SSD reads. Default remains256 and
+the existing selected-medium flag still chooses768. Benchmark904 appended
+tokens after4096, and verify768/1023 continuation snapshots, after the current
+sequential agent queue. Smaller-cache performance must be considered separately.
