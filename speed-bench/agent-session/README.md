@@ -187,3 +187,18 @@ performance benchmarks serially. Chronological60/20/20 splits keep all layers
 of each token together; validation selects the best epoch. Test and the separate
 TTL-cache task are evaluation-only. These measurements lack demand cache-miss
 and deadline labels and do not establish useful prefetch or runtime speed.
+
+Cache-aware offline screening pairs `DS4_V41_ROUTE_CACHE=/tmp/new-cache.bin`
+with native route recording. The16-byte uint32 header is magic0x44534331,
+version1,layers40,experts384. Each row has position/token/layer then384 residency
+bytes, taken before native scalar demand loading without cache aging changes.
+
+    python3 speed-bench/agent-session/score_route_prefetch.py \
+      /tmp/new-features.bin /tmp/new-routes.bin /tmp/new-cache.bin \
+      /tmp/new-training/best.safetensors /tmp/new-miss-score.json
+
+Default scores the last20% of scalar tokens. `--split all` is appropriate for
+an independent evaluation task. It filters predicted residents and reports cold
+miss coverage, false reads and reads on native all-hit layers. Confidence uses
+uncalibrated6*softmax scores. This holds native cache evolution fixed: it omits
+speculative eviction, contention, predictor overhead and readiness deadlines.

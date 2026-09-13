@@ -400,6 +400,10 @@ int ds4_gpu_glm_stream_expert_cache_begin_selected_load_tensor(
         const ds4_gpu_tensor              *selected,
         uint32_t                           n_selected);
 #ifdef __APPLE__
+/* Diagnostic snapshot only: no hit counters, aging, installation or waits.
+ * Caller owns the cache thread and supplies n_total_expert output bytes. */
+int ds4_gpu_stream_expert_cache_snapshot(const ds4_gpu_stream_expert_table *table,
+        uint8_t *resident);
 /* The async selected-load worker registers itself so Metal cache paths never
  * wait on command buffers from that thread (they fail the load instead and
  * the caller retries synchronously). */

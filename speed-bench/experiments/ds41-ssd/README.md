@@ -1254,7 +1254,7 @@ regression check, not a fresh blind holdout. Never train on those rows.
 ## 78: width128 predictor and longer training
 
 Predeclared width128,60epochs;2,636,928 parameters. Validation selects epoch18
-(52.1303% top6 recall); later epochs overfit. Held-out session top6 recall
+(52.1550% top6 recall); later epochs overfit. Held-out session top6 recall
 51.6123% versus early-gate50.4907%, all-six2.0407% versus1.6222%. Top12
 recall66.6716%, all-six13.9259%. Separate TTL regression task top6 recall
 46.5768% versus early-gate49.3342%; top12 recall60.9030%, all-six9.7505%.
@@ -1266,3 +1266,29 @@ The learned model beats the native early gate slightly within the original
 session but still generalizes worse to the separate task. No runtime predictor
 integration or speedup claim. Next score actual cache misses before spending
 SSD bandwidth; cache-residency diagnostics are being added separately.
+
+## 79: cache-aware scoring exposes the wrong prediction objective
+
+DS4_V41_ROUTE_CACHE records all384 resident flags immediately before native
+scalar demand loading, paired with position/token/layer. Snapshot uses entry
+identity checks without touching hit counters, aging, admission or waits. Full
+replay routes/logits/state remain baseline-identical; normal full cache traffic
+retained. See predictor-cache-capture.json and predictor-miss-score.json.
+21 harness tests pass. No timing claim from this single diagnostic capture.
+
+On675 held-out tokens (27000 layer calls), native demand has8471 cold experts.
+The early gate covers45.48% of these, but only14.76% of its proposed cold reads
+are useful:26113 proposed reads,16343 on native all-hit layers. This frozen
+cache screen predicts wrong reads equal to262.78% of native cold demand.
+Learned rank128 top6 covers25.65% of misses at29.23% precision, with wrong reads
+equal to62.09% of native demand. Its better all-route recall mostly favors
+resident experts. Top12 is worse for bandwidth:38.37% miss coverage but
+224.45% extra wrong reads relative to native demand.
+
+Filtering learned predictions by uncalibrated6*softmax score>=.75 gives9.37%
+miss coverage,65.03% read precision and5.04% extra reads. At.9:7.05% coverage,
+69.82% precision,3.05% extra reads. These are exploratory thresholds scored on
+the test cohort; no deployment selection claim. Residency is held fixed, with
+no eviction, I/O contention, prediction cost or readiness deadlines. Real
+performance can be worse. This evidence argues for training directly on cold
+misses and abstention, plus demand priority, before another runtime integration.

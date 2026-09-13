@@ -107,13 +107,30 @@ staging. Expert reads already happen layer by layer; prefetching the NEXT layer
 requires predicting that layer's routes before its activation is ready.
 Keep cross-layer lookahead as a distinct later predictor experiment.
 
-Current experiment76 captures BF16-exact pre-attention features and native route
-labels to /tmp/ds41-predictor-{features,routes}-full.bin. Capture is intrusive,
-not performance evidence. train_route_predictor.py trains a shared 5120->64
-stem and forty 64->384 heads with token-level 60/20/20 chronological splitting.
-Prepare independent TTL-cache task with predictor_holdout.py and reserve it
-for final evaluation. No miss/deadline labels yet. No production defaults changed.
-Update this paragraph when capture/training completes. Vision remains deferred.
+Experiments76-78 completed. BF16-exact pre-attention features and native route
+labels: /tmp/ds41-predictor-{features,routes}-full.bin. Full native routes,
+logits and final state match baseline;134840 rows. Separate checked TTL task:
+/tmp/ds41-predictor-ttl-holdout,3136 decoded tokens and6toolcalls. Capture is
+intrusive, not performance evidence. Checked scripts and compact evidence are
+in agent-session and SSD notebook; raw features stay outside the repo.
+
+Dedicated learned shared-stem predictors trained on2022tokens, validation674,
+chronological test675; the independent task is excluded from training/selection.
+Rank64/20epochs: test49.53% vs early-gate50.49%; separate44.71% vs49.33%.
+Rank128/60epochs: best validation epoch18, test51.61%; separate46.58%.
+Both remain offline. We viewed the separate task in77, so reuse in78 is a
+regression check rather than another blind holdout. Checkpoints in
+/tmp/ds41-predictor-rank{64,128}/best.safetensors; hashes in checked metrics.
+
+Current79 captures native per-layer cache residency before exact load, via
+DS4_V41_ROUTE_CACHE paired with DS4_V41_ROUTE_RECORD. Cache snapshot does not
+change hit/aging state. /tmp/ds41-predictor-cache-capture is active until verified.
+score_route_prefetch.py evaluates frozen-residency miss coverage and false reads
+for top6/top12 plus uncalibrated confidence thresholds. It does not model
+prefetch eviction, contention, predictor overhead or readiness deadlines.
+21 harness tests pass. Update status/evidence when complete. No production
+scheduling defaults enabled. Next runtime work is demand-priority speculative
+buffers/queue with bounded admission, not another unconditional six-ID prefetch.
 
 ## Reproduction and artifacts
 

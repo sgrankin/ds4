@@ -40828,7 +40828,7 @@ static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
  * Single-process/single-session only; files are native-endian uint32 words. */
 static struct {
     bool initialized, enabled, active, preattention, defer_check, probe;
-    FILE *record, *features;
+    FILE *record, *features, *cache;
     const ds41_gpu_graph *owner;
     uint32_t *words;
     size_t count, cursor;
@@ -40844,6 +40844,10 @@ static void ds41_route_oracle_close(void) {
                 (unsigned long long)ds41_route_oracle.probe_calls[il],
                 (unsigned long long)ds41_route_oracle.probe_hits[il],
                 (unsigned long long)ds41_route_oracle.probe_all[il]);
+    }
+    if (ds41_route_oracle.cache && fclose(ds41_route_oracle.cache)) {
+        fprintf(stderr, "ds4: routing cache recording close failed\n");
+        _Exit(1);
     }
     if (ds41_route_oracle.features && fclose(ds41_route_oracle.features)) {
         fprintf(stderr, "ds4: routing feature recording close failed\n");
@@ -40866,6 +40870,8 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
         const char *record = getenv("DS4_V41_ROUTE_RECORD");
         const char *oracle = getenv("DS4_V41_ROUTE_ORACLE");
         const char *features = getenv("DS4_V41_ROUTE_FEATURES");
+        const char *cache = getenv("DS4_V41_ROUTE_CACHE");
+        if (cache && !record) ds4_die("routing cache capture requires route recording mode");
         ds41_route_oracle.probe = getenv("DS4_V41_ROUTE_PROBE") != NULL || features;
         if (features && !record) ds4_die("routing features require route recording mode");
         if (ds41_route_oracle.probe && !record)
@@ -40910,6 +40916,13 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
             if (!ds41_route_oracle.features ||
                 fwrite(fh, sizeof(fh), 1, ds41_route_oracle.features) != 1)
                 ds4_die("cannot create routing feature recording");
+        }
+        if (cache) {
+            const uint32_t ch[] = {0x44534331, 1, DS4_N_LAYER, DS4_N_EXPERT};
+            ds41_route_oracle.cache = fopen(cache, "wbx");
+            if (!ds41_route_oracle.cache ||
+                fwrite(ch, sizeof(ch), 1, ds41_route_oracle.cache) != 1)
+                ds4_die("cannot create routing cache recording");
         }
         ds41_route_oracle.enabled = true;
         ds41_route_oracle.owner = g;
@@ -41091,6 +41104,14 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
                 !ds4_gpu_tensor_read(g->selected, 0, selected_ids,
                     DS4_N_EXPERT_USED * sizeof(selected_ids[0]))) return false;
             ds41_route_oracle_check(il, selected_ids);
+            if (ds41_route_oracle.cache) {
+                uint8_t resident[DS4_MAX_EXPERT];
+                const uint32_t meta[] = {ds41_route_oracle.pos, token, il};
+                if (!ds4_gpu_stream_expert_cache_snapshot(&table, resident) ||
+                    fwrite(meta, sizeof(meta), 1, ds41_route_oracle.cache) != 1 ||
+                    fwrite(resident, 1, DS4_N_EXPERT, ds41_route_oracle.cache) != DS4_N_EXPERT)
+                    ds4_die("routing cache snapshot failed");
+            }
             if (!ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
                     DS4_N_EXPERT_USED) || !ds4_gpu_begin_commands()) return false;
         }
