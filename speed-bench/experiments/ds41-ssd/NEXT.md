@@ -108,3 +108,14 @@ exhaustively test all 65536 input pairs and rejection semantics, then profile.
 19 40-token logits equal; perf drifty. Chunk2048 scratch3.76GiB vs8.01,
 cache76.50GiB vs72.51, total97.36 vs97.61. Real-agent ABBA next.
 20 Engram LUT opt-in written; exhaustive CPU test running.
+
+19 complete: actual-agent chunk2048 flat fresh and slightly worse restored;
+keep default cap. Explicit --prefill-chunk fix retained.
+20 Engram LUT exhaustive 65536 cases passed, CPU row benchmark46.4ms->27.1ms
+for2000x24 rows; only ~0.02ms saved per token, leave opt-in. Model check now.
+21 ASYNC_EXPERT_LOAD reuses existing selected-event worker; committed router
+event before worker, shared encode overlaps route/load prep, joins worker on
+all exits, synchronous retry if cache entries require main-thread waits. Built.
+
+20 model parity passed too; no end-to-end claim, retained opt-in.
+21 async model check running /tmp/ds41-async-model-check.log.

@@ -94,3 +94,4 @@ __pycache__/
 /tests/test_deepseek41_ablation
 /tests/test_metal_norm_bf16
 /tests/test_metal_q8_bf16
+/tests/test_engram_lut

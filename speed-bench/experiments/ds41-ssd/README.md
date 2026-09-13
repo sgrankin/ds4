@@ -392,3 +392,22 @@ Forty-token append ABBA: control 13.00/11.94 tps; chunk2048 13.11/12.75.
 All full-vocabulary frontier logits match. Control drift makes the timing
 inconclusive; actual-agent ABBA follows before considering a default change.
 See chunk2048-abba40.json.
+
+Actual-agent buffer ABBA shows no consistent short-turn gain: fresh hello
+3.537 to 3.521 s, restored hello 5.038 to 5.101 s. Keep the default buffer cap;
+the explicit chunk setting remains useful for controlling the memory budget.
+See agent-chunk2048-abba.json.
+
+## 20: tabulate Engram FP8/scale decoding (opt-in, tiny total savings)
+
+`DS4_ENGRAM_DECODE_LUT=1` uses a process-wide 256 KiB table initialized once
+from the original F32 scaling and BF16 rounding. Invalid encodings and
+non-finite results retain EDOM behavior. All 65536 code/scale pairs match an
+independent double-precision reference after the original rounding boundaries,
+including signed zero and subnormals. The existing Engram suite passes.
+
+Cached CPU row benchmark: 2000x24 rows takes 46.4-49.2 ms normally, 27.1-28.1 ms
+with the table. That saves only about 0.02 ms per model token's two Engram
+lookups. All 32 full model logit rows and serialized continuation bytes match.
+Retain opt-in, with no claim of meaningful agent latency gain.
+See engram-lut-cpu.txt and tests/test_engram_lut.c.

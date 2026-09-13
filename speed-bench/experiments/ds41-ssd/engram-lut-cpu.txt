@@ -1,0 +1,5 @@
+engram pass=0 lookup=0 2000x24 rows=49.170 ms
+engram pass=1 lookup=1 2000x24 rows=28.063 ms
+engram pass=2 lookup=1 2000x24 rows=27.060 ms
+engram pass=3 lookup=0 2000x24 rows=46.367 ms
+PASS: all 65536 FP8/scale pairs and cached-row bytes

@@ -1084,7 +1084,7 @@ clean:
 	rm -f tests/test_quality_api
 	rm -f tests/test_linux_memory tests/test_rocm_memory
 	rm -f tests/test_glm_attention tests/test_glm_attention_rocm
-	rm -f tests/test_ssd_cache tests/test_engram
+	rm -f tests/test_ssd_cache tests/test_engram tests/test_engram_lut
 	rm -f tests/test_session_state tests/test_session_state_gpu tests/test_tp_commands
 	rm -f tests/test_tp_rdma tests/test_tp_link tests/test_tp_tcp
 	rm -f tests/test_metal_tp_spec
@@ -1114,3 +1114,6 @@ tests/test_metal_norm_bf16: tests/test_metal_norm_bf16.c ds4_gpu.h $(CORE_OBJS)
 
 tests/test_metal_q8_bf16: tests/test_metal_q8_bf16.c ds4_gpu.h $(CORE_OBJS)
 	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/test_engram_lut: tests/test_engram_lut.c ds4_engram.c ds4_engram.h
+	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -I. -o $@ $< -lm -pthread
