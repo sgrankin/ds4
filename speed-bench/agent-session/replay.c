@@ -37,6 +37,13 @@ int main(int argc, char **argv) {
         REQUIRE(end!=cache && !*end && gb>=4 && gb<=96);
         opt.ssd_streaming_cache_bytes=(uint64_t)gb<<30;
     }
+    const char *chunk=getenv("DS4_REPLAY_PREFILL_CHUNK");
+    if (chunk) {
+        char *end=NULL;
+        unsigned long rows=strtoul(chunk,&end,10);
+        REQUIRE(end!=chunk && !*end && rows>=1 && rows<=8192);
+        opt.prefill_chunk=(uint32_t)rows;
+    }
     REQUIRE(ds4_engine_open(&engine,&opt)==0);
     REQUIRE(ds4_session_create(&session,engine,100000)==0);
     const int vocab=ds4_engine_vocab_size(engine);

@@ -23,6 +23,7 @@ p.add_argument('output',type=Path)
 p.add_argument('--binary',type=Path,default=Path('./ds4-agent'))
 p.add_argument('--env',action='append',default=[])
 p.add_argument('--cache-gb',type=int)
+p.add_argument('--prefill-chunk',type=int)
 p.add_argument('--timeout',type=int,default=1200)
 a=p.parse_args()
 a.output=a.output.resolve(); a.output.mkdir(parents=True,exist_ok=False)
@@ -37,6 +38,7 @@ for value in a.env:
 cmd=[str(binary),'--ssd-streaming','--non-interactive','--seed','1234','--temp','0','-n','4096',
      '--chdir',str(project),'--trace',str(trace)]
 if a.cache_gb: cmd+=['--ssd-streaming-cache-experts',f'{a.cache_gb}GB']
+if a.prefill_chunk: cmd+=['--prefill-chunk',str(a.prefill_chunk)]
 (a.output/'command.json').write_text(json.dumps(dict(argv=cmd,env={k:v for k,v in env.items() if k.startswith('DS4_') or k=='TZ'}),indent=2)+'\n')
 shutil.copy2(HERE/'prompts.json',a.output/'prompts.json')
 prompts=json.loads((a.output/'prompts.json').read_text())

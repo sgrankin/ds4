@@ -23,7 +23,9 @@ files, fixes datetime/timezone and seed, and uses greedy sampling. Tools run in
 the copied project. This runs actual model-selected commands; use a disposable
 workspace. It never points tools at the ds4 checkout. `--env NAME=VALUE` enables
 an experimental path; `--cache-gb N` sets the total expert-cache target.
-The timeout is 1200 seconds by default. Validation time is excluded from turn
+`--prefill-chunk N` controls the agent prefill allocation; the replay equivalent
+is `--candidate-env DS4_REPLAY_PREFILL_CHUNK=N`. The timeout is 1200 seconds
+by default. Validation time is excluded from turn
 wall time, but startup is reported separately. Tool and host work are included
 in turn wall time; model timings alone are not time to task completion.
 
