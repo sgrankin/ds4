@@ -1043,3 +1043,12 @@ wasted reads. Deeper lookahead with different queues is outside this bound.
 See oracle-preattention-full.json, its comparison and provenance files. The
 stronger combined oracle in63 also changes the routing synchronization schedule;
 do not attribute its entire19.7% session gain to a conventional predictor.
+
+## 65: existing gate on earlier activations predicts half the selected experts
+
+Opt-in DS4_V41_ROUTE_PROBE evaluates the native gate on pre-attention norm,
+then records the unchanged native post-attention routing. Full-session recall
+is 50.2973%, with 1.44245% complete six-expert coverage and layer recall
+24.4–67.4%. Native route payload, phase logits and continuation state exactly
+match baseline. This intrusive accuracy probe is not a speed benchmark; no
+predictions affect loads or execution. See gate-probe-full.json.

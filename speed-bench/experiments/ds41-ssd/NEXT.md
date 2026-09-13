@@ -1,114 +1,127 @@
 # DS4.1 SSD optimization handoff
 
 Objective: good agentic tool-use performance balanced with interactive latency.
-Machine: Apple M5 Max, 128 GiB; DS4.1 Flash Q2; SSD streaming required.
-Run GPU benchmarks serially. Metal and jj mutations need sandbox escalation;
-profiling our own process with `sample` worked without sudo. Vision reproduction
-and the vision session-save limitation remain deferred until the user is present.
+Apple M5 Max, 128 GiB, DeepSeek V4.1 Flash Q2; SSD streaming required. Use jj,
+commit experiments separately, and run GPU workloads serially. Metal/jj require
+sandbox escalation; no sudo needed. No subagents. Vision reproduction and the
+vision session-save issue remain deferred until the user is present.
 
-## Active routing-prediction experiment
+## Current routing investigation
 
-User authorized predicted expert prefetch. Exact-route oracle implementation
-committed d47db637; first results b471a8ce. Short ABBA completed at
-/tmp/ds41-oracle-preattention-short: 18.405 -> 16.984 s decode (-7.7%), combined
-33.773 -> 32.813 s (-2.8%, one candidate prefill outlier). Exact routes, logits,
-full snapshot, cache misses and bytes. Evidence oracle-preattention-short.json.
-Capture /tmp/ds41-oracle-routes-short.bin is 343 tokens * 40 layers, 493936 bytes,
-SHA256 80bfffb6a8481e3762d531ff6590f4d7e5eb1cbdfcd297e9c806c375c8a7174a.
+User authorized investigating predicted expert prefetch. No new production
+scheduling default has been enabled. Diagnostic flags are opt-in and require
+one scalar session per process; native routing is always retained or verified.
 
-Second uncommitted diagnostic adds DS4_V41_ORACLE_DEFER_CHECK to pre-attention:
-GPU-copy actual routes into a 960-byte trace, validate after each token, avoiding
-per-layer CPU route waits while retaining native weights/arithmetic. It is an
-oracle architectural bound, not usable with a fallible predictor without an
-exact GPU check/fallback mechanism. Existing cache in-flight protections apply.
-Short ABBA currently running /tmp/ds41-oracle-deferred-short (session48987),
-A = pre-attention oracle, B = pre-attention plus deferred check. First A16.590s
-and B13.316s decode, exact state/logits/routes. Wait for balanced completion.
-Binaries already rebuilt; avoid builds/CPU-heavy analysis during timed runs.
-Next: full route capture and full direct-default-vs-combined ABBA, and a separate
-profiled comparison using the new pending-read CPU wait counter.
+The checked working-session recording has 20 tool calls, 14 generation rounds,
+3371 decoded tokens and final context8710. Its live fixture passed all three
+independent task checks. Live turn time291.714s excludes17.420s startup;
+model prefill/decode94.280/196.339s. The replay preserves token boundaries,
+KV/expert-cache evolution and checks full phase logits/final continuation state.
+See speed-bench/agent-session/README.md and the registry speed-bench/README.md.
 
-Backend diagnostic pending wait_ms measures only CPU join wait. Existing
-pread_ms includes the whole begin-to-consumption lifetime, including overlap;
-do not use it as exposed-stall time. Counters reset with cache stats.
+Full-session routing results (README experiments60-64):
 
-Offline route_stats.py screens previous-token, hot-frequency and previous-layer
-transition predictors. It is only a within-session chronological split and uses
-all-route recall, not cache misses/deadlines. Short recall at six candidates:
-previous token22.5%, frequency28.7%, transition45.9%; at12 transition63.0%.
-Do not confuse this with independent-task predictor validation. Eight extractor
-and route-parser tests pass. Need full-session stats before judging baselines.
+- Exact pre-attention prefetch oracle: decode198.199->172.594s (-12.9%),
+  append93.918->93.997s, combined292.117->266.592s (-8.7%,25.5s saved).
+  Per-layer CPU route validation stays in place. Balanced ABBA uses the last A
+  of the combined study followed immediately by BBA; complete_abba.py checks
+  executable/model/shader/token/route/environment and numerical identity.
+  Shared control is one observation, not an extra independent repeat.
+  Evidence oracle-preattention-full*.json; commit0fe6c413.
+- Combined pre-attention + deferred validation oracle: decode197.511->136.838s
+  (-30.7%), append94.140->97.418s (+3.5%), combined291.651->234.256s (-19.7%).
+  Every actual route is GPU-copied into960 bytes per token and checked after
+  the token; CPU address binding uses exact recorded future IDs. A real
+  predictor cannot safely do this without GPU validation and fallback.
+  Evidence oracle-combined-full.json; commits50ce2817/b1c9fdb5.
+- Native routes, phase logits and full final snapshots match in all trials.
+  Cache budget stays7822 experts/72.51GiB. Combined oracle reads670.63GiB
+  versus670.61GiB control, with two additional misses; it saves time through
+  scheduling rather than reducing expert bytes. These are free-future-information
+  bounds for the tested schedules, not achievable-generation speed claims.
+- Instrumented census:134840 layer events,75.3% all-resident,33302 mixed and
+  3 all-missing. CPU pending-read joins total19.858s in197.939s decode.
+  This excludes I/O preparation/advice and is not a ceiling on all I/O-related
+  savings. Old pread_ms includes begin-to-consumption overlap, not just stalls.
+  Evidence oracle-full-capture.json; commitd99dbefd.
+- Cheap within-session chronological predictor baselines: at6 candidates,
+  previous-token recall24.5%, frequency16.0%, layer-transition34.6%; transition
+  at12 candidates48.6%. These are all-route metrics, not miss/deadline metrics
+  or independent-task validation. Evidence route-stats-full.json.
+
+Completed gate probe: existing pre-attention gate predicts 50.2973% of native
+selected experts; all-six coverage 1.44245%, per-layer recall 24.4–67.4%.
+Full native routes, logits and final state match baseline. Evidence gate-probe-full.json.
+Intrusive probe timings are not deployment performance. Next: bounded asynchronous
+real gate prefetch with native fallback, short replay ABBA first.
+Missing-route schedule guard was tested on a one-token input and exits nonzero.
+Wrong-route injection in deferred mode also exits nonzero. Twelve Python tests
+pass, covering extraction, route parsing and balanced-continuation identity.
+
+## Reproduction and artifacts
+
+    make ds4-agent ds4-bench speed-bench/agent-session/replay
+    python3 speed-bench/agent-session/replay_abba.py /tmp/NEW-PREFETCH --routes --candidate-env DS4_V41_ORACLE_PREATTENTION=1
+    python3 speed-bench/agent-session/replay_abba.py /tmp/NEW-COMBINED --routes --candidate-env DS4_V41_ORACLE_PREATTENTION=1 --candidate-env DS4_V41_ORACLE_DEFER_CHECK=1
+
+--routes without a path uses checked session-v1.routes.bin.gz (1.5MB,
+commit80a11919; a command-local jj size-limit override was used, no repo config
+change). Provenance is session-v1.routes.json. The native-endian uint32 payload
+is4,854,256 bytes, SHA256:
+3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43.
+Token recording SHA256:
+310159cecfb6688d65967cf30279e1626c15571dbedd02838549f0d1ff14f368.
+Full replay logits SHA256:
+dbb7917fd94cef6332878b8e74bfa328ecab7c28001de6eb1b02c212c1d55be0.
+Full snapshot SHA256:
+4038547fda7c3050dbb562e488a12b33f89527ea7c7927d142d978b2c36319fe.
+Raw full comparison directories are /tmp/ds41-oracle-combined-full,
+/tmp/ds41-oracle-preattention-full-tail and the merged
+/tmp/ds41-oracle-preattention-full. No timed processes remain active.
+Route capture and probe commands are in the agent-session README.
+
+## Next substantial work
+
+1. Evaluate the existing-gate probe, then collect pre-attention activations,
+   actual selections and demand cache-miss masks across independent tasks.
+   Current route-only recording lacks activation/miss labels. Score useful
+   misses ready before deadline, wasted bytes and eviction; hot experts that
+   are already cached can flatter ordinary recall.
+2. Prototype asynchronous exact-fallback prefetch. Predict into a separate,
+   immutable GPU ID buffer, signal an event, and let the service worker read it
+   and start loads while the main thread encodes attention. Join before native
+   demand/cache mutation. Don't add a blocking CPU readback before attention or
+   overwrite prediction IDs before the worker reads them. Demand reads need
+   priority over wrong predictions; current one-slot loader can block on them.
+3. GPU cache-hit scheduling: validate sparse addresses and compute the all-hit
+   MoE in the routing submission. On a miss, preserve norm/shared/attention state
+   and fall back before consuming the routed output. Guard every pointer/kernel
+   and protect cache resources in flight. Stop within the layer initially;
+   avoid speculative later KV updates and rollback. Existing
+   ds4_gpu_stream_expert_cache_validate_selected still immediately waits on CPU,
+   and its caller requires IQ2 gate/up. Header verification confirms this model
+   uses IQ2_XXS gate/up and Q2_K down; the early selected override bypasses
+   that validator, and its immediate CPU wait remains the relevant limitation.
+4. If needed, train a small predictor: shared5120->64 stem plus40 separate
+   64->384 heads is about1.31M weights (~2.6MB FP16), excluding biases. This is
+   a candidate, not a trained model or performance claim. Hold out whole tasks,
+   preserve the native router, and charge prediction/readback/contended I/O time.
+5. Deeper lookahead needs bounded multi-request I/O and cache admission; the
+   current oracle measures one pending load before same-layer attention only.
 
 Research anchors:
-- https://arxiv.org/html/2410.22134v3 (ProMoE learned prediction and scheduling)
+- https://arxiv.org/html/2410.22134v3 (ProMoE prediction and scheduling)
 - https://arxiv.org/abs/2511.10676 (pre-attention expert prediction)
-- https://arxiv.org/abs/2607.24787 (predictions only for transfers, frozen routing)
+- https://arxiv.org/abs/2607.24787 (transfer prediction with frozen routing)
 
-Score useful misses ready before deadline, wasted bytes and eviction, not just
-all-expert prediction accuracy. For training, hold out entire sessions/tasks.
-Try earlier-activation gate and transition-statistics baselines before an MLP.
-Preserve exact execution routing; wrong predictions may cost time, not quality.
-
-## Working-session benchmark now available
-
-Registered in `speed-bench/README.md`; instructions and source are in
-`speed-bench/agent-session/`. `live.py` runs three tasks in a disposable Python
-ledger project and independently checks task results after every user turn.
-The passing baseline uses 20 tool calls, 14 generation rounds, 3371 generated
-tokens, and ends at context 8710. Turn wall time is 291.714 s, with 17.420 s
-startup reported separately; model prefill/decode are 94.280/196.339 s.
-
-`session-v1.txt` records exact prefill/decode boundaries and tokens from that
-successful run. SHA256:
-310159cecfb6688d65967cf30279e1626c15571dbedd02838549f0d1ff14f368.
-The replay retains KV and expert-cache evolution, checks full phase logits and
-final continuation snapshots, and excludes tool execution/sampling/rendering.
-Full control replay closely reproduces live model time. Live task success and
-short fresh/restored interactive responses remain required complementary checks.
-
-    python3 speed-bench/agent-session/live.py /tmp/NEW-LIVE
-    python3 speed-bench/agent-session/replay_abba.py /tmp/NEW-ABBA --candidate-env NAME=VALUE
-
-The default replay is the complete session. `--order AB` is exploratory; pair
-with BA using identical binary/shader hashes before treating it as balanced.
-Repeat `--candidate-env` for combinations. Buffer and cache studies are supported:
-`DS4_REPLAY_PREFILL_CHUNK=2048`, or `--cache-gb N` (total target including reserve).
-
-## Latest round completed: no new runtime defaults
-
-Evidence and numerical hashes are in README experiments 51 onward and adjacent
-JSON files. Runtime files were restored to accepted revision 8e8d7794 in commit
-4442d372. The following new runtime experiments survive in jj history only:
-
-- Wider 512-row layer sweeps with <=128-row MoE subtiles (92e05db7): full ABBA
-  turn model time 291.389 -> 295.204 s, about 1.3% slower. Prefill misses rose
-  31818 -> 33952; decode misses were almost unchanged. Exact state/logits.
-- Router-event overlap (0fb424f3): short-session ABBA decode about 0.75% faster,
-  but combined append/decode about 0.8% slower. Exact state/logits.
-- Broad current-layer cache protection (25689657): slightly fewer reads, about
-  1% slower overall in short ABBA. Exact state/logits.
-- Protection scoped only to future MoE subtiles (ec701a4a): about 0.8% slower
-  overall in short ABBA. Exact state/logits. Do not retain either pin by default.
-
-A targeted three-second CPU sample finds the largest main-thread wait at router
-Metal completion, then selected SSD reads, then F_RDADVISE calls. Metal waits
-include actual GPU work, so this is not a measure of removable overhead.
-The sample perturbed decode; use `decode-profile.txt` only for attribution.
-
-Existing flag `DS4_METAL_DISABLE_STREAMING_EXPERT_READAHEAD=1` gave a promising
-short fixed-session screen: decode 18.388 -> 17.981 s (2.2% faster), combined
-turn model time 33.570 -> 33.246 s (1% faster), exact state/logits. This is only
-the first seven complete replay phases (343 decoded tokens, context 2665),
-not the complete working session. Completed interactive ABBA rejects the
-unconditional ablation: fresh response time 8.222 -> 8.157 s (-0.8%), restored
-12.261 -> 12.623 s (+3.0%), with identical input/output token hashes. Restored
-decode is 5.3% slower. Read-ahead stays enabled; skip full-session promotion for
-this variant. Evidence: `noadvice-interactive.json`, README experiment 59.
-
-No GPU runs remain active. Agent, benchmark and replay binaries are rebuilt.
-The successful live task, exact replay comparisons and four extractor tests
-passed. No sudo or user input was needed. All negative experiments have separate
-jj commits; do not reintroduce their runtime branches without new evidence.
+Other queued ideas: prefill-chunk2048 versus larger expert cache on the full
+session; fixed-input batch shared overlap; pread threads18 versus9; restored
+first-decode attribution; RoPE/quantize/direct-KV fusion; demand-allocated
+scratch with explicit headroom. HC fusion must use the previous sublayer mixer.
+Preserve slab/in-flight/admission proofs before lending prefill reserve to decode.
+Earlier wider-layer/router-event/cache-pin attempts were exact but slower and
+were restored out in4442d372; their historical implementations and evidence are
+in README52-58. Read-ahead removal loses3% on restored interactive responses.
 
 ## Accepted defaults
 
@@ -194,60 +207,3 @@ from bd66c402 ds4.c into /tmp/ds41-prefill-input.c, SHA256
   remain optional. See README for measurements and switches.
 - Smaller scratch frees memory but auto cache consumes it; no demonstrated
   short-agent win. No cache budget change adopted.
-
-## Best next work
-
-1. Test `--prefill-chunk 2048` on the complete session. It frees about 4.25 GiB
-   of scratch (8.01 -> 3.76 GiB), which automatic sizing gives to expert cache.
-   Earlier short questions were flat; this recording has 3371 decode tokens and
-   meaningful eviction. Measure full ABBA plus interactive responses before
-   changing defaults. Keep memory savings distinct from cache growth.
-2. Recheck `DS4_METAL_V41_BATCH_SHARED_OVERLAP=1` with the fixed session; sweep
-   `DS4_METAL_STREAMING_EXPERT_PREAD_THREADS=18` versus default 9 separately.
-   Prior shared-overlap agent results preceded fixed timestamp inputs.
-3. Attribute restored first-decode latency with per-phase I/O and GPU timings.
-   Investigate the extra drain before the second Engram layer only after proving
-   every consumer of the reused buffer has completed in the eligible path.
-4. RoPE + quantization + direct KV writes, preserving block quantization rules.
-   HC fusion must consume the previous sublayer mixer, not the newly computed
-   mixer. Require actual-session improvement as well as exact kernel results.
-5. Demand-allocated scratch with explicit memory headroom. A possible extension
-   lends part of the 7.12 GiB prefill reserve to decode/selected appends, reclaiming
-   it before full-layer sweeps. Prove slab release, in-flight protection and all
-   admission paths first; prefer the existing prefill-chunk knob for now.
-6. Longer conversations, smaller cache budgets and compaction coverage. The
-   current synthetic session is useful but does not establish long-context
-   behavior or general coding-task quality.
-7. Reproduce vision-enabled text slowdown and session-save limitation with user.
-
-Possible next production architecture (not implemented): GPU validate cached
-addresses and execute the all-resident MoE in the same submission as routing.
-On a miss, skip the speculative routed output and use ordinary exact demand
-loading before consuming that output. Stop at the same layer, retaining norm,
-shared result and attention state; do not speculate later KV updates. This could
-avoid a CPU gap on hits without needing a perfect predictor or token rollback.
-Misses need valid address guards in every affected kernel and lifetime protection
-for GPU-addressable cache entries. The existing hit-validator code at
-`ds4_gpu_stream_expert_cache_validate_selected` still waits on CPU immediately;
-its caller is guarded for IQ2 selected slots, so it is not already this DS4.1 Q2
-fast path. Study/adapt the mechanism rather than just enabling that flag.
-
-Update: deferred short ABBA completed, pre-attention-only A16.620s decode vs
-combined B13.257s (-20.2% additional), exact. Commit50ce2817 includes this
-experiment, pending-read CPU wait counters and route_stats.py. Deliberately
-wrong expert ID is rejected after first token in deferred mode. Full record
-currently /tmp/ds41-oracle-record-full (session29115), route output
-/tmp/ds41-oracle-routes-full.bin. This recording uses timing instrumentation,
-so its times are diagnostic. Full default-vs-combined ABBA is now running at /tmp/ds41-oracle-combined-full,
-session57851. It omits timing-summary instrumentation and uses --routes with
-both candidate flags. Full capture is complete and saved as
-oracle-full-capture.json: 3371 tokens, 75.3% all-resident layer events,
-19.858 s CPU pending-read wait in 197.939 s instrumented decode. Full route SHA
-3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43.
-Full transition-baseline recall drops to34.6% at6 candidates,48.6% at12;
-see route-stats-full.json. Need independent-task and miss-conditioned labels.
-
-Uncommitted follow-up guards reject oracle schedule flags without a file and
-multiple scalar sessions. Do not rebuild while full ABBA is running; its binary
-and shaders are frozen. Rebuild all affected targets afterward. New replay
-io_reports parsing persists optional cumulative counters per phase.
