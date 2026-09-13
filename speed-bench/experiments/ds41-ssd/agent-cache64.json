@@ -1,0 +1,63 @@
+[
+  {
+    "mode": "fresh",
+    "system_kv_hit": false,
+    "turns": [
+      {
+        "prompt": 1859,
+        "cached": 0,
+        "suffix": 1859,
+        "rc": 0,
+        "ms": 14606.886
+      },
+      {
+        "prompt": 1897,
+        "cached": 1859,
+        "suffix": 38,
+        "rc": 0,
+        "ms": 3434.654
+      },
+      {
+        "prompt": 1910,
+        "cached": 1898,
+        "suffix": 12,
+        "rc": 0,
+        "ms": 1033.479
+      },
+      {
+        "prompt": 1917,
+        "cached": 1911,
+        "suffix": 6,
+        "rc": 0,
+        "ms": 455.232
+      }
+    ]
+  },
+  {
+    "mode": "restored",
+    "system_kv_hit": true,
+    "turns": [
+      {
+        "prompt": 1897,
+        "cached": 1859,
+        "suffix": 38,
+        "rc": 0,
+        "ms": 4658.603
+      },
+      {
+        "prompt": 1910,
+        "cached": 1898,
+        "suffix": 12,
+        "rc": 0,
+        "ms": 1153.322
+      },
+      {
+        "prompt": 1917,
+        "cached": 1911,
+        "suffix": 6,
+        "rc": 0,
+        "ms": 482.487
+      }
+    ]
+  }
+]

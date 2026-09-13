@@ -295,3 +295,11 @@ After loading saved system KV in a new process, the same appends took
 4.954/1.203/0.509 s. The trace confirms a system KV hit. Repeated short turns
 get faster as weights warm; restoring KV does not recreate that weight cache.
 All KV files are isolated under the experiment directory. See agent-short-baseline.json.
+
+## 14: smaller 64 GiB cache target (inconclusive; no default change)
+
+`agent_probe.py /tmp/ds41-agent-cache64 --cache-gb 64` uses the existing explicit
+cache budget. Fresh/restored 38-token hello took 3.435/4.659 seconds versus
+baseline 3.527/4.954. Later turns were mixed (12 tokens 1.033/1.153 seconds;
+6 tokens 0.455/0.482). This single comparison does not justify a cache-default
+change; differences are small and need balanced repeats. See agent-cache64.json.
