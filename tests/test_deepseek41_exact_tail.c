@@ -3,7 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #define CHECK(x) do { if (!(x)) { fprintf(stderr, "line %d: %s: %s\n", __LINE__, #x, err); goto done; } } while (0)
+static double seconds(void) {
+    struct timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
+    return t.tv_sec + t.tv_nsec * 1e-9;
+}
 int main(int argc, char **argv) {
     if (argc != 3) { fprintf(stderr, "usage: %s MODEL PROMPT\n", argv[0]); return 2; }
     int rc = 1;
@@ -27,19 +33,24 @@ int main(int argc, char **argv) {
         prefix.len = 4096 + tails[c];
         CHECK(unsetenv("DS4_METAL_V41_EXACT_SHORT_PREFILL") == 0);
         CHECK(ds4_session_load_snapshot(s, &initial, err, sizeof(err)) == 0);
+        double start = seconds();
         CHECK(ds4_session_sync(s, &prefix, err, sizeof(err)) == 0);
+        const double scalar_seconds = seconds() - start;
         /* Also cover continuation after the tail, not just its output head. */
         for (int i = 0; i < 8; i++)
             CHECK(ds4_session_eval(s, tokens.v[prefix.len + i], err, sizeof(err)) == 0);
         CHECK(ds4_session_save_snapshot(s, &expected, err, sizeof(err)) == 0);
         CHECK(setenv("DS4_METAL_V41_EXACT_SHORT_PREFILL", "1", 1) == 0);
         CHECK(ds4_session_load_snapshot(s, &initial, err, sizeof(err)) == 0);
+        start = seconds();
         CHECK(ds4_session_sync(s, &prefix, err, sizeof(err)) == 0);
+        const double batch_seconds = seconds() - start;
         for (int i = 0; i < 8; i++)
             CHECK(ds4_session_eval(s, tokens.v[prefix.len + i], err, sizeof(err)) == 0);
         CHECK(ds4_session_save_snapshot(s, &actual, err, sizeof(err)) == 0);
         CHECK(actual.len == expected.len && !memcmp(actual.ptr, expected.ptr, actual.len));
-        printf("PASS: tail=%d plus 8 decoded tokens, full snapshot bit-identical\n", tails[c]);
+        printf("PASS: tail=%d plus 8 decoded tokens, full snapshot bit-identical; "
+            "scalar %.3fs, batch %.3fs\n", tails[c], scalar_seconds, batch_seconds);
         fflush(stdout);
     }
     rc = 0;

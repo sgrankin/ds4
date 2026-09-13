@@ -5,6 +5,7 @@ import csv
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 
 p = argparse.ArgumentParser()
@@ -13,6 +14,7 @@ p.add_argument('--candidate-env', required=True, help='NAME=VALUE; unset in cont
 p.add_argument('--tokens', type=int, default=2048)
 p.add_argument('--ctx', type=int)
 p.add_argument('--initial-tokens', type=int)
+p.add_argument('--gen-tokens', type=int, default=8)
 p.add_argument('--prompt', default='/tmp/ds41-prefill-input.c')
 p.add_argument('--vision')
 p.add_argument('--candidate-vision', help='load this encoder only in candidate runs')
@@ -27,6 +29,9 @@ name, value = a.candidate_env.split('=', 1)
 if not name:
     p.error('--candidate-env requires a nonempty name')
 a.output.mkdir(parents=True, exist_ok=False)
+# Every subprocess must use the same binary even if development continues.
+binary = a.output.resolve() / 'ds4-bench'
+shutil.copy2('./ds4-bench', binary)
 reference = None
 results = []
 for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
@@ -38,10 +43,10 @@ for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
         env[name] = value
     env['DS4_METAL_GRAPH_PREFILL_PROFILE'] = '1'
     env['DS4_METAL_STREAMING_PREFILL_LAYER_PREAD_PROFILE'] = '1'
-    cmd = ['./ds4-bench', '-m', 'gguf/DeepSeek-V4.1-Flash-Q2.gguf',
+    cmd = [str(binary), '-m', 'gguf/DeepSeek-V4.1-Flash-Q2.gguf',
            '--ssd-streaming', '--prompt-file', a.prompt,
            '--ctx-start', str(a.tokens), '--ctx-max', str(a.tokens),
-           '--gen-tokens', '8', '--teacher-forced-decode',
+           '--gen-tokens', str(a.gen_tokens), '--teacher-forced-decode',
            '--dump-frontier-logits-dir', str(dest), '--csv', str(dest / 'speed.csv')]
     if a.vision:
         cmd += ['--vision', a.vision]

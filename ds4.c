@@ -41729,7 +41729,8 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     const bool batch_moe = !exact_short && !getenv("DS4_METAL_DISABLE_V41_BATCH_MOE");
     const bool batch_attention = !getenv("DS4_METAL_DISABLE_V41_BATCH_ATTN");
     const bool batch_core = !exact_short && batch_attention && !getenv("DS4_METAL_DISABLE_V41_BATCH_CORE");
-    const bool batch_hc = batch_attention && batch_moe &&
+    const bool batch_hc = batch_attention && (batch_moe ||
+        (exact_short && getenv("DS4_METAL_V41_EXACT_BATCH_HC"))) &&
         !getenv("DS4_METAL_DISABLE_V41_BATCH_HC");
     const bool decoder_suffix = wide && total_count >= 8192u &&
         !getenv("DS4_METAL_DISABLE_V41_DECODER_SUFFIX");
@@ -41971,15 +41972,21 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
                     ds41_trace_row(active.norm, DS4_N_EMBD, start, count, il, "3-norm") &&
                     ds41_trace_row(active.ffn_split, 24, start, count, il, "3-split");
                 DS41_STAGE("hc/ffn norm");
-                for (uint32_t t = 0; ok && !batch_hc && t < count; t++) {
+                for (uint32_t t = 0; ok && (!batch_hc || !batch_moe) && t < count; t++) {
                     row.pos = start + t;
 #define DS41_USE_FFN_ROW(name, width) row.name = g->rows_view[t].name;
                     DS41_PREFILL_ROWS(DS41_USE_FFN_ROW)
 #undef DS41_USE_FFN_ROW
-                    ok = ds41_graph_after_attention(&row, m, l);
-                    if (ok && !batch_moe) ok = ds41_moe(&row, m, l, il, (uint32_t)tokens[off + t]) &&
-                        ds41_graph_after_moe(&row);
+                    if (!batch_hc) ok = ds41_graph_after_attention(&row, m, l);
+                    if (ok && !batch_moe) {
+                        ok = ds41_moe(&row, m, l, il, (uint32_t)tokens[off + t]);
+                        if (ok && !batch_hc) ok = ds41_graph_after_moe(&row);
+                    }
                 }
+                if (ok && batch_hc && !batch_moe) ok =
+                    ds4_gpu_hc_expand_split_tensor(active.residual, active.block, active.after_attn,
+                        active.ffn_split, DS4_N_EMBD, DS4_N_HC) &&
+                    ds4_gpu_dsv41_quantize(active.residual, DS4_N_EMBD * DS4_N_HC, count, DS4_V41_BF16);
             }
             if (ok && batch_moe) {
                 ok = ds41_moe_batch(g, m, &w->layer[il], il, count, false);

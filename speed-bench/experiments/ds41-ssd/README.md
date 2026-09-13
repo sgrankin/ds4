@@ -179,3 +179,26 @@ Regression `tests/test_deepseek41_exact_tail MODEL PROMPT` passed: 257- and
 513-token tails after a restored 4096-token prefix, each followed by eight
 teacher-forced decode steps, produce bit-identical complete serialized
 snapshots (KV state, hidden state, history, and logits).
+
+## 10: exact hyperconnection batching (opt-in; not a clear default win)
+
+`DS4_METAL_V41_EXACT_BATCH_HC=1` allows batched HC mixing around scalar
+attention and MoE in the exact-tail path. The exact dense arithmetic switch
+also prevents the fused HC projection from changing precision. Scalar MoE
+writes the batch block buffer, followed by one batched HC expansion.
+
+Both 257- and 513-token restored-prefix continuation snapshots are bit-identical
+with this switch. Their within-process ctx=8192 timings were worse than scalar
+(24.0 vs 13.9 seconds and 38.6 vs 26.7 seconds), so this is not enabled by default.
+The fresh-process ctx=100000 ABBA comparison is recorded in exact-hc5000.json.
+These context allocations have different expert-cache budgets; results from
+one configuration do not establish a win in the other.
+
+The baseline exact-tail path (without HC batching) did improve 513-token
+appends at ctx=100000 in all four separate-process runs: scalar 17.81/17.38 tps,
+exact sweep 22.49/21.86 tps. All full-vocabulary frontier logits match;
+see exact-short513.json.
+
+The runner now copies the executable into each experiment directory before
+starting, preventing a rebuild from changing the binary between A/B samples.
+It also accepts --gen-tokens for longer continuation measurements.
