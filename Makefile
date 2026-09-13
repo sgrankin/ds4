@@ -1061,7 +1061,7 @@ clean:
 	rm -f tests/test_qwen4_ngrams
 	rm -f tests/test_qwen4_ngram_state
 	rm -f tests/test_web_recovery
-	rm -f tests/test_deepseek41_ablation tests/test_metal_norm_bf16
+	rm -f tests/test_deepseek41_ablation tests/test_metal_norm_bf16 tests/test_metal_q8_bf16
 	rm -f tests/test_deepseek41_scalar_queue tests/test_deepseek41_exact_tail tests/trace_deepseek41_prefill
 	rm -f tests/test_metal_ssd_experts
 	rm -f tests/test_metal_command_memory
@@ -1110,4 +1110,7 @@ tests/test_deepseek41_exact_tail: tests/test_deepseek41_exact_tail.c ds4.h $(COR
 tests/test_deepseek41_ablation: tests/test_deepseek41_ablation.c ds4.h $(CORE_OBJS)
 	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
 tests/test_metal_norm_bf16: tests/test_metal_norm_bf16.c ds4_gpu.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/test_metal_q8_bf16: tests/test_metal_q8_bf16.c ds4_gpu.h $(CORE_OBJS)
 	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)

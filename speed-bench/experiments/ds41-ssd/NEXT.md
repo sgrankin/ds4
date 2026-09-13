@@ -94,3 +94,8 @@ as the executable, so later source edits cannot silently alter A/B subprocesses.
 
 17 complete: no-advice rejected, restored hello 7.9% slower. Keep advice.
 18 Q8 synthetic check running /tmp/ds41-q8-kernel.log; new code remains opt-in.
+
+18 synthetic/model parity passed; short-append ABBA /tmp/ds41-q8-abba40
+is running using frozen shaders. Next: honor explicit --prefill-chunk in
+DS41 allocation/admission/memory reports, then test 2048-row buffers with
+default 100000 context. Default cap should remain unchanged unless measured.

@@ -360,3 +360,16 @@ The benchmark harness now copies all external Metal sources and records their
 SHA256 hashes, passing source overrides to every subprocess. This complements
 the fixed executable and allows later development without changing a running
 experiment's shaders.
+
+## 18: exact Q8 matvec output and BF16 fusion (opt-in)
+
+`DS4_METAL_V41_FUSED_Q8_BF16=1` rounds the final scalar Q8 reduction in its
+output store, replacing a separate BF16 dispatch. The scalar reduction order
+and explicit rounding are unchanged. Exact-row batches use the same epilogue;
+large matrix batches keep their prior path.
+
+All 48 synthetic shape cases match exact output bytes and output guards.
+Warmed 1000-call 5120x5120 matrix timing: separate 33.241 ms, fused 31.624/31.680;
+first separate pass 40.487 ms includes cold overhead. All 32 full-vocabulary
+model logit rows and serialized continuation state match exactly.
+Short-append ABBA pending; no default change yet. See q8-kernel.txt.

@@ -40432,6 +40432,9 @@ static bool ds41_bf16(ds4_gpu_tensor *x, uint32_t width) {
 
 static bool ds41_matmul(ds4_gpu_tensor *out, const ds4_model *m,
                         const ds4_tensor *weight, const ds4_gpu_tensor *in, bool round) {
+    if (round && weight->type == DS4_TENSOR_Q8_0 && getenv("DS4_METAL_V41_FUSED_Q8_BF16"))
+        return ds4_gpu_dsv41_matmul_q8_0_bf16_rows(out, m->map, m->size,
+            weight->abs_offset, weight->dim[0], weight->dim[1], in, 1);
     return metal_graph_matmul_plain_tensor(out, m, weight, weight->dim[0], weight->dim[1], in, 1) &&
            (!round || ds41_bf16(out, (uint32_t)weight->dim[1]));
 }
@@ -40449,6 +40452,10 @@ static bool ds41_matmul_batch(ds4_gpu_tensor *out, const ds4_model *m,
     const uint32_t width = (uint32_t)weight->dim[0], outputs = (uint32_t)weight->dim[1];
     const bool exact_rows = count <= DS4_TP_BATCH_MAX_ROWS ||
         ds41_exact_dense_rows();
+    if (round && exact_rows && outputs != DS4_N_VOCAB &&
+        weight->type == DS4_TENSOR_Q8_0 && getenv("DS4_METAL_V41_FUSED_Q8_BF16"))
+        return ds4_gpu_dsv41_matmul_q8_0_bf16_rows(out, m->map, m->size,
+            weight->abs_offset, width, outputs, in, count);
     bool ok;
     /* Small decode batches retain scalar reductions before BF16 and sparse
      * routing boundaries. Preserve Metal's separate vocabulary-head dispatch. */
