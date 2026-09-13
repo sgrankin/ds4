@@ -22,3 +22,15 @@ commands and profiles, and requires identical final full-vocabulary logit
 values (9 significant digit float serialization). Copy the baseline ds4.c to
 /tmp/ds41-prefill-input.c before changing source so token inputs remain fixed.
 Results with full logits belong in /tmp; retain summaries here.
+
+## 02: one prefetch reader versus default eight (no default change)
+
+`python3 speed-bench/experiments/ds41-ssd/run_abba.py /tmp/ds41-threads1
+--candidate-env DS4_METAL_STREAMING_PREFILL_LAYER_PREPARE_THREADS=1`
+
+ABBA, fresh processes, 2048 tokens, 8 teacher-forced decode tokens.
+Control: 131.08, 134.16 tps. Candidate: 135.14, 136.48 tps (about 2.4%
+faster by aggregate time). All full-vocabulary final logits match exactly.
+Steady decode: 17.13/17.32 control, 16.82/17.34 candidate.
+The improvement is too small relative to run variation to change a shared
+backend default. Retain this as a documented negative/inconclusive experiment.
