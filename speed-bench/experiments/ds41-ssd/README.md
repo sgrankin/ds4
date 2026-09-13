@@ -948,3 +948,21 @@ experiments were committed separately and rejected on measured end-to-end time;
 the accepted runtime was restored and rebuilt. The read-ahead flag was an
 existing ablation, with this new result committed separately. No new runtime
 default is justified by this round. NEXT.md records the remaining hypotheses.
+
+## 60: exact-route oracle starts SSD reads before attention
+
+Implementation d47db637 records native scalar routes and replays them only for
+prefetch scheduling. Every exact router selection is still read and verified.
+No capacity or worker change. Short-session ABBA (343 decoded tokens) gives
+mean decode 18.405 -> 16.984 s (-7.7%), append prefill 15.368 -> 15.829 s,
+combined turn work 33.773 -> 32.813 s (-2.8%). One candidate append is a timing
+outlier; batched prefill has no oracle change. Both candidate decode samples
+beat both controls. Full phase logits, final snapshot, misses and bytes match.
+
+This is a promising diagnostic, not an achievable model speedup: future routes
+are supplied for free, and the scope is one pending load before same-layer
+attention, not multi-layer lookahead. Need full-session confirmation and an
+independent bound on the per-layer router readback dependency. See
+oracle-preattention-short.json; route capture/replay instructions are in the
+agent-session README. Existing pread_ms includes overlap duration; it cannot be
+interpreted as exposed CPU stall time when comparing these schedules.

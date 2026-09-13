@@ -1,0 +1,466 @@
+[
+  {
+    "variant": "A",
+    "logits_sha256": "5747236d4492fc64415648e836f112a6ab759b69b7b5e4e660ba7bf1eca00e83",
+    "snapshot_sha256": "c35ff76685d423900d091ce0d959250ccc995c62b6747b90f32ce2d01d8ccc0b",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14487.845,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3747.833,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4085.687,
+        "first_decode_ms": 78.284
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9581.428,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4126.101,
+        "first_decode_ms": 69.838
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2027.802,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10055.065,
+        "first_decode_ms": 66.776
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "0",
+        "misses": "7800",
+        "evictions": "0"
+      },
+      {
+        "hits": "20365",
+        "misses": "9035",
+        "evictions": "1213",
+        "miss_pread": "11.45",
+        "pread_ms": "893.257"
+      },
+      {
+        "hits": "36669",
+        "misses": "10011",
+        "evictions": "2189",
+        "miss_pread": "20.50",
+        "pread_ms": "1343.363"
+      },
+      {
+        "hits": "104198",
+        "misses": "14722",
+        "evictions": "6900",
+        "miss_pread": "64.16",
+        "pread_ms": "4816.210"
+      },
+      {
+        "hits": "121190",
+        "misses": "15490",
+        "evictions": "7668",
+        "miss_pread": "71.28",
+        "pread_ms": "5200.530"
+      },
+      {
+        "hits": "137617",
+        "misses": "16343",
+        "evictions": "8521",
+        "miss_pread": "79.19",
+        "pread_ms": "5812.056"
+      },
+      {
+        "hits": "183997",
+        "misses": "17243",
+        "evictions": "9421",
+        "miss_pread": "87.53",
+        "pread_ms": "6302.748"
+      }
+    ],
+    "startup_prefill_ms": 14487.845,
+    "append_prefill_ms": 15357.063,
+    "decode_ms": 18266.853,
+    "model_ms": 48111.761
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "5747236d4492fc64415648e836f112a6ab759b69b7b5e4e660ba7bf1eca00e83",
+    "snapshot_sha256": "c35ff76685d423900d091ce0d959250ccc995c62b6747b90f32ce2d01d8ccc0b",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14383.487,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3722.851,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3519.014,
+        "first_decode_ms": 72.803
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9480.524,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 3564.832,
+        "first_decode_ms": 57.884
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2036.126,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9408.712,
+        "first_decode_ms": 60.463
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "0",
+        "misses": "7800",
+        "evictions": "0"
+      },
+      {
+        "hits": "20365",
+        "misses": "9035",
+        "evictions": "1213",
+        "miss_pread": "11.45",
+        "pread_ms": "904.471"
+      },
+      {
+        "hits": "36669",
+        "misses": "10011",
+        "evictions": "2189",
+        "miss_pread": "20.50",
+        "pread_ms": "1595.507"
+      },
+      {
+        "hits": "104198",
+        "misses": "14722",
+        "evictions": "6900",
+        "miss_pread": "64.16",
+        "pread_ms": "5018.035"
+      },
+      {
+        "hits": "121190",
+        "misses": "15490",
+        "evictions": "7668",
+        "miss_pread": "71.28",
+        "pread_ms": "5549.875"
+      },
+      {
+        "hits": "137617",
+        "misses": "16343",
+        "evictions": "8521",
+        "miss_pread": "79.19",
+        "pread_ms": "6157.190"
+      },
+      {
+        "hits": "183997",
+        "misses": "17243",
+        "evictions": "9421",
+        "miss_pread": "87.53",
+        "pread_ms": "6833.976"
+      }
+    ],
+    "startup_prefill_ms": 14383.487,
+    "append_prefill_ms": 15239.501,
+    "decode_ms": 16492.558,
+    "model_ms": 46115.545999999995
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "5747236d4492fc64415648e836f112a6ab759b69b7b5e4e660ba7bf1eca00e83",
+    "snapshot_sha256": "c35ff76685d423900d091ce0d959250ccc995c62b6747b90f32ce2d01d8ccc0b",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14375.846,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3843.638,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3657.609,
+        "first_decode_ms": 79.579
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 10229.004,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 3754.351,
+        "first_decode_ms": 67.691
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2345.407,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10063.939,
+        "first_decode_ms": 72.271
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "0",
+        "misses": "7800",
+        "evictions": "0"
+      },
+      {
+        "hits": "20365",
+        "misses": "9035",
+        "evictions": "1213",
+        "miss_pread": "11.45",
+        "pread_ms": "889.004"
+      },
+      {
+        "hits": "36669",
+        "misses": "10011",
+        "evictions": "2189",
+        "miss_pread": "20.50",
+        "pread_ms": "1590.038"
+      },
+      {
+        "hits": "104198",
+        "misses": "14722",
+        "evictions": "6900",
+        "miss_pread": "64.16",
+        "pread_ms": "5143.772"
+      },
+      {
+        "hits": "121190",
+        "misses": "15490",
+        "evictions": "7668",
+        "miss_pread": "71.28",
+        "pread_ms": "5684.596"
+      },
+      {
+        "hits": "137617",
+        "misses": "16343",
+        "evictions": "8521",
+        "miss_pread": "79.19",
+        "pread_ms": "6298.702"
+      },
+      {
+        "hits": "183997",
+        "misses": "17243",
+        "evictions": "9421",
+        "miss_pread": "87.53",
+        "pread_ms": "7002.567"
+      }
+    ],
+    "startup_prefill_ms": 14375.846,
+    "append_prefill_ms": 16418.049,
+    "decode_ms": 17475.899,
+    "model_ms": 48269.794
+  },
+  {
+    "variant": "A",
+    "logits_sha256": "5747236d4492fc64415648e836f112a6ab759b69b7b5e4e660ba7bf1eca00e83",
+    "snapshot_sha256": "c35ff76685d423900d091ce0d959250ccc995c62b6747b90f32ce2d01d8ccc0b",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14392.36,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3555.908,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4061.391,
+        "first_decode_ms": 78.324
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9658.405,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4101.176,
+        "first_decode_ms": 68.888
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2164.235,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10381.114,
+        "first_decode_ms": 69.083
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "0",
+        "misses": "7800",
+        "evictions": "0"
+      },
+      {
+        "hits": "20365",
+        "misses": "9035",
+        "evictions": "1213",
+        "miss_pread": "11.45",
+        "pread_ms": "863.366"
+      },
+      {
+        "hits": "36669",
+        "misses": "10011",
+        "evictions": "2189",
+        "miss_pread": "20.50",
+        "pread_ms": "1302.847"
+      },
+      {
+        "hits": "104198",
+        "misses": "14722",
+        "evictions": "6900",
+        "miss_pread": "64.16",
+        "pread_ms": "4848.936"
+      },
+      {
+        "hits": "121190",
+        "misses": "15490",
+        "evictions": "7668",
+        "miss_pread": "71.28",
+        "pread_ms": "5235.081"
+      },
+      {
+        "hits": "137617",
+        "misses": "16343",
+        "evictions": "8521",
+        "miss_pread": "79.19",
+        "pread_ms": "5844.536"
+      },
+      {
+        "hits": "183997",
+        "misses": "17243",
+        "evictions": "9421",
+        "miss_pread": "87.53",
+        "pread_ms": "6323.650"
+      }
+    ],
+    "startup_prefill_ms": 14392.36,
+    "append_prefill_ms": 15378.548,
+    "decode_ms": 18543.681,
+    "model_ms": 48314.589
+  }
+]
