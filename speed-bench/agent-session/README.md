@@ -42,6 +42,9 @@ the recorded token streams match.
       --replay /tmp/agent-session-RUN/replay.txt \
       --candidate-env DS4_METAL_V41_BATCH_SHARED_OVERLAP=1
 
+Repeat `--candidate-env NAME=VALUE` to test a combination against a control
+with all those flags unset. Record single-factor studies before combinations.
+
 Each replay retains the recorded system prefix, every user/tool-result prefill
 boundary, and every generated token. Generated tokens are teacher-forced one
 at a time through the ordinary decode API. It preserves evolving KV and expert

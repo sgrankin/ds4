@@ -23,21 +23,22 @@ p.add_argument('output',type=Path)
 p.add_argument('--replay',type=Path,default=HERE/'session-v1.txt')
 p.add_argument('--model',type=Path,default=Path('ds4flash.gguf'))
 p.add_argument('--binary',type=Path,default=HERE/'replay')
-p.add_argument('--candidate-env',required=True)
+p.add_argument('--candidate-env',action='append',required=True)
 p.add_argument('--cache-gb',type=int)
 p.add_argument('--order',default='ABBA',choices=['ABBA','AB','A'])
 a=p.parse_args(); a.output=a.output.resolve(); a.output.mkdir(parents=True,exist_ok=False)
 binary=a.output/'replay'; shutil.copy2(a.binary,binary)
 recording=a.output/'session.txt'; shutil.copy2(a.replay,recording)
 env=os.environ.copy(); env.update(snapshot_shaders(a.output))
-name,value=a.candidate_env.split('=',1); env.pop(name,None)
+candidate=dict(item.split('=',1) for item in a.candidate_env)
+for name in candidate: env.pop(name,None)
 if a.cache_gb: env['DS4_REPLAY_CACHE_GB']=str(a.cache_gb)
 (a.output/'manifest.json').write_text(json.dumps(dict(replay_sha256=digest(recording),binary_sha256=digest(binary),model=str(a.model.resolve()),candidate=a.candidate_env,cache_gb=a.cache_gb,order=a.order,env={k:v for k,v in env.items() if k.startswith('DS4_')}),indent=2)+'\n')
 results=[]; reference=None
 for i,variant in enumerate(a.order):
     dest=a.output/f'{i}-{variant}'; dest.mkdir()
     runenv=env.copy()
-    if variant=='B': runenv[name]=value
+    if variant=='B': runenv.update(candidate)
     logits=dest/'logits.bin'; snapshot=dest/'snapshot.bin'
     with (dest/'timings.csv').open('w') as out, (dest/'stderr.log').open('w') as err:
         subprocess.run([str(binary),str(a.model.resolve()),str(recording),str(logits),str(snapshot)],env=runenv,stdout=out,stderr=err,check=True)
