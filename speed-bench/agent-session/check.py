@@ -2,6 +2,7 @@
 import csv
 from decimal import Decimal
 import json
+import inspect
 from pathlib import Path
 import sys
 
@@ -19,6 +20,7 @@ rows = [dict(event_id='a', account='x', kind='charge', amount='0.29', date='2026
         dict(event_id='c', account='v', kind='void', amount='99.00', date='2026-08-15')]
 assert summarize(iter(rows)) == {'x': 0}
 if stage >= 1:
+    assert inspect.signature(summarize).parameters['since'].kind is inspect.Parameter.KEYWORD_ONLY
     assert summarize(iter(rows), since='2026-08-15') == {'x': -29}
     assert summarize(rows, since='2026-09-01') == {}
     assert summarize(rows, since=None) == {'x': 0}

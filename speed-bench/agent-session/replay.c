@@ -66,7 +66,11 @@ int main(int argc, char **argv) {
         } else {
             for (int i=0;i<count;i++) {
                 REQUIRE(ds4_session_eval(session,history.v[start+i],err,sizeof(err))==0);
-                if (!i) first=milliseconds()-t0;
+                if (!i) {
+                    first=milliseconds()-t0;
+                    if (getenv("DS4_REPLAY_PROFILE_FIRST_DECODE"))
+                        fprintf(stderr,"REPLAY phase=%d first_decode_done %.3f ms\n",phase,first);
+                }
             }
         }
         const double elapsed=milliseconds()-t0;

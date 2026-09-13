@@ -8,8 +8,8 @@ The fixture is a standard-library Python payment reconciliation project. Three
 user turns require inspecting code, observing failing tests, fixing money,
 refund and retry handling, adding a date-filter API with tests, and producing
 checked reports from 275 CSV records. Independent held-out checks run outside
-the editable project after every turn. Existing tests and data must remain
-unchanged. Task success, tool calls, context growth, turn wall time, prefill and
+the editable project after every turn. Existing test definitions and data must remain
+unchanged; additional tests may be added. Task success, tool calls, context growth, turn wall time, prefill and
 decode times are recorded. Model reasoning is enabled, matching agent defaults.
 
 ## Live task

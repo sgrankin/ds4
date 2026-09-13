@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Run the real SSD agent on an isolated, verified three-turn coding session."""
 import argparse
+import ast
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import selectors
 import shutil
@@ -58,13 +60,22 @@ try:
                     if last is not None:
                         turns.append((now-last)*1000)
                         stage=submitted-1
-                        for relative in ['tests/test_report.py','data.csv']:
+                        for relative in ['data.csv']:
                             assert (project/relative).read_bytes()==(HERE/'fixture'/relative).read_bytes(), f'Changed fixture: {relative}'
+                        original=ast.parse((HERE/'fixture/tests/test_report.py').read_text())
+                        actual=ast.parse((project/'tests/test_report.py').read_text())
+                        def definitions(tree):
+                            return {n.name: ast.dump(n,include_attributes=False) for n in ast.walk(tree) if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))}
+                        expected=definitions(original); observed=definitions(actual)
+                        assert all(observed.get(k)==v for k,v in expected.items()), 'Existing test definitions changed'
                         check=subprocess.run([sys.executable,str(HERE/'check.py'),str(project),str(stage)],capture_output=True,text=True,env=env)
                         tests=subprocess.run([sys.executable,'-m','unittest','discover','-s','tests','-v'],cwd=project,capture_output=True,text=True,env=env)
                         checks.append(dict(stage=stage,held_out_rc=check.returncode,tests_rc=tests.returncode,held_out=check.stdout+check.stderr,tests=tests.stdout+tests.stderr))
                         (a.output/'checks.json').write_text(json.dumps(checks,indent=2)+'\n')
                         assert check.returncode==tests.returncode==0, f'Task validation failed at stage {stage}'
+                        if stage >= 1:
+                            count=re.search(r'Ran (\d+) tests?',tests.stderr)
+                            assert count and int(count[1])>=7, 'Expected at least two added tests'
                         print(f'PASS turn {stage+1}: {turns[-1]/1000:.3f}s',flush=True)
                     if submitted<len(prompts):
                         last=time.monotonic(); proc.stdin.write((prompts[submitted]+'\n').encode()); proc.stdin.flush(); submitted+=1
