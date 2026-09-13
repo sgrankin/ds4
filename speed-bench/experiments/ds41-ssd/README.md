@@ -750,3 +750,32 @@ All full-vocabulary frontier logits match exactly. Prefix initialization is
 identical; the reported speed is the append, not the entire5000-token prompt.
 See tail904-selected-abba.json. Complete768/1023 continuation-state checks
 are running before default promotion.
+
+## 48: enable measured wider selected tiles in large caches
+
+Default warm text appends now use up to128 exact selected-expert rows, below
+1024 remaining tokens, when at least half the model's experts fit in the
+dynamic cache. Smaller budgets retain tile8/limit256. Tile size is capped by
+the actual prefill buffer. Both tile selection and sweep classification use
+the same cap, including the rollback and explicit diagnostic overrides.
+
+DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES=1 restores this round's prior
+tile8/limit256 policy. The older common short-optimization rollback still
+disables the previous round too. Kernel fusion, shared overlap and Engram
+experiments remain opt-in. No allocation budget or image/quality/TP guard changes.
+
+Long tails768/1023 plus8decoded tokens preserve full snapshots. Unsupported
+4GiB-target fallback and selected batching at16GiB target (8.88GiB dynamic)
+both preserve snapshots. Final defaults pass indexed-prefix tails2/3/4/5/6/7/
+8/9/17/40; tiny-prefix32-row scratch tails2/3/17/128; and one-row fallback.
+See round3-long-state.txt, round3-fallback4-state.txt, round3-cache16-state.txt
+and final-default-indexed.txt, final-small-prefix-cap32.txt, final-cap1-fallback.txt.
+
+Controlled complete-response ABBA (new default versus wider-tiling rollback):
+all input/output token hashes match. The three answers finish naturally at
+41/15/28 generated tokens, below the256-token cap. Mean sum of response times
+for all three turns: fresh8.968->8.617s (~3.9% lower), restored12.657->12.085s
+(~4.5% lower). Fresh hello varies across runs; decoded-token cost offsets some
+prefill savings. Do not describe the larger prefill gain as a general response
+speedup. See agent-fixed-responses.json, which also records first output,
+startup and submit-to-ready wall times.

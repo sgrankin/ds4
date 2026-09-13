@@ -43,6 +43,13 @@ int main(int argc, char **argv) {
         CHECK(end != cache_env && !*end && gb >= 4 && gb <= 96);
         opt.ssd_streaming_cache_bytes = (uint64_t)gb << 30;
     }
+    const char *chunk_env = getenv("DS4_TEST_PREFILL_CHUNK");
+    if (chunk_env && chunk_env[0]) {
+        char *end = NULL;
+        unsigned long chunk = strtoul(chunk_env, &end, 10);
+        CHECK(end != chunk_env && !*end && chunk >= 1 && chunk <= 8192);
+        opt.prefill_chunk = (uint32_t)chunk;
+    }
     CHECK(ds4_engine_open(&e, &opt) == 0);
     ds4_tokenize_text(e, text, &tokens); CHECK(tokens.len > initial_tokens + max_tail + 8);
     CHECK(ds4_session_create(&s, e, 100000) == 0);

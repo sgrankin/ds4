@@ -41568,13 +41568,37 @@ static bool ds41_exact_short_prefill(const ds41_gpu_graph *g, uint32_t count) {
         ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u;
 }
 
+static bool ds41_large_expert_cache(const ds41_gpu_graph *g) {
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+    return g->streaming && g->pos &&
+        ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u;
+#else
+    (void)g;
+    return false;
+#endif
+}
+
+static uint32_t ds41_selected_tile_cap(const ds41_gpu_graph *g) {
+    uint32_t tile = ds41_large_expert_cache(g) &&
+        !getenv("DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES") ? 128u : 8u;
+    const char *env = getenv("DS4_METAL_V41_SELECTED_TILE");
+    if (env && env[0]) {
+        char *end = NULL;
+        unsigned long value = strtoul(env, &end, 10);
+        if (end != env && !*end && value >= 2u && value <= 128u)
+            tile = (uint32_t)value;
+    }
+    return tile < g->prefill_cap ? tile : g->prefill_cap;
+}
+
 /* Small layer-major tiles keep the ordinary selected-expert cache. They must
  * never map or seed a whole expert layer for a handful of tokens. */
 static bool ds41_selected_small_prefill(const ds41_gpu_graph *g,
                                         const ds4_weights *w, uint32_t count) {
     if (getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") || !g->streaming ||
         g->tp_world != 1 || g->quality || g->imatrix || g->image_count ||
-        g->encoder_resident || !g->pos || count < 2u || count > 128u ||
+        g->encoder_resident || !g->pos || count < 2u ||
+        count > ds41_selected_tile_cap(g) ||
         count > g->prefill_cap) return false;
     const uint32_t gate_type = w->layer[0].ffn_gate_exps->type;
     const uint32_t down_type = w->layer[0].ffn_down_exps->type;
@@ -41598,23 +41622,17 @@ static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, const ds4_weights *w
     /* Resident appends do not pay for an SSD layer sweep. In particular,
      * the server's 128-token mixed quantum must not become scalar prefill. */
     if (!g->streaming && g->tp_world == 1) minimum = 8u;
-#if defined(__APPLE__) && !defined(DS4_NO_GPU)
-    /* With at least half the experts cached, shorter warm appends beat a full
-     * disk sweep. Longer tails may use the scalar-equivalent sweep below. */
-    if (g->streaming && g->pos &&
-        ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u)
-        minimum = 1024u;
-#endif
-    uint32_t tile = 8u;
-    const char *tile_env = getenv("DS4_METAL_V41_SELECTED_TILE");
-    if (tile_env && tile_env[0]) {
-        char *end = NULL;
-        unsigned long value = strtoul(tile_env, &end, 10);
-        if (end != tile_env && !*end && value >= 2u && value <= 128u)
-            tile = (uint32_t)value;
-    }
+    const bool large_cache = ds41_large_expert_cache(g);
+    /* Wide selected tiles amortize exact GPU work and repeated expert reads
+     * in the measured large-cache regime. Smaller budgets retain the old
+     * eight-row/256-token policy unless explicitly overridden for diagnosis. */
+    if (large_cache) minimum = 1024u;
+    const bool wider_selected = large_cache &&
+        !getenv("DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES");
+    const uint32_t tile = ds41_selected_tile_cap(g);
     const uint32_t small = remaining < tile ? remaining : tile;
-    uint32_t selected_limit = getenv("DS4_METAL_V41_SELECTED_MEDIUM") ? 768u : 256u;
+    uint32_t selected_limit = wider_selected ? 1024u : 256u;
+    if (getenv("DS4_METAL_V41_SELECTED_MEDIUM")) selected_limit = 768u;
     const char *limit_env = getenv("DS4_METAL_V41_SELECTED_LIMIT");
     if (limit_env && limit_env[0]) {
         char *end = NULL;
