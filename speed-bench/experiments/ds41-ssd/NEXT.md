@@ -119,3 +119,8 @@ all exits, synchronous retry if cache entries require main-thread waits. Built.
 
 20 model parity passed too; no end-to-end claim, retained opt-in.
 21 async model check running /tmp/ds41-async-model-check.log.
+
+21 model parity passed. Direct actual-agent ASYNC vs EARLY ABBA running
+at /tmp/ds41-agent-async-vs-early, baseenv EARLY=1, candidate ASYNC=1.
+~21min remain in hour at16:51:35. Final acceptance should enable whichever
+loader wins, preserve a rollback, retest actual defaults and long-tail decode.

@@ -411,3 +411,15 @@ with the table. That saves only about 0.02 ms per model token's two Engram
 lookups. All 32 full model logit rows and serialized continuation bytes match.
 Retain opt-in, with no claim of meaningful agent latency gain.
 See engram-lut-cpu.txt and tests/test_engram_lut.c.
+
+## 21: overlap selected-load preparation on the existing worker (opt-in)
+
+`DS4_METAL_V41_ASYNC_EXPERT_LOAD=1` submits a routing-ready event and reuses
+the established asynchronous selected-load worker while the main thread
+encodes shared-expert kernels. It joins before routed MoE and retries on the
+main thread when cache entries require waiting for in-flight GPU use. Error
+paths join the worker before releasing session state. This takes precedence
+over the earlier-load opt-in.
+
+All 32 full model logit rows and the complete continuation snapshot match.
+Actual-agent ABBA directly against early loading is pending.

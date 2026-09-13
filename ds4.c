@@ -40809,9 +40809,22 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
     /* Resolve routing before shared work so selected SSD reads can overlap its
      * GPU execution. The cache loader protects live entries and the override
      * avoids paying for a second selected-ID readback in routed_moe_one. */
-    const bool early_load = g->streaming && !g->quality && g->tp_world == 1 &&
+    const bool load_eligible = g->streaming && !g->quality && g->tp_world == 1;
+    const bool async_load = load_eligible && getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD");
+    const bool early_load = load_eligible && !async_load &&
         getenv("DS4_METAL_V41_EARLY_EXPERT_LOAD");
+    metal_graph_selected_async_load load = {0};
     int32_t selected_ids[DS4_MAX_EXPERT_USED];
+    if (async_load) {
+        uint64_t event = 0;
+        /* Commit the routing event before handing it to the worker, so even
+         * an encoding failure below cannot leave the worker waiting forever. */
+        if (!ds4_gpu_signal_selected_readback_ready(&event) ||
+            !ds4_gpu_flush_commands() ||
+            !metal_graph_selected_async_load_start_tensor(&load, g->selected,
+                m, l, il, event, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD))
+            return false;
+    }
     if (early_load) {
         const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
             m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
@@ -40843,7 +40856,30 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
         !ds4_gpu_swiglu_tensor(g->shared_mid, g->shared_gate, g->shared_up,
                               DS4_N_FF_EXP, DS4_SWIGLU_CLAMP_EXP, 1.0f) ||
         !ds41_bf16(g->shared_mid, DS4_N_FF_EXP) ||
-        !ds41_matmul(g->shared, m, l->ffn_down_shexp, g->shared_mid, true))) return false;
+        !ds41_matmul(g->shared, m, l->ffn_down_shexp, g->shared_mid, true))) {
+        if (load.active) {
+            (void)metal_graph_selected_async_load_finish(&load);
+            (void)ds4_gpu_routed_moe_set_selected_override(NULL, 0);
+        }
+        return false;
+    }
+    if (async_load) {
+        const bool flush_ok = ds4_gpu_flush_commands() != 0;
+        bool loaded = metal_graph_selected_async_load_finish(&load);
+        /* The worker cannot wait for cache entries still in GPU use. Retry
+         * on this thread after joining, exactly as the existing graph does. */
+        if (!loaded && load.ids_ok) {
+            const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
+                m, l, il, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
+            loaded = ds4_gpu_stream_expert_cache_begin_selected_load(&table,
+                load.selected_ids, DS4_N_EXPERT_USED) &&
+                ds4_gpu_routed_moe_set_selected_override(load.selected_ids, DS4_N_EXPERT_USED);
+        }
+        if (!flush_ok || !loaded) {
+            (void)ds4_gpu_routed_moe_set_selected_override(NULL, 0);
+            return false;
+        }
+    }
     if (early_load && (!ds4_gpu_flush_commands() ||
         !ds4_gpu_routed_moe_set_selected_override(selected_ids, DS4_N_EXPERT_USED)))
         return false;
