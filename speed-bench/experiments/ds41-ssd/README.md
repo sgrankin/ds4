@@ -719,3 +719,24 @@ Add DS4_TEST_SELECTED_FALLBACK to explicitly validate unsupported configurations
 without expecting batched progress. Repeat with4GiB for fallback, then16GiB
 (total target, about8.9GiB dynamic capacity) to exercise real selected-batch
 evictions. Record both effective memory budgets in evidence.
+
+## 46: controlled agent confirmation with identical input/output tokens
+
+Fixed datetime, timezone, seed, executable and Metal sources; ABBA verifies
+actual input-ID and output-ID hashes for every generation. Tile128 versus
+tile8, SSD streaming, default context100000 and cache allocation:
+
+| Condition | Tile8 | Tile128 |
+| --- | ---: | ---: |
+| Fresh hello prefill | 3.270 s | 2.343 s |
+| Restored hello prefill | 4.434 s | 3.744 s |
+| Fresh hello through first decode | 3.337 s | 2.420 s |
+| Restored hello through first decode | 4.527 s | 3.993 s |
+| Fresh/restored12-token prefill | 0.664/0.926 s | 0.545/0.825 s |
+| Fresh/restored6-token prefill | 0.334/0.335 s | 0.296/0.348 s |
+
+Both hello candidates beat both controls. The fresh control samples vary
+3.526/3.015s, so the average improvement should not be treated as a precise
+population estimate. Restored first-decode overhead persists (~0.25 versus
+~0.09s), but total response improves. No startup work was moved; startup time
+is measured separately. See agent-fixed-tile128.json. Longer generations follow.
