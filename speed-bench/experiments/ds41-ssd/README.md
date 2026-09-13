@@ -1171,3 +1171,19 @@ all input/output token hashes match. Mean fresh first-output latencies are
 3961.5/922.5/401.5ms versus3951/908/403ms. This supports near-neutral interactive
 latency with at most a small fresh benefit; it is not a complete-response
 throughput measurement. See chunk2048-interactive-new.json.
+
+## 73: full8192-row processing exposes the large-input tradeoff
+
+At16384 input tokens, logs confirm control2x8192 and candidate8x2048 chunks.
+All frontier logits match. Control630.54/558.86tps, candidate563.94/538.86tps;
+mean throughput594.70->551.40 (-7.28%), mean prefill time27.650->29.729s
+(+7.52%). Control drift is substantial and one candidate exceeds the second
+control, so this is a tradeoff warning rather than a precise stable penalty.
+See chunk2048-large16384.json and chunk2048-large-provenance.json.
+
+Decision: retain the default. --prefill-chunk2048 is a measured option for this
+small-input tool session (2.66% lower inference time,13.13% fewer expert reads),
+with near-neutral short interactive latency and uncertain long-input cost.
+A better next design starts with a small workspace and expands for large inputs,
+reclaiming expert cache safely. Account for resize/admission/eviction costs and
+never resize tensors referenced by in-flight commands or alias views.

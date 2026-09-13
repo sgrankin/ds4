@@ -151,3 +151,10 @@ It retains native exact routing and only speculates on cache loads. It is
 currently slower on the short tool-session screen and is disabled by default;
 see experiment66 in the SSD experiment notebook. Do not combine it with oracle
 modes, image/quality execution, or the older asynchronous expert-load experiment.
+
+For the measured small-input tool session, `--prefill-chunk 2048` on ds4-agent
+freed about4GiB for cached experts and reduced full replay inference time2.7%.
+The replay equivalent is `--candidate-env DS4_REPLAY_PREFILL_CHUNK=2048`.
+Short interactive latency was near-neutral; large16384-token input showed a
+possible throughput penalty, so the general default remains unchanged. See
+SSD experiments70-73 for samples and exact-output checks.

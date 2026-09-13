@@ -82,11 +82,27 @@ Experiment70 completed: chunk2048 full ABBA exact; decode -2.95%, append
 Budget7822->8253 experts /72.51->76.50GiB. Results chunk2048-full-*.json.
 No default changed: explicit --prefill-chunk2048 is the tested option.
 
-Experiment71 ACTIVE: /tmp/ds41-chunk2048-large8192, unified session17089.
-run_abba.py --candidate-prefill-chunk2048 --tokens8192 --ctx100000
---gen-tokens8, normal restored binary and frozen shaders. Finish, check frontier
-logits and throughput, save evidence and decide whether this is a user-selectable
-tradeoff rather than a default. GPU runs serial; no other active trials.
+Experiments71-73 complete. Buffer2048 preserves frontier logits at8192 and
+16384 prefill tokens. At8192 input, actual chunks are4096 vs2048, throughput
+432.17->427.01tps (-1.19%, below control drift). At16384, actual chunks8192
+vs2048, throughput594.70->551.40tps (-7.28%); control630.54->558.86 drift
+makes the penalty estimate uncertain. No universal default change.
+Actual-agent fresh first output2333.5->2288ms, restored3961.5->3951ms;
+input/output token hashes identical. Subsequent short turns near-neutral/small
+improvement. This check generates one token, not full responses.
+Evidence chunk2048-large8192.json, chunk2048-large16384.json,
+chunk2048-large-provenance.json, chunk2048-interactive-new.json.
+
+Next major idea: demand-sized prefill workspace. Start small for short tool
+inputs, expand for large prefills while reclaiming cache within the same memory
+budget. Current allocation reserves8192 rows although count-dependent execution
+uses2048 below8192 input and4096 below16384. Preserve alias lifetimes, cache
+admission and in-flight resource proofs; benchmark resize/cold/warm transitions.
+Do not infer an implementation speedup from the fixed-buffer experiment.
+
+All trials finished. No active GPU workload. Rebuilt agent/bench/replay use the
+restored baseline runtime; rejected67-69 code exists only in jj history. No new
+production defaults were enabled this continuation. Vision remains deferred.
 
 ## Reproduction and artifacts
 
