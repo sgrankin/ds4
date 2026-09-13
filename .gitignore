@@ -90,3 +90,6 @@ __pycache__/
 
 /tests/trace_deepseek41_prefill
 /tests/test_deepseek41_exact_tail
+
+/tests/test_deepseek41_ablation
+/tests/test_metal_norm_bf16

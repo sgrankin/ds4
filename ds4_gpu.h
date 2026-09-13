@@ -1132,6 +1132,11 @@ int ds4_gpu_rms_norm_weight_rows_tensor(
         uint32_t                rows,
         float                   eps);
 
+/* Weighted RMSNorm followed by the exact DS4.1 BF16 boundary in one dispatch. */
+int ds4_gpu_dsv41_rms_norm_weight_bf16_rows(ds4_gpu_tensor *out, const ds4_gpu_tensor *x,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint32_t n, uint32_t rows, float eps);
+
 int ds4_gpu_add_rms_norm_weight_tensor(
         ds4_gpu_tensor       *norm_out,
         ds4_gpu_tensor       *sum_out,

@@ -70,3 +70,9 @@ DS4_AGENT_CACHE_DIR; marker protocol is on stderr, merged into stdout by probe.
 14 complete: cache64 first probe is inconclusive, no default change.
 15 in progress: fused weighted RMS norm+BF16, synthetic shapes/alias guards
 and full-model per-step logit/snapshot comparison before performance claims.
+
+15: synthetic and model parity passed; 40-token ABBA is flat (~13.1 tps).
+Actual agent norm probe in progress. Next experiment: move selected-expert
+readback/load initiation before shared-expert work, then flush shared GPU work
+while pending preads run. Reuse protected cache/pending-load APIs and consume
+the exact same selected IDs through the existing override.

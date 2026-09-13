@@ -303,3 +303,18 @@ cache budget. Fresh/restored 38-token hello took 3.435/4.659 seconds versus
 baseline 3.527/4.954. Later turns were mixed (12 tokens 1.033/1.153 seconds;
 6 tokens 0.455/0.482). This single comparison does not justify a cache-default
 change; differences are small and need balanced repeats. See agent-cache64.json.
+
+## 15: exact weighted normalization and BF16 fusion (opt-in)
+
+`DS4_METAL_V41_FUSED_NORM=1` retains the original RMS reduction and learned
+weight multiplication, rounding to BF16 in the same kernel. Forty synthetic
+shape/alias cases match every output byte and buffer guards. The full-model
+check (`test_deepseek41_ablation MODEL PROMPT ENV`) matches all 32 full-vocabulary
+logit rows and the complete serialized continuation state.
+
+Warmed synthetic 2000-call timing: separate ~9.96 ms, fused 6.79/6.83 ms; the
+first separate pass was 19.96 ms and includes cold overhead (norm-kernel.txt).
+The four-process 40-token append after 2048 tokens at ctx=100000 shows no
+wall-time improvement: control 13.21/13.09 tps, fused 13.05/13.23. All frontier
+logits match. Retained opt-in while measuring actual agent behavior; no default
+change justified by this sample. See norm-abba40.json.
