@@ -1,0 +1,255 @@
+{
+  "rows": 134840,
+  "tokens": 3371,
+  "features_sha256": "7811c9a0ae932d56bec6563ecf818faf70d17aa6f3b5d41e6e5a2946a79ac7be",
+  "routes_sha256": "3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43",
+  "replay": [
+    {
+      "variant": "A",
+      "logits_sha256": "dbb7917fd94cef6332878b8e74bfa328ecab7c28001de6eb1b02c212c1d55be0",
+      "snapshot_sha256": "4038547fda7c3050dbb562e488a12b33f89527ea7c7927d142d978b2c36319fe",
+      "phases": [
+        {
+          "phase": 0,
+          "kind": "P",
+          "context": 1859,
+          "tokens": 1859,
+          "ms": 14658.897,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 1,
+          "kind": "P",
+          "context": 1949,
+          "tokens": 90,
+          "ms": 3670.209,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 2,
+          "kind": "D",
+          "context": 2021,
+          "tokens": 72,
+          "ms": 4711.483,
+          "first_decode_ms": 92.573
+        },
+        {
+          "phase": 3,
+          "kind": "P",
+          "context": 2322,
+          "tokens": 301,
+          "ms": 9354.638,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 4,
+          "kind": "D",
+          "context": 2396,
+          "tokens": 74,
+          "ms": 4775.045,
+          "first_decode_ms": 80.821
+        },
+        {
+          "phase": 5,
+          "kind": "P",
+          "context": 2468,
+          "tokens": 72,
+          "ms": 2052.81,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 6,
+          "kind": "D",
+          "context": 2665,
+          "tokens": 197,
+          "ms": 11501.375,
+          "first_decode_ms": 80.568
+        },
+        {
+          "phase": 7,
+          "kind": "P",
+          "context": 3350,
+          "tokens": 685,
+          "ms": 17142.296,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 8,
+          "kind": "D",
+          "context": 3414,
+          "tokens": 64,
+          "ms": 4526.755,
+          "first_decode_ms": 105.201
+        },
+        {
+          "phase": 9,
+          "kind": "P",
+          "context": 4240,
+          "tokens": 826,
+          "ms": 19554.487,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 10,
+          "kind": "D",
+          "context": 5182,
+          "tokens": 942,
+          "ms": 61930.61,
+          "first_decode_ms": 108.971
+        },
+        {
+          "phase": 11,
+          "kind": "P",
+          "context": 5543,
+          "tokens": 361,
+          "ms": 10250.718,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 12,
+          "kind": "D",
+          "context": 5597,
+          "tokens": 54,
+          "ms": 3591.003,
+          "first_decode_ms": 93.425
+        },
+        {
+          "phase": 13,
+          "kind": "P",
+          "context": 5759,
+          "tokens": 162,
+          "ms": 4153.251,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 14,
+          "kind": "D",
+          "context": 5832,
+          "tokens": 73,
+          "ms": 4814.602,
+          "first_decode_ms": 86.019
+        },
+        {
+          "phase": 15,
+          "kind": "P",
+          "context": 5916,
+          "tokens": 84,
+          "ms": 2223.292,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 16,
+          "kind": "D",
+          "context": 6005,
+          "tokens": 89,
+          "ms": 6318.315,
+          "first_decode_ms": 80.958
+        },
+        {
+          "phase": 17,
+          "kind": "P",
+          "context": 6097,
+          "tokens": 92,
+          "ms": 2774.746,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 18,
+          "kind": "D",
+          "context": 7273,
+          "tokens": 1176,
+          "ms": 77990.844,
+          "first_decode_ms": 83.88
+        },
+        {
+          "phase": 19,
+          "kind": "P",
+          "context": 7551,
+          "tokens": 278,
+          "ms": 7979.622,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 20,
+          "kind": "D",
+          "context": 7605,
+          "tokens": 54,
+          "ms": 3558.122,
+          "first_decode_ms": 74.777
+        },
+        {
+          "phase": 21,
+          "kind": "P",
+          "context": 7819,
+          "tokens": 214,
+          "ms": 5457.611,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 22,
+          "kind": "D",
+          "context": 7891,
+          "tokens": 72,
+          "ms": 5259.076,
+          "first_decode_ms": 81.252
+        },
+        {
+          "phase": 23,
+          "kind": "P",
+          "context": 7953,
+          "tokens": 62,
+          "ms": 2019.797,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 24,
+          "kind": "D",
+          "context": 8187,
+          "tokens": 234,
+          "ms": 15831.786,
+          "first_decode_ms": 83.311
+        },
+        {
+          "phase": 25,
+          "kind": "P",
+          "context": 8312,
+          "tokens": 125,
+          "ms": 3683.553,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 26,
+          "kind": "D",
+          "context": 8435,
+          "tokens": 123,
+          "ms": 8177.306,
+          "first_decode_ms": 104.449
+        },
+        {
+          "phase": 27,
+          "kind": "P",
+          "context": 8563,
+          "tokens": 128,
+          "ms": 2956.654,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 28,
+          "kind": "D",
+          "context": 8710,
+          "tokens": 147,
+          "ms": 9926.583,
+          "first_decode_ms": 85.132
+        }
+      ],
+      "cache_reports": [],
+      "io_reports": {},
+      "startup_prefill_ms": 14658.897,
+      "append_prefill_ms": 93273.68400000001,
+      "decode_ms": 222912.905,
+      "model_ms": 330845.486
+    }
+  ],
+  "feature_bytes": 1385615872,
+  "limits": "Intrusive activation capture; timings are not deployment measurements."
+}

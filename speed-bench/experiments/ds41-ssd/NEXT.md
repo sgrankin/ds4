@@ -100,9 +100,20 @@ uses2048 below8192 input and4096 below16384. Preserve alias lifetimes, cache
 admission and in-flight resource proofs; benchmark resize/cold/warm transitions.
 Do not infer an implementation speedup from the fixed-buffer experiment.
 
-All trials finished. No active GPU workload. Rebuilt agent/bench/replay use the
-restored baseline runtime; rejected67-69 code exists only in jj history. No new
-production defaults were enabled this continuation. Vision remains deferred.
+Experiments74-75 add opt-in gate/up-first reads and begin their exact fused
+compute before down weights finish. Warm-path short ABBA is exact but neutral:
+decode +0.39%, combined +0.91%; no default promotion. This is within-layer
+staging. Expert reads already happen layer by layer; prefetching the NEXT layer
+requires predicting that layer's routes before its activation is ready.
+Keep cross-layer lookahead as a distinct later predictor experiment.
+
+Current experiment76 captures BF16-exact pre-attention features and native route
+labels to /tmp/ds41-predictor-{features,routes}-full.bin. Capture is intrusive,
+not performance evidence. train_route_predictor.py trains a shared 5120->64
+stem and forty 64->384 heads with token-level 60/20/20 chronological splitting.
+Prepare independent TTL-cache task with predictor_holdout.py and reserve it
+for final evaluation. No miss/deadline labels yet. No production defaults changed.
+Update this paragraph when capture/training completes. Vision remains deferred.
 
 ## Reproduction and artifacts
 

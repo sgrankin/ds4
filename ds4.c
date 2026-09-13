@@ -40828,7 +40828,7 @@ static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
  * Single-process/single-session only; files are native-endian uint32 words. */
 static struct {
     bool initialized, enabled, active, preattention, defer_check, probe;
-    FILE *record;
+    FILE *record, *features;
     const ds41_gpu_graph *owner;
     uint32_t *words;
     size_t count, cursor;
@@ -40844,6 +40844,10 @@ static void ds41_route_oracle_close(void) {
                 (unsigned long long)ds41_route_oracle.probe_calls[il],
                 (unsigned long long)ds41_route_oracle.probe_hits[il],
                 (unsigned long long)ds41_route_oracle.probe_all[il]);
+    }
+    if (ds41_route_oracle.features && fclose(ds41_route_oracle.features)) {
+        fprintf(stderr, "ds4: routing feature recording close failed\n");
+        _Exit(1);
     }
     if (ds41_route_oracle.record && fclose(ds41_route_oracle.record)) {
         fprintf(stderr, "ds4: oracle route recording close failed\n");
@@ -40861,7 +40865,9 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
         ds41_route_oracle.initialized = true;
         const char *record = getenv("DS4_V41_ROUTE_RECORD");
         const char *oracle = getenv("DS4_V41_ROUTE_ORACLE");
-        ds41_route_oracle.probe = getenv("DS4_V41_ROUTE_PROBE") != NULL;
+        const char *features = getenv("DS4_V41_ROUTE_FEATURES");
+        ds41_route_oracle.probe = getenv("DS4_V41_ROUTE_PROBE") != NULL || features;
+        if (features && !record) ds4_die("routing features require route recording mode");
         if (ds41_route_oracle.probe && !record)
             ds4_die("routing probe requires route recording mode");
         const bool scheduled = getenv("DS4_V41_ORACLE_PREATTENTION") ||
@@ -40896,6 +40902,14 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
             ds41_route_oracle.defer_check = getenv("DS4_V41_ORACLE_DEFER_CHECK") != NULL;
             if (ds41_route_oracle.defer_check && !ds41_route_oracle.preattention)
                 ds4_die("deferred oracle check requires pre-attention loading");
+        }
+        if (features) {
+            const uint32_t fh[] = {0x44534631, 1, DS4_N_LAYER, DS4_N_EMBD,
+                DS4_N_EXPERT, DS4_N_EXPERT_USED, 2, 0};
+            ds41_route_oracle.features = fopen(features, "wbx");
+            if (!ds41_route_oracle.features ||
+                fwrite(fh, sizeof(fh), 1, ds41_route_oracle.features) != 1)
+                ds4_die("cannot create routing feature recording");
         }
         ds41_route_oracle.enabled = true;
         ds41_route_oracle.owner = g;
@@ -40972,13 +40986,31 @@ static bool ds41_route_probe(ds41_gpu_graph *g, const ds4_model *m,
                              const ds4_layer_weights *l, uint32_t token) {
     if (!ds41_route_oracle.active || !ds41_route_oracle.probe) return true;
     if (!l->ffn_exp_probs_b) return false;
-    return ds41_matmul(g->route_logits, m, l->ffn_gate_inp, g->norm, false) &&
+    bool ok = ds41_matmul(g->route_logits, m, l->ffn_gate_inp, g->norm, false) &&
         ds4_gpu_router_select_tensor(g->selected, g->route_weights, g->route_probs,
             m->map, m->size, l->ffn_exp_probs_b->abs_offset, 0, 0, token,
             DS4_N_EXPERT, DS4_N_EXPERT_USED, DS4_EXPERT_WEIGHT_SCALE, 0, 0, true, false,
             g->route_logits) && ds4_gpu_end_commands() &&
         ds4_gpu_tensor_read(g->selected, 0, ds41_route_oracle.predicted,
-            DS4_N_EXPERT_USED * sizeof(int32_t)) && ds4_gpu_begin_commands();
+            DS4_N_EXPERT_USED * sizeof(int32_t));
+    if (ok && ds41_route_oracle.features) {
+        float values[DS4_MAX_EMBD];
+        uint16_t bf16[DS4_MAX_EMBD];
+        ok = ds4_gpu_tensor_read(g->norm, 0, values, DS4_N_EMBD * sizeof(float));
+        for (uint32_t i = 0; ok && i < DS4_N_EMBD; i++) {
+            uint32_t bits;
+            memcpy(&bits, values + i, sizeof(bits));
+            if (bits & 0xffffu) ds4_die("routing feature is not BF16-exact");
+            bf16[i] = (uint16_t)(bits >> 16);
+        }
+        const uint32_t meta[] = {ds41_route_oracle.pos, token, ds41_route_oracle.checked};
+        FILE *f = ds41_route_oracle.features;
+        if (ok && (fwrite(meta, sizeof(meta), 1, f) != 1 ||
+            fwrite(bf16, sizeof(uint16_t), DS4_N_EMBD, f) != DS4_N_EMBD ||
+            fwrite(ds41_route_oracle.predicted, sizeof(int32_t), DS4_N_EXPERT_USED, f)
+                != DS4_N_EXPERT_USED)) ds4_die("routing feature write failed");
+    }
+    return ok && ds4_gpu_begin_commands();
 }
 
 /* Bounded experimental prefetch: predicted IDs only warm the cache. The

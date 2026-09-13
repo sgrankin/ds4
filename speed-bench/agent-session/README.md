@@ -158,3 +158,32 @@ The replay equivalent is `--candidate-env DS4_REPLAY_PREFILL_CHUNK=2048`.
 Short interactive latency was near-neutral; large16384-token input showed a
 possible throughput penalty, so the general default remains unchanged. See
 SSD experiments70-73 for samples and exact-output checks.
+
+### Learned routing predictor study
+
+Capture pre-attention BF16 activations, early-gate predictions and native labels:
+
+    DS4_V41_ROUTE_RECORD=/tmp/new-routes.bin DS4_V41_ROUTE_FEATURES=/tmp/new-features.bin \
+      python3 speed-bench/agent-session/replay_abba.py /tmp/new-capture \
+      --candidate-env DS4_V41_ORACLE_PREATTENTION=1 --order A
+
+Only A runs, so the candidate flag is not enabled. Both output files must be
+new. Capture adds GPU readback and gate work; do not use its times as performance
+results. Match its native route, logit and state hashes against the fixed replay.
+The version1 feature header is eight native uint32 values: magic0x44534631,
+version1, layers40, hidden5120, experts384, selected6, bytes-per-feature2,
+reserved0. Each row contains position/token/layer uint32,5120 BF16 values, and
+six int32 early predicted IDs. Native labels are in the paired route recording.
+Full session capture is about1.39GB; keep raw data outside the repository.
+
+    python3 speed-bench/agent-session/predictor_holdout.py /tmp/new-ttl-holdout
+    python3 speed-bench/agent-session/train_route_predictor.py \
+      /tmp/new-features.bin /tmp/new-routes.bin /tmp/new-training \
+      --holdout-features /tmp/new-ttl-holdout/features.bin \
+      --holdout-routes /tmp/new-ttl-holdout/routes.bin
+
+Training requires NumPy and MLX and uses the GPU. Run capture, training and
+performance benchmarks serially. Chronological60/20/20 splits keep all layers
+of each token together; validation selects the best epoch. Test and the separate
+TTL-cache task are evaluation-only. These measurements lack demand cache-miss
+and deadline labels and do not establish useful prefetch or runtime speed.

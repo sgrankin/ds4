@@ -1213,3 +1213,21 @@ all logits and continuation state exactly. Decode17.593->17.662s (+0.39%),
 append15.322->15.555s (+1.52%), combined32.915->33.216s (+0.91%).
 Warm staging is exercised hundreds of times, but offers no convincing win.
 Retain the opt-in flag; no default change. See staged-experts-warm-short JSON.
+
+## 76: exact activation capture and small-predictor training harness
+
+DS4_V41_ROUTE_FEATURES with native route recording saves BF16-exact normalized
+pre-attention activations and the existing early-gate six-ID prediction. Full
+capture contains134840 rows /3371 scalar tokens /1385615872 bytes. All native
+routes, complete logits and final serialized state match the canonical replay.
+See predictor-feature-capture.json. The probe is intrusive; its time is not a
+runtime result. Six data-validation tests pass, including alignment, incomplete
+token, duplicate expert, layer ordering and BF16 conversion/nonfinite cases.
+
+train_route_predictor.py implements a shared5120->64 tanh stem with40 separate
+64->384 heads, uniform-six cross entropy and Adam. Token-level chronological
+60/20/20 partitions, validation-selected epoch, final test and an optional
+separate-task holdout avoid mixing layer rows across partitions. These are
+all-route accuracy metrics, not cache-miss/deadline metrics. predictor_holdout.py
+runs a separate isolated TTL-cache repair with independent semantic checks.
+Raw datasets and trained weights stay in /tmp. Training results follow.
