@@ -577,3 +577,11 @@ The expanded snapshot test accepts several explicit tail lengths in one process.
 Combined tile32/medium/overlap checks have passed 12/16/24/31/32/33/64 plus eight
 continuation tokens at a 2048-token indexed prefix; larger boundaries are still
 running in /tmp/ds41-round3-expanded-state.txt. Performance gate follows.
+
+## 31: parallel reads for small Engram batches (opt-in)
+
+DS4_ENGRAM_SMALL_BATCH_PARALLEL=1 lowers the existing macOS concurrent-read
+threshold from 256 requests to two tokens (48 requests). This reuses the same
+16 readers, disjoint outputs, bounded allocation and error propagation. The
+existing Engram hash/history/disk-row suite passes with the flag enabled.
+No default change; benchmark after the expanded GPU snapshot test completes.
