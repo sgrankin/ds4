@@ -1086,6 +1086,10 @@ training a more accurate gate alone does not resolve the queue constraint.
 
 ## 67: execute cached experts before the routing readback
 
+Superseded timing: experiment68 found missing address-table maintenance and
+cache aging on this prototype's hit path. Outputs were exact, but this is not
+a clean scheduling-only comparison. Use the corrected experiment68 results.
+
 Opt-in DS4_METAL_V41_CACHE_TRY runs native routing, GPU cache validation and
 sparse-address IQ2/Q2 kernels in the same submission. Missing addresses are
 skipped by existing kernels. The CPU accepts output only when validation says
@@ -1100,3 +1104,17 @@ Both candidate decode samples are slower than both controls. Cache reads
 87.53->88.71GiB; scheduling changes cache eviction availability. Disabled by
 default. See cache-try-short-{summary,comparison,manifest}.json. Next test
 skips all speculative expert work on a miss and batches resource declarations.
+
+## 68: guarded cache execution with normal address maintenance and aging
+
+GPU all-hit guards skip both expert kernels entirely on any miss; exact demand
+fallback remains. Batched useResources replaces individual resource calls.
+Corrected two integration omissions: enable address writes for newly loaded
+experts and advance the normal token-aging clock on hits. The preliminary
+guarded trial also lacked those fixes and is saved only as diagnostic history.
+
+Corrected short ABBA retains exact logits and state. Both candidate decode
+samples (19.159s,19.076s) are slower than the first18.300s control. All variants
+have identical cache hits183997, misses17243, evictions9421 and reads87.53GiB.
+See cache-guarded-fixed-short-{summary,comparison,manifest}.json for the complete
+balanced result. No default enabled. Next isolate duplicate slab registrations.

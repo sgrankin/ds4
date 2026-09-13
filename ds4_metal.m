@@ -471,8 +471,10 @@ static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_sum6_tp_full_rows_stati
 static id<MTLComputePipelineState> g_moe_mul_mv_slots6_mxfp4_pair_swiglu_pipeline;
 static id<MTLComputePipelineState> g_moe_mul_mv_slots6_mxfp4_sum6_pipeline;
 static id<MTLComputePipelineState> g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_pipeline;
+static id<MTLComputePipelineState> g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_cached_pipeline;
 static id<MTLComputePipelineState> g_moe_mul_mv_addr_iq2_xxs_pipeline;
 static id<MTLComputePipelineState> g_moe_mul_mv_addr_q2_k_sum6_pipeline;
+static id<MTLComputePipelineState> g_moe_mul_mv_addr_q2_k_sum6_cached_pipeline;
 static id<MTLComputePipelineState> g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_masked_pipeline;
 static id<MTLComputePipelineState> g_moe_mul_mv_addr_q2_k_sum6_masked_pipeline;
 static id<MTLComputePipelineState> g_moe_stream_expert_cache_validate_pipeline;
@@ -7851,6 +7853,29 @@ int ds4_gpu_init(void) {
             return 0;
         }
 
+        if (getenv("DS4_METAL_V41_CACHE_TRY_GUARDED")) {
+        error = nil;
+        fn = [library newFunctionWithName:@"kernel_mul_mv_addr_iq2_xxs_pair_swiglu_f32_cached"
+                           constantValues:moe_mv_id_constants
+                                    error:&error];
+        if (!fn) {
+            fprintf(stderr, "ds4: Metal kernel_mul_mv_addr_iq2_xxs_pair_swiglu_f32_cached function not found: %s\n",
+                    [[error localizedDescription] UTF8String]);
+            g_queue = nil;
+            g_device = nil;
+            return 0;
+        }
+        g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_cached_pipeline = [g_device newComputePipelineStateWithFunction:fn error:&error];
+        if (!g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_cached_pipeline) {
+            fprintf(stderr, "ds4: Metal kernel_mul_mv_addr_iq2_xxs_pair_swiglu_f32_cached pipeline failed: %s\n",
+                    [[error localizedDescription] UTF8String]);
+            g_queue = nil;
+            g_device = nil;
+            return 0;
+        }
+
+        }
+
         error = nil;
         fn = [library newFunctionWithName:@"kernel_mul_mv_addr_iq2_xxs_f32"
                            constantValues:moe_mv_id_constants
@@ -7889,6 +7914,29 @@ int ds4_gpu_init(void) {
             g_queue = nil;
             g_device = nil;
             return 0;
+        }
+
+        if (getenv("DS4_METAL_V41_CACHE_TRY_GUARDED")) {
+        error = nil;
+        fn = [library newFunctionWithName:@"kernel_mul_mv_addr_q2_K_sum6_f32_cached"
+                           constantValues:moe_mv_id_constants
+                                    error:&error];
+        if (!fn) {
+            fprintf(stderr, "ds4: Metal kernel_mul_mv_addr_q2_K_sum6_f32_cached function not found: %s\n",
+                    [[error localizedDescription] UTF8String]);
+            g_queue = nil;
+            g_device = nil;
+            return 0;
+        }
+        g_moe_mul_mv_addr_q2_k_sum6_cached_pipeline = [g_device newComputePipelineStateWithFunction:fn error:&error];
+        if (!g_moe_mul_mv_addr_q2_k_sum6_cached_pipeline) {
+            fprintf(stderr, "ds4: Metal kernel_mul_mv_addr_q2_K_sum6_f32_cached pipeline failed: %s\n",
+                    [[error localizedDescription] UTF8String]);
+            g_queue = nil;
+            g_device = nil;
+            return 0;
+        }
+
         }
 
         error = nil;
@@ -11676,8 +11724,10 @@ void ds4_gpu_cleanup(void) {
         g_moe_mul_mv_slots6_mxfp4_pair_swiglu_pipeline = nil;
         g_moe_mul_mv_slots6_mxfp4_sum6_pipeline = nil;
         g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_pipeline = nil;
+        g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_cached_pipeline = nil;
         g_moe_mul_mv_addr_iq2_xxs_pipeline = nil;
         g_moe_mul_mv_addr_q2_k_sum6_pipeline = nil;
+        g_moe_mul_mv_addr_q2_k_sum6_cached_pipeline = nil;
         g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_masked_pipeline = nil;
         g_moe_mul_mv_addr_q2_k_sum6_masked_pipeline = nil;
         g_moe_stream_expert_cache_validate_pipeline = nil;
@@ -14401,7 +14451,8 @@ static int ds4_gpu_stream_compact_addr_requested(void) {
 
 static int ds4_gpu_stream_expert_addr_table_requested(void) {
     return g_ssd_streaming_mode &&
-           (getenv("DS4_METAL_ENABLE_STREAMING_EXPERT_ADDR_TABLE") != NULL ||
+           (getenv("DS4_METAL_V41_CACHE_TRY") != NULL ||
+            getenv("DS4_METAL_ENABLE_STREAMING_EXPERT_ADDR_TABLE") != NULL ||
             getenv("DS4_METAL_ENABLE_STREAMING_EXPERT_HIT_VALIDATOR") != NULL ||
             getenv("DS4_METAL_ENABLE_STREAMING_EXPERT_MASKED_ADDR") != NULL ||
             g_stream_prefill_batch_selected_addr_building ||
@@ -32699,9 +32750,20 @@ static int ds4_gpu_encode_mul_mv_addr_iq2_pair_swiglu(
     [enc setBuffer:dst_mid    offset:dst_mid_off atIndex:7];
     [enc setBuffer:ids        offset:ids_off     atIndex:8];
     [enc setBuffer:weights    offset:weights_off atIndex:9];
+    if (pipeline == g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_cached_pipeline) {
+        if (n_entries > 384) return 0;
+        [enc setBuffer:g_stream_expert_validate_status_buffer offset:0 atIndex:10];
+        __unsafe_unretained id<MTLResource> resources[768];
+        for (uint32_t i = 0; i < n_entries; i++) {
+            resources[2*i] = entries[i]->gate_buffer;
+            resources[2*i+1] = entries[i]->up_buffer;
+        }
+        [enc useResources:resources count:2*n_entries usage:MTLResourceUsageRead];
+    } else {
     for (uint32_t i = 0; i < n_entries; i++) {
         [enc useResource:entries[i]->gate_buffer usage:MTLResourceUsageRead];
         [enc useResource:entries[i]->up_buffer usage:MTLResourceUsageRead];
+    }
     }
     /* Overflow experts are addressed straight into the mapped model views
      * when a layer's unique selected set exceeds the cache budget. */
@@ -32824,8 +32886,16 @@ static int ds4_gpu_encode_mul_mv_addr_q2_sum6(
     [enc setBuffer:src1  offset:src1_off atIndex:2];
     [enc setBuffer:dst   offset:dst_off  atIndex:3];
     [enc setBuffer:ids   offset:ids_off  atIndex:4];
+    if (pipeline == g_moe_mul_mv_addr_q2_k_sum6_cached_pipeline) {
+        if (n_entries > 384) return 0;
+        [enc setBuffer:g_stream_expert_validate_status_buffer offset:0 atIndex:5];
+        __unsafe_unretained id<MTLResource> resources[384];
+        for (uint32_t i = 0; i < n_entries; i++) resources[i] = entries[i]->down_buffer;
+        [enc useResources:resources count:n_entries usage:MTLResourceUsageRead];
+    } else {
     for (uint32_t i = 0; i < n_entries; i++) {
         [enc useResource:entries[i]->down_buffer usage:MTLResourceUsageRead];
+    }
     }
     if (overflow_down) [enc useResource:overflow_down usage:MTLResourceUsageRead];
     if (threadgroup_bytes != 0) {
@@ -32880,16 +32950,19 @@ int ds4_gpu_dsv41_cached_moe_try(const ds4_gpu_stream_expert_table *t,
         .mid_row_stride = (uint64_t)mid_dim * sizeof(float),
         .weight_stride = sizeof(float), .write_clamped = 0, .clamp_value = clamp,
     };
+    const bool guarded = getenv("DS4_METAL_V41_CACHE_TRY_GUARDED") != NULL;
     id<MTLCommandBuffer> cb = g_batch_cb;
 #define DS41_BUF(v) ds4_gpu_tensor_buffer(v), ds4_gpu_tensor_offset(v)
     int ok = ds4_gpu_encode_stream_expert_cache_validate(cb, &va,
         DS41_BUF(selected), ga, ua, da, status) &&
         ds4_gpu_encode_mul_mv_addr_iq2_pair_swiglu(cb,
-            g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_pipeline, &a, &act, entries, count,
+            (guarded ? g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_cached_pipeline :
+             g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_pipeline), &a, &act, entries, count,
             ga, ua, DS41_BUF(x), DS41_BUF(gate), DS41_BUF(up), DS41_BUF(mid),
             DS41_BUF(selected), DS41_BUF(weights),
             ds4_gpu_routed_mv_smem(DS4_METAL_TENSOR_IQ2_XXS), 2, false, nil, nil) &&
-        ds4_gpu_encode_mul_mv_addr_q2_sum6(cb, g_moe_mul_mv_addr_q2_k_sum6_pipeline,
+        ds4_gpu_encode_mul_mv_addr_q2_sum6(cb, (guarded ? g_moe_mul_mv_addr_q2_k_sum6_cached_pipeline :
+             g_moe_mul_mv_addr_q2_k_sum6_pipeline),
             &b, entries, count, da, DS41_BUF(mid), DS41_BUF(out), DS41_BUF(selected),
             ds4_gpu_routed_mv_smem(DS4_METAL_TENSOR_Q2_K), 2, nil);
 #undef DS41_BUF
@@ -32901,6 +32974,7 @@ int ds4_gpu_dsv41_cached_moe_try(const ds4_gpu_stream_expert_table *t,
     if (hit) {
         int32_t ids[6];
         for (uint32_t i = 0; i < 6; i++) ids[i] = (int32_t)words[4 + i];
+        ds4_gpu_stream_expert_cache_note_token(t->layer);
         ds4_gpu_stream_expert_cache_note_selected_hotness(t->layer, ids, 6);
         for (uint32_t i = 0; i < 6; i++) {
             const uint32_t e = (uint32_t)ids[i];
