@@ -527,3 +527,13 @@ DS4_METAL_V41_SELECTED_MEDIUM=1 to use exact small tiles below 768 remaining
 tokens. Existing default stays below 256. The model-dependent snapshot test
 accepts an optional single tail length for testing the medium gap. Benchmark
 512-token appends at ctx=100000 after a 2048-token prefix next.
+
+## 26: measure complete agent generations
+
+Agent probes now accept --gen-tokens and --prompts-json, and record prefill-to-
+first-output, total response, decode duration, generated count and output-ID
+hash from the trace. Longer generations use seed 1234; the original one-token
+probe behavior is preserved. ABBA forwards these settings and an optional fixed
+expert-cache budget. Python compilation passes. Full-response trials follow
+after the current medium-append benchmark; exact snapshots remain the stronger
+numerical gate than matching sampled outputs.

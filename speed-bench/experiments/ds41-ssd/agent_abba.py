@@ -14,6 +14,9 @@ p.add_argument('output', type=Path)
 choice = p.add_mutually_exclusive_group(required=True)
 choice.add_argument('--candidate-env', help='NAME=VALUE')
 choice.add_argument('--candidate-prefill-chunk', type=int)
+p.add_argument('--gen-tokens',type=int,default=1)
+p.add_argument('--prompts-json',type=Path)
+p.add_argument('--cache-gb',type=int)
 a = p.parse_args()
 name, value = a.candidate_env.split('=', 1) if a.candidate_env else (None, None)
 a.output.mkdir(parents=True, exist_ok=False)
@@ -27,7 +30,9 @@ for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
     if name: env.pop(name, None)
     env.update(shaders)
     cmd = [sys.executable, str(Path(__file__).with_name('agent_probe.py')),
-           str(dest), '--binary', str(binary)]
+           str(dest), '--binary', str(binary), '--gen-tokens', str(a.gen_tokens)]
+    if a.prompts_json: cmd += ['--prompts-json', str(a.prompts_json.resolve())]
+    if a.cache_gb: cmd += ['--cache-gb', str(a.cache_gb)]
     if variant == 'candidate' and name:
         cmd += ['--env', f'{name}={value}']
     if variant == 'candidate' and a.candidate_prefill_chunk:
