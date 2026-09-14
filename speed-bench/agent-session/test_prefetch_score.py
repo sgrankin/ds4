@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 import numpy as np
 from score_route_prefetch import score, cache_data
+from train_miss_predictor import threshold_for_budget
 
 class ScoreTests(unittest.TestCase):
     def test_only_nonresident_predictions_issue_reads(self):
@@ -24,6 +25,16 @@ class ScoreTests(unittest.TestCase):
         self.assertEqual(s['predicted_reads'],0)
         self.assertEqual(s['miss_recall'],0)
         self.assertIsNone(s['read_precision'])
+    def test_threshold_respects_ties_and_abstention(self):
+        actual=np.arange(6)[None,:];resident=np.zeros((1,384),np.uint8)
+        pred=np.array([[0,7,1]]);conf=np.array([[.9,.8,.7]])
+        self.assertAlmostEqual(threshold_for_budget(pred,conf,actual,resident),.9)
+        conf=np.array([[.9,.9,.7]])
+        self.assertEqual(threshold_for_budget(pred,conf,actual,resident),7.0)
+    def test_threshold_does_not_spend_budget_without_more_hits(self):
+        actual=np.arange(6)[None,:];resident=np.zeros((1,384),np.uint8)
+        pred=np.array([[0,7,8]]);conf=np.array([[.9,.8,.7]])
+        self.assertAlmostEqual(threshold_for_budget(pred,conf,actual,resident,.5),.9)
     def test_cache_pairing(self):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/'cache.bin'

@@ -1292,3 +1292,28 @@ the test cohort; no deployment selection claim. Residency is held fixed, with
 no eviction, I/O contention, prediction cost or readiness deadlines. Real
 performance can be worse. This evidence argues for training directly on cold
 misses and abstention, plus demand priority, before another runtime integration.
+
+## 80: train cold-demand binary classifier with abstention
+
+Same width128 architecture,30epochs from random initialization; binary cross
+entropy on nonresident experts only, positive weight16, bias initial -4.
+Validation selects epoch24 and one global sigmoid-score threshold0.871712 to
+maximize useful reads subject to wrong reads <=10% of native demand. Rank
+top6 cold candidates before thresholding; all layers may abstain. Threshold
+ties are admitted together, and a tie in coverage prefers fewer reads.
+23 harness tests pass. Scores are uncalibrated; this is offline only.
+
+Test miss coverage6.233%, wrong reads6.693% of native demand, precision48.219%.
+Separate task coverage4.172%, wrong reads6.307%, precision39.811%. No strong
+result. For comparison, the earlier route model with its own validation-selected
+threshold0.506181 covers14.437%/9.241% test/separate misses, but wrong reads
+grow to12.608%/22.889% despite its10% validation budget. This exposes threshold
+generalization as well as ranking difficulty. Neither result justifies a
+production prefetch path. Evidence predictor-miss-trained.json.
+
+Separate task cache capture has125440 rows,29316 native expert-cache misses,
+and the same native routes as live feature capture. Its replay hashes are
+recorded in predictor-cache-ttl-capture.json; there was no prior replay logit
+or state hash for that task to compare against. Full original session still
+provides exact logit/state validation of the instrumentation. Cache misses are
+logical expert-cache misses, not necessarily physical SSD reads.

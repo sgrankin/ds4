@@ -1,0 +1,214 @@
+{
+  "replay": [
+    {
+      "variant": "A",
+      "logits_sha256": "96d939def50b7103f27e230363ba008c8944074e7ac2f7a3fd167dcfa87feaea",
+      "snapshot_sha256": "6c8d94777f26f485a2975d66f5815c5d8cebdf707055d7c45b009345054f4a4a",
+      "phases": [
+        {
+          "phase": 0,
+          "kind": "P",
+          "context": 1859,
+          "tokens": 1859,
+          "ms": 14909.535,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 1,
+          "kind": "P",
+          "context": 1963,
+          "tokens": 104,
+          "ms": 4119.423,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 2,
+          "kind": "D",
+          "context": 2016,
+          "tokens": 53,
+          "ms": 3107.185,
+          "first_decode_ms": 82.062
+        },
+        {
+          "phase": 3,
+          "kind": "P",
+          "context": 2052,
+          "tokens": 36,
+          "ms": 1272.633,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 4,
+          "kind": "D",
+          "context": 2126,
+          "tokens": 74,
+          "ms": 4120.177,
+          "first_decode_ms": 55.388
+        },
+        {
+          "phase": 5,
+          "kind": "P",
+          "context": 2358,
+          "tokens": 232,
+          "ms": 6697.561,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 6,
+          "kind": "D",
+          "context": 4160,
+          "tokens": 1802,
+          "ms": 99867.884,
+          "first_decode_ms": 87.548
+        },
+        {
+          "phase": 7,
+          "kind": "P",
+          "context": 4190,
+          "tokens": 30,
+          "ms": 1146.381,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 8,
+          "kind": "D",
+          "context": 4910,
+          "tokens": 720,
+          "ms": 40105.418,
+          "first_decode_ms": 73.78
+        },
+        {
+          "phase": 9,
+          "kind": "P",
+          "context": 4943,
+          "tokens": 33,
+          "ms": 1151.116,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 10,
+          "kind": "D",
+          "context": 5002,
+          "tokens": 59,
+          "ms": 3446.432,
+          "first_decode_ms": 68.841
+        },
+        {
+          "phase": 11,
+          "kind": "P",
+          "context": 5408,
+          "tokens": 406,
+          "ms": 10968.507,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 12,
+          "kind": "D",
+          "context": 5836,
+          "tokens": 428,
+          "ms": 24409.551,
+          "first_decode_ms": 80.043
+        }
+      ],
+      "cache_reports": [
+        {
+          "hits": "0",
+          "misses": "7800",
+          "evictions": "0"
+        },
+        {
+          "hits": "23510",
+          "misses": "9250",
+          "evictions": "1428",
+          "miss_pread": "13.44",
+          "pread_ms": "1044.342"
+        },
+        {
+          "hits": "35362",
+          "misses": "10118",
+          "evictions": "2296",
+          "miss_pread": "21.49",
+          "pread_ms": "1410.975"
+        },
+        {
+          "hits": "43204",
+          "misses": "10916",
+          "evictions": "3094",
+          "miss_pread": "28.88",
+          "pread_ms": "1920.587"
+        },
+        {
+          "hits": "60167",
+          "misses": "11713",
+          "evictions": "3891",
+          "miss_pread": "36.27",
+          "pread_ms": "2293.982"
+        },
+        {
+          "hits": "112892",
+          "misses": "14668",
+          "evictions": "6846",
+          "miss_pread": "63.66",
+          "pread_ms": "4549.880"
+        },
+        {
+          "hits": "529082",
+          "misses": "30958",
+          "evictions": "23136",
+          "miss_pread": "214.67",
+          "pread_ms": "12886.670"
+        },
+        {
+          "hits": "535715",
+          "misses": "31525",
+          "evictions": "23703",
+          "miss_pread": "219.92",
+          "pread_ms": "13328.392"
+        },
+        {
+          "hits": "702274",
+          "misses": "37766",
+          "evictions": "29944",
+          "miss_pread": "277.78",
+          "pread_ms": "16570.637"
+        },
+        {
+          "hits": "709652",
+          "misses": "38308",
+          "evictions": "30486",
+          "miss_pread": "282.80",
+          "pread_ms": "16980.984"
+        },
+        {
+          "hits": "723147",
+          "misses": "38973",
+          "evictions": "31151",
+          "miss_pread": "288.96",
+          "pread_ms": "17316.223"
+        },
+        {
+          "hits": "817598",
+          "misses": "41962",
+          "evictions": "34140",
+          "miss_pread": "316.67",
+          "pread_ms": "19762.088"
+        },
+        {
+          "hits": "915863",
+          "misses": "46417",
+          "evictions": "38595",
+          "miss_pread": "357.97",
+          "pread_ms": "21981.458"
+        }
+      ],
+      "io_reports": {},
+      "startup_prefill_ms": 14909.535,
+      "append_prefill_ms": 25355.621,
+      "decode_ms": 175056.647,
+      "model_ms": 215321.803
+    }
+  ],
+  "routes_sha256": "68b8766f048d656f3c076c8f8071714d4a7b66f2786944f93e6d439c6e08680f",
+  "cache_sha256": "9f017c95acc77b1424081df4df28c94961dc1396ce338b12a2271d8b69889701",
+  "native_routes_equal_live": true
+}
