@@ -1317,3 +1317,25 @@ recorded in predictor-cache-ttl-capture.json; there was no prior replay logit
 or state hash for that task to compare against. Full original session still
 provides exact logit/state validation of the instrumentation. Cache misses are
 logical expert-cache misses, not necessarily physical SSD reads.
+
+## 81: fine-tune the route model for cold demand
+
+Initialize from78's best route checkpoint, shift bias -4, fine-tune cold-only
+BCE at lr.0001 for30epochs. Validation selects epoch3 and fixed threshold
+0.830612. Test miss coverage14.013%, extra wrong reads10.471% of native demand,
+precision57.232%. Separate task coverage8.865%, extra wrong reads13.696%,
+precision39.295%. Relative to the route model's validation-threshold policy,
+separate wrong reads6710->4015 (-40.2%), useful reads2709->2599 (-4.1%).
+This improves the bandwidth tradeoff but still covers few misses and exceeds
+the10% validation budget on the separate task. No runtime integration or speed
+claim; frozen cache still omits eviction, deadlines and contention. Evidence
+predictor-miss-finetuned.json; checkpoint /tmp/ds41-predictor-miss-finetuned.
+
+Round conclusion: staged gate/up loading is exact but not a convincing warm-path
+win. Dedicated learned prediction is now implemented and measured offline, with
+independent-task and cache-miss labels. Overall recall was misleading for SSD
+prefetch; cold-demand fine-tuning and abstention improve waste. Before runtime
+use, broaden training tasks, reserve new evaluation tasks, and implement bounded
+private speculative buffers with demand priority. GPU routing-handoff removal
+and cross-layer lookahead remain substantial separate engineering items. No
+production scheduling defaults changed; all GPU jobs finished.

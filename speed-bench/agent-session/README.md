@@ -202,3 +202,13 @@ an independent evaluation task. It filters predicted residents and reports cold
 miss coverage, false reads and reads on native all-hit layers. Confidence uses
 uncalibrated6*softmax scores. This holds native cache evolution fixed: it omits
 speculative eviction, contention, predictor overhead and readiness deadlines.
+
+`train_miss_predictor.py FEATURES ROUTES CACHE OUTPUT` trains an alternative
+binary cold-demand objective. Supply `--baseline-weights CHECKPOINT`,
+`--holdout-features FILE`, `--holdout-routes FILE`, and `--holdout-cache FILE`.
+It selects checkpoint and one global score threshold using validation only,
+maximizing covered misses with unnecessary reads <=10% of native demand. That
+budget is not guaranteed on test or other tasks. `--warm-start` initializes
+from the route checkpoint and fine-tunes at a lower learning rate. Both models
+rank six cold candidates before thresholding and can abstain entirely. This
+still assumes fixed native cache residency, not a deployed prefetch simulation.

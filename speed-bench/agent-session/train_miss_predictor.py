@@ -39,6 +39,7 @@ def main():
     p.add_argument('--holdout-cache',type=Path,required=True)
     p.add_argument('--baseline-weights',type=Path,required=True)
     p.add_argument('--epochs',type=int,default=30)
+    p.add_argument('--warm-start',action='store_true',help='Initialize from baseline route weights, shift bias -4, fine-tune at lr.0001')
     a=p.parse_args()
     if a.epochs<1:p.error('positive epochs required')
     d,labels=dataset(a.features,a.routes); cache=cache_data(a.cache,labels)
@@ -56,7 +57,11 @@ def main():
             self.bias=mx.full((40,384),-4.0)
         def __call__(self,x,layer):
             return mx.einsum('bi,bij->bj',mx.tanh(self.stem(x)),self.heads[layer])+self.bias[layer]
-    model=Predictor();optimizer=optim.Adam(learning_rate=.001)
+    model=Predictor()
+    if a.warm_start:
+        model.load_weights(str(a.baseline_weights));model.bias=model.bias-4
+    learning_rate=.0001 if a.warm_start else .001
+    optimizer=optim.Adam(learning_rate=learning_rate)
     def loss_fn(model,x,layer,target,cold):
         logits=model(x,layer)
         loss=mx.logaddexp(0,logits)-target*logits
@@ -101,7 +106,9 @@ def main():
     baseline=mx.load(str(a.baseline_weights))
     bv=evaluate(baseline,d,labels,cache,cut1,cut2,'route')
     result=dict(architecture='5120->128 tanh shared stem,40x128->384 heads',parameters=2636928,
-        objective='BCE on nonresident experts only, positive weight16, Adam lr.001, bias init -4',
+        objective='BCE on nonresident experts only, positive weight16',
+        learning_rate=learning_rate,warm_start=a.warm_start,
+        initialization='baseline route weights with bias shifted -4' if a.warm_start else 'random, bias initial -4',
         selection='Max validation covered misses at wrong reads <=10% of native demand; top6 cold candidates; one global threshold',
         epochs=a.epochs,seed=1234,best_epoch=best_epoch,threshold=best_threshold,
         split_tokens=[cut1//40,(cut2-cut1)//40,(len(d)-cut2)//40],history=history,

@@ -122,15 +122,35 @@ Both remain offline. We viewed the separate task in77, so reuse in78 is a
 regression check rather than another blind holdout. Checkpoints in
 /tmp/ds41-predictor-rank{64,128}/best.safetensors; hashes in checked metrics.
 
-Current79 captures native per-layer cache residency before exact load, via
-DS4_V41_ROUTE_CACHE paired with DS4_V41_ROUTE_RECORD. Cache snapshot does not
-change hit/aging state. /tmp/ds41-predictor-cache-capture is active until verified.
-score_route_prefetch.py evaluates frozen-residency miss coverage and false reads
-for top6/top12 plus uncalibrated confidence thresholds. It does not model
-prefetch eviction, contention, predictor overhead or readiness deadlines.
-21 harness tests pass. Update status/evidence when complete. No production
-scheduling defaults enabled. Next runtime work is demand-priority speculative
-buffers/queue with bounded admission, not another unconditional six-ID prefetch.
+Experiment79 complete: native cache snapshots match full baseline routes,
+logits and state. Test cold demand8471 experts across27000 layer calls. Early
+native gate covers45.48% but only14.76% read precision; rank128 top6 covers
+25.65%, precision29.23%, wrong reads62.09% of native demand. Overall recall
+flatters resident experts. Confidence filtering lowers coverage greatly.
+See predictor-miss-score.json. Cache snapshots are logical runtime misses,
+not necessarily physical SSD reads. Frozen-cache scoring omits eviction,
+contention, predictor overhead and readiness deadlines.
+
+Experiment80: cold-demand BCE from scratch (positive16,30epochs) selects epoch24
+on validation, with one global threshold under10% wrong-read budget. Test
+coverage6.23%, wrong reads6.69%; separate coverage4.17%, wrong reads6.31%.
+Earlier route model with its own validation-selected threshold: test14.44%
+coverage /12.61% extra reads, separate9.24% /22.89%. Threshold generalization
+is weak. Separate cache recording125440 rows matches live native routes.
+23 harness tests pass. All studies remain offline; no predictor default.
+
+Experiment81 completed: fine-tune route checkpoint at lr.0001,30epochs, best
+validation epoch3. Fixed threshold0.830612. Test miss coverage14.01% /10.47%
+wrong reads; separate8.87% /13.70%. Separate wrong reads6710->4015 (-40.2%)
+versus route baseline, useful2709->2599 (-4.1%). Better tradeoff but limited
+coverage and still above validation's10% budget. Checkpoint/metrics in
+/tmp/ds41-predictor-miss-finetuned, checked predictor-miss-finetuned.json.
+No runtime predictor integration; real deadlines/contention remain unmeasured.
+
+All GPU jobs are finished. Agent/bench/replay rebuilt with current runtime79;
+80-81 change offline training only. 23 harness tests pass. No production
+scheduling defaults changed. Staging remains opt-in. Eight experiments74-81
+are separate jj commits; queue and all evidence are durable in this notebook.
 
 ## Reproduction and artifacts
 
@@ -159,15 +179,15 @@ Route capture and probe commands are in the agent-session README.
 User-authorized queue (current): staged exact gate/up readiness while down loads;
 demand-priority bounded speculative I/O; dedicated trained predictor with
 confidence/cache-aware admission. No requantization. Keep GPU handoff removal
-and demand-sized prefill workspace on the list. Begin with staged loading;
-then collect activations/native route labels for a learned predictor. Every
+and demand-sized prefill workspace on the list. Staging,
+activation/native-route/cache capture and initial training are complete. Every
 experiment gets a separate jj commit and exact-output validation.
 
-1. Evaluate the existing-gate probe, then collect pre-attention activations,
-   actual selections and demand cache-miss masks across independent tasks.
-   Current route-only recording lacks activation/miss labels. Score useful
-   misses ready before deadline, wasted bytes and eviction; hot experts that
-   are already cached can flatter ordinary recall.
+1. Dedicated predictors and activation/cache capture now exist (76-81). Broaden
+   TRAINING across separate coding/tool tasks and short interactive inputs;
+   reserve fresh tasks for evaluation. Existing TTL task is reused, not blind.
+   Train/evaluate useful cold misses and abstention, not just all-route recall.
+   Actual deadlines, wasted bytes and eviction still need a deployed trial.
 2. Completed experiment66: asynchronous exact-fallback prefetch regresses.
    For a subsequent version, improve admission and demand priority. Predict into a separate,
    immutable GPU ID buffer, signal an event, and let the service worker read it
@@ -175,6 +195,12 @@ experiment gets a separate jj commit and exact-output validation.
    demand/cache mutation. Don't add a blocking CPU readback before attention or
    overwrite prediction IDs before the worker reads them. Demand reads need
    priority over wrong predictions; current one-slot loader can block on them.
+   Concrete design: bounded private speculative buffers,1-2 speculative readers,
+   separate demand capacity, cancel queued wrong work and let in-flight wrong
+   reads finish privately. Do not install predictions/evict hot entries before
+   native demand confirms usefulness. Tag jobs by token/layer epoch; retain GPU
+   and I/O buffer ownership until both consumers finish. A kernel in pread cannot
+   be assumed cancelable. Measure logical bytes AND physical device activity.
 3. GPU cache-hit scheduling: validate sparse addresses and compute the all-hit
    MoE in the routing submission. On a miss, preserve norm/shared/attention state
    and fall back before consuming the routed output. Guard every pointer/kernel
