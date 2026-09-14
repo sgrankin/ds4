@@ -1373,3 +1373,22 @@ passes the first reset with 73.43 GiB locked and zero failures, instead of
 collapsing at 11 GiB. However the first 8K append takes45.16s and the process
 is SIGKILLed during second growth. Full cache replacement remains unsuitable
 for workspace growth; next experiment trims existing slabs in place.
+
+## 84: trim expert cache in place for workspace growth
+
+Reducing a populated slab-backed cache budget now evicts only slots beyond
+the new cap, unlocks those pages, drops whole unused tail slabs, truncates
+slot allocation metadata, and filters the free list. Surviving experts remain
+warm. Mixed/non-slab caches and increases retain the existing reset path.
+Callers must drain GPU users before changing the budget, as before. The
+partially retained final slab keeps its original Metal allocation but its
+removed slots are unlocked and cannot be allocated again under this cap.
+
+Short->8K->16K->short BA completes with zero mlock failures and exact full
+logits and continuation snapshot. Budget8253->8109->7794. Combined inference
+65.988->64.079s (-2.89%), append59.942->57.760s (-3.64%), decode6.047->6.319s
+(+4.50%). One pair is a growth smoke check, not a repeatable speedup claim.
+The 8K and16K candidate appends take21.28s and31.71s. This removes the
+failed full-cache-replacement path from ordinary demand-workspace growth.
+Full-session experiment82 remains the repeatable4.06% improvement evidence.
+See demand-workspace-transition-trim JSON. Actual-agent ABBA pending.

@@ -357,3 +357,11 @@ exact but+29.4%, corrected budget transition hits mlock failure and exits1.
 30419 finished; no GPU job active. Next83 fix cache_clear_all to unlock each
 locked slab slot BEFORE dropping MTLBuffer refs/resetting lock metadata, then
 rebuild/retest transition and actual interactive. No default promotion.
+
+83 committed c8a73224. Explicit unlock fixes lock-limit failure, but full
+cache replacement SIGKILLs on second growth.84 trims in place; transition BA
+exact with zero failures,65.988->64.079s combined. Evidence checked in.
+Actual-agent complete-answer ABBA running /tmp/ds41-demand-workspace-agent
+session55845; no other GPU jobs. Do not compile during timing. No default
+promotion yet. Full-session82 repeatable4.06% gain retained; goal awaits
+interactive validation and final documentation/commit.
