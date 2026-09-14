@@ -1392,3 +1392,14 @@ The 8K and16K candidate appends take21.28s and31.71s. This removes the
 failed full-cache-replacement path from ordinary demand-workspace growth.
 Full-session experiment82 remains the repeatable4.06% improvement evidence.
 See demand-workspace-transition-trim JSON. Actual-agent ABBA pending.
+
+Actual-agent complete-answer ABBA (hello,2+2,hello; 41/15/28 generated tokens)
+is exact in every fresh/restored run. Summed response time across three turns:
+fresh8.1795->7.7610s (-5.12%), restored11.9545->11.6565s (-2.49%). Both
+candidates beat both controls in each mode, though fresh controls drifted
+8.410->7.949s. See demand-workspace-agent summary/comparison JSON.
+
+Usage: DS4_METAL_V41_DEMAND_WORKSPACE=1 ./ds4-agent --ssd-streaming
+The option remains explicit: this validates the local SSD text workload, not
+vision, multiple live sessions, or all cache/context configurations. Explicit
+--prefill-chunk overrides demand allocation. No kernel arithmetic changes.

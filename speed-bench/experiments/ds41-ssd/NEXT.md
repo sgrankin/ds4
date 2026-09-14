@@ -365,3 +365,14 @@ Actual-agent complete-answer ABBA running /tmp/ds41-demand-workspace-agent
 session55845; no other GPU jobs. Do not compile during timing. No default
 promotion yet. Full-session82 repeatable4.06% gain retained; goal awaits
 interactive validation and final documentation/commit.
+
+ROUND COMPLETE:82 d31f5dd8 demand workspace,83 c8a73224 cache unlock,
+84 e2662ee2 in-place trim. All GPU jobs finished. Actual-agent ABBA exact:
+fresh response sum8.1795->7.7610s (-5.12%),restored11.9545->11.6565s
+(-2.49%), both candidates beat both controls; fresh controls drift~5.5%.
+Full tool-session ABBA4.06% gain, exact full logits and snapshot. Growth BA
+exact, zero lock failures, no full-cache rebuild. Option remains explicit:
+DS4_METAL_V41_DEMAND_WORKSPACE=1 ./ds4-agent --ssd-streaming. No vision
+validation/default promotion. Next: wider growth/context/cache coverage before
+agent default; examine GPU routing handoff and cold-miss predictor queue from
+prior notes. Do not repeat failed full-cache replacement during growth.
