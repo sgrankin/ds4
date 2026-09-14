@@ -1364,3 +1364,12 @@ The existing cache-clear routine drops slab objects and resets lock bookkeeping
 without explicitly unlocking their pages. This must be repaired and retested
 before accepting growth or promoting the option. Initial transition JSON and
 demand-workspace-growth-lock-failure.log preserve the evidence.
+
+## 83: explicitly unlock cache slabs on reset
+
+Cache clear now unlocks every locked slab slot before dropping Metal buffers
+and resetting metadata. Growth retest /tmp/ds41-demand-workspace-transition-unlock
+passes the first reset with 73.43 GiB locked and zero failures, instead of
+collapsing at 11 GiB. However the first 8K append takes45.16s and the process
+is SIGKILLed during second growth. Full cache replacement remains unsuitable
+for workspace growth; next experiment trims existing slabs in place.
