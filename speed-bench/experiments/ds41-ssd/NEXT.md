@@ -315,3 +315,45 @@ from bd66c402 ds4.c into /tmp/ds41-prefill-input.c, SHA256
   remain optional. See README for measurements and switches.
 - Smaller scratch frees memory but auto cache consumes it; no demonstrated
   short-agent win. No cache budget change adopted.
+
+## Active next round: demand-sized workspace (82)
+
+User requests continuing until a measured improvement. Active goal matches.
+DS4_METAL_V41_DEMAND_WORKSPACE=1 starts implicit workspace at2048 rows,
+retains explicit --prefill-chunk, grows to4096/8192 for native8k/16k regimes.
+Growth drains GPU work, re-admits total session memory, clears/refits the expert
+cache if needed, rebuilds batch tensors/views and size-dependent raw/index/image
+scratch. KV, Engram history and carry storage remain. Failed allocation marks
+workspace unusable rather than allowing partial retry. This is opt-in pending
+measurements. Current full ABBA: /tmp/ds41-demand-workspace-full, session70117.
+Run GPU jobs serially. Do not compile during timed benchmarks.
+Prepared workspace-transition.txt: short prefix/decode,8192 append,16384 append,
+then38 append, all with teacher-forced decode; verify full logits and snapshots
+against control after full ABBA. Also check actual interactive fresh/restored.
+Only ds4.c plus this new fixture/notes modified; no experiment82 commit yet.
+One error-path audit fix after freezing full ABBA: graph_reset now retains
+workspace_failed invalidity. Rebuild AFTER timed ABBA before transition tests;
+normal benchmark path is unchanged. Frozen executable SHA is in its manifest.
+Growth audit fix before transition testing: use ds4_gpu_synchronize directly;
+end_commands returns0 if no batch is open. The sync function already commits
+an open batch or drains pending ones. Full ABBA never grows, so its timings
+remain applicable; growth has not yet been tested. Rebuild after ABBA.
+Full ABBA82 completed exact: append93.207->89.816s (-3.64%), decode
+196.885->188.510s (-4.25%), combined290.092->278.327s (-4.06%,11.766s).
+Both candidates beat both controls; reads670.61->582.57GiB (-13.13%).
+Copied demand-workspace-full JSON. Need rebuilt growth-transition and actual
+interactive checks before accepting. Full ABBA70117 finished.
+Initial transition BA exact: logits69545ed5...,state7315bd7... but +29.4%
+combined due large-prefill regression. Initial broad112GiB guard did NOT trim
+cache when workspace grew, allowing extra~4GiB. Tightened growth to subtract
+ceil(workspace_delta/expert_bytes) slots before allocation (minimum1), then
+apply host guard; restore engine fields if admission fails. Reserve new graph
+bytes in engine ledger even on partial allocation failure. Rebuild60481 then
+run /tmp/ds41-demand-workspace-transition-budget BA. Initial transition99266
+finished; its timings superseded for final growth policy. Full small-session
+ABBA never grows and remains applicable. No default promotion yet.
+Experiment82 recorded: full small-session4.06% gain, unbounded transition
+exact but+29.4%, corrected budget transition hits mlock failure and exits1.
+30419 finished; no GPU job active. Next83 fix cache_clear_all to unlock each
+locked slab slot BEFORE dropping MTLBuffer refs/resetting lock metadata, then
+rebuild/retest transition and actual interactive. No default promotion.

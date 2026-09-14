@@ -1,0 +1,38 @@
+{
+  "replay_sha256": "310159cecfb6688d65967cf30279e1626c15571dbedd02838549f0d1ff14f368",
+  "binary_sha256": "e829c9e689bb36ec3bdb7de603718e4d1944550a954996a49a2ebdf5c5b2c04e",
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "routes_sha256": null,
+  "candidate": [
+    "DS4_METAL_V41_DEMAND_WORKSPACE=1"
+  ],
+  "cache_gb": null,
+  "order": "ABBA",
+  "env": {
+    "DS4_REPLAY_PROFILE_MEMORY": "1",
+    "DS4_METAL_ARGSORT_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/argsort.metal",
+    "DS4_METAL_BIN_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/bin.metal",
+    "DS4_METAL_CONCAT_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/concat.metal",
+    "DS4_METAL_CPY_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/cpy.metal",
+    "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/deepseek4_vision.metal",
+    "DS4_METAL_DENSE_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/dense.metal",
+    "DS4_METAL_DSV41_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/dsv41.metal",
+    "DS4_METAL_DSV4_HC_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/dsv4_hc.metal",
+    "DS4_METAL_DSV4_KV_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/dsv4_kv.metal",
+    "DS4_METAL_DSV4_MISC_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/dsv4_misc.metal",
+    "DS4_METAL_DSV4_ROPE_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/dsv4_rope.metal",
+    "DS4_METAL_FLASH_ATTN_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/flash_attn.metal",
+    "DS4_METAL_GET_ROWS_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/get_rows.metal",
+    "DS4_METAL_GLM53_BF16_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/glm53_bf16.metal",
+    "DS4_METAL_GLM53_KDA_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/glm53_kda.metal",
+    "DS4_METAL_GLM53_VISION_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/glm53_vision.metal",
+    "DS4_METAL_GLU_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/glu.metal",
+    "DS4_METAL_MOE_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/moe.metal",
+    "DS4_METAL_NORM_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/norm.metal",
+    "DS4_METAL_REPEAT_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/repeat.metal",
+    "DS4_METAL_SET_ROWS_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/set_rows.metal",
+    "DS4_METAL_SOFTMAX_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/softmax.metal",
+    "DS4_METAL_SUM_ROWS_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/sum_rows.metal",
+    "DS4_METAL_UNARY_SOURCE": "/private/tmp/ds41-demand-workspace-full/metal/unary.metal"
+  }
+}

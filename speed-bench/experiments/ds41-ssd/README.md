@@ -1339,3 +1339,28 @@ use, broaden training tasks, reserve new evaluation tasks, and implement bounded
 private speculative buffers with demand priority. GPU routing-handoff removal
 and cross-layer lookahead remain substantial separate engineering items. No
 production scheduling defaults changed; all GPU jobs finished.
+
+## 82: demand-sized workspace gives a full-session win; growth exposes cache reset bug
+
+DS4_METAL_V41_DEMAND_WORKSPACE starts an implicit workspace at2048 rows, with
+4096/8192 growth at native8K/16K input thresholds. Explicit chunks stay fixed.
+Separate allocation/free helpers rebuild temporary tensors and aliases after
+GPU synchronization, retaining KV/history/carry. Engine memory accounting
+reserves growth even if allocation fails; a failed workspace cannot be reused.
+
+Full ABBA exact logits and snapshot: append93.207->89.816s (-3.64%), decode
+196.885->188.510s (-4.25%), combined290.092->278.327s (-4.06%,11.766s saved).
+Both candidates beat both controls. Expert cache7822->8253 entries; reads
+670.61->582.57GiB (-13.13%). See demand-workspace-full JSON. This recording
+never grows. Two subsequent error-path fixes and growth-budget fixes do not
+affect that measured path; frozen executable hash is in its manifest.
+
+Initial transition BA (short,8K,16K,short) is exact, but combined time+29.4%.
+The broad112GiB admission guard allowed larger workspace and larger cache to
+coexist. Tightened growth to reclaim ceil(workspace_delta/expert_bytes) cache
+slots before allocating. The resulting run hits mlock failures on the first
+cache reset, collapsing to~10GiB cache, and fails during the second growth.
+The existing cache-clear routine drops slab objects and resets lock bookkeeping
+without explicitly unlocking their pages. This must be repaired and retested
+before accepting growth or promoting the option. Initial transition JSON and
+demand-workspace-growth-lock-failure.log preserve the evidence.

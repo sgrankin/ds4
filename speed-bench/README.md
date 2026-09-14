@@ -154,6 +154,7 @@ Use these complementary workloads when deciding whether an optimization helps:
 | Interactive short questions | Fresh/restored first output and complete response latency | `experiments/ds41-ssd/agent_abba.py` (one token and `--gen-tokens 256`) |
 | Tool-using coding session | Checked task completion, repeated tool-result prefill and growing context | [agent-session/live.py](agent-session/README.md) |
 | Fixed coding-session replay | Identical prefill/decode work, phase logits and final continuation-state comparison | `agent-session/replay_abba.py` |
+| Workspace growth transitions | Exact logits/state across short, 8K, 16K, then short inputs | `agent-session/replay_abba.py --replay agent-session/workspace-transition.txt` |
 | Fixed prefix/tail workloads | Isolate prefill thresholds and batch-size effects | `experiments/ds41-ssd/run_abba.py` |
 
 Keep SSD streaming enabled and run GPU trials serially. Kernel microbenchmarks
