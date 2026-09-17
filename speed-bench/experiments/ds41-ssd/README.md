@@ -1187,3 +1187,29 @@ with near-neutral short interactive latency and uncertain long-input cost.
 A better next design starts with a small workspace and expands for large inputs,
 reclaiming expert cache safely. Account for resize/admission/eviction costs and
 never resize tensors referenced by in-flight commands or alias views.
+
+## 74: partial gate/up readiness, initial selected-slot path
+
+DS4_METAL_V41_STAGED_EXPERT_LOAD prioritizes gate/up tasks ahead of down,
+publishes per-task completion under the read-pool mutex, and submits fused
+gate/up when those weights are ready and down reads remain. Pending buffers
+remain privately owned until all reads pass; global cache entries are installed
+only afterward. Existing resident buffers are protected before GPU submission.
+The original fused six-expert down reduction and native routing remain.
+
+Short ABBA exact logits/state: decode18.097->17.796s (-1.66%), append15.432
+->15.084s (-2.25%), combined33.528->32.880s (-1.93%). This initial version
+stages only56 layer executions before the warm address-table path activates;
+the broader effect includes read-task reordering. Timings are exploratory, no
+default change. See staged-experts-short-{summary,comparison,manifest}.json.
+Next extend to ordinary warm address-table execution; preserve existing
+resident/missing split behavior and check exact output again.
+
+## 75: stage gate/up on the warm address-table path
+
+Allow the same staged slots6 gate/up kernel before normal address-table down
+execution. The resident/missing split remains excluded. Short ABBA preserves
+all logits and continuation state exactly. Decode17.593->17.662s (+0.39%),
+append15.322->15.555s (+1.52%), combined32.915->33.216s (+0.91%).
+Warm staging is exercised hundreds of times, but offers no convincing win.
+Retain the opt-in flag; no default change. See staged-experts-warm-short JSON.
