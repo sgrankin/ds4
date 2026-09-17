@@ -14487,6 +14487,13 @@ static int ds4_gpu_stream_prefill_batch_selected_addr_enabled(
     return max_tokens != 0 && n_tokens >= min_tokens && n_tokens <= max_tokens;
 }
 
+int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
+        uint32_t used, uint32_t gate_type, uint32_t down_type) {
+    return ds4_gpu_stream_prefill_batch_selected_addr_enabled(rows, total, used,
+        gate_type, down_type) && g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_pipeline != nil &&
+        g_moe_mul_mv_addr_q2_k_sum6_pipeline != nil;
+}
+
 static int ds4_gpu_glm_streaming_prefill_full_layer_active(void) {
     return g_glm_streaming_prefill_full_layer_runtime ||
            getenv("DS4_METAL_GLM_STREAMING_PREFILL_FULL_LAYER") != NULL;

@@ -411,3 +411,103 @@ with the table. That saves only about 0.02 ms per model token's two Engram
 lookups. All 32 full model logit rows and serialized continuation bytes match.
 Retain opt-in, with no claim of meaningful agent latency gain.
 See engram-lut-cpu.txt and tests/test_engram_lut.c.
+
+## 21: overlap selected-load preparation on the existing worker (opt-in)
+
+`DS4_METAL_V41_ASYNC_EXPERT_LOAD=1` submits a routing-ready event and reuses
+the established asynchronous selected-load worker while the main thread
+encodes shared-expert kernels. It joins before routed MoE and retries on the
+main thread when cache entries require waiting for in-flight GPU use. Error
+paths join the worker before releasing session state. This takes precedence
+over the earlier-load opt-in.
+
+All 32 full model logit rows and the complete continuation snapshot match.
+Actual-agent ABBA directly against early loading is pending.
+
+Direct ABBA loses to early loading: mean fresh hello 3.355 to 3.422 s;
+restored hello 4.684 to 4.893 s (4.5% slower). Keep the worker path opt-in.
+The earlier simple loading schedule remains the default candidate.
+See agent-async-vs-early.json.
+
+## 22: small layer-major tiles with selected-expert streaming (opt-in)
+
+`DS4_METAL_V41_SELECTED_SMALL_PREFILL=1` uses tiles of at most eight rows for
+short warm appends. Dense projections and HC work are batched with exact
+scalar reductions, while attention and routed/shared MoE retain scalar
+arithmetic. The tile keeps selected-expert streaming and skips all full-layer
+mapping, read-ahead, and cache seeding. It therefore avoids the full SSD sweep
+that made earlier short-batch attempts unattractive.
+
+Tails 6/8/17/40 after 512 tokens, each followed by eight decoded tokens, produce
+bit-identical complete snapshots. Within-process 40-token timing improves
+2.110 to 1.536 s, but cache warming favors the second run; balanced real-agent
+ABBA against early loading alone follows. See selected-small-state.txt.
+
+Actual-agent tiles versus early loading alone: fresh hello 3.346 to 3.425 s
+(slightly worse), restored hello 4.691 to 4.513 s (3.8% better). Fresh/restored
+12-token turns improve 0.922/1.177 to 0.787/1.033 s; 6-token turns improve
+0.392/0.472 to 0.350/0.387 s. Tile size/policy needs care: initial cache misses
+can outweigh the dense-kernel savings. See agent-small-vs-early.json.
+
+The same four tail/continuation snapshot checks also pass after a 2048-token
+prefix, exercising indexed attention. See selected-small-indexed-state.txt.
+
+## 23: batch the small tile's selected experts too (opt-in)
+
+`DS4_METAL_V41_SELECTED_SMALL_MOE=1`, with the small-prefill flag, enables
+the existing exact <=8-row shared/routed kernels and passes force_resident=false
+to the selected-address backend. Whole-layer prefills and multi-session callers
+retain force_resident=true. Only actual selected weights enter the cache.
+
+All four indexed-prefix tail/continuation snapshots match exactly. Warmed
+40-token comparison: scalar 2.021 s, batched selected MoE 1.068 s (within-process
+cache caveat applies). Actual-agent ABBA versus early loading alone follows.
+See selected-moe-state.txt.
+
+Actual-agent ABBA confirms selected MoE batching: mean fresh hello 3.438 to
+2.873 s (16.4% lower latency than early loading alone), restored hello 4.717
+to 4.465 s (5.3% lower). Later 12-token turns improve 0.889/1.138 to
+0.696/0.952 s; 6-token turns 0.397/0.469 to 0.314/0.344 s. Both hello
+candidates beat both controls. See agent-selected-moe.json.
+
+## 24: accept early loading and exact selected-expert short batches
+
+The defaults now start selected SSD loads before shared-expert GPU work and
+use <=8-row exact tiles for short warm text appends. Selected expert batches
+reuse the existing address kernels. A backend capability query checks expert
+formats, cache capacity, pipeline availability, and backend ablation settings;
+unsupported configurations retain scalar prefill. Quality, imatrix, image-bearing
+and multi-rank sessions retain their previous path.
+
+Rollback both changes with `DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS=1`.
+`DS4_METAL_DISABLE_V41_SELECTED_SMALL_MOE=1` separately keeps scalar MoE
+inside tiles for diagnosis. The earlier enable flags were experiment controls;
+use the rollback flag to compare current defaults. Kernel norm/Q8 fusion,
+Engram lookup conversion, and worker-based loads remain opt-in. Cache budget,
+prefill-buffer defaults, and read-ahead advice remain unchanged.
+
+Final real-agent ABBA (control=current default, candidate=rollback), fixed
+binary and shaders, SSD streaming, ctx=100000, isolated caches, three short
+turns with one output token each:
+
+| Condition | Prior path | New default | Latency reduction |
+| --- | ---: | ---: | ---: |
+| Fresh hello, 38-token append | 3.566 s | 2.917 s | 18.2% |
+| Restored system KV hello | 5.029 s | 4.417 s | 12.2% |
+| Fresh 12-token turn | 0.962 s | 0.666 s | 30.8% |
+| Restored 12-token turn | 1.209 s | 0.955 s | 21.0% |
+| Fresh 6-token turn | 0.427 s | 0.323 s | 24.2% |
+| Restored 6-token turn | 0.487 s | 0.347 s | 28.8% |
+
+Both default samples beat both rollback samples in every short-turn condition.
+Post-prefill to first output stays in the same ~60-110 ms range, with no hidden
+second-scale first-decode penalty. System-prompt prefill itself is essentially
+unchanged. See agent-final-abba.json and agent-final-metrics.json.
+
+Final numerical regression: tails 2/3/4/5/6/7/8/9/17/40 after a 2048-token
+prefix, followed by eight decoded tokens each, have bit-identical complete
+continuation snapshots against rollback. See final-small-state.txt. The prior
+768- and 1023-token tail sweeps, each followed by eight decoded tokens, also
+remain byte-identical to scalar execution (final-long-tail-state.txt). Both
+ds4-agent and ds4-bench are rebuilt; whitespace checks pass. The round ran from
+16:12:48 to approximately 17:13 UTC on 2026-09-13, with one commit per experiment.

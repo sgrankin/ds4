@@ -1,0 +1,27 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: SSD streaming auto cache budget
+ds4:   metal recommends 112.00 GiB working set
+ds4:   using 79% total for model + cached experts: 89.00 GiB
+ds4:   non-routed weights: 9.37 GiB
+ds4:   routed expert size: 9.49 MiB
+ds4:   expert budget before prefill reserve: 8590 (79.63 GiB)
+ds4: metal SSD streaming cache target 79.63 GiB; effective 79.63 GiB = 7.12 GiB prefill headroom + 72.51 GiB dynamic cache (7822 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.61 GiB (raw 0.01 + compressed 0.60) + buffers 8.01 GiB + resident model 9.37 GiB + expert cache 72.51 GiB + prefill expert reserve 7.12 GiB = 97.61 GiB planned
+ds4: memory detail: ctx=100000 prefill_cap=8192 raw_kv_rows=128 compressed_kv_rows=100001 backend=metal
+ds4: V4.1 static context buffers 8820.49 MiB (ctx=100000), Engram disk-only
+PASS: tail=2 plus 8 decoded tokens, full snapshot bit-identical; scalar 1.014s, batch 0.176s
+PASS: tail=3 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.141s, batch 0.100s
+PASS: tail=4 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.190s, batch 0.120s
+PASS: tail=5 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.234s, batch 0.145s
+PASS: tail=6 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.280s, batch 0.159s
+PASS: tail=7 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.328s, batch 0.184s
+PASS: tail=8 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.379s, batch 0.202s
+PASS: tail=9 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.425s, batch 0.281s
+PASS: tail=17 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.799s, batch 0.487s
+PASS: tail=40 plus 8 decoded tokens, full snapshot bit-identical; scalar 2.056s, batch 1.072s
