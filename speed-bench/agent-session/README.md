@@ -79,3 +79,65 @@ checks. This is a small synthetic working session, not coverage of long-context
 compaction, every tool, or arbitrary coding-task quality.
 `test_trace_session.py` checks extraction boundaries and rejection of
 incomplete/unsupported traces.
+
+## Exact-route prefetch oracle (diagnostic)
+
+This deliberately uses future information. It measures scheduling opportunity,
+not achievable generation throughput. Native routing and weights still execute;
+every scalar route is checked and mismatches abort. Batched prefill is unchanged.
+The first version starts selected SSD loading before the same layer's attention,
+using the existing pending-load slot, workers and cache budget. It does not yet
+model a learned predictor, wrong predictions, or multi-layer speculative queues.
+
+    DS4_V41_ROUTE_RECORD=/tmp/routes.bin python3 speed-bench/agent-session/replay_abba.py /tmp/route-capture --candidate-env DS4_V41_ORACLE_PREATTENTION=1 --order A
+    python3 speed-bench/agent-session/replay_abba.py /tmp/route-abba --routes /tmp/routes.bin --candidate-env DS4_V41_ORACLE_PREATTENTION=1
+
+The complete recording is also checked in as `session-v1.routes.bin.gz` (about
+1.5 MB), with provenance in `session-v1.routes.json`. For the default session,
+`--routes` without a filename uses this recording, so no capture is required:
+
+    python3 speed-bench/agent-session/replay_abba.py /tmp/oracle-ABBA --routes --candidate-env DS4_V41_ORACLE_PREATTENTION=1
+
+Both comparison variants load and validate the frozen route file. Only B starts
+loads before attention. The route file must come from the same token recording,
+model and scalar schedule. Its header checks model dimensions; position, input
+token, layer and ordered expert IDs are checked during execution, and unused
+trailing records cause failure. Files are native-endian uint32 data, version 1,
+for local experiments; the harness records their SHA256. Recording refuses to
+overwrite an existing file. Use one session per process, ordinary nonvision,
+single-GPU SSD mode. Do not enable oracle flags for real agent use.
+
+A second bound adds `DS4_V41_ORACLE_DEFER_CHECK=1` alongside pre-attention mode.
+It copies each native GPU route into a tiny per-token trace and checks all routes
+at token completion, allowing host address binding from the oracle without the
+per-layer router wait. Native routing weights remain in use. This is deliberately
+stronger future knowledge than a fallible prefetch predictor can safely exploit:
+a real implementation would need GPU-side validation and a miss/fallback path.
+Use it to distinguish synchronization opportunity from I/O overlap, never as a
+production optimization. Any route mismatch still fails the entire run.
+
+For diagnostic attribution, `DS4_METAL_STREAMING_EXPERT_TIMING_SUMMARY=1` plus
+`DS4_REPLAY_PROFILE_MEMORY=1` reports cumulative `streaming pending ... wait_ms`:
+time actually spent in pending-read joins, excluding overlap and installation.
+Collect these separately from uninstrumented headline timings.
+
+`python3 speed-bench/agent-session/route_stats.py /tmp/routes.bin` reports cheap
+previous-token, frequency and previous-layer transition prediction baselines.
+It trains on the first 60% and tests on the last 40% of one recording. This is
+an exploratory within-session split, not independent-task validation. Recall is
+across all experts, not just misses; candidate budgets and all-selected coverage
+are reported explicitly. The previous-token baseline always offers only its
+original selected set, even in the larger-budget table.
+
+To reuse an immediately preceding matching control, run `--order BBA` and then
+`python3 speed-bench/agent-session/complete_abba.py PREVIOUS FOLLOWING OUTPUT`.
+Use the previous frozen executable and run consecutively. The helper checks
+binary, model, shaders, tokens, oracle data, environment and numerical identity.
+The shared control is one observation, not an additional independent repeat.
+
+An offline activation probe uses `DS4_V41_ROUTE_PROBE=1` together with route
+recording mode. It applies each existing gate to the same layer's pre-attention
+normalized activation, then measures overlap with the native post-attention
+route. It never substitutes its predictions or prefetches them. This adds GPU
+work/readback and its timings are not performance results; native logits/state
+must match the baseline. Per-layer recall counters are printed at process exit.

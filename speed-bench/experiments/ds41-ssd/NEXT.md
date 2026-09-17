@@ -6,6 +6,49 @@ Run GPU benchmarks serially. Metal and jj mutations need sandbox escalation;
 profiling our own process with `sample` worked without sudo. Vision reproduction
 and the vision session-save limitation remain deferred until the user is present.
 
+## Active routing-prediction experiment
+
+User authorized predicted expert prefetch. Exact-route oracle implementation
+committed d47db637; first results b471a8ce. Short ABBA completed at
+/tmp/ds41-oracle-preattention-short: 18.405 -> 16.984 s decode (-7.7%), combined
+33.773 -> 32.813 s (-2.8%, one candidate prefill outlier). Exact routes, logits,
+full snapshot, cache misses and bytes. Evidence oracle-preattention-short.json.
+Capture /tmp/ds41-oracle-routes-short.bin is 343 tokens * 40 layers, 493936 bytes,
+SHA256 80bfffb6a8481e3762d531ff6590f4d7e5eb1cbdfcd297e9c806c375c8a7174a.
+
+Second uncommitted diagnostic adds DS4_V41_ORACLE_DEFER_CHECK to pre-attention:
+GPU-copy actual routes into a 960-byte trace, validate after each token, avoiding
+per-layer CPU route waits while retaining native weights/arithmetic. It is an
+oracle architectural bound, not usable with a fallible predictor without an
+exact GPU check/fallback mechanism. Existing cache in-flight protections apply.
+Short ABBA currently running /tmp/ds41-oracle-deferred-short (session48987),
+A = pre-attention oracle, B = pre-attention plus deferred check. First A16.590s
+and B13.316s decode, exact state/logits/routes. Wait for balanced completion.
+Binaries already rebuilt; avoid builds/CPU-heavy analysis during timed runs.
+Next: full route capture and full direct-default-vs-combined ABBA, and a separate
+profiled comparison using the new pending-read CPU wait counter.
+
+Backend diagnostic pending wait_ms measures only CPU join wait. Existing
+pread_ms includes the whole begin-to-consumption lifetime, including overlap;
+do not use it as exposed-stall time. Counters reset with cache stats.
+
+Offline route_stats.py screens previous-token, hot-frequency and previous-layer
+transition predictors. It is only a within-session chronological split and uses
+all-route recall, not cache misses/deadlines. Short recall at six candidates:
+previous token22.5%, frequency28.7%, transition45.9%; at12 transition63.0%.
+Do not confuse this with independent-task predictor validation. Eight extractor
+and route-parser tests pass. Need full-session stats before judging baselines.
+
+Research anchors:
+- https://arxiv.org/html/2410.22134v3 (ProMoE learned prediction and scheduling)
+- https://arxiv.org/abs/2511.10676 (pre-attention expert prediction)
+- https://arxiv.org/abs/2607.24787 (predictions only for transfers, frozen routing)
+
+Score useful misses ready before deadline, wasted bytes and eviction, not just
+all-expert prediction accuracy. For training, hold out entire sessions/tasks.
+Try earlier-activation gate and transition-statistics baselines before an MLP.
+Preserve exact execution routing; wrong predictions may cost time, not quality.
+
 ## Working-session benchmark now available
 
 Registered in `speed-bench/README.md`; instructions and source are in
@@ -176,3 +219,35 @@ from bd66c402 ds4.c into /tmp/ds41-prefill-input.c, SHA256
    current synthetic session is useful but does not establish long-context
    behavior or general coding-task quality.
 7. Reproduce vision-enabled text slowdown and session-save limitation with user.
+
+Possible next production architecture (not implemented): GPU validate cached
+addresses and execute the all-resident MoE in the same submission as routing.
+On a miss, skip the speculative routed output and use ordinary exact demand
+loading before consuming that output. Stop at the same layer, retaining norm,
+shared result and attention state; do not speculate later KV updates. This could
+avoid a CPU gap on hits without needing a perfect predictor or token rollback.
+Misses need valid address guards in every affected kernel and lifetime protection
+for GPU-addressable cache entries. The existing hit-validator code at
+`ds4_gpu_stream_expert_cache_validate_selected` still waits on CPU immediately;
+its caller is guarded for IQ2 selected slots, so it is not already this DS4.1 Q2
+fast path. Study/adapt the mechanism rather than just enabling that flag.
+
+Update: deferred short ABBA completed, pre-attention-only A16.620s decode vs
+combined B13.257s (-20.2% additional), exact. Commit50ce2817 includes this
+experiment, pending-read CPU wait counters and route_stats.py. Deliberately
+wrong expert ID is rejected after first token in deferred mode. Full record
+currently /tmp/ds41-oracle-record-full (session29115), route output
+/tmp/ds41-oracle-routes-full.bin. This recording uses timing instrumentation,
+so its times are diagnostic. Full default-vs-combined ABBA is now running at /tmp/ds41-oracle-combined-full,
+session57851. It omits timing-summary instrumentation and uses --routes with
+both candidate flags. Full capture is complete and saved as
+oracle-full-capture.json: 3371 tokens, 75.3% all-resident layer events,
+19.858 s CPU pending-read wait in 197.939 s instrumented decode. Full route SHA
+3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43.
+Full transition-baseline recall drops to34.6% at6 candidates,48.6% at12;
+see route-stats-full.json. Need independent-task and miss-conditioned labels.
+
+Uncommitted follow-up guards reject oracle schedule flags without a file and
+multiple scalar sessions. Do not rebuild while full ABBA is running; its binary
+and shaders are frozen. Rebuild all affected targets afterward. New replay
+io_reports parsing persists optional cumulative counters per phase.

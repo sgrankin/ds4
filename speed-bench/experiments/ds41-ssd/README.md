@@ -948,3 +948,98 @@ experiments were committed separately and rejected on measured end-to-end time;
 the accepted runtime was restored and rebuilt. The read-ahead flag was an
 existing ablation, with this new result committed separately. No new runtime
 default is justified by this round. NEXT.md records the remaining hypotheses.
+
+## 60: exact-route oracle starts SSD reads before attention
+
+Implementation d47db637 records native scalar routes and replays them only for
+prefetch scheduling. Every exact router selection is still read and verified.
+No capacity or worker change. Short-session ABBA (343 decoded tokens) gives
+mean decode 18.405 -> 16.984 s (-7.7%), append prefill 15.368 -> 15.829 s,
+combined turn work 33.773 -> 32.813 s (-2.8%). One candidate append is a timing
+outlier; batched prefill has no oracle change. Both candidate decode samples
+beat both controls. Full phase logits, final snapshot, misses and bytes match.
+
+This is a promising diagnostic, not an achievable model speedup: future routes
+are supplied for free, and the scope is one pending load before same-layer
+attention, not multi-layer lookahead. Need full-session confirmation and an
+independent bound on the per-layer router readback dependency. See
+oracle-preattention-short.json; route capture/replay instructions are in the
+agent-session README. Existing pread_ms includes overlap duration; it cannot be
+interpreted as exposed CPU stall time when comparing these schedules.
+
+## 61: oracle-only deferred route validation isolates CPU handoff cost
+
+Add a 960-byte per-token GPU route trace and validate it at token completion.
+The host binds exact oracle addresses while the native GPU router still computes
+weights; every actual ordered expert selection must match. This removes the
+per-layer readback wait in the diagnostic. It requires perfect future knowledge;
+a real predictor needs GPU validation and fallback before execution.
+
+Short ABBA compares pre-attention alone (A) against pre-attention plus deferred
+check (B): decode 16.620 -> 13.257 s (-20.2%); combined append/decode
+31.831 -> 28.689 s (-9.9%). Both B samples beat both A samples. Full phase
+logits and final state match. This is additional to experiment60's read-overlap
+gain, but don't combine separate runs into a precise overall headline. Full
+session must compare default directly against the combined diagnostic.
+See oracle-deferred-short.json. No production default changed.
+
+Fault injection: changing one recorded expert ID in the first decoded token
+makes deferred validation exit nonzero with "oracle prediction differs from
+exact router". No final continuation snapshot is published. Eight extraction
+and route-parser tests pass. Build succeeds without warnings.
+
+## 62: full-session route and exposed-I/O census
+
+The instrumented full replay captures 3371 scalar tokens, 134840 layer events.
+Every phase's logits and the final snapshot match the previous checked replay.
+Of those layer events, 101535 (75.3%) are all-resident, 33302 mixed and 3 all
+missing. Pending-read CPU joins total 19.858 s across 33305 joins, versus
+197.939 s of instrumented decode. This is CPU blocking at the read join only,
+not all I/O-related host overhead and not all removable wall time. Earlier
+begin-to-consumption pread_ms was not an exposed-stall metric.
+
+Route SHA256 3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43.
+See oracle-full-capture.json for cumulative per-phase counters. Timing here is
+diagnostic; a separate uninstrumented full ABBA compares default with combined
+oracle pre-attention/deferred-validation scheduling.
+
+Cheap predictors weaken on the full chronological split: at six candidates,
+previous-token recall24.5%, frequency16.0%, previous-layer transition34.6%; at
+12 candidates transition48.6%. This is within-session, all-route recall, not
+independent-task or cache-miss prediction. Don't extrapolate the short trace's
+higher recall. See route-stats-full.json and the offline route_stats.py runner.
+
+## 63: full-session ABBA confirms the combined oracle scheduling opportunity
+
+Default A versus pre-attention + deferred-validation oracle B, frozen binary,
+shaders, routes and full session. Mean append prefill94.140 ->97.418s (+3.5%),
+decode197.511 ->136.838s (-30.7%), combined turn inference291.651 ->234.256s
+(-19.7%,57.4s saved). Initial system prefill is separate. Both B decode samples
+beat both controls. Every scalar native route, phase logit and full final state
+matches. The oracle does not reduce expert data volume:670.61 ->670.63GiB,
+80144 ->80146 misses, same7822-expert cache budget. B's small cache difference
+comes with altered scheduling; don't claim identical cache traces.
+
+This is a free-future-information architectural bound, not a deployed speedup
+or a promise for a learned predictor. Prefill regressions are included in the
+overall number. See oracle-combined-full.json. The next full comparison retains
+per-layer validation to isolate the opportunity for prefetch alone.
+
+## 64: full-session prefetch-only oracle isolates a 12.9% decode opportunity
+
+Immediately after experiment63's final A, run BBA with the same frozen binary,
+shaders, model, tokens, route recording and control environment. Reusing that
+preceding control forms a second ABBA. complete_abba.py validates those identities
+and numerical hashes; the shared A is not an additional independent observation.
+
+Mean append prefill93.918 ->93.997s (+0.08%), decode198.199 ->172.594s (-12.9%),
+turn inference292.117 ->266.592s (-8.7%,25.5s saved). Both B decode samples are
+essentially identical and faster than both controls. Exact native routing checks,
+phase logits and final snapshots pass. This retains per-layer CPU route validation;
+it is the more relevant free-prediction bound for the current pre-attention
+loader. A real predictor adds computation, readback, errors, cache pollution and
+wasted reads. Deeper lookahead with different queues is outside this bound.
+
+See oracle-preattention-full.json, its comparison and provenance files. The
+stronger combined oracle in63 also changes the routing synchronization schedule;
+do not attribute its entire19.7% session gain to a conventional predictor.

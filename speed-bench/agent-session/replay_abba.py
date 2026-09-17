@@ -2,6 +2,7 @@
 """Separate-process ABBA with frozen session tokens, binary, and Metal sources."""
 import argparse
 import csv
+import gzip
 import hashlib
 import json
 import os
@@ -25,7 +26,8 @@ p.add_argument('--model',type=Path,default=Path('ds4flash.gguf'))
 p.add_argument('--binary',type=Path,default=HERE/'replay')
 p.add_argument('--candidate-env',action='append',required=True)
 p.add_argument('--cache-gb',type=int)
-p.add_argument('--order',default='ABBA',choices=['ABBA','BAAB','AB','BA','A'])
+p.add_argument('--routes',type=Path,nargs='?',const=HERE/'session-v1.routes.bin.gz',help='Frozen oracle routes (.bin or .gz); defaults to checked recording; diagnostic only')
+p.add_argument('--order',default='ABBA',choices=['ABBA','BAAB','AB','BA','BBA','A'])
 a=p.parse_args(); a.output=a.output.resolve(); a.output.mkdir(parents=True,exist_ok=False)
 binary=a.output/'replay'; shutil.copy2(a.binary,binary)
 recording=a.output/'session.txt'; shutil.copy2(a.replay,recording)
@@ -33,7 +35,14 @@ env=os.environ.copy(); env.update(snapshot_shaders(a.output))
 candidate=dict(item.split('=',1) for item in a.candidate_env)
 for name in candidate: env.pop(name,None)
 if a.cache_gb: env['DS4_REPLAY_CACHE_GB']=str(a.cache_gb)
-(a.output/'manifest.json').write_text(json.dumps(dict(replay_sha256=digest(recording),binary_sha256=digest(binary),model=str(a.model.resolve()),candidate=a.candidate_env,cache_gb=a.cache_gb,order=a.order,env={k:v for k,v in env.items() if k.startswith('DS4_')}),indent=2)+'\n')
+route_hash=None
+if a.routes:
+    routes=a.output/'routes.bin'
+    if a.routes.suffix == '.gz':
+        with gzip.open(a.routes,'rb') as src, routes.open('wb') as dst: shutil.copyfileobj(src,dst)
+    else: shutil.copy2(a.routes,routes)
+    route_hash=digest(routes); env['DS4_V41_ROUTE_ORACLE']=str(routes)
+(a.output/'manifest.json').write_text(json.dumps(dict(replay_sha256=digest(recording),binary_sha256=digest(binary),model=str(a.model.resolve()),routes_sha256=route_hash,candidate=a.candidate_env,cache_gb=a.cache_gb,order=a.order,env={k:v for k,v in env.items() if k.startswith('DS4_')}),indent=2)+'\n')
 results=[]; reference=None
 for i,variant in enumerate(a.order):
     dest=a.output/f'{i}-{variant}'; dest.mkdir()
@@ -50,17 +59,29 @@ for i,variant in enumerate(a.order):
         for k in ['phase','context','tokens']: r[k]=int(r[k])
         for k in ['ms','first_decode_ms']: r[k]=float(r[k])
     cache_stats=[]
+    io_reports={}
+    current_phase=None
     for line in (dest/'stderr.log').read_text().splitlines():
+        phase_match=re.match(r'REPLAY phase=(\d+) kind=',line)
+        if phase_match: current_phase=int(phase_match[1])
+        if current_phase is not None:
+            pending=re.search(r'streaming pending joins=(\d+) wait_ms=([0-9.]+)',line)
+            if pending:
+                io_reports.setdefault(current_phase,{}).update(
+                    pending_joins=int(pending[1]), pending_wait_ms=float(pending[2]))
+            if 'streaming expert timing total ' in line:
+                io_reports.setdefault(current_phase,{}).update({k:int(v) for k,v in re.findall(
+                    r'(cache_all_resident|cache_all_missing|cache_mixed|selected_calls)=([0-9]+)',line)})
         if 'streaming expert cache budget=' in line:
             cache_stats.append(dict(re.findall(r'(hits|misses|evictions|miss_pread|pread_ms)=([0-9.]+)',line)))
-    result=dict(variant=variant,**hashes,phases=rows,cache_reports=cache_stats,
+    result=dict(variant=variant,**hashes,phases=rows,cache_reports=cache_stats,io_reports=io_reports,
         startup_prefill_ms=rows[0]['ms'],
         append_prefill_ms=sum(r['ms'] for r in rows[1:] if r['kind']=='P'),
         decode_ms=sum(r['ms'] for r in rows if r['kind']=='D'),
         model_ms=sum(r['ms'] for r in rows))
     results.append(result)
     (a.output/'summary.json').write_text(json.dumps(results,indent=2)+'\n')
-    print(json.dumps({k:v for k,v in result.items() if k not in ('phases','cache_reports')}),flush=True)
+    print(json.dumps({k:v for k,v in result.items() if k not in ('phases','cache_reports','io_reports')}),flush=True)
     # Keep the reference bytes until all comparisons pass, for diagnosis.
     if i: logits.unlink(); snapshot.unlink()
 for filename in ['logits.bin','snapshot.bin']:

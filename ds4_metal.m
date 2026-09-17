@@ -716,6 +716,8 @@ static uint64_t g_stream_expert_cache_bytes;
 static uint64_t g_stream_expert_cache_expert_bytes;
 static uint32_t g_stream_expert_cache_entry_count;
 static uint32_t g_stream_expert_cache_budget_override;
+static double g_stream_expert_pending_wait_ms;
+static uint64_t g_stream_expert_pending_joins;
 static uint64_t g_stream_expert_cache_hits;
 static uint64_t g_stream_expert_cache_misses;
 static uint64_t g_stream_expert_cache_evictions;
@@ -4378,6 +4380,10 @@ void ds4_gpu_print_memory_report(const char *label) {
                     ds4_gpu_gib(limit),
                     (unsigned long long)g_model_buffer_cache_evictions);
         }
+    }
+    if (g_stream_expert_pending_joins) {
+        fprintf(stderr, "ds4:   streaming pending joins=%llu wait_ms=%.3f (CPU wait only)\n",
+            (unsigned long long)g_stream_expert_pending_joins, g_stream_expert_pending_wait_ms);
     }
     if (g_stream_expert_cache_hits != 0 ||
         g_stream_expert_cache_misses != 0 ||
@@ -15220,6 +15226,8 @@ static void ds4_gpu_stream_expert_cache_clear_all(int reset_stats) {
            0,
            sizeof(g_stream_expert_cache_slab_slot_locked));
     if (reset_stats) {
+        g_stream_expert_pending_wait_ms = 0.0;
+        g_stream_expert_pending_joins = 0;
         g_stream_expert_cache_hits = 0;
         g_stream_expert_cache_misses = 0;
         g_stream_expert_cache_evictions = 0;
@@ -16442,7 +16450,14 @@ static int ds4_gpu_stream_expert_pending_load_finish(
     if (!p->active) return 1;
 
     const double start_ms = p->start_ms;
-    if (!ds4_gpu_stream_expert_pread_pool_wait()) {
+    const int time_join = ds4_gpu_stream_expert_timing_summary_enabled();
+    const double join_start = time_join ? ds4_gpu_now_ms() : 0.0;
+    const int wait_ok = ds4_gpu_stream_expert_pread_pool_wait();
+    if (time_join) {
+        g_stream_expert_pending_wait_ms += ds4_gpu_now_ms() - join_start;
+        g_stream_expert_pending_joins++;
+    }
+    if (!wait_ok) {
         ds4_gpu_stream_expert_pending_load_release_buffers(p);
         p->active = 0;
         return 0;
