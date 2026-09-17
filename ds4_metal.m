@@ -832,6 +832,7 @@ static int ds4_gpu_stream_expert_cache_note_expert_size(
         uint64_t down_expert_bytes);
 static uint32_t ds4_gpu_stream_expert_cache_configured_budget(void);
 static void ds4_gpu_stream_expert_cache_clear_all(int reset_stats);
+static int ds4_gpu_stream_expert_cache_trim(uint32_t experts);
 static void ds4_gpu_stream_expert_pending_load_clear(void);
 static void ds4_gpu_stream_expert_pread_pool_shutdown(void);
 static int ds4_gpu_stream_expert_timing_summary_enabled(void);
@@ -4653,6 +4654,12 @@ void ds4_gpu_set_glm_streaming_prefill_full_layer(bool enabled) {
 void ds4_gpu_set_streaming_expert_cache_budget(uint32_t experts) {
     if (experts > DS4_METAL_STREAM_EXPERT_CACHE_MAX_ENTRIES) {
         experts = DS4_METAL_STREAM_EXPERT_CACHE_MAX_ENTRIES;
+    }
+    const uint32_t previous = g_stream_expert_cache_budget_override;
+    if (experts && previous && experts < previous &&
+        ds4_gpu_stream_expert_cache_trim(experts)) {
+        g_stream_expert_cache_budget_override = experts;
+        return;
     }
     g_stream_expert_cache_budget_override = experts;
     ds4_gpu_stream_expert_cache_clear_all(1);
@@ -15219,6 +15226,60 @@ static void ds4_gpu_stream_expert_cache_clear_entry(
                                                      count_eviction,
                                                      1,
                                                      NULL);
+}
+
+/* Keep the surviving slab prefix warm when workspace growth reduces RAM
+ * available for experts. Callers must drain GPU users before resizing. */
+static int ds4_gpu_stream_expert_cache_trim(uint32_t experts) {
+    if (!g_stream_expert_cache_slab_count) return 0;
+    ds4_gpu_stream_expert_pending_load_clear();
+    for (uint32_t layer = 0; layer < DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER; layer++) {
+        for (uint32_t expert = 0; expert < DS4_METAL_STREAM_EXPERT_CACHE_MAX_EXPERT; expert++) {
+            ds4_gpu_stream_expert_cache_entry *e = &g_stream_expert_cache[layer][expert];
+            if (e->valid && (!e->slab_backed || ds4_gpu_stream_expert_cache_entry_inflight(e))) return 0;
+        }
+    }
+    for (uint32_t layer = 0; layer < DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER; layer++) {
+        for (uint32_t expert = 0; expert < DS4_METAL_STREAM_EXPERT_CACHE_MAX_EXPERT; expert++) {
+            ds4_gpu_stream_expert_cache_entry *e = &g_stream_expert_cache[layer][expert];
+            if (e->valid && e->slab_slot >= experts) {
+                ds4_gpu_stream_expert_cache_clear_entry_internal(layer, expert, 1, 0, NULL);
+            }
+        }
+    }
+    for (uint32_t slot = experts; slot < g_stream_expert_cache_slab_total_slots; slot++) {
+        if (!ds4_gpu_stream_expert_slab_unlock_slot(slot)) {
+            fprintf(stderr, "metal: failed to unlock trimmed expert slot %u\n", slot);
+            abort();
+        }
+    }
+    uint32_t free_count = 0;
+    for (uint32_t i = 0; i < g_stream_expert_cache_free_slot_count; i++) {
+        const uint32_t slot = g_stream_expert_cache_free_slots[i];
+        if (slot < experts) g_stream_expert_cache_free_slots[free_count++] = slot;
+    }
+    g_stream_expert_cache_free_slot_count = free_count;
+    uint32_t slab_count = 0;
+    for (uint32_t i = 0; i < g_stream_expert_cache_slab_count; i++) {
+        const uint32_t start = g_stream_expert_cache_slab_start_slot[i];
+        if (start >= experts) {
+            g_stream_expert_cache_slabs[i] = nil;
+            g_stream_expert_cache_slab_start_slot[i] = 0;
+            g_stream_expert_cache_slab_slot_count[i] = 0;
+            g_stream_expert_cache_slab_slots_used[i] = 0;
+        } else {
+            const uint32_t remaining = experts - start;
+            if (g_stream_expert_cache_slab_slot_count[i] > remaining)
+                g_stream_expert_cache_slab_slot_count[i] = remaining;
+            if (g_stream_expert_cache_slab_slots_used[i] > remaining)
+                g_stream_expert_cache_slab_slots_used[i] = remaining;
+            slab_count++;
+        }
+    }
+    g_stream_expert_cache_slab_count = slab_count;
+    if (g_stream_expert_cache_slab_total_slots > experts)
+        g_stream_expert_cache_slab_total_slots = experts;
+    return 1;
 }
 
 static void ds4_gpu_stream_expert_cache_clear_all(int reset_stats) {

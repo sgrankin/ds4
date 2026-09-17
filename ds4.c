@@ -40123,7 +40123,7 @@ typedef struct {
 #undef DS41_ROW_FIELD
 } ds41_prefill_row;
 
-static uint32_t ds41_prefill_limit(uint32_t ctx, uint32_t prefill_chunk) {
+static uint32_t ds41_prefill_ceiling(uint32_t ctx, uint32_t prefill_chunk) {
     /* An explicit chunk bounds scratch allocation independently of context.
      * Keep the old context-derived default and the supported 8192-row ceiling. */
     if (prefill_chunk) {
@@ -40133,6 +40133,16 @@ static uint32_t ds41_prefill_limit(uint32_t ctx, uint32_t prefill_chunk) {
     const uint32_t limit = ctx < 8192u || getenv("DS4_METAL_DISABLE_V41_WIDE_CHUNK") ? 2048u :
         (ctx < 16384u || getenv("DS4_METAL_DISABLE_V41_8K_CHUNK")) ? 4096u : DS41_PREFILL_CAP;
     return ctx < limit ? ctx : limit;
+}
+
+/* Experimental demand-sized workspace; explicit user chunks remain fixed. */
+static uint32_t ds41_prefill_limit(uint32_t ctx, uint32_t prefill_chunk) {
+    uint32_t cap = ds41_prefill_ceiling(ctx, prefill_chunk);
+#ifdef __APPLE__
+    if (!prefill_chunk && getenv("DS4_METAL_V41_DEMAND_WORKSPACE") && cap > 2048u)
+        cap = 2048u;
+#endif
+    return cap;
 }
 
 static uint32_t ds41_carry_words(uint32_t width, uint32_t format, bool compact) {
@@ -40186,9 +40196,9 @@ static uint32_t ds41_carry_cap(uint32_t ctx, uint32_t prefill_chunk) {
     X(engram_kv, (DS4_N_HC + 1u) * DS4_N_EMBD) X(logits, DS4_N_VOCAB)
 
 typedef struct {
-    uint32_t ctx, pos, prefill_cap, carry_cap;
+    uint32_t ctx, pos, prefill_cap, carry_cap, prefill_max;
     uint64_t allocation_bytes;
-    bool valid, streaming, encoder_resident, compact_carry, prefill_alias, quality;
+    bool valid, streaming, encoder_resident, compact_carry, prefill_alias, quality, workspace_failed;
     uint32_t tp_world, tp_rank;
     ds4_gpu_tensor *tp_logits_half;
     ds4_gpu_tensor **tp_out, **tp_in;
@@ -40225,6 +40235,22 @@ static bool ds41_read_array(const ds4_model *m, const char *key, uint32_t type,
     return cursor_read(&c, out, bytes);
 }
 
+static void ds41_workspace_free(ds41_gpu_graph *g) {
+    for (uint32_t i = 0; g->rows_view && i < g->prefill_cap; i++) {
+#define DS41_ROW_FREE(name, count) ds4_gpu_tensor_free(g->rows_view[i].name);
+        DS41_PREFILL_ROWS(DS41_ROW_FREE)
+#undef DS41_ROW_FREE
+    }
+#define DS41_BATCH_FREE(name, count) ds4_gpu_tensor_free(g->batch.name);
+    DS41_PREFILL_ROWS(DS41_BATCH_FREE)
+#undef DS41_BATCH_FREE
+    free(g->rows_view);
+    g->rows_view = NULL;
+    ds4_gpu_tensor_free(g->prefill_tokens);
+    g->prefill_tokens = NULL;
+    memset(&g->batch, 0, sizeof(g->batch));
+}
+
 static void ds41_graph_free(ds41_gpu_graph *g) {
     if (!g) return;
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
@@ -40237,14 +40263,7 @@ static void ds41_graph_free(ds41_gpu_graph *g) {
     }
     ds4_gpu_tensor_free(g->predict_selected);
     ds4_gpu_tensor_free(g->oracle_selected);
-    for (uint32_t i = 0; g->rows_view && i < g->prefill_cap; i++) {
-#define DS41_ROW_FREE(name, count) ds4_gpu_tensor_free(g->rows_view[i].name);
-        DS41_PREFILL_ROWS(DS41_ROW_FREE)
-#undef DS41_ROW_FREE
-    }
-#define DS41_BATCH_FREE(name, count) ds4_gpu_tensor_free(g->batch.name);
-    DS41_PREFILL_ROWS(DS41_BATCH_FREE)
-#undef DS41_BATCH_FREE
+    ds41_workspace_free(g);
 #define DS41_CARRY_FREE(name, count, format) ds4_gpu_tensor_free(g->carry.name);
     DS41_CARRY_ROWS(DS41_CARRY_FREE)
 #undef DS41_CARRY_FREE
@@ -40265,8 +40284,6 @@ static void ds41_graph_free(ds41_gpu_graph *g) {
 #undef DS41_FREE
     free(g->token_map);
     free(g->prefill_ids);
-    free(g->rows_view);
-    ds4_gpu_tensor_free(g->prefill_tokens);
     memset(g, 0, sizeof(*g));
     g->table[0].fd = g->table[1].fd = -1;
 }
@@ -40318,10 +40335,77 @@ static ds4_context_memory ds41_graph_memory(uint32_t ctx, uint32_t prefill_chunk
 
 static void ds41_graph_reset(ds41_gpu_graph *g) {
     g->pos = 0;
-    g->valid = true;
+    g->valid = !g->workspace_failed;
     ds4_engram_history_reset(&g->history);
     /* Valid lengths, not zeroed storage, determine cache visibility. Each
      * partial pair is overwritten by its even-position token before use. */
+}
+
+static bool ds41_workspace_alloc(ds41_gpu_graph *g) {
+    g->rows_view = calloc(g->prefill_cap, sizeof(*g->rows_view));
+    g->prefill_tokens = ds4_gpu_tensor_alloc((uint64_t)g->prefill_cap * sizeof(int32_t));
+    if (!g->rows_view || !g->prefill_tokens) return false;
+#define DS41_BATCH_ALLOC(name, count) \
+    if (!(g->batch.name = (!strcmp(#name, "engram_rows") || !strcmp(#name, "selected_comp") ? \
+            ds4_gpu_tensor_alloc_managed : ds4_gpu_tensor_alloc)( \
+                (uint64_t)(count) * g->prefill_cap * 4u))) return false;
+    DS41_PREFILL_STORAGE(DS41_BATCH_ALLOC)
+    /* Engram projection ends before HC normalization. HC normalization
+     * precedes Q projection or follows attention; routed expert outputs are
+     * produced only after attention has consumed Q. The attention output
+     * projection consumes heads/low before FFN; FFN normalization consumes x
+     * before shared-down, and the routed sum may replace the old block. */
+    if (g->prefill_alias) {
+#define DS41_BATCH_ALIAS(name, count, parent, offset) \
+        if (!(g->batch.name = ds4_gpu_tensor_view(g->batch.parent, \
+            (uint64_t)(offset) * g->prefill_cap * 4u, \
+            (uint64_t)(count) * g->prefill_cap * 4u))) return false;
+        DS41_BATCH_ALIAS(engram_kv, (DS4_N_HC + 1u) * DS4_N_EMBD, q, 0)
+        DS41_BATCH_ALIAS(flat_norm, DS4_N_HC * DS4_N_EMBD, q, 0)
+        DS41_BATCH_ALIAS(experts, DS4_N_EXPERT_USED * DS4_N_EMBD, q, 0)
+        DS41_BATCH_ALIAS(gate, DS4_N_EXPERT_USED * DS4_N_FF_EXP, heads, 0)
+        DS41_BATCH_ALIAS(up, DS4_N_EXPERT_USED * DS4_N_FF_EXP, heads,
+                         DS4_N_EXPERT_USED * DS4_N_FF_EXP)
+        DS41_BATCH_ALIAS(shared_gate, DS4_N_FF_EXP, low, 0)
+        DS41_BATCH_ALIAS(shared_up, DS4_N_FF_EXP, low, DS4_N_FF_EXP)
+        DS41_BATCH_ALIAS(shared_mid, DS4_N_FF_EXP, low, 2u * DS4_N_FF_EXP)
+        DS41_BATCH_ALIAS(shared, DS4_N_EMBD, x, 0)
+        DS41_BATCH_ALIAS(routed, DS4_N_EMBD, block, 0)
+#undef DS41_BATCH_ALIAS
+    } else { DS41_PREFILL_ALIASES(DS41_BATCH_ALLOC) }
+#undef DS41_BATCH_ALLOC
+#define DS41_BATCH_VIEW(name, count) \
+    for (uint32_t i = 0; i < g->prefill_cap; i++) \
+        if (!(g->rows_view[i].name = ds4_gpu_tensor_view(g->batch.name, \
+                (uint64_t)i * (count) * 4u, (uint64_t)(count) * 4u))) return false;
+    DS41_PREFILL_ROWS(DS41_BATCH_VIEW)
+#undef DS41_BATCH_VIEW
+    if (!ds4_gpu_tensor_fill_f32(g->batch.block_mask, 0,
+        (uint64_t)g->prefill_cap * ((g->ctx + 7u) / 8u))) return false;
+    return true;
+}
+
+/* Caller admits the larger graph and retires cached weights first. Persistent
+ * KV, compressed keys, Engram history and carry storage are untouched. */
+static bool ds41_workspace_grow(ds41_gpu_graph *g, uint32_t cap) {
+    if (cap <= g->prefill_cap) return true;
+    if (cap > g->prefill_max || !ds4_gpu_synchronize())
+        return false;
+    ds41_workspace_free(g);
+    ds4_gpu_tensor_free(g->raw_prefill);
+    ds4_gpu_tensor_free(g->image_text_mask);
+    ds4_gpu_tensor_free(g->index_packed);
+    g->prefill_cap = cap;
+    g->raw_prefill = ds4_gpu_tensor_alloc((uint64_t)(cap + 128u) * DS4_N_HEAD_DIM * 4u);
+    g->image_text_mask = ds4_gpu_tensor_alloc((cap + 3u) / 4u * 4u);
+    g->index_packed = ds4_gpu_tensor_alloc(ds4_gpu_dsv41_indexer_packed_bytes(g->ctx, cap));
+    if (!g->raw_prefill || !g->image_text_mask || !g->index_packed || !ds41_workspace_alloc(g)) {
+        g->workspace_failed = true;
+        g->valid = false;
+        return false;
+    }
+    g->allocation_bytes = ds41_graph_bytes(g->ctx, cap);
+    return true;
 }
 
 static DS4_MAYBE_UNUSED bool ds41_graph_alloc(ds41_gpu_graph *g, const ds4_model *m,
@@ -40332,6 +40416,7 @@ static DS4_MAYBE_UNUSED bool ds41_graph_alloc(ds41_gpu_graph *g, const ds4_model
     if (!ctx || ctx > 1048576 || DS4_MODEL_FAMILY != DS4_MODEL_FAMILY_DEEPSEEK41) return false;
     g->ctx = ctx;
     g->prefill_cap = ds41_prefill_limit(ctx, prefill_chunk);
+    g->prefill_max = ds41_prefill_ceiling(ctx, prefill_chunk);
     g->carry_cap = ds41_carry_cap(ctx, prefill_chunk);
     g->compact_carry = !getenv("DS4_METAL_DISABLE_V41_COMPACT_CARRY");
     g->prefill_alias = !getenv("DS4_METAL_DISABLE_V41_PREFILL_ALIAS");
@@ -40341,9 +40426,7 @@ static DS4_MAYBE_UNUSED bool ds41_graph_alloc(ds41_gpu_graph *g, const ds4_model
     g->token_map = malloc((size_t)DS4_N_VOCAB * sizeof(uint32_t));
     g->prefill_ids = malloc((size_t)(g->carry_cap ? g->carry_cap : g->prefill_cap) *
                             sizeof(*g->prefill_ids));
-    g->rows_view = calloc(g->prefill_cap, sizeof(*g->rows_view));
-    g->prefill_tokens = ds4_gpu_tensor_alloc((uint64_t)g->prefill_cap * sizeof(int32_t));
-    if (!g->token_map || !g->prefill_ids || !g->rows_view || !g->prefill_tokens) goto fail;
+    if (!g->token_map || !g->prefill_ids) goto fail;
     g->engram.token_map = g->token_map;
     g->engram.vocab_size = DS4_N_VOCAB;
     g->engram.compressed_vocab_size = required_u32(m, "deepseek41.engram.compressed_vocab_size");
@@ -40390,43 +40473,7 @@ static DS4_MAYBE_UNUSED bool ds41_graph_alloc(ds41_gpu_graph *g, const ds4_model
                 (uint64_t)((count) != 0 ? (count) : 1u) * sizeof(float)))) goto fail;
     DS41_SCRATCH(DS41_ALLOC)
 #undef DS41_ALLOC
-#define DS41_BATCH_ALLOC(name, count) \
-    if (!(g->batch.name = (!strcmp(#name, "engram_rows") || !strcmp(#name, "selected_comp") ? \
-            ds4_gpu_tensor_alloc_managed : ds4_gpu_tensor_alloc)( \
-                (uint64_t)(count) * g->prefill_cap * 4u))) goto fail;
-    DS41_PREFILL_STORAGE(DS41_BATCH_ALLOC)
-    /* Engram projection ends before HC normalization. HC normalization
-     * precedes Q projection or follows attention; routed expert outputs are
-     * produced only after attention has consumed Q. The attention output
-     * projection consumes heads/low before FFN; FFN normalization consumes x
-     * before shared-down, and the routed sum may replace the old block. */
-    if (g->prefill_alias) {
-#define DS41_BATCH_ALIAS(name, count, parent, offset) \
-        if (!(g->batch.name = ds4_gpu_tensor_view(g->batch.parent, \
-            (uint64_t)(offset) * g->prefill_cap * 4u, \
-            (uint64_t)(count) * g->prefill_cap * 4u))) goto fail;
-        DS41_BATCH_ALIAS(engram_kv, (DS4_N_HC + 1u) * DS4_N_EMBD, q, 0)
-        DS41_BATCH_ALIAS(flat_norm, DS4_N_HC * DS4_N_EMBD, q, 0)
-        DS41_BATCH_ALIAS(experts, DS4_N_EXPERT_USED * DS4_N_EMBD, q, 0)
-        DS41_BATCH_ALIAS(gate, DS4_N_EXPERT_USED * DS4_N_FF_EXP, heads, 0)
-        DS41_BATCH_ALIAS(up, DS4_N_EXPERT_USED * DS4_N_FF_EXP, heads,
-                         DS4_N_EXPERT_USED * DS4_N_FF_EXP)
-        DS41_BATCH_ALIAS(shared_gate, DS4_N_FF_EXP, low, 0)
-        DS41_BATCH_ALIAS(shared_up, DS4_N_FF_EXP, low, DS4_N_FF_EXP)
-        DS41_BATCH_ALIAS(shared_mid, DS4_N_FF_EXP, low, 2u * DS4_N_FF_EXP)
-        DS41_BATCH_ALIAS(shared, DS4_N_EMBD, x, 0)
-        DS41_BATCH_ALIAS(routed, DS4_N_EMBD, block, 0)
-#undef DS41_BATCH_ALIAS
-    } else { DS41_PREFILL_ALIASES(DS41_BATCH_ALLOC) }
-#undef DS41_BATCH_ALLOC
-#define DS41_BATCH_VIEW(name, count) \
-    for (uint32_t i = 0; i < g->prefill_cap; i++) \
-        if (!(g->rows_view[i].name = ds4_gpu_tensor_view(g->batch.name, \
-                (uint64_t)i * (count) * 4u, (uint64_t)(count) * 4u))) goto fail;
-    DS41_PREFILL_ROWS(DS41_BATCH_VIEW)
-#undef DS41_BATCH_VIEW
-    if (!ds4_gpu_tensor_fill_f32(g->batch.block_mask, 0,
-        (uint64_t)g->prefill_cap * ((g->ctx + 7u) / 8u))) goto fail;
+    if (!ds41_workspace_alloc(g)) goto fail;
 #define DS41_CARRY_ALLOC(name, count, format) \
     if (g->carry_cap && !(g->carry.name = ds4_gpu_tensor_alloc( \
             (uint64_t)ds41_carry_words(count, format, g->compact_carry) * g->carry_cap * sizeof(float)))) goto fail;
@@ -41068,14 +41115,12 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
             m->map, m->size, bias->abs_offset, 0, 0, token,
             DS4_N_EXPERT, DS4_N_EXPERT_USED, DS4_EXPERT_WEIGHT_SCALE, 0, 0, true, false,
             g->route_logits)) return false;
+    bool routed_ok;
+#ifdef __APPLE__
     /* Resolve routing before shared work so selected SSD reads can overlap its
      * GPU execution. The cache loader protects live entries and the override
      * avoids paying for a second selected-ID readback in routed_moe_one. */
-    const bool load_eligible =
-#ifndef __APPLE__
-        false &&
-#endif
-        g->streaming && !g->quality && !g->imatrix &&
+    const bool load_eligible = g->streaming && !g->quality && !g->imatrix &&
         !g->image_count && g->tp_world == 1 &&
         !getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS");
     const bool async_load = load_eligible && getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD");
@@ -41116,7 +41161,6 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
                 !ds4_gpu_tensor_read(g->selected, 0, selected_ids,
                     DS4_N_EXPERT_USED * sizeof(selected_ids[0]))) return false;
             ds41_route_oracle_check(il, selected_ids);
-#ifdef __APPLE__
             if (ds41_route_oracle.cache) {
                 uint8_t resident[DS4_MAX_EXPERT];
                 const uint32_t meta[] = {ds41_route_oracle.pos, token, il};
@@ -41125,28 +41169,11 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
                     fwrite(resident, 1, DS4_N_EXPERT, ds41_route_oracle.cache) != DS4_N_EXPERT)
                     ds4_die("routing cache snapshot failed");
             }
-#endif
             if (!ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
                     DS4_N_EXPERT_USED) || !ds4_gpu_begin_commands()) return false;
         }
     }
-    const bool shared_here = !shared_owner || g->tp_rank == (il & 1u);
-    bool shared_queued = false;
-#if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
-    if (shared_owner && shared_here &&
-        l->ffn_gate_shexp->type == DS4_TENSOR_Q8_0 &&
-        l->ffn_up_shexp->type == DS4_TENSOR_Q8_0 &&
-        l->ffn_down_shexp->type == DS4_TENSOR_Q8_0) {
-        const int rc = ds4_gpu_dsv41_shared_start(g->shared, g->shared_gate,
-            g->shared_up, g->shared_mid, g->norm, m->map, m->size,
-            l->ffn_gate_shexp->abs_offset, l->ffn_up_shexp->abs_offset,
-            l->ffn_down_shexp->abs_offset, DS4_N_EMBD, DS4_N_FF_EXP,
-            DS4_SWIGLU_CLAMP_EXP);
-        if (rc < 0) return false;
-        shared_queued = rc > 0;
-    }
-#endif
-    if (shared_here && !shared_queued &&
+    if ((!shared_owner || g->tp_rank == (il & 1u)) &&
         (!ds41_shared_gate_up(g, m, l, g->shared_gate, g->shared_up,
             g->shared_mid, g->norm, 1) ||
         !ds41_matmul(g->shared, m, l->ffn_down_shexp, g->shared_mid, true))) {
@@ -41176,7 +41203,30 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
     if (early_load && (!ds4_gpu_flush_commands() ||
         !ds4_gpu_routed_moe_set_selected_override(selected_ids, DS4_N_EXPERT_USED)))
         return false;
-    bool routed_ok;
+#else
+    const bool shared_here = !shared_owner || g->tp_rank == (il & 1u);
+    bool shared_queued = false;
+#if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
+    if (shared_owner && shared_here &&
+        l->ffn_gate_shexp->type == DS4_TENSOR_Q8_0 &&
+        l->ffn_up_shexp->type == DS4_TENSOR_Q8_0 &&
+        l->ffn_down_shexp->type == DS4_TENSOR_Q8_0) {
+        const int rc = ds4_gpu_dsv41_shared_start(g->shared, g->shared_gate,
+            g->shared_up, g->shared_mid, g->norm, m->map, m->size,
+            l->ffn_gate_shexp->abs_offset, l->ffn_up_shexp->abs_offset,
+            l->ffn_down_shexp->abs_offset, DS4_N_EMBD, DS4_N_FF_EXP,
+            DS4_SWIGLU_CLAMP_EXP);
+        if (rc < 0) return false;
+        shared_queued = rc > 0;
+    }
+#endif
+    if (shared_here && !shared_queued &&
+        (!ds41_matmul(g->shared_gate, m, l->ffn_gate_shexp, g->norm, true) ||
+        !ds41_matmul(g->shared_up, m, l->ffn_up_shexp, g->norm, true) ||
+        !ds4_gpu_swiglu_tensor(g->shared_mid, g->shared_gate, g->shared_up,
+                              DS4_N_FF_EXP, DS4_SWIGLU_CLAMP_EXP, 1.0f) ||
+        !ds41_bf16(g->shared_mid, DS4_N_FF_EXP) ||
+        !ds41_matmul(g->shared, m, l->ffn_down_shexp, g->shared_mid, true))) return false;
 #ifndef __APPLE__
     if (g->tp_world == 2) {
         routed_ok = ds4_gpu_routed_moe_batch_owned_tensor(routed, g->gate, g->up, g->mid, g->experts,
@@ -41187,6 +41237,7 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
             DS4_N_EXPERT, DS4_N_EXPERT_USED, g->tp_rank * (DS4_N_EXPERT / 2u),
             DS4_N_EXPERT / 2u, DS4_SWIGLU_CLAMP_EXP, g->norm, il, 1, NULL);
     } else
+#endif
 #endif
     routed_ok = ds4_gpu_routed_moe_one_tensor(routed, g->gate, g->up, g->mid, g->experts,
             m->map, m->size, l->ffn_gate_exps->abs_offset, l->ffn_up_exps->abs_offset,
@@ -76015,7 +76066,7 @@ static int ds4_session_sync_internal(ds4_session *s, const ds4_tokens *prompt, c
 #ifdef DS4_HAS_DEEPSEEK41_GPU
     if (ds4_session_is_ds41(s)) {
         ds41_gpu_graph *g = &s->ds41_graph;
-        if (!s->ds41_graph_ready) {
+        if (!s->ds41_graph_ready || g->workspace_failed) {
             snprintf(err, errlen, "V4.1 graph is not initialized");
             return 1;
         }
@@ -76026,6 +76077,54 @@ static int ds4_session_sync_internal(ds4_session *s, const ds4_tokens *prompt, c
             s->checkpoint_valid = false;
         }
         bool pending_logits = false, interrupted = false, decoder_pending = false;
+        if (g->prefill_max > g->prefill_cap) {
+            ds41_gpu_graph shape = *g;
+            shape.prefill_cap = g->prefill_max;
+            const uint32_t need = ds41_encoder_chunk_cap(&shape, (uint32_t)(prompt->len - s->checkpoint.len));
+            if (need > g->prefill_cap) {
+                const uint64_t old_bytes = g->allocation_bytes;
+                const uint64_t new_bytes = ds41_graph_bytes(g->ctx, need);
+                const uint32_t old_budget = e->ssd_streaming_cache_experts;
+                const uint64_t old_cache_bytes = e->ssd_streaming_cache_bytes;
+                if (!ds4_gpu_synchronize()) {
+                    snprintf(err, errlen, "cannot drain V4.1 workspace users");
+                    return 1;
+                }
+                /* Return borrowed workspace bytes before allocating the larger
+                 * buffers, even when the broad host guard still has headroom. */
+                if (g->streaming && old_budget) {
+                    uint64_t expert_bytes = 0;
+                    if (!ds4_streaming_routed_expert_bytes(&e->weights, &expert_bytes) || !expert_bytes) {
+                        snprintf(err, errlen, "cannot size V4.1 expert cache for workspace growth");
+                        return 1;
+                    }
+                    const uint64_t slots = (new_bytes - old_bytes + expert_bytes - 1u) / expert_bytes;
+                    e->ssd_streaming_cache_experts = slots < old_budget ? old_budget - (uint32_t)slots : 1u;
+                    e->ssd_streaming_cache_bytes = e->ssd_streaming_cache_experts * expert_bytes;
+                }
+                if (!ds41_memory_admit(e, ds4_add_sat_u64(e->ds41_session_bytes - old_bytes,
+                                                        new_bytes), true)) {
+                    e->ssd_streaming_cache_experts = old_budget;
+                    e->ssd_streaming_cache_bytes = old_cache_bytes;
+                    snprintf(err, errlen, "cannot admit larger V4.1 workspace");
+                    return 1;
+                }
+                if (e->ssd_streaming_cache_experts != old_budget)
+                    ds4_gpu_set_streaming_expert_cache_budget(e->ssd_streaming_cache_experts);
+                fprintf(stderr, "ds4: V4.1 workspace grows %u -> %u rows before %u-token prefill\n",
+                    g->prefill_cap, need, (uint32_t)(prompt->len - s->checkpoint.len));
+                e->ds41_session_bytes = e->ds41_session_bytes - old_bytes + new_bytes;
+                g->allocation_bytes = new_bytes; /* Conservative also on partial allocation failure. */
+                if (!ds41_workspace_grow(g, need)) {
+                    g->workspace_failed = true;
+                    g->valid = false;
+                    s->checkpoint_valid = false;
+                    snprintf(err, errlen, "cannot grow V4.1 workspace");
+                    return 1;
+                }
+                s->prefill_cap = g->prefill_cap;
+            }
+        }
         ds41_encoder_residency encoder = {0};
         ds41_encoder_acquire(g, &e->model, &e->weights,
             (uint32_t)(prompt->len - s->checkpoint.len), &encoder, s->cancel, s->cancel_ud);

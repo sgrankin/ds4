@@ -1339,3 +1339,67 @@ use, broaden training tasks, reserve new evaluation tasks, and implement bounded
 private speculative buffers with demand priority. GPU routing-handoff removal
 and cross-layer lookahead remain substantial separate engineering items. No
 production scheduling defaults changed; all GPU jobs finished.
+
+## 82: demand-sized workspace gives a full-session win; growth exposes cache reset bug
+
+DS4_METAL_V41_DEMAND_WORKSPACE starts an implicit workspace at2048 rows, with
+4096/8192 growth at native8K/16K input thresholds. Explicit chunks stay fixed.
+Separate allocation/free helpers rebuild temporary tensors and aliases after
+GPU synchronization, retaining KV/history/carry. Engine memory accounting
+reserves growth even if allocation fails; a failed workspace cannot be reused.
+
+Full ABBA exact logits and snapshot: append93.207->89.816s (-3.64%), decode
+196.885->188.510s (-4.25%), combined290.092->278.327s (-4.06%,11.766s saved).
+Both candidates beat both controls. Expert cache7822->8253 entries; reads
+670.61->582.57GiB (-13.13%). See demand-workspace-full JSON. This recording
+never grows. Two subsequent error-path fixes and growth-budget fixes do not
+affect that measured path; frozen executable hash is in its manifest.
+
+Initial transition BA (short,8K,16K,short) is exact, but combined time+29.4%.
+The broad112GiB admission guard allowed larger workspace and larger cache to
+coexist. Tightened growth to reclaim ceil(workspace_delta/expert_bytes) cache
+slots before allocating. The resulting run hits mlock failures on the first
+cache reset, collapsing to~10GiB cache, and fails during the second growth.
+The existing cache-clear routine drops slab objects and resets lock bookkeeping
+without explicitly unlocking their pages. This must be repaired and retested
+before accepting growth or promoting the option. Initial transition JSON and
+demand-workspace-growth-lock-failure.log preserve the evidence.
+
+## 83: explicitly unlock cache slabs on reset
+
+Cache clear now unlocks every locked slab slot before dropping Metal buffers
+and resetting metadata. Growth retest /tmp/ds41-demand-workspace-transition-unlock
+passes the first reset with 73.43 GiB locked and zero failures, instead of
+collapsing at 11 GiB. However the first 8K append takes45.16s and the process
+is SIGKILLed during second growth. Full cache replacement remains unsuitable
+for workspace growth; next experiment trims existing slabs in place.
+
+## 84: trim expert cache in place for workspace growth
+
+Reducing a populated slab-backed cache budget now evicts only slots beyond
+the new cap, unlocks those pages, drops whole unused tail slabs, truncates
+slot allocation metadata, and filters the free list. Surviving experts remain
+warm. Mixed/non-slab caches and increases retain the existing reset path.
+Callers must drain GPU users before changing the budget, as before. The
+partially retained final slab keeps its original Metal allocation but its
+removed slots are unlocked and cannot be allocated again under this cap.
+
+Short->8K->16K->short BA completes with zero mlock failures and exact full
+logits and continuation snapshot. Budget8253->8109->7794. Combined inference
+65.988->64.079s (-2.89%), append59.942->57.760s (-3.64%), decode6.047->6.319s
+(+4.50%). One pair is a growth smoke check, not a repeatable speedup claim.
+The 8K and16K candidate appends take21.28s and31.71s. This removes the
+failed full-cache-replacement path from ordinary demand-workspace growth.
+Full-session experiment82 remains the repeatable4.06% improvement evidence.
+See demand-workspace-transition-trim JSON. Actual-agent ABBA pending.
+
+Actual-agent complete-answer ABBA (hello,2+2,hello; 41/15/28 generated tokens)
+is exact in every fresh/restored run. Summed response time across three turns:
+fresh8.1795->7.7610s (-5.12%), restored11.9545->11.6565s (-2.49%). Both
+candidates beat both controls in each mode, though fresh controls drifted
+8.410->7.949s. See demand-workspace-agent summary/comparison JSON.
+
+Usage: DS4_METAL_V41_DEMAND_WORKSPACE=1 ./ds4-agent --ssd-streaming
+The option remains explicit: this validates the local SSD text workload, not
+vision, multiple live sessions, or all cache/context configurations. Explicit
+--prefill-chunk overrides demand allocation. No kernel arithmetic changes.

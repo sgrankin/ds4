@@ -212,3 +212,22 @@ budget is not guaranteed on test or other tasks. `--warm-start` initializes
 from the route checkpoint and fine-tunes at a lower learning rate. Both models
 rank six cold candidates before thresholding and can abstain entirely. This
 still assumes fixed native cache residency, not a deployed prefetch simulation.
+
+### Workspace transition regression
+
+`workspace-transition.txt` is a synthetic teacher-forced stress recording: the
+first system/user/decode events from session-v1, then8192 and16384 token appends
+made by repeating a recorded tool-result token block, followed by38 tokens.
+Each append has eight fixed decode tokens. It checks allocation growth and
+continuation correctness; it is not a realistic task-completion benchmark.
+
+    python3 speed-bench/agent-session/replay_abba.py /tmp/new-workspace-transition \
+      --replay speed-bench/agent-session/workspace-transition.txt \
+      --candidate-env DS4_METAL_V41_DEMAND_WORKSPACE=1
+
+The experimental workspace starts at2048 rows for an implicit chunk limit and
+grows to4096/8192 at native input thresholds. Explicit --prefill-chunk stays
+fixed. Growth drains GPU work and refits the cache budget before replacing
+temporary buffers and their views. It retains persistent KV/history, but may
+clear cached expert weights when growth lowers their budget. It does not shrink
+again later in a session. Check those transitions before adopting a default.
