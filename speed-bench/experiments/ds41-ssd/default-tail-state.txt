@@ -1,0 +1,4 @@
+./tests/test_deepseek41_exact_tail gguf/DeepSeek-V4.1-Flash-Q2.gguf /tmp/ds41-prefill-input.c
+ctx=100000; actual default versus rollback
+PASS: tail=768 plus 8 decoded tokens, full snapshot bit-identical; scalar 44.007s, batch 35.162s
+PASS: tail=1023 plus 8 decoded tokens, full snapshot bit-identical; scalar 60.734s, batch 57.524s

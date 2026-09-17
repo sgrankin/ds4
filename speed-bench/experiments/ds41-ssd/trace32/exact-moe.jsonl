@@ -1,0 +1,560 @@
+{"stage": "00-1-norm.bin", "missing": true}
+{"stage": "00-1-split.bin", "missing": true}
+{"stage": "00-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "00-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "00-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "00-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "00-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "00-3-norm.bin", "missing": true}
+{"stage": "00-3-split.bin", "missing": true}
+{"stage": "00-3a-selected.bin", "missing": true}
+{"stage": "00-3b-weights.bin", "missing": true}
+{"stage": "00-3c-shared.bin", "missing": true}
+{"stage": "00-3d-routed.bin", "missing": true}
+{"stage": "00-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "01-1-norm.bin", "missing": true}
+{"stage": "01-1-split.bin", "missing": true}
+{"stage": "01-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "01-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "01-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "01-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "01-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "01-3-norm.bin", "missing": true}
+{"stage": "01-3-split.bin", "missing": true}
+{"stage": "01-3a-selected.bin", "missing": true}
+{"stage": "01-3b-weights.bin", "missing": true}
+{"stage": "01-3c-shared.bin", "missing": true}
+{"stage": "01-3d-routed.bin", "missing": true}
+{"stage": "01-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "02-1-norm.bin", "missing": true}
+{"stage": "02-1-split.bin", "missing": true}
+{"stage": "02-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "02-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "02-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "02-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "02-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "02-3-norm.bin", "missing": true}
+{"stage": "02-3-split.bin", "missing": true}
+{"stage": "02-3a-selected.bin", "missing": true}
+{"stage": "02-3b-weights.bin", "missing": true}
+{"stage": "02-3c-shared.bin", "missing": true}
+{"stage": "02-3d-routed.bin", "missing": true}
+{"stage": "02-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "03-1-norm.bin", "missing": true}
+{"stage": "03-1-split.bin", "missing": true}
+{"stage": "03-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "03-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "03-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "03-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "03-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "03-3-norm.bin", "missing": true}
+{"stage": "03-3-split.bin", "missing": true}
+{"stage": "03-3a-selected.bin", "missing": true}
+{"stage": "03-3b-weights.bin", "missing": true}
+{"stage": "03-3c-shared.bin", "missing": true}
+{"stage": "03-3d-routed.bin", "missing": true}
+{"stage": "03-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "04-1-norm.bin", "missing": true}
+{"stage": "04-1-split.bin", "missing": true}
+{"stage": "04-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "04-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "04-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "04-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "04-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "04-3-norm.bin", "missing": true}
+{"stage": "04-3-split.bin", "missing": true}
+{"stage": "04-3a-selected.bin", "missing": true}
+{"stage": "04-3b-weights.bin", "missing": true}
+{"stage": "04-3c-shared.bin", "missing": true}
+{"stage": "04-3d-routed.bin", "missing": true}
+{"stage": "04-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "05-1-norm.bin", "missing": true}
+{"stage": "05-1-split.bin", "missing": true}
+{"stage": "05-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "05-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "05-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "05-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "05-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "05-3-norm.bin", "missing": true}
+{"stage": "05-3-split.bin", "missing": true}
+{"stage": "05-3a-selected.bin", "missing": true}
+{"stage": "05-3b-weights.bin", "missing": true}
+{"stage": "05-3c-shared.bin", "missing": true}
+{"stage": "05-3d-routed.bin", "missing": true}
+{"stage": "05-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "06-1-norm.bin", "missing": true}
+{"stage": "06-1-split.bin", "missing": true}
+{"stage": "06-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "06-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "06-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "06-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "06-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "06-3-norm.bin", "missing": true}
+{"stage": "06-3-split.bin", "missing": true}
+{"stage": "06-3a-selected.bin", "missing": true}
+{"stage": "06-3b-weights.bin", "missing": true}
+{"stage": "06-3c-shared.bin", "missing": true}
+{"stage": "06-3d-routed.bin", "missing": true}
+{"stage": "06-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "07-1-norm.bin", "missing": true}
+{"stage": "07-1-split.bin", "missing": true}
+{"stage": "07-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "07-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "07-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "07-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "07-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "07-3-norm.bin", "missing": true}
+{"stage": "07-3-split.bin", "missing": true}
+{"stage": "07-3a-selected.bin", "missing": true}
+{"stage": "07-3b-weights.bin", "missing": true}
+{"stage": "07-3c-shared.bin", "missing": true}
+{"stage": "07-3d-routed.bin", "missing": true}
+{"stage": "07-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "08-1-norm.bin", "missing": true}
+{"stage": "08-1-split.bin", "missing": true}
+{"stage": "08-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "08-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "08-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "08-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "08-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "08-3-norm.bin", "missing": true}
+{"stage": "08-3-split.bin", "missing": true}
+{"stage": "08-3a-selected.bin", "missing": true}
+{"stage": "08-3b-weights.bin", "missing": true}
+{"stage": "08-3c-shared.bin", "missing": true}
+{"stage": "08-3d-routed.bin", "missing": true}
+{"stage": "08-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "09-1-norm.bin", "missing": true}
+{"stage": "09-1-split.bin", "missing": true}
+{"stage": "09-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "09-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "09-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "09-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "09-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "09-3-norm.bin", "missing": true}
+{"stage": "09-3-split.bin", "missing": true}
+{"stage": "09-3a-selected.bin", "missing": true}
+{"stage": "09-3b-weights.bin", "missing": true}
+{"stage": "09-3c-shared.bin", "missing": true}
+{"stage": "09-3d-routed.bin", "missing": true}
+{"stage": "09-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "10-1-norm.bin", "missing": true}
+{"stage": "10-1-split.bin", "missing": true}
+{"stage": "10-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "10-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "10-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "10-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "10-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "10-3-norm.bin", "missing": true}
+{"stage": "10-3-split.bin", "missing": true}
+{"stage": "10-3a-selected.bin", "missing": true}
+{"stage": "10-3b-weights.bin", "missing": true}
+{"stage": "10-3c-shared.bin", "missing": true}
+{"stage": "10-3d-routed.bin", "missing": true}
+{"stage": "10-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "11-1-norm.bin", "missing": true}
+{"stage": "11-1-split.bin", "missing": true}
+{"stage": "11-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "11-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "11-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "11-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "11-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "11-3-norm.bin", "missing": true}
+{"stage": "11-3-split.bin", "missing": true}
+{"stage": "11-3a-selected.bin", "missing": true}
+{"stage": "11-3b-weights.bin", "missing": true}
+{"stage": "11-3c-shared.bin", "missing": true}
+{"stage": "11-3d-routed.bin", "missing": true}
+{"stage": "11-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "12-1-norm.bin", "missing": true}
+{"stage": "12-1-split.bin", "missing": true}
+{"stage": "12-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "12-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "12-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "12-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "12-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "12-3-norm.bin", "missing": true}
+{"stage": "12-3-split.bin", "missing": true}
+{"stage": "12-3a-selected.bin", "missing": true}
+{"stage": "12-3b-weights.bin", "missing": true}
+{"stage": "12-3c-shared.bin", "missing": true}
+{"stage": "12-3d-routed.bin", "missing": true}
+{"stage": "12-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "13-1-norm.bin", "missing": true}
+{"stage": "13-1-split.bin", "missing": true}
+{"stage": "13-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "13-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "13-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "13-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "13-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "13-3-norm.bin", "missing": true}
+{"stage": "13-3-split.bin", "missing": true}
+{"stage": "13-3a-selected.bin", "missing": true}
+{"stage": "13-3b-weights.bin", "missing": true}
+{"stage": "13-3c-shared.bin", "missing": true}
+{"stage": "13-3d-routed.bin", "missing": true}
+{"stage": "13-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "14-1-norm.bin", "missing": true}
+{"stage": "14-1-split.bin", "missing": true}
+{"stage": "14-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "14-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "14-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "14-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "14-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "14-3-norm.bin", "missing": true}
+{"stage": "14-3-split.bin", "missing": true}
+{"stage": "14-3a-selected.bin", "missing": true}
+{"stage": "14-3b-weights.bin", "missing": true}
+{"stage": "14-3c-shared.bin", "missing": true}
+{"stage": "14-3d-routed.bin", "missing": true}
+{"stage": "14-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "15-1-norm.bin", "missing": true}
+{"stage": "15-1-split.bin", "missing": true}
+{"stage": "15-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "15-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "15-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "15-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "15-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "15-3-norm.bin", "missing": true}
+{"stage": "15-3-split.bin", "missing": true}
+{"stage": "15-3a-selected.bin", "missing": true}
+{"stage": "15-3b-weights.bin", "missing": true}
+{"stage": "15-3c-shared.bin", "missing": true}
+{"stage": "15-3d-routed.bin", "missing": true}
+{"stage": "15-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "16-1-norm.bin", "missing": true}
+{"stage": "16-1-split.bin", "missing": true}
+{"stage": "16-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "16-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "16-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "16-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "16-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "16-3-norm.bin", "missing": true}
+{"stage": "16-3-split.bin", "missing": true}
+{"stage": "16-3a-selected.bin", "missing": true}
+{"stage": "16-3b-weights.bin", "missing": true}
+{"stage": "16-3c-shared.bin", "missing": true}
+{"stage": "16-3d-routed.bin", "missing": true}
+{"stage": "16-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "17-1-norm.bin", "missing": true}
+{"stage": "17-1-split.bin", "missing": true}
+{"stage": "17-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "17-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "17-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "17-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "17-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "17-3-norm.bin", "missing": true}
+{"stage": "17-3-split.bin", "missing": true}
+{"stage": "17-3a-selected.bin", "missing": true}
+{"stage": "17-3b-weights.bin", "missing": true}
+{"stage": "17-3c-shared.bin", "missing": true}
+{"stage": "17-3d-routed.bin", "missing": true}
+{"stage": "17-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "18-1-norm.bin", "missing": true}
+{"stage": "18-1-split.bin", "missing": true}
+{"stage": "18-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "18-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "18-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "18-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "18-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "18-3-norm.bin", "missing": true}
+{"stage": "18-3-split.bin", "missing": true}
+{"stage": "18-3a-selected.bin", "missing": true}
+{"stage": "18-3b-weights.bin", "missing": true}
+{"stage": "18-3c-shared.bin", "missing": true}
+{"stage": "18-3d-routed.bin", "missing": true}
+{"stage": "18-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "19-1-norm.bin", "missing": true}
+{"stage": "19-1-split.bin", "missing": true}
+{"stage": "19-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "19-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "19-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "19-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "19-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "19-3-norm.bin", "missing": true}
+{"stage": "19-3-split.bin", "missing": true}
+{"stage": "19-3a-selected.bin", "missing": true}
+{"stage": "19-3b-weights.bin", "missing": true}
+{"stage": "19-3c-shared.bin", "missing": true}
+{"stage": "19-3d-routed.bin", "missing": true}
+{"stage": "19-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "20-1-norm.bin", "missing": true}
+{"stage": "20-1-split.bin", "missing": true}
+{"stage": "20-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "20-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "20-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "20-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "20-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "20-3-norm.bin", "missing": true}
+{"stage": "20-3-split.bin", "missing": true}
+{"stage": "20-3a-selected.bin", "missing": true}
+{"stage": "20-3b-weights.bin", "missing": true}
+{"stage": "20-3c-shared.bin", "missing": true}
+{"stage": "20-3d-routed.bin", "missing": true}
+{"stage": "20-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "21-1-norm.bin", "missing": true}
+{"stage": "21-1-split.bin", "missing": true}
+{"stage": "21-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "21-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "21-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "21-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "21-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "21-3-norm.bin", "missing": true}
+{"stage": "21-3-split.bin", "missing": true}
+{"stage": "21-3a-selected.bin", "missing": true}
+{"stage": "21-3b-weights.bin", "missing": true}
+{"stage": "21-3c-shared.bin", "missing": true}
+{"stage": "21-3d-routed.bin", "missing": true}
+{"stage": "21-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "22-1-norm.bin", "missing": true}
+{"stage": "22-1-split.bin", "missing": true}
+{"stage": "22-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "22-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "22-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "22-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "22-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "22-3-norm.bin", "missing": true}
+{"stage": "22-3-split.bin", "missing": true}
+{"stage": "22-3a-selected.bin", "missing": true}
+{"stage": "22-3b-weights.bin", "missing": true}
+{"stage": "22-3c-shared.bin", "missing": true}
+{"stage": "22-3d-routed.bin", "missing": true}
+{"stage": "22-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "23-1-norm.bin", "missing": true}
+{"stage": "23-1-split.bin", "missing": true}
+{"stage": "23-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "23-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "23-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "23-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "23-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "23-3-norm.bin", "missing": true}
+{"stage": "23-3-split.bin", "missing": true}
+{"stage": "23-3a-selected.bin", "missing": true}
+{"stage": "23-3b-weights.bin", "missing": true}
+{"stage": "23-3c-shared.bin", "missing": true}
+{"stage": "23-3d-routed.bin", "missing": true}
+{"stage": "23-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "24-1-norm.bin", "missing": true}
+{"stage": "24-1-split.bin", "missing": true}
+{"stage": "24-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "24-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "24-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "24-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "24-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "24-3-norm.bin", "missing": true}
+{"stage": "24-3-split.bin", "missing": true}
+{"stage": "24-3a-selected.bin", "missing": true}
+{"stage": "24-3b-weights.bin", "missing": true}
+{"stage": "24-3c-shared.bin", "missing": true}
+{"stage": "24-3d-routed.bin", "missing": true}
+{"stage": "24-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "25-1-norm.bin", "missing": true}
+{"stage": "25-1-split.bin", "missing": true}
+{"stage": "25-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "25-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "25-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "25-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "25-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "25-3-norm.bin", "missing": true}
+{"stage": "25-3-split.bin", "missing": true}
+{"stage": "25-3a-selected.bin", "missing": true}
+{"stage": "25-3b-weights.bin", "missing": true}
+{"stage": "25-3c-shared.bin", "missing": true}
+{"stage": "25-3d-routed.bin", "missing": true}
+{"stage": "25-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "26-1-norm.bin", "missing": true}
+{"stage": "26-1-split.bin", "missing": true}
+{"stage": "26-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "26-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "26-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "26-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "26-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "26-3-norm.bin", "missing": true}
+{"stage": "26-3-split.bin", "missing": true}
+{"stage": "26-3a-selected.bin", "missing": true}
+{"stage": "26-3b-weights.bin", "missing": true}
+{"stage": "26-3c-shared.bin", "missing": true}
+{"stage": "26-3d-routed.bin", "missing": true}
+{"stage": "26-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "27-1-norm.bin", "missing": true}
+{"stage": "27-1-split.bin", "missing": true}
+{"stage": "27-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "27-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "27-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "27-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "27-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "27-3-norm.bin", "missing": true}
+{"stage": "27-3-split.bin", "missing": true}
+{"stage": "27-3a-selected.bin", "missing": true}
+{"stage": "27-3b-weights.bin", "missing": true}
+{"stage": "27-3c-shared.bin", "missing": true}
+{"stage": "27-3d-routed.bin", "missing": true}
+{"stage": "27-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "28-1-norm.bin", "missing": true}
+{"stage": "28-1-split.bin", "missing": true}
+{"stage": "28-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "28-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "28-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "28-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "28-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "28-3-norm.bin", "missing": true}
+{"stage": "28-3-split.bin", "missing": true}
+{"stage": "28-3a-selected.bin", "missing": true}
+{"stage": "28-3b-weights.bin", "missing": true}
+{"stage": "28-3c-shared.bin", "missing": true}
+{"stage": "28-3d-routed.bin", "missing": true}
+{"stage": "28-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "29-1-norm.bin", "missing": true}
+{"stage": "29-1-split.bin", "missing": true}
+{"stage": "29-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "29-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "29-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "29-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "29-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "29-3-norm.bin", "missing": true}
+{"stage": "29-3-split.bin", "missing": true}
+{"stage": "29-3a-selected.bin", "missing": true}
+{"stage": "29-3b-weights.bin", "missing": true}
+{"stage": "29-3c-shared.bin", "missing": true}
+{"stage": "29-3d-routed.bin", "missing": true}
+{"stage": "29-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "30-1-norm.bin", "missing": true}
+{"stage": "30-1-split.bin", "missing": true}
+{"stage": "30-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "30-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "30-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "30-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "30-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "30-3-norm.bin", "missing": true}
+{"stage": "30-3-split.bin", "missing": true}
+{"stage": "30-3a-selected.bin", "missing": true}
+{"stage": "30-3b-weights.bin", "missing": true}
+{"stage": "30-3c-shared.bin", "missing": true}
+{"stage": "30-3d-routed.bin", "missing": true}
+{"stage": "30-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "31-1-norm.bin", "missing": true}
+{"stage": "31-1-split.bin", "missing": true}
+{"stage": "31-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "31-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "31-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "31-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "31-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "31-3-norm.bin", "missing": true}
+{"stage": "31-3-split.bin", "missing": true}
+{"stage": "31-3a-selected.bin", "missing": true}
+{"stage": "31-3b-weights.bin", "missing": true}
+{"stage": "31-3c-shared.bin", "missing": true}
+{"stage": "31-3d-routed.bin", "missing": true}
+{"stage": "31-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "32-1-norm.bin", "missing": true}
+{"stage": "32-1-split.bin", "missing": true}
+{"stage": "32-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "32-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "32-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "32-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "32-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "32-3-norm.bin", "missing": true}
+{"stage": "32-3-split.bin", "missing": true}
+{"stage": "32-3a-selected.bin", "missing": true}
+{"stage": "32-3b-weights.bin", "missing": true}
+{"stage": "32-3c-shared.bin", "missing": true}
+{"stage": "32-3d-routed.bin", "missing": true}
+{"stage": "32-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "33-1-norm.bin", "missing": true}
+{"stage": "33-1-split.bin", "missing": true}
+{"stage": "33-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "33-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "33-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "33-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "33-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "33-3-norm.bin", "missing": true}
+{"stage": "33-3-split.bin", "missing": true}
+{"stage": "33-3a-selected.bin", "missing": true}
+{"stage": "33-3b-weights.bin", "missing": true}
+{"stage": "33-3c-shared.bin", "missing": true}
+{"stage": "33-3d-routed.bin", "missing": true}
+{"stage": "33-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "34-1-norm.bin", "missing": true}
+{"stage": "34-1-split.bin", "missing": true}
+{"stage": "34-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "34-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "34-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "34-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "34-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "34-3-norm.bin", "missing": true}
+{"stage": "34-3-split.bin", "missing": true}
+{"stage": "34-3a-selected.bin", "missing": true}
+{"stage": "34-3b-weights.bin", "missing": true}
+{"stage": "34-3c-shared.bin", "missing": true}
+{"stage": "34-3d-routed.bin", "missing": true}
+{"stage": "34-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "35-1-norm.bin", "missing": true}
+{"stage": "35-1-split.bin", "missing": true}
+{"stage": "35-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "35-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "35-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "35-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "35-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "35-3-norm.bin", "missing": true}
+{"stage": "35-3-split.bin", "missing": true}
+{"stage": "35-3a-selected.bin", "missing": true}
+{"stage": "35-3b-weights.bin", "missing": true}
+{"stage": "35-3c-shared.bin", "missing": true}
+{"stage": "35-3d-routed.bin", "missing": true}
+{"stage": "35-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "36-1-norm.bin", "missing": true}
+{"stage": "36-1-split.bin", "missing": true}
+{"stage": "36-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "36-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "36-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "36-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "36-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "36-3-norm.bin", "missing": true}
+{"stage": "36-3-split.bin", "missing": true}
+{"stage": "36-3a-selected.bin", "missing": true}
+{"stage": "36-3b-weights.bin", "missing": true}
+{"stage": "36-3c-shared.bin", "missing": true}
+{"stage": "36-3d-routed.bin", "missing": true}
+{"stage": "36-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "37-1-norm.bin", "missing": true}
+{"stage": "37-1-split.bin", "missing": true}
+{"stage": "37-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "37-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "37-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "37-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "37-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "37-3-norm.bin", "missing": true}
+{"stage": "37-3-split.bin", "missing": true}
+{"stage": "37-3a-selected.bin", "missing": true}
+{"stage": "37-3b-weights.bin", "missing": true}
+{"stage": "37-3c-shared.bin", "missing": true}
+{"stage": "37-3d-routed.bin", "missing": true}
+{"stage": "37-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "38-1-norm.bin", "missing": true}
+{"stage": "38-1-split.bin", "missing": true}
+{"stage": "38-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "38-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "38-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "38-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "38-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "38-3-norm.bin", "missing": true}
+{"stage": "38-3-split.bin", "missing": true}
+{"stage": "38-3a-selected.bin", "missing": true}
+{"stage": "38-3b-weights.bin", "missing": true}
+{"stage": "38-3c-shared.bin", "missing": true}
+{"stage": "38-3d-routed.bin", "missing": true}
+{"stage": "38-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "39-1-norm.bin", "missing": true}
+{"stage": "39-1-split.bin", "missing": true}
+{"stage": "39-1a-qr.bin", "elements": 1280, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "39-1b-q.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "39-1c-kv.bin", "elements": 512, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "39-1d-heads.bin", "elements": 32768, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "39-2-attn.bin", "elements": 5120, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}
+{"stage": "39-3-norm.bin", "missing": true}
+{"stage": "39-3-split.bin", "missing": true}
+{"stage": "39-3a-selected.bin", "missing": true}
+{"stage": "39-3b-weights.bin", "missing": true}
+{"stage": "39-3c-shared.bin", "missing": true}
+{"stage": "39-3d-routed.bin", "missing": true}
+{"stage": "39-4-residual.bin", "elements": 20480, "different": 0, "bit_identical": true, "max_abs": 0.0, "rmse": 0.0, "first": null}

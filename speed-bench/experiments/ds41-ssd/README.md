@@ -105,7 +105,7 @@ reproduce a vision-specific text prefill regression. The actual agent test
 also successfully saved its text-only system prompt with vision loaded.
 Sessions containing images remain outside that text-only save path.
 
-## Outcome
+## First-round outcome
 
 Six separate experiments, one accepted default performance change (scalar
 submission, commit 24914d66), and rebuilt ds4-agent/ds4-bench. The rejected
@@ -119,3 +119,163 @@ arithmetic/state discrepancy before adopting different partitions; do not
 interpret a matching argmax alone as correctness. Reproducing the originally
 reported vision slowdown still needs its prompt/runtime conditions: these
 controlled text-only tests already show parity with the encoder loaded.
+
+## 07: locate existing scalar/batch divergence before changing tail scheduling
+
+Added a diagnostic-only build (`make tests/trace_deepseek41_prefill`) that
+captures the last row of intermediate tensors. Trace barriers and file I/O are
+compiled out of normal builds. `trace_deepseek41_prefill MODEL PROMPT 32
+scalar|batch OUTDIR` runs the existing scalar or batch path directly.
+`compare_trace.py CONTROL_DIR CANDIDATE_DIR` compares every captured vector.
+
+At layer 0 of a fresh 32-token prompt, normalized inputs are bit-identical.
+Mixing coefficients already differ (max 2.33e-5). Q projection has 8208/32768
+differences after BF16 rounding; normalized Q low-rank and K projections also
+differ. This predates wide-tail scheduling and does not depend on long-context
+cache state. The batch dense paths use different arithmetic/half intermediates.
+Detailed stage comparisons are in trace32/scalar-vs-batch.jsonl.
+
+## 08: isolate the arithmetic differences and recover exact layer parity
+
+`DS4_METAL_V41_EXACT_DENSE_PREFILL=1` expands existing exact Q8/F16 row
+projections to larger batches and retains scalar grouped attention output.
+This removes layer-0 HC mixing and Q/K differences exactly. Attention heads
+still differ in 7/32768 elements. Adding `DS4_METAL_DISABLE_V41_BATCH_CORE=1`
+removes those differences; all inputs to the routed FFN then match exactly.
+Router IDs/weights and shared-expert output match; routed output differs by
+up to 4.22e-5 before BF16, producing 192 residual differences.
+
+Adding `DS4_METAL_DISABLE_V41_BATCH_MOE=1` gives bit-identical final residuals
+at all 40 layers in the 32-token trace. All other captured vectors also match.
+The trace comparison reports absent intermediate captures for the unfused HC
+path; the complete residual comparison is present for every layer. These
+switches are diagnostic, not default performance changes. This establishes a
+scalar-equivalent layer-major path worth testing for formerly scalar tails.
+
+## 09: preserve the original prefix and batch only its scalar tail
+
+Opt-in `DS4_METAL_V41_EXACT_SHORT_PREFILL=1` admits warm SSD tails of
+256-1023 tokens to a separate layer-major sweep, using exact row projections,
+scalar attention and scalar routed experts. The preceding batch partitions
+stay unchanged. This targets single-GPU, non-quality, non-imatrix execution
+with at least half the experts cached. The exact arithmetic scope is thread-local
+and restored even if the sweep fails.
+
+`run_abba.py /tmp/ds41-exact-short5000 --candidate-env
+DS4_METAL_V41_EXACT_SHORT_PREFILL=1 --tokens 5000 --ctx 100000`:
+representative control 70.65 tps, candidate 93.99/88.75 tps (26-33% faster).
+All full-vocabulary frontier logits match exactly. The first control was an
+outlier at 14.31 tps; do not use it to claim a sixfold improvement. No competing
+model process or thermal warning was found, but its cause is not established.
+Raw result rows, including the outlier, are in exact-short5000.json.
+
+The sweep changes expert-cache residency: candidate first decode is about
+1.2 seconds versus 58 ms for control, and the following seven tokens run at
+12.9-13.2 versus 15.5 tps. This cost must be included when choosing a default
+threshold. Smaller-tail timing and full serialized continuation-state checks
+follow before enabling this path by default.
+
+Regression `tests/test_deepseek41_exact_tail MODEL PROMPT` passed: 257- and
+513-token tails after a restored 4096-token prefix, each followed by eight
+teacher-forced decode steps, produce bit-identical complete serialized
+snapshots (KV state, hidden state, history, and logits).
+
+## 10: exact hyperconnection batching (opt-in; not a clear default win)
+
+`DS4_METAL_V41_EXACT_BATCH_HC=1` allows batched HC mixing around scalar
+attention and MoE in the exact-tail path. The exact dense arithmetic switch
+also prevents the fused HC projection from changing precision. Scalar MoE
+writes the batch block buffer, followed by one batched HC expansion.
+
+Both 257- and 513-token restored-prefix continuation snapshots are bit-identical
+with this switch. Their within-process ctx=8192 timings were worse than scalar
+(24.0 vs 13.9 seconds and 38.6 vs 26.7 seconds), so this is not enabled by default.
+The fresh-process ctx=100000 ABBA comparison is recorded in exact-hc5000.json.
+These context allocations have different expert-cache budgets; results from
+one configuration do not establish a win in the other.
+
+The baseline exact-tail path (without HC batching) did improve 513-token
+appends at ctx=100000 in all four separate-process runs: scalar 17.81/17.38 tps,
+exact sweep 22.49/21.86 tps. All full-vocabulary frontier logits match;
+see exact-short513.json.
+
+The runner now copies the executable into each experiment directory before
+starting, preventing a rebuild from changing the binary between A/B samples.
+It also accepts --gen-tokens for longer continuation measurements.
+
+## 11: reuse eight-row scalar-equivalent expert kernels
+
+`DS4_METAL_V41_EXACT_MOE_TILES=1`, together with the exact-tail opt-in,
+tiles routed/shared FFN work into at most eight rows. It reuses the backend's
+existing DS4.1 decode-batch kernels, which retain F32 intermediate values and
+scalar reduction order; it does not enable the large-batch grouped matmul.
+Token-ID views advance with each tile. HC and attention remain scalar unless
+separately requested. The final partial tile is covered by odd-length cases.
+
+At ctx=8192, 257- and 513-token restored-prefix tails plus eight continuation
+tokens have byte-identical complete snapshots. The test now checks that the
+candidate actually uses a layer-major sweep and the control stays scalar.
+Within-process timings (24.8 vs 14.0 seconds and 38.6 vs 25.9 seconds) again
+argue against enabling short SSD sweeps at every tail length.
+The ctx=100000, 5000-token fresh-process comparison includes 32 teacher-forced
+decode tokens per run and is retained in exact-tiles5000.json.
+
+Result: exact sweep control 89.36/94.57 tps; eight-row tiles 83.18/81.14 tps.
+All final logits match. Tiles reduce first decode from 1.07-1.12 seconds to
+193-205 ms, but the prefill regression is larger than that saving. Keep tiles
+opt-in. The non-tiled sweep reaches 14.9-15.1 tps over the next 31 decode tokens.
+
+## 12: enable the measured long-tail regime by default
+
+The default now uses the exact layer-major sweep for warm text-only SSD tails
+of 768-1023 tokens when the prefill buffer holds 8192 rows and at least half the
+experts are cached. It remains single-GPU, non-quality and non-imatrix only.
+This covers the agent's default 100000-token allocation. Shorter tails and
+smaller buffer configurations retain the previous dispatch because the
+measurements did not establish a consistent win there. Sessions containing
+image spans are excluded pending the deferred vision work.
+
+Rollback: `DS4_METAL_DISABLE_V41_EXACT_SHORT_PREFILL=1`.
+The old `DS4_METAL_V41_EXACT_SHORT_PREFILL=1` remains a diagnostic force flag
+for 256-1023-token comparisons; rollback takes precedence. HC batching and
+eight-row expert tiles remain opt-in, independently of the accepted sweep.
+
+Current-default comparison:
+`run_abba.py /tmp/ds41-default-tail5000 --candidate-env
+DS4_METAL_DISABLE_V41_EXACT_SHORT_PREFILL=1 --tokens 5000 --ctx 100000
+--gen-tokens 32`. Here **control is the new default; candidate is rollback**.
+Earlier opt-in A/B commands should be run at their experiment revisions,
+because unsetting the force flag no longer disables the accepted default.
+
+`make -j2 ds4-bench ds4-agent tests/test_deepseek41_exact_tail
+ tests/test_deepseek41_scalar_queue` completed without warnings. The exact-tail
+regression now checks the actual default against rollback at 768 and 1023
+appended tokens, including explicit batch-dispatch activation and eight
+continuation steps. Diagnostic build prerequisites and clean targets also
+include the new test tools correctly.
+
+Both default-boundary regressions passed with byte-identical full snapshots:
+768-token tail 44.0 -> 35.2 seconds; 1023-token tail 60.7 -> 57.5 seconds.
+These are within-process restored-prefix timings, not the separate-process
+ABBA estimate. See default-tail-state.txt for the exact command and output.
+
+Final review also excludes the optional resident-encoder mode: its short
+chunks were already batched and must keep their existing arithmetic. The
+normal wide-prefill path used by these measurements has no resident encoder.
+
+Final ABBA: default **88.60/89.96 tps**, rollback **70.45/68.78 tps**:
+**28.3% faster by aggregate prefill time** on this 5000-token prompt.
+All full-vocabulary frontier logits match across the four fresh processes.
+First decode after the sweep costs 1.00-1.20 seconds (rollback 57 ms);
+the next 31 tokens run at 14.95-15.00 tps (rollback 15.52-15.61).
+Including all 32 decoded tokens, average measured prefill-plus-decode time
+falls from about 73.9 to 59.2 seconds, a 19.9% wall-time reduction.
+See default-tail5000.json. The final resident-encoder exclusion does not
+change this measured path: all profile rows report encoder_resident=0.
+
+Second-round outcome: six more jj experiments, one new default admission
+policy, exact logit and continuation-state checks, and rebuilt agent/benchmark.
+The batching discrepancy is arithmetic: different dense/attention/expert
+rounding, rather than a missing KV-cache update. The accepted path preserves
+the old batch prefix and uses scalar-equivalent arithmetic for its long tail.
+Vision reproduction remains deferred to the user's next keyboard session.
