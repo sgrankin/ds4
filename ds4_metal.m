@@ -15248,6 +15248,15 @@ static void ds4_gpu_stream_expert_cache_clear_all(int reset_stats) {
     }
     g_stream_expert_cache_bytes = 0;
     g_stream_expert_cache_entry_count = 0;
+    /* Recycled slab slots remain locked until the entire cache is released.
+     * Explicitly unlock before dropping Metal buffers: their backing storage
+     * can outlive these references, including across a cache budget reset. */
+    for (uint32_t slot = 0; slot < g_stream_expert_cache_slab_total_slots; slot++) {
+        if (!ds4_gpu_stream_expert_slab_unlock_slot(slot)) {
+            fprintf(stderr, "metal: failed to unlock expert cache slot %u\n", slot);
+            abort();
+        }
+    }
     for (uint32_t i = 0; i < g_stream_expert_cache_slab_count; i++) {
         g_stream_expert_cache_slabs[i] = nil;
         g_stream_expert_cache_slab_start_slot[i] = 0;
