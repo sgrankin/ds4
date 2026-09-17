@@ -1068,6 +1068,7 @@ clean:
 	rm -f tests/test_qwen4_ngrams
 	rm -f tests/test_qwen4_ngram_state
 	rm -f tests/test_web_recovery
+	rm -f tests/test_deepseek41_ablation tests/test_metal_norm_bf16 tests/test_metal_q8_bf16
 	rm -f tests/test_deepseek41_scalar_queue tests/test_deepseek41_exact_tail tests/trace_deepseek41_prefill
 	rm -f tests/test_metal_ssd_experts
 	rm -f tests/test_metal_command_memory
@@ -1090,7 +1091,7 @@ clean:
 	rm -f tests/test_quality_api
 	rm -f tests/test_linux_memory tests/test_rocm_memory
 	rm -f tests/test_glm_attention tests/test_glm_attention_rocm
-	rm -f tests/test_ssd_cache tests/test_engram
+	rm -f tests/test_ssd_cache tests/test_engram tests/test_engram_lut
 	rm -f tests/test_session_state tests/test_session_state_gpu tests/test_tp_commands
 	rm -f tests/test_tp_rdma tests/test_tp_link tests/test_tp_tcp
 	rm -f tests/test_metal_tp_spec
@@ -1112,3 +1113,15 @@ tests/trace_deepseek41_prefill: tests/trace_deepseek41_prefill.c ds4.c ds4.h $(f
 
 tests/test_deepseek41_exact_tail: tests/test_deepseek41_exact_tail.c ds4.h $(CORE_OBJS)
 	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+# Explicit short-turn arithmetic regression and fused-kernel checks.
+tests/test_deepseek41_ablation: tests/test_deepseek41_ablation.c ds4.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+tests/test_metal_norm_bf16: tests/test_metal_norm_bf16.c ds4_gpu.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/test_metal_q8_bf16: tests/test_metal_q8_bf16.c ds4_gpu.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/test_engram_lut: tests/test_engram_lut.c ds4_engram.c ds4_engram.h
+	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -I. -o $@ $< -lm -pthread

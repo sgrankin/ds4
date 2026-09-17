@@ -279,3 +279,135 @@ The batching discrepancy is arithmetic: different dense/attention/expert
 rounding, rather than a missing KV-cache update. The accepted path preserves
 the old batch prefix and uses scalar-equivalent arithmetic for its long tail.
 Vision reproduction remains deferred to the user's next keyboard session.
+
+## 13: actual hello turns, fresh versus restored system KV
+
+Added `DS4_AGENT_CACHE_DIR` as an optional agent cache-directory override.
+The default remains ~/.ds4/kvcache. agent_probe.py snapshots the executable,
+uses a private cache, sends three separate turns on the real noninteractive
+readiness protocol, and limits output to one token per turn. This isolates
+prefill latency; it is not a benchmark of complete natural-language answers.
+
+`python3 speed-bench/experiments/ds41-ssd/agent_probe.py /tmp/ds41-agent-short-baseline2`
+(no vision; default ctx=100000). System prompt 1859 tokens: 14.932 seconds.
+After fresh system prefill, appends of 38/12/6 tokens took 3.527/0.981/0.379 s.
+After loading saved system KV in a new process, the same appends took
+4.954/1.203/0.509 s. The trace confirms a system KV hit. Repeated short turns
+get faster as weights warm; restoring KV does not recreate that weight cache.
+All KV files are isolated under the experiment directory. See agent-short-baseline.json.
+
+## 14: smaller 64 GiB cache target (inconclusive; no default change)
+
+`agent_probe.py /tmp/ds41-agent-cache64 --cache-gb 64` uses the existing explicit
+cache budget. Fresh/restored 38-token hello took 3.435/4.659 seconds versus
+baseline 3.527/4.954. Later turns were mixed (12 tokens 1.033/1.153 seconds;
+6 tokens 0.455/0.482). This single comparison does not justify a cache-default
+change; differences are small and need balanced repeats. See agent-cache64.json.
+
+## 15: exact weighted normalization and BF16 fusion (opt-in)
+
+`DS4_METAL_V41_FUSED_NORM=1` retains the original RMS reduction and learned
+weight multiplication, rounding to BF16 in the same kernel. Forty synthetic
+shape/alias cases match every output byte and buffer guards. The full-model
+check (`test_deepseek41_ablation MODEL PROMPT ENV`) matches all 32 full-vocabulary
+logit rows and the complete serialized continuation state.
+
+Warmed synthetic 2000-call timing: separate ~9.96 ms, fused 6.79/6.83 ms; the
+first separate pass was 19.96 ms and includes cold overhead (norm-kernel.txt).
+The four-process 40-token append after 2048 tokens at ctx=100000 shows no
+wall-time improvement: control 13.21/13.09 tps, fused 13.05/13.23. All frontier
+logits match. Retained opt-in while measuring actual agent behavior; no default
+change justified by this sample. See norm-abba40.json.
+
+Actual agent probe with fusion: fresh/restored hello 3.614/5.027 seconds,
+versus 3.527/4.954 in the initial baseline. No measured end-to-end gain.
+The restored-process profile (three short turns plus three output tokens)
+reports 2360 layer selections, 3.641 s selected synchronization, 1.674 s pread,
+and 0.595 s read-ahead advice. Timing categories overlap. This points toward
+submission/I/O scheduling rather than treating norm microbenchmark gains as
+user-visible gains. See agent-norm.json.
+
+## 16: start selected SSD loads before shared-expert GPU work (opt-in)
+
+`DS4_METAL_V41_EARLY_EXPERT_LOAD=1` moves selected-ID synchronization before
+shared-expert computation, starts the existing protected asynchronous cache
+loader, submits shared kernels, then consumes the same IDs in routed MoE.
+Only non-quality single-rank SSD streaming is changed. No routing prediction.
+
+All 32 full logit rows and the complete serialized continuation match exactly.
+Forty-token append ABBA at ctx=100000: control 13.08/12.93 tps; early load
+13.52/13.24 (~2.9% mean throughput gain). All frontier logits match exactly.
+Actual-agent balanced trials follow; this remains opt-in pending stronger
+workload evidence. agent_abba.py fixes one executable across all eight agent
+processes and tests both fresh and restored system KV in ABBA order.
+See early-abba40.json.
+
+Real-agent ABBA confirms early loading: mean fresh hello 3.498 to 3.369 s
+(-3.7% latency), restored hello 5.005 to 4.709 s (-5.9%). Both candidates
+beat both controls in each hello condition. Later turns are broadly improved,
+with restored 12-token turns essentially flat. All runs use a fixed binary,
+private KV stores, default ctx=100000, and one output token. See agent-early-abba.json.
+
+## 17: omit selected-expert read-ahead advice (rejected)
+
+Actual-agent ABBA with `DS4_METAL_DISABLE_STREAMING_EXPERT_READAHEAD=1`:
+mean fresh hello 3.585 to 3.633 s, restored hello 5.041 to 5.441 s (7.9% slower).
+Both restored candidates were slower than both controls. Read-ahead overhead
+is real, but omitting it makes subsequent reads sufficiently slower to lose
+overall. Keep the existing default. See agent-noadvice-abba.json.
+
+The benchmark harness now copies all external Metal sources and records their
+SHA256 hashes, passing source overrides to every subprocess. This complements
+the fixed executable and allows later development without changing a running
+experiment's shaders.
+
+## 18: exact Q8 matvec output and BF16 fusion (opt-in)
+
+`DS4_METAL_V41_FUSED_Q8_BF16=1` rounds the final scalar Q8 reduction in its
+output store, replacing a separate BF16 dispatch. The scalar reduction order
+and explicit rounding are unchanged. Exact-row batches use the same epilogue;
+large matrix batches keep their prior path.
+
+All 48 synthetic shape cases match exact output bytes and output guards.
+Warmed 1000-call 5120x5120 matrix timing: separate 33.241 ms, fused 31.624/31.680;
+first separate pass 40.487 ms includes cold overhead. All 32 full-vocabulary
+model logit rows and serialized continuation state match exactly.
+Short-append ABBA pending; no default change yet. See q8-kernel.txt.
+
+Q8 short-append ABBA is flat: control 13.22/12.80 tps, candidate 13.10/12.82,
+all frontier logits identical. Keep the fusion opt-in; the microbenchmark
+gain does not establish an end-to-end gain. See q8-abba40.json.
+
+## 19: honor prefill chunk independently of maximum context
+
+DS4.1 now honors explicit `--prefill-chunk` in graph allocation, admission,
+and memory reporting, capped at the supported 8192 rows. The existing
+context-derived default is unchanged. All call sites, including imatrix and
+multiple-session admission, receive the engine setting.
+
+At ctx=100000, chunk2048 reduces scratch from 8.01 to 3.76 GiB; the automatic
+expert cache grows from 72.51 to 76.50 GiB. Total planned memory changes only
+from 97.61 to 97.36 GiB, so this is primarily a budget redistribution.
+Forty-token append ABBA: control 13.00/11.94 tps; chunk2048 13.11/12.75.
+All full-vocabulary frontier logits match. Control drift makes the timing
+inconclusive; actual-agent ABBA follows before considering a default change.
+See chunk2048-abba40.json.
+
+Actual-agent buffer ABBA shows no consistent short-turn gain: fresh hello
+3.537 to 3.521 s, restored hello 5.038 to 5.101 s. Keep the default buffer cap;
+the explicit chunk setting remains useful for controlling the memory budget.
+See agent-chunk2048-abba.json.
+
+## 20: tabulate Engram FP8/scale decoding (opt-in, tiny total savings)
+
+`DS4_ENGRAM_DECODE_LUT=1` uses a process-wide 256 KiB table initialized once
+from the original F32 scaling and BF16 rounding. Invalid encodings and
+non-finite results retain EDOM behavior. All 65536 code/scale pairs match an
+independent double-precision reference after the original rounding boundaries,
+including signed zero and subnormals. The existing Engram suite passes.
+
+Cached CPU row benchmark: 2000x24 rows takes 46.4-49.2 ms normally, 27.1-28.1 ms
+with the table. That saves only about 0.02 ms per model token's two Engram
+lookups. All 32 full model logit rows and serialized continuation bytes match.
+Retain opt-in, with no claim of meaningful agent latency gain.
+See engram-lut-cpu.txt and tests/test_engram_lut.c.

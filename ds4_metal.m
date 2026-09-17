@@ -19634,7 +19634,7 @@ int ds4_gpu_qwen4_matmul_q8_0_tensor(
         ds4_gpu_device_name_contains("M3 Ultra"));
 }
 
-int ds4_gpu_matmul_q8_0_decode_rows_exact_tensor(
+static int ds4_gpu_matmul_q8_0_decode_rows_impl(
         ds4_gpu_tensor       *out,
         const void           *model_map,
         uint64_t              model_size,
@@ -19642,7 +19642,7 @@ int ds4_gpu_matmul_q8_0_decode_rows_exact_tensor(
         uint64_t              in_dim,
         uint64_t              out_dim,
         const ds4_gpu_tensor *x,
-        uint32_t              n_rows) {
+        uint32_t              n_rows, bool round_bf16) {
     if (!g_initialized && !ds4_gpu_init()) return 0;
     if (!out || !x || !model_map || n_rows == 0 ||
         n_rows > INT32_MAX || in_dim == 0 || out_dim == 0 ||
@@ -19689,7 +19689,8 @@ int ds4_gpu_matmul_q8_0_decode_rows_exact_tensor(
         args.nr0 = dispatch.nr0;
 
         id<MTLComputePipelineState> pipeline =
-            ds4_gpu_get_mul_mv_pipeline(dispatch.function_name, dispatch.nsg);
+            ds4_gpu_get_mul_mv_pipeline(round_bf16 ?
+                "kernel_mul_mv_q8_0_bf16_f32" : dispatch.function_name, dispatch.nsg);
         if (!pipeline) return 0;
 
         int owned = 0;
@@ -19715,6 +19716,20 @@ int ds4_gpu_matmul_q8_0_decode_rows_exact_tensor(
         return ds4_gpu_finish_command_buffer(
                 cb, owned, "Q8_0 exact decode-row matvec");
     }
+}
+
+int ds4_gpu_matmul_q8_0_decode_rows_exact_tensor(ds4_gpu_tensor *out,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint64_t in_dim, uint64_t out_dim, const ds4_gpu_tensor *x, uint32_t rows) {
+    return ds4_gpu_matmul_q8_0_decode_rows_impl(out, model_map, model_size,
+        weight_offset, in_dim, out_dim, x, rows, false);
+}
+
+int ds4_gpu_dsv41_matmul_q8_0_bf16_rows(ds4_gpu_tensor *out,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint64_t in_dim, uint64_t out_dim, const ds4_gpu_tensor *x, uint32_t rows) {
+    return ds4_gpu_matmul_q8_0_decode_rows_impl(out, model_map, model_size,
+        weight_offset, in_dim, out_dim, x, rows, true);
 }
 
 int ds4_gpu_matmul_q8_0_decode_mpp_tensor(
@@ -22301,7 +22316,7 @@ int ds4_gpu_rms_norm_weight_tensor(
     return ds4_gpu_rms_norm_weight_rows_tensor(out, x, model_map, model_size, weight_offset, n, 1, eps);
 }
 
-int ds4_gpu_rms_norm_weight_rows_tensor(
+static int ds4_gpu_rms_norm_weight_rows_impl(
         ds4_gpu_tensor       *out,
         const ds4_gpu_tensor *x,
         const void             *model_map,
@@ -22309,7 +22324,7 @@ int ds4_gpu_rms_norm_weight_rows_tensor(
         uint64_t                weight_offset,
         uint32_t                n,
         uint32_t                rows,
-        float                   eps) {
+        float                   eps, bool round_bf16) {
     if (!g_initialized && !ds4_gpu_init()) return 0;
     if (n == 0 || rows == 0 || (n & 3u) != 0) return 0;
 
@@ -22343,7 +22358,10 @@ int ds4_gpu_rms_norm_weight_rows_tensor(
         if (!cb) return 0;
 
         id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
-        [enc setComputePipelineState:g_rms_norm_pipeline];
+        id<MTLComputePipelineState> pipeline = round_bf16 ?
+            ds4_gpu_get_pipeline("kernel_rms_norm_mul_bf16_f32_4") : g_rms_norm_pipeline;
+        if (!enc || !pipeline) return 0;
+        [enc setComputePipelineState:pipeline];
         [enc setBytes:&args length:sizeof(args) atIndex:0];
         [enc setBuffer:xbuf offset:ds4_gpu_tensor_offset(x) atIndex:1];
         [enc setBuffer:wbuf offset:(NSUInteger)inner_offset atIndex:2];
@@ -22358,6 +22376,20 @@ int ds4_gpu_rms_norm_weight_rows_tensor(
     }
 
     return 1;
+}
+
+int ds4_gpu_rms_norm_weight_rows_tensor(ds4_gpu_tensor *out, const ds4_gpu_tensor *x,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint32_t n, uint32_t rows, float eps) {
+    return ds4_gpu_rms_norm_weight_rows_impl(out, x, model_map, model_size,
+        weight_offset, n, rows, eps, false);
+}
+
+int ds4_gpu_dsv41_rms_norm_weight_bf16_rows(ds4_gpu_tensor *out, const ds4_gpu_tensor *x,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint32_t n, uint32_t rows, float eps) {
+    return ds4_gpu_rms_norm_weight_rows_impl(out, x, model_map, model_size,
+        weight_offset, n, rows, eps, true);
 }
 
 int ds4_gpu_add_rms_norm_weight_tensor(

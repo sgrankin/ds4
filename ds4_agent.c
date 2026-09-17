@@ -4697,6 +4697,8 @@ static bool agent_mkdir_p(const char *path) {
 }
 
 static char *agent_default_cache_dir(void) {
+    const char *override = getenv("DS4_AGENT_CACHE_DIR");
+    if (override && override[0]) return xstrdup(override);
     const char *home = getenv("HOME");
     if (!home || !home[0]) home = ".";
     agent_buf b = {0};

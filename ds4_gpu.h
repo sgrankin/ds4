@@ -782,6 +782,10 @@ int ds4_gpu_matmul_q4_K_pair_decode_tensor(
         const ds4_gpu_tensor *x);
 
 /* Multi-row decode projections that preserve the one-row reduction order. */
+/* Scalar reduction order, with explicit BF16 output rounding. */
+int ds4_gpu_dsv41_matmul_q8_0_bf16_rows(ds4_gpu_tensor *out,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint64_t in_dim, uint64_t out_dim, const ds4_gpu_tensor *x, uint32_t rows);
 int ds4_gpu_matmul_q8_0_decode_rows_exact_tensor(
         ds4_gpu_tensor       *out,
         const void           *model_map,
@@ -1131,6 +1135,11 @@ int ds4_gpu_rms_norm_weight_rows_tensor(
         uint32_t                n,
         uint32_t                rows,
         float                   eps);
+
+/* Weighted RMSNorm followed by the exact DS4.1 BF16 boundary in one dispatch. */
+int ds4_gpu_dsv41_rms_norm_weight_bf16_rows(ds4_gpu_tensor *out, const ds4_gpu_tensor *x,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint32_t n, uint32_t rows, float eps);
 
 int ds4_gpu_add_rms_norm_weight_tensor(
         ds4_gpu_tensor       *norm_out,

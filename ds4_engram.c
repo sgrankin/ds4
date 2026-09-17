@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <math.h>
+#include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -144,6 +145,26 @@ static float e4m3(uint8_t byte) {
     return byte & 128 ? -value : value;
 }
 
+/* The on-disk element has only 16 bits of input: FP8 code and shared scale.
+ * Cache the original F32 scaling and BF16 rounding, including invalid values. */
+static float engram_decode_lut[256][256];
+static pthread_once_t engram_decode_once = PTHREAD_ONCE_INIT;
+static void engram_decode_init(void) {
+    for (unsigned scale = 0; scale < 256; scale++) {
+        for (unsigned code = 0; code < 256; code++) {
+            float value = NAN;
+            if ((code & 127u) != 127u && scale != 255u) {
+                value = ldexpf(e4m3((uint8_t)code), (int)scale - 127);
+                uint32_t bits;
+                memcpy(&bits, &value, sizeof(bits));
+                bits = (bits + 0x7fffu + ((bits >> 16) & 1u)) & 0xffff0000u;
+                memcpy(&value, &bits, sizeof(value));
+            }
+            engram_decode_lut[scale][code] = value;
+        }
+    }
+}
+
 bool ds4_engram_read(const ds4_engram_table *t, const uint32_t *rows,
                      size_t count, float *out) {
     if (!t || t->fd < 0 || (count && (!rows || !out)) ||
@@ -158,10 +179,18 @@ bool ds4_engram_read(const ds4_engram_table *t, const uint32_t *rows,
         }
     }
     uint8_t raw[DS4_ENGRAM_ROW_BYTES];
+    const bool lookup = getenv("DS4_ENGRAM_DECODE_LUT") != NULL;
+    if (lookup) pthread_once(&engram_decode_once, engram_decode_init);
     for (size_t i = 0; i < count; i++) {
         if (!read_row(t->fd, t->offset + (uint64_t)rows[i] * sizeof(raw), raw)) return false;
         for (int j = 0; j < DS4_ENGRAM_DIM; j++) {
             uint8_t code = raw[j], scale = raw[DS4_ENGRAM_DIM + j / 32];
+            if (lookup) {
+                float value = engram_decode_lut[scale][code];
+                if (!isfinite(value)) { errno = EDOM; return false; }
+                out[i * DS4_ENGRAM_DIM + j] = value;
+                continue;
+            }
             if ((code & 127) == 127 || scale == 255) {
                 errno = EDOM;
                 return false;
