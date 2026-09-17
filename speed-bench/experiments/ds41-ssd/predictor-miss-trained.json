@@ -1,0 +1,712 @@
+{
+  "architecture": "5120->128 tanh shared stem,40x128->384 heads",
+  "parameters": 2636928,
+  "objective": "BCE on nonresident experts only, positive weight16, Adam lr.001, bias init -4",
+  "selection": "Max validation covered misses at wrong reads <=10% of native demand; top6 cold candidates; one global threshold",
+  "epochs": 30,
+  "seed": 1234,
+  "best_epoch": 24,
+  "threshold": 0.8717117309570312,
+  "split_tokens": [
+    2022,
+    674,
+    675
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.10849925750354351,
+      "validation": {
+        "threshold": 0.45525702834129333,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 998,
+          "useful_reads": 115,
+          "unnecessary_reads": 883,
+          "miss_recall": 0.012656834690732996,
+          "read_precision": 0.11523046092184369,
+          "all_demand_misses_covered": 0.007460661964188823,
+          "reads_on_native_all_hit_layers": 433,
+          "extra_reads_over_native_fraction": 0.09718247853841074,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.06930054634280731,
+      "validation": {
+        "threshold": 0.5945963859558105,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1151,
+          "useful_reads": 243,
+          "unnecessary_reads": 908,
+          "miss_recall": 0.026744441998679286,
+          "read_precision": 0.21112076455256298,
+          "all_demand_misses_covered": 0.018990775908844276,
+          "reads_on_native_all_hit_layers": 474,
+          "extra_reads_over_native_fraction": 0.099933964340744,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.0479036409363637,
+      "validation": {
+        "threshold": 0.6797837018966675,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1225,
+          "useful_reads": 329,
+          "unnecessary_reads": 896,
+          "miss_recall": 0.0362095531587057,
+          "read_precision": 0.26857142857142857,
+          "all_demand_misses_covered": 0.025501899077590883,
+          "reads_on_native_all_hit_layers": 486,
+          "extra_reads_over_native_fraction": 0.09861325115562404,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.03607829374060381,
+      "validation": {
+        "threshold": 0.7241742014884949,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1268,
+          "useful_reads": 369,
+          "unnecessary_reads": 899,
+          "miss_recall": 0.040611930442438916,
+          "read_precision": 0.2910094637223975,
+          "all_demand_misses_covered": 0.02875746066196419,
+          "reads_on_native_all_hit_layers": 499,
+          "extra_reads_over_native_fraction": 0.09894342945190403,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.028680394306335816,
+      "validation": {
+        "threshold": 0.7440404891967773,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1317,
+          "useful_reads": 409,
+          "unnecessary_reads": 908,
+          "miss_recall": 0.04501430772617213,
+          "read_precision": 0.3105542900531511,
+          "all_demand_misses_covered": 0.032691264243081934,
+          "reads_on_native_all_hit_layers": 515,
+          "extra_reads_over_native_fraction": 0.099933964340744,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.023736583355502855,
+      "validation": {
+        "threshold": 0.7617595791816711,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1351,
+          "useful_reads": 443,
+          "unnecessary_reads": 908,
+          "miss_recall": 0.04875632841734537,
+          "read_precision": 0.32790525536639525,
+          "all_demand_misses_covered": 0.03567552902875746,
+          "reads_on_native_all_hit_layers": 520,
+          "extra_reads_over_native_fraction": 0.099933964340744,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.02020867111835662,
+      "validation": {
+        "threshold": 0.7775640487670898,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1358,
+          "useful_reads": 457,
+          "unnecessary_reads": 901,
+          "miss_recall": 0.050297160466651995,
+          "read_precision": 0.33652430044182624,
+          "all_demand_misses_covered": 0.03648941942485079,
+          "reads_on_native_all_hit_layers": 521,
+          "extra_reads_over_native_fraction": 0.09916354831609069,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.017554525950090806,
+      "validation": {
+        "threshold": 0.7840112447738647,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1375,
+          "useful_reads": 472,
+          "unnecessary_reads": 903,
+          "miss_recall": 0.05194805194805195,
+          "read_precision": 0.3432727272727273,
+          "all_demand_misses_covered": 0.03811720021703744,
+          "reads_on_native_all_hit_layers": 522,
+          "extra_reads_over_native_fraction": 0.09938366718027734,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.015480128688284986,
+      "validation": {
+        "threshold": 0.7954990863800049,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1414,
+          "useful_reads": 510,
+          "unnecessary_reads": 904,
+          "miss_recall": 0.0561303103675985,
+          "read_precision": 0.3606789250353607,
+          "all_demand_misses_covered": 0.04218665219750407,
+          "reads_on_native_all_hit_layers": 525,
+          "extra_reads_over_native_fraction": 0.09949372661237069,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.01379570981305006,
+      "validation": {
+        "threshold": 0.8041747808456421,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1414,
+          "useful_reads": 517,
+          "unnecessary_reads": 897,
+          "miss_recall": 0.05690072639225181,
+          "read_precision": 0.36562942008486565,
+          "all_demand_misses_covered": 0.042322300596852956,
+          "reads_on_native_all_hit_layers": 525,
+          "extra_reads_over_native_fraction": 0.09872331058771737,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.012405072749257512,
+      "validation": {
+        "threshold": 0.8106582164764404,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1442,
+          "useful_reads": 535,
+          "unnecessary_reads": 907,
+          "miss_recall": 0.05888179616993176,
+          "read_precision": 0.3710124826629681,
+          "all_demand_misses_covered": 0.04381443298969072,
+          "reads_on_native_all_hit_layers": 518,
+          "extra_reads_over_native_fraction": 0.09982390490865067,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.011229177938143674,
+      "validation": {
+        "threshold": 0.8201759457588196,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1417,
+          "useful_reads": 537,
+          "unnecessary_reads": 880,
+          "miss_recall": 0.05910191503411842,
+          "read_precision": 0.378969654199012,
+          "all_demand_misses_covered": 0.04395008138903961,
+          "reads_on_native_all_hit_layers": 508,
+          "extra_reads_over_native_fraction": 0.09685230024213075,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.01022209500380157,
+      "validation": {
+        "threshold": 0.8296657800674438,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1437,
+          "useful_reads": 545,
+          "unnecessary_reads": 892,
+          "miss_recall": 0.05998239049086507,
+          "read_precision": 0.3792623521224774,
+          "all_demand_misses_covered": 0.04476397178513294,
+          "reads_on_native_all_hit_layers": 521,
+          "extra_reads_over_native_fraction": 0.09817301342725071,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.009345112376202462,
+      "validation": {
+        "threshold": 0.8295592069625854,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1470,
+          "useful_reads": 562,
+          "unnecessary_reads": 908,
+          "miss_recall": 0.06185340083645168,
+          "read_precision": 0.38231292517006804,
+          "all_demand_misses_covered": 0.0462561041779707,
+          "reads_on_native_all_hit_layers": 525,
+          "extra_reads_over_native_fraction": 0.099933964340744,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.008578337624859761,
+      "validation": {
+        "threshold": 0.8331729173660278,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1478,
+          "useful_reads": 578,
+          "unnecessary_reads": 900,
+          "miss_recall": 0.06361435174994497,
+          "read_precision": 0.3910690121786198,
+          "all_demand_misses_covered": 0.04801953336950624,
+          "reads_on_native_all_hit_layers": 525,
+          "extra_reads_over_native_fraction": 0.09905348888399736,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.007896831955573716,
+      "validation": {
+        "threshold": 0.8379549980163574,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1490,
+          "useful_reads": 582,
+          "unnecessary_reads": 908,
+          "miss_recall": 0.0640545894783183,
+          "read_precision": 0.3906040268456376,
+          "all_demand_misses_covered": 0.04761258817145958,
+          "reads_on_native_all_hit_layers": 532,
+          "extra_reads_over_native_fraction": 0.099933964340744,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.007285843542048111,
+      "validation": {
+        "threshold": 0.8459200263023376,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1484,
+          "useful_reads": 587,
+          "unnecessary_reads": 897,
+          "miss_recall": 0.06460488663878494,
+          "read_precision": 0.39555256064690025,
+          "all_demand_misses_covered": 0.04788388497015735,
+          "reads_on_native_all_hit_layers": 522,
+          "extra_reads_over_native_fraction": 0.09872331058771737,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.0067404092417898175,
+      "validation": {
+        "threshold": 0.8486919403076172,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1495,
+          "useful_reads": 599,
+          "unnecessary_reads": 896,
+          "miss_recall": 0.0659255998239049,
+          "read_precision": 0.4006688963210702,
+          "all_demand_misses_covered": 0.04896907216494845,
+          "reads_on_native_all_hit_layers": 525,
+          "extra_reads_over_native_fraction": 0.09861325115562404,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.006250017107202755,
+      "validation": {
+        "threshold": 0.8516091108322144,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1503,
+          "useful_reads": 597,
+          "unnecessary_reads": 906,
+          "miss_recall": 0.06570548095971825,
+          "read_precision": 0.3972055888223553,
+          "all_demand_misses_covered": 0.04964731416169289,
+          "reads_on_native_all_hit_layers": 528,
+          "extra_reads_over_native_fraction": 0.09971384547655734,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.005800095165539192,
+      "validation": {
+        "threshold": 0.859129011631012,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1513,
+          "useful_reads": 605,
+          "unnecessary_reads": 908,
+          "miss_recall": 0.06658595641646489,
+          "read_precision": 0.3998678122934567,
+          "all_demand_misses_covered": 0.04964731416169289,
+          "reads_on_native_all_hit_layers": 532,
+          "extra_reads_over_native_fraction": 0.099933964340744,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 21,
+      "train_loss": 0.005395157221102724,
+      "validation": {
+        "threshold": 0.8603681921958923,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1500,
+          "useful_reads": 600,
+          "unnecessary_reads": 900,
+          "miss_recall": 0.06603565925599823,
+          "read_precision": 0.4,
+          "all_demand_misses_covered": 0.050054259359739554,
+          "reads_on_native_all_hit_layers": 525,
+          "extra_reads_over_native_fraction": 0.09905348888399736,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 22,
+      "train_loss": 0.005021990093550646,
+      "validation": {
+        "threshold": 0.8648921847343445,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1506,
+          "useful_reads": 600,
+          "unnecessary_reads": 906,
+          "miss_recall": 0.06603565925599823,
+          "read_precision": 0.398406374501992,
+          "all_demand_misses_covered": 0.04978296256104178,
+          "reads_on_native_all_hit_layers": 535,
+          "extra_reads_over_native_fraction": 0.09971384547655734,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 23,
+      "train_loss": 0.004682603234788596,
+      "validation": {
+        "threshold": 0.8694849610328674,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1515,
+          "useful_reads": 610,
+          "unnecessary_reads": 905,
+          "miss_recall": 0.06713625357693154,
+          "read_precision": 0.40264026402640263,
+          "all_demand_misses_covered": 0.050868149755832884,
+          "reads_on_native_all_hit_layers": 540,
+          "extra_reads_over_native_fraction": 0.09960378604446402,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 24,
+      "train_loss": 0.004367639588891748,
+      "validation": {
+        "threshold": 0.8717117309570312,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1524,
+          "useful_reads": 616,
+          "unnecessary_reads": 908,
+          "miss_recall": 0.06779661016949153,
+          "read_precision": 0.4041994750656168,
+          "all_demand_misses_covered": 0.051682040151926206,
+          "reads_on_native_all_hit_layers": 530,
+          "extra_reads_over_native_fraction": 0.099933964340744,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 25,
+      "train_loss": 0.004080989534475999,
+      "validation": {
+        "threshold": 0.8775948882102966,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1511,
+          "useful_reads": 606,
+          "unnecessary_reads": 905,
+          "miss_recall": 0.06669601584855822,
+          "read_precision": 0.4010589013898081,
+          "all_demand_misses_covered": 0.049918610960390665,
+          "reads_on_native_all_hit_layers": 529,
+          "extra_reads_over_native_fraction": 0.09960378604446402,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 26,
+      "train_loss": 0.0038131039037620678,
+      "validation": {
+        "threshold": 0.8849344849586487,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1508,
+          "useful_reads": 607,
+          "unnecessary_reads": 901,
+          "miss_recall": 0.06680607528065155,
+          "read_precision": 0.40251989389920423,
+          "all_demand_misses_covered": 0.050596852957135105,
+          "reads_on_native_all_hit_layers": 531,
+          "extra_reads_over_native_fraction": 0.09916354831609069,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 27,
+      "train_loss": 0.0035696061014561177,
+      "validation": {
+        "threshold": 0.8861565589904785,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1509,
+          "useful_reads": 605,
+          "unnecessary_reads": 904,
+          "miss_recall": 0.06658595641646489,
+          "read_precision": 0.40092776673293573,
+          "all_demand_misses_covered": 0.050596852957135105,
+          "reads_on_native_all_hit_layers": 536,
+          "extra_reads_over_native_fraction": 0.09949372661237069,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 28,
+      "train_loss": 0.0033415545538291436,
+      "validation": {
+        "threshold": 0.8894274830818176,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1514,
+          "useful_reads": 606,
+          "unnecessary_reads": 908,
+          "miss_recall": 0.06669601584855822,
+          "read_precision": 0.4002642007926024,
+          "all_demand_misses_covered": 0.050732501356483994,
+          "reads_on_native_all_hit_layers": 541,
+          "extra_reads_over_native_fraction": 0.099933964340744,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 29,
+      "train_loss": 0.0031323722149782032,
+      "validation": {
+        "threshold": 0.8911253213882446,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1514,
+          "useful_reads": 608,
+          "unnecessary_reads": 906,
+          "miss_recall": 0.06691613471274488,
+          "read_precision": 0.40158520475561427,
+          "all_demand_misses_covered": 0.051139446554530656,
+          "reads_on_native_all_hit_layers": 544,
+          "extra_reads_over_native_fraction": 0.09971384547655734,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    },
+    {
+      "epoch": 30,
+      "train_loss": 0.0029337584627511276,
+      "validation": {
+        "threshold": 0.8935853838920593,
+        "metrics": {
+          "rows": 26960,
+          "demand_misses": 9086,
+          "predicted_reads": 1514,
+          "useful_reads": 608,
+          "unnecessary_reads": 906,
+          "miss_recall": 0.06691613471274488,
+          "read_precision": 0.40158520475561427,
+          "all_demand_misses_covered": 0.051003798155181766,
+          "reads_on_native_all_hit_layers": 549,
+          "extra_reads_over_native_fraction": 0.09971384547655734,
+          "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+        }
+      }
+    }
+  ],
+  "test": {
+    "threshold": 0.8717117309570312,
+    "metrics": {
+      "rows": 27000,
+      "demand_misses": 8471,
+      "predicted_reads": 1095,
+      "useful_reads": 528,
+      "unnecessary_reads": 567,
+      "miss_recall": 0.06233030338802975,
+      "read_precision": 0.4821917808219178,
+      "all_demand_misses_covered": 0.05070382074116633,
+      "reads_on_native_all_hit_layers": 356,
+      "extra_reads_over_native_fraction": 0.06693424625191831,
+      "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+    }
+  },
+  "separate_task": {
+    "threshold": 0.8717117309570312,
+    "metrics": {
+      "rows": 125440,
+      "demand_misses": 29316,
+      "predicted_reads": 3072,
+      "useful_reads": 1223,
+      "unnecessary_reads": 1849,
+      "miss_recall": 0.0417178332651112,
+      "read_precision": 0.3981119791666667,
+      "all_demand_misses_covered": 0.030185665801557196,
+      "reads_on_native_all_hit_layers": 1257,
+      "extra_reads_over_native_fraction": 0.0630713603492973,
+      "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+    }
+  },
+  "route_baseline": {
+    "validation": {
+      "threshold": 0.506181001663208,
+      "metrics": {
+        "rows": 26960,
+        "demand_misses": 9086,
+        "predicted_reads": 2097,
+        "useful_reads": 1197,
+        "unnecessary_reads": 900,
+        "miss_recall": 0.13174114021571648,
+        "read_precision": 0.5708154506437768,
+        "all_demand_misses_covered": 0.09943027672273468,
+        "reads_on_native_all_hit_layers": 560,
+        "extra_reads_over_native_fraction": 0.09905348888399736,
+        "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+      }
+    },
+    "test": {
+      "threshold": 0.506181001663208,
+      "metrics": {
+        "rows": 27000,
+        "demand_misses": 8471,
+        "predicted_reads": 2291,
+        "useful_reads": 1223,
+        "unnecessary_reads": 1068,
+        "miss_recall": 0.14437492621886436,
+        "read_precision": 0.533828022697512,
+        "all_demand_misses_covered": 0.11361677678827924,
+        "reads_on_native_all_hit_layers": 707,
+        "extra_reads_over_native_fraction": 0.1260772045803329,
+        "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+      }
+    },
+    "separate_task": {
+      "threshold": 0.506181001663208,
+      "metrics": {
+        "rows": 125440,
+        "demand_misses": 29316,
+        "predicted_reads": 9419,
+        "useful_reads": 2709,
+        "unnecessary_reads": 6710,
+        "miss_recall": 0.09240687679083094,
+        "read_precision": 0.2876101496974201,
+        "all_demand_misses_covered": 0.06851666999401078,
+        "reads_on_native_all_hit_layers": 5043,
+        "extra_reads_over_native_fraction": 0.22888525037522173,
+        "limits": "Native residency frozen; no eviction, I/O contention, predictor overhead or readiness deadline."
+      }
+    }
+  },
+  "hashes": {
+    "features": "7811c9a0ae932d56bec6563ecf818faf70d17aa6f3b5d41e6e5a2946a79ac7be",
+    "routes": "3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43",
+    "cache": "3268e72bf4c13e69e8c5379a9c3a3a2718f41b46dc57c2b1d1ee9007f56f6573",
+    "holdout_features": "ff48afb9c29150da2015235d175f6c54093feea2f82fa254d3522daeeeaf937f",
+    "holdout_routes": "68b8766f048d656f3c076c8f8071714d4a7b66f2786944f93e6d439c6e08680f",
+    "holdout_cache": "9f017c95acc77b1424081df4df28c94961dc1396ce338b12a2271d8b69889701",
+    "baseline_weights": "c146eea49516498d831cb4a88fda756e9e649ffe9e37ceb7ceb54e65856609b9"
+  },
+  "weights_sha256": "b60de3c1f780edcbe96d94d1d05b01292c538b63263d4778a98db551f3bd239d",
+  "script_sha256": "8f03c2dd613c6e578b06a2ac0cf6598a637f9d37a3726bd625e7ac56ff10b116",
+  "mlx_version": "0.32.1",
+  "limits": "Reused evaluation cohorts. Native residency fixed; no eviction, I/O contention, overhead or readiness deadlines. Scores are not calibrated probabilities."
+}

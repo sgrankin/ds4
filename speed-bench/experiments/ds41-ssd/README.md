@@ -1213,3 +1213,129 @@ all logits and continuation state exactly. Decode17.593->17.662s (+0.39%),
 append15.322->15.555s (+1.52%), combined32.915->33.216s (+0.91%).
 Warm staging is exercised hundreds of times, but offers no convincing win.
 Retain the opt-in flag; no default change. See staged-experts-warm-short JSON.
+
+## 76: exact activation capture and small-predictor training harness
+
+DS4_V41_ROUTE_FEATURES with native route recording saves BF16-exact normalized
+pre-attention activations and the existing early-gate six-ID prediction. Full
+capture contains134840 rows /3371 scalar tokens /1385615872 bytes. All native
+routes, complete logits and final serialized state match the canonical replay.
+See predictor-feature-capture.json. The probe is intrusive; its time is not a
+runtime result. Six data-validation tests pass, including alignment, incomplete
+token, duplicate expert, layer ordering and BF16 conversion/nonfinite cases.
+
+train_route_predictor.py implements a shared5120->64 tanh stem with40 separate
+64->384 heads, uniform-six cross entropy and Adam. Token-level chronological
+60/20/20 partitions, validation-selected epoch, final test and an optional
+separate-task holdout avoid mixing layer rows across partitions. These are
+all-route accuracy metrics, not cache-miss/deadline metrics. predictor_holdout.py
+runs a separate isolated TTL-cache repair with independent semantic checks.
+Raw datasets and trained weights stay in /tmp. Training results follow.
+
+## 77: first dedicated predictor, rank64 shared stem
+
+Twenty Adam epochs,1,326,144 parameters,2022/674/675 train/validation/test
+tokens. Validation-selected epoch20. Held-out session top6 recall49.5265%
+versus early-gate50.4907%; all-six1.400% versus1.622%. Top12 recall64.6012%,
+all-six11.8037%. Independent TTL-cache task: six tool calls,3136 decoded
+tokens,10 agent tests and independent semantic checks pass. Top6 recall44.7108%
+versus early-gate49.3342%; all-six0.9949% versus1.2707%. Top12 recall58.7713%,
+all-six8.1609%. This is not strong enough to justify unconditional prefetch.
+
+Evidence predictor-rank64.json and predictor-ttl-holdout.json; independent token
+recording predictor-ttl-session.txt is checked in for reproducible capture.
+Checkpoint /tmp/ds41-predictor-rank64/best.safetensors (SHA in metrics).
+The standalone predictor uses fewer multiply-adds than evaluating the native
+5120x384 gate, but its deployment latency has not been measured. Validation
+was still improving at the fixed final epoch; next test width128 with60epochs.
+The separate task has now been viewed, so subsequent reuse is an exploratory
+regression check, not a fresh blind holdout. Never train on those rows.
+
+## 78: width128 predictor and longer training
+
+Predeclared width128,60epochs;2,636,928 parameters. Validation selects epoch18
+(52.1550% top6 recall); later epochs overfit. Held-out session top6 recall
+51.6123% versus early-gate50.4907%, all-six2.0407% versus1.6222%. Top12
+recall66.6716%, all-six13.9259%. Separate TTL regression task top6 recall
+46.5768% versus early-gate49.3342%; top12 recall60.9030%, all-six9.7505%.
+The task was viewed in77 and is no longer a fresh blind evaluation. Its data
+remained excluded from both training and epoch selection.
+
+Evidence predictor-rank128.json, checkpoint /tmp/ds41-predictor-rank128.
+The learned model beats the native early gate slightly within the original
+session but still generalizes worse to the separate task. No runtime predictor
+integration or speedup claim. Next score actual cache misses before spending
+SSD bandwidth; cache-residency diagnostics are being added separately.
+
+## 79: cache-aware scoring exposes the wrong prediction objective
+
+DS4_V41_ROUTE_CACHE records all384 resident flags immediately before native
+scalar demand loading, paired with position/token/layer. Snapshot uses entry
+identity checks without touching hit counters, aging, admission or waits. Full
+replay routes/logits/state remain baseline-identical; normal full cache traffic
+retained. See predictor-cache-capture.json and predictor-miss-score.json.
+21 harness tests pass. No timing claim from this single diagnostic capture.
+
+On675 held-out tokens (27000 layer calls), native demand has8471 cold experts.
+The early gate covers45.48% of these, but only14.76% of its proposed cold reads
+are useful:26113 proposed reads,16343 on native all-hit layers. This frozen
+cache screen predicts wrong reads equal to262.78% of native cold demand.
+Learned rank128 top6 covers25.65% of misses at29.23% precision, with wrong reads
+equal to62.09% of native demand. Its better all-route recall mostly favors
+resident experts. Top12 is worse for bandwidth:38.37% miss coverage but
+224.45% extra wrong reads relative to native demand.
+
+Filtering learned predictions by uncalibrated6*softmax score>=.75 gives9.37%
+miss coverage,65.03% read precision and5.04% extra reads. At.9:7.05% coverage,
+69.82% precision,3.05% extra reads. These are exploratory thresholds scored on
+the test cohort; no deployment selection claim. Residency is held fixed, with
+no eviction, I/O contention, prediction cost or readiness deadlines. Real
+performance can be worse. This evidence argues for training directly on cold
+misses and abstention, plus demand priority, before another runtime integration.
+
+## 80: train cold-demand binary classifier with abstention
+
+Same width128 architecture,30epochs from random initialization; binary cross
+entropy on nonresident experts only, positive weight16, bias initial -4.
+Validation selects epoch24 and one global sigmoid-score threshold0.871712 to
+maximize useful reads subject to wrong reads <=10% of native demand. Rank
+top6 cold candidates before thresholding; all layers may abstain. Threshold
+ties are admitted together, and a tie in coverage prefers fewer reads.
+23 harness tests pass. Scores are uncalibrated; this is offline only.
+
+Test miss coverage6.233%, wrong reads6.693% of native demand, precision48.219%.
+Separate task coverage4.172%, wrong reads6.307%, precision39.811%. No strong
+result. For comparison, the earlier route model with its own validation-selected
+threshold0.506181 covers14.437%/9.241% test/separate misses, but wrong reads
+grow to12.608%/22.889% despite its10% validation budget. This exposes threshold
+generalization as well as ranking difficulty. Neither result justifies a
+production prefetch path. Evidence predictor-miss-trained.json.
+
+Separate task cache capture has125440 rows,29316 native expert-cache misses,
+and the same native routes as live feature capture. Its replay hashes are
+recorded in predictor-cache-ttl-capture.json; there was no prior replay logit
+or state hash for that task to compare against. Full original session still
+provides exact logit/state validation of the instrumentation. Cache misses are
+logical expert-cache misses, not necessarily physical SSD reads.
+
+## 81: fine-tune the route model for cold demand
+
+Initialize from78's best route checkpoint, shift bias -4, fine-tune cold-only
+BCE at lr.0001 for30epochs. Validation selects epoch3 and fixed threshold
+0.830612. Test miss coverage14.013%, extra wrong reads10.471% of native demand,
+precision57.232%. Separate task coverage8.865%, extra wrong reads13.696%,
+precision39.295%. Relative to the route model's validation-threshold policy,
+separate wrong reads6710->4015 (-40.2%), useful reads2709->2599 (-4.1%).
+This improves the bandwidth tradeoff but still covers few misses and exceeds
+the10% validation budget on the separate task. No runtime integration or speed
+claim; frozen cache still omits eviction, deadlines and contention. Evidence
+predictor-miss-finetuned.json; checkpoint /tmp/ds41-predictor-miss-finetuned.
+
+Round conclusion: staged gate/up loading is exact but not a convincing warm-path
+win. Dedicated learned prediction is now implemented and measured offline, with
+independent-task and cache-miss labels. Overall recall was misleading for SSD
+prefetch; cold-demand fine-tuning and abstention improve waste. Before runtime
+use, broaden training tasks, reserve new evaluation tasks, and implement bounded
+private speculative buffers with demand priority. GPU routing-handoff removal
+and cross-layer lookahead remain substantial separate engineering items. No
+production scheduling defaults changed; all GPU jobs finished.

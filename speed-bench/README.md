@@ -160,3 +160,8 @@ Keep SSD streaming enabled and run GPU trials serially. Kernel microbenchmarks
 and numerical regression tests support these workloads; their speedups alone
 are insufficient to change defaults. Detailed DS4.1 results and open ideas are
 in [the experiment notebook](experiments/ds41-ssd/NEXT.md).
+
+Routing-predictor accuracy studies use `agent-session/train_route_predictor.py`
+with the fixed working session and a separate checked TTL-cache task
+(`agent-session/predictor_holdout.py`, `predictor-ttl-session.txt`). These are
+accuracy datasets; intrusive activation-capture timings are not speed results.

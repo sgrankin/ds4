@@ -16078,6 +16078,27 @@ static int ds4_gpu_stream_expert_cache_entry_matches(
            e->gate_buffer && e->up_buffer && e->down_buffer;
 }
 
+int ds4_gpu_stream_expert_cache_snapshot(const ds4_gpu_stream_expert_table *table,
+        uint8_t *resident) {
+    if (!g_ssd_streaming_mode || !table || !resident ||
+        table->layer >= DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER ||
+        !table->n_total_expert ||
+        table->n_total_expert > DS4_METAL_STREAM_EXPERT_CACHE_MAX_EXPERT ||
+        !table->gate_expert_bytes || !table->down_expert_bytes) return 0;
+    for (uint32_t i = 0; i < table->n_total_expert; i++) {
+        if (i > (UINT64_MAX - table->gate_offset) / table->gate_expert_bytes ||
+            i > (UINT64_MAX - table->up_offset) / table->gate_expert_bytes ||
+            i > (UINT64_MAX - table->down_offset) / table->down_expert_bytes) return 0;
+        resident[i] = ds4_gpu_stream_expert_cache_entry_matches(
+            &g_stream_expert_cache[table->layer][i], table->model_map, table->model_size,
+            table->gate_offset + i * table->gate_expert_bytes,
+            table->up_offset + i * table->gate_expert_bytes,
+            table->down_offset + i * table->down_expert_bytes,
+            table->gate_expert_bytes, table->down_expert_bytes) != 0;
+    }
+    return 1;
+}
+
 static ds4_gpu_stream_expert_cache_entry *ds4_gpu_stream_expert_cache_peek(
         const void *model_map,
         uint64_t    model_size,
