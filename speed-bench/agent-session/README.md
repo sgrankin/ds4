@@ -231,3 +231,18 @@ fixed. Growth drains GPU work and refits the cache budget before replacing
 temporary buffers and their views. It retains persistent KV/history, but may
 clear cached expert weights when growth lowers their budget. It does not shrink
 again later in a session. Check those transitions before adopting a default.
+
+## Offline eviction-policy study
+
+`cache_policy_study.py` compares LRU, LFU/aging, SLRU, 2Q, ARC, and future-aware
+eviction using recorded decode routes. It uses no inference or GPU. See
+[methodology and results](../experiments/ds41-ssd/CACHE_POLICY_STUDY.md).
+
+```sh
+python3 speed-bench/agent-session/cache_policy_study.py --output /tmp/cache-session.json
+```
+
+Prefill is missing from the traces: reset and carryover are explicitly modeled
+scenarios, not reproductions of native full-session cache behavior. The second
+recording, `predictor-ttl.routes.bin.gz`, matches the raw route SHA in
+`predictor-cache-ttl-capture.json`; both recordings and all results are retained.

@@ -376,3 +376,17 @@ DS4_METAL_V41_DEMAND_WORKSPACE=1 ./ds4-agent --ssd-streaming. No vision
 validation/default promotion. Next: wider growth/context/cache coverage before
 agent default; examine GPU routing handoff and cold-miss predictor queue from
 prior notes. Do not repeat failed full-cache replacement during growth.
+
+## Offline eviction study (2026-09-17)
+
+Completed without inference: cache_policy_study.py, ten policy tests, two
+recordings, and CACHE_POLICY_STUDY.md with full JSON evidence. Native eviction
+is decaying route-frequency with recency ties, not pure LRU. At8253 slots,
+aging256 beats aging16 by2.07%/1.94% misses in reset scenarios and10.06%/6.04%
+in artificial decode-only carryover for coding/TTL tasks. At4096 slots,
+aging256 regresses; aging64 saves2.75–6.17%. SLRU improves every screened
+scenario/capacity; ARC gains are small at large capacity; tested2Q loses.
+Future-aware eviction has substantial additional opportunity. Missing prefill
+means these are not bounds on actual session savings or throughput claims.
+Next candidates: capacity-aware decay and SLRU. Runtime validation requires
+prefill cache effects and in-flight restrictions; no defaults changed.
