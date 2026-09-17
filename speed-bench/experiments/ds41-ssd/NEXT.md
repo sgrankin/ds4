@@ -1,8 +1,71 @@
 # DS4.1 SSD optimization handoff
 
-Third round: 2026-09-13, approximately 17:18-18:18 UTC, M5 Max /128 GiB.
-Use jj, one commit per experiment. Vision reproduction and session saving remain
-deferred until the user is at keyboard. No vision experiment in this round.
+Objective: good agentic tool-use performance balanced with interactive latency.
+Machine: Apple M5 Max, 128 GiB; DS4.1 Flash Q2; SSD streaming required.
+Run GPU benchmarks serially. Metal and jj mutations need sandbox escalation;
+profiling our own process with `sample` worked without sudo. Vision reproduction
+and the vision session-save limitation remain deferred until the user is present.
+
+## Working-session benchmark now available
+
+Registered in `speed-bench/README.md`; instructions and source are in
+`speed-bench/agent-session/`. `live.py` runs three tasks in a disposable Python
+ledger project and independently checks task results after every user turn.
+The passing baseline uses 20 tool calls, 14 generation rounds, 3371 generated
+tokens, and ends at context 8710. Turn wall time is 291.714 s, with 17.420 s
+startup reported separately; model prefill/decode are 94.280/196.339 s.
+
+`session-v1.txt` records exact prefill/decode boundaries and tokens from that
+successful run. SHA256:
+310159cecfb6688d65967cf30279e1626c15571dbedd02838549f0d1ff14f368.
+The replay retains KV and expert-cache evolution, checks full phase logits and
+final continuation snapshots, and excludes tool execution/sampling/rendering.
+Full control replay closely reproduces live model time. Live task success and
+short fresh/restored interactive responses remain required complementary checks.
+
+    python3 speed-bench/agent-session/live.py /tmp/NEW-LIVE
+    python3 speed-bench/agent-session/replay_abba.py /tmp/NEW-ABBA --candidate-env NAME=VALUE
+
+The default replay is the complete session. `--order AB` is exploratory; pair
+with BA using identical binary/shader hashes before treating it as balanced.
+Repeat `--candidate-env` for combinations. Buffer and cache studies are supported:
+`DS4_REPLAY_PREFILL_CHUNK=2048`, or `--cache-gb N` (total target including reserve).
+
+## Latest round completed: no new runtime defaults
+
+Evidence and numerical hashes are in README experiments 51 onward and adjacent
+JSON files. Runtime files were restored to accepted revision 8e8d7794 in commit
+4442d372. The following new runtime experiments survive in jj history only:
+
+- Wider 512-row layer sweeps with <=128-row MoE subtiles (92e05db7): full ABBA
+  turn model time 291.389 -> 295.204 s, about 1.3% slower. Prefill misses rose
+  31818 -> 33952; decode misses were almost unchanged. Exact state/logits.
+- Router-event overlap (0fb424f3): short-session ABBA decode about 0.75% faster,
+  but combined append/decode about 0.8% slower. Exact state/logits.
+- Broad current-layer cache protection (25689657): slightly fewer reads, about
+  1% slower overall in short ABBA. Exact state/logits.
+- Protection scoped only to future MoE subtiles (ec701a4a): about 0.8% slower
+  overall in short ABBA. Exact state/logits. Do not retain either pin by default.
+
+A targeted three-second CPU sample finds the largest main-thread wait at router
+Metal completion, then selected SSD reads, then F_RDADVISE calls. Metal waits
+include actual GPU work, so this is not a measure of removable overhead.
+The sample perturbed decode; use `decode-profile.txt` only for attribution.
+
+Existing flag `DS4_METAL_DISABLE_STREAMING_EXPERT_READAHEAD=1` gave a promising
+short fixed-session screen: decode 18.388 -> 17.981 s (2.2% faster), combined
+turn model time 33.570 -> 33.246 s (1% faster), exact state/logits. This is only
+the first seven complete replay phases (343 decoded tokens, context 2665),
+not the complete working session. Completed interactive ABBA rejects the
+unconditional ablation: fresh response time 8.222 -> 8.157 s (-0.8%), restored
+12.261 -> 12.623 s (+3.0%), with identical input/output token hashes. Restored
+decode is 5.3% slower. Read-ahead stays enabled; skip full-session promotion for
+this variant. Evidence: `noadvice-interactive.json`, README experiment 59.
+
+No GPU runs remain active. Agent, benchmark and replay binaries are rebuilt.
+The successful live task, exact replay comparisons and four extractor tests
+passed. No sudo or user input was needed. All negative experiments have separate
+jj commits; do not reintroduce their runtime branches without new evidence.
 
 ## Accepted defaults
 
@@ -24,7 +87,7 @@ exact tail fallback retains DS4_METAL_DISABLE_V41_EXACT_SHORT_PREFILL.
 Diagnostic DS4_METAL_V41_SELECTED_TILE and DS4_METAL_V41_SELECTED_LIMIT
 allow controlled tuning without changing defaults.
 
-## Controlled results from this hour
+## Accepted results from the previous round
 
 - Whole5000-token benchmark (4096 prefix +904 tail):92-93 to114 tokens/sec,
   about10.25s saved. Tail alone24.2-24.8 to35.1-35.4tps. Full logits identical.
@@ -91,16 +154,25 @@ from bd66c402 ds4.c into /tmp/ds41-prefill-input.c, SHA256
 
 ## Best next work
 
-1. Attribute restored first-decode delay: expert misses/read time, command-buffer
-   waits and first scalar work after batched prefill. Pipeline creation ruled
-   out as the main explanation in the measured helper paths.
-2. Fixed-input confirmation of batch shared overlap; sweep pread concurrency
-   and bounded prefetch with full-response checks and real eviction workloads.
-3. Longer conversations and cache budgets: the128/1024 policy is conditional,
-   not evidence that128 is universally optimal.
+1. Test `--prefill-chunk 2048` on the complete session. It frees about 4.25 GiB
+   of scratch (8.01 -> 3.76 GiB), which automatic sizing gives to expert cache.
+   Earlier short questions were flat; this recording has 3371 decode tokens and
+   meaningful eviction. Measure full ABBA plus interactive responses before
+   changing defaults. Keep memory savings distinct from cache growth.
+2. Recheck `DS4_METAL_V41_BATCH_SHARED_OVERLAP=1` with the fixed session; sweep
+   `DS4_METAL_STREAMING_EXPERT_PREAD_THREADS=18` versus default 9 separately.
+   Prior shared-overlap agent results preceded fixed timestamp inputs.
+3. Attribute restored first-decode latency with per-phase I/O and GPU timings.
+   Investigate the extra drain before the second Engram layer only after proving
+   every consumer of the reused buffer has completed in the eligible path.
 4. RoPE + quantization + direct KV writes, preserving block quantization rules.
-   HC fusion must consume previous sublayer mixer, not the newly computed mixer.
-5. Demand-allocated scratch with explicit memory headroom; avoid handing every
-   saved byte directly to expert cache. Account for startup and I/O costs if
-   adding saved-system-KV expert hints or background warmup.
-6. Reproduce vision-enabled text slowdown and session-save limitation with user.
+   HC fusion must consume the previous sublayer mixer, not the newly computed
+   mixer. Require actual-session improvement as well as exact kernel results.
+5. Demand-allocated scratch with explicit memory headroom. A possible extension
+   lends part of the 7.12 GiB prefill reserve to decode/selected appends, reclaiming
+   it before full-layer sweeps. Prove slab release, in-flight protection and all
+   admission paths first; prefer the existing prefill-chunk knob for now.
+6. Longer conversations, smaller cache budgets and compaction coverage. The
+   current synthetic session is useful but does not establish long-context
+   behavior or general coding-task quality.
+7. Reproduce vision-enabled text slowdown and session-save limitation with user.

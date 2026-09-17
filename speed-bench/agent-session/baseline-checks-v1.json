@@ -1,0 +1,23 @@
+[
+  {
+    "stage": 0,
+    "held_out_rc": 0,
+    "tests_rc": 0,
+    "held_out": "PASS held-out stage 0\n",
+    "tests": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+  },
+  {
+    "stage": 1,
+    "held_out_rc": 0,
+    "tests_rc": 0,
+    "held_out": "PASS held-out stage 1\n",
+    "tests": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\ntest_duplicate_straddling_cutoff (test_since.SinceTests.test_duplicate_straddling_cutoff) ... ok\ntest_inclusive_boundary (test_since.SinceTests.test_inclusive_boundary) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.000s\n\nOK\n"
+  },
+  {
+    "stage": 2,
+    "held_out_rc": 0,
+    "tests_rc": 0,
+    "held_out": "PASS held-out stage 2\n",
+    "tests": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\ntest_duplicate_straddling_cutoff (test_since.SinceTests.test_duplicate_straddling_cutoff) ... ok\ntest_inclusive_boundary (test_since.SinceTests.test_inclusive_boundary) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.000s\n\nOK\n"
+  }
+]

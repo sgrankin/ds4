@@ -811,3 +811,140 @@ This warmed repeat avoids the earlier fresh-control outlier and suggests about
 19%/16% less hello prefill time, rather than relying on the earlier28% estimate.
 These one-output-token measurements isolate startup-to-first-token behavior;
 experiment48 measures naturally completed answers. See agent-final-warmed-abba.json.
+
+## 51: checked-in tool-using session benchmark
+
+Registry now includes speed-bench/agent-session/live.py and replay_abba.py.
+The three-turn ledger task exercises20 tools and14 generation rounds, growing
+context to8710. Independent task checks pass after every turn, including money
+precision, refund/void/retry semantics, date filtering before/after duplicate
+handling, and generated report artifacts. Baseline user turns total291.714s,
+with17.420s startup separate;94.280s prefill and196.339s decode. Fixed token
+recording session-v1.txt is checked in with summary and validation evidence.
+An earlier run hit an overstrict harness assertion on added tests, not a model
+failure; preserve existing test definitions but allow added test coverage.
+
+## 52: keep selected experts active across wider layer sweeps
+
+Experimental DS4_METAL_V41_SELECTED_LAYER_TILE=129..1023 increases the outer
+exact layer sweep while keeping selected MoE dispatches at128 rows or less.
+This aims to reuse each layer's selected weights before other layers evict them.
+Default tile128 remains unchanged. Large-cache, rollback, actual scratch cap,
+format and backend capability guards remain; check every subtile's capability.
+
+The initial129 case exposed a one-row remainder selecting the unmapped full
+expert path. Distribute129 as127+2 instead. With that fix,129/511/512/513/767
+appends after2048 tokens plus8 decoded tokens match complete scalar snapshots.
+See layer512-state.txt. Separate-process full-session ABBA is running; timings
+inside the numerical test are not evidence of an end-to-end speedup.
+
+## 53: full working-session ABBA rejects wider layer sweeps as a default
+
+Fixed recording, executable and shaders; every phase's full-vocabulary logits
+and complete final continuation snapshot match across all four runs. Mean
+control append prefill94.489s, decode196.901s; layer512 prefill97.160s,
+decode198.044s. Turn model work291.389->295.204s (~1.3% slower).
+Total including initial system prefill306.419->310.163s. Keep default128.
+
+Expert reads are deterministic across each variant's repeats:670.61GiB control
+versus689.85GiB layer512. Prefill cache misses31818->33952; decode misses
+40526->40468. The regression is additional prefill I/O, not a larger decode
+miss rate. A follow-up protects cached current-layer experts for later subtiles;
+it is a separate opt-in experiment and remains unmeasured at this point.
+See session-layer512-abba.json. The control model timings closely reproduce the
+live session (94.280s prefill,196.339s decode), validating the replay's fidelity.
+
+## 54: targeted decode profiling
+
+A separate3-second sample during the replay's first decode burst finds most
+main-thread samples at router command-buffer completion, followed by waiting
+for selected SSD reads and F_RDADVISE calls. Victim scanning is a smaller cost.
+This is attribution, not removable-time accounting: Metal waits include actual
+GPU work, and tracing measurably perturbs this short run. See decode-profile.txt.
+A router-event experiment is next; a fixed-input recheck of read-ahead advice
+may also be worthwhile, because earlier advice tests used varying timestamps.
+
+## 55: router-event overlap is exact, but does not earn a default
+
+DS4_METAL_V41_ROUTER_EVENT reuses the Metal shared-event API: signal after
+routing, encode shared expert work after the signal, then let the CPU read IDs
+and begin SSD loads while shared GPU work continues. No worker handoff.
+The ordinary eligible scalar early-load path remains the default.
+
+ABBA on the first7 complete working-session replay phases (343 decoded tokens,
+context2665) matches every phase's full logits and final snapshot. Mean decode
+18.356->18.219s (~0.75% lower), append prefill15.372->15.783s; combined turn
+model work33.728->34.002s (~0.8% slower). Individual decode samples overlap,
+and the second candidate prefill is slower. No robust end-to-end gain, so keep
+this experiment opt-in. See router-event-screen.json; do not promote based on
+the first candidate's apparent2% decode improvement.
+
+## 56: broad current-layer protection does not recover the regression
+
+DS4_METAL_STREAMING_PREFILL_PROTECT_LAYER initially protects every cached
+expert in the current layer during any selected batch load. No extra loads or
+budget growth. Combined with layer512, short-replay ABBA matches all phase
+logits and final state. Mean append prefill15.459->15.811s, decode18.581->18.580s;
+turn model work34.040->34.392s (~1.0% worse). Reads87.53->86.67GiB.
+
+This broad version also protects unused experts for single-batch short prompts,
+which is outside the intended future-subtile reuse case. Refine protection to
+only the duration of a selected multi-subtile layer sweep, then retest. Neither
+version is a default. See layer-pin-broad-screen.json.
+
+## 57: fixed-token read-ahead ablation deserves a longer check
+
+With current selected-batch defaults, disabling selected-expert F_RDADVISE
+improves short-replay mean decode18.388->17.981s (~2.2%), with append prefill
+15.182->15.266s essentially flat. Turn model work33.570->33.246s (~1.0% lower).
+Both candidate decode samples beat both controls, though candidates vary.
+All phase logits and full final snapshots match. This differs from the older
+short-agent rejection, which predates selected MoE batches and fixed datetime.
+No default change yet: full-session and interactive-response confirmation are
+required. See noadvice-fixed-screen.json.
+
+## 58: scoped future-subtile protection remains a non-winning experiment
+
+Replace the broad protection with a scoped Metal pin only while later selected
+MoE subtiles remain in the current layer. Clear it before the last subtile and
+on every exit; single-batch prompts are unaffected. Use a constant-time layer
+check instead of scanning a list of all expert IDs. Large-cache admission
+already guarantees one whole layer fits. No extra loads or memory budget.
+
+Short-session ABBA of512+scoped pin versus default128 is exact at every phase
+and in the full final snapshot. Mean append15.464->15.663s, decode18.603->18.681s,
+turn model34.067->34.344s (~0.8% slower). Both variants drift upward, but there
+is no evidence of a gain. Preserve this and the other non-winning runtime
+experiments in jj history, then restore the accepted runtime instead of leaving
+unused branches in the active code. See layer-pin-scoped-screen.json.
+
+Runtime cleanup: commit 4442d372 restores the accepted runtime from 8e8d7794.
+The wider-layer, router-event and layer-protection implementations described in
+52/55/56/58 are historical experiments, not active environment switches. Their
+implementation commits are 92e05db7, 0fb424f3, 25689657 and ec701a4a respectively.
+Benchmark runners and evidence remain in the current tree.
+
+## 59: read-ahead removal loses on restored interactive responses
+
+Complete-response ABBA (41/15/28 generated tokens per three-turn run, fresh and
+restored system KV) uses identical input/output token hashes throughout.
+Removing read-ahead changes mean summed response time:
+
+| Mode | Control | Advice off | Change |
+| --- | ---: | ---: | ---: |
+| Fresh | 8.222 s | 8.157 s | -0.8% |
+| Restored | 12.261 s | 12.623 s | +3.0% |
+
+Restored decode alone grows 6.574 -> 6.921 s (+5.3%). Both restored candidate
+runs are slower than both controls. This does not meet the objective of balanced
+agentic and interactive performance, despite the short replay's small gain.
+Keep read-ahead enabled; no full-session promotion run is warranted for the
+unconditional ablation. See noadvice-interactive.json. A future cache-state-aware
+policy would need independent evidence; it is not implemented here.
+
+Round outcome: a checked live task and reproducible working-session replay are
+now registered alongside the interactive benchmarks. All four new runtime
+experiments were committed separately and rejected on measured end-to-end time;
+the accepted runtime was restored and rebuilt. The read-ahead flag was an
+existing ablation, with this new result committed separately. No new runtime
+default is justified by this round. NEXT.md records the remaining hypotheses.
