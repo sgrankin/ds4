@@ -808,6 +808,7 @@ typedef struct {
 } ds4_gpu_stream_expert_timing_snapshot;
 static ds4_gpu_stream_expert_timing_snapshot g_stream_expert_timing_last_report;
 static int g_stream_prefill_batch_selected_addr_building;
+static const ds4_gpu_tensor *g_stream_expert_batch_ready;
 static int g_glm_stream_expert_addr_table_building;
 static uint64_t g_model_residency_count;
 static int g_model_residency_added_to_queue;
@@ -2622,6 +2623,8 @@ static id<MTLComputePipelineState> ds4_gpu_get_pipeline(
         return cached;
     }
 
+    const bool profile_create = getenv("DS4_METAL_PIPELINE_CREATE_PROFILE") != NULL;
+    const double create_start = profile_create ? ds4_gpu_now_ms() : 0.0;
     NSError *error = nil;
     NSString *name = [NSString stringWithUTF8String:function_name];
     id<MTLFunction> fn = [g_library newFunctionWithName:name];
@@ -2639,6 +2642,8 @@ static id<MTLComputePipelineState> ds4_gpu_get_pipeline(
         return nil;
     }
 
+    if (profile_create) fprintf(stderr, "ds4: Metal pipeline create %s %.3f ms\n",
+        [key UTF8String], ds4_gpu_now_ms() - create_start);
     [g_pipeline_cache setObject:pipeline forKey:key];
     return pipeline;
 }
@@ -3173,6 +3178,8 @@ static id<MTLComputePipelineState> ds4_gpu_get_mul_mv_pipeline(
         return cached;
     }
 
+    const bool profile_create = getenv("DS4_METAL_PIPELINE_CREATE_PROFILE") != NULL;
+    const double create_start = profile_create ? ds4_gpu_now_ms() : 0.0;
     MTLFunctionConstantValues *constants = [[MTLFunctionConstantValues alloc] init];
     [constants setConstantValue:&nsg type:MTLDataTypeShort atIndex:600];
 
@@ -3195,6 +3202,8 @@ static id<MTLComputePipelineState> ds4_gpu_get_mul_mv_pipeline(
         return nil;
     }
 
+    if (profile_create) fprintf(stderr, "ds4: Metal pipeline create %s %.3f ms\n",
+        [key UTF8String], ds4_gpu_now_ms() - create_start);
     [g_pipeline_cache setObject:pipeline forKey:key];
     if (fast_key_valid) {
         ds4_gpu_decode_pipeline_fast_cache_insert(
@@ -14487,6 +14496,10 @@ static int ds4_gpu_stream_prefill_batch_selected_addr_enabled(
     return max_tokens != 0 && n_tokens >= min_tokens && n_tokens <= max_tokens;
 }
 
+void ds4_gpu_stream_expert_batch_set_ready(const ds4_gpu_tensor *selected) {
+    g_stream_expert_batch_ready = selected;
+}
+
 int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
         uint32_t used, uint32_t gate_type, uint32_t down_type) {
     return ds4_gpu_stream_prefill_batch_selected_addr_enabled(rows, total, used,
@@ -20355,9 +20368,11 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
         uint64_t                out_dim,
         const ds4_gpu_tensor *x,
         float                   clamp,
-        int                     store_gate_up) {
+        int                     store_gate_up,
+        uint32_t n_rows, bool bf16) {
     if (!g_initialized && !ds4_gpu_init()) return 0;
-    if (!mid || !x || !model_map ||
+    if (!mid || !x || !model_map || !n_rows || n_rows > 128u ||
+        (bf16 && (!out_dim || out_dim % 2u || out_dim > 65536u)) ||
         (store_gate_up && (!gate || !up)) ||
         (in_dim & 31u) != 0 ||
         in_dim > UINT32_MAX || out_dim > UINT32_MAX ||
@@ -20372,8 +20387,8 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
             ds4_gpu_tensor_buffer(gate) : midbuf;
         id<MTLBuffer> upbuf = store_gate_up ?
             ds4_gpu_tensor_buffer(up) : midbuf;
-        const uint64_t x_bytes = in_dim * sizeof(float);
-        const uint64_t out_bytes = out_dim * sizeof(float);
+        const uint64_t x_bytes = (uint64_t)n_rows * in_dim * sizeof(float);
+        const uint64_t out_bytes = (uint64_t)n_rows * out_dim * sizeof(float);
         if (!xbuf || !gatebuf || !upbuf || !midbuf ||
             ds4_gpu_tensor_bytes(x) < x_bytes ||
             (store_gate_up && ds4_gpu_tensor_bytes(gate) < out_bytes) ||
@@ -20409,7 +20424,9 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
         ds4_gpu_q8_0_matvec_args args = ds4_gpu_make_q8_0_mv_args(in_dim, out_dim);
         ds4_gpu_mv_dispatch mv_dispatch = ds4_gpu_make_q8_0_mv_dispatch();
         args.nr0 = mv_dispatch.nr0;
-        const char *fn_name = store_gate_up ?
+        args.ne11 = args.ne1 = (int32_t)n_rows;
+        args.nb12 = args.nb13 = (uint64_t)n_rows * in_dim * sizeof(float);
+        const char *fn_name = bf16 ? "kernel_dsv41_shared_gate_up_bf16_q8_0" : store_gate_up ?
             "kernel_dsv4_shared_gate_up_swiglu_q8_0" :
             "kernel_dsv4_shared_mid_swiglu_q8_0";
         id<MTLComputePipelineState> pipeline =
@@ -20437,7 +20454,7 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
         [enc setThreadgroupMemoryLength:2u * mv_dispatch.smem atIndex:0];
         [enc dispatchThreadgroups:MTLSizeMake(((NSUInteger)out_dim + (NSUInteger)mv_dispatch.nr0 - 1u) /
                                                   (NSUInteger)mv_dispatch.nr0,
-                                              1,
+                                              n_rows,
                                               1)
              threadsPerThreadgroup:MTLSizeMake(32, (NSUInteger)mv_dispatch.nsg, 1)];
         ds4_gpu_end_compute_encoder(cb, enc);
@@ -20452,6 +20469,15 @@ static int ds4_gpu_shared_gate_up_swiglu_q8_0_impl(
     }
 
     return 1;
+}
+
+int ds4_gpu_dsv41_shared_gate_up_bf16_rows(ds4_gpu_tensor *gate,
+        ds4_gpu_tensor *up, ds4_gpu_tensor *mid, const void *model_map,
+        uint64_t model_size, uint64_t gate_offset, uint64_t up_offset,
+        uint64_t in_dim, uint64_t out_dim, const ds4_gpu_tensor *x,
+        uint32_t rows, float clamp) {
+    return ds4_gpu_shared_gate_up_swiglu_q8_0_impl(gate, up, mid, model_map,
+        model_size, gate_offset, up_offset, in_dim, out_dim, x, clamp, 1, rows, true);
 }
 
 /* Decode-only fusion of the router logits matvec with the shared-expert
@@ -20688,7 +20714,7 @@ int ds4_gpu_shared_gate_up_swiglu_q8_0_tensor(
                                                    out_dim,
                                                    x,
                                                    clamp,
-                                                   1);
+                                                   1, 1, false);
 }
 
 int ds4_gpu_shared_mid_swiglu_q8_0_tensor(
@@ -20712,7 +20738,7 @@ int ds4_gpu_shared_mid_swiglu_q8_0_tensor(
                                                    out_dim,
                                                    x,
                                                    clamp,
-                                                   0);
+                                                   0, 1, false);
 }
 
 int ds4_gpu_shared_gate_up_swiglu_q8_0_model_view_tensor(
@@ -20738,7 +20764,7 @@ int ds4_gpu_shared_gate_up_swiglu_q8_0_model_view_tensor(
                                                    out_dim,
                                                    x,
                                                    clamp,
-                                                   1);
+                                                   1, 1, false);
 }
 
 int ds4_gpu_shared_gate_up_swiglu_q8_0_rows_tensor(
@@ -43749,7 +43775,13 @@ int ds4_gpu_routed_moe_batch_tensor(
         }
         if (use_cached_batch) {
             const int had_batch = g_batch_cb != nil;
-            if (had_batch && ds4_gpu_end_commands() == 0) {
+            const bool overlap_shared = use_iq2_batch_selected_addr &&
+                g_stream_expert_batch_ready == selected;
+            g_stream_expert_batch_ready = NULL;
+            /* The router was completed by the caller. Only shared-expert work
+             * remains queued, so selected IDs are safe to read while it runs. */
+            if (had_batch && (overlap_shared ? ds4_gpu_flush_commands() :
+                                               ds4_gpu_end_commands()) == 0) {
                 return 0;
             }
             g_stream_prefill_batch_selected_addr_building++;
@@ -43804,7 +43836,7 @@ int ds4_gpu_routed_moe_batch_tensor(
                     return 0;
                 }
             }
-            if (had_batch && ds4_gpu_begin_commands() == 0) {
+            if (had_batch && !overlap_shared && ds4_gpu_begin_commands() == 0) {
                 fprintf(stderr,
                         "ds4: Metal streaming prefill batch selected addr layer=%u "
                         "failed to reopen command batch after preparation\n",

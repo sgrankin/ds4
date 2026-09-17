@@ -511,3 +511,303 @@ continuation snapshots against rollback. See final-small-state.txt. The prior
 remain byte-identical to scalar execution (final-long-tail-state.txt). Both
 ds4-agent and ds4-bench are rebuilt; whitespace checks pass. The round ran from
 16:12:48 to approximately 17:13 UTC on 2026-09-13, with one commit per experiment.
+
+## 25: profile accepted defaults and expose bounded tile experiments
+
+Round starts 2026-09-13 17:18 UTC. Real-agent profile at the accepted defaults
+uses isolated fresh/restored system KV, one generated token per turn. Restored
+hello is 4.394 s: 200 selected batch bindings total 2.250 s, including 1.809 s
+of parallel pread. GPU busy accumulation reaches about 0.94 s before the next
+ready marker. Fresh hello is 3.072 s with 0.594 s binding, including 0.551 s
+pread. These categories are nested/overlapping, not additive independent stages.
+See round3-profile.json; raw logs /tmp/ds41-round3-profile.
+
+Add bounded diagnostic DS4_METAL_V41_SELECTED_TILE=2..8 and opt-in
+DS4_METAL_V41_SELECTED_MEDIUM=1 to use exact small tiles below 768 remaining
+tokens. Existing default stays below 256. The model-dependent snapshot test
+accepts an optional single tail length for testing the medium gap. Benchmark
+512-token appends at ctx=100000 after a 2048-token prefix next.
+
+## 26: measure complete agent generations
+
+Agent probes now accept --gen-tokens and --prompts-json, and record prefill-to-
+first-output, total response, decode duration, generated count and output-ID
+hash from the trace. Longer generations use seed 1234; the original one-token
+probe behavior is preserved. ABBA forwards these settings and an optional fixed
+expert-cache budget. Python compilation passes. Full-response trials follow
+after the current medium-append benchmark; exact snapshots remain the stronger
+numerical gate than matching sampled outputs.
+
+## 27: exact eight-row tiles across medium appends
+
+Balanced separate-process ABBA after a 2048-token prefix, ctx=100000, 512-token
+append: controls 23.05/21.92 tps, selected-medium candidates 27.85/29.75 tps.
+Mean latency falls from 22.785 to 17.797 s, about 21.9%; all full-vocabulary
+frontier logits match exactly. See medium512-abba.json. The flag remains opt-in
+pending full continuation snapshots and boundary tests.
+
+## 28: larger exact selected-address tiles (opt-in)
+
+Extend diagnostic DS4_METAL_V41_SELECTED_TILE to 2..32; default remains eight.
+Selected-address routed kernels already preserve scalar arithmetic independently
+of row count, and the exact-dense scope selects scalar-equivalent projections.
+No grouped routed matmul is introduced. A 40-token tail with tile=32 after an
+indexed 2048-token prefix, plus eight teacher-forced tokens, has a bit-identical
+full continuation snapshot. Within-process scalar 3.068 s, tile32 0.959 s is a
+correctness run with warm-cache bias, not an independent performance result.
+Actual-agent ABBA is running at /tmp/ds41-agent-tile32.
+
+Tile32 actual-agent ABBA: fresh hello 2.884 to 2.422 s (16.0% lower), restored
+4.520 to 4.083 s (9.7% lower). Twelve-token turns 0.657/0.940 to 0.572/0.826 s.
+Six-token turns use the same shape and are approximately flat amid run noise.
+Both hello candidates beat both controls. See agent-tile32-abba.json. One-token
+probes retain the old random seed behavior, so sampled output IDs are not a
+correctness comparison; the expanded full-state test supplies that gate.
+
+## 30: overlap selected-batch SSD binding with shared-expert GPU work
+
+Opt-in DS4_METAL_V41_BATCH_SHARED_OVERLAP=1 completes the router first, then
+queues shared-expert work. A scoped completed-router hint lets the selected
+backend flush those commands without waiting, load selected expert bytes on
+the CPU, and enqueue routed computation behind shared work. The hint is
+consumed by the backend and cleared on every caller exit. Existing cache
+in-flight lifetime protections remain active. No arithmetic or weight changes.
+
+The expanded snapshot test accepts several explicit tail lengths in one process.
+Combined tile32/medium/overlap checks have passed 12/16/24/31/32/33/64 plus eight
+continuation tokens at a 2048-token indexed prefix; larger boundaries are still
+running in /tmp/ds41-round3-expanded-state.txt. Performance gate follows.
+
+## 31: parallel reads for small Engram batches (opt-in)
+
+DS4_ENGRAM_SMALL_BATCH_PARALLEL=1 lowers the existing macOS concurrent-read
+threshold from 256 requests to two tokens (48 requests). This reuses the same
+16 readers, disjoint outputs, bounded allocation and error propagation. The
+existing Engram hash/history/disk-row suite passes with the flag enabled.
+No default change; benchmark after the expanded GPU snapshot test completes.
+
+## 32: reuse Engram prefetch on small selected tiles (opt-in)
+
+DS4_METAL_V41_SMALL_ENGRAM_PREFETCH=1 starts the existing table reader for
+selected tiles too. Layer 0 overlaps table 0; layers 2-13 overlap table 1.
+The existing allocated staging tensor, release/acquire row publication, thread
+join, cancellation and copy path are reused. No additional admitted memory.
+This is independent of the small-batch parallel-reader flag. Built successfully;
+model snapshot and real-agent measurement follow the current expanded run.
+
+Expanded tile32/medium/shared-overlap regression is complete: tails
+12/16/24/31/32/33/64/127/128/255/256/511/512/767 after a 2048-token prefix,
+each followed by eight decoded tokens, all have bit-identical complete snapshots.
+See round3-expanded-state.txt. Timing within this single process is explicitly
+not an ABBA performance claim.
+
+## 34: probe selected tiles up to 128 rows and eviction pressure
+
+Extend the diagnostic tile range to 2..128 while retaining the eight-row default.
+The supported selected-address path has no grouped reduction switch at these
+row counts. Full-model exactness still must be verified. The snapshot test now
+accepts DS4_TEST_EXPERT_CACHE_GB=4..96 so the same continuation checks can force
+cache reuse/eviction instead of only exercising the default 72.5 GiB cache.
+No new runtime defaults. Build succeeds; tests are queued after overlap ABBA.
+
+## 35: reclaimable OS caching of sparse Engram reads (opt-in)
+
+DS4_ENGRAM_FILE_CACHE=1 opens the Engram descriptor with F_NOCACHE disabled,
+while keeping automatic read-ahead disabled. This permits reclaimable OS file
+cache pages; it does not allocate or map a whole table or change the pinned
+expert budget. Potential benefit is repeated sparse rows, with potential file
+cache pressure in longer conversations. The default stays uncached. Existing
+Engram tests, including errors and changed file bytes, pass with the option.
+
+## 36: measure shared-expert overlap on actual agent turns
+
+At tile32, overlap ABBA reduces mean fresh hello 2.513 to 2.391 s (4.9%), but
+restored hello is essentially flat at 4.049 to 4.029 s. Twelve-token turns
+0.573/0.844 to 0.532/0.798 s; six-token turns 0.308/0.355 to 0.286/0.326 s.
+Both fresh hello candidates beat both controls. Keep opt-in pending selection
+of the final tile size and complete-response checks. See agent-batch-overlap.json.
+
+## 37: wider selected tiles on the actual agent
+
+Tile128 permits all 38 hello tokens in one layer sweep. ABBA versus tile8:
+fresh prefill2.902->2.313s, restored4.435->3.781s. Including first decode:
+fresh2.970->2.390s (19.5%), restored4.525->4.043s (10.6%). Restored first
+decode increases from~0.09 to~0.26s, so the prefill-only gain overstates the
+response gain. Later12-token prefills0.686/0.955->0.544/0.843s; 6-token shape
+unchanged. Both hello candidates beat both controls. See agent-tile128-abba.json.
+
+Full snapshots with tile128, medium, shared overlap and all Engram experiment
+flags enabled match scalar at38/64/127/128/129/255 after2048+8decoded tokens.
+See tile128-state.txt. This is correctness evidence, not an attribution of speed.
+
+## 38: exact shared-expert projection/activation fusion (opt-in)
+
+DS4_METAL_V41_FUSED_SHARED_BF16=1 fuses Q8 gate/up projections, their individual
+BF16 boundaries, SwiGLU, and its BF16 output boundary. The shader specializes
+the existing shared dot-product body; default DS4 kernels retain the original
+non-BF16 specialization. Scalar and <=128-row exact V4.1 calls are eligible;
+quality and TP retain the existing path. Down projection remains separate.
+
+All 32 synthetic shapes pass byte comparison for gate, up, mid and output guards.
+Warm 32-row microbench: 200 calls140.2->107.2ms (~23.5% lower); scalar warm
+control7.97ms versus candidates5.94/5.98ms (first control15.99ms includes startup).
+See shared-bf16-micro.txt. Full model ablation passes32 full-vocabulary logit rows
+and the complete serialized continuation state. Actual-agent ABBA is queued
+under /tmp/ds41-round3-trials/shared-agent.log; no end-to-end gain claimed yet.
+
+## 39: compare selected tiles with the established long-tail sweep
+
+Add DS4_METAL_V41_SELECTED_LIMIT=256..1024 as a bounded diagnostic override.
+With tile128 this can replace an exact 768-1023-token full-layer sweep with
+selected-only tiles, avoiding whole-layer SSD reads. Default remains256 and
+the existing selected-medium flag still chooses768. Benchmark904 appended
+tokens after4096, and verify768/1023 continuation snapshots, after the current
+sequential agent queue. Smaller-cache performance must be considered separately.
+
+## 40: agent timestamp/sampling confound discovered
+
+The first38-token hello append includes33 tokens of live date/time context.
+The prior agent probes also used the default random sampling seed. Although
+ABBA reduced drift and the model-dependent snapshot tests used fixed inputs,
+the agent trials did not route identical token sequences. Treat all earlier
+agent numbers as exploratory, not controlled same-input comparisons.
+
+The pending fix adds a noninteractive-only DS4_AGENT_TEST_TIME epoch override,
+freezes the probe timezone and seed, hashes actual input and generated tokens,
+and rejects ABBA mismatches. It also measures startup and submit-to-ready wall
+time. Prepared scripts are held outside the repo until the current queue
+finishes using the old scripts; final candidate selection uses the fixed probe.
+
+The fixed harness is now installed. Probe defaults freeze epoch1789319891,
+America/New_York and seed1234. ABBA rejects differing input/output ID hashes
+or generated counts. Real trace/elapsed timestamps stay live. Startup and
+submit-to-ready timings include work outside the prefill trace. First controlled
+confirmation is /tmp/ds41-fixed-tile128, running before any default promotion.
+
+## 41: OS caching of Engram rows did not improve short-agent latency
+
+Fresh/restored hello means 2.235/3.758 s control versus 2.274/3.780 s cached. Later turns also flat. Keep uncached default.
+These are exploratory trials with live timestamp tokens and random seeds.
+See agent-file-cache-exploratory.json. No default changed.
+
+## 42: short Engram prefetch did not improve first-turn latency
+
+Fresh hello 2.290 s in both variants; restored 3.768 versus 3.764 s. Fresh six-token turn improved, but restored did not. Keep prefetch opt-in.
+These are exploratory trials with live timestamp tokens and random seeds.
+See agent-engram-prefetch-exploratory.json. No default changed.
+
+## 43: small Engram parallel reads show only a small later-turn effect
+
+Fresh/restored hello 2.303/3.773 s control versus 2.287/3.789 s parallel. Six-token turns 0.316/0.346 to 0.294/0.325 s; insufficient evidence to change the default.
+These are exploratory trials with live timestamp tokens and random seeds.
+See agent-engram-parallel-exploratory.json. No default changed.
+
+## 44: shared-expert fusion is exact but flat on actual agent turns
+
+Fresh/restored hello 2.282/3.786 s control versus 2.294/3.756 s fused. Twelve-token turns slightly worse, six-token turns flat. Keep the exact kernel opt-in; the microbenchmark gain did not become a useful agent gain.
+These are exploratory trials with live timestamp tokens and random seeds.
+See agent-fused-shared-exploratory.json. No default changed.
+
+## 45: distinguish cache-target reserve from dynamic expert capacity
+
+The attempted4GiB stress target leaves only one dynamic expert: the target
+includes a3.99GiB prefill reserve. The runtime correctly selected scalar fallback;
+the test failed only its assertion that batching should appear, before snapshot
+comparison. No numerical mismatch or failed inference was reported.
+
+Add DS4_TEST_SELECTED_FALLBACK to explicitly validate unsupported configurations
+without expecting batched progress. Repeat with4GiB for fallback, then16GiB
+(total target, about8.9GiB dynamic capacity) to exercise real selected-batch
+evictions. Record both effective memory budgets in evidence.
+
+## 46: controlled agent confirmation with identical input/output tokens
+
+Fixed datetime, timezone, seed, executable and Metal sources; ABBA verifies
+actual input-ID and output-ID hashes for every generation. Tile128 versus
+tile8, SSD streaming, default context100000 and cache allocation:
+
+| Condition | Tile8 | Tile128 |
+| --- | ---: | ---: |
+| Fresh hello prefill | 3.270 s | 2.343 s |
+| Restored hello prefill | 4.434 s | 3.744 s |
+| Fresh hello through first decode | 3.337 s | 2.420 s |
+| Restored hello through first decode | 4.527 s | 3.993 s |
+| Fresh/restored12-token prefill | 0.664/0.926 s | 0.545/0.825 s |
+| Fresh/restored6-token prefill | 0.334/0.335 s | 0.296/0.348 s |
+
+Both hello candidates beat both controls. The fresh control samples vary
+3.526/3.015s, so the average improvement should not be treated as a precise
+population estimate. Restored first-decode overhead persists (~0.25 versus
+~0.09s), but total response improves. No startup work was moved; startup time
+is measured separately. See agent-fixed-tile128.json. Longer generations follow.
+
+## 47: selected tiles beat full-layer SSD sweeps on a904-token tail
+
+Separate-process fixed-input ABBA, ctx100000, prefix4096, appended904:
+full-layer exact sweep24.21/24.80tps; selected128 tiles35.37/35.08tps.
+Mean append latency36.896->25.664s, about30.4% lower (43.7% higher throughput).
+All full-vocabulary frontier logits match exactly. Prefix initialization is
+identical; the reported speed is the append, not the entire5000-token prompt.
+See tail904-selected-abba.json. Complete768/1023 continuation-state checks
+are running before default promotion.
+
+## 48: enable measured wider selected tiles in large caches
+
+Default warm text appends now use up to128 exact selected-expert rows, below
+1024 remaining tokens, when at least half the model's experts fit in the
+dynamic cache. Smaller budgets retain tile8/limit256. Tile size is capped by
+the actual prefill buffer. Both tile selection and sweep classification use
+the same cap, including the rollback and explicit diagnostic overrides.
+
+DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES=1 restores this round's prior
+tile8/limit256 policy. The older common short-optimization rollback still
+disables the previous round too. Kernel fusion, shared overlap and Engram
+experiments remain opt-in. No allocation budget or image/quality/TP guard changes.
+
+Long tails768/1023 plus8decoded tokens preserve full snapshots. Unsupported
+4GiB-target fallback and selected batching at16GiB target (8.88GiB dynamic)
+both preserve snapshots. Final defaults pass indexed-prefix tails2/3/4/5/6/7/
+8/9/17/40; tiny-prefix32-row scratch tails2/3/17/128; and one-row fallback.
+See round3-long-state.txt, round3-fallback4-state.txt, round3-cache16-state.txt
+and final-default-indexed.txt, final-small-prefix-cap32.txt, final-cap1-fallback.txt.
+
+Controlled complete-response ABBA (new default versus wider-tiling rollback):
+all input/output token hashes match. The three answers finish naturally at
+41/15/28 generated tokens, below the256-token cap. Mean sum of response times
+for all three turns: fresh8.968->8.617s (~3.9% lower), restored12.657->12.085s
+(~4.5% lower). Fresh hello varies across runs; decoded-token cost offsets some
+prefill savings. Do not describe the larger prefill gain as a general response
+speedup. See agent-fixed-responses.json, which also records first output,
+startup and submit-to-ready wall times.
+
+## 49: pipeline creation does not explain restored first-decode delay
+
+Add opt-in DS4_METAL_PIPELINE_CREATE_PROFILE timing on pipeline-cache misses
+in the general and matrix-vector pipeline helpers. Final fixed-input agent
+probe also enables existing pread and command-buffer timing. Pipeline creation
+across the entire first user turn totals0.919ms fresh and6.006ms restored;
+restored first decode is218ms versus76ms fresh. These pipeline helpers therefore
+do not account for the extra142ms. The remaining delay needs finer attribution;
+this run does not establish whether expert I/O or GPU work dominates that gap.
+See pipeline-create-profile.json; raw logs /tmp/ds41-final-pipeline-profile.
+Profiling is disabled by default. Agent and benchmark rebuilt successfully.
+
+For experiment47, adding each run's measured4096-token prefix and904-token tail
+also gives a whole5000-token prefill comparison: controls54.302/53.796s
+(92.08/92.94tps), selected tiles43.714/43.882s (114.38/113.94tps).
+That saves about10.25s overall, roughly23% higher throughput. This is a fixed
+5000-token benchmark, not the short agent or the complete-response measurement.
+
+## 50: final warmed fixed-input short-agent ABBA
+
+Final rebuilt binary, defaults versus DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES.
+All four trials complete; actual input and output token hashes match. Control
+is the new default, candidate the previous policy. Mean prefill (old -> new):
+fresh hello2.861->2.319s, restored hello4.421->3.697s; fresh/restored12-token
+turn0.649/0.929->0.536/0.828s. Six-token turns are flat within run variation.
+First-output response fresh hello2.930->2.399s, restored4.517->3.920s, so the
+restored first-decode penalty reduces but does not erase the first-turn gain.
+This warmed repeat avoids the earlier fresh-control outlier and suggests about
+19%/16% less hello prefill time, rather than relying on the earlier28% estimate.
+These one-output-token measurements isolate startup-to-first-token behavior;
+experiment48 measures naturally completed answers. See agent-final-warmed-abba.json.

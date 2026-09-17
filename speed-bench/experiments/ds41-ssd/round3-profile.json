@@ -1,0 +1,48 @@
+{
+  "fresh": [
+    {
+      "batches": 200,
+      "selected_read_ms": 0.148,
+      "bind_load_ms": 594.269,
+      "pread_ms": 550.97,
+      "unique": 5076
+    },
+    {
+      "batches": 80,
+      "selected_read_ms": 0.054,
+      "bind_load_ms": 266.927,
+      "pread_ms": 248.38,
+      "unique": 1835
+    },
+    {
+      "batches": 40,
+      "selected_read_ms": 0.026000000000000002,
+      "bind_load_ms": 91.909,
+      "pread_ms": 82.283,
+      "unique": 895
+    }
+  ],
+  "restored": [
+    {
+      "batches": 200,
+      "selected_read_ms": 0.166,
+      "bind_load_ms": 2249.965,
+      "pread_ms": 1808.638,
+      "unique": 5081
+    },
+    {
+      "batches": 80,
+      "selected_read_ms": 0.047,
+      "bind_load_ms": 369.412,
+      "pread_ms": 274.476,
+      "unique": 1832
+    },
+    {
+      "batches": 40,
+      "selected_read_ms": 0.025,
+      "bind_load_ms": 118.063,
+      "pread_ms": 89.634,
+      "unique": 899
+    }
+  ]
+}

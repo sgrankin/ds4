@@ -1,0 +1,6 @@
+PASS: tail=38 plus 8 decoded tokens, full snapshot bit-identical; scalar 2.955s, batch 0.851s
+PASS: tail=64 plus 8 decoded tokens, full snapshot bit-identical; scalar 2.860s, batch 1.339s
+PASS: tail=127 plus 8 decoded tokens, full snapshot bit-identical; scalar 5.923s, batch 2.427s
+PASS: tail=128 plus 8 decoded tokens, full snapshot bit-identical; scalar 5.349s, batch 2.540s
+PASS: tail=129 plus 8 decoded tokens, full snapshot bit-identical; scalar 5.423s, batch 2.575s
+PASS: tail=255 plus 8 decoded tokens, full snapshot bit-identical; scalar 11.625s, batch 5.260s

@@ -105,7 +105,10 @@ bool ds4_engram_table_open(ds4_engram_table *t, const char *path,
         goto fail;
     }
 #ifdef __APPLE__
-    if (fcntl(fd, F_NOCACHE, 1) != 0 || fcntl(fd, F_RDAHEAD, 0) != 0) goto fail;
+    /* Diagnostic: permit reclaimable OS file-cache pages for repeated sparse
+     * rows. Keep automatic read-ahead off even in this mode. */
+    if (fcntl(fd, F_NOCACHE, getenv("DS4_ENGRAM_FILE_CACHE") ? 0 : 1) != 0 ||
+        fcntl(fd, F_RDAHEAD, 0) != 0) goto fail;
 #endif
     *t = (ds4_engram_table){.fd = fd, .offset = offset, .rows = rows};
     return true;
@@ -304,7 +307,9 @@ bool ds4_engram_read_batch(const ds4_engram_table *t, const uint32_t *rows,
             .out = out + start * DS4_ENGRAM_COLS * DS4_ENGRAM_DIM, .readers = 1};
         /* Fixed concurrency hides random-read latency without caching the table.
          * Each worker owns disjoint output rows; all finish before GPU use. */
-        if (count >= ENGRAM_PARALLEL_MIN_ROWS) {
+        const size_t parallel_min = getenv("DS4_ENGRAM_SMALL_BATCH_PARALLEL") ?
+            DS4_ENGRAM_COLS * 2u : ENGRAM_PARALLEL_MIN_ROWS;
+        if (count >= parallel_min) {
             batch.readers = ENGRAM_READERS;
 #ifdef __APPLE__
             dispatch_apply_f(batch.readers,

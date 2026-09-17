@@ -40797,6 +40797,29 @@ static bool ds41_attention(ds41_gpu_graph *g, const ds4_model *m,
            ds41_bf16(g->block, DS4_N_EMBD);
 }
 
+/* Preserve both projection BF16 boundaries before SwiGLU, then its BF16
+ * output boundary. The fused kernel keeps the standalone reduction trees. */
+static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
+        const ds4_layer_weights *l, ds4_gpu_tensor *gate, ds4_gpu_tensor *up,
+        ds4_gpu_tensor *mid, const ds4_gpu_tensor *in, uint32_t count) {
+#ifdef __APPLE__
+    if (!g->quality && g->tp_world == 1 && count <= 128u &&
+        l->ffn_gate_shexp->type == DS4_TENSOR_Q8_0 &&
+        l->ffn_up_shexp->type == DS4_TENSOR_Q8_0 &&
+        getenv("DS4_METAL_V41_FUSED_SHARED_BF16"))
+        return ds4_gpu_dsv41_shared_gate_up_bf16_rows(gate, up, mid, m->map, m->size,
+            l->ffn_gate_shexp->abs_offset, l->ffn_up_shexp->abs_offset,
+            DS4_N_EMBD, DS4_N_FF_EXP, in, count, DS4_SWIGLU_CLAMP_EXP);
+#endif
+    return (count == 1 ? ds41_matmul(gate, m, l->ffn_gate_shexp, in, true) :
+        ds41_matmul_batch(gate, m, l->ffn_gate_shexp, in, count, true)) &&
+        (count == 1 ? ds41_matmul(up, m, l->ffn_up_shexp, in, true) :
+        ds41_matmul_batch(up, m, l->ffn_up_shexp, in, count, true)) &&
+        ds4_gpu_swiglu_tensor(mid, gate, up, count * DS4_N_FF_EXP,
+            DS4_SWIGLU_CLAMP_EXP, 1.0f) &&
+        ds4_gpu_dsv41_quantize(mid, DS4_N_FF_EXP, count, DS4_V41_BF16);
+}
+
 static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
                      const ds4_layer_weights *l, uint32_t il, uint32_t token) {
     uint64_t gate_row = 0, down_row = 0;
@@ -40862,11 +40885,8 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
     }
 #endif
     if (shared_here && !shared_queued &&
-        (!ds41_matmul(g->shared_gate, m, l->ffn_gate_shexp, g->norm, true) ||
-        !ds41_matmul(g->shared_up, m, l->ffn_up_shexp, g->norm, true) ||
-        !ds4_gpu_swiglu_tensor(g->shared_mid, g->shared_gate, g->shared_up,
-                              DS4_N_FF_EXP, DS4_SWIGLU_CLAMP_EXP, 1.0f) ||
-        !ds41_bf16(g->shared_mid, DS4_N_FF_EXP) ||
+        (!ds41_shared_gate_up(g, m, l, g->shared_gate, g->shared_up,
+            g->shared_mid, g->norm, 1) ||
         !ds41_matmul(g->shared, m, l->ffn_down_shexp, g->shared_mid, true))) {
         if (load.active) {
             (void)metal_graph_selected_async_load_finish(&load);
@@ -41365,14 +41385,21 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
     const uint64_t gate_row = routed_expert_row_bytes(l->ffn_gate_exps);
     const uint64_t down_row = routed_expert_row_bytes(l->ffn_down_exps);
     bool mid_f16 = false;
-    return ds41_matmul_batch(b->route_logits, m, l->ffn_gate_inp, b->norm, count, false) &&
-        ds41_route_batch(g, m, l, count) &&
-        ((shared_owner && g->tp_rank != (il & 1u)) ||
-        (ds41_matmul_batch(b->shared_gate, m, l->ffn_gate_shexp, b->norm, count, true) &&
-        ds41_matmul_batch(b->shared_up, m, l->ffn_up_shexp, b->norm, count, true) &&
-        ds4_gpu_swiglu_tensor(b->shared_mid, b->shared_gate, b->shared_up,
-            count * DS4_N_FF_EXP, DS4_SWIGLU_CLAMP_EXP, 1.0f) &&
-        ds4_gpu_dsv41_quantize(b->shared_mid, DS4_N_FF_EXP, count, DS4_V41_BF16) &&
+    bool ok = ds41_matmul_batch(b->route_logits, m, l->ffn_gate_inp, b->norm, count, false) &&
+        ds41_route_batch(g, m, l, count);
+#ifdef __APPLE__
+    const bool overlap_shared = !force_resident && g->streaming &&
+        getenv("DS4_METAL_V41_BATCH_SHARED_OVERLAP") &&
+        ds4_gpu_stream_expert_batch_supported(count, DS4_N_EXPERT, DS4_N_EXPERT_USED,
+            l->ffn_gate_exps->type, l->ffn_down_exps->type);
+    if (ok && overlap_shared) {
+        ok = ds4_gpu_end_commands() && ds4_gpu_begin_commands();
+        if (ok) ds4_gpu_stream_expert_batch_set_ready(b->selected);
+    }
+#endif
+    ok = ok && ((shared_owner && g->tp_rank != (il & 1u)) ||
+        (ds41_shared_gate_up(g, m, l, b->shared_gate, b->shared_up,
+            b->shared_mid, b->norm, count) &&
         ds41_matmul_batch(b->shared, m, l->ffn_down_shexp, b->shared_mid, count, true))) &&
         (
 #ifndef __APPLE__
@@ -41395,6 +41422,10 @@ static bool ds41_moe_batch(ds41_gpu_graph *g, const ds4_model *m,
         (!shared_owner || g->tp_rank != (il & 1u) ||
             ds4_gpu_add_tensor(b->routed, b->routed, b->shared, count * DS4_N_EMBD)) &&
         ds41_sum_partial_batch(g, b->routed, il, count);
+#ifdef __APPLE__
+    if (overlap_shared) ds4_gpu_stream_expert_batch_set_ready(NULL);
+#endif
+    return ok;
 }
 
 /* Tile routed/shared work through the existing <=8-row decode kernels.
@@ -41570,6 +41601,29 @@ static bool ds41_exact_short_prefill(const ds41_gpu_graph *g, uint32_t count) {
 #endif
 }
 
+static bool ds41_large_expert_cache(const ds41_gpu_graph *g) {
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+    return g->streaming && g->pos &&
+        ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u;
+#else
+    (void)g;
+    return false;
+#endif
+}
+
+static uint32_t ds41_selected_tile_cap(const ds41_gpu_graph *g) {
+    uint32_t tile = ds41_large_expert_cache(g) &&
+        !getenv("DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES") ? 128u : 8u;
+    const char *env = getenv("DS4_METAL_V41_SELECTED_TILE");
+    if (env && env[0]) {
+        char *end = NULL;
+        unsigned long value = strtoul(env, &end, 10);
+        if (end != env && !*end && value >= 2u && value <= 128u)
+            tile = (uint32_t)value;
+    }
+    return tile < g->prefill_cap ? tile : g->prefill_cap;
+}
+
 /* Small layer-major tiles keep the ordinary selected-expert cache. They must
  * never map or seed a whole expert layer for a handful of tokens. */
 static bool ds41_selected_small_prefill(const ds41_gpu_graph *g,
@@ -41577,7 +41631,8 @@ static bool ds41_selected_small_prefill(const ds41_gpu_graph *g,
 #ifdef __APPLE__
     if (getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") || !g->streaming ||
         g->tp_world != 1 || g->quality || g->imatrix || g->image_count ||
-        g->encoder_resident || !g->pos || count < 2u || count > 8u ||
+        g->encoder_resident || !g->pos || count < 2u ||
+        count > ds41_selected_tile_cap(g) ||
         count > g->prefill_cap) return false;
     const uint32_t gate_type = w->layer[0].ffn_gate_exps->type;
     const uint32_t down_type = w->layer[0].ffn_down_exps->type;
@@ -41605,15 +41660,25 @@ static uint32_t ds41_prefill_count(const ds41_gpu_graph *g, const ds4_weights *w
     /* Resident appends do not pay for an SSD layer sweep. In particular,
      * the server's 128-token mixed quantum must not become scalar prefill. */
     if (!g->streaming && g->tp_world == 1) minimum = 8u;
-#if defined(__APPLE__) && !defined(DS4_NO_GPU)
-    /* With at least half the experts cached, shorter warm appends beat a full
-     * disk sweep. Longer tails may use the scalar-equivalent sweep below. */
-    if (g->streaming && g->pos &&
-        ds4_gpu_stream_expert_cache_configured_count() >= DS4_N_LAYER * DS4_N_EXPERT / 2u)
-        minimum = 1024u;
-#endif
-    const uint32_t small = remaining < 8u ? remaining : 8u;
-    if (remaining < 256u && ds41_selected_small_prefill(g, w, small)) return small;
+    const bool large_cache = ds41_large_expert_cache(g);
+    /* Wide selected tiles amortize exact GPU work and repeated expert reads
+     * in the measured large-cache regime. Smaller budgets retain the old
+     * eight-row/256-token policy unless explicitly overridden for diagnosis. */
+    if (large_cache) minimum = 1024u;
+    const bool wider_selected = large_cache &&
+        !getenv("DS4_METAL_DISABLE_V41_WIDER_SELECTED_TILES");
+    const uint32_t tile = ds41_selected_tile_cap(g);
+    const uint32_t small = remaining < tile ? remaining : tile;
+    uint32_t selected_limit = wider_selected ? 1024u : 256u;
+    if (getenv("DS4_METAL_V41_SELECTED_MEDIUM")) selected_limit = 768u;
+    const char *limit_env = getenv("DS4_METAL_V41_SELECTED_LIMIT");
+    if (limit_env && limit_env[0]) {
+        char *end = NULL;
+        unsigned long value = strtoul(limit_env, &end, 10);
+        if (end != limit_env && !*end && value >= 256u && value <= 1024u)
+            selected_limit = (uint32_t)value;
+    }
+    if (remaining < selected_limit && ds41_selected_small_prefill(g, w, small)) return small;
     if (remaining < minimum) return ds41_exact_short_prefill(g, remaining) ? remaining : 1;
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
     /* Keep a medium SSD append in one layer sweep without changing its
@@ -41913,7 +41978,8 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
      * selected-expert cache and never replace the static decode mapping. */
     row.streaming = selected_small;
     ds41_engram_prefetch engram_prefetch = {0};
-    const bool overlap_engram = total_count >= 1024u &&
+    const bool overlap_engram = (total_count >= 1024u ||
+        (selected_small && getenv("DS4_METAL_V41_SMALL_ENGRAM_PREFETCH"))) &&
         !getenv("DS4_METAL_DISABLE_V41_ENGRAM_PREFETCH") &&
         !getenv("DS4_METAL_DISABLE_V41_BATCH_ENGRAM");
     const bool pipeline_engram = overlap_engram &&
