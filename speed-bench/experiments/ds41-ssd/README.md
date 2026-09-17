@@ -1135,3 +1135,55 @@ the final experiment. The corrected guarded schedule still waits once per layer
 and changes overlap; its negative result does not disprove a design that avoids
 those per-layer handoffs. Such a design needs guarded continuation or a different
 command-submission protocol, not just moving a wait after expert computation.
+
+## 70: smaller prefill buffer improves the full tool session modestly
+
+Restored baseline runtime; only DS4_REPLAY_PREFILL_CHUNK=2048 differs. Full
+ABBA with memory reports retains exact phase logits and final snapshot hashes.
+Mean append94.681->92.725s (-2.07%), decode198.447->192.591s (-2.95%),
+combined293.128->285.316s (-2.66%,7.812s saved), excluding system prefill.
+System prefill14.674->14.812s. Both candidates beat both controls in combined
+and decode time. Cache budget7822->8253 experts,72.51->76.50GiB; total expert
+reads670.61->582.57GiB (-13.13%), evictions72322->62834. Both repeats have
+identical traffic. See chunk2048-full-{summary,comparison,manifest}.json.
+
+Every prefill segment in this recording fits within2048 rows. This is evidence
+for a memory-budget tradeoff on a working session, not a universal setting.
+Experiment19 found no consistent short-interactive benefit. A large8192-token
+prefill check follows before changing any default.
+
+## 71: buffer2048 on an8192-token prefill is exact and near-neutral
+
+Fixed-input ABBA at ctx100000,8192 prefill tokens and8 teacher-forced decode
+tokens; all frontier logits match exactly. Control prefill425.89/438.45tps,
+candidate425.52/428.50tps (means432.17/427.01, candidate -1.19%). The control
+drift exceeds the mean difference. Actual layer logs confirm control2x4096
+versus candidate4x2048; the count-dependent native limit uses4096 below16384
+input rows even with8192-row allocated capacity. Therefore this does not test
+the full8192-row processing regime; test16384 before a general default change.
+See chunk2048-large8192.json.
+
+## 72: refresh actual-agent short turns for buffer2048
+
+Fresh/restored ABBA, three short questions each, one generated token per turn;
+all input/output token hashes match. Mean fresh first-output latencies are
+2333.5/615.5/377.5ms control versus2288/579/358.5ms candidate. Restored means
+3961.5/922.5/401.5ms versus3951/908/403ms. This supports near-neutral interactive
+latency with at most a small fresh benefit; it is not a complete-response
+throughput measurement. See chunk2048-interactive-new.json.
+
+## 73: full8192-row processing exposes the large-input tradeoff
+
+At16384 input tokens, logs confirm control2x8192 and candidate8x2048 chunks.
+All frontier logits match. Control630.54/558.86tps, candidate563.94/538.86tps;
+mean throughput594.70->551.40 (-7.28%), mean prefill time27.650->29.729s
+(+7.52%). Control drift is substantial and one candidate exceeds the second
+control, so this is a tradeoff warning rather than a precise stable penalty.
+See chunk2048-large16384.json and chunk2048-large-provenance.json.
+
+Decision: retain the default. --prefill-chunk2048 is a measured option for this
+small-input tool session (2.66% lower inference time,13.13% fewer expert reads),
+with near-neutral short interactive latency and uncertain long-input cost.
+A better next design starts with a small workspace and expands for large inputs,
+reclaiming expert cache safely. Account for resize/admission/eviction costs and
+never resize tensors referenced by in-flight commands or alias views.

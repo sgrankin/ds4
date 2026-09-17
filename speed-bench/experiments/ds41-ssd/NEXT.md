@@ -65,6 +65,45 @@ Missing-route schedule guard was tested on a one-token input and exits nonzero.
 Wrong-route injection in deferred mode also exits nonzero. Twelve Python tests
 pass, covering extraction, route parsing and balanced-continuation identity.
 
+## Current continuation (experiments67-70)
+
+Experiments67-69 implemented sparse cache execution before CPU routing readback,
+then GPU all-hit guards, batched resource declarations and slab deduplication.
+Native logits and continuation state were exact. Experiment67 and preliminary68
+missed address-table maintenance and hit-path token aging; their timings are
+superseded. Corrected68 preserves identical cache traffic and is +4.29% decode,
++2.55% short-session inference. Deduplicated69 remains +4.19% decode,+3.04% turn.
+All are rejected. Code archived in jj commits458ee395,99121f52,468d504c;
+restored out in4ba2a3a3. Runtime sources are back to experiment66 baseline.
+This schedule still waits once per layer and is not the oracle's wait-free path.
+
+Experiment70 completed: chunk2048 full ABBA exact; decode -2.95%, append
+-2.07%, combined -2.665% (293.128->285.316s), reads670.61->582.57GiB.
+Budget7822->8253 experts /72.51->76.50GiB. Results chunk2048-full-*.json.
+No default changed: explicit --prefill-chunk2048 is the tested option.
+
+Experiments71-73 complete. Buffer2048 preserves frontier logits at8192 and
+16384 prefill tokens. At8192 input, actual chunks are4096 vs2048, throughput
+432.17->427.01tps (-1.19%, below control drift). At16384, actual chunks8192
+vs2048, throughput594.70->551.40tps (-7.28%); control630.54->558.86 drift
+makes the penalty estimate uncertain. No universal default change.
+Actual-agent fresh first output2333.5->2288ms, restored3961.5->3951ms;
+input/output token hashes identical. Subsequent short turns near-neutral/small
+improvement. This check generates one token, not full responses.
+Evidence chunk2048-large8192.json, chunk2048-large16384.json,
+chunk2048-large-provenance.json, chunk2048-interactive-new.json.
+
+Next major idea: demand-sized prefill workspace. Start small for short tool
+inputs, expand for large prefills while reclaiming cache within the same memory
+budget. Current allocation reserves8192 rows although count-dependent execution
+uses2048 below8192 input and4096 below16384. Preserve alias lifetimes, cache
+admission and in-flight resource proofs; benchmark resize/cold/warm transitions.
+Do not infer an implementation speedup from the fixed-buffer experiment.
+
+All trials finished. No active GPU workload. Rebuilt agent/bench/replay use the
+restored baseline runtime; rejected67-69 code exists only in jj history. No new
+production defaults were enabled this continuation. Vision remains deferred.
+
 ## Reproduction and artifacts
 
     make ds4-agent ds4-bench speed-bench/agent-session/replay
