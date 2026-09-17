@@ -1,0 +1,26 @@
+[
+  {
+    "run": "1-candidate",
+    "ctx_tokens": "5000",
+    "prefill_tokens": "5000",
+    "prefill_tps": "257.66",
+    "gen_tokens": "8",
+    "gen_tps": "5.31",
+    "gen_first_ms": "956.450",
+    "gen_steady_tokens": "7",
+    "gen_steady_tps": "12.75",
+    "kvcache_bytes": "0"
+  },
+  {
+    "run": "0-control",
+    "ctx_tokens": "5000",
+    "prefill_tokens": "5000",
+    "prefill_tps": "67.61",
+    "gen_tokens": "8",
+    "gen_tps": "14.79",
+    "gen_first_ms": "61.466",
+    "gen_steady_tokens": "7",
+    "gen_steady_tps": "14.60",
+    "kvcache_bytes": "0"
+  }
+]
