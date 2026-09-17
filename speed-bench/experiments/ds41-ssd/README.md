@@ -1043,3 +1043,95 @@ wasted reads. Deeper lookahead with different queues is outside this bound.
 See oracle-preattention-full.json, its comparison and provenance files. The
 stronger combined oracle in63 also changes the routing synchronization schedule;
 do not attribute its entire19.7% session gain to a conventional predictor.
+
+## 65: existing gate on earlier activations predicts half the selected experts
+
+Opt-in DS4_V41_ROUTE_PROBE evaluates the native gate on pre-attention norm,
+then records the unchanged native post-attention routing. Full-session recall
+is 50.2973%, with 1.44245% complete six-expert coverage and layer recall
+24.4–67.4%. Native route payload, phase logits and continuation state exactly
+match baseline. This intrusive accuracy probe is not a speed benchmark; no
+predictions affect loads or execution. See gate-probe-full.json.
+
+## 66: real asynchronous gate prediction is exact but slower
+
+DS4_METAL_V41_GATE_PREFETCH=1 runs the existing gate on pre-attention norm,
+predicts into a private ID tensor, and submits one event-driven cache load.
+Attention and native routing continue while the worker prepares the load.
+Before native demand loading, join the worker and clear its selected override.
+Only native selected IDs and native weights are used for expert computation.
+The current single pending load is bounded but cannot cancel wrong reads or
+prioritize demand over them. Incompatible scalar configurations fail explicitly.
+
+Short fixed tool-session ABBA: decode18.282 ->20.422s (+11.71%); append
+15.262 ->15.154s (-0.70%); combined33.543 ->35.576s (+6.06%). Both candidate
+samples are slower than both controls. Every phase logit and final continuation
+state is byte-identical to baseline. No oracle routes are supplied.
+See gate-prefetch-short.json and gate-prefetch-short-comparison.json.
+
+Rejected for default enablement. The oracle bounds are opportunities, not
+realized gains; prediction, handoffs and extra I/O must fit inside that budget.
+A separate intrusive AB profile investigates cache traffic; its timings are
+not the headline performance comparison.
+
+The diagnostic AB also retains exact logits/state. Total expert reads rise
+87.53 ->127.24 GiB (+45.4%), misses17243 ->21526, evictions9421 ->13704.
+Pending joins2302 ->5467; exposed CPU wait1.392 ->2.373s. Native all-resident
+layer calls improve11418 ->12188 out of13720, but extra speculative traffic
+and synchronization more than consume this benefit. These counters include
+initial/append prefill traffic; pending waits are cumulative scalar-load joins.
+See gate-prefetch-profile.json. Further work should target admission by
+confidence and cache residency, demand priority, and GPU cache-hit scheduling;
+training a more accurate gate alone does not resolve the queue constraint.
+
+## 67: execute cached experts before the routing readback
+
+Superseded timing: experiment68 found missing address-table maintenance and
+cache aging on this prototype's hit path. Outputs were exact, but this is not
+a clean scheduling-only comparison. Use the corrected experiment68 results.
+
+Opt-in DS4_METAL_V41_CACHE_TRY runs native routing, GPU cache validation and
+sparse-address IQ2/Q2 kernels in the same submission. Missing addresses are
+skipped by existing kernels. The CPU accepts output only when validation says
+all six native experts were resident; otherwise the normal exact path replaces
+the disposable partial output before anything consumes it. Every addressable
+cache buffer is declared to Metal and protected in flight. This first version
+still synchronizes at each layer, after expert computation rather than before.
+
+Short tool-session ABBA, exact phase logits/final state: decode18.217->19.540s
+(+7.27%), append15.176->14.179s (-6.57%), combined33.393->33.719s (+0.98%).
+Both candidate decode samples are slower than both controls. Cache reads
+87.53->88.71GiB; scheduling changes cache eviction availability. Disabled by
+default. See cache-try-short-{summary,comparison,manifest}.json. Next test
+skips all speculative expert work on a miss and batches resource declarations.
+
+## 68: guarded cache execution with normal address maintenance and aging
+
+GPU all-hit guards skip both expert kernels entirely on any miss; exact demand
+fallback remains. Batched useResources replaces individual resource calls.
+Corrected two integration omissions: enable address writes for newly loaded
+experts and advance the normal token-aging clock on hits. The preliminary
+guarded trial also lacked those fixes and is saved only as diagnostic history.
+
+Corrected short ABBA retains exact logits and state. Both candidate decode
+samples (19.159s,19.076s) are slower than the first18.300s control. All variants
+have identical cache hits183997, misses17243, evictions9421 and reads87.53GiB.
+See cache-guarded-fixed-short-{summary,comparison,manifest}.json for the complete
+balanced result. No default enabled. Next isolate duplicate slab registrations.
+
+## 69: deduplicate slab resource declarations; no gain
+
+On top of corrected guarded cache execution, DS4_METAL_V41_CACHE_TRY_UNIQUE
+compacts repeated underlying Metal resources before useResources. Every unique
+resource remains declared and every potentially selected entry remains protected
+in flight. Short ABBA is exact, but decode18.531->19.307s (+4.19%), append
+15.416->15.671s (+1.65%), combined33.947->34.978s (+3.04%). Later samples
+show timing drift; both candidate decode samples still exceed both controls.
+See cache-unique-short-{summary,comparison,manifest}.json.
+
+No cache-execution variant is promoted. Experiments67-69 retain their code in
+jj history; restore these prototypes out of the active build after committing
+the final experiment. The corrected guarded schedule still waits once per layer
+and changes overlap; its negative result does not disprove a design that avoids
+those per-layer handoffs. Such a design needs guarded continuation or a different
+command-submission protocol, not just moving a wait after expert computation.

@@ -40209,6 +40209,9 @@ typedef struct {
     ds41_prefill_row carry;
     ds4_gpu_tensor *prefill_tokens;
     ds4_gpu_tensor *oracle_selected; /* Diagnostic deferred route validation. */
+    ds4_gpu_tensor *predict_selected;
+    metal_graph_selected_async_load predict_load;
+    bool predict_active;
 #define DS41_FIELD(name, count) ds4_gpu_tensor *name;
     DS41_SCRATCH(DS41_FIELD)
 #undef DS41_FIELD
@@ -40228,6 +40231,11 @@ static void ds41_graph_free(ds41_gpu_graph *g) {
     ds4_gpu_decode_graphs_invalidate();
 #endif
     ds4_gpu_tensor_free(g->tp_logits_half);
+    if (g->predict_load.active) {
+        (void)metal_graph_selected_async_load_finish(&g->predict_load);
+        (void)ds4_gpu_routed_moe_set_selected_override(NULL, 0);
+    }
+    ds4_gpu_tensor_free(g->predict_selected);
     ds4_gpu_tensor_free(g->oracle_selected);
     for (uint32_t i = 0; g->rows_view && i < g->prefill_cap; i++) {
 #define DS41_ROW_FREE(name, count) ds4_gpu_tensor_free(g->rows_view[i].name);
@@ -40823,18 +40831,28 @@ static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
 }
 
 /* Diagnostic oracle: exact future routes from a previous scalar replay.
- * Never changes routing, arithmetic, cache capacity, or selected-ID readback.
+ * Retains native routing, arithmetic and cache capacity. The optional deferred
+ * check moves selected-ID validation to token completion.
  * Single-process/single-session only; files are native-endian uint32 words. */
 static struct {
-    bool initialized, enabled, active, preattention, defer_check;
+    bool initialized, enabled, active, preattention, defer_check, probe;
     FILE *record;
     const ds41_gpu_graph *owner;
     uint32_t *words;
     size_t count, cursor;
     uint32_t pos, token, checked;
+    int32_t predicted[DS4_MAX_EXPERT_USED];
+    uint64_t probe_calls[DS4_MAX_LAYER], probe_hits[DS4_MAX_LAYER], probe_all[DS4_MAX_LAYER];
 } ds41_route_oracle;
 
 static void ds41_route_oracle_close(void) {
+    if (ds41_route_oracle.probe) {
+        for (uint32_t il = 0; il < DS4_N_LAYER; il++)
+            fprintf(stderr, "ds4: routing probe layer=%u calls=%llu hits=%llu all=%llu\n", il,
+                (unsigned long long)ds41_route_oracle.probe_calls[il],
+                (unsigned long long)ds41_route_oracle.probe_hits[il],
+                (unsigned long long)ds41_route_oracle.probe_all[il]);
+    }
     if (ds41_route_oracle.record && fclose(ds41_route_oracle.record)) {
         fprintf(stderr, "ds4: oracle route recording close failed\n");
         _Exit(1);
@@ -40851,6 +40869,9 @@ static void ds41_route_oracle_begin(ds41_gpu_graph *g, uint32_t token) {
         ds41_route_oracle.initialized = true;
         const char *record = getenv("DS4_V41_ROUTE_RECORD");
         const char *oracle = getenv("DS4_V41_ROUTE_ORACLE");
+        ds41_route_oracle.probe = getenv("DS4_V41_ROUTE_PROBE") != NULL;
+        if (ds41_route_oracle.probe && !record)
+            ds4_die("routing probe requires route recording mode");
         const bool scheduled = getenv("DS4_V41_ORACLE_PREATTENTION") ||
                                getenv("DS4_V41_ORACLE_DEFER_CHECK");
         if (scheduled && !oracle) ds4_die("oracle schedule requires a route recording");
@@ -40920,6 +40941,15 @@ static const int32_t *ds41_route_oracle_ids(uint32_t il) {
 static void ds41_route_oracle_check(uint32_t il, const int32_t *ids) {
     if (!ds41_route_oracle.active) return;
     if (il != ds41_route_oracle.checked++) ds4_die("oracle layer order mismatch");
+    if (ds41_route_oracle.probe) {
+        uint32_t hits = 0;
+        for (uint32_t i = 0; i < DS4_N_EXPERT_USED; i++)
+            for (uint32_t j = 0; j < DS4_N_EXPERT_USED; j++)
+                if (ids[i] == ds41_route_oracle.predicted[j]) { hits++; break; }
+        ds41_route_oracle.probe_calls[il]++;
+        ds41_route_oracle.probe_hits[il] += hits;
+        ds41_route_oracle.probe_all[il] += hits == DS4_N_EXPERT_USED;
+    }
     if (ds41_route_oracle.record) {
         uint32_t row[3 + DS4_MAX_EXPERT_USED];
         row[0] = ds41_route_oracle.pos; row[1] = ds41_route_oracle.token; row[2] = il;
@@ -40942,6 +40972,40 @@ static bool ds41_route_oracle_prefetch(const ds4_model *m,
      * in-flight tracking protects every buffer still referenced by that work. */
     return ds4_gpu_flush_commands() && ds4_gpu_stream_expert_cache_begin_selected_load(
         &table, ds41_route_oracle_ids(il), DS4_N_EXPERT_USED);
+}
+
+/* Offline accuracy probe: apply the existing gate to pre-attention norm.
+ * This adds intrusive GPU work/readback; it is not a timed prefetch predictor. */
+static bool ds41_route_probe(ds41_gpu_graph *g, const ds4_model *m,
+                             const ds4_layer_weights *l, uint32_t token) {
+    if (!ds41_route_oracle.active || !ds41_route_oracle.probe) return true;
+    if (!l->ffn_exp_probs_b) return false;
+    return ds41_matmul(g->route_logits, m, l->ffn_gate_inp, g->norm, false) &&
+        ds4_gpu_router_select_tensor(g->selected, g->route_weights, g->route_probs,
+            m->map, m->size, l->ffn_exp_probs_b->abs_offset, 0, 0, token,
+            DS4_N_EXPERT, DS4_N_EXPERT_USED, DS4_EXPERT_WEIGHT_SCALE, 0, 0, true, false,
+            g->route_logits) && ds4_gpu_end_commands() &&
+        ds4_gpu_tensor_read(g->selected, 0, ds41_route_oracle.predicted,
+            DS4_N_EXPERT_USED * sizeof(int32_t)) && ds4_gpu_begin_commands();
+}
+
+/* Bounded experimental prefetch: predicted IDs only warm the cache. The
+ * native router still selects every expert used for arithmetic. */
+static bool ds41_predict_prefetch(ds41_gpu_graph *g, const ds4_model *m,
+                                  const ds4_layer_weights *l, uint32_t il, uint32_t token) {
+    if (!g->predict_active) return true;
+    uint64_t gate_row = 0, down_row = 0, event = 0;
+    if (!l->ffn_exp_probs_b ||
+        !tensor_nbytes(l->ffn_gate_exps->type, DS4_N_EMBD, &gate_row) ||
+        !tensor_nbytes(l->ffn_down_exps->type, DS4_N_FF_EXP, &down_row)) return false;
+    return ds41_matmul(g->route_logits, m, l->ffn_gate_inp, g->norm, false) &&
+        ds4_gpu_router_select_tensor(g->predict_selected, g->route_weights, g->route_probs,
+            m->map, m->size, l->ffn_exp_probs_b->abs_offset, 0, 0, token,
+            DS4_N_EXPERT, DS4_N_EXPERT_USED, DS4_EXPERT_WEIGHT_SCALE, 0, 0, true, false,
+            g->route_logits) && ds4_gpu_signal_selected_readback_ready(&event) &&
+        ds4_gpu_flush_commands() &&
+        metal_graph_selected_async_load_start_tensor(&g->predict_load, g->predict_selected,
+            m, l, il, event, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD);
 }
 
 static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
@@ -40982,6 +41046,14 @@ static bool ds41_moe_partial(ds41_gpu_graph *g, const ds4_model *m,
             !metal_graph_selected_async_load_start_tensor(&load, g->selected,
                 m, l, il, event, gate_row * DS4_N_FF_EXP, down_row * DS4_N_EMBD))
             return false;
+    }
+    if (g->predict_load.active) {
+        const bool flushed = ds4_gpu_flush_commands() != 0;
+        /* Join cache mutations before exact demand loading. A failed speculative
+         * load is harmless: the native path retries its own exact selected set. */
+        (void)metal_graph_selected_async_load_finish(&g->predict_load);
+        const bool cleared = ds4_gpu_routed_moe_set_selected_override(NULL, 0) != 0;
+        if (!flushed || !cleared) return false;
     }
     if (early_load) {
         const ds4_gpu_stream_expert_table table = graph_stream_expert_table_make(
@@ -41420,6 +41492,8 @@ static bool ds41_graph_after_moe(ds41_gpu_graph *g) {
 static bool ds41_graph_layer(ds41_gpu_graph *g, const ds4_model *m,
                             const ds4_layer_weights *l, uint32_t il, int token) {
     return ds41_graph_before_attention(g, m, l, il) &&
+        ds41_route_probe(g, m, l, (uint32_t)token) &&
+        ds41_predict_prefetch(g, m, l, il, (uint32_t)token) &&
         ds41_trace_row(g->norm, DS4_N_EMBD, g->pos, 1, il, "1-norm") &&
         ds41_trace_row(g->attn_split, 24, g->pos, 1, il, "1-split") &&
         ds41_attention(g, m, l, il, false) &&
@@ -41609,6 +41683,16 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
     const float initial_pre[] = {1, 0, 0, 0};
     if (!ds4_gpu_tensor_write(g->pre, 0, initial_pre, sizeof(initial_pre)) ||
         !ds4_gpu_begin_commands()) return false;
+    g->predict_active = getenv("DS4_METAL_V41_GATE_PREFETCH") != NULL;
+    if (g->predict_active) {
+        if (!g->streaming || g->quality || g->imatrix || g->image_count || g->tp_world != 1 ||
+            getenv("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") ||
+            getenv("DS4_METAL_V41_ASYNC_EXPERT_LOAD") || ds41_route_oracle.active)
+            ds4_die("gate prefetch requires ordinary scalar text SSD execution without oracle modes");
+        if (!g->predict_selected)
+            g->predict_selected = ds4_gpu_tensor_alloc(DS4_N_EXPERT_USED * sizeof(int32_t));
+        if (!g->predict_selected) ds4_die("cannot allocate predicted selected IDs");
+    }
     bool ok = ds41_embed(g, m, w, g->residual, g->x, token, g->pos);
     /* Unfused quality kernels bind whole expert tensors. Keep just the current
      * layer mapped, using the same admitted reserve as layer-major prefill. */
@@ -41653,6 +41737,12 @@ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model 
         if (ok && drain && !layer_resident && il + 1u < DS4_N_LAYER)
             ok = ds4_gpu_begin_commands() != 0;
     }
+    if (g->predict_load.active) {
+        (void)ds4_gpu_flush_commands();
+        (void)metal_graph_selected_async_load_finish(&g->predict_load);
+        (void)ds4_gpu_routed_moe_set_selected_override(NULL, 0);
+    }
+    g->predict_active = false;
     if (ds4_gpu_commands_active() && !ds4_gpu_end_commands()) ok = false;
     if (layer_resident && !metal_graph_stream_map_decode_static_all(m, w)) ok = false;
     if (g->tp_world == 2 && ds4_gpu_tp_failed()) ok = false;

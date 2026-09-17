@@ -1,0 +1,333 @@
+{
+  "description": "Existing native gate applied to pre-attention norm; full-session offline probe, no prediction execution or prefetch.",
+  "tokens": 3371,
+  "layer_events": 134840,
+  "recall": 0.5029726589538218,
+  "all_selected_fraction": 0.01442450311480273,
+  "routes_sha256": "3f3a99820e1e4e26f452092301fec1e67c5ca3c42a3acda7cc918a46e2943b43",
+  "logits_sha256": "dbb7917fd94cef6332878b8e74bfa328ecab7c28001de6eb1b02c212c1d55be0",
+  "snapshot_sha256": "4038547fda7c3050dbb562e488a12b33f89527ea7c7927d142d978b2c36319fe",
+  "layers": [
+    {
+      "layer": 0,
+      "calls": 3371,
+      "hits": 6772,
+      "all_selected": 0,
+      "recall": 0.33481657272817167,
+      "all_selected_fraction": 0.0
+    },
+    {
+      "layer": 1,
+      "calls": 3371,
+      "hits": 7726,
+      "all_selected": 0,
+      "recall": 0.38198358548403044,
+      "all_selected_fraction": 0.0
+    },
+    {
+      "layer": 2,
+      "calls": 3371,
+      "hits": 9186,
+      "all_selected": 9,
+      "recall": 0.4541679026994957,
+      "all_selected_fraction": 0.0026698309107089885
+    },
+    {
+      "layer": 3,
+      "calls": 3371,
+      "hits": 9523,
+      "all_selected": 8,
+      "recall": 0.4708296252348462,
+      "all_selected_fraction": 0.002373183031741323
+    },
+    {
+      "layer": 4,
+      "calls": 3371,
+      "hits": 10065,
+      "all_selected": 19,
+      "recall": 0.49762681696825867,
+      "all_selected_fraction": 0.005636309700385643
+    },
+    {
+      "layer": 5,
+      "calls": 3371,
+      "hits": 10443,
+      "all_selected": 21,
+      "recall": 0.5163156333432216,
+      "all_selected_fraction": 0.006229605458320973
+    },
+    {
+      "layer": 6,
+      "calls": 3371,
+      "hits": 9265,
+      "all_selected": 7,
+      "recall": 0.45807376643923664,
+      "all_selected_fraction": 0.0020765351527736575
+    },
+    {
+      "layer": 7,
+      "calls": 3371,
+      "hits": 11559,
+      "all_selected": 57,
+      "recall": 0.5714921388312073,
+      "all_selected_fraction": 0.016908929101156926
+    },
+    {
+      "layer": 8,
+      "calls": 3371,
+      "hits": 12250,
+      "all_selected": 111,
+      "recall": 0.6056560862256501,
+      "all_selected_fraction": 0.03292791456541086
+    },
+    {
+      "layer": 9,
+      "calls": 3371,
+      "hits": 13642,
+      "all_selected": 200,
+      "recall": 0.6744783941461485,
+      "all_selected_fraction": 0.059329575793533075
+    },
+    {
+      "layer": 10,
+      "calls": 3371,
+      "hits": 11540,
+      "all_selected": 98,
+      "recall": 0.5705527538811431,
+      "all_selected_fraction": 0.029071492138831208
+    },
+    {
+      "layer": 11,
+      "calls": 3371,
+      "hits": 12156,
+      "all_selected": 111,
+      "recall": 0.6010086027884901,
+      "all_selected_fraction": 0.03292791456541086
+    },
+    {
+      "layer": 12,
+      "calls": 3371,
+      "hits": 10626,
+      "all_selected": 75,
+      "recall": 0.5253633936517353,
+      "all_selected_fraction": 0.022248590922574904
+    },
+    {
+      "layer": 13,
+      "calls": 3371,
+      "hits": 10601,
+      "all_selected": 41,
+      "recall": 0.5241273608227035,
+      "all_selected_fraction": 0.01216256303767428
+    },
+    {
+      "layer": 14,
+      "calls": 3371,
+      "hits": 7973,
+      "all_selected": 14,
+      "recall": 0.394195589834866,
+      "all_selected_fraction": 0.004153070305547315
+    },
+    {
+      "layer": 15,
+      "calls": 3371,
+      "hits": 4933,
+      "all_selected": 1,
+      "recall": 0.2438939978245822,
+      "all_selected_fraction": 0.0002966478789676654
+    },
+    {
+      "layer": 16,
+      "calls": 3371,
+      "hits": 10731,
+      "all_selected": 34,
+      "recall": 0.5305547315336695,
+      "all_selected_fraction": 0.010086027884900622
+    },
+    {
+      "layer": 17,
+      "calls": 3371,
+      "hits": 10085,
+      "all_selected": 34,
+      "recall": 0.4986156432314842,
+      "all_selected_fraction": 0.010086027884900622
+    },
+    {
+      "layer": 18,
+      "calls": 3371,
+      "hits": 8136,
+      "all_selected": 12,
+      "recall": 0.40225452388015426,
+      "all_selected_fraction": 0.0035597745476119848
+    },
+    {
+      "layer": 19,
+      "calls": 3371,
+      "hits": 7883,
+      "all_selected": 5,
+      "recall": 0.389745871650351,
+      "all_selected_fraction": 0.0014832393948383269
+    },
+    {
+      "layer": 20,
+      "calls": 3371,
+      "hits": 6769,
+      "all_selected": 1,
+      "recall": 0.33466824878868784,
+      "all_selected_fraction": 0.0002966478789676654
+    },
+    {
+      "layer": 21,
+      "calls": 3371,
+      "hits": 11587,
+      "all_selected": 52,
+      "recall": 0.5728764955997231,
+      "all_selected_fraction": 0.0154256897063186
+    },
+    {
+      "layer": 22,
+      "calls": 3371,
+      "hits": 13107,
+      "all_selected": 115,
+      "recall": 0.648027291604865,
+      "all_selected_fraction": 0.03411450608128152
+    },
+    {
+      "layer": 23,
+      "calls": 3371,
+      "hits": 11274,
+      "all_selected": 41,
+      "recall": 0.5574013645802433,
+      "all_selected_fraction": 0.01216256303767428
+    },
+    {
+      "layer": 24,
+      "calls": 3371,
+      "hits": 11013,
+      "all_selected": 56,
+      "recall": 0.5444971818451498,
+      "all_selected_fraction": 0.01661228122218926
+    },
+    {
+      "layer": 25,
+      "calls": 3371,
+      "hits": 8866,
+      "all_selected": 20,
+      "recall": 0.4383466824878869,
+      "all_selected_fraction": 0.0059329575793533075
+    },
+    {
+      "layer": 26,
+      "calls": 3371,
+      "hits": 7909,
+      "all_selected": 7,
+      "recall": 0.3910313457925442,
+      "all_selected_fraction": 0.0020765351527736575
+    },
+    {
+      "layer": 27,
+      "calls": 3371,
+      "hits": 11519,
+      "all_selected": 74,
+      "recall": 0.5695144863047562,
+      "all_selected_fraction": 0.021951943043607237
+    },
+    {
+      "layer": 28,
+      "calls": 3371,
+      "hits": 10579,
+      "all_selected": 37,
+      "recall": 0.5230396519331554,
+      "all_selected_fraction": 0.010975971521803619
+    },
+    {
+      "layer": 29,
+      "calls": 3371,
+      "hits": 11356,
+      "all_selected": 51,
+      "recall": 0.561455552259468,
+      "all_selected_fraction": 0.015129041827350934
+    },
+    {
+      "layer": 30,
+      "calls": 3371,
+      "hits": 9539,
+      "all_selected": 21,
+      "recall": 0.4716206862454267,
+      "all_selected_fraction": 0.006229605458320973
+    },
+    {
+      "layer": 31,
+      "calls": 3371,
+      "hits": 9083,
+      "all_selected": 16,
+      "recall": 0.4490754474438841,
+      "all_selected_fraction": 0.004746366063482646
+    },
+    {
+      "layer": 32,
+      "calls": 3371,
+      "hits": 12228,
+      "all_selected": 106,
+      "recall": 0.604568377336102,
+      "all_selected_fraction": 0.031444675170572534
+    },
+    {
+      "layer": 33,
+      "calls": 3371,
+      "hits": 9982,
+      "all_selected": 29,
+      "recall": 0.49352318797587263,
+      "all_selected_fraction": 0.008602788490062296
+    },
+    {
+      "layer": 34,
+      "calls": 3371,
+      "hits": 10032,
+      "all_selected": 22,
+      "recall": 0.49599525363393654,
+      "all_selected_fraction": 0.006526253337288638
+    },
+    {
+      "layer": 35,
+      "calls": 3371,
+      "hits": 9165,
+      "all_selected": 17,
+      "recall": 0.4531296351231089,
+      "all_selected_fraction": 0.005043013942450311
+    },
+    {
+      "layer": 36,
+      "calls": 3371,
+      "hits": 11961,
+      "all_selected": 102,
+      "recall": 0.591367546722041,
+      "all_selected_fraction": 0.030258083654701867
+    },
+    {
+      "layer": 37,
+      "calls": 3371,
+      "hits": 11751,
+      "all_selected": 101,
+      "recall": 0.5809848709581726,
+      "all_selected_fraction": 0.029961435775734204
+    },
+    {
+      "layer": 38,
+      "calls": 3371,
+      "hits": 12325,
+      "all_selected": 110,
+      "recall": 0.609364184712746,
+      "all_selected_fraction": 0.03263126668644319
+    },
+    {
+      "layer": 39,
+      "calls": 3371,
+      "hits": 11785,
+      "all_selected": 110,
+      "recall": 0.5826658756056561,
+      "all_selected_fraction": 0.03263126668644319
+    }
+  ],
+  "warning": "All-route recall on one session, not miss-conditioned or deadline-aware; intrusive timing is not a speed result."
+}
