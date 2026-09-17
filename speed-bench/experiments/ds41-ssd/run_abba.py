@@ -12,10 +12,20 @@ p.add_argument('output', type=Path)
 p.add_argument('--candidate-env', required=True, help='NAME=VALUE; unset in control')
 p.add_argument('--tokens', type=int, default=2048)
 p.add_argument('--ctx', type=int)
+p.add_argument('--initial-tokens', type=int)
 p.add_argument('--prompt', default='/tmp/ds41-prefill-input.c')
 p.add_argument('--vision')
+p.add_argument('--candidate-vision', help='load this encoder only in candidate runs')
 a = p.parse_args()
+if a.vision and a.candidate_vision:
+    p.error('--vision and --candidate-vision are mutually exclusive')
+if a.initial_tokens is not None and not 0 < a.initial_tokens < a.tokens:
+    p.error('--initial-tokens must be positive and less than --tokens')
+if '=' not in a.candidate_env:
+    p.error('--candidate-env must be NAME=VALUE')
 name, value = a.candidate_env.split('=', 1)
+if not name:
+    p.error('--candidate-env requires a nonempty name')
 a.output.mkdir(parents=True, exist_ok=False)
 reference = None
 results = []
@@ -35,19 +45,25 @@ for i, variant in enumerate(('control', 'candidate', 'candidate', 'control')):
            '--dump-frontier-logits-dir', str(dest), '--csv', str(dest / 'speed.csv')]
     if a.vision:
         cmd += ['--vision', a.vision]
+    if a.candidate_vision and variant == 'candidate':
+        cmd += ['--vision', a.candidate_vision]
     if a.ctx:
         cmd += ['--ctx-alloc', str(a.ctx)]
+    if a.initial_tokens:
+        cmd += ['--ctx-start', str(a.initial_tokens), '--step-incr',
+                str(a.tokens - a.initial_tokens), '--gen-tokens', '0']
     (dest / 'command.json').write_text(json.dumps({'argv': cmd, 'variant': variant,
                                                  'env': {k: v for k, v in env.items() if k.startswith('DS4_')}}, indent=2))
     with (dest / 'run.log').open('w') as log:
         subprocess.run(cmd, env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
-    logits = json.loads(next(dest.glob('*.logits.json')).read_text())['logits']
+    logits = {f.name: json.loads(f.read_text())['logits']
+              for f in sorted(dest.glob('*.logits.json'))}
     if reference is None:
         reference = logits
     if logits != reference:
         raise RuntimeError(f'Full vocabulary logits differ: {dest}')
     with (dest / 'speed.csv').open() as f:
-        row = next(csv.DictReader(f))
+        row = list(csv.DictReader(f))[-1]
     results.append({'variant': variant, **row})
     print(json.dumps(results[-1]), flush=True)
 (a.output / 'summary.json').write_text(json.dumps(results, indent=2) + '\n')

@@ -1,6 +1,8 @@
 # DS4.1 SSD experiments on Apple M5 Max, 128 GiB
 
-Base: bd66c402. Model: gguf/DeepSeek-V4.1-Flash-Q2.gguf. SSD streaming is required.
+Base: bd66c402. Fixed input: `jj file show -r bd66c402 ds4.c > /tmp/ds41-prefill-input.c`
+(SHA-256 `1776dbfed177ea14f3ce6cac1d8d0b1c1b44dfff2c2663769a9a5634aeec34e7`).
+Model: gguf/DeepSeek-V4.1-Flash-Q2.gguf. SSD streaming is required.
 
 ## 01: baseline and vision-loaded text-only benchmark
 
@@ -64,3 +66,56 @@ The control executes 4096 batched tokens then 904 scalar steps; candidate
 executes one 5000-token sweep. Arithmetic/batch partitions differ.
 The rejected implementation is retained only as whole-tail.patch, not enabled
 in source. Runner now accepts --ctx to match the agent's 100000-token allocation.
+
+## 05: eliminate redundant scalar layer-end drains (accepted)
+
+128-token appends after a 2048-token prefill; ctx=100000. ABBA control
+15.48/15.13 tps, candidate 16.93/16.51 tps: about 9.2% faster by aggregate
+time. Both frontier full-vocabulary logit rows match across all four runs.
+Development command: `run_abba.py /tmp/ds41-scalar-queue
+--candidate-env DS4_METAL_V41_SCALAR_QUEUE=1 --tokens 2176
+--initial-tokens 2048 --ctx 100000`.
+
+Enabled by default only for single-GPU SSD-streaming DS4.1 scalar execution,
+excluding quality and imatrix modes. TP behavior is unchanged. Streaming
+route/cache checks already submit work; retain explicit drains before
+reusing the Engram input at layer 14 and at token completion.
+The rollback is now `DS4_METAL_DISABLE_V41_SCALAR_QUEUE=1` (the development
+opt-in was removed). It benefits short prefill appends, scalar tails and decode;
+it does not change the layer-major batch kernels.
+
+Regression: `make -j2 tests/test_deepseek41_scalar_queue`, then
+`./tests/test_deepseek41_scalar_queue gguf/DeepSeek-V4.1-Flash-Q2.gguf
+/tmp/ds41-prefill-input.c gguf/DeepSeek-V4.1-Flash-Vision.gguf`.
+With vision loaded: 32 complete logit rows and the serialized continuation
+snapshot are bit-identical between scalar schedules, including snapshot restore.
+Final default-enabled build also passed the same 32-row/snapshot regression
+without vision. `make -j2 ds4-bench ds4-agent tests/test_deepseek41_scalar_queue`
+completed successfully.
+
+## 06: longer vision-loaded text parity (verified)
+
+`run_abba.py /tmp/ds41-vision8192 --candidate-env DS4_BENCH_VISION_COMPARISON=1
+--candidate-vision gguf/DeepSeek-V4.1-Flash-Vision.gguf --tokens 8192 --ctx 100000`
+The environment name is a no-op marker; candidate-vision controls encoder load.
+Fresh processes in ABBA order, final scalar scheduling enabled, no image input.
+Text-only: 448.78/433.10 tps. Vision-loaded: 447.46/436.92 tps.
+All 129280 final logits match exactly across the four runs. This does not
+reproduce a vision-specific text prefill regression. The actual agent test
+also successfully saved its text-only system prompt with vision loaded.
+Sessions containing images remain outside that text-only save path.
+
+## Outcome
+
+Six separate experiments, one accepted default performance change (scalar
+submission, commit 24914d66), and rebuilt ds4-agent/ds4-bench. The rejected
+whole-tail change is not in active source; deeper prefetch remains opt-in and
+is not recommended. `git diff --check` passed. Both vision-loaded and unloaded
+32-token full-logit/snapshot scalar scheduling regressions passed.
+
+The strongest remaining lead is unaligned prompt tails. Folding them into
+batches was dramatically faster but not numerically equivalent. Resolve that
+arithmetic/state discrepancy before adopting different partitions; do not
+interpret a matching argmax alone as correctness. Reproducing the originally
+reported vision slowdown still needs its prompt/runtime conditions: these
+controlled text-only tests already show parity with the encoder loaded.
