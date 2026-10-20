@@ -11,7 +11,8 @@ prefix. Keep this feature opt-in rather than treating all dynamic tools alike.
 
 Initially render the known tools once. When a `tool_search_output` supplies new
 `tools`, retain their schemas at the discovery position as a system message
-headed `### Updated Tool Schemas`, immediately after that tool result. Restore
+headed `### Updated Tool Schemas`, after the complete tool-result group
+containing that discovery. Restore
 those announcements in the same chronological position when loading durable
 history; restore the discovered call schemas and namespace mapping as well.
 Do not hoist newly discovered tools into the initial tool preamble. That would

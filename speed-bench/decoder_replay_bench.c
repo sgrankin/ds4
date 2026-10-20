@@ -43,7 +43,7 @@ static FILE *output(const char *dir, const char *name, const char *mode) {
 
 static int number(const char *value) {
     char *end; long n = strtol(value, &end, 10);
-    return end == value || *end || n < 0 || n > 131072 ? -1 : (int)n;
+    return end == value || *end || n < 0 || n > 1048576 ? -1 : (int)n;
 }
 
 static void append(ds4_tokens *dst, const ds4_tokens *src) {
@@ -141,11 +141,12 @@ static bool answer_equal(const char *text, const char *expected) {
 
 int main(int argc, char **argv) {
     const char *model = NULL, *out = NULL, *selected = "all";
-    int rows = 0, wanted = 8192, chunk = 8192;
+    int rows = 0, wanted = 8192, chunk = 8192, ctx = CONTEXT, compressed_f16 = 0;
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--help")) {
             puts("decoder_replay_bench --model MODEL --out EXISTING_DIR --rows 0|128|256 "
-                 "[--tokens 8192] [--chunk 8192] [--case all|ordinary|favorable|changed]");
+                 "[--tokens 8192] [--chunk 8192] [--ctx 16384] [--compressed-kv-f16 0|1] "
+                 "[--case all|ordinary|favorable|changed]");
             return 0;
         }
         if (++i >= argc) return 2;
@@ -156,6 +157,8 @@ int main(int argc, char **argv) {
         else if (!strcmp(key, "--rows")) rows = number(value);
         else if (!strcmp(key, "--tokens")) wanted = number(value);
         else if (!strcmp(key, "--chunk")) chunk = number(value);
+        else if (!strcmp(key, "--ctx")) ctx = number(value);
+        else if (!strcmp(key, "--compressed-kv-f16")) compressed_f16 = number(value);
         else return 2;
     }
     bool chosen[CASES] = {0}; int count = 0;
@@ -164,7 +167,8 @@ int main(int argc, char **argv) {
         count += chosen[i];
     }
     if (!model || !out || !count || (rows != 0 && rows != 128 && rows != 256) ||
-        wanted < 2048 || wanted + MAX_NEW >= CONTEXT || chunk < 1 || chunk > 8192) return 2;
+        wanted < 2048 || wanted + MAX_NEW >= ctx || chunk < 1 || chunk > 8192 ||
+        (compressed_f16 != 0 && compressed_f16 != 1)) return 2;
     int rc = 1; char err[256] = {0}, setting[16];
     ds4_engine *e = NULL; ds4_session *s = NULL;
     ds4_tokens prompt = {0}, teacher = {0}, generated = {0};
@@ -172,6 +176,7 @@ int main(int argc, char **argv) {
     float *logits = NULL; char *answer = NULL;
     snprintf(setting, sizeof(setting), "%d", rows);
     CHECK(setenv("DS4_V41_DECODER_REPLAY_ROWS", setting, 1) == 0);
+    CHECK(setenv("DS4_V41_COMPRESSED_KV_F16", compressed_f16 ? "1" : "0", 1) == 0);
     CHECK(setenv("DS4_METAL_V41_RESIDENT_ROUTE_GAP", "0", 1) == 0);
     CHECK(setenv("DS4_METAL_V41_RESIDENT_PREFILL_GAP", "0", 1) == 0);
     CHECK(setenv("DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS", "0", 1) == 0);
@@ -180,20 +185,23 @@ int main(int argc, char **argv) {
     answers = output(out, "answers.jsonl", "wx");
     CHECK(raw && csv && timings && tokens && answers);
     ds4_engine_options opt = {.model_path = model, .backend = DS4_BACKEND_METAL,
-        .context_size = CONTEXT, .prefill_chunk = (uint32_t)chunk, .mtp_draft_tokens = 1,
+        .context_size = (uint32_t)ctx, .prefill_chunk = (uint32_t)chunk, .mtp_draft_tokens = 1,
         .ssd_streaming = true, .ssd_streaming_cache_bytes = UINT64_C(64) << 30,
         .power_percent = 100};
     double open_started = now_ms();
     CHECK(ds4_engine_open(&e, &opt) == 0 && ds4_engine_is_deepseek41(e));
     double open_ms = now_ms() - open_started;
-    CHECK(ds4_session_create(&s, e, CONTEXT) == 0);
+    CHECK(ds4_session_create(&s, e, ctx) == 0);
     int vocab = ds4_engine_vocab_size(e); CHECK(vocab > 0);
     logits = malloc((size_t)vocab * sizeof(float)); CHECK(logits);
     fprintf(csv, "case,step,target,nll,argmax\n");
     fprintf(timings, "case,rows,prompt_tokens,teacher_tokens,sync_ms,teacher_ms,greedy_sync_ms,greedy_ms,generated_tokens,stopped,exact,approximate,payload_bytes,suffix_cache_bytes\n");
-    fprintf(tokens, "{\"rows\":%d,\"vocab\":%d,\"context\":%d,\"chunk\":%d,\"ssd_cache_gib\":64,"
+    ds4_context_memory memory = ds4_context_memory_estimate_with_prefill(DS4_BACKEND_METAL, ctx, chunk);
+    fprintf(tokens, "{\"rows\":%d,\"vocab\":%d,\"context\":%d,\"chunk\":%d,\"compressed_kv_f16\":%d,"
+        "\"planned_raw_bytes\":%llu,\"planned_compressed_bytes\":%llu,\"planned_total_bytes\":%llu,\"ssd_cache_gib\":64,"
         "\"mtp\":false,\"native_routing\":true,\"logits_dtype\":\"float32_le\",\"engine_open_ms\":%.6f,\"cases\":[",
-        rows, vocab, CONTEXT, chunk, open_ms);
+        rows, vocab, ctx, chunk, compressed_f16, (unsigned long long)memory.raw_bytes,
+        (unsigned long long)memory.compressed_bytes, (unsigned long long)memory.total_bytes, open_ms);
     int row_start = 0, emitted = 0;
     for (int which = 0; which < CASES; which++) {
         if (!chosen[which]) continue;
@@ -217,6 +225,7 @@ int main(int argc, char **argv) {
         if (wanted == 8192 && chunk == 8192) {
             CHECK(approximate == (rows != 0));
             CHECK(rows ? payload_bytes == 0 && suffix_cache_bytes == 0 : payload_bytes > 0);
+            if (compressed_f16) CHECK(suffix_cache_bytes == 0);
         }
         start = now_ms();
         for (int step = 0; step < teacher.len; step++) {

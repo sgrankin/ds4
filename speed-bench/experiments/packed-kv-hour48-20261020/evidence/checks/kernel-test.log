@@ -1,0 +1,5 @@
+Command: python3 speed-bench/ideas/pressure_run.py .workspaces/deepinfer-followups-20261020/item48/kernel-guard -- ./tests/test_deepseek41_metal --compressed-kv-f16
+Initial device: Apple M5 Max, 128 GiB
+V4.1 mode3 compressed KV F16 storage, offset publication and sparse gather: exact
+{"status": "complete", "child_returncode": 0}
+Exit status: 0

@@ -1,0 +1,4 @@
+{
+  "revision": "af29fceda929141b9e0c6601f00da6ab9142a95b",
+  "purpose": "Parent sources for full GPU regression baseline; unchanged support objects and shader sources from checkout."
+}

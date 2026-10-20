@@ -638,3 +638,27 @@ regression caused by discarding approximate live state; a narrow profile fix
 now permits verified matching live continuations while canonicalexports and
 suffixcapture stay blocked. Existingbatched2k presets unchanged.
 [Portable recipe, curves and all first outputs](../../recipes/12-bounded-decoder-replay.md).
+
+Item48 starts **23:04 UTC**, deadline **2026-10-21 00:03 UTC**, including
+1 minute prior preparation. Sourcebaseaf29fced. Prototype narrowly scoped packed
+runtime KV using existing typed loads/conversion where possible; original
+quantizer outputs are BF16-representable. Keep defaultF32behavior, avoid a
+permanent expanded mirror, measure actual cache allocation plus nativebracket
+latency/sharedteacherquality/firstanswers. ReuseItem47fixtures/probe ratherthan
+new qualityharness. Keepcanonicalpayload/suffixcompat explicit; retain negatives.
+
+Item48 measurements finished **23:29 UTC**, within the one-hour cap.
+Main compressed KV now has opt-in F16 storage for the already-quantized values,
+with no expanded full-cache mirror. At context capacity262144, actual main
+allocation halves1280.008→640.004MiB; main+index+raw falls1610.010→970.006MiB.
+Expert-cache budget stays64GiB. The same-binary0/1/1/0 bracket passed all12 first
+answers; all4×22 teacher rows were bit-identical (ΔNLL=KL=0). Mean direct time
+69.960→69.282s is unresolved:0.969% saving vsmean,0.474% slower than the faster
+control,2.914% native drift. Odd8193 canonical F32→F16→F32 snapshots and fresh
+8194 logits passed bytewise; suffix relocation remains excluded.
+Server/agent suites and focused GPU checks pass. Default full Metal suite fails
+an unchanged quantizer tie at index5428 on both parent and candidate; the
+existing safe-math diagnostic passes the full suite. Defaults/timed settings
+remain unchanged and the first failure is retained, rather than widening this
+storage experiment into a quantizer change.
+[Portable recipe and all evidence](../../recipes/13-packed-compressed-kv.md).

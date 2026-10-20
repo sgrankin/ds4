@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import re
 import statistics
 import sys
 
@@ -51,10 +52,11 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('input', type=Path)
     p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--variant-key', choices=['rows','compressed_kv_f16'], default='rows')
     a = p.parse_args()
     a.output.mkdir(parents=True, exist_ok=True)
     arms = [read_arm(a.input/r['directory']) for r in json.loads((a.input/'result.json').read_text())]
-    controls = [x for x in arms if x['meta']['rows']==0]
+    controls = [x for x in arms if x['meta'][a.variant_key]==0]
     assert len(controls)==2
     result = {'reference':controls[0]['path'].name,'timing_formula':'greedy_sync_ms + greedy_ms',
         'quality_formula':'KL(native opening || candidate), shared fixed teachers including EOS', 'arms':[]}
@@ -78,6 +80,7 @@ def main():
         native_total = sum(x['native_practical_ms'] for x in per_case)
         mean_dnll = statistics.mean(r['delta_nll'] for r in rows)
         entry = dict(directory=arm['path'].name, rows=arm['meta']['rows'],
+            variant_key=a.variant_key,variant_value=arm['meta'][a.variant_key],
             practical_ms=total,native_practical_ms=native_total,saving=1-total/native_total,
             mean_delta_nll=mean_dnll,perplexity_ratio=math.exp(mean_dnll),
             mean_kl=statistics.mean(r['kl'] for r in rows),max_kl=max(r['kl'] for r in rows),
@@ -85,6 +88,11 @@ def main():
             byte_equal_rows=sum(r['byte_equal'] for r in rows),
             correct=sum(x['exact'] and x['stopped'] for x in arm['answers']),cases=per_case,
             logits_sha256=hashlib.sha256((arm['path']/'logits.bin').read_bytes()).hexdigest())
+        if a.variant_key=='compressed_kv_f16':
+            actual = re.search(r'KV allocated main=\w+ main_bytes=(\d+) index_bytes=(\d+) raw_bytes=(\d+)',
+                               (arm['path']/'stderr.log').read_text())
+            assert actual, 'Missing actual KV allocation counters'
+            entry['allocated_kv_bytes'] = dict(zip(['main','index','raw'], map(int,actual.groups())))
         result['arms'].append(entry)
         with (a.output/(arm['path'].name+'-paired.csv')).open('w') as f:
             writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
@@ -100,19 +108,38 @@ def main():
         print('matplotlib unavailable; summary and paired CSVs retained', file=sys.stderr)
         return
     fig, ax = plt.subplots(figsize=(7,4.5),layout='constrained')
-    plotted = [x for x in result['arms'] if x['rows'] != 0]
+    plotted = [x for x in result['arms'] if x['variant_value'] != 0]
+    if a.variant_key=='compressed_kv_f16':
+        # One point per storage format; repeated arms remain in the raw table.
+        selected=plotted
+        plotted=[dict(selected[0],directory='F16 repeat mean',
+            practical_ms=statistics.mean(x['practical_ms'] for x in selected),
+            timing_min_ms=min(x['practical_ms'] for x in selected),
+            timing_max_ms=max(x['practical_ms'] for x in selected))]
+    native_times=[x['practical_ms'] for x in result['arms'] if x['variant_value']==0]
     plotted.insert(0,dict(directory='Native bracket mean',rows=0,
-        practical_ms=statistics.mean(x['practical_ms'] for x in result['arms'] if x['rows']==0),
+        variant_value=0,practical_ms=statistics.mean(native_times),
+        timing_min_ms=min(native_times),timing_max_ms=max(native_times),
+        allocated_kv_bytes=result['arms'][0].get('allocated_kv_bytes'),
         perplexity_ratio=1.0,correct=result['arms'][0]['correct'],cases=result['arms'][0]['cases']))
     for entry in plotted:
-        x,y=entry['practical_ms']/1000,100*(entry['perplexity_ratio']-1)
-        ax.scatter(x,y)
+        if a.variant_key=='compressed_kv_f16':
+            x,y=sum(entry['allocated_kv_bytes'].values())/2**20,entry['practical_ms']/1000
+            ax.errorbar(x,y,yerr=[[y-entry['timing_min_ms']/1000],
+                                 [entry['timing_max_ms']/1000-y]],fmt='o',capsize=4)
+        else:
+            x,y=entry['practical_ms']/1000,100*(entry['perplexity_ratio']-1)
+            ax.scatter(x,y)
         ax.annotate(f"{entry['directory']} ({entry['correct']}/{len(entry['cases'])} answers)",(x,y),
-                    xytext=(-5,6) if entry['rows']==0 else (5,6),textcoords='offset points',
-                    ha='right' if entry['rows']==0 else 'left',fontsize=8)
-    ax.axhline(0,color='gray',linestyle=':',linewidth=.8)
-    ax.set(xlabel='Sum of direct prefill + first greedy answer (seconds)',
-           ylabel='Fixed-teacher perplexity change (%)',title='Measured decoder replay tradeoff')
+                    xytext=(-5,6) if entry['variant_value']==0 else (5,6),textcoords='offset points',
+                    ha='right' if entry['variant_value']==0 else 'left',fontsize=8)
+    if a.variant_key=='compressed_kv_f16':
+        ax.set(xlabel='Actual allocated main + index + raw KV (MiB)',
+            ylabel='Sum of direct prefill + first greedy answer (seconds)',title='Measured runtime KV packing tradeoff')
+    else:
+        ax.axhline(0,color='gray',linestyle=':',linewidth=.8)
+        ax.set(xlabel='Sum of direct prefill + first greedy answer (seconds)',
+               ylabel='Fixed-teacher perplexity change (%)',title='Measured decoder replay tradeoff')
     fig.savefig(a.output/'tradeoff.svg')
     fig.savefig(a.output/'tradeoff.png',dpi=150)
 

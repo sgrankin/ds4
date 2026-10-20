@@ -22,6 +22,8 @@ def main():
     p.add_argument('--case', choices=['all','ordinary','favorable','changed'], default='all')
     p.add_argument('--tokens', type=int, default=8192)
     p.add_argument('--chunk', type=int, default=8192)
+    p.add_argument('--ctx', type=int, default=16384)
+    p.add_argument('--variant', choices=['replay','compressed-kv'], default='replay')
     p.add_argument('--timeout', type=int, default=1500)
     p.add_argument('--profile', action='store_true')
     p.add_argument('--selected', action='store_true')
@@ -34,17 +36,21 @@ def main():
         overrides['DS4_V41_DECODER_REPLAY_SELECTED']='1'
     env.update(overrides)
     results = []
-    for index, rows in enumerate(map(int, a.order.split(',')), 1):
-        out = a.output/f'{index:02d}-rows{rows}'
+    for index, value in enumerate(map(int, a.order.split(',')), 1):
+        rows = value if a.variant=='replay' else 0
+        packed = value if a.variant=='compressed-kv' else 0
+        label = f'rows{rows}' if a.variant=='replay' else f'kvf16{packed}'
+        out = a.output/f'{index:02d}-{label}'
         out.mkdir()
         cmd = [str(a.bench.resolve()), '--model', str(Path(a.model).resolve()),
                '--out', str(out.resolve()), '--rows', str(rows), '--tokens', str(a.tokens),
-               '--chunk', str(a.chunk), '--case', a.case]
+               '--chunk', str(a.chunk), '--case', a.case, '--ctx', str(a.ctx),
+               '--compressed-kv-f16', str(packed)]
         save(out/'execution.json', {'command':cmd,
             'environment':'Inherited except DS4_/PT_ variables cleared; bench sets replay rows',
             'profile_overrides':overrides,
             'binary_sha256':hashlib.sha256(a.bench.read_bytes()).hexdigest(),
-            'base_revision':subprocess.check_output(['jj','--ignore-working-copy','log',
+            'base_revision':subprocess.check_output(['jj','--color','never','--ignore-working-copy','log',
                 '-r','@-','--no-graph','-T','commit_id'], cwd=ROOT, text=True).strip(),
             'started_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())})
         started = time.monotonic()
@@ -58,7 +64,7 @@ def main():
                 except subprocess.TimeoutExpired:
                     proc.kill(); proc.wait()
                 raise
-        row = {'rows':rows, 'directory':out.name, 'seconds':time.monotonic()-started,
+        row = {'rows':rows, 'compressed_kv_f16':packed, 'directory':out.name, 'seconds':time.monotonic()-started,
                'returncode':code}
         results.append(row)
         save(a.output/'result.json', results)

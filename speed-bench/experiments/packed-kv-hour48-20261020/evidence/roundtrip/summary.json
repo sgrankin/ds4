@@ -1,0 +1,17 @@
+{
+  "pass":true,
+  "stage":"complete",
+  "prefix_tokens":8193,
+  "snapshot_prefix_teacher_token":57,
+  "common_fresh_teacher_token":19274,
+  "vocab":129280,
+  "canonical_payload_a_bytes":63479352,
+  "canonical_payload_b_bytes":63479352,
+  "canonical_payload_c_bytes":63479352,
+  "native_to_f16_snapshot_byte_equal":true,
+  "f16_to_native_snapshot_byte_equal":true,
+  "f16_fresh_logits_byte_equal":true,
+  "restored_native_fresh_logits_byte_equal":true,
+  "all_fresh_logits_finite":true,
+  "scope":"Fresh one-token cache reads after canonical cross-layout restore; loaded logits are not a computed-quality check. No latency claim."
+}

@@ -153,6 +153,12 @@ int ds4_gpu_dsv41_projection_rows(ds4_gpu_tensor *out,
 int ds4_gpu_dsv41_gather_kv(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
                            const ds4_gpu_tensor *ids, uint32_t source_rows,
                            uint32_t selected_rows);
+#ifdef __APPLE__
+/* Gather packed F16 cache rows into the same bounded F32 selected scratch. */
+int ds4_gpu_dsv41_gather_kv_f16(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
+                               const ds4_gpu_tensor *ids, uint32_t source_rows,
+                               uint32_t selected_rows);
+#endif
 
 #ifdef __cplusplus
 }

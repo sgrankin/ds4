@@ -1,0 +1,17 @@
+{
+  "native_mean_ms": 69960.044,
+  "candidate_mean_ms": 69282.25749999999,
+  "native_drift": 0.029142393629216112,
+  "saving_vs_mean": 0.009688194307024722,
+  "saving_vs_faster_control": -0.00474183392155747,
+  "byte_equal_rows": [
+    22,
+    22,
+    22,
+    22
+  ],
+  "teacher_rows": 22,
+  "unique_logit_sha256": [
+    "8f7e546e53717189d429fed0d1931d549ac8f391d83504830f50076a2385ffa3"
+  ]
+}

@@ -48464,6 +48464,27 @@ int ds4_gpu_dsv41_gather_kv(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
     }
 }
 
+int ds4_gpu_dsv41_gather_kv_f16(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
+                               const ds4_gpu_tensor *ids, uint32_t source_rows,
+                               uint32_t selected_rows) {
+    if (!source_rows || !selected_rows || selected_rows > 512 ||
+        selected_rows > source_rows || !source || !ds4_gpu_tensor_buffer(source) ||
+        ds4_gpu_tensor_bytes(source) < (uint64_t)source_rows * 512u * sizeof(uint16_t) ||
+        !dsv41_tensor_has_floats(out, (uint64_t)selected_rows * 512u) ||
+        !dsv41_tensor_has_floats(ids, selected_rows)) return 0;
+    if (!g_initialized && !ds4_gpu_init()) return 0;
+    @autoreleasepool {
+        int owned = 0;
+        id<MTLCommandBuffer> cb = ds4_gpu_command_buffer(&owned);
+        if (!cb || !ds4_gpu_encode_get_rows_f16(cb,
+                ds4_gpu_tensor_buffer(source), ds4_gpu_tensor_offset(source),
+                ds4_gpu_tensor_buffer(ids), ds4_gpu_tensor_offset(ids),
+                ds4_gpu_tensor_buffer(out), ds4_gpu_tensor_offset(out),
+                source_rows, selected_rows, 512u)) return 0;
+        return ds4_gpu_finish_command_buffer(cb, owned, "V4.1 packed F16 sparse KV gather");
+    }
+}
+
 void ds4_gpu_set_glm_mtp_verify_mode(bool enabled) {
     (void)enabled;
 }

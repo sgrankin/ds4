@@ -1,0 +1,80 @@
+[
+  {
+    "guard": "kernel-guard",
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "samples": 3,
+    "adverse_samples": 0,
+    "max_pressure_level": 1,
+    "initial_swap_gib": 0.76806640625,
+    "max_swap_growth_mib": 0.0,
+    "peak_wired_plus_compressor_gib": 20.025619506835938
+  },
+  {
+    "guard": "curve-guard",
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "samples": 542,
+    "adverse_samples": 0,
+    "max_pressure_level": 1,
+    "initial_swap_gib": 0.76806640625,
+    "max_swap_growth_mib": 3.3799999999999955,
+    "peak_wired_plus_compressor_gib": 105.19297790527344
+  },
+  {
+    "guard": "roundtrip-guard",
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "samples": 22,
+    "adverse_samples": 0,
+    "max_pressure_level": 1,
+    "initial_swap_gib": 0.7713671875,
+    "max_swap_growth_mib": 0.0,
+    "peak_wired_plus_compressor_gib": 89.96527099609375
+  },
+  {
+    "guard": "full-gpu-guard",
+    "result": {
+      "status": "complete",
+      "child_returncode": 1
+    },
+    "samples": 3,
+    "adverse_samples": 0,
+    "max_pressure_level": 1,
+    "initial_swap_gib": 0.7713671875,
+    "max_swap_growth_mib": 0.0,
+    "peak_wired_plus_compressor_gib": 21.814468383789062
+  },
+  {
+    "guard": "baseline-gpu-guard",
+    "result": {
+      "status": "complete",
+      "child_returncode": 1
+    },
+    "samples": 3,
+    "adverse_samples": 0,
+    "max_pressure_level": 1,
+    "initial_swap_gib": 0.7713671875,
+    "max_swap_growth_mib": 0.0,
+    "peak_wired_plus_compressor_gib": 21.211624145507812
+  },
+  {
+    "guard": "safe-math-gpu-guard",
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "samples": 12,
+    "adverse_samples": 0,
+    "max_pressure_level": 1,
+    "initial_swap_gib": 0.7713671875,
+    "max_swap_growth_mib": 0.0,
+    "peak_wired_plus_compressor_gib": 22.49603271484375
+  }
+]

@@ -7,6 +7,7 @@
 /speed-bench/suffix_reuse_bench
 /speed-bench/suffix_fact_oracle
 /speed-bench/decoder_replay_bench
+/speed-bench/kv_pack_roundtrip_bench
 /tests/test_agent_compact_prefix
 /tests/test_agent_live_context
 /tests/test_agent_context_frontiers

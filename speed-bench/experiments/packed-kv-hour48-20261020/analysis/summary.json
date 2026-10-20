@@ -1,0 +1,423 @@
+{
+  "reference": "01-kvf160",
+  "timing_formula": "greedy_sync_ms + greedy_ms",
+  "quality_formula": "KL(native opening || candidate), shared fixed teachers including EOS",
+  "arms": [
+    {
+      "directory": "01-kvf160",
+      "rows": 0,
+      "variant_key": "compressed_kv_f16",
+      "variant_value": 0,
+      "practical_ms": 68955.283,
+      "native_practical_ms": 69960.044,
+      "saving": 0.014361926358994248,
+      "mean_delta_nll": 0.0,
+      "perplexity_ratio": 1.0,
+      "mean_kl": 0.0,
+      "max_kl": 0.0,
+      "argmax_flips": 0,
+      "teacher_rows": 22,
+      "byte_equal_rows": 22,
+      "correct": 3,
+      "cases": [
+        {
+          "case": "ordinary",
+          "practical_ms": 21098.898,
+          "native_practical_ms": 21569.644,
+          "saving": 0.021824467756630495,
+          "native_drift": 0.04462280447064093,
+          "sync_ms": 19470.947,
+          "native_sync_ms": 19974.5245,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "ordinary",
+            "expected": "CODE=EMBER-7319",
+            "text": "CODE=EMBER-7319",
+            "tokens": [
+              83552,
+              31,
+              72048,
+              15,
+              29107,
+              27
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        },
+        {
+          "case": "favorable",
+          "practical_ms": 23445.870000000003,
+          "native_practical_ms": 23737.031000000003,
+          "saving": 0.012266108596310943,
+          "native_drift": 0.02483686892403636,
+          "sync_ms": 22401.577,
+          "native_sync_ms": 22711.8645,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "favorable",
+            "expected": "CODE=CEDAR-4826",
+            "text": "CODE=CEDAR-4826",
+            "tokens": [
+              83552,
+              62534,
+              3316,
+              2271,
+              15,
+              24980,
+              24
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        },
+        {
+          "case": "changed",
+          "practical_ms": 24410.515,
+          "native_practical_ms": 24653.369,
+          "saving": 0.009850742914690458,
+          "native_drift": 0.01989749089685322,
+          "sync_ms": 22717.082,
+          "native_sync_ms": 23009.3605,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "changed",
+            "expected": "CODE=LARCH-9062",
+            "text": "CODE=LARCH-9062",
+            "tokens": [
+              83552,
+              108097,
+              24606,
+              15,
+              30598,
+              20
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        }
+      ],
+      "logits_sha256": "8f7e546e53717189d429fed0d1931d549ac8f391d83504830f50076a2385ffa3",
+      "allocated_kv_bytes": {
+        "main": 1342185472,
+        "index": 335546368,
+        "raw": 10485760
+      }
+    },
+    {
+      "directory": "02-kvf161",
+      "rows": 0,
+      "variant_key": "compressed_kv_f16",
+      "variant_value": 1,
+      "practical_ms": 68997.39799999999,
+      "native_practical_ms": 69960.044,
+      "saving": 0.01375993988797386,
+      "mean_delta_nll": 0.0,
+      "perplexity_ratio": 1.0,
+      "mean_kl": 0.0,
+      "max_kl": 0.0,
+      "argmax_flips": 0,
+      "teacher_rows": 22,
+      "byte_equal_rows": 22,
+      "correct": 3,
+      "cases": [
+        {
+          "case": "ordinary",
+          "practical_ms": 21415.709,
+          "native_practical_ms": 21569.644,
+          "saving": 0.007136650006833722,
+          "native_drift": 0.04462280447064093,
+          "sync_ms": 19713.349,
+          "native_sync_ms": 19974.5245,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "ordinary",
+            "expected": "CODE=EMBER-7319",
+            "text": "CODE=EMBER-7319",
+            "tokens": [
+              83552,
+              31,
+              72048,
+              15,
+              29107,
+              27
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        },
+        {
+          "case": "favorable",
+          "practical_ms": 23440.523999999998,
+          "native_practical_ms": 23737.031000000003,
+          "saving": 0.012491326316252604,
+          "native_drift": 0.02483686892403636,
+          "sync_ms": 22442.422,
+          "native_sync_ms": 22711.8645,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "favorable",
+            "expected": "CODE=CEDAR-4826",
+            "text": "CODE=CEDAR-4826",
+            "tokens": [
+              83552,
+              62534,
+              3316,
+              2271,
+              15,
+              24980,
+              24
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        },
+        {
+          "case": "changed",
+          "practical_ms": 24141.165,
+          "native_practical_ms": 24653.369,
+          "saving": 0.020776227378902945,
+          "native_drift": 0.01989749089685322,
+          "sync_ms": 22518.863,
+          "native_sync_ms": 23009.3605,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "changed",
+            "expected": "CODE=LARCH-9062",
+            "text": "CODE=LARCH-9062",
+            "tokens": [
+              83552,
+              108097,
+              24606,
+              15,
+              30598,
+              20
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        }
+      ],
+      "logits_sha256": "8f7e546e53717189d429fed0d1931d549ac8f391d83504830f50076a2385ffa3",
+      "allocated_kv_bytes": {
+        "main": 671092736,
+        "index": 335546368,
+        "raw": 10485760
+      }
+    },
+    {
+      "directory": "03-kvf161",
+      "rows": 0,
+      "variant_key": "compressed_kv_f16",
+      "variant_value": 1,
+      "practical_ms": 69567.117,
+      "native_practical_ms": 69960.044,
+      "saving": 0.005616448726075696,
+      "mean_delta_nll": 0.0,
+      "perplexity_ratio": 1.0,
+      "mean_kl": 0.0,
+      "max_kl": 0.0,
+      "argmax_flips": 0,
+      "teacher_rows": 22,
+      "byte_equal_rows": 22,
+      "correct": 3,
+      "cases": [
+        {
+          "case": "ordinary",
+          "practical_ms": 20499.475,
+          "native_practical_ms": 21569.644,
+          "saving": 0.04961458798300067,
+          "native_drift": 0.04462280447064093,
+          "sync_ms": 19021.332,
+          "native_sync_ms": 19974.5245,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "ordinary",
+            "expected": "CODE=EMBER-7319",
+            "text": "CODE=EMBER-7319",
+            "tokens": [
+              83552,
+              31,
+              72048,
+              15,
+              29107,
+              27
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        },
+        {
+          "case": "favorable",
+          "practical_ms": 24443.293999999998,
+          "native_practical_ms": 23737.031000000003,
+          "saving": -0.029753636838574904,
+          "native_drift": 0.02483686892403636,
+          "sync_ms": 23437.082,
+          "native_sync_ms": 22711.8645,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "favorable",
+            "expected": "CODE=CEDAR-4826",
+            "text": "CODE=CEDAR-4826",
+            "tokens": [
+              83552,
+              62534,
+              3316,
+              2271,
+              15,
+              24980,
+              24
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        },
+        {
+          "case": "changed",
+          "practical_ms": 24624.348,
+          "native_practical_ms": 24653.369,
+          "saving": 0.0011771616284977915,
+          "native_drift": 0.01989749089685322,
+          "sync_ms": 23048.841,
+          "native_sync_ms": 23009.3605,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "changed",
+            "expected": "CODE=LARCH-9062",
+            "text": "CODE=LARCH-9062",
+            "tokens": [
+              83552,
+              108097,
+              24606,
+              15,
+              30598,
+              20
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        }
+      ],
+      "logits_sha256": "8f7e546e53717189d429fed0d1931d549ac8f391d83504830f50076a2385ffa3",
+      "allocated_kv_bytes": {
+        "main": 671092736,
+        "index": 335546368,
+        "raw": 10485760
+      }
+    },
+    {
+      "directory": "04-kvf160",
+      "rows": 0,
+      "variant_key": "compressed_kv_f16",
+      "variant_value": 0,
+      "practical_ms": 70964.805,
+      "native_practical_ms": 69960.044,
+      "saving": -0.014361926358994248,
+      "mean_delta_nll": 0.0,
+      "perplexity_ratio": 1.0,
+      "mean_kl": 0.0,
+      "max_kl": 0.0,
+      "argmax_flips": 0,
+      "teacher_rows": 22,
+      "byte_equal_rows": 22,
+      "correct": 3,
+      "cases": [
+        {
+          "case": "ordinary",
+          "practical_ms": 22040.39,
+          "native_practical_ms": 21569.644,
+          "saving": -0.021824467756630606,
+          "native_drift": 0.04462280447064093,
+          "sync_ms": 20478.102,
+          "native_sync_ms": 19974.5245,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "ordinary",
+            "expected": "CODE=EMBER-7319",
+            "text": "CODE=EMBER-7319",
+            "tokens": [
+              83552,
+              31,
+              72048,
+              15,
+              29107,
+              27
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        },
+        {
+          "case": "favorable",
+          "practical_ms": 24028.192,
+          "native_practical_ms": 23737.031000000003,
+          "saving": -0.01226610859631072,
+          "native_drift": 0.02483686892403636,
+          "sync_ms": 23022.152,
+          "native_sync_ms": 22711.8645,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "favorable",
+            "expected": "CODE=CEDAR-4826",
+            "text": "CODE=CEDAR-4826",
+            "tokens": [
+              83552,
+              62534,
+              3316,
+              2271,
+              15,
+              24980,
+              24
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        },
+        {
+          "case": "changed",
+          "practical_ms": 24896.222999999998,
+          "native_practical_ms": 24653.369,
+          "saving": -0.009850742914690347,
+          "native_drift": 0.01989749089685322,
+          "sync_ms": 23301.639,
+          "native_sync_ms": 23009.3605,
+          "mean_delta_nll": 0.0,
+          "mean_kl": 0.0,
+          "answer": {
+            "case": "changed",
+            "expected": "CODE=LARCH-9062",
+            "text": "CODE=LARCH-9062",
+            "tokens": [
+              83552,
+              108097,
+              24606,
+              15,
+              30598,
+              20
+            ],
+            "stopped": true,
+            "exact": true
+          }
+        }
+      ],
+      "logits_sha256": "8f7e546e53717189d429fed0d1931d549ac8f391d83504830f50076a2385ffa3",
+      "allocated_kv_bytes": {
+        "main": 1342185472,
+        "index": 335546368,
+        "raw": 10485760
+      }
+    }
+  ]
+}

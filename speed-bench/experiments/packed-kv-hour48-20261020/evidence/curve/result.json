@@ -1,0 +1,30 @@
+[
+  {
+    "rows": 0,
+    "compressed_kv_f16": 0,
+    "directory": "01-kvf160",
+    "seconds": 145.08366474998184,
+    "returncode": 0
+  },
+  {
+    "rows": 0,
+    "compressed_kv_f16": 1,
+    "directory": "02-kvf161",
+    "seconds": 141.55404091603123,
+    "returncode": 0
+  },
+  {
+    "rows": 0,
+    "compressed_kv_f16": 1,
+    "directory": "03-kvf161",
+    "seconds": 142.2973165831063,
+    "returncode": 0
+  },
+  {
+    "rows": 0,
+    "compressed_kv_f16": 0,
+    "directory": "04-kvf160",
+    "seconds": 143.7632987499237,
+    "returncode": 0
+  }
+]

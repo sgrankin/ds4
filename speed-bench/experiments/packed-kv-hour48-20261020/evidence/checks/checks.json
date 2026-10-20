@@ -1,0 +1,48 @@
+{
+  "base_revision": "af29fceda929141b9e0c6601f00da6ab9142a95b",
+  "builds": [
+    {
+      "command": "make -j2 speed-bench/decoder_replay_bench ds4-server tests/test_deepseek41_metal ds4_test",
+      "returncode": 0
+    },
+    {
+      "command": "make -j2 speed-bench/kv_pack_roundtrip_bench ds4-agent ds4_agent_test ds4_test",
+      "returncode": 0
+    }
+  ],
+  "tests": [
+    {
+      "command": "./tests/test_deepseek41_metal --compressed-kv-f16",
+      "returncode": 0
+    },
+    {
+      "command": "./ds4_test --server",
+      "returncode": 0
+    },
+    {
+      "command": "./ds4_agent_test",
+      "returncode": 0
+    },
+    {
+      "command": "./tests/test_deepseek41_metal",
+      "returncode": 1,
+      "result": "existing quantizer CPU-oracle mismatch; parent runtime reproduced identically"
+    },
+    {
+      "command": ".workspaces/deepinfer-followups-20261020/item48/baseline-gpu/test",
+      "returncode": 1,
+      "revision": "af29fceda929141b9e0c6601f00da6ab9142a95b",
+      "result": "same mode3/index5428/11.25 != 7.5"
+    },
+    {
+      "command": "DS4_METAL_MATH_SAFE=1 ./tests/test_deepseek41_metal",
+      "returncode": 0,
+      "result": "diagnostic only; runtime defaults and model timing settings unchanged"
+    }
+  ],
+  "binary_sha256": {
+    "speed-bench/decoder_replay_bench": "ca69c3da50df6be3049782ac3e8d5a999cb598f17c3d67583f42d8e8ce8faa06",
+    "speed-bench/kv_pack_roundtrip_bench": "2b83d01d4197cab2af4fe672027231a6ca8192dd4620535a2162ad834afef5c6",
+    "tests/test_deepseek41_metal": "1b269a73af1731bf972a99d1a0a4f0ba9d16366ea5bcbf0b4fb448845582d0e9"
+  }
+}

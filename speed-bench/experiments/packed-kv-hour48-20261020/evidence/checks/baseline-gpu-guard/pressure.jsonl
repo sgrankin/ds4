@@ -1,0 +1,3 @@
+{"time": 1792538905.135286, "level": 1, "swap_gb": 0.7713671875, "physical_gb": 128.0, "free_gb": 55.74761962890625, "file_backed_gb": 46.53532409667969, "wired_gb": 4.902801513671875, "compressor_gb": 16.308822631835938, "reason": null, "consecutive_bad": 0}
+{"time": 1792538906.176617, "level": 1, "swap_gb": 0.7713671875, "physical_gb": 128.0, "free_gb": 55.51805114746094, "file_backed_gb": 46.5537109375, "wired_gb": 4.9030914306640625, "compressor_gb": 16.30230712890625, "reason": null, "consecutive_bad": 0}
+{"time": 1792538907.2172081, "level": 1, "swap_gb": 0.7713671875, "physical_gb": 128.0, "free_gb": 55.475128173828125, "file_backed_gb": 46.555877685546875, "wired_gb": 4.9031524658203125, "compressor_gb": 16.300155639648438, "reason": null, "consecutive_bad": 0}

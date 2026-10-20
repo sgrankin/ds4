@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "./tests/test_deepseek41_metal",
+    "--compressed-kv-f16"
+  ],
+  "initial": {
+    "time": 1792537941.4883862,
+    "level": 1,
+    "swap_gb": 0.76806640625,
+    "physical_gb": 128.0,
+    "free_gb": 49.94694519042969,
+    "file_backed_gb": 46.004241943359375,
+    "wired_gb": 5.1952667236328125,
+    "compressor_gb": 14.3548583984375
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

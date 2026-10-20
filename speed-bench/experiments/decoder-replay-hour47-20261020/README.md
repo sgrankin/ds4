@@ -36,7 +36,8 @@ session is approximate before writes, sticky across continuations, and blocked
 from canonical payload/layer/snapshot export and suffix capture, even with
 original pre-RoPE tape. Invalidate/recompute or canonical load to obtain exact
 state again. Runtime activation requires an existing wide sweep of at least
-8,192 rows. The batched preset's ordinary 2,048-row HTTP path does not exercise it. Default
+8,192 rows. Named server presets use 512-row chunks; the separate 2,048-row
+HTTP configuration also does not exercise it. Default
 unbatched sync can; its separate qualification is recorded below.
 
 ## Phase 1 result: no practical speed gain
@@ -191,7 +192,8 @@ the uninstrumented curve.
 The default unbatched server calls full session sync before entering any
 quantum loop, so a sufficiently wide prefill can already activate replay with
 no new server API. Omit `--batched-session`; an explicit 0 is invalid. The
-batched preset's ordinary 2,048-row chunks do not activate this wide path.
+named server presets' 512-row chunks do not activate this wide path; neither
+does the separate 2,048-row batched HTTP configuration.
 The first 340-audit-line fixture rendered 8,162 input tokens, below the 8,192
 activation gate. Root intentionally stopped its owned guard; that attempt is
 **ineligible**, with no timing or task-quality claim. Its first wire outputs,

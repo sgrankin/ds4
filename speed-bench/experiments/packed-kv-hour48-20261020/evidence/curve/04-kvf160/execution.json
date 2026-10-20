@@ -1,0 +1,26 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/speed-bench/decoder_replay_bench",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--out",
+    "/Volumes/Models/ds4/.workspaces/deepinfer-followups-20261020/item48/curve/04-kvf160",
+    "--rows",
+    "0",
+    "--tokens",
+    "8192",
+    "--chunk",
+    "8192",
+    "--case",
+    "all",
+    "--ctx",
+    "262144",
+    "--compressed-kv-f16",
+    "0"
+  ],
+  "environment": "Inherited except DS4_/PT_ variables cleared; bench sets replay rows",
+  "profile_overrides": {},
+  "binary_sha256": "ca69c3da50df6be3049782ac3e8d5a999cb598f17c3d67583f42d8e8ce8faa06",
+  "base_revision": "\u001b[38;5;4maf29fceda929141b9e0c6601f00da6ab9142a95b\u001b[39m",
+  "started_utc": "2026-10-20T23:22:32Z"
+}

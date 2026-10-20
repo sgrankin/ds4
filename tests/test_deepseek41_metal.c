@@ -553,6 +553,49 @@ static int check_sparse_gather(void) {
     return 1;
 }
 
+#ifdef __APPLE__
+static int check_compressed_kv_f16(void) {
+    enum { WIDTH = 512, ROWS = 9, KEPT = 4, PREFIX = 3, N = WIDTH * ROWS };
+    const float scales[] = {0x1p-9f, 0x1p-6f, .5f, 1.0f, 64.0f, 448.0f};
+    const float alphabet[] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
+    const int32_t picked[KEPT] = {8, 0, 5, 2};
+    float source[N], quantized[N], actual[KEPT * WIDTH];
+    for (int i = 0; i < N; i++) {
+        float value = scales[(i / 16) % 6] * alphabet[i % 8];
+        source[i] = copysignf(value, (i / 8) & 1 ? -1.0f : 1.0f);
+    }
+    const uint64_t packed_bytes = (uint64_t)(PREFIX + ROWS + 1) * WIDTH * sizeof(uint16_t);
+    const uint64_t row_bytes = WIDTH * sizeof(uint16_t);
+    ds4_gpu_tensor *plain = upload(source, sizeof(source));
+    ds4_gpu_tensor *packed = upload(NULL, packed_bytes);
+    ds4_gpu_tensor *ids = upload(picked, sizeof(picked));
+    ds4_gpu_tensor *out = upload(NULL, sizeof(actual));
+    CHECK(plain && packed && ids && out);
+    uint8_t *guard = ds4_gpu_tensor_contents(packed);
+    CHECK(guard); memset(guard, 0xa5, (size_t)packed_bytes);
+    ds4_gpu_tensor *cache = ds4_gpu_tensor_view(packed, PREFIX * row_bytes, ROWS * row_bytes);
+    CHECK(cache && ds4_gpu_tensor_bytes(cache) == sizeof(source) / 2);
+    CHECK(ds4_gpu_dsv41_quantize(plain, WIDTH, ROWS, DS4_V41_FP4_E4M3));
+    CHECK(ds4_gpu_tensor_read(plain, 0, quantized, sizeof(quantized)));
+    for (int i = 0; i < N; i++) {
+        CHECK(isfinite(quantized[i]) && fabsf(quantized[i]) <= 2688.0f);
+        CHECK(quantized[i] == 0 || fabsf(quantized[i]) >= 0x1p-10f);
+    }
+    CHECK(ds4_gpu_tensor_copy_f32_to_f16(packed, PREFIX * row_bytes, plain, 0, N));
+    CHECK(ds4_gpu_dsv41_gather_kv_f16(out, cache, ids, ROWS, KEPT));
+    CHECK(ds4_gpu_tensor_read(out, 0, actual, sizeof(actual)));
+    for (int row = 0; row < KEPT; row++)
+        CHECK(!memcmp(actual + row * WIDTH, quantized + picked[row] * WIDTH, WIDTH * sizeof(float)));
+    CHECK(ds4_gpu_synchronize());
+    for (uint64_t i = 0; i < PREFIX * row_bytes; i++) CHECK(guard[i] == 0xa5);
+    for (uint64_t i = (PREFIX + ROWS) * row_bytes; i < packed_bytes; i++) CHECK(guard[i] == 0xa5);
+    ds4_gpu_tensor_free(cache); ds4_gpu_tensor_free(plain); ds4_gpu_tensor_free(packed);
+    ds4_gpu_tensor_free(ids); ds4_gpu_tensor_free(out);
+    fprintf(stderr, "V4.1 mode3 compressed KV F16 storage, offset publication and sparse gather: exact\n");
+    return 1;
+}
+#endif
+
 static int check_attention_output(bool large) {
     enum { GROUP = 4096, RANK = 1024, GROUPS = 8, OUT = 5120 };
     const uint32_t ROWS = large ? 8192u : 513u;
@@ -1280,6 +1323,11 @@ int main(int argc, char **argv) {
         return ok ? 0 : 1;
     }
 #ifdef __APPLE__
+    if (argc == 2 && !strcmp(argv[1], "--compressed-kv-f16")) {
+        const int ok = ds4_gpu_init() && check_compressed_kv_f16();
+        ds4_gpu_cleanup();
+        return ok ? 0 : 1;
+    }
     if (argc == 2 && !strcmp(argv[1], "--hc-scaled")) {
         const int ok = ds4_gpu_init() && check_hc_scaled();
         ds4_gpu_cleanup();
@@ -1321,6 +1369,9 @@ int main(int argc, char **argv) {
              check_candidates() && check_sparse_gather() && check_indexer_batch() &&
              check_embedding() && check_index_projection() && check_general_topk() && check_causal_topk() && check_compact_carry() && check_attention_output(false) &&
              check_tp_attention();
+#ifdef __APPLE__
+    if (ok) ok = check_compressed_kv_f16();
+#endif
     ds4_gpu_cleanup();
     return ok ? 0 : 1;
 }

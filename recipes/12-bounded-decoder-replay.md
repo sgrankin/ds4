@@ -48,8 +48,9 @@ the existing decoder-suffix path also disables this replay. The candidate is
 for single-GPU text without MTP/DSpark, TP, images, imatrix or quality mode;
 active unsupported configurations reject visibly.
 
-The batched preset dispatches ordinary 2,048-row chunks and does not reach this
-wide path. The default unbatched server already calls full session sync, so
+The named `ds4-local` server presets use 512-row chunks and do not reach this
+wide path. The separate 2,048-row HTTP configuration also stays below the gate.
+The default unbatched server already calls full session sync, so
 sufficiently large requests can activate it with no new API: omit
 `--batched-session` rather than supplying an invalid 0. The measured HTTP workflow is below; setting the variable alone does not prove
 activation. Require the
@@ -143,7 +144,7 @@ histories. Direct 8,192-token and HTTP 8,625-token scopes remain separate; HTTP
 includes a 433-token normally processed tail and real tool round trips.
 
 This qualifies an opt-in for these fixtures, with no whole-agent, coding or
-general task-quality claim. The existing batched 2,048-row preset is unchanged
+general task-quality claim. The existing batched 512-row preset is unchanged
 and does not activate the wide path. Canonical SSD prefix storage and suffix
 capture remain blocked for private replay state. Use the existing
 [HTTP driver and exact first-output evidence](../speed-bench/experiments/decoder-replay-hour47-20261020/README.md#fixed-http360-result-bounded-whole-workflow-qualification)

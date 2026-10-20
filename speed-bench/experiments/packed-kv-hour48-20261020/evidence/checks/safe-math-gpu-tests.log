@@ -1,0 +1,496 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+ds4: Metal model views created in 0.043 ms, residency requested in 0.058 ms, warmup 6.384 ms (mapped 0.02 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+256/384-expert routing, ties/extremes and scalar/batch oracle: PASS
+V4.1 BF16/FP8/FP4 round trips: exact
+V4.1 Engram gate: 7 BF16 boundary differences, relative RMS 2.2732851e-06
+V4.1 strided RoPE: exact row parity through 1M positions, guards PASS
+V4.1 pair pooling: exact across eight chunk sizes
+V4.1 causal candidate blocks and filtering: exact
+V4.1 bounded sparse KV gather: exact
+V4.1 index scores mode=0 range=0 ratio=1 start=1024 rows=1 error=0
+V4.1 index scores mode=1 range=0 ratio=1 start=1024 rows=1 error=0
+V4.1 index scores mode=2 range=0 ratio=1 start=1024 rows=1 error=0
+V4.1 index scores mode=0 range=0 ratio=1 start=1018 rows=7 error=3.71212156e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=1018 rows=7 error=3.71212156e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=1018 rows=7 error=3.92554913e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=1017 rows=8 error=3.92554913e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=1017 rows=8 error=3.92554913e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=1017 rows=8 error=3.92554913e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=1016 rows=9 error=3.92554913e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=1016 rows=9 error=3.92554913e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=1016 rows=9 error=3.92554913e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=994 rows=31 error=4.99641582e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=994 rows=31 error=4.99641582e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=994 rows=31 error=7.05162672e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=993 rows=32 error=7.05162672e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=993 rows=32 error=7.05162672e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=993 rows=32 error=7.05162672e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=992 rows=33 error=7.05162672e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=992 rows=33 error=7.05162672e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=992 rows=33 error=7.05162672e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=0 rows=1 error=0
+V4.1 index scores mode=1 range=0 ratio=1 start=0 rows=1 error=0
+V4.1 index scores mode=2 range=0 ratio=1 start=0 rows=1 error=0
+V4.1 index scores mode=0 range=0 ratio=1 start=0 rows=7 error=1.16334178e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=0 rows=7 error=1.16334178e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=0 rows=7 error=2.02892019e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=0 rows=8 error=2.02892019e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=0 rows=8 error=2.02892019e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=0 rows=8 error=2.02892019e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=0 rows=9 error=2.02892019e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=0 rows=9 error=2.02892019e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=0 rows=9 error=2.02892019e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=0 rows=31 error=4.3479484e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=0 rows=31 error=4.3479484e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=0 rows=31 error=4.3479484e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=0 rows=32 error=4.3479484e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=0 rows=32 error=4.3479484e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=0 rows=32 error=4.3479484e-08
+V4.1 index scores mode=0 range=0 ratio=1 start=0 rows=33 error=4.3479484e-08
+V4.1 index scores mode=1 range=0 ratio=1 start=0 rows=33 error=4.3479484e-08
+V4.1 index scores mode=2 range=0 ratio=1 start=0 rows=33 error=4.3479484e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=2049 rows=1 error=0
+V4.1 index scores mode=1 range=0 ratio=2 start=2049 rows=1 error=0
+V4.1 index scores mode=2 range=0 ratio=2 start=2049 rows=1 error=0
+V4.1 index scores mode=0 range=0 ratio=2 start=2043 rows=7 error=3.71212156e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=2043 rows=7 error=3.71212156e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=2043 rows=7 error=3.92554913e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=2042 rows=8 error=3.92554913e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=2042 rows=8 error=3.92554913e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=2042 rows=8 error=3.92554913e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=2041 rows=9 error=3.92554913e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=2041 rows=9 error=3.92554913e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=2041 rows=9 error=3.92554913e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=2019 rows=31 error=4.99641582e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=2019 rows=31 error=4.99641582e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=2019 rows=31 error=7.05162672e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=2018 rows=32 error=7.05162672e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=2018 rows=32 error=7.05162672e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=2018 rows=32 error=7.05162672e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=2017 rows=33 error=7.05162672e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=2017 rows=33 error=7.05162672e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=2017 rows=33 error=7.05162672e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=1 range=0 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=2 range=0 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=0 range=0 ratio=2 start=0 rows=7 error=1.16334178e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=0 rows=7 error=1.16334178e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=0 rows=7 error=2.02892019e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=0 rows=8 error=2.02892019e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=0 rows=8 error=2.02892019e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=0 rows=8 error=2.02892019e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=0 rows=9 error=2.02892019e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=0 rows=9 error=2.02892019e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=0 rows=9 error=2.02892019e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=0 rows=31 error=2.19061376e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=0 rows=31 error=2.19061376e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=0 rows=31 error=3.78110216e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=0 rows=32 error=3.78110216e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=0 rows=32 error=3.78110216e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=0 rows=32 error=3.78110216e-08
+V4.1 index scores mode=0 range=0 ratio=2 start=0 rows=33 error=3.78110216e-08
+V4.1 index scores mode=1 range=0 ratio=2 start=0 rows=33 error=3.78110216e-08
+V4.1 index scores mode=2 range=0 ratio=2 start=0 rows=33 error=3.78110216e-08
+V4.1 index scores mode=0 range=1 ratio=1 start=1024 rows=1 error=2.18627584e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=1024 rows=1 error=2.18627584e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=1024 rows=1 error=1.48876021e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=1018 rows=7 error=2.53148928e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=1018 rows=7 error=2.53148928e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=1018 rows=7 error=2.53148928e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=1017 rows=8 error=2.53148928e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=1017 rows=8 error=2.53148928e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=1017 rows=8 error=2.54373517e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=1016 rows=9 error=2.54373517e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=1016 rows=9 error=2.54373517e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=1016 rows=9 error=2.54373517e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=994 rows=31 error=3.29073654e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=994 rows=31 error=3.29073654e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=994 rows=31 error=3.29073654e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=993 rows=32 error=3.29073654e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=993 rows=32 error=3.29073654e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=993 rows=32 error=3.29073654e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=992 rows=33 error=3.29073654e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=992 rows=33 error=3.29073654e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=992 rows=33 error=3.29073654e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=0 rows=1 error=2.29364929e-08
+V4.1 index scores mode=1 range=1 ratio=1 start=0 rows=1 error=2.29364929e-08
+V4.1 index scores mode=2 range=1 ratio=1 start=0 rows=1 error=3.52870733e-08
+V4.1 index scores mode=0 range=1 ratio=1 start=0 rows=7 error=9.24208528e-08
+V4.1 index scores mode=1 range=1 ratio=1 start=0 rows=7 error=9.24208528e-08
+V4.1 index scores mode=2 range=1 ratio=1 start=0 rows=7 error=9.24208528e-08
+V4.1 index scores mode=0 range=1 ratio=1 start=0 rows=8 error=9.24208528e-08
+V4.1 index scores mode=1 range=1 ratio=1 start=0 rows=8 error=9.24208528e-08
+V4.1 index scores mode=2 range=1 ratio=1 start=0 rows=8 error=9.24208528e-08
+V4.1 index scores mode=0 range=1 ratio=1 start=0 rows=9 error=9.24208528e-08
+V4.1 index scores mode=1 range=1 ratio=1 start=0 rows=9 error=9.24208528e-08
+V4.1 index scores mode=2 range=1 ratio=1 start=0 rows=9 error=9.24208528e-08
+V4.1 index scores mode=0 range=1 ratio=1 start=0 rows=31 error=2.02610352e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=0 rows=31 error=2.02610352e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=0 rows=31 error=2.02610352e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=0 rows=32 error=2.02610352e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=0 rows=32 error=2.02610352e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=0 rows=32 error=2.02610352e-07
+V4.1 index scores mode=0 range=1 ratio=1 start=0 rows=33 error=2.02610352e-07
+V4.1 index scores mode=1 range=1 ratio=1 start=0 rows=33 error=2.02610352e-07
+V4.1 index scores mode=2 range=1 ratio=1 start=0 rows=33 error=2.02610352e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=2049 rows=1 error=2.18627584e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=2049 rows=1 error=2.18627584e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=2049 rows=1 error=1.48876021e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=2043 rows=7 error=2.53148928e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=2043 rows=7 error=2.53148928e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=2043 rows=7 error=2.53148928e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=2042 rows=8 error=2.53148928e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=2042 rows=8 error=2.53148928e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=2042 rows=8 error=2.54373517e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=2041 rows=9 error=2.54373517e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=2041 rows=9 error=2.54373517e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=2041 rows=9 error=2.54373517e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=2019 rows=31 error=3.29073654e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=2019 rows=31 error=3.29073654e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=2019 rows=31 error=3.29073654e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=2018 rows=32 error=3.29073654e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=2018 rows=32 error=3.29073654e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=2018 rows=32 error=3.29073654e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=2017 rows=33 error=3.29073654e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=2017 rows=33 error=3.29073654e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=2017 rows=33 error=3.29073654e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=1 range=1 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=2 range=1 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=0 range=1 ratio=2 start=0 rows=7 error=5.44058888e-08
+V4.1 index scores mode=1 range=1 ratio=2 start=0 rows=7 error=5.44058888e-08
+V4.1 index scores mode=2 range=1 ratio=2 start=0 rows=7 error=5.44058888e-08
+V4.1 index scores mode=0 range=1 ratio=2 start=0 rows=8 error=5.44058888e-08
+V4.1 index scores mode=1 range=1 ratio=2 start=0 rows=8 error=5.44058888e-08
+V4.1 index scores mode=2 range=1 ratio=2 start=0 rows=8 error=7.38727922e-08
+V4.1 index scores mode=0 range=1 ratio=2 start=0 rows=9 error=7.38727922e-08
+V4.1 index scores mode=1 range=1 ratio=2 start=0 rows=9 error=7.38727922e-08
+V4.1 index scores mode=2 range=1 ratio=2 start=0 rows=9 error=7.38727922e-08
+V4.1 index scores mode=0 range=1 ratio=2 start=0 rows=31 error=2.02610352e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=0 rows=31 error=2.02610352e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=0 rows=31 error=2.02610352e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=0 rows=32 error=2.02610352e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=0 rows=32 error=2.02610352e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=0 rows=32 error=2.02610352e-07
+V4.1 index scores mode=0 range=1 ratio=2 start=0 rows=33 error=2.02610352e-07
+V4.1 index scores mode=1 range=1 ratio=2 start=0 rows=33 error=2.02610352e-07
+V4.1 index scores mode=2 range=1 ratio=2 start=0 rows=33 error=2.02610352e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=1024 rows=1 error=2.06772983e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=1024 rows=1 error=2.06772983e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=1024 rows=1 error=1.55443775e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=1018 rows=7 error=2.06772983e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=1018 rows=7 error=2.06772983e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=1018 rows=7 error=2.2756083e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=1017 rows=8 error=2.2756083e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=1017 rows=8 error=2.2756083e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=1017 rows=8 error=2.2756083e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=1016 rows=9 error=2.2756083e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=1016 rows=9 error=2.2756083e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=1016 rows=9 error=2.2756083e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=994 rows=31 error=2.41845756e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=994 rows=31 error=2.41845756e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=994 rows=31 error=2.41845756e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=993 rows=32 error=2.41845756e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=993 rows=32 error=2.41845756e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=993 rows=32 error=2.41845756e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=992 rows=33 error=2.41845756e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=992 rows=33 error=2.41845756e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=992 rows=33 error=2.41845756e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=0 rows=1 error=9.85014444e-09
+V4.1 index scores mode=1 range=2 ratio=1 start=0 rows=1 error=9.85014444e-09
+V4.1 index scores mode=2 range=2 ratio=1 start=0 rows=1 error=7.34294185e-10
+V4.1 index scores mode=0 range=2 ratio=1 start=0 rows=7 error=1.19493144e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=0 rows=7 error=1.19493144e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=0 rows=7 error=1.19493144e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=0 rows=8 error=1.19493144e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=0 rows=8 error=1.19493144e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=0 rows=8 error=1.19493144e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=0 rows=9 error=1.19493144e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=0 rows=9 error=1.19493144e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=0 rows=9 error=1.19493144e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=0 rows=31 error=1.58710519e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=0 rows=31 error=1.58710519e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=0 rows=31 error=1.58710519e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=0 rows=32 error=1.58710519e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=0 rows=32 error=1.58710519e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=0 rows=32 error=1.58710519e-07
+V4.1 index scores mode=0 range=2 ratio=1 start=0 rows=33 error=1.58710519e-07
+V4.1 index scores mode=1 range=2 ratio=1 start=0 rows=33 error=1.58710519e-07
+V4.1 index scores mode=2 range=2 ratio=1 start=0 rows=33 error=1.58710519e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=2049 rows=1 error=2.06772983e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=2049 rows=1 error=2.06772983e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=2049 rows=1 error=1.55443775e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=2043 rows=7 error=2.06772983e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=2043 rows=7 error=2.06772983e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=2043 rows=7 error=2.2756083e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=2042 rows=8 error=2.2756083e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=2042 rows=8 error=2.2756083e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=2042 rows=8 error=2.2756083e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=2041 rows=9 error=2.2756083e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=2041 rows=9 error=2.2756083e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=2041 rows=9 error=2.2756083e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=2019 rows=31 error=2.41845756e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=2019 rows=31 error=2.41845756e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=2019 rows=31 error=2.41845756e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=2018 rows=32 error=2.41845756e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=2018 rows=32 error=2.41845756e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=2018 rows=32 error=2.41845756e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=2017 rows=33 error=2.41845756e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=2017 rows=33 error=2.41845756e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=2017 rows=33 error=2.41845756e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=1 range=2 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=2 range=2 ratio=2 start=0 rows=1 error=0
+V4.1 index scores mode=0 range=2 ratio=2 start=0 rows=7 error=1.14783505e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=0 rows=7 error=1.14783505e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=0 rows=7 error=1.14783505e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=0 rows=8 error=1.14783505e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=0 rows=8 error=1.14783505e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=0 rows=8 error=1.14783505e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=0 rows=9 error=1.14783505e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=0 rows=9 error=1.14783505e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=0 rows=9 error=1.14783505e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=0 rows=31 error=1.44183981e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=0 rows=31 error=1.44183981e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=0 rows=31 error=1.44183981e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=0 rows=32 error=1.44183981e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=0 rows=32 error=1.44183981e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=0 rows=32 error=1.44183981e-07
+V4.1 index scores mode=0 range=2 ratio=2 start=0 rows=33 error=1.44183981e-07
+V4.1 index scores mode=1 range=2 ratio=2 start=0 rows=33 error=1.44183981e-07
+V4.1 index scores mode=2 range=2 ratio=2 start=0 rows=33 error=1.44183981e-07
+ds4: Metal GLM indexer batch scores received undersized buffers
+V4.1 causal batched index scores: double-precision oracle PASS
+ds4: Metal model views created in 0.035 ms, residency requested in 0.053 ms, warmup 0.337 ms (mapped 0.19 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+V4.1 batched embedding rows=1: exact scalar and independent oracle PASS
+V4.1 batched embedding rows=7: exact scalar and independent oracle PASS
+V4.1 batched embedding rows=127: exact scalar and independent oracle PASS
+V4.1 batched embedding rows=128: exact scalar and independent oracle PASS
+V4.1 batched embedding rows=257: exact scalar and independent oracle PASS
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+ds4: Metal model views created in 0.012 ms, residency requested in 0.127 ms, warmup 2.783 ms (mapped 10.00 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+V4.1 exact F16 projection width=1280 output=4096 rows=1 RMS=0 1.626 ms
+V4.1 exact F16 projection width=1280 output=4096 rows=31 RMS=0 2.639 ms
+V4.1 exact F16 projection width=1280 output=4096 rows=64 RMS=0 3.878 ms
+V4.1 exact F16 projection width=1280 output=4096 rows=65 RMS=0 1.156 ms
+V4.1 exact F16 projection width=1280 output=4096 rows=513 RMS=0 7.009 ms
+V4.1 exact F16 projection width=1280 output=4096 rows=2048 RMS=0 27.591 ms
+V4.1 exact F16 projection width=1280 output=4096 rows=4096 RMS=0 54.833 ms
+ds4: Metal F16 tensor matmul range is outside the mapped model
+ds4: Metal F16 tensor matmul received undersized activation buffers
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+ds4: Metal model views created in 0.010 ms, residency requested in 0.045 ms, warmup 2.619 ms (mapped 0.31 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+V4.1 exact F16 projection width=5120 output=32 rows=1 RMS=0 0.194 ms
+V4.1 exact F16 projection width=5120 output=32 rows=31 RMS=0 0.153 ms
+V4.1 exact F16 projection width=5120 output=32 rows=64 RMS=0 0.188 ms
+V4.1 exact F16 projection width=5120 output=32 rows=65 RMS=0 0.194 ms
+V4.1 exact F16 projection width=5120 output=32 rows=513 RMS=0 0.348 ms
+V4.1 exact F16 projection width=5120 output=32 rows=2048 RMS=0 0.907 ms
+V4.1 exact F16 projection width=5120 output=32 rows=4096 RMS=0 1.572 ms
+ds4: Metal F16 tensor matmul range is outside the mapped model
+ds4: Metal F16 tensor matmul received undersized activation buffers
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+ds4: Metal model views created in 0.011 ms, residency requested in 0.103 ms, warmup 2.966 ms (mapped 5.00 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+V4.1 exact F16 projection width=5120 output=512 rows=1 RMS=0 0.361 ms
+V4.1 exact F16 projection width=5120 output=512 rows=31 RMS=0 0.293 ms
+V4.1 exact F16 projection width=5120 output=512 rows=64 RMS=0 0.465 ms
+V4.1 exact F16 projection width=5120 output=512 rows=65 RMS=0 1.220 ms
+V4.1 exact F16 projection width=5120 output=512 rows=513 RMS=0 2.786 ms
+V4.1 exact F16 projection width=5120 output=512 rows=2048 RMS=0 11.569 ms
+V4.1 exact F16 projection width=5120 output=512 rows=4096 RMS=0 22.544 ms
+ds4: Metal F16 tensor matmul range is outside the mapped model
+ds4: Metal F16 tensor matmul received undersized activation buffers
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+ds4: Metal model views created in 0.010 ms, residency requested in 0.042 ms, warmup 3.092 ms (mapped 0.12 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+V4.1 exact F16 projection width=512 output=128 rows=1 RMS=0 0.236 ms
+V4.1 exact F16 projection width=512 output=128 rows=31 RMS=0 0.970 ms
+V4.1 exact F16 projection width=512 output=128 rows=64 RMS=0 0.198 ms
+V4.1 exact F16 projection width=512 output=128 rows=65 RMS=0 1.006 ms
+V4.1 exact F16 projection width=512 output=128 rows=513 RMS=0 1.120 ms
+V4.1 exact F16 projection width=512 output=128 rows=2048 RMS=0 0.768 ms
+V4.1 exact F16 projection width=512 output=128 rows=4096 RMS=0 2.129 ms
+ds4: Metal F16 tensor matmul range is outside the mapped model
+ds4: Metal F16 tensor matmul received undersized activation buffers
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+V4.1 variable-k sort width=1: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=2: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=31: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=127: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=255: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=256: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=257: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=511: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=512: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=513: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=1023: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=1024: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=1025: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=2047: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=2048: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=2049: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=4095: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=4096: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=4097: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=8191: independent sorted-value/unique-ID oracle PASS
+V4.1 variable-k sort width=8192: independent sorted-value/unique-ID oracle PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=1024: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=1025: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=1535: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=2047: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=2048: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=4095: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=4096: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=8191: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=8192: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=16383: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=32767: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=1 visible=65535: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=1024: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=1025: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=1535: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=2047: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=2048: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=4095: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=4096: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=8191: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=8192: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=16383: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=32767: exact IDs including ties PASS
+ds4: Metal graph indexer top-k received undersized buffers
+V4.1 causal top-k ratio=2 visible=65535: exact IDs including ties PASS
+V4.1 compact carry format=0 width=1: exact round-trip and bounds PASS
+V4.1 compact carry format=0 width=31: exact round-trip and bounds PASS
+V4.1 compact carry format=0 width=32: exact round-trip and bounds PASS
+V4.1 compact carry format=0 width=33: exact round-trip and bounds PASS
+V4.1 compact carry format=0 width=127: exact round-trip and bounds PASS
+V4.1 compact carry format=0 width=128: exact round-trip and bounds PASS
+V4.1 compact carry format=0 width=129: exact round-trip and bounds PASS
+V4.1 compact carry format=0 width=20480: exact round-trip and bounds PASS
+V4.1 compact carry format=1 width=1: exact round-trip and bounds PASS
+V4.1 compact carry format=1 width=31: exact round-trip and bounds PASS
+V4.1 compact carry format=1 width=32: exact round-trip and bounds PASS
+V4.1 compact carry format=1 width=33: exact round-trip and bounds PASS
+V4.1 compact carry format=1 width=127: exact round-trip and bounds PASS
+V4.1 compact carry format=1 width=128: exact round-trip and bounds PASS
+V4.1 compact carry format=1 width=129: exact round-trip and bounds PASS
+V4.1 compact carry format=1 width=20480: exact round-trip and bounds PASS
+ds4: Metal model views created in 0.020 ms, residency requested in 0.743 ms, warmup 1.095 ms (mapped 76.50 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+V4.1 batched Q8 output, BF16 boundary, rows=1: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=2: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=3: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=5: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=6: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=8: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=31: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=32: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=63: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=64: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=65: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=257: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=512: PASS
+V4.1 batched Q8 output, BF16 boundary, rows=513: PASS
+ds4: Metal attention output batch weights are outside the mapped model
+ds4: Metal attention output batch received undersized buffers
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=1: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=2: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=3: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=5: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=6: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=8: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=31: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=32: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=33: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=63: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=64: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=65: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=127: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=128: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=129: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=257: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=512: PASS
+V4.1 TP Q8 output, both ranks, BF16 and double oracle, rows=513: PASS
+ds4: Metal attention output batch weights are outside the mapped model
+ds4: Metal attention output batch received undersized buffers
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+ds4: Metal model views created in 0.011 ms, residency requested in 0.026 ms, warmup 2.645 ms (mapped 0.02 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+V4.1 TP attention rows=1 selected=512 ratio=1 max split=0 oracle=7.35852e-09: PASS
+V4.1 TP attention rows=31 selected=512 ratio=2 max split=0 oracle=3.9768e-08: PASS
+V4.1 TP attention rows=32 selected=512 ratio=1 max split=0 oracle=3.88966e-08: PASS
+V4.1 TP attention rows=33 selected=512 ratio=2 max split=0 oracle=3.16255e-08: PASS
+V4.1 TP attention rows=129 selected=512 ratio=1 max split=0 oracle=4.00318e-08: PASS
+V4.1 TP attention rows=257 selected=512 ratio=2 max split=0 oracle=1.94841e-08: PASS
+TP indexed attention control=1 16.559 ms
+TP indexed attention control=0 14.686 ms
+TP indexed attention control=0 14.699 ms
+TP indexed attention control=1 16.566 ms
+V4.1 TP attention rows=2048 selected=512 ratio=1 max split=0 oracle=2.7837e-08: PASS
+V4.1 TP attention rows=1 selected=0 ratio=2 max split=0 oracle=5.5111e-09: PASS
+V4.1 TP attention rows=1 selected=1 ratio=1 max split=0 oracle=1.76858e-08: PASS
+V4.1 TP attention rows=2 selected=512 ratio=2 max split=0 oracle=2.69019e-08: PASS
+V4.1 TP attention rows=6 selected=512 ratio=1 max split=0 oracle=4.7128e-08: PASS
+V4.1 TP attention rows=8 selected=512 ratio=2 max split=0 oracle=9.09052e-08: PASS
+V4.1 TP attention rows=2 selected=0 ratio=1 max split=0 oracle=1.2513e-08: PASS
+V4.1 TP attention rows=2 selected=1 ratio=2 max split=0 oracle=5.59675e-08: PASS
+V4.1 TP attention rows=6 selected=0 ratio=1 max split=0 oracle=1.87938e-08: PASS
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: Metal shader library math mode = safe (strict IEEE-754) by DS4_METAL_MATH_SAFE
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=on tensor_matmul=on
+V4.1 mode3 compressed KV F16 storage, offset publication and sparse gather: exact
+{"status": "complete", "child_returncode": 0}

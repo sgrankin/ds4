@@ -12,8 +12,15 @@ astrra.space's AMD/HIP `ds4-recipe`:
 
 The research compared them with the pre-upgrade DS4 working sources identified
 in [the full source audit](evidence/deepseek-research.md). The official GPU
-cluster results are not local Metal/SSD measurements. No bounded-replay feature
-has been adopted from this research.
+cluster results are not local Metal/SSD measurements. At this initial research
+snapshot, no local bounded-replay feature had been implemented.
+
+Current follow-ups are recorded separately: [bounded decoder replay](12-bounded-decoder-replay.md)
+now has an opt-in measured implementation, including 7.03% whole-workflow saving
+on one unbatched HTTP tool fixture (with nine fewer search-output tokens).
+[Main compressed-KV F16 storage](13-packed-compressed-kv.md) is being qualified
+separately. The candidate discussion below preserves the original research
+reasoning rather than describing the complete current feature surface.
 
 ## Candidate: approximate decoder bounded replay
 
@@ -42,10 +49,10 @@ would still receive attention probability, and higher decoder raw state depends
 on its own layer. DS4 already has an EXACT shrinking decoder dependency suffix,
 so an official “nearly halves prefill” claim does not predict a similar local
 gain. Full KV/index publication, SSD layer reads and smaller-batch efficiency
-remain costs. A first port should fix one model/quant, disable MTP and other
-approximations, and measure one 8192/16384-row direct sync before changing server
-scheduling. Preserve first free outputs plus fixed-teacher ΔNLL/KL, and prevent
-the approximate state from entering ordinary exact-cache/export paths.
+remain costs. The initial port plan was to fix one model/quant, disable MTP and other
+approximations, and measure a wide direct sync before changing server
+scheduling. Item47 followed that direction, retaining first free outputs and
+fixed-teacher ΔNLL/KL while excluding approximate state from canonical exports.
 
 ## Mixed-prefill quantum: measured completion/responsiveness tradeoff
 
@@ -96,8 +103,11 @@ updates remains [separate](../speed-bench/experiments/1017-upgrade-20261020/sche
 Its completed217.41s opening128 baseline and incomplete512 are excluded from
 this clean bracket; the interruption was not a model-quality failure.
 
-Current server syncs generally do not reach the wide≥8192 decoder branch, so a
-direct-session bounded-replay result would not establish HTTP serving savings.
+The named server presets use 512-row chunks; neither those nor the separate
+2,048-row scheduling configuration reaches the wide≥8,192 decoder branch.
+Default unbatched full sync can, and Item47 separately measured it;
+keep the direct 8,192-token curve and HTTP tool-workflow result in chapter 12
+separate from this scheduling experiment.
 
 ## Other lessons worth using without importing the cluster
 
