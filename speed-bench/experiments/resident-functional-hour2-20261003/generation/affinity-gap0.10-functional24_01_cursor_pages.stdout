@@ -1,0 +1,8 @@
+{"ids": [9, 2, 7], "requests": 3, "stop_reason": "next_cursor is null"}
+
+Reasoning:
+- Page 1: ids [9, 2], next_cursor "k1" → append 9, 2; continue because next_cursor is not null.
+- Page 2: ids [], next_cursor "k2" → append nothing; continue because next_cursor is not null. The empty ids list is not a termination signal.
+- Page 3: ids [7], next_cursor null → append 7; stop because next_cursor is null.
+- Total requests: 3 pages requested in order.
+- Final ids: [9, 2, 7].

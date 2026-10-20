@@ -1,0 +1,8 @@
+{
+  "role": "Excluded warmup and geometry qualification; initial selected-env typo and prior timer version retained.",
+  "task_pass": true,
+  "token_displacement": 662,
+  "shared_system_prefix_tokens": 1986,
+  "system_prefix_cold_seconds": 63.706818,
+  "fixture_changed_after_pilot": false
+}

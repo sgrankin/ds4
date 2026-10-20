@@ -1,0 +1,38 @@
+{
+  "mode": "native",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "ssd_mb": 4096,
+  "arm": "native-before",
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/repeated-conversations-hour30-20261004/run.py",
+  "seconds": 435.6706359159725,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 0,
+      "seconds": 222.29626466700574,
+      "startup_seconds": 0.21540579199790955,
+      "client_seconds": 220.36180345798493,
+      "shutdown_seconds": 1.7187947920174338,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 213.37086995801656,
+      "startup_seconds": 0.4429831660236232,
+      "client_seconds": 211.51347108298796,
+      "shutdown_seconds": 1.4139685000118334,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-cache-native-before",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-store-native-before",
+  "timeout_seconds": 1200.0
+}

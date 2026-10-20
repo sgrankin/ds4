@@ -1,0 +1,1014 @@
+[
+  {
+    "variant": "A",
+    "logits_sha256": "8d982f30ddbe4974178cf1ae7392dcab80c3140974f0ad191980ece3b2737ecd",
+    "snapshot_sha256": "721ac9544a88fc09548f381d13391cea14995927f7703b4b0a14a5556e479285",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 16602.772,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 4339.867,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3839.054,
+        "first_decode_ms": 80.241
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9486.879,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 3892.548,
+        "first_decode_ms": 67.077
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2048.643,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9282.084,
+        "first_decode_ms": 75.383
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 3350,
+        "tokens": 685,
+        "ms": 17451.059,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 3414,
+        "tokens": 64,
+        "ms": 3773.893,
+        "first_decode_ms": 92.862
+      },
+      {
+        "phase": 9,
+        "kind": "P",
+        "context": 4240,
+        "tokens": 826,
+        "ms": 19529.742,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 10,
+        "kind": "D",
+        "context": 5182,
+        "tokens": 942,
+        "ms": 51363.574,
+        "first_decode_ms": 94.845
+      },
+      {
+        "phase": 11,
+        "kind": "P",
+        "context": 5543,
+        "tokens": 361,
+        "ms": 9964.725,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 12,
+        "kind": "D",
+        "context": 5597,
+        "tokens": 54,
+        "ms": 3062.861,
+        "first_decode_ms": 81.764
+      },
+      {
+        "phase": 13,
+        "kind": "P",
+        "context": 5759,
+        "tokens": 162,
+        "ms": 4068.86,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 14,
+        "kind": "D",
+        "context": 5832,
+        "tokens": 73,
+        "ms": 4096.169,
+        "first_decode_ms": 75.645
+      },
+      {
+        "phase": 15,
+        "kind": "P",
+        "context": 5916,
+        "tokens": 84,
+        "ms": 2239.272,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 16,
+        "kind": "D",
+        "context": 6005,
+        "tokens": 89,
+        "ms": 5459.286,
+        "first_decode_ms": 62.761
+      },
+      {
+        "phase": 17,
+        "kind": "P",
+        "context": 6097,
+        "tokens": 92,
+        "ms": 2789.843,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 18,
+        "kind": "D",
+        "context": 7273,
+        "tokens": 1176,
+        "ms": 65670.461,
+        "first_decode_ms": 68.759
+      },
+      {
+        "phase": 19,
+        "kind": "P",
+        "context": 7551,
+        "tokens": 278,
+        "ms": 7870.902,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 20,
+        "kind": "D",
+        "context": 7605,
+        "tokens": 54,
+        "ms": 2993.409,
+        "first_decode_ms": 65.182
+      },
+      {
+        "phase": 21,
+        "kind": "P",
+        "context": 7819,
+        "tokens": 214,
+        "ms": 5411.154,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 22,
+        "kind": "D",
+        "context": 7891,
+        "tokens": 72,
+        "ms": 4474.821,
+        "first_decode_ms": 61.033
+      },
+      {
+        "phase": 23,
+        "kind": "P",
+        "context": 7953,
+        "tokens": 62,
+        "ms": 2016.167,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 24,
+        "kind": "D",
+        "context": 8187,
+        "tokens": 234,
+        "ms": 12950.653,
+        "first_decode_ms": 63.254
+      },
+      {
+        "phase": 25,
+        "kind": "P",
+        "context": 8312,
+        "tokens": 125,
+        "ms": 3621.413,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 26,
+        "kind": "D",
+        "context": 8435,
+        "tokens": 123,
+        "ms": 6896.144,
+        "first_decode_ms": 83.641
+      },
+      {
+        "phase": 27,
+        "kind": "P",
+        "context": 8563,
+        "tokens": 128,
+        "ms": 2995.934,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 28,
+        "kind": "D",
+        "context": 8710,
+        "tokens": 147,
+        "ms": 8344.483,
+        "first_decode_ms": 68.948
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "1571814",
+        "misses": "80226",
+        "evictions": "72404",
+        "miss_pread": "671.37",
+        "pread_ms": "45955.134"
+      }
+    ],
+    "io_reports": {},
+    "startup_prefill_ms": 16602.772,
+    "append_prefill_ms": 93834.46,
+    "decode_ms": 186099.44,
+    "model_ms": 296536.672
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "8d982f30ddbe4974178cf1ae7392dcab80c3140974f0ad191980ece3b2737ecd",
+    "snapshot_sha256": "721ac9544a88fc09548f381d13391cea14995927f7703b4b0a14a5556e479285",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 15682.888,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3931.089,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3788.93,
+        "first_decode_ms": 77.485
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 7958.729,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 3829.991,
+        "first_decode_ms": 57.046
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 1753.052,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9414.208,
+        "first_decode_ms": 59.662
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 3350,
+        "tokens": 685,
+        "ms": 16286.943,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 3414,
+        "tokens": 64,
+        "ms": 3386.68,
+        "first_decode_ms": 60.151
+      },
+      {
+        "phase": 9,
+        "kind": "P",
+        "context": 4240,
+        "tokens": 826,
+        "ms": 18260.468,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 10,
+        "kind": "D",
+        "context": 5182,
+        "tokens": 942,
+        "ms": 48478.882,
+        "first_decode_ms": 70.243
+      },
+      {
+        "phase": 11,
+        "kind": "P",
+        "context": 5543,
+        "tokens": 361,
+        "ms": 8581.84,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 12,
+        "kind": "D",
+        "context": 5597,
+        "tokens": 54,
+        "ms": 2784.71,
+        "first_decode_ms": 68.844
+      },
+      {
+        "phase": 13,
+        "kind": "P",
+        "context": 5759,
+        "tokens": 162,
+        "ms": 3810.682,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 14,
+        "kind": "D",
+        "context": 5832,
+        "tokens": 73,
+        "ms": 3713.978,
+        "first_decode_ms": 57.389
+      },
+      {
+        "phase": 15,
+        "kind": "P",
+        "context": 5916,
+        "tokens": 84,
+        "ms": 2002.211,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 16,
+        "kind": "D",
+        "context": 6005,
+        "tokens": 89,
+        "ms": 4993.21,
+        "first_decode_ms": 61.804
+      },
+      {
+        "phase": 17,
+        "kind": "P",
+        "context": 6097,
+        "tokens": 92,
+        "ms": 2441.403,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 18,
+        "kind": "D",
+        "context": 7273,
+        "tokens": 1176,
+        "ms": 60529.597,
+        "first_decode_ms": 72.519
+      },
+      {
+        "phase": 19,
+        "kind": "P",
+        "context": 7551,
+        "tokens": 278,
+        "ms": 7416.349,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 20,
+        "kind": "D",
+        "context": 7605,
+        "tokens": 54,
+        "ms": 2848.058,
+        "first_decode_ms": 62.504
+      },
+      {
+        "phase": 21,
+        "kind": "P",
+        "context": 7819,
+        "tokens": 214,
+        "ms": 5133.202,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 22,
+        "kind": "D",
+        "context": 7891,
+        "tokens": 72,
+        "ms": 4313.486,
+        "first_decode_ms": 68.678
+      },
+      {
+        "phase": 23,
+        "kind": "P",
+        "context": 7953,
+        "tokens": 62,
+        "ms": 1847.79,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 24,
+        "kind": "D",
+        "context": 8187,
+        "tokens": 234,
+        "ms": 11751.05,
+        "first_decode_ms": 67.922
+      },
+      {
+        "phase": 25,
+        "kind": "P",
+        "context": 8312,
+        "tokens": 125,
+        "ms": 3057.982,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 26,
+        "kind": "D",
+        "context": 8435,
+        "tokens": 123,
+        "ms": 6070.944,
+        "first_decode_ms": 68.362
+      },
+      {
+        "phase": 27,
+        "kind": "P",
+        "context": 8563,
+        "tokens": 128,
+        "ms": 2913.643,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 28,
+        "kind": "D",
+        "context": 8710,
+        "tokens": 147,
+        "ms": 7694.651,
+        "first_decode_ms": 69.541
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "1577636",
+        "misses": "74844",
+        "evictions": "66591",
+        "miss_pread": "617.40",
+        "pread_ms": "33542.546"
+      }
+    ],
+    "io_reports": {},
+    "startup_prefill_ms": 15682.888,
+    "append_prefill_ms": 85395.383,
+    "decode_ms": 173598.375,
+    "model_ms": 274676.646
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "8d982f30ddbe4974178cf1ae7392dcab80c3140974f0ad191980ece3b2737ecd",
+    "snapshot_sha256": "721ac9544a88fc09548f381d13391cea14995927f7703b4b0a14a5556e479285",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 16409.771,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 4813.256,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3788.615,
+        "first_decode_ms": 73.527
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 7983.957,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 3803.932,
+        "first_decode_ms": 58.242
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 1756.008,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9399.754,
+        "first_decode_ms": 59.126
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 3350,
+        "tokens": 685,
+        "ms": 16499.341,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 3414,
+        "tokens": 64,
+        "ms": 3251.786,
+        "first_decode_ms": 58.023
+      },
+      {
+        "phase": 9,
+        "kind": "P",
+        "context": 4240,
+        "tokens": 826,
+        "ms": 18663.887,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 10,
+        "kind": "D",
+        "context": 5182,
+        "tokens": 942,
+        "ms": 48135.975,
+        "first_decode_ms": 70.931
+      },
+      {
+        "phase": 11,
+        "kind": "P",
+        "context": 5543,
+        "tokens": 361,
+        "ms": 8516.42,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 12,
+        "kind": "D",
+        "context": 5597,
+        "tokens": 54,
+        "ms": 2697.181,
+        "first_decode_ms": 70.317
+      },
+      {
+        "phase": 13,
+        "kind": "P",
+        "context": 5759,
+        "tokens": 162,
+        "ms": 3785.052,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 14,
+        "kind": "D",
+        "context": 5832,
+        "tokens": 73,
+        "ms": 3766.315,
+        "first_decode_ms": 58.426
+      },
+      {
+        "phase": 15,
+        "kind": "P",
+        "context": 5916,
+        "tokens": 84,
+        "ms": 2010.894,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 16,
+        "kind": "D",
+        "context": 6005,
+        "tokens": 89,
+        "ms": 5029.992,
+        "first_decode_ms": 71.938
+      },
+      {
+        "phase": 17,
+        "kind": "P",
+        "context": 6097,
+        "tokens": 92,
+        "ms": 2450.581,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 18,
+        "kind": "D",
+        "context": 7273,
+        "tokens": 1176,
+        "ms": 59971.536,
+        "first_decode_ms": 64.877
+      },
+      {
+        "phase": 19,
+        "kind": "P",
+        "context": 7551,
+        "tokens": 278,
+        "ms": 6891.187,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 20,
+        "kind": "D",
+        "context": 7605,
+        "tokens": 54,
+        "ms": 2792.975,
+        "first_decode_ms": 61.184
+      },
+      {
+        "phase": 21,
+        "kind": "P",
+        "context": 7819,
+        "tokens": 214,
+        "ms": 4944.375,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 22,
+        "kind": "D",
+        "context": 7891,
+        "tokens": 72,
+        "ms": 4009.41,
+        "first_decode_ms": 64.85
+      },
+      {
+        "phase": 23,
+        "kind": "P",
+        "context": 7953,
+        "tokens": 62,
+        "ms": 1841.241,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 24,
+        "kind": "D",
+        "context": 8187,
+        "tokens": 234,
+        "ms": 11959.914,
+        "first_decode_ms": 60.971
+      },
+      {
+        "phase": 25,
+        "kind": "P",
+        "context": 8312,
+        "tokens": 125,
+        "ms": 3074.134,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 26,
+        "kind": "D",
+        "context": 8435,
+        "tokens": 123,
+        "ms": 6306.413,
+        "first_decode_ms": 68.606
+      },
+      {
+        "phase": 27,
+        "kind": "P",
+        "context": 8563,
+        "tokens": 128,
+        "ms": 2897.021,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 28,
+        "kind": "D",
+        "context": 8710,
+        "tokens": 147,
+        "ms": 7615.738,
+        "first_decode_ms": 66.424
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "1577636",
+        "misses": "74844",
+        "evictions": "66591",
+        "miss_pread": "617.40",
+        "pread_ms": "34326.744"
+      }
+    ],
+    "io_reports": {},
+    "startup_prefill_ms": 16409.771,
+    "append_prefill_ms": 86127.354,
+    "decode_ms": 172529.536,
+    "model_ms": 275066.661
+  },
+  {
+    "variant": "A",
+    "logits_sha256": "8d982f30ddbe4974178cf1ae7392dcab80c3140974f0ad191980ece3b2737ecd",
+    "snapshot_sha256": "721ac9544a88fc09548f381d13391cea14995927f7703b4b0a14a5556e479285",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 15250.423,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3688.642,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3787.52,
+        "first_decode_ms": 76.531
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9542.856,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 3879.554,
+        "first_decode_ms": 62.527
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2061.841,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9330.849,
+        "first_decode_ms": 63.691
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 3350,
+        "tokens": 685,
+        "ms": 17277.176,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 3414,
+        "tokens": 64,
+        "ms": 3731.43,
+        "first_decode_ms": 90.847
+      },
+      {
+        "phase": 9,
+        "kind": "P",
+        "context": 4240,
+        "tokens": 826,
+        "ms": 19301.901,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 10,
+        "kind": "D",
+        "context": 5182,
+        "tokens": 942,
+        "ms": 51674.533,
+        "first_decode_ms": 90.463
+      },
+      {
+        "phase": 11,
+        "kind": "P",
+        "context": 5543,
+        "tokens": 361,
+        "ms": 9972.526,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 12,
+        "kind": "D",
+        "context": 5597,
+        "tokens": 54,
+        "ms": 3070.016,
+        "first_decode_ms": 85.583
+      },
+      {
+        "phase": 13,
+        "kind": "P",
+        "context": 5759,
+        "tokens": 162,
+        "ms": 4042.319,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 14,
+        "kind": "D",
+        "context": 5832,
+        "tokens": 73,
+        "ms": 4066.039,
+        "first_decode_ms": 72.982
+      },
+      {
+        "phase": 15,
+        "kind": "P",
+        "context": 5916,
+        "tokens": 84,
+        "ms": 2246.929,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 16,
+        "kind": "D",
+        "context": 6005,
+        "tokens": 89,
+        "ms": 5421.742,
+        "first_decode_ms": 68.551
+      },
+      {
+        "phase": 17,
+        "kind": "P",
+        "context": 6097,
+        "tokens": 92,
+        "ms": 2797.522,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 18,
+        "kind": "D",
+        "context": 7273,
+        "tokens": 1176,
+        "ms": 65559.077,
+        "first_decode_ms": 68.029
+      },
+      {
+        "phase": 19,
+        "kind": "P",
+        "context": 7551,
+        "tokens": 278,
+        "ms": 7869.126,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 20,
+        "kind": "D",
+        "context": 7605,
+        "tokens": 54,
+        "ms": 3013.184,
+        "first_decode_ms": 64.796
+      },
+      {
+        "phase": 21,
+        "kind": "P",
+        "context": 7819,
+        "tokens": 214,
+        "ms": 5454.869,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 22,
+        "kind": "D",
+        "context": 7891,
+        "tokens": 72,
+        "ms": 4510.982,
+        "first_decode_ms": 64.072
+      },
+      {
+        "phase": 23,
+        "kind": "P",
+        "context": 7953,
+        "tokens": 62,
+        "ms": 2041.011,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 24,
+        "kind": "D",
+        "context": 8187,
+        "tokens": 234,
+        "ms": 12913.354,
+        "first_decode_ms": 64.838
+      },
+      {
+        "phase": 25,
+        "kind": "P",
+        "context": 8312,
+        "tokens": 125,
+        "ms": 3675.039,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 26,
+        "kind": "D",
+        "context": 8435,
+        "tokens": 123,
+        "ms": 6893.587,
+        "first_decode_ms": 83.628
+      },
+      {
+        "phase": 27,
+        "kind": "P",
+        "context": 8563,
+        "tokens": 128,
+        "ms": 3075.059,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 28,
+        "kind": "D",
+        "context": 8710,
+        "tokens": 147,
+        "ms": 8283.719,
+        "first_decode_ms": 70.105
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "1571814",
+        "misses": "80226",
+        "evictions": "72404",
+        "miss_pread": "671.37",
+        "pread_ms": "45666.713"
+      }
+    ],
+    "io_reports": {},
+    "startup_prefill_ms": 15250.423,
+    "append_prefill_ms": 93046.816,
+    "decode_ms": 186135.586,
+    "model_ms": 294432.825
+  }
+]

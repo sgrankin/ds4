@@ -1,0 +1,70 @@
+{
+  "case": "helpful-history",
+  "gold": 456,
+  "answer": null,
+  "text": "Net units: 18 × 26 − 9 = 468 − 9 = 459.\n\nPolicy: round_net_down with rounding_multiple 8 → floor(459 / 8) × 8 = 57 × 8 = 456.\n\n456",
+  "correct": false,
+  "complete": true,
+  "required_file": "/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/helpful-history/policy.json",
+  "actual_read_count": 1,
+  "calls": [
+    {
+      "name": "read",
+      "call_id": "call_e83e0dc627633a24615113107e1f4dab",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/helpful-history/policy.json\",\"whole\":true,\"raw\":true}",
+      "read": true,
+      "error": null,
+      "path": "/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/helpful-history/policy.json",
+      "text": "{\"policy\":\"round_net_down\",\"formula\":\"batches * units_per_batch - reserved_units\",\"rounding_multiple\":8,\"status\":\"current\"}\n",
+      "read_ms": 0.26354199508205056
+    }
+  ],
+  "replies": [
+    {
+      "seconds": 20.976254332999815,
+      "http_status": 200,
+      "max_output_tokens": 128,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 360,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 360
+        },
+        "output_tokens": 108,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 468
+      },
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "seconds": 4.7443614170042565,
+      "http_status": 200,
+      "max_output_tokens": 128,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 513,
+        "input_tokens_details": {
+          "cached_tokens": 468,
+          "cache_write_tokens": 45
+        },
+        "output_tokens": 55,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 568
+      },
+      "incomplete_details": null,
+      "stop_token_observed": null
+    }
+  ],
+  "seconds": 25.72161095800402,
+  "errors": [],
+  "source_warmup": false,
+  "context": "fresh question plus actual policy tool result",
+  "scope": "Retrieval correctness; independent of core fresh/reuse contexts and timings.",
+  "pass": false
+}

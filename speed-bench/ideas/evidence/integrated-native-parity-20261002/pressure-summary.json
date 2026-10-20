@@ -1,0 +1,9 @@
+{
+  "samples": 210,
+  "all_pressure_level_1": true,
+  "all_reasons_null": true,
+  "peak_wired_gib": 75.18199157714844,
+  "peak_compressed_gib": 9.020065307617188,
+  "initial_swap_gib": 0.025576171875,
+  "max_swap_growth_gib": 0.0
+}

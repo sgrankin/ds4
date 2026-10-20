@@ -1,0 +1,10 @@
+{
+  "status": "NEW_ARCHIVE_VERSION_EXTENDS_COMPLETE_INDEX_AFTER_ROOT_ATTESTATION",
+  "original_archive_freeze": "0215418b41d52dd869709cca8859b2cd6faa9c80",
+  "pre_attestation_index_sha256": "b7d7617b242e3e76c0ac47bf3999f232b1c93c0843fd1fc3f96fff3cbe402de7",
+  "ROOT_archive_proof_sha256": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c",
+  "ROOT_first_inspection_refusal_sha256": "fade0557b5187afe16c52c9514371031413ffa40eb59b84507fbb21cdc11c142",
+  "retained_refusal_never_changed_producer_or_outcomes": true,
+  "old_reference_unchanged": true,
+  "no_native_B_run_or_shared_reset": true
+}

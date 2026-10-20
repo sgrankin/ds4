@@ -1,0 +1,82 @@
+{
+  "status": "RETAINED_INVALID_AGENT_TOOL_CONTRACT_NO_SUFFIX_REUSE",
+  "source_freeze": "86f834866f81ae8cb33c9c9f00e4df86a3b7a95c",
+  "prepared_freeze": "3d410056fd401b540845a9a311de9c6a2d3506f3",
+  "controls": [
+    {
+      "turn": 1,
+      "answer": "CODE=2718",
+      "passed": true
+    },
+    {
+      "turn": 2,
+      "answer": "READY",
+      "passed": true
+    }
+  ],
+  "controller_status": "FIRST_FAILURE_RETAINED",
+  "controller_error": "ControlFailure: First tool was not the single frozen updater invocation",
+  "guard_returncode": 3,
+  "agent_returncode": -15,
+  "first_third_tool": [
+    {
+      "name": "bash",
+      "args": [
+        {
+          "name": "command",
+          "value": "ls -la /Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/run/ 2>/dev/null; echo \"---\"; find /Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1 -name 'update_context.py' 2>/dev/null",
+          "is_string": true
+        }
+      ]
+    }
+  ],
+  "third_tool_rounds": 7,
+  "source_frontier_tokens": 2987,
+  "following_frontier_tokens_before_edit": [
+    3545,
+    4192
+  ],
+  "configured_frontier_slots": 2,
+  "source_eviction_from_FIFO_policy": true,
+  "actual_import_tokens": [
+    4193,
+    4182
+  ],
+  "next_prefill_cached": 0,
+  "next_prefill_fresh": 4245,
+  "approximate_pair_trace_count": 0,
+  "semantic_grader_attempts": 1,
+  "semantic_grader_passed": true,
+  "overall_success": false,
+  "strict_updater_and_read_audit": "FAILED_AT_FIRST_TOOL; subsequent live-context reads also retained in parsed rounds",
+  "no_forgetting_or_suffix_semantic_success_or_speed_claim": true,
+  "model_stop_cap_context": {
+    "observed_rounds": 9,
+    "at_limit_rounds": 0,
+    "context_limited_rounds": 0,
+    "interrupted_rounds": 0,
+    "last_model_stopped": true
+  },
+  "persistence": "NOT_EXERCISED",
+  "choice_sha256": "480057204ff830e9a5428f1af75f398377f1055354fc80a85adc720ae1b2e32a",
+  "choice_before_outcome_archive": true,
+  "baseline": "SOURCE_REFUSAL_UNRUN: prepared-specific live-file path is protected system text and differs across proposed arms",
+  "release_scope": "ROOT proof at release time before subsequent ragged job; no present-time process/flock claim",
+  "release": {
+    "time": 1791001895.0712168,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 3
+    },
+    "lock_reacquired": true,
+    "live_model_processes": [],
+    "normal_pressure_samples": 243,
+    "bad_pressure_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gib": 86.61106872558594
+  },
+  "pressure_independently_recomputed": true,
+  "no_native_execution_or_GGUF_access_during_archive": true,
+  "trace_decode": "lossless UTF8 surrogateescape; raw trace bytes copied unchanged",
+  "first_CPU_archive_decode_refusal_commit": "5067a46d"
+}

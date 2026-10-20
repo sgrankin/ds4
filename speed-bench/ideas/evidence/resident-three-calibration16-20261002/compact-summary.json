@@ -1,0 +1,211 @@
+{
+  "status": "CALIBRATION_COMPLETE_NOT_PROMOTED",
+  "runtime": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "prepared": "4abde644c1cb7c2f4f10fa000cce0f929f88323c",
+  "reference_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+  "quality": [
+    {
+      "name": "native-before",
+      "tokens": 512,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "prompt_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "worst_prompt_delta_nll": 0.0,
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8"
+    },
+    {
+      "name": "positive-native",
+      "tokens": 512,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "prompt_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "worst_prompt_delta_nll": 0.0,
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8"
+    },
+    {
+      "name": "sub1",
+      "tokens": 512,
+      "delta_nll": 0.021032484537,
+      "kl_base_to_raw": 0.0126620184131,
+      "tv": 0.0265077269717,
+      "argmax_flips": 13,
+      "prompt_bootstrap_95": [
+        0.005001062883730748,
+        0.042382054753039786
+      ],
+      "worst_prompt_delta_nll": 0.1360649832132081,
+      "kl_p99": 0.190973388357,
+      "kl_max": 1.11871335481,
+      "candidate_record_sha256": "ceb6df37c311a1b294353c58865510581e41cc086c5f89c826ac0460a8647b86"
+    },
+    {
+      "name": "sub2",
+      "tokens": 512,
+      "delta_nll": 0.0138603055631,
+      "kl_base_to_raw": 0.0126513775484,
+      "tv": 0.02788055789,
+      "argmax_flips": 20,
+      "prompt_bootstrap_95": [
+        -0.004004996281954927,
+        0.03404970389070628
+      ],
+      "worst_prompt_delta_nll": 0.11324364087467889,
+      "kl_p99": 0.124990498398,
+      "kl_max": 0.616082237206,
+      "candidate_record_sha256": "3cc8f88de88258e79f89cfb211ce49372af3b5ea9956e365e07d158573947eb1"
+    },
+    {
+      "name": "sub3",
+      "tokens": 512,
+      "delta_nll": 0.00592917346068,
+      "kl_base_to_raw": 0.016694374752,
+      "tv": 0.0323476077081,
+      "argmax_flips": 18,
+      "prompt_bootstrap_95": [
+        -0.01501423887254198,
+        0.026891992327601106
+      ],
+      "worst_prompt_delta_nll": 0.09017517201306441,
+      "kl_p99": 0.159525477405,
+      "kl_max": 1.4147189271,
+      "candidate_record_sha256": "f09c421873c19113c6c313b1d0df55e3994c83e41341be440ab575f26e72cd46"
+    },
+    {
+      "name": "native-after",
+      "tokens": 512,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "prompt_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "worst_prompt_delta_nll": 0.0,
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8"
+    }
+  ],
+  "route_counts": {
+    "sub1": {
+      "layers": "20480",
+      "substitutions": "3521",
+      "native_misses": "11777",
+      "skipped_loads": "3521",
+      "skipped_bytes": "35045498880",
+      "mean_mass": "0.09949850",
+      "mean_score_gap": "0.06978896",
+      "mean_affinity_ratio": "0.95299369",
+      "mean_rank": "7.426",
+      "full_snapshots": "3605",
+      "double_layers": "0",
+      "planned_substitutions": "3521",
+      "drops": "0",
+      "triple_layers": "0"
+    },
+    "sub2": {
+      "layers": "20480",
+      "substitutions": "6464",
+      "native_misses": "12718",
+      "skipped_loads": "6464",
+      "skipped_bytes": "64338001920",
+      "mean_mass": "0.10421444",
+      "mean_score_gap": "0.09077311",
+      "mean_affinity_ratio": "0.92680168",
+      "mean_rank": "7.703",
+      "full_snapshots": "6179",
+      "double_layers": "625",
+      "planned_substitutions": "6464",
+      "drops": "0",
+      "triple_layers": "0"
+    },
+    "sub3": {
+      "layers": "20480",
+      "substitutions": "8299",
+      "native_misses": "13433",
+      "skipped_loads": "8299",
+      "skipped_bytes": "82602270720",
+      "mean_mass": "0.10826591",
+      "mean_score_gap": "0.10258580",
+      "mean_affinity_ratio": "0.91109869",
+      "mean_rank": "7.912",
+      "full_snapshots": "7888",
+      "double_layers": "1074",
+      "planned_substitutions": "8299",
+      "drops": "0",
+      "triple_layers": "80"
+    }
+  },
+  "all_three_native_full_raw_equal": true,
+  "old_sub2_serialized_quality_and_route_parity": {
+    "serialized_quality_equal": true,
+    "previous_rows": 512,
+    "current_rows": 512,
+    "first_mismatched_rows": [],
+    "route_fields_equal": true,
+    "route_field_mismatches": {},
+    "retrospective_raw_byte_proof": false
+  },
+  "pressure": {
+    "samples": 309,
+    "all_normal": true,
+    "peak_wired_gib": 72.07630920410156,
+    "peak_compressor_gib": 6.796539306640625,
+    "initial_swap_gib": 0.025576171875,
+    "max_swap_growth_gib": 0.0
+  },
+  "retained_raw_files": [
+    {
+      "name": "native-before",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2/run/native-before-raw.bin",
+      "bytes": 264777744,
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8"
+    },
+    {
+      "name": "positive-native",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2/run/positive-native-raw.bin",
+      "bytes": 264777744,
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8"
+    },
+    {
+      "name": "sub1",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2/run/sub1-raw.bin",
+      "bytes": 264777744,
+      "sha256": "ceb6df37c311a1b294353c58865510581e41cc086c5f89c826ac0460a8647b86"
+    },
+    {
+      "name": "sub2",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2/run/sub2-raw.bin",
+      "bytes": 264777744,
+      "sha256": "3cc8f88de88258e79f89cfb211ce49372af3b5ea9956e365e07d158573947eb1"
+    },
+    {
+      "name": "sub3",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2/run/sub3-raw.bin",
+      "bytes": 264777744,
+      "sha256": "f09c421873c19113c6c313b1d0df55e3994c83e41341be440ab575f26e72cd46"
+    },
+    {
+      "name": "native-after",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2/run/native-after-raw.bin",
+      "bytes": 264777744,
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8"
+    }
+  ],
+  "scope": "Six-arm calibration16\u00d732 with fullraw controls; one/two/three substitutions. Different approximate trajectories change miss populations. Skipped request bytes are not net demand IO or physicalSSD. Frozen helper does not export exact demand bytes. Concurrent CPU work allowed; timings diagnostic. No heldout semantic or default promotion."
+}

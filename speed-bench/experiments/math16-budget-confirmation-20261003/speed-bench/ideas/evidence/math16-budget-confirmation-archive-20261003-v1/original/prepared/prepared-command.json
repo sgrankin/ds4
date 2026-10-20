@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/run_reasoning_budget_confirmation.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/plan.json",
+    "--plan-sha256",
+    "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+    "--root-granted"
+  ],
+  "plan_sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+  "launch_authorized": false
+}

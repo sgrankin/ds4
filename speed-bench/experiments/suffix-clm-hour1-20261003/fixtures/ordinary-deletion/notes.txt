@@ -1,0 +1,1 @@
+Neutral inventory: the cabinet has labels, a lamp is off, three boxes are on a shelf, and the weather sensor reports a mild afternoon. These inventory observations do not specify a deployment code.

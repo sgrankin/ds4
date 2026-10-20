@@ -1,0 +1,86 @@
+{
+  "status": "CORRECTIVE_PROTOCOL_AND_ADMISSION_CPU_PASS_NATIVE_CALLER_UNBUILT",
+  "source_freeze": "cd03499cec7d3db424b4bcb4e4ffb068f580f38b",
+  "cpu_plan_sha256": "3c0aeb9bc5307c5f3c455fa57cac64a063f6b474805c90ed000ee98106fedcb8",
+  "results": [
+    {
+      "label": "standalone-compile",
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-pthread",
+        "-I/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/agent_suffix_pair_actual_protocol_fixture.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2/production-protocol-fixture"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.0838158130645752,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "warning": false,
+      "tests": null
+    },
+    {
+      "label": "delivery-tests",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/tests/test_agent_suffix_pair_actual_delivery.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.3788800239562988,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "4973a29047cf1dfba2510d30dfd9bf0d336186ea2c6aa4a8164ebe798d108b8f",
+      "warning": false,
+      "tests": 12
+    },
+    {
+      "label": "authority-tests",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/tests/test_agent_suffix_pair_actual_delivery_authority.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.09064912796020508,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5ddc1eb9968188b6ed8542fbefd82b9d656c3f8397865b1b05839d4da96186d6",
+      "warning": false,
+      "tests": 8
+    },
+    {
+      "label": "original36-tests",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/test_agent_suffix_pair_actual.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 10.44169306755066,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "0af172643363b41261557c83a28094a167fc00f82fb765439504703db86bfe06",
+      "warning": false,
+      "tests": 36
+    }
+  ],
+  "tests": {
+    "delivery": 12,
+    "authority": 8,
+    "original36": 36
+  },
+  "all_pins_unchanged": true,
+  "native_caller_compiled_or_linked": false,
+  "borrowed_native_objects": [],
+  "model_stat_or_engine_or_tokenizer_or_guard_access": false,
+  "elapsed_seconds": 12.387314081192017,
+  "standalone_fixture": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2/production-protocol-fixture",
+    "bytes": 38632,
+    "sha256": "537bc0f419a8a888be45ee849fa4ad7300cd73160f4bfa0abed64b3cc620a4cc",
+    "mode": "0o755"
+  }
+}

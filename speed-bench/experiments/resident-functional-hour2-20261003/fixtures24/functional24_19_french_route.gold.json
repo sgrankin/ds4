@@ -1,0 +1,22 @@
+{
+  "gold": {
+    "french_sentences": [
+      "Partez de l’accueil.",
+      "Traversez la cour.",
+      "Dans la cour, tournez à gauche.",
+      "Entrez dans l’atelier par la porte bleue."
+    ],
+    "verification": "The route starts at accueil, crosses cour, turns left there, and ends at atelier through the blue door."
+  },
+  "oracle_input": {
+    "door_color": "bleue",
+    "sequence": [
+      "cour",
+      "atelier"
+    ],
+    "start": "accueil",
+    "turn_at_cour": "gauche"
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "French invented indoor route with supplied labels; not Italian receipt translation or ambiguous deadlines."
+}

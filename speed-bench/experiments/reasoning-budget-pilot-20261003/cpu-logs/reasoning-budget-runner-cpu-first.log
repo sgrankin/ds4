@@ -1,0 +1,30 @@
+test_actual_frozen_historical_contract_without_model (__main__.ProtocolTests.test_actual_frozen_historical_contract_without_model) ... ok
+test_analysis_release_gate_precedes_outcomes_and_aggregate_rc (__main__.ProtocolTests.test_analysis_release_gate_precedes_outcomes_and_aggregate_rc) ... ok
+test_asset_drift_and_nonexecutability (__main__.ProtocolTests.test_asset_drift_and_nonexecutability) ... ok
+test_complete_mixed_first_attempts (__main__.ProtocolTests.test_complete_mixed_first_attempts) ... ok
+test_complete_results_order_and_gold_fixture (__main__.ProtocolTests.test_complete_results_order_and_gold_fixture) ... ok
+test_duplicate_missing_or_truncated_tokens (__main__.ProtocolTests.test_duplicate_missing_or_truncated_tokens) ... ok
+test_explicit_grant_and_exclusive_output (__main__.ProtocolTests.test_explicit_grant_and_exclusive_output) ... ok
+test_first_producer_infrastructure_failure_no_next_arm (__main__.ProtocolTests.test_first_producer_infrastructure_failure_no_next_arm) ... ok
+test_force_final_slot_refuses_even_self_consistent_metadata (__main__.ProtocolTests.test_force_final_slot_refuses_even_self_consistent_metadata) ... ok
+test_forced_close_eligibility_and_rng (__main__.ProtocolTests.test_forced_close_eligibility_and_rng) ... ok
+test_guard_exact_framework_suffix_and_held_lock (__main__.ProtocolTests.test_guard_exact_framework_suffix_and_held_lock) ... ok
+test_independent_rng_known_vectors (__main__.ProtocolTests.test_independent_rng_known_vectors) ... ok
+test_literal_summary_types_and_geometry (__main__.ProtocolTests.test_literal_summary_types_and_geometry) ... ok
+test_native_reference_mismatch_and_preforce_mismatch (__main__.ProtocolTests.test_native_reference_mismatch_and_preforce_mismatch) ... ok
+test_native_rng_exact_advance_and_chain (__main__.ProtocolTests.test_native_rng_exact_advance_and_chain) ... ok
+test_parent_refusal_before_any_model_identity_or_producer (__main__.ProtocolTests.test_parent_refusal_before_any_model_identity_or_producer) ... ok
+test_plan_shape_and_required_inventory (__main__.ProtocolTests.test_plan_shape_and_required_inventory) ... ok
+test_postforce_phase_must_be_outside (__main__.ProtocolTests.test_postforce_phase_must_be_outside) ... ok
+test_raw_final_prompt_extent_and_path_escape (__main__.ProtocolTests.test_raw_final_prompt_extent_and_path_escape) ... ok
+test_real_three_arm_cpu_producers_retaining_rc3_wrong_and_caps (__main__.ProtocolTests.test_real_three_arm_cpu_producers_retaining_rc3_wrong_and_caps) ... ok
+test_scorer_golds_and_wrong_not_invalid (__main__.ProtocolTests.test_scorer_golds_and_wrong_not_invalid) ... ok
+test_strict_release_actual_schema (__main__.ProtocolTests.test_strict_release_actual_schema) ... ok
+test_token_types_and_vocabulary (__main__.ProtocolTests.test_token_types_and_vocabulary) ... ok
+test_typed_fixed_options (__main__.ProtocolTests.test_typed_fixed_options) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 1.564s
+
+OK
+{"cpu_only": true, "model_opened": false, "model_metadata_touched": false, "real_helper_executed": false, "tests_run": 24, "negative_trials": 125, "failures": 0, "errors": 0, "pass_": true, "fixtures": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-cpu-fixtures-1790993341162569000", "fake_producer": "Actual Python subprocesses copy independently scripted token/piece/RNG timelines; production analyzer and driver arm loop execute unchanged."}

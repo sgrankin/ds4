@@ -1,0 +1,21 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.03 GiB (raw 0.01 + compressed 0.02) + buffers 0.83 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.23 GiB planned
+ds4: memory detail: ctx=4096 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=4097 backend=metal
+ds4: V4.1 static context buffers 880.04 MiB (ctx=4096), Engram disk-only
+PHASE old_A complete_ms=25245.995
+PHASE old_B complete_ms=6221.351
+PHASE old_C complete_ms=7905.327
+PHASE fresh_B_prime complete_ms=2791.257
+PHASE replayed_C_and_fresh_tail complete_ms=10599.301
+FACT case=code mode=fresh C=512 tail=128 greedy=UNKNOWN correct=0 stale=0 gold_lp=-9.714430 stale_lp=-12.497723 edit_ms=13390.786
+PHASE reuse_B_prime complete_ms=2707.571
+PHASE relocated_C_and_fresh_tail complete_ms=2749.562
+FACT case=code mode=reuse C=512 tail=128 greedy=18*26=468; 468-9=459; floor to multiple correct=0 stale=0 gold_lp=-8.768518 stale_lp=-11.306934 edit_ms=5457.191
+FACT_ORACLE COMPLETE case=code C=512 tail=128 baseline_correct=0 reuse_correct=0 reuse_stale=0 mean_kl=0.183331112 delta_nll=-0.945911855

@@ -1,0 +1,15 @@
+{
+  "gold": {
+    "paragraph": "The gray cup is dried first. A cobalt stripe is then brushed onto its surface. Finally, the cup is fired, while the description keeps the stripe narrow."
+  },
+  "oracle_input": {
+    "actions": [
+      "dry the gray cup",
+      "brush a cobalt stripe",
+      "fire the cup"
+    ],
+    "finishing_detail": "stripe remains narrow"
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Ordered fictional craft notes and color-role fidelity; not ecology decomposers or constrained rainy-platform fiction."
+}

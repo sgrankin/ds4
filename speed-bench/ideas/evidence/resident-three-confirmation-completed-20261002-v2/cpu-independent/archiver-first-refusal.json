@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "speed-bench/ideas/archive_resident_confirmation.py"
+  ],
+  "returncode": 1,
+  "error": "AssertionError: /Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/tests/test_resident_confirmation.py",
+  "recorded_cpu_test_sha256": "ae68ca0d4f6c42a3259c69211730b33b39bcbb27e419528314d67b7db247623a",
+  "actual_immutable38_test_source_sha256": "b1ccef6fcecc518849a25ccc6585567bbed8b3bf4b8e9085eb2d5179b4e83084",
+  "field_identifies": "original captured cpu-test.json stdout SHA, not source SHA",
+  "archive_dir_created": false,
+  "large_raw_arrays_hashed": false,
+  "original_outputs_mutated": false
+}

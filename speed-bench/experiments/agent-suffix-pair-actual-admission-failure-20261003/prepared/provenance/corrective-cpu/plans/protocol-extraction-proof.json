@@ -1,0 +1,46 @@
+{
+  "status": "SOURCE_EXTRACTED_BEFORE_CPU",
+  "production_agent_source_sha256": "3c0dc3d9141f33cea40878c3724f9893d23c229b492434ea9455bdcac7464806",
+  "private_hook_sha256": "c6e0645784f7d4e14bd6c709a3b898bfc9137e5b7b6f9f8d9d0e5b83b13d28d9",
+  "functions": {
+    "xmalloc": {
+      "sha256": "640b2a24447720ef8b3832b92137bfbf51741895bc8725b39c22114acd1f8152",
+      "exact_production_source": true
+    },
+    "xstrdup": {
+      "sha256": "ce992ada232e2943434d73916c374f296f99a1680ebca45d507cd57a65753765",
+      "exact_production_source": true
+    },
+    "xrealloc": {
+      "sha256": "7174082a4bd7a9b5ffbe833f987f59517bd0d9cbfe0518a10ddd48a6d1ab9040",
+      "exact_production_source": true
+    },
+    "agent_input_buf_append": {
+      "sha256": "976cc3205b0c4369a9cbd4503d9670ffbc5464b54401769c29161839fc0e8584",
+      "exact_production_source": true
+    },
+    "agent_input_buf_take": {
+      "sha256": "f8b2a883054b172d517541415540116ec4aa90621f9fb49dd15a1413aba3329c",
+      "exact_production_source": true
+    },
+    "agent_input_buf_free": {
+      "sha256": "f3dc1fbe7197bc0c9e33beddf8634ce332026cfc8e6cb6d7bcb3a621c14da0c6",
+      "exact_production_source": true
+    },
+    "agent_read_stdin_available": {
+      "sha256": "83d121de58931f7592e6bcda87f75d22d04b3a513aaeca3239c19bcedb42d6f7",
+      "exact_production_source": true
+    },
+    "worker_submit": {
+      "sha256": "b53d75e7781bd2d137cda10221894ec446df40d1fed5161d8ae065e20d5f45ae",
+      "exact_production_source": true
+    }
+  },
+  "input_typedef_sha256": "77d26df7326caaf6b2a2dba05db552850247cc8111e15c47551a99638565377f",
+  "gate_condition_sha256": "2dcb9f3dba10c81a7e045abdb285d057e2b39c940d9ed1c06b6f473cbf5713d2",
+  "fixture_sha256": "1f3b5e72c503a9158dbfcd81d6bc8b903da2d42831d77b0a13c7e5b536e940b4",
+  "stubs": "Minimal worker/status and exact-gate boolean getters only. No model/native object/engine/Metal; poll200ms control driver is fixture code, input buffering/read/submit functions are exact production bytes.",
+  "original_bad_condition": "C short-circuit strcmp rejected protocol LF before remaining conditions.",
+  "admission_header_sha256": "a92300e30416e1a6a5cb6fd3cbfd7466cb9dfa3de3a3ab807f95c283f9c755f8",
+  "admission_scope": "Shared actual observational writer; preserves existing exact admission comparators, no allocation/model/geometry change."
+}

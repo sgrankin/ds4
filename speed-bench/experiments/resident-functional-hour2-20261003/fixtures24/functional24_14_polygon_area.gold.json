@@ -1,0 +1,28 @@
+{
+  "gold": {
+    "denominator": 2,
+    "numerator": 65
+  },
+  "oracle_input": {
+    "vertices": [
+      [
+        -2,
+        1
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        0,
+        7
+      ]
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Nonrectangular coordinate polygon area; not rectangle perimeter, map scale or lattice diamond counts."
+}

@@ -1,0 +1,274 @@
+{
+  "source_revision": "86bfd7a2",
+  "binary_sha256": "66cd35892f61bf9fe72378d02c20effd0dfb93b8548ee14c11abe487ed981fb9",
+  "guard_sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+  "baseline_trace_comparisons": [
+    {
+      "case": "circular_binary",
+      "byte_identical": true,
+      "sha256": [
+        "340d42fa70a385a7e108c434fbf14094eb74632695f91bd8c15110140480a560",
+        "340d42fa70a385a7e108c434fbf14094eb74632695f91bd8c15110140480a560"
+      ]
+    },
+    {
+      "case": "restricted_lattice",
+      "byte_identical": true,
+      "sha256": [
+        "774adea7eeee31e26cd095ec516aa7f111074e838133deb1c843268f0bb938bf",
+        "774adea7eeee31e26cd095ec516aa7f111074e838133deb1c843268f0bb938bf"
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "directory": "/Volumes/Models/ds4/.workspaces/idea-logits/speed-bench/ideas/artifacts/hard-two-immediate-v2-20261002",
+      "records": 4,
+      "arms": {
+        "0.0": {
+          "cases": 2,
+          "correct": 2,
+          "incorrect": 0,
+          "invalid": 0,
+          "cap_hits": 0,
+          "tokens": 1356,
+          "reasoning_tokens": 1354,
+          "decode_seconds": 68.048165
+        },
+        "1.0": {
+          "cases": 2,
+          "correct": 1,
+          "incorrect": 0,
+          "invalid": 1,
+          "cap_hits": 1,
+          "tokens": 1413,
+          "reasoning_tokens": 1412,
+          "decode_seconds": 70.241558
+        }
+      },
+      "cases": [
+        {
+          "case": "circular_binary",
+          "arms": {
+            "0.0": {
+              "status": "CORRECT",
+              "parsed_answer": "336",
+              "expected": "336",
+              "tokens": 415,
+              "reasoning_tokens": 414,
+              "ordinary_generated_thinking_tokens": 413,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 0,
+              "cap_hit": false,
+              "parse_reason": "none",
+              "trace_sha256": "340d42fa70a385a7e108c434fbf14094eb74632695f91bd8c15110140480a560"
+            },
+            "1.0": {
+              "status": "CORRECT",
+              "parsed_answer": "336",
+              "expected": "336",
+              "tokens": 389,
+              "reasoning_tokens": 388,
+              "ordinary_generated_thinking_tokens": 387,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 388,
+              "cap_hit": false,
+              "parse_reason": "none",
+              "trace_sha256": "71547ac4a8b55fe88684455bc9d550850d8e5b7c0f5f830d4fd9601b831ecacd"
+            }
+          }
+        },
+        {
+          "case": "restricted_lattice",
+          "arms": {
+            "1.0": {
+              "status": "INVALID",
+              "parsed_answer": "",
+              "expected": "295",
+              "tokens": 1024,
+              "reasoning_tokens": 1024,
+              "ordinary_generated_thinking_tokens": 1024,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 1024,
+              "cap_hit": true,
+              "parse_reason": "unclosed_reasoning",
+              "trace_sha256": "98e31241f84da1ac23a11a51f749445914bb0e49e44df3e1bb791ce51a9acd95"
+            },
+            "0.0": {
+              "status": "CORRECT",
+              "parsed_answer": "295",
+              "expected": "295",
+              "tokens": 941,
+              "reasoning_tokens": 940,
+              "ordinary_generated_thinking_tokens": 939,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 0,
+              "cap_hit": false,
+              "parse_reason": "none",
+              "trace_sha256": "774adea7eeee31e26cd095ec516aa7f111074e838133deb1c843268f0bb938bf"
+            }
+          }
+        }
+      ],
+      "correctness_regressions": [
+        {
+          "case": "restricted_lattice",
+          "penalty": 1.0,
+          "status": "INVALID"
+        }
+      ],
+      "correctness_improvements": [],
+      "all_records_correct": false,
+      "timing_qualification": "exploratory arm timings; cache reuse prevents a speedup claim",
+      "expected_records": 4,
+      "complete": true,
+      "configuration": {
+        "revision": "86bfd7a2",
+        "cache_gib_requested": 64.0,
+        "max_tokens": 1024,
+        "think_level": 75,
+        "suite": "hard",
+        "candidate": 1.0,
+        "case_limit": 2,
+        "overthink_after": 0
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 3
+      },
+      "host_pressure": {
+        "samples": 158,
+        "minimum_free_gib": 0.1602783203125,
+        "maximum_wired_gib": 72.5531005859375,
+        "maximum_compressor_gib": 6.6519622802734375,
+        "maximum_swap_gib": 0.03796875,
+        "maximum_kernel_level": 1
+      }
+    },
+    {
+      "directory": "/Volumes/Models/ds4/.workspaces/idea-logits/speed-bench/ideas/artifacts/hard-two-late256-v2-20261002",
+      "records": 4,
+      "arms": {
+        "0.0": {
+          "cases": 2,
+          "correct": 2,
+          "incorrect": 0,
+          "invalid": 0,
+          "cap_hits": 0,
+          "tokens": 1356,
+          "reasoning_tokens": 1354,
+          "decode_seconds": 68.73545200000001
+        },
+        "1.0": {
+          "cases": 2,
+          "correct": 1,
+          "incorrect": 0,
+          "invalid": 1,
+          "cap_hits": 1,
+          "tokens": 1439,
+          "reasoning_tokens": 1438,
+          "decode_seconds": 70.535151
+        }
+      },
+      "cases": [
+        {
+          "case": "circular_binary",
+          "arms": {
+            "0.0": {
+              "status": "CORRECT",
+              "parsed_answer": "336",
+              "expected": "336",
+              "tokens": 415,
+              "reasoning_tokens": 414,
+              "ordinary_generated_thinking_tokens": 413,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 0,
+              "cap_hit": false,
+              "parse_reason": "none",
+              "trace_sha256": "340d42fa70a385a7e108c434fbf14094eb74632695f91bd8c15110140480a560"
+            },
+            "1.0": {
+              "status": "CORRECT",
+              "parsed_answer": "336",
+              "expected": "336",
+              "tokens": 415,
+              "reasoning_tokens": 414,
+              "ordinary_generated_thinking_tokens": 413,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 158,
+              "cap_hit": false,
+              "parse_reason": "none",
+              "trace_sha256": "340d42fa70a385a7e108c434fbf14094eb74632695f91bd8c15110140480a560"
+            }
+          }
+        },
+        {
+          "case": "restricted_lattice",
+          "arms": {
+            "1.0": {
+              "status": "INVALID",
+              "parsed_answer": "",
+              "expected": "295",
+              "tokens": 1024,
+              "reasoning_tokens": 1024,
+              "ordinary_generated_thinking_tokens": 1024,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 768,
+              "cap_hit": true,
+              "parse_reason": "unclosed_reasoning",
+              "trace_sha256": "591b149acf3782c7af6ed5b2343d48fa393e7aad0363ecab887cc7fb8f3a17aa"
+            },
+            "0.0": {
+              "status": "CORRECT",
+              "parsed_answer": "295",
+              "expected": "295",
+              "tokens": 941,
+              "reasoning_tokens": 940,
+              "ordinary_generated_thinking_tokens": 939,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 0,
+              "cap_hit": false,
+              "parse_reason": "none",
+              "trace_sha256": "774adea7eeee31e26cd095ec516aa7f111074e838133deb1c843268f0bb938bf"
+            }
+          }
+        }
+      ],
+      "correctness_regressions": [
+        {
+          "case": "restricted_lattice",
+          "penalty": 1.0,
+          "status": "INVALID"
+        }
+      ],
+      "correctness_improvements": [],
+      "all_records_correct": false,
+      "timing_qualification": "exploratory arm timings; cache reuse prevents a speedup claim",
+      "expected_records": 4,
+      "complete": true,
+      "configuration": {
+        "revision": "86bfd7a2",
+        "cache_gib_requested": 64.0,
+        "max_tokens": 1024,
+        "think_level": 75,
+        "suite": "hard",
+        "candidate": 1.0,
+        "case_limit": 2,
+        "overthink_after": 256
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 3
+      },
+      "host_pressure": {
+        "samples": 156,
+        "minimum_free_gib": 0.407623291015625,
+        "maximum_wired_gib": 72.48927307128906,
+        "maximum_compressor_gib": 6.19427490234375,
+        "maximum_swap_gib": 0.03796875,
+        "maximum_kernel_level": 1
+      }
+    }
+  ],
+  "conclusion": "Both lambda1 settings regress budgeted correctness on the lattice problem; no quality-neutral gain or default promotion. Timings are exploratory, with cache warmth varying between arms."
+}

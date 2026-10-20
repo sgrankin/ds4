@@ -1,0 +1,28 @@
+{
+  "time": 1790995211.665843,
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "manifest_sha256": "7f9b80a35e67b9caefe959193555cbce084e9983b9ef695d4e42ebb910653cb6",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run_agent_suffix_pair_native.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1",
+    "--manifest-sha256",
+    "7f9b80a35e67b9caefe959193555cbce084e9983b9ef695d4e42ebb910653cb6"
+  ],
+  "launcher_sha256": "726cdbb125ed8c159f1915029f315a433d1f29ecd9667bfd8d9f74dee0d21d82",
+  "source_revision": "1e377e5504fb30ff3d835079553f71766ddf8deb",
+  "qualification_freeze": "b9ee802c5fa5abfb0fc6dda22b44e8d309c40f79",
+  "all67assets_verified": true,
+  "previous_release_path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/root-release-proof.json",
+  "previous_release_sha256": "a2fc29cebc7f593b6436c44471b6b749412111f54d9c6204f19ba2134fa9314c",
+  "cpu_parallel_allowed": true,
+  "timing_diagnostic": true,
+  "production_defaults_changed": false,
+  "model_metadata_touched_before_guard": false
+}

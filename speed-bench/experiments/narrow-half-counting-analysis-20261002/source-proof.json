@@ -1,0 +1,82 @@
+{
+  "actual_record_scoring_repaired": false,
+  "analysis_wrapper_sha256": "7830f64402b9972bac164b06dde1e3a6aa4a251cae3187fc29086c0cc9cefcf5",
+  "core_proof_scope": "Frozen manifest source hashes and existing explicit core object hashes; historical runtime_sources_equal count is not newly rederived.",
+  "corrected_analysis_source_commit": "f27b7d5a942d4ea5e23849f9209e47ed4dc5a3a7",
+  "existing_core_object_proof_sha256": "1b52970c2928122f79591befd59545b82aa314de461793384836b8bb448a3fe9",
+  "independent_source_review": "checkout_recap PASS after ROOT thaw, before outcomes were read",
+  "model_metadata_or_payload_accessed": false,
+  "original_aggregation_sha256": "dbd8d472b86cb34c696a1ee4ae217a8dfcf83e6a17e51c2891883427faae746a",
+  "producer_binary_sha256": "6a441febaebf3b04dbf35ea6de48f54f1fdec87a17def16b78356a52edcedf9e",
+  "producer_revision": "baaa53dc",
+  "producer_sources_rehashed": {
+    "Makefile": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/Makefile",
+      "sha256": "be532f9a58b60a736e147120238e574bef0cdc06ec1e4bde2d986697d617a5d2"
+    },
+    "ds4.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/ds4.c",
+      "sha256": "efb1af06ab8f262b6aabf201da1aeb5052fcd2699b3c26e889d24fc39eead798"
+    },
+    "ds4.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/ds4.h",
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "ds4_overthink_markers.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/ds4_overthink_markers.h",
+      "sha256": "0e869906f35c80e49d5363cadf25306c97f044c5c0d44ab473b8c51a55d9c863"
+    },
+    "speed-bench/experiments/ds41-ssd/overthink-provenance/counting-study/cases-v1.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/experiments/ds41-ssd/overthink-provenance/counting-study/cases-v1.json",
+      "sha256": "0e4b4eff5154cf199984829019e03678686deef50e6abb5fff02eeeff854b5e1"
+    },
+    "speed-bench/overthink_counting_cases.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/overthink_counting_cases.h",
+      "sha256": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173"
+    },
+    "speed-bench/overthink_counting_gold.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/overthink_counting_gold.py",
+      "sha256": "9787d185cb5166e50cb54a94da0593214ba3e78d0d5967786b70336b343ac1fc"
+    },
+    "speed-bench/overthink_diagnostics.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/overthink_diagnostics.h",
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "speed-bench/overthink_gold.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/overthink_gold.py",
+      "sha256": "7b10aa3f7f3fd16fde421bb28565bdcc45844b908f02f7f88c15c9f05b235057"
+    },
+    "speed-bench/overthink_pilot.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/overthink_pilot.c",
+      "sha256": "296aaf0a77ff1a9f0a8abee082629c79ae0cb01639364db1b4ed22f27ebfed38"
+    }
+  },
+  "runtime_shaders_rehashed": {
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/argsort.metal": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/bin.metal": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/concat.metal": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/cpy.metal": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/deepseek4_vision.metal": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/dense.metal": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/dsv41.metal": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/dsv4_hc.metal": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/dsv4_kv.metal": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/dsv4_misc.metal": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/dsv4_rope.metal": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/flash_attn.metal": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/get_rows.metal": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/glm53_bf16.metal": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/glm53_kda.metal": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/glm53_vision.metal": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/glu.metal": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/moe.metal": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/norm.metal": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/qwen4.metal": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/qwen4_vision.metal": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/repeat.metal": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/set_rows.metal": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/softmax.metal": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/sum_rows.metal": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-counting/metal/unary.metal": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+  }
+}

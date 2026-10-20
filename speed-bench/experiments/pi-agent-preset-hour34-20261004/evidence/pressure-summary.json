@@ -1,0 +1,9 @@
+{
+  "samples": 52,
+  "normal_samples": 52,
+  "peak_wired_plus_compressor_gib": 80.6807861328125,
+  "swap_start_gib": 0.021787109375,
+  "swap_end_gib": 0.021787109375,
+  "swap_growth_gib": 0.0,
+  "max_consecutive_bad": 0
+}

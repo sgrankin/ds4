@@ -1,0 +1,147 @@
+{
+  "status": "FROZEN_MODEL_FREE_PAIRED_ARCHIVE_SOURCE_V1",
+  "immutable_base": "d9c7c958b119656be3c765bc1c044d214430aff7",
+  "output": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1",
+  "arms": {
+    "reuse": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse",
+      "manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+      "command_sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5",
+      "release_sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd"
+    },
+    "native": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native",
+      "manifest_sha256": "1143a7812d739c9215bed24e186b83eaed8ba5406ef1c67d229b66d2795e8a57",
+      "command_sha256": "5afa400cb3315011ea33b3c39645fcbc55ab0e9a7feeb63f4a46d006c8d064fa",
+      "release_sha256": "7834ec1da8cbb652b3cedc34f3fef6aab28cc26d6a0fd0779eea310ab56545f8"
+    }
+  },
+  "controller": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/run_agent_suffix_pair_external.py",
+    "sha256": "2b72efaa8ab4a81d22769ad04a02316defc234e977a40be4fb19dbeb31443153"
+  },
+  "task_sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c",
+  "archive_roots": {
+    "reuse": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse",
+    "native": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native",
+    "prior-A-structural-archive": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1",
+    "prior-controls-and-refusals": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/evidence/agent-suffix-pair-external-controls-and-static-prepared-v2",
+    "qualified-caller-build": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-caller-build-v1",
+    "prior-B-static-prepare": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-native-static-preparation-attempt-v1",
+    "post-release-procedure": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/agent_suffix_pair_external_post_release_v1"
+  },
+  "archive_files": {
+    "ROOT/A-launch.log": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/agent-suffix-pair-external-A-root-launch-20261003-v1.log",
+    "ROOT/B-launch.log": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/agent-suffix-pair-external-B-root-launch-20261003-v1.log",
+    "qualified-source-CPU-v1/proof.json": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-cpu-v1/proof.json",
+    "qualified-source-CPU-v1/controller.stdout": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-cpu-v1/controller.stdout",
+    "qualified-source-CPU-v1/controller.stderr": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-cpu-v1/controller.stderr",
+    "qualified-source-CPU-v2/proof.json": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-cpu-v2/proof.json",
+    "qualified-source-CPU-v2/controller.stdout": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-cpu-v2/controller.stdout",
+    "qualified-source-CPU-v2/controller.stderr": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-cpu-v2/controller.stderr",
+    "archive-source/speed-bench/ideas/archive_agent_suffix_external_pair.py": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/archive_agent_suffix_external_pair.py",
+    "archive-source/tests/test_archive_agent_suffix_external_pair.py": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/tests/test_archive_agent_suffix_external_pair.py",
+    "archive-source/speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration.json": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration.json",
+    "archive-source/speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration-v2.json": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration-v2.json",
+    "archive-source/speed-bench/ideas/agent_suffix_external_pair_archive_v1/cpu-plan.json": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/cpu-plan.json",
+    "archive-source/speed-bench/ideas/agent_suffix_external_pair_archive_v1/cpu-plan-v2.json": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/cpu-plan-v2.json",
+    "archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/cpu-proof.json": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/cpu-proof.json",
+    "archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/stdout.log": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/stdout.log",
+    "archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/stderr.log": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/stderr.log",
+    "archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/cpu-proof.json": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/cpu-proof.json",
+    "archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/stdout.log": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/stdout.log",
+    "archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/stderr.log": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/stderr.log"
+  },
+  "copy_threshold_bytes": 2097152,
+  "no_model_helper_guard_grader_or_subprocess_execution": true,
+  "actual_archive_requires_separate_ROOT_grant": true,
+  "primary_persistence": "NOT_EXERCISED",
+  "generated_trace_is_piece_bytes_not_full_logits": true,
+  "no_semantic_cache_regression_success_speed_or_forgetting_claim": true,
+  "unchanged_initial_controls_required": true,
+  "selection_bound_only_to_new_A_pre_forward_structure": true,
+  "source_outcomes_read": false,
+  "scope_correction": {
+    "original_source_freeze": "3ac80d17117f5596d705f96745446ad0a5ed9fd1",
+    "original_preregistration_sha256": "846c6046fa993dca39c4f9d2f0938b6773822a4d8f9e92a46f4dafd3c4428da3",
+    "reason": "Original CPU-case tree intentionally contains a symlink refusal fixture; archive only frozen qualification logs/proofs, preserving first failing V1 and passing V2. Disposable synthetic case trees remain at their unchanged original paths and are not publication payload. Actual A/B/source/refusal roots stay complete.",
+    "actual_archive_execution_attempted": false,
+    "actual_A_B_outcomes_read": false,
+    "analysis_source_and18CPU_tests_unchanged": true
+  },
+  "source_freeze": "d590b44bdc91c1b42aaed90152fc017bbb89cae0",
+  "CPU_pass": 19,
+  "preserved_first_CPU_pass": 18,
+  "source_files": {
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/archive_agent_suffix_external_pair.py": {
+      "bytes": 24965,
+      "mode": 420,
+      "sha256": "4ee40bfb03c3c585274ef920bb7d8832547b3ac666f61a2364bc50d2f7b81da4"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/tests/test_archive_agent_suffix_external_pair.py": {
+      "bytes": 11538,
+      "mode": 420,
+      "sha256": "14f27614d6f7d426aa1c5cc160421825aa2d6814133c166192e11d23d24b4f58"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration.json": {
+      "bytes": 3761,
+      "mode": 420,
+      "sha256": "846c6046fa993dca39c4f9d2f0938b6773822a4d8f9e92a46f4dafd3c4428da3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration-v2.json": {
+      "bytes": 5437,
+      "mode": 420,
+      "sha256": "9458b192b8c03aaf6b180f558095fecbe3d1f16e46e793ff6dbfb071a2bbfb33"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/cpu-plan.json": {
+      "bytes": 1499,
+      "mode": 420,
+      "sha256": "2fd5374244826a6df452cd751ad32526c6354db0f0c5189f912ca846aa8aa62b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/cpu-plan-v2.json": {
+      "bytes": 1625,
+      "mode": 420,
+      "sha256": "184c6ef13c1da92448b19fc2903f01349f8471207be2a1915c456a6175a20802"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/cpu-proof.json": {
+      "bytes": 1912,
+      "mode": 420,
+      "sha256": "ff5c22ea5d91daff1f87580d67984c1546389877669b8deda7a69253a7672e05"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/stdout.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/stderr.log": {
+      "bytes": 2171,
+      "mode": 420,
+      "sha256": "a7a9faf44fb86cba59a6436742c197bfad47affbb63ccf1b39daa83c6474ac8c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/cpu-proof.json": {
+      "bytes": 1988,
+      "mode": 420,
+      "sha256": "140f9b92cb17958bd508cb0202eeccbfeb653d971647bef37b72243f423fa1c7"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/stdout.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/stderr.log": {
+      "bytes": 2298,
+      "mode": 420,
+      "sha256": "0983cdc0c8ffac252afca20069d85171aae6c5a3eb324738dbb263ab247e770d"
+    }
+  },
+  "required_input_files": {
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/archive-index.json": "88c88f5f148e7a87d6178a23a096c4ddbd436d69b223ffedaf9d26bbb5ca8d26",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/root-shared-archive-proof.json": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/binding.json": "bc0a6189aaf90ef0fb75a1731983abeb0de0f233ae5a9f5ceaa2c7c19278cdfe",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/choice.bin": "3d30dd104d057b865bdc80df7c53dfec31513f4673d1d8b0c14078ce87ee30d3",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/evidence/agent-suffix-pair-external-controls-and-static-prepared-v2/manifest.json": "cf35cd8eaf58251c03977b1fbaaca9ba871510037a0f17a24a899bba4ffbd208",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/agent_suffix_pair_external_post_release_v1/procedure.json": "b621660cf82e426c3b5057a6207ce96ce0268307ccc3119c03c25659198d6f2a",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-caller-build-v1/build-manifest.json": "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64"
+  },
+  "historical_CPU_cases_scope": "Disposable intentional symlink/refusal cases remain unchanged outside publication; both failing original V1 and qualified V2 logs/proofs are explicit leaves. Whole actual A/B roots and nested manifests are indexed."
+}

@@ -1,0 +1,22 @@
+{
+  "source": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "prepared": "4abde644c1cb7c2f4f10fa000cce0f929f88323c",
+  "manifest_sha256": "54a7e16543470f754b470535eebb646195644092421771fd071f08acddf154e5",
+  "prepared_command_sha256": "34fc66e3532508d0cb0de1a137dcf29aa640092b217f1a2782c7760748db1cb3",
+  "frozen_assets_verified": 67,
+  "sole_root_model_grant": true,
+  "model_metadata_outside_guard": false,
+  "reference_fullhash_inside_guard": true,
+  "all_inherited_DS4_environment_removed": true,
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2/prepare_three_quality.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-study/speed-bench/ideas/artifacts/three-quality-prepared-20261002-v2"
+  ],
+  "timing_scope": "Diagnostic calibration quality; concurrentCPUwork permitted; no latency claim; helperdoesnotexportexactdemandbyteIO"
+}

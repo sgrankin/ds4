@@ -1,0 +1,65 @@
+ds4-agent
+Run the native terminal coding agent with live tools, session save/restore, and a responsive prompt while the model works.
+
+Usage: ds4-agent [options]
+
+Model And Runtime
+  -m, --model FILE               GGUF model path. Default: ds4flash.gguf
+  --vision FILE                  Vision encoder GGUF for the selected model.
+  --metal | --cuda | --cpu       Select the backend explicitly.
+  --backend NAME                 Backend name: metal, cuda, or cpu.
+  --gpu-vram N[,N,...]|auto      CUDA VRAM budgets per device, in GiB, or auto-detect free VRAM.
+  --gpu-devices N[,N,...]        CUDA device indices used by multi-GPU placement.
+  --cuda-tensor-parallel         Enable the paired DeepSeek tensor/expert path on an even multi-GPU CUDA placement.
+  -c, --ctx N                    Allocated context tokens.
+  -t, --threads N                CPU helper threads for host-side/reference work.
+  --power N                      GPU duty-cycle target, 1..100. Default: 100
+  --ssd-streaming                Metal/CUDA/ROCm: opt in to SSD-backed model streaming instead of full residency.
+  --ssd-streaming-cold           SSD streaming: skip default popularity-based expert-cache preload.
+  --ssd-streaming-cache-experts N|NGB
+      SSD streaming cache target. N requests dynamic expert slots; NGB also reserves two full prefill layers. Either may be reduced to fit the model, graph, context, and backend working set.
+  --ssd-streaming-full-layers N  GLM Metal streaming: keep the first N routed layers fully resident. Default: auto from NGB expert budget; use 0 to disable.
+  --ssd-streaming-preload-experts N
+      SSD streaming: upfront popularity preload count. DeepSeek auto-seeds by default; GLM demand-fills unless N is explicit.
+  --simulate-used-memory NGB     Diagnostic: lock N GiB before model load to simulate a smaller-memory machine.
+  --prefill-chunk N              Graph prefill chunk size. Default: CUDA TP 2048; PRO long prompts 8192; others 4096.
+
+Agent Options
+  -p, --prompt TEXT              Submit an initial prompt after startup.
+  --prompt-file FILE             Read the initial prompt from FILE.
+  --prefix-file FILE             Preload complete alternating USER:/ASSISTANT: turns before the live task.
+  --non-interactive              Run without TUI. With an initial prompt: one turn; otherwise: repeated stdin prompts.
+  --raw-prompt                   Non-interactive initial prompt only: omit agent chat/tool text.
+  --edit-upto                    Enable anchored [upto] edits and automatic marker insertion.
+  -sys, --system TEXT            Extra system prompt. Empty disables extra text.
+  --trace FILE                   Write prompt, token, and DSML debug trace.
+  --live-context-file FILE       Experiment: mirror text chat into FILE; import edits after tools finish.
+  --chdir DIR                    Change working directory before loading runtime assets.
+
+Agent Runtime Commands
+  /save                          Save the current session in ~/.ds4/kvcache.
+  /compact                       Compact the current session context now.
+  /list                          List saved sessions, sorted by recent update time.
+  /switch ID                     Load a saved session and show recent history.
+  /del ID                        Delete a saved session.
+  /strip ID                      Remove KV payload; the text history can be rebuilt later.
+  /history [N]                   Show N recent user turns from the current session.
+  /hints on|off                  Enable or disable brief programming hints. New and resumed sessions start off.
+  /think [N]                     V4.1: set effort 0..100 (default 75) after this turn; rebuilds the prefix.
+  /power N                       Set GPU duty cycle percentage, 1..100.
+  /new                           Start a fresh session from the system prompt.
+  /quit, /exit                   Exit.
+
+More Info
+    Runtime full info:         --help runtime
+    Sampling full info:        --help sampling
+    Distributed inference:     --help distributed
+    Steering full info:        --help steering
+    Agent sessions:            --help sessions
+    Agent commands:            --help commands
+    Agent tool system:         --help tools
+
+Examples
+  interactive                    ./ds4-agent
+  one shot                       ./ds4-agent --non-interactive -p "Create /tmp/hello.c"
+

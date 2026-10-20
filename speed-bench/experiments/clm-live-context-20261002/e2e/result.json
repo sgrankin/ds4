@@ -1,0 +1,42 @@
+{
+  "command": [
+    "./ds4-agent",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--ssd-streaming",
+    "--ctx",
+    "8192",
+    "--prefill-chunk",
+    "2048",
+    "--nothink",
+    "--temp",
+    "0",
+    "--tokens",
+    "512",
+    "--seed",
+    "41",
+    "--non-interactive",
+    "--live-context-file",
+    "/private/tmp/ds4-context-run/speed-bench/experiments/clm-live-context-20261002/e2e/context.txt",
+    "--trace",
+    "/private/tmp/ds4-context-run/speed-bench/experiments/clm-live-context-20261002/e2e/agent.trace"
+  ],
+  "returncode": 0,
+  "seconds": 90.80566041599377,
+  "prefix_cache": "on",
+  "turns_sent": 2,
+  "accepted_edits": [
+    [
+      3478,
+      2460
+    ]
+  ],
+  "history_shrank": true,
+  "fact_retained": true,
+  "blob_removed": true,
+  "final_answer_correct": true,
+  "final_assistant_text": "</think>CODE=2718<\uff5cend\u2581of\u2581sentence\uff5c>",
+  "prefix_cache_hits": 1,
+  "rejected_edits": 0,
+  "pass": true
+}

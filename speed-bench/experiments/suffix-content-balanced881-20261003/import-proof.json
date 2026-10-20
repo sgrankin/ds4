@@ -1,0 +1,33 @@
+{
+  "status": "ROOT_BALANCED_EXACT881_EVIDENCE_ONLY_MAIN_IMPORT",
+  "time": 1791023305.577996,
+  "prepared_freeze": "a3cb03269918c337cb5ebda20600ca3d6461289d",
+  "prepared_manifest_sha256": "c572d17acca4e92fa2833dffe277f0480ee6f315d80065bf56bca6096cf9668f",
+  "independent_audit_sha256": "8afeb1e3d3f0c36092f763ddd78cc94ca51fb02c8354e0bb6f00b861899b318a",
+  "release_sha256": "e9bb8a78fb4f2db65d3bd6942287607f6d99b9d6338360091b4fb2cf2ca16870",
+  "runner_result_sha256": "7b5770587cce9a561930c783a02fe7b5e05f3c0da34093a7b41b869f0484b22c",
+  "imported_files": {
+    "README.md": {
+      "bytes": 3033,
+      "mode": 420,
+      "sha256": "b2c366bda28db444d0ac10c6285ebd3b3b6e20456f409ecc82afcb1b2e50fc31"
+    },
+    "runner-result.json": {
+      "bytes": 16184,
+      "mode": 420,
+      "sha256": "7b5770587cce9a561930c783a02fe7b5e05f3c0da34093a7b41b869f0484b22c"
+    },
+    "independent-audit.json": {
+      "bytes": 30565,
+      "mode": 420,
+      "sha256": "8afeb1e3d3f0c36092f763ddd78cc94ca51fb02c8354e0bb6f00b861899b318a"
+    },
+    "release.json": {
+      "bytes": 1682,
+      "mode": 420,
+      "sha256": "e9bb8a78fb4f2db65d3bd6942287607f6d99b9d6338360091b4fb2cf2ca16870"
+    }
+  },
+  "all100_MAIN_runtime_and_shaders_before_after_unchanged": true,
+  "no_runtime_default_or_model_access": true
+}

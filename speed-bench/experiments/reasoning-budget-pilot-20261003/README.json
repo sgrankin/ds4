@@ -1,0 +1,8 @@
+{
+  "prepared": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2",
+  "immutable_parent": "e1b80a601c8795dc0f0e10f3c46935959dd2d10e",
+  "original_first_attempts_retained": true,
+  "original_build_and_prepare_failures_retained": true,
+  "archive_administrative_refusal": "Initial workspace add --ignore-working-copy created metadata then refused checkout; materialized in private workspace and selected exact immutable parent. No study artifact changed.",
+  "interpretation": "Token reduction with identical two correct completions on four calibration cases; one INVALID cap became completed INCORRECT, and another still capped outside thinking. No equal-quality, generalization, quantization causality, KL/NLL or latency claim."
+}

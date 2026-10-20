@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-02T22:52:58.312594+00:00",
+  "ROOT_sole_model_grant": "frozen0e7533c2 ABBA v2 native-fast64 vs broader3",
+  "all_cpu_agents_explicitly_paused": {
+    "checkout_recap": "v2 prepared; root instructed correction review to wait until thaw",
+    "clm_design": "f27b frozen; explicit pause no active process",
+    "resident_experts": "explicit pause; TTL frozen"
+  },
+  "ROOT_cpu_work_paused_during_timing": true,
+  "MAIN_flock_free_before_launch": true,
+  "failed_v1_preflight_preserved": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v1",
+  "no_models_opened_in_failed_preflight": true,
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/prepare_resident_three_timing.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2",
+    "--root-granted",
+    "--cpu-timing-frozen"
+  ]
+}

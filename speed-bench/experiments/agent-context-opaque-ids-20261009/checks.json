@@ -1,0 +1,12 @@
+{
+  "embedded_recipe_exit": 0,
+  "printed_bytes": 0,
+  "protected_prefix_and_kept_block_exact": true,
+  "ids_handled_as_strings": true,
+  "recipe_source_exact": true,
+  "main_build_exit": 0,
+  "agent_test_exit": 0,
+  "source_diff_check_exit": 0,
+  "source_sha256": "713dbf7f2c06b610ee5fab5724974acfb109a2d33b92276d6291046e14878ce1",
+  "binary_sha256": "b14dff8409a88efe52819f09abcacd56b1e21c60315d889b804acc3e915bb150"
+}

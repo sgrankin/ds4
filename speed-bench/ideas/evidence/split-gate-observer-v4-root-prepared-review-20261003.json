@@ -1,0 +1,53 @@
+{
+  "schema": "ROOT_SPLIT_GATE_OBSERVER_V4_PREPARED_REVIEW",
+  "time": 1791010050.160554,
+  "status": "QUALIFIED_STATIC_UNRUN",
+  "prepared": "/Volumes/Models/ds4/.workspaces/idea-resident-split-gate-prefix/speed-bench/ideas/artifacts/split-gate-observer-prepared-20261003-v4",
+  "prepared_manifest_sha256": "891c84a3a55b3ca555b1c895e6597499aea578d936a000f00e49ab9b94c99447",
+  "prepared_command_sha256": "cfa490cb454bcc2ff617be0454f1154e63e5a03abd2509131f90edbcccaa278f",
+  "prepared_freeze": "fd81c8b5207ad31c188a0afa471797f2f0286356",
+  "publication_manifest_sha256": "46864bcf3ed6c0266d68747e218c128e8eeafc52853fccd0d1e9d4017a3a0066",
+  "first_static_prepare_returncode": 0,
+  "no_retry": true,
+  "fresh_prepared_assets": 68,
+  "fresh_external_assets": 249,
+  "fresh_publication_physical_tracked_literal_assets": 79,
+  "source_cpu_package19_fresh": true,
+  "source_cpu_manifest_sha256": "728af3a5e9be6b686be9cede8c236423673c9ce066e6b12b6adb239c9caa973c",
+  "distinct_cpu_tests": 37,
+  "known_symlink_aliases": {
+    "/opt/homebrew/lib/python3.14/site-packages/numpy/__init__.py": [
+      "../../../../Cellar/numpy/2.5.3/lib/python3.14/site-packages/numpy/__init__.py",
+      "/opt/homebrew/Cellar/numpy/2.5.3/lib/python3.14/site-packages/numpy/__init__.py"
+    ],
+    "/opt/homebrew/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-darwin.so": [
+      "../../../../../Cellar/numpy/2.5.3/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-darwin.so",
+      "/opt/homebrew/Cellar/numpy/2.5.3/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-darwin.so"
+    ]
+  },
+  "ROOT_full_driver_reader_footer_source_review_sha256": "f6bff65285bcd725ead36f9af1c37e2c65082d88c9b13ced716f5cf546923cc0",
+  "exact_original_eight_arms_inputs_controls_and_settings": true,
+  "relocated_fixture_TSV_equal_after_exact_prefix_normalization": true,
+  "only_driver_footer_changed_plus_bounded_reader": true,
+  "no_native_rebuild": true,
+  "native_directory_compatibility_unverified": true,
+  "current_model_job_unaffected": true,
+  "sole_model_grant": false,
+  "model_launch_authorized": false,
+  "MAIN_runtime100_unchanged": true,
+  "guard_command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-split-gate-prefix/speed-bench/ideas/artifacts/split-gate-observer-prepared-20261003-v4/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-split-gate-prefix/speed-bench/ideas/artifacts/split-gate-observer-prepared-20261003-v4/driver.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-split-gate-prefix/speed-bench/ideas/artifacts/split-gate-observer-prepared-20261003-v4",
+    "--manifest-sha256",
+    "891c84a3a55b3ca555b1c895e6597499aea578d936a000f00e49ab9b94c99447",
+    "--root-granted"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "first_ROOT_administration_refusal_sha256": "560efe2025c4599b4c96a3a4194fdcf44fceedc77a8039e0bae9e7e417c1169f"
+}

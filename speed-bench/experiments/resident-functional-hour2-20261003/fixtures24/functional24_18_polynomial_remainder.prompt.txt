@@ -1,0 +1,3 @@
+Find the remainder when P(x)=3x^4-2x^3+x-5 is divided by x^2+x+1. Report linear and constant coefficients of the remainder linear*x+constant. Work over rational coefficients.
+Literal input JSON: {"dividend_ascending": [-5, 1, 0, -2, 3], "divisor_ascending": [1, 1, 1]}
+Return the requested JSON first, then explain the specific reasoning.

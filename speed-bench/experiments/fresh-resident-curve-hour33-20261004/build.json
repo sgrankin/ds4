@@ -1,0 +1,24 @@
+{
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "frozen_spec_sha256": "8045f9098824503baca82175c31ccda279b1b0537e0588a4b4e7f166963cb0b8",
+  "frozen_cases_sha256": "45c595388a9f2540da864619916be9f5e7674a4516758a91f59bfc38d9b9917d",
+  "preparation_start_utc": "2026-10-04 22:21 UTC",
+  "start_utc": "2026-10-04 22:24 UTC",
+  "deadline_utc": "2026-10-04 22:50 UTC",
+  "budget_note": "3 minutes source-only preparation charged; bounded 29-minute experiment including execution and reporting",
+  "driver": "speed-bench/experiments/fresh-clm-coding-hour32-20261004/run.py",
+  "arms": [
+    "subs1",
+    "subs2",
+    "subs3-after"
+  ],
+  "opening_reference": "fresh-clm-coding-hour32-20261004/persistent-fast",
+  "native_routing_reference": "fresh-clm-coding-hour32-20261004/context-fast",
+  "one_change": "maximum substitutions1/2/3 with suffix64 and all remaining knobs fixed",
+  "fixed": "stable full-input CLM caller; READhigh0 WRITEhigh128 FINALhigh1; globalcap2048; canonical1PAD1, suffix64, strongsubs1/2/3; hot0SSD4096/Q2cache64/batch2/ctx8192/chunk512/tile64limit1024/temp0",
+  "qualification": "two unused event-processing tasks with frozen161 checks each, actual config read/one first write, 2 obsolete notes removed, preserved config, no retry; passed checks and first failure retained",
+  "measurement_finish_utc": "2026-10-04 22:34:20 UTC",
+  "finish_utc": "2026-10-04 22:36 UTC",
+  "independent_audit": "Six original first grades161/161, clean pipelines; closing3 code/public/usage/routes repeat; cache profiles/geometry/guard sums agree."
+}

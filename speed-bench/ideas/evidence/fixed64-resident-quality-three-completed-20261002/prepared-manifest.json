@@ -1,0 +1,32 @@
+{
+  "actual_c_export_selftest": "PASS model-free without linking runtime",
+  "base_commit": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "binary_sha256": "53c06b0828d0da9a04fdf1200f7a7155681907cf6e866d5ad781759f08b4f47b",
+  "driver_sha256": "e22ec47d273a86b77479b8312299976cdb773bed2bb1b658e42df4a38578c5a5",
+  "estimated_batch_minutes": "7\u20139; extrapolation only, not measured",
+  "files": {
+    "README.md": "4aaa2abc694c3cef663902f35a5beb2c4e5e85c1d24d2bc90b7258c2f653036a",
+    "c-export-selftest.log": "7a00887eb5c1ecbef374aaf8117a6dc485833edea4b884406ac39228b6b4abf4",
+    "cpu-preflight.json": "2da4967413d7e42e6069b605f321c5e0316300024e2e1740f5e5c2cd12fd834b",
+    "frontend.diff": "9d8dd609f57c26dd19071e56828e36786b64fac9e758ae9a61431c1229708ed6",
+    "object-source-proof.json": "fbe52edb43d22b46b0563821dae350233fb7cd06c629951b9d76e33221df6aaf",
+    "prepared-command.json": "1b9e4a07844ae917c4a571c98ca1f155fb4bf10660d621e508105388e31fe956",
+    "prepared-plan.json": "fdbbf0a4ad7c61f96d1511a588b927bb79807133e7d3e8e381498ed5a09cfba6",
+    "python-cpu-tests.log": "a82ebfdacc3be3cb2da52e3f8f7aa7c27cbaa1c64f6cf20375bb99e4af5ae085",
+    "replay_raw_io_quality.c": "5c26dd0af49a3b49a938f6776d6284e4ce1c33d08de778f2b244eff4b5600a2d",
+    "run_joint_quality.py": "e22ec47d273a86b77479b8312299976cdb773bed2bb1b658e42df4a38578c5a5",
+    "test_joint_quality.py": "a8b3fed218431696ba54bd64a380ba1f35e36d1e290977526da683e40c094465",
+    "test_replay_export.c": "b309ff147a8b23a0f5aabaf9955fc1606d5ef9b1820629fa5282691eb4e3ced1"
+  },
+  "frontend_sha256": "5c26dd0af49a3b49a938f6776d6284e4ce1c33d08de778f2b244eff4b5600a2d",
+  "guard_sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+  "historical_diagnostic_arm_seconds": 84.499517,
+  "model_opened": false,
+  "model_stat_or_tokenizer_used": false,
+  "prepared_command_sha256": "1b9e4a07844ae917c4a571c98ca1f155fb4bf10660d621e508105388e31fe956",
+  "prepared_plan_sha256": "fdbbf0a4ad7c61f96d1511a588b927bb79807133e7d3e8e381498ed5a09cfba6",
+  "python_tests": 8,
+  "reference_float_payload_hashed_during_preparation": false,
+  "reference_sha256_expected": "cf5b0ea8e62426d8682b603d09b83501a9de97b5a2535537acaf0dcc50ecf482",
+  "status": "FROZEN_CPU_PREPARED_UNRUN"
+}

@@ -1,0 +1,48 @@
+{
+  "status": "FIRST_FAILURE_RETAINED",
+  "phase": "completed_turn_validation",
+  "error": "ControlFailure: First tool was not the single frozen updater invocation",
+  "cleanup": {
+    "attempted": true,
+    "error": null,
+    "leader_reaped": true
+  },
+  "submitted": 3,
+  "completed": [
+    1,
+    2
+  ],
+  "overall_success": false,
+  "partial_gold_checks": [
+    {
+      "turn": 1,
+      "answer": "CODE=2718",
+      "passed": true
+    },
+    {
+      "turn": 2,
+      "answer": "READY",
+      "passed": true
+    }
+  ],
+  "deadline_seconds": 900,
+  "cleanup_reserve_seconds": 12,
+  "elapsed_seconds": 252.12771808300022,
+  "agent_returncode": -15,
+  "persistence": "NOT_EXERCISED",
+  "first_attempt": true,
+  "no_retries": true,
+  "memory_admission_experiment": {
+    "status": "MEMORY_ADMISSION_EXPERIMENT",
+    "fixed_budget_bytes": 167772160,
+    "fixed_frontier_mb": 160,
+    "preregistered_before_any_third_semantic_evaluation": true,
+    "prior_fixed128_prepared_manifest_sha256": "53a3326e3c6a8b46d15c86302f2008c06f82d953bb817509f9610847d6ef4b88",
+    "prior_fixed128_child_returncode": 3,
+    "prior_fixed128_structural_selection_created": false,
+    "prior_fixed128_forecast_bytes": 137150794,
+    "prior_fixed128_budget_bytes": 134217728,
+    "prior_fixed128_admission_ledger_sha256": "00212e25cac46fbe647f07e750c276a09bfb7609f009f8b55d11dc031dac02e6",
+    "scope": "Separate fixed160MiB admission experiment; only frontier memory and explicit budget criteria change. All prompts/facts/edits/order/tape/fresh128/model/sampler/tools/golds unchanged. Prior128 failure retained; no adaptive expansion or repair."
+  }
+}

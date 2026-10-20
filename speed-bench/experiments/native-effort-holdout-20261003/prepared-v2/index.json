@@ -1,0 +1,14 @@
+{
+  "files": {
+    "analyze_native_effort_holdout.py": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e",
+    "correction-launch-proof-v2.json": "7def4fa2196aee14885a8e3af50d35a1f11046eac37b435063e82e37380ef55f",
+    "launch_native_effort_holdout.py": "91d47864dd883e06a41a433ff81ae2261622a0f1f66c5e541b19e97c071f6fbc",
+    "native-effort-holdout": "a03bff186ded7251164154edb4c5e319447222f3a5d9faaf8cbe60e93f67ae35",
+    "plan.json": "4ddcb09eeec73b54ba3c823157e463687fc756ca1441b36961c74a5a19828b80",
+    "prepared-command.json": "d25fb20188f24d5a2fb8473fed526040d5707212551b9208baa0387f83787b37",
+    "run_native_effort_holdout.py": "f46820ecb228b0a067b937e9b5271e57dc8cb3cef74cc0dc6c19210063298564"
+  },
+  "original_v1_unchanged_unrun": true,
+  "runtime_and_helper_unchanged": true,
+  "model_access": false
+}

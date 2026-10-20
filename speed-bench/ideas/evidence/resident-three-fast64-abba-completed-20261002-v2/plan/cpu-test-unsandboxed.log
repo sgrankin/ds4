@@ -1,0 +1,14 @@
+test_abba_and_inherited_flags (__main__.TimingTests.test_abba_and_inherited_flags) ... ok
+test_actual_main_guarded_cpu_probe (__main__.TimingTests.test_actual_main_guarded_cpu_probe) ... ok
+test_failures (__main__.TimingTests.test_failures) ... ok
+test_guard_refusal_precedes_model_metadata (__main__.TimingTests.test_guard_refusal_precedes_model_metadata) ... ok
+test_missing_assertions_precede_any_metadata_or_subprocess (__main__.TimingTests.test_missing_assertions_precede_any_metadata_or_subprocess) ... ok
+test_parent_and_lock (__main__.TimingTests.test_parent_and_lock) ... ok
+test_pinned_interpreter_alias_and_rejections (__main__.TimingTests.test_pinned_interpreter_alias_and_rejections) ... ok
+test_plan_tamper_and_missing_candidate_footer (__main__.TimingTests.test_plan_tamper_and_missing_candidate_footer) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.215s
+
+OK
+Actual model-free MAIN guarded probe: {"model_metadata_read": false, "model_or_helper_executed": false, "parent_proof": {"exact_suffix_argv": true, "guard_lock_held": true, "interpreter_samefile": true, "interpreter_sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d", "parent_argv": ["/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python", "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py", "/var/folders/7h/9z5l37cd4q3f_f24y3c2_jjr0000gn/T/tmpt3vogqes/pressure", "--", "/opt/homebrew/opt/python@3.14/bin/python3.14", "/var/folders/7h/9z5l37cd4q3f_f24y3c2_jjr0000gn/T/tmpt3vogqes/probe.py", "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/prepare_resident_three_timing.py", "/var/folders/7h/9z5l37cd4q3f_f24y3c2_jjr0000gn/T/tmpt3vogqes/manifest.json", "/var/folders/7h/9z5l37cd4q3f_f24y3c2_jjr0000gn/T/tmpt3vogqes", "/var/folders/7h/9z5l37cd4q3f_f24y3c2_jjr0000gn/T/tmpt3vogqes/report.json"]}, "passed": true}

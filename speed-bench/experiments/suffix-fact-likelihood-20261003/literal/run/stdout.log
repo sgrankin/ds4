@@ -1,0 +1,8 @@
+nonmodel_input_validation_ms_diagnostic=20.475000
+engine_open_ms_diagnostic=2684.656000
+source_preflight_byte_exact=1 source_replay_capture_ms_diagnostic=32970.958000 tape_first=2011 tape_end=2988
+arm=fresh-native-before wall_ms_diagnostic=31940.646000
+arm=identity-suffix wall_ms_diagnostic=9250.706000
+arm=repaired-old-suffix wall_ms_diagnostic=9371.422000
+arm=fresh-native-after wall_ms_diagnostic=121570.458000 total_wall_ms_diagnostic=207811.176000
+archived fact oracle native_brackets_exact=1 identity_vectors_states_exact=1 source_exact=1 teacher_tokens=4 known_owned_caps_peak_plus_reserves=106243310 admitted_forecast_peak_plus_reserves=106956014 budget=134217728 semantics_task_success=NOT_MEASURED

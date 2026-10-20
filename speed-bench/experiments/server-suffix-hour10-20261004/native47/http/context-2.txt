@@ -1,0 +1,107 @@
+REFERENCE DOCUMENT. Obsolete notes may be deleted; active facts remain authoritative.
+Old arrival note 47: pencil marks and draft crate labels are no longer used.
+ACTIVE FACTS — retain this section verbatim.
+packages = 17
+units_per_package = 25
+damaged_units = 9
+archive_code = MAPLE-42
+reserve_count = 73
+END ACTIVE FACTS
+CURRENT HANDBOOK — this entire suffix remains unchanged.
+Handbook entry 000: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 001: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 002: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 003: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 004: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 005: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 006: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 007: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 008: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 009: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 010: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 011: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 012: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 013: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 014: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 015: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 016: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 017: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 018: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 019: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 020: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 021: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 022: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 023: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 024: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 025: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 026: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 027: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 028: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 029: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 030: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 031: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 032: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 033: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 034: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 035: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 036: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 037: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 038: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 039: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 040: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 041: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 042: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 043: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 044: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 045: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 046: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 047: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 048: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 049: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 050: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 051: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 052: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 053: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 054: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 055: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 056: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 057: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 058: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 059: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 060: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 061: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 062: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 063: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 064: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 065: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 066: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 067: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 068: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 069: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 070: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 071: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 072: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 073: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 074: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 075: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 076: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 077: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 078: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 079: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 080: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 081: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 082: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 083: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 084: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 085: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 086: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 087: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 088: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 089: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 090: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 091: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 092: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 093: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 094: check the active register before dispatch; obsolete notes are not authoritative.
+Handbook entry 095: check the active register before dispatch; obsolete notes are not authoritative.
+End of current handbook. The active facts above are the only values needed for answers.

@@ -1,0 +1,22 @@
+{
+  "samples": 332,
+  "all_normal": true,
+  "adverse_samples": 0,
+  "initial_swap_gib": 0.017763671875,
+  "min_free_gib": 0.1088104248046875,
+  "max_wired_gib": 74.4176025390625,
+  "max_compressor_gib": 8.709609985351562,
+  "max_swap_gib": 0.017763671875,
+  "result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "release": {
+    "time": 1790981967.6549602,
+    "root_session": 3445,
+    "guard_returncode": 0,
+    "lock_reacquired": true,
+    "matching_live_model_processes": [],
+    "cpu_timing_freeze_released": true
+  }
+}

@@ -1,0 +1,28 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+SOURCE capture_count=1 start=2048 end=4097 reused=2049 setup_ms=16961.632 state_bytes=37248568 prerope_bytes=3307789 live_prerope_bytes=5940652 state_fnv=4184a0ddefa50926 prerope_fnv=1d5ee3e3956de17c
+MOVE 1 arm=native shift=2 source=2048:4097 destination=2046:4095 edit_ms=115621.194 teacher_ms=285.161 immutable_state=1 immutable_prerope=1
+MOVE 1 arm=reuse shift=2 source=2048:4097 destination=2046:4095 edit_ms=56282.869 teacher_ms=273.744 immutable_state=1 immutable_prerope=1
+MOVE 2 arm=native shift=66 source=2048:4097 destination=1982:4031 edit_ms=114524.193 teacher_ms=286.929 immutable_state=1 immutable_prerope=1
+MOVE 2 arm=reuse shift=66 source=2048:4097 destination=1982:4031 edit_ms=54076.715 teacher_ms=269.172 immutable_state=1 immutable_prerope=1
+MOVE 3 arm=native shift=128 source=2048:4097 destination=1920:3969 edit_ms=113123.702 teacher_ms=272.491 immutable_state=1 immutable_prerope=1
+MOVE 3 arm=reuse shift=128 source=2048:4097 destination=1920:3969 edit_ms=53070.188 teacher_ms=266.956 immutable_state=1 immutable_prerope=1
+MOVE 4 arm=native shift=256 source=2048:4097 destination=1792:3841 edit_ms=110696.066 teacher_ms=276.912 immutable_state=1 immutable_prerope=1
+MOVE 4 arm=reuse shift=256 source=2048:4097 destination=1792:3841 edit_ms=51447.383 teacher_ms=268.781 immutable_state=1 immutable_prerope=1
+MOVE 5 arm=native shift=514 source=2048:4097 destination=1534:3583 edit_ms=98683.925 teacher_ms=278.120 immutable_state=1 immutable_prerope=1
+MOVE 5 arm=reuse shift=514 source=2048:4097 destination=1534:3583 edit_ms=39553.322 teacher_ms=270.098 immutable_state=1 immutable_prerope=1
+MOVE 6 arm=native shift=768 source=2048:4097 destination=1280:3329 edit_ms=94286.501 teacher_ms=285.142 immutable_state=1 immutable_prerope=1
+MOVE 6 arm=reuse shift=768 source=2048:4097 destination=1280:3329 edit_ms=34060.581 teacher_ms=274.249 immutable_state=1 immutable_prerope=1
+MOVE 7 arm=native shift=1024 source=2048:4097 destination=1024:3073 edit_ms=88915.775 teacher_ms=282.730 immutable_state=1 immutable_prerope=1
+MOVE 7 arm=reuse shift=1024 source=2048:4097 destination=1024:3073 edit_ms=29195.227 teacher_ms=268.913 immutable_state=1 immutable_prerope=1
+MOVE 8 arm=native shift=1280 source=2048:4097 destination=768:2817 edit_ms=83246.446 teacher_ms=278.150 immutable_state=1 immutable_prerope=1
+MOVE 8 arm=reuse shift=1280 source=2048:4097 destination=768:2817 edit_ms=25055.252 teacher_ms=264.655 immutable_state=1 immutable_prerope=1

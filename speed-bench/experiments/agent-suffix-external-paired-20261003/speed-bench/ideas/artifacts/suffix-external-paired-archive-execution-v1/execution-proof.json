@@ -1,0 +1,24 @@
+{
+  "status": "MODEL_FREE_ARCHIVE_COMMAND_PASS",
+  "returncode": 0,
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/archive_agent_suffix_external_pair.py",
+    "--plan",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/execution-plan.json",
+    "--plan-sha256",
+    "5659c2973e759e47c77902e2196ae904e9930dfacf93c3e694e61bb3f5f05354",
+    "--execute"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive",
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "started": 1791008672.306336,
+  "ended": 1791008673.128924,
+  "plan_sha256": "5659c2973e759e47c77902e2196ae904e9930dfacf93c3e694e61bb3f5f05354",
+  "prepared_command_sha256": "dddab8e27061ac816a6e61edc9af71c907274a4e9e4fcde8fdbba20b3126645c",
+  "root_grant_sha256": "88fbb19f600d1187ae3294bd6d5ff473997b4d97face8e7e8086085525e7f22f",
+  "model_helper_guard_grader_compiler_execution": false,
+  "no_retry": true
+}

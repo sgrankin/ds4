@@ -1,0 +1,9 @@
+```python
+from decimal import Decimal, ROUND_HALF_UP
+
+def round_cents(value: str) -> int:
+    d = Decimal(value)
+    cents = d * 100
+    rounded = cents.quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    return int(rounded)
+```

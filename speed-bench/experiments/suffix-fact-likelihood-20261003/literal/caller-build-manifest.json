@@ -1,0 +1,95 @@
+{
+  "status": "ARCHIVED_FACT_CALLER_BUILD_PASS",
+  "source_freeze": "74f59004c35778e19c6630a7696936d576f54d8f",
+  "cpu_evidence": "bfa387877cc41dd329ad6f88c7931330be96b5e2",
+  "plan_sha256": "66447abecb0ec3c712bcfab267fa94fad9e67f2a9fedf12338b4ea7f1bb5d7d0",
+  "all_pins_unchanged": true,
+  "serial_compilers": 1,
+  "native_core_Metal_built": false,
+  "model_or_native_executable_run": false,
+  "results": [
+    {
+      "label": "archived-fact-caller-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-Wno-deprecated-declarations",
+        "-std=c99",
+        "-fno-fast-math",
+        "-I.",
+        "-I/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/suffix_archived_fact_probe_v1",
+        "-c",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/suffix_archived_fact_probe_v1/archived_fact_probe.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/artifacts/suffix-archived-fact-caller-build-v1/probe.o"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan",
+      "returncode": 0,
+      "wall_seconds": 0.15930737500457326,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "archived-fact-caller-link",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-Wno-deprecated-declarations",
+        "-std=c99",
+        "-fno-fast-math",
+        "-I.",
+        "-I/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/suffix_archived_fact_probe_v1",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/artifacts/suffix-archived-fact-caller-build-v1/probe",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/artifacts/suffix-archived-fact-caller-build-v1/probe.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_image.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_distributed.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_tp.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_ssd.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_metal.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan",
+      "returncode": 0,
+      "wall_seconds": 0.07623387499916134,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "outputs": {
+    "probe": {
+      "bytes": 2711512,
+      "mode": 493,
+      "sha256": "b3c6a40d03356b12a91094e1ec03dc68b0574ba29d7e4588d525e918631b6f0c"
+    },
+    "probe.o": {
+      "bytes": 106712,
+      "mode": 420,
+      "sha256": "c7fa8ea7b6690744ff4d96b12e27a52c7121a55a4491a2f8f1d77b8dcb40d6f9"
+    }
+  },
+  "grant_sha256": "2b8a335b4b485205d71f31834a6b90c14acea048bd3257e2a01af4f184edb543",
+  "warning_count": 0
+}

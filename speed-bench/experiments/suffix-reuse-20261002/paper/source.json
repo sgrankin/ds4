@@ -1,0 +1,17 @@
+{
+  "source": "/Users/sgrankin/Library/Mobile Documents/com~apple~CloudDocs/Downloads/2609.37725.pdf",
+  "title": "Context Language Models",
+  "arxiv": "2609.37725v1",
+  "pdf_sha256": "ac5c926814434d8ad2f499183cd2a81e53b4c14f327587f99980ade9157db01b",
+  "text_sha256": "075ad14ade85a01d122f4aa47cb2790e89809245eae653b9a35c74a8f7e416a4",
+  "relevant_pdf_pages": [
+    6,
+    9,
+    14,
+    15,
+    16,
+    17
+  ],
+  "extraction": "single pdftotext -layout; no PDF rendering",
+  "warnings": "Poppler malformed string/dictionary and embedded font warnings; relevant sections readable"
+}

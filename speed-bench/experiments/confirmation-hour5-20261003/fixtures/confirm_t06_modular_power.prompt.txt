@@ -1,0 +1,1 @@
+Compute 7^13 modulo 19. Report remainder as a nonnegative integer in JSON, then give a short modular-arithmetic derivation without expanding the full power.

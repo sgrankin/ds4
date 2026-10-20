@@ -1,0 +1,354 @@
+{
+  "status": "INDEPENDENT_FIRST_ATTEMPT_AUDIT_PASS",
+  "counts": {
+    "native-before": {
+      "strict_success": 4,
+      "code_correct_including_capped": 4,
+      "caps": 5,
+      "tool_or_parser_failure": 0,
+      "admitted_tokens": 16833,
+      "samples": 16838
+    },
+    "protected-weights1": {
+      "strict_success": 4,
+      "code_correct_including_capped": 4,
+      "caps": 6,
+      "tool_or_parser_failure": 0,
+      "admitted_tokens": 16879,
+      "samples": 16883
+    },
+    "native-after": {
+      "strict_success": 4,
+      "code_correct_including_capped": 4,
+      "caps": 5,
+      "tool_or_parser_failure": 0,
+      "admitted_tokens": 16833,
+      "samples": 16838
+    }
+  },
+  "tasks": {
+    "native-before": {
+      "csv_records": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "glob_full": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 1709,
+        "admitted_tokens": 1708,
+        "first_code_sha256": "b5cd209b6bbbe0abae26ca8e2fac3435d112da9cedf51835ecc9e66c2b009e60"
+      },
+      "lexical_path": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 1122,
+        "admitted_tokens": 1121,
+        "first_code_sha256": "3d597dc4d6fe9ee0a849197ea42397dc5d89850602c9ef090b9dcc2aca840592"
+      },
+      "transactions": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 1675,
+        "admitted_tokens": 1674,
+        "first_code_sha256": "f2496a5fea6390c2608464eaa80302001d36dd4c8b8735443b80489a14bc73fd"
+      },
+      "shortest_counts": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "literal_rewrite": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 790,
+        "admitted_tokens": 789,
+        "first_code_sha256": "3ab5431ab8fb472de5d1840b2c06bbd7d78c53d3bf344b2e211a97015925bbde"
+      },
+      "lru_trace": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "NameError",
+        "cap": false,
+        "complete": true,
+        "samples": 1302,
+        "admitted_tokens": 1301,
+        "first_code_sha256": "89c718f9f44cee5d5ff0a78c4ccd29165ba0f53785d4e91eecb63000186cf07f"
+      },
+      "bracket_scan": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "postfix": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "chunk_frames": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      }
+    },
+    "protected-weights1": {
+      "csv_records": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "glob_full": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "lexical_path": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 1609,
+        "admitted_tokens": 1608,
+        "first_code_sha256": "ee55f287f0d1ec9498575b4dbd991b9644a374e6c0f1ea7d67fa9b3cdd5ccbe2"
+      },
+      "transactions": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 1380,
+        "admitted_tokens": 1379,
+        "first_code_sha256": "590a670ad29f8e59d096591fbb7cd8527e483109491c4533b6817bbe7157ba7d"
+      },
+      "shortest_counts": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "literal_rewrite": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 659,
+        "admitted_tokens": 658,
+        "first_code_sha256": "547866b3c910d74a3c04f52e858979ac869419911137ba484085caaf35eb3125"
+      },
+      "lru_trace": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 947,
+        "admitted_tokens": 946,
+        "first_code_sha256": "33544e8152853bc5ddd82eb3d3a54e3a59088354b8e425d55ab9ad34f73efd02"
+      },
+      "bracket_scan": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "postfix": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "chunk_frames": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      }
+    },
+    "native-after": {
+      "csv_records": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "glob_full": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 1709,
+        "admitted_tokens": 1708,
+        "first_code_sha256": "b5cd209b6bbbe0abae26ca8e2fac3435d112da9cedf51835ecc9e66c2b009e60"
+      },
+      "lexical_path": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 1122,
+        "admitted_tokens": 1121,
+        "first_code_sha256": "3d597dc4d6fe9ee0a849197ea42397dc5d89850602c9ef090b9dcc2aca840592"
+      },
+      "transactions": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 1675,
+        "admitted_tokens": 1674,
+        "first_code_sha256": "f2496a5fea6390c2608464eaa80302001d36dd4c8b8735443b80489a14bc73fd"
+      },
+      "shortest_counts": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "literal_rewrite": {
+        "strict_success": true,
+        "code_correct": true,
+        "grade_failure": null,
+        "cap": false,
+        "complete": true,
+        "samples": 790,
+        "admitted_tokens": 789,
+        "first_code_sha256": "3ab5431ab8fb472de5d1840b2c06bbd7d78c53d3bf344b2e211a97015925bbde"
+      },
+      "lru_trace": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "NameError",
+        "cap": false,
+        "complete": true,
+        "samples": 1302,
+        "admitted_tokens": 1301,
+        "first_code_sha256": "89c718f9f44cee5d5ff0a78c4ccd29165ba0f53785d4e91eecb63000186cf07f"
+      },
+      "bracket_scan": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "postfix": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      },
+      "chunk_frames": {
+        "strict_success": false,
+        "code_correct": false,
+        "grade_failure": "FileNotFoundError",
+        "cap": true,
+        "complete": false,
+        "samples": 2048,
+        "admitted_tokens": 2048,
+        "first_code_sha256": null
+      }
+    }
+  },
+  "all_native_brackets_exact": true,
+  "policy": {
+    "gap": 0.3,
+    "mass": 0.12,
+    "rank": 24,
+    "max_substitutions": 1,
+    "native_six_coefficient_bits_retained": true
+  },
+  "one_seed": 20261002,
+  "ten_unused_tasks": true,
+  "first_attempts_only": true,
+  "delta_samples": 45,
+  "delta_admitted_tokens": 46,
+  "strict_success_delta": 0,
+  "extra_caps": 1,
+  "grade_caveat": "Native LRU first code used next(iter(cache)); fixed original grader rejects iter as undefined. Preserve original grade; do not infer algorithmic rescue or rescore.",
+  "speed_or_generalization_claim": false
+}

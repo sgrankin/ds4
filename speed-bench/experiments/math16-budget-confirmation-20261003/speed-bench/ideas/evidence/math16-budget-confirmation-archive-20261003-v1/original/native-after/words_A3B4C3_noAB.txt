@@ -1,0 +1,55 @@
+We need answer integer. Need solve. Need count length 10 multiset: exactly 3 A,4 B,3 C. No contiguous substring "AB" (adjacent A followed by B). Identical indistinguishable. Need count words over A/B/C with counts, avoiding adjacent pair A then B. Need compute.
+
+Let's reason. Total arrangements = 10!/(3!4!3!) = 4200? 10!/(6*24*6)=3628800/864=4200 yes.
+
+Need exclude occurrences of substring AB. Since A and B distinct, condition no position i with letter A and i+1 B.
+
+We can count via inclusion-exclusion or DP. Counts small. Need exact.
+
+Let's do dynamic programming by counts and last char. Count sequences with remaining counts and avoid AB. State (a,b,c,last). Need count.
+
+I can compute manually carefully. Let's define f(a,b,c,last) number ways to append remaining? Maybe use recursion. Counts up to 3,4,3. Let's compute.
+
+Alternative inclusion-exclusion over A-B adjacencies. Need count arrangements with no A immediately before B. Treat forbidden directed pair AB. Could use inclusion-exclusion on occurrences of adjacent AB as blocks? Since A and B counts limited. But overlapping? Pattern AB length2; multiple AB can overlap? ABAB has two AB at positions 1-2 and 3-4, no overlap. AB cannot overlap with itself? AB and AB can overlap if suffix B = prefix A? B != A, so no. Thus occurrences of AB are disjoint in positions? Wait pattern AB, two occurrences could be at positions i and i+1? Need letters A B at i,i+1 and A B at i+1,i+2 would require B=A at i+1, impossible. So occurrences cannot overlap. Good. Inclusion-exclusion selecting k specified AB blocks, merge into k blocks plus remaining A/B/C. Need count arrangements of k AB blocks, remaining A (3-k), remaining B(4-k), C(3), total items = k + (3-k)+(4-k)+3 = 10 - k. Number arrangements = (10-k)! / (k! (3-k)! (4-k)! 3!)? Because AB blocks identical? Blocks are identical pattern AB, yes. But inclusion-exclusion for occurrences in a word? Need count words with at least selected k occurrences? If choose k disjoint adjacent AB pairs among positions? Inclusion-exclusion over occurrences events E_i for each possible adjacent position? Events not independent. Standard inclusion-exclusion over set of k occurrences: number arrangements containing specified k AB occurrences (not necessarily exactly) = merge selected AB pairs. But selected occurrences must be disjoint automatically if specified positions? If events are actual occurrences at positions in final word. Inclusion-exclusion sum over subsets of possible occurrence positions? There are 9 possible adjacent positions. But occurrences cannot overlap, and counts constraints. Counting arrangements with at least specified occurrences at particular positions is tricky because positions shift.
+
+Alternative use Goulden? Since occurrences cannot overlap, inclusion-exclusion over occurrences as indistinguishable blocks works: Number with no AB = sum_{k=0}^{min(3,4)} (-1)^k * C? Wait choose k occurrences among A/B letters? Formula for forbidden adjacent pair with identical letters? For words with counts, number avoiding AB = sum_{k=0}^{min(a,b)} (-1)^k * binom(a,k) binom(b,k)? maybe times k!? Let's derive.
+
+Treat k AB blocks selected from A and B. Number ways to choose k A's and k B's to pair as AB blocks, then arrange blocks and remaining letters. Since blocks identical? If we choose which A and B are in blocks, but identical, choosing k A among a and k B among b gives binom(a,k) binom(b,k). Pair them? Each selected A paired with selected B, but because identical, pairing unique? The blocks are identical AB, so no k! factor? Let's test small.
+
+For a=1,b=1,c=0, words AB, BA. Avoid AB count 1. Formula sum k=0:2!/(1!1!)=2. k=1: (-1)* binom1,1 binom1,1 * (1)!/(1!0!0!)? total items=1 =>1. gives 1. Good no k!.
+
+For a=2,b=2,c=0. Total 6. Avoid AB? Let's enumerate maybe. Formula k=0: 4!/(2!2!)=6. k=1: - binom2,1^2 * 3!/(1!1!1!)? total items k=1 + rem a1 b1 =3, arrangements = 3!/(1!1!1!)=6. term -4*6=-24. k=2: + binom2,2^2 * 2!/(2!0!0!)? total items 2 blocks =2!/(2!)=1. Sum -17 impossible. So formula wrong due overcount? Wait inclusion-exclusion over occurrences not simply choose k A/B? Let's examine.
+
+For a=2,b=2 no C, words length4 with 2 A 2 B. Avoid AB. Total 6. List: AABB has AB at pos2-3? A A B B: pos2 A, pos3 B yes one. ABAB has AB at 1-2 and 3-4? A B A B: pos1 A pos2 B, pos3 A pos4 B yes two. ABBA has AB at 1-2 only? A B B A yes. BAAB: B A A B has AB at 3-4. BABA: B A B A has AB at 2-3. BBAA none. Avoid: BBAA only? Also? BABA has A followed B at pos2-3 yes. BAAB yes. ABBA yes. So only BBAA count1. Formula should 1.
+
+Need correct inclusion-exclusion. Events are occurrences of adjacent A-B. There are possible positions. For a=2,b=2, occurrences can be at positions 1,2,3. Inclusion-exclusion over subsets of positions? Count arrangements with specified positions i are AB. For subset S of positions, impose letters at those positions. If S={1,3}: positions 1=A,2=B,3=A,4=B => ABAB one arrangement. If S={1,2}: positions 1=A,2=B,3=A? Wait position2 is B and position3? Event at 2 requires pos2=A, conflict with pos2=B. So impossible. Thus only non-overlapping positions. Count for subset of k non-overlapping positions = arrange remaining letters in remaining positions with counts adjusted. Need sum over possible position subsets. Not just choose A/B.
+
+Maybe use DP easier.
+
+Let's compute DP manually. Count sequences length 10 with counts A3 B4 C3 avoiding AB. We can do recursion by last char.
+
+Let F(a,b,c,last) count completions from remaining counts? Start no last. Need avoid appending B if last=A. We can compute via memo perhaps.
+
+Since counts small. Let's define f(a,b,c,last) = number of sequences using remaining a A, b B, c C, given previous char last (or none). Append next char allowed if not (last=A and next=B). We need f(3,4,3,N).
+
+Could compute recursively. Maybe use generating or dynamic table. Let's do careful.
+
+Alternatively count all arrangements and subtract occurrences via inclusion-exclusion with DP? Let's use DP manually with states. Counts up to 3,4,3; total 10. Could compute by dynamic programming over counts and last char. Need final integer. Let's do systematically with tables.
+
+Let dp(a,b,c,last) number of sequences with counts remaining? I'll compute from empty forward maybe. Since counts small but many states. Could derive using inclusion-exclusion maybe easier.
+
+Let's attempt DP with last char. Define W(a,b,c; last) = number of valid prefixes using counts a,b,c and ending in last. We want total after using all counts. Recurrence build forward.
+
+Start at (0,0,0) no last? Add first any. Then transitions:
+From last A: can add A or C, not B.
+From last B: can add A,B,C (since B->A ok, B->B, B->C)
+From last C: can add A,B,C.
+From no last: add A,B,C.
+
+Need count at (3,4,3) ending A/B/C. Could compute tables for all a<=3,b<=4,c<=3. That's 4*5*4*3 ~240. Manual maybe possible but tedious. Need find smarter.
+
+Because forbidden only AB. We can count by positions of A/B relative to C? Maybe.
+
+Condition no A immediately before B. C's separate. Consider remove C's? Since C can break AB. We have 7 non-C letters: 3 A, 4 B. C's inserted into gaps among A/B sequence and ends. The condition only depends on adjacent A/B in the A/B sequence: if an A is followed immediately by B in the A/B subsequence and no C inserted between them, then forbidden. If C inserted between, okay.
+
+Thus count: choose an A/B sequence with 3 A,4 B. There are 7!/(3!4!)=35. For each such sequence, identify number of "AB adjacencies" (positions where A immediately followed by B in the A/B sequence). We need insert 3

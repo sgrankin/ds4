@@ -1,0 +1,26 @@
+{
+  "arm": "staged-before",
+  "write_budget": 128,
+  "returncode": 0,
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/stable-instructions-hour18-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:64623",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/stable-instructions-hour18-20261004/http/staged-before/checks",
+    "--visible",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible",
+    "--arm",
+    "staged-before",
+    "--protocol",
+    "staged",
+    "--budget",
+    "128",
+    "--global-cap",
+    "2048"
+  ],
+  "seconds": 295.6943116670009,
+  "server_returncode_after_shutdown": 0
+}

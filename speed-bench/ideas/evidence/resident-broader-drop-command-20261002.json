@@ -1,0 +1,28 @@
+{
+  "source_commit": "bfcde97a7758a135b39f18e0ec3691547cb8d832",
+  "binary_sha256": "6bc9e8270427fb9ce38bc2728198776b5fd0c91cb3d266827b3aadec808908dd",
+  "command": [
+    "python3",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-broader-drop-quality-20261002-pressure",
+    "--",
+    "python3",
+    "/Volumes/Models/ds4/speed-bench/ideas/run_replay_matrix.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-broader-drop-quality-20261002",
+    "--binary",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-policy/speed-bench/ideas/artifacts/drop-build/replay-drop-quality",
+    "--source-root",
+    "/Volumes/Models/ds4",
+    "--reference",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-replay-quality-20261002T1857/reference.bin",
+    "--reference-manifest",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-replay-quality-20261002T1857/manifest.json",
+    "--variant",
+    "balanced:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=replace,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.15,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.18,DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS=0.30,DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK=24,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=2",
+    "--variant",
+    "broader:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=replace,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.30,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.20,DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS=0.35,DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK=48,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=2",
+    "--variant",
+    "drop:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=drop,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.05,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.10,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=1"
+  ],
+  "scope": "Locked exploratory policies, full raw teacher-forced distributions, native controls before and after; not latency evidence."
+}

@@ -1,0 +1,16 @@
+{
+  "prepared_plan_sha256": "cd0bc3bc3cfcead432a3479835f32bffa5aba0b2909eeb21b0bef69106094df9",
+  "pinned_files_checked": 166,
+  "all_pins_current": true,
+  "all_compiler_outputs_absent": true,
+  "core_build_executed": false,
+  "metal_build_executed": false,
+  "frontend_build_executed": false,
+  "model_stat_or_open": false,
+  "planning_commands_only": [
+    "immutable jj source/header reads",
+    "file hashing/copy",
+    "/usr/bin/cc --version"
+  ],
+  "planning_refusal_retained": true
+}

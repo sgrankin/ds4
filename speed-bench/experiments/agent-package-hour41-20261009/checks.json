@@ -1,0 +1,21 @@
+{
+  "runtime_revision": "e203b8065022b8762d2f7eae8dcaff96c68bb97c",
+  "budget_start_utc": "2026-10-09 02:40:48",
+  "budget_end_utc": "2026-10-09 03:40:48",
+  "build": {"command": "make -j2 ds4-agent ds4_agent_test", "exit_code": 0},
+  "agent_tests": {"command": "./ds4_agent_test", "exit_code": 0, "log": "agent-tests.log"},
+  "suffix_mock": {
+    "command": ".workspaces/recipe-20261008/agent-suffix-mock41 .workspaces/agent-package-20261009/mock-state",
+    "exit_code": 0,
+    "log": "suffix-mock.log",
+    "setup_note": "Initial root rerun omitted the existing parent cache directory and exited at line 323. Creating that directory fixed the run; no runtime change was required."
+  },
+  "wrapper": {"command": "sh -n ds4-local", "exit_code": 0, "capture_cases": 8, "evidence": "preset-check.json"},
+  "agent_sha256": "0475b0f3427a72a06565b3030649386fcc1e66faacbfdfbc09b3b0d8df2b5737",
+  "real_model_cli_runs": 5,
+  "fresh_query_answers_passed": 10,
+  "real_compaction": {"suffix_reused": true, "reused_tokens": 696, "fresh_tokens": 187, "exact_answer": "EMBER-7319"},
+  "all_six_guards_normal_pressure": true,
+  "owned_model_processes_remaining": false,
+  "verification_complete_utc": "2026-10-09 03:29:20"
+}

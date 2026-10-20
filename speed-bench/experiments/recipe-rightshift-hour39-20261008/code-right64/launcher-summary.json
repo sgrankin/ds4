@@ -1,0 +1,48 @@
+{
+  "mode": "reuse",
+  "arm": "context-right",
+  "route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 0,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/recipe-rightshift-hour39-20261008/run.py",
+  "right_shift_enabled": true,
+  "seconds": 210.29107504099375,
+  "phases": [
+    {
+      "phase": "dedupe",
+      "returncode": 0,
+      "seconds": 105.69182283297414,
+      "startup_seconds": 2.693973832996562,
+      "client_seconds": 101.29898937500548,
+      "shutdown_seconds": 1.6984950419864617,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "bucket",
+      "returncode": 0,
+      "seconds": 104.59602254198398,
+      "startup_seconds": 0.41666687501128763,
+      "client_seconds": 102.74741850001737,
+      "shutdown_seconds": 1.4314555840101093,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/recipe-20261008/right-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/recipe-20261008/right64-cache",
+  "store": "/Volumes/Models/ds4/.workspaces/recipe-20261008/right64-store",
+  "timeout_seconds": 600
+}

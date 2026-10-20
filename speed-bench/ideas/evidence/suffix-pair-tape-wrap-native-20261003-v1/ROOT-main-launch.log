@@ -1,0 +1,11 @@
+{"event": "arm_start", "arm": "old-native-before"}
+{"arm": "old-native-before", "native_parity": true, "mean_kl": 0, "sum_delta_nll": 0, "peak_staging_bytes": 92941215}
+{"event": "arm_start", "arm": "new-native"}
+{"arm": "new-native", "native_parity": true, "mean_kl": 0, "sum_delta_nll": 0, "peak_staging_bytes": 92941215}
+{"event": "arm_start", "arm": "new-tape-native"}
+{"arm": "new-tape-native", "native_parity": true, "mean_kl": 0, "sum_delta_nll": 0, "peak_staging_bytes": 118107119}
+{"event": "arm_start", "arm": "suffix-reuse"}
+{"arm": "suffix-reuse", "native_parity": true, "mean_kl": 0.0573944591888, "sum_delta_nll": 0.422206306317, "peak_staging_bytes": 118107119}
+{"event": "arm_start", "arm": "old-native-after"}
+{"arm": "old-native-after", "native_parity": true, "mean_kl": 0, "sum_delta_nll": 0, "peak_staging_bytes": 92941215}
+{"status": "complete", "child_returncode": 0}

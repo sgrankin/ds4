@@ -1,0 +1,11 @@
+{
+  "time": 1790999501.420842,
+  "status": "FIRST_TRACKING_VERIFICATION_REFUSED",
+  "missing_paths": [
+    "speed-bench/experiments/ds41-ssd/resident-env-calibration-evidence/first-attempt-v1/prepared/__pycache__/driver.cpython-314.pyc",
+    "speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-offline-revalidation.json",
+    "speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-release-proof.json",
+    "speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-selection.json"
+  ],
+  "description_or_completion_not_run": true
+}

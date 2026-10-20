@@ -1,0 +1,65 @@
+{
+  "mode": "reuse",
+  "arm": "suffix-only",
+  "route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 0,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "prefill_route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 0,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "server_identity": {
+    "sha256": "97e94d3d47a3e9b1c2db14e048e17eef8628b4672725893d1879dda666c40325",
+    "size_bytes": 3251016,
+    "source_revision": "8586646bceccc9bdd26d6f41484e5fcc2e1b4bc7",
+    "reported_version": null,
+    "version_note": "The server has no version flag; SHA256 identifies the measured binary."
+  },
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/combined-fresh-hour40-20261008/run.py",
+  "right_shift_enabled": true,
+  "seconds": 228.2624813329894,
+  "phases": [
+    {
+      "phase": "interval_groups",
+      "returncode": 0,
+      "seconds": 114.68642662494676,
+      "startup_seconds": 0.4154021669528447,
+      "client_seconds": 112.83202174998587,
+      "shutdown_seconds": 1.4386079999967478,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "dependency_layers",
+      "returncode": 0,
+      "seconds": 113.57231775001856,
+      "startup_seconds": 0.42291020799893886,
+      "client_seconds": 111.30769958300516,
+      "shutdown_seconds": 1.8413772089988925,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/cache-suffix-only",
+  "store": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/store-suffix-only",
+  "timeout_seconds": 600
+}

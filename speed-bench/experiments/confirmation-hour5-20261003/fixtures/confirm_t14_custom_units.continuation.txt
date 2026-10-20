@@ -1,0 +1,2 @@
+{"meters":8400,"kilometers":8.4}
+Each league contains 240 rods, with five meters per rod, so a league is 1200 meters under the supplied definition. Seven leagues therefore cover 8400 meters. Dividing by one thousand converts that distance to 8.4 kilometers. Historical meanings of a league or rod do not change this fictional exercise.

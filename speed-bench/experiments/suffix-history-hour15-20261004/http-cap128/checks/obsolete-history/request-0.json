@@ -1,0 +1,47 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "input": [
+    {
+      "role": "user",
+      "content": "Read the current shipping policy from /Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/obsolete-history/policy.json using read with whole=true and raw=true. The new shipment has 18 batches, 26 units_per_batch, and 9 reserved_units. Compute net units, apply the current file's rounding policy, and reply only with the final integer."
+    }
+  ],
+  "instructions": "Read the advertised file before calculating. Follow its current rule; never guess from a previous answer.",
+  "tools": [
+    {
+      "type": "function",
+      "name": "read",
+      "description": "Read the advertised JSON policy file in full.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "whole": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "whole",
+          "raw"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "prompt_cache_key": "ds4-hour15-retrieval-obsolete-history",
+  "store": false,
+  "stream": false,
+  "temperature": 0,
+  "seed": 20261004,
+  "max_output_tokens": 128,
+  "reasoning": {
+    "effort": "none"
+  }
+}

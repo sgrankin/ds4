@@ -1,0 +1,175 @@
+{
+  "phase": "after",
+  "mode": "native",
+  "steps": [
+    {
+      "step": "A-edit2",
+      "session": "A",
+      "seconds": 42.58435562500381,
+      "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}",
+      "answer": {
+        "active_total": 416,
+        "archived_code": "RIVER-74"
+      },
+      "gold": {
+        "active_total": 416,
+        "archived_code": "RIVER-74"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_ffac51a0fcb9c75fec3aac54b8f11b07",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+          "text": "{\n  \"archived_code\": \"RIVER-74\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+      "replies": [
+        {
+          "seconds": 41.11966054099321,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1382,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1382
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1475
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.4634186670009512,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1500,
+            "input_tokens_details": {
+              "cached_tokens": 1475,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 15,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1515
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 42.585221291999915,
+      "edit_seconds": 0.0005134590028319508
+    },
+    {
+      "step": "B-edit2",
+      "session": "B",
+      "seconds": 42.6995004999917,
+      "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}",
+      "answer": {
+        "active_total": 202,
+        "archived_code": "CEDAR-92"
+      },
+      "gold": {
+        "active_total": 202,
+        "archived_code": "CEDAR-92"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_2ccc7eb198f227ba7875facb26b75283",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+          "text": "{\n  \"archived_code\": \"CEDAR-92\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+      "replies": [
+        {
+          "seconds": 41.08127604100446,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1385,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1385
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1478
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.6169489589956356,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1503,
+            "input_tokens_details": {
+              "cached_tokens": 1478,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1521
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 42.70036816599895,
+      "edit_seconds": 0.0005066250014351681
+    }
+  ],
+  "edits": [
+    {
+      "removed_bytes": 2469,
+      "remaining_blocks": 0,
+      "session": "A",
+      "seconds": 0.0005134590028319508
+    },
+    {
+      "removed_bytes": 2469,
+      "remaining_blocks": 0,
+      "session": "B",
+      "seconds": 0.0005066250014351681
+    }
+  ],
+  "seconds": 85.28741604099923,
+  "source_warmup_seconds": 0,
+  "edited_seconds": 85.28558945799887,
+  "suffix_grafts_observed": 0,
+  "approximate_ssd_sources_observed": 0,
+  "pass": true,
+  "restart_owned_by_ROOT": true
+}

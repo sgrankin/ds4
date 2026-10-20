@@ -1,0 +1,1 @@
+We are continuing an implementation review. Earlier material can be compacted. The current retained contract and configuration remain authoritative.

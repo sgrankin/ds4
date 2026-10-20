@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "completed_archive": "completed-small-artifacts.tar.gz",
+  "archive_sha256": "acbaa3fdcf930927ffcf6f954a3fc6cf04f443961f97bc9d8189390dc1c09cf4",
+  "archive_bytes": 2800855,
+  "files": 225,
+  "original_index_sha256": "a7464a17a27df972071e23d14c76332f27c558a56731e93ccb40ef97f2046872",
+  "indexed_files_verified": 224,
+  "six_full_raw_arrays_retained_not_copied": true,
+  "model_opened": false,
+  "model_metadata_read": false
+}

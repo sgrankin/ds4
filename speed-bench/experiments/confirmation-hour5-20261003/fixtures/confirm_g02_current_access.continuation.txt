@@ -1,0 +1,2 @@
+{"current_code":"8736","obsolete_code":"5127"}
+The explicitly current update supplies 8736; the superseded code is 5127.

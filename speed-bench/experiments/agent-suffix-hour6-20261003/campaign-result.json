@@ -1,0 +1,30 @@
+[
+  {
+    "arm": "short-native-before",
+    "returncode": 0
+  },
+  {
+    "arm": "short-tail128",
+    "returncode": 0
+  },
+  {
+    "arm": "short-native-after",
+    "returncode": 0
+  },
+  {
+    "arm": "long-native-before",
+    "returncode": 0
+  },
+  {
+    "arm": "long-tail256",
+    "returncode": 0
+  },
+  {
+    "arm": "long-tail128",
+    "returncode": 0
+  },
+  {
+    "arm": "long-native-after",
+    "returncode": 0
+  }
+]

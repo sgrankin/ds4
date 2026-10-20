@@ -1,0 +1,12 @@
+In file included from /Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/native_effort_holdout.c:2:
+In file included from /Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/native_effort_final_score.h:3:
+/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/overthink_diagnostics.h:15:12: warning: unused function 'overthink_is_marker' [-Wunused-function]
+   15 | static int overthink_is_marker(int token, const int *ids, int count) {
+      |            ^~~~~~~~~~~~~~~~~~~
+/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/overthink_diagnostics.h:20:15: warning: unused function 'overthink_marker_mass' [-Wunused-function]
+   20 | static double overthink_marker_mass(const float *logits, int vocab,
+      |               ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/overthink_diagnostics.h:44:13: warning: unused function 'overthink_policy_metrics' [-Wunused-function]
+   44 | static void overthink_policy_metrics(double mass, double effective_penalty,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+3 warnings generated.

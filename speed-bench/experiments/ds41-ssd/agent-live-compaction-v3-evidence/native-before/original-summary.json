@@ -1,0 +1,80 @@
+{
+  "arm": "native-before",
+  "process_returncode": 1,
+  "complete": false,
+  "turns_checked": 3,
+  "turns_correct": 3,
+  "all_three_turns_correct": false,
+  "ordered_stages_valid": true,
+  "missing_final_project_files": [],
+  "harness_outcome": {
+    "status": "FAILED",
+    "phase": "trace_validation",
+    "stage": 2,
+    "error_type": "ValueError",
+    "error": "Compaction requires a separate replay format",
+    "traceback": "Traceback (most recent call last):\n  File \"/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3/live.py\", line 136, in <module>\n    result,replay=extract(trace)\n                  ~~~~~~~^^^^^^^\n  File \"/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3/trace_session.py\", line 16, in extract\n    raise ValueError('Compaction requires a separate replay format')\nValueError: Compaction requires a separate replay format\n",
+    "agent_pid": 53126,
+    "agent_returncode": 0,
+    "turns_submitted": 3,
+    "turns_observed": 3,
+    "checks_recorded": 3,
+    "elapsed_seconds": 435.1233570830009,
+    "cleanup_grace_seconds": 5.5
+  },
+  "checks": [
+    {
+      "stage": 0,
+      "held_out_rc": 0,
+      "tests_rc": 0,
+      "held_out": "PASS held-out stage 0\n",
+      "tests": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+    },
+    {
+      "stage": 1,
+      "held_out_rc": 0,
+      "tests_rc": 0,
+      "held_out": "PASS held-out stage 1\n",
+      "tests": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\ntest_default_unchanged (test_since.SinceTests.test_default_unchanged) ... ok\ntest_duplicate_straddling_cutoff (test_since.SinceTests.test_duplicate_straddling_cutoff) ... ok\ntest_inclusive_boundary (test_since.SinceTests.test_inclusive_boundary) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.000s\n\nOK\n"
+    },
+    {
+      "stage": 2,
+      "held_out_rc": 0,
+      "tests_rc": 0,
+      "held_out": "PASS held-out stage 2\n",
+      "tests": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\ntest_default_unchanged (test_since.SinceTests.test_default_unchanged) ... ok\ntest_duplicate_straddling_cutoff (test_since.SinceTests.test_duplicate_straddling_cutoff) ... ok\ntest_inclusive_boundary (test_since.SinceTests.test_inclusive_boundary) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.000s\n\nOK\n"
+    }
+  ],
+  "agent_summary": null,
+  "resident_route": null,
+  "project_file_sha256": {
+    "README.md": "4762a22be96dd9296022f5feb2751c482741d37e728ebde4fa155c18feaa853f",
+    "data.csv": "6d39cc523285833e9b82d51f486d3f8eee4fac157aa4f1aecf0060c0be445b4b",
+    "ledger/__init__.py": "520756894a4ccfc933e2d3b148754f02620a64eeef5430412b7346fb8aee9f44",
+    "ledger/cli.py": "9d3f47361f5033ec64ff238c3342326fa9f2a2552dbbfb00c238109c54c68a3f",
+    "ledger/io.py": "9fd2e228274f830fecde49b0f64a9942db57048c75cdc0353e89c8ac07aca26d",
+    "ledger/money.py": "e79e65e65ca3b6da2a0f64af4d0836aac65e8e6909a13cc25cd1741b65f2c368",
+    "ledger/report.py": "a31821387909f1ca7d81db44489c97850be091f8e454db01c2d9187a82dddb61",
+    "recent.json": "06d1149cab2e8519beeca9d2e7a1d391cde071874609e65a8ae0b3e59dc8f846",
+    "result.json": "5bc26a462c11d3ab06284ccac0569000391fda360544fbd9c52deab4235c585f",
+    "tests/test_report.py": "ab4025c1305ce65d35a6263bffe45a4a5cc288560fc1199a333d1024e14fbafa",
+    "tests/test_since.py": "e981718b2b1a8647939ff15acdd79802b484f3c0725e80938227cb9a5430e09c"
+  },
+  "rounds_at_configured_limit_or_context_boundary": [
+    {
+      "tool_round": 2,
+      "generated": 376,
+      "carried": 0,
+      "context_limited": true
+    },
+    {
+      "tool_round": 3,
+      "generated": 53,
+      "carried": 0,
+      "context_limited": true
+    }
+  ],
+  "limit_observation": "Trace records generated/carried/context_limited, not an explicit EOS-versus-cap flag; at-limit rounds are reported without inventing an exact termination cause.",
+  "stdout_sha256": "e90ab19234d327c192db38287137a0d26f974e1f9ecb9137c9247003d463bf17",
+  "trace_sha256": "9d5f111939c6543bc58692a42407c8c2dd63dca136f4ac18035fb91c748685bc"
+}

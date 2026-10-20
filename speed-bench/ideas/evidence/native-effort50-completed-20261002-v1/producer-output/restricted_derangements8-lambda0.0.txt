@@ -1,0 +1,59 @@
+We need answer count. Need solve. Need be careful. Problem: permutations of 8 with no fixed points (derangements) and additionally p(1) !=2, p(2)!=1. Count. Need integer.
+
+We can inclusion-exclusion. Total permutations 8!. Conditions: for i=1..8 p(i)!=i; plus p(1)!=2, p(2)!=1. Need count.
+
+Let's compute. This is permutations avoiding forbidden positions in 8x8 board: diagonal all 8 forbidden, plus (1,2),(2,1) forbidden. Count perfect matchings in complement. Use inclusion-exclusion over forbidden positions. Need count permutations avoiding set F of size 10? Note (1,1),(2,2) etc. F = diagonal 8 plus off-diagonal (1,2),(2,1). But (1,2) distinct from diag; (2,1). Need count permutations with no forbidden positions.
+
+Inclusion-exclusion: N = sum_{S subset F} (-1)^|S| * (8 - |S|)! if S is a matching (no two forbidden positions share row or column). If S not matching, no permutations satisfy all selected conditions? Actually if selected forbidden positions conflict same row/col, impossible, term 0. So need count matchings in forbidden board F of size k, weighted (-1)^k (8-k)!.
+
+Need count matchings in F. F consists diagonal edges (i,i) for i=1..8 and two off-diagonal edges (1,2),(2,1). Need count matchings by size k. Then sum.
+
+Could compute via rook polynomial for board F. Since diagonal has 8 cells, plus two extra in rows/cols 1,2. Need rook numbers r_k.
+
+Let's compute carefully. Board F: positions:
+diagonal D: (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)
+extra E: (1,2),(2,1).
+
+Rows/cols involved. Extra edges connect rows 1,2 cols 1,2. Diagonal edges in rows 1,2 cols 1,2 too. Interactions.
+
+Need rook numbers r_k = number of ways place k nonattacking rooks on F.
+
+Can derive. Since diagonal alone has rook numbers C(8,k) (choose k rows and corresponding columns). Extra cells add possibilities. Need count matchings including extra.
+
+Let's compute r_k for k=0..8 maybe max matching? F has 10 cells but max matching? Could be 8? Need see. Diagonal gives 8 matching all rows/cols. Extra may allow still 8? To include extra (1,2), then row1 col2 occupied, col1 unavailable, row2 maybe? Need cover all 8 rows/cols with 8 rooks? Since 8 rooks on 8 rows/cols. If include (1,2), row1 uses col2, then col2 unavailable. Row2 cannot use col2 diag; can use col1 extra or maybe other? To cover all columns, col1 must be used by some row. Row2 can use (2,1), but then row2 col1. Then rows 3-8 use diagonals 3..8. That's 8 rooks? Include both extras (1,2),(2,1) plus diagonals 3..8 = 8? Wait rows 1,2,3..8 =8 rooks, cols 2,1,3..8=8. Yes matching size 8 with both extras. Also include one extra? If include (1,2) only, row1 col2, col1 must be used by some other row. Row2 cannot use col2; can use col1? That's extra (2,1) if include, or row2 diag col2 unavailable. Other row cannot use col1 except row1? Diagonal row? col1 only row1 diag or row2 extra. So to cover col1, must include (2,1). Thus one extra alone cannot be in full matching of size 8? But for k<8 possible.
+
+Need rook numbers.
+
+Approach: Use inclusion-exclusion over extra cells. Diagonal board D has rook numbers d_j = C(8,j). Add extra cells. Count matchings in D ∪ E. We can classify by number of extra cells selected m=0,1,2.
+
+r_k = sum over subsets T of E of size m, (-? no, just count matchings in D avoiding rows/cols used by T) with remaining k-m rooks on diagonal. For each valid T matching, number of diagonal rooks on remaining rows/cols excluding used rows and cols. Diagonal D restricted to available rows and columns. But if T uses row r and col c not necessarily same, diagonal edges in remaining rows/cols: For each remaining row i, its diagonal column i must be available. If column i is used by T, then row i cannot use diagonal i; so diagonal available rows are those not used by T and whose column not used by T. Since T uses some rows and columns. Number of diagonal rooks of size j from D on available rows/cols = choose from indices i such that row i not used and col i not used. Let A = set of indices not in used rows and not in used columns. Then d_j = C(|A|, j). Because diagonal edges correspond i.
+
+For T subset E of size m, valid if no row/col conflict among T and with? T itself matching. E cells:
+a=(1,2), b=(2,1). They are disjoint rows and cols? a uses row1 col2; b uses row2 col1. They do not share row/col, so {a,b} valid. Single valid.
+
+For T empty: used rows/cols none, |A|=8, contribution to r_k: C(8,k).
+
+For T={a}: used row1, col2. A = indices not row used {1} and not col used {2}: {3,4,5,6,7,8}? Also index 2? row2 not used but col2 used so exclude. index1 row used exclude. So |A|=6. Need place k-1 diagonal rooks from A. Contribution for k>=1: C(6,k-1). Similarly T={b}: used row2 col1, A excludes row2 and col1 => {3,4,5,6,7,8}? index1 col used exclude. |A|=6. Contribution 2*C(6,k-1).
+
+For T={a,b}: used rows {1,2}, cols {1,2}. A excludes indices 1,2 due both row and col. Remaining {3,4,5,6,7,8}, |A|=6. Need k-2 diagonal rooks: C(6,k-2). Contribution.
+
+Thus r_k = C(8,k) + 2 C(6,k-1) + C(6,k-2), with convention C(n,j)=0 if j<0 or j>n. Is this correct? Wait for T={a,b}, used rows 1,2 and cols 2,1. A excludes row1,row2, col1,col2 => indices 1,2 excluded. Remaining 3-8 size6. yes.
+
+Let's test small k. r_0=1. k=1: C8,1=8 +2*C6,0=2 + C6,-1=0 =>10 cells. yes.
+k=2: C8,2=28 +2*C6,1=12 + C6,0=1 =>41. Let's maybe manually? Diagonal pairs C8,2=28. One extra + one diagonal not sharing: for a, available A size6, choose 1 =6, times2=12. Both extras=1. total41. Seems plausible.
+k=8: C8,8=1 +2*C6,7=0 + C6,6=1 =>2? Wait matchings size8: diagonal only, and both extras + diagonals 3-8 =1. total 2. Good. But are there matchings size8 with one extra? No. r8=2. Max matching size 8.
+
+Then count N = sum_{k=0}^8 (-1)^k r_k (8-k)!.
+
+Compute. Need integer. Let's calculate carefully.
+
+r_k formula:
+r0=1
+r1=10
+r2= C8,2 28 +2*C6,1 12 + C6,0 1 =41.
+r3= C8,3=56 +2*C6,2=2*15=30 + C6,1=6 =>92.
+r4= C8,4=70 +2*C6,3=2*20=40 + C6,2=15 =>125.
+r5= C8,5=56 +2*C6,4=2*15=30 + C6,3=20 =>106.
+r6= C8,6=28 +2*C6,5=2*6=12 + C6,4=15 =>55.
+r7= C8,7=8 +2*C6,6=2*1=2 + C6,5=6 =>16.
+r8= C8,8=1 +2*C6,7=0 + C6,6=1 =>

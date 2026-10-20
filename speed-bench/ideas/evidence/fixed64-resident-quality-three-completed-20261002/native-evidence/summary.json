@@ -1,0 +1,757 @@
+[
+  {
+    "argmax_flips": 0,
+    "avg_nll": 0.019270655303,
+    "bit_equal_rows": 343,
+    "decode_ms": 18237.673,
+    "decode_phase_count": 3,
+    "delta_nll": 0,
+    "exact_demand_io": {
+      "per_phase": [
+        {
+          "cache_evictions": 13317,
+          "cache_hits": 193187,
+          "cache_loader_returned_bytes": 108958556160,
+          "cache_misses": 19453,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 0,
+          "pread_calls": 32841,
+          "pread_requested_bytes": 108958556160,
+          "pread_returned_bytes": 108958556160,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 2160,
+          "cache_hits": 19440,
+          "cache_loader_returned_bytes": 21499084800,
+          "cache_misses": 2160,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 1,
+          "pread_calls": 6480,
+          "pread_requested_bytes": 21499084800,
+          "pread_returned_bytes": 21499084800,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 2413,
+          "cache_hits": 14867,
+          "cache_loader_returned_bytes": 24017264640,
+          "cache_misses": 2413,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 2,
+          "pread_calls": 7239,
+          "pread_requested_bytes": 24017264640,
+          "pread_returned_bytes": 24017264640,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 6901,
+          "cache_hits": 65339,
+          "cache_loader_returned_bytes": 68687585280,
+          "cache_misses": 6901,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 3,
+          "pread_calls": 20703,
+          "pread_requested_bytes": 68687585280,
+          "pread_returned_bytes": 68687585280,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1286,
+          "cache_hits": 16474,
+          "cache_loader_returned_bytes": 12799918080,
+          "cache_misses": 1286,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 4,
+          "pread_calls": 3858,
+          "pread_requested_bytes": 12799918080,
+          "pread_returned_bytes": 12799918080,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1255,
+          "cache_hits": 16025,
+          "cache_loader_returned_bytes": 12491366400,
+          "cache_misses": 1255,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 5,
+          "pread_calls": 3765,
+          "pread_requested_bytes": 12491366400,
+          "pread_returned_bytes": 12491366400,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1335,
+          "cache_hits": 45945,
+          "cache_loader_returned_bytes": 13287628800,
+          "cache_misses": 1335,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 6,
+          "pread_calls": 4005,
+          "pread_requested_bytes": 13287628800,
+          "pread_returned_bytes": 13287628800,
+          "resident_entries": 6136
+        }
+      ],
+      "scope": "Exact logical demand-loader syscall counters between completed evaluation phase boundaries; no physical SSD-byte claim or skip-count estimate.",
+      "total": {
+        "cache_evictions": 28667,
+        "cache_hits": 371277,
+        "cache_loader_returned_bytes": 261741404160,
+        "cache_misses": 34803,
+        "pread_calls": 78891,
+        "pread_requested_bytes": 261741404160,
+        "pread_returned_bytes": 261741404160
+      }
+    },
+    "independence_scope": "One correlated evolving-agent trajectory; no independent-prompt confidence interval.",
+    "kl_base_to_raw": 0,
+    "kl_max": 0.0,
+    "kl_p99": 0.0,
+    "name": "native-before",
+    "per_decode_phase": {
+      "phase_002": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_nll": 0.027633164984209847,
+        "mean_tv": 0.0,
+        "tokens": 72
+      },
+      "phase_004": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_nll": 0.02465057462992889,
+        "mean_tv": 0.0,
+        "tokens": 74
+      },
+      "phase_006": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_nll": 0.014193423185017682,
+        "mean_tv": 0.0,
+        "tokens": 197
+      }
+    },
+    "phases": 7,
+    "prefill_ms": 64621.554,
+    "raw_bytes": 177380400,
+    "raw_sha256": "cf5b0ea8e62426d8682b603d09b83501a9de97b5a2535537acaf0dcc50ecf482",
+    "tokens": 343,
+    "trajectory_count": 1,
+    "tv": 0
+  },
+  {
+    "argmax_flips": 3,
+    "avg_nll": 0.0187892466695,
+    "bit_equal_rows": 1,
+    "decode_ms": 16981.426,
+    "decode_phase_count": 3,
+    "delta_nll": -0.000481408633505,
+    "exact_demand_io": {
+      "per_phase": [
+        {
+          "cache_evictions": 13317,
+          "cache_hits": 193187,
+          "cache_loader_returned_bytes": 108958556160,
+          "cache_misses": 19453,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 0,
+          "pread_calls": 32841,
+          "pread_requested_bytes": 108958556160,
+          "pread_returned_bytes": 108958556160,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 2160,
+          "cache_hits": 19440,
+          "cache_loader_returned_bytes": 21499084800,
+          "cache_misses": 2160,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 1,
+          "pread_calls": 6480,
+          "pread_requested_bytes": 21499084800,
+          "pread_returned_bytes": 21499084800,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1619,
+          "cache_hits": 15661,
+          "cache_loader_returned_bytes": 16114360320,
+          "cache_misses": 1619,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 2,
+          "pread_calls": 4857,
+          "pread_requested_bytes": 16114360320,
+          "pread_returned_bytes": 16114360320,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 6995,
+          "cache_hits": 65245,
+          "cache_loader_returned_bytes": 69623193600,
+          "cache_misses": 6995,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 3,
+          "pread_calls": 20985,
+          "pread_requested_bytes": 69623193600,
+          "pread_returned_bytes": 69623193600,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 807,
+          "cache_hits": 16953,
+          "cache_loader_returned_bytes": 8032296960,
+          "cache_misses": 807,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 4,
+          "pread_calls": 2421,
+          "pread_requested_bytes": 8032296960,
+          "pread_returned_bytes": 8032296960,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1241,
+          "cache_hits": 16039,
+          "cache_loader_returned_bytes": 12352020480,
+          "cache_misses": 1241,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 5,
+          "pread_calls": 3723,
+          "pread_requested_bytes": 12352020480,
+          "pread_returned_bytes": 12352020480,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 728,
+          "cache_hits": 46552,
+          "cache_loader_returned_bytes": 7245987840,
+          "cache_misses": 728,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 6,
+          "pread_calls": 2184,
+          "pread_requested_bytes": 7245987840,
+          "pread_returned_bytes": 7245987840,
+          "resident_entries": 6136
+        }
+      ],
+      "scope": "Exact logical demand-loader syscall counters between completed evaluation phase boundaries; no physical SSD-byte claim or skip-count estimate.",
+      "total": {
+        "cache_evictions": 26867,
+        "cache_hits": 373077,
+        "cache_loader_returned_bytes": 243825500160,
+        "cache_misses": 33003,
+        "pread_calls": 73491,
+        "pread_requested_bytes": 243825500160,
+        "pread_returned_bytes": 243825500160
+      }
+    },
+    "independence_scope": "One correlated evolving-agent trajectory; no independent-prompt confidence interval.",
+    "kl_base_to_raw": 0.000885105043898,
+    "kl_max": 0.0656228766274,
+    "kl_p99": 0.0288153248712,
+    "name": "balanced2",
+    "per_decode_phase": {
+      "phase_002": {
+        "argmax_flips": 1,
+        "mean_delta_nll": -0.001914084911819297,
+        "mean_kl": 0.0004144999607406146,
+        "mean_nll": 0.02571908007237802,
+        "mean_tv": 0.002820389194226671,
+        "tokens": 72
+      },
+      "phase_004": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.0025237186507670244,
+        "mean_kl": 0.00033831301663094025,
+        "mean_nll": 0.027174293280690084,
+        "mean_tv": 0.002496429155691875,
+        "tokens": 74
+      },
+      "phase_006": {
+        "argmax_flips": 2,
+        "mean_delta_nll": -0.0010866204456723074,
+        "mean_kl": 0.0012624968002696705,
+        "mean_nll": 0.01310680273933622,
+        "mean_tv": 0.0041797148778850175,
+        "tokens": 197
+      }
+    },
+    "phases": 7,
+    "prefill_ms": 65608.012,
+    "raw_bytes": 177380400,
+    "raw_sha256": "cbc1f8c35151ab93e663bb8d3e8ad0a5e6fbd29100c5de5b7eb9a2531b9f9993",
+    "tokens": 343,
+    "trajectory_count": 1,
+    "tv": 0.00353121752317
+  },
+  {
+    "argmax_flips": 3,
+    "avg_nll": 0.0172190084025,
+    "bit_equal_rows": 1,
+    "decode_ms": 16568.162,
+    "decode_phase_count": 3,
+    "delta_nll": -0.00205164690048,
+    "exact_demand_io": {
+      "per_phase": [
+        {
+          "cache_evictions": 13317,
+          "cache_hits": 193187,
+          "cache_loader_returned_bytes": 108958556160,
+          "cache_misses": 19453,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 0,
+          "pread_calls": 32841,
+          "pread_requested_bytes": 108958556160,
+          "pread_returned_bytes": 108958556160,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 2160,
+          "cache_hits": 19440,
+          "cache_loader_returned_bytes": 21499084800,
+          "cache_misses": 2160,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 1,
+          "pread_calls": 6480,
+          "pread_requested_bytes": 21499084800,
+          "pread_returned_bytes": 21499084800,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1398,
+          "cache_hits": 15882,
+          "cache_loader_returned_bytes": 13914685440,
+          "cache_misses": 1398,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 2,
+          "pread_calls": 4194,
+          "pread_requested_bytes": 13914685440,
+          "pread_returned_bytes": 13914685440,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 6909,
+          "cache_hits": 65331,
+          "cache_loader_returned_bytes": 68767211520,
+          "cache_misses": 6909,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 3,
+          "pread_calls": 20727,
+          "pread_requested_bytes": 68767211520,
+          "pread_returned_bytes": 68767211520,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 697,
+          "cache_hits": 17063,
+          "cache_loader_returned_bytes": 6937436160,
+          "cache_misses": 697,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 4,
+          "pread_calls": 2091,
+          "pread_requested_bytes": 6937436160,
+          "pread_returned_bytes": 6937436160,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1227,
+          "cache_hits": 16053,
+          "cache_loader_returned_bytes": 12212674560,
+          "cache_misses": 1227,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 5,
+          "pread_calls": 3681,
+          "pread_requested_bytes": 12212674560,
+          "pread_returned_bytes": 12212674560,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 626,
+          "cache_hits": 46654,
+          "cache_loader_returned_bytes": 6230753280,
+          "cache_misses": 626,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 6,
+          "pread_calls": 1878,
+          "pread_requested_bytes": 6230753280,
+          "pread_returned_bytes": 6230753280,
+          "resident_entries": 6136
+        }
+      ],
+      "scope": "Exact logical demand-loader syscall counters between completed evaluation phase boundaries; no physical SSD-byte claim or skip-count estimate.",
+      "total": {
+        "cache_evictions": 26334,
+        "cache_hits": 373610,
+        "cache_loader_returned_bytes": 238520401920,
+        "cache_misses": 32470,
+        "pread_calls": 71892,
+        "pread_requested_bytes": 238520401920,
+        "pread_returned_bytes": 238520401920
+      }
+    },
+    "independence_scope": "One correlated evolving-agent trajectory; no independent-prompt confidence interval.",
+    "kl_base_to_raw": 0.000728112114256,
+    "kl_max": 0.0597622814761,
+    "kl_p99": 0.0218992048697,
+    "name": "broader2",
+    "per_decode_phase": {
+      "phase_002": {
+        "argmax_flips": 1,
+        "mean_delta_nll": -0.003800330218607207,
+        "mean_kl": 0.0005540475957684968,
+        "mean_nll": 0.023832834765601687,
+        "mean_tv": 0.002895294312180647,
+        "tokens": 72
+      },
+      "phase_004": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.00028788107796748254,
+        "mean_kl": 0.00016367585507601337,
+        "mean_nll": 0.024938455707890283,
+        "mean_tv": 0.0012256595521367142,
+        "tokens": 74
+      },
+      "phase_006": {
+        "argmax_flips": 2,
+        "mean_delta_nll": -0.0022913416796577013,
+        "mean_kl": 0.0010037513452735207,
+        "mean_nll": 0.01190208150535389,
+        "mean_tv": 0.0034796246282184674,
+        "tokens": 197
+      }
+    },
+    "phases": 7,
+    "prefill_ms": 67405.305,
+    "raw_bytes": 177380400,
+    "raw_sha256": "01a7d150684f806438683842406e48bd824c861b227d956b2d310ed4d309b5f2",
+    "tokens": 343,
+    "trajectory_count": 1,
+    "tv": 0.00287068818978
+  },
+  {
+    "argmax_flips": 2,
+    "avg_nll": 0.0194016036302,
+    "bit_equal_rows": 1,
+    "decode_ms": 16088.66,
+    "decode_phase_count": 3,
+    "delta_nll": 0.000130948327253,
+    "exact_demand_io": {
+      "per_phase": [
+        {
+          "cache_evictions": 13317,
+          "cache_hits": 193187,
+          "cache_loader_returned_bytes": 108958556160,
+          "cache_misses": 19453,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 0,
+          "pread_calls": 32841,
+          "pread_requested_bytes": 108958556160,
+          "pread_returned_bytes": 108958556160,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 2160,
+          "cache_hits": 19440,
+          "cache_loader_returned_bytes": 21499084800,
+          "cache_misses": 2160,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 1,
+          "pread_calls": 6480,
+          "pread_requested_bytes": 21499084800,
+          "pread_returned_bytes": 21499084800,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1097,
+          "cache_hits": 16183,
+          "cache_loader_returned_bytes": 10918748160,
+          "cache_misses": 1097,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 2,
+          "pread_calls": 3291,
+          "pread_requested_bytes": 10918748160,
+          "pread_returned_bytes": 10918748160,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 7014,
+          "cache_hits": 65226,
+          "cache_loader_returned_bytes": 69812305920,
+          "cache_misses": 7014,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 3,
+          "pread_calls": 21042,
+          "pread_requested_bytes": 69812305920,
+          "pread_returned_bytes": 69812305920,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 503,
+          "cache_hits": 17257,
+          "cache_loader_returned_bytes": 5006499840,
+          "cache_misses": 503,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 4,
+          "pread_calls": 1509,
+          "pread_requested_bytes": 5006499840,
+          "pread_returned_bytes": 5006499840,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1268,
+          "cache_hits": 16012,
+          "cache_loader_returned_bytes": 12620759040,
+          "cache_misses": 1268,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 5,
+          "pread_calls": 3804,
+          "pread_requested_bytes": 12620759040,
+          "pread_returned_bytes": 12620759040,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 423,
+          "cache_hits": 46857,
+          "cache_loader_returned_bytes": 4210237440,
+          "cache_misses": 423,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 6,
+          "pread_calls": 1269,
+          "pread_requested_bytes": 4210237440,
+          "pread_returned_bytes": 4210237440,
+          "resident_entries": 6136
+        }
+      ],
+      "scope": "Exact logical demand-loader syscall counters between completed evaluation phase boundaries; no physical SSD-byte claim or skip-count estimate.",
+      "total": {
+        "cache_evictions": 25782,
+        "cache_hits": 374162,
+        "cache_loader_returned_bytes": 233026191360,
+        "cache_misses": 31918,
+        "pread_calls": 70236,
+        "pread_requested_bytes": 233026191360,
+        "pread_returned_bytes": 233026191360
+      }
+    },
+    "independence_scope": "One correlated evolving-agent trajectory; no independent-prompt confidence interval.",
+    "kl_base_to_raw": 0.000292227107702,
+    "kl_max": 0.0157799297369,
+    "kl_p99": 0.0102737344953,
+    "name": "broader3",
+    "per_decode_phase": {
+      "phase_002": {
+        "argmax_flips": 0,
+        "mean_delta_nll": -0.00046176968576081137,
+        "mean_kl": 0.00018828893133485385,
+        "mean_nll": 0.027171395298438112,
+        "mean_tv": 0.001392049024068389,
+        "tokens": 72
+      },
+      "phase_004": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.0024707623914780323,
+        "mean_kl": 0.0003428525095322671,
+        "mean_nll": 0.027121337021381618,
+        "mean_tv": 0.0026305544478056734,
+        "tokens": 74
+      },
+      "phase_006": {
+        "argmax_flips": 2,
+        "mean_delta_nll": -0.000531338697187507,
+        "mean_kl": 0.0003111980161430285,
+        "mean_nll": 0.013662084487831785,
+        "mean_tv": 0.0016380686129781538,
+        "tokens": 197
+      }
+    },
+    "phases": 7,
+    "prefill_ms": 67347.547,
+    "raw_bytes": 177380400,
+    "raw_sha256": "0142be203a383dce6d6c2f40fc0e4a00f575cc3998308859912f47ee61a4010e",
+    "tokens": 343,
+    "trajectory_count": 1,
+    "tv": 0.00180054832544
+  },
+  {
+    "argmax_flips": 0,
+    "avg_nll": 0.019270655303,
+    "bit_equal_rows": 343,
+    "decode_ms": 18210.514,
+    "decode_phase_count": 3,
+    "delta_nll": 0,
+    "exact_demand_io": {
+      "per_phase": [
+        {
+          "cache_evictions": 13317,
+          "cache_hits": 193187,
+          "cache_loader_returned_bytes": 108958556160,
+          "cache_misses": 19453,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 0,
+          "pread_calls": 32841,
+          "pread_requested_bytes": 108958556160,
+          "pread_returned_bytes": 108958556160,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 2160,
+          "cache_hits": 19440,
+          "cache_loader_returned_bytes": 21499084800,
+          "cache_misses": 2160,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 1,
+          "pread_calls": 6480,
+          "pread_requested_bytes": 21499084800,
+          "pread_returned_bytes": 21499084800,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 2413,
+          "cache_hits": 14867,
+          "cache_loader_returned_bytes": 24017264640,
+          "cache_misses": 2413,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 2,
+          "pread_calls": 7239,
+          "pread_requested_bytes": 24017264640,
+          "pread_returned_bytes": 24017264640,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 6901,
+          "cache_hits": 65339,
+          "cache_loader_returned_bytes": 68687585280,
+          "cache_misses": 6901,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 3,
+          "pread_calls": 20703,
+          "pread_requested_bytes": 68687585280,
+          "pread_returned_bytes": 68687585280,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1286,
+          "cache_hits": 16474,
+          "cache_loader_returned_bytes": 12799918080,
+          "cache_misses": 1286,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 4,
+          "pread_calls": 3858,
+          "pread_requested_bytes": 12799918080,
+          "pread_returned_bytes": 12799918080,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1255,
+          "cache_hits": 16025,
+          "cache_loader_returned_bytes": 12491366400,
+          "cache_misses": 1255,
+          "configured_slots": 6136,
+          "kind": "P",
+          "phase": 5,
+          "pread_calls": 3765,
+          "pread_requested_bytes": 12491366400,
+          "pread_returned_bytes": 12491366400,
+          "resident_entries": 6136
+        },
+        {
+          "cache_evictions": 1335,
+          "cache_hits": 45945,
+          "cache_loader_returned_bytes": 13287628800,
+          "cache_misses": 1335,
+          "configured_slots": 6136,
+          "kind": "D",
+          "phase": 6,
+          "pread_calls": 4005,
+          "pread_requested_bytes": 13287628800,
+          "pread_returned_bytes": 13287628800,
+          "resident_entries": 6136
+        }
+      ],
+      "scope": "Exact logical demand-loader syscall counters between completed evaluation phase boundaries; no physical SSD-byte claim or skip-count estimate.",
+      "total": {
+        "cache_evictions": 28667,
+        "cache_hits": 371277,
+        "cache_loader_returned_bytes": 261741404160,
+        "cache_misses": 34803,
+        "pread_calls": 78891,
+        "pread_requested_bytes": 261741404160,
+        "pread_returned_bytes": 261741404160
+      }
+    },
+    "independence_scope": "One correlated evolving-agent trajectory; no independent-prompt confidence interval.",
+    "kl_base_to_raw": 0,
+    "kl_max": 0.0,
+    "kl_p99": 0.0,
+    "name": "native-after",
+    "per_decode_phase": {
+      "phase_002": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_nll": 0.027633164984209847,
+        "mean_tv": 0.0,
+        "tokens": 72
+      },
+      "phase_004": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_nll": 0.02465057462992889,
+        "mean_tv": 0.0,
+        "tokens": 74
+      },
+      "phase_006": {
+        "argmax_flips": 0,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_nll": 0.014193423185017682,
+        "mean_tv": 0.0,
+        "tokens": 197
+      }
+    },
+    "phases": 7,
+    "prefill_ms": 67180.222,
+    "raw_bytes": 177380400,
+    "raw_sha256": "cf5b0ea8e62426d8682b603d09b83501a9de97b5a2535537acaf0dcc50ecf482",
+    "tokens": 343,
+    "trajectory_count": 1,
+    "tv": 0
+  }
+]

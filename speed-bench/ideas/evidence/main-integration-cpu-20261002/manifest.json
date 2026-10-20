@@ -1,0 +1,79 @@
+{
+  "status": "FOCUSED_BUILD_AND_CPU_TESTS_PASS",
+  "merge_source": "3d9670ea",
+  "parents": [
+    "2bf2ccc9",
+    "0b20e1b4"
+  ],
+  "source_comparison": "All runtime/test/helper files identical to frozen integration0b20; no merge conflict or runtime edit.",
+  "tests": [
+    {
+      "argv": [
+        "./ds4_agent_test"
+      ],
+      "returncode": 0,
+      "captured_via": "exec session83313; terminal output archived verbatim without bell bytes"
+    },
+    {
+      "argv": [
+        "./tests/test_resident_route"
+      ],
+      "returncode": 0,
+      "captured_via": "direct exec output archived verbatim"
+    },
+    {
+      "argv": [
+        "./tests/test_session_suffix_exports",
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/sentinel.bin"
+      ],
+      "returncode": 0,
+      "captured_via": "subprocess captured output"
+    }
+  ],
+  "corrected_test_invocation": {
+    "argv": [
+      "./tests/test_session_suffix_exports"
+    ],
+    "returncode": 134,
+    "reason": "First invocation omitted mandatory sentinel output-path argument; failed argc assertion before test execution. Correct invocation then passed."
+  },
+  "source_sha256": {
+    "ds4.c": "eb381c5aa1b13ca3452692d31d839c2c7c10e7e887db83fa91a8596ff8dfe798",
+    "ds4.h": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+    "ds4_agent.c": "ba2b66e8fea4b663cb9a3e01d6cdc8a62b6c43350e32342b6ec32c5fb6f902f3",
+    "ds4_metal.m": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+    "ds4_gpu.h": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "ds4_resident_route.h": "a21dbe771153513a5625cfa14940164978cf5574b1a14c5d313ceaf5cec9f37c",
+    "Makefile": "b31a31fc919067815509fa9b639701c6d30bacbb80cd52f2f3cd534398b4ed56",
+    "speed-bench/suffix_fact_oracle.c": "9ffc990693c0f266f0676b4fbc6cda910eac42fd00c8acbcfc620012829bbdf8",
+    "speed-bench/suffix_snapshot_compare.h": "8e2d3f23978e6af48f02ddce35d555e11a15354b815e9134bad96fb81cda46d3",
+    "tests/test_session_suffix_exports.c": "95eecddbf21c776db944c4d697a7eb57f4ade3ea06e742e323949803965cf176",
+    "tests/test_suffix_diagnostic_format.c": "a96470d6dce8006f4694f79c3f5ca4e214fab4bb6b4bdffb22fe00af678aa449",
+    "tests/test_agent_context_suffix_mock.c": "33c9e90d44c1ce193723fdd50b7546b473c5241f7d2033e767fc0da43319c1c6"
+  },
+  "artifacts": {
+    "ds4-agent": {
+      "bytes": 3049352,
+      "sha256": "14b34c3986c26deb04658d49f1a56cbe7a76c3bbf6f5795f4ca62624dba75cc3"
+    },
+    "ds4_agent_test": {
+      "bytes": 3054736,
+      "sha256": "21ef31a9987544e6f505b24399e64fe35196984b46285791ea92b9a239a111e6"
+    },
+    "tests/test_resident_route": {
+      "bytes": 38336,
+      "sha256": "058a746d3bbaaaf2c9a8c248d3e7399e17a3f45b19534395e0abdbc4f4de09b9"
+    },
+    "tests/test_session_suffix_exports": {
+      "bytes": 2676184,
+      "sha256": "e1a9486ece43cf8632c9b7cc31e1948a26d495f8059d1fbeeec1c6192a9740a7"
+    }
+  },
+  "additional_merged_source_tests": {
+    "status": "PASS",
+    "commands": "additional-tests.json",
+    "model_free": true,
+    "mock_scope": "Actual agent helper instrumented with ASan/UBSan; session/tokenizer seams mocked, linked production core objects are ordinary uninstrumented build.",
+    "tag_scope": "Actual core canonical-source/parser and public payload/snapshot rejection; includes real ds4.c; no model/GPU opened."
+  }
+}

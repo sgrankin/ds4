@@ -1,0 +1,42 @@
+{
+  "status": "locked before any inference on these16 cases",
+  "source_commit": "bfcde97a7758a135b39f18e0ec3691547cb8d832",
+  "command": [
+    "python3",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-broad-independent16-20261002-pressure",
+    "--",
+    "python3",
+    "/Volumes/Models/ds4/speed-bench/ideas/run_fixture_matrix.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-broad-independent16-20261002",
+    "--binary",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-timing-build-20261002/quality-probe-drop",
+    "--manifest",
+    "/Volumes/Models/ds4/speed-bench/ideas/validation-broad.tsv",
+    "--variant",
+    "balanced:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=replace,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.15,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.18,DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS=0.30,DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK=24,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=2",
+    "--variant",
+    "broader:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=replace,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.30,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.20,DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS=0.35,DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK=48,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=2",
+    "--variant",
+    "drop:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=drop,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.05,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.10,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=1"
+  ],
+  "inputs": [
+    "case_001",
+    "case_007",
+    "case_013",
+    "case_019",
+    "case_025",
+    "case_031",
+    "case_037",
+    "case_043",
+    "case_049",
+    "case_055",
+    "case_061",
+    "case_067",
+    "case_073",
+    "case_079",
+    "case_085",
+    "case_091"
+  ],
+  "scope": "Independent prompt validation for all three preregistered resident policies; frozen native reference and before/after controls."
+}

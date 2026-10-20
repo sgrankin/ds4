@@ -1,0 +1,75 @@
+{
+  "start_utc": "2026-10-04 17:24:00",
+  "deadline_utc": "2026-10-04 18:14:00",
+  "budget_note": "10 minutes of earlier cache/source/launcher preparation charged",
+  "one_change": "host hot limit0/128/512MiB; same full-input four-session suffix64 workload",
+  "runtime_change": "only log existing state-cache counters at shutdown after owners stop",
+  "server_sha256": "430e6c2671739d5e60a3c583324e55ce32ed5d1989d78394c7c77ebb305d93b2",
+  "build_command": "make -j2 ds4-server ds4_test",
+  "build_returncode": 0,
+  "check_command": "./ds4_test --server",
+  "check_returncode": 0,
+  "build_log": ".workspaces/server-agent-day-20261004/item21-build.log",
+  "check_log": ".workspaces/server-agent-day-20261004/item21-server-tests.log",
+  "prepared_driver_revision": "656b0f6c64d9104f8e5181e39a967a484f75e359",
+  "driver": "../concurrent-sessions-hour19-20261004/run.py",
+  "arms": [
+    "hot0",
+    "hot128",
+    "hot512"
+  ],
+  "cache_ssd_mb": 4096,
+  "settings": "Q2/cache64/ctx8192/chunk512/batch2/GAP0/effortnone/temp0/fresh64",
+  "metrics": "group makespan, queue-inclusive latency, strictgrades/freshreads/grafts; hot/SSD/metadata bytes and chunk-read counters per server lifetime",
+  "compiled_runtime_revision": "fe5d6e2670e7d154bf97234df01d1ee8db4a51e8",
+  "caller_revision": "fe5d6e2670e7d154bf97234df01d1ee8db4a51e8",
+  "measurement_finished_utc": "2026-10-04 17:52:54",
+  "closing_control": {
+    "arm": "hot0-after",
+    "reason": "opening disk-only editedlatency differed sharply from prior19 and128 despite same graftgeometry",
+    "same_original_deadline": "2026-10-04 18:14:00",
+    "driver_change": "none; existinglauncher hot-mb0 freshdirs"
+  },
+  "guard": {
+    "hot0": {
+      "samples": 319,
+      "pressure_levels": [
+        1
+      ],
+      "swap_growth_gib": 0.0,
+      "peak_wired_plus_compressor_gib": 85.36463928222656,
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "hot128": {
+      "samples": 283,
+      "pressure_levels": [
+        1
+      ],
+      "swap_growth_gib": 0.0,
+      "peak_wired_plus_compressor_gib": 84.98255920410156,
+      "status": "complete",
+      "child_returncode": 3
+    },
+    "hot512": {
+      "samples": 318,
+      "pressure_levels": [
+        1
+      ],
+      "swap_growth_gib": 0.0,
+      "peak_wired_plus_compressor_gib": 86.99299621582031,
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "hot0-after": {
+      "samples": 281,
+      "pressure_levels": [
+        1
+      ],
+      "swap_growth_gib": 0.0,
+      "peak_wired_plus_compressor_gib": 84.32965087890625,
+      "status": "complete",
+      "child_returncode": 3
+    }
+  }
+}

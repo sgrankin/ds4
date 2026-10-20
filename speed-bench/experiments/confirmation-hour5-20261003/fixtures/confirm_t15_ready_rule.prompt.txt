@@ -1,0 +1,1 @@
+A fictional device is ready exactly when permit is approved, lock is open, and alarm is acknowledged. Current record: permit=approved, lock=open, alarm=unacknowledged. A note says the old alarm was acknowledged yesterday, but the current record supersedes it. Report ready as a boolean and blocking_field as a string in JSON, then explain.

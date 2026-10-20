@@ -1,0 +1,17 @@
+Earlier implementation discussion:
+Archived review: the earlier prototype accepted a caller-provided list of records and returned new lists rather than changing the input. We kept the interface small because the caller already validates the shape.
+The team compared a short direct loop with a helper that copied every record. The copy was unnecessary because the result contained indices, so the direct loop was easier to inspect.
+An early note proposed sorting before processing. We rejected that change because the input order carries meaning and is already part of the contract. Sorting would silently change which record wins.
+We separated examples from requirements. A public example illustrates the shape of input but does not authorize returning a precomputed answer. Empty inputs still require a normal result.
+The review found no need for filesystem access, clocks, random numbers, network calls, or imports. The function should compute from its arguments and return its result.
+A previous design introduced a class to wrap three lists. A plain dictionary and a function were sufficient for the current interface, and the class would add state without improving the result.
+We considered storing the sample answer next to the sample input. That would encourage special casing, so only sample inputs are retained in the public project.
+Boundary examples should be reasoned about explicitly. A value at an exact boundary can behave differently from a value just before it, and the difference belongs in the branch condition.
+Identifiers belong to the caller. We agreed not to lowercase strings, strip whitespace, normalize Unicode, or reinterpret empty strings merely because it might look convenient.
+After a rejected event, the next event must still be interpreted under the stated transition rules. There is no universal rule that every rejection either changes or preserves all state.
+We prefer a single pass where the contract permits it. A second pass is justified only when a result cannot be known from the state already accumulated during the first one.
+The returned indices should identify original entries, not positions in an intermediate filtered list. A running index or enumerate both make this relationship visible.
+A previous test report mentioned repeated timestamps. We kept those cases because sequential processing order still matters when the numerical time is unchanged.
+The output should contain fresh lists on every invocation. Sharing an output list across calls would make independent requests interfere, even if one isolated example looked correct.
+The caller can inspect config without modifying it. Reading a key once into a local name is a clarity choice, whereas deleting that key would change the observable contract.
+The earlier implementation discussion is being summarized; decisions remain checkable in archived source.

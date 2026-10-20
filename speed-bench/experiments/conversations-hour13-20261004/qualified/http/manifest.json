@@ -1,0 +1,163 @@
+{
+  "conversation": "conv_b6af6680a58eac0ba193c007",
+  "other_conversation": "conv_106c96e8cc4ab25b241eef65",
+  "pending": {
+    "id": "resp_acc3d67002472967b253c2ad",
+    "object": "response",
+    "created_at": 1791122731,
+    "status": "completed",
+    "model": "deepseek-v4.1-flash",
+    "store": false,
+    "previous_response_id": null,
+    "conversation": {
+      "id": "conv_b6af6680a58eac0ba193c007"
+    },
+    "output": [
+      {
+        "id": "fc_97374f4e26013f622fc46ac0",
+        "type": "function_call",
+        "status": "completed",
+        "name": "lookup_count",
+        "call_id": "call_91a2b77d0435e09148d60c953f25d72f",
+        "arguments": "{\"key\":\"subject\"}"
+      }
+    ],
+    "usage": {
+      "input_tokens": 945,
+      "input_tokens_details": {
+        "cached_tokens": 498,
+        "cache_write_tokens": 447
+      },
+      "output_tokens": 38,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 983
+    }
+  },
+  "stored_response": {
+    "id": "resp_e3e358be0237eb86afabaedf",
+    "object": "response",
+    "created_at": 1791122714,
+    "status": "completed",
+    "model": "deepseek-v4.1-flash",
+    "store": true,
+    "previous_response_id": null,
+    "conversation": {
+      "id": "conv_b6af6680a58eac0ba193c007"
+    },
+    "output": [
+      {
+        "id": "msg_367031b51bbdddc37516bb00",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 682,
+      "input_tokens_details": {
+        "cached_tokens": 476,
+        "cache_write_tokens": 206
+      },
+      "output_tokens": 13,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 695
+    }
+  },
+  "pending_items": [
+    {
+      "id": "msg_4700609d20c2aa5bf9b5e661",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+        }
+      ]
+    },
+    {
+      "id": "msg_0ac015805d658d7818521a3b",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+        }
+      ]
+    },
+    {
+      "id": "msg_5abaeb15c7d4ad93ebffac44",
+      "type": "message",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "msg_9b64eead33a8f94f7491dcd5",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Report the active site and net usable units again as JSON with site and total."
+        }
+      ]
+    },
+    {
+      "id": "msg_367031b51bbdddc37516bb00",
+      "type": "message",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "msg_c58f2e8813f5611fa3920545",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Call lookup_count with key \"subject\" now. After its result, return JSON with site, total and count."
+        }
+      ]
+    },
+    {
+      "id": "fc_97374f4e26013f622fc46ac0",
+      "type": "function_call",
+      "status": "completed",
+      "name": "lookup_count",
+      "call_id": "call_91a2b77d0435e09148d60c953f25d72f",
+      "arguments": "{\"key\":\"subject\"}"
+    }
+  ],
+  "store_dir": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/conversations-qualified-store",
+  "model": "deepseek-v4.1-flash"
+}

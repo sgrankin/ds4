@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/ideas/artifacts/reasoning-budget-native-build-v2/reasoning-budget-probe'
+relocations:     []
+...

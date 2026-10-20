@@ -1,0 +1,22 @@
+arm,phase,group,step,session,queue_inclusive_seconds,http_task_seconds,edit_seconds,correct,read_isolated,actual_reads,complete,cap,pass,stored_pass,grade_agrees,output_tokens,input_tokens,cached_tokens,text,errors
+native,before,warm-AB,A-warm,A,88.63231004099362,88.6319605000026,0,True,True,1,True,False,True,True,True,95,2766,1166,READY,
+native,before,warm-AB,B-warm,B,80.03427249999368,80.03392604200053,0,True,True,1,True,False,True,True,True,95,2762,1164,READY,
+native,before,warm-CD,C-warm,C,89.35908316700079,89.35875079200196,0,True,True,1,True,False,True,True,True,95,2766,1166,READY,
+native,before,warm-CD,D-warm,D,81.20870237499184,81.20833037499688,0,True,True,1,True,False,True,True,True,95,2762,1164,READY,
+native,before,edited-AB,A-edited,A,86.73355258299853,86.73264737499994,0.0005465419963002205,True,True,1,True,False,True,True,True,109,2993,1530,"{""active_total"":313,""archived_code"":""BEACON-46""}",
+native,before,edited-AB,B-edited,B,86.77702329099702,86.77627550000034,0.00041170800977852196,True,True,1,True,False,True,True,True,111,2990,1529,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}",
+native,after,edited-CD,C-edited,C,86.69903333300317,86.69806399999652,0.0006183329969644547,True,True,1,True,False,True,True,True,108,2992,1530,"{""active_total"":267,""archived_code"":""CEDAR-70""}",
+native,after,edited-CD,D-edited,D,86.65375583399145,86.65290541699505,0.0005023330013500527,True,True,1,True,False,True,True,True,108,2990,1529,"{""active_total"":197,""archived_code"":""DELTA-83""}",
+reuse64,before,warm-AB,A-warm,A,82.02380654199806,82.0234395419975,0,True,True,1,True,False,True,True,True,95,2766,1166,READY,
+reuse64,before,warm-AB,B-warm,B,90.66345154200098,90.66306858300231,0,True,True,1,True,False,True,True,True,95,2762,1164,READY,
+reuse64,before,warm-CD,C-warm,C,91.12147762499808,91.12110241600021,0,False,True,1,True,False,False,False,True,135,2775,1175,"READY
+
+Retained inventory numbers from the active file:
+- batches: 19
+- items_per_batch: 15
+- reserved_items: 18",
+reuse64,before,warm-CD,D-warm,D,77.08869312499883,77.08832541599986,0,True,True,1,True,False,True,True,True,95,2762,1164,READY,
+reuse64,before,edited-AB,A-edited,A,47.08855795899581,47.08754295799008,0.0005893750058021396,True,True,1,True,False,True,True,True,109,2993,1943,"{""active_total"":313,""archived_code"":""BEACON-46""}",
+reuse64,before,edited-AB,B-edited,B,47.13461904101132,47.13375420800003,0.0005604579928331077,True,True,1,True,False,True,True,True,111,2990,2056,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}",
+reuse64,after,edited-CD,C-edited,C,59.31567220800207,59.31503529100155,0.0002864580019377172,True,True,1,True,False,True,True,True,111,3072,1983,"{""active_total"": 267, ""archived_code"": ""CEDAR-70""}",
+reuse64,after,edited-CD,D-edited,D,59.26897854098934,59.268380333000096,0.0003040830051759258,True,True,1,True,False,True,True,True,111,2990,2056,"{""active_total"": 197, ""archived_code"": ""DELTA-83""}",

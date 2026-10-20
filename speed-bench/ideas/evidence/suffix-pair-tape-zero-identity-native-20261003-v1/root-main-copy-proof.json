@@ -1,0 +1,13 @@
+{
+  "time": 1790988902.694409,
+  "archive_source_revision": "b62b05107f1d22e214c4db7781bbbfbf3a28f16d",
+  "archive_manifest_sha256": "fc5d874dea7429e3ecf2e29db90d311e2f743857f5229c35c97990353e65c5a0",
+  "verified_files": 99,
+  "complete_archive_inventory": true,
+  "previous_manifest_sha256": "a1d61aed2f4051bdde1d7d6bbe69af74f3a1308033fe88ceb72c4d734de1e413",
+  "previous_copy_proof_sha256": "00b92be2e710555bf6b737a8160da84736182b1ee6e4ebc7cb730c9d885ecdea",
+  "correction": "Index already retained cpu/manifest.json; all result/source bytes unchanged",
+  "completeness_proof_sha256": "245f32a84c626c1af9ea8fe1659ef513546cb25b10c550fe5d46bd047a827afd",
+  "model_metadata_touched": false,
+  "runtime_merged": false
+}

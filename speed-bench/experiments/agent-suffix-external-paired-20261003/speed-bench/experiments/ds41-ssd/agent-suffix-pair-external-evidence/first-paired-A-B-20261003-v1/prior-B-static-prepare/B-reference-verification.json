@@ -1,0 +1,177 @@
+{
+  "status": "STATIC_B_ALL130_AND_IMMUTABLE_A_REFERENCE_BYTE_MODE_PASS",
+  "A_manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "B_manifest_sha256": "1143a7812d739c9215bed24e186b83eaed8ba5406ef1c67d229b66d2795e8a57",
+  "B_command_sha256": "5afa400cb3315011ea33b3c39645fcbc55ab0e9a7feeb63f4a46d006c8d064fa",
+  "files_verified": 130,
+  "all114_common_payloads_exact": true,
+  "policy_differences_only_two_reuse_pair_flags_off": true,
+  "same_task_settings_generation_source_build_CPU": true,
+  "reference_checks": {
+    "choice.bin": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/choice.bin",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/choice.bin",
+      "bytes": 16,
+      "sha256": "3d30dd104d057b865bdc80df7c53dfec31513f4673d1d8b0c14078ce87ee30d3",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "binding.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/binding.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/binding.json",
+      "bytes": 2268,
+      "sha256": "bc0a6189aaf90ef0fb75a1731983abeb0de0f233ae5a9f5ceaa2c7c19278cdfe",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "selection.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/selection.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/selection.json",
+      "bytes": 453,
+      "sha256": "0526d4cd3da60e3fde4a0596b6590464e9a1dfe107beabb77e3855e1485838ea",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "selected-before.txt": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/selected-before.txt",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/selected-before.txt",
+      "bytes": 14653,
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "selected-after.txt": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/selected-after.txt",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/selected-after.txt",
+      "bytes": 14609,
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "selected-old.ids": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/selected-old.ids",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/selected-old.ids",
+      "bytes": 13604,
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "selected-edited.ids": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/selected-edited.ids",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/selected-edited.ids",
+      "bytes": 13560,
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "preedit-state.bin": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/preedit-state.bin",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/preedit-state.bin",
+      "bytes": 30138084,
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "preedit-logits.bin": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/preedit-logits.bin",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/preedit-logits.bin",
+      "bytes": 517136,
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "commit.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/commit.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/commit.json",
+      "bytes": 238,
+      "sha256": "92b641bf7eff5a6586ca1b8d5eb610fc57c2615c376c94f24537d79738529438",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "candidate-00.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/candidate-00.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/candidate-00.json",
+      "bytes": 81,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "A-manifest.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/A-manifest.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/A-manifest.json",
+      "bytes": 28567,
+      "sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "A-prepared-command.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/A-prepared-command.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/A-prepared-command.json",
+      "bytes": 1084,
+      "sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "shared-snapshot.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/shared-snapshot.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/shared-snapshot.json",
+      "bytes": 1306,
+      "sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "root-release-proof.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/root-release-proof.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/root-release-proof.json",
+      "bytes": 379,
+      "sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    },
+    "root-archive-proof.json": {
+      "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/root-shared-archive-proof.json",
+      "B_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/root-archive-proof.json",
+      "bytes": 1243,
+      "sha256": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c",
+      "mode": 420,
+      "byte_and_mode_exact": true
+    }
+  },
+  "new_A_first_structural_selection": {
+    "selection": {
+      "status": "SELECTED_BEFORE_THIRD_EVAL",
+      "candidate": 0,
+      "displacement": 11,
+      "source_start": 2107,
+      "source_end": 2988,
+      "destination_start": 2096,
+      "destination_end": 2977,
+      "reused": 881,
+      "fresh": 409,
+      "latest_user_start": 2978,
+      "user_id": 128803,
+      "old_tokens": 3397,
+      "edited_tokens": 3386,
+      "budget": 167772160,
+      "preallocation_peak_with_reserves": 137145130,
+      "current_payload_forecast": 30138084,
+      "actual_commit_rechecks_admission": true,
+      "old_text_bytes": 14653,
+      "edited_text_bytes": 14609
+    },
+    "old_ids_sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f",
+    "edited_ids_sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb",
+    "before_sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133",
+    "after_sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+  },
+  "complete_A_archive_index_sha256": "88c88f5f148e7a87d6178a23a096c4ddbd436d69b223ffedaf9d26bbb5ca8d26",
+  "ROOT_archive_attestation_sha256": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c",
+  "original_shared_root_identity_unchanged": {
+    "device": 16777230,
+    "inode": 1671818
+  },
+  "all4_original_shared_inventory_inodes_bytes_modes_unchanged": true,
+  "model_guard_native_helper_stat_shared_reset": false,
+  "native_B_NOT_GRANTED_NOT_RUN": true,
+  "no_generated_or_grader_choice": true
+}

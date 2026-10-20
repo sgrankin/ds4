@@ -1,0 +1,248 @@
+{
+  "status": "ROOT_STATIC_INPUT_AND_GOLD_REVIEW_PASS_NO_MODEL_GRANT",
+  "time": 1791008431.178101,
+  "source_freeze": "e9a450047db390f866df37c23afdeef550027a33",
+  "qualified_freeze": "491c396b7b457d5331886db4e39df275c1de169c",
+  "publication_sha256": "2fc679866506789544136405b9bc84ee711ea55dab12f5ac0b102adf717c682e",
+  "fresh_physical_files": 148,
+  "fresh_payloads": 147,
+  "directories_verified": 5,
+  "full_source_read": [
+    "README.md",
+    "SEMANTIC_REVIEW.md",
+    "oracles.py",
+    "validate.py",
+    "test_packet.py"
+  ],
+  "all24_literal_prompts_inputs_and_golds_reviewed": true,
+  "gold_checks": [
+    {
+      "case": "functional24_01_cursor_pages",
+      "gold": {
+        "ids": [
+          9,
+          2,
+          7
+        ],
+        "requests": 3,
+        "stop_reason": "null_cursor"
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_02_call_correlation",
+      "gold": {
+        "values": [
+          3,
+          5,
+          8
+        ]
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_03_fixed_offset",
+      "gold": {
+        "utc": "2026-04-17T12:00:00Z"
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_04_stream_events",
+      "gold": {
+        "text": "abc",
+        "completed": true,
+        "ignored_heartbeats": 2
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_05_artifact_delta",
+      "gold": {
+        "changed": [
+          "beta"
+        ],
+        "unexpected_changes": []
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_06_three_way_fields",
+      "gold": {
+        "merged": {
+          "owner": "Bo",
+          "title": "Final"
+        },
+        "conflicts": []
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_07_little_endian_words",
+      "gold": {
+        "words": [
+          513,
+          254,
+          10000
+        ],
+        "sum": 10767
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_08_matrix_product",
+      "gold": {
+        "product": [
+          [
+            -10,
+            15
+          ],
+          [
+            2,
+            16
+          ]
+        ]
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_09_left_join_null",
+      "gold": {
+        "rows": [
+          [
+            1,
+            "red"
+          ],
+          [
+            1,
+            "blue"
+          ],
+          [
+            2,
+            null
+          ],
+          [
+            3,
+            "red"
+          ],
+          [
+            3,
+            "blue"
+          ],
+          [
+            4,
+            null
+          ]
+        ]
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_10_form_query",
+      "gold": {
+        "pairs": [
+          [
+            "item",
+            "a+b"
+          ],
+          [
+            "empty",
+            ""
+          ],
+          [
+            "item",
+            "c d"
+          ],
+          [
+            "flag",
+            ""
+          ],
+          [
+            "mark",
+            "✓"
+          ]
+        ]
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_11_crc8",
+      "gold": {
+        "decimal": 72,
+        "hex": "48"
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_12_grid_components",
+      "gold": {
+        "component_sizes": [
+          2,
+          3,
+          3
+        ],
+        "count": 3
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_13_absolute_integral",
+      "gold": {
+        "numerator": 17,
+        "denominator": 2
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_14_polygon_area",
+      "gold": {
+        "numerator": 65,
+        "denominator": 2
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_15_geometric_fraction",
+      "gold": {
+        "numerator": 3367,
+        "denominator": 1024
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_16_weighted_median",
+      "gold": {
+        "median": 9,
+        "total_weight": 12
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_17_diophantine_list",
+      "gold": {
+        "solutions": [
+          [
+            6,
+            7
+          ],
+          [
+            17,
+            0
+          ]
+        ]
+      },
+      "two_reviewed_methods_equal": true
+    },
+    {
+      "case": "functional24_18_polynomial_remainder",
+      "gold": {
+        "linear": 4,
+        "constant": -7
+      },
+      "two_reviewed_methods_equal": true
+    }
+  ],
+  "role": "24 unused validation-only inputs; training16 remains separate; fixed functional .30/.12/rank24/sub1/nativebits policy unchanged",
+  "model_engine_tokenizer_stat_helper_build_guard_access": false,
+  "limitations": "Actual32token teacher extent/context fit awaits separately guarded model preflight; authored prose reference not unique correctness; bounded172prompt input-only semantic review not exhaustive; teacher distributions are separate from practical completion."
+}

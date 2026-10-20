@@ -1,0 +1,17 @@
+arm,case,pass,fields_correct,failure_reason,seconds,returncode,generated_tokens,token_cap,cap_status,completion_status,stop_reason,prefill_ms,decode_ms,prefill_tps,generation_tps
+affinity-strong,functional24_01_cursor_pages,True,True,,18.119677916998626,0,166,256,not_reached,complete,stop_token,9107.36,7613.977,14.27,21.8
+affinity-strong,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,19.38620841600641,0,256,256,reached,incomplete,cap,5858.391,12128.009,11.95,21.11
+affinity-strong,functional24_16_weighted_median,False,True,generation cap reached,20.832797125010984,0,256,256,reached,incomplete,cap,7634.457,11711.728,14.8,21.86
+affinity-strong,functional24_24_literal_unicode_note,True,True,,18.28817633300787,0,194,256,not_reached,complete,stop_token,7462.055,9358.384,11.79,20.73
+deadline-strong-age1,functional24_01_cursor_pages,True,True,,17.948551249995944,0,158,256,not_reached,complete,stop_token,8707.342,7814.756,14.93,20.22
+deadline-strong-age1,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,19.982340583010227,0,256,256,reached,incomplete,cap,5861.575,12785.347,11.94,20.02
+deadline-strong-age1,functional24_16_weighted_median,True,True,,21.53183008400083,0,247,256,not_reached,complete,stop_token,7693.216,12474.31,14.69,19.8
+deadline-strong-age1,functional24_24_literal_unicode_note,True,True,,18.29750979199889,0,186,256,not_reached,complete,stop_token,7348.022,9580.569,11.98,19.41
+deadline-strong-age8,functional24_01_cursor_pages,True,True,,17.503208082998754,0,162,256,not_reached,complete,stop_token,8683.817,7408.907,14.97,21.87
+deadline-strong-age8,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,19.21505441699992,0,256,256,reached,incomplete,cap,5818.345,12009.154,12.03,21.32
+deadline-strong-age8,functional24_16_weighted_median,False,True,generation cap reached,20.36156975000631,0,256,256,reached,incomplete,cap,7423.11,11563.591,15.22,22.14
+deadline-strong-age8,functional24_24_literal_unicode_note,True,True,,18.037148584000533,0,192,256,not_reached,complete,stop_token,7443.156,9256.698,11.82,20.74
+native,functional24_01_cursor_pages,True,True,,20.526066875012475,0,159,256,not_reached,complete,stop_token,9754.639,8952.178,13.33,17.76
+native,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,21.655844167005853,0,256,256,reached,incomplete,cap,6152.124,14103.62,11.38,18.15
+native,functional24_16_weighted_median,False,False,generation cap reached; required factual fields differ from gold,23.67014891600411,0,256,256,reached,incomplete,cap,8523.703,13722.277,13.26,18.66
+native,functional24_24_literal_unicode_note,True,True,,20.747067499993136,0,199,256,not_reached,complete,stop_token,7532.243,11825.259,11.68,16.83

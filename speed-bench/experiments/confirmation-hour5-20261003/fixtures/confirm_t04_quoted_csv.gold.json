@@ -1,0 +1,15 @@
+{
+  "gold": {
+    "names": [
+      "green, tea",
+      "coffee"
+    ],
+    "total_quantity": 6
+  },
+  "oracle_input": {
+    "question": "Parse this CSV with a header and standard double-quoted fields: name,quantity\n\"green, tea\",4\ncoffee,2\n. Report names in row order and total_quantity as an integer. Return JSON first, then explain the quoted comma."
+  },
+  "explanation": "The comma within the quoted first name is part of that field, not a column separator. The data rows therefore contain the names green, tea and coffee, with quantities four and two. Their sum is six. The header is not a data row and does not contribute a name or quantity.",
+  "category": "code",
+  "scope": "New authored content, fixed before any model outcome."
+}

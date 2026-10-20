@@ -1,0 +1,21 @@
+{
+  "base_commit": "67696070",
+  "gpu_runs_by_implementation_agent": 0,
+  "selector_test": "passed",
+  "metal_build": "warning-free",
+  "changed_runtime": [
+    "ds41_resident_route_configure",
+    "ds41_resident_route_apply",
+    "ds41_moe_partial",
+    "ds41_graph_step"
+  ],
+  "sha256": {
+    "ds4.c": "056e19dff1258867cb14fca44787893bec28804b4096fa76ce739bf7710efbbf",
+    "ds4_resident_route.h": "5c4d8151acfe91d815a001e2d83d2432aa4c0fab14b3f9a9cc6e9c25de1bf4a3",
+    "ds4.o": "bfeeb9b64b882e233e673644e42c24659aa77c6c94a60223bc6f15f2693038ae",
+    "libds4_resident.dylib": "43578d8289b80f3f9ce36090a0d24f47c5ce9531b830b0f3429d581d56d5ab09",
+    "ds4": "4c909737a127b651b154102d69546050d4c84c2f981188434820a6f671a3d69f",
+    "ds4-agent": "960d1f96a215ef55456beec2264459aebee50f460a8837aadeaa983831fc476f",
+    "speed-bench/agent-session/replay": "3541334d9fa80b5c99f76d0e9134e42c70fa2ee1a7b8a52a6657921440448e21"
+  }
+}

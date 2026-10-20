@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/fresh-thinking-curve-hour35-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:57631",
+    "--arm",
+    "write32",
+    "--case",
+    "bucket",
+    "--output",
+    "speed-bench/experiments/fresh-thinking-curve-hour35-20261004/write32/http/bucket",
+    "--visible",
+    ".workspaces/server-agent-day-20261004/fresh32-visible",
+    "--global-cap",
+    "2048",
+    "--write-budget",
+    "32"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

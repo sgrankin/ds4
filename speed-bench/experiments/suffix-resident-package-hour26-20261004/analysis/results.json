@@ -1,0 +1,2560 @@
+{
+  "by_arm": {
+    "native-before": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 283.95892350000213,
+      "launcher_wall_seconds": 290.22602816700237,
+      "all_group_makespan_seconds": 283.9545962080156,
+      "edited_group_makespan_seconds": 102.28511258300568,
+      "sum_queue_inclusive_seconds": 567.5096277500124,
+      "approximate_hits": 4,
+      "ssd_approximate_hits": 4,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 4,
+      "hot_read_ops": 0,
+      "disk_read_ops": 330,
+      "endpoint_evictions": 0,
+      "primary_grafts": 4,
+      "completion_grafts": 0,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 4,
+      "phase_log_graft_count": 4
+    },
+    "subs3": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 285.54942958299944,
+      "launcher_wall_seconds": 289.84008137500496,
+      "all_group_makespan_seconds": 285.54544391599484,
+      "edited_group_makespan_seconds": 100.55209429199749,
+      "sum_queue_inclusive_seconds": 570.86309704202,
+      "approximate_hits": 4,
+      "ssd_approximate_hits": 4,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 4,
+      "hot_read_ops": 0,
+      "disk_read_ops": 330,
+      "endpoint_evictions": 0,
+      "primary_grafts": 4,
+      "completion_grafts": 0,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 4,
+      "phase_log_graft_count": 4
+    },
+    "native-after": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 293.1556271259906,
+      "launcher_wall_seconds": 297.78004133301147,
+      "all_group_makespan_seconds": 293.14991904199996,
+      "edited_group_makespan_seconds": 102.92229441700329,
+      "sum_queue_inclusive_seconds": 585.8974866670178,
+      "approximate_hits": 4,
+      "ssd_approximate_hits": 4,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 4,
+      "hot_read_ops": 0,
+      "disk_read_ops": 330,
+      "endpoint_evictions": 0,
+      "primary_grafts": 4,
+      "completion_grafts": 0,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 4,
+      "phase_log_graft_count": 4
+    }
+  },
+  "steps": [
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 91.01155504200142,
+      "http_task_seconds": 91.01118245799444,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 90.90226241700293,
+      "http_task_seconds": 90.90188512500026,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 90.65762641699985,
+      "http_task_seconds": 90.65729545899376,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 90.54965625000477,
+      "http_task_seconds": 90.54928845800168,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 51.248674250004115,
+      "http_task_seconds": 51.2478726249974,
+      "edit_seconds": 0.00035320798633620143,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 51.38842904099147,
+      "http_task_seconds": 51.387797457995475,
+      "edit_seconds": 0.00034566600515972823,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 50.85503220799728,
+      "http_task_seconds": 50.85436254199885,
+      "edit_seconds": 0.0002847079886123538,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 50.89639212501061,
+      "http_task_seconds": 50.89578308298951,
+      "edit_seconds": 0.000317458005156368,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "errors": ""
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 90.01146325000445,
+      "http_task_seconds": 90.01103691699973,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 90.10581112500222,
+      "http_task_seconds": 90.10544237498834,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 94.88717804200132,
+      "http_task_seconds": 94.88679254199087,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 94.79574258301,
+      "http_task_seconds": 94.7953738750075,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 50.34996529199998,
+      "http_task_seconds": 50.34890595800243,
+      "edit_seconds": 0.0004875839949818328,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 50.349845666001784,
+      "http_task_seconds": 50.34907587499765,
+      "edit_seconds": 0.0002975410025101155,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":231,\"archived_code\":\"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "subs3",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 50.20176795900625,
+      "http_task_seconds": 50.20114212499175,
+      "edit_seconds": 0.0003121250047115609,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "subs3",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 50.16132312499394,
+      "http_task_seconds": 50.160723749999306,
+      "edit_seconds": 0.0002410000015515834,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "errors": ""
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 94.68884324999817,
+      "http_task_seconds": 94.6884742090042,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 94.79963912500534,
+      "http_task_seconds": 94.7992724999931,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 95.4276302090002,
+      "http_task_seconds": 95.42730866599595,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 95.31948583300982,
+      "http_task_seconds": 95.31913370899565,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 51.50452283299819,
+      "http_task_seconds": 51.5032855419995,
+      "edit_seconds": 0.0008960419945651665,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 51.64448570899549,
+      "http_task_seconds": 51.64323425000475,
+      "edit_seconds": 0.000935458010644652,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 51.23535400000401,
+      "http_task_seconds": 51.23431166699447,
+      "edit_seconds": 0.0006578750035259873,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 51.27752570800658,
+      "http_task_seconds": 51.276544082997134,
+      "edit_seconds": 0.0005004169943276793,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "errors": ""
+    }
+  ],
+  "groups": [
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 91.01171408301161,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 90.95690872950217,
+      "max_queue_inclusive_seconds": 91.01155504200142,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:29:37 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:30:03 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 90.65776954199828,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 90.60364133350231,
+      "max_queue_inclusive_seconds": 90.65762641699985,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:31:08 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:31:36 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:31:08 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:31:08 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 51.388557250000304,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 51.31855164549779,
+      "max_queue_inclusive_seconds": 51.38842904099147,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:32:55 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17093.717 ms",
+        "1004 15:33:15 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17206.844 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:32:38 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:32:38 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 50.89655533300538,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 50.875712166503945,
+      "max_queue_inclusive_seconds": 50.89639212501061,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:33:48 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16823.862 ms",
+        "1004 15:34:06 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17609.040 ms"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 90.10601408299408,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 90.05863718750334,
+      "max_queue_inclusive_seconds": 90.10581112500222,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:34:35 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:35:04 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 94.88733554100327,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 94.84146031250566,
+      "max_queue_inclusive_seconds": 94.88717804200132,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:36:05 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:36:34 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:36:05 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:36:05 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 50.3501988749922,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 50.34990547900088,
+      "max_queue_inclusive_seconds": 50.34996529199998,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:37:57 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17053.342 ms",
+        "1004 15:38:17 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17397.418 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:37:40 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:37:40 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "subs3",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 50.20189541700529,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 50.181545542000094,
+      "max_queue_inclusive_seconds": 50.20176795900625,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:38:50 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17003.723 ms",
+        "1004 15:39:07 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17717.994 ms"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 94.79982445799396,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 94.74424118750176,
+      "max_queue_inclusive_seconds": 94.79963912500534,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:39:35 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:40:04 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 95.42780016700272,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 95.37355802100501,
+      "max_queue_inclusive_seconds": 95.4276302090002,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:41:10 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:41:39 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:41:10 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:41:10 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 51.64459512500616,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 51.57450427099684,
+      "max_queue_inclusive_seconds": 51.64448570899549,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:43:02 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17260.635 ms",
+        "1004 15:43:22 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17259.959 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:42:45 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:42:45 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 51.27769929199712,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 51.25643985400529,
+      "max_queue_inclusive_seconds": 51.27752570800658,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:43:56 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16906.538 ms",
+        "1004 15:44:16 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17389.309 ms"
+      ],
+      "slot_eviction_log_lines": []
+    }
+  ],
+  "cache_shutdowns": [
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 508137840,
+      "metadata_bytes": 396067,
+      "endpoints": 42,
+      "chunks": 1847,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "native-before",
+      "phase": "before",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 639806856,
+      "metadata_bytes": 475465,
+      "endpoints": 48,
+      "chunks": 2333,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "native-before",
+      "phase": "after",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 508151985,
+      "metadata_bytes": 396162,
+      "endpoints": 42,
+      "chunks": 1848,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "subs3",
+      "phase": "before",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 639821001,
+      "metadata_bytes": 475560,
+      "endpoints": 48,
+      "chunks": 2334,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "subs3",
+      "phase": "after",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 508151985,
+      "metadata_bytes": 396162,
+      "endpoints": 42,
+      "chunks": 1848,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "native-after",
+      "phase": "before",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 639821001,
+      "metadata_bytes": 475560,
+      "endpoints": 48,
+      "chunks": 2334,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "native-after",
+      "phase": "after",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    }
+  ],
+  "scope": "Only resident settings change: GAP.90 mass.25 rank64 max3 totalmass.50 replace/nativeweights1 versus GAP0/nativeweights0. Qualified canonical1/PAD1/hot0/suffix64 continuation behavior fixed; each arm warms its own sources. Logical chunk reads are not physical SSD traffic. No paired generated-history NLL or additive claim.",
+  "change_vs_native_before_percent": {
+    "native-before": {
+      "launcher_wall_seconds": 0.0,
+      "client_phase_wall_seconds": 0.0,
+      "edited_group_makespan_seconds": 0.0
+    },
+    "subs3": {
+      "launcher_wall_seconds": -0.13298145394986527,
+      "client_phase_wall_seconds": 0.5601183662035103,
+      "edited_group_makespan_seconds": -1.694301592132308
+    },
+    "native-after": {
+      "launcher_wall_seconds": 2.602803481727123,
+      "client_phase_wall_seconds": 3.2387443622592826,
+      "edited_group_makespan_seconds": 0.6229467983236869
+    }
+  },
+  "group_change_vs_native_before_percent": {
+    "warm-AB": {
+      "native-before": 0.0,
+      "subs3": -0.9951466238636519,
+      "native-after": 4.162222866747922
+    },
+    "warm-CD": {
+      "native-before": 0.0,
+      "subs3": 4.665420316838476,
+      "native-after": 5.261579508411196
+    },
+    "edited-AB": {
+      "native-before": 0.0,
+      "subs3": -2.0206023102703363,
+      "native-after": 0.49823908026889185
+    },
+    "edited-CD": {
+      "native-before": 0.0,
+      "subs3": -1.3648466216526378,
+      "native-after": 0.7488600289312197
+    }
+  },
+  "change_vs_native_after_percent": {
+    "native-before": {
+      "launcher_wall_seconds": -2.536776182914602,
+      "client_phase_wall_seconds": -3.137140404279515,
+      "edited_group_makespan_seconds": -0.6190901957703887
+    },
+    "subs3": {
+      "launcher_wall_seconds": -2.666384195012972,
+      "client_phase_wall_seconds": -2.5945937376539607,
+      "edited_group_makespan_seconds": -2.3029025328590302
+    },
+    "native-after": {
+      "launcher_wall_seconds": 0.0,
+      "client_phase_wall_seconds": 0.0,
+      "edited_group_makespan_seconds": 0.0
+    }
+  },
+  "group_change_vs_native_after_percent": {
+    "warm-AB": {
+      "native-before": -3.9959044192754534,
+      "subs3": -4.951285935217864,
+      "native-after": 0.0
+    },
+    "warm-CD": {
+      "native-before": -4.998575484980982,
+      "subs3": -0.5663597243713125,
+      "native-after": 0.0
+    },
+    "edited-AB": {
+      "native-before": -0.4957689655347597,
+      "subs3": -2.5063537566339056,
+      "native-after": 0.0
+    },
+    "edited-CD": {
+      "native-before": -0.7432937987746802,
+      "subs3": -2.0979956001257904,
+      "native-after": 0.0
+    }
+  },
+  "native_bracket_after_vs_before_percent": {
+    "launcher_wall_seconds": 2.602803481727123,
+    "client_phase_wall_seconds": 3.2387443622592826,
+    "edited_group_makespan_seconds": 0.6229467983236869
+  },
+  "subs3_change_vs_native_mean_percent": {
+    "launcher_wall_seconds": -1.4159559198229865,
+    "client_phase_wall_seconds": -1.0423739019348344,
+    "edited_group_makespan_seconds": -1.99954693448946
+  },
+  "text_and_usage_vs_native_before": {
+    "native-before": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      }
+    },
+    "subs3": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-edited": {
+        "text_byte_equal": false,
+        "grade_equal": true,
+        "token_totals_equal": false
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      }
+    },
+    "native-after": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      }
+    }
+  },
+  "grafts": [
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.093717,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:32:55 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17093.717 ms"
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.206844,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:33:15 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17206.844 ms"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 16.823862000000002,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:33:48 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16823.862 ms"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.60904,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:34:06 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17609.040 ms"
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.053342,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:37:57 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17053.342 ms"
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.397418000000002,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:38:17 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17397.418 ms"
+    },
+    {
+      "arm": "subs3",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.003723,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:38:50 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17003.723 ms"
+    },
+    {
+      "arm": "subs3",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.717993999999997,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:39:07 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17717.994 ms"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.260634999999997,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:43:02 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17260.635 ms"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.259959,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:43:22 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17259.959 ms"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 16.906538,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:43:56 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16906.538 ms"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.389309,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:44:16 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17389.309 ms"
+    }
+  ],
+  "visible_continuations": [
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1556,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 15:33:26 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1"
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:33:27 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:34:19 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:34:20 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1556,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 15:38:27 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1"
+    },
+    {
+      "arm": "subs3",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:38:28 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "subs3",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:39:20 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "subs3",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:39:21 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1556,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 15:43:33 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:43:34 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:44:27 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:44:28 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    }
+  ],
+  "actual_reply_usage": {
+    "native-before": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1572
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ]
+    },
+    "subs3": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1572
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ]
+    },
+    "native-after": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1572
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ]
+    }
+  },
+  "public_reply_controls_vs_native_before": {
+    "native-before": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      }
+    },
+    "subs3": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          false
+        ],
+        "reply_usage_equal": false
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      }
+    },
+    "native-after": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      }
+    }
+  },
+  "route_summaries": [
+    {
+      "layers": 23880,
+      "substitutions": 9178,
+      "native_misses": 12039,
+      "skipped_loads": 9178,
+      "skipped_bytes": 91351203840,
+      "mean_mass": 0.12393175,
+      "mean_score_gap": 0.1000424,
+      "mean_affinity_ratio": 0.90071076,
+      "mean_rank": 7.606,
+      "full_snapshots": 7722,
+      "double_layers": 1240,
+      "planned_substitutions": 9178,
+      "drops": 0,
+      "triple_layers": 108,
+      "arm": "subs3",
+      "phase": "before",
+      "raw_log": "ds4: resident-route layers=23880 substitutions=9178 native_misses=12039 skipped_loads=9178 skipped_bytes=91351203840 mean_mass=0.12393175 mean_score_gap=0.10004240 mean_affinity_ratio=0.90071076 mean_rank=7.606 full_snapshots=7722 double_layers=1240 planned_substitutions=9178 drops=0 triple_layers=108",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=9178"
+      ]
+    },
+    {
+      "layers": 8640,
+      "substitutions": 4519,
+      "native_misses": 5993,
+      "skipped_loads": 4519,
+      "skipped_bytes": 44978872320,
+      "mean_mass": 0.12817632,
+      "mean_score_gap": 0.10238758,
+      "mean_affinity_ratio": 0.89945987,
+      "mean_rank": 7.838,
+      "full_snapshots": 3611,
+      "double_layers": 744,
+      "planned_substitutions": 4519,
+      "drops": 0,
+      "triple_layers": 82,
+      "arm": "subs3",
+      "phase": "after",
+      "raw_log": "ds4: resident-route layers=8640 substitutions=4519 native_misses=5993 skipped_loads=4519 skipped_bytes=44978872320 mean_mass=0.12817632 mean_score_gap=0.10238758 mean_affinity_ratio=0.89945987 mean_rank=7.838 full_snapshots=3611 double_layers=744 planned_substitutions=4519 drops=0 triple_layers=82",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=4519"
+      ]
+    }
+  ],
+  "guard_summaries": [
+    {
+      "arm": "native-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 280,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.012998046875,
+      "swap_last_gb": 0.012998046875,
+      "peak_wired_compressor_gb": 85.01171875,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "subs3",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 280,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.012998046875,
+      "swap_last_gb": 0.012998046875,
+      "peak_wired_compressor_gb": 84.82545471191406,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "native-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 288,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.012998046875,
+      "swap_last_gb": 0.012998046875,
+      "peak_wired_compressor_gb": 84.47509765625,
+      "max_consecutive_bad": 0
+    }
+  ],
+  "source_settings": {
+    "native-before": {
+      "route": {
+        "enabled": false,
+        "gap": 0,
+        "max_substitutions": 0,
+        "max_mass": 0.25,
+        "max_rank": 64,
+        "max_total_mass": 0.5,
+        "policy": "replace",
+        "native_weights": false
+      },
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/package26-cache-before",
+      "route_settings_same_after_restart": true,
+      "request_hints": {
+        "A": "ds4-hour17-confirmation-A",
+        "B": "ds4-hour17-confirmation-B",
+        "C": "ds4-hour17-confirmation-C",
+        "D": "ds4-hour17-confirmation-D"
+      }
+    },
+    "subs3": {
+      "route": {
+        "enabled": true,
+        "gap": 0.9,
+        "max_substitutions": 3,
+        "max_mass": 0.25,
+        "max_rank": 64,
+        "max_total_mass": 0.5,
+        "policy": "replace",
+        "native_weights": true
+      },
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/package26-cache-subs3",
+      "route_settings_same_after_restart": true,
+      "request_hints": {
+        "A": "ds4-hour17-confirmation-A",
+        "B": "ds4-hour17-confirmation-B",
+        "C": "ds4-hour17-confirmation-C",
+        "D": "ds4-hour17-confirmation-D"
+      }
+    },
+    "native-after": {
+      "route": {
+        "enabled": false,
+        "gap": 0,
+        "max_substitutions": 0,
+        "max_mass": 0.25,
+        "max_rank": 64,
+        "max_total_mass": 0.5,
+        "policy": "replace",
+        "native_weights": false
+      },
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/package26-cache-after",
+      "route_settings_same_after_restart": true,
+      "request_hints": {
+        "A": "ds4-hour17-confirmation-A",
+        "B": "ds4-hour17-confirmation-B",
+        "C": "ds4-hour17-confirmation-C",
+        "D": "ds4-hour17-confirmation-D"
+      }
+    }
+  },
+  "route_totals": {
+    "layers": 32520,
+    "substitutions": 13697,
+    "native_misses": 18032,
+    "skipped_loads": 13697,
+    "skipped_bytes": 136330076160,
+    "double_layers": 1984,
+    "triple_layers": 190,
+    "drops": 0
+  }
+}

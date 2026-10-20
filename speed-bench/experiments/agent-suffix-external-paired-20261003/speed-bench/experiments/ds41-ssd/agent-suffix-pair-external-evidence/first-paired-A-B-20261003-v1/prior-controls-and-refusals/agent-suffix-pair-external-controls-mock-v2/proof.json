@@ -1,0 +1,86 @@
+{
+  "status": "EXTERNAL_ACTUAL_CONTROLS_MOCK17_PASS",
+  "source_freeze": "2690c2459388f4c94ab1e4ca6ceb64082229e4ec",
+  "plan_sha256": "4957c369583ba4edc8d30b399597df079a1b67d79dc4877316b7b688647d42c8",
+  "results": [
+    {
+      "label": "libc-control-mock-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-std=c99",
+        "-pthread",
+        "tests/test_agent_suffix_pair_external_controls.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v2/controls-normal"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "returncode": 0,
+      "start": 1791005657.670204,
+      "elapsed": 0.19895219802856445,
+      "pins_before_after": true
+    },
+    {
+      "label": "libc-control-mock-selftest",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v2/controls-normal",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v2/normal-cases"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "returncode": 0,
+      "start": 1791005657.922979,
+      "elapsed": 0.06681585311889648,
+      "pins_before_after": true
+    },
+    {
+      "label": "libc-control-mock-asan-ubsan-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-std=c99",
+        "-pthread",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "tests/test_agent_suffix_pair_external_controls.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v2/controls-asan-ubsan"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "returncode": 0,
+      "start": 1791005658.043575,
+      "elapsed": 0.1937720775604248,
+      "pins_before_after": true
+    },
+    {
+      "label": "libc-control-mock-asan-ubsan-selftest",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v2/controls-asan-ubsan",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v2/sanitized-cases"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "returncode": 0,
+      "start": 1791005658.290921,
+      "elapsed": 0.14406085014343262,
+      "pins_before_after": true
+    }
+  ],
+  "borrowed_native_objects": [],
+  "native_engine_or_model_or_guard": false,
+  "pins_before_after_each": true,
+  "qualified74source_unchanged": true,
+  "production_control_byte_identical_d364": true,
+  "first_mock_failure_retained": "33e8493b3477fd3c8dfce7c934c784036988e9fa",
+  "diagnosis_correction_sha256": "3cf4a6df2b0e5296bb85119f4ebe3203c2835c7b8f60793be66924e1fab47a08"
+}

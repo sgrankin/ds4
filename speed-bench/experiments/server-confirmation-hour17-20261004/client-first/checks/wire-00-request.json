@@ -1,0 +1,5 @@
+{
+  "url": "http://127.0.0.1:62637/v1/models",
+  "method": "GET",
+  "body": null
+}

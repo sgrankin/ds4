@@ -1,0 +1,2 @@
+{"type":"init","policy_type":"protocol-boundary-token","write_budget":0,"global_decision_cap":2048,"read_final_native":true}
+{"type":"finish","legacy_rc":0,"returncode":0,"decisions":680,"native_sampler_calls":680,"forced_steps":0,"force_committed":false,"force_pending":false,"extra_forwards":0,"forced_rng_draws":0}

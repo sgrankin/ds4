@@ -1,0 +1,102 @@
+{
+  "status": "CPU_BUILD_COMPLETE_MODEL_UNRUN",
+  "source_files": {
+    "ds4.c": {
+      "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05",
+      "bytes": 3926808
+    },
+    "ds4.h": {
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631",
+      "bytes": 37885
+    },
+    "ds4_suffix_pair_tape.h": {
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0",
+      "bytes": 7139
+    },
+    "tests/test_suffix_pair_tape.c": {
+      "sha256": "8c68d7c31717c963f422e187dbadda18a43b35971785d7c95b736d0b3598a941",
+      "bytes": 18031
+    },
+    "Makefile": {
+      "sha256": "3cd1680abef19c903c53fa95c4baa428b851455f38cd018f9ca4382194f7f88f",
+      "bytes": 55008
+    },
+    "speed-bench/suffix_pair_tape_bench.c": {
+      "sha256": "d1251e287d673a69b21585f0c72b84a5541afa465f8638aa471f1e7d9795e2b7",
+      "bytes": 16455
+    },
+    "speed-bench/ideas/run_suffix_pair_tape_pilot.py": {
+      "sha256": "46e85f153cd82e1dcab05699a5cb2dabfcc08f0eb0bde14557488450011f3a4a",
+      "bytes": 16884
+    },
+    "tests/test_suffix_pair_tape_pilot.py": {
+      "sha256": "2a3d0d50f18c5292de3862931e7b39884823b86b6f111bba1951de880cc83475",
+      "bytes": 21494
+    }
+  },
+  "objects": {
+    "ds4.o": {
+      "sha256": "c24c30d24ac774339377f9b3995c6ae132e3025bd8f1e78ad363875bbe6ce803",
+      "bytes": 5672616
+    },
+    "ds4_image.o": {
+      "sha256": "ebdae98d494de74fd560daed53aad2bd934ff7012499fc2cde82e7e994278f60",
+      "bytes": 165664
+    },
+    "ds4_distributed.o": {
+      "sha256": "5e8a183b83abed129a7ab0ea1b6ce298ce3c1483d246829dafab98aacc5d8635",
+      "bytes": 427104
+    },
+    "ds4_tp.o": {
+      "sha256": "6efa29f9f0235e49502596cd04be4c3440bacb1a1b4f365ec78b9d7012e3320c",
+      "bytes": 207432
+    },
+    "ds4_ssd.o": {
+      "sha256": "aa2a18d7cc4b805af138691fd8208042837a045e30b6ed02def90c4b07d37434",
+      "bytes": 13736
+    },
+    "ds4_metal.o": {
+      "sha256": "813ff15ec709934f97bd41c018e5cab3cf796d4921b3adff46203efbe7ce80b7",
+      "bytes": 2803056
+    },
+    "ds4_layer_pack.o": {
+      "sha256": "efa53eacf5c197bd0ee5c6c140e70fd5924673f788e6876cac3656deea3b694d",
+      "bytes": 11264
+    },
+    "ds4_engram.o": {
+      "sha256": "41eefb68d54c36192c579379d9f9f9b7f35b3df619be97caed967ecb8b568982",
+      "bytes": 30064
+    },
+    "new-probe-frontend-final.o": {
+      "sha256": "512edd5ff4a659ac9fe917931c1ca39e0923f1b778ff55865eb823cad8806428",
+      "bytes": 63088
+    },
+    "baseline-probe-frontend-final.o": {
+      "sha256": "86cd42a66a32a0e67634593955f0f1e95d576530f2762a33dd80ba15bc2e0414",
+      "bytes": 47272
+    }
+  },
+  "binaries": {
+    "new-probe": {
+      "sha256": "dbbf2747e0dc423322b5f5b15b999cbdb03fe07980acfefa2409a2703da2ffc5",
+      "bytes": 2709384
+    },
+    "baseline-probe": {
+      "sha256": "03a7d301c9c53eab32bfe1cc8288c0f7df256fd39383b6f2fe3449e9fc9d15a4",
+      "bytes": 2691456
+    }
+  },
+  "native_baseline_core": {
+    "sha256": "45da7d4af7fbb2b2ae298408a3cd87c266e41c5fcf0fcfaecb7ba3b155af02cf",
+    "bytes": 5650520
+  },
+  "cpu_tape_proof_sha256": "08eaa89263c4ac239c69369a094c3dc087f0ee412acb94cb2611e7dd4796aecb",
+  "final_link_cpu_proof_sha256": "8f1851ce571267e9056e9673aa32d22c33b13cd7f3c39a4d1d5ea37b1305f0db",
+  "auxiliary_object_proof_sha256": "685cb308a501fb81867d806d00a8e3d60e69a3e7f855a9d3cc3cc5233a65e6bf",
+  "baseline_core_proof_sha256": "9fc7a478ede2feb21d1a15a71e09dc5aa6eb829463feb6acba51cb3e2ae24d3c",
+  "model_opened": false,
+  "default_changed": false,
+  "pilot_cpu_proof_sha256": "4a4c610beecec000aa1118279c166d1504e361ddd97abae325f4477144bda746",
+  "prior_unrun_driver_metadata_manifest_sha256": "94b113ec1a01bde2f1ed79eff71e97b4927a0195ac00690ae60c11c82c623736",
+  "historical_baseline_core_proof_scope": "Prior frontend link; actual final link is in final-link-cpu-proof.json"
+}

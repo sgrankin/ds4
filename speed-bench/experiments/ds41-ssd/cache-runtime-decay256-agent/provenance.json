@@ -1,0 +1,12 @@
+{
+  "binary_sha256": "b4c064dadbbe5af04d4778c0406c1bd323f1f897826524841d173f1a6be8dc0a",
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "candidate": "DS4_METAL_STREAM_CACHE_DECAY_TOKENS=256",
+  "order": "ABBA",
+  "prompts": [
+    "hello",
+    "What is 2 + 2?",
+    "hello"
+  ],
+  "generation_limit": 256
+}

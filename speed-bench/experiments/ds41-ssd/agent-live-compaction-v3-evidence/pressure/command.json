@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3/run_resident_agent_live.py",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3/plan.json",
+    "b6a4b9649054454f985c083c72a692203dc442accca487e8c66f26a331f48e49"
+  ],
+  "initial": {
+    "time": 1790984201.104751,
+    "level": 1,
+    "swap_gb": 0.017763671875,
+    "physical_gb": 128.0,
+    "free_gb": 55.65873718261719,
+    "file_backed_gb": 53.08848571777344,
+    "wired_gb": 3.06787109375,
+    "compressor_gb": 6.743255615234375
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

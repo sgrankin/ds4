@@ -1,0 +1,9 @@
+{
+  "guard_pid": 7467,
+  "MAIN_lock_held": true,
+  "actual": {
+    "bytes": 365713686528,
+    "mtime_ns": 1789237692837653163
+  },
+  "matches_pinned": true
+}

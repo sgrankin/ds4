@@ -1,0 +1,2 @@
+budget: page=16384 metadata=16384 Q2_capacity=9961472 40READY+1READING+stack+guard=408715264 cap=419430400
+PASS: strict opt-in gates; real short-read/EOF; CLOEXEC/descriptor policy and lifetime; one-worker latest40 queue; READY retention/expiry; nonwaiting handoff; bounded mapped allocation; busy reset/restart; balanced frees/fds

@@ -1,0 +1,1132 @@
+{
+  "mode": "reuse",
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "histories": {
+    "A": [
+      {
+        "role": "user",
+        "content": "These two marked dispatch spans are obsolete notes; their labels will move to the archive file.\n[dispatch note archived]\n[OBSOLETE_DISPATCH_NOTE_BEGIN]\nObsolete dispatch label: BEACON-46.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n[OBSOLETE_DISPATCH_NOTE_END]\nRead /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/active.json once using read with whole=true and raw=true. Retain the inventory numbers and complete unchanged tool result. Then reply READY only."
+      },
+      {
+        "id": "fc_262686777741f33aa3fab72f",
+        "type": "function_call",
+        "status": "completed",
+        "name": "read",
+        "call_id": "call_539df7fbc46b356b70fe218bcc3d83e0",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/active.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_539df7fbc46b356b70fe218bcc3d83e0",
+        "output": "{\n  \"batches\": 23,\n  \"items_per_batch\": 14,\n  \"reserved_items\": 9,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+      },
+      {
+        "id": "msg_928e8c132bb6391ff20222dd",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "READY",
+            "annotations": []
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "Read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/archive.json again now with whole=true and raw=true. A fresh read is required even if an earlier answer contained a code. Use the unchanged active inventory tool result to calculate batches * items_per_batch - reserved_items. Reply only JSON with active_total (integer) and archived_code (string) from the current file."
+      },
+      {
+        "id": "fc_69a6b71a96a24e18194ff7d4",
+        "type": "function_call",
+        "status": "completed",
+        "name": "read",
+        "call_id": "call_f6fbcb2ce2be3d656d53c0f6cd0a9f3a",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/archive.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_f6fbcb2ce2be3d656d53c0f6cd0a9f3a",
+        "output": "{\n  \"archived_code\": \"BEACON-46\"\n}\n"
+      },
+      {
+        "id": "msg_bd8a7bd7ecf199d737b857e3",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "B": [
+      {
+        "role": "user",
+        "content": "These two marked dispatch spans are obsolete notes; their labels will move to the archive file.\n[dispatch note archived]\n[OBSOLETE_DISPATCH_NOTE_BEGIN]\nObsolete dispatch label: ORBIT-57.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n[OBSOLETE_DISPATCH_NOTE_END]\nRead /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/active.json once using read with whole=true and raw=true. Retain the inventory numbers and complete unchanged tool result. Then reply READY only."
+      },
+      {
+        "id": "fc_c6e113948d417c45d5c7fb02",
+        "type": "function_call",
+        "status": "completed",
+        "name": "read",
+        "call_id": "call_5bf1d2e26ac50b7953900db13d2032a4",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/active.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_5bf1d2e26ac50b7953900db13d2032a4",
+        "output": "{\n  \"batches\": 31,\n  \"items_per_batch\": 8,\n  \"reserved_items\": 17,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+      },
+      {
+        "id": "msg_d16aa13ec967139328d6eb96",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "READY",
+            "annotations": []
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "Read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json again now with whole=true and raw=true. A fresh read is required even if an earlier answer contained a code. Use the unchanged active inventory tool result to calculate batches * items_per_batch - reserved_items. Reply only JSON with active_total (integer) and archived_code (string) from the current file."
+      },
+      {
+        "id": "fc_34ec4b79552e81240afff79e",
+        "type": "function_call",
+        "status": "completed",
+        "name": "read",
+        "call_id": "call_caaf4ee43126f256b0df41d31c5a21be",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_caaf4ee43126f256b0df41d31c5a21be",
+        "output": "{\n  \"archived_code\": \"ORBIT-57\"\n}\n"
+      },
+      {
+        "id": "msg_b8b3e2a3c158258996f8d029",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"active_total\":231,\"archived_code\":\"ORBIT-57\"}",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "C": [
+      {
+        "role": "user",
+        "content": "These two marked dispatch spans are obsolete notes; their labels will move to the archive file.\n[dispatch note archived]\n[OBSOLETE_DISPATCH_NOTE_BEGIN]\nObsolete dispatch label: CEDAR-69.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n[OBSOLETE_DISPATCH_NOTE_END]\nRead /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/active.json once using read with whole=true and raw=true. Retain the inventory numbers and complete unchanged tool result. Then reply READY only."
+      },
+      {
+        "id": "fc_4423aaac3adc9c88180ffdcc",
+        "type": "function_call",
+        "status": "completed",
+        "name": "read",
+        "call_id": "call_37e8f79bb98137cbceacad41a93c9e82",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/active.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_37e8f79bb98137cbceacad41a93c9e82",
+        "output": "{\n  \"batches\": 19,\n  \"items_per_batch\": 15,\n  \"reserved_items\": 18,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+      },
+      {
+        "id": "msg_dd936e7987e5c04db5b6da21",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "READY",
+            "annotations": []
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "Read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/archive.json again now with whole=true and raw=true. A fresh read is required even if an earlier answer contained a code. Use the unchanged active inventory tool result to calculate batches * items_per_batch - reserved_items. Reply only JSON with active_total (integer) and archived_code (string) from the current file."
+      },
+      {
+        "id": "fc_d37057f0aacf585167c50238",
+        "type": "function_call",
+        "status": "completed",
+        "name": "read",
+        "call_id": "call_58bdd45f53592bc87e7c510bb34ee6fa",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/archive.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_58bdd45f53592bc87e7c510bb34ee6fa",
+        "output": "{\n  \"archived_code\": \"CEDAR-70\"\n}\n"
+      },
+      {
+        "id": "msg_f14378cfe35b5518ccb5d01b",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "D": [
+      {
+        "role": "user",
+        "content": "These two marked dispatch spans are obsolete notes; their labels will move to the archive file.\n[dispatch note archived]\n[OBSOLETE_DISPATCH_NOTE_BEGIN]\nObsolete dispatch label: DELTA-82.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n[OBSOLETE_DISPATCH_NOTE_END]\nRead /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/active.json once using read with whole=true and raw=true. Retain the inventory numbers and complete unchanged tool result. Then reply READY only."
+      },
+      {
+        "id": "fc_8256650bd94ebb681b0977c1",
+        "type": "function_call",
+        "status": "completed",
+        "name": "read",
+        "call_id": "call_7649aa63759563f596528ff59acc4637",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/active.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_7649aa63759563f596528ff59acc4637",
+        "output": "{\n  \"batches\": 27,\n  \"items_per_batch\": 8,\n  \"reserved_items\": 19,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+      },
+      {
+        "id": "msg_9729bd620d540c5238060243",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "READY",
+            "annotations": []
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "Read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/archive.json again now with whole=true and raw=true. A fresh read is required even if an earlier answer contained a code. Use the unchanged active inventory tool result to calculate batches * items_per_batch - reserved_items. Reply only JSON with active_total (integer) and archived_code (string) from the current file."
+      },
+      {
+        "id": "fc_6df5e1122293e22b024fc962",
+        "type": "function_call",
+        "status": "completed",
+        "name": "read",
+        "call_id": "call_3eed81515879c02c948c5db337018b6d",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/archive.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_3eed81515879c02c948c5db337018b6d",
+        "output": "{\n  \"archived_code\": \"DELTA-83\"\n}\n"
+      },
+      {
+        "id": "msg_444bdb3bbdfda6ea751d9c9a",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+            "annotations": []
+          }
+        ]
+      }
+    ]
+  },
+  "results": [
+    {
+      "step": "A-warm",
+      "session": "A",
+      "seconds": 90.01103691699973,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_539df7fbc46b356b70fe218bcc3d83e0",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/active.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/active.json",
+          "text": "{\n  \"batches\": 23,\n  \"items_per_batch\": 14,\n  \"reserved_items\": 9,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/active.json",
+      "replies": [
+        {
+          "seconds": 64.86638712498825,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1073,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1073
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1166
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 25.14355541599798,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1694,
+            "input_tokens_details": {
+              "cached_tokens": 1166,
+              "cache_write_tokens": 528
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1696
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "group": "warm-AB",
+      "queue_inclusive_seconds": 90.01146325000445
+    },
+    {
+      "step": "B-warm",
+      "session": "B",
+      "seconds": 90.10544237498834,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_5bf1d2e26ac50b7953900db13d2032a4",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/active.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/active.json",
+          "text": "{\n  \"batches\": 31,\n  \"items_per_batch\": 8,\n  \"reserved_items\": 17,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/active.json",
+      "replies": [
+        {
+          "seconds": 64.94645858299918,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1071,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1071
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1164
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 25.158096416998887,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1692,
+            "input_tokens_details": {
+              "cached_tokens": 1164,
+              "cache_write_tokens": 528
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1694
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "group": "warm-AB",
+      "queue_inclusive_seconds": 90.10581112500222
+    },
+    {
+      "step": "C-warm",
+      "session": "C",
+      "seconds": 94.88679254199087,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_37e8f79bb98137cbceacad41a93c9e82",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/active.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/active.json",
+          "text": "{\n  \"batches\": 19,\n  \"items_per_batch\": 15,\n  \"reserved_items\": 18,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/active.json",
+      "replies": [
+        {
+          "seconds": 67.22632316600357,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1073,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1073
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1166
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 27.65965449999203,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1694,
+            "input_tokens_details": {
+              "cached_tokens": 1166,
+              "cache_write_tokens": 528
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1696
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "group": "warm-CD",
+      "queue_inclusive_seconds": 94.88717804200132
+    },
+    {
+      "step": "D-warm",
+      "session": "D",
+      "seconds": 94.7953738750075,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_7649aa63759563f596528ff59acc4637",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/active.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/active.json",
+          "text": "{\n  \"batches\": 27,\n  \"items_per_batch\": 8,\n  \"reserved_items\": 19,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/active.json",
+      "replies": [
+        {
+          "seconds": 67.13803666699096,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1071,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1071
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1164
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 27.656079541004146,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1692,
+            "input_tokens_details": {
+              "cached_tokens": 1164,
+              "cache_write_tokens": 528
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1694
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "group": "warm-CD",
+      "queue_inclusive_seconds": 94.79574258301
+    },
+    {
+      "step": "A-edited",
+      "session": "A",
+      "seconds": 50.34890595800243,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "answer": {
+        "active_total": 313,
+        "archived_code": "BEACON-46"
+      },
+      "gold": {
+        "active_total": 313,
+        "archived_code": "BEACON-46"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_f6fbcb2ce2be3d656d53c0f6cd0a9f3a",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/archive.json",
+          "text": "{\n  \"archived_code\": \"BEACON-46\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/archive.json",
+      "replies": [
+        {
+          "seconds": 47.17361962499854,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1437,
+            "input_tokens_details": {
+              "cached_tokens": 1034,
+              "cache_write_tokens": 403
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1530
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 3.1741313749953406,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1556,
+            "input_tokens_details": {
+              "cached_tokens": 1530,
+              "cache_write_tokens": 26
+            },
+            "output_tokens": 16,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1572
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "group": "edited-AB",
+      "queue_inclusive_seconds": 50.34996529199998,
+      "seconds_including_edit": 50.34996529199998,
+      "edit_seconds": 0.0004875839949818328
+    },
+    {
+      "step": "B-edited",
+      "session": "B",
+      "seconds": 50.34907587499765,
+      "text": "{\"active_total\":231,\"archived_code\":\"ORBIT-57\"}",
+      "answer": {
+        "active_total": 231,
+        "archived_code": "ORBIT-57"
+      },
+      "gold": {
+        "active_total": 231,
+        "archived_code": "ORBIT-57"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_caaf4ee43126f256b0df41d31c5a21be",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json",
+          "text": "{\n  \"archived_code\": \"ORBIT-57\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json",
+      "replies": [
+        {
+          "seconds": 47.26015312501113,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1437,
+            "input_tokens_details": {
+              "cached_tokens": 1034,
+              "cache_write_tokens": 403
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1530
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 3.0881610840006033,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1555,
+            "input_tokens_details": {
+              "cached_tokens": 1530,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 15,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1570
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "group": "edited-AB",
+      "queue_inclusive_seconds": 50.349845666001784,
+      "seconds_including_edit": 50.349845666001784,
+      "edit_seconds": 0.0002975410025101155
+    },
+    {
+      "step": "C-edited",
+      "session": "C",
+      "seconds": 50.20114212499175,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "answer": {
+        "active_total": 267,
+        "archived_code": "CEDAR-70"
+      },
+      "gold": {
+        "active_total": 267,
+        "archived_code": "CEDAR-70"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_58bdd45f53592bc87e7c510bb34ee6fa",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/archive.json",
+          "text": "{\n  \"archived_code\": \"CEDAR-70\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/archive.json",
+      "replies": [
+        {
+          "seconds": 47.2058307499974,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1437,
+            "input_tokens_details": {
+              "cached_tokens": 1034,
+              "cache_write_tokens": 403
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1530
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 2.994524374997127,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1555,
+            "input_tokens_details": {
+              "cached_tokens": 1530,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 15,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1570
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "group": "edited-CD",
+      "queue_inclusive_seconds": 50.20176795900625,
+      "seconds_including_edit": 50.20176795900625,
+      "edit_seconds": 0.0003121250047115609
+    },
+    {
+      "step": "D-edited",
+      "session": "D",
+      "seconds": 50.160723749999306,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "answer": {
+        "active_total": 197,
+        "archived_code": "DELTA-83"
+      },
+      "gold": {
+        "active_total": 197,
+        "archived_code": "DELTA-83"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_3eed81515879c02c948c5db337018b6d",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/archive.json",
+          "text": "{\n  \"archived_code\": \"DELTA-83\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/D/archive.json",
+      "replies": [
+        {
+          "seconds": 47.16558625000471,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1437,
+            "input_tokens_details": {
+              "cached_tokens": 1034,
+              "cache_write_tokens": 403
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1530
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 2.994043166996562,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1555,
+            "input_tokens_details": {
+              "cached_tokens": 1530,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 15,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1570
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "group": "edited-CD",
+      "queue_inclusive_seconds": 50.16132312499394,
+      "seconds_including_edit": 50.16132312499394,
+      "edit_seconds": 0.0002410000015515834
+    }
+  ],
+  "groups": [
+    {
+      "group": "warm-AB",
+      "sessions": [
+        "A",
+        "B"
+      ],
+      "seconds": 90.10601408299408,
+      "steps": [
+        "A-warm",
+        "B-warm"
+      ],
+      "pass": true,
+      "server_log_lines": [
+        "1004 15:34:35 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prompt start",
+        "1004 15:34:35 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:34:49 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 512/1073 (47.7%) chunk=0.00 t/s avg=35.88 t/s 14.271s",
+        "1004 15:34:52 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 576/1073 (53.7%) chunk=24.00 t/s avg=34.01 t/s 16.938s",
+        "1004 15:34:53 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 640/1073 (59.6%) chunk=48.84 t/s avg=35.07 t/s 18.248s",
+        "1004 15:34:55 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 704/1073 (65.6%) chunk=37.06 t/s avg=35.24 t/s 19.975s",
+        "1004 15:34:57 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 768/1073 (71.6%) chunk=45.70 t/s avg=35.93 t/s 21.375s",
+        "1004 15:34:58 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 832/1073 (77.5%) chunk=46.97 t/s avg=36.59 t/s 22.738s",
+        "1004 15:34:59 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 896/1073 (83.5%) chunk=49.59 t/s avg=37.29 t/s 24.029s",
+        "1004 15:35:00 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 960/1073 (89.5%) chunk=49.36 t/s avg=37.91 t/s 25.326s",
+        "1004 15:35:01 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 1009/1073 (94.0%) chunk=47.99 t/s avg=38.30 t/s 26.347s",
+        "1004 15:35:04 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 1073/1073 (100.0%) chunk=31.14 t/s avg=37.78 t/s 28.402s",
+        "1004 15:35:04 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prompt done 28.508s",
+        "1004 15:35:04 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prompt start",
+        "1004 15:35:04 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:35:19 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 512/1071 (47.8%) chunk=0.00 t/s avg=33.26 t/s 15.393s",
+        "1004 15:35:20 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 576/1071 (53.8%) chunk=46.56 t/s avg=34.35 t/s 16.767s",
+        "1004 15:35:22 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 640/1071 (59.8%) chunk=49.95 t/s avg=35.46 t/s 18.049s",
+        "1004 15:35:23 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 704/1071 (65.7%) chunk=39.46 t/s avg=35.79 t/s 19.671s",
+        "1004 15:35:25 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 768/1071 (71.7%) chunk=46.85 t/s avg=36.51 t/s 21.037s",
+        "1004 15:35:26 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 832/1071 (77.7%) chunk=45.97 t/s avg=37.10 t/s 22.429s",
+        "1004 15:35:27 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 896/1071 (83.7%) chunk=48.56 t/s avg=37.73 t/s 23.747s",
+        "1004 15:35:29 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 960/1071 (89.6%) chunk=47.88 t/s avg=38.27 t/s 25.083s",
+        "1004 15:35:30 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 1007/1071 (94.0%) chunk=44.89 t/s avg=38.54 t/s 26.130s",
+        "1004 15:35:32 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 1071/1071 (100.0%) chunk=29.90 t/s avg=37.88 t/s 28.271s",
+        "1004 15:35:32 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prompt done 28.378s",
+        "1004 15:35:36 ds4-server: chat ctx=1073..1123:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=1.53 t/s avg=1.53 t/s 32.680s",
+        "1004 15:35:36 ds4-server: chat ctx=1071..1121:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=11.17 t/s avg=11.17 t/s 4.476s",
+        "1004 15:35:40 ds4-server: chat ctx=1123..1166:43 gen=93 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=11.73 t/s avg=2.56 t/s 36.345s",
+        "1004 15:35:40 ds4-server: tool calls ctx=0..1073:1073 RESPPROTO n=1 raw_tool_text=1 ids=[call_539df7fbc46b356b70fe218bcc3d83e0] names=[read]",
+        "1004 15:35:40 ds4-server: reasoning_summary id=chatcmpl-fbad9e9119c5a0124a82149b ctx=0..1073:1073 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:35:40 ds4-server: chat ctx=0..1073:1073 gen=93 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 64.854s",
+        "1004 15:35:40 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prompt start",
+        "1004 15:35:40 ds4-server: chat ctx=1121..1164:43 gen=93 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=12.04 t/s avg=11.56 t/s 8.048s",
+        "1004 15:35:40 ds4-server: tool calls ctx=0..1071:1071 RESPPROTO n=1 raw_tool_text=1 ids=[call_5bf1d2e26ac50b7953900db13d2032a4] names=[read]",
+        "1004 15:35:40 ds4-server: reasoning_summary id=chatcmpl-739b230cf17137b6c08e0e8a ctx=0..1071:1071 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:35:40 ds4-server: chat ctx=0..1071:1071 gen=93 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 36.427s",
+        "1004 15:35:42 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 64/528 (12.1%) chunk=0.00 t/s avg=29.00 t/s 2.207s",
+        "1004 15:35:44 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 128/528 (24.2%) chunk=37.01 t/s avg=32.52 t/s 3.936s",
+        "1004 15:35:46 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 192/528 (36.4%) chunk=38.50 t/s avg=34.29 t/s 5.599s",
+        "1004 15:35:47 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 256/528 (48.5%) chunk=44.06 t/s avg=36.31 t/s 7.051s",
+        "1004 15:35:49 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 320/528 (60.6%) chunk=44.61 t/s avg=37.71 t/s 8.486s",
+        "1004 15:35:50 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 384/528 (72.7%) chunk=46.11 t/s avg=38.89 t/s 9.874s",
+        "1004 15:35:51 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 448/528 (84.8%) chunk=46.03 t/s avg=39.77 t/s 11.264s",
+        "1004 15:35:52 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 464/528 (87.9%) chunk=42.51 t/s avg=39.86 t/s 11.640s",
+        "1004 15:35:53 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 528/528 (100.0%) chunk=41.15 t/s avg=40.01 t/s 13.196s",
+        "1004 15:35:53 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prompt done 13.336s",
+        "1004 15:35:53 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prompt start",
+        "1004 15:35:55 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 64/528 (12.1%) chunk=0.00 t/s avg=37.80 t/s 1.693s",
+        "1004 15:35:56 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 128/528 (24.2%) chunk=47.32 t/s avg=42.03 t/s 3.046s",
+        "1004 15:35:58 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 192/528 (36.4%) chunk=47.67 t/s avg=43.75 t/s 4.388s",
+        "1004 15:35:59 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 256/528 (48.5%) chunk=48.01 t/s avg=44.75 t/s 5.721s",
+        "1004 15:36:00 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 320/528 (60.6%) chunk=47.85 t/s avg=45.33 t/s 7.059s",
+        "1004 15:36:02 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 384/528 (72.7%) chunk=47.95 t/s avg=45.75 t/s 8.393s",
+        "1004 15:36:03 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 448/528 (84.8%) chunk=48.69 t/s avg=46.15 t/s 9.708s",
+        "1004 15:36:03 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 464/528 (87.9%) chunk=44.79 t/s avg=46.10 t/s 10.065s",
+        "1004 15:36:05 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 528/528 (100.0%) chunk=42.76 t/s avg=45.67 t/s 11.562s",
+        "1004 15:36:05 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prompt done 11.700s",
+        "1004 15:36:05 ds4-server: chat ctx=1694..1696:2 gen=2 RESPPROTO TOOLS decoding chunk=0.17 t/s avg=0.17 t/s 11.769s",
+        "1004 15:36:05 ds4-server: reasoning_summary id=chatcmpl-a375b5326b217f2a539f3420 ctx=1166..1694:528 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:36:05 ds4-server: chat ctx=1166..1694:528 gen=2 RESPPROTO TOOLS finish=stop 25.106s",
+        "1004 15:36:05 ds4-server: chat ctx=1692..1694:2 gen=2 RESPPROTO TOOLS decoding chunk=12.20 t/s avg=12.20 t/s 0.164s",
+        "1004 15:36:05 ds4-server: reasoning_summary id=chatcmpl-89e55f226dfd7d7cac81792d ctx=1164..1692:528 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:36:05 ds4-server: chat ctx=1164..1692:528 gen=2 RESPPROTO TOOLS finish=stop 11.864s"
+      ],
+      "suffix_log_lines": [
+        "1004 15:34:35 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:35:04 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "group": "warm-CD",
+      "sessions": [
+        "C",
+        "D"
+      ],
+      "seconds": 94.88733554100327,
+      "steps": [
+        "C-warm",
+        "D-warm"
+      ],
+      "pass": true,
+      "server_log_lines": [
+        "1004 15:36:05 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:36:05 ds4-server: live kv cache miss RESPPROTO live=1694 prompt=1071 common=321 vision=match reason=token-mismatch",
+        "1004 15:36:05 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prompt start",
+        "1004 15:36:05 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:36:05 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)",
+        "1004 15:36:21 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 512/1071 (47.8%) chunk=0.00 t/s avg=33.14 t/s 15.450s",
+        "1004 15:36:22 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 576/1071 (53.8%) chunk=45.01 t/s avg=34.14 t/s 16.872s",
+        "1004 15:36:23 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 640/1071 (59.8%) chunk=48.76 t/s avg=35.19 t/s 18.185s",
+        "1004 15:36:25 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 704/1071 (65.7%) chunk=39.43 t/s avg=35.54 t/s 19.808s",
+        "1004 15:36:26 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 768/1071 (71.7%) chunk=46.78 t/s avg=36.27 t/s 21.176s",
+        "1004 15:36:28 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 832/1071 (77.7%) chunk=47.56 t/s avg=36.94 t/s 22.522s",
+        "1004 15:36:29 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 896/1071 (83.7%) chunk=49.30 t/s avg=37.62 t/s 23.820s",
+        "1004 15:36:30 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 960/1071 (89.6%) chunk=49.02 t/s avg=38.21 t/s 25.126s",
+        "1004 15:36:31 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 1007/1071 (94.0%) chunk=47.43 t/s avg=38.56 t/s 26.117s",
+        "1004 15:36:33 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prefill chunk 1071/1071 (100.0%) chunk=30.68 t/s avg=37.98 t/s 28.203s",
+        "1004 15:36:34 ds4-server: chat ctx=0..1071:1071 RESPPROTO TOOLS prompt done 28.307s",
+        "1004 15:36:34 ds4-server: live kv cache miss RESPPROTO live=1696 prompt=1073 common=321 vision=match reason=token-mismatch",
+        "1004 15:36:34 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prompt start",
+        "1004 15:36:34 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:36:49 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 512/1073 (47.7%) chunk=0.00 t/s avg=32.09 t/s 15.954s",
+        "1004 15:36:51 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 576/1073 (53.7%) chunk=43.65 t/s avg=33.07 t/s 17.420s",
+        "1004 15:36:52 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 640/1073 (59.6%) chunk=42.11 t/s avg=33.79 t/s 18.940s",
+        "1004 15:36:54 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 704/1073 (65.6%) chunk=35.30 t/s avg=33.92 t/s 20.753s",
+        "1004 15:36:56 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 768/1073 (71.6%) chunk=40.91 t/s avg=34.41 t/s 22.317s",
+        "1004 15:36:57 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 832/1073 (77.5%) chunk=41.46 t/s avg=34.87 t/s 23.861s",
+        "1004 15:36:59 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 896/1073 (83.5%) chunk=42.40 t/s avg=35.32 t/s 25.370s",
+        "1004 15:37:00 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 960/1073 (89.5%) chunk=42.46 t/s avg=35.72 t/s 26.877s",
+        "1004 15:37:02 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 1009/1073 (94.0%) chunk=40.99 t/s avg=35.94 t/s 28.073s",
+        "1004 15:37:04 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prefill chunk 1073/1073 (100.0%) chunk=28.65 t/s avg=35.40 t/s 30.307s",
+        "1004 15:37:04 ds4-server: chat ctx=0..1073:1073 RESPPROTO TOOLS prompt done 30.418s",
+        "1004 15:37:08 ds4-server: chat ctx=1071..1121:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=1.44 t/s avg=1.44 t/s 34.820s",
+        "1004 15:37:09 ds4-server: chat ctx=1073..1123:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=10.88 t/s avg=10.88 t/s 4.596s",
+        "1004 15:37:12 ds4-server: chat ctx=1121..1164:43 gen=93 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=10.73 t/s avg=2.40 t/s 38.828s",
+        "1004 15:37:12 ds4-server: tool calls ctx=0..1071:1071 RESPPROTO n=1 raw_tool_text=1 ids=[call_7649aa63759563f596528ff59acc4637] names=[read]",
+        "1004 15:37:12 ds4-server: reasoning_summary id=chatcmpl-04a707f1c6d74848487208a7 ctx=0..1071:1071 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:37:12 ds4-server: chat ctx=0..1071:1071 gen=93 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 67.135s",
+        "1004 15:37:12 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prompt start",
+        "1004 15:37:12 ds4-server: chat ctx=1123..1166:43 gen=93 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=11.01 t/s avg=10.94 t/s 8.501s",
+        "1004 15:37:12 ds4-server: tool calls ctx=0..1073:1073 RESPPROTO n=1 raw_tool_text=1 ids=[call_37e8f79bb98137cbceacad41a93c9e82] names=[read]",
+        "1004 15:37:12 ds4-server: reasoning_summary id=chatcmpl-cc8885482439e49fc311dda2 ctx=0..1073:1073 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:37:12 ds4-server: chat ctx=0..1073:1073 gen=93 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 38.919s",
+        "1004 15:37:15 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 64/528 (12.1%) chunk=0.00 t/s avg=26.79 t/s 2.389s",
+        "1004 15:37:17 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 128/528 (24.2%) chunk=34.20 t/s avg=30.05 t/s 4.260s",
+        "1004 15:37:18 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 192/528 (36.4%) chunk=35.51 t/s avg=31.67 t/s 6.062s",
+        "1004 15:37:20 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 256/528 (48.5%) chunk=39.13 t/s avg=33.26 t/s 7.697s",
+        "1004 15:37:22 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 320/528 (60.6%) chunk=40.47 t/s avg=34.49 t/s 9.279s",
+        "1004 15:37:23 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 384/528 (72.7%) chunk=41.06 t/s avg=35.43 t/s 10.838s",
+        "1004 15:37:25 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 448/528 (84.8%) chunk=41.44 t/s avg=36.18 t/s 12.382s",
+        "1004 15:37:25 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 464/528 (87.9%) chunk=38.06 t/s avg=36.24 t/s 12.803s",
+        "1004 15:37:27 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prefill chunk 528/528 (100.0%) chunk=39.24 t/s avg=36.58 t/s 14.434s",
+        "1004 15:37:27 ds4-server: chat ctx=1164..1692:528 RESPPROTO TOOLS prompt done 14.565s",
+        "1004 15:37:27 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prompt start",
+        "1004 15:37:29 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 64/528 (12.1%) chunk=0.00 t/s avg=34.84 t/s 1.837s",
+        "1004 15:37:30 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 128/528 (24.2%) chunk=42.59 t/s avg=38.33 t/s 3.340s",
+        "1004 15:37:32 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 192/528 (36.4%) chunk=42.66 t/s avg=39.67 t/s 4.840s",
+        "1004 15:37:33 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 256/528 (48.5%) chunk=42.57 t/s avg=40.36 t/s 6.343s",
+        "1004 15:37:35 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 320/528 (60.6%) chunk=43.05 t/s avg=40.87 t/s 7.830s",
+        "1004 15:37:36 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 384/528 (72.7%) chunk=42.89 t/s avg=41.19 t/s 9.322s",
+        "1004 15:37:38 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 448/528 (84.8%) chunk=42.93 t/s avg=41.43 t/s 10.813s",
+        "1004 15:37:38 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 464/528 (87.9%) chunk=38.51 t/s avg=41.32 t/s 11.228s",
+        "1004 15:37:40 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prefill chunk 528/528 (100.0%) chunk=39.56 t/s avg=41.10 t/s 12.846s",
+        "1004 15:37:40 ds4-server: chat ctx=1166..1694:528 RESPPROTO TOOLS prompt done 12.975s",
+        "1004 15:37:40 ds4-server: chat ctx=1692..1694:2 gen=2 RESPPROTO TOOLS decoding chunk=0.15 t/s avg=0.15 t/s 13.049s",
+        "1004 15:37:40 ds4-server: reasoning_summary id=chatcmpl-b117182a7f1e7005c75f77ff ctx=1164..1692:528 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:37:40 ds4-server: chat ctx=1164..1692:528 gen=2 RESPPROTO TOOLS finish=stop 27.615s",
+        "1004 15:37:40 ds4-server: chat ctx=1694..1696:2 gen=2 RESPPROTO TOOLS decoding chunk=12.07 t/s avg=12.07 t/s 0.166s",
+        "1004 15:37:40 ds4-server: reasoning_summary id=chatcmpl-93bbadfd74b9f3550f495e07 ctx=1166..1694:528 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:37:40 ds4-server: chat ctx=1166..1694:528 gen=2 RESPPROTO TOOLS finish=stop 13.141s"
+      ],
+      "suffix_log_lines": [
+        "1004 15:36:05 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:36:34 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1004 15:36:05 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:36:05 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "group": "edited-AB",
+      "sessions": [
+        "A",
+        "B"
+      ],
+      "seconds": 50.3501988749922,
+      "steps": [
+        "A-edited",
+        "B-edited"
+      ],
+      "pass": true,
+      "server_log_lines": [
+        "1004 15:37:40 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:37:40 ds4-server: live kv cache miss RESPPROTO live=1694 prompt=1437 common=304 vision=match reason=token-mismatch",
+        "1004 15:37:40 ds4-server: chat ctx=0..1437:1437 RESPPROTO TOOLS prompt start",
+        "1004 15:37:40 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)",
+        "1004 15:37:56 ds4-server: chat ctx=0..1437:1437 RESPPROTO TOOLS prefill chunk 308/1437 (21.4%) chunk=0.00 t/s avg=19.67 t/s 15.660s",
+        "1004 15:37:57 ds4-server: chat ctx=0..1437:1437 RESPPROTO TOOLS prefill chunk 1373/1437 (95.5%) chunk=804.38 t/s avg=80.84 t/s 16.984s",
+        "1004 15:37:57 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17053.342 ms",
+        "1004 15:37:59 ds4-server: chat ctx=1034..1437:403 RESPPROTO TOOLS prefill chunk 403/403 (100.0%) chunk=30.88 t/s avg=21.15 t/s 19.057s",
+        "1004 15:37:59 ds4-server: chat ctx=1034..1437:403 RESPPROTO TOOLS prompt done 19.131s",
+        "1004 15:37:59 ds4-server: live kv cache miss RESPPROTO live=1696 prompt=1436 common=304 vision=match reason=token-mismatch",
+        "1004 15:37:59 ds4-server: chat ctx=0..1436:1436 RESPPROTO TOOLS prompt start",
+        "1004 15:38:15 ds4-server: chat ctx=0..1436:1436 RESPPROTO TOOLS prefill chunk 308/1436 (21.4%) chunk=0.00 t/s avg=19.25 t/s 16.003s",
+        "1004 15:38:17 ds4-server: chat ctx=0..1436:1436 RESPPROTO TOOLS prefill chunk 1373/1436 (95.6%) chunk=798.50 t/s avg=79.20 t/s 17.336s",
+        "1004 15:38:17 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17397.418 ms",
+        "1004 15:38:19 ds4-server: chat ctx=1034..1437:403 RESPPROTO TOOLS prefill chunk 403/403 (100.0%) chunk=30.46 t/s avg=20.73 t/s 19.437s",
+        "1004 15:38:19 ds4-server: chat ctx=1034..1437:403 RESPPROTO TOOLS prompt done 19.506s",
+        "1004 15:38:23 ds4-server: chat ctx=1437..1487:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=2.08 t/s avg=2.08 t/s 24.045s",
+        "1004 15:38:23 ds4-server: chat ctx=1437..1487:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=10.58 t/s avg=10.58 t/s 4.727s",
+        "1004 15:38:27 ds4-server: chat ctx=1487..1530:43 gen=93 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=10.77 t/s avg=3.32 t/s 28.039s",
+        "1004 15:38:27 ds4-server: tool calls ctx=1034..1437:403 RESPPROTO n=1 raw_tool_text=1 ids=[call_f6fbcb2ce2be3d656d53c0f6cd0a9f3a] names=[read]",
+        "1004 15:38:27 ds4-server: reasoning_summary id=chatcmpl-f6583ff83013987a7a62fa05 ctx=1034..1437:403 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:38:27 ds4-server: chat ctx=1034..1437:403 gen=93 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 47.170s",
+        "1004 15:38:27 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1",
+        "1004 15:38:27 ds4-server: chat ctx=1530..1556:26 RESPPROTO TOOLS prompt start",
+        "1004 15:38:27 ds4-server: chat ctx=1487..1530:43 gen=93 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=11.05 t/s avg=10.79 t/s 8.620s",
+        "1004 15:38:27 ds4-server: tool calls ctx=1034..1437:403 RESPPROTO n=1 raw_tool_text=1 ids=[call_caaf4ee43126f256b0df41d31c5a21be] names=[read]",
+        "1004 15:38:27 ds4-server: reasoning_summary id=chatcmpl-d6b7ddeb48c4cd3a5d56c8cf ctx=1034..1437:403 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:38:27 ds4-server: chat ctx=1034..1437:403 gen=93 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 28.127s",
+        "1004 15:38:28 ds4-server: chat ctx=1530..1556:26 RESPPROTO TOOLS prefill chunk 26/26 (100.0%) chunk=0.00 t/s avg=26.09 t/s 0.997s",
+        "1004 15:38:28 ds4-server: chat ctx=1530..1556:26 RESPPROTO TOOLS prompt done 1.060s",
+        "1004 15:38:28 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1",
+        "1004 15:38:28 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prompt start",
+        "1004 15:38:29 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prefill chunk 25/25 (100.0%) chunk=0.00 t/s avg=39.26 t/s 0.637s",
+        "1004 15:38:29 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prompt done 0.700s",
+        "1004 15:38:30 ds4-server: chat ctx=1555..1570:15 gen=15 RESPPROTO TOOLS decoding chunk=10.92 t/s avg=10.92 t/s 1.373s",
+        "1004 15:38:30 ds4-server: reasoning_summary id=chatcmpl-54843e392cf5e15fdf746ccb ctx=1530..1555:25 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:38:30 ds4-server: chat ctx=1556..1572:16 gen=16 RESPPROTO TOOLS decoding chunk=7.72 t/s avg=7.72 t/s 2.073s",
+        "1004 15:38:30 ds4-server: reasoning_summary id=chatcmpl-85027aa70552c14765429990 ctx=1530..1556:26 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:38:30 ds4-server: chat ctx=1530..1555:25 gen=15 RESPPROTO TOOLS finish=stop 2.073s",
+        "1004 15:38:30 ds4-server: chat ctx=1530..1556:26 gen=16 RESPPROTO TOOLS finish=stop 3.133s"
+      ],
+      "suffix_log_lines": [
+        "1004 15:37:57 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17053.342 ms",
+        "1004 15:38:17 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17397.418 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1004 15:37:40 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:37:40 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "group": "edited-CD",
+      "sessions": [
+        "C",
+        "D"
+      ],
+      "seconds": 50.20189541700529,
+      "steps": [
+        "C-edited",
+        "D-edited"
+      ],
+      "pass": true,
+      "server_log_lines": [
+        "1004 15:38:33 ds4-server: chat ctx=0..1436:1436 RESPPROTO TOOLS prompt start",
+        "1004 15:38:33 ds4-server: chat ctx=0..1437:1437 RESPPROTO TOOLS prompt start",
+        "1004 15:38:47 ds4-server: chat ctx=0..1436:1436 RESPPROTO TOOLS prefill chunk 308/1436 (21.4%) chunk=0.00 t/s avg=21.03 t/s 14.648s",
+        "1004 15:38:50 ds4-server: chat ctx=0..1436:1436 RESPPROTO TOOLS prefill chunk 1373/1436 (95.6%) chunk=465.82 t/s avg=81.08 t/s 16.934s",
+        "1004 15:38:50 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17003.723 ms",
+        "1004 15:39:06 ds4-server: chat ctx=0..1437:1437 RESPPROTO TOOLS prefill chunk 308/1437 (21.4%) chunk=0.00 t/s avg=9.27 t/s 33.235s",
+        "1004 15:39:07 ds4-server: chat ctx=0..1437:1437 RESPPROTO TOOLS prefill chunk 1373/1437 (95.5%) chunk=750.90 t/s avg=39.62 t/s 34.653s",
+        "1004 15:39:07 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17717.994 ms",
+        "1004 15:39:09 ds4-server: chat ctx=1034..1437:403 RESPPROTO TOOLS prefill chunk 403/403 (100.0%) chunk=3.23 t/s avg=10.96 t/s 36.757s",
+        "1004 15:39:09 ds4-server: chat ctx=1034..1437:403 RESPPROTO TOOLS prompt done 36.834s",
+        "1004 15:39:11 ds4-server: chat ctx=1034..1437:403 RESPPROTO TOOLS prefill chunk 403/403 (100.0%) chunk=16.42 t/s avg=10.45 t/s 38.551s",
+        "1004 15:39:11 ds4-server: chat ctx=1034..1437:403 RESPPROTO TOOLS prompt done 38.626s",
+        "1004 15:39:16 ds4-server: chat ctx=1437..1487:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=7.85 t/s avg=7.85 t/s 6.369s",
+        "1004 15:39:16 ds4-server: chat ctx=1437..1487:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=10.69 t/s avg=10.69 t/s 4.676s",
+        "1004 15:39:20 ds4-server: chat ctx=1487..1530:43 gen=93 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=10.89 t/s avg=9.01 t/s 10.318s",
+        "1004 15:39:20 ds4-server: tool calls ctx=1034..1437:403 RESPPROTO n=1 raw_tool_text=1 ids=[call_3eed81515879c02c948c5db337018b6d] names=[read]",
+        "1004 15:39:20 ds4-server: reasoning_summary id=chatcmpl-c7916c29af34f220170993d9 ctx=1034..1437:403 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:39:20 ds4-server: chat ctx=1034..1437:403 gen=93 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 47.152s",
+        "1004 15:39:20 ds4-server: chat ctx=1487..1530:43 gen=93 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=11.05 t/s avg=10.85 t/s 8.568s",
+        "1004 15:39:20 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1",
+        "1004 15:39:20 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prompt start",
+        "1004 15:39:20 ds4-server: tool calls ctx=1034..1437:403 RESPPROTO n=1 raw_tool_text=1 ids=[call_58bdd45f53592bc87e7c510bb34ee6fa] names=[read]",
+        "1004 15:39:20 ds4-server: reasoning_summary id=chatcmpl-35099d57e6c92d887f34ffb1 ctx=1034..1437:403 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:39:20 ds4-server: chat ctx=1034..1437:403 gen=93 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 47.194s",
+        "1004 15:39:21 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prefill chunk 25/25 (100.0%) chunk=0.00 t/s avg=28.80 t/s 0.868s",
+        "1004 15:39:21 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prompt done 0.932s",
+        "1004 15:39:21 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1",
+        "1004 15:39:21 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prompt start",
+        "1004 15:39:21 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prefill chunk 25/25 (100.0%) chunk=0.00 t/s avg=37.81 t/s 0.661s",
+        "1004 15:39:22 ds4-server: chat ctx=1530..1555:25 RESPPROTO TOOLS prompt done 0.725s",
+        "1004 15:39:23 ds4-server: chat ctx=1555..1570:15 gen=15 RESPPROTO TOOLS decoding chunk=7.42 t/s avg=7.42 t/s 2.022s",
+        "1004 15:39:23 ds4-server: reasoning_summary id=chatcmpl-e5942c869a6b1afff2d9fc14 ctx=1530..1555:25 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:39:23 ds4-server: chat ctx=1530..1555:25 gen=15 RESPPROTO TOOLS finish=stop 2.955s",
+        "1004 15:39:23 ds4-server: chat ctx=1555..1570:15 gen=15 RESPPROTO TOOLS decoding chunk=11.21 t/s avg=11.21 t/s 1.338s",
+        "1004 15:39:23 ds4-server: reasoning_summary id=chatcmpl-c1150a2db8ec421f4e581e6d ctx=1530..1555:25 budget=0 thinking_tokens=0 forced=0 deferred=0",
+        "1004 15:39:23 ds4-server: chat ctx=1530..1555:25 gen=15 RESPPROTO TOOLS finish=stop 2.063s"
+      ],
+      "suffix_log_lines": [
+        "1004 15:38:50 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17003.723 ms",
+        "1004 15:39:07 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17717.994 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": []
+    }
+  ]
+}

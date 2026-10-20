@@ -1,0 +1,25 @@
+{
+  "time": 1790988353.989231,
+  "sole_model_grant": true,
+  "source_revision": "d04460a9f726c371cbc91349897e33fc2447f0d6",
+  "manifest_sha256": "9781896e85d6ae9eee030f034a9fab0a0e0f3e2290c2c3930be20a5a36e32ca2",
+  "command_sha256": "0db865613cf9b96b8e96ba469f9b1e4990d8f0ef8bc2ccbe33b9e3d0f16d9111",
+  "verified_nonmodel_assets": 38,
+  "previous_model_release_proof": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/root-release-proof.json",
+  "model_metadata_touched_by_root_launcher": false,
+  "case": "inverse-parity-pending",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run_suffix_pair_tape_followup.py",
+    "--case",
+    "inverse-parity-pending",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1",
+    "--manifest-sha256",
+    "9781896e85d6ae9eee030f034a9fab0a0e0f3e2290c2c3930be20a5a36e32ca2"
+  ]
+}

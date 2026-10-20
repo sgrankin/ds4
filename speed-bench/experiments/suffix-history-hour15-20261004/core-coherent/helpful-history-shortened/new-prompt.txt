@@ -1,0 +1,53 @@
+<｜begin▁of▁sentence｜><｜User｜>Apply the currently approved shipping policy to the final shipment. A newer policy supersedes an older decision. Neutral filing notes do not define a rounding rule. Reply only with the final decimal integer, or UNKNOWN if no rounding rule is available.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs theThe shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policyThe earlier approved shipping-policy decision was moved into permanent policy.json. It remains current. Its rounding detail is intentionally omitted from this shortened visible record. Neutral filing prose is not a replacement rule.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governs the next dispatch. Apply a newly supplied current policy in preference to an earlier policy.
+The shipping review approved the policy recorded above. That approved policy governsThe new shipment has 18 batches, 26 units_per_batch, and 9 reserved_units. Apply the currently approved shipping policy. Reply only with the final decimal integer, or UNKNOWN if no rounding rule is available.
+<｜Assistant｜></think>

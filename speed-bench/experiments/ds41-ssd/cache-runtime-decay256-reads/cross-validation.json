@@ -1,0 +1,20 @@
+{
+  "purpose": "Single-run read-count attribution, not balanced latency evidence",
+  "control": "cache-runtime-slru/1-A and 2-A",
+  "same_binary_model_recording_shader_contents": true,
+  "exact_logits_and_snapshot": true,
+  "control_cache_reports": {
+    "hits": "1571814",
+    "misses": "80226",
+    "evictions": "72404",
+    "miss_pread": "671.37",
+    "pread_ms": "45383.155"
+  },
+  "aging256_cache_reports": {
+    "hits": "1566167",
+    "misses": "85873",
+    "evictions": "78051",
+    "miss_pread": "723.71",
+    "pread_ms": "37127.296"
+  }
+}

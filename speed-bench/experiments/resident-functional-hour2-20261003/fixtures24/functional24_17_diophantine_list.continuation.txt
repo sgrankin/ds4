@@ -1,0 +1,2 @@
+{"solutions":[[6,7],[17,0]]}
+Because both variables are nonnegative, b can range only from zero through ten. Reducing the equation modulo seven gives four times b congruent to zero, so b must be a multiple of seven. The only possibilities in that range are zero and seven. Substitution gives a equal to seventeen when b is zero, and a equal to six when b is seven. Sorting by a places [6,7] before [17,0]. Exhaustively testing the bounded b values yields the same two pairs. The output lists the complete solutions and does not count negative or fractional values.

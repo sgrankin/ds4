@@ -1,0 +1,2 @@
+{"selected":["I1","I2","I4"],"count":3}
+The first interval ends exactly where the second begins, and the second ends where the fourth begins. Half-open intervals allow these touching boundaries, so all three fit. The third interval overlaps both the first and second. All four cannot be selected, and the displayed three-interval schedule therefore attains the maximum.

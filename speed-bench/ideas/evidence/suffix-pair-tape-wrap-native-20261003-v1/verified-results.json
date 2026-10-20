@@ -1,0 +1,625 @@
+{
+  "status": "RETAINED_NATIVE_PHYSICAL_WRAP_VERIFIED",
+  "source_revision": "d04460a9f726c371cbc91349897e33fc2447f0d6",
+  "prepared_directory": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1",
+  "prepared_manifest_sha256": "c61e486365a4feadd97dac67518a6e1f5eff4cc29cb331d31c8b8c058b427342",
+  "command_sha256": "5d7d6cee669d9ed8d51f2ac5f8bd4bca575e169dfae63344866ee770b9cac735",
+  "native_control_identity": {
+    "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+    "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+    "state": {
+      ".source.state.bin": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94",
+      ".fresh.state.bin": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+    }
+  },
+  "arms": [
+    {
+      "arm": "old-native-before",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92941215,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 2869.806,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-before.raw.bin",
+        "bytes": 9308256,
+        "sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "candidate_sha256": null,
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "teacher_ids": [
+          283,
+          112322,
+          260,
+          201,
+          265,
+          272,
+          1543,
+          81565,
+          11,
+          2408,
+          11765,
+          3152,
+          2236,
+          8644,
+          15342,
+          71443
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-before.source.state.bin",
+          "bytes": 24745916,
+          "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-before.fresh.state.bin",
+          "bytes": 24338104,
+          "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+        }
+      }
+    },
+    {
+      "arm": "new-native",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92941215,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 2896.56,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-native.raw.bin",
+        "bytes": 9308256,
+        "sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "candidate_sha256": null,
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "teacher_ids": [
+          283,
+          112322,
+          260,
+          201,
+          265,
+          272,
+          1543,
+          81565,
+          11,
+          2408,
+          11765,
+          3152,
+          2236,
+          8644,
+          15342,
+          71443
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-native.source.state.bin",
+          "bytes": 24745916,
+          "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-native.fresh.state.bin",
+          "bytes": 24338104,
+          "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+        }
+      }
+    },
+    {
+      "arm": "new-tape-native",
+      "summary": {
+        "mode": "tape-native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 118107119,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 2802.489,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-tape-native.raw.bin",
+        "bytes": 9308256,
+        "sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "candidate_sha256": null,
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "teacher_ids": [
+          283,
+          112322,
+          260,
+          201,
+          265,
+          272,
+          1543,
+          81565,
+          11,
+          2408,
+          11765,
+          3152,
+          2236,
+          8644,
+          15342,
+          71443
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-tape-native.source.state.bin",
+          "bytes": 24745916,
+          "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-tape-native.fresh.state.bin",
+          "bytes": 24338104,
+          "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+        }
+      }
+    },
+    {
+      "arm": "suffix-reuse",
+      "summary": {
+        "mode": "reuse",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 17,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 118107119,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": true,
+        "precancel_preserves_state": true,
+        "partial_cancel_invalidates": true,
+        "approximate_export_blocked": true,
+        "pair_inputs_reused": 387,
+        "pair_rows_rebuilt": 195,
+        "pair_boundary_rows": 3,
+        "reused_tokens": 129,
+        "fresh_tail_tokens": 1,
+        "fresh_ms_diagnostic": 2814.539,
+        "reuse_ms_diagnostic": 98.628,
+        "mean_kl": 0.0573944591888,
+        "mean_tv": 0.0771990693971,
+        "sum_delta_nll": 0.422206306317,
+        "argmax_flips": 1,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.raw.bin",
+        "bytes": 18099296,
+        "sha256": "16a7d9d30aa4bfb75efcbbfd2c8447daf31a03c61d9be58ba7c45e1ac29f5d2e",
+        "reference_rows": 18,
+        "candidate_rows": 17,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "candidate_sha256": "5c92c989518a4a0a2dd8fd9f36a24c1dda46d2e70da42c2bb78d2d6c7d3f9535",
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "teacher_ids": [
+          283,
+          112322,
+          260,
+          201,
+          265,
+          272,
+          1543,
+          81565,
+          11,
+          2408,
+          11765,
+          3152,
+          2236,
+          8644,
+          15342,
+          71443
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.source.state.bin",
+          "bytes": 24745916,
+          "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.fresh.state.bin",
+          "bytes": 24338104,
+          "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+        },
+        ".private.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.private.state.bin",
+          "bytes": 24338104,
+          "sha256": "0d1fd95e99b59bcd63dd667d736a90ac6b7824324a23e38ba2cb7c50afbde7e6"
+        }
+      }
+    },
+    {
+      "arm": "old-native-after",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92941215,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 2805.101,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-after.raw.bin",
+        "bytes": 9308256,
+        "sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "candidate_sha256": null,
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "teacher_ids": [
+          283,
+          112322,
+          260,
+          201,
+          265,
+          272,
+          1543,
+          81565,
+          11,
+          2408,
+          11765,
+          3152,
+          2236,
+          8644,
+          15342,
+          71443
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-after.source.state.bin",
+          "bytes": 24745916,
+          "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-after.fresh.state.bin",
+          "bytes": 24338104,
+          "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+        }
+      }
+    }
+  ],
+  "private_state": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.private.state.bin",
+    "bytes": 24338104,
+    "sha256": "0d1fd95e99b59bcd63dd667d736a90ac6b7824324a23e38ba2cb7c50afbde7e6"
+  },
+  "independent_math": {
+    "method": "Streamed FP32 rows; FP64 math.fsum/logsumexp, independent log-ratio arithmetic",
+    "rows": [
+      {
+        "step": 0,
+        "target": 283,
+        "delta_nll": 0.45782923950653753,
+        "kl": 0.31963622953177606,
+        "tv": 0.34426141458464365,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 1,
+        "target": 112322,
+        "delta_nll": 1.7188301896453595e-05,
+        "kl": 8.109991692401588e-06,
+        "tv": 2.195086804650876e-05,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 2,
+        "target": 260,
+        "delta_nll": -0.03504668724439597,
+        "kl": 0.021523247311637985,
+        "tv": 0.033649125877035065,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 3,
+        "target": 201,
+        "delta_nll": -0.0031165666478472076,
+        "kl": 0.0017545762103695747,
+        "tv": 0.0031038558271790375,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 4,
+        "target": 265,
+        "delta_nll": 0.139243398282634,
+        "kl": 0.043611943825208103,
+        "tv": 0.021435629870194657,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 5,
+        "target": 272,
+        "delta_nll": 0.03130794475847409,
+        "kl": 0.00627618386586785,
+        "tv": 0.02952001606441289,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 6,
+        "target": 1543,
+        "delta_nll": 0.3618496484146654,
+        "kl": 0.03573461372703741,
+        "tv": 0.10351182683201302,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 7,
+        "target": 81565,
+        "delta_nll": -0.012231943234983333,
+        "kl": 0.011378313804965358,
+        "tv": 0.012088828998378546,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 8,
+        "target": 11,
+        "delta_nll": -0.044820107947124654,
+        "kl": 0.027034503525421454,
+        "tv": 0.041559311511734635,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 9,
+        "target": 2408,
+        "delta_nll": -0.05858323917027164,
+        "kl": 0.08179189918998496,
+        "tv": 0.05607023810354381,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 10,
+        "target": 11765,
+        "delta_nll": -0.02438034628249497,
+        "kl": 0.021321525151189066,
+        "tv": 0.023860556544896237,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 11,
+        "target": 3152,
+        "delta_nll": 0.15255889845097315,
+        "kl": 0.08544461211644452,
+        "tv": 0.13389696532672163,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 12,
+        "target": 2236,
+        "delta_nll": -0.19219197872543958,
+        "kl": 0.08131206664880754,
+        "tv": 0.16662930549420008,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 13,
+        "target": 8644,
+        "delta_nll": 0.01050742736053678,
+        "kl": 0.002186961159061051,
+        "tv": 0.010351499334851126,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 14,
+        "target": 15342,
+        "delta_nll": -0.3574172049990061,
+        "kl": 0.004094294244361749,
+        "tv": 0.009014284496883762,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 15,
+        "target": 71443,
+        "delta_nll": -0.0033193645044136133,
+        "kl": 0.004719770733717543,
+        "tv": 0.003312282165620275,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 16,
+        "target": -1,
+        "delta_nll": 0,
+        "kl": 0.22787695517398265,
+        "tv": 0.32009708784999374,
+        "argmax_flip": 1,
+        "bit_equal": 0
+      }
+    ],
+    "summary": {
+      "mean_kl": 0.05739445918891325,
+      "mean_tv": 0.07719906939707932,
+      "sum_delta_nll": 0.4222063063197403,
+      "argmax_flips": 1,
+      "bit_equal_rows": 0
+    }
+  },
+  "pressure": {
+    "samples": 1398,
+    "normal_samples": 1398,
+    "bad_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_plus_compressor_gib": 89.30433654785156
+  },
+  "historical_release_proof": {
+    "time": 1790990209.278661,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "lock_reacquired": true,
+    "live_model_processes": [],
+    "normal_pressure_samples": 1398,
+    "bad_pressure_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gib": 89.30433654785156
+  },
+  "structural_controls": {
+    "source_even_destination_odd": true,
+    "physical_source_ring_wrap_2048": true,
+    "configured_replay_chunk": 65,
+    "geometry_expected_first_tail_starts_pending_pair": true,
+    "pair_boundary_rows": 3,
+    "production_fresh_tail_recommendation": false
+  },
+  "main_launch_log": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-followup-wrap-root-launch-20261003-v1.log",
+    "bytes": 890,
+    "sha256": "b6352672a6622226732c5add1e4082dfe1dbfb6f8c40e3e4610a22cc152a21a9"
+  },
+  "timing_diagnostic": true,
+  "accuracy_claim": false,
+  "forgetting_claim": false,
+  "default_promotion": false,
+  "archive_model_assets_accessed": false
+}

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 281, in drive
+    if submitted<3:checked=validate_control(trace,records,submitted)
+                           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 175, in validate_control
+    validate_rounds(records,turn);texts=generated_text(trace);selected=[r for r in texts if r['turn']==turn]
+                                        ~~~~~~~~~~~~~~^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 171, in generated_text
+    if active:raise ControlFailure('Truncated generation trace')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+actual_controller.ControlFailure: Truncated generation trace

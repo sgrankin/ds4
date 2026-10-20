@@ -1,0 +1,15 @@
+{
+  "gold": {
+    "sum": 10767,
+    "words": [
+      513,
+      254,
+      10000
+    ]
+  },
+  "oracle_input": {
+    "hex_bytes": "0102fe001027"
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Fixed-width binary endian decoding; not base64, base36 or unsigned rotation."
+}

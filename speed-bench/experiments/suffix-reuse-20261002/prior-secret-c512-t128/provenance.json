@@ -1,0 +1,126 @@
+{
+  "case_name": "prior-secret-c512-t128",
+  "helper_source_commit": "ccd3d384",
+  "core_source_commit": "6c2efad0",
+  "helper_sha256": "89bba403421f4739ac9d87c38342562ed591123606ccb423f9c1c20cff44ff1a",
+  "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-prior-secret-c512-t128",
+  "summary": {
+    "case": "prior-secret",
+    "gold_answer_text": "UNKNOWN",
+    "stale_answer_text": "6829",
+    "query_tokens_including_assistant_prefix": 45,
+    "query_start": 1747,
+    "query_fully_fresh_required": true,
+    "query_fully_fresh": true,
+    "branch_endpoint_logit_bytes_equal": true,
+    "semantic_controls_valid": false,
+    "original_calibration": {
+      "gold_logprob": -0.38788409316,
+      "stale_logprob": -1.13724668088,
+      "correct_answer": false,
+      "stopped": true,
+      "endpoint_logit_bytes_equal": true,
+      "expected_answer": "6829",
+      "greedy": "UNKNOWN",
+      "greedy_tokens": [
+        6901,
+        117883,
+        1
+      ]
+    },
+    "fresh_prefix_bytes_equal": true,
+    "fresh_prefix_raw_rows_per_layer": 0,
+    "fresh_prefix_compressed_rows": 3200,
+    "fresh_prefix_index_rows": 3200,
+    "prefix_tokens": 1024,
+    "edit_tokens": 256,
+    "source_edit_tokens": 256,
+    "unchanged_tokens": 512,
+    "fresh_tail_tokens": 128,
+    "source_start": 1280,
+    "destination_start": 1280,
+    "source_end": 1664,
+    "destination_end": 1664,
+    "raw_keys_repaired": 0,
+    "compressed_keys_repaired": 0,
+    "index_keys_repaired": 0,
+    "reused_tokens": 384,
+    "copied_bytes": 12943360,
+    "pending_pairs": 0,
+    "identity_logit_bytes_equal": true,
+    "identity_graph_bytes_equal": true,
+    "canonical_export_blocked": true,
+    "invalid_candidates_unchanged": true,
+    "precancel_unchanged": true,
+    "postgraft_cancel_invalidated": true,
+    "setup_ms": 108887.69,
+    "identity_ms": 3207.387,
+    "rows": 3,
+    "gold_tokens_including_eos": 3,
+    "stale_tokens_including_eos": 3,
+    "mean_kl": 0.000133224146411,
+    "mean_tv": 0.000123630862957,
+    "sum_delta_nll": 0.000306320116493,
+    "argmax_flips": 0,
+    "byte_equal_rows": 0,
+    "greedy_encoding": "JSON byte escapes for non-ASCII",
+    "results": [
+      {
+        "mode": "fresh",
+        "edit_ms": 42559.737,
+        "gold_logprob": -0.000111716222357,
+        "stale_logprob": -30.7347002983,
+        "gold_minus_stale_logprob": 30.7345885821,
+        "greedy": "UNKNOWN",
+        "correct_answer": true,
+        "stale_answer": false,
+        "stopped": true,
+        "greedy_tokens": [
+          6901,
+          117883,
+          1
+        ]
+      },
+      {
+        "mode": "reuse",
+        "edit_ms": 21576.919,
+        "gold_logprob": -0.00041803633885,
+        "stale_logprob": -22.3927803096,
+        "gold_minus_stale_logprob": 22.3923622733,
+        "greedy": "UNKNOWN",
+        "correct_answer": true,
+        "stale_answer": false,
+        "stopped": true,
+        "greedy_tokens": [
+          6901,
+          117883,
+          1
+        ]
+      }
+    ]
+  },
+  "guard": {
+    "status": "complete",
+    "child_returncode": 3
+  },
+  "pressure": {
+    "samples": 233,
+    "levels": [
+      1
+    ],
+    "adverse_samples": 0,
+    "swap_growth_gb": 0.0,
+    "max_wired_gb": 77.69320678710938,
+    "max_compressor_gb": 8.632095336914062
+  },
+  "semantic_controls_valid": false,
+  "raw_logits": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-prior-secret-c512-t128/logits.bin",
+    "bytes": 3102748,
+    "sha256": "32d0c3f9296f94642b27c1ba4f3f8e1224c1c69e5e383a0e75b617d4487de4dc"
+  },
+  "diagnostic_speedup": 1.9724659021058566,
+  "stale_answer_logprob_gain": 8.341919988700003,
+  "stale_sequence_probability_fresh": 4.4883762690304484e-14,
+  "stale_sequence_probability_reuse": 1.8833848692896848e-10
+}

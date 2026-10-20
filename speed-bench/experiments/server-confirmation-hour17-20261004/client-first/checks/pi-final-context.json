@@ -1,0 +1,86 @@
+{
+  "systemPrompt": "Use the read tool for the requested file. After receiving the result, output only the answer field.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Read /Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/client-first/checks/pi-config.json with read(path, whole=true, raw=true). After the read result, reply with only the answer field, without quotes or commentary.",
+      "timestamp": 1791129040970
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "toolCall",
+          "id": "call_9a300d95e3c70141f8bd7254f67d76a8|fc_b26133274277ce017bf734c2",
+          "name": "read",
+          "arguments": {
+            "path": "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/client-first/checks/pi-config.json",
+            "whole": true,
+            "raw": true
+          }
+        }
+      ],
+      "api": "openai-responses",
+      "provider": "local-ds4",
+      "model": "deepseek-v4.1-flash",
+      "usage": {
+        "input": 0,
+        "output": 99,
+        "cacheRead": 0,
+        "cacheWrite": 311,
+        "reasoning": 0,
+        "totalTokens": 410,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        }
+      },
+      "stopReason": "toolUse",
+      "timestamp": 1791129040970,
+      "responseId": "resp_49763eaa6e0af49302092bb2",
+      "rawStopReason": "completed"
+    },
+    {
+      "role": "toolResult",
+      "toolCallId": "call_9a300d95e3c70141f8bd7254f67d76a8|fc_b26133274277ce017bf734c2",
+      "toolName": "read",
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"answer\":\"COVE-42\"}\n"
+        }
+      ],
+      "isError": false,
+      "timestamp": 1791129062326
+    }
+  ],
+  "tools": [
+    {
+      "name": "read",
+      "description": "Read the complete owned configuration file.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "whole": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "whole",
+          "raw"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+PROBE_IO enabled=1 pread_calls=59151 requested_bytes=196248821760 returned_bytes=196248821760 cache_loader_bytes=196248821760 cache_hits=196464 cache_misses=19751 cache_evictions=13615
+ds4: resident-route layers=20480 substitutions=3539 native_misses=11785 skipped_loads=3539 skipped_bytes=35224657920 mean_mass=0.09943021 mean_score_gap=0.06946717 mean_affinity_ratio=0.95339125 mean_rank=7.423 full_snapshots=3621 double_layers=0 planned_substitutions=3539
+ds4: resident-backfill attempts=3539 started=249 busy_skips=33 ready_skips=3257 completed=249 failed=0 consumed=34 expired=215 resets=0 pread_calls=747 requested_bytes=2478366720 returned_bytes=2478366720 copied_bytes=338411520 peak_bytes=9953280 live_bytes=0 state=0
+ds4: resident-backfill-late tentative=3539 rollbacks=2 final_substitutions=3537 cancelled=0 candidate_finish=3539 candidate_finish_failures=0 ready_checks=3539 not_ready=3537 no_victim=0 installs=2 install_failures=0

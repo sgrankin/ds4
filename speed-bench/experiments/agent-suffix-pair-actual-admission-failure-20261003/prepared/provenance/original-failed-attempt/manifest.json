@@ -1,0 +1,67 @@
+{
+  "original_prepared": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1",
+  "files": {
+    "diagnosis.json": {
+      "bytes": 1272,
+      "sha256": "7dffb4ceb1c6835c050f59b6a332dae84b515c89edb98fba2e2ee9d5955caac1"
+    },
+    "original/manifest.json": {
+      "bytes": 64058,
+      "sha256": "1719ce2a865edcd3e8a711353b1226fc61f090a8aa2ef577ab6a1878b45791bb"
+    },
+    "original/prepared-command.json": {
+      "bytes": 1037,
+      "sha256": "a346c428f4f593a8cf4d552fbe91e9799c8c2bcd596b7a8d50fac68b60e5889e"
+    },
+    "original/root-launch-proof.json": {
+      "bytes": 1672,
+      "sha256": "65465e02e38ab170150baa1bec1c5b588d79243695863a0ebe784cc875ca7bea"
+    },
+    "original/root-release-proof.json": {
+      "bytes": 304,
+      "sha256": "62a30ce4385b49916bbe533d402fb797dce5f1557c07e79d9385e228888db546"
+    },
+    "original/run/controller-outcome.json": {
+      "bytes": 703,
+      "sha256": "ac19c2ec1d2418440dc249c6db151bd4d7c8aaf8d04b7b5319415c9aefd06bcd"
+    },
+    "original/run/private/rounds.jsonl": {
+      "bytes": 490,
+      "sha256": "85c2376c24845e69e930193a8de344212f5619889ce13b3f4042cf45d9b22c3f"
+    },
+    "original/run/stdout.log": {
+      "bytes": 1284,
+      "sha256": "d90e0c986530a0aa11ca1840d9bcb73cbf3ad2312976ce25673760777ab35ffc"
+    },
+    "original/run/trace.log": {
+      "bytes": 254499,
+      "sha256": "0dd35bcc9eb74a3209af021f238a99e5a5b14e6f9497401113154a178f290c5b"
+    },
+    "original/run/traceback.txt": {
+      "bytes": 362,
+      "sha256": "f8b4d5140d80e42ecc6798564e22ff1501db30c9b4b3528aa1f4b881aff296a7"
+    },
+    "original/run/turn-1-check.json": {
+      "bytes": 59,
+      "sha256": "425e8b71cafbb57823eae0fe0abb2b8fed02e5d289901f16b03fe2dd7ad4499d"
+    },
+    "original/run/turn-2-check.json": {
+      "bytes": 55,
+      "sha256": "04d7d64a2a50d2a9c5548c5e51c53dc1b03b6193de6fc10cb5e225ae990fed5c"
+    },
+    "original/run_agent_suffix_pair_actual.py": {
+      "bytes": 28896,
+      "sha256": "5bebda8ea489b30b5e17663e7ac106a6cb2e857e26cdb3aac1fc2307fed7d778"
+    },
+    "original/task.json": {
+      "bytes": 24521,
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283"
+    },
+    "original/third.txt": {
+      "bytes": 1798,
+      "sha256": "6e279a665d5389ed95bb59580f1366e8d1dafc4df25b627557772191aac987d0"
+    }
+  },
+  "status": "ORIGINAL_FIRST_INFRASTRUCTURE_FAILURE_RETAINED",
+  "no_retry_or_repair_counted": true
+}

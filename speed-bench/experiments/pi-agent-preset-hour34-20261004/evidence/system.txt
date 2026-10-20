@@ -1,0 +1,1 @@
+Implement the requested function using Python builtins only. At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports. No I/O, dynamic execution, or names/attributes beginning with underscore. Follow the task tool contract exactly. Do not search for or read private grading files.

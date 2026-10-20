@@ -1,0 +1,24 @@
+{
+  "csv_unchanged": true,
+  "original_tests_byte_unchanged": true,
+  "original_test_definitions_unchanged": true,
+  "held_out": {
+    "rc": 0,
+    "stdout": "PASS held-out stage 0\n",
+    "stderr": ""
+  },
+  "unit_tests": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+  },
+  "original_unit_test_count": 5,
+  "generated_fix_passes": true,
+  "completed_model_turn": false,
+  "complete_harness_success": false,
+  "scope": "first original reconciliation task only; since and CLI tasks not evaluated",
+  "changed_existing_files": [
+    "ledger/money.py",
+    "ledger/report.py"
+  ]
+}

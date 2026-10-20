@@ -1,0 +1,54 @@
+{
+  "A_prepared_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse",
+  "status": "NEW_A_PRETHIRD_STRUCTURAL_REFERENCE_ONLY",
+  "A_manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "task_sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c",
+  "shared_paths": {
+    "live": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run/live-context.txt",
+    "project": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run/project"
+  },
+  "files": {
+    "selection.json": {
+      "bytes": 453,
+      "sha256": "0526d4cd3da60e3fde4a0596b6590464e9a1dfe107beabb77e3855e1485838ea"
+    },
+    "selected-before.txt": {
+      "bytes": 14653,
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133"
+    },
+    "selected-after.txt": {
+      "bytes": 14609,
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+    },
+    "selected-old.ids": {
+      "bytes": 13604,
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f"
+    },
+    "selected-edited.ids": {
+      "bytes": 13560,
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb"
+    },
+    "preedit-state.bin": {
+      "bytes": 30138084,
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f"
+    },
+    "preedit-logits.bin": {
+      "bytes": 517136,
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+    },
+    "commit.json": {
+      "bytes": 238,
+      "sha256": "92b641bf7eff5a6586ca1b8d5eb610fc57c2615c376c94f24537d79738529438"
+    },
+    "candidate-00.json": {
+      "bytes": 81,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c"
+    },
+    "choice.bin": {
+      "bytes": 16,
+      "sha256": "3d30dd104d057b865bdc80df7c53dfec31513f4673d1d8b0c14078ce87ee30d3"
+    }
+  },
+  "generated_or_grader_outcomes_used_for_choice": false,
+  "choice_override_available": false
+}

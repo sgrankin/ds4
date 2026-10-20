@@ -1,0 +1,5 @@
+1004 09:17:15 ds4-server: chat ctx=0..3114:3114 RESPPROTO prompt start
+1004 09:17:15 ds4-server: state cache exact hit slot=0 tokens=3114
+1004 09:17:15 ds4-server: chat ctx=0..3114:3114 RESPPROTO prompt done 0.144s
+1004 09:17:16 ds4-server: chat ctx=3114..3116:2 gen=2 RESPPROTO decoding chunk=4.02 t/s avg=4.02 t/s 0.497s
+1004 09:17:16 ds4-server: chat ctx=0..3114:3114 gen=2 RESPPROTO finish=stop 0.641s

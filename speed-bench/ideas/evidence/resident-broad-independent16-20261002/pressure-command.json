@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "python3",
+    "/Volumes/Models/ds4/speed-bench/ideas/run_fixture_matrix.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-broad-independent16-20261002",
+    "--binary",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-timing-build-20261002/quality-probe-drop",
+    "--manifest",
+    "/Volumes/Models/ds4/speed-bench/ideas/validation-broad.tsv",
+    "--variant",
+    "balanced:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=replace,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.15,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.18,DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS=0.30,DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK=24,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=2",
+    "--variant",
+    "broader:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=replace,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.30,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.20,DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS=0.35,DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK=48,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=2",
+    "--variant",
+    "drop:DS4_METAL_V41_RESIDENT_ROUTE_POLICY=drop,DS4_METAL_V41_RESIDENT_ROUTE_GAP=0.05,DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=0.10,DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=1"
+  ],
+  "initial": {
+    "time": 1790971210.598089,
+    "level": 1,
+    "swap_gb": 0.024599609375,
+    "physical_gb": 128.0,
+    "free_gb": 55.71693420410156,
+    "file_backed_gb": 56.185821533203125,
+    "wired_gb": 4.7445526123046875,
+    "compressor_gb": 7.0477752685546875
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

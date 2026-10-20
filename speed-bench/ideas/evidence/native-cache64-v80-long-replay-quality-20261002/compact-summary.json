@@ -1,0 +1,202 @@
+{
+  "source_commit": "70cd0df5e85e46a02849bfddc777216a09cdd2c0",
+  "plan_commit": "f02cbdae",
+  "raw_artifacts": "/Volumes/Models/ds4/.workspaces/idea-native-cache-replay-quality/speed-bench/ideas/artifacts/native-cache-replay-quality-20261002-v1",
+  "scope": "Full-vocabulary temperature-one teacher-forced343 decode distributions on one evolving7-phase agent replay. Native64/80 differs in prefill batching and memory regime, with no rerouting or sampling penalty.",
+  "checks": {
+    "native64_all343_rows_exact": true,
+    "native80_repeat_all343_rows_exact": true,
+    "old_reference_sha256": "f3690213afdae2d292d33fd74753c1fd010a04b482fca14cc6a9eb7d91f3ee3b",
+    "new_reference_sha256": "cf5b0ea8e62426d8682b603d09b83501a9de97b5a2535537acaf0dcc50ecf482",
+    "native80_record_equals_old_raw": false,
+    "rows": 343,
+    "all_ds4_environment_cleared": true,
+    "raw_export_scope": "Record arms write complete raw files; compare arms use C per-row full-vocab memcmp and do not export raw.",
+    "timing_scope": "diagnostic only"
+  },
+  "arms": [
+    {
+      "phases": 7,
+      "tokens": 343,
+      "avg_nll": 0.0190480241346,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "bit_equal_rows": 343,
+      "prefill_ms": 84064.266,
+      "decode_ms": 18516.586,
+      "name": "native64-old",
+      "cache_gb": 64,
+      "reference": "old",
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        }
+      },
+      "phase_mean_delta_nll": 0.0,
+      "worst_phase_delta_nll": 0.0
+    },
+    {
+      "phases": 7,
+      "tokens": 343,
+      "avg_nll": 0.019270655303,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "bit_equal_rows": 343,
+      "prefill_ms": 65587.206,
+      "decode_ms": 17388.872,
+      "name": "native80-record",
+      "cache_gb": 80,
+      "reference": "new",
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        }
+      },
+      "phase_mean_delta_nll": 0.0,
+      "worst_phase_delta_nll": 0.0
+    },
+    {
+      "phases": 7,
+      "tokens": 343,
+      "avg_nll": 0.019270655303,
+      "delta_nll": 0.000222631168395,
+      "kl_base_to_raw": 0.000303373941736,
+      "tv": 0.00187026403935,
+      "argmax_flips": 2,
+      "bit_equal_rows": 0,
+      "prefill_ms": 66345.872,
+      "decode_ms": 17048.012,
+      "name": "native80-old",
+      "cache_gb": 80,
+      "reference": "old",
+      "kl_p99": 0.00948186833591,
+      "kl_max": 0.0171782658638,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": 0.0025681230262430787,
+          "kl": 0.0005533088498236276
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": -0.0039462909739586315,
+          "kl": 0.00040694910507522666
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": 0.0009313866240741173,
+          "kl": 0.00017312076676409208
+        }
+      },
+      "phase_mean_delta_nll": -0.00014892710788047848,
+      "worst_phase_delta_nll": 0.0025681230262430787
+    },
+    {
+      "phases": 7,
+      "tokens": 343,
+      "avg_nll": 0.019270655303,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "bit_equal_rows": 343,
+      "prefill_ms": 65619.758,
+      "decode_ms": 17122.55,
+      "name": "native80-new",
+      "cache_gb": 80,
+      "reference": "new",
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        }
+      },
+      "phase_mean_delta_nll": 0.0,
+      "worst_phase_delta_nll": 0.0
+    }
+  ],
+  "per_decode_phase": {
+    "phase_002": {
+      "tokens": 72,
+      "mean_delta_nll": 0.0025681230262430787,
+      "mean_kl": 0.0005533088498236276,
+      "argmax_flips": 1
+    },
+    "phase_004": {
+      "tokens": 74,
+      "mean_delta_nll": -0.0039462909739586315,
+      "mean_kl": 0.00040694910507522666,
+      "argmax_flips": 0
+    },
+    "phase_006": {
+      "tokens": 197,
+      "mean_delta_nll": 0.0009313866240741173,
+      "mean_kl": 0.00017312076676409208,
+      "argmax_flips": 1
+    }
+  },
+  "pressure": {
+    "samples": 353,
+    "normal_all": true,
+    "swap_growth_gib": 0.00048828125,
+    "peak_wired_gib": 90.37498474121094,
+    "peak_compressed_gib": 8.569000244140625,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  },
+  "perplexity_ratio_native80_to64": 1.0002226559525529,
+  "limits": [
+    "Three phases belong to one correlated trajectory, not independent prompt trials; no bootstrap confidence interval is claimed.",
+    "Tiny average drift coexists with two argmax changes and maximumKL.0171783; generated task correctness remains separately required.",
+    "Timings here are instrumented diagnostics. The profile-off same-binary ABBA provides the timing claim.",
+    "Short16-case fixture rows were all byte-identical across64/80, while these longer state histories are not.",
+    "Compare arms use C full-vocabulary row memcmp but do not export their own raw files; the native80 record arm supplies pinned raw reference."
+  ]
+}

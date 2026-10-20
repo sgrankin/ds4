@@ -1,0 +1,98 @@
+[
+  {
+    "arm": "native-before",
+    "write_budget": 0,
+    "returncode": 0,
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/run.py",
+      "--base-url",
+      "http://127.0.0.1:61092",
+      "--output",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/http/native-before/checks",
+      "--visible",
+      "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible",
+      "--arm",
+      "native-before",
+      "--budget",
+      "0",
+      "--global-cap",
+      "2048"
+    ],
+    "seconds": 413.2632597500051,
+    "server_returncode_after_shutdown": 0
+  },
+  {
+    "arm": "budget512",
+    "write_budget": 512,
+    "returncode": 0,
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/run.py",
+      "--base-url",
+      "http://127.0.0.1:61429",
+      "--output",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/http/budget512/checks",
+      "--visible",
+      "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible",
+      "--arm",
+      "budget512",
+      "--budget",
+      "512",
+      "--global-cap",
+      "2048"
+    ],
+    "seconds": 309.35853416699683,
+    "server_returncode_after_shutdown": 0
+  },
+  {
+    "arm": "budget256",
+    "write_budget": 256,
+    "returncode": 0,
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/run.py",
+      "--base-url",
+      "http://127.0.0.1:61671",
+      "--output",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/http/budget256/checks",
+      "--visible",
+      "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible",
+      "--arm",
+      "budget256",
+      "--budget",
+      "256",
+      "--global-cap",
+      "2048"
+    ],
+    "seconds": 268.18412050000916,
+    "server_returncode_after_shutdown": 0
+  },
+  {
+    "arm": "native-after",
+    "write_budget": 0,
+    "returncode": 0,
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/run.py",
+      "--base-url",
+      "http://127.0.0.1:61895",
+      "--output",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/http/native-after/checks",
+      "--visible",
+      "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible",
+      "--arm",
+      "native-after",
+      "--budget",
+      "0",
+      "--global-cap",
+      "2048"
+    ],
+    "seconds": 410.4876241250022,
+    "server_returncode_after_shutdown": 0
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "gold": {
+    "rows": [
+      [
+        1,
+        "red"
+      ],
+      [
+        1,
+        "blue"
+      ],
+      [
+        2,
+        null
+      ],
+      [
+        3,
+        "red"
+      ],
+      [
+        3,
+        "blue"
+      ],
+      [
+        4,
+        null
+      ]
+    ]
+  },
+  "oracle_input": {
+    "left": [
+      {
+        "id": 1,
+        "key": "x"
+      },
+      {
+        "id": 2,
+        "key": "y"
+      },
+      {
+        "id": 3,
+        "key": "x"
+      },
+      {
+        "id": 4,
+        "key": null
+      }
+    ],
+    "right": [
+      {
+        "key": "x",
+        "tag": "red"
+      },
+      {
+        "key": "x",
+        "tag": "blue"
+      },
+      {
+        "key": "z",
+        "tag": "green"
+      }
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Left-join multiplicity and null semantics; not SQL grouping or customers-with-no-orders anti-join."
+}

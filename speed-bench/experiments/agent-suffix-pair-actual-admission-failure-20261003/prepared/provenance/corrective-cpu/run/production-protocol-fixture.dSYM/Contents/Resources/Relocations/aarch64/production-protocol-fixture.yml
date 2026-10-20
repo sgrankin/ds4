@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2/production-protocol-fixture'
+relocations:     []
+...

@@ -1,0 +1,183 @@
+{
+  "metric": "sum of HTTP request seconds; server startup excluded",
+  "cohorts": {
+    "cold48": {
+      "revision": "a892cf0957f0",
+      "deleted_a_lines": 48,
+      "deleted_b_lines": 32,
+      "arms": {
+        "native": {
+          "source_warmup_seconds": 85.10078570900077,
+          "edited_seconds": 121.59565000000293,
+          "all_request_seconds": 206.6964357090037,
+          "driver_seconds": 206.69903208399774,
+          "correct": 3,
+          "completed": 3,
+          "request_count": 3,
+          "suffix_grafts": 0,
+          "suffix_fallbacks": 0,
+          "source_exact_hit_3114_in_log": false,
+          "result_path": "native/http/result.json",
+          "guard_result": {
+            "status": "complete",
+            "child_returncode": 0
+          },
+          "guard_command": [
+            "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+            "-B",
+            "speed-bench/experiments/server-suffix-hour10-20261004/launch.py",
+            "--mode",
+            "native",
+            "--output",
+            "speed-bench/experiments/server-suffix-hour10-20261004/native",
+            "--cache",
+            ".workspaces/server-agent-day-20261004/native-cache"
+          ],
+          "pressure": {
+            "samples": 203,
+            "normal_samples": 203,
+            "bad_samples": 0,
+            "initial_swap_gib": 0.012998046875,
+            "min_swap_gib": 0.012998046875,
+            "max_swap_gib": 0.012998046875,
+            "swap_growth_gib": 0.0,
+            "peak_wired_compressor_gib": 87.44439697265625
+          }
+        },
+        "reuse": {
+          "source_warmup_seconds": 87.44867129200429,
+          "edited_seconds": 77.71274716699554,
+          "all_request_seconds": 165.16141845899983,
+          "driver_seconds": 165.16407933400478,
+          "correct": 3,
+          "completed": 3,
+          "request_count": 3,
+          "suffix_grafts": 1,
+          "suffix_fallbacks": 1,
+          "source_exact_hit_3114_in_log": false,
+          "result_path": "reuse/http/result.json",
+          "guard_result": {
+            "status": "complete",
+            "child_returncode": 0
+          },
+          "guard_command": [
+            "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+            "-B",
+            "speed-bench/experiments/server-suffix-hour10-20261004/launch.py",
+            "--mode",
+            "reuse",
+            "--output",
+            "speed-bench/experiments/server-suffix-hour10-20261004/reuse",
+            "--cache",
+            ".workspaces/server-agent-day-20261004/reuse-cache"
+          ],
+          "pressure": {
+            "samples": 161,
+            "normal_samples": 161,
+            "bad_samples": 0,
+            "initial_swap_gib": 0.012998046875,
+            "min_swap_gib": 0.012998046875,
+            "max_swap_gib": 0.012998046875,
+            "swap_growth_gib": 0.0,
+            "peak_wired_compressor_gib": 87.47557067871094
+          }
+        }
+      },
+      "all_request_saving_fraction": 0.2009469447672465,
+      "edited_saving_fraction": 0.3608920453404898,
+      "correct": 6,
+      "responses": 6
+    },
+    "warm47": {
+      "revision": "a56347a8a9a3",
+      "deleted_a_lines": 47,
+      "deleted_b_lines": 32,
+      "arms": {
+        "native": {
+          "source_warmup_seconds": 0.6512953749916051,
+          "edited_seconds": 118.5797894999996,
+          "all_request_seconds": 119.23108487499121,
+          "driver_seconds": 119.24120862499694,
+          "correct": 3,
+          "completed": 3,
+          "request_count": 3,
+          "suffix_grafts": 0,
+          "suffix_fallbacks": 0,
+          "source_exact_hit_3114_in_log": true,
+          "result_path": "native47/http/result.json",
+          "guard_result": {
+            "status": "complete",
+            "child_returncode": 0
+          },
+          "guard_command": [
+            "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+            "-B",
+            "speed-bench/experiments/server-suffix-hour10-20261004/launch.py",
+            "--mode",
+            "native",
+            "--output",
+            "speed-bench/experiments/server-suffix-hour10-20261004/native47",
+            "--cache",
+            ".workspaces/server-agent-day-20261004/native-cache",
+            "--delete-a",
+            "47"
+          ],
+          "pressure": {
+            "samples": 117,
+            "normal_samples": 117,
+            "bad_samples": 0,
+            "initial_swap_gib": 0.012998046875,
+            "min_swap_gib": 0.012998046875,
+            "max_swap_gib": 0.012998046875,
+            "swap_growth_gib": 0.0,
+            "peak_wired_compressor_gib": 84.82838439941406
+          }
+        },
+        "reuse": {
+          "source_warmup_seconds": 0.7576556669955608,
+          "edited_seconds": 44.817873667008826,
+          "all_request_seconds": 45.575529334004386,
+          "driver_seconds": 45.57752779099974,
+          "correct": 3,
+          "completed": 3,
+          "request_count": 3,
+          "suffix_grafts": 2,
+          "suffix_fallbacks": 0,
+          "source_exact_hit_3114_in_log": true,
+          "result_path": "reuse47/http/result.json",
+          "guard_result": {
+            "status": "complete",
+            "child_returncode": 0
+          },
+          "guard_command": [
+            "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+            "-B",
+            "speed-bench/experiments/server-suffix-hour10-20261004/launch.py",
+            "--mode",
+            "reuse",
+            "--output",
+            "speed-bench/experiments/server-suffix-hour10-20261004/reuse47",
+            "--cache",
+            ".workspaces/server-agent-day-20261004/reuse-cache",
+            "--delete-a",
+            "47"
+          ],
+          "pressure": {
+            "samples": 46,
+            "normal_samples": 46,
+            "bad_samples": 0,
+            "initial_swap_gib": 0.012998046875,
+            "min_swap_gib": 0.012998046875,
+            "max_swap_gib": 0.012998046875,
+            "swap_growth_gib": 0.0,
+            "peak_wired_compressor_gib": 80.49755859375
+          }
+        }
+      },
+      "all_request_saving_fraction": 0.6177546368735266,
+      "edited_saving_fraction": 0.622044584022398,
+      "correct": 6,
+      "responses": 6
+    }
+  }
+}

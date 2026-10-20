@@ -1,0 +1,1 @@
+ds4: resident-route layers=20480 substitutions=3521 native_misses=11777 skipped_loads=3521 skipped_bytes=35045498880 mean_mass=0.09949850 mean_score_gap=0.06978896 mean_affinity_ratio=0.95299369 mean_rank=7.426 full_snapshots=3605 double_layers=0 planned_substitutions=3521 drops=0 triple_layers=0

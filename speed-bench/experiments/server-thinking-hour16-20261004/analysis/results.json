@@ -1,0 +1,611 @@
+{
+  "rows": [
+    {
+      "arm": "native-before",
+      "case": "join",
+      "write_budget": 0,
+      "pass": true,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "complete": true,
+      "cap": false,
+      "actual_reads": 1,
+      "actual_writes": 1,
+      "wall_seconds": 242.89608945800865,
+      "output_tokens": 2046,
+      "reasoning_tokens": 1633,
+      "errors": "",
+      "read_seconds": 29.70566991600208,
+      "read_output_tokens": 114,
+      "read_reasoning_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 126.03781212499598,
+      "write_output_tokens": 1855,
+      "write_reasoning_tokens": 1613,
+      "write_status": "completed",
+      "final_seconds": 87.15070641700004,
+      "final_output_tokens": 77,
+      "final_reasoning_tokens": 0,
+      "final_status": "completed"
+    },
+    {
+      "arm": "native-before",
+      "case": "window_argmax",
+      "write_budget": 0,
+      "pass": true,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "complete": true,
+      "cap": false,
+      "actual_reads": 1,
+      "actual_writes": 1,
+      "wall_seconds": 167.37315949999902,
+      "output_tokens": 1103,
+      "reasoning_tokens": 764,
+      "errors": "",
+      "read_seconds": 29.772385040996596,
+      "read_output_tokens": 116,
+      "read_reasoning_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 80.16300241700083,
+      "write_output_tokens": 944,
+      "write_reasoning_tokens": 744,
+      "write_status": "completed",
+      "final_seconds": 57.4361009169952,
+      "final_output_tokens": 43,
+      "final_reasoning_tokens": 0,
+      "final_status": "completed"
+    },
+    {
+      "arm": "budget512",
+      "case": "join",
+      "write_budget": 512,
+      "pass": true,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "complete": true,
+      "cap": false,
+      "actual_reads": 1,
+      "actual_writes": 1,
+      "wall_seconds": 159.01138812499994,
+      "output_tokens": 936,
+      "reasoning_tokens": 532,
+      "errors": "",
+      "read_seconds": 30.39425504200335,
+      "read_output_tokens": 114,
+      "read_reasoning_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 71.55944162499509,
+      "write_output_tokens": 751,
+      "write_reasoning_tokens": 512,
+      "write_status": "completed",
+      "final_seconds": 57.05600658299227,
+      "final_output_tokens": 71,
+      "final_reasoning_tokens": 0,
+      "final_status": "completed"
+    },
+    {
+      "arm": "budget512",
+      "case": "window_argmax",
+      "write_budget": 512,
+      "pass": true,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "complete": true,
+      "cap": false,
+      "actual_reads": 1,
+      "actual_writes": 1,
+      "wall_seconds": 149.64455095800804,
+      "output_tokens": 873,
+      "reasoning_tokens": 532,
+      "errors": "",
+      "read_seconds": 30.27388916700147,
+      "read_output_tokens": 116,
+      "read_reasoning_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 67.18961645799573,
+      "write_output_tokens": 712,
+      "write_reasoning_tokens": 512,
+      "write_status": "completed",
+      "final_seconds": 52.17918904100952,
+      "final_output_tokens": 45,
+      "final_reasoning_tokens": 0,
+      "final_status": "completed"
+    },
+    {
+      "arm": "budget256",
+      "case": "join",
+      "write_budget": 256,
+      "pass": true,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "complete": true,
+      "cap": false,
+      "actual_reads": 1,
+      "actual_writes": 1,
+      "wall_seconds": 140.24199262500042,
+      "output_tokens": 689,
+      "reasoning_tokens": 287,
+      "errors": "",
+      "read_seconds": 30.313832833999186,
+      "read_output_tokens": 114,
+      "read_reasoning_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 58.33414029100095,
+      "write_output_tokens": 495,
+      "write_reasoning_tokens": 256,
+      "write_status": "completed",
+      "final_seconds": 51.59231891599484,
+      "final_output_tokens": 80,
+      "final_reasoning_tokens": 11,
+      "final_status": "completed"
+    },
+    {
+      "arm": "budget256",
+      "case": "window_argmax",
+      "write_budget": 256,
+      "pass": true,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "complete": true,
+      "cap": false,
+      "actual_reads": 1,
+      "actual_writes": 1,
+      "wall_seconds": 127.17998299999454,
+      "output_tokens": 632,
+      "reasoning_tokens": 276,
+      "errors": "",
+      "read_seconds": 29.982352749997517,
+      "read_output_tokens": 116,
+      "read_reasoning_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 53.779830583007424,
+      "write_output_tokens": 469,
+      "write_reasoning_tokens": 256,
+      "write_status": "completed",
+      "final_seconds": 43.41604599999846,
+      "final_output_tokens": 47,
+      "final_reasoning_tokens": 0,
+      "final_status": "completed"
+    },
+    {
+      "arm": "native-after",
+      "case": "join",
+      "write_budget": 0,
+      "pass": true,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "complete": true,
+      "cap": false,
+      "actual_reads": 1,
+      "actual_writes": 1,
+      "wall_seconds": 243.31547783401038,
+      "output_tokens": 2046,
+      "reasoning_tokens": 1633,
+      "errors": "",
+      "read_seconds": 30.1058506249974,
+      "read_output_tokens": 114,
+      "read_reasoning_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 126.01954458300315,
+      "write_output_tokens": 1855,
+      "write_reasoning_tokens": 1613,
+      "write_status": "completed",
+      "final_seconds": 87.1879038749903,
+      "final_output_tokens": 77,
+      "final_reasoning_tokens": 0,
+      "final_status": "completed"
+    },
+    {
+      "arm": "native-after",
+      "case": "window_argmax",
+      "write_budget": 0,
+      "pass": true,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "complete": true,
+      "cap": false,
+      "actual_reads": 1,
+      "actual_writes": 1,
+      "wall_seconds": 166.47009470799821,
+      "output_tokens": 1103,
+      "reasoning_tokens": 764,
+      "errors": "",
+      "read_seconds": 29.99007275000622,
+      "read_output_tokens": 116,
+      "read_reasoning_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 79.22384845900524,
+      "write_output_tokens": 944,
+      "write_reasoning_tokens": 744,
+      "write_status": "completed",
+      "final_seconds": 57.254251374994055,
+      "final_output_tokens": 43,
+      "final_reasoning_tokens": 0,
+      "final_status": "completed"
+    }
+  ],
+  "by_arm": {
+    "native-before": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 410.26924895800767,
+      "output_tokens": 3149,
+      "reasoning_tokens": 2397,
+      "role_tokens": {
+        "READ": {
+          "output": 230,
+          "reasoning": 40
+        },
+        "WRITE": {
+          "output": 2799,
+          "reasoning": 2357
+        },
+        "FINAL": {
+          "output": 120,
+          "reasoning": 0
+        }
+      },
+      "role_seconds": {
+        "READ": 59.478054956998676,
+        "WRITE": 206.2008145419968,
+        "FINAL": 144.58680733399524
+      },
+      "budget_forced": 0,
+      "budget_deferred": 0
+    },
+    "budget512": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 308.655939083008,
+      "output_tokens": 1809,
+      "reasoning_tokens": 1064,
+      "role_tokens": {
+        "READ": {
+          "output": 230,
+          "reasoning": 40
+        },
+        "WRITE": {
+          "output": 1463,
+          "reasoning": 1024
+        },
+        "FINAL": {
+          "output": 116,
+          "reasoning": 0
+        }
+      },
+      "role_seconds": {
+        "READ": 60.66814420900482,
+        "WRITE": 138.7490580829908,
+        "FINAL": 109.23519562400179
+      },
+      "budget_forced": 2,
+      "budget_deferred": 0
+    },
+    "budget256": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 267.42197562499496,
+      "output_tokens": 1321,
+      "reasoning_tokens": 563,
+      "role_tokens": {
+        "READ": {
+          "output": 230,
+          "reasoning": 40
+        },
+        "WRITE": {
+          "output": 964,
+          "reasoning": 512
+        },
+        "FINAL": {
+          "output": 127,
+          "reasoning": 11
+        }
+      },
+      "role_seconds": {
+        "READ": 60.2961855839967,
+        "WRITE": 112.11397087400837,
+        "FINAL": 95.0083649159933
+      },
+      "budget_forced": 2,
+      "budget_deferred": 0
+    },
+    "native-after": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 409.7855725420086,
+      "output_tokens": 3149,
+      "reasoning_tokens": 2397,
+      "role_tokens": {
+        "READ": {
+          "output": 230,
+          "reasoning": 40
+        },
+        "WRITE": {
+          "output": 2799,
+          "reasoning": 2357
+        },
+        "FINAL": {
+          "output": 120,
+          "reasoning": 0
+        }
+      },
+      "role_seconds": {
+        "READ": 60.09592337500362,
+        "WRITE": 205.2433930420084,
+        "FINAL": 144.44215524998435
+      },
+      "budget_forced": 0,
+      "budget_deferred": 0
+    }
+  },
+  "native_code_final_usage_repeat": {
+    "join": true,
+    "window_argmax": true
+  },
+  "budget_log_lines": {
+    "native-before": [
+      "1004 11:19:01 ds4-server: reasoning_summary id=chatcmpl-20f55e62e12f831b7b41cbf8 ctx=0..840:840 budget=0 thinking_tokens=20 forced=0 deferred=0",
+      "1004 11:21:07 ds4-server: reasoning_summary id=chatcmpl-e267c7fe53ecfc62c012212d ctx=0..1110:1110 budget=0 thinking_tokens=1613 forced=0 deferred=0",
+      "1004 11:22:34 ds4-server: reasoning_summary id=chatcmpl-0bdc2c734e1067a67bdfb014 ctx=0..3001:3001 budget=0 thinking_tokens=0 forced=0 deferred=0",
+      "1004 11:23:04 ds4-server: reasoning_summary id=chatcmpl-371f1139896a95402fae4ff6 ctx=0..807:807 budget=0 thinking_tokens=20 forced=0 deferred=0",
+      "1004 11:24:24 ds4-server: reasoning_summary id=chatcmpl-b698a1ba47768e5e47b2f9c2 ctx=0..982:982 budget=0 thinking_tokens=744 forced=0 deferred=0",
+      "1004 11:25:22 ds4-server: reasoning_summary id=chatcmpl-5acf98e979a2c2ba32fdaaac ctx=0..1964:1964 budget=0 thinking_tokens=0 forced=0 deferred=0"
+    ],
+    "budget512": [
+      "1004 11:25:54 ds4-server: reasoning_summary id=chatcmpl-434fff858f0fb914c56bbb4c ctx=0..840:840 budget=0 thinking_tokens=20 forced=0 deferred=0",
+      "1004 11:26:52 ds4-server: reasoning budget=512 forced_close generated_thinking=512 pos=1622",
+      "1004 11:27:06 ds4-server: reasoning_summary id=chatcmpl-e442a6997a14a203bd7c7c5a ctx=0..1110:1110 budget=512 thinking_tokens=512 forced=1 deferred=0",
+      "1004 11:28:03 ds4-server: reasoning_summary id=chatcmpl-bb1402a31bc31deab73a7149 ctx=0..1897:1897 budget=0 thinking_tokens=0 forced=0 deferred=0",
+      "1004 11:28:33 ds4-server: reasoning_summary id=chatcmpl-5c1c198c4b43f7cd9bd1f1e8 ctx=0..807:807 budget=0 thinking_tokens=20 forced=0 deferred=0",
+      "1004 11:29:29 ds4-server: reasoning budget=512 forced_close generated_thinking=512 pos=1494",
+      "1004 11:29:41 ds4-server: reasoning_summary id=chatcmpl-0ae8b6c65f7e1db2f6cfa32c ctx=0..982:982 budget=512 thinking_tokens=512 forced=1 deferred=0",
+      "1004 11:30:33 ds4-server: reasoning_summary id=chatcmpl-11a77bfdb483b83a70e531e0 ctx=0..1732:1732 budget=0 thinking_tokens=0 forced=0 deferred=0"
+    ],
+    "budget256": [
+      "1004 11:31:05 ds4-server: reasoning_summary id=chatcmpl-d29142c663a45eb107a6c963 ctx=0..840:840 budget=0 thinking_tokens=20 forced=0 deferred=0",
+      "1004 11:31:51 ds4-server: reasoning budget=256 forced_close generated_thinking=256 pos=1366",
+      "1004 11:32:04 ds4-server: reasoning_summary id=chatcmpl-36e77104880336f95b8d1196 ctx=0..1110:1110 budget=256 thinking_tokens=256 forced=1 deferred=0",
+      "1004 11:32:55 ds4-server: reasoning_summary id=chatcmpl-80ec0ae39f221a7a51538da7 ctx=0..1641:1641 budget=0 thinking_tokens=11 forced=0 deferred=0",
+      "1004 11:33:25 ds4-server: reasoning_summary id=chatcmpl-ff81654a7c02fb18e08ae315 ctx=0..807:807 budget=0 thinking_tokens=20 forced=0 deferred=0",
+      "1004 11:34:07 ds4-server: reasoning budget=256 forced_close generated_thinking=256 pos=1238",
+      "1004 11:34:19 ds4-server: reasoning_summary id=chatcmpl-7a2791a0b630e94668131729 ctx=0..982:982 budget=256 thinking_tokens=256 forced=1 deferred=0",
+      "1004 11:35:03 ds4-server: reasoning_summary id=chatcmpl-e004209b67823111def7b65d ctx=0..1489:1489 budget=0 thinking_tokens=0 forced=0 deferred=0"
+    ],
+    "native-after": [
+      "1004 11:35:35 ds4-server: reasoning_summary id=chatcmpl-924ef902e6149f13ced3072e ctx=0..840:840 budget=0 thinking_tokens=20 forced=0 deferred=0",
+      "1004 11:37:41 ds4-server: reasoning_summary id=chatcmpl-01a384df2341f33ec2a696f1 ctx=0..1110:1110 budget=0 thinking_tokens=1613 forced=0 deferred=0",
+      "1004 11:39:08 ds4-server: reasoning_summary id=chatcmpl-b7ff7e095a45ad14263406a4 ctx=0..3001:3001 budget=0 thinking_tokens=0 forced=0 deferred=0",
+      "1004 11:39:38 ds4-server: reasoning_summary id=chatcmpl-363caa4469cd35418353f83d ctx=0..807:807 budget=0 thinking_tokens=20 forced=0 deferred=0",
+      "1004 11:40:57 ds4-server: reasoning_summary id=chatcmpl-2fb57b65891354e0dbb17e0f ctx=0..982:982 budget=0 thinking_tokens=744 forced=0 deferred=0",
+      "1004 11:41:55 ds4-server: reasoning_summary id=chatcmpl-2e61b63e76abc89a439f98ef ctx=0..1964:1964 budget=0 thinking_tokens=0 forced=0 deferred=0"
+    ]
+  },
+  "budget_summaries": {
+    "native-before": [
+      {
+        "response_id": "chatcmpl-20f55e62e12f831b7b41cbf8",
+        "context": "0..840:840",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-e267c7fe53ecfc62c012212d",
+        "context": "0..1110:1110",
+        "budget": 0,
+        "thinking_tokens": 1613,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-0bdc2c734e1067a67bdfb014",
+        "context": "0..3001:3001",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-371f1139896a95402fae4ff6",
+        "context": "0..807:807",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-b698a1ba47768e5e47b2f9c2",
+        "context": "0..982:982",
+        "budget": 0,
+        "thinking_tokens": 744,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-5acf98e979a2c2ba32fdaaac",
+        "context": "0..1964:1964",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      }
+    ],
+    "budget512": [
+      {
+        "response_id": "chatcmpl-434fff858f0fb914c56bbb4c",
+        "context": "0..840:840",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-e442a6997a14a203bd7c7c5a",
+        "context": "0..1110:1110",
+        "budget": 512,
+        "thinking_tokens": 512,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-bb1402a31bc31deab73a7149",
+        "context": "0..1897:1897",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-5c1c198c4b43f7cd9bd1f1e8",
+        "context": "0..807:807",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-0ae8b6c65f7e1db2f6cfa32c",
+        "context": "0..982:982",
+        "budget": 512,
+        "thinking_tokens": 512,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-11a77bfdb483b83a70e531e0",
+        "context": "0..1732:1732",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      }
+    ],
+    "budget256": [
+      {
+        "response_id": "chatcmpl-d29142c663a45eb107a6c963",
+        "context": "0..840:840",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-36e77104880336f95b8d1196",
+        "context": "0..1110:1110",
+        "budget": 256,
+        "thinking_tokens": 256,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-80ec0ae39f221a7a51538da7",
+        "context": "0..1641:1641",
+        "budget": 0,
+        "thinking_tokens": 11,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-ff81654a7c02fb18e08ae315",
+        "context": "0..807:807",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-7a2791a0b630e94668131729",
+        "context": "0..982:982",
+        "budget": 256,
+        "thinking_tokens": 256,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-e004209b67823111def7b65d",
+        "context": "0..1489:1489",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      }
+    ],
+    "native-after": [
+      {
+        "response_id": "chatcmpl-924ef902e6149f13ced3072e",
+        "context": "0..840:840",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-01a384df2341f33ec2a696f1",
+        "context": "0..1110:1110",
+        "budget": 0,
+        "thinking_tokens": 1613,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-b7ff7e095a45ad14263406a4",
+        "context": "0..3001:3001",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-363caa4469cd35418353f83d",
+        "context": "0..807:807",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-2fb57b65891354e0dbb17e0f",
+        "context": "0..982:982",
+        "budget": 0,
+        "thinking_tokens": 744,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "response_id": "chatcmpl-2e61b63e76abc89a439f98ef",
+        "context": "0..1964:1964",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      }
+    ]
+  },
+  "scope": "Actual divergent READ/WRITE/FINAL histories: task/code/token/wall scores; no paired teacher NLL or KL.",
+  "native_bracket_mean_wall_seconds": 410.02741075000813,
+  "native_bracket_after_vs_before_percent": -0.11789243703433927,
+  "wall_change_vs_native_mean_percent": {
+    "native-before": 0.058980985577816725,
+    "budget512": -24.7230963124087,
+    "budget256": -34.77948824547222,
+    "native-after": -0.058980985577816725
+  }
+}

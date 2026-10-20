@@ -1,0 +1,16 @@
+{
+  "manifest_sha256": "7f9b80a35e67b9caefe959193555cbce084e9983b9ef695d4e42ebb910653cb6",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run_agent_suffix_pair_native.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1",
+    "--manifest-sha256",
+    "7f9b80a35e67b9caefe959193555cbce084e9983b9ef695d4e42ebb910653cb6"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

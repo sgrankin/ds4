@@ -1,0 +1,13 @@
+{
+  "gold": {
+    "crates": 3,
+    "color": "blue",
+    "dock": "C"
+  },
+  "oracle_input": {
+    "question": "These are fictional shipping notes. Draft: nine red crates go to Dock A. Approved revision: three blue crates go to Dock C; this replaces every draft detail. A later comment says the courier likes red, but makes no revision. Report current crates, color, and dock in JSON, then explain which statement is authoritative."
+  },
+  "explanation": "The approved revision explicitly replaces the draft, so the active shipment contains three blue crates for Dock C. The courier comment is a preference rather than an instruction changing the shipment. It does not restore the superseded color, quantity, or location. The current record follows the stated authority of the revision.",
+  "category": "facts",
+  "scope": "New authored content, fixed before any model outcome."
+}

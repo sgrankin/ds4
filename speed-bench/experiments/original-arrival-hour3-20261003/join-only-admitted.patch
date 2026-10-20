@@ -1,0 +1,15 @@
+--- a/ds4_original_deadline_native.inc
++++ b/ds4_original_deadline_native.inc
+@@ -397,6 +397,12 @@
+         c->deadline_finished=1;memcpy(final_ids,c->candidate,sizeof c->candidate);
+         *promoted=0;return 1;
+     }
++#ifdef DS4_OD_JOIN_ONLY_ADMITTED
++    if(!c->ticket_valid) {
++        c->deadline_finished=1;memcpy(final_ids,c->candidate,sizeof c->candidate);
++        *promoted=0;return 1;
++    }
++#endif
+     /* Same mandatory native pool, checked and moved before FIRST routed gate/up
+      * only for replacement windows (including reader contention declines).
+      * This can sacrifice existing resident/miss overlap; measure that cost. */

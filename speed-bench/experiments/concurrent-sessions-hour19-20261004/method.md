@@ -1,0 +1,13 @@
+# Four keys on two server slots
+
+Reuse the hour17 `suffix_workflow.py` tool protocol, instructions, grading and raw request/response format. Two worker threads issue full-input Responses requests with `store:false`, temperature 0 and effort none. Each session has its own A–D key, active/archive files, history and result directory. Native and reuse arms advertise the same absolute paths; the driver's before-phase warmup resets only those owned files before each arm, preserving completed arm artifacts.
+
+Before restart: concurrent warm A/B, concurrent warm C/D, then concurrent edited A/B. Each warm turn reads its real active file and must reply READY. Warming C/D puts four identities through two slots. Edited A/B remove the first of two marked obsolete blocks, write their archived codes and require a new archive read plus independently graded JSON total/code. After the launcher restarts the server, edited C/D perform the same deletion with newly changed archive codes. The retained active tool results contain 24 unchanged notes; each obsolete block has 64 repeated lines. No earlier model answer supplies the active total or archive code.
+
+There are eight graded replies and eight required fresh reads. Totals are A313/B231/C267/D197; final codes A BEACON-46, B ORBIT-57, C CEDAR-70, D DELTA-83. Wrong codes/totals, extra or failed reads, incomplete responses and caps remain failures. The existing helper allows three HTTP responses per step; there is no retry of a wrong final answer.
+
+`before/result.json` contains six steps and groups `warm-AB`, `warm-CD`, `edited-AB`; `after/result.json` contains two steps and group `edited-CD`. Group `seconds` is makespan. Each row's `queue_inclusive_seconds` begins at submission and includes HTTP server wait; `seconds_including_edit` additionally includes file/history edit work for edited rows. Per-session seconds cannot be added to obtain concurrent wall time. Server traces are sliced once per group, avoiding duplicated or falsely session-attributed cache events.
+
+The launcher owns one server at a time, two slots, hot cache 0, SSD cache 4096 MiB; ROOT's external pressure guard owns the campaign. Compare exact/native and opt-in suffix arms; verify observed turnover, SSD restore and actual grafts from logs rather than assume them. This is concurrent workflow correctness and queue-inclusive throughput evidence, not native hidden-state parity or a general model-quality claim.
+
+Driver interface: `python3 -B run.py --base-url http://127.0.0.1:PORT --phase before|after --mode native|reuse --output ARM/http --shared SHARED --server-log ARM/PHASE-server.stderr.log`. No server startup or restart occurs in this driver.

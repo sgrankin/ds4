@@ -1,0 +1,2 @@
+{"remainder":7}
+The cube of seven is 343, which is one modulo nineteen because 343 equals eighteen times nineteen plus one. Write thirteen as four times three plus one. Four copies of the cube contribute one modulo nineteen, leaving one additional factor of seven. The nonnegative remainder is therefore seven.

@@ -1,0 +1,2 @@
+cc -O3 -ffast-math -g -mcpu=native -Wall -Wextra -std=c99 -Wno-unused-function -I. -c -o tests/test_agent_live_context.o tests/test_agent_live_context.c
+cc -O3 -ffast-math -g -mcpu=native -Wall -Wextra -std=c99 -Wno-unused-function -I. -c -o tests/test_agent_context_frontiers.o tests/test_agent_context_frontiers.c

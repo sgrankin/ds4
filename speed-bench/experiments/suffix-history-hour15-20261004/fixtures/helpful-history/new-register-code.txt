@@ -1,0 +1,1 @@
+The earlier approved shipping-policy decision was moved into permanent policy.json. It remains current. Its rounding detail is intentionally omitted from this shortened visible record. Neutral filing prose is not a replacement rule.

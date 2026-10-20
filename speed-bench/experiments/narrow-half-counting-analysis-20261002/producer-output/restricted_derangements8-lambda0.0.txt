@@ -1,0 +1,60 @@
+We need answer count permutations of 8 with forbidden positions: derangement (no fixed points) plus additional restrictions p(1)!=2, p(2)!=1. Need count. Need compute. Let's reason carefully. Need final only integer.
+
+We can use inclusion-exclusion. Total permutations 8!. Forbidden events: F_i: p(i)=i for i=1..8. Plus A: p(1)=2. Plus B: p(2)=1. Need count avoiding all 10 forbidden assignments? Note A and B distinct. Need count permutations avoiding events E_i for i=1..8, E_9: p(1)=2, E_10: p(2)=1. These are positions/values constraints. Use rook polynomial / inclusion-exclusion over forbidden positions in 8x8 board: cells (row i, col i) diagonal 8, plus (1,2), (2,1). Count permutations with no forbidden cells = sum (-1)^k r_k (8-k)! where r_k number ways to place k nonattacking rooks on forbidden board. Need compute rook numbers for board consisting of diagonal cells (1,1)...(8,8) plus off-diagonal (1,2),(2,1). Need r_k for k=0..8? Max rooks 8 maybe. Need compute.
+
+Board has rows/columns. Forbidden cells:
+Row1: col1, col2
+Row2: col1, col2? Wait diagonal row2 col2, plus (2,1). So row2 col1,col2.
+Rows3-8: col i only.
+
+Thus first two rows have both columns 1,2 forbidden (a 2x2 block all cells? Row1 col1,col2; Row2 col1,col2 = full 2x2 block). Rows 3-8 each have diagonal col i.
+
+Need rook polynomial for board B = full 2x2 block on rows1,2 cols1,2 plus diagonal singleton cells (3,3)...(8,8). These are disjoint in rows/columns? The 2x2 block uses rows1,2 cols1,2. Diagonal singletons use rows3-8 cols3-8. They are disjoint (rows and columns separate). Therefore rook polynomial product: for 2x2 full block, rook numbers b_k: b_0=1, b_1=4, b_2=2 (choose 2 nonattacking rooks in 2x2 = 2 permutations). For diagonal 6 singletons, rook numbers c_k = C(6,k) (choose k cells, no conflicts since distinct rows/cols). Product. Total r_k = sum_{a+b=k} b_a C(6,b). b_0=1,b_1=4,b_2=2. Then count = sum_{k=0}^8 (-1)^k r_k (8-k)!.
+
+Let's compute. Need ensure max k? 2x2 block can place up to 2, diagonal up to 6, total up to 8. Yes.
+
+Compute r_k:
+r0=1.
+r1 = b1*c0 + b0*c1 =4 +6=10. Indeed 10 forbidden cells.
+r2 = b2*c0 + b1*c1 + b0*c2 =2 +4*6 + C(6,2)=2+24+15=41.
+r3 = b2*c1 + b1*c2 + b0*c3 =2*6 +4*15 +20 =12+60+20=92.
+r4 = b2*c2 + b1*c3 + b0*c4 =2*15 +4*20 +15 =30+80+15=125.
+r5 = b2*c3 + b1*c4 + b0*c5 =2*20 +4*15 +6 =40+60+6=106.
+r6 = b2*c4 + b1*c5 + b0*c6 =2*15 +4*6 +1 =30+24+1=55.
+r7 = b2*c5 + b1*c6 =2*6 +4*1 =12+4=16. (b0*c7 none)
+r8 = b2*c6 =2*1=2.
+Check sum? okay.
+
+Now count N = Σ (-1)^k r_k (8-k)! for k=0..8.
+Factorials:
+0? (8)! =40320
+7! =5040
+6! =720
+5! =120
+4! =24
+3! =6
+2! =2
+1! =1
+0! =1 (for k=8)
+Compute:
+k0: +1*40320 =40320
+k1: -10*5040 = -50400 => -10080? 40320-50400=-10080.
+k2: +41*720 = 29520 => 19440? Wait -10080+29520=19440.
+k3: -92*120 = -11040 => 8400.
+k4: +125*24 = 3000 => 11400.
+k5: -106*6 = -636 => 10764.
+k6: +55*2 = 110 => 10874.
+k7: -16*1 = -16 => 10858.
+k8: +2*1 = 2 => 10860.
+
+So answer 10860? Need verify. Let's cross-check via alternative inclusion-exclusion or direct.
+
+We need count permutations with no fixed points and p1 !=2, p2 !=1. Derangements D8 = 40320 -8*5040+28*720 -56*120+70*24 -56*6+28*2 -8*1+1? Let's compute D8 = 14833? Known derangements: D8=14833. Additional restrictions exclude permutations where p1=2 or p2=1 but no fixed points. Need count = D8 - |A ∪ B| among derangements. A: p1=2 and no fixed points. If p1=2, then p2 cannot be? For derangement, p2 !=2 automatically? Since p1=2, value 2 used, p2 cannot be 2 anyway. Also p2 !=1 due B? We're counting A only. Need derangements with p1=2. Remove positions 1,2? Let's compute. If p1=2, remaining values {1,3,4,5,6,7,8} assigned to positions 2..8, with constraints p_i != i for i=2..8. Also p2? p2 cannot be2 (already unavailable) and p2 !=2 fixed? Actually fixed for i=2 is p2=2, impossible. So only p_i != i for i=3..8, and p2 can be any remaining except? p2 !=2 impossible. Need count permutations of 7 positions with some constraints: position2 has no fixed restriction? Since value2 unavailable. Positions3-8 cannot be themselves. Values include 1 plus 3..8. This is derangements of 7? Let's see positions 2..8 correspond values {1,3,4,5,6,7,8}. For positions 3..8, forbidden value i; position2 has forbidden value2 unavailable. So no additional. Count permutations of 7 values where positions 3..8 avoid their matching values, position2 unrestricted. This is not standard. Could compute inclusion-exclusion: total 7! - constraints for positions3-8. Since position2 no constraint. Number = Σ_{j=0}^6 (-1)^j C(6,j) (7-j)!? Because choose j of six fixed constraints. = 7! -6*6! +15*5! -20*4! +15*3! -6*2! +1*1! =5040 -4320 +1800 -480 +90 -12 +1 =2119? Let's compute: 5040-4320=720; +1800=2520; -480=2040; +90=2130; -12=2118; +1=2119. So A count=2119.
+
+B count symmetric? p2=1, remaining positions1,3..8 values {2,3,4,5,6,7,8}, constraints positions3-8, position1 unrestricted (value1 unavailable). Same 2119.
+
+Intersection A∩B: p1=2, p2=1. Then remaining positions3..8 values {3,4,5,6,7,8} with p_i != i for i=3..8. That's derangements of 6: D6=265? Known D6=265. Let's compute D6=720-6*120+15*24-20*6+15*2-6*1+1=720-720+360-120+30-6+1=265. So intersection=265.
+
+Thus count = D8 -2119 -2119 +265 =14833 -4238 +265 =10860? 14833-4238=10595; +265=10860. Yes.
+
+Need final only integer. But before final, ensure no issue: The problem statement: "Count permutations p of {1,...,8} such that p(i) is not i for every i, p(1) is not 2, and p(2) is not 1." Yes count derangements

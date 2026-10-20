@@ -1,0 +1,133 @@
+{
+  "case": "bucket",
+  "arm": "subs1",
+  "protocol": "full-input-clm",
+  "write_budget": 128,
+  "final_policy": "budget1",
+  "global_cap": 2048,
+  "wall_seconds": 99.11670087501989,
+  "http_output_tokens": 601,
+  "http_reasoning_tokens": 146,
+  "actual_read_count": 1,
+  "actual_write_count": 1,
+  "calls": [
+    {
+      "role": "READ",
+      "name": "read",
+      "call_id": "call_fefeddea7a9cd219d5a1b0ea8aaeaab5",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/config.json\",\"whole\":true,\"raw\":true}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/config.json",
+      "output": "{\n  \"capacity\": 5,\n  \"rate\": 1,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"cost\": 4\n    },\n    {\n      \"t\": 1,\n      \"cost\": 4\n    },\n    {\n      \"t\": 2,\n      \"cost\": 1\n    },\n    {\n      \"t\": 10,\n      \"cost\": 8\n    },\n    {\n      \"t\": 10,\n      \"cost\": 5\n    },\n    {\n      \"t\": 10,\n      \"cost\": 0\n    }\n  ]\n}\n",
+      "tool_ms": 0.3104159841313958
+    },
+    {
+      "role": "WRITE",
+      "name": "write",
+      "call_id": "call_96500e2b9527d170be63da3c14259b10",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py\",\"content\":\"def solve(payload, config):\\n    capacity = config[\\\"capacity\\\"]\\n    rate = config[\\\"rate\\\"]\\n    tokens = capacity\\n    previous = 0\\n    accepted = []\\n    rejected = []\\n    remaining = []\\n    for index in range(len(payload)):\\n        event = payload[index]\\n        t = event[\\\"t\\\"]\\n        cost = event[\\\"cost\\\"]\\n        elapsed = t - previous\\n        tokens = tokens + elapsed * rate\\n        if tokens > capacity:\\n            tokens = capacity\\n        previous = t\\n        if cost <= tokens:\\n            accepted.append(index)\\n            tokens = tokens - cost\\n        else:\\n            rejected.append(index)\\n        remaining.append(tokens)\\n    return {\\n        \\\"accepted\\\": accepted,\\n        \\\"rejected\\\": rejected,\\n        \\\"remaining\\\": remaining,\\n        \\\"tokens\\\": tokens,\\n    }\\n\"}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py",
+      "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py",
+      "tool_ms": 0.2658749872352928
+    }
+  ],
+  "replies": [
+    {
+      "role": "READ",
+      "budget": 0,
+      "effort": "high",
+      "seconds": 47.154048583004624,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1576,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1576
+        },
+        "output_tokens": 113,
+        "output_tokens_details": {
+          "reasoning_tokens": 18
+        },
+        "total_tokens": 1689
+      },
+      "requested_max_output_tokens": 2048,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "WRITE",
+      "budget": 128,
+      "effort": "high",
+      "seconds": 43.960257500002626,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1159,
+        "input_tokens_details": {
+          "cached_tokens": 458,
+          "cache_write_tokens": 701
+        },
+        "output_tokens": 376,
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        },
+        "total_tokens": 1535
+      },
+      "requested_max_output_tokens": 1935,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "FINAL",
+      "budget": 1,
+      "effort": "high",
+      "seconds": 8.00026779100881,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1577,
+        "input_tokens_details": {
+          "cached_tokens": 1535,
+          "cache_write_tokens": 42
+        },
+        "output_tokens": 112,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1689
+      },
+      "requested_max_output_tokens": 1559,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    }
+  ],
+  "first_code_path": "speed-bench/experiments/fresh-resident-curve-hour33-20261004/subs1/http/bucket/bucket/first-solution.py",
+  "grade": {
+    "correct": true,
+    "tests": 161,
+    "passed": 161,
+    "failed": 0,
+    "first_failure": null,
+    "returncode": 0
+  },
+  "complete": true,
+  "cap": false,
+  "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, starts with `tokens = capacity` at time 0, refills before each event based on elapsed time since the previous event timestamp, caps at capacity, advances the timestamp, accepts costs within the balance, rejects oversized costs without spending, records zero-based indices and post-event balances, and returns the required dictionary without mutating inputs.",
+  "final_text_length": 528,
+  "final_text_bytes": 528,
+  "first_code_bytes": 772,
+  "errors": [],
+  "config_unchanged": true,
+  "context_edit": {
+    "removed_blocks": 2,
+    "before_bytes": 5708,
+    "after_bytes": 2190,
+    "seconds": 0.0002839170047082007
+  },
+  "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+  "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+  "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+  "pass": true
+}

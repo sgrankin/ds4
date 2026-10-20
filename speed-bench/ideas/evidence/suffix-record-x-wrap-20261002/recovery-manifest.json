@@ -1,0 +1,366 @@
+{
+  "status": "original redaction tails64/128 passed; distinct prior-query original semantic control failed as rc3",
+  "source_profile": "all suffix fixtures use clean native resident/off forward profile; cacheAPI itself does not track resident or other forward-policy history",
+  "comparison_scope": "single paired diagnostic times, not balanced speed claims",
+  "washout_full_prompts_and_targets_byte_equal": true,
+  "washout_fresh_full_vocab_rows_byte_equal": true,
+  "washout_series": [
+    {
+      "fresh_tail": 1,
+      "reused_tokens": 511,
+      "fresh_stale_logprob": -28.9880461074,
+      "reuse_stale_logprob": -9.886778869,
+      "reuse_stale_sequence_probability": 5.0842452715133406e-05,
+      "stale_logprob_gain": 19.1012672384,
+      "mean_kl": 8.28989174486e-05,
+      "gold_delta_nll": 0.000306868650249,
+      "fresh_edit_ms": 41186.623,
+      "reuse_edit_ms": 17599.827,
+      "diagnostic_speedup": 2.340172036918317
+    },
+    {
+      "fresh_tail": 64,
+      "reused_tokens": 448,
+      "fresh_stale_logprob": -28.9880461074,
+      "reuse_stale_logprob": -26.028073457,
+      "reuse_stale_sequence_probability": 4.967653813491595e-12,
+      "stale_logprob_gain": 2.9599726503999975,
+      "mean_kl": 6.28135441796e-07,
+      "gold_delta_nll": 4.95173592086e-06,
+      "fresh_edit_ms": 40007.983,
+      "reuse_edit_ms": 18754.01,
+      "diagnostic_speedup": 2.1333028509636076
+    },
+    {
+      "fresh_tail": 128,
+      "reused_tokens": 384,
+      "fresh_stale_logprob": -28.9880461074,
+      "reuse_stale_logprob": -25.4263768202,
+      "reuse_stale_sequence_probability": 9.067025814371726e-12,
+      "stale_logprob_gain": 3.5616692871999973,
+      "mean_kl": 2.07428549415e-06,
+      "gold_delta_nll": 2.02096716393e-05,
+      "fresh_edit_ms": 42003.046,
+      "reuse_edit_ms": 21413.726,
+      "diagnostic_speedup": 1.9615010484396787
+    }
+  ],
+  "new_cases": [
+    {
+      "case_name": "semantic-secret-c512-t64",
+      "helper_source_commit": "dd49bed6",
+      "core_source_commit": "e580d947",
+      "helper_sha256": "0fdf612e65d2fa4c93635d2a1548907737980b9d99249edcf808bf2ad5751db7",
+      "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t64",
+      "summary": {
+        "case": "secret",
+        "prefix_tokens": 1024,
+        "edit_tokens": 256,
+        "unchanged_tokens": 512,
+        "fresh_tail_tokens": 64,
+        "reused_tokens": 448,
+        "copied_bytes": 13352960,
+        "pending_pairs": 0,
+        "identity_logit_bytes_equal": true,
+        "identity_graph_bytes_equal": true,
+        "canonical_export_blocked": true,
+        "setup_ms": 102015.408,
+        "identity_ms": 1647.638,
+        "rows": 4,
+        "gold_tokens_including_eos": 4,
+        "stale_tokens_including_eos": 3,
+        "mean_kl": 6.28135441796e-07,
+        "mean_tv": 1.98597198609e-06,
+        "sum_delta_nll": 4.95173592086e-06,
+        "argmax_flips": 0,
+        "byte_equal_rows": 0,
+        "greedy_encoding": "JSON byte escapes for non-ASCII",
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 40007.983,
+            "gold_logprob": -2.01677328349e-05,
+            "stale_logprob": -28.9880461074,
+            "gold_minus_stale_logprob": 28.9880259396,
+            "greedy": "REDACTED",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              63529,
+              13455,
+              3316,
+              1
+            ]
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 18754.01,
+            "gold_logprob": -2.51194687557e-05,
+            "stale_logprob": -26.028073457,
+            "gold_minus_stale_logprob": 26.0280483375,
+            "greedy": "REDACTED",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              63529,
+              13455,
+              3316,
+              1
+            ]
+          }
+        ]
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "pressure": {
+        "samples": 196,
+        "levels": [
+          1
+        ],
+        "adverse_samples": 0,
+        "swap_growth_gb": 0.0,
+        "max_wired_gb": 74.94192504882812,
+        "max_compressor_gb": 8.54058837890625
+      },
+      "semantic_controls_valid": true,
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t64/logits.bin",
+        "bytes": 4136992,
+        "sha256": "8eee6cb8e2820867d9d9cfd71316ff401214c5b9d1b6390bdc1f619cf8473f52"
+      },
+      "diagnostic_speedup": 2.1333028509636076,
+      "stale_answer_logprob_gain": 2.9599726503999975,
+      "stale_sequence_probability_fresh": 2.5742548189178044e-13,
+      "stale_sequence_probability_reuse": 4.967653813491595e-12
+    },
+    {
+      "case_name": "semantic-secret-c512-t128",
+      "helper_source_commit": "dd49bed6",
+      "core_source_commit": "e580d947",
+      "helper_sha256": "0fdf612e65d2fa4c93635d2a1548907737980b9d99249edcf808bf2ad5751db7",
+      "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t128",
+      "summary": {
+        "case": "secret",
+        "prefix_tokens": 1024,
+        "edit_tokens": 256,
+        "unchanged_tokens": 512,
+        "fresh_tail_tokens": 128,
+        "reused_tokens": 384,
+        "copied_bytes": 12943360,
+        "pending_pairs": 0,
+        "identity_logit_bytes_equal": true,
+        "identity_graph_bytes_equal": true,
+        "canonical_export_blocked": true,
+        "setup_ms": 108095.136,
+        "identity_ms": 3085.207,
+        "rows": 4,
+        "gold_tokens_including_eos": 4,
+        "stale_tokens_including_eos": 3,
+        "mean_kl": 2.07428549415e-06,
+        "mean_tv": 5.17432443956e-06,
+        "sum_delta_nll": 2.02096716393e-05,
+        "argmax_flips": 0,
+        "byte_equal_rows": 0,
+        "greedy_encoding": "JSON byte escapes for non-ASCII",
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 42003.046,
+            "gold_logprob": -2.01677328349e-05,
+            "stale_logprob": -28.9880461074,
+            "gold_minus_stale_logprob": 28.9880259396,
+            "greedy": "REDACTED",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              63529,
+              13455,
+              3316,
+              1
+            ]
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 21413.726,
+            "gold_logprob": -4.03774044742e-05,
+            "stale_logprob": -25.4263768202,
+            "gold_minus_stale_logprob": 25.4263364427,
+            "greedy": "REDACTED",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              63529,
+              13455,
+              3316,
+              1
+            ]
+          }
+        ]
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "pressure": {
+        "samples": 211,
+        "levels": [
+          1
+        ],
+        "adverse_samples": 0,
+        "swap_growth_gb": 0.0,
+        "max_wired_gb": 74.56246948242188,
+        "max_compressor_gb": 8.612228393554688
+      },
+      "semantic_controls_valid": true,
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t128/logits.bin",
+        "bytes": 4136992,
+        "sha256": "852196ff72282a799309d6b6d8754685a1426e27f70e6c0505afec1ace5b9346"
+      },
+      "diagnostic_speedup": 1.9615010484396787,
+      "stale_answer_logprob_gain": 3.5616692871999973,
+      "stale_sequence_probability_fresh": 2.5742548189178044e-13,
+      "stale_sequence_probability_reuse": 9.067025814371726e-12
+    },
+    {
+      "case_name": "prior-secret-c512-t128",
+      "helper_source_commit": "ccd3d384",
+      "core_source_commit": "6c2efad0",
+      "helper_sha256": "89bba403421f4739ac9d87c38342562ed591123606ccb423f9c1c20cff44ff1a",
+      "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-prior-secret-c512-t128",
+      "summary": {
+        "case": "prior-secret",
+        "gold_answer_text": "UNKNOWN",
+        "stale_answer_text": "6829",
+        "query_tokens_including_assistant_prefix": 45,
+        "query_start": 1747,
+        "query_fully_fresh_required": true,
+        "query_fully_fresh": true,
+        "branch_endpoint_logit_bytes_equal": true,
+        "semantic_controls_valid": false,
+        "original_calibration": {
+          "gold_logprob": -0.38788409316,
+          "stale_logprob": -1.13724668088,
+          "correct_answer": false,
+          "stopped": true,
+          "endpoint_logit_bytes_equal": true,
+          "expected_answer": "6829",
+          "greedy": "UNKNOWN",
+          "greedy_tokens": [
+            6901,
+            117883,
+            1
+          ]
+        },
+        "fresh_prefix_bytes_equal": true,
+        "fresh_prefix_raw_rows_per_layer": 0,
+        "fresh_prefix_compressed_rows": 3200,
+        "fresh_prefix_index_rows": 3200,
+        "prefix_tokens": 1024,
+        "edit_tokens": 256,
+        "source_edit_tokens": 256,
+        "unchanged_tokens": 512,
+        "fresh_tail_tokens": 128,
+        "source_start": 1280,
+        "destination_start": 1280,
+        "source_end": 1664,
+        "destination_end": 1664,
+        "raw_keys_repaired": 0,
+        "compressed_keys_repaired": 0,
+        "index_keys_repaired": 0,
+        "reused_tokens": 384,
+        "copied_bytes": 12943360,
+        "pending_pairs": 0,
+        "identity_logit_bytes_equal": true,
+        "identity_graph_bytes_equal": true,
+        "canonical_export_blocked": true,
+        "invalid_candidates_unchanged": true,
+        "precancel_unchanged": true,
+        "postgraft_cancel_invalidated": true,
+        "setup_ms": 108887.69,
+        "identity_ms": 3207.387,
+        "rows": 3,
+        "gold_tokens_including_eos": 3,
+        "stale_tokens_including_eos": 3,
+        "mean_kl": 0.000133224146411,
+        "mean_tv": 0.000123630862957,
+        "sum_delta_nll": 0.000306320116493,
+        "argmax_flips": 0,
+        "byte_equal_rows": 0,
+        "greedy_encoding": "JSON byte escapes for non-ASCII",
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 42559.737,
+            "gold_logprob": -0.000111716222357,
+            "stale_logprob": -30.7347002983,
+            "gold_minus_stale_logprob": 30.7345885821,
+            "greedy": "UNKNOWN",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              6901,
+              117883,
+              1
+            ]
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 21576.919,
+            "gold_logprob": -0.00041803633885,
+            "stale_logprob": -22.3927803096,
+            "gold_minus_stale_logprob": 22.3923622733,
+            "greedy": "UNKNOWN",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              6901,
+              117883,
+              1
+            ]
+          }
+        ]
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 3
+      },
+      "pressure": {
+        "samples": 233,
+        "levels": [
+          1
+        ],
+        "adverse_samples": 0,
+        "swap_growth_gb": 0.0,
+        "max_wired_gb": 77.69320678710938,
+        "max_compressor_gb": 8.632095336914062
+      },
+      "semantic_controls_valid": false,
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-prior-secret-c512-t128/logits.bin",
+        "bytes": 3102748,
+        "sha256": "32d0c3f9296f94642b27c1ba4f3f8e1224c1c69e5e383a0e75b617d4487de4dc"
+      },
+      "diagnostic_speedup": 1.9724659021058566,
+      "stale_answer_logprob_gain": 8.341919988700003,
+      "stale_sequence_probability_fresh": 4.4883762690304484e-14,
+      "stale_sequence_probability_reuse": 1.8833848692896848e-10
+    }
+  ],
+  "prior_query_interpretation": "Original CURRENT REGISTER has6829 but question asks BEFORE REDACTION without an old-context redaction event. Original greedyUNKNOWN defeats the expected6829 control. CandidateUNKNOWN and likelihood gains are retained diagnostics, not a valid old-value retrieval/forgetting result.",
+  "gpu_batch_ledger": "washout-prior-batch-results.json",
+  "notes": [
+    "Strong washout versus tail1 is not monotonic: tail64 old-value probability is lower than tail128.",
+    "Gold and stale complete-answer likelihoods include EOS; no sampler penalties or forced prefixes enter independent greedy generation.",
+    "45-token prior query plus assistant prefix lies wholly after cacheendpoint1664, starts1747.",
+    "All pressure guards completed normally; final semantic rc3 is deliberate, not infrastructure failure."
+  ]
+}

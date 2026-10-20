@@ -1,0 +1,11 @@
+{
+  "samples": 40,
+  "normal_samples": 40,
+  "bad_samples": 0,
+  "swapgrowth_gib": 0.0,
+  "peak_wired_plus_compressor_gib": 82.54232788085938,
+  "guard": {
+    "status": "complete",
+    "child_returncode": 0
+  }
+}

@@ -1,0 +1,14 @@
+cc -O3 -ffast-math -g -mcpu=native -Wall -Wextra -std=c99 -c -o ds4_agent.o ds4_agent.c
+cc -O3 -ffast-math -g -mcpu=native -Wall -Wextra -std=c99 -Wno-unused-function -c -o ds4_agent_test.o tests/ds4_agent_test.c
+ds4_agent.c:5871:21: error: call to undeclared function 'getentropy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+In file included from tests/ds4_agent_test.c:3:
+tests/../ds4_agent.c:5871: 5871 |        21         : if (getentropy(&t->id, sizeof(t->id)) != 0) {
+      |                     ^
+error: call to undeclared function 'getentropy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+ 5871 |                 if (getentropy(&t->id, sizeof(t->id)) != 0) {
+      |                     ^
+1 error generated.
+make: *** [ds4_agent.o] Error 1
+make: *** Waiting for unfinished jobs....
+1 error generated.
+make: *** [ds4_agent_test.o] Error 1

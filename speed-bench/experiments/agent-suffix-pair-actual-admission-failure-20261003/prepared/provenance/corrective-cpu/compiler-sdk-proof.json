@@ -1,0 +1,43 @@
+{
+  "selected_wrapper": {
+    "path": "/usr/bin/cc",
+    "bytes": 200560,
+    "sha256": "34129c71a01a74f7f3b2443521519b2e5447553fa187f5fcafaaf8c42cc192e2"
+  },
+  "actual_clang": {
+    "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "bytes": 124676976,
+    "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+  },
+  "sdk_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+  "sdk_settings": {
+    "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/SDKSettings.json",
+    "bytes": 7948,
+    "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+  },
+  "libSystem_stub": {
+    "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd",
+    "bytes": 347931,
+    "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+  },
+  "selection_commands": [
+    [
+      "/usr/bin/xcrun",
+      "--find",
+      "clang"
+    ],
+    [
+      "/usr/bin/xcrun",
+      "--sdk",
+      "macosx",
+      "--show-sdk-path"
+    ],
+    [
+      "/usr/bin/cc",
+      "--version"
+    ]
+  ],
+  "observed_version": "Apple clang version 21.0.0 (clang-2100.3.34.2); Target arm64-apple-darwin27.0.0",
+  "compiler_invoked": false,
+  "model_accessed": false
+}

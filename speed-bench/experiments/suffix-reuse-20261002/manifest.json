@@ -1,0 +1,94 @@
+{
+  "status": "same-position native identity/graft smoke passed; approximate quality drift measured",
+  "base": "95503b3b",
+  "files": {
+    "ds4.c": "b1e83d831c723ac44688ec10ef89a61e254c286d03eb895ca4422300c5ce3b61",
+    "ds4.h": "edd057f10d13b9d71cb54b75e93cc65019bc3c0cc699615859ffe8c158241b86",
+    "Makefile": "88d132f085a81270d055dfef0fb1494afa20778846fa00216cdadaef540e3265",
+    "speed-bench/suffix_reuse_bench.c": "63e9e33f6bdc2092f144c285cd21060954bacf20682f49fee0117ba415d6c00c",
+    "speed-bench/suffix_reuse_bench": "6d8a1694a20fa52d47cde9f6c22bf0343a249705fa55ee14c5221cce97d04bfe",
+    "ds4.o": "9839433c1edbb3ef2856f672466373172e380d79a397ebb8269e63cb9984553b"
+  },
+  "linked_root_objects": {
+    "ds4_image": "ebdae98d494de74fd560daed53aad2bd934ff7012499fc2cde82e7e994278f60",
+    "ds4_distributed": "c47be1cf4fb974b5a775824feba31dd77c592789da402d0c97e18f6524d62e5a",
+    "ds4_tp": "a1352f1f806c71e148fb1f21f090ff8e5aebbe93a51c452acd13741ce748729b",
+    "ds4_ssd": "aa2a18d7cc4b805af138691fd8208042837a045e30b6ed02def90c4b07d37434",
+    "ds4_metal": "acd3be28b21d1657abf054503307c06f11a0776e24928d0001c4fe421dae25a8",
+    "ds4_layer_pack": "efa53eacf5c197bd0ee5c6c140e70fd5924673f788e6876cac3656deea3b694d",
+    "ds4_engram": "41eefb68d54c36192c579379d9f9f9b7f35b3df619be97caed967ecb8b568982"
+  },
+  "approximation": "same-position stale suffix, edited block recomputed, fresh tail1, K1",
+  "prepared_argv_from_root": [
+    "python3",
+    "speed-bench/ideas/pressure_run.py",
+    "speed-bench/ideas/artifacts/suffix-same-position-smoke",
+    "--",
+    ".workspaces/idea-context/speed-bench/suffix_reuse_bench",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--prefix",
+    "256",
+    "--edit",
+    "32",
+    "--unchanged",
+    "128",
+    "--fresh-tail",
+    "1",
+    "--decode",
+    "4",
+    "--ctx",
+    "2048",
+    "--chunk",
+    "256",
+    "--cache-gb",
+    "64",
+    "--summary",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-same-position-smoke/summary.json",
+    "--raw",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-same-position-smoke/logits.bin"
+  ],
+  "model_jobs_started": 1,
+  "smoke_summary": {
+    "identity_logit_bytes_equal": true,
+    "identity_graph_bytes_equal": true,
+    "canonical_export_blocked": true,
+    "prefix_tokens": 256,
+    "edit_tokens": 32,
+    "unchanged_tokens": 128,
+    "reused_tokens": 127,
+    "fresh_tail_tokens": 1,
+    "continuation_tokens": 4,
+    "copied_bytes": 11225088,
+    "pending_pairs": 3,
+    "old_setup_ms": 20783.757,
+    "identity_reuse_ms": 41.904,
+    "fresh_edit_ms": 3966.902,
+    "approx_edit_ms": 791.725,
+    "mean_kl": 0.0395026499667,
+    "mean_tv": 0.0471860532131,
+    "sum_delta_nll": 1.96735783062,
+    "argmax_flips": 0,
+    "bit_equal_rows": 0,
+    "rows": 5
+  },
+  "smoke_guard": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "pressure": {
+    "elapsed_last_sample_s": 29.923834800720215,
+    "levels": [
+      1
+    ],
+    "adverse_samples": 0,
+    "max_wired_gb": 73.49024963378906,
+    "max_compressor_gb": 8.447509765625,
+    "swap_growth_gb": 0.0
+  },
+  "raw_logits": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-same-position-smoke/logits.bin",
+    "bytes": 5171232,
+    "sha256": "7a89510427e64d2df8354cd345aaa156218b8c8c419230374b53d69c6c5e9979"
+  }
+}

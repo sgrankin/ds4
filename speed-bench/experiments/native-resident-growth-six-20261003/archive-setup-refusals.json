@@ -1,0 +1,51 @@
+{
+  "original_run_affected": false,
+  "first_attempt": {
+    "operation": "jj --ignore-working-copy workspace add --name quiet-growth-archive -r 7c6e7b32a2560e032decea88b7877e330a27c52b .workspaces/idea-quiet-growth-archive",
+    "exit_code": 1,
+    "reason": "sandbox refused commit-object temporary file under read-only .git/objects; incomplete destination retained"
+  },
+  "second_attempt": {
+    "operation": "same command with authorized repository-write escalation",
+    "exit_code": 1,
+    "reason": "destination path exists and is not empty"
+  },
+  "third_attempt": {
+    "operation": "jj --ignore-working-copy workspace add --name quiet-growth-archive-v2 -r 7c6e7b32a2560e032decea88b7877e330a27c52b .workspaces/idea-quiet-growth-archive-v2",
+    "exit_code": 1,
+    "reason": "workspace created but command needed working-copy updates; --ignore-working-copy refused checkout; empty root checkout confirmed"
+  },
+  "correction": {
+    "operation": "jj new 7c6e7b32a2560e032decea88b7877e330a27c52b -m Archive independent quiet growth evidence",
+    "workspace": "/Volumes/Models/ds4/.workspaces/idea-quiet-growth-archive-v2",
+    "exit_code": 0,
+    "parent_confirmed": "7c6e7b32a2560e032decea88b7877e330a27c52b",
+    "runtime_or_MAIN_mutated": false
+  },
+  "snapshot_packaging": {
+    "initial_status_exit_code": 0,
+    "initial_snapshot_omissions": "Four binary/source files exceeded default1MiB; object/bytecode paths matched repository ignores",
+    "correction": "Explicitly track this archive path with jj file track --include-ignored; no repository configuration change",
+    "complete_physical_index_excludes_only_top_manifest": true,
+    "initial_complete_index_verification": {
+      "pass": false,
+      "tracked_files": 100,
+      "physical_files": 114,
+      "reason": "directory-level include-ignored did not include14 ignored/oversized children",
+      "correction": "Recursive explicit glob fileset with jj file track --include-ignored retained all114 physical files"
+    },
+    "concurrent_stale_refusal": {
+      "first_recursive_track_exit_code": 1,
+      "reason": "working copy stale after concurrent repository activity",
+      "local_update_stale_exit_code": 0,
+      "recursive_retry_exit_code": 0,
+      "final_physical_and_tracked_count": 114
+    },
+    "binary_file_show_refusal": {
+      "pass": false,
+      "reason": "jj default color decorated binary stdout, so initial direct byte comparison failed on retained bytecode",
+      "correction": "Use jj --color never for exact binary commit-byte verification",
+      "underlying_binary_changed": false
+    }
+  }
+}

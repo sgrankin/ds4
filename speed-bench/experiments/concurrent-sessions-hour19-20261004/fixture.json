@@ -1,0 +1,12 @@
+{
+  "source": "hour17 suffix_workflow.py A/B family; C/D contain newly authored distinct facts",
+  "sessions": {
+    "A": {"batches": 23, "items_per_batch": 14, "reserved_items": 9, "active_total": 313, "old_code": "BEACON-46", "new_code": "BEACON-47"},
+    "B": {"batches": 31, "items_per_batch": 8, "reserved_items": 17, "active_total": 231, "old_code": "ORBIT-57", "new_code": "ORBIT-58"},
+    "C": {"batches": 19, "items_per_batch": 15, "reserved_items": 18, "active_total": 267, "old_code": "CEDAR-69", "new_code": "CEDAR-70"},
+    "D": {"batches": 27, "items_per_batch": 8, "reserved_items": 19, "active_total": 197, "old_code": "DELTA-82", "new_code": "DELTA-83"}
+  },
+  "source_shape": {"obsolete_blocks": 2, "lines_per_block": 64, "retained_active_notes": 24},
+  "steps": ["A-warm", "B-warm", "C-warm", "D-warm", "A-edited", "B-edited", "C-edited", "D-edited"],
+  "edited_archive_codes": {"A": "BEACON-46", "B": "ORBIT-57", "C": "CEDAR-70", "D": "DELTA-83"}
+}

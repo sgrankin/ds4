@@ -1,0 +1,12 @@
+{
+  "source_sha256": "94507d90aea2723deb15b6918cc56c0fd24af61536e5b9780719cc5308c080e3",
+  "test_sha256": "2a1ff492c6b4db6ed2566ef1676a1e6799e1c9042252c0f7d3449b667697f6ba",
+  "tests_log_sha256": "ab0cb6bb0266a844c4dce6a837090ee83c01e754e718c00413b51677f52e9692",
+  "tests": 16,
+  "test_returncode": 0,
+  "prepare_returncode": 1,
+  "prepare_error": "ValueError: original case path not pinned",
+  "reason": "Exact case-hash check did not resolve relative calibration TSV paths against MAIN, unlike frozen raw helper. Preparation refused, no manifest or run command created.",
+  "model_stat_or_open": false,
+  "runtime_or_policy_changed": false
+}

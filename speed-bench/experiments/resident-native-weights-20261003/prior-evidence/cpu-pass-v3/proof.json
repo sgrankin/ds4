@@ -1,0 +1,24 @@
+{
+  "status": "FOCUSED_CPU_PASS_MODEL_PENDING",
+  "source_commit": "8a47faf344c2b4eb7b716d25a83c518a03711836",
+  "production_returncode": 0,
+  "asan_ubsan_returncode": 0,
+  "asan_options": "detect_leaks=0",
+  "source_pins_unchanged": true,
+  "legacy_function_body_and_name_literal_parent": true,
+  "exact_default_cases": 24,
+  "default_case_grid": "native/apply/lookup/noop x sub1/sub2/sub3 x unset/literal0",
+  "all_six_preserved_coefficient_slots": true,
+  "native_substitution_counts": [
+    1,
+    2,
+    3
+  ],
+  "lookup_noop_native_and_prefill_controls": true,
+  "strict_flag_gap_drop_and_failed_selected_write_checks": true,
+  "first_four_failed_attempts_retained": true,
+  "all_equality_contracts_unchanged": true,
+  "core_metal_or_frontend_build": false,
+  "model_or_metadata_access": false,
+  "limitation": "Model-free mocks prove specified source/control invariants and finite cases; actual Metal bit parity, quality, logical I/O and latency remain unmeasured."
+}

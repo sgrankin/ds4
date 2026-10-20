@@ -1,0 +1,15 @@
+{
+  "status": "ROOT_FULLSCAN_COMMAND_RETURNED_ZERO_PENDING_RELEASE_AND_INDEPENDENT_OUTPUT_AUDIT",
+  "returncode": 0,
+  "owned_timeout": false,
+  "wall_seconds_diagnostic": 83.93925954199949,
+  "launch_proof_sha256": "ed7092a8d679f221bd06abc8aa7b34253cdedb15a99a9d35b2b9be8578aae5ac",
+  "stdout_sha256": "a4bf02fd16d7e7b0e002ae83b7d747d7e424d931f8d5369b418909f3413d744b",
+  "stderr_sha256": "e22a8fc0c20ae1e669f2a64671435a8375dc6427939b9474129086e5135f8d13",
+  "plan_sha256": "85e604c2625e3f9243be463154b153dd92b1c9bf1f93da67f619eeda87829449",
+  "all_pins_before_after_exact": true,
+  "source_files_literal": 8,
+  "unique_pins": 234,
+  "normal_model_engine": false,
+  "no_retry_no_resume_no_auto_publication_or_eval": true
+}

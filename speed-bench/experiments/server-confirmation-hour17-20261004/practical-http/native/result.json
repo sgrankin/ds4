@@ -1,0 +1,24 @@
+{
+  "arm": "native",
+  "write_budget": 0,
+  "returncode": 3,
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/practical_run.py",
+    "--base-url",
+    "http://127.0.0.1:63314",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/practical-http/native/checks",
+    "--visible",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible",
+    "--arm",
+    "native",
+    "--budget",
+    "0",
+    "--global-cap",
+    "2048"
+  ],
+  "seconds": 337.917400833001,
+  "server_returncode_after_shutdown": 0
+}

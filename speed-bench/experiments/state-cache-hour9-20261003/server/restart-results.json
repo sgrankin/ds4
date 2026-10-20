@@ -1,0 +1,58 @@
+{
+  "phase": "restart",
+  "pid": 33691,
+  "startup_seconds": 0.40733908298716415,
+  "concurrent_pair_seconds": 0.8573455829900922,
+  "server_returncode": 0,
+  "requests": [
+    {
+      "request": 0,
+      "status": 200,
+      "error": null,
+      "body": "{\"id\":\"chatcmpl-cb5ffcdcaf554d4f494dbc45\",\"object\":\"chat.completion\",\"created\":1791073910,\"model\":\"deepseek-chat\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"READY\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":2128,\"completion_tokens\":2,\"total_tokens\":2130,\"prompt_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":2128}}}\n",
+      "content": "READY",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2128,
+        "completion_tokens": 2,
+        "total_tokens": 2130,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 2128
+        }
+      },
+      "ready": true,
+      "seconds": 0.8061310420016525
+    },
+    {
+      "request": 1,
+      "status": 200,
+      "error": null,
+      "body": "{\"id\":\"chatcmpl-e7151d7874ac0e9f63fb6f99\",\"object\":\"chat.completion\",\"created\":1791073910,\"model\":\"deepseek-chat\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"READY\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":2128,\"completion_tokens\":2,\"total_tokens\":2130,\"prompt_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":2128}}}\n",
+      "content": "READY",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2128,
+        "completion_tokens": 2,
+        "total_tokens": 2130,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 2128
+        }
+      },
+      "ready": true,
+      "seconds": 0.8570040829945356
+    }
+  ],
+  "state_cache_exact_hits": [
+    {
+      "slot": 1,
+      "tokens": 2128
+    },
+    {
+      "slot": 0,
+      "tokens": 2128
+    }
+  ],
+  "state_cache_enabled": true
+}

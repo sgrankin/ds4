@@ -1,0 +1,3 @@
+{"paragraph": "The badge card is a small, matte-black credential with a crisp white border and a single centered emblem: 👩‍🚒. Beneath the emblem, printed in narrow uppercase lettering, is the motto ö la nuit. The card feels like a night-shift token, carrying a quiet, smoky resolve and a hint of watchful calm.", "label": "👩‍🚒", "motto": "ö la nuit"}
+
+Reasoning: I kept the label and motto exactly as provided, including the woman firefighter emoji with its zero-width joiner sequence and the “o” with combining diaeresis in “ö la nuit,” without escaping, normalizing, or explaining those literal sequences. The paragraph is a short fictional description of a badge card, and the requested fields are reported as paragraph, label, and motto.

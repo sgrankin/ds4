@@ -1,0 +1,33 @@
+{
+  "mode": "reuse",
+  "phase": "edited-1",
+  "seconds": 68.09642270799668,
+  "http_status": 200,
+  "response_status": "completed",
+  "text": "{\"total\":416}",
+  "gold": {
+    "total": 416
+  },
+  "correct": true,
+  "complete": true,
+  "error": null,
+  "input_tokens": 2339,
+  "output_tokens": 5,
+  "usage": {
+    "input_tokens": 2339,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 2339
+    },
+    "output_tokens": 5,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 2344
+  },
+  "incomplete_details": null,
+  "suffix_log_lines": [
+    "1004 09:08:08 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+  ],
+  "pass": true
+}

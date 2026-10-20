@@ -1,0 +1,1 @@
+PASS: canonical DS41 source parser accepts valid bytes; diagnostic tag rejected by real source parser and engine-less payload/snapshot loaders; comparison normalizes only magic; no model or GPU opened

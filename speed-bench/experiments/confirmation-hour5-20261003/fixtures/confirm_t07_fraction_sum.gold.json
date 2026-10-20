@@ -1,0 +1,12 @@
+{
+  "gold": {
+    "numerator": 25,
+    "denominator": 36
+  },
+  "oracle_input": {
+    "question": "Calculate 5/12 + 7/18 - 1/9 exactly. Report numerator and denominator of the reduced fraction as integers in JSON, then explain."
+  },
+  "explanation": "A common denominator is thirty-six. The three terms become fifteen thirty-sixths, fourteen thirty-sixths, and four thirty-sixths. Combining them gives twenty-five thirty-sixths. Twenty-five and thirty-six have no common factor greater than one, so this fraction is already reduced. Decimal rounding is unnecessary for this calculation.",
+  "category": "math",
+  "scope": "New authored content, fixed before any model outcome."
+}

@@ -1,0 +1,1 @@
+For the positive integers 84 and 30, report gcd and lcm in JSON. Explain using Euclidean division and the product identity.

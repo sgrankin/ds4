@@ -1,0 +1,621 @@
+{
+  "status": "complete",
+  "steps": [
+    {
+      "step": 0,
+      "command": [
+        "/usr/bin/cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-I",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e",
+        "-c",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o"
+      ],
+      "purpose": "core",
+      "started_unix": 1790992456.298062,
+      "ended_unix": 1790992466.679848,
+      "returncode": 0,
+      "log": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-0.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o",
+      "output_sha256": "8a8d7e10eff13587e35011754ac907b8a015cf6e7970a42cc19a6bfebb810ccd",
+      "before": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992456.2979782
+      },
+      "model_opened": false,
+      "metal_compiled": false,
+      "after": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992466.7845619
+      }
+    },
+    {
+      "step": 1,
+      "command": [
+        "/usr/bin/cc",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c11",
+        "-I",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/quality_probe.c",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-old7c6e"
+      ],
+      "purpose": "literal065 quality link",
+      "started_unix": 1790992466.8634791,
+      "ended_unix": 1790992467.1695979,
+      "returncode": 0,
+      "log": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-1.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-old7c6e",
+      "output_sha256": "9e125fb44fb12c3f76e8d2372943809f41223a4bdfcd4fe8bccbc6a1c27fe77f",
+      "before": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992466.86338
+      },
+      "model_opened": false,
+      "metal_compiled": false,
+      "after": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992467.2496982
+      }
+    },
+    {
+      "step": 2,
+      "command": [
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-old7c6e",
+        "--self-test"
+      ],
+      "purpose": "model-free metric/raw-record/IO self-test",
+      "started_unix": 1790992467.329261,
+      "ended_unix": 1790992467.3354251,
+      "returncode": 0,
+      "log": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-2.log",
+      "log_sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+      "output": null,
+      "output_sha256": null,
+      "before": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992467.329205
+      },
+      "model_opened": false,
+      "metal_compiled": false,
+      "after": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992467.4131231
+      }
+    },
+    {
+      "step": 3,
+      "command": [
+        "/usr/bin/cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-I",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47",
+        "-c",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o"
+      ],
+      "purpose": "core",
+      "started_unix": 1790992467.492522,
+      "ended_unix": 1790992477.4835021,
+      "returncode": 0,
+      "log": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-3.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o",
+      "output_sha256": "edfcbdd8bc9a25952320fcf644093d76a9b7f9d5b395fc5352429acdab60be51",
+      "before": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992467.4924412
+      },
+      "model_opened": false,
+      "metal_compiled": false,
+      "after": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992477.586045
+      }
+    },
+    {
+      "step": 4,
+      "command": [
+        "/usr/bin/cc",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c11",
+        "-I",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/quality_probe.c",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-new8a47"
+      ],
+      "purpose": "literal065 quality link",
+      "started_unix": 1790992477.67033,
+      "ended_unix": 1790992477.970607,
+      "returncode": 0,
+      "log": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-4.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-new8a47",
+      "output_sha256": "98aec43ad68e14cc163cf2a381b52085984a6f8b9cdc451d1747a34a9826915f",
+      "before": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992477.670238
+      },
+      "model_opened": false,
+      "metal_compiled": false,
+      "after": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992478.0504682
+      }
+    },
+    {
+      "step": 5,
+      "command": [
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-new8a47",
+        "--self-test"
+      ],
+      "purpose": "model-free metric/raw-record/IO self-test",
+      "started_unix": 1790992478.1334321,
+      "ended_unix": 1790992478.139384,
+      "returncode": 0,
+      "log": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-5.log",
+      "log_sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+      "output": null,
+      "output_sha256": null,
+      "before": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992478.133364
+      },
+      "model_opened": false,
+      "metal_compiled": false,
+      "after": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992478.217474
+      }
+    },
+    {
+      "step": 6,
+      "command": [
+        "/usr/bin/cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-I",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/replay.c",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-old7c6e"
+      ],
+      "purpose": "optional unchanged replay state link; ROOT choice required",
+      "started_unix": 1790992478.301119,
+      "ended_unix": 1790992478.5416698,
+      "returncode": 0,
+      "log": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-6.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-old7c6e",
+      "output_sha256": "fe1d2f10f0c377c7c4a98a5ad18b772a387709afd5711c4bfe87d4032b779e3c",
+      "before": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992478.30103
+      },
+      "model_opened": false,
+      "metal_compiled": false,
+      "after": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992478.621897
+      }
+    },
+    {
+      "step": 7,
+      "command": [
+        "/usr/bin/cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-I",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/replay.c",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-new8a47"
+      ],
+      "purpose": "optional unchanged replay state link; ROOT choice required",
+      "started_unix": 1790992478.706144,
+      "ended_unix": 1790992478.945473,
+      "returncode": 0,
+      "log": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-7.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-new8a47",
+      "output_sha256": "4d2e34d042b19a67ae13a1a85072e7f6551870b1e64339fea417d19eb37fe1ca",
+      "before": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992478.706053
+      },
+      "model_opened": false,
+      "metal_compiled": false,
+      "after": {
+        "asset_count": 175,
+        "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+        "selected_compiler": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+          "bytes": 124676976,
+          "version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin27.0.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+          "scope": "cc launcher and selected clang executable/version; SDK headers/framework binaries are not fully hashed"
+        },
+        "selected_sdk": {
+          "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "resolved_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+          "pins": {
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+          },
+          "scope": "selected SDK path, SDK settings and stdio header; full SDK/framework content is not hashed"
+        },
+        "verified_at_unix": 1790992479.025119
+      }
+    }
+  ],
+  "plan_sha256": "f798a1a977f61b7fc7a0f023da452e91f41a09516614e097e361e6bdd925638f",
+  "execution_source_sha256": "4569fe87d925768639b51f643beaf65fb62331c4ff73ccafecd60361c8b6a861",
+  "concurrency": 1,
+  "model_open_or_stat": false,
+  "tokenizer_called": false,
+  "metal_compiled": false
+}

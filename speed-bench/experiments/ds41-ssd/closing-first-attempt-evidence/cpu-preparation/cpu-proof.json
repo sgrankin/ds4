@@ -1,0 +1,25 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_closing_first_attempt.py",
+    "-v"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "tool_chunk_id": "8ec387",
+  "returncode": 0,
+  "tests_run": 16,
+  "status": "PASS",
+  "source_sha256": "79881a996fc6b536f4ba8d0a851010319e23aea93f0f9dd90bffd494afd8f7a4",
+  "cpu_test_sha256": "82b8250e9264ff78f9e40339296d101f4b3f1936feac5d6c55ff91d52089f9c0",
+  "actual_metadata_fixture_sha256": "be83bdbdb1f01072b33a2242e3a2c146a1e01c98ee3f9d684162618d53a160d2",
+  "no_live_pilot_outcomes_read": true,
+  "no_model_metadata_read": true
+}

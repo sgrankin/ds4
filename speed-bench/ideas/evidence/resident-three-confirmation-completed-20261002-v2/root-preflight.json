@@ -1,0 +1,9 @@
+{
+  "status": "ROOT_PREFLIGHT_PASS_UNEXECUTED",
+  "manifest_sha256": "b80ecd4abdee67976e4b3824892ff34514a7214fa58687dd3746e692e4657df9",
+  "command_sha256": "009da3bdbc763311e7e5d83b055e5cdb9450cb8bbda6ca022b7ed2dd1e4af7c1",
+  "files_checked": 64,
+  "runtime_commit": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "input_text_inspected": false,
+  "model_metadata_touched": false
+}

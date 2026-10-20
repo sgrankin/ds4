@@ -1,0 +1,57 @@
+I need to read config.json first with whole=true raw=true, then write solution.py. Let me do that.
+
+The instructions say exactly one read call for config.json, then exactly one write call for solution.py. Let me comply.
+
+I need to see config.json to understand the config structure. Let me read it.
+
+🛠️ Reading config.json (whole file)...
+
+Config has include_unmatched: true and a sample. Note the right has "é" and "e\u0301" (e + combining acute) which are different byte sequences, so no normalization means they don't match.
+
+Now implement solve(payload, config). payload has left and right lists. config has include_unmatched.
+
+Rules: module level only plain function definitions, no decorators, annotations, default args, classes, imports. No I/O, dynamic execution, names/attributes beginning with underscore.
+
+So I can write helper functions but must be plain defs. No imports. Use builtins only.
+
+Let me write:
+
+def solve(payload, config):
+    left = payload["left"]
+    right = payload["right"]
+    include = config["include_unmatched"]
+    result = []
+    for litem in left:
+        lkey = litem["key"]
+        lval = litem["value"]
+        matched = False
+        for ritem in right:
+            if ritem["key"] == lkey:
+                matched = True
+                result.append({"key": lkey, "left": lval, "right": ritem["value"]})
+        if not matched and include:
+            result.append({"key": lkey, "
+
+🛠️ write  path=solution.py
+def solve(payload, config):
+    left = payload["left"]
+    right = payload["right"]
+    include = config["include_unmatched"]
+    result = []
+    for litem in left:
+        lkey = litem["key"]
+        lval = litem["value"]
+        matched = False
+        for ritem in right:
+            if ritem["key"] == lkey:
+                matched = True
+                result.append({"key": lkey, "left": lval, "right": ritem["value"]})
+        if not matched and include:
+            result.append({"key": lkey, "left": lval, "right": None})
+    return result
+
+
+Wrote `solution.py` with `solve(payload, config)`.
+
+It iterates the left list in order, and for each left item scans the right list in order, emitting `{key, left, right}` for every exact key match (so duplicates on both sides produce all matching pairs). When no right item matches, it emits a single `{key, left, right: null}` only if `config["include_unmatched"]` is true. Keys are compared exactly with `==` (no normalization), empty-string keys are preserved, and neither `payload` nor `config` is mutated.
+

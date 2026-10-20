@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_resident_env_calibration.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "started": 1790996719.200305,
+  "completed": 1790996720.864612,
+  "source_sha256": "7184efeb16794d88f59f7f6fef5507d09c750189be708b8187d55895a5a0e8ff",
+  "test_sha256": "f97ab08c6aff27eb050f5740acdf6193036cff4d4cceb257248a3934491cbaca",
+  "tests": 21,
+  "log_sha256": "f054bd341a6fd4bedb36146f2b12170252402ecdfb88af0c5c0dfb28e82be4f0",
+  "model_opened": false,
+  "tokenizer_or_model_metadata": false,
+  "core_or_Metal_build": false,
+  "original_v1_assets_unchanged": true,
+  "first_corrective_attempt": true
+}

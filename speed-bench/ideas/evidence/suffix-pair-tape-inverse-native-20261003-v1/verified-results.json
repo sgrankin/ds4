@@ -1,0 +1,623 @@
+{
+  "status": "RETAINED_NATIVE_INVERSE_PARITY_VERIFIED",
+  "source_revision": "d04460a9f726c371cbc91349897e33fc2447f0d6",
+  "prepared_directory": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1",
+  "prepared_manifest_sha256": "9781896e85d6ae9eee030f034a9fab0a0e0f3e2290c2c3930be20a5a36e32ca2",
+  "command_sha256": "0db865613cf9b96b8e96ba469f9b1e4990d8f0ef8bc2ccbe33b9e3d0f16d9111",
+  "native_control_identity": {
+    "reference_sha256": "fab1ace9ec151b58a7a18117c4bd0e38dd9126a36068c7b97b0f793158197f5f",
+    "teacher_token_hex": "ff1f0100670600004f0f00002ed7000093c0000023010000b9110000e6d300007a3900003480000014010000d2c301008ccc01008a8800000d010000d9020000",
+    "state": {
+      ".source.state.bin": "f841b8cd20fed2a14ce8482154dbe274af67c2fd4935aed143ad62aab6267e47",
+      ".fresh.state.bin": "a4d9d89d5bd1bf632c71d2d14a218fb04c0a16347690fd819cb9120f17f86a6d"
+    }
+  },
+  "arms": [
+    {
+      "arm": "old-native-before",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1408,
+        "shift": 65,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 81648171,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 1404.621,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/old-native-before.raw.bin",
+        "bytes": 9308256,
+        "sha256": "553d7736beb7bbf87896ac75fa9816b150054b08be4df3fe133c12747d198fef",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "fab1ace9ec151b58a7a18117c4bd0e38dd9126a36068c7b97b0f793158197f5f",
+        "candidate_sha256": null,
+        "teacher_token_hex": "ff1f0100670600004f0f00002ed7000093c0000023010000b9110000e6d300007a3900003480000014010000d2c301008ccc01008a8800000d010000d9020000",
+        "teacher_ids": [
+          73727,
+          1639,
+          3919,
+          55086,
+          49299,
+          291,
+          4537,
+          54246,
+          14714,
+          32820,
+          276,
+          115666,
+          117900,
+          34954,
+          269,
+          729
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/old-native-before.source.state.bin",
+          "bytes": 20867136,
+          "sha256": "f841b8cd20fed2a14ce8482154dbe274af67c2fd4935aed143ad62aab6267e47"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/old-native-before.fresh.state.bin",
+          "bytes": 20442428,
+          "sha256": "a4d9d89d5bd1bf632c71d2d14a218fb04c0a16347690fd819cb9120f17f86a6d"
+        }
+      }
+    },
+    {
+      "arm": "new-native",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1408,
+        "shift": 65,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 81648171,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 1495.308,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/new-native.raw.bin",
+        "bytes": 9308256,
+        "sha256": "553d7736beb7bbf87896ac75fa9816b150054b08be4df3fe133c12747d198fef",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "fab1ace9ec151b58a7a18117c4bd0e38dd9126a36068c7b97b0f793158197f5f",
+        "candidate_sha256": null,
+        "teacher_token_hex": "ff1f0100670600004f0f00002ed7000093c0000023010000b9110000e6d300007a3900003480000014010000d2c301008ccc01008a8800000d010000d9020000",
+        "teacher_ids": [
+          73727,
+          1639,
+          3919,
+          55086,
+          49299,
+          291,
+          4537,
+          54246,
+          14714,
+          32820,
+          276,
+          115666,
+          117900,
+          34954,
+          269,
+          729
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/new-native.source.state.bin",
+          "bytes": 20867136,
+          "sha256": "f841b8cd20fed2a14ce8482154dbe274af67c2fd4935aed143ad62aab6267e47"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/new-native.fresh.state.bin",
+          "bytes": 20442428,
+          "sha256": "a4d9d89d5bd1bf632c71d2d14a218fb04c0a16347690fd819cb9120f17f86a6d"
+        }
+      }
+    },
+    {
+      "arm": "new-tape-native",
+      "summary": {
+        "mode": "tape-native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1408,
+        "shift": 65,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 106814075,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 1512.879,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/new-tape-native.raw.bin",
+        "bytes": 9308256,
+        "sha256": "553d7736beb7bbf87896ac75fa9816b150054b08be4df3fe133c12747d198fef",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "fab1ace9ec151b58a7a18117c4bd0e38dd9126a36068c7b97b0f793158197f5f",
+        "candidate_sha256": null,
+        "teacher_token_hex": "ff1f0100670600004f0f00002ed7000093c0000023010000b9110000e6d300007a3900003480000014010000d2c301008ccc01008a8800000d010000d9020000",
+        "teacher_ids": [
+          73727,
+          1639,
+          3919,
+          55086,
+          49299,
+          291,
+          4537,
+          54246,
+          14714,
+          32820,
+          276,
+          115666,
+          117900,
+          34954,
+          269,
+          729
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/new-tape-native.source.state.bin",
+          "bytes": 20867136,
+          "sha256": "f841b8cd20fed2a14ce8482154dbe274af67c2fd4935aed143ad62aab6267e47"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/new-tape-native.fresh.state.bin",
+          "bytes": 20442428,
+          "sha256": "a4d9d89d5bd1bf632c71d2d14a218fb04c0a16347690fd819cb9120f17f86a6d"
+        }
+      }
+    },
+    {
+      "arm": "suffix-reuse",
+      "summary": {
+        "mode": "reuse",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1408,
+        "shift": 65,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 17,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 106814075,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": true,
+        "precancel_preserves_state": true,
+        "partial_cancel_invalidates": true,
+        "approximate_export_blocked": true,
+        "pair_inputs_reused": 195,
+        "pair_rows_rebuilt": 96,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 65,
+        "fresh_tail_tokens": 1,
+        "fresh_ms_diagnostic": 1486.067,
+        "reuse_ms_diagnostic": 86.343,
+        "mean_kl": 0.116563892813,
+        "mean_tv": 0.0682032358879,
+        "sum_delta_nll": -1.3726906342,
+        "argmax_flips": 1,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/suffix-reuse.raw.bin",
+        "bytes": 18099296,
+        "sha256": "4fa3238e229873162759824bede1509e10f478b3bb5b0ac08bbb1193226efdbd",
+        "reference_rows": 18,
+        "candidate_rows": 17,
+        "reference_sha256": "fab1ace9ec151b58a7a18117c4bd0e38dd9126a36068c7b97b0f793158197f5f",
+        "candidate_sha256": "ccc3cc11b00defcbf5d5ee177363a8222e78637242f0f8c600306c655da3fcfa",
+        "teacher_token_hex": "ff1f0100670600004f0f00002ed7000093c0000023010000b9110000e6d300007a3900003480000014010000d2c301008ccc01008a8800000d010000d9020000",
+        "teacher_ids": [
+          73727,
+          1639,
+          3919,
+          55086,
+          49299,
+          291,
+          4537,
+          54246,
+          14714,
+          32820,
+          276,
+          115666,
+          117900,
+          34954,
+          269,
+          729
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/suffix-reuse.source.state.bin",
+          "bytes": 20867136,
+          "sha256": "f841b8cd20fed2a14ce8482154dbe274af67c2fd4935aed143ad62aab6267e47"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/suffix-reuse.fresh.state.bin",
+          "bytes": 20442428,
+          "sha256": "a4d9d89d5bd1bf632c71d2d14a218fb04c0a16347690fd819cb9120f17f86a6d"
+        },
+        ".private.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/suffix-reuse.private.state.bin",
+          "bytes": 20442428,
+          "sha256": "d5ec39ecd2de50503a6606fc2515e39f1900485d071fdb50865682a18f0083cf"
+        }
+      }
+    },
+    {
+      "arm": "old-native-after",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1408,
+        "shift": 65,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 81648171,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 1478.37,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/old-native-after.raw.bin",
+        "bytes": 9308256,
+        "sha256": "553d7736beb7bbf87896ac75fa9816b150054b08be4df3fe133c12747d198fef",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "fab1ace9ec151b58a7a18117c4bd0e38dd9126a36068c7b97b0f793158197f5f",
+        "candidate_sha256": null,
+        "teacher_token_hex": "ff1f0100670600004f0f00002ed7000093c0000023010000b9110000e6d300007a3900003480000014010000d2c301008ccc01008a8800000d010000d9020000",
+        "teacher_ids": [
+          73727,
+          1639,
+          3919,
+          55086,
+          49299,
+          291,
+          4537,
+          54246,
+          14714,
+          32820,
+          276,
+          115666,
+          117900,
+          34954,
+          269,
+          729
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/old-native-after.source.state.bin",
+          "bytes": 20867136,
+          "sha256": "f841b8cd20fed2a14ce8482154dbe274af67c2fd4935aed143ad62aab6267e47"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/old-native-after.fresh.state.bin",
+          "bytes": 20442428,
+          "sha256": "a4d9d89d5bd1bf632c71d2d14a218fb04c0a16347690fd819cb9120f17f86a6d"
+        }
+      }
+    }
+  ],
+  "private_state": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/suffix-reuse.private.state.bin",
+    "bytes": 20442428,
+    "sha256": "d5ec39ecd2de50503a6606fc2515e39f1900485d071fdb50865682a18f0083cf"
+  },
+  "independent_math": {
+    "method": "Streamed FP32 rows; FP64 math.fsum/logsumexp, independent log-ratio arithmetic",
+    "rows": [
+      {
+        "step": 0,
+        "target": 73727,
+        "delta_nll": 0.020522497288187225,
+        "kl": 0.018262005423456983,
+        "tv": 0.02214011786530785,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 1,
+        "target": 1639,
+        "delta_nll": 0.002923488991786627,
+        "kl": 0.005051924995063139,
+        "tv": 0.010095946990539329,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 2,
+        "target": 3919,
+        "delta_nll": 0.29176841767513295,
+        "kl": 0.042701098703320055,
+        "tv": 0.11703023295660328,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 3,
+        "target": 55086,
+        "delta_nll": 0.6526066975091531,
+        "kl": 0.005526524215088991,
+        "tv": 0.010591243145777439,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 4,
+        "target": 49299,
+        "delta_nll": -0.02286071318677685,
+        "kl": 0.019937484493830943,
+        "tv": 0.022683406791394817,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 5,
+        "target": 291,
+        "delta_nll": 0.11220609925360137,
+        "kl": 0.019146699872898732,
+        "tv": 0.0829121641964632,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 6,
+        "target": 4537,
+        "delta_nll": -6.99744676779801e-06,
+        "kl": 4.831425001326656e-06,
+        "tv": 6.997454174675151e-06,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 7,
+        "target": 54246,
+        "delta_nll": -0.05191288536823535,
+        "kl": 0.011367768763408094,
+        "tv": 0.045882929953221366,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 8,
+        "target": 14714,
+        "delta_nll": -3.8943355207265995e-09,
+        "kl": 2.990207608426196e-09,
+        "tv": 3.894336510403664e-09,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 9,
+        "target": 32820,
+        "delta_nll": 3.2336682103562e-05,
+        "kl": 1.792213375049244e-05,
+        "tv": 3.2469131332200984e-05,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 10,
+        "target": 276,
+        "delta_nll": 1.5961177673773363e-05,
+        "kl": 1.1421846052464422e-05,
+        "tv": 1.6014727197985564e-05,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 11,
+        "target": 115666,
+        "delta_nll": 1.2462684814806835e-05,
+        "kl": 9.824900159815994e-06,
+        "tv": 1.616036916481063e-05,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 12,
+        "target": 117900,
+        "delta_nll": 0.04035448066441916,
+        "kl": 0.006057336540399552,
+        "tv": 0.03667267047160706,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 13,
+        "target": 34954,
+        "delta_nll": -6.075791541348963e-05,
+        "kl": 1.563832543124035e-05,
+        "tv": 6.392409533182754e-05,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 14,
+        "target": 269,
+        "delta_nll": -2.141914354991929,
+        "kl": 1.7430914655468346,
+        "tv": 0.6085784316614756,
+        "argmax_flip": 1,
+        "bit_equal": 0
+      },
+      {
+        "step": 15,
+        "target": 729,
+        "delta_nll": -0.27637736332631135,
+        "kl": 0.10877189500672403,
+        "tv": 0.19083624204010466,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 16,
+        "target": -1,
+        "delta_nll": 0,
+        "kl": 0.0016123326355389524,
+        "tv": 0.011896054349946058,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      }
+    ],
+    "summary": {
+      "mean_kl": 0.11656389281277453,
+      "mean_tv": 0.0682032358878811,
+      "sum_delta_nll": -1.3726906342028968,
+      "argmax_flips": 1,
+      "bit_equal_rows": 0
+    }
+  },
+  "pressure": {
+    "samples": 215,
+    "normal_samples": 215,
+    "bad_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_plus_compressor_gib": 81.68525695800781
+  },
+  "historical_release_proof": {
+    "time": 1790988602.0758002,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "lock_reacquired": true,
+    "live_model_processes": [],
+    "normal_pressure_samples": 215,
+    "bad_pressure_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gib": 81.68525695800781
+  },
+  "structural_controls": {
+    "source_odd_destination_even": true,
+    "pair_boundary_rows": 0,
+    "production_fresh_tail_recommendation": false,
+    "geometry_expected_first_tail_completes_pending_pair": true
+  },
+  "main_launch_log": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-followup-inverse-root-launch-20261003-v1.log",
+    "bytes": 888,
+    "sha256": "6e3c7421799aac13db4596d0fb3c06a4be2c00d9078c15feae3680469407d12c"
+  },
+  "timing_diagnostic": true,
+  "accuracy_claim": false,
+  "forgetting_claim": false,
+  "default_promotion": false,
+  "archive_model_assets_accessed": false
+}

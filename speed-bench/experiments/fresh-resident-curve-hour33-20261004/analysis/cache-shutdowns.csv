@@ -1,0 +1,11 @@
+arm,case,hot_bytes,ssd_bytes,metadata_bytes,endpoints,chunks,pinned_endpoints,hot_reads,disk_reads,endpoint_evictions
+count0-reference,dedupe,0,106395039,77236,7,406,0,0,85,0
+count0-reference,bucket,0,213603968,151755,14,801,0,0,79,0
+subs3-before,dedupe,0,106395039,77239,7,406,0,0,85,0
+subs3-before,bucket,0,213603968,151758,14,801,0,0,79,0
+subs1,dedupe,0,106451411,77229,7,406,0,0,85,0
+subs1,bucket,0,213660340,151748,14,801,0,0,79,0
+subs2,dedupe,0,106451411,77229,7,406,0,0,85,0
+subs2,bucket,0,213660340,151748,14,801,0,0,79,0
+subs3-after,dedupe,0,106395039,77235,7,406,0,0,85,0
+subs3-after,bucket,0,213603968,151754,14,801,0,0,79,0

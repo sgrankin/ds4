@@ -1,0 +1,78 @@
+{
+  "status": "PASS",
+  "source_merge_initial": "3d9670ea",
+  "runtime_parent": "0b20e1b4",
+  "evidence_parent": "2bf2ccc9",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1052,
+      "sha256": "cf2567e4e325bd5c9412c972d9c6f30a4c7a8c1caf8a687509d35cdaf087256f"
+    },
+    {
+      "path": "additional-tests.json",
+      "bytes": 2762,
+      "sha256": "de9aba0595fd615ef10cbd808ba0376e505b0c21176c7328f851b3e671a006dc"
+    },
+    {
+      "path": "agent-test.log",
+      "bytes": 20,
+      "sha256": "1b2a7a25463279fc02a7ba0535521ca59695e8480b97984d2ac9c882c65dbf3b"
+    },
+    {
+      "path": "build.log",
+      "bytes": 1769,
+      "sha256": "a3ed86ce2e82665b481b129fd605c5cd5de5bcc6ee2e62f9c3862264af5ea9e2"
+    },
+    {
+      "path": "command.txt",
+      "bytes": 94,
+      "sha256": "46a2daa10c5e5a20efdc5e491f199a2a9d47a6457ce6dd062516c58ab014c5e4"
+    },
+    {
+      "path": "export-guards.log",
+      "bytes": 55,
+      "sha256": "ea0f5c728bfa2bfad4cd27142683b61f27d05039f86061b3a8ab49960e8a51d8"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 3362,
+      "sha256": "d3332a3a26f37a8a1c2578c30d73753e750a2d215d713e526e74243fc2fa961f"
+    },
+    {
+      "path": "mock-compile.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-link.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-test.log",
+      "bytes": 350,
+      "sha256": "1ef145c1eab943b55a58c53c93dd34fe638b284a6245e00b2175fe5a054cd451"
+    },
+    {
+      "path": "resident-route.log",
+      "bytes": 156,
+      "sha256": "932a25ead47437c0673ad06947a208a365b0257755dbde6e609be2f3196690d3"
+    },
+    {
+      "path": "tag-compile.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tag-link.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tag-test.log",
+      "bytes": 201,
+      "sha256": "f1ac0551e13634224708debd30edfa58921e6373d0d97806e26826b71cf3b2ab"
+    }
+  ]
+}

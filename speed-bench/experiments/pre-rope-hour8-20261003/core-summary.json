@@ -1,0 +1,28 @@
+{
+  "moves": 8,
+  "teacher_rows": 32,
+  "native_total_seconds": 819.097802,
+  "reuse_total_seconds": 342.741537,
+  "edit_saving_percent": 58.15621331627015,
+  "mean_delta_nll": -1.536341370578219e-05,
+  "mean_kl": 1.3511095273887282e-05,
+  "max_kl": 6.63283594253e-05,
+  "greedy_flips": 0,
+  "state_hash_count": 1,
+  "prerope_hash_count": 1,
+  "source_state_bytes": 37248568,
+  "source_prerope_bytes": 3307789,
+  "live_archive_bytes": 5940652,
+  "fresh_tail": 128,
+  "source_start": 2048,
+  "source_end": 4097,
+  "reused": 2049,
+  "interpretation": "Four teacher tokens per move; changed-fact screen, not an open-ended task score.",
+  "perplexity_ratio": 0.9999846367043108,
+  "pressure": {
+    "samples": 1142,
+    "bad": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gb": 85.59596252441406
+  }
+}

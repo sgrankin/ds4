@@ -1,0 +1,56 @@
+{
+  "suite": "calibration",
+  "model": "DeepSeek-V4.1-Flash-Q2.gguf",
+  "context": 8192,
+  "mapped_markers": 46,
+  "inference_binary": "speed-bench/overthink_pilot",
+  "source_change": "uwunypqu",
+  "source_commit_at_run": "6e2a2a18",
+  "caution": "Timing is exploratory and includes differing expert-cache warmness; no speedup established.",
+  "arms": [
+    {
+      "lambda": 0,
+      "correct": 4,
+      "n": 4,
+      "generated_tokens": 315,
+      "reasoning_tokens": 301,
+      "cap_hits": 0,
+      "invalid": 0,
+      "decode_seconds": 15.90528
+    },
+    {
+      "lambda": 0.5,
+      "correct": 4,
+      "n": 4,
+      "generated_tokens": 315,
+      "reasoning_tokens": 301,
+      "cap_hits": 0,
+      "invalid": 0,
+      "decode_seconds": 12.822918
+    },
+    {
+      "lambda": 1,
+      "correct": 4,
+      "n": 4,
+      "generated_tokens": 315,
+      "reasoning_tokens": 301,
+      "cap_hits": 0,
+      "invalid": 0,
+      "decode_seconds": 13.674045
+    }
+  ],
+  "trace_sha256": {
+    "dice-lambda0.0.txt": "c3480feda59101203fd905e2b6bd48409f7adfc722630ecee6b55b76ed21915b",
+    "python-lambda0.0.txt": "c92324b6aeaec539e2ac4dd1b64f1c6b58e8ac854043c325374d3e3b5e31ec99",
+    "percentage-lambda0.5.txt": "bc586412206cf1505b12590576e4e401a62216fec22650607a2359744504c286",
+    "python-lambda0.5.txt": "c92324b6aeaec539e2ac4dd1b64f1c6b58e8ac854043c325374d3e3b5e31ec99",
+    "percentage-lambda0.0.txt": "bc586412206cf1505b12590576e4e401a62216fec22650607a2359744504c286",
+    "dice-lambda0.5.txt": "c3480feda59101203fd905e2b6bd48409f7adfc722630ecee6b55b76ed21915b",
+    "python-lambda1.0.txt": "c92324b6aeaec539e2ac4dd1b64f1c6b58e8ac854043c325374d3e3b5e31ec99",
+    "dice-lambda1.0.txt": "c3480feda59101203fd905e2b6bd48409f7adfc722630ecee6b55b76ed21915b",
+    "percentage-lambda1.0.txt": "bc586412206cf1505b12590576e4e401a62216fec22650607a2359744504c286",
+    "binary-lambda1.0.txt": "b526c55f864cef17a9dd3154aa28b8c866eb89161055255e0ce04cf2d17d241e",
+    "binary-lambda0.0.txt": "b526c55f864cef17a9dd3154aa28b8c866eb89161055255e0ce04cf2d17d241e",
+    "binary-lambda0.5.txt": "b526c55f864cef17a9dd3154aa28b8c866eb89161055255e0ce04cf2d17d241e"
+  }
+}

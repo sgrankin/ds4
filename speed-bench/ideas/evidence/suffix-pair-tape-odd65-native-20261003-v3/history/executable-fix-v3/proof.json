@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "tests": 35,
+  "negative_cases": 225,
+  "returncode": 0,
+  "runner": {
+    "sha256": "46e85f153cd82e1dcab05699a5cb2dabfcc08f0eb0bde14557488450011f3a4a",
+    "bytes": 16884
+  },
+  "test_source": {
+    "sha256": "2a3d0d50f18c5292de3862931e7b39884823b86b6f111bba1951de880cc83475",
+    "bytes": 21494
+  },
+  "output": {
+    "sha256": "0b339285bbb47a2f2cacdcca8ea1a9aa59a1ab9703c0ae406c8296f529b6c75a",
+    "bytes": 3977
+  },
+  "changed_contract": "Preserve copied probe mode and fail before guard/model metadata on nonexecutable probes",
+  "model_opened": false,
+  "prior_guarded_attempt": "V2 failed on exec EACCES before baseline model process, metadata only under guard"
+}

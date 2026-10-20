@@ -1,0 +1,1018 @@
+{
+  "rows": [
+    {
+      "case": "ledger",
+      "arm": "high0-before",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "unlimited",
+      "wall_seconds": 108.79739791700558,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 1430,
+      "http_reasoning_tokens": 945,
+      "final_text_length": 284,
+      "first_code_bytes": 1023,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`. It selects the latest event per key, handles tombstones and resurrection, respects `include_deleted`, sorts by key, and does not mutate inputs.",
+      "errors": "",
+      "read_seconds": 32.051118292001775,
+      "read_thinking_tokens": 40,
+      "read_output_tokens": 136,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 878,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 30.275417625001865,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 446,
+      "write_cached_tokens": 1014,
+      "write_fresh_input_tokens": 176,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 46.46934966700792,
+      "final_thinking_tokens": 777,
+      "final_output_tokens": 848,
+      "final_cached_tokens": 1636,
+      "final_fresh_input_tokens": 44,
+      "final_effort": "high",
+      "final_budget": 0,
+      "final_status": "completed"
+    },
+    {
+      "case": "lru",
+      "arm": "high0-before",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "unlimited",
+      "wall_seconds": 66.075984916999,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 671,
+      "http_reasoning_tokens": 220,
+      "final_text_length": 284,
+      "first_code_bytes": 830,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`. It tracks LRU hits/misses/evictions, handles non-positive capacity, preserves empty keys, and returns the required result without mutating inputs.",
+      "errors": "",
+      "read_seconds": 31.54655566699512,
+      "read_thinking_tokens": 28,
+      "read_output_tokens": 123,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 860,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 24.965958000000683,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 415,
+      "write_cached_tokens": 983,
+      "write_fresh_input_tokens": 52,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 9.561216665999382,
+      "final_thinking_tokens": 64,
+      "final_output_tokens": 133,
+      "final_cached_tokens": 1450,
+      "final_fresh_input_tokens": 43,
+      "final_effort": "high",
+      "final_budget": 0,
+      "final_status": "completed"
+    },
+    {
+      "case": "ledger",
+      "arm": "budget64",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "budget64",
+      "wall_seconds": 73.61752475000685,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 747,
+      "http_reasoning_tokens": 232,
+      "final_text_length": 423,
+      "first_code_bytes": 1023,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the latest event per exact key by highest revision, breaking ties by last payload order, emits winning puts in `live`, and emits winning deletes in `deleted` only when `config[\"include_deleted\"]` is true. Both lists are sorted by key using normal Python string ordering.",
+      "errors": "",
+      "read_seconds": 31.88664300000528,
+      "read_thinking_tokens": 40,
+      "read_output_tokens": 136,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 878,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 30.011942540993914,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 446,
+      "write_cached_tokens": 1014,
+      "write_fresh_input_tokens": 176,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 11.717336250003427,
+      "final_thinking_tokens": 64,
+      "final_output_tokens": 165,
+      "final_cached_tokens": 1636,
+      "final_fresh_input_tokens": 44,
+      "final_effort": "high",
+      "final_budget": 64,
+      "final_status": "completed"
+    },
+    {
+      "case": "lru",
+      "arm": "budget64",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "budget64",
+      "wall_seconds": 65.06210549999378,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 671,
+      "http_reasoning_tokens": 220,
+      "final_text_length": 284,
+      "first_code_bytes": 830,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`. It tracks LRU hits/misses/evictions, handles non-positive capacity, preserves empty keys, and returns the required result without mutating inputs.",
+      "errors": "",
+      "read_seconds": 30.88182183400204,
+      "read_thinking_tokens": 28,
+      "read_output_tokens": 123,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 860,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 24.597184083992033,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 415,
+      "write_cached_tokens": 983,
+      "write_fresh_input_tokens": 52,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 9.581614709008136,
+      "final_thinking_tokens": 64,
+      "final_output_tokens": 133,
+      "final_cached_tokens": 1450,
+      "final_fresh_input_tokens": 43,
+      "final_effort": "high",
+      "final_budget": 64,
+      "final_status": "completed"
+    },
+    {
+      "case": "ledger",
+      "arm": "none",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "none",
+      "wall_seconds": 106.13644933399337,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 664,
+      "http_reasoning_tokens": 168,
+      "final_text_length": 356,
+      "first_code_bytes": 1023,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in the specified solution file. It selects the greatest-revision event per exact key (last on ties), emits winning puts as `{key, revision, value}`, emits winning deletes as `{key, revision}` only when `include_deleted` is true, sorts both lists by key, preserves empty keys and JSON values, and does not mutate inputs.",
+      "errors": "",
+      "read_seconds": 31.856449583996437,
+      "read_thinking_tokens": 40,
+      "read_output_tokens": 136,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 878,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 30.038395667012082,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 446,
+      "write_cached_tokens": 1014,
+      "write_fresh_input_tokens": 176,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 44.24003716700827,
+      "final_thinking_tokens": 0,
+      "final_output_tokens": 82,
+      "final_cached_tokens": 0,
+      "final_fresh_input_tokens": 1485,
+      "final_effort": "none",
+      "final_budget": 0,
+      "final_status": "completed"
+    },
+    {
+      "case": "lru",
+      "arm": "none",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "none",
+      "wall_seconds": 97.36640516700572,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 633,
+      "http_reasoning_tokens": 156,
+      "final_text_length": 380,
+      "first_code_bytes": 830,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`. It tracks hits/misses with an LRU list, moves hits to most-recently-used, evicts the least-recently-used on overflow, records evictions in order, and handles non-positive capacity by treating every access as a miss with empty cache/evictions.",
+      "errors": "",
+      "read_seconds": 31.44081162501243,
+      "read_thinking_tokens": 28,
+      "read_output_tokens": 123,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 860,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 24.63807350001298,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 415,
+      "write_cached_tokens": 983,
+      "write_fresh_input_tokens": 52,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 41.286061916995095,
+      "final_thinking_tokens": 0,
+      "final_output_tokens": 95,
+      "final_cached_tokens": 0,
+      "final_fresh_input_tokens": 1310,
+      "final_effort": "none",
+      "final_budget": 0,
+      "final_status": "completed"
+    },
+    {
+      "case": "ledger",
+      "arm": "high0-after",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "unlimited",
+      "wall_seconds": 109.29088870799751,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 1430,
+      "http_reasoning_tokens": 945,
+      "final_text_length": 284,
+      "first_code_bytes": 1023,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`. It selects the latest event per key, handles tombstones and resurrection, respects `include_deleted`, sorts by key, and does not mutate inputs.",
+      "errors": "",
+      "read_seconds": 32.17780579200189,
+      "read_thinking_tokens": 40,
+      "read_output_tokens": 136,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 878,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 30.267804167000577,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 446,
+      "write_cached_tokens": 1014,
+      "write_fresh_input_tokens": 176,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 46.84380950000195,
+      "final_thinking_tokens": 777,
+      "final_output_tokens": 848,
+      "final_cached_tokens": 1636,
+      "final_fresh_input_tokens": 44,
+      "final_effort": "high",
+      "final_budget": 0,
+      "final_status": "completed"
+    },
+    {
+      "case": "lru",
+      "arm": "high0-after",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "unlimited",
+      "wall_seconds": 65.38584387500305,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 671,
+      "http_reasoning_tokens": 220,
+      "final_text_length": 284,
+      "first_code_bytes": 830,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`. It tracks LRU hits/misses/evictions, handles non-positive capacity, preserves empty keys, and returns the required result without mutating inputs.",
+      "errors": "",
+      "read_seconds": 30.94729612499941,
+      "read_thinking_tokens": 28,
+      "read_output_tokens": 123,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 860,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 24.990629416002776,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 415,
+      "write_cached_tokens": 983,
+      "write_fresh_input_tokens": 52,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 9.44663445900369,
+      "final_thinking_tokens": 64,
+      "final_output_tokens": 133,
+      "final_cached_tokens": 1450,
+      "final_fresh_input_tokens": 43,
+      "final_effort": "high",
+      "final_budget": 0,
+      "final_status": "completed"
+    },
+    {
+      "case": "ledger",
+      "arm": "budget1",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "budget1",
+      "wall_seconds": 69.1442158340069,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 684,
+      "http_reasoning_tokens": 169,
+      "final_text_length": 423,
+      "first_code_bytes": 1023,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the latest event per exact key by highest revision, breaking ties by last payload order, emits winning puts in `live`, and emits winning deletes in `deleted` only when `config[\"include_deleted\"]` is true. Both lists are sorted by key using normal Python string ordering.",
+      "errors": "",
+      "read_seconds": 31.775274625004386,
+      "read_thinking_tokens": 40,
+      "read_output_tokens": 136,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 878,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 29.835946000006516,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 446,
+      "write_cached_tokens": 1014,
+      "write_fresh_input_tokens": 176,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 7.531159625010332,
+      "final_thinking_tokens": 1,
+      "final_output_tokens": 102,
+      "final_cached_tokens": 1636,
+      "final_fresh_input_tokens": 44,
+      "final_effort": "high",
+      "final_budget": 1,
+      "final_status": "completed"
+    },
+    {
+      "case": "lru",
+      "arm": "budget1",
+      "protocol": "natural",
+      "write_budget": 128,
+      "final_policy": "budget1",
+      "wall_seconds": 62.72377833300561,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 610,
+      "http_reasoning_tokens": 157,
+      "final_text_length": 282,
+      "first_code_bytes": 830,
+      "code_correct": true,
+      "tests_passed": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`. It tracks hits, misses, evictions, and final LRU-ordered cache, handles non-positive capacity, preserves empty keys, and does not mutate inputs.",
+      "errors": "",
+      "read_seconds": 31.129114334005862,
+      "read_thinking_tokens": 28,
+      "read_output_tokens": 123,
+      "read_cached_tokens": 0,
+      "read_fresh_input_tokens": 860,
+      "read_effort": "high",
+      "read_budget": 0,
+      "read_status": "completed",
+      "write_seconds": 25.52342141700501,
+      "write_thinking_tokens": 128,
+      "write_output_tokens": 415,
+      "write_cached_tokens": 983,
+      "write_fresh_input_tokens": 52,
+      "write_effort": "high",
+      "write_status": "completed",
+      "final_seconds": 6.0698247920081485,
+      "final_thinking_tokens": 1,
+      "final_output_tokens": 72,
+      "final_cached_tokens": 1450,
+      "final_fresh_input_tokens": 43,
+      "final_effort": "high",
+      "final_budget": 1,
+      "final_status": "completed"
+    }
+  ],
+  "by_arm": {
+    "high0-before": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 174.8733828340046,
+      "output_tokens": 2101,
+      "reasoning_tokens": 1165,
+      "role_seconds": {
+        "READ": 63.59767395899689,
+        "WRITE": 55.24137562500255,
+        "FINAL": 56.0305663330073
+      },
+      "role_thinking": {
+        "READ": 68,
+        "WRITE": 256,
+        "FINAL": 841
+      },
+      "role_output_tokens": {
+        "READ": 259,
+        "WRITE": 861,
+        "FINAL": 981
+      },
+      "role_cached_tokens": {
+        "READ": 0,
+        "WRITE": 1997,
+        "FINAL": 3086
+      },
+      "role_fresh_input_tokens": {
+        "READ": 1738,
+        "WRITE": 228,
+        "FINAL": 87
+      },
+      "forced": 2,
+      "deferred": 0
+    },
+    "budget64": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 138.67963025000063,
+      "output_tokens": 1418,
+      "reasoning_tokens": 452,
+      "role_seconds": {
+        "READ": 62.76846483400732,
+        "WRITE": 54.60912662498595,
+        "FINAL": 21.298950959011563
+      },
+      "role_thinking": {
+        "READ": 68,
+        "WRITE": 256,
+        "FINAL": 128
+      },
+      "role_output_tokens": {
+        "READ": 259,
+        "WRITE": 861,
+        "FINAL": 298
+      },
+      "role_cached_tokens": {
+        "READ": 0,
+        "WRITE": 1997,
+        "FINAL": 3086
+      },
+      "role_fresh_input_tokens": {
+        "READ": 1738,
+        "WRITE": 228,
+        "FINAL": 87
+      },
+      "forced": 4,
+      "deferred": 0
+    },
+    "none": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 203.5028545009991,
+      "output_tokens": 1297,
+      "reasoning_tokens": 324,
+      "role_seconds": {
+        "READ": 63.297261209008866,
+        "WRITE": 54.67646916702506,
+        "FINAL": 85.52609908400336
+      },
+      "role_thinking": {
+        "READ": 68,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_output_tokens": {
+        "READ": 259,
+        "WRITE": 861,
+        "FINAL": 177
+      },
+      "role_cached_tokens": {
+        "READ": 0,
+        "WRITE": 1997,
+        "FINAL": 0
+      },
+      "role_fresh_input_tokens": {
+        "READ": 1738,
+        "WRITE": 228,
+        "FINAL": 2795
+      },
+      "forced": 2,
+      "deferred": 0
+    },
+    "high0-after": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 174.67673258300056,
+      "output_tokens": 2101,
+      "reasoning_tokens": 1165,
+      "role_seconds": {
+        "READ": 63.1251019170013,
+        "WRITE": 55.25843358300335,
+        "FINAL": 56.29044395900564
+      },
+      "role_thinking": {
+        "READ": 68,
+        "WRITE": 256,
+        "FINAL": 841
+      },
+      "role_output_tokens": {
+        "READ": 259,
+        "WRITE": 861,
+        "FINAL": 981
+      },
+      "role_cached_tokens": {
+        "READ": 0,
+        "WRITE": 1997,
+        "FINAL": 3086
+      },
+      "role_fresh_input_tokens": {
+        "READ": 1738,
+        "WRITE": 228,
+        "FINAL": 87
+      },
+      "forced": 2,
+      "deferred": 0
+    },
+    "budget1": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 131.8679941670125,
+      "output_tokens": 1294,
+      "reasoning_tokens": 326,
+      "role_seconds": {
+        "READ": 62.90438895901025,
+        "WRITE": 55.359367417011526,
+        "FINAL": 13.60098441701848
+      },
+      "role_thinking": {
+        "READ": 68,
+        "WRITE": 256,
+        "FINAL": 2
+      },
+      "role_output_tokens": {
+        "READ": 259,
+        "WRITE": 861,
+        "FINAL": 174
+      },
+      "role_cached_tokens": {
+        "READ": 0,
+        "WRITE": 1997,
+        "FINAL": 3086
+      },
+      "role_fresh_input_tokens": {
+        "READ": 1738,
+        "WRITE": 228,
+        "FINAL": 87
+      },
+      "forced": 4,
+      "deferred": 0
+    }
+  },
+  "budget_summaries": {
+    "high0-before": [
+      {
+        "id": "chatcmpl-88eeeb5eeda48467e200cdbc",
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 40,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-0696da7d17eaa55913856b36",
+        "context": "1014..1190:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-76630f8ef3c54aabf976312a",
+        "context": "1636..1680:44",
+        "budget": 0,
+        "thinking_tokens": 777,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-518ad45a0cf5d00137fb6288",
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 28,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-101e0515e5b3029a4d0c3344",
+        "context": "983..1035:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-ee7f668c603e621e2db07a41",
+        "context": "1450..1493:43",
+        "budget": 0,
+        "thinking_tokens": 64,
+        "forced": 0,
+        "deferred": 0
+      }
+    ],
+    "budget64": [
+      {
+        "id": "chatcmpl-784ce9a5596f5fa82823dc8d",
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 40,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-b75830be9b327f40ede6b517",
+        "context": "1014..1190:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-a36263f5644db2dc2c4eb173",
+        "context": "1636..1680:44",
+        "budget": 64,
+        "thinking_tokens": 64,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-b526d6af4ad87dd1aa37aa04",
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 28,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-857068af729f8b40d9e8086d",
+        "context": "983..1035:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-9ef341be193102f17d8493f3",
+        "context": "1450..1493:43",
+        "budget": 64,
+        "thinking_tokens": 64,
+        "forced": 1,
+        "deferred": 0
+      }
+    ],
+    "none": [
+      {
+        "id": "chatcmpl-29902d472d3ea08eedbba8db",
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 40,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-55e7519da76f50480aa3c44a",
+        "context": "1014..1190:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-2b931607970de2e15759615b",
+        "context": "0..1485:1485",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-d15b742096afa34cbef5072b",
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 28,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-b1477719a3e60cfd49e42d05",
+        "context": "983..1035:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-d0be59322313449631b575ef",
+        "context": "0..1310:1310",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      }
+    ],
+    "high0-after": [
+      {
+        "id": "chatcmpl-ca6a61b16e4a1bcc06bd2725",
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 40,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-fe879b5ec97af3d31ac0f1ff",
+        "context": "1014..1190:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-1bbdf1ba8c10534689d61950",
+        "context": "1636..1680:44",
+        "budget": 0,
+        "thinking_tokens": 777,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-ac4978fa2fe09f04843ccc68",
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 28,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-deb394c34b3439dfa2c35770",
+        "context": "983..1035:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-49c0cf6cf037ebd499f9bcfc",
+        "context": "1450..1493:43",
+        "budget": 0,
+        "thinking_tokens": 64,
+        "forced": 0,
+        "deferred": 0
+      }
+    ],
+    "budget1": [
+      {
+        "id": "chatcmpl-d32263d6d36a4ceb44daa403",
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 40,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-6afe22438ad5b3357fa8d8a6",
+        "context": "1014..1190:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-d441c2ffb087cd01fb4947bd",
+        "context": "1636..1680:44",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-fa1d680d94813a6fef7e2abb",
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 28,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-f65066952690ae128faa2d67",
+        "context": "983..1035:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-bb580b155d58da13d4c5d001",
+        "context": "1450..1493:43",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      }
+    ]
+  },
+  "scope": "FINAL policy only; READ high/0 and WRITE high/128 fixed. No paired NLL/KL.",
+  "pre_final_controls": {
+    "high0-before": {
+      "ledger": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": true,
+        "final_emitted_bytes_equal": true
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": true,
+        "final_emitted_bytes_equal": true
+      }
+    },
+    "budget64": {
+      "ledger": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": false,
+        "final_emitted_bytes_equal": false
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": true,
+        "final_emitted_bytes_equal": true
+      }
+    },
+    "none": {
+      "ledger": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": false,
+        "final_emitted_bytes_equal": false
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": false,
+        "final_emitted_bytes_equal": false
+      }
+    },
+    "high0-after": {
+      "ledger": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": true,
+        "final_emitted_bytes_equal": true
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": true,
+        "final_emitted_bytes_equal": true
+      }
+    },
+    "budget1": {
+      "ledger": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": false,
+        "final_emitted_bytes_equal": false
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "read_emitted_bytes_equal": true,
+        "write_emitted_bytes_equal": true,
+        "read_write_usage_equal": true,
+        "quality_equal": true,
+        "final_text_equal": false,
+        "final_emitted_bytes_equal": false
+      }
+    }
+  },
+  "native_repeat": {
+    "ledger": {
+      "final_text_equal": true,
+      "role_usage_equal": true,
+      "quality_equal": true
+    },
+    "lru": {
+      "final_text_equal": true,
+      "role_usage_equal": true,
+      "quality_equal": true
+    }
+  },
+  "native_mean_wall_seconds": 174.77505770850257,
+  "wall_change_vs_native_mean_percent": {
+    "high0-before": 0.05625809929126202,
+    "budget64": -20.65250495794627,
+    "none": 16.43701176194716,
+    "high0-after": -0.05625809929126202,
+    "budget1": -24.54987805700074
+  },
+  "native_after_vs_before_wall_percent": -0.11245293469887008,
+  "case_wall_change_vs_native_mean_percent": {
+    "ledger": {
+      "high0-before": -0.2262802824621546,
+      "budget64": -32.488327649994154,
+      "none": -2.6665292515300254,
+      "high0-after": 0.2262802824621435,
+      "budget1": -36.5906194192827
+    },
+    "lru": {
+      "high0-before": 0.5249744723146099,
+      "budget64": -1.0174951956060663,
+      "none": 48.12878546069543,
+      "high0-after": -0.524974472314621,
+      "budget1": -4.574918956518214
+    }
+  }
+}

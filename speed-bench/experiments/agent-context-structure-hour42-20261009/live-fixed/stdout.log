@@ -1,0 +1,44 @@
+READY
+
+READY
+
+I'll locate the obsolete turn by its header, archive it, then delete it.
+
+🛠️ $ cd /Volumes/Models/ds4/.workspaces/agent-context-structure-20261009/live-fixed && grep -n "OBSOLETE_CASE_A" context.txt | head -5
+
+248:<｜User｜>[OBSOLETE_CASE_A] Archived code: EMBER-7319. This entire user turn is old audit history, which may later be archived and deleted.
+314:<｜DSML｜ parameter name="command" string="true">cd /Volumes/Models/ds4/.workspaces/agent-context-structure-20261009/live-fixed && grep -n "OBSOLETE_CASE_A" context.txt | head -5</｜DSML｜ parameter>
+[0mI found the turn. Let me identify its stable ID header.
+
+🛠️ $ cd /Volumes/Models/ds4/.workspaces/agent-context-structure-20261009/live-fixed && awk 'NR>=240 && NR<=250' context.txt | grep -n "DS4_TURN"
+
+8:[[DS4_TURN 1 role=user]]
+[0mThe obsolete turn is ID 1. Now I'll archive it and delete it in one script.
+
+🛠️ $ cd /Volumes/Models/ds4/.workspaces/agent-context-structure-20261009/live-fixed && python3 - <<'PY'
+from pathlib import Path
+import re
+p = Path("context.txt"); s = p.read_text()
+parts = re.split(r"(\n\[\[DS4_TURN (\d+) role=\w+\]\]\n)", s)
+drop = {1}
+out = [parts[0]]
+for i in range(1, len(parts), 3):
+    tid = int(parts[i+1])
+    if tid in drop:
+        Path("archived-turn.txt").write_text(parts[i] + parts[i+2])
+    else:
+        out += [parts[i], parts[i+2]]
+p.write_text(''.join(out))
+print("archived and dropped turn", sorted(drop))
+PY
+
+archived and dropped turn [1]
+[0mCLEANED
+
+
+
+🛠️ $ cd /Volumes/Models/ds4/.workspaces/agent-context-structure-20261009/live-fixed && grep -o "EMBER-[0-9]*" archived-turn.txt
+
+EMBER-7319
+[0m{"archived_code": "EMBER-7319", "current_key": "COVE-3917"}
+

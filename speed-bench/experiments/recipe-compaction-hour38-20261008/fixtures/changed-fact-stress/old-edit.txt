@@ -1,0 +1,7 @@
+Earlier tentative algorithm review, superseded by the authoritative current contract retained later:
+A reviewer initially claimed that any duplicate event should refresh the stored timestamp, including a rejected duplicate. Under that tentative rule, a stream of repeated events would keep extending the rejection window.
+They used timestamps 0, 4, 5 with ttl5 as an example and predicted that both later events would be rejected, because the event at4 refreshed the remembered timestamp. That prediction belongs to the earlier tentative interpretation.
+Another reviewer argued that a rejection ought to update per-key state, since the most recent observed event seemed simpler to remember than the most recent accepted event. The tentative implementation tracked the last seen timestamp for every exact key.
+The first draft set the remembered time before checking whether the gap was large enough. It treated the time-window policy as a cooldown after every observation rather than a cooldown after an accepted event.
+An old note described equality as expired but still used the last observed timestamp. That made the equal-boundary example at t5 appear to be too early after the rejected observation at t4.
+This earlier interpretation was used during preliminary discussion, before the final contract was written. The full record is retained for comparison with the subsequent correction. The later current contract remains authoritative.

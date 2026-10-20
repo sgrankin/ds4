@@ -1,0 +1,63 @@
+{
+  "files": {
+    "README.md": {
+      "bytes": 2478,
+      "sha256": "00c340b795709f73e297e3d0a0c25432b7282a2f81d0eb7a1ba8a2b9deec0b07"
+    },
+    "auxiliary-object-proof.json": {
+      "bytes": 1240,
+      "sha256": "685cb308a501fb81867d806d00a8e3d60e69a3e7f855a9d3cc3cc5233a65e6bf"
+    },
+    "baseline-core-proof.json": {
+      "bytes": 1351,
+      "sha256": "9fc7a478ede2feb21d1a15a71e09dc5aa6eb829463feb6acba51cb3e2ae24d3c"
+    },
+    "baseline-frontend-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "baseline-selftest.log": {
+      "bytes": 45,
+      "sha256": "6c4864222a435f8c3d7ad3213b595a618200e2b15c6f98ab638f02577d5a7a1b"
+    },
+    "extended-driver-cpu-tests.log": {
+      "bytes": 1890,
+      "sha256": "37814059ccaa5461f7a72c9b1e451d2d6e69c97fcb0bf154f3b0ed6505479b4f"
+    },
+    "final-actual-state-fixture.log": {
+      "bytes": 75,
+      "sha256": "2917b54ad0d566dc307a4b0f23c5e15702af27d21b1e620b1da59055fb343b5c"
+    },
+    "final-link-cpu-proof.json": {
+      "bytes": 9973,
+      "sha256": "1f1846c95a2edc65dd51fc5cd3a36d56a70dfa12a3956212d6bd5146b9a433d0"
+    },
+    "frozen-object-reuse-proof.json": {
+      "bytes": 2497,
+      "sha256": "15a62aee8ea5b003889037bf62c1f429fd0dd072cc35084d69efdbf8790a1561"
+    },
+    "manifest.json": {
+      "bytes": 3669,
+      "sha256": "2b8c227c2a008bd84c279d39c528a9aa7d11660dba8c573d249f901ae15c44d3"
+    },
+    "new-frontend-compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "new-selftest.log": {
+      "bytes": 45,
+      "sha256": "6c4864222a435f8c3d7ad3213b595a618200e2b15c6f98ab638f02577d5a7a1b"
+    },
+    "run_suffix_pair_tape_followup.py.diff": {
+      "bytes": 24007,
+      "sha256": "f56e5a2d0229028006e23a86d540cf07a8b2f02783701312050ee689e0f82c0b"
+    },
+    "suffix_pair_tape_followup_bench.c.diff": {
+      "bytes": 11893,
+      "sha256": "1505bdb0a5366f45f83b474ae59bb56ded94299454acdca136e1b23103998c74"
+    }
+  },
+  "build_directory": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1",
+  "helper_binary_sha256": "8c3585fb8cd57d39bb91a87fc37807b54d20637789f373ac37688f6b8b68ce31",
+  "baseline_binary_sha256": "6ee762d846890d850af362198f2ab9cfb0023294b7050dabd8d8ba72d57d6f5a"
+}

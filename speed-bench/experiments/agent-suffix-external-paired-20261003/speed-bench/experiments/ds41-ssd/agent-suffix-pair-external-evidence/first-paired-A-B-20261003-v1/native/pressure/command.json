@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/run_agent_suffix_pair_external.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native",
+    "--manifest-sha256",
+    "1143a7812d739c9215bed24e186b83eaed8ba5406ef1c67d229b66d2795e8a57"
+  ],
+  "initial": {
+    "time": 1791007256.637988,
+    "level": 1,
+    "swap_gb": 0.009951171875,
+    "physical_gb": 128.0,
+    "free_gb": 54.98016357421875,
+    "file_backed_gb": 56.55354309082031,
+    "wired_gb": 3.0690155029296875,
+    "compressor_gb": 9.235107421875
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

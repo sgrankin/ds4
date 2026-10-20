@@ -1,0 +1,14 @@
+{
+  "time": 1790995163.1515899,
+  "status": "PASS_MODEL_UNRUN",
+  "source_revision": "0294de2a1b4b4efe899891189c5086360fd87f80",
+  "qualification_freeze": "960cbb20c85b16110a0f2d907784f41ef07df730",
+  "manifest_sha256": "d78f72e601fd811280d62adc9d2971bd7612ab10c58b29fdde47abfcb026a286",
+  "command_sha256": "6d9fda86c40a13d7857612fc98e5f62e73b888d604a05c326d390bd4ab4ab3e1",
+  "all_asset_pins_verified": true,
+  "assets": 76,
+  "author_audit": "checkout_recap PASS; role disclosed",
+  "root_independent_authority_source_review": "guard+grant+all-assets+fresh outputs before first stat; first native historical common-fields gate before candidate; cap/wrong retained; forced token eval then immediate outside-phaseinfo before next sample",
+  "model_metadata_touched": false,
+  "model_grant": false
+}

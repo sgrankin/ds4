@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "seconds": 0.023703332990407944,
+  "checks": [
+    {
+      "key": "join",
+      "fixed_inputs": 161,
+      "independent_golds_equal": true,
+      "reference_solution_grade": {
+        "correct": true,
+        "tests": 161
+      },
+      "reference_solution_sha256": "a8cc836f7ffb37c6d36f83f3335c75133268faef9269816cb3440dbbfc8ab300"
+    },
+    {
+      "key": "window_argmax",
+      "fixed_inputs": 161,
+      "independent_golds_equal": true,
+      "reference_solution_grade": {
+        "correct": true,
+        "tests": 161
+      },
+      "reference_solution_sha256": "00ac6abd449a1a77625b3197df4a90b4903dd22f4854a5af8d287dd94474c544"
+    }
+  ],
+  "source_sha256": {
+    "spec.json": "6f2ba356df52492d913400a53a297632f77a96b3cd3ba1982e63e8e5363c61b4",
+    "fixtures.py": "d53edd47e6d80437b1637fdad651b917f4f0a605480941fc0b2fe7f2220fbd06",
+    "grade.py": "eb0575ee82494e1f7bb646fb33aff13f88c786f0b71f6c3f2d2a564fc0a85300"
+  },
+  "scope": "stdlib CPU gold agreement and reference-solution language/output/input-mutation checks only",
+  "model_tokenizer_native_compiler_GGUF_or_raw_artifacts_accessed": false
+}

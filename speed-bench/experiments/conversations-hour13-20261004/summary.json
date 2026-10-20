@@ -1,0 +1,263 @@
+{
+  "runtime_revision": "3fb450f7",
+  "implementation_revision": "0392c260",
+  "driver_revision": "20ade780",
+  "qualification": "First corrected semantic qualification; suffix reuse enabled. No native timing pair.",
+  "mixed_checks": {
+    "PASS": 45,
+    "FAIL": 0,
+    "ERROR": 0,
+    "SKIP": 0
+  },
+  "generated_turn_checks": {
+    "total": 7,
+    "passed": 7,
+    "independent_json_answers": 6,
+    "pending_function_calls": 1,
+    "caps": 0,
+    "race_conflict_is_not_quality": true
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "counts": {
+        "PASS": 29,
+        "FAIL": 0,
+        "ERROR": 0,
+        "SKIP": 0
+      },
+      "seconds": 54.403857874989626,
+      "startup_seconds": 0.21405062499979977,
+      "results": "qualified/http/before.json"
+    },
+    {
+      "phase": "after",
+      "counts": {
+        "PASS": 16,
+        "FAIL": 0,
+        "ERROR": 0,
+        "SKIP": 0
+      },
+      "seconds": 36.53997595899273,
+      "startup_seconds": 0.41685854199749883,
+      "results": "qualified/http/after.json"
+    }
+  ],
+  "total_client_phase_seconds": 90.94383383398235,
+  "generated_turns": [
+    {
+      "name": "source-storefalse",
+      "result": "PASS",
+      "seconds": 32.11008516700531,
+      "response_status": "completed",
+      "actual_text": "{\"site\": \"MAPLE\", \"total\": 416}",
+      "independent_gold": {
+        "site": "MAPLE",
+        "total": 416
+      },
+      "expects_function_call": false,
+      "cap_hit": false
+    },
+    {
+      "name": "after-item-delete-memory",
+      "result": "PASS",
+      "seconds": 6.096623292003642,
+      "response_status": "completed",
+      "actual_text": "{\"site\": \"MAPLE\", \"total\": 416}",
+      "independent_gold": {
+        "site": "MAPLE",
+        "total": 416
+      },
+      "expects_function_call": false,
+      "cap_hit": false
+    },
+    {
+      "name": "second-conversation-isolated",
+      "result": "PASS",
+      "seconds": 2.377069959009532,
+      "response_status": "completed",
+      "actual_text": "{\"site\":\"CEDAR\",\"total\":202}",
+      "independent_gold": {
+        "site": "CEDAR",
+        "total": 202
+      },
+      "expects_function_call": false,
+      "cap_hit": false
+    },
+    {
+      "name": "pending-tool",
+      "result": "PASS",
+      "seconds": 13.801517084008083,
+      "response_status": "completed",
+      "actual_text": "",
+      "independent_gold": null,
+      "expects_function_call": true,
+      "cap_hit": false
+    },
+    {
+      "name": "restart-tool-output",
+      "result": "PASS",
+      "seconds": 21.639261042000726,
+      "response_status": "completed",
+      "actual_text": "{\"site\": \"MAPLE\", \"total\": 416, \"count\": 61}",
+      "independent_gold": {
+        "site": "MAPLE",
+        "total": 416,
+        "count": 61
+      },
+      "expects_function_call": false,
+      "cap_hit": false
+    },
+    {
+      "name": "continue-after-response-delete",
+      "result": "PASS",
+      "seconds": 7.9296695410012035,
+      "response_status": "completed",
+      "actual_text": "{\"site\": \"MAPLE\", \"total\": 416}",
+      "independent_gold": {
+        "site": "MAPLE",
+        "total": 416
+      },
+      "expects_function_call": false,
+      "cap_hit": false
+    },
+    {
+      "name": "restart-second-conversation-isolated",
+      "result": "PASS",
+      "seconds": 1.5177851670014206,
+      "response_status": "completed",
+      "actual_text": "{\"site\":\"CEDAR\",\"total\":202}",
+      "independent_gold": {
+        "site": "CEDAR",
+        "total": 202
+      },
+      "expects_function_call": false,
+      "cap_hit": false
+    }
+  ],
+  "observed_suffix_grafts": {
+    "before": 2,
+    "after_restart": 2,
+    "total": 4,
+    "all_sources_ssd": true,
+    "after_sources_approximate": true,
+    "grafts": [
+      {
+        "phase": "before",
+        "slot": 1,
+        "reused": 476,
+        "fresh": 134,
+        "graft_fresh": 6,
+        "source_start": 530,
+        "source_end": 1006,
+        "destination_start": 72,
+        "destination_end": 548,
+        "source_ssd": 1,
+        "source_approximate": 0,
+        "milliseconds": 2230.898,
+        "line": "1004 10:05:11 ds4-server: suffix APPROXIMATE slot=1 reused=476 fresh=134 graft_fresh=6 source=530:1006 destination=72:548 latest_user_start=663 pre_rope=1 source_ssd=1 source_approximate=0 2230.898 ms"
+      },
+      {
+        "phase": "before",
+        "slot": 1,
+        "reused": 498,
+        "fresh": 201,
+        "graft_fresh": 73,
+        "source_start": 508,
+        "source_end": 1006,
+        "destination_start": 246,
+        "destination_end": 744,
+        "source_ssd": 1,
+        "source_approximate": 0,
+        "milliseconds": 8484.86,
+        "line": "1004 10:05:25 ds4-server: suffix APPROXIMATE slot=1 reused=498 fresh=201 graft_fresh=73 source=508:1006 destination=246:744 latest_user_start=919 pre_rope=1 source_ssd=1 source_approximate=0 8484.860 ms"
+      },
+      {
+        "phase": "after",
+        "slot": 0,
+        "reused": 531,
+        "fresh": 200,
+        "graft_fresh": 72,
+        "source_start": 286,
+        "source_end": 817,
+        "destination_start": 268,
+        "destination_end": 799,
+        "source_ssd": 1,
+        "source_approximate": 1,
+        "milliseconds": 16963.588,
+        "line": "1004 10:05:50 ds4-server: suffix APPROXIMATE slot=0 reused=531 fresh=200 graft_fresh=72 source=286:817 destination=268:799 latest_user_start=984 pre_rope=1 source_ssd=1 source_approximate=1 16963.588 ms"
+      },
+      {
+        "phase": "after",
+        "slot": 1,
+        "reused": 549,
+        "fresh": 222,
+        "graft_fresh": 94,
+        "source_start": 268,
+        "source_end": 817,
+        "destination_start": 54,
+        "destination_end": 603,
+        "source_ssd": 1,
+        "source_approximate": 1,
+        "milliseconds": 4063.864,
+        "line": "1004 10:05:59 ds4-server: suffix APPROXIMATE slot=1 reused=549 fresh=222 graft_fresh=94 source=268:817 destination=54:603 latest_user_start=796 pre_rope=1 source_ssd=1 source_approximate=1 4063.864 ms"
+      }
+    ]
+  },
+  "guard": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "pressure": {
+    "samples": 92,
+    "normal_samples": 92,
+    "bad_samples": 0,
+    "initial_swap_gib": 0.012998046875,
+    "final_swap_gib": 0.012998046875,
+    "swap_growth_gib": 0.0,
+    "peak_wired_compressor_gib": 82.61544799804688
+  },
+  "guard_command": {
+    "argv": [
+      "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+      "-B",
+      "speed-bench/experiments/conversations-hour13-20261004/launch.py",
+      "--output",
+      "speed-bench/experiments/conversations-hour13-20261004/qualified",
+      "--cache",
+      ".workspaces/server-agent-day-20261004/conversations-qualified-cache",
+      "--store",
+      ".workspaces/server-agent-day-20261004/conversations-qualified-store"
+    ],
+    "initial": {
+      "time": 1791122676.410528,
+      "level": 1,
+      "swap_gb": 0.012998046875,
+      "physical_gb": 128.0,
+      "free_gb": 56.69285583496094,
+      "file_backed_gb": 55.439971923828125,
+      "wired_gb": 3.3397979736328125,
+      "compressor_gb": 9.079605102539062
+    },
+    "polling_seconds": 1,
+    "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+  },
+  "limitations": [
+    "45 mixed protocol/model checks are not an accuracy percentage.",
+    "Unpaired phase timings are descriptive, with cold source work and differing histories.",
+    "Manual item edits clear private replay; opt-in approximate suffix reuse can retain old conditioning.",
+    "Deleted-conversation GET404 and retained-items GET200 is a locally documented extension.",
+    "Only completed responses publish conversation state.",
+    "Conversation and response-file atomic writes are separate; later response IO failure can return HTTP500 after conversation advancement.",
+    "Metadata update, custom items and multimodal items unsupported; textual messages, function items and native textual reasoning supported."
+  ],
+  "evidence": {
+    "before": "qualified/http/before.json",
+    "after": "qualified/http/after.json",
+    "guard": "qualified-guard/result.json",
+    "pressure": "qualified-guard/pressure.jsonl",
+    "launcher": "launch.py",
+    "driver": "run.py",
+    "first_refusal": "first-screen.md"
+  }
+}

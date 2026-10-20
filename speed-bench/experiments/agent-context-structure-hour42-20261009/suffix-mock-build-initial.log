@@ -1,0 +1,35 @@
+In file included from tests/test_agent_context_suffix_mock.c:44:
+tests/../ds4_agent.c:5820:46: error: call to undeclared function 'ds4_die'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+ 5820 |     if (w->live_context_turn_count && !used) ds4_die("cannot allocate live context turn map");
+      |                                              ^
+tests/../ds4_agent.c:6087:28: error: call to undeclared function 'ds4_die'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+ 6087 |     if (capacity && !used) ds4_die("cannot allocate live context turn map");
+      |                            ^
+tests/test_agent_context_suffix_mock.c:641:59: error: expected ')'
+  641 |         snprintf(header, sizeof(header), "\n[[DS4_TURN %" PRIu64 " role=%s]]\n",
+      |                                                           ^
+tests/test_agent_context_suffix_mock.c:641:9: note: to match this '('
+  641 |         snprintf(header, sizeof(header), "\n[[DS4_TURN %" PRIu64 " role=%s]]\n",
+      |         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/secure/_stdio.h:119:33: note: expanded from macro 'snprintf'
+  119 | #define snprintf(str, len, ...) __snprintf_chk_func (str, len, 0, __VA_ARGS__)
+      |                                 ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/secure/_stdio.h:76:27: note: expanded from macro '__snprintf_chk_func'
+   76 |         __builtin___snprintf_chk (str, len, flag, __darwin_obsz(str), __VA_ARGS__)
+      |                                  ^
+tests/test_agent_context_suffix_mock.c:635:68: warning: unused parameter 'ids' [-Wunused-parameter]
+  635 | static void write_numbered_fixture(agent_worker *w, const uint64_t ids[5],
+      |                                                                    ^
+tests/test_agent_context_suffix_mock.c:719:65: error: expected ')'
+  719 |         snprintf(annotation, sizeof(annotation), "[[DS4_TURN %" PRIu64 " role=", ids[i]);
+      |                                                                 ^
+tests/test_agent_context_suffix_mock.c:719:9: note: to match this '('
+  719 |         snprintf(annotation, sizeof(annotation), "[[DS4_TURN %" PRIu64 " role=", ids[i]);
+      |         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/secure/_stdio.h:119:33: note: expanded from macro 'snprintf'
+  119 | #define snprintf(str, len, ...) __snprintf_chk_func (str, len, 0, __VA_ARGS__)
+      |                                 ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/secure/_stdio.h:76:27: note: expanded from macro '__snprintf_chk_func'
+   76 |         __builtin___snprintf_chk (str, len, flag, __darwin_obsz(str), __VA_ARGS__)
+      |                                  ^
+1 warning and 4 errors generated.

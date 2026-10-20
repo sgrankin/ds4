@@ -1,0 +1,5 @@
+{
+  "guard_access": "Sandbox pressure probe could not read vm.swapusage. Rerun with approved macOS pressure access; no model child had started.",
+  "fresh_directory": "The failed probe retained its directory. Actual pilot uses pressure-pilot-v2 rather than overwriting it.",
+  "pilot_selected_environment": "Pilot loaded the initially authored PREFILL spelling; these two environment keys were ignored. Measured runs use SELECTED_TILE/SELECTED_LIMIT. Pilot remains warmup and geometry qualification only."
+}

@@ -1,0 +1,9 @@
+{
+  "native_core_parent_commit": "685ff0ba8864d66e7ca7ef60107536ac00fd2cb2",
+  "literal_scorer_source": "speed-bench/overthink_pilot.c",
+  "literal_scorer_source_sha256": "e4c7463b9ab7798ceab39ceada06c870060e3be22111a162f92bed69a07bc0da",
+  "literal_scorer_prefix_sha256": "6b840f01d3ffb54720d1467cfff8f382fb395ee7fa8a2d1ccc3919e14c5a24c6",
+  "frozen_input_sha256": "ad2f0510ebc2684a77f21ebb0f22fe3cb2eb9918890826108192064926dfcc3a",
+  "no_model_metadata_read": true,
+  "old_runtime_sources_edited": false
+}

@@ -1,0 +1,10 @@
+We need answer count ordered lists length5 positive integers sum18 each <=6. Need compute. Need only integer final. Let's solve carefully.
+
+Let xi in {1,...,6}, sum 18. Let yi = xi-1 in {0,...,5}, sum yi = 18-5=13. Count 5-tuples yi 0..5 sum13. Total unrestricted nonneg C(13+5-1,4)=C(17,4)=2380. Subtract those with yi>=6. Let zi=yi-6, sum =13-6=7 for one variable. For each variable, count C(7+4,4)=C(11,4)=330? Wait if one variable >=6, set yi'=yi-6, then sum yi' =7 across 5 variables nonneg: C(7+5-1,4)=C(11,4)=330. 5*330=1650. Need inclusion-exclusion for two variables >=6: sum after subtract 12 =1, count C(1+5-1,4)=C(5,4)=5 for each pair. Number pairs C(5,2)=10 ->50 add. Three variables >=6 sum 13-18 negative none. Count =2380-1650+50=780. Check.
+
+Alternative generating (x+x^2+...+x^6)^5 coefficient x^18. Since positive. Equivalent (1+...+x^5)^5 x^5 coeff x^13. We did.
+
+Need final only integer. 780. Ensure no issue ordered lists yes.
+
+Final just 780. 
+</think>780

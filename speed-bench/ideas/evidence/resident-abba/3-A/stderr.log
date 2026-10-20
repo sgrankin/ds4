@@ -1,0 +1,113 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+REPLAY phase=0 kind=P context=1859 tokens=1859 start
+REPLAY phase=0 done 67524.901 ms
+ds4: Metal memory replay phase 0: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.66 GiB, resident 66.33 GiB, virtual 732.85 GiB
+ds4:   mmap model wrapper creations 4801 buffers 651.30 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=12177 misses=12303 hit_rate=0.497 wraps=36909 evictions=6167 buffer_allocs=15 buffer_reuses=6167
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1359.424 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 33.72 MiB (flash mask 0.00, pad 0.19, tmp 0.00, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 1.25, moe 30.76, f16 0.00, raw-store 0.00)
+REPLAY phase=1 kind=P context=1949 tokens=90 start
+REPLAY phase=1 done 3934.028 ms
+ds4: Metal memory replay phase 1: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.67 GiB, resident 66.33 GiB, virtual 732.86 GiB
+ds4:   mmap model wrapper creations 4801 buffers 651.30 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=31065 misses=15015 hit_rate=0.674 wraps=45045 evictions=8879 buffer_allocs=15 buffer_reuses=8879 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=25.14 GiB pread_ms=1297.260
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1359.424 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 37.75 MiB (flash mask 0.02, pad 0.19, tmp 4.02, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 1.25, moe 30.76, f16 0.00, raw-store 0.00)
+REPLAY phase=2 kind=D context=2021 tokens=72 start
+REPLAY phase=2 done 4635.787 ms
+ds4: Metal memory replay phase 2: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.67 GiB, resident 66.33 GiB, virtual 732.86 GiB
+ds4:   mmap model wrapper creations 4801 buffers 651.30 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=45941 misses=17419 hit_rate=0.725 wraps=52257 evictions=11283 buffer_allocs=15 buffer_reuses=11283 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=47.42 GiB pread_ms=2036.050
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1359.424 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 37.75 MiB (flash mask 0.02, pad 0.19, tmp 4.02, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 1.25, moe 30.76, f16 0.00, raw-store 0.00)
+REPLAY phase=3 kind=P context=2322 tokens=301 start
+REPLAY phase=3 done 16637.312 ms
+ds4: Metal memory replay phase 3: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.67 GiB, resident 66.32 GiB, virtual 732.86 GiB
+ds4:   mmap model wrapper creations 5859 buffers 811.78 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=49110 misses=20370 hit_rate=0.707 wraps=61110 evictions=14234 buffer_allocs=15 buffer_reuses=14234 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=47.42 GiB pread_ms=2036.050
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1359.424 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 37.81 MiB (flash mask 0.02, pad 0.19, tmp 4.02, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 1.32, moe 30.76, f16 0.00, raw-store 0.00)
+REPLAY phase=4 kind=D context=2396 tokens=74 start
+REPLAY phase=4 done 4257.326 ms
+ds4: Metal memory replay phase 4: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.67 GiB, resident 66.33 GiB, virtual 732.86 GiB
+ds4:   mmap model wrapper creations 5859 buffers 811.78 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=65480 misses=21760 hit_rate=0.751 wraps=65280 evictions=15624 buffer_allocs=15 buffer_reuses=15624 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=60.31 GiB pread_ms=2630.265
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1359.424 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 37.81 MiB (flash mask 0.02, pad 0.19, tmp 4.02, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 1.32, moe 30.76, f16 0.00, raw-store 0.00)
+REPLAY phase=5 kind=P context=2468 tokens=72 start
+REPLAY phase=5 done 2633.937 ms
+ds4: Metal memory replay phase 5: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.67 GiB, resident 66.33 GiB, virtual 732.86 GiB
+ds4:   mmap model wrapper creations 5859 buffers 811.78 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=81555 misses=22965 hit_rate=0.780 wraps=68895 evictions=16829 buffer_allocs=15 buffer_reuses=16829 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=71.48 GiB pread_ms=3490.347
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1359.424 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 37.81 MiB (flash mask 0.02, pad 0.19, tmp 4.02, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 1.32, moe 30.76, f16 0.00, raw-store 0.00)
+REPLAY phase=6 kind=D context=2665 tokens=197 start
+REPLAY phase=6 done 10168.024 ms
+ds4: Metal memory replay phase 6: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.67 GiB, resident 66.33 GiB, virtual 732.86 GiB
+ds4:   mmap model wrapper creations 5859 buffers 811.78 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=127486 misses=24314 hit_rate=0.840 wraps=72942 evictions=18178 buffer_allocs=15 buffer_reuses=18178 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=83.98 GiB pread_ms=4162.872
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1359.424 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 37.81 MiB (flash mask 0.02, pad 0.19, tmp 4.02, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 1.32, moe 30.76, f16 0.00, raw-store 0.00)
+ds4: Metal memory replay final: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.70 GiB, resident 66.39 GiB, virtual 732.90 GiB
+ds4:   mmap model wrapper creations 5859 buffers 811.78 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=127486 misses=24314 hit_rate=0.840 wraps=72942 evictions=18178 buffer_allocs=15 buffer_reuses=18178 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=83.98 GiB pread_ms=4162.872
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1359.424 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 37.81 MiB (flash mask 0.02, pad 0.19, tmp 4.02, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 1.32, moe 30.76, f16 0.00, raw-store 0.00)

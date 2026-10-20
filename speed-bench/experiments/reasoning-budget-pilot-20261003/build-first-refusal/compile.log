@@ -1,0 +1,6 @@
+In file included from /Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_probe.c:4:
+In file included from /Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/native_effort_final_score.h:2:
+/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_native_api.h:7:10: fatal error: 'stdio.h' file not found
+    7 | #include <stdio.h>
+      |          ^~~~~~~~~
+1 error generated.

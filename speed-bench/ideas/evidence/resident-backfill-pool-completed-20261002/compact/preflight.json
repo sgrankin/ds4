@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "prepared_manifest_sha256": "321632a8417bd2c74fa84c67f748046b74e7430129bc39ccb7b11e38d91b6848",
+  "build_manifest_sha256": "1bc2c023b71c84edb528d4b28a2cddd7c6daae100c4525ff0379ecb903b6fcb4",
+  "native_reference_not_read_in_preflight": true,
+  "model_not_statted_or_opened_in_preflight": true,
+  "root_grant": "exact seven arms,2026-10-02",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run_resident_pool_study.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002"
+  ]
+}

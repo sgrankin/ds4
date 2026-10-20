@@ -1,0 +1,2 @@
+{"forward":[22,44,66],"backward":[77,44,11]}
+The forward slice selects indices one, three, and five; its stop index six is excluded. The backward slice starts at the final element and steps backward by three, selecting indices six, three, and zero. These are ordinary Python list slices, and neither result sorts the original values.

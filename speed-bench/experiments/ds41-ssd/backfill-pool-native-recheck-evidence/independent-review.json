@@ -1,0 +1,13 @@
+{
+  "runtime_commit": "f4a96514ac10db85f9bddc085a1995f0dbe27f3d",
+  "reviewer": "/root/checkout_recap",
+  "status": "PASS",
+  "source": "Retained ROOT/team messages; read-only independent runtime review.",
+  "scope": [
+    "Literal default admission source delegates unchanged when callback is null.",
+    "Owner-only bounded forty-slot recheck rejects pending/inflight or incomplete buffers and validates model, generation, identity and native spans.",
+    "No hotness/counter mutation, GPU wait, worker cache access or weight change.",
+    "Disjoint native resident drop/not-started byte metrics and reset callback ownership."
+  ],
+  "model_or_build_run_by_reviewer": false
+}

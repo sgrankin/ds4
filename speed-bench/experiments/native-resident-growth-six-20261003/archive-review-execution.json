@@ -1,0 +1,15 @@
+{
+  "operation": "offline review/copy only",
+  "command": [
+    "python3",
+    "speed-bench/experiments/native-resident-growth-six-20261003/archive_completed_growth.py"
+  ],
+  "stdout_and_stderr_file": "archive-review-run.log",
+  "stdout_and_stderr_sha256": "6d2ec0d3f2fa17b86b24287c62f78706df2f8e5fa474f0e788ff3ecf26ab8185",
+  "process_exit_code": 0,
+  "execution_tool_initial_chunk": "710340",
+  "execution_tool_completion_chunk": "c3bf7f",
+  "source_script_sha256": "424e81de7792630e797e88cb2700b998e94d6b052d1f599910b8b14f6c408031",
+  "models_or_helpers_or_builds_executed": false,
+  "CLM_crosscheck": "Phase means and scopes independently read; corrected conversational labels before publication, no incorrect evidence file written."
+}

@@ -1,0 +1,24 @@
+READY
+
+I'll run one Python command to perform the exact span replacement and report the removed byte count.
+
+🛠️ $ python3 - <<'PY'
+p = "/private/tmp/ds4-context-run/speed-bench/experiments/clm-live-context-20261002/e2e/context.txt"
+with open(p, "rb") as f:
+    data = f.read()
+begin = data.find(b"[HIST_BLOB_7Q_BEGIN]")
+end = data.find(b"[HIST_BLOB_7Q_END]", begin)
+assert begin != -1 and end != -1, "markers not found"
+end += len(b"[HIST_BLOB_7Q_END]")
+removed = end - begin
+new = data[:begin] + b"[old blob removed]" + data[end:]
+with open(p, "wb") as f:
+    f.write(new)
+print("removed_bytes=%d" % removed)
+print("new_size=%d" % len(new))
+PY
+
+removed_bytes=9038
+new_size=10131
+[0mCODE=2718
+

@@ -1,0 +1,55 @@
+{
+  "status": "RELEASED",
+  "time": 1791023127.539503,
+  "manifest_sha256": "c572d17acca4e92fa2833dffe277f0480ee6f315d80065bf56bca6096cf9668f",
+  "ROOT_launch_sha256": "f76e27b22a0b74426ef8f9faa1f8a85404de0d2f9d0f3e576f13395335b5b7a1",
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "guard_result_sha256": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+  "runner_result_sha256": "7b5770587cce9a561930c783a02fe7b5e05f3c0da34093a7b41b869f0484b22c",
+  "runner_status": "ALL_ABBA_RAW_STATE_STARTING_IO_AND_REPEAT_CONTROLS_EXACT",
+  "completed_or_attempted_arms": [
+    {
+      "name": "native-before",
+      "returncode": 0
+    },
+    {
+      "name": "clipped-1",
+      "returncode": 0
+    },
+    {
+      "name": "clipped-2",
+      "returncode": 0
+    },
+    {
+      "name": "native-after",
+      "returncode": 0
+    }
+  ],
+  "live_model_processes": [],
+  "lock_reacquired": true,
+  "normal_samples": 263,
+  "bad_samples": 0,
+  "initial_swap_gib": 0.024599609375,
+  "final_swap_gib": 0.024599609375,
+  "max_swap_gib": 0.024599609375,
+  "swapgrowth_gib": 0.0,
+  "peak_wired_compressor_gib": 80.29902648925781,
+  "pressure_ledger_sha256": "573fc98932a5daba48f21dd70e13f14e2de048ea54aa14210c92b660c550d31f",
+  "fresh_ps_args_sha256": "e3538c84b143c8a112f0ecfb2df4f9a448aa070bb0b3f930889a164e1537c1cd",
+  "fresh_ps_comm_sha256": "080c1fb737fa545b7a4ca5eb570c83e0ca3b233ce75377626b9e69ef575a7e17",
+  "all_ancestors_excluded": [
+    37576,
+    2072,
+    2064,
+    1244,
+    1213,
+    759,
+    1
+  ],
+  "free_disk_gib": 164.12594985961914,
+  "no_retry": true,
+  "timing": "quiet ABBA; all other collaborating CPU/source/read work paused"
+}

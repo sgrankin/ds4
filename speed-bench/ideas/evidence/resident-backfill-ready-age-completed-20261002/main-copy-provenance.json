@@ -1,0 +1,9 @@
+{
+  "source_commit": "b6321e33de0939c6df64abf68dd415dc089c92d6",
+  "source_workspace": ".workspaces/idea-resident-backfill-pool-age-evidence/speed-bench/experiments/ds41-ssd",
+  "index_sha256": "42bad659a7dd57f30a25feb78c11019bfe016a2f5dad46673e5a37b5f0118b52",
+  "results_sha256": "6f7118862e8984c8f6da56986bcd4124d292235c66ee5a7d21dc487602b8b47a",
+  "copied_files": 28,
+  "runtime_merged": false,
+  "model_access": false
+}

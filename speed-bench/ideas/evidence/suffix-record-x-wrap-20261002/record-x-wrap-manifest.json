@@ -1,0 +1,67 @@
+{
+  "status": "both native guards completed0",
+  "parent_preparation_commit": "c03be857",
+  "prior_recovery_commit": "b7a8612a",
+  "prior_recovery_manifest": "recovery-manifest.json",
+  "scope": "native resident routing off; one fixed fixture per case; single paired diagnostic timings, not balanced latency claims",
+  "cases": [
+    {
+      "name": "record-x-c512-t128",
+      "helper_source": "ccd3d384 / core6c2efad0",
+      "helper_sha256": "89bba403421f4739ac9d87c38342562ed591123606ccb423f9c1c20cff44ff1a",
+      "compact_directory": "native-record-x-wrap/record-x-c512-t128",
+      "full_artifacts": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-c512-t128",
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-c512-t128/logits.bin",
+        "bytes": 3102748,
+        "sha256": "294566f945cd1696447443f097d57c83d666ecb9c6b7806d37480cd72c290570"
+      },
+      "semantic_controls_valid": true,
+      "single_diagnostic_speedup": 1.9154872584666571,
+      "stale_logprob_gain": 20.924902658700006,
+      "stale_probability_fresh": 1.5424511805138029e-15,
+      "stale_probability_reuse": 1.88704034841229e-06,
+      "pressure": {
+        "samples": 218,
+        "levels": [
+          1
+        ],
+        "bad_samples": 0,
+        "swap_initial_gb": 0.024599609375,
+        "swap_growth_gb": 0.00048828125,
+        "max_wired_gb": 75.31854248046875,
+        "max_compressor_gb": 8.613525390625,
+        "min_file_backed_gb": 42.40380859375
+      }
+    },
+    {
+      "name": "even-relocation-code-d66-wrap-c101-t1",
+      "helper_source": "5c8ef1f3",
+      "helper_sha256": "ebbe08144aecc7d9c69fddb8cac1bf66597314d7763fb2a891364ac53aa4b659",
+      "compact_directory": "native-record-x-wrap/even-relocation-code-d66-wrap-c101-t1",
+      "full_artifacts": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-even-relocation-code-d66-wrap-c101-t1",
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-even-relocation-code-d66-wrap-c101-t1/logits.bin",
+        "bytes": 3102748,
+        "sha256": "c307c5c61a2a7af557f9dede893daa2a414d470b2663dcf75416f335bea140ec"
+      },
+      "semantic_controls_valid": true,
+      "single_diagnostic_speedup": 1.4597756419670709,
+      "stale_logprob_gain": 2.0993167331999985,
+      "stale_probability_fresh": 4.5737483351330375e-09,
+      "stale_probability_reuse": 3.732449473941697e-08,
+      "pressure": {
+        "samples": 78,
+        "levels": [
+          1
+        ],
+        "bad_samples": 0,
+        "swap_initial_gb": 0.025087890625,
+        "swap_growth_gb": 0.0,
+        "max_wired_gb": 74.89836120605469,
+        "max_compressor_gb": 8.353668212890625,
+        "min_file_backed_gb": 42.92071533203125
+      }
+    }
+  ]
+}

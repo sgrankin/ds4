@@ -1,0 +1,8 @@
+1004 12:12:30 slot 1: request reuses nothing; evicting checkpoint (1588 tokens, idle 0 s, protected)
+1004 12:12:30 ds4-server: chat ctx=0..48:48 RESPPROTO prompt start
+1004 12:12:30 ds4-server: chat ctx=0..48:48 RESPPROTO prefill chunk 1/48 (2.1%) chunk=0.00 t/s avg=6.99 t/s 0.143s
+1004 12:12:32 ds4-server: chat ctx=0..48:48 RESPPROTO prefill chunk 48/48 (100.0%) chunk=21.56 t/s avg=20.66 t/s 2.323s
+1004 12:12:32 ds4-server: chat ctx=0..48:48 RESPPROTO prompt done 2.375s
+1004 12:12:32 ds4-server: chat ctx=48..50:2 gen=2 RESPPROTO decoding chunk=16.56 t/s avg=16.56 t/s 0.121s
+1004 12:12:32 ds4-server: reasoning_summary id=chatcmpl-bfa6941591a3110972228c91 ctx=0..48:48 budget=0 thinking_tokens=0 forced=0 deferred=0
+1004 12:12:32 ds4-server: chat ctx=0..48:48 gen=2 RESPPROTO finish=stop 2.496s

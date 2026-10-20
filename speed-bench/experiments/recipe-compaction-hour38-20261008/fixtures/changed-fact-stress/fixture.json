@@ -1,0 +1,15 @@
+{
+  "case": "changed-fact-stress",
+  "practical_case": "dedupe",
+  "system_edit": false,
+  "teacher_origin": "retained actual Item37 code-native-before first implementation, unmodified",
+  "teacher_source": "/Volumes/Models/ds4/speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/dedupe/dedupe/first-solution.py",
+  "teacher_sha256": "44053a0315d8e7a77684d5bf3e522816a78492ead72e1fb8d7f08c4b5b2e23e4",
+  "teacher_scope": "up to512 tokens; retain actual target length, no artificial teacher padding",
+  "notes": "algorithm contract excludes tool protocol; independent existing161-case grader; current contract/config occur only in retained C, not A/B padding",
+  "source_edit": 1024,
+  "edit": 256,
+  "prefix": 256,
+  "unchanged": 1536,
+  "edit_kind": "stress correction of stale earlier algorithm fact; retained current contract/config unchanged"
+}

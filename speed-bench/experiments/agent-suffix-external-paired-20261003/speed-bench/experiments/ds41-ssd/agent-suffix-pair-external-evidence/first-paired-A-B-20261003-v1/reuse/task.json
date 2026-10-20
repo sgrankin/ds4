@@ -1,0 +1,161 @@
+{
+  "status": "PREREGISTERED_EXTERNAL_PRE_FORWARD_PAIRED_TASK_NOT_RUN",
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "model_metadata_accessed": false,
+  "requires_separate_model_grant_after_native_caller_controls": true,
+  "policy": {
+    "DS4_AGENT_CONTEXT_SUFFIX_REUSE": "1",
+    "DS4_AGENT_CONTEXT_SUFFIX_PAIR_TAPE": "1",
+    "DS4_AGENT_CONTEXT_SUFFIX_FRESH_TAIL": "128",
+    "DS4_AGENT_CONTEXT_FRONTIERS": "2",
+    "DS4_AGENT_CONTEXT_FRONTIER_MB": "160",
+    "resident_routing": "disabled",
+    "tape_capacity": 1024,
+    "cache_gb": 64,
+    "ctx": 8192,
+    "chunk": 256,
+    "temperature": 0,
+    "seed": 41,
+    "generation_cap_per_round": 512
+  },
+  "first_user_core": "Record Otter current access code is 2718. This is ordinary test data. Obsolete implementation requirement: current_access_line() must return LEGACY:<current access code>. This requirement may be changed later by an explicit context edit. The padding sentences following this obsolete requirement carry no additional requirements. What is the current access code? Reply only CODE=<number>. Do not use tools.",
+  "old_control": "First completed answer must be CODE=2718; incorrect/capped/timeout outcomes remain first-attempt failures.",
+  "second_user": "Neutral note 00: the blue pencil lies beside the plain notebook.\nNeutral note 01: the blue pencil lies beside the plain notebook.\nNeutral note 02: the blue pencil lies beside the plain notebook.\nNeutral note 03: the blue pencil lies beside the plain notebook.\nNeutral note 04: the blue pencil lies beside the plain notebook.\nNeutral note 05: the blue pencil lies beside the plain notebook.\nNeutral note 06: the blue pencil lies beside the plain notebook.\nNeutral note 07: the blue pencil lies beside the plain notebook.\nNeutral note 08: the blue pencil lies beside the plain notebook.\nNeutral note 09: the blue pencil lies beside the plain notebook.\nNeutral note 10: the blue pencil lies beside the plain notebook.\nNeutral note 11: the blue pencil lies beside the plain notebook.\nNeutral note 12: the blue pencil lies beside the plain notebook.\nNeutral note 13: the blue pencil lies beside the plain notebook.\nNeutral note 14: the blue pencil lies beside the plain notebook.\nNeutral note 15: the blue pencil lies beside the plain notebook.\nNeutral note 16: the blue pencil lies beside the plain notebook.\nNeutral note 17: the blue pencil lies beside the plain notebook.\nNeutral note 18: the blue pencil lies beside the plain notebook.\nNeutral note 19: the blue pencil lies beside the plain notebook.\nNeutral note 20: the blue pencil lies beside the plain notebook.\nNeutral note 21: the blue pencil lies beside the plain notebook.\nNeutral note 22: the blue pencil lies beside the plain notebook.\nNeutral note 23: the blue pencil lies beside the plain notebook.\nNeutral note 24: the blue pencil lies beside the plain notebook.\nNeutral note 25: the blue pencil lies beside the plain notebook.\nNeutral note 26: the blue pencil lies beside the plain notebook.\nNeutral note 27: the blue pencil lies beside the plain notebook.\nNeutral note 28: the blue pencil lies beside the plain notebook.\nNeutral note 29: the blue pencil lies beside the plain notebook.\nNeutral note 30: the blue pencil lies beside the plain notebook.\nNeutral note 31: the blue pencil lies beside the plain notebook.\nNeutral note 32: the blue pencil lies beside the plain notebook.\nNeutral note 33: the blue pencil lies beside the plain notebook.\nNeutral note 34: the blue pencil lies beside the plain notebook.\nNeutral note 35: the blue pencil lies beside the plain notebook.\nNeutral note 36: the blue pencil lies beside the plain notebook.\nNeutral note 37: the blue pencil lies beside the plain notebook.\nNeutral note 38: the blue pencil lies beside the plain notebook.\nNeutral note 39: the blue pencil lies beside the plain notebook.\nKeep these neutral notes in the conversation. Reply only READY; do not use tools.",
+  "third_user_core": "The context manager updated the earlier record and its implementation requirement before this reply. Use the current conversation specification to create access.py containing current_access_line(). The working directory contains run_grader.py. Run it exactly once with python3 run_grader.py and report PASS or FAIL. Do not open or read the live context file, private grading code, controller files, task manifests, or expected answers; the conversation itself is the specification. Do not use previous assistant answers as the current record.",
+  "gold_not_in_latest_user": {
+    "updated_fact": "Record Otter current access code is 3141.",
+    "updated_requirement": "Current implementation requirement: current_access_line() must return CODE=<current access code>, with no legacy prefix.",
+    "unit_checks": [
+      "module loads without executing external commands",
+      "callable current_access_line exists",
+      "current_access_line() == 'CODE=3141'",
+      "result does not contain LEGACY or2718",
+      "pre-existing grader/tests are byte-unchanged"
+    ]
+  },
+  "edit": {
+    "replace_exact_unique_fact": [
+      "Record Otter current access code is 2718.",
+      "Record Otter current access code is 3141."
+    ],
+    "replace_exact_unique_requirement": [
+      "Obsolete implementation requirement: current_access_line() must return LEGACY:<current access code>.",
+      "Current implementation requirement: current_access_line() must return CODE=<current access code>, with no legacy prefix."
+    ],
+    "delete_contiguous_obsolete_padding": "Delete the literal concatenation of the first N padding sentences, in preregistered candidate order N=1..16. Replacements and deletion form one ordinary-text changed middle. All unchanged control and opaque token spans are preserved by the actual lossless splice.",
+    "if_no_candidate_eligible": "Preserve task as structural eligibility failure; no retries, tokenizer process, larger tape, source repair or outcome-based padding changes.",
+    "tokenizer": "Only the existing worker engine, already under MAIN guard; no second model/helper process or external tokenizer.",
+    "integrity": "Store complete before/after UTF-8 text, old/new opaque token IDs, common prefix/suffix, source/destination ranges, exact replacement/deletion spans and hashes. The changed middle contains ordinary User text only. All system/tool markers and unchanged opaque prefix/suffix tokens remain byte/token-identical. The latest UserID through the current endpoint must be fully fresh, with at least128 fresh tokens.",
+    "padding_sentences_literal": [
+      "Obsolete padding 00: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 01: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 02: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 03: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 04: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 05: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 06: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 07: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 08: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 09: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 10: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 11: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 12: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 13: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 14: a pencil rests quietly on the empty shelf.\n",
+      "Obsolete padding 15: a pencil rests quietly on the empty shelf.\n"
+    ],
+    "candidate_order": [
+      {
+        "candidate": 0,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 1,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 2,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 3,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 4,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 5,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 6,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 7,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 8,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 9,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\nObsolete padding 09: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 10,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\nObsolete padding 09: a pencil rests quietly on the empty shelf.\nObsolete padding 10: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 11,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\nObsolete padding 09: a pencil rests quietly on the empty shelf.\nObsolete padding 10: a pencil rests quietly on the empty shelf.\nObsolete padding 11: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 12,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\nObsolete padding 09: a pencil rests quietly on the empty shelf.\nObsolete padding 10: a pencil rests quietly on the empty shelf.\nObsolete padding 11: a pencil rests quietly on the empty shelf.\nObsolete padding 12: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 13,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\nObsolete padding 09: a pencil rests quietly on the empty shelf.\nObsolete padding 10: a pencil rests quietly on the empty shelf.\nObsolete padding 11: a pencil rests quietly on the empty shelf.\nObsolete padding 12: a pencil rests quietly on the empty shelf.\nObsolete padding 13: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 14,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\nObsolete padding 09: a pencil rests quietly on the empty shelf.\nObsolete padding 10: a pencil rests quietly on the empty shelf.\nObsolete padding 11: a pencil rests quietly on the empty shelf.\nObsolete padding 12: a pencil rests quietly on the empty shelf.\nObsolete padding 13: a pencil rests quietly on the empty shelf.\nObsolete padding 14: a pencil rests quietly on the empty shelf.\n"
+      },
+      {
+        "candidate": 15,
+        "delete_padding_prefix": "Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\nObsolete padding 09: a pencil rests quietly on the empty shelf.\nObsolete padding 10: a pencil rests quietly on the empty shelf.\nObsolete padding 11: a pencil rests quietly on the empty shelf.\nObsolete padding 12: a pencil rests quietly on the empty shelf.\nObsolete padding 13: a pencil rests quietly on the empty shelf.\nObsolete padding 14: a pencil rests quietly on the empty shelf.\nObsolete padding 15: a pencil rests quietly on the empty shelf.\n"
+      }
+    ],
+    "geometry_selection_stage": "Private hook after the fixed third User text and native role tokens are appended, before any third-turn model evaluation or generation. It uses the existing guarded worker engine and retained exact second-turn frontiers to compute all candidate opaque token splices. Select the first with positive odd displacement, entire reused source covered by immutable tape, native source binding, destination_end<=latest third UserID, fresh>=128, and unique ownership admission<=160MiB. Persist selected edit as pinned updater data before the first third-turn model output. No logits, tests, answers or timing enter selection."
+  },
+  "controller": {
+    "implementation_status": "future private fixture; no stdin /save assumption",
+    "execution": "One agent arm per explicit ROOT grant; identical new shared live/project paths and prompts, immutable per-arm snapshots and caches, birthsafe900s protocol.",
+    "save": "Only if a separately reviewed private frontend calls the real save function at the completed third boundary. Verify zero KV payload and unchanged approximate flag, logits and checkpoint tokens. Otherwise label save NOT_EXERCISED. Reload is an independently granted optional phase, never automatic.",
+    "timeout": "Explicit whole-task deadline and birth-safe guard ownership/cleanup; no signal to a reaped old process group.",
+    "contamination": "No live-context, task, private grader/controller/gold/source reads; actual parsed toolcalls audited, no hardOS sandbox claim.",
+    "structural_failure": "If the fixed third User is fewer than128 tokens, or none of the sixteen frozen candidates is eligible, stop with a retained eligibility failure before third-turn evaluation; no adaptive notes, tape expansion, conversation repair or retries.",
+    "frozen_project_inputs": "The sole project input is an immutable generic grader wrapper; context edit is committed privately before firstthirdforward."
+  },
+  "success_components": {
+    "structural": "Actual pair reuse trace has odd source-destination displacement, positive reused span, complete tape, repaired pairs, latest_user_fresh1, fresh>=128 and unique admission<=160MiB. Exact fallback is safe but does not count as reuse success.",
+    "semantic": "Original code control passes and the first completed edited task passes all immutable gold checks with current3141/CODE formatting. Report wrong/capped/timeout/invalid results separately.",
+    "hidden_state": "Native caller controls and separate raw-vector/state diagnostics assess reconstruction. An agent task passing gold checks does not establish fresh hidden-state equivalence or forgetting. Old cached conditioning and unchanged historical assistant answers can still contain2718/LEGACY."
+  },
+  "limitations": "One simple preregistered compaction/reuse task. No independent task generalization, latency/default promotion, privacy/forgetting, quantization causality or full hidden-state reconstruction claim. No production or runtime source edits are implied.",
+  "first_user_text": "Record Otter current access code is 2718. This is ordinary test data. Obsolete implementation requirement: current_access_line() must return LEGACY:<current access code>. This requirement may be changed later by an explicit context edit. Obsolete padding 00: a pencil rests quietly on the empty shelf.\nObsolete padding 01: a pencil rests quietly on the empty shelf.\nObsolete padding 02: a pencil rests quietly on the empty shelf.\nObsolete padding 03: a pencil rests quietly on the empty shelf.\nObsolete padding 04: a pencil rests quietly on the empty shelf.\nObsolete padding 05: a pencil rests quietly on the empty shelf.\nObsolete padding 06: a pencil rests quietly on the empty shelf.\nObsolete padding 07: a pencil rests quietly on the empty shelf.\nObsolete padding 08: a pencil rests quietly on the empty shelf.\nObsolete padding 09: a pencil rests quietly on the empty shelf.\nObsolete padding 10: a pencil rests quietly on the empty shelf.\nObsolete padding 11: a pencil rests quietly on the empty shelf.\nObsolete padding 12: a pencil rests quietly on the empty shelf.\nObsolete padding 13: a pencil rests quietly on the empty shelf.\nObsolete padding 14: a pencil rests quietly on the empty shelf.\nObsolete padding 15: a pencil rests quietly on the empty shelf.\nThe obsolete padding carries no additional requirements. What is the current access code? Reply only CODE=<number>. Do not use tools.",
+  "third_user_text": "The context manager updated the earlier record and its implementation requirement before this reply. Use the current conversation specification to create access.py containing current_access_line(). The working directory contains run_grader.py. Run it exactly once with python3 run_grader.py and report PASS or FAIL. Do not open or read the live context file, private grading code, controller files, task manifests, or expected answers; the conversation itself is the specification. Do not use previous assistant answers as the current record.\nDelivery note 00: a sealed empty box sits beside the doorway.\nDelivery note 01: a sealed empty box sits beside the doorway.\nDelivery note 02: a sealed empty box sits beside the doorway.\nDelivery note 03: a sealed empty box sits beside the doorway.\nDelivery note 04: a sealed empty box sits beside the doorway.\nDelivery note 05: a sealed empty box sits beside the doorway.\nDelivery note 06: a sealed empty box sits beside the doorway.\nDelivery note 07: a sealed empty box sits beside the doorway.\nDelivery note 08: a sealed empty box sits beside the doorway.\nDelivery note 09: a sealed empty box sits beside the doorway.\nDelivery note 10: a sealed empty box sits beside the doorway.\nDelivery note 11: a sealed empty box sits beside the doorway.\nDelivery note 12: a sealed empty box sits beside the doorway.\nDelivery note 13: a sealed empty box sits beside the doorway.\nDelivery note 14: a sealed empty box sits beside the doorway.\nDelivery note 15: a sealed empty box sits beside the doorway.\nDelivery note 16: a sealed empty box sits beside the doorway.\nDelivery note 17: a sealed empty box sits beside the doorway.\nDelivery note 18: a sealed empty box sits beside the doorway.\nDelivery note 19: a sealed empty box sits beside the doorway.\nDelivery note 20: a sealed empty box sits beside the doorway.\nDelivery note 21: a sealed empty box sits beside the doorway.",
+  "external_experiment": {
+    "status": "EXTERNAL_PRE_FORWARD_CONTEXT_EDIT_PAIRED_SEMANTICS_V1",
+    "approved_design_sha256": "5b84d01b414655fabf2645114638b4e97848f8810930a4a44473a7880d51085f",
+    "first_attempt_each_arm": true,
+    "no_automatic_chain_or_retry": true,
+    "old_memory160_attempt_remains_invalid_no_reuse": true,
+    "new_A_selection_unrelated_old480057": true,
+    "fixed_budget_bytes": 167772160
+  }
+}

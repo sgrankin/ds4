@@ -1,0 +1,196 @@
+{
+  "scope": "343 teacher-forced tokens,3 correlated decode phases; quality metrics and counters only, not production latency. Native reference decode misses5143 from exact attribution run.",
+  "results": [
+    {
+      "name": "native-before",
+      "tokens": 343,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "bit_equal_rows": 343,
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        }
+      }
+    },
+    {
+      "name": "balanced",
+      "tokens": 343,
+      "delta_nll": -0.000298847996701,
+      "kl_base_to_raw": 0.000412702611469,
+      "tv": 0.00222891561529,
+      "argmax_flips": 1,
+      "bit_equal_rows": 1,
+      "kl_p99": 0.00834287116782,
+      "kl_max": 0.0387141598352,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": -0.0011191649246590763,
+          "kl": 0.0003799187107762759
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": 0.0003521065285743113,
+          "kl": 0.0001393269939469362
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": -0.00024355772287717496,
+          "kl": 0.0005273738629741268
+        }
+      },
+      "routing": {
+        "layers": 13720,
+        "substitutions": 2660,
+        "native_misses": 5931,
+        "skipped_loads": 2660,
+        "skipped_bytes": 26475724800,
+        "mean_mass": 0.11767334,
+        "mean_score_gap": 0.0495457,
+        "mean_affinity_ratio": 0.95614023,
+        "mean_rank": 7.378,
+        "full_snapshots": 2994,
+        "double_layers": 147,
+        "planned_substitutions": 2660,
+        "drops": 0
+      },
+      "decode_demand_misses": 3271,
+      "net_decode_load_reduction_vs_native": 0.3639898891697453
+    },
+    {
+      "name": "broader",
+      "tokens": 343,
+      "delta_nll": 0.000454512950833,
+      "kl_base_to_raw": 0.000253542382457,
+      "tv": 0.00169883403199,
+      "argmax_flips": 1,
+      "bit_equal_rows": 1,
+      "kl_p99": 0.00801123640237,
+      "kl_max": 0.0139272066085,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": -0.0008894037291027607,
+          "kl": 0.0002808567161710015
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": 0.0014561298616115072,
+          "kl": 0.0004608756901988423
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": 0.0005694487353926727,
+          "kl": 0.00016567793169396883
+        }
+      },
+      "routing": {
+        "layers": 13720,
+        "substitutions": 3323,
+        "native_misses": 6159,
+        "skipped_loads": 3323,
+        "skipped_bytes": 33074749440,
+        "mean_mass": 0.11703168,
+        "mean_score_gap": 0.07359688,
+        "mean_affinity_ratio": 0.93107995,
+        "mean_rank": 7.469,
+        "full_snapshots": 3107,
+        "double_layers": 281,
+        "planned_substitutions": 3323,
+        "drops": 0
+      },
+      "decode_demand_misses": 2836,
+      "net_decode_load_reduction_vs_native": 0.4485708730313047
+    },
+    {
+      "name": "drop",
+      "tokens": 343,
+      "delta_nll": 9.10920614656e-05,
+      "kl_base_to_raw": 0.000255279452873,
+      "tv": 0.0017251577801,
+      "argmax_flips": 2,
+      "bit_equal_rows": 1,
+      "kl_p99": 0.00891597432214,
+      "kl_max": 0.0170287682566,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": 0.000438893428360803,
+          "kl": 9.303060600090296e-05
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": 0.0007048092008284225,
+          "kl": 0.0003849659552129078
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": -0.0002665565006097937,
+          "kl": 0.0002658637970436401
+        }
+      },
+      "routing": {
+        "layers": 13720,
+        "substitutions": 497,
+        "native_misses": 5266,
+        "skipped_loads": 497,
+        "skipped_bytes": 4946780160,
+        "mean_mass": 0.07680085,
+        "mean_score_gap": 0.0,
+        "mean_affinity_ratio": 0.0,
+        "mean_rank": 0.0,
+        "full_snapshots": 0,
+        "double_layers": 0,
+        "planned_substitutions": 497,
+        "drops": 497
+      },
+      "decode_demand_misses": 4769,
+      "net_decode_load_reduction_vs_native": 0.07272020221660513
+    },
+    {
+      "name": "native-after",
+      "tokens": 343,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "bit_equal_rows": 343,
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "per_phase": {
+        "phase_002": {
+          "tokens": 72,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_004": {
+          "tokens": 74,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "phase_006": {
+          "tokens": 197,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "original_plan_sha256": "cca9ffbc4e8f5d77c77f7b2c68f622dc144cbd54d426adc80b854418ba40ed65",
+  "prepared_command_sha256": "c4634fe3b5005492bf6d2b14193ee559ba20258332d334f717fb980246831998",
+  "launcher_sha256": "37a57726f2030653d1018ef2a78a52b18e7c67e84016b0762be6282fcc5c4f78",
+  "validated_analysis_sha256": "fd559a7c66d0d46e0e1196b197f0489e7d78bc45963d506051c676667c57d486",
+  "binary_sha256": "847ca79f2d850901d4d553a99535fdd5ccf1783ae10322585c0551e639e5be39",
+  "source_sha256": "79881a996fc6b536f4ba8d0a851010319e23aea93f0f9dd90bffd494afd8f7a4",
+  "original_prepared": "/Volumes/Models/ds4/.workspaces/idea-quant-closing/speed-bench/ideas/artifacts/closing-prepared-20261002-v1",
+  "mandatory_assets": 194,
+  "exact_arms": [
+    [
+      "native-before",
+      0
+    ],
+    [
+      "closing-add2",
+      2
+    ],
+    [
+      "native-after",
+      0
+    ]
+  ],
+  "distribution": "Same-prefix full-vocabulary pre-filter softmax at actual Tfloat 0.6000000238418579 and actual rounded FP32 ADD delta to ID128822. Not post-top-p probabilities, T1, corpus NLL or cross-trajectory KL.",
+  "live_output_read": false,
+  "model_opened": false,
+  "model_metadata_read": false
+}

@@ -1,0 +1,141 @@
+{
+  "revision": "47115a6e0394bd1eead6a37356d0d9931b1726f8",
+  "source_sha256": "85e52f0f26a7501f73f8ffcb348c7c1f488ad1d088a36feebfc295a43cdb8c1d",
+  "binary_sha256": "d4d91f440ae1971fd06a9dc7547831ac185f31f7517573e66c9f7f73bc2e345c",
+  "reused_objects": [
+    "ds4_help.o",
+    "ds4_prompt_prefix.o",
+    "ds4_web.o",
+    "ds4_kvstore.o",
+    "linenoise.o",
+    "ds4_gpu_args.o",
+    "ds4.o",
+    "ds4_image.o",
+    "ds4_distributed.o",
+    "ds4_tp.o",
+    "ds4_ssd.o",
+    "ds4_metal.o",
+    "ds4_layer_pack.o",
+    "ds4_engram.o"
+  ],
+  "commands": [
+    {
+      "argv": [
+        "cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-c",
+        "-o",
+        ".workspaces/idea-agent-suffix-hour6/build/ds4_agent.o",
+        "ds4_agent.c"
+      ],
+      "returncode": 0,
+      "seconds": 1.2190292500017677
+    },
+    {
+      "argv": [
+        "cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-o",
+        ".workspaces/idea-agent-suffix-hour6/build/ds4-agent",
+        ".workspaces/idea-agent-suffix-hour6/build/ds4_agent.o",
+        "ds4_help.o",
+        "ds4_prompt_prefix.o",
+        "ds4_web.o",
+        "ds4_kvstore.o",
+        "linenoise.o",
+        "ds4_gpu_args.o",
+        "ds4.o",
+        "ds4_image.o",
+        "ds4_distributed.o",
+        "ds4_tp.o",
+        "ds4_ssd.o",
+        "ds4_metal.o",
+        "ds4_layer_pack.o",
+        "ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "returncode": 0,
+      "seconds": 0.07018854199850466
+    },
+    {
+      "argv": [
+        "cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-Wno-unused-function",
+        "-c",
+        "-o",
+        ".workspaces/idea-agent-suffix-hour6/build/ds4_agent_test.o",
+        "tests/ds4_agent_test.c"
+      ],
+      "returncode": 0,
+      "seconds": 1.1543549589987379
+    },
+    {
+      "argv": [
+        "cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-o",
+        ".workspaces/idea-agent-suffix-hour6/build/ds4_agent_test",
+        ".workspaces/idea-agent-suffix-hour6/build/ds4_agent_test.o",
+        "ds4_help.o",
+        "ds4_prompt_prefix.o",
+        "ds4_web.o",
+        "ds4_kvstore.o",
+        "linenoise.o",
+        "ds4_gpu_args.o",
+        "ds4.o",
+        "ds4_image.o",
+        "ds4_distributed.o",
+        "ds4_tp.o",
+        "ds4_ssd.o",
+        "ds4_metal.o",
+        "ds4_layer_pack.o",
+        "ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "returncode": 0,
+      "seconds": 0.06724495899106842
+    },
+    {
+      "argv": [
+        ".workspaces/idea-agent-suffix-hour6/build/ds4_agent_test"
+      ],
+      "returncode": 0,
+      "seconds": 5.018621666007675
+    }
+  ]
+}

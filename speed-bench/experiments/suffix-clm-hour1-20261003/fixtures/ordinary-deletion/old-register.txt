@@ -1,0 +1,1 @@
+Deployment Atlas release code is 3141. Earlier deployment planning considered cabinet checks, shelf counts and weather readings. Those checks are complete and do not change the release code.

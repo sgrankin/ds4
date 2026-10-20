@@ -1,0 +1,4 @@
+These two marked dispatch spans are obsolete notes; their labels will move to the archive file.
+[dispatch note archived]
+[dispatch note archived]
+Read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/active.json once using read with whole=true and raw=true. Retain the inventory numbers and complete unchanged tool result. Then reply READY only.

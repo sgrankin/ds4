@@ -1,0 +1,134 @@
+[
+  {
+    "case": "ledger",
+    "arm": "native",
+    "protocol": "full-input-clm",
+    "write_budget": 128,
+    "final_policy": "budget1",
+    "global_cap": 2048,
+    "wall_seconds": 119.26724533300148,
+    "http_output_tokens": 688,
+    "http_reasoning_tokens": 155,
+    "actual_read_count": 1,
+    "actual_write_count": 1,
+    "calls": [
+      {
+        "role": "READ",
+        "name": "read",
+        "call_id": "call_5939edca02cabd7146d5089bebaa6460",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/config.json\",\"whole\":true,\"raw\":true}",
+        "executed": true,
+        "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/config.json",
+        "output": "{\n  \"include_deleted\": true,\n  \"sample\": [\n    {\n      \"key\": \"x\",\n      \"revision\": 2,\n      \"op\": \"put\",\n      \"value\": \"new\"\n    },\n    {\n      \"key\": \"x\",\n      \"revision\": 1,\n      \"op\": \"delete\"\n    },\n    {\n      \"key\": \"y\",\n      \"revision\": 3,\n      \"op\": \"put\",\n      \"value\": false\n    },\n    {\n      \"key\": \"y\",\n      \"revision\": 3,\n      \"op\": \"delete\"\n    },\n    {\n      \"key\": \"\",\n      \"revision\": 0,\n      \"op\": \"put\",\n      \"value\": null\n    }\n  ]\n}\n",
+        "tool_ms": 0.2666670043254271
+      },
+      {
+        "role": "WRITE",
+        "name": "write",
+        "call_id": "call_556ed7e741794d4aeed2dd2715c0b0e8",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py\",\"content\":\"def solve(payload, config):\\n    winners = {}\\n    order = []\\n    for event in payload:\\n        key = event[\\\"key\\\"]\\n        revision = event[\\\"revision\\\"]\\n        if key not in winners:\\n            winners[key] = event\\n            order.append(key)\\n        else:\\n            current = winners[key]\\n            if revision >= current[\\\"revision\\\"]:\\n                winners[key] = event\\n\\n    live = []\\n    deleted = []\\n    include_deleted = False\\n    if config is not None:\\n        include_deleted = config.get(\\\"include_deleted\\\", False)\\n\\n    for key in order:\\n        event = winners[key]\\n        if event[\\\"op\\\"] == \\\"put\\\":\\n            live.append({\\n                \\\"key\\\": key,\\n                \\\"revision\\\": event[\\\"revision\\\"],\\n                \\\"value\\\": event[\\\"value\\\"],\\n            })\\n        else:\\n            if include_deleted:\\n                deleted.append({\\n                    \\\"key\\\": key,\\n                    \\\"revision\\\": event[\\\"revision\\\"],\\n                })\\n\\n    live.sort(key=lambda item: item[\\\"key\\\"])\\n    deleted.sort(key=lambda item: item[\\\"key\\\"])\\n\\n    return {\\\"live\\\": live, \\\"deleted\\\": deleted}\\n\"}",
+        "executed": true,
+        "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py",
+        "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py",
+        "tool_ms": 0.8669579983688891
+      }
+    ],
+    "replies": [
+      {
+        "role": "READ",
+        "budget": 0,
+        "effort": "high",
+        "seconds": 52.435359042006894,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1591,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1591
+          },
+          "output_tokens": 122,
+          "output_tokens_details": {
+            "reasoning_tokens": 26
+          },
+          "total_tokens": 1713
+        },
+        "requested_max_output_tokens": 2048,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "role": "WRITE",
+        "budget": 128,
+        "effort": "high",
+        "seconds": 57.93359149999742,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1208,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1208
+          },
+          "output_tokens": 444,
+          "output_tokens_details": {
+            "reasoning_tokens": 128
+          },
+          "total_tokens": 1652
+        },
+        "requested_max_output_tokens": 1926,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "role": "FINAL",
+        "budget": 1,
+        "effort": "high",
+        "seconds": 8.895370041995193,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1695,
+          "input_tokens_details": {
+            "cached_tokens": 1652,
+            "cache_write_tokens": 43
+          },
+          "output_tokens": 122,
+          "output_tokens_details": {
+            "reasoning_tokens": 1
+          },
+          "total_tokens": 1817
+        },
+        "requested_max_output_tokens": 1482,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      }
+    ],
+    "first_code_path": "speed-bench/experiments/clm-coding-hour27-20261004/native-before/http/ledger/ledger/first-solution.py",
+    "grade": {
+      "correct": false,
+      "reason": "FileNotFoundError",
+      "message": "[Errno 2] No such file or directory: 'speed-bench/experiments/clm-coding-hour27-20261004/native-before/http/ledger/ledger/first-solution.py'",
+      "tests_complete": false,
+      "returncode": 3
+    },
+    "complete": true,
+    "cap": false,
+    "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects, per exact key, the event with the greatest revision (last event wins on ties), emits winning puts as `{key, revision, value}`, emits winning deletes as `{key, revision}` only when `config[\"include_deleted\"]` is true, sorts both lists by key using normal string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+    "final_text_length": 494,
+    "final_text_bytes": 494,
+    "first_code_bytes": 1090,
+    "errors": [],
+    "config_unchanged": true,
+    "context_edit": {
+      "removed_blocks": 2,
+      "before_bytes": 5718,
+      "after_bytes": 2200,
+      "seconds": 0.0003137500025331974
+    },
+    "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+    "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+    "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+    "pass": false
+  }
+]

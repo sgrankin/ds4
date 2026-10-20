@@ -1,0 +1,23 @@
+{
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "frozen_spec_sha256": "8045f9098824503baca82175c31ccda279b1b0537e0588a4b4e7f166963cb0b8",
+  "frozen_cases_sha256": "45c595388a9f2540da864619916be9f5e7674a4516758a91f59bfc38d9b9917d",
+  "preparation_start_utc": "2026-10-04 22:37 UTC",
+  "start_utc": "2026-10-04 22:42 UTC",
+  "deadline_utc": "2026-10-04 22:58 UTC",
+  "budget_note": "4 minutes source preparation charged, execution/report bounded by22:58 UTC",
+  "one_change": "WRITE request thinking budget1/32/128, fixed persistent profile",
+  "opening_reference": "fresh-resident-curve-hour33-20261004/subs3-after",
+  "fixed": "suffix64/canonical1PAD1/strongsubs3/nativeweights1, READhigh0 FINALhigh1, hot0SSD4096/cache64/batch2/ctx8192/chunk512/temp0/global2048",
+  "arms": [
+    "write1",
+    "write32",
+    "write128-after"
+  ],
+  "qualification": "unchanged32 dedupe/bucket frozen161 checks; first WRITE content graded withoutretry, partial failures/caps/pipeline androle costsretained",
+  "measurement_finish_utc": "2026-10-04 22:51:52 UTC",
+  "finish_utc": "2026-10-04 22:55 UTC",
+  "independent_audit": "Original first grades/pipeline/READ requests and usage/closing128 public code and routes/geometry/profiles/guards agree; no blocker.",
+  "final_runtime_sha256_verified": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9"
+}

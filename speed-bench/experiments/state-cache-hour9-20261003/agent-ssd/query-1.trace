@@ -1,0 +1,274 @@
+2026-10-03 20:40:25.745 compaction prefix cache hit tokens=1988 4.781 ms
+2026-10-03 20:40:27.626 prefill sync done prompt=2050 cached=1988 suffix=62 rc=0 1880.906 ms
+2026-10-03 20:40:27.704 state cache store ok tokens=2050 approximate=0
+2026-10-03 20:40:31.128 context suffix APPROXIMATE reused=2073 fresh=144 source=2712:4785 destination=2050:4123 copied_bytes=23761408 latest_user_start=4124 latest_user_fresh=1 pre_rope=1 prior_approximate=0 source_ssd=1 5502.806 ms
+2026-10-03 20:40:31.128 live context edit committed tokens=4929->4267 file=/Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/agent-shared/context.txt
+2026-10-03 20:40:31.128 user="Read /Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/agent-shared/work/archive.json again now using the read tool with whole=true and raw=true. A fresh read is required on this turn; do not substitute an earlier read or remembered code. Using the previously read unchanged active inventory, return only JSON with active_total (batches times items_per_batch minus reserved_items) and archived_code from this permanent file.\n"
+2026-10-03 20:40:31.130 prefill tool_round=0 transcript=4370 prompt=4370 cached=4267 suffix=103 think=none
+2026-10-03 20:40:31.130 tokens label=prefill_suffix start=4267 len=4370
+2026-10-03 20:40:31.130 token index=4267 id=128803 bytes=12 text="<｜User｜>" hex=3cefbd9c55736572efbd9c3e
+2026-10-03 20:40:31.130 token index=4268 id=8158 bytes=4 text="Read" hex=52656164
+2026-10-03 20:40:31.130 token index=4269 id=1492 bytes=2 text=" /" hex=202f
+2026-10-03 20:40:31.130 token index=4270 id=11628 bytes=3 text="Vol" hex=566f6c
+2026-10-03 20:40:31.130 token index=4271 id=13487 bytes=4 text="umes" hex=756d6573
+2026-10-03 20:40:31.130 token index=4272 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:31.130 token index=4273 id=29593 bytes=6 text="Models" hex=4d6f64656c73
+2026-10-03 20:40:31.130 token index=4274 id=6761 bytes=2 text="/d" hex=2f64
+2026-10-03 20:40:31.130 token index=4275 id=85 bytes=1 text="s" hex=73
+2026-10-03 20:40:31.130 token index=4276 id=22 bytes=1 text="4" hex=34
+2026-10-03 20:40:31.130 token index=4277 id=2283 bytes=2 text="/s" hex=2f73
+2026-10-03 20:40:31.130 token index=4278 id=18584 bytes=4 text="peed" hex=70656564
+2026-10-03 20:40:31.130 token index=4279 id=1761 bytes=2 text="-b" hex=2d62
+2026-10-03 20:40:31.130 token index=4280 id=34569 bytes=4 text="ench" hex=656e6368
+2026-10-03 20:40:31.130 token index=4281 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:31.130 token index=4282 id=32844 bytes=5 text="exper" hex=6578706572
+2026-10-03 20:40:31.130 token index=4283 id=7078 bytes=6 text="iments" hex=696d656e7473
+2026-10-03 20:40:31.130 token index=4284 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:31.130 token index=4285 id=9395 bytes=5 text="state" hex=7374617465
+2026-10-03 20:40:31.130 token index=4286 id=2846 bytes=2 text="-c" hex=2d63
+2026-10-03 20:40:31.130 token index=4287 id=6634 bytes=4 text="ache" hex=61636865
+2026-10-03 20:40:31.130 token index=4288 id=23264 bytes=5 text="-hour" hex=2d686f7572
+2026-10-03 20:40:31.130 token index=4289 id=27 bytes=1 text="9" hex=39
+2026-10-03 20:40:31.130 token index=4290 id=15 bytes=1 text="-" hex=2d
+2026-10-03 20:40:31.130 token index=4291 id=939 bytes=3 text="202" hex=323032
+2026-10-03 20:40:31.130 token index=4292 id=21484 bytes=3 text="610" hex=363130
+2026-10-03 20:40:31.130 token index=4293 id=3600 bytes=2 text="03" hex=3033
+2026-10-03 20:40:31.130 token index=4294 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:31.130 token index=4295 id=27860 bytes=5 text="agent" hex=6167656e74
+2026-10-03 20:40:31.130 token index=4296 id=10565 bytes=3 text="-sh" hex=2d7368
+2026-10-03 20:40:31.130 token index=4297 id=1947 bytes=4 text="ared" hex=61726564
+2026-10-03 20:40:31.130 token index=4298 id=124907 bytes=5 text="/work" hex=2f776f726b
+2026-10-03 20:40:31.130 token index=4299 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:31.130 token index=4300 id=29512 bytes=7 text="archive" hex=61726368697665
+2026-10-03 20:40:31.130 token index=4301 id=23074 bytes=5 text=".json" hex=2e6a736f6e
+2026-10-03 20:40:31.130 token index=4302 id=1820 bytes=6 text=" again" hex=20616761696e
+2026-10-03 20:40:31.130 token index=4303 id=1928 bytes=4 text=" now" hex=206e6f77
+2026-10-03 20:40:31.130 token index=4304 id=1812 bytes=6 text=" using" hex=207573696e67
+2026-10-03 20:40:31.130 token index=4305 id=270 bytes=4 text=" the" hex=20746865
+2026-10-03 20:40:31.130 token index=4306 id=1733 bytes=5 text=" read" hex=2072656164
+2026-10-03 20:40:31.130 token index=4307 id=4105 bytes=5 text=" tool" hex=20746f6f6c
+2026-10-03 20:40:31.130 token index=4308 id=418 bytes=5 text=" with" hex=2077697468
+2026-10-03 20:40:31.130 token index=4309 id=4445 bytes=6 text=" whole" hex=2077686f6c65
+2026-10-03 20:40:31.130 token index=4310 id=57176 bytes=5 text="=true" hex=3d74727565
+2026-10-03 20:40:31.130 token index=4311 id=305 bytes=4 text=" and" hex=20616e64
+2026-10-03 20:40:31.130 token index=4312 id=14099 bytes=4 text=" raw" hex=20726177
+2026-10-03 20:40:31.130 token index=4313 id=57176 bytes=5 text="=true" hex=3d74727565
+2026-10-03 20:40:31.130 token index=4314 id=16 bytes=1 text="." hex=2e
+2026-10-03 20:40:31.130 token index=4315 id=334 bytes=2 text=" A" hex=2041
+2026-10-03 20:40:31.130 token index=4316 id=8289 bytes=6 text=" fresh" hex=206672657368
+2026-10-03 20:40:31.130 token index=4317 id=1733 bytes=5 text=" read" hex=2072656164
+2026-10-03 20:40:31.130 token index=4318 id=344 bytes=3 text=" is" hex=206973
+2026-10-03 20:40:31.130 token index=4319 id=4072 bytes=9 text=" required" hex=207265717569726564
+2026-10-03 20:40:31.130 token index=4320 id=377 bytes=3 text=" on" hex=206f6e
+2026-10-03 20:40:31.130 token index=4321 id=566 bytes=5 text=" this" hex=2074686973
+2026-10-03 20:40:31.130 token index=4322 id=2859 bytes=5 text=" turn" hex=207475726e
+2026-10-03 20:40:31.130 token index=4323 id=29 bytes=1 text=";" hex=3b
+2026-10-03 20:40:31.130 token index=4324 id=696 bytes=3 text=" do" hex=20646f
+2026-10-03 20:40:31.130 token index=4325 id=554 bytes=4 text=" not" hex=206e6f74
+2026-10-03 20:40:31.130 token index=4326 id=26864 bytes=11 text=" substitute" hex=2073756273746974757465
+2026-10-03 20:40:31.130 token index=4327 id=411 bytes=3 text=" an" hex=20616e
+2026-10-03 20:40:31.130 token index=4328 id=7728 bytes=8 text=" earlier" hex=206561726c696572
+2026-10-03 20:40:31.130 token index=4329 id=1733 bytes=5 text=" read" hex=2072656164
+2026-10-03 20:40:31.130 token index=4330 id=469 bytes=3 text=" or" hex=206f72
+2026-10-03 20:40:31.130 token index=4331 id=23006 bytes=11 text=" remembered" hex=2072656d656d6265726564
+2026-10-03 20:40:31.130 token index=4332 id=4181 bytes=5 text=" code" hex=20636f6465
+2026-10-03 20:40:31.130 token index=4333 id=16 bytes=1 text="." hex=2e
+2026-10-03 20:40:31.130 token index=4334 id=9276 bytes=6 text=" Using" hex=205573696e67
+2026-10-03 20:40:31.130 token index=4335 id=270 bytes=4 text=" the" hex=20746865
+2026-10-03 20:40:31.130 token index=4336 id=9479 bytes=11 text=" previously" hex=2070726576696f75736c79
+2026-10-03 20:40:31.130 token index=4337 id=1733 bytes=5 text=" read" hex=2072656164
+2026-10-03 20:40:31.130 token index=4338 id=41668 bytes=10 text=" unchanged" hex=20756e6368616e676564
+2026-10-03 20:40:31.130 token index=4339 id=6690 bytes=7 text=" active" hex=20616374697665
+2026-10-03 20:40:31.130 token index=4340 id=21473 bytes=10 text=" inventory" hex=20696e76656e746f7279
+2026-10-03 20:40:31.130 token index=4341 id=14 bytes=1 text="," hex=2c
+2026-10-03 20:40:31.130 token index=4342 id=1354 bytes=7 text=" return" hex=2072657475726e
+2026-10-03 20:40:31.130 token index=4343 id=1353 bytes=5 text=" only" hex=206f6e6c79
+2026-10-03 20:40:31.130 token index=4344 id=26639 bytes=5 text=" JSON" hex=204a534f4e
+2026-10-03 20:40:31.130 token index=4345 id=418 bytes=5 text=" with" hex=2077697468
+2026-10-03 20:40:31.130 token index=4346 id=6690 bytes=7 text=" active" hex=20616374697665
+2026-10-03 20:40:31.130 token index=4347 id=68081 bytes=6 text="_total" hex=5f746f74616c
+2026-10-03 20:40:31.130 token index=4348 id=343 bytes=2 text=" (" hex=2028
+2026-10-03 20:40:31.130 token index=4349 id=27420 bytes=3 text="bat" hex=626174
+2026-10-03 20:40:31.130 token index=4350 id=2990 bytes=4 text="ches" hex=63686573
+2026-10-03 20:40:31.130 token index=4351 id=2734 bytes=6 text=" times" hex=2074696d6573
+2026-10-03 20:40:31.130 token index=4352 id=7316 bytes=6 text=" items" hex=206974656d73
+2026-10-03 20:40:31.130 token index=4353 id=36106 bytes=4 text="_per" hex=5f706572
+2026-10-03 20:40:31.130 token index=4354 id=9181 bytes=2 text="_b" hex=5f62
+2026-10-03 20:40:31.130 token index=4355 id=2471 bytes=4 text="atch" hex=61746368
+2026-10-03 20:40:31.130 token index=4356 id=21802 bytes=6 text=" minus" hex=206d696e7573
+2026-10-03 20:40:31.130 token index=4357 id=15969 bytes=9 text=" reserved" hex=207265736572766564
+2026-10-03 20:40:31.130 token index=4358 id=75266 bytes=6 text="_items" hex=5f6974656d73
+2026-10-03 20:40:31.130 token index=4359 id=11 bytes=1 text=")" hex=29
+2026-10-03 20:40:31.130 token index=4360 id=305 bytes=4 text=" and" hex=20616e64
+2026-10-03 20:40:31.130 token index=4361 id=80103 bytes=9 text=" archived" hex=206172636869766564
+2026-10-03 20:40:31.130 token index=4362 id=17636 bytes=5 text="_code" hex=5f636f6465
+2026-10-03 20:40:31.130 token index=4363 id=538 bytes=5 text=" from" hex=2066726f6d
+2026-10-03 20:40:31.130 token index=4364 id=566 bytes=5 text=" this" hex=2074686973
+2026-10-03 20:40:31.130 token index=4365 id=16093 bytes=10 text=" permanent" hex=207065726d616e656e74
+2026-10-03 20:40:31.130 token index=4366 id=4245 bytes=5 text=" file" hex=2066696c65
+2026-10-03 20:40:31.130 token index=4367 id=603 bytes=2 text=".\n" hex=2e0a
+2026-10-03 20:40:31.130 token index=4368 id=128804 bytes=17 text="<｜Assistant｜>" hex=3cefbd9c417373697374616e74efbd9c3e
+2026-10-03 20:40:31.130 token index=4369 id=128822 bytes=8 text="</think>" hex=3c2f7468696e6b3e
+2026-10-03 20:40:33.970 prefill sync done tool_round=0 prompt=4370 cached=4267 suffix=103 rc=0 2839.255 ms
+2026-10-03 20:40:34.045 token index=1 id=271 bytes=2 text="\n\n" hex=0a0a
+2026-10-03 20:40:34.100 token index=2 id=30 bytes=1 text="<" hex=3c
+2026-10-03 20:40:34.152 token index=3 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:34.204 token index=4 id=10699 bytes=6 text=" calls" hex=2063616c6c73
+2026-10-03 20:40:34.253 token index=5 id=1018 bytes=2 text=">\n" hex=3e0a
+2026-10-03 20:40:34.253 dsml tool start detected
+2026-10-03 20:40:34.304 token index=6 id=30 bytes=1 text="<" hex=3c
+2026-10-03 20:40:34.367 token index=7 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:34.430 token index=8 id=34756 bytes=7 text=" invoke" hex=20696e766f6b65
+2026-10-03 20:40:34.485 token index=9 id=2329 bytes=5 text=" name" hex=206e616d65
+2026-10-03 20:40:34.553 token index=10 id=1281 bytes=2 text="=\"" hex=3d22
+2026-10-03 20:40:34.634 token index=11 id=1795 bytes=4 text="read" hex=72656164
+2026-10-03 20:40:34.693 token index=12 id=3816 bytes=3 text="\">\n" hex=223e0a
+2026-10-03 20:40:34.751 token index=13 id=30 bytes=1 text="<" hex=3c
+2026-10-03 20:40:34.808 token index=14 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:34.868 token index=15 id=10767 bytes=10 text=" parameter" hex=20706172616d65746572
+2026-10-03 20:40:34.920 token index=16 id=2329 bytes=5 text=" name" hex=206e616d65
+2026-10-03 20:40:34.975 token index=17 id=1281 bytes=2 text="=\"" hex=3d22
+2026-10-03 20:40:35.054 token index=18 id=9860 bytes=4 text="path" hex=70617468
+2026-10-03 20:40:35.112 token index=19 id=4 bytes=1 text="\"" hex=22
+2026-10-03 20:40:35.172 token index=20 id=3418 bytes=7 text=" string" hex=20737472696e67
+2026-10-03 20:40:35.228 token index=21 id=1281 bytes=2 text="=\"" hex=3d22
+2026-10-03 20:40:35.280 token index=22 id=11476 bytes=4 text="true" hex=74727565
+2026-10-03 20:40:35.336 token index=23 id=3320 bytes=2 text="\">" hex=223e
+2026-10-03 20:40:35.392 token index=24 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:35.445 token index=25 id=11628 bytes=3 text="Vol" hex=566f6c
+2026-10-03 20:40:35.498 token index=26 id=13487 bytes=4 text="umes" hex=756d6573
+2026-10-03 20:40:35.548 token index=27 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:35.605 token index=28 id=29593 bytes=6 text="Models" hex=4d6f64656c73
+2026-10-03 20:40:35.655 token index=29 id=6761 bytes=2 text="/d" hex=2f64
+2026-10-03 20:40:35.704 token index=30 id=85 bytes=1 text="s" hex=73
+2026-10-03 20:40:35.763 token index=31 id=22 bytes=1 text="4" hex=34
+2026-10-03 20:40:35.822 token index=32 id=2283 bytes=2 text="/s" hex=2f73
+2026-10-03 20:40:35.874 token index=33 id=18584 bytes=4 text="peed" hex=70656564
+2026-10-03 20:40:35.925 token index=34 id=1761 bytes=2 text="-b" hex=2d62
+2026-10-03 20:40:35.983 token index=35 id=34569 bytes=4 text="ench" hex=656e6368
+2026-10-03 20:40:36.033 token index=36 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:36.090 token index=37 id=32844 bytes=5 text="exper" hex=6578706572
+2026-10-03 20:40:36.141 token index=38 id=7078 bytes=6 text="iments" hex=696d656e7473
+2026-10-03 20:40:36.190 token index=39 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:36.239 token index=40 id=9395 bytes=5 text="state" hex=7374617465
+2026-10-03 20:40:36.293 token index=41 id=2846 bytes=2 text="-c" hex=2d63
+2026-10-03 20:40:36.345 token index=42 id=6634 bytes=4 text="ache" hex=61636865
+2026-10-03 20:40:36.403 token index=43 id=23264 bytes=5 text="-hour" hex=2d686f7572
+2026-10-03 20:40:36.460 token index=44 id=27 bytes=1 text="9" hex=39
+2026-10-03 20:40:36.509 token index=45 id=15 bytes=1 text="-" hex=2d
+2026-10-03 20:40:36.556 token index=46 id=939 bytes=3 text="202" hex=323032
+2026-10-03 20:40:36.605 token index=47 id=21484 bytes=3 text="610" hex=363130
+2026-10-03 20:40:36.659 token index=48 id=3600 bytes=2 text="03" hex=3033
+2026-10-03 20:40:36.709 token index=49 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:36.758 token index=50 id=27860 bytes=5 text="agent" hex=6167656e74
+2026-10-03 20:40:36.820 token index=51 id=10565 bytes=3 text="-sh" hex=2d7368
+2026-10-03 20:40:36.868 token index=52 id=1947 bytes=4 text="ared" hex=61726564
+2026-10-03 20:40:36.922 token index=53 id=124907 bytes=5 text="/work" hex=2f776f726b
+2026-10-03 20:40:36.966 token index=54 id=17 bytes=1 text="/" hex=2f
+2026-10-03 20:40:37.016 token index=55 id=29512 bytes=7 text="archive" hex=61726368697665
+2026-10-03 20:40:37.075 token index=56 id=23074 bytes=5 text=".json" hex=2e6a736f6e
+2026-10-03 20:40:37.129 token index=57 id=1718 bytes=2 text="</" hex=3c2f
+2026-10-03 20:40:37.182 token index=58 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:37.255 token index=59 id=10767 bytes=10 text=" parameter" hex=20706172616d65746572
+2026-10-03 20:40:37.316 token index=60 id=1018 bytes=2 text=">\n" hex=3e0a
+2026-10-03 20:40:37.368 token index=61 id=30 bytes=1 text="<" hex=3c
+2026-10-03 20:40:37.416 token index=62 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:37.468 token index=63 id=10767 bytes=10 text=" parameter" hex=20706172616d65746572
+2026-10-03 20:40:37.515 token index=64 id=2329 bytes=5 text=" name" hex=206e616d65
+2026-10-03 20:40:37.566 token index=65 id=1281 bytes=2 text="=\"" hex=3d22
+2026-10-03 20:40:37.630 token index=66 id=86639 bytes=5 text="whole" hex=77686f6c65
+2026-10-03 20:40:37.679 token index=67 id=4 bytes=1 text="\"" hex=22
+2026-10-03 20:40:37.739 token index=68 id=3418 bytes=7 text=" string" hex=20737472696e67
+2026-10-03 20:40:37.787 token index=69 id=1281 bytes=2 text="=\"" hex=3d22
+2026-10-03 20:40:37.840 token index=70 id=19836 bytes=5 text="false" hex=66616c7365
+2026-10-03 20:40:37.908 token index=71 id=3320 bytes=2 text="\">" hex=223e
+2026-10-03 20:40:37.968 token index=72 id=11476 bytes=4 text="true" hex=74727565
+2026-10-03 20:40:38.018 token index=73 id=1718 bytes=2 text="</" hex=3c2f
+2026-10-03 20:40:38.071 token index=74 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:38.125 token index=75 id=10767 bytes=10 text=" parameter" hex=20706172616d65746572
+2026-10-03 20:40:38.170 token index=76 id=1018 bytes=2 text=">\n" hex=3e0a
+2026-10-03 20:40:38.223 token index=77 id=30 bytes=1 text="<" hex=3c
+2026-10-03 20:40:38.274 token index=78 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:38.325 token index=79 id=10767 bytes=10 text=" parameter" hex=20706172616d65746572
+2026-10-03 20:40:38.368 token index=80 id=2329 bytes=5 text=" name" hex=206e616d65
+2026-10-03 20:40:38.417 token index=81 id=1281 bytes=2 text="=\"" hex=3d22
+2026-10-03 20:40:38.479 token index=82 id=2758 bytes=3 text="raw" hex=726177
+2026-10-03 20:40:38.524 token index=83 id=4 bytes=1 text="\"" hex=22
+2026-10-03 20:40:38.570 token index=84 id=3418 bytes=7 text=" string" hex=20737472696e67
+2026-10-03 20:40:38.617 token index=85 id=1281 bytes=2 text="=\"" hex=3d22
+2026-10-03 20:40:38.661 token index=86 id=19836 bytes=5 text="false" hex=66616c7365
+2026-10-03 20:40:38.710 token index=87 id=3320 bytes=2 text="\">" hex=223e
+2026-10-03 20:40:38.767 token index=88 id=11476 bytes=4 text="true" hex=74727565
+2026-10-03 20:40:38.816 token index=89 id=1718 bytes=2 text="</" hex=3c2f
+2026-10-03 20:40:38.865 token index=90 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:38.916 token index=91 id=10767 bytes=10 text=" parameter" hex=20706172616d65746572
+2026-10-03 20:40:38.967 token index=92 id=1018 bytes=2 text=">\n" hex=3e0a
+2026-10-03 20:40:39.017 token index=93 id=1718 bytes=2 text="</" hex=3c2f
+2026-10-03 20:40:39.070 token index=94 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:39.142 token index=95 id=34756 bytes=7 text=" invoke" hex=20696e766f6b65
+2026-10-03 20:40:39.191 token index=96 id=1018 bytes=2 text=">\n" hex=3e0a
+2026-10-03 20:40:39.246 token index=97 id=1718 bytes=2 text="</" hex=3c2f
+2026-10-03 20:40:39.297 token index=98 id=128825 bytes=10 text="｜DSML｜" hex=efbd9c44534d4cefbd9c
+2026-10-03 20:40:39.349 token index=99 id=10699 bytes=6 text=" calls" hex=2063616c6c73
+2026-10-03 20:40:39.402 token index=100 id=32 bytes=1 text=">" hex=3e
+2026-10-03 20:40:39.402 dsml done calls=1
+2026-10-03 20:40:39.402 generation finished tool_round=0 generated=100 carried=0 context_limited=0
+2026-10-03 20:40:39.524 state cache store ok tokens=4470 approximate=1
+2026-10-03 20:40:39.524 context frontier captured tokens=4470 bytes=17880 retained=4 retained_bytes=73724 121.722 ms
+2026-10-03 20:40:39.529 prefill tool_round=1 transcript=4503 prompt=4503 cached=4470 suffix=33 think=none
+2026-10-03 20:40:39.529 tokens label=prefill_suffix start=4470 len=4503
+2026-10-03 20:40:39.529 token index=4470 id=1 bytes=27 text="<｜end▁of▁sentence｜>" hex=3cefbd9c656e64e296816f66e2968173656e74656e6365efbd9c3e
+2026-10-03 20:40:39.529 token index=4471 id=128803 bytes=12 text="<｜User｜>" hex=3cefbd9c55736572efbd9c3e
+2026-10-03 20:40:39.529 token index=4472 id=30 bytes=1 text="<" hex=3c
+2026-10-03 20:40:39.529 token index=4473 id=72461 bytes=4 text="tool" hex=746f6f6c
+2026-10-03 20:40:39.529 token index=4474 id=46148 bytes=7 text="_result" hex=5f726573756c74
+2026-10-03 20:40:39.529 token index=4475 id=32 bytes=1 text=">" hex=3e
+2026-10-03 20:40:39.529 token index=4476 id=42639 bytes=4 text="Tool" hex=546f6f6c
+2026-10-03 20:40:39.529 token index=4477 id=1529 bytes=7 text=" result" hex=20726573756c74
+2026-10-03 20:40:39.529 token index=4478 id=223 bytes=1 text=" " hex=20
+2026-10-03 20:40:39.529 token index=4479 id=19 bytes=1 text="1" hex=31
+2026-10-03 20:40:39.529 token index=4480 id=343 bytes=2 text=" (" hex=2028
+2026-10-03 20:40:39.529 token index=4481 id=1795 bytes=4 text="read" hex=72656164
+2026-10-03 20:40:39.529 token index=4482 id=3395 bytes=3 text="):\n" hex=293a0a
+2026-10-03 20:40:39.529 token index=4483 id=2054 bytes=2 text="{\n" hex=7b0a
+2026-10-03 20:40:39.529 token index=4484 id=223 bytes=1 text=" " hex=20
+2026-10-03 20:40:39.529 token index=4485 id=582 bytes=2 text=" \"" hex=2022
+2026-10-03 20:40:39.529 token index=4486 id=1501 bytes=4 text="arch" hex=61726368
+2026-10-03 20:40:39.529 token index=4487 id=2419 bytes=4 text="ived" hex=69766564
+2026-10-03 20:40:39.529 token index=4488 id=17636 bytes=5 text="_code" hex=5f636f6465
+2026-10-03 20:40:39.529 token index=4489 id=3362 bytes=2 text="\":" hex=223a
+2026-10-03 20:40:39.529 token index=4490 id=582 bytes=2 text=" \"" hex=2022
+2026-10-03 20:40:39.529 token index=4491 id=52 bytes=1 text="R" hex=52
+2026-10-03 20:40:39.529 token index=4492 id=78034 bytes=4 text="IVER" hex=49564552
+2026-10-03 20:40:39.529 token index=4493 id=15 bytes=1 text="-" hex=2d
+2026-10-03 20:40:39.529 token index=4494 id=5817 bytes=2 text="73" hex=3733
+2026-10-03 20:40:39.529 token index=4495 id=2701 bytes=2 text="\"\n" hex=220a
+2026-10-03 20:40:39.529 token index=4496 id=1778 bytes=2 text="}\n" hex=7d0a
+2026-10-03 20:40:39.529 token index=4497 id=1718 bytes=2 text="</" hex=3c2f
+2026-10-03 20:40:39.529 token index=4498 id=72461 bytes=4 text="tool" hex=746f6f6c
+2026-10-03 20:40:39.529 token index=4499 id=46148 bytes=7 text="_result" hex=5f726573756c74
+2026-10-03 20:40:39.529 token index=4500 id=32 bytes=1 text=">" hex=3e
+2026-10-03 20:40:39.529 token index=4501 id=128804 bytes=17 text="<｜Assistant｜>" hex=3cefbd9c417373697374616e74efbd9c3e
+2026-10-03 20:40:39.529 token index=4502 id=128822 bytes=8 text="</think>" hex=3c2f7468696e6b3e
+2026-10-03 20:40:40.617 prefill sync done tool_round=1 prompt=4503 cached=4470 suffix=33 rc=0 1087.859 ms
+2026-10-03 20:40:40.675 token index=1 id=24313 bytes=2 text="{\"" hex=7b22
+2026-10-03 20:40:40.741 token index=2 id=6615 bytes=6 text="active" hex=616374697665
+2026-10-03 20:40:40.803 token index=3 id=68081 bytes=6 text="_total" hex=5f746f74616c
+2026-10-03 20:40:40.852 token index=4 id=3362 bytes=2 text="\":" hex=223a
+2026-10-03 20:40:40.917 token index=5 id=223 bytes=1 text=" " hex=20
+2026-10-03 20:40:40.998 token index=6 id=20447 bytes=3 text="416" hex=343136
+2026-10-03 20:40:41.055 token index=7 id=14 bytes=1 text="," hex=2c
+2026-10-03 20:40:41.129 token index=8 id=582 bytes=2 text=" \"" hex=2022
+2026-10-03 20:40:41.182 token index=9 id=1501 bytes=4 text="arch" hex=61726368
+2026-10-03 20:40:41.234 token index=10 id=2419 bytes=4 text="ived" hex=69766564
+2026-10-03 20:40:41.289 token index=11 id=17636 bytes=5 text="_code" hex=5f636f6465
+2026-10-03 20:40:41.340 token index=12 id=3362 bytes=2 text="\":" hex=223a
+2026-10-03 20:40:41.390 token index=13 id=582 bytes=2 text=" \"" hex=2022
+2026-10-03 20:40:41.443 token index=14 id=52 bytes=1 text="R" hex=52
+2026-10-03 20:40:41.492 token index=15 id=78034 bytes=4 text="IVER" hex=49564552
+2026-10-03 20:40:41.542 token index=16 id=15 bytes=1 text="-" hex=2d
+2026-10-03 20:40:41.607 token index=17 id=5817 bytes=2 text="73" hex=3733
+2026-10-03 20:40:41.663 token index=18 id=62773 bytes=2 text="\"}" hex=227d
+2026-10-03 20:40:41.663 generation finished tool_round=1 generated=18 carried=0 context_limited=0
+2026-10-03 20:40:41.773 state cache store ok tokens=4521 approximate=1
+2026-10-03 20:40:41.773 context frontier captured tokens=4521 bytes=18084 retained=4 retained_bytes=74816 109.350 ms

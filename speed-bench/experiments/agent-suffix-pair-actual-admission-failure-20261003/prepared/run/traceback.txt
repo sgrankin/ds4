@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-prepared-20261003-v2/run_agent_suffix_pair_actual.py", line 292, in drive
+    if (private/'selection-failure.txt').exists():raise ControlFailure('Frozen structural selection failure retained')
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ControlFailure: Frozen structural selection failure retained

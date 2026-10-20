@@ -1,0 +1,29 @@
+{
+  "driver_tests": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_native_effort_holdout_driver.py",
+      "-v"
+    ],
+    "returncode": 0,
+    "tests": 6,
+    "tool_chunk": "967261"
+  },
+  "source_sha256": {
+    "speed-bench/run_native_effort_holdout.py": "f46820ecb228b0a067b937e9b5271e57dc8cb3cef74cc0dc6c19210063298564",
+    "speed-bench/prepare_native_effort_holdout.py": "782a574b6d363721bba9ded43ef629e514168c6f4014b492c7485330494c3c5e",
+    "tests/test_native_effort_holdout_driver.py": "bc070d990170b9701bda88b546b8a55f7cfb92eb1c242d5bac8bb1701a716da1"
+  },
+  "preflight_returncode": 0,
+  "model_opened": false,
+  "model_metadata_read": false,
+  "gpu_work": false,
+  "runtime_modified": false,
+  "helper_or_core_build_repeated": false
+}

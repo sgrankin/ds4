@@ -1,0 +1,133 @@
+{
+  "case": "dedupe",
+  "arm": "native-before",
+  "protocol": "full-input-clm",
+  "write_budget": 128,
+  "final_policy": "budget1",
+  "global_cap": 2048,
+  "wall_seconds": 110.35923674999503,
+  "http_output_tokens": 553,
+  "http_reasoning_tokens": 147,
+  "actual_read_count": 1,
+  "actual_write_count": 1,
+  "calls": [
+    {
+      "role": "READ",
+      "name": "read",
+      "call_id": "call_7d54570988a626605de687a90e21f719",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/dedupe/config.json\",\"whole\":true,\"raw\":true}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/dedupe/config.json",
+      "output": "{\n  \"ttl\": 5,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 4,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"b\"\n    },\n    {\n      \"t\": 9,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 10,\n      \"key\": \"a\"\n    }\n  ]\n}\n",
+      "tool_ms": 0.4054579767398536
+    },
+    {
+      "role": "WRITE",
+      "name": "write",
+      "call_id": "call_15e8467ce319f71e6d3de7ed683d93aa",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/dedupe/solution.py\",\"content\":\"def solve(payload, config):\\n    ttl = config[\\\"ttl\\\"]\\n    accepted = []\\n    rejected = []\\n    last = {}\\n    index = 0\\n    while index < len(payload):\\n        event = payload[index]\\n        key = event[\\\"key\\\"]\\n        t = event[\\\"t\\\"]\\n        if key in last:\\n            if t - last[key] < ttl:\\n                rejected.append(index)\\n            else:\\n                accepted.append(index)\\n                last[key] = t\\n        else:\\n            accepted.append(index)\\n            last[key] = t\\n        index = index + 1\\n    return {\\\"accepted\\\": accepted, \\\"rejected\\\": rejected}\\n\"}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/dedupe/solution.py",
+      "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/dedupe/solution.py",
+      "tool_ms": 0.6111669936217368
+    }
+  ],
+  "replies": [
+    {
+      "role": "READ",
+      "budget": 0,
+      "effort": "high",
+      "seconds": 51.43745562498225,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1553,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1553
+        },
+        "output_tokens": 113,
+        "output_tokens_details": {
+          "reasoning_tokens": 19
+        },
+        "total_tokens": 1666
+      },
+      "requested_max_output_tokens": 2048,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "WRITE",
+      "budget": 128,
+      "effort": "high",
+      "seconds": 51.21757099998649,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1129,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1129
+        },
+        "output_tokens": 342,
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        },
+        "total_tokens": 1471
+      },
+      "requested_max_output_tokens": 1935,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "FINAL",
+      "budget": 1,
+      "effort": "high",
+      "seconds": 7.701676083030179,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1512,
+        "input_tokens_details": {
+          "cached_tokens": 1471,
+          "cache_write_tokens": 41
+        },
+        "output_tokens": 98,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1610
+      },
+      "requested_max_output_tokens": 1593,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    }
+  ],
+  "first_code_path": "speed-bench/experiments/recipe-prefill-hour37-20261008/code-prefill1/http/dedupe/dedupe/first-solution.py",
+  "grade": {
+    "correct": true,
+    "tests": 161,
+    "passed": 161,
+    "failed": 0,
+    "first_failure": null,
+    "returncode": 0
+  },
+  "complete": true,
+  "cap": false,
+  "final_text": "Implemented `solve(payload, config)` in `solution.py`. It tracks the last accepted timestamp per exact key, rejects later occurrences only when `t - last_accepted < ttl`, keeps rejected duplicates from refreshing the timestamp, and accepts when the gap is `>= ttl` (so `ttl == 0` accepts everything). It returns `{\"accepted\": [...], \"rejected\": [...]}` as zero-based payload indices in original order without mutating inputs.",
+  "final_text_length": 425,
+  "final_text_bytes": 425,
+  "first_code_bytes": 572,
+  "errors": [],
+  "config_unchanged": true,
+  "context_edit": {
+    "removed_blocks": 2,
+    "before_bytes": 5520,
+    "after_bytes": 2002,
+    "seconds": 0.00025341700529679656
+  },
+  "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+  "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+  "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+  "pass": true
+}

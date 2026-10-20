@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/ssd-budget-hour29-20261004/launch.py",
+    "--arm",
+    "ssd512",
+    "--ssd-mb",
+    "512",
+    "--output",
+    "speed-bench/experiments/ssd-budget-hour29-20261004/ssd512",
+    "--cache",
+    ".workspaces/server-agent-day-20261004/ssd29-cache-512",
+    "--store",
+    ".workspaces/server-agent-day-20261004/ssd29-store-512",
+    "--shared",
+    ".workspaces/server-agent-day-20261004/concurrent-visible"
+  ],
+  "initial": {
+    "time": 1791146037.069619,
+    "level": 1,
+    "swap_gb": 0.018125,
+    "physical_gb": 128.0,
+    "free_gb": 58.12892150878906,
+    "file_backed_gb": 53.48234558105469,
+    "wired_gb": 4.619293212890625,
+    "compressor_gb": 9.07843017578125
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

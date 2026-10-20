@@ -1,0 +1,25 @@
+{
+  "gold": {
+    "changed": [
+      "beta"
+    ],
+    "unexpected_changes": []
+  },
+  "oracle_input": {
+    "after": {
+      "alpha": "tag-101",
+      "beta": "tag-909",
+      "gamma": "tag-303"
+    },
+    "before": {
+      "alpha": "tag-101",
+      "beta": "tag-202",
+      "gamma": "tag-303"
+    },
+    "declared_touched": [
+      "beta"
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Compares declared change scope with a fixed manifest delta; not checksum authentication or cache-state validation."
+}

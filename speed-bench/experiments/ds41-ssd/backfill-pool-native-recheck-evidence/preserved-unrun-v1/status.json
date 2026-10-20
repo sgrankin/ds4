@@ -1,0 +1,12 @@
+{
+  "source_commit": "1a81405181e00c7082abee92ec9b53556b4e75cc",
+  "status": "UNRUN_REVIEW_REFUSAL_PRESERVED",
+  "review_findings": [
+    "Process-parent lookup used an unbounded bare ps command.",
+    "Raw record completeness alone did not validate exactly 16 by 32 finite CSV rows and raw-metadata keys."
+  ],
+  "corrective_commit": "7040eef1359deeb802ae1f1686707fd43ac80a7e",
+  "model_run": false,
+  "original_v1_prepared_artifact_not_found_at_expected_workspace_path": true,
+  "immutable_original_source_retained": true
+}

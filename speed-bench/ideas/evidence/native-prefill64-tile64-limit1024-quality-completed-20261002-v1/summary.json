@@ -1,0 +1,131 @@
+[
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0190480241346,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 84326.164,
+    "decode_ms": 18455.443,
+    "name": "native64-before",
+    "trajectory_count": 1,
+    "decode_phase_count": 3,
+    "per_decode_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "mean_nll": 0.025065041957943172,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_tv": 0.0,
+        "argmax_flips": 0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "mean_nll": 0.02859686560387214,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_tv": 0.0,
+        "argmax_flips": 0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "mean_nll": 0.013262036560943914,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_tv": 0.0,
+        "argmax_flips": 0
+      }
+    },
+    "kl_p99": 0.0,
+    "kl_max": 0.0
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.019270655303,
+    "delta_nll": 0.000222631168395,
+    "kl_base_to_raw": 0.000303373941736,
+    "tv": 0.00187026403935,
+    "argmax_flips": 2,
+    "bit_equal_rows": 0,
+    "prefill_ms": 66204.385,
+    "decode_ms": 18295.132,
+    "name": "tile64-limit1024",
+    "trajectory_count": 1,
+    "decode_phase_count": 3,
+    "per_decode_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "mean_nll": 0.027633164984209847,
+        "mean_delta_nll": 0.0025681230262430787,
+        "mean_kl": 0.0005533088498236276,
+        "mean_tv": 0.003074292367368538,
+        "argmax_flips": 1
+      },
+      "phase_004": {
+        "tokens": 74,
+        "mean_nll": 0.024650574629928885,
+        "mean_delta_nll": -0.0039462909739586315,
+        "mean_kl": 0.00040694910507522666,
+        "mean_tv": 0.0028330756081976576,
+        "argmax_flips": 0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "mean_nll": 0.014193423185017682,
+        "mean_delta_nll": 0.0009313866240741173,
+        "mean_kl": 0.00017312076676409208,
+        "mean_tv": 0.0010685478174581105,
+        "argmax_flips": 1
+      }
+    },
+    "kl_p99": 0.00948186833591,
+    "kl_max": 0.0171782658638
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0190480241346,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 86283.802,
+    "decode_ms": 18434.215,
+    "name": "native64-after",
+    "trajectory_count": 1,
+    "decode_phase_count": 3,
+    "per_decode_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "mean_nll": 0.025065041957943172,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_tv": 0.0,
+        "argmax_flips": 0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "mean_nll": 0.02859686560387214,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_tv": 0.0,
+        "argmax_flips": 0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "mean_nll": 0.013262036560943914,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "mean_tv": 0.0,
+        "argmax_flips": 0
+      }
+    },
+    "kl_p99": 0.0,
+    "kl_max": 0.0
+  }
+]

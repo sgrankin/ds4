@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "reason": "The inventory excluded every basename manifest.json, omitting the already-tracked copied CPU manifest. Exclude only the top-level self manifest; retained evidence and source/results unchanged.",
+  "archives": [
+    {
+      "directory": "speed-bench/ideas/evidence/suffix-pair-tape-zero-identity-native-20261003-v1",
+      "preserved_parent": "9f75c3a1c130dfc3e69f584570f528e024caa00a",
+      "parent_manifest_sha256": "a1d61aed2f4051bdde1d7d6bbe69af74f3a1308033fe88ceb72c4d734de1e413",
+      "changed_only_manifest": true,
+      "nested_manifest_previously_tracked": true,
+      "nested_manifest_now_hashed": true,
+      "tracked_file_count": 100,
+      "manifest_file_count": 99,
+      "manifest_sha256": "fc5d874dea7429e3ecf2e29db90d311e2f743857f5229c35c97990353e65c5a0"
+    },
+    {
+      "directory": "speed-bench/ideas/evidence/suffix-pair-tape-inverse-native-20261003-v1",
+      "preserved_parent": "a34305e054a8dc9c6a9cbd8d6cf4cc67b2cbfc91",
+      "parent_manifest_sha256": "23cf3ee3e214c3f37a6dcd2636a6dc48d9b4164654865579622b983228ccef5e",
+      "changed_only_manifest": true,
+      "nested_manifest_previously_tracked": true,
+      "nested_manifest_now_hashed": true,
+      "tracked_file_count": 100,
+      "manifest_file_count": 99,
+      "manifest_sha256": "8ecca2ffd34bcee5226677a328f54120404471ab2ecd963d3abfd673e118ca61"
+    }
+  ],
+  "models_accessed": false
+}

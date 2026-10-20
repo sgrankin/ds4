@@ -1,0 +1,161 @@
+{
+  "variant": "B",
+  "process_wall_ms": 145896.5989999997,
+  "logits_sha256": "4ba907a895b53e90e869f1bb03015f1ebad3243ab9d4a479962a5613908a47b7",
+  "snapshot_sha256": "69e3183545cd0163c08468201817c470f1baa77ccd5a724f2e0c3fa4f4645a29",
+  "logits_bytes": 4654080,
+  "snapshot_bytes": 181735616,
+  "phases": [
+    {
+      "phase": 0,
+      "kind": "P",
+      "context": 1859,
+      "tokens": 1859,
+      "ms": 55241.786,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 1,
+      "kind": "P",
+      "context": 1949,
+      "tokens": 90,
+      "ms": 2630.129,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 2,
+      "kind": "D",
+      "context": 2021,
+      "tokens": 72,
+      "ms": 4218.522,
+      "first_decode_ms": 63.874
+    },
+    {
+      "phase": 3,
+      "kind": "P",
+      "context": 10213,
+      "tokens": 8192,
+      "ms": 27038.273,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 4,
+      "kind": "D",
+      "context": 10221,
+      "tokens": 8,
+      "ms": 800.466,
+      "first_decode_ms": 222.737
+    },
+    {
+      "phase": 5,
+      "kind": "P",
+      "context": 26605,
+      "tokens": 16384,
+      "ms": 51142.299,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 6,
+      "kind": "D",
+      "context": 26613,
+      "tokens": 8,
+      "ms": 745.177,
+      "first_decode_ms": 180.286
+    },
+    {
+      "phase": 7,
+      "kind": "P",
+      "context": 26651,
+      "tokens": 38,
+      "ms": 1253.341,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 8,
+      "kind": "D",
+      "context": 26659,
+      "tokens": 8,
+      "ms": 502.697,
+      "first_decode_ms": 71.801
+    }
+  ],
+  "profiles": {
+    "cache": [
+      {
+        "budget": 6136,
+        "entries": 6136,
+        "expert": 9.49,
+        "target": 56.88,
+        "live": 56.88,
+        "hits": 247489,
+        "misses": 30434,
+        "hit_rate": 0.89,
+        "wraps": 91302,
+        "evictions": 24298,
+        "buffer_allocs": 15,
+        "buffer_reuses": 24298,
+        "evict_dontneed": 0.0,
+        "miss_willneed": 0.0,
+        "miss_pread": 162.65,
+        "pread_ms": 6298.804
+      }
+    ],
+    "pending": [],
+    "timing": [],
+    "resident_route": [],
+    "route_phase": [],
+    "io_phase": [],
+    "cache_phase": [
+      {
+        "phase": 0,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      },
+      {
+        "phase": 1,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      },
+      {
+        "phase": 2,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      },
+      {
+        "phase": 3,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      },
+      {
+        "phase": 4,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      },
+      {
+        "phase": 5,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      },
+      {
+        "phase": 6,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      },
+      {
+        "phase": 7,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      },
+      {
+        "phase": 8,
+        "configured_slots": 6136,
+        "resident_entries": 6136
+      }
+    ]
+  },
+  "startup_prefill_ms": 55241.786,
+  "append_prefill_ms": 82064.042,
+  "decode_ms": 6266.862,
+  "model_ms": 143572.69,
+  "turn_model_ms": 88330.904
+}

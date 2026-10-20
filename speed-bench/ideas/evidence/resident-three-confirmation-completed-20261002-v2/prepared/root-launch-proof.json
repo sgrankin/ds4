@@ -1,0 +1,13 @@
+{
+  "time": 1790983741.953911,
+  "grant": "ROOT_SOLE_MODEL_CONFIRMATION16",
+  "previous_model_session": 34982,
+  "previous_model_returncode": 3,
+  "cpu_probe_session": 49012,
+  "cpu_probe_returncode": 0,
+  "prepared_source": "38c758fe730f7d3780d93bad11ca27bf07aeadd4",
+  "manifest_sha256": "b80ecd4abdee67976e4b3824892ff34514a7214fa58687dd3746e692e4657df9",
+  "command_sha256": "009da3bdbc763311e7e5d83b055e5cdb9450cb8bbda6ca022b7ed2dd1e4af7c1",
+  "assets_checked": 64,
+  "no_model_metadata_before_guard": true
+}

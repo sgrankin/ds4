@@ -1,0 +1,14 @@
+{
+  "gold": {
+    "time_numerator": 36,
+    "time_denominator": 5,
+    "whole_hours": 7,
+    "minutes": 12
+  },
+  "oracle_input": {
+    "question": "Two independent pumps complete the same tank in 12 hours and 18 hours respectively. Both run at constant rates together from an empty tank. Report time_numerator/time_denominator in hours, plus whole_hours and minutes. Return JSON first, then explain."
+  },
+  "explanation": "The rates add to one twelfth plus one eighteenth of a tank per hour, which is five thirty-sixths. The reciprocal is thirty-six fifths of an hour. This is seven hours plus one fifth of an hour. Multiplying the fractional hour by sixty gives twelve minutes, for seven hours and twelve minutes total.",
+  "category": "math",
+  "scope": "New authored content, fixed before any model outcome."
+}

@@ -1,0 +1,32 @@
+{
+  "guard-ds41": {
+    "samples": 386,
+    "levels": [
+      1
+    ],
+    "initial_swap_gib": 0.03015625,
+    "max_swap_gib": 0.03015625,
+    "max_wired_gib": 77.04527282714844,
+    "max_compressor_gib": 7.8575897216796875,
+    "adverse_samples": 0,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 1
+    }
+  },
+  "guard-ds41-full275": {
+    "samples": 267,
+    "levels": [
+      1
+    ],
+    "initial_swap_gib": 0.03015625,
+    "max_swap_gib": 0.03185546875,
+    "max_wired_gib": 76.02749633789062,
+    "max_compressor_gib": 9.10479736328125,
+    "adverse_samples": 0,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 1
+    }
+  }
+}

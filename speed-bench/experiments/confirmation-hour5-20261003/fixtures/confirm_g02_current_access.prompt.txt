@@ -1,0 +1,1 @@
+A fictional record lists obsolete access code 5127. The signed current update replaces it with 8736 and says no other change is valid. Report only JSON with current_code and obsolete_code, both strings.

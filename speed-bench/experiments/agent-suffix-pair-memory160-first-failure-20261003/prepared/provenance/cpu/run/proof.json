@@ -1,0 +1,73 @@
+{
+  "status": "MEMORY160_CPU_PASS_NATIVE_CALLER_UNBUILT",
+  "source_freeze": "86f834866f81ae8cb33c9c9f00e4df86a3b7a95c",
+  "original_memory160_source_freeze": "6db15c783ee61bc5adfb176eb3e614c1a0b7e5bd",
+  "cpu_plan_sha256": "bb24c8bb11c64a6a819a7562a4799cee7f40935ae79e23e8ec35772a6f0b2208",
+  "results": [
+    {
+      "label": "standalone-compile",
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-pthread",
+        "-I/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/agent_suffix_pair_memory160_protocol_fixture.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-cpu-v2/production-protocol-admission-fixture"
+      ],
+      "returncode": 0,
+      "warning": false,
+      "tests": null,
+      "elapsed_seconds": 0.09130597114562988,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "authority-budget-protocol13",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/tests/test_agent_suffix_pair_memory160.py"
+      ],
+      "returncode": 0,
+      "warning": false,
+      "tests": 13,
+      "elapsed_seconds": 0.08923196792602539,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "2829ee88f67954197daecba6589d0a6ffdcb229e0c5521cdfac55231309ab0b4"
+    },
+    {
+      "label": "controller36",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/test_agent_suffix_pair_actual_memory160.py"
+      ],
+      "returncode": 0,
+      "warning": false,
+      "tests": 36,
+      "elapsed_seconds": 10.454538106918335,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "dbde8717aa9da6888367c06c99ff452e0041b7342131d6a357706fbb062bde92"
+    }
+  ],
+  "tests": {
+    "authority_budget_protocol": 13,
+    "controller": 36
+  },
+  "all_source_compiler_sdk_pins_unchanged": true,
+  "borrowed_native_objects": [],
+  "native_caller_compiled_or_linked": false,
+  "model_or_engine_or_tokenizer_or_guard_access": false,
+  "elapsed_seconds": 10.938126802444458,
+  "standalone_fixture": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-cpu-v2/production-protocol-admission-fixture",
+    "bytes": 38952,
+    "sha256": "9994d288bd03d939e18c6bb0c739e06d0b690843488387fba0ab17e5f9c0ab33",
+    "mode": 493
+  }
+}

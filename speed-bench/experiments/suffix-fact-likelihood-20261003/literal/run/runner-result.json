@@ -1,0 +1,11 @@
+{
+  "status": "NATIVE_PROCESS_COMPLETE",
+  "native_child_returncode": 0,
+  "no_retry": true,
+  "argv": [
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/artifacts/suffix-archived-fact-prepared-20261003-v1/probe",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/artifacts/suffix-archived-fact-prepared-20261003-v1/run"
+  ],
+  "pid": 67649
+}

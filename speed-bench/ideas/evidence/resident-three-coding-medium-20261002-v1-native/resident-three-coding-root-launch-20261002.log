@@ -1,0 +1,32 @@
+{
+  "status": "PREFLIGHT_PASS_UNEXECUTED",
+  "utc": "2026-10-02T23:00:17.372532+00:00",
+  "frozen_assets_checked": 156,
+  "prepared_command_sha256": "bf96b33b14be3dd9f9719adb296f0f1b96032b8a6a159efcc63abe3090f0a30f",
+  "plan_sha256": "851ffa9623b568d94459372e705d2e09703a78e94e86810b3f34619919f432d2",
+  "binary_sha256": "70f7cec5c2f502e9a59e1e9a84bc343b1a3d39817ab3f0b9df205c99bc93619f",
+  "driver_sha256": "00d5e9a9fc34eb63da333f9808902f9c6c422cc73240baf6cd80a72f6190e159",
+  "guard_sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+  "removed_inherited_ds4_keys": [],
+  "clean_ds4_environment_at_guard_entry": true,
+  "guard_lock_contract": "The pinned MAIN guard acquires its shared model-job flock before child spawn; frozen driver additionally verifies direct MAIN guard parent and held lock before real model stat/open.",
+  "model_scope": "No model path resolve/stat/hash, tokenizer or engine open occurred in this preflight.",
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1-pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1-build/run_native_prefill_coding.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1-build/plan.json",
+    "851ffa9623b568d94459372e705d2e09703a78e94e86810b3f34619919f432d2",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1"
+  ]
+}
+{"event": "arm_start", "arm": "native-before", "cache_gib": 64}
+{"arm": "native-before", "cache_gib": 64, "correct": 4, "total": 4, "score_rc": 0, "generated_tokens": 569, "cap_hits": 0}
+{"event": "arm_start", "arm": "broader3", "cache_gib": 64}
+{"arm": "broader3", "cache_gib": 64, "correct": 4, "total": 4, "score_rc": 0, "generated_tokens": 574, "cap_hits": 0, "resident_route": {"layers": 22960, "substitutions": 12519, "native_misses": 18019, "skipped_loads": 12519, "skipped_bytes": 124605112320, "mean_mass": "0.11165889", "mean_score_gap": "0.09524920", "mean_affinity_ratio": "0.91045788", "mean_rank": "7.802", "full_snapshots": 10835, "double_layers": 2005, "planned_substitutions": 12519, "drops": 0, "triple_layers": 135}}
+{"event": "arm_start", "arm": "native-after", "cache_gib": 64}
+{"arm": "native-after", "cache_gib": 64, "correct": 4, "total": 4, "score_rc": 0, "generated_tokens": 569, "cap_hits": 0}
+{"status": "complete", "child_returncode": 0}

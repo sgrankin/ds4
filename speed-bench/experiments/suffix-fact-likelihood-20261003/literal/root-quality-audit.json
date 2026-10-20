@@ -1,0 +1,275 @@
+{
+  "status": "ROOT_INDEPENDENT_FP64_AUDIT_PASS",
+  "time": 1791012858.277956,
+  "guard_returncode": 0,
+  "release_sha256": "eaef22d728a27718a5761710d2b6a9b3751a368e45a4d4e8bbe02b6a9f86eea4",
+  "source_raw_canonical_exact": true,
+  "native_brackets_all5_full_raw_and2_full_states_exact": true,
+  "identity_all5_full_raw_and2_state_bodies_exact": true,
+  "teacher_bytes": "CODE=3141",
+  "teacher_ids": [
+    83552,
+    31,
+    18321,
+    19
+  ],
+  "teacher_ids_sha256": "728b2c237a5657cf836366fa674756951de3789911c8ca4221695689117537fb",
+  "same_edited_history_for_all_arms": true,
+  "teacher_tokens": 4,
+  "targetless_rows_per_arm": 1,
+  "vocab": 129280,
+  "raw_vectors_audited": 20,
+  "max_reported_metric_error": 8.537571691280554e-14,
+  "changed_scored_delta_nll_sum": 2.2782803633802544,
+  "changed_scored_delta_nll_mean": 0.5695700908450636,
+  "changed_scored_kl_mean": 0.4504930243219756,
+  "changed_scored_argmax_flips": 1,
+  "changed_terminal_argmax_flip": true,
+  "arms": [
+    {
+      "arm": "fresh-native-before",
+      "rows": [
+        {
+          "step": 0,
+          "target": 83552,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 1.4668656967849323,
+          "candidate_nll": 1.4668656967849323,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 1,
+          "target": 31,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.008150075390386036,
+          "candidate_nll": 0.008150075390386036,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 2,
+          "target": 18321,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.10104936256286479,
+          "candidate_nll": 0.10104936256286479,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 3,
+          "target": 19,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.0015077767311808543,
+          "candidate_nll": 0.0015077767311808543,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 4,
+          "target": -1,
+          "terminal": true,
+          "argmax_flip": false,
+          "reference_nll": 0,
+          "candidate_nll": 0,
+          "delta_nll": 0,
+          "kl": 0.0,
+          "tv": 0.0
+        }
+      ],
+      "raw_sha256": "ffb3549aec7ceb2432a1247adca72dda5a1b8907046a7028b38657543b9c8529"
+    },
+    {
+      "arm": "identity-suffix",
+      "rows": [
+        {
+          "step": 0,
+          "target": 83552,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 1.4668656967849323,
+          "candidate_nll": 1.4668656967849323,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 1,
+          "target": 31,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.008150075390386036,
+          "candidate_nll": 0.008150075390386036,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 2,
+          "target": 18321,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.10104936256286479,
+          "candidate_nll": 0.10104936256286479,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 3,
+          "target": 19,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.0015077767311808543,
+          "candidate_nll": 0.0015077767311808543,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 4,
+          "target": -1,
+          "terminal": true,
+          "argmax_flip": false,
+          "reference_nll": 0,
+          "candidate_nll": 0,
+          "delta_nll": 0,
+          "kl": 0.0,
+          "tv": 0.0
+        }
+      ],
+      "raw_sha256": "faae00f3d2d577b70f738e9ec91c1878af245669a4ef9ab26df3b3fc01779a64"
+    },
+    {
+      "arm": "repaired-old-suffix",
+      "rows": [
+        {
+          "step": 0,
+          "target": 83552,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 1.4668656967849323,
+          "candidate_nll": 1.64612411052207,
+          "delta_nll": 0.1792584137371378,
+          "kl": 0.060544284793427786,
+          "tv": 0.0881056406556626
+        },
+        {
+          "step": 1,
+          "target": 31,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.008150075390386036,
+          "candidate_nll": 0.01742114503744574,
+          "delta_nll": 0.009271069647059704,
+          "kl": 0.007074133867575147,
+          "tv": 0.009858183541941665
+        },
+        {
+          "step": 2,
+          "target": 18321,
+          "terminal": false,
+          "argmax_flip": true,
+          "reference_nll": 0.10104936256286479,
+          "candidate_nll": 2.1910711834538077,
+          "delta_nll": 2.090021820890943,
+          "kl": 1.7317340568181578,
+          "tv": 0.8018848067908622
+        },
+        {
+          "step": 3,
+          "target": 19,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.0015077767311808543,
+          "candidate_nll": 0.0012368358362948584,
+          "delta_nll": -0.00027094089488599593,
+          "kl": 0.0026196218087414696,
+          "tv": 0.0007618940823008908
+        },
+        {
+          "step": 4,
+          "target": -1,
+          "terminal": true,
+          "argmax_flip": true,
+          "reference_nll": 0,
+          "candidate_nll": 0,
+          "delta_nll": 0,
+          "kl": 0.7498843102220647,
+          "tv": 0.5440939429972754
+        }
+      ],
+      "raw_sha256": "c8018dd070b645293f2fce76ccc3abf976a6b3bbe589862711d5068825847bdb"
+    },
+    {
+      "arm": "fresh-native-after",
+      "rows": [
+        {
+          "step": 0,
+          "target": 83552,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 1.4668656967849323,
+          "candidate_nll": 1.4668656967849323,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 1,
+          "target": 31,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.008150075390386036,
+          "candidate_nll": 0.008150075390386036,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 2,
+          "target": 18321,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.10104936256286479,
+          "candidate_nll": 0.10104936256286479,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 3,
+          "target": 19,
+          "terminal": false,
+          "argmax_flip": false,
+          "reference_nll": 0.0015077767311808543,
+          "candidate_nll": 0.0015077767311808543,
+          "delta_nll": 0.0,
+          "kl": 0.0,
+          "tv": 0.0
+        },
+        {
+          "step": 4,
+          "target": -1,
+          "terminal": true,
+          "argmax_flip": false,
+          "reference_nll": 0,
+          "candidate_nll": 0,
+          "delta_nll": 0,
+          "kl": 0.0,
+          "tv": 0.0
+        }
+      ],
+      "raw_sha256": "996b47beb131f2d21ac6dacbd9935d9ad18c8cef4f512bff26999b90c5093151"
+    }
+  ],
+  "limitations": "One archived fact, four fixed teacher tokens; task success and speed not measured; no heldout generalization, forgetting, quantization causality, or default promotion."
+}

@@ -1,0 +1,35 @@
+{
+  "status": "OWNED_SHARED_SNAPSHOT_RETAINED",
+  "root": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run",
+  "root_identity": {
+    "device": 16777230,
+    "inode": 1671818
+  },
+  "manifest_sha256": "1143a7812d739c9215bed24e186b83eaed8ba5406ef1c67d229b66d2795e8a57",
+  "arm": "native",
+  "files": {
+    ".owner.json": {
+      "bytes": 154,
+      "sha256": "7a5459ad0c33eb37e5b453f28cb86b4bc9a4a551fda7a23ec68ca15667e4863a",
+      "mode": 420,
+      "device": 16777230,
+      "inode": 1690499
+    },
+    "live-context.txt": {
+      "bytes": 24231,
+      "sha256": "74f5d2758aadd45576a3ed806bbf60cc940cdffd957abc7c93209a4990669ff6",
+      "mode": 420,
+      "device": 16777230,
+      "inode": 1718545
+    },
+    "project/run_grader.py": {
+      "bytes": 1732,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+      "mode": 493,
+      "device": 16777230,
+      "inode": 1690498
+    }
+  },
+  "leader_cleanup_completed": true,
+  "global_model_release_claimed": false
+}

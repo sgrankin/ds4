@@ -1,0 +1,3 @@
+Explain this invented game move in ordinary English and give the legal destinations from the supplied square. Coordinates are [row,column]. The board is 5 by 5. A piece moves exactly two rows and two columns diagonally; intermediate occupancy does not matter, but the destination must be in bounds and empty. Report legal and explanation.
+Literal input JSON: {"board_size": 5, "occupied_destinations": [[0, 0], [4, 4]], "occupied_intermediate": [[1, 3]], "start": [2, 2]}
+Return the requested JSON first, then explain the specific reasoning.

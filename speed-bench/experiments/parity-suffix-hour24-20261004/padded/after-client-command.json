@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/concurrent-sessions-hour19-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:55708",
+    "--phase",
+    "after",
+    "--mode",
+    "reuse",
+    "--output",
+    "speed-bench/experiments/parity-suffix-hour24-20261004/padded/http",
+    "--shared",
+    ".workspaces/server-agent-day-20261004/concurrent-visible",
+    "--server-log",
+    "speed-bench/experiments/parity-suffix-hour24-20261004/padded/after-server.stderr.log"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

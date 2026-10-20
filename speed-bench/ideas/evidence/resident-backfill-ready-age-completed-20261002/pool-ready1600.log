@@ -1,0 +1,43 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.03 GiB (raw 0.01 + compressed 0.02) + buffers 0.83 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.23 GiB planned
+ds4: memory detail: ctx=4096 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=4097 backend=metal
+ds4: V4.1 static context buffers 880.04 MiB (ctx=4096), Engram disk-only
+PROBE case=case_001 tokens=32 nll=0.135333 kl=0.00821209 prefill_ms=2972.680 decode_ms=2459.806
+PROBE case=case_007 tokens=32 nll=0.454190 kl=0.00673879 prefill_ms=1437.417 decode_ms=2176.187
+PROBE case=case_013 tokens=32 nll=0.535292 kl=0.00597739 prefill_ms=2056.048 decode_ms=1657.495
+PROBE case=case_019 tokens=32 nll=0.611356 kl=0.00472968 prefill_ms=903.034 decode_ms=1616.927
+PROBE case=case_025 tokens=32 nll=0.191063 kl=0.00649824 prefill_ms=848.067 decode_ms=1580.542
+PROBE case=case_031 tokens=32 nll=0.561108 kl=0.00687072 prefill_ms=791.341 decode_ms=1712.826
+PROBE case=case_037 tokens=32 nll=0.311219 kl=0.00291177 prefill_ms=1599.786 decode_ms=1752.447
+PROBE case=case_043 tokens=32 nll=0.535325 kl=0.0127147 prefill_ms=1017.037 decode_ms=1743.140
+PROBE case=case_049 tokens=32 nll=0.479138 kl=0.0238782 prefill_ms=932.792 decode_ms=1802.480
+PROBE case=case_055 tokens=32 nll=0.276133 kl=0.00717991 prefill_ms=757.318 decode_ms=1845.655
+PROBE case=case_061 tokens=32 nll=0.393320 kl=0.0285741 prefill_ms=864.492 decode_ms=1955.792
+PROBE case=case_067 tokens=32 nll=0.089934 kl=0.00292056 prefill_ms=1312.962 decode_ms=1712.134
+PROBE case=case_073 tokens=32 nll=0.531682 kl=0.00310855 prefill_ms=1158.259 decode_ms=1624.920
+PROBE case=case_079 tokens=32 nll=0.901581 kl=0.0556748 prefill_ms=983.959 decode_ms=1667.740
+PROBE case=case_085 tokens=32 nll=0.605773 kl=0.00946025 prefill_ms=889.588 decode_ms=1823.423
+PROBE case=case_091 tokens=32 nll=0.703937 kl=0.00930866 prefill_ms=832.925 decode_ms=1659.505
+ds4: Metal memory quality probe final: runtime 0.61 GiB + streaming experts 56.88 GiB = 57.49 GiB tracked live
+ds4:   runtime tensors live 620.84 MiB peak 620.84 MiB
+ds4:   macOS task memory footprint 57.84 GiB, resident 66.63 GiB, virtual 732.80 GiB
+ds4:   mmap model wrapper creations 569 buffers 9.38 GiB cumulative, 1.23 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=196425 misses=19873 hit_rate=0.908 wraps=59619 evictions=13737 buffer_allocs=15 buffer_reuses=13737 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=180.34 GiB pread_ms=11242.440
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=974.660 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 4.26 MiB (flash mask 0.02, pad 0.06, tmp 4.02, blk 0.00, ring 0.00, kv 0.13, compressor 0.02, router 0.01, indexer 0.00, moe 0.00, f16 0.00, raw-store 0.00)
+PROBE_IO enabled=1 pread_calls=58365 requested_bytes=193641062400 returned_bytes=193641062400 cache_loader_bytes=193641062400 cache_hits=196425 cache_misses=19873 cache_evictions=13737
+ds4: resident-route layers=20480 substitutions=3351 native_misses=11699 skipped_loads=3351 skipped_bytes=33353441280 mean_mass=0.09937245 mean_score_gap=0.06919459 mean_affinity_ratio=0.95307247 mean_rank=7.423 full_snapshots=3430 double_layers=0 planned_substitutions=3351
+ds4: resident-backfill attempts=0 started=0 busy_skips=0 ready_skips=0 completed=0 failed=0 consumed=0 expired=0 resets=0 pread_calls=0 requested_bytes=0 returned_bytes=0 copied_bytes=0 peak_bytes=0 live_bytes=0 state=0
+ds4: resident-backfill-late tentative=3351 rollbacks=1 final_substitutions=3350 cancelled=0 candidate_finish=3351 candidate_finish_failures=0 ready_checks=3351 not_ready=3350 no_victim=0 installs=1 install_failures=0
+ds4: resident-backfill-pool requests=3351 invalid_requests=0 dedup_ready=0 dedup_reading=0 dedup_queued=21 queued=3117 queue_updates=213 queue_expired=490 queue_ready_drops=0 queue_reading_drops=0 admissions=2626 busy_defers=725 handoff_defers=0 budget_defers=0 worker_starts=1 worker_start_failures=0 read_started=2626 completed=2626 failed=0 pread_calls=7878 requested_bytes=26137313280 returned_bytes=26137313280 allocations=2626 allocation_failures=0 frees=2626 free_failures=0 allocated_bytes=26158825472 freed_bytes=26158825472 dup_opens=2626 dup_closes=2626 dup_failures=0 consumed_future=417 consumed_late=1 copied_bytes=4160471040 ready_replaced=2166 ready_expired=14 reset_ready_discards=28 ready_superseded=0 ready_superseded_bytes=0 completion_harvest_expired=0 stored_ready_expired=14 consumed_future_age_sum=64840 consumed_future_age_max=1600 consumed_future_older80=168 consumed_late_age_sum=0 consumed_late_age_max=0 consumed_late_older80=0 reset_result_discards=0 reset_queue_discards=1 resets=2 joins=1 limit_bytes=419430400 metadata_bytes=16384 stack_bytes=0 guard_bytes=0 ready_age=1600 payload_live_bytes=0 payload_peak_bytes=408420352 owned_live_bytes=16384 owned_peak_bytes=408727552 step=20480 enabled=1 ready_count=0 ready_peak=40 queue_count=0 queue_peak=10 worker_active=0 worker_state=0 worker_present=0

@@ -1,0 +1,66 @@
+We need read config.json whole raw. Then write solution.py. Must obey constraints: module level only plain function definitions, no imports, no decorators, annotations, defaults, classes. Function solve(payload, config). Need handle config window. Payload list ints. Return list indices.
+
+Need know config structure. Read config.json first.
+
+Let's call read.
+
+🛠️ Reading config.json (whole file)...
+
+Now write solution.py. Need plain function def solve(payload, config). No imports. Access config["window"]. Should not mutate. For each window start i from 0 to len(payload)-w. Find max earliest. Return indices.
+
+Edge cases: window less than 1 or greater than payload length -> empty. Also config may be dict. "config window is an integer" likely config["window"]. Could config be something else? Config.json shows window key. Use config["window"].
+
+Implementation:
+
+def solve(payload, config):
+    window = config["window"]
+    length = len(payload)
+    if window < 1 or window > length:
+        return []
+    result = []
+    start = 0
+    while start + window <= length:
+        best_index = start
+        best_value = payload[start]
+        offset = 1
+        while offset < window:
+            index = start + offset
+            value = payload[index]
+            if value > best_value:
+                best_value = value
+                best_index = index
+            offset = offset + 1
+        result.append(best_index)
+        start = start + 1
+    return result
+
+No imports, no annotations, no defaults. Names don't begin underscore. Fine. Could use range? builtins allowed. But range is builtin. Using while okay. Need "no names/attributes beginning with underscore" - none.
+
+Write.
+
+🛠️ write  path=solution.py
+def solve(payload, config):
+    window = config["window"]
+    length = len(payload)
+    if window < 1 or window > length:
+        return []
+    result = []
+    start = 0
+    while start + window <= length:
+        best_index = start
+        best_value = payload[start]
+        offset = 1
+        while offset < window:
+            index = start + offset
+            value = payload[index]
+            if value > best_value:
+                best_value = value
+                best_index = index
+            offset = offset + 1
+        result.append(best_index)
+        start = start + 1
+    return result
+
+
+Implemented `solve(payload, config)` in `solution.py`. It reads `config["window"]`, returns `[]` for invalid/oversized windows or empty payloads, and otherwise scans each window left-to-right, recording the earliest index of the maximum value.
+

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe",
+    "--helper-self-test"
+  ],
+  "returncode": 0,
+  "seconds": 0.0063228607177734375,
+  "stdout_bytes": 105,
+  "stderr_bytes": 0,
+  "log_sha256": "38f73849767c9339927c00fcf6ed7e183c01380887a860291f947eb791945a4c"
+}

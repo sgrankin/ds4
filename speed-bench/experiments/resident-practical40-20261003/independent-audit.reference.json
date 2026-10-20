@@ -1,0 +1,9 @@
+{
+  "storage": "EXTERNAL_LITERAL_ORIGINAL_REFERENCE",
+  "source_evidence_revision": "f4ad01536e5cd9f88344c20f59cb09b08cbfe78b",
+  "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/independent-audit.json",
+  "sha256": "8d67767adf7232df0a692a26e31c94d84d9d458aed6f797ebec80fb279bbb14f",
+  "bytes": 24188548,
+  "mode": 420,
+  "reason": "Original24.19MB literal exceeds2MiB copy bound; retained unchanged, never recomputed or rescored."
+}

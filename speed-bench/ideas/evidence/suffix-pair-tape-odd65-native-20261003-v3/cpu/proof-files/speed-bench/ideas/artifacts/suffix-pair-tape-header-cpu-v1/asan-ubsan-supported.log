@@ -1,0 +1,1 @@
+suffix-pair-tape PASS trials=6243 capacities=4033 schedules=2200 checked_words=2755129344 copies=303090 allocations=299656 frees=299656 live_bytes=0 models=0 devices=0

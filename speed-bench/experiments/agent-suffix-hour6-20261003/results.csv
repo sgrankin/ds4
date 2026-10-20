@@ -1,0 +1,14 @@
+arm,cohort,mode,tail,task_pass,answer_correct,fourth_answer_correct,workflow_seconds,edit_turn_seconds,fifth_turn_seconds,edit_cycle_seconds,reused_tokens,fresh_tokens,approximate_edits,accepted_edits,archived_fact_removed,incoming_question_retained
+long-native-after,long,native,128,True,True,,151.70084758399753,67.01169120900158,,67.01169120900158,0,0,0,1,True,True
+long-native-before,long,native,128,True,True,,148.14752104200306,65.37388408299012,,65.37388408299012,0,0,0,1,True,True
+long-tail128,long,suffix,128,True,True,,102.2365616249881,18.141125917012687,,18.141125917012687,1540,177,1,1,True,True
+long-tail256,long,suffix,256,True,True,,140.0966839169996,56.80369320799946,,56.80369320799946,203,1514,1,1,True,True
+repeat-long-native-after,repeat-long,native,128,True,True,True,172.48574400000507,61.978223875004915,30.526043874997413,92.50426775000233,0,0,0,2,True,True
+repeat-long-native-before,repeat-long,native,128,True,True,True,168.55863066700113,61.34567241599143,30.92943925000145,92.27511166599288,0,0,0,2,True,True
+repeat-long-tail128,repeat-long,suffix,128,True,True,True,128.49412979200133,16.64183087499987,31.191699792005238,47.83353066700511,1540,177,1,2,True,True
+repeat-native-after,repeat-short,native,128,True,True,True,129.53289154199592,38.28206820800551,30.664504333995865,68.94657254200138,0,0,0,2,True,True
+repeat-native-before,repeat-short,native,128,True,True,True,129.19140104099642,37.65610266699514,31.71579958300572,69.37190225000086,0,0,0,2,True,True
+repeat-tail128,repeat-short,suffix,128,True,True,True,110.32739545899676,16.682410833993345,31.373151457999484,48.05556229199283,740,177,1,2,True,True
+short-native-after,short,native,128,True,True,,98.57746558400686,37.99501970798883,,37.99501970798883,0,0,0,1,True,True
+short-native-before,short,native,128,True,True,,93.96707058300672,36.532725083001424,,36.532725083001424,0,0,0,1,True,True
+short-tail128,short,suffix,128,True,True,,80.44558941600553,17.18966662499588,,17.18966662499588,740,177,1,1,True,True

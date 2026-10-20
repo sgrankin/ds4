@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/fresh-clm-coding-hour32-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:55769",
+    "--arm",
+    "native-before",
+    "--case",
+    "bucket",
+    "--output",
+    "speed-bench/experiments/recipe-prefill-hour37-20261008/code-prefill1/http/bucket",
+    "--visible",
+    ".workspaces/recipe-20261008/code-visible",
+    "--global-cap",
+    "2048"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

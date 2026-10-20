@@ -1,0 +1,33 @@
+{
+  "status": "RELEASED",
+  "time": 1791024693.520564,
+  "execution_sha256": "d8ab86ae63d3b36bdb7602b783ad1066d1c4d93adb9ec7946e68395a69adf907",
+  "lock_reacquired": true,
+  "live_model_processes": [],
+  "all_ancestors_excluded": [
+    44938,
+    2072,
+    2064,
+    1244,
+    1213,
+    759,
+    1
+  ],
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "normal_samples": 81,
+  "bad_samples": 0,
+  "swapgrowth_gib": 0.0,
+  "peak_wired_plus_compressed_gib": 13.14410400390625,
+  "pressure_sha256": "a2113796b30fe958ed0994f9efe14b59e7e83c67133cf7b5ec1579e1a7698913",
+  "stdout_sha256": "a4bf02fd16d7e7b0e002ae83b7d747d7e424d931f8d5369b418909f3413d744b",
+  "stderr_sha256": "e22a8fc0c20ae1e669f2a64671435a8375dc6427939b9474129086e5135f8d13",
+  "complete_source_scanner_constructor_admission_GPU_cleanup_reported": true,
+  "signature_extent": 7864320,
+  "signature_mode": 420,
+  "signature_independent_byte_audit_pending": true,
+  "normal_model_engine": false,
+  "no_retry": true
+}

@@ -1,0 +1,14 @@
+{
+  "gold": {
+    "favorable": 24,
+    "total": 42,
+    "numerator": 4,
+    "denominator": 7
+  },
+  "oracle_input": {
+    "question": "A bag contains four red and three blue distinguishable balls. Draw two balls in order without replacement. Count ordered outcomes with exactly one of each color. Report favorable, total, and the reduced probability numerator/denominator in JSON, then explain."
+  },
+  "explanation": "There are seven choices for the first ball and six for the second, giving forty-two ordered outcomes. A red followed by a blue has four times three possibilities, and blue followed by red has another three times four. The twenty-four favorable outcomes yield twenty-four over forty-two, which reduces to four sevenths.",
+  "category": "math",
+  "scope": "New authored content, fixed before any model outcome."
+}

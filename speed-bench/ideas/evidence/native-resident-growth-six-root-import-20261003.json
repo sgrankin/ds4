@@ -1,0 +1,14 @@
+{
+  "time": 1790991832.307157,
+  "status": "PASS",
+  "archive_revision": "e38d0de393b1c1537e5048a87b9d314b86a66e72",
+  "archive_manifest_sha256": "8ee246f51c64b2b49b1b4e0cf68fbaaed7cb9bf4d2089d3ed87adbd8cc9eae3d",
+  "indexed_files": 113,
+  "physical_files_including_self_manifest": 114,
+  "all_physical_files_accounted_for": true,
+  "source": "/Volumes/Models/ds4/.workspaces/idea-quiet-growth-archive-v2/speed-bench/experiments/native-resident-growth-six-20261003",
+  "destination": "/Volumes/Models/ds4/speed-bench/experiments/native-resident-growth-six-20261003",
+  "all_copied_hashes_exact": true,
+  "runtime_defaults_changed": false,
+  "model_opened_by_import": false
+}

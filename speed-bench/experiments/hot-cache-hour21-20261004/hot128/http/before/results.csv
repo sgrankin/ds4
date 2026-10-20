@@ -1,0 +1,12 @@
+step,session,group,seconds,queue_inclusive_seconds,seconds_including_edit,correct,fresh_read,complete,pass,text
+A-warm,A,warm-AB,82.4378147499956,82.4382296249969,,True,True,True,True,READY
+B-warm,B,warm-AB,91.30369666600018,91.30406750000839,,True,True,True,True,READY
+C-warm,C,warm-CD,91.54142404100276,91.54184674999851,,False,True,True,False,"READY
+
+Retained inventory numbers from the active file:
+- batches: 19
+- items_per_batch: 15
+- reserved_items: 18"
+D-warm,D,warm-CD,77.00336224999046,77.00372924999101,,True,True,True,True,READY
+A-edited,A,edited-AB,47.78218929200375,47.782849249997525,47.782849249997525,True,True,True,True,"{""active_total"":313,""archived_code"":""BEACON-46""}"
+B-edited,B,edited-AB,47.82827458300744,47.828941208994365,47.828941208994365,True,True,True,True,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}"

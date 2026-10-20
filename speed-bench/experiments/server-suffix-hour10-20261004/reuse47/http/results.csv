@@ -1,0 +1,4 @@
+mode,phase,seconds,http_status,response_status,input_tokens,output_tokens,correct,complete,pass,error,text
+reuse,source,0.7576556669955608,200,completed,3114,2,True,True,True,,READY
+reuse,edited-1,38.04268970900739,200,completed,2356,5,True,True,True,,"{""total"":416}"
+reuse,edited-2,6.775183958001435,200,completed,1949,13,True,True,True,,"{""code"":""MAPLE-42"",""reserve"":73}"

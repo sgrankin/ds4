@@ -1,0 +1,99 @@
+{
+  "status": "PASS",
+  "outcomes": [
+    {
+      "label": "ownership-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-I.",
+        "-O1",
+        "-g",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-pthread",
+        "tests/test_agent_suffix_pair_actual_ownership.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock"
+      ],
+      "returncode": 0,
+      "started": 1790997230.189661,
+      "completed": 1790997230.8800619
+    },
+    {
+      "label": "ownership-test",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock"
+      ],
+      "returncode": 0,
+      "started": 1790997230.8804328,
+      "completed": 1790997230.8914618
+    },
+    {
+      "label": "ownership-asan-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-I.",
+        "-O1",
+        "-g",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-pthread",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "tests/test_agent_suffix_pair_actual_ownership.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock-asan"
+      ],
+      "returncode": 0,
+      "started": 1790997230.891815,
+      "completed": 1790997231.02209
+    },
+    {
+      "label": "ownership-asan-test",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock-asan"
+      ],
+      "returncode": 0,
+      "started": 1790997231.0225,
+      "completed": 1790997231.9042969
+    },
+    {
+      "label": "authority-test",
+      "argv": [
+        "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_agent_suffix_pair_actual_authority.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "started": 1790997231.904748,
+      "completed": 1790997232.046932
+    }
+  ],
+  "outputs": {
+    "ownership-mock": {
+      "sha256": "ab707900de03d9400d189a1039eb969042e369d4ee7c704c517a98f31bed6fa6",
+      "bytes": 38704
+    },
+    "ownership-mock-asan": {
+      "sha256": "6bc518e3cab592823ce61b694f6b65b2ea931a5bf654f120a5db92333239c4b4",
+      "bytes": 75904
+    }
+  },
+  "source_and14nativeobjects_andCompilerSDK_unchanged": true,
+  "native_caller_compile": false,
+  "native_core_or_Metal_build": false,
+  "model_or_tokenizer_or_metadata": false,
+  "original36tests_source_unchanged_priorpass_retained_no_rerun": true
+}

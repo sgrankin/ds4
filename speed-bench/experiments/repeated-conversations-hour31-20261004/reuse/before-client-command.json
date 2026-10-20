@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/repeated-conversations-hour31-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:51857",
+    "--phase",
+    "before",
+    "--mode",
+    "reuse",
+    "--output",
+    "speed-bench/experiments/repeated-conversations-hour31-20261004/reuse/http",
+    "--shared",
+    ".workspaces/server-agent-day-20261004/repeat31-visible",
+    "--store",
+    ".workspaces/server-agent-day-20261004/repeat31-store-reuse",
+    "--server-log",
+    "speed-bench/experiments/repeated-conversations-hour31-20261004/reuse/before-server.stderr.log"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

@@ -1,0 +1,370 @@
+{
+  "by_arm": {
+    "write128-before": {
+      "task_wall_seconds": 188.79974575000233,
+      "launcher_wall_seconds": 193.39327000000048,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1162,
+      "thinking_tokens": 327,
+      "role_seconds": {
+        "READ": 96.98371424898505,
+        "WRITE": 79.79935733298771,
+        "FINAL": 12.01267379100318
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "write_budget": 128,
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "write1": {
+      "task_wall_seconds": 175.3312923340127,
+      "launcher_wall_seconds": 179.51534095898387,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 929,
+      "thinking_tokens": 73,
+      "role_seconds": {
+        "READ": 93.73847645800561,
+        "WRITE": 68.16380258300342,
+        "FINAL": 13.425146541994764
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 2,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 2753
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "write_budget": 1,
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "write32": {
+      "task_wall_seconds": 184.43068487601704,
+      "launcher_wall_seconds": 188.84474979201332,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 953,
+      "thinking_tokens": 135,
+      "role_seconds": {
+        "READ": 100.66587624899694,
+        "WRITE": 72.30955958302366,
+        "FINAL": 11.451009626005543
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 64,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 2816
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "write_budget": 32,
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "write128-after": {
+      "task_wall_seconds": 194.47278379302588,
+      "launcher_wall_seconds": 198.75973095800146,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1162,
+      "thinking_tokens": 327,
+      "role_seconds": {
+        "READ": 100.34764941700269,
+        "WRITE": 81.8616500000062,
+        "FINAL": 12.258731583016925
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "write_budget": 128,
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    }
+  },
+  "change_vs_write128_bracket_mean_percent": {
+    "write128-before": {
+      "task_wall_seconds": -1.4801577482705164,
+      "launcher_wall_seconds": -1.3684610202882808
+    },
+    "write1": {
+      "task_wall_seconds": -8.508291714484029,
+      "launcher_wall_seconds": -8.446274530379394
+    },
+    "write32": {
+      "task_wall_seconds": -3.760029399491893,
+      "launcher_wall_seconds": -3.6882291704110393
+    },
+    "write128-after": {
+      "task_wall_seconds": 1.4801577482705275,
+      "launcher_wall_seconds": 1.3684610202882697
+    }
+  },
+  "closing128_vs_opening128_percent": {
+    "task_wall_seconds": 3.0047911455005183,
+    "launcher_wall_seconds": 2.774895402513722
+  },
+  "controls_vs_opening128": {
+    "write128-before": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "write1": {
+      "dedupe": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "write32": {
+      "dedupe": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "write128-after": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    }
+  },
+  "guard_summaries": [
+    {
+      "arm": "write128-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 187,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.51518249511719,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "write1",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 174,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.50169372558594,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "write32",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 183,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.21902465820312,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "write128-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 192,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.11604309082031,
+      "max_consecutive_bad": 0
+    }
+  ]
+}

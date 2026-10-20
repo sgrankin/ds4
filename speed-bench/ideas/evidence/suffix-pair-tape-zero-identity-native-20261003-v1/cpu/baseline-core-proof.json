@@ -1,0 +1,31 @@
+{
+  "source": "/Volumes/Models/ds4/ds4.o",
+  "sha256": "45da7d4af7fbb2b2ae298408a3cd87c266e41c5fcf0fcfaecb7ba3b155af02cf",
+  "core_bytes": 5650520,
+  "baseline_frontend_define": "DS4_PAIR_TAPE_BASELINE",
+  "link_command": [
+    "cc",
+    "-O3",
+    "-g",
+    "-mcpu=native",
+    "-o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-build-v1/baseline-probe",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-build-v1/baseline-frontend.o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-build-v1/native-baseline-core.o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_image.o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_distributed.o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_tp.o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_ssd.o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_metal.o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_layer_pack.o",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_engram.o",
+    "-lm",
+    "-pthread",
+    "-framework",
+    "Foundation",
+    "-framework",
+    "Metal"
+  ],
+  "returncode": 0,
+  "no_model_access": true
+}

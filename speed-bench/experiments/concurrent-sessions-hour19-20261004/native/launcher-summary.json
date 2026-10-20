@@ -1,0 +1,31 @@
+{
+  "mode": "native",
+  "fresh_tail": 64,
+  "seconds": 355.06857333300286,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 0,
+      "seconds": 266.43035358299676,
+      "startup_seconds": 0.20404062498710118,
+      "client_seconds": 264.8873635830096,
+      "shutdown_seconds": 1.3386534999881405,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 88.63402104198758,
+      "startup_seconds": 0.42291595799906645,
+      "client_seconds": 86.82421758300916,
+      "shutdown_seconds": 1.3864825839991681,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-native-cache",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-native-store",
+  "timeout_seconds": 600.0
+}

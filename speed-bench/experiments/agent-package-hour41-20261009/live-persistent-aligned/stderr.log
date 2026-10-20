@@ -1,0 +1,20 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.49 MiB (ctx=8192), Engram disk-only
++DWARFSTAR_WAITING
++DWARFSTAR_WAITING
++DWARFSTAR_WAITING
++DWARFSTAR_WAITING
++DWARFSTAR_WAITING
++DWARFSTAR_WAITING
+ds4: resident-route layers=19720 substitutions=8009 native_misses=11069 skipped_loads=8009 skipped_bytes=79715819520 mean_mass=0.12846510 mean_score_gap=0.09573105 mean_affinity_ratio=0.90900630 mean_rank=7.626 full_snapshots=6661 double_layers=1156 planned_substitutions=8009 drops=0 triple_layers=96
+ds4: resident-route-native-weights requested=1 substitutions=8009
+ds4: resident-prefill calls=59 fallbacks=2 frozen_residents=362024 row_layers=139760 native_misses=68499 planned_substitutions=47095 substitutions=47095 skipped_bytes=468749721600 double_layers=6189 triple_layers=614 mean_mass=0.12873476 native_weights=1

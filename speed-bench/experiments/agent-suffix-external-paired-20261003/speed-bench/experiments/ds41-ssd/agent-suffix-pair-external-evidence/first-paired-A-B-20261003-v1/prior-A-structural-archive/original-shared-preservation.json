@@ -1,0 +1,42 @@
+{
+  "status": "ORIGINAL_SHARED_ROOT_UNCHANGED_AND_ALL114_REVERIFIED",
+  "root": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run",
+  "root_identity": {
+    "device": 16777230,
+    "inode": 1671818
+  },
+  "files": {
+    ".owner.json": {
+      "bytes": 153,
+      "sha256": "8a07a476e0fd2d4b40b8eed00b5c8f7a3ac13af1489af290bffef076667d749e",
+      "mode": 420,
+      "device": 16777230,
+      "inode": 1671821
+    },
+    "live-context.txt": {
+      "bytes": 15751,
+      "sha256": "cade13f041fa79197de609ea3201d2d45180d99de1199db72af7a423c80e3916",
+      "mode": 420,
+      "device": 16777230,
+      "inode": 1676931
+    },
+    "project/access.py": {
+      "bytes": 50,
+      "sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26",
+      "mode": 420,
+      "device": 16777230,
+      "inode": 1676919
+    },
+    "project/run_grader.py": {
+      "bytes": 1732,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+      "mode": 493,
+      "device": 16777230,
+      "inode": 1671820
+    }
+  },
+  "snapshot_sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064",
+  "A_manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "release_sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd",
+  "no_reset_delete_write_original_shared": true
+}

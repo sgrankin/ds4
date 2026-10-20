@@ -1,0 +1,20 @@
+{
+  "gold": {
+    "forward": [
+      22,
+      44,
+      66
+    ],
+    "backward": [
+      77,
+      44,
+      11
+    ]
+  },
+  "oracle_input": {
+    "question": "In Python, xs=[11,22,33,44,55,66,77]. Evaluate xs[1:6:2] and xs[::-3]. Return a JSON object with forward and backward, then explain the index choices."
+  },
+  "explanation": "The forward slice selects indices one, three, and five; its stop index six is excluded. The backward slice starts at the final element and steps backward by three, selecting indices six, three, and zero. These are ordinary Python list slices, and neither result sorts the original values.",
+  "category": "code",
+  "scope": "New authored content, fixed before any model outcome."
+}

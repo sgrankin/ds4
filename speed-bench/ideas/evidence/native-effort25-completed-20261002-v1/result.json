@@ -1,0 +1,81 @@
+{
+  "execution_status": "COMPLETE_WITH_INVALID_CAPPED_RESULTS",
+  "producer_returncode": 3,
+  "guard_returncode": 3,
+  "record_integrity_status": "PASS",
+  "strict_outcome_status": "INVALID_PRESENT",
+  "completed_correct": 2,
+  "invalid": 2,
+  "cap_hits": 2,
+  "tokens": 5985,
+  "reasoning_tokens": 5982,
+  "native25": {
+    "cases": 4,
+    "correct": 2,
+    "incorrect": 0,
+    "invalid": 2,
+    "cap_hits": 2,
+    "tokens": 5985,
+    "reasoning_tokens": 5982,
+    "decode_seconds": 278.97082,
+    "tokens_per_solved_task": 2992.5,
+    "completed_correct": 2,
+    "capped_correct": 0
+  },
+  "native75_penalty_zero": {
+    "cases": 4,
+    "correct": 1,
+    "incorrect": 0,
+    "invalid": 3,
+    "cap_hits": 3,
+    "tokens": 6681,
+    "reasoning_tokens": 6680,
+    "decode_seconds": 319.117103,
+    "tokens_per_solved_task": 6681.0,
+    "completed_correct": 1,
+    "capped_correct": 0
+  },
+  "tokens_difference_percent": -10.417602155365968,
+  "comparison_scope": "Four identical counting problems and one seed; effort changes the thinking prompt. Descriptive token/completion comparison only, no cross-effort KL, raw-logit equivalence, causal or generalization claim.",
+  "native50_partial_outcomes_read": false,
+  "timing_scope": "exploratory arm timings; cache reuse prevents a speedup claim",
+  "pressure": {
+    "samples": 294,
+    "normal_samples": 294,
+    "adverse_samples": 0,
+    "swap_growth_gib": 0.0,
+    "host_pressure": {
+      "samples": 294,
+      "minimum_free_gib": 0.1119384765625,
+      "maximum_wired_gib": 71.18014526367188,
+      "maximum_compressor_gib": 7.3418121337890625,
+      "maximum_swap_gib": 0.017763671875,
+      "maximum_kernel_level": 1
+    }
+  },
+  "release": {
+    "time": 1790983221.075436,
+    "root_session": 39064,
+    "guard_returncode": 3,
+    "root_lock_reacquired": true,
+    "matching_live_model_processes": [],
+    "samples": 294,
+    "pressure_levels": [
+      1
+    ],
+    "adverse_samples": 0,
+    "swap_growth_gib": 0.0
+  },
+  "no_rescoring_or_analysis_rerun": true,
+  "accepted_analysis_commit": "f27b7d5a942d4ea5e23849f9209e47ed4dc5a3a7",
+  "checked_summary_commit": "7c6e0d98",
+  "checked_summary_sha256": "ce2ca66defb63131ab9ad170c9eee84291d91bb48da7e03aed710133588da769",
+  "helper_sha256": "f0596bf4fb3035871c4bd7b1393161b005377fca2bc0a6e28b868b852cd3f571",
+  "queue_launcher_sha256": "98204b286e48ab100c6f5cfa1fa4565530f7a74f32ae5931fe351c230262640d",
+  "queue_sha256": "2af91c43a8c701cdcec392ef9041607cbf068180ea32528521b9afc01cc495b6",
+  "preflight_verified_files": 98,
+  "archive_model_metadata_read": false,
+  "archive_model_payload_read": false,
+  "archive_helper_executed": false,
+  "defaults_promoted": false
+}

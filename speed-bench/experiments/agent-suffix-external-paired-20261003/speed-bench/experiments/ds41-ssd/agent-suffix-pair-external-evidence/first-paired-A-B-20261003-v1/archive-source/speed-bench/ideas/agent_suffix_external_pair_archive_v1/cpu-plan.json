@@ -1,0 +1,34 @@
+{
+  "status": "FROZEN_SYNTHETIC_CPU_ONLY_SOURCE_PLAN",
+  "files": {
+    "speed-bench/ideas/archive_agent_suffix_external_pair.py": {
+      "bytes": 24680,
+      "mode": 420,
+      "sha256": "775c79c135d69b132c517bfffec65ba5082ec196b8c183438e601129c61a3a9f"
+    },
+    "tests/test_archive_agent_suffix_external_pair.py": {
+      "bytes": 11168,
+      "mode": 420,
+      "sha256": "1310abb6833ed331904bed8ea8f139af075ea0f561e832ac9d4f6574053d7c31"
+    },
+    "speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration.json": {
+      "bytes": 3761,
+      "mode": 420,
+      "sha256": "846c6046fa993dca39c4f9d2f0938b6773822a4d8f9e92a46f4dafd3c4428da3"
+    }
+  },
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "tests/test_archive_agent_suffix_external_pair.py",
+    "-v"
+  ],
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PAIR_ARCHIVE_CPU_CASES": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/cases"
+  },
+  "output": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1",
+  "no_actual_production_outcomes_read": true,
+  "no_models_helpers_graders_compilers_or_guard": true,
+  "source_freeze_required_before_CPU": true
+}

@@ -1,0 +1,20 @@
+{
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "ssd_streaming": true,
+  "v41_recognized": true,
+  "ctx": "8192",
+  "cache": "64GB",
+  "chunk": "512",
+  "resident_env": {
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".05",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".12",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".20"
+  },
+  "incompatible_cli_flags": [],
+  "incompatible_env_found": {},
+  "binary_sha256": "8b4b611d3964e48f07c6afa167e60a274b8c86af2b5bc4c5484389e8550772f5",
+  "scalar_decode_evidence": "ordinary agent generation, no speculative CLI modes; actual generation/tool tokens in trace; configured resident path rejects incompatible modes at scalar decode setup",
+  "counter_report_present": false,
+  "counter_report_limitation": "SIGTERM at timeout bypassed atexit report; actual substitution count is unavailable"
+}

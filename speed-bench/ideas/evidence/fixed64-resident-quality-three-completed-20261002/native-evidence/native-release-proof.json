@@ -1,0 +1,18 @@
+{
+  "MAIN_lock": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/model-job.lock",
+  "ROOT_pre_next_launch_free_lock_proof": "native-evidence/root-release-proof.json",
+  "ROOT_pre_next_launch_verified_utc": "2026-10-02 22:33:54 UTC",
+  "guard_pid": 27395,
+  "guard_pid_alive": false,
+  "guard_result": {
+    "child_returncode": 0,
+    "status": "complete"
+  },
+  "matching_study_processes": [],
+  "model_metadata_accessed_after_guard": false,
+  "nonblocking_exclusive_probe": "occupied by ROOT next granted narrow-half guard 31276 at 22:34:34 UTC; joint guard 27395 and descendants already exited",
+  "relevant_current_process_inventory": [
+    "31276  2072 31276 /opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /Volumes/Models/ds4/speed-bench/ideas/pressure_run.py /Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1-pressure -- /Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/overthink_pilot /Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf narrow-half-counting-four-20261002-v1 2048 75 counting 0.5 --cache-gb 64.0 --cases 4 --case-offset 0 --diagnostic-stride 32"
+  ],
+  "time_utc": "2026-10-02T22:34:34.762823+00:00"
+}

@@ -1,0 +1,15 @@
+We need answer count paths from (0,0) to (7,7) with steps R,U, never y>x (i.e., stay below or on diagonal y=x? Starting (0,0) y=x. Need never y>x means y <= x at all points. Since steps right increases x, up increases y. From (0,0) to (7,7). This is Catalan paths below diagonal? Usually Dyck paths with R=up? Let's define coordinates x,y. Condition y<=x. Starting (0,0) equality. First step must R (x=1,y=0). Ending (7,7) equality. Count Catalan number C_7 = 1/(8) binom(14,7)=429? Wait Catalan C_n counts paths from (0,0) to (n,n) not crossing y=x? If condition y<=x, yes Catalan C_n = 429 for n=7. But exclude paths through (2,2) or (4,4). Need count paths avoiding both points.
+
+Need compute number of Catalan paths length 14 from (0,0) to (7,7) staying y<=x, not visiting (2,2) or (4,4). Note (2,2), (4,4) are on diagonal. Any path that reaches diagonal at those points. Need avoid.
+
+We can use decomposition or inclusion-exclusion. Count Catalan paths of length 7 avoiding diagonal visits at times 2 and 4 (after 2k steps? coordinates (k,k) at step 2k). Since condition y<=x, diagonal points are returns to axis in standard Dyck path (after mapping). Need count Dyck paths of semilength 7 with no return at semilength 2 and no return at semilength 4? Let's map standard Dyck path: x? Let R = (1,0) maybe east, U=(0,1). Condition y<=x. If rotate? Standard Dyck path with U=(1,1)? Let's map to steps: R corresponds to up? Actually condition y<=x means x-y >=0. Let horizontal R increases x, vertical U increases y. Let define a = R (increase x) as "up" in height h=x-y? R increases h by 1; U decreases h by 1. Start h=0, end h=0, never h<0. So R = up step, U = down step. Coordinates (x,y): after t steps, h=x-y. At (k,k), h=0. So (2,2) after 4 steps? Wait from (0,0) to (2,2) uses 2 R and 2 U, total 4 steps. Semilength k=2. (4,4) uses 4 R and 4 U total 8 steps, semilength 4. Final (7,7) semilength 7.
+
+So count Dyck paths of semilength 7 with no return to zero at time 4 and time 8? Actually (2,2) at step 4, (4,4) at step 8. Need avoid zero at times 4 and 8. Final at time 14 zero. Standard Dyck path length 14, nonnegative, returns to zero at times 0 and 14. Avoid return at time 4 and time 8. Need count.
+
+Let's compute. Total Catalan C_7 = 429.
+
+Need subtract paths passing through (2,2) or (4,4). Let A = paths through (2,2), B = paths through (4,4). Need |A ∪ B| = |A|+|B|-|A∩B|. Count avoid = total - |A|-|B|+|A∩B|.
+
+Compute |A|: paths from (0,0) to (7,7) staying y<=x and pass (2,2). Decompose at (2,2): first segment from (0,0) to (2,2) staying y<=x. Since (2,2) on diagonal. Number of such paths = Catalan C_2? From (0,0) to (2,2) never y>x. Count C_2 = 2? Let's list length 4: RRUU? (0,0)->(1,0)->(2,0)->(2,1)->(2,2) y<=x yes. RURU? (1,0)->(1,1)->(2,1)->(2,2). RUUR? (1,0)->(1,1)->(1,2) y>x at (1,2), invalid. U first invalid. So 2. Yes C_2=2.
+
+Second segment from (2,2) to (7,

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/prepare_resident_three_timing.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2",
+    "--root-granted",
+    "--cpu-timing-frozen"
+  ],
+  "launch_authorized": false,
+  "manifest_sha256": "13adc6b7ce0202caa4f2d25bd5e275b889020ff6275bd5b8d1c427d54f77a317",
+  "requires_root_grant_and_explicit_cpu_freeze": true
+}

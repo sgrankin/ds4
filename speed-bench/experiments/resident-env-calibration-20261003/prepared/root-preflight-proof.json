@@ -1,0 +1,14 @@
+{
+  "time": 1790996942.793789,
+  "status": "ROOT_NONMODEL_REVIEW_PASS",
+  "manifest_sha256": "1b537cb53a217d25fd13ee5957b405955a9a0ae63da9e372dde23092ccfe7fcd",
+  "command_sha256": "8c8c3e885830b3ec59322af2e396e4ef380efa2c919db183a7b9739cd03d4b30",
+  "local_pins": 6,
+  "external_pins": 317,
+  "all_nonmodel_assets_verified": true,
+  "shader_inventory_exact": 26,
+  "source_review": true,
+  "model_stat_or_open": false,
+  "model_launch_granted": false,
+  "timing_claim": false
+}

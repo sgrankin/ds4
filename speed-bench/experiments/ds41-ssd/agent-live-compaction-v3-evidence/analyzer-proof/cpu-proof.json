@@ -1,0 +1,22 @@
+{
+  "source_commit": "02e5d3b1a380344e5c5e99ad83e5703ddf196b08",
+  "source_files_sha256": {
+    "speed-bench/ideas/analyze_agent_compaction.py": "91715f2fdd91bead015e45433bfd5035320a35c01049fb331aaa8dcfa0f424ac",
+    "tests/test_agent_compaction_analysis.py": "e2240b464c29398f44066cc258d2ef81d7fb763bdad3d26db16ca9d5003f10a6",
+    "speed-bench/experiments/ds41-ssd/AGENT_COMPACTION_OFFLINE_ANALYSIS.md": "7aef16e6378aa12f49b2a8aaf7f0d7ba94ec75566eb9328cb013c774a36b99e4"
+  },
+  "jj_blob_disk_equal": true,
+  "cpu_test_source_sha256": "e2240b464c29398f44066cc258d2ef81d7fb763bdad3d26db16ca9d5003f10a6",
+  "cpu_test_result_log_sha256": "bc3bae16b5efe393be93385239f838343e1d87cc04b07266c6faaf2b2080ad4e",
+  "cpu_tests": 26,
+  "analysis_sha256": "45ea0b44a7fc2c1027b3ef5386c5aba1665977585a10237291b828c2089ae046",
+  "original_harness_failed": true,
+  "original_private_frontend_rc": 1,
+  "actual_agent_rc": 0,
+  "three_recorded_checks_pass": true,
+  "independent_final_cpu_commands_pass": 4,
+  "model_opened": false,
+  "model_metadata_read": false,
+  "original_artifacts_mutated": false,
+  "replay_created": false
+}

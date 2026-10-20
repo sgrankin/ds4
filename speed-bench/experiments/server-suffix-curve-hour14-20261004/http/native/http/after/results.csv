@@ -1,0 +1,3 @@
+step,session,seconds,seconds_including_edit,correct,fresh_read,complete,pass,text
+A-edit2,A,42.58435562500381,42.585221291999915,True,True,True,True,"{""active_total"":416,""archived_code"":""RIVER-74""}"
+B-edit2,B,42.6995004999917,42.70036816599895,True,True,True,True,"{""active_total"": 202, ""archived_code"": ""CEDAR-92""}"

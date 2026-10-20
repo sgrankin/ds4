@@ -1,0 +1,777 @@
+{
+  "rows": [
+    {
+      "case": "ledger",
+      "arm": "native-before",
+      "wall_seconds": 68.7959506670013,
+      "pass": true,
+      "cap": false,
+      "complete": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 684,
+      "http_reasoning_tokens": 169,
+      "first_code_bytes": 1023,
+      "final_text_length": 423,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the latest event per exact key by highest revision, breaking ties by last payload order, emits winning puts in `live`, and emits winning deletes in `deleted` only when `config[\"include_deleted\"]` is true. Both lists are sorted by key using normal Python string ordering.",
+      "code_pass": true,
+      "tests": 161,
+      "errors": "",
+      "read_seconds": 31.23569862500881,
+      "read_output_tokens": 136,
+      "read_thinking_tokens": 40,
+      "read_input_tokens": 878,
+      "read_cached_tokens": 0,
+      "read_fresh_tokens": 878,
+      "write_seconds": 29.952536875003716,
+      "write_output_tokens": 446,
+      "write_thinking_tokens": 128,
+      "write_input_tokens": 1190,
+      "write_cached_tokens": 1014,
+      "write_fresh_tokens": 176,
+      "final_seconds": 7.606295834004413,
+      "final_output_tokens": 102,
+      "final_thinking_tokens": 1,
+      "final_input_tokens": 1680,
+      "final_cached_tokens": 1636,
+      "final_fresh_tokens": 44
+    },
+    {
+      "case": "lru",
+      "arm": "native-before",
+      "wall_seconds": 61.77133962500375,
+      "pass": true,
+      "cap": false,
+      "complete": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 610,
+      "http_reasoning_tokens": 157,
+      "first_code_bytes": 830,
+      "final_text_length": 282,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`. It tracks hits, misses, evictions, and final LRU-ordered cache, handles non-positive capacity, preserves empty keys, and does not mutate inputs.",
+      "code_pass": true,
+      "tests": 161,
+      "errors": "",
+      "read_seconds": 30.68687316699652,
+      "read_output_tokens": 123,
+      "read_thinking_tokens": 28,
+      "read_input_tokens": 860,
+      "read_cached_tokens": 0,
+      "read_fresh_tokens": 860,
+      "write_seconds": 25.024425916999462,
+      "write_output_tokens": 415,
+      "write_thinking_tokens": 128,
+      "write_input_tokens": 1035,
+      "write_cached_tokens": 983,
+      "write_fresh_tokens": 52,
+      "final_seconds": 6.058527291999781,
+      "final_output_tokens": 72,
+      "final_thinking_tokens": 1,
+      "final_input_tokens": 1493,
+      "final_cached_tokens": 1450,
+      "final_fresh_tokens": 43
+    },
+    {
+      "case": "ledger",
+      "arm": "subs3",
+      "wall_seconds": 62.18089441600023,
+      "pass": true,
+      "cap": false,
+      "complete": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 679,
+      "http_reasoning_tokens": 169,
+      "first_code_bytes": 996,
+      "final_text_length": 423,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the latest event per exact key by highest revision, breaking ties by last payload order, emits winning puts in `live`, and emits winning deletes in `deleted` only when `config[\"include_deleted\"]` is true. Both lists are sorted by key using normal Python string ordering.",
+      "code_pass": true,
+      "tests": 161,
+      "errors": "",
+      "read_seconds": 30.668680333998054,
+      "read_output_tokens": 136,
+      "read_thinking_tokens": 40,
+      "read_input_tokens": 878,
+      "read_cached_tokens": 0,
+      "read_fresh_tokens": 878,
+      "write_seconds": 25.250751875006245,
+      "write_output_tokens": 441,
+      "write_thinking_tokens": 128,
+      "write_input_tokens": 1190,
+      "write_cached_tokens": 1014,
+      "write_fresh_tokens": 176,
+      "final_seconds": 6.2596340000018245,
+      "final_output_tokens": 102,
+      "final_thinking_tokens": 1,
+      "final_input_tokens": 1675,
+      "final_cached_tokens": 1631,
+      "final_fresh_tokens": 44
+    },
+    {
+      "case": "lru",
+      "arm": "subs3",
+      "wall_seconds": 55.90820104200975,
+      "pass": true,
+      "cap": false,
+      "complete": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 613,
+      "http_reasoning_tokens": 156,
+      "first_code_bytes": 830,
+      "final_text_length": 300,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`.\n\nIt tracks hits, misses, evictions, and final LRU-ordered cache, handles non-positive capacity by treating every access as a miss, and does not mutate the inputs.",
+      "code_pass": true,
+      "tests": 161,
+      "errors": "",
+      "read_seconds": 29.69682258401008,
+      "read_output_tokens": 122,
+      "read_thinking_tokens": 27,
+      "read_input_tokens": 860,
+      "read_cached_tokens": 0,
+      "read_fresh_tokens": 860,
+      "write_seconds": 20.95216575000086,
+      "write_output_tokens": 415,
+      "write_thinking_tokens": 128,
+      "write_input_tokens": 1034,
+      "write_cached_tokens": 982,
+      "write_fresh_tokens": 52,
+      "final_seconds": 5.25751495800796,
+      "final_output_tokens": 76,
+      "final_thinking_tokens": 1,
+      "final_input_tokens": 1492,
+      "final_cached_tokens": 1449,
+      "final_fresh_tokens": 43
+    },
+    {
+      "case": "ledger",
+      "arm": "subs1",
+      "wall_seconds": 66.78189729100268,
+      "pass": true,
+      "cap": false,
+      "complete": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 661,
+      "http_reasoning_tokens": 156,
+      "first_code_bytes": 1023,
+      "final_text_length": 395,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the latest event per key by highest revision, breaking ties by last payload order, treats winning deletes as tombstones, optionally includes deleted entries based on `config[\"include_deleted\"]`, and returns `live` and `deleted` sorted by key.",
+      "code_pass": true,
+      "tests": 161,
+      "errors": "",
+      "read_seconds": 31.026046208004118,
+      "read_output_tokens": 123,
+      "read_thinking_tokens": 27,
+      "read_input_tokens": 878,
+      "read_cached_tokens": 0,
+      "read_fresh_tokens": 878,
+      "write_seconds": 28.703908625000622,
+      "write_output_tokens": 442,
+      "write_thinking_tokens": 128,
+      "write_input_tokens": 1177,
+      "write_cached_tokens": 1001,
+      "write_fresh_tokens": 176,
+      "final_seconds": 7.050311041995883,
+      "final_output_tokens": 96,
+      "final_thinking_tokens": 1,
+      "final_input_tokens": 1663,
+      "final_cached_tokens": 1619,
+      "final_fresh_tokens": 44
+    },
+    {
+      "case": "lru",
+      "arm": "subs1",
+      "wall_seconds": 59.322795082989614,
+      "pass": true,
+      "cap": false,
+      "complete": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 611,
+      "http_reasoning_tokens": 156,
+      "first_code_bytes": 830,
+      "final_text_length": 287,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`. It tracks hits, misses, evictions, and final LRU-to-MRU cache order, handles non-positive capacity, preserves empty keys, and does not mutate inputs.",
+      "code_pass": true,
+      "tests": 161,
+      "errors": "",
+      "read_seconds": 30.249255374990753,
+      "read_output_tokens": 122,
+      "read_thinking_tokens": 27,
+      "read_input_tokens": 860,
+      "read_cached_tokens": 0,
+      "read_fresh_tokens": 860,
+      "write_seconds": 23.32244258299761,
+      "write_output_tokens": 415,
+      "write_thinking_tokens": 128,
+      "write_input_tokens": 1034,
+      "write_cached_tokens": 982,
+      "write_fresh_tokens": 52,
+      "final_seconds": 5.749493499999517,
+      "final_output_tokens": 74,
+      "final_thinking_tokens": 1,
+      "final_input_tokens": 1492,
+      "final_cached_tokens": 1449,
+      "final_fresh_tokens": 43
+    },
+    {
+      "case": "ledger",
+      "arm": "native-after",
+      "wall_seconds": 69.93692824999744,
+      "pass": true,
+      "cap": false,
+      "complete": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 684,
+      "http_reasoning_tokens": 169,
+      "first_code_bytes": 1023,
+      "final_text_length": 423,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the latest event per exact key by highest revision, breaking ties by last payload order, emits winning puts in `live`, and emits winning deletes in `deleted` only when `config[\"include_deleted\"]` is true. Both lists are sorted by key using normal Python string ordering.",
+      "code_pass": true,
+      "tests": 161,
+      "errors": "",
+      "read_seconds": 31.82278408300772,
+      "read_output_tokens": 136,
+      "read_thinking_tokens": 40,
+      "read_input_tokens": 878,
+      "read_cached_tokens": 0,
+      "read_fresh_tokens": 878,
+      "write_seconds": 30.38626137499523,
+      "write_output_tokens": 446,
+      "write_thinking_tokens": 128,
+      "write_input_tokens": 1190,
+      "write_cached_tokens": 1014,
+      "write_fresh_tokens": 176,
+      "final_seconds": 7.7263102080032695,
+      "final_output_tokens": 102,
+      "final_thinking_tokens": 1,
+      "final_input_tokens": 1680,
+      "final_cached_tokens": 1636,
+      "final_fresh_tokens": 44
+    },
+    {
+      "case": "lru",
+      "arm": "native-after",
+      "wall_seconds": 61.056163582994486,
+      "pass": true,
+      "cap": false,
+      "complete": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 610,
+      "http_reasoning_tokens": 157,
+      "first_code_bytes": 830,
+      "final_text_length": 282,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`. It tracks hits, misses, evictions, and final LRU-ordered cache, handles non-positive capacity, preserves empty keys, and does not mutate inputs.",
+      "code_pass": true,
+      "tests": 161,
+      "errors": "",
+      "read_seconds": 30.659621832994162,
+      "read_output_tokens": 123,
+      "read_thinking_tokens": 28,
+      "read_input_tokens": 860,
+      "read_cached_tokens": 0,
+      "read_fresh_tokens": 860,
+      "write_seconds": 24.458141000010073,
+      "write_output_tokens": 415,
+      "write_thinking_tokens": 128,
+      "write_input_tokens": 1035,
+      "write_cached_tokens": 983,
+      "write_fresh_tokens": 52,
+      "final_seconds": 5.936903166002594,
+      "final_output_tokens": 72,
+      "final_thinking_tokens": 1,
+      "final_input_tokens": 1493,
+      "final_cached_tokens": 1450,
+      "final_fresh_tokens": 43
+    }
+  ],
+  "by_arm": {
+    "native-before": {
+      "wall_seconds": 130.56729029200505,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "output_tokens": 1294,
+      "thinking_tokens": 326,
+      "roles": {
+        "READ": {
+          "seconds": 61.92257179200533,
+          "output_tokens": 259,
+          "thinking_tokens": 68,
+          "input_tokens": 1738,
+          "cached_tokens": 0,
+          "fresh_tokens": 1738
+        },
+        "WRITE": {
+          "seconds": 54.97696279200318,
+          "output_tokens": 861,
+          "thinking_tokens": 256,
+          "input_tokens": 2225,
+          "cached_tokens": 1997,
+          "fresh_tokens": 228
+        },
+        "FINAL": {
+          "seconds": 13.664823126004194,
+          "output_tokens": 174,
+          "thinking_tokens": 2,
+          "input_tokens": 3173,
+          "cached_tokens": 3086,
+          "fresh_tokens": 87
+        }
+      },
+      "forced": 4,
+      "deferred": 0
+    },
+    "subs3": {
+      "wall_seconds": 118.08909545800998,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "output_tokens": 1292,
+      "thinking_tokens": 325,
+      "roles": {
+        "READ": {
+          "seconds": 60.36550291800813,
+          "output_tokens": 258,
+          "thinking_tokens": 67,
+          "input_tokens": 1738,
+          "cached_tokens": 0,
+          "fresh_tokens": 1738
+        },
+        "WRITE": {
+          "seconds": 46.2029176250071,
+          "output_tokens": 856,
+          "thinking_tokens": 256,
+          "input_tokens": 2224,
+          "cached_tokens": 1996,
+          "fresh_tokens": 228
+        },
+        "FINAL": {
+          "seconds": 11.517148958009784,
+          "output_tokens": 178,
+          "thinking_tokens": 2,
+          "input_tokens": 3167,
+          "cached_tokens": 3080,
+          "fresh_tokens": 87
+        }
+      },
+      "forced": 4,
+      "deferred": 0
+    },
+    "subs1": {
+      "wall_seconds": 126.1046923739923,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "output_tokens": 1272,
+      "thinking_tokens": 312,
+      "roles": {
+        "READ": {
+          "seconds": 61.27530158299487,
+          "output_tokens": 245,
+          "thinking_tokens": 54,
+          "input_tokens": 1738,
+          "cached_tokens": 0,
+          "fresh_tokens": 1738
+        },
+        "WRITE": {
+          "seconds": 52.02635120799823,
+          "output_tokens": 857,
+          "thinking_tokens": 256,
+          "input_tokens": 2211,
+          "cached_tokens": 1983,
+          "fresh_tokens": 228
+        },
+        "FINAL": {
+          "seconds": 12.7998045419954,
+          "output_tokens": 170,
+          "thinking_tokens": 2,
+          "input_tokens": 3155,
+          "cached_tokens": 3068,
+          "fresh_tokens": 87
+        }
+      },
+      "forced": 4,
+      "deferred": 0
+    },
+    "native-after": {
+      "wall_seconds": 130.99309183299192,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "output_tokens": 1294,
+      "thinking_tokens": 326,
+      "roles": {
+        "READ": {
+          "seconds": 62.48240591600188,
+          "output_tokens": 259,
+          "thinking_tokens": 68,
+          "input_tokens": 1738,
+          "cached_tokens": 0,
+          "fresh_tokens": 1738
+        },
+        "WRITE": {
+          "seconds": 54.8444023750053,
+          "output_tokens": 861,
+          "thinking_tokens": 256,
+          "input_tokens": 2225,
+          "cached_tokens": 1997,
+          "fresh_tokens": 228
+        },
+        "FINAL": {
+          "seconds": 13.663213374005863,
+          "output_tokens": 174,
+          "thinking_tokens": 2,
+          "input_tokens": 3173,
+          "cached_tokens": 3086,
+          "fresh_tokens": 87
+        }
+      },
+      "forced": 4,
+      "deferred": 0
+    }
+  },
+  "native_mean_wall_seconds": 130.7801910624985,
+  "change_vs_native_mean_percent": {
+    "native-before": -0.16279282723458133,
+    "subs3": -9.704142119217096,
+    "subs1": -3.5750817081096176,
+    "native-after": 0.16279282723459243
+  },
+  "native_after_vs_before_percent": 0.3261165488190665,
+  "route_summaries": {
+    "native-before": {
+      "raw_lines": [],
+      "native_weight_lines": []
+    },
+    "subs3": {
+      "layers": 51680,
+      "substitutions": 21856,
+      "native_misses": 30898,
+      "skipped_loads": 21856,
+      "skipped_bytes": 217538887680,
+      "mean_mass": 0.12053417,
+      "mean_score_gap": 0.10930412,
+      "mean_affinity_ratio": 0.89320445,
+      "mean_rank": 7.622,
+      "full_snapshots": 18351,
+      "double_layers": 2956,
+      "planned_substitutions": 21856,
+      "drops": 0,
+      "triple_layers": 275,
+      "raw_lines": [
+        "ds4: resident-route layers=51680 substitutions=21856 native_misses=30898 skipped_loads=21856 skipped_bytes=217538887680 mean_mass=0.12053417 mean_score_gap=0.10930412 mean_affinity_ratio=0.89320445 mean_rank=7.622 full_snapshots=18351 double_layers=2956 planned_substitutions=21856 drops=0 triple_layers=275"
+      ],
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=21856"
+      ]
+    },
+    "subs1": {
+      "layers": 50880,
+      "substitutions": 7566,
+      "native_misses": 26092,
+      "skipped_loads": 7566,
+      "skipped_bytes": 75306516480,
+      "mean_mass": 0.11137183,
+      "mean_score_gap": 0.05653064,
+      "mean_affinity_ratio": 0.95480964,
+      "mean_rank": 7.305,
+      "full_snapshots": 7566,
+      "double_layers": 0,
+      "planned_substitutions": 7566,
+      "drops": 0,
+      "triple_layers": 0,
+      "raw_lines": [
+        "ds4: resident-route layers=50880 substitutions=7566 native_misses=26092 skipped_loads=7566 skipped_bytes=75306516480 mean_mass=0.11137183 mean_score_gap=0.05653064 mean_affinity_ratio=0.95480964 mean_rank=7.305 full_snapshots=7566 double_layers=0 planned_substitutions=7566 drops=0 triple_layers=0"
+      ],
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=7566"
+      ]
+    },
+    "native-after": {
+      "raw_lines": [],
+      "native_weight_lines": []
+    }
+  },
+  "reasoning_summaries": {
+    "native-before": [
+      {
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 40,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "context": "1014..1190:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "1636..1680:44",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 28,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "context": "983..1035:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "1450..1493:43",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      }
+    ],
+    "subs3": [
+      {
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 40,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "context": "1014..1190:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "1631..1675:44",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 27,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "context": "982..1034:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "1449..1492:43",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      }
+    ],
+    "subs1": [
+      {
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 27,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "context": "1001..1177:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "1619..1663:44",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 27,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "context": "982..1034:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "1449..1492:43",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      }
+    ],
+    "native-after": [
+      {
+        "context": "0..878:878",
+        "budget": 0,
+        "thinking_tokens": 40,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "context": "1014..1190:176",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "1636..1680:44",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "0..860:860",
+        "budget": 0,
+        "thinking_tokens": 28,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "context": "983..1035:52",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "context": "1450..1493:43",
+        "budget": 1,
+        "thinking_tokens": 1,
+        "forced": 1,
+        "deferred": 0
+      }
+    ]
+  },
+  "controls_vs_native_before": {
+    "native-before": {
+      "ledger": {
+        "first_code_byte_equal": true,
+        "final_text_byte_equal": true,
+        "role_usage_equal": true,
+        "quality_equal": true,
+        "role_emitted_bytes_equal": {
+          "READ": true,
+          "WRITE": true,
+          "FINAL": true
+        }
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "final_text_byte_equal": true,
+        "role_usage_equal": true,
+        "quality_equal": true,
+        "role_emitted_bytes_equal": {
+          "READ": true,
+          "WRITE": true,
+          "FINAL": true
+        }
+      }
+    },
+    "subs3": {
+      "ledger": {
+        "first_code_byte_equal": false,
+        "final_text_byte_equal": true,
+        "role_usage_equal": false,
+        "quality_equal": true,
+        "role_emitted_bytes_equal": {
+          "READ": true,
+          "WRITE": false,
+          "FINAL": true
+        }
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "final_text_byte_equal": false,
+        "role_usage_equal": false,
+        "quality_equal": true,
+        "role_emitted_bytes_equal": {
+          "READ": false,
+          "WRITE": false,
+          "FINAL": false
+        }
+      }
+    },
+    "subs1": {
+      "ledger": {
+        "first_code_byte_equal": false,
+        "final_text_byte_equal": false,
+        "role_usage_equal": false,
+        "quality_equal": true,
+        "role_emitted_bytes_equal": {
+          "READ": false,
+          "WRITE": false,
+          "FINAL": false
+        }
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "final_text_byte_equal": false,
+        "role_usage_equal": false,
+        "quality_equal": true,
+        "role_emitted_bytes_equal": {
+          "READ": false,
+          "WRITE": false,
+          "FINAL": false
+        }
+      }
+    },
+    "native-after": {
+      "ledger": {
+        "first_code_byte_equal": true,
+        "final_text_byte_equal": true,
+        "role_usage_equal": true,
+        "quality_equal": true,
+        "role_emitted_bytes_equal": {
+          "READ": true,
+          "WRITE": true,
+          "FINAL": true
+        }
+      },
+      "lru": {
+        "first_code_byte_equal": true,
+        "final_text_byte_equal": true,
+        "role_usage_equal": true,
+        "quality_equal": true,
+        "role_emitted_bytes_equal": {
+          "READ": true,
+          "WRITE": true,
+          "FINAL": true
+        }
+      }
+    }
+  },
+  "scope": "Resident profile only changes. READ high/0 WRITE high/128 FINAL high/1 fixed; suffix off. Generated histories differ; no paired NLL/KL or additive speed claim."
+}

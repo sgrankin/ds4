@@ -1,0 +1,188 @@
+{
+  "cases": 24,
+  "tokens": 768,
+  "avg_nll": 2.08963857746,
+  "delta_nll": 0,
+  "policy_delta_nll": 0,
+  "kl_base_to_raw": 0,
+  "kl_base_to_policy": 0,
+  "tv": 0,
+  "argmax_flips": 0,
+  "bit_equal_rows": 768,
+  "startup_ms": 191.979,
+  "prefill_ms": 54096.787,
+  "decode_ms": 45253.303,
+  "metrics_ms": 1564.14,
+  "name": "native-after",
+  "raw_sha256": "e5b96e9245343447c49c7db3a24a5b68f202475538d12b13b876553a202da21d",
+  "csv_sha256": "398de904c88079528bba8b9404f226697a622b69858f9b9e7bdd75be57c9c372",
+  "layout": {
+    "magic": 1146310961,
+    "vocab": 129280,
+    "cases": 24,
+    "token_limit": 32,
+    "header_bytes": 16,
+    "row_metadata_bytes": 24,
+    "float_bytes": 4,
+    "row_bytes": 517144,
+    "rows": 768,
+    "bytes": 397166608,
+    "metadata_sha256": "e09f2b3acdbdac3ac26fbc4b33c780a49bf36caccbf18cb9dcd78b0a394d6180"
+  },
+  "finite_validation": {
+    "vectors": 768,
+    "fp32_values": 99287040,
+    "finite": true
+  },
+  "cache": {
+    "configured_slots": 6136,
+    "resident_entries": 6136,
+    "hits": 536550,
+    "misses": 45210,
+    "wraps": 135630,
+    "evictions": 39074,
+    "buffer_allocs": 15,
+    "buffer_reuses": 39074
+  },
+  "io": {
+    "enabled": 1,
+    "pread_calls": 135630,
+    "requested_bytes": 449987788800,
+    "returned_bytes": 449987788800,
+    "cache_loader_bytes": 449987788800,
+    "cache_hits": 536550,
+    "cache_misses": 45210,
+    "cache_evictions": 39074
+  },
+  "route": null,
+  "prompt_mean_delta_nll": 0.0,
+  "prompt_bootstrap_95": [
+    0.0,
+    0.0
+  ],
+  "worst_prompt_delta_nll": 0.0,
+  "kl_p99": 0.0,
+  "kl_max": 0.0,
+  "per_prompt": {
+    "mixed24_01_agent_stable_patch": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_02_agent_failed_unit": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_03_agent_dependency_order": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_04_agent_immutable_paths": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_05_tool_invoice": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_06_tool_retry_filter": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_07_tool_lexical_path": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_08_tool_exit_ledger": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_09_code_interval_merge": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_10_code_u32_rotate": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_11_code_sql_group": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_12_code_regex_fullmatch": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_13_math_diamond": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_14_math_separated_bits": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_15_math_modular_power": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_16_math_urn": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_17_string_nfc": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_18_string_overlap": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_19_string_quoted_csv": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_20_string_json_escape": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_21_rare_codepoints": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_22_rare_byte_sort": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_23_rare_base64": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "mixed24_24_rare_base36": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "files": {
+    "agent-test.log": "0983cdc5e409fa51c33c397f91c420bee9402e77773813ee510c77f474f1b10b",
+    "build-command.json": "e8af51393aa9e293e8dc8f38949c1dbbde87ab59f5697ae658636fac5520eae9",
+    "build.log": "96b3d2c39744f1e527c21e58360414d5073fed5308bd5734e596daa1557c8dac",
+    "proof.json": "efaff521d460761aaf7a76781f11304dc077f9a6b3f5ccec617c180f0377e213",
+    "resident-route.log": "932a25ead47437c0673ad06947a208a365b0257755dbde6e609be2f3196690d3",
+    "test-commands.json": "586dd83bbc5ab0161db4aada122785906d0e67b3da9801e47804a1c018a76186",
+    "three-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "three-test.log": "439f97824be61a9a2ba4ab4de6b8cd434c6c764550aaabc5dc6f8a38ab1f8c97"
+  },
+  "source": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/main-three-integration-cpu-20261002"
+}

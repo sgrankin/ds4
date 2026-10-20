@@ -1,0 +1,25 @@
+{
+  "status": "INDEPENDENT_FULLSCAN_RAW_SIGNATURE_AND_COMPLETION_AUDIT_PASS",
+  "time": 1791024721.190977,
+  "release_sha256": "c1069a299eef609ae744b185565d87d8e2b5bdbd6dd3487baa0e638f7ad4ac13",
+  "execution_sha256": "d8ab86ae63d3b36bdb7602b783ad1066d1c4d93adb9ec7946e68395a69adf907",
+  "audit_grant_sha256": "b03a925fea5bf5a363db73fd887f7542845a1248c202559c99e3e48c1972de2b",
+  "audit_source_sha256": "41ce908d8fee0b002c525cf0a9d36d28747b5d7f3c558625628020621635dfa1",
+  "signature": {
+    "bytes": 7864320,
+    "finite_binary16_values": 3932160,
+    "sha256": "e3d03efbf384ec16c6a54d36624efcbee37ee2912031297e32967c9fcf9efcad"
+  },
+  "signature_regular_0644_fstat_before_after_exact": true,
+  "all_complete_counters_and_lifecycle_exact": true,
+  "expected_expert_count": 15360,
+  "expected_projected_rows": 245760,
+  "logical_expert_requested_and_returned_bytes": 152882380800,
+  "expert_pread_calls": 46080,
+  "known_application_page_charge_peak": 31735808,
+  "normal_model_engine": false,
+  "diagnostics_sha256": "2ab63ed2e8dea22e2944bbaf3f6e868747cf0b2bc7634ca82e0f2bdbba566f59",
+  "no_model_stat_GPU_helper_guard_or_candidate_codec_execution": true,
+  "no_map_publication_or_policy_eval": true,
+  "no_retry": true
+}

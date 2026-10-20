@@ -1,0 +1,5 @@
+CURRENT CALCULATION RECORD
+a = 17
+b = 25
+The operation is addition: a + b.
+END CURRENT CALCULATION RECORD

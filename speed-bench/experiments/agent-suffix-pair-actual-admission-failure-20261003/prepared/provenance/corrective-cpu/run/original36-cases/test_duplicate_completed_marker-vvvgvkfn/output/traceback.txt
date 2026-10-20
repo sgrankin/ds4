@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 277, in drive
+    if len(completed)>=submitted:raise ControlFailure('Duplicate WAITING completion retained')
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+actual_controller.ControlFailure: Duplicate WAITING completion retained

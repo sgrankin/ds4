@@ -1,0 +1,9 @@
+arm,case,hot_bytes,ssd_bytes,metadata_bytes,endpoints,chunks,pinned_endpoints,hot_reads,disk_reads,endpoint_evictions
+write128-before,dedupe,0,106395039,77235,7,406,0,0,85,0
+write128-before,bucket,0,213603968,151754,14,801,0,0,79,0
+write1,dedupe,0,105464773,76910,7,404,0,0,85,0
+write1,bucket,0,211771686,151269,14,798,0,0,79,0
+write32,dedupe,0,105674832,76111,7,399,0,0,85,0
+write32,bucket,0,212207233,150470,14,793,0,0,79,0
+write128-after,dedupe,0,106395039,77238,7,406,0,0,85,0
+write128-after,bucket,0,213603968,151757,14,801,0,0,79,0

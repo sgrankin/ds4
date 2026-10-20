@@ -1,0 +1,7 @@
+{"step": "A-source", "session": "A", "seconds": 52.50896829100384, "text": "READY", "correct": true, "fresh_read": true, "complete": true, "pass": true, "suffix_log_lines": []}
+{"step": "B-source", "session": "B", "seconds": 52.15308391700091, "text": "READY", "correct": true, "fresh_read": true, "complete": true, "pass": true, "suffix_log_lines": []}
+{"step": "A-edit1", "session": "A", "seconds": 52.81973895798728, "text": "{\"active_total\":416,\"archived_code\":\"RIVER-73\"}", "correct": true, "fresh_read": true, "complete": true, "pass": true, "suffix_log_lines": []}
+{"step": "B-edit1", "session": "B", "seconds": 53.56430087500485, "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-91\"}", "correct": true, "fresh_read": true, "complete": true, "pass": true, "suffix_log_lines": []}
+{"step": "C-turnover", "session": "C", "seconds": 2.247588166006608, "text": "READY", "correct": true, "fresh_read": false, "complete": true, "pass": true, "suffix_log_lines": []}
+{"step": "A-edit2", "session": "A", "seconds": 42.58435562500381, "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}", "correct": true, "fresh_read": true, "complete": true, "pass": true, "suffix_log_lines": []}
+{"step": "B-edit2", "session": "B", "seconds": 42.6995004999917, "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}", "correct": true, "fresh_read": true, "complete": true, "pass": true, "suffix_log_lines": []}

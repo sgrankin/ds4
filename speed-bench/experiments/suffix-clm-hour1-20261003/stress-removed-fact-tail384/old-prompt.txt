@@ -1,0 +1,47 @@
+<｜begin▁of▁sentence｜><｜User｜>Answer using the active deployment record for Record X. If that record is absent, reply only UNKNOWN. If the record is present, reply only its four-digit code. Unrelated inventory notes do not supply deployment codes.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinetUnrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is offActive deployment record for Record X: its current code is 6829.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paper is in a cabinet. These observations do not supply a deployment code.
+Unrelated inventory note: folders have labels, a lamp is off, three boxes are on a shelf, and blank paperWhat is the current deployment code for Record X? Reply only its code if there is an active record, or UNKNOWN if no active record exists.
+<｜Assistant｜></think>

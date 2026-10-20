@@ -1,0 +1,89 @@
+{
+  "budget_utc": {
+    "start": "2026-10-08 21:43:16",
+    "end": "2026-10-08 22:43:16"
+  },
+  "runtime_revision": "4cfff6cb8c09",
+  "report_parent": "5f15a8b781ca",
+  "model": "gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "files": {
+    "ds4-server": {
+      "size_bytes": 3251016,
+      "sha256": "97e94d3d47a3e9b1c2db14e048e17eef8628b4672725893d1879dda666c40325"
+    },
+    "ds4.c": {
+      "size_bytes": 3948291,
+      "sha256": "4de4d714f4d41dc40606e6f7080b7493faa1cee956ed49a3587836f6a4c000ee"
+    },
+    "ds4_server.c": {
+      "size_bytes": 969154,
+      "sha256": "4a57d0c88463e5646673494b589a3caed96a8a0fe4de090f465185e7e78cbc5f"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/run.py": {
+      "size_bytes": 13513,
+      "sha256": "731e01c0234e045bfc7202f2214a094d6030b1b2bbac805472c0367559073400"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/launch.py": {
+      "size_bytes": 9201,
+      "sha256": "7dc4592bdd0bd794828643090f2bb153cf2cf1ae1345471398ce4c6deef080a0"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/spec.json": {
+      "size_bytes": 5789,
+      "sha256": "73637ad52487d05e7bf3a94b6987e0dbc98c2a4b00e8f349d6a5c2bf78672880"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/gold_oracles.py": {
+      "size_bytes": 2132,
+      "sha256": "ca805f4b81ea169a226e823414feae2fd8a0ae623a448ad492e49845cc52d62d"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/reference-interval_groups.py": {
+      "size_bytes": 600,
+      "sha256": "cae4d076579e2bacbad024332b05fe81e8515bf394c4556ed1e0c704c5a29764"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/contexts.json": {
+      "size_bytes": 21633,
+      "sha256": "b2f749286ba2afe71dbc924c18881bed6ec047dceef7e9aa439bf26a5fa777a6"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/prepare_fixtures.py": {
+      "size_bytes": 8921,
+      "sha256": "374cca2e3be407734211c694ac11312b1bf985b0274abd33a5b5681b4f3221bd"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/cases.json": {
+      "size_bytes": 413468,
+      "sha256": "903034870cac4fa3fba88b65b909ca890539f327735546c07d11b917b8a3803b"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/prepare_contexts.py": {
+      "size_bytes": 11813,
+      "sha256": "008f9f6981722a0dde334a2e065272ff58ee3a74fb3913359af51851bbc8c032"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/check-results.json": {
+      "size_bytes": 340,
+      "sha256": "8d1ec98743757ab1897bf4de487733dbf384bdb9204deb4d95ef66aac151d2b5"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/reference-dependency_layers.py": {
+      "size_bytes": 707,
+      "sha256": "4bc9371c5fa35ea4fee542e9d8e5eafd877ff914e05875ba7bc8381c8b9fd2e4"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/grade.py": {
+      "size_bytes": 2159,
+      "sha256": "bd773d86ebba9aafd7910f07a2898a539aea099da02f471681a9981d0d65bbb0"
+    },
+    "speed-bench/experiments/combined-fresh-hour40-20261008/practical/fixtures.py": {
+      "size_bytes": 269,
+      "sha256": "52bf521a041176f874270bee276b425dce50661368a5e929d1974027a5a97b29"
+    }
+  },
+  "validation": {
+    "status": "GOLD_SANITY_PASS",
+    "cases": {
+      "interval_groups": 161,
+      "dependency_layers": 161
+    },
+    "independent_checks": "interval all-pairs connectivity vs sorted sweep; recursive dependency depth vs simultaneous ready rounds",
+    "hand_checks": 3,
+    "seeds": [
+      20261008401,
+      20261008402
+    ],
+    "model_executed": false
+  }
+}

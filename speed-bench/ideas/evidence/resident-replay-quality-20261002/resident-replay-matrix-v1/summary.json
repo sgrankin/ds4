@@ -1,0 +1,138 @@
+[
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0190480241346,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 89049.897,
+    "decode_ms": 18317.026,
+    "name": "native-before",
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "phase_mean_delta_nll": 0.0,
+    "worst_phase_delta_nll": 0.0,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0199896267947,
+    "delta_nll": 0.000941602660081,
+    "kl_base_to_raw": 0.000212780857887,
+    "tv": 0.00159952014379,
+    "argmax_flips": 1,
+    "bit_equal_rows": 1,
+    "prefill_ms": 89832.817,
+    "decode_ms": 18239.421,
+    "name": "subs1",
+    "kl_p99": 0.00704947425748,
+    "kl_max": 0.0109672619734,
+    "phase_mean_delta_nll": 0.0010670792356400217,
+    "worst_phase_delta_nll": 0.0014396024830936312,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0010448240834766871,
+        "kl": 0.00016982097739980752
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0014396024830936312,
+        "kl": 0.00027641182314234824
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0007168111403497469,
+        "kl": 0.0002045799440094092
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0194920214692,
+    "delta_nll": 0.000443997334625,
+    "kl_base_to_raw": 0.000106853050393,
+    "tv": 0.00108104600809,
+    "argmax_flips": 0,
+    "bit_equal_rows": 1,
+    "prefill_ms": 89488.515,
+    "decode_ms": 17978.698,
+    "name": "subs2",
+    "kl_p99": 0.0028854804389,
+    "kl_max": 0.00467431084609,
+    "phase_mean_delta_nll": 0.0002268444159983538,
+    "worst_phase_delta_nll": 0.0008342760968493369,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.00034216724381999907,
+        "kl": 0.00012778368227590327
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": -0.0004959100926742746,
+        "kl": 9.204890646739595e-05
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0008342760968493369,
+        "kl": 0.0001047642237681528
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0190480241346,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 90478.366,
+    "decode_ms": 18417.292,
+    "name": "native-after",
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "phase_mean_delta_nll": 0.0,
+    "worst_phase_delta_nll": 0.0,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  }
+]

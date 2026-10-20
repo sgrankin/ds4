@@ -1,0 +1,1 @@
+No frozen candidate was eligible; no third evaluation or repair.

@@ -1,0 +1,41 @@
+{
+  "start_utc": "2026-10-04 19:07:00 UTC",
+  "budget_note": "10 minutes prior continuation-source audit/launcher/candidate preparation charged",
+  "baseline_runtime_revision": "00da420b1995663540d3b617537e87b18abda402",
+  "baseline_server": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/ds4-server-before-approx-continuation",
+  "baseline_sha256": "dd60127812a282a0e3a63a87c0d2db8da17344efa3ccfc73cb4009259c5ee1d2",
+  "fixed_runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "fixed_server": "/Volumes/Models/ds4/ds4-server",
+  "fixed_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "build_command": "make -j2 ds4-server ds4_test",
+  "build_returncode": 0,
+  "check_command": "./ds4_test --server",
+  "check_returncode": 0,
+  "build_log": ".workspaces/server-agent-day-20261004/item25-build.log",
+  "check_log": ".workspaces/server-agent-day-20261004/item25-server-tests.log",
+  "arms": [
+    "before",
+    "fixed",
+    "after"
+  ],
+  "one_change": "Responsesvisible allowed on same-profile approximate graph with entirevisibleprefixbinding; ID-only/memory-text/legacydiskcanonicalbypass retained",
+  "fixed": "canonical1/PAD1/suffix64/hot0SSD4096/GAP0/Q2cache64/batch2/ctx8192/chunk512/tile64limit1024/temperature0/noeffort/newcacheperarm/samefiles",
+  "driver": "../concurrent-sessions-hour19-20261004/run.py",
+  "metrics": "all8stepsreads/grades/caps, warm/edited/wholewall, actual approximatevisiblecontinuations, avoidedregraftcounts, cacheusage+guards",
+  "deadline_utc": "2026-10-04 19:57:00 UTC",
+  "measurement_finished_utc": "2026-10-04 19:23:58 UTC",
+  "guards": {
+    "before": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "fixed": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "after": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  }
+}

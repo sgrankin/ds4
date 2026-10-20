@@ -1,0 +1,9 @@
+arm,case,task_seconds,passed,failed,unresolved,complete,cap,read_count,write_count,config_unchanged,first_code_bytes,errors
+code-native-before,dedupe,119.19595662498614,161,0,0,True,False,1,1,True,545,[]
+code-native-before,bucket,120.68799858400598,161,0,0,True,False,1,1,True,769,[]
+code-prefill3,dedupe,107.54627408296801,161,0,0,True,False,1,1,True,620,[]
+code-prefill3,bucket,110.98761008295696,161,0,0,True,False,1,1,True,769,[]
+code-prefill1,dedupe,110.35923674999503,161,0,0,True,False,1,1,True,572,[]
+code-prefill1,bucket,120.39306725002825,161,0,0,True,False,1,1,True,772,[]
+code-native-after,dedupe,111.73782641603611,161,0,0,True,False,1,1,True,545,[]
+code-native-after,bucket,113.23684337496525,161,0,0,True,False,1,1,True,769,[]

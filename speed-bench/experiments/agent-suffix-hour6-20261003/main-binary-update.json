@@ -1,0 +1,6 @@
+{
+  "backup": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-hour6/build/original-main-agent",
+  "old_sha256": "5a9e24a8c7d235650bdd97d69b0321192df1ad8b0be6da8cff4e39c40c8e64b2",
+  "new_sha256": "d4d91f440ae1971fd06a9dc7547831ac185f31f7517573e66c9f7f73bc2e345c",
+  "verified_equal_to_tested_binary": true
+}

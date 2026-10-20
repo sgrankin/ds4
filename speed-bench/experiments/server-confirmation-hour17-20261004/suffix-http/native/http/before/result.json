@@ -1,0 +1,351 @@
+{
+  "phase": "before",
+  "mode": "native",
+  "steps": [
+    {
+      "step": "A-source",
+      "session": "A",
+      "seconds": 49.995903625007486,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_344e819a46bdab6ce06f94f8cc39ffe8",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/active.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/active.json",
+          "text": "{\n  \"batches\": 23,\n  \"items_per_batch\": 14,\n  \"reserved_items\": 9,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/active.json",
+      "replies": [
+        {
+          "seconds": 35.39625104199513,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1076,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1076
+            },
+            "output_tokens": 96,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1172
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 14.598422750001191,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1699,
+            "input_tokens_details": {
+              "cached_tokens": 1172,
+              "cache_write_tokens": 527
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1701
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true
+    },
+    {
+      "step": "B-source",
+      "session": "B",
+      "seconds": 49.84150608300115,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_ae7cc855341544828379589804f8ab92",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/active.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/active.json",
+          "text": "{\n  \"batches\": 31,\n  \"items_per_batch\": 8,\n  \"reserved_items\": 17,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/active.json",
+      "replies": [
+        {
+          "seconds": 35.05616758299584,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1074,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1074
+            },
+            "output_tokens": 96,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1170
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 14.784130458006985,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1697,
+            "input_tokens_details": {
+              "cached_tokens": 1170,
+              "cache_write_tokens": 527
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1699
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true
+    },
+    {
+      "step": "A-edit1",
+      "session": "A",
+      "seconds": 48.36877858400112,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "answer": {
+        "active_total": 313,
+        "archived_code": "BEACON-46"
+      },
+      "gold": {
+        "active_total": 313,
+        "archived_code": "BEACON-46"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_1655ea80d1d165445c1804bae20b3283",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/archive.json",
+          "text": "{\n  \"archived_code\": \"BEACON-46\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/archive.json",
+      "replies": [
+        {
+          "seconds": 46.38205791699875,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1450,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1450
+            },
+            "output_tokens": 96,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1546
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.985520957998233,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1572,
+            "input_tokens_details": {
+              "cached_tokens": 1546,
+              "cache_write_tokens": 26
+            },
+            "output_tokens": 19,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1591
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1004 12:15:33 slot 1: request reuses nothing; evicting checkpoint (1699 tokens, idle 0 s, protected)"
+      ],
+      "pass": true,
+      "seconds_including_edit": 48.36962570800097,
+      "edit_seconds": 0.000483582989545539
+    },
+    {
+      "step": "B-edit1",
+      "session": "B",
+      "seconds": 48.62116725000669,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "answer": {
+        "active_total": 231,
+        "archived_code": "ORBIT-57"
+      },
+      "gold": {
+        "active_total": 231,
+        "archived_code": "ORBIT-57"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_b732c5dc958763a7ddb606b636a9bc24",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json",
+          "text": "{\n  \"archived_code\": \"ORBIT-57\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json",
+      "replies": [
+        {
+          "seconds": 46.69486954199965,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1449,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1449
+            },
+            "output_tokens": 96,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1545
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.9251440000080038,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1570,
+            "input_tokens_details": {
+              "cached_tokens": 1545,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1588
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1004 12:16:22 slot 1: request reuses nothing; evicting checkpoint (1591 tokens, idle 0 s, protected)"
+      ],
+      "pass": true,
+      "seconds_including_edit": 48.621944250000524,
+      "edit_seconds": 0.0004176250076852739
+    },
+    {
+      "step": "C-turnover",
+      "session": "C",
+      "seconds": 2.304238124997937,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": false,
+      "complete": true,
+      "calls": [],
+      "required_read": null,
+      "replies": [
+        {
+          "seconds": 2.304003500001272,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 48,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 48
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 50
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1004 12:17:10 slot 1: request reuses nothing; evicting checkpoint (1588 tokens, idle 0 s, protected)"
+      ],
+      "pass": true
+    }
+  ],
+  "edits": [
+    {
+      "removed_bytes": 1823,
+      "remaining_blocks": 1,
+      "session": "A",
+      "seconds": 0.000483582989545539
+    },
+    {
+      "removed_bytes": 1822,
+      "remaining_blocks": 1,
+      "session": "B",
+      "seconds": 0.0004176250076852739
+    }
+  ],
+  "seconds": 199.13747624999087,
+  "source_warmup_seconds": 99.83740970800864,
+  "edited_seconds": 96.99156995800149,
+  "suffix_grafts_observed": 0,
+  "approximate_ssd_sources_observed": 0,
+  "pass": true,
+  "restart_owned_by_ROOT": true
+}

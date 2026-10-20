@@ -1,0 +1,19 @@
+{
+  "time": 1790999429.1677608,
+  "status": "ROOT_PROTOCOL_BYTE_MISMATCH_PROVEN_BEFORE_THIRD_EVAL",
+  "literal_and_frozen_file_exact": true,
+  "frozen_file_bytes": 1798,
+  "delivered_third_bytes": 1799,
+  "delivered_exactly_file_plus_one_LF": true,
+  "literal_header_sha256": "db17f12d77827b3eea174cbb637f639896979fd363122d346fdaef514014d6b0",
+  "third_file_sha256": "6e279a665d5389ed95bb59580f1366e8d1dafc4df25b627557772191aac987d0",
+  "controller_sha256": "5bebda8ea489b30b5e17663e7ac106a6cb2e857e26cdb3aac1fc2307fed7d778",
+  "outcome_sha256": "ac19c2ec1d2418440dc249c6db151bd4d7c8aaf8d04b7b5319415c9aefd06bcd",
+  "trace_sha256": "0dd35bcc9eb74a3209af021f238a99e5a5b14e6f9497401113154a178f290c5b",
+  "first_two_semantic_checks_pass": true,
+  "structural_edit_selected": false,
+  "suffix_transaction_executed": false,
+  "third_evaluated": false,
+  "grader_executed": false,
+  "source_correction_requires_separate_qualified_plan_and_ROOT_grant": true
+}

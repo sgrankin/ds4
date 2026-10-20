@@ -1,0 +1,25 @@
+{
+  "gold": {
+    "items": [
+      [
+        "a",
+        3
+      ],
+      [
+        "b",
+        9
+      ],
+      [
+        "c",
+        -2
+      ]
+    ],
+    "sum": 10
+  },
+  "oracle_input": {
+    "question": "A Python dictionary starts as {\"a\":3,\"b\":4}. Assign b=9, then assign c=-2. Report items as key/value pairs in dictionary iteration order and sum as the sum of values. Return JSON first, then explain."
+  },
+  "explanation": "Replacing the value for b preserves its existing position. Adding c appends a new key after a and b. The resulting values are three, nine, and negative two, whose sum is ten. This operation overwrites one value and inserts one key; it does not move the overwritten key to the end.",
+  "category": "code",
+  "scope": "New authored content, fixed before any model outcome."
+}

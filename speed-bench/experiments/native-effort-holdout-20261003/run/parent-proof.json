@@ -1,0 +1,15 @@
+{
+  "parent_argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-six-20261003-v1-pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-prepared-20261003-v2/run_native_effort_holdout.py",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-prepared-20261003-v2/plan.json",
+    "4ddcb09eeec73b54ba3c823157e463687fc756ca1441b36961c74a5a19828b80"
+  ],
+  "exact_parent_suffix": true,
+  "framework_samefile": true,
+  "guard_lock_held": true
+}

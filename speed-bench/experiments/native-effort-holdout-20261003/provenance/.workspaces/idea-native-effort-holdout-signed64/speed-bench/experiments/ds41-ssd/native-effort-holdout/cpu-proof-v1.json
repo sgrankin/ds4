@@ -1,0 +1,52 @@
+{
+  "gold_tests": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_native_effort_holdout_gold.py",
+      "-v"
+    ],
+    "returncode": 0,
+    "tests": 2,
+    "tool_chunk": "27c9f1"
+  },
+  "first_attempt_tests": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_analyze_native_effort_holdout.py",
+      "-v"
+    ],
+    "returncode": 0,
+    "tests": 10,
+    "tool_chunk": "38eda4"
+  },
+  "helper_self_test_returncode": 0,
+  "literal_scorer_checks": 17,
+  "build_manifest": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/ideas/artifacts/native-effort-holdout-helper-build-v1/build-manifest.json",
+  "build_manifest_sha256": "e259b62754cc4d66f2b5c262db42fc2fb7e421f7c9385a1a607a5e7f90db6a04",
+  "source_sha256": {
+    "speed-bench/native_effort_holdout.c": "6d8830a211ec79a8c4486ba1a44a8ba6ab805bf99731023edc6e4d3811c35954",
+    "speed-bench/native_effort_final_score.h": "6b840f01d3ffb54720d1467cfff8f382fb395ee7fa8a2d1ccc3919e14c5a24c6",
+    "speed-bench/native_effort_holdout_cases.h": "10e0cab288d2151a8d84656b5e55a7ae45dad21a94f2470dde040531f24d8cc6",
+    "speed-bench/native_effort_holdout_gold.py": "41a72993944a9e1789b4ca80e114bba9d3932e87b8f8c0d27afa523f165f2d55",
+    "speed-bench/analyze_native_effort_holdout.py": "e96c266db1300abe8cea4b7de5c4dd9ddff9e941cc0a80b9c77fa28ca3240e6b",
+    "tests/test_native_effort_holdout_gold.py": "261ebcdad5cce6f8979021b127de24c96015cc4dafce173d8510f0352c8e02c8",
+    "tests/test_analyze_native_effort_holdout.py": "d2b2df528a32de9dd8426ac5208f322564ca797cd79721b7796eed4f05fa1d51",
+    "speed-bench/experiments/ds41-ssd/native-effort-holdout/input-freeze-v1.json": "ad2f0510ebc2684a77f21ebb0f22fe3cb2eb9918890826108192064926dfcc3a"
+  },
+  "model_opened": false,
+  "model_metadata_read": false,
+  "gpu_work": false,
+  "runtime_modified": false
+}

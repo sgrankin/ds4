@@ -1,0 +1,46 @@
+{
+  "mode": "reuse",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "arm": "subs3",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/concurrent-sessions-hour19-20261004/run.py",
+  "route_settings": {
+    "enabled": true,
+    "gap": 0.9,
+    "max_substitutions": 3,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": true
+  },
+  "seconds": 289.84008137500496,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 0,
+      "seconds": 237.52360675000818,
+      "startup_seconds": 0.41974300000583753,
+      "client_seconds": 235.48144120800134,
+      "shutdown_seconds": 1.621707290993072,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 52.31325249999645,
+      "startup_seconds": 0.4198746670008404,
+      "client_seconds": 50.299426458004746,
+      "shutdown_seconds": 1.5936081249965355,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/package26-cache-subs3",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/package26-store-subs3",
+  "timeout_seconds": 600
+}

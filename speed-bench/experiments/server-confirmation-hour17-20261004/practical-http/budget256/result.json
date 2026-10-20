@@ -1,0 +1,24 @@
+{
+  "arm": "budget256",
+  "write_budget": 256,
+  "returncode": 3,
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/practical_run.py",
+    "--base-url",
+    "http://127.0.0.1:63017",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/practical-http/budget256/checks",
+    "--visible",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible",
+    "--arm",
+    "budget256",
+    "--budget",
+    "256",
+    "--global-cap",
+    "2048"
+  ],
+  "seconds": 361.58862020800007,
+  "server_returncode_after_shutdown": 0
+}

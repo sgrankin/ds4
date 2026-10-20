@@ -1,0 +1,106 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "instructions": "Follow the newest request. Use the read tool for advertised files. Never guess a file's current content from an earlier answer. Active inventory tool results remain authoritative after obsolete dispatch notes are removed.",
+  "input": [
+    {
+      "role": "user",
+      "content": "These two marked dispatch spans are obsolete notes; their labels will move to the archive file.\n[dispatch note archived]\n[dispatch note archived]\nRead /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/active.json once using read with whole=true and raw=true. Retain the inventory numbers and complete unchanged tool result. Then reply READY only."
+    },
+    {
+      "id": "fc_8d4d8a7f69ef52a12a8787e6",
+      "type": "function_call",
+      "status": "completed",
+      "name": "read",
+      "call_id": "call_ae7cc855341544828379589804f8ab92",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/active.json\",\"whole\":true,\"raw\":true}"
+    },
+    {
+      "type": "function_call_output",
+      "call_id": "call_ae7cc855341544828379589804f8ab92",
+      "output": "{\n  \"batches\": 31,\n  \"items_per_batch\": 8,\n  \"reserved_items\": 17,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+    },
+    {
+      "id": "msg_07be70e081071a4c32551b62",
+      "type": "message",
+      "status": "completed",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "READY",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Question 1: read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json again now with whole=true and raw=true. A fresh read is required even if an earlier answer contained a code. Use the unchanged active inventory tool result to calculate batches * items_per_batch - reserved_items. Reply only JSON with active_total (integer) and archived_code (string) from the current file."
+    },
+    {
+      "id": "fc_9fcf78e800527f89b22b412a",
+      "type": "function_call",
+      "status": "completed",
+      "name": "read",
+      "call_id": "call_b732c5dc958763a7ddb606b636a9bc24",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json\",\"whole\":true,\"raw\":true}"
+    },
+    {
+      "type": "function_call_output",
+      "call_id": "call_b732c5dc958763a7ddb606b636a9bc24",
+      "output": "{\n  \"archived_code\": \"ORBIT-57\"\n}\n"
+    },
+    {
+      "id": "msg_5a8f3d9ff8fda76d3310b87c",
+      "type": "message",
+      "status": "completed",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Question 2: read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json again now with whole=true and raw=true. A fresh read is required even if an earlier answer contained a code. Use the unchanged active inventory tool result to calculate batches * items_per_batch - reserved_items. Reply only JSON with active_total (integer) and archived_code (string) from the current file."
+    }
+  ],
+  "prompt_cache_key": "ds4-hour17-confirmation-B",
+  "store": false,
+  "stream": false,
+  "temperature": 0,
+  "seed": 20261004,
+  "max_output_tokens": 128,
+  "reasoning": {
+    "effort": "none"
+  },
+  "tools": [
+    {
+      "type": "function",
+      "name": "read",
+      "description": "Read one advertised JSON file in full.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "whole": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "whole",
+          "raw"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

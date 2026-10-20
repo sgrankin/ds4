@@ -1,0 +1,37 @@
+{
+  "argv": [
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/baseline-probe",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--corpus",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/corpus.txt",
+    "--base",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run/old-native-before",
+    "--mode",
+    "native",
+    "--prefix",
+    "1408",
+    "--shift",
+    "65",
+    "--span",
+    "65",
+    "--tail",
+    "1",
+    "--decode",
+    "16",
+    "--ctx",
+    "4096",
+    "--chunk",
+    "512",
+    "--cache-gb",
+    "64",
+    "--capacity",
+    "1024"
+  ],
+  "policy": {
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MODE": "native"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "name": "suffix-even-relocation-code-d66-wrap-c101-t1",
+  "status": "prepared only; no GPU grant",
+  "source_commit": "5c8ef1f3",
+  "helper_sha256": "ebbe08144aecc7d9c69fddb8cac1bf66597314d7763fb2a891364ac53aa4b659",
+  "expected": {
+    "source_start": 550,
+    "destination_start": 484,
+    "source_end": 650,
+    "destination_end": 584,
+    "reused_tokens": 100,
+    "pending_pairs": 0,
+    "source_destination_segments": [
+      [
+        38,
+        100,
+        28
+      ],
+      [
+        66,
+        0,
+        62
+      ],
+      [
+        0,
+        62,
+        10
+      ]
+    ],
+    "fresh_prefix_raw_rows_per_layer": 27,
+    "raw_keys_repaired": 4000,
+    "compressed_keys_repaired": 250,
+    "index_keys_repaired": 250
+  },
+  "cwd": "/Volumes/Models/ds4",
+  "argv": [
+    "python3",
+    "speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-even-relocation-code-d66-wrap-c101-t1",
+    "--",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-even-relocation-build-20261002/suffix_fact_oracle",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--fixtures",
+    "/Volumes/Models/ds4/.workspaces/idea-context/speed-bench/experiments/suffix-reuse-20261002/semantic-fixtures",
+    "--case",
+    "code",
+    "--out",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-even-relocation-code-d66-wrap-c101-t1",
+    "--prefix",
+    "256",
+    "--source-edit",
+    "294",
+    "--edit",
+    "228",
+    "--unchanged",
+    "101",
+    "--fresh-tail",
+    "1",
+    "--greedy",
+    "16",
+    "--ctx",
+    "2048",
+    "--chunk",
+    "256",
+    "--cache-gb",
+    "64"
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-flag1-lookup.raw": {
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-flag1-native.raw": {
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-flag1-noop.raw": {
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-native-weights1.raw": {
+    "bytes": 264777744,
+    "sha256": "48f13f8291728241cd42da081db0923bc1cb6e86b79cb89286be79a1e29025b4",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-new-approx0.raw": {
+    "bytes": 264777744,
+    "sha256": "89b455eb38161b5937d81d26742ce6971c36129ae1891754b1924d0d29701e61",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-new-native0.raw": {
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-approx0.raw": {
+    "bytes": 264777744,
+    "sha256": "89b455eb38161b5937d81d26742ce6971c36129ae1891754b1924d0d29701e61",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-native-after.raw": {
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-reference.raw": {
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/heldout16-native-weights1.raw": {
+    "bytes": 264777744,
+    "sha256": "3a52faca9d558fd3c83393fa6fb7f7960c21b143ab65d858d7185aac3ba5409f",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/heldout16-new-approx0.raw": {
+    "bytes": 264777744,
+    "sha256": "6ba6007cc701425d767b72a94dea7118edaf00a6abaf5d1ca1497d89d5ddeb0a",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/heldout16-new-native0.raw": {
+    "bytes": 264777744,
+    "sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/heldout16-old-approx0.raw": {
+    "bytes": 264777744,
+    "sha256": "6ba6007cc701425d767b72a94dea7118edaf00a6abaf5d1ca1497d89d5ddeb0a",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/heldout16-old-native-after.raw": {
+    "bytes": 264777744,
+    "sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/heldout16-reference.raw": {
+    "bytes": 264777744,
+    "sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/state-new-approx0.logits": {
+    "bytes": 3619840,
+    "sha256": "9dad42085c983e76f53920bb99940969e5fd8ccaf673450efe66893d38b76e9d",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/state-new-approx0.snapshot": {
+    "bytes": 28078040,
+    "sha256": "f29474b71b36f2557a787bdffa901c8ad7fe047737ac898fb57163063d272f9f",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/state-new-native0.logits": {
+    "bytes": 3619840,
+    "sha256": "f91a39503f60233d633b08586229fb1b2e18958e60632efaec9d742ab977e652",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/state-new-native0.snapshot": {
+    "bytes": 28078040,
+    "sha256": "f71f06ea4d72e4329eb7c67a4ba462b284d21352756f8ec50022ec8c9276f2b0",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/state-old-approx0.logits": {
+    "bytes": 3619840,
+    "sha256": "9dad42085c983e76f53920bb99940969e5fd8ccaf673450efe66893d38b76e9d",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/state-old-approx0.snapshot": {
+    "bytes": 28078040,
+    "sha256": "f29474b71b36f2557a787bdffa901c8ad7fe047737ac898fb57163063d272f9f",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/state-old-native.logits": {
+    "bytes": 3619840,
+    "sha256": "f91a39503f60233d633b08586229fb1b2e18958e60632efaec9d742ab977e652",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/state-old-native.snapshot": {
+    "bytes": 28078040,
+    "sha256": "f71f06ea4d72e4329eb7c67a4ba462b284d21352756f8ec50022ec8c9276f2b0",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "full original array retained in released run; independent streaming SHA and FP32/layout validation passed"
+  },
+  "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o": {
+    "bytes": 165728,
+    "sha256": "955a7d909bf5e9a792777960dceb3d809e3779f46e68f99d120aef8a3d712eed",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o": {
+    "bytes": 427168,
+    "sha256": "c1c362737fc39bc8dd5b40ff3f4d03f99c6f35ac381923a7316947437bb34b27",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o": {
+    "bytes": 207496,
+    "sha256": "9d97e0d9c7e3d78928ba9d911daf96fcf85178352ac567fdcdf78a68f9b2b7a1",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o": {
+    "bytes": 13800,
+    "sha256": "2e418c6f60f1cdc3abdd4473eabbaaf8b9ed29b535d211149c44463cab50a408",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o": {
+    "bytes": 2803120,
+    "sha256": "f32bf8251fe2619c795e74ad634fdd43e76cebde0b555177aa9f4be57b3c380b",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o": {
+    "bytes": 11320,
+    "sha256": "dd072b50b2ba9983f3f5ef37127cec23b4d807265cfe0bffda1764ce0b217cba",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o": {
+    "bytes": 30128,
+    "sha256": "177b20ea91d0483862a65534a48ade524526362689b654433cf234eeee4fad71",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o": {
+    "bytes": 5651024,
+    "sha256": "8a8d7e10eff13587e35011754ac907b8a015cf6e7970a42cc19a6bfebb810ccd",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-old7c6e": {
+    "bytes": 2695760,
+    "sha256": "9e125fb44fb12c3f76e8d2372943809f41223a4bdfcd4fe8bccbc6a1c27fe77f",
+    "mode_octal": "0o755",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-old7c6e": {
+    "bytes": 2691728,
+    "sha256": "fe1d2f10f0c377c7c4a98a5ad18b772a387709afd5711c4bfe87d4032b779e3c",
+    "mode_octal": "0o755",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o": {
+    "bytes": 5667424,
+    "sha256": "edfcbdd8bc9a25952320fcf644093d76a9b7f9d5b395fc5352429acdab60be51",
+    "mode_octal": "0o644",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-new8a47": {
+    "bytes": 2696656,
+    "sha256": "98aec43ad68e14cc163cf2a381b52085984a6f8b9cdc451d1747a34a9826915f",
+    "mode_octal": "0o755",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-new8a47": {
+    "bytes": 2692624,
+    "sha256": "4d2e34d042b19a67ae13a1a85072e7f6551870b1e64339fea417d19eb37fe1ca",
+    "mode_octal": "0o755",
+    "streaming_sha_verified": true,
+    "reason": "frozen linked runtime/helper retained with full build proof"
+  }
+}

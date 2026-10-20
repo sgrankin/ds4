@@ -1,0 +1,141 @@
+{
+  "sdk_version": "6.26.0",
+  "pi_version": "0.83.0",
+  "model": "deepseek-v4.1-flash",
+  "checks": {
+    "sdk": {
+      "pass": true,
+      "read_id": "resp_675b47f74e29b67ce6c8fbe0",
+      "final_id": "resp_274c29d583feeca1d69ab104",
+      "call_id": "call_a88fc3ac6cc5acc8eac136f7d48685f4",
+      "final_text": "LIME-27",
+      "expected": "LIME-27",
+      "status": "completed",
+      "incomplete_details": null,
+      "usage": {
+        "input_tokens": 183,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 183
+        },
+        "output_tokens": 4,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 187
+      },
+      "seconds": 26.782292958,
+      "stored_output_exact": true
+    },
+    "conversations": {
+      "pass": true,
+      "conversation": {
+        "id": "conv_2ff3c5e09fadfd7513fdbbff",
+        "object": "conversation",
+        "created_at": 1791129040,
+        "metadata": {
+          "smoke": "installed-sdk"
+        }
+      },
+      "appended": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_2d9c7735ceb375317e6d21bf",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "A local SDK item."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_2d9c7735ceb375317e6d21bf",
+        "last_id": "msg_2d9c7735ceb375317e6d21bf",
+        "has_more": false
+      },
+      "list": [
+        {
+          "id": "msg_2d9c7735ceb375317e6d21bf",
+          "type": "message",
+          "role": "user",
+          "status": "completed",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "A local SDK item."
+            }
+          ]
+        }
+      ],
+      "item": {
+        "id": "msg_2d9c7735ceb375317e6d21bf",
+        "type": "message",
+        "role": "user",
+        "status": "completed",
+        "content": [
+          {
+            "type": "input_text",
+            "text": "A local SDK item."
+          }
+        ]
+      },
+      "fetched": {
+        "id": "conv_2ff3c5e09fadfd7513fdbbff",
+        "object": "conversation",
+        "created_at": 1791129040,
+        "metadata": {
+          "smoke": "installed-sdk"
+        }
+      },
+      "deletedItem": {
+        "id": "conv_2ff3c5e09fadfd7513fdbbff",
+        "object": "conversation",
+        "created_at": 1791129040,
+        "metadata": {
+          "smoke": "installed-sdk"
+        }
+      },
+      "deleted": {
+        "id": "conv_2ff3c5e09fadfd7513fdbbff",
+        "object": "conversation.deleted",
+        "deleted": true
+      }
+    },
+    "pi": {
+      "pass": true,
+      "read_id": "resp_49763eaa6e0af49302092bb2",
+      "final_id": "resp_919f6c09ba5357515f886f5d",
+      "tool_id": "call_9a300d95e3c70141f8bd7254f67d76a8|fc_b26133274277ce017bf734c2",
+      "final_text": "COVE-42",
+      "expected": "COVE-42",
+      "stopReason": "stop",
+      "rawStopReason": "completed",
+      "usage": {
+        "input": 0,
+        "output": 4,
+        "cacheRead": 410,
+        "cacheWrite": 19,
+        "reasoning": 0,
+        "totalTokens": 433,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        }
+      },
+      "seconds": 22.245385167,
+      "full_input": true,
+      "store": false,
+      "sessionId": "hour17-pi-read"
+    }
+  },
+  "errors": [],
+  "scope": "Actual client/parser and tiny retrieval smoke; no broad task-quality or latency claim.",
+  "pass": true
+}

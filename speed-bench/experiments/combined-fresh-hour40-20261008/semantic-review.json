@@ -1,0 +1,808 @@
+{
+  "review_scope": "Read-only inspection of all ten generated first-solution.py files against the frozen spec, plus exact byte hash and parsed role-usage comparisons; no model or grader rerun.",
+  "first_implementations_reviewed": 10,
+  "distinct_code_bodies": 6,
+  "semantic_findings": {
+    "interval_groups": [
+      "All five first writes copy each input interval into a newly allocated (start,end,original index) tuple list and sort that list; payload records and config are never modified.",
+      "All versions compare next start <= current maximum end + actual config gap, preserving equality/touching rules and transitive reach through nested intervals.",
+      "All versions preserve every duplicate occurrence via its original index, sort each output index list numerically, and emit groups in increasing start order with maximum original end.",
+      "Native and suffix-only use explicit current-group state with a None sentinel; start is guaranteed an integer, including negative values, so the sentinel is unambiguous and empty input emits no group.",
+      "Combined and its repeat use the final output group as current state; it is newly allocated output data, and max-end updates never mutate input. Empty input naturally returns an empty groups list."
+    ],
+    "dependency_layers": [
+      "All five first writes preserve original ID order separately from per-ID dependency references; referenced deps are read only.",
+      "Every version collects the entire ready layer before adding any selected ID to completed. Dependents cannot unlock within the same round.",
+      "Dependency membership tests use exact strings; duplicates do not inflate counts, absent names never enter completed, and self/cycle/downstream blocked tasks remain unresolved at the no-ready stop.",
+      "All versions sort each newly allocated ready layer and unresolved list only for config order=lex, retaining original payload order for order=input.",
+      "Native and suffix-only maintain a filtered remaining list; combined and repeat scan all original IDs while skipping completed IDs. Both terminate with the same layering/unresolved semantics, including empty inputs."
+    ]
+  },
+  "verdict": "No semantic contract violation found by inspection in any of the ten first writes. All ten recorded graders report161/161; this is evidence for two small algorithm families, not a general coding accuracy estimate.",
+  "limitations": [
+    "There are only two independently authored algorithm families; repeated arms and161 fixtures each do not constitute ten distinct coding problems.",
+    "These deterministic builtins-only functions and small graph/interval batches do not cover imports, integration, long-lived agent memory, repository edits, or large-input runtime performance.",
+    "Valid generated code differs across feature arms. Combined interval code is shorter and WRITE output token count drops479→365; whole-task timing therefore includes changed valid generation length as well as engine/prefill acceleration.",
+    "Generated code inspection and passing finite cases establish practical correctness for these contracts but do not measure distribution-wide KL or delta-NLL."
+  ],
+  "comparisons": [
+    {
+      "arms": [
+        "native-before",
+        "native-after"
+      ],
+      "case": "interval_groups",
+      "first_code_identical": true,
+      "full_role_usage_identical": true,
+      "output_tokens": [
+        686,
+        686
+      ],
+      "reasoning_tokens": [
+        162,
+        162
+      ]
+    },
+    {
+      "arms": [
+        "native-before",
+        "native-after"
+      ],
+      "case": "dependency_layers",
+      "first_code_identical": true,
+      "full_role_usage_identical": true,
+      "output_tokens": [
+        617,
+        617
+      ],
+      "reasoning_tokens": [
+        148,
+        148
+      ]
+    },
+    {
+      "arms": [
+        "combined",
+        "combined-repeat"
+      ],
+      "case": "interval_groups",
+      "first_code_identical": true,
+      "full_role_usage_identical": true,
+      "output_tokens": [
+        594,
+        594
+      ],
+      "reasoning_tokens": [
+        164,
+        164
+      ]
+    },
+    {
+      "arms": [
+        "combined",
+        "combined-repeat"
+      ],
+      "case": "dependency_layers",
+      "first_code_identical": true,
+      "full_role_usage_identical": true,
+      "output_tokens": [
+        621,
+        621
+      ],
+      "reasoning_tokens": [
+        156,
+        156
+      ]
+    },
+    {
+      "arms": [
+        "native-before",
+        "combined"
+      ],
+      "case": "interval_groups",
+      "first_code_identical": false,
+      "full_role_usage_identical": false,
+      "output_tokens": [
+        686,
+        594
+      ],
+      "reasoning_tokens": [
+        162,
+        164
+      ]
+    },
+    {
+      "arms": [
+        "native-before",
+        "combined"
+      ],
+      "case": "dependency_layers",
+      "first_code_identical": false,
+      "full_role_usage_identical": false,
+      "output_tokens": [
+        617,
+        621
+      ],
+      "reasoning_tokens": [
+        148,
+        156
+      ]
+    },
+    {
+      "arms": [
+        "native-before",
+        "suffix-only"
+      ],
+      "case": "interval_groups",
+      "first_code_identical": false,
+      "full_role_usage_identical": false,
+      "output_tokens": [
+        686,
+        670
+      ],
+      "reasoning_tokens": [
+        162,
+        162
+      ]
+    },
+    {
+      "arms": [
+        "native-before",
+        "suffix-only"
+      ],
+      "case": "dependency_layers",
+      "first_code_identical": false,
+      "full_role_usage_identical": false,
+      "output_tokens": [
+        617,
+        638
+      ],
+      "reasoning_tokens": [
+        148,
+        148
+      ]
+    }
+  ],
+  "implementations": [
+    {
+      "arm": "combined",
+      "case": "dependency_layers",
+      "source_path": "code-combined/http/dependency_layers/dependency_layers/first-solution.py",
+      "source_bytes": 1044,
+      "sha256": "db61df6db89b0808c0a2ffce8f12bd318323f5ff472aa953d74d55cedd86a7b8",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1154,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1154
+            },
+            "output_tokens": 123,
+            "output_tokens_details": {
+              "reasoning_tokens": 28
+            },
+            "total_tokens": 1277
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 2038,
+            "input_tokens_details": {
+              "cached_tokens": 522,
+              "cache_write_tokens": 1516
+            },
+            "output_tokens": 433,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 2471
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 2513,
+            "input_tokens_details": {
+              "cached_tokens": 2471,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 65,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2578
+          }
+        }
+      ]
+    },
+    {
+      "arm": "combined",
+      "case": "interval_groups",
+      "source_path": "code-combined/http/interval_groups/interval_groups/first-solution.py",
+      "source_bytes": 695,
+      "sha256": "b8a198d1a2f79ac59ac727650ff3ce630be5ba5241ed36df2939470fe0e60d70",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1644,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1644
+            },
+            "output_tokens": 130,
+            "output_tokens_details": {
+              "reasoning_tokens": 35
+            },
+            "total_tokens": 1774
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 1366,
+            "input_tokens_details": {
+              "cached_tokens": 502,
+              "cache_write_tokens": 864
+            },
+            "output_tokens": 365,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 1731
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 1773,
+            "input_tokens_details": {
+              "cached_tokens": 1731,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 99,
+            "output_tokens_details": {
+              "reasoning_tokens": 1
+            },
+            "total_tokens": 1872
+          }
+        }
+      ]
+    },
+    {
+      "arm": "combined-repeat",
+      "case": "dependency_layers",
+      "source_path": "code-combined-repeat/http/dependency_layers/dependency_layers/first-solution.py",
+      "source_bytes": 1044,
+      "sha256": "db61df6db89b0808c0a2ffce8f12bd318323f5ff472aa953d74d55cedd86a7b8",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1154,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1154
+            },
+            "output_tokens": 123,
+            "output_tokens_details": {
+              "reasoning_tokens": 28
+            },
+            "total_tokens": 1277
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 2038,
+            "input_tokens_details": {
+              "cached_tokens": 522,
+              "cache_write_tokens": 1516
+            },
+            "output_tokens": 433,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 2471
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 2513,
+            "input_tokens_details": {
+              "cached_tokens": 2471,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 65,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2578
+          }
+        }
+      ]
+    },
+    {
+      "arm": "combined-repeat",
+      "case": "interval_groups",
+      "source_path": "code-combined-repeat/http/interval_groups/interval_groups/first-solution.py",
+      "source_bytes": 695,
+      "sha256": "b8a198d1a2f79ac59ac727650ff3ce630be5ba5241ed36df2939470fe0e60d70",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1644,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1644
+            },
+            "output_tokens": 130,
+            "output_tokens_details": {
+              "reasoning_tokens": 35
+            },
+            "total_tokens": 1774
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 1366,
+            "input_tokens_details": {
+              "cached_tokens": 502,
+              "cache_write_tokens": 864
+            },
+            "output_tokens": 365,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 1731
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 1773,
+            "input_tokens_details": {
+              "cached_tokens": 1731,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 99,
+            "output_tokens_details": {
+              "reasoning_tokens": 1
+            },
+            "total_tokens": 1872
+          }
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "case": "dependency_layers",
+      "source_path": "code-native-after/http/dependency_layers/dependency_layers/first-solution.py",
+      "source_bytes": 1078,
+      "sha256": "7175c829cde8113d28f1edf0f8cb99574d5b60418b9411253f64ab37afd6939b",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1154,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1154
+            },
+            "output_tokens": 115,
+            "output_tokens_details": {
+              "reasoning_tokens": 20
+            },
+            "total_tokens": 1269
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 2038,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 2038
+            },
+            "output_tokens": 441,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 2479
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 2521,
+            "input_tokens_details": {
+              "cached_tokens": 2479,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 61,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2582
+          }
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "case": "interval_groups",
+      "source_path": "code-native-after/http/interval_groups/interval_groups/first-solution.py",
+      "source_bytes": 1221,
+      "sha256": "f30bb2d6ff8845fb992dcf150c76e415050e775cf5e3c5efcb83049c88185bb8",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1644,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1644
+            },
+            "output_tokens": 129,
+            "output_tokens_details": {
+              "reasoning_tokens": 34
+            },
+            "total_tokens": 1773
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 1366,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1366
+            },
+            "output_tokens": 479,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 1845
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 1887,
+            "input_tokens_details": {
+              "cached_tokens": 1845,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 78,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1965
+          }
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "case": "dependency_layers",
+      "source_path": "code-native-before/http/dependency_layers/dependency_layers/first-solution.py",
+      "source_bytes": 1078,
+      "sha256": "7175c829cde8113d28f1edf0f8cb99574d5b60418b9411253f64ab37afd6939b",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1154,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1154
+            },
+            "output_tokens": 115,
+            "output_tokens_details": {
+              "reasoning_tokens": 20
+            },
+            "total_tokens": 1269
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 2038,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 2038
+            },
+            "output_tokens": 441,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 2479
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 2521,
+            "input_tokens_details": {
+              "cached_tokens": 2479,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 61,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2582
+          }
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "case": "interval_groups",
+      "source_path": "code-native-before/http/interval_groups/interval_groups/first-solution.py",
+      "source_bytes": 1221,
+      "sha256": "f30bb2d6ff8845fb992dcf150c76e415050e775cf5e3c5efcb83049c88185bb8",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1644,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1644
+            },
+            "output_tokens": 129,
+            "output_tokens_details": {
+              "reasoning_tokens": 34
+            },
+            "total_tokens": 1773
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 1366,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1366
+            },
+            "output_tokens": 479,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 1845
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 1887,
+            "input_tokens_details": {
+              "cached_tokens": 1845,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 78,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1965
+          }
+        }
+      ]
+    },
+    {
+      "arm": "suffix-only",
+      "case": "dependency_layers",
+      "source_path": "code-suffix-only/http/dependency_layers/dependency_layers/first-solution.py",
+      "source_bytes": 1174,
+      "sha256": "5f3a6268b5e2e80b73f0c43a32b7928f88aca8813fa80013695fb3e8bef0b287",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1154,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1154
+            },
+            "output_tokens": 115,
+            "output_tokens_details": {
+              "reasoning_tokens": 20
+            },
+            "total_tokens": 1269
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 2038,
+            "input_tokens_details": {
+              "cached_tokens": 522,
+              "cache_write_tokens": 1516
+            },
+            "output_tokens": 465,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 2503
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 2545,
+            "input_tokens_details": {
+              "cached_tokens": 2503,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 58,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2603
+          }
+        }
+      ]
+    },
+    {
+      "arm": "suffix-only",
+      "case": "interval_groups",
+      "source_path": "code-suffix-only/http/interval_groups/interval_groups/first-solution.py",
+      "source_bytes": 1241,
+      "sha256": "300b513e57514b77f89394161ea7f4c4710cb7e923d20b8ecbbc43c299c3df7a",
+      "reported_grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null,
+        "returncode": 0
+      },
+      "complete": true,
+      "pass": true,
+      "role_usage": [
+        {
+          "role": "READ",
+          "usage": {
+            "input_tokens": 1644,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1644
+            },
+            "output_tokens": 129,
+            "output_tokens_details": {
+              "reasoning_tokens": 34
+            },
+            "total_tokens": 1773
+          }
+        },
+        {
+          "role": "WRITE",
+          "usage": {
+            "input_tokens": 1366,
+            "input_tokens_details": {
+              "cached_tokens": 502,
+              "cache_write_tokens": 864
+            },
+            "output_tokens": 471,
+            "output_tokens_details": {
+              "reasoning_tokens": 128
+            },
+            "total_tokens": 1837
+          }
+        },
+        {
+          "role": "FINAL",
+          "usage": {
+            "input_tokens": 1879,
+            "input_tokens_details": {
+              "cached_tokens": 1837,
+              "cache_write_tokens": 42
+            },
+            "output_tokens": 70,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1949
+          }
+        }
+      ]
+    }
+  ]
+}

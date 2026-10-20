@@ -1,0 +1,30 @@
+{
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "time": 1791007256.605272,
+  "manifest_sha256": "1143a7812d739c9215bed24e186b83eaed8ba5406ef1c67d229b66d2795e8a57",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/run_agent_suffix_pair_external.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native",
+    "--manifest-sha256",
+    "1143a7812d739c9215bed24e186b83eaed8ba5406ef1c67d229b66d2795e8a57"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "preceding_release_sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd",
+  "root_static_review_sha256": "9e4b4ab9b50f42d7d665015bab882bd63d6d17049d37efe0ab9723fe000a8e4f",
+  "root_static_review_freeze": "994ce9d06eff78361cf5cfb0a727837deb300c16",
+  "prepared_evidence_freeze": "d9c7c958b119656be3c765bc1c044d214430aff7",
+  "root_archive_proof_sha256": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c",
+  "fresh_assets": 130,
+  "fresh_processes": [],
+  "fresh_ps_args_and_comm": true,
+  "all_owned_ancestors_excluded": true,
+  "fresh_lock_reacquired": true,
+  "scope": "One fixed fresh-native B first attempt using newAstructuralchoice; archived-owned shared files may reset only after frozen exact inventory checks. Afailed firstgrade remains failed. No retry/automatic chain/default/speed/forgetting claim."
+}

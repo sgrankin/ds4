@@ -1,0 +1,44 @@
+{
+  "rows": [
+    {
+      "effort": 25,
+      "cases": 4,
+      "completed_correct": 2,
+      "invalid": 2,
+      "cap_hits": 2,
+      "tokens": 5985,
+      "reasoning_tokens": 5982
+    },
+    {
+      "effort": 50,
+      "cases": 4,
+      "completed_correct": 1,
+      "invalid": 3,
+      "cap_hits": 3,
+      "tokens": 6336,
+      "reasoning_tokens": 6335
+    },
+    {
+      "effort": 75,
+      "cases": 4,
+      "completed_correct": 1,
+      "invalid": 3,
+      "cap_hits": 3,
+      "tokens": 6681,
+      "reasoning_tokens": 6680
+    }
+  ],
+  "case_ids": [
+    "circular10",
+    "restricted_derangements8",
+    "lattice8x6",
+    "subset_mod7"
+  ],
+  "seed": 20261002,
+  "native25_archive_commit": "e12b453e7098942a54d73cf0c58ea31ead03ffa4",
+  "native25_archive_path": "/Volumes/Models/ds4/.workspaces/idea-native-effort25-archive/speed-bench/ideas/evidence/native-effort25-completed-20261002-v1",
+  "native25_archive_manifest_sha256": "5ed09bcc06ea1e7dd8b9f102f9bc5225693394630968c0bc84462dc6b14b0370",
+  "native75_comparison_input_path": "/Volumes/Models/ds4/.workspaces/idea-native-effort25-archive/speed-bench/ideas/evidence/native-effort25-completed-20261002-v1/native75-native-only-comparison-input.json",
+  "native75_comparison_input_sha256": "f7ffa179bbf8d808b47c6a57b3e4f16305e6b474bc7f5b2a5c92e119559dfdc7",
+  "scope": "Four fixed counting problems and one seed. Each effort changes the thinking prompt. Descriptive counts only; no cross-effort KL, raw-logit equivalence, causal quantization, generalization or speed claim."
+}

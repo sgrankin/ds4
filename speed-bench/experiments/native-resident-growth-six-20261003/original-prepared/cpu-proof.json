@@ -1,0 +1,79 @@
+{
+  "status": "CPU_ONLY_SIX_ARM_PREPARATION_PASS_NO_MODEL_GRANT",
+  "tests": 11,
+  "mocked_six_arm_trials": 13,
+  "original_input_sha256": "a859a10f9d74987789aa982a6d061db3991be11cec884e277fc5da4ce9f92adb",
+  "original_input_token_ids_preserved": true,
+  "context_capacity": 32768,
+  "final_context": 26659,
+  "prefill_tokens": 26563,
+  "decode_tokens": 96,
+  "phases": 9,
+  "expected_vector_bytes": 4654080,
+  "order": "ABCCBA",
+  "balanced_variant_mean_position": 2.5,
+  "variants": {
+    "A": {
+      "name": "native-default",
+      "env": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0"
+      },
+      "selected_tile_limit_unset": true,
+      "expected_effective_tile": 8,
+      "expected_effective_limit": 256,
+      "large_cache_threshold_slots": 7680
+    },
+    "B": {
+      "name": "native-fast",
+      "env": {
+        "DS4_METAL_V41_SELECTED_TILE": "64",
+        "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0"
+      }
+    },
+    "C": {
+      "name": "resident-three-fast",
+      "env": {
+        "DS4_METAL_V41_SELECTED_TILE": "64",
+        "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0.30",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": "0.20",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": "0.40",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "48",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MODE": "apply",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      }
+    }
+  },
+  "native_default_tile_limit_environment_unset": true,
+  "native_fast_and_resident_use_identical_tile64_limit1024": true,
+  "primary_comparison": "B/A native-fast versus native-default",
+  "secondary_comparison": "C/B resident-three versus native-fast",
+  "within_variant_full_vector_state_and_size_repeats_required": true,
+  "cross_variant_hashes_diagnostic": true,
+  "no_preexisting_growth_expected_hash": true,
+  "exact_guard_asset_context_parser_bodies_from_e1": true,
+  "configured_slots_required_each_phase": 6136,
+  "no_opt_in_diagnostic_profiling": true,
+  "all_inherited_ds4_prefix_cleared": true,
+  "preserved_four_arm_plan": "/Volumes/Models/ds4/.workspaces/idea-resident-three-growth/speed-bench/ideas/artifacts/resident-three-growth-abba-plan-20261002-v1",
+  "preserved_four_arm_plan_unrun": true,
+  "no_runtime_or_frontend_build": true,
+  "helper_executed": false,
+  "model_metadata_read": false,
+  "tokenizer_or_model_or_gpu_opened": false,
+  "actual_cpu_guard_probe_reused_from_approved_v2": true,
+  "actual_guard_probe_not_rerun_while_root_model_job_active": true,
+  "approved_v2_cpu_proof_sha256": "20df098634bbb7dcc6597635578dbf45a3b4eacee01c45bc3051eaa9f68427df",
+  "wrapper_sha256": "a8c0b0a70b3e92558f5c9d59cfc8dc72d8096fb039c7fae6233768f5a6c32f9d",
+  "test_log_sha256": "1d281319a05deabfdaf1f1366d84467fe9f66f290136816d154d0fc56f294aa0",
+  "binary_sha256": "93e337256975bc177e0f03b76baa9d041164e974250f7e7491b186081c3b9fd7",
+  "build_manifest_sha256": "17942b2386aff9be0f0dace1500bc17cbf24452e27c75ceac15f2bfb785b6175",
+  "estimated_seconds": [
+    4050,
+    5400
+  ],
+  "estimate_is_unmeasured": true,
+  "no_correctness_or_default_promotion_claim": true
+}

@@ -1,0 +1,28 @@
+{
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "time": 1791006476.098397,
+  "manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run_agent_suffix_pair_external.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse",
+    "--manifest-sha256",
+    "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "preceding_release_sha256": "d35de4e3bef0f0c678395509042087d93d6a98358744acbf0adec095d1d32f72",
+  "root_static_review_sha256": "b707895a32883b4e041abc03fe8f2eb1c4945a774239b2add20c898ecb45f60e",
+  "root_static_review_freeze": "31dfbdc545b43dbb6014da677cbefea8b2fc67e7",
+  "fresh_assets": 114,
+  "fresh_processes": [],
+  "fresh_ps_args_and_comm": true,
+  "all_owned_ancestors_excluded": true,
+  "fresh_lock_reacquired": true,
+  "scope": "One fixed external pre-forward suffix reuse first attempt A, structural binding allowed independent of semantic outcome, no retry, no automatic B launch, no speed/default/forgetting claim"
+}

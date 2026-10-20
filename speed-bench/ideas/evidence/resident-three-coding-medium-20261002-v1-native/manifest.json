@@ -1,0 +1,572 @@
+{
+  "ROOT_exec_session": 65972,
+  "all_prepared_assets_unchanged": true,
+  "binary_sha256": "70f7cec5c2f502e9a59e1e9a84bc343b1a3d39817ab3f0b9df205c99bc93619f",
+  "files": {
+    "README.md": "a025365547046dc2900cc8f7d118946e857e80110639ba2dad37b98ad01244d5",
+    "archive-checks.json": "b6bf766c044990d1fc5e35f00670f40b88338e2dc6915577e24aca12667af0cc",
+    "broader3-command.json": "b739f53b9dc4f16853d6b9798f8553f14701a808344c1ee1be8b3b5a0dc4f64e",
+    "broader3-score.log": "264d98375feab6b287748a873205cc66794981bca4834eb0995320aa9ee75d92",
+    "broader3-stderr.log": "8c082c0aba2cecefe4824954566382a43e9ed280ea824a1faa9a1e387e10e033",
+    "broader3-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "broader3-summary.json": "6190c5f1245ef2da38a52b5062124b9b0d1b32de750d249b7891e536f791fc38",
+    "broader3/generation.jsonl": "e57014f14a68b7a83d1c0392d58fd9dd45fc61e5f7afdae86ecad86d1fc768f1",
+    "broader3/merge_intervals.prompt.json": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831",
+    "broader3/merge_intervals.tokens.jsonl": "d748d3e8b1d40ea69afcf438c310a6f12bd32ac65448eb0a0c614373aa8610f7",
+    "broader3/merge_intervals.txt": "9d98703c51293597b1f2f0560a8f4fe1c932dfe7e459eb6cfca08a048665b003",
+    "broader3/round_cents.prompt.json": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8",
+    "broader3/round_cents.tokens.jsonl": "d787145966628a505aba05c27c0927122246ec8494f722d788c32787517fcdb7",
+    "broader3/round_cents.txt": "91a0c1274ca06a3627c10ed08e586f04282bbce41fea76e977ac8377bdb5ba38",
+    "broader3/score.json": "0b1e19e35b851260fc158978456736b3a29667721f1106f83b1321ad12b5c2a0",
+    "broader3/split_escaped.prompt.json": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3",
+    "broader3/split_escaped.tokens.jsonl": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3",
+    "broader3/split_escaped.txt": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea",
+    "broader3/topological_order.prompt.json": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05",
+    "broader3/topological_order.tokens.jsonl": "78fc55a5938a1a7237d91e5615543c8b514e1ca304052aea2f17b98185c62378",
+    "broader3/topological_order.txt": "b455b9d555981933ea4002570f80e1b22a81ac8eef4cca06c3faa474a74ae1e6",
+    "guard/command.json": "f35f093df7e9a4cae9621a6e8a19e92449f2f1063ac64b864a1b31d1d889fd65",
+    "guard/pressure.jsonl": "3f2c4d28f0a8e72f29248dc1615ea422ca1551be0e2e254f0e0711fded56808e",
+    "guard/result.json": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+    "model-identity.json": "82085185f0dc8bc751624a954a11b4861533295f49a5e9a6d3824c54b82d982d",
+    "native-after-command.json": "305afacf25cb5b0cee0eebcbde258d0f6f933e5b195782f3d00e43da289697e9",
+    "native-after-score.log": "534b5a26bd6605847066f4617b47f996c9ff13345b911358cdbb73cd9ff99865",
+    "native-after-stderr.log": "bc8ff09bf82c0a7e8bfbaeff5a0f6b63c3fe94ae8c486908d929e0af83262b8b",
+    "native-after-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native-after-summary.json": "d79423836577205cfe6abc0ae3e13d78c6f360a2536b504df933d1633c55300d",
+    "native-after/generation.jsonl": "478624ff39babd638000bb4939723b8b5857fa48148f553581d138323ded802c",
+    "native-after/merge_intervals.prompt.json": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831",
+    "native-after/merge_intervals.tokens.jsonl": "ec7fb3492a93dfcab0015ca1c6685ee0d58963cc56c0744a30590bdd0e3cd732",
+    "native-after/merge_intervals.txt": "017011112d780811806b3d51ce3d31caf1746714e4ce7c3313e1e22fefa946b7",
+    "native-after/round_cents.prompt.json": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8",
+    "native-after/round_cents.tokens.jsonl": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93",
+    "native-after/round_cents.txt": "067048c8286a34a38bdf99a620c0b0a074d04d7cc71c525c86fa05f310e3bfd5",
+    "native-after/score.json": "c299e86364132742fdc4679d8b06ccc258cce5a2845d0b13b7d4b0dd0fd2811a",
+    "native-after/split_escaped.prompt.json": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3",
+    "native-after/split_escaped.tokens.jsonl": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3",
+    "native-after/split_escaped.txt": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea",
+    "native-after/topological_order.prompt.json": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05",
+    "native-after/topological_order.tokens.jsonl": "4abb7407c9b3baeffe1061936fbcfa0f553104892b5178342a6e7240e89fcb36",
+    "native-after/topological_order.txt": "c33d11a77551d809fd39f1ebd2d7b76c3c74817ba9205da3b3cda827a74ef37b",
+    "native-before-command.json": "14d76319dd4a7f6e7165ed771efd99cdcb5811654afa58b8b27594ff3b954872",
+    "native-before-score.log": "06ce872f74e10af46e90372ae4c3bdaa34d96368ada4a729ade1aedc3c2e42ee",
+    "native-before-stderr.log": "5cca8769f6e768a3d7ac23a53a52d5dd885ee848d76ad7a75d2d5f16dcfdd8db",
+    "native-before-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native-before-summary.json": "10d2db2a0789f7e634a504ae0fcddb685a43543ac4902d307c51efb3b88f2d1b",
+    "native-before/generation.jsonl": "1b8f054436c08467f602db228a9ed5d826f2026f8fed1d97e957f83edd092d32",
+    "native-before/merge_intervals.prompt.json": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831",
+    "native-before/merge_intervals.tokens.jsonl": "ec7fb3492a93dfcab0015ca1c6685ee0d58963cc56c0744a30590bdd0e3cd732",
+    "native-before/merge_intervals.txt": "017011112d780811806b3d51ce3d31caf1746714e4ce7c3313e1e22fefa946b7",
+    "native-before/round_cents.prompt.json": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8",
+    "native-before/round_cents.tokens.jsonl": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93",
+    "native-before/round_cents.txt": "067048c8286a34a38bdf99a620c0b0a074d04d7cc71c525c86fa05f310e3bfd5",
+    "native-before/score.json": "1d1a84e2faf6eeaea49c4ac42f8c5760d478eea962caaa650d727734e4ec3582",
+    "native-before/split_escaped.prompt.json": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3",
+    "native-before/split_escaped.tokens.jsonl": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3",
+    "native-before/split_escaped.txt": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea",
+    "native-before/topological_order.prompt.json": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05",
+    "native-before/topological_order.tokens.jsonl": "4abb7407c9b3baeffe1061936fbcfa0f553104892b5178342a6e7240e89fcb36",
+    "native-before/topological_order.txt": "c33d11a77551d809fd39f1ebd2d7b76c3c74817ba9205da3b3cda827a74ef37b",
+    "plan.json": "851ffa9623b568d94459372e705d2e09703a78e94e86810b3f34619919f432d2",
+    "prepared-build-proof/assembly-v1.json": "e1fe848a0ab6f5d739a7bf98381077e391b1679f63e570515db148adf48d8c80",
+    "prepared-build-proof/core-identity.json": "0690d6909133ea3cde5af49531f2bb154f3b169d7bbddaa688989b8f1be82aed",
+    "prepared-build-proof/fixtures-v1.json": "d1ea470ff2cb70476ee6504a55a06b8756156a3ca2df67739c556d4941e5f2c7",
+    "prepared-build-proof/frozen-prepared-command.json": "bf96b33b14be3dd9f9719adb296f0f1b96032b8a6a159efcc63abe3090f0a30f",
+    "prepared-build-proof/frozen-prepared-manifest.json": "28341df3dfbedc7c943a71c9f3077bb156f0844879fbd5fa95dc0396aa971422",
+    "prepared-build-proof/native_prefill_coding_pilot.c": "4da1dd34b9f182ec082dab765a54ccd9a65b3b092f15c6984a6902d5a19a368f",
+    "prepared-build-proof/prompts/merge_intervals.txt": "5b4aa36a7658e782213662e614a019b461a3798c13948a38b4a17dbe4ad8b722",
+    "prepared-build-proof/prompts/preamble.txt": "e5dec14b285669dfde0683d4f37d25de85d755869d5f1840f228088b14d6d534",
+    "prepared-build-proof/prompts/round_cents.txt": "48aada5d081b0cb4c7ae6d67ddac5e054d208f620026f1f73693b6c2d86bd96c",
+    "prepared-build-proof/prompts/split_escaped.txt": "7448366c882498aa1f8ebf7d20ad4875902faacc7d75ef1199972f409fb9d86c",
+    "prepared-build-proof/prompts/tasks.txt": "51cee873a1f7b968c21da0a7998968ef51ae217b7270480143d4f5384961beb9",
+    "prepared-build-proof/prompts/topological_order.txt": "6ca46292078c33a813d22377b1df739ec63274449b7bc8a20b9077928eb96a11",
+    "prepared-build-proof/prompts/warm-assistant.txt": "4b35da7627f8363c084d650d30859ace3a7334a21fd28e7ab5cba1465d05e8e9",
+    "prepared-build-proof/prompts/warm-user.txt": "bb86f8d522edfa040118b29bb4ffa9f1932216710818df9742f3220dbd7cb050",
+    "prepared-build-proof/run_native_prefill_coding.py": "00d5e9a9fc34eb63da333f9808902f9c6c422cc73240baf6cd80a72f6190e159",
+    "prepared-build-proof/score_resident_coding.py": "ead03d775daa7f70192ae40675b9812317a4979e1c22c03b9e961cbf9ca5972c",
+    "prepared-build-proof/test_native_prefill_coding.py": "87a975e68119dc935256ed3722e01f0bbcb3030fb4330166415a02a712ab28af",
+    "prepared-build-proof/three-coding-build-command.json": "a00f7eb1824adf2c47487e9acf62b0997de3196103950a6a687424ef9f870c51",
+    "prepared-build-proof/three-coding-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "prepared-build-proof/three-coding-cpu-tests.log": "6a4001416dff6d992a7efb4142be222728c4c1ab0c9bf83676a9c96d6b6d6ec0",
+    "raw-vector-identities.json": "55d05289553335dcf3a2a387a7d14b1d22083d77973760dd997a191c8de04d66",
+    "resident-three-coding-root-launch-20261002.log": "07000f08022281c3a785c52dd46bdf27103a8602b35957aac66d82e796255fbb",
+    "resident-three-coding-root-preflight-20261002.json": "ffd238493d2e6b9be079dcaca8c34a3b71b47b4623d9a42d0399414b5bbd52fa",
+    "root-release-proof.json": "fdccf039ae2e9a53eb3310e2290d4837b924298373431bc7ac03d0e6211327b7",
+    "summary.json": "1c2b4b983804303f19b0c18c477a8848d33d382935db729a59ef42bf35c77523"
+  },
+  "guard_rc": 0,
+  "no_large_vector_copies": true,
+  "no_model_metadata_access": true,
+  "no_scoring_or_generation_repairs": true,
+  "original_compact_output_copies": [
+    {
+      "archive": "native-before/generation.jsonl",
+      "bytes": 2095,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/generation.jsonl",
+      "sha256": "1b8f054436c08467f602db228a9ed5d826f2026f8fed1d97e957f83edd092d32"
+    },
+    {
+      "archive": "native-before/merge_intervals.prompt.json",
+      "bytes": 2244,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/merge_intervals.prompt.json",
+      "sha256": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831"
+    },
+    {
+      "archive": "native-before/merge_intervals.tokens.jsonl",
+      "bytes": 11236,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/merge_intervals.tokens.jsonl",
+      "sha256": "ec7fb3492a93dfcab0015ca1c6685ee0d58963cc56c0744a30590bdd0e3cd732"
+    },
+    {
+      "archive": "native-before/merge_intervals.txt",
+      "bytes": 560,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/merge_intervals.txt",
+      "sha256": "017011112d780811806b3d51ce3d31caf1746714e4ce7c3313e1e22fefa946b7"
+    },
+    {
+      "archive": "native-before/round_cents.prompt.json",
+      "bytes": 2154,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/round_cents.prompt.json",
+      "sha256": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8"
+    },
+    {
+      "archive": "native-before/round_cents.tokens.jsonl",
+      "bytes": 5295,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/round_cents.tokens.jsonl",
+      "sha256": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93"
+    },
+    {
+      "archive": "native-before/round_cents.txt",
+      "bytes": 227,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/round_cents.txt",
+      "sha256": "067048c8286a34a38bdf99a620c0b0a074d04d7cc71c525c86fa05f310e3bfd5"
+    },
+    {
+      "archive": "native-before/score.json",
+      "bytes": 4428,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/score.json",
+      "sha256": "1d1a84e2faf6eeaea49c4ac42f8c5760d478eea962caaa650d727734e4ec3582"
+    },
+    {
+      "archive": "native-before/split_escaped.prompt.json",
+      "bytes": 2252,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/split_escaped.prompt.json",
+      "sha256": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3"
+    },
+    {
+      "archive": "native-before/split_escaped.tokens.jsonl",
+      "bytes": 11444,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/split_escaped.tokens.jsonl",
+      "sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3"
+    },
+    {
+      "archive": "native-before/split_escaped.txt",
+      "bytes": 601,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/split_escaped.txt",
+      "sha256": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea"
+    },
+    {
+      "archive": "native-before/topological_order.prompt.json",
+      "bytes": 2238,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/topological_order.prompt.json",
+      "sha256": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05"
+    },
+    {
+      "archive": "native-before/topological_order.tokens.jsonl",
+      "bytes": 15293,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/topological_order.tokens.jsonl",
+      "sha256": "4abb7407c9b3baeffe1061936fbcfa0f553104892b5178342a6e7240e89fcb36"
+    },
+    {
+      "archive": "native-before/topological_order.txt",
+      "bytes": 682,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/topological_order.txt",
+      "sha256": "c33d11a77551d809fd39f1ebd2d7b76c3c74817ba9205da3b3cda827a74ef37b"
+    },
+    {
+      "archive": "broader3/generation.jsonl",
+      "bytes": 2095,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/generation.jsonl",
+      "sha256": "e57014f14a68b7a83d1c0392d58fd9dd45fc61e5f7afdae86ecad86d1fc768f1"
+    },
+    {
+      "archive": "broader3/merge_intervals.prompt.json",
+      "bytes": 2244,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/merge_intervals.prompt.json",
+      "sha256": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831"
+    },
+    {
+      "archive": "broader3/merge_intervals.tokens.jsonl",
+      "bytes": 11324,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/merge_intervals.tokens.jsonl",
+      "sha256": "d748d3e8b1d40ea69afcf438c310a6f12bd32ac65448eb0a0c614373aa8610f7"
+    },
+    {
+      "archive": "broader3/merge_intervals.txt",
+      "bytes": 604,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/merge_intervals.txt",
+      "sha256": "9d98703c51293597b1f2f0560a8f4fe1c932dfe7e459eb6cfca08a048665b003"
+    },
+    {
+      "archive": "broader3/round_cents.prompt.json",
+      "bytes": 2154,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/round_cents.prompt.json",
+      "sha256": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8"
+    },
+    {
+      "archive": "broader3/round_cents.tokens.jsonl",
+      "bytes": 5295,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/round_cents.tokens.jsonl",
+      "sha256": "d787145966628a505aba05c27c0927122246ec8494f722d788c32787517fcdb7"
+    },
+    {
+      "archive": "broader3/round_cents.txt",
+      "bytes": 227,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/round_cents.txt",
+      "sha256": "91a0c1274ca06a3627c10ed08e586f04282bbce41fea76e977ac8377bdb5ba38"
+    },
+    {
+      "archive": "broader3/score.json",
+      "bytes": 4428,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/score.json",
+      "sha256": "0b1e19e35b851260fc158978456736b3a29667721f1106f83b1321ad12b5c2a0"
+    },
+    {
+      "archive": "broader3/split_escaped.prompt.json",
+      "bytes": 2252,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/split_escaped.prompt.json",
+      "sha256": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3"
+    },
+    {
+      "archive": "broader3/split_escaped.tokens.jsonl",
+      "bytes": 11444,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/split_escaped.tokens.jsonl",
+      "sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3"
+    },
+    {
+      "archive": "broader3/split_escaped.txt",
+      "bytes": 601,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/split_escaped.txt",
+      "sha256": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea"
+    },
+    {
+      "archive": "broader3/topological_order.prompt.json",
+      "bytes": 2238,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/topological_order.prompt.json",
+      "sha256": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05"
+    },
+    {
+      "archive": "broader3/topological_order.tokens.jsonl",
+      "bytes": 15699,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/topological_order.tokens.jsonl",
+      "sha256": "78fc55a5938a1a7237d91e5615543c8b514e1ca304052aea2f17b98185c62378"
+    },
+    {
+      "archive": "broader3/topological_order.txt",
+      "bytes": 712,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/topological_order.txt",
+      "sha256": "b455b9d555981933ea4002570f80e1b22a81ac8eef4cca06c3faa474a74ae1e6"
+    },
+    {
+      "archive": "native-after/generation.jsonl",
+      "bytes": 2095,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/generation.jsonl",
+      "sha256": "478624ff39babd638000bb4939723b8b5857fa48148f553581d138323ded802c"
+    },
+    {
+      "archive": "native-after/merge_intervals.prompt.json",
+      "bytes": 2244,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/merge_intervals.prompt.json",
+      "sha256": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831"
+    },
+    {
+      "archive": "native-after/merge_intervals.tokens.jsonl",
+      "bytes": 11236,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/merge_intervals.tokens.jsonl",
+      "sha256": "ec7fb3492a93dfcab0015ca1c6685ee0d58963cc56c0744a30590bdd0e3cd732"
+    },
+    {
+      "archive": "native-after/merge_intervals.txt",
+      "bytes": 560,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/merge_intervals.txt",
+      "sha256": "017011112d780811806b3d51ce3d31caf1746714e4ce7c3313e1e22fefa946b7"
+    },
+    {
+      "archive": "native-after/round_cents.prompt.json",
+      "bytes": 2154,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/round_cents.prompt.json",
+      "sha256": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8"
+    },
+    {
+      "archive": "native-after/round_cents.tokens.jsonl",
+      "bytes": 5295,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/round_cents.tokens.jsonl",
+      "sha256": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93"
+    },
+    {
+      "archive": "native-after/round_cents.txt",
+      "bytes": 227,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/round_cents.txt",
+      "sha256": "067048c8286a34a38bdf99a620c0b0a074d04d7cc71c525c86fa05f310e3bfd5"
+    },
+    {
+      "archive": "native-after/score.json",
+      "bytes": 4427,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/score.json",
+      "sha256": "c299e86364132742fdc4679d8b06ccc258cce5a2845d0b13b7d4b0dd0fd2811a"
+    },
+    {
+      "archive": "native-after/split_escaped.prompt.json",
+      "bytes": 2252,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/split_escaped.prompt.json",
+      "sha256": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3"
+    },
+    {
+      "archive": "native-after/split_escaped.tokens.jsonl",
+      "bytes": 11444,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/split_escaped.tokens.jsonl",
+      "sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3"
+    },
+    {
+      "archive": "native-after/split_escaped.txt",
+      "bytes": 601,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/split_escaped.txt",
+      "sha256": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea"
+    },
+    {
+      "archive": "native-after/topological_order.prompt.json",
+      "bytes": 2238,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/topological_order.prompt.json",
+      "sha256": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05"
+    },
+    {
+      "archive": "native-after/topological_order.tokens.jsonl",
+      "bytes": 15293,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/topological_order.tokens.jsonl",
+      "sha256": "4abb7407c9b3baeffe1061936fbcfa0f553104892b5178342a6e7240e89fcb36"
+    },
+    {
+      "archive": "native-after/topological_order.txt",
+      "bytes": 682,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/topological_order.txt",
+      "sha256": "c33d11a77551d809fd39f1ebd2d7b76c3c74817ba9205da3b3cda827a74ef37b"
+    }
+  ],
+  "plan_sha256": "851ffa9623b568d94459372e705d2e09703a78e94e86810b3f34619919f432d2",
+  "prepared_manifest_sha256": "28341df3dfbedc7c943a71c9f3077bb156f0844879fbd5fa95dc0396aa971422",
+  "prepared_parent": "3248c84b108ce80428f8598d42216f16a5c95939",
+  "pressure": {
+    "adverse_samples": 0,
+    "final_swap_gb": 0.017763671875,
+    "first_utc": "2026-10-02T23:00:17.452900+00:00",
+    "initial_swap_gb": 0.017763671875,
+    "last_utc": "2026-10-02T23:05:15.066486+00:00",
+    "levels": [
+      1
+    ],
+    "maximum_compressor_gb": 7.7022857666015625,
+    "maximum_simultaneous_wired_compressor_gb": 79.56341552734375,
+    "maximum_wired_gb": 71.97775268554688,
+    "minimum_free_gb": 0.118743896484375,
+    "samples": 289,
+    "swap_growth_gb": 0.0
+  },
+  "raw_vectors": [
+    {
+      "arm": "native-before",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/merge_intervals.initial-logits.bin",
+      "sha256": "0b5ab6b870265f7550bd15afba573b849198f11610d95d60e9dc1a056773b031",
+      "task": "merge_intervals"
+    },
+    {
+      "arm": "native-before",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/merge_intervals.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "merge_intervals"
+    },
+    {
+      "arm": "native-before",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/round_cents.initial-logits.bin",
+      "sha256": "e469060cdbe0629f448dec60932865c7f63a988bd20acf3685924538510b74f7",
+      "task": "round_cents"
+    },
+    {
+      "arm": "native-before",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/round_cents.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "round_cents"
+    },
+    {
+      "arm": "native-before",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/split_escaped.initial-logits.bin",
+      "sha256": "c5ca7e757f9bd828853ca32a7ce659febfb34630dc6ed5b9729b3216d16d19b1",
+      "task": "split_escaped"
+    },
+    {
+      "arm": "native-before",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/split_escaped.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "split_escaped"
+    },
+    {
+      "arm": "native-before",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/topological_order.initial-logits.bin",
+      "sha256": "c963ce2867c1ed1ac732d693cb9b0fe400e600cbb83ac979a3c5853182be557b",
+      "task": "topological_order"
+    },
+    {
+      "arm": "native-before",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-before/topological_order.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "topological_order"
+    },
+    {
+      "arm": "broader3",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/merge_intervals.initial-logits.bin",
+      "sha256": "0b5ab6b870265f7550bd15afba573b849198f11610d95d60e9dc1a056773b031",
+      "task": "merge_intervals"
+    },
+    {
+      "arm": "broader3",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/merge_intervals.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "merge_intervals"
+    },
+    {
+      "arm": "broader3",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/round_cents.initial-logits.bin",
+      "sha256": "e469060cdbe0629f448dec60932865c7f63a988bd20acf3685924538510b74f7",
+      "task": "round_cents"
+    },
+    {
+      "arm": "broader3",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/round_cents.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "round_cents"
+    },
+    {
+      "arm": "broader3",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/split_escaped.initial-logits.bin",
+      "sha256": "c5ca7e757f9bd828853ca32a7ce659febfb34630dc6ed5b9729b3216d16d19b1",
+      "task": "split_escaped"
+    },
+    {
+      "arm": "broader3",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/split_escaped.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "split_escaped"
+    },
+    {
+      "arm": "broader3",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/topological_order.initial-logits.bin",
+      "sha256": "c963ce2867c1ed1ac732d693cb9b0fe400e600cbb83ac979a3c5853182be557b",
+      "task": "topological_order"
+    },
+    {
+      "arm": "broader3",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3/topological_order.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "topological_order"
+    },
+    {
+      "arm": "native-after",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/merge_intervals.initial-logits.bin",
+      "sha256": "0b5ab6b870265f7550bd15afba573b849198f11610d95d60e9dc1a056773b031",
+      "task": "merge_intervals"
+    },
+    {
+      "arm": "native-after",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/merge_intervals.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "merge_intervals"
+    },
+    {
+      "arm": "native-after",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/round_cents.initial-logits.bin",
+      "sha256": "e469060cdbe0629f448dec60932865c7f63a988bd20acf3685924538510b74f7",
+      "task": "round_cents"
+    },
+    {
+      "arm": "native-after",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/round_cents.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "round_cents"
+    },
+    {
+      "arm": "native-after",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/split_escaped.initial-logits.bin",
+      "sha256": "c5ca7e757f9bd828853ca32a7ce659febfb34630dc6ed5b9729b3216d16d19b1",
+      "task": "split_escaped"
+    },
+    {
+      "arm": "native-after",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/split_escaped.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "split_escaped"
+    },
+    {
+      "arm": "native-after",
+      "bytes": 517120,
+      "kind": "initial-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/topological_order.initial-logits.bin",
+      "sha256": "c963ce2867c1ed1ac732d693cb9b0fe400e600cbb83ac979a3c5853182be557b",
+      "task": "topological_order"
+    },
+    {
+      "arm": "native-after",
+      "bytes": 517120,
+      "kind": "warm-logits.bin",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/native-after/topological_order.warm-logits.bin",
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6",
+      "task": "topological_order"
+    }
+  ],
+  "runtime_parent": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "source_hash_count": 156,
+  "source_revision": "911c99381e90ed8027991d09d2c488476578e111",
+  "status": "NATIVE_GENERATED_CODE_PASS_SOURCE_SEPARATED",
+  "timing_claim": "none; instrumented diagnostics only"
+}

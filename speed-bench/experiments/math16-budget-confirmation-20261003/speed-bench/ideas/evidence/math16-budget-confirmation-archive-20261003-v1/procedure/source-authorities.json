@@ -1,0 +1,760 @@
+{
+  "archive_workspace": "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive-v2",
+  "asset_count": 104,
+  "audit_source": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/root_math16_outcome_audit_v1.py",
+  "audit_source_commit": "da36a6e3ca0c384f14988a8f3a9f2db5eae9bde8",
+  "audit_source_sha256": "8a6a1947792743a12c86f81ea467325d5832e5d853ccb026923e7bb4f6d04a8f",
+  "plan": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/plan.json",
+  "plan_sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+  "producer_source_commit": "542fcb86866578d528d6168bd9299de5d7f90cd8",
+  "qualified_source_commit": "448caaa8f864533559635817469c8b46f0a15cf8",
+  "root": "/Volumes/Models/ds4",
+  "runtime_authority": "/Volumes/Models/ds4/speed-bench/ideas/evidence/reasoning-budget-pilot-root-import-20261003.json",
+  "runtime_authority_sha256": "2f4c1ee85cd8bf6c411366f7907c406de12d7e18aa2a4af2efc28de462538360",
+  "schema": "math16-archive-source-authorities-v1",
+  "static_files": {
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": {
+      "bytes": 7948,
+      "mode": 420,
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": {
+      "bytes": 3069,
+      "mode": 420,
+      "sha256": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libSystem.B.tbd": {
+      "bytes": 347931,
+      "mode": 420,
+      "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/SDKSettings.json": {
+      "bytes": 7948,
+      "mode": 420,
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/stdio.h": {
+      "bytes": 3069,
+      "mode": 420,
+      "sha256": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd": {
+      "alias": {
+        "link_text": "libSystem.B.tbd",
+        "resolved": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libSystem.B.tbd"
+      },
+      "bytes": 347931,
+      "mode": 420,
+      "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang": {
+      "bytes": 124676976,
+      "mode": 493,
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4.o": {
+      "bytes": 5606328,
+      "mode": 420,
+      "sha256": "d77958a390840f3a555f01df64d52964a656c72e6449c2a1cd8c19f497eb8aca"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_distributed.o": {
+      "bytes": 427168,
+      "mode": 420,
+      "sha256": "3b09b4b252fd1b06894421b88bc62eeaca24869b839cc17cd22effde1d50dc1a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_engram.o": {
+      "bytes": 30120,
+      "mode": 420,
+      "sha256": "d94530e0a20a2c196ef24ea839175152dabbdb9ad8245626f01bd81a97f34a4b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_image.o": {
+      "bytes": 165728,
+      "mode": 420,
+      "sha256": "752eace0ab62636538b225d4c80011739354649ee395b6648924928079572528"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_layer_pack.o": {
+      "bytes": 11320,
+      "mode": 420,
+      "sha256": "174b07bfca784e04cb938ae3803e3b97696afcdb886ccd518117ffa3400135c8"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_metal.o": {
+      "bytes": 2798776,
+      "mode": 420,
+      "sha256": "ec94b88a9a3da8742c77899e370c1b64869d456ce97d9c8fdba4fae1752bd5ff"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_ssd.o": {
+      "bytes": 13800,
+      "mode": 420,
+      "sha256": "a1fbc20ad4102f4a6f126cde822f2995dd4421153c6256dace554ebca26c2b71"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_tp.o": {
+      "bytes": 207496,
+      "mode": 420,
+      "sha256": "d2f2f5ce0b8bfc7ebcfb0fd80f3eb4e434e89dc4518253cc43a7d253a0b2c2a1"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-literal-proof-20261003-v2.json": {
+      "bytes": 1498843,
+      "mode": 420,
+      "sha256": "80af9c9f29118cc80506b566c5abd3a6fa98b13fe1d47960f4ea522923cc7fd3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-literal-refusal-v1.json": {
+      "bytes": 561,
+      "mode": 420,
+      "sha256": "b9da7cfa8c22ecd75bf6105bb410e0ae1171cd7e31f818583325bf4e8563f080"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/analyze_reasoning_budget_confirmation.py": {
+      "bytes": 23844,
+      "mode": 420,
+      "sha256": "55ec3271731b75ace8a466cec622eadb13c98cef4ed7df13088eef07634ee3b6"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/cpu-proof.json": {
+      "bytes": 1327,
+      "mode": 420,
+      "sha256": "83e84d6bea03f9fd9d257e9451a1e1107b5b74a3815590f5f855580d233eb333"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/cpu-tests.log": {
+      "bytes": 1299,
+      "mode": 420,
+      "sha256": "91e93fdd6d6f0d72b50d08b40becb40a1f414a61e259dbeab073b3aeb954d8ca"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/fixture.json": {
+      "bytes": 4660,
+      "mode": 420,
+      "sha256": "f0eeb1effe60fb75af9572d6e81b7a102f1eb83cfe995a2e919109e7b2ed8703"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/argsort.metal": {
+      "bytes": 11174,
+      "mode": 420,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/bin.metal": {
+      "bytes": 6580,
+      "mode": 420,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/concat.metal": {
+      "bytes": 1932,
+      "mode": 420,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/cpy.metal": {
+      "bytes": 10154,
+      "mode": 420,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/deepseek4_vision.metal": {
+      "bytes": 7815,
+      "mode": 420,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/dense.metal": {
+      "bytes": 113439,
+      "mode": 420,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/dsv41.metal": {
+      "bytes": 12508,
+      "mode": 420,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/dsv4_hc.metal": {
+      "bytes": 63069,
+      "mode": 420,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/dsv4_kv.metal": {
+      "bytes": 22218,
+      "mode": 420,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/dsv4_misc.metal": {
+      "bytes": 282139,
+      "mode": 420,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/dsv4_rope.metal": {
+      "bytes": 35980,
+      "mode": 420,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/flash_attn.metal": {
+      "bytes": 61784,
+      "mode": 420,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/get_rows.metal": {
+      "bytes": 6976,
+      "mode": 420,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/glm53_bf16.metal": {
+      "bytes": 5466,
+      "mode": 420,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/glm53_kda.metal": {
+      "bytes": 13116,
+      "mode": 420,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/glm53_vision.metal": {
+      "bytes": 11295,
+      "mode": 420,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/glu.metal": {
+      "bytes": 2129,
+      "mode": 420,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/moe.metal": {
+      "bytes": 423032,
+      "mode": 420,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/norm.metal": {
+      "bytes": 14766,
+      "mode": 420,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/qwen4.metal": {
+      "bytes": 232464,
+      "mode": 420,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/qwen4_vision.metal": {
+      "bytes": 7402,
+      "mode": 420,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/repeat.metal": {
+      "bytes": 1640,
+      "mode": 420,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/set_rows.metal": {
+      "bytes": 1909,
+      "mode": 420,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/softmax.metal": {
+      "bytes": 7679,
+      "mode": 420,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/sum_rows.metal": {
+      "bytes": 2737,
+      "mode": 420,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/metal/unary.metal": {
+      "bytes": 10104,
+      "mode": 420,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/preparation-first-failure.json": {
+      "bytes": 107,
+      "mode": 420,
+      "sha256": "f4759dce9ee1c25741fd5150fdc8ada9b040d701286670272e0047cc307549dc"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/reasoning_budget_signed64.py": {
+      "bytes": 9410,
+      "mode": 420,
+      "sha256": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/run_reasoning_budget_confirmation.py": {
+      "bytes": 24290,
+      "mode": 420,
+      "sha256": "08d0689008dd2e95e4bd505b2fb16ab839beef7b3c7891f12b1bd4ea9e860b98"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/runner-tests.py": {
+      "bytes": 17513,
+      "mode": 420,
+      "sha256": "771c9a149ac8e890afe916fd9924d9b0b90b44a22b22054d7b6521f4d04f28cd"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/source/native_effort_final_score.h": {
+      "bytes": 6246,
+      "mode": 420,
+      "sha256": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/source/overthink_diagnostics.h": {
+      "bytes": 2104,
+      "mode": 420,
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/source/reasoning_budget_confirmation_cases.h": {
+      "bytes": 4113,
+      "mode": 420,
+      "sha256": "1884857da9e1a9202c7fb938253f4585385d4a7693b2c8f3b4a4e6682cfc53ef"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/source/reasoning_budget_confirmation_probe.c": {
+      "bytes": 10480,
+      "mode": 420,
+      "sha256": "dd05bfa3967bc211e9533e4f3108aee2b4bec9b7f44da7bd63a9d6d5b277ea1a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/source/reasoning_budget_native_api.h": {
+      "bytes": 32935,
+      "mode": 420,
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v1/source/reasoning_budget_policy.h": {
+      "bytes": 1819,
+      "mode": 420,
+      "sha256": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/analyze_reasoning_budget_confirmation.py": {
+      "bytes": 23844,
+      "mode": 420,
+      "sha256": "55ec3271731b75ace8a466cec622eadb13c98cef4ed7df13088eef07634ee3b6"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/cpu-proof.json": {
+      "bytes": 1327,
+      "mode": 420,
+      "sha256": "520b83df758e074fe6cc2e12ce9c27a900b21dd004fa0cb17ae4a4809daf1fac"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/cpu-tests.log": {
+      "bytes": 1521,
+      "mode": 420,
+      "sha256": "831ac1838d7a55965ef8b0e51e6b6d0b9cc8085e387d63f8887c620d0191a1d6"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/fixture.json": {
+      "bytes": 4660,
+      "mode": 420,
+      "sha256": "f0eeb1effe60fb75af9572d6e81b7a102f1eb83cfe995a2e919109e7b2ed8703"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/argsort.metal": {
+      "bytes": 11174,
+      "mode": 420,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/bin.metal": {
+      "bytes": 6580,
+      "mode": 420,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/concat.metal": {
+      "bytes": 1932,
+      "mode": 420,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/cpy.metal": {
+      "bytes": 10154,
+      "mode": 420,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/deepseek4_vision.metal": {
+      "bytes": 7815,
+      "mode": 420,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dense.metal": {
+      "bytes": 113439,
+      "mode": 420,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv41.metal": {
+      "bytes": 12508,
+      "mode": 420,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv4_hc.metal": {
+      "bytes": 63069,
+      "mode": 420,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv4_kv.metal": {
+      "bytes": 22218,
+      "mode": 420,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv4_misc.metal": {
+      "bytes": 282139,
+      "mode": 420,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv4_rope.metal": {
+      "bytes": 35980,
+      "mode": 420,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/flash_attn.metal": {
+      "bytes": 61784,
+      "mode": 420,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/get_rows.metal": {
+      "bytes": 6976,
+      "mode": 420,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/glm53_bf16.metal": {
+      "bytes": 5466,
+      "mode": 420,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/glm53_kda.metal": {
+      "bytes": 13116,
+      "mode": 420,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/glm53_vision.metal": {
+      "bytes": 11295,
+      "mode": 420,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/glu.metal": {
+      "bytes": 2129,
+      "mode": 420,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/moe.metal": {
+      "bytes": 423032,
+      "mode": 420,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/norm.metal": {
+      "bytes": 14766,
+      "mode": 420,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/qwen4.metal": {
+      "bytes": 232464,
+      "mode": 420,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/qwen4_vision.metal": {
+      "bytes": 7402,
+      "mode": 420,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/repeat.metal": {
+      "bytes": 1640,
+      "mode": 420,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/set_rows.metal": {
+      "bytes": 1909,
+      "mode": 420,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/softmax.metal": {
+      "bytes": 7679,
+      "mode": 420,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/sum_rows.metal": {
+      "bytes": 2737,
+      "mode": 420,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/unary.metal": {
+      "bytes": 10104,
+      "mode": 420,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/reasoning_budget_signed64.py": {
+      "bytes": 9410,
+      "mode": 420,
+      "sha256": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/run_reasoning_budget_confirmation.py": {
+      "bytes": 25269,
+      "mode": 420,
+      "sha256": "ad4531a128767f902934d26fd2373fd1d08f88e6b3926e92a302109dba5a3d29"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/runner-tests.py": {
+      "bytes": 21959,
+      "mode": 420,
+      "sha256": "43be8eb9762bd8aa512f9600611000fe89be534a5c09d0d73bc1c1613373701d"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/source/native_effort_final_score.h": {
+      "bytes": 6246,
+      "mode": 420,
+      "sha256": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/source/overthink_diagnostics.h": {
+      "bytes": 2104,
+      "mode": 420,
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/source/reasoning_budget_confirmation_cases.h": {
+      "bytes": 4113,
+      "mode": 420,
+      "sha256": "1884857da9e1a9202c7fb938253f4585385d4a7693b2c8f3b4a4e6682cfc53ef"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/source/reasoning_budget_confirmation_probe.c": {
+      "bytes": 10480,
+      "mode": 420,
+      "sha256": "dd05bfa3967bc211e9533e4f3108aee2b4bec9b7f44da7bd63a9d6d5b277ea1a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/source/reasoning_budget_native_api.h": {
+      "bytes": 32935,
+      "mode": 420,
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/source/reasoning_budget_policy.h": {
+      "bytes": 1819,
+      "mode": 420,
+      "sha256": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-readiness-20261003-v2.json": {
+      "bytes": 2066,
+      "mode": 420,
+      "sha256": "5c864803a1330c279488f7bc0f0d1200e813c61e4e866ce373ef7c0f7db4d537"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/ds4.h": {
+      "bytes": 35802,
+      "mode": 420,
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/ds4_gpu.h": {
+      "bytes": 152618,
+      "mode": 420,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/build-manifest.json": {
+      "bytes": 9912,
+      "mode": 420,
+      "sha256": "b67874d6642d3c68ea280fa4410fd27235eb654c0b9c3fd8c0b79a5dea072ccf"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/build-plan.json": {
+      "bytes": 10959,
+      "mode": 420,
+      "sha256": "f988bacfd6c2dffaf0cdf55bc39cbea53ceef41da7685949549672a7d947987c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/build-source.py": {
+      "bytes": 6870,
+      "mode": 420,
+      "sha256": "41cde67468589614d0e33481969611d371208c15e59a838147a64bdbb33f5e21"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/build-tests.py": {
+      "bytes": 2399,
+      "mode": 420,
+      "sha256": "b299b55f78227d710cfea8ddd4f19b46bff675046baad30ec0031ed0b88ddda8"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/compile-result.json": {
+      "bytes": 1596,
+      "mode": 420,
+      "sha256": "6263e93892e2ad4d8a0114cf865e1453946a22c249211be7a6a58db9d1b75603"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/compile.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/cpu-proof.json": {
+      "bytes": 586,
+      "mode": 420,
+      "sha256": "be202b1c166d18ddc81171c71a4b25ab45909e25fc1b346088f168d8eae7a078"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/cpu-tests.log": {
+      "bytes": 348,
+      "mode": 420,
+      "sha256": "cbe3819600e10911a124a58de3e9fbc1d734c2ad4f1b452e9fb6d3c531818c58"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe": {
+      "bytes": 2673104,
+      "mode": 493,
+      "sha256": "1cdeaaa7f7dcb8d4f073b7694f7cce48a9e3cc6ec1253dd63be7bce93bfaca39"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe.dSYM/Contents/Info.plist": {
+      "bytes": 664,
+      "mode": 420,
+      "sha256": "946312bf633bc3ee52a10589d3dab4fda736019c45650055381696d8684fb017"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe.dSYM/Contents/Resources/DWARF/reasoning-budget-confirmation-probe": {
+      "bytes": 4975732,
+      "mode": 420,
+      "sha256": "a903adc983d872dcca30ee86c4eb5c3a17f8d37d4c4f47e47a0fa182fbe85cf2"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe.dSYM/Contents/Resources/Relocations/aarch64/reasoning-budget-confirmation-probe.yml": {
+      "bytes": 273,
+      "mode": 420,
+      "sha256": "621b46cfe077f7d477ded26290733e0a18e46f4b084a6fa852bcb473a68dbe68"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/review-findings.json": {
+      "bytes": 587,
+      "mode": 420,
+      "sha256": "29465bd52afea7ddf6ac11035ecb28e373d6d43acc5c968a05d427e6abe8346e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/root-build-grant.json": {
+      "bytes": 2221,
+      "mode": 420,
+      "sha256": "8b12b61eaaaf936d702ec51640ae52c253a4dd1933e4b7ccfe57ee52ae76f230"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/root-preflight-refusal-v1.json": {
+      "bytes": 236,
+      "mode": 420,
+      "sha256": "41faccb0960d54b1b7df249b5945c348d62806e4d1df72c0edd78a0ed46ad2a8"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/root-preflight-refusal-v2.json": {
+      "bytes": 308,
+      "mode": 420,
+      "sha256": "79bfea51871233983bc03ca0849c14706466726ea3e9f09c31a0eee3b781cb38"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/selftest-result.json": {
+      "bytes": 426,
+      "mode": 420,
+      "sha256": "20ae36d74f7f9277acffc0a69c0fa8f3c6151b55d4bdecd2650401675dcf797a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/selftest.log": {
+      "bytes": 105,
+      "mode": 420,
+      "sha256": "38f73849767c9339927c00fcf6ed7e183c01380887a860291f947eb791945a4c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/source-proof.json": {
+      "bytes": 1435,
+      "mode": 420,
+      "sha256": "365f066ce90f4242910c2166aac9136d11c348ccb31065adbbe66d6be112a5ff"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/build-plan.json": {
+      "bytes": 7722,
+      "mode": 420,
+      "sha256": "8e1cbd7f9b72e14767394bc2235380fd612d42ba37ae4de4890476cb9adf1cc5"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/cpu-proof.json": {
+      "bytes": 605,
+      "mode": 420,
+      "sha256": "2a37950447052abc232be2af035da83522bffd65432350b0352b53d608a84a6c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/fixture-source.py": {
+      "bytes": 16448,
+      "mode": 420,
+      "sha256": "c34e4f5902e547b3e4351a827c01199c388efbc77eb2260c373bf5866e304b46"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/fixture.json": {
+      "bytes": 4660,
+      "mode": 420,
+      "sha256": "f0eeb1effe60fb75af9572d6e81b7a102f1eb83cfe995a2e919109e7b2ed8703"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/gold-proof.json": {
+      "bytes": 1269,
+      "mode": 420,
+      "sha256": "f03be386f51017e58c947a492b75886a3c894b9ef5f4b489d15ab111b0894615"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/input-freeze.json": {
+      "bytes": 2938,
+      "mode": 420,
+      "sha256": "cce60cf7ff19c3ef8d76410c857d0b422c1874d1558c1339551923f3d1a66b83"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/reasoning_budget_confirmation_cases.h": {
+      "bytes": 4113,
+      "mode": 420,
+      "sha256": "1884857da9e1a9202c7fb938253f4585385d4a7693b2c8f3b4a4e6682cfc53ef"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/reasoning_budget_confirmation_probe.c": {
+      "bytes": 10480,
+      "mode": 420,
+      "sha256": "dd05bfa3967bc211e9533e4f3108aee2b4bec9b7f44da7bd63a9d6d5b277ea1a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/native_effort_final_score.h": {
+      "bytes": 6246,
+      "mode": 420,
+      "sha256": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/overthink_diagnostics.h": {
+      "bytes": 2104,
+      "mode": 420,
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_cases.h": {
+      "bytes": 1295,
+      "mode": 420,
+      "sha256": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_native_api.h": {
+      "bytes": 32935,
+      "mode": 420,
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_policy.h": {
+      "bytes": 1819,
+      "mode": 420,
+      "sha256": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_probe.c": {
+      "bytes": 10449,
+      "mode": 420,
+      "sha256": "48bf48e6ae5b16adffa53129571c9ff3279ed1e5372e3ca8d56738f0aeed519c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/reasoning_budget_signed64.py": {
+      "bytes": 9410,
+      "mode": 420,
+      "sha256": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/ds4.h": {
+      "bytes": 35802,
+      "mode": 420,
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/ds4_gpu.h": {
+      "bytes": 152618,
+      "mode": 420,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/ideas/artifacts/reasoning-budget-native-build-v2/build-manifest.json": {
+      "bytes": 5440,
+      "mode": 420,
+      "sha256": "aff1ba1b958428568d4b5747ff3046c273d231e0044ed31cff8d09e90064636b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/native_effort_final_score.h": {
+      "bytes": 6246,
+      "mode": 420,
+      "sha256": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/overthink_diagnostics.h": {
+      "bytes": 2104,
+      "mode": 420,
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_cases.h": {
+      "bytes": 1295,
+      "mode": 420,
+      "sha256": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_native_api.h": {
+      "bytes": 32935,
+      "mode": 420,
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_policy.h": {
+      "bytes": 1819,
+      "mode": 420,
+      "sha256": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_probe.c": {
+      "bytes": 10449,
+      "mode": 420,
+      "sha256": "48bf48e6ae5b16adffa53129571c9ff3279ed1e5372e3ca8d56738f0aeed519c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/input-freeze.json": {
+      "bytes": 34069,
+      "mode": 420,
+      "sha256": "3295e9bd9b5361c2cb870233f8038b6377e4dca91d778b467092cead2cdec7a4"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py": {
+      "bytes": 9066,
+      "mode": 420,
+      "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c"
+    },
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python": {
+      "bytes": 33568,
+      "mode": 493,
+      "sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d"
+    },
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/bin/python3.14": {
+      "bytes": 34640,
+      "mode": 493,
+      "sha256": "7ebde552773a4045532637b114d645a313e045ac07b26f5e520bf039f1e34063"
+    },
+    "/opt/homebrew/opt/python@3.14/bin/python3.14": {
+      "alias": {
+        "link_text": "../Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "resolved": "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/bin/python3.14"
+      },
+      "bytes": 34640,
+      "mode": 493,
+      "sha256": "7ebde552773a4045532637b114d645a313e045ac07b26f5e520bf039f1e34063"
+    }
+  }
+}

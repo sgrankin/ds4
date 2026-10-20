@@ -1,0 +1,57 @@
+{
+  "build_returncode": 0,
+  "default_max_subs": 1,
+  "focused_tests_returncodes": [
+    {
+      "argv": [
+        "cc",
+        "-O3",
+        "-ffast-math",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-I.",
+        "tests/test_resident_three.c",
+        "-o",
+        "speed-bench/ideas/artifacts/main-three-integration-cpu-20261002/test-three",
+        "-lm"
+      ],
+      "label": "three-build",
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "speed-bench/ideas/artifacts/main-three-integration-cpu-20261002/test-three"
+      ],
+      "label": "three-test",
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "./tests/test_resident_route"
+      ],
+      "label": "resident-route",
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "./ds4_agent_test"
+      ],
+      "label": "agent-test",
+      "returncode": 0
+    }
+  ],
+  "integration_commit": "b58344d4",
+  "model_used": false,
+  "runtime_parent": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "scope": "Focused production build, real resident and agent CPU tests, 100000 old one/two-plan/coefficient-bit differential trials and 50000 three-plan invariants. No model open or generated-quality proof.",
+  "source_sha256": {
+    "ds4.c": "fa2f155d8051b3885da59a325031cc811144a150d1f0ae27e84b65f4c1b974c5",
+    "ds4_agent.c": "ba2b66e8fea4b663cb9a3e01d6cdc8a62b6c43350e32342b6ec32c5fb6f902f3",
+    "ds4_resident_route.h": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+    "tests/test_resident_three.c": "fb84edef33c8cc16c1376408a0becd174f43374bb948b9b512c1e2e62eea2c06"
+  },
+  "three_substitutions": "opt-in only"
+}

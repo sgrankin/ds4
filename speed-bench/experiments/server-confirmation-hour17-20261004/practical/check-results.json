@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "task": "ledger",
+      "inputs": 161,
+      "reference_grade": {
+        "correct": true,
+        "tests": 161
+      },
+      "cases_sha256": "ddbe234a1c006ecac0fd4f9f4e1b613036d7f842a653f902bdc530e0b8260410"
+    },
+    {
+      "task": "lru",
+      "inputs": 161,
+      "reference_grade": {
+        "correct": true,
+        "tests": 161
+      },
+      "cases_sha256": "1c5c3e80226c2b9dc9c3a7ffe61ce1a99aaf5be7a5986aa8980d90f1d9d3790e"
+    }
+  ],
+  "sources": {
+    "practical/fixtures.py": "2ffe3e710cedb1953e60aa5b6c5d96acaac82ab8a40895e67ae57e31d1a5ce15",
+    "practical/grade.py": "3e76224c0a6527e19c15a447470fe074e773dffdac083fb69b79ca71ed6fca2b",
+    "practical/reference-ledger.py": "e412d0546c4b38b21ddf88ba881100e13acc57ff7e9086de1986c37219480e4c",
+    "practical/reference-lru.py": "0e0b94ebec94fd516d66dae8f49d96b483a45735747d4983b9e3cbaa7febebc6",
+    "practical/spec.json": "167ddd38cfb51600aaf8aad3275ca05488628495b1caacd7a854973d4d5f7683"
+  },
+  "decisions": "Frozen before model outcomes: new ledger/LRU contracts, 161 inputs each, budgets128 then256 thennative, no repairs.",
+  "gold_methods": "Ledger per-key exhaustive max(revision,position) vs reference incremental winners; LRU timestamps vs reference queue."
+}

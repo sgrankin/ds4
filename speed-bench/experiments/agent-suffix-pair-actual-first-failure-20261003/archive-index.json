@@ -1,0 +1,1914 @@
+{
+  "time": 1790999595.7582998,
+  "status": "FIRST_FAILURE_RETAINED_RELEASED",
+  "source_parent": "dcf9067336b559438960219b286ea484a1242542",
+  "manifest_sha256": "1719ce2a865edcd3e8a711353b1226fc61f090a8aa2ef577ab6a1878b45791bb",
+  "command_sha256": "a346c428f4f593a8cf4d552fbe91e9799c8c2bcd596b7a8d50fac68b60e5889e",
+  "root_release_sha256": "62a30ce4385b49916bbe533d402fb797dce5f1557c07e79d9385e228888db546",
+  "root_diagnosis_sha256": "8f47c5becba552118a097189d42fbb65e859740e914a0d9572833e73e28827da",
+  "local_files": {
+    "prepared/agent": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/agent",
+      "sha256": "f2312e21b8c355e544bd0ecd56bf9a67409ab41584b0d74e2e7e09a966c5bac4",
+      "bytes": 3086936,
+      "mode": 493
+    },
+    "prepared/caller-build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/caller-build-manifest.json",
+      "sha256": "fbdb61dfcbe6a3ddc55c2f9f1857f18a139f939c0004ea3b173d49238336460e",
+      "bytes": 4748,
+      "mode": 420
+    },
+    "prepared/first.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/first.txt",
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2",
+      "bytes": 1395,
+      "mode": 420
+    },
+    "prepared/grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/grader.py",
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0",
+      "bytes": 2461,
+      "mode": 420
+    },
+    "prepared/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/manifest.json",
+      "sha256": "1719ce2a865edcd3e8a711353b1226fc61f090a8aa2ef577ab6a1878b45791bb",
+      "bytes": 64058,
+      "mode": 420
+    },
+    "prepared/metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/argsort.metal",
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+      "bytes": 11174,
+      "mode": 420
+    },
+    "prepared/metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/bin.metal",
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+      "bytes": 6580,
+      "mode": 420
+    },
+    "prepared/metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/concat.metal",
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+      "bytes": 1932,
+      "mode": 420
+    },
+    "prepared/metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/cpy.metal",
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+      "bytes": 10154,
+      "mode": 420
+    },
+    "prepared/metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/deepseek4_vision.metal",
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+      "bytes": 7815,
+      "mode": 420
+    },
+    "prepared/metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/dense.metal",
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+      "bytes": 113439,
+      "mode": 420
+    },
+    "prepared/metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/dsv41.metal",
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+      "bytes": 12508,
+      "mode": 420
+    },
+    "prepared/metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/dsv4_hc.metal",
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+      "bytes": 63069,
+      "mode": 420
+    },
+    "prepared/metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/dsv4_kv.metal",
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+      "bytes": 22218,
+      "mode": 420
+    },
+    "prepared/metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/dsv4_misc.metal",
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+      "bytes": 282139,
+      "mode": 420
+    },
+    "prepared/metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/dsv4_rope.metal",
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+      "bytes": 35980,
+      "mode": 420
+    },
+    "prepared/metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/flash_attn.metal",
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+      "bytes": 61784,
+      "mode": 420
+    },
+    "prepared/metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/get_rows.metal",
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+      "bytes": 6976,
+      "mode": 420
+    },
+    "prepared/metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/glm53_bf16.metal",
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+      "bytes": 5466,
+      "mode": 420
+    },
+    "prepared/metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/glm53_kda.metal",
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+      "bytes": 13116,
+      "mode": 420
+    },
+    "prepared/metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/glm53_vision.metal",
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+      "bytes": 11295,
+      "mode": 420
+    },
+    "prepared/metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/glu.metal",
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+      "bytes": 2129,
+      "mode": 420
+    },
+    "prepared/metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/moe.metal",
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+      "bytes": 423032,
+      "mode": 420
+    },
+    "prepared/metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/norm.metal",
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+      "bytes": 14766,
+      "mode": 420
+    },
+    "prepared/metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/qwen4.metal",
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+      "bytes": 232464,
+      "mode": 420
+    },
+    "prepared/metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/qwen4_vision.metal",
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+      "bytes": 7402,
+      "mode": 420
+    },
+    "prepared/metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/repeat.metal",
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+      "bytes": 1640,
+      "mode": 420
+    },
+    "prepared/metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/set_rows.metal",
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+      "bytes": 1909,
+      "mode": 420
+    },
+    "prepared/metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/softmax.metal",
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+      "bytes": 7679,
+      "mode": 420
+    },
+    "prepared/metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/sum_rows.metal",
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+      "bytes": 2737,
+      "mode": 420
+    },
+    "prepared/metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/metal/unary.metal",
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf",
+      "bytes": 10104,
+      "mode": 420
+    },
+    "prepared/nonmodel-preflight.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/nonmodel-preflight.json",
+      "sha256": "f5e17f3a0466902b8c23b3a7a04e50c493d7f76b0e491cd5cceda4607e74b29b",
+      "bytes": 455,
+      "mode": 420
+    },
+    "prepared/prepared-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/prepared-command.json",
+      "sha256": "a346c428f4f593a8cf4d552fbe91e9799c8c2bcd596b7a8d50fac68b60e5889e",
+      "bytes": 1037,
+      "mode": 420
+    },
+    "prepared/pressure/command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/pressure/command.json",
+      "sha256": "d27a3981bce78532f2a84f6634ccc3419299d09a6780950e53c11c1bb4f23cf0",
+      "bytes": 945,
+      "mode": 420
+    },
+    "prepared/pressure/pressure.jsonl": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/pressure/pressure.jsonl",
+      "sha256": "e5ff015672f7691fad2f44c18af07e63ef0565923379665ea48226b23383f7b9",
+      "bytes": 29681,
+      "mode": 420
+    },
+    "prepared/pressure/result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/pressure/result.json",
+      "sha256": "b076022cc211be498dbeb1a7498f758f025e2ecd2a3f5da6a7e1618ac31fc0e1",
+      "bytes": 52,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/README.md": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/README.md",
+      "sha256": "72cc0adfe92f41784999b8700020724ce917e01dc243681a9fcac30c8f9dda7e",
+      "bytes": 646,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/build/build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/build/build-manifest.json",
+      "sha256": "fbdb61dfcbe6a3ddc55c2f9f1857f18a139f939c0004ea3b173d49238336460e",
+      "bytes": 4748,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/build/ds4-agent-pair-actual": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/build/ds4-agent-pair-actual",
+      "sha256": "f2312e21b8c355e544bd0ecd56bf9a67409ab41584b0d74e2e7e09a966c5bac4",
+      "bytes": 3086936,
+      "mode": 493
+    },
+    "prepared/provenance/caller-build/build/ds4-agent-pair-actual-compile.stderr": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/build/ds4-agent-pair-actual-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/build/ds4-agent-pair-actual-compile.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/build/ds4-agent-pair-actual-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/build/ds4-agent-pair-actual-link.stderr": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/build/ds4-agent-pair-actual-link.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/build/ds4-agent-pair-actual-link.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/build/ds4-agent-pair-actual-link.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/build/ds4-agent-pair-actual.o": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/build/ds4-agent-pair-actual.o",
+      "sha256": "3c9fdd75f62a6fd1a34541e4f03f4421be7ad1b084eed93ff5f5a22af1b94b5d",
+      "bytes": 1027576,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/build/root-build-grant.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/build/root-build-grant.json",
+      "sha256": "b6a06f87d3f5d5f2c758dea1161f1112e822884f7ea11d58347d3c3453d47ba0",
+      "bytes": 4384,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/compiler-sdk-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/compiler-sdk-proof.json",
+      "sha256": "0fe26c4757dcc4eee736bfb2cbc6efb1a20d69ec9f15a1bb88b8863c41d29b16",
+      "bytes": 1438,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/manifest.json",
+      "sha256": "08009bb5613a75e420747d1b6dfb64791c7bbd8805dfbd8553235ec16a52e493",
+      "bytes": 16008,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/native-build-plan.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/native-build-plan.json",
+      "sha256": "da9023be6665eb333e42c9719ef4c3df41f5361e497dfe9213e01e6520258f33",
+      "bytes": 23457,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/Makefile": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/Makefile",
+      "sha256": "3cd1680abef19c903c53fa95c4baa428b851455f38cd018f9ca4382194f7f88f",
+      "bytes": 55008,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4.c",
+      "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05",
+      "bytes": 3926808,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4.h",
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631",
+      "bytes": 37885,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_agent.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_agent.c",
+      "sha256": "3c0dc3d9141f33cea40878c3724f9893d23c229b492434ea9455bdcac7464806",
+      "bytes": 593557,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_deepseek41_gpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_deepseek41_gpu.h",
+      "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+      "bytes": 7317,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_distributed.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_distributed.h",
+      "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+      "bytes": 3782,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_engram.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_engram.h",
+      "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+      "bytes": 2496,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_eval_cases.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_eval_cases.h",
+      "sha256": "39bc494d1a95ec095a16a0ed8c52326e6cb67cb11c20613aeccfc2108fa545a2",
+      "bytes": 1101,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_gpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_gpu.h",
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+      "bytes": 152618,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_gpu_args.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_gpu_args.h",
+      "sha256": "bb9398a37f0e5f346641aee6d556c4703a41ed2c09442693e48dab591a50d993",
+      "bytes": 3030,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_gpu_mgpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_gpu_mgpu.h",
+      "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+      "bytes": 10742,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_gpu_tp.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_gpu_tp.h",
+      "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+      "bytes": 2678,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_help.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_help.h",
+      "sha256": "0b4af2be3ec7278a3f56489c945b88a56a744c0743c6f63fbbe70c0d9498ec0c",
+      "bytes": 268,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_image.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_image.h",
+      "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+      "bytes": 4504,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_kvstore.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_kvstore.h",
+      "sha256": "e6d0e2836385285718436d89292d1052099b7cc9a2c8a1c79d3d59e214d81c3b",
+      "bytes": 9067,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_layer_pack.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_layer_pack.h",
+      "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+      "bytes": 2838,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_linux_memory.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_linux_memory.h",
+      "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+      "bytes": 1168,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_metal.m": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_metal.m",
+      "sha256": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+      "bytes": 2360348,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_prompt_prefix.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_prompt_prefix.h",
+      "sha256": "3c5806bf5ed3e451adbf5487ac7105ca32a549c4e1e17d7c61883b52e570b7b1",
+      "bytes": 1568,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_qwen4_vision.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_qwen4_vision.h",
+      "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+      "bytes": 666,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_resident_route.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_resident_route.h",
+      "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+      "bytes": 14647,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_rocm.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_rocm.h",
+      "sha256": "f6a80e4c221004cdaaa08829c8930c9db2b9b21d009db829aca46c012365e3ed",
+      "bytes": 6143,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_rocm_memory.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_rocm_memory.h",
+      "sha256": "e3c4b2d4bf4b854f98940bc44ba73140c72f99e999ba141f8210e41841ea7dd0",
+      "bytes": 2350,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_ssd.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_ssd.h",
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+      "bytes": 1349,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_suffix_layout.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_suffix_layout.h",
+      "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b",
+      "bytes": 1251,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_suffix_pair_tape.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_suffix_pair_tape.h",
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0",
+      "bytes": 7139,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_tool_text.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_tool_text.h",
+      "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+      "bytes": 1755,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_tp.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_tp.h",
+      "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+      "bytes": 11344,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/ds4_web.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/ds4_web.h",
+      "sha256": "e43748a12480a31186961c8f2b67510441e139d3b9b82d35b6ba8017a65849a8",
+      "bytes": 927,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/linenoise.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/linenoise.h",
+      "sha256": "24425a1fd617dc9f05c8820ff936c1a82fd08ab540358fb02ae871678de60ef8",
+      "bytes": 7350,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/argsort.metal",
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+      "bytes": 11174,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/bin.metal",
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+      "bytes": 6580,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/concat.metal",
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+      "bytes": 1932,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/cpy.metal",
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+      "bytes": 10154,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/deepseek4_vision.metal",
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+      "bytes": 7815,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/dense.metal",
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+      "bytes": 113439,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/dsv41.metal",
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+      "bytes": 12508,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/dsv4_hc.metal",
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+      "bytes": 63069,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/dsv4_kv.metal",
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+      "bytes": 22218,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/dsv4_misc.metal",
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+      "bytes": 282139,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/dsv4_rope.metal",
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+      "bytes": 35980,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/flash_attn.metal",
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+      "bytes": 61784,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/get_rows.metal",
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+      "bytes": 6976,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/glm53_bf16.metal",
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+      "bytes": 5466,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/glm53_kda.metal",
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+      "bytes": 13116,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/glm53_vision.metal",
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+      "bytes": 11295,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/glu.metal",
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+      "bytes": 2129,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/moe.metal",
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+      "bytes": 423032,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/norm.metal",
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+      "bytes": 14766,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/qwen4.metal",
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+      "bytes": 232464,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/qwen4_vision.metal",
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+      "bytes": 7402,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/repeat.metal",
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+      "bytes": 1640,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/set_rows.metal",
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+      "bytes": 1909,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/softmax.metal",
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+      "bytes": 7679,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/sum_rows.metal",
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+      "bytes": 2737,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/metal/unary.metal",
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf",
+      "bytes": 10104,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/rax.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/rax.h",
+      "sha256": "e9281e1a444c0cd090b187d2271d200fcc02106062d9f827a7f2d590594cdce4",
+      "bytes": 14251,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/rax_malloc.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/rax_malloc.h",
+      "sha256": "5ab2fa4a8bbf94401cf15f7dde1b0050f0b5ea9f60ccb81f0dcb1e7b392e5d93",
+      "bytes": 2058,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/agent_suffix_pair_actual.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/agent_suffix_pair_actual.c",
+      "sha256": "b6ec1a2f58cd88f605ff3b0a52600b70139a049b69b35c67842b319b615af481",
+      "bytes": 593957,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/agent_suffix_pair_actual_hook.inc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/agent_suffix_pair_actual_hook.inc",
+      "sha256": "cf9406ab4b6ad77f6cb024216791a6609d7c8e3baa15e06c440859626250b35d",
+      "bytes": 10366,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/agent_suffix_pair_actual_literals.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/agent_suffix_pair_actual_literals.h",
+      "sha256": "db17f12d77827b3eea174cbb637f639896979fd363122d346fdaef514014d6b0",
+      "bytes": 11465,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/agent_suffix_pair_actual_ownership.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/agent_suffix_pair_actual_ownership.h",
+      "sha256": "cd6f259b1bed287ef2cce67597a6bf5082a3c83bd0a5c036e4335e1846969982",
+      "bytes": 2295,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/agent_suffix_pair_native_fixture.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/agent_suffix_pair_native_fixture.c",
+      "sha256": "2858c4e308f94fb8eb0d5e4e9e31329a1ed475c18158198d1c92d76f99c16f1c",
+      "bytes": 29552,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_task_v1.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_task_v1.json",
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283",
+      "bytes": 24521,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/first.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/first.txt",
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2",
+      "bytes": 1395,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/grader.py",
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0",
+      "bytes": 2461,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/private-caller.diff": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/private-caller.diff",
+      "sha256": "b7d086c788c68b7d0fdabdee97ebad46a9949a11ffae8b7d87d1bf1a915d5f38",
+      "bytes": 1256,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/run_grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/run_grader.py",
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+      "bytes": 1732,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/second.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/second.txt",
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153",
+      "bytes": 2681,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/task.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/task.json",
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283",
+      "bytes": 24521,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/third.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/third.txt",
+      "sha256": "6e279a665d5389ed95bb59580f1366e8d1dafc4df25b627557772191aac987d0",
+      "bytes": 1798,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/update_context.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/agent_suffix_pair_actual_v1/update_context.py",
+      "sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93",
+      "bytes": 3048,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/run_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/run_agent_suffix_pair_actual.py",
+      "sha256": "5bebda8ea489b30b5e17663e7ac106a6cb2e857e26cdb3aac1fc2307fed7d778",
+      "bytes": 28896,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/run_agent_suffix_pair_native.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/run_agent_suffix_pair_native.py",
+      "sha256": "f91286d98c4901cb6a6ef349cdc3942307b05116df88b2f10e95731ebe14d620",
+      "bytes": 21675,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/ideas/test_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/ideas/test_agent_suffix_pair_actual.py",
+      "sha256": "4c59033bcb9bfd71e6be5125563e0773d2e4b14a1bb9c29a7a9be5abbe7274f8",
+      "bytes": 22647,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/speed-bench/promessi_sposi.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/speed-bench/promessi_sposi.txt",
+      "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f",
+      "bytes": 1329139,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/tests/test_agent_suffix_pair_actual_authority.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/tests/test_agent_suffix_pair_actual_authority.py",
+      "sha256": "935914a1843b4365a79d4e5cf1891ef6954aabfbe1f9d3d380bafe36b644cf34",
+      "bytes": 4388,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/tests/test_agent_suffix_pair_actual_ownership.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/tests/test_agent_suffix_pair_actual_ownership.c",
+      "sha256": "4fc76d6265d8fb50fc1fd3a7958c9c26e3bbb61323e5c96b451cc0e94f558b92",
+      "bytes": 5730,
+      "mode": 420
+    },
+    "prepared/provenance/caller-build/source/tests/test_agent_suffix_pair_native_driver.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/caller-build/source/tests/test_agent_suffix_pair_native_driver.py",
+      "sha256": "10ce917eebc1f649d300cf5373d259ccebe707a23fc037f398254abb4a0926f5",
+      "bytes": 10458,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/README.md": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/README.md",
+      "sha256": "7f75ac00f3ce9c266b8bb6ac1e49ce0026d49d0585bbf362a7778a8ccde979e8",
+      "bytes": 1941,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-3d7lxa_7/root-launch-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-3d7lxa_7/root-launch-proof.json",
+      "sha256": "a39bc202542a79d44dc19a55ab145c22ced6848252ab80daee378436c2156cb6",
+      "bytes": 959,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-47v0e0_h/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-47v0e0_h/manifest.json",
+      "sha256": "5255f41b733f3017f0315c63f120e7623ddd28df2e639544580e540fa0b73994",
+      "bytes": 13,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/agent": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/agent",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 493
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/caller-build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/caller-build-manifest.json",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/first.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/first.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/grader.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/manifest.json",
+      "sha256": "fe8a72fcbb4d6aab14611843c1203a49a84a1c646e4afb1f2c68c67ed8f9e3c0",
+      "bytes": 8883,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/argsort.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/bin.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/concat.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/cpy.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/deepseek4_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dense.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv41.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv4_hc.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv4_kv.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv4_misc.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/dsv4_rope.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/flash_attn.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/get_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/glm53_bf16.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/glm53_kda.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/glm53_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/glu.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/moe.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/norm.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/qwen4.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/qwen4_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/repeat.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/set_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/softmax.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/sum_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/metal/unary.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/prepared-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/prepared-command.json",
+      "sha256": "05f578dc0990d89a9b16fbb93e967b3790ddd77f2376c32f1990cb2640048c79",
+      "bytes": 924,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/run_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/run_agent_suffix_pair_actual.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/run_grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/run_grader.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/second.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/second.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/task.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/task.json",
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283",
+      "bytes": 24521,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/third.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/third.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-epnhxdnn/update_context.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-epnhxdnn/update_context.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/agent": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/agent",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 493
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/caller-build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/caller-build-manifest.json",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/first.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/first.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/grader.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/manifest.json",
+      "sha256": "71e41d7f44c7f8d0f9e51ef401bc8e3e1e3685345c49b18495861850fde7ac5e",
+      "bytes": 8997,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/argsort.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/bin.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/concat.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/cpy.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/deepseek4_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dense.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv41.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv4_hc.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv4_kv.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv4_misc.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/dsv4_rope.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/flash_attn.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/get_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/glm53_bf16.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/glm53_kda.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/glm53_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/glu.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/moe.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/norm.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/qwen4.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/qwen4_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/repeat.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/set_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/softmax.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/sum_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/metal/unary.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/prepared-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/prepared-command.json",
+      "sha256": "bca808afa7d9fe27929975808ab16bb0591103c326bffb89520a4be289ffc2b0",
+      "bytes": 27,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/run_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/run_agent_suffix_pair_actual.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/run_grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/run_grader.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/second.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/second.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/task.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/task.json",
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283",
+      "bytes": 24521,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/third.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/third.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-ff6j258s/update_context.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-ff6j258s/update_context.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-masq7bhj/root-launch-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-masq7bhj/root-launch-proof.json",
+      "sha256": "0ff7c43c422ceac7ad0169935a5c0a2c53b43bef73089e604f00de13f4bd585a",
+      "bytes": 1034,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/agent": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/agent",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 493
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/caller-build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/caller-build-manifest.json",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/first.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/first.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/grader.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/manifest.json",
+      "sha256": "fe101c86796c13fbfe4aca30a18b268bd738baff4d87d5aa817ac1b8379c8dc7",
+      "bytes": 8997,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/argsort.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/bin.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/concat.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/cpy.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/deepseek4_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dense.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv41.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv4_hc.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv4_kv.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv4_misc.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/dsv4_rope.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/flash_attn.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/get_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/glm53_bf16.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/glm53_kda.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/glm53_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/glu.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/moe.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/norm.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/qwen4.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/qwen4_vision.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/repeat.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/set_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/softmax.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/sum_rows.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/metal/unary.metal",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/prepared-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/prepared-command.json",
+      "sha256": "e4013b24c794aadf5796034c4b60d915db7b29700d09dd70167e1f4c1b72fcc2",
+      "bytes": 924,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/run_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/run_agent_suffix_pair_actual.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/run_grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/run_grader.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/second.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/second.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/task.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/task.json",
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283",
+      "bytes": 24521,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/third.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/third.txt",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-cases/actual-authority-wiry34mw/update_context.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-cases/actual-authority-wiry34mw/update_context.py",
+      "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb",
+      "bytes": 33,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-fixture-originals.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-fixture-originals.json",
+      "sha256": "7ebd83c26b5546ec760d5b112bed04b9898b381f96e25f8a22f69c193449da15",
+      "bytes": 27833,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-test-result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-test-result.json",
+      "sha256": "2ea18cdca82f6eb81c1ba3da4b8e82a80ffd0e49a11a1207034a69d47a01338a",
+      "bytes": 400,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/authority-test.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/authority-test.log",
+      "sha256": "26b659b583a05875fb387f574534b15809ec71a67996be7102a1eeba2b042501",
+      "bytes": 1191,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/cpu-result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/cpu-result.json",
+      "sha256": "3103ac5db6ca0952531b346a26b8c1c4b372e4a2fa49c788922336bc1fa0ff17",
+      "bytes": 3244,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/manifest.json",
+      "sha256": "afc3aab80ac72ba1136f308495913d39b088255f2e6f727c862036c627e0ea08",
+      "bytes": 28273,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-asan-compile-result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-asan-compile-result.json",
+      "sha256": "41eb463c2ca17c9c70b827abb50a824185129499ed8be511e70d87f2ec212c84",
+      "bytes": 729,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-asan-compile.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-asan-compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-asan-test-result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-asan-test-result.json",
+      "sha256": "27362ab387d69db342e4a7b303245e19a7d514e27544088199300f3d0a1c06ae",
+      "bytes": 279,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-asan-test.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-asan-test.log",
+      "sha256": "139bf7e01b2b7af3e7c8701cb21872b0863385f93592e06773dc8b0b999e8621",
+      "bytes": 133,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-compile-result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-compile-result.json",
+      "sha256": "e179c24e75ab4fd53349d67a9765e5328b366a2f942544d4460b8dfe7d86d85d",
+      "bytes": 654,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-compile.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-mock": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-mock",
+      "sha256": "ab707900de03d9400d189a1039eb969042e369d4ee7c704c517a98f31bed6fa6",
+      "bytes": 38704,
+      "mode": 493
+    },
+    "prepared/provenance/cpu/ownership-mock-asan": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-mock-asan",
+      "sha256": "6bc518e3cab592823ce61b694f6b65b2ea931a5bf654f120a5db92333239c4b4",
+      "bytes": 75904,
+      "mode": 493
+    },
+    "prepared/provenance/cpu/ownership-mock-asan.dSYM/Contents/Info.plist": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-mock-asan.dSYM/Contents/Info.plist",
+      "sha256": "74b0f6c58aa1d9b6f539b558881c5fe3fd6dd7c5010c5078e5b31e3b93259ffe",
+      "bytes": 648,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-mock-asan.dSYM/Contents/Resources/DWARF/ownership-mock-asan": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-mock-asan.dSYM/Contents/Resources/DWARF/ownership-mock-asan",
+      "sha256": "58f02173206fefdce2e38fb99ec11c806ae989f1b7e877b380fc9ded1e753d02",
+      "bytes": 31208,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-mock-asan.dSYM/Contents/Resources/Relocations/aarch64/ownership-mock-asan.yml": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-mock-asan.dSYM/Contents/Resources/Relocations/aarch64/ownership-mock-asan.yml",
+      "sha256": "72aa23bbfa04f4d8e064b472da5ca5bfc337a00c53be6b572b919177e595f1d3",
+      "bytes": 220,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-mock.dSYM/Contents/Info.plist": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-mock.dSYM/Contents/Info.plist",
+      "sha256": "4bbae6d682e7eb5e5a5490e3f1a8ef82850abe3e3dee8e9f276f395a257698d3",
+      "bytes": 643,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-mock.dSYM/Contents/Resources/DWARF/ownership-mock": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-mock.dSYM/Contents/Resources/DWARF/ownership-mock",
+      "sha256": "bf2a95713df21fb69a986328997c8d1d091d317605b52b6145ca605c77cbc6cb",
+      "bytes": 22964,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-mock.dSYM/Contents/Resources/Relocations/aarch64/ownership-mock.yml": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-mock.dSYM/Contents/Resources/Relocations/aarch64/ownership-mock.yml",
+      "sha256": "0e4e9f303f8af5cb13dc457eb5215e10a8ed6ff2d9c4a495e6264d3452bc2fda",
+      "bytes": 215,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-test-result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-test-result.json",
+      "sha256": "073700f30433957ae9a3260bc65a9552a4dd40be350c65645b1209ce9d4158d9",
+      "bytes": 272,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/ownership-test.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/ownership-test.log",
+      "sha256": "139bf7e01b2b7af3e7c8701cb21872b0863385f93592e06773dc8b0b999e8621",
+      "bytes": 133,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/ds4.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/ds4.h",
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631",
+      "bytes": 37885,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/agent_suffix_pair_actual.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/agent_suffix_pair_actual.c",
+      "sha256": "b6ec1a2f58cd88f605ff3b0a52600b70139a049b69b35c67842b319b615af481",
+      "bytes": 593957,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/agent_suffix_pair_actual_hook.inc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/agent_suffix_pair_actual_hook.inc",
+      "sha256": "cf9406ab4b6ad77f6cb024216791a6609d7c8e3baa15e06c440859626250b35d",
+      "bytes": 10366,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/agent_suffix_pair_actual_literals.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/agent_suffix_pair_actual_literals.h",
+      "sha256": "db17f12d77827b3eea174cbb637f639896979fd363122d346fdaef514014d6b0",
+      "bytes": 11465,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/agent_suffix_pair_actual_ownership.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/agent_suffix_pair_actual_ownership.h",
+      "sha256": "cd6f259b1bed287ef2cce67597a6bf5082a3c83bd0a5c036e4335e1846969982",
+      "bytes": 2295,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/README.md": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/README.md",
+      "sha256": "11ba5a42a5406a8f44961020c94989693be03ae9340d499604c94576f6e2b79a",
+      "bytes": 3660,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/first.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/first.txt",
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2",
+      "bytes": 1395,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/grader.py",
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0",
+      "bytes": 2461,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/native-build-plan.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/native-build-plan.json",
+      "sha256": "da9023be6665eb333e42c9719ef4c3df41f5361e497dfe9213e01e6520258f33",
+      "bytes": 23457,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/private-caller.diff": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/private-caller.diff",
+      "sha256": "b7d086c788c68b7d0fdabdee97ebad46a9949a11ffae8b7d87d1bf1a915d5f38",
+      "bytes": 1256,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/review-findings-v2.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/review-findings-v2.json",
+      "sha256": "bedea1666536fbd8648afae36ec54edb127f1f947ab37129776b6e44c6ae0c79",
+      "bytes": 1467,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/run_grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/run_grader.py",
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+      "bytes": 1732,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/second.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/second.txt",
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153",
+      "bytes": 2681,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/task.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/task.json",
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283",
+      "bytes": 24521,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/third.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/third.txt",
+      "sha256": "6e279a665d5389ed95bb59580f1366e8d1dafc4df25b627557772191aac987d0",
+      "bytes": 1798,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/update_context.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/agent_suffix_pair_actual_v1/update_context.py",
+      "sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93",
+      "bytes": 3048,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/run_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/run_agent_suffix_pair_actual.py",
+      "sha256": "5bebda8ea489b30b5e17663e7ac106a6cb2e857e26cdb3aac1fc2307fed7d778",
+      "bytes": 28896,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/speed-bench/ideas/test_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/speed-bench/ideas/test_agent_suffix_pair_actual.py",
+      "sha256": "4c59033bcb9bfd71e6be5125563e0773d2e4b14a1bb9c29a7a9be5abbe7274f8",
+      "bytes": 22647,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/tests/test_agent_suffix_pair_actual_authority.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/tests/test_agent_suffix_pair_actual_authority.py",
+      "sha256": "935914a1843b4365a79d4e5cf1891ef6954aabfbe1f9d3d380bafe36b644cf34",
+      "bytes": 4388,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source/tests/test_agent_suffix_pair_actual_ownership.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source/tests/test_agent_suffix_pair_actual_ownership.c",
+      "sha256": "4fc76d6265d8fb50fc1fd3a7958c9c26e3bbb61323e5c96b451cc0e94f558b92",
+      "bytes": 5730,
+      "mode": 420
+    },
+    "prepared/provenance/cpu/source-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/cpu/source-proof.json",
+      "sha256": "0360d45964e8e7bacbe4151fd46dcbc18f039d92d0fa480ecda82acc038588fd",
+      "bytes": 12847,
+      "mode": 420
+    },
+    "prepared/provenance/native-build-plan.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/native-build-plan.json",
+      "sha256": "da9023be6665eb333e42c9719ef4c3df41f5361e497dfe9213e01e6520258f33",
+      "bytes": 23457,
+      "mode": 420
+    },
+    "prepared/provenance/prepare_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/provenance/prepare_agent_suffix_pair_actual.py",
+      "sha256": "f5664bcc496274e06d93f718864e9ddd6c3b6a1561ad0ddb0a212f85b48bfc6c",
+      "bytes": 8789,
+      "mode": 420
+    },
+    "prepared/root-diagnosis.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/root-diagnosis.json",
+      "sha256": "8f47c5becba552118a097189d42fbb65e859740e914a0d9572833e73e28827da",
+      "bytes": 953,
+      "mode": 420
+    },
+    "prepared/root-launch-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/root-launch-proof.json",
+      "sha256": "65465e02e38ab170150baa1bec1c5b588d79243695863a0ebe784cc875ca7bea",
+      "bytes": 1672,
+      "mode": 420
+    },
+    "prepared/root-preflight-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/root-preflight-proof.json",
+      "sha256": "4be896400be88b3b29cadd1e3487f7aa7d30a63d7da060398b0bbd113c1b349d",
+      "bytes": 570,
+      "mode": 420
+    },
+    "prepared/root-release-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/root-release-proof.json",
+      "sha256": "62a30ce4385b49916bbe533d402fb797dce5f1557c07e79d9385e228888db546",
+      "bytes": 304,
+      "mode": 420
+    },
+    "prepared/run/command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/command.json",
+      "sha256": "f5b29e172b702f01dbb6bd90d83a5a3bce46a9a74fde4f177145c5d0b474702f",
+      "bytes": 7461,
+      "mode": 420
+    },
+    "prepared/run/controller-outcome.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/controller-outcome.json",
+      "sha256": "ac19c2ec1d2418440dc249c6db151bd4d7c8aaf8d04b7b5319415c9aefd06bcd",
+      "bytes": 703,
+      "mode": 420
+    },
+    "prepared/run/immutable-inputs.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/immutable-inputs.json",
+      "sha256": "7376105de9f4579c6c6624f73eaf53d868415b69a2969a0b7bec3555dbea570c",
+      "bytes": 181,
+      "mode": 420
+    },
+    "prepared/run/live-context.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/live-context.txt",
+      "sha256": "2f2ea6c77601e825e10ed61183820ef2c883a8b3563765376b0bad555f95726b",
+      "bytes": 12718,
+      "mode": 420
+    },
+    "prepared/run/private/rounds.jsonl": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/private/rounds.jsonl",
+      "sha256": "85c2376c24845e69e930193a8de344212f5619889ce13b3f4042cf45d9b22c3f",
+      "bytes": 490,
+      "mode": 420
+    },
+    "prepared/run/project/run_grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/project/run_grader.py",
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+      "bytes": 1732,
+      "mode": 493
+    },
+    "prepared/run/project/update_context.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/project/update_context.py",
+      "sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93",
+      "bytes": 3048,
+      "mode": 493
+    },
+    "prepared/run/stdout.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/stdout.log",
+      "sha256": "d90e0c986530a0aa11ca1840d9bcb73cbf3ad2312976ce25673760777ab35ffc",
+      "bytes": 1284,
+      "mode": 420
+    },
+    "prepared/run/trace.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/trace.log",
+      "sha256": "0dd35bcc9eb74a3209af021f238a99e5a5b14e6f9497401113154a178f290c5b",
+      "bytes": 254499,
+      "mode": 420
+    },
+    "prepared/run/traceback.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/traceback.txt",
+      "sha256": "f8b4d5140d80e42ecc6798564e22ff1501db30c9b4b3528aa1f4b881aff296a7",
+      "bytes": 362,
+      "mode": 420
+    },
+    "prepared/run/turn-1-check.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/turn-1-check.json",
+      "sha256": "425e8b71cafbb57823eae0fe0abb2b8fed02e5d289901f16b03fe2dd7ad4499d",
+      "bytes": 59,
+      "mode": 420
+    },
+    "prepared/run/turn-2-check.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/turn-2-check.json",
+      "sha256": "04d7d64a2a50d2a9c5548c5e51c53dc1b03b6193de6fc10cb5e225ae990fed5c",
+      "bytes": 55,
+      "mode": 420
+    },
+    "prepared/run_agent_suffix_pair_actual.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run_agent_suffix_pair_actual.py",
+      "sha256": "5bebda8ea489b30b5e17663e7ac106a6cb2e857e26cdb3aac1fc2307fed7d778",
+      "bytes": 28896,
+      "mode": 420
+    },
+    "prepared/run_grader.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run_grader.py",
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+      "bytes": 1732,
+      "mode": 420
+    },
+    "prepared/second.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/second.txt",
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153",
+      "bytes": 2681,
+      "mode": 420
+    },
+    "prepared/task.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/task.json",
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283",
+      "bytes": 24521,
+      "mode": 420
+    },
+    "prepared/third.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/third.txt",
+      "sha256": "6e279a665d5389ed95bb59580f1366e8d1dafc4df25b627557772191aac987d0",
+      "bytes": 1798,
+      "mode": 420
+    },
+    "prepared/update_context.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/update_context.py",
+      "sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93",
+      "bytes": 3048,
+      "mode": 420
+    },
+    "ROOT/root-launch.log": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/agent-suffix-pair-actual-root-launch-20261003-v1.log",
+      "sha256": "91cc97f95f88b5aaf257a5123975d4dab2f685ec34aba8e64426b0c99d68e529",
+      "bytes": 46,
+      "mode": 420
+    },
+    "ROOT/archive-copy-first-refusal.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/experiments/ds41-ssd/agent-suffix-pair-actual-evidence/first-attempt-v1-failed-protocol/ROOT/archive-copy-first-refusal.json",
+      "sha256": "f71fec7b553ac6d2ae7f069e3a51edec9a1bcd3dfe6c5156857f1ccad59a962d",
+      "bytes": 335,
+      "mode": 420
+    }
+  },
+  "external_files": {
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/cache/sysprompt.kv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run/cache/sysprompt.kv",
+      "sha256": "e8554f0a5fa0b0028d0ac8305b46c61d565fc6ce2eb41931cff90d3af99adca8",
+      "bytes": 23857795,
+      "mode": 384,
+      "role": "incidental_fresh_native_system_prompt_cache"
+    }
+  },
+  "excluded_only_self": "archive-index.json",
+  "controls_completed": [
+    1,
+    2
+  ],
+  "controls_passed": true,
+  "third_submitted": true,
+  "structural_edit_selected": false,
+  "suffix_transaction_executed": false,
+  "third_evaluated": false,
+  "grader_executed": false,
+  "model_pressure_normal": true,
+  "no_swap_growth": true,
+  "primary_persistence": "NOT_EXERCISED",
+  "incidental_native_system_prompt_cache_retained": true,
+  "scope": "Exact-byte guard refusal before third evaluation; no suffix semantic, speed, quality or forgetting result. Incidental fresh native system cache retained; named persistence/reload not tested. Corrective source requires new preparation and separate ROOT grant."
+}

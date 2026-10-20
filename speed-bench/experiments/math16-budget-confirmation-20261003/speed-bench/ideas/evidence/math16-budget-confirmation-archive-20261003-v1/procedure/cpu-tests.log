@@ -1,0 +1,19 @@
+test_alias_model_special_file_and_destination_refusal (__main__.ArchiveTests.test_alias_model_special_file_and_destination_refusal) ... ok
+test_all_files_nested_manifests_modes_and_large_boundary (__main__.ArchiveTests.test_all_files_nested_manifests_modes_and_large_boundary) ... ok
+test_audit_summary_mutations_block_before_attempts (__main__.ArchiveTests.test_audit_summary_mutations_block_before_attempts) ... ok
+test_both_discordances_and_rc3_cannot_be_rewritten (__main__.ArchiveTests.test_both_discordances_and_rc3_cannot_be_rewritten) ... ok
+test_complete_preserves_rc3_caps_and_all48 (__main__.ArchiveTests.test_complete_preserves_rc3_caps_and_all48) ... ok
+test_copy_failure_retained_no_overwrite (__main__.ArchiveTests.test_copy_failure_retained_no_overwrite) ... ok
+test_duplicate_json_and_truncated_result (__main__.ArchiveTests.test_duplicate_json_and_truncated_result) ... ok
+test_duplicate_missing_or_reordered_case (__main__.ArchiveTests.test_duplicate_missing_or_reordered_case) ... ok
+test_exact_child_command (__main__.ArchiveTests.test_exact_child_command) ... ok
+test_main100_drift_before_and_after_copy (__main__.ArchiveTests.test_main100_drift_before_and_after_copy) ... ok
+test_no_grant_or_bad_release_never_opens_attempt_inventory (__main__.ArchiveTests.test_no_grant_or_bad_release_never_opens_attempt_inventory) ... ok
+test_release_and_pressure_mutations (__main__.ArchiveTests.test_release_and_pressure_mutations) ... ok
+test_static_mode_pin_and_source_tree_overlap (__main__.ArchiveTests.test_static_mode_pin_and_source_tree_overlap) ... ok
+test_trace_drift_missing_escape_or_role_reuse (__main__.ArchiveTests.test_trace_drift_missing_escape_or_role_reuse) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.752s
+
+OK

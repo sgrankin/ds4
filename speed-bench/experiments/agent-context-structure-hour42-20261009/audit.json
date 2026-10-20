@@ -1,0 +1,55 @@
+{
+  "runtime_revision": "d29522004f4b7d7405e25416890fc0711a8a8212",
+  "base_revision": "7f6e9feaebcfb08388de6a553bc55396fd2f75d6",
+  "initial_source_sha256": "da9daf37bf4dd09b050a16214472cf673928a2e64f235fa3de248b7f218b5c92",
+  "initial_binary_sha256": "9455e485eb62c671c1294a8e7d6722c9986dc71ad84c15044729abcc179db70d",
+  "source_sha256": "7f532be440a30698551c8f10e4b5f86c73ecd1d71ca1f1169e0c69021d6dc18e",
+  "binary_sha256": "e8742bd755b625dc436214c0b8aaf24920d29904f61cb88525641579230dfc64",
+  "mock_source_sha256": "2510fa11b465093b643fcb99dc544b465ce972baf08bfe9f7f8bb2d928703826",
+  "archive_bytes_match_original_complete_block": true,
+  "archive_old_log_lines": 48,
+  "mirror_headers_before": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "mirror_headers_after": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "manual_tool_output_audit": {
+    "complete_mirror_dump": false,
+    "old_turn_retyped": false,
+    "context_edits": 1,
+    "cleanup_searches": 2,
+    "archive_lookup_calls": 1
+  },
+  "receipt": "Live context edit accepted: 3618 -> 3187 tokens; suffix reuse=none.",
+  "pressure": {
+    "samples": 129,
+    "all_normal": true,
+    "swap_growth_gib": 0.000244140625,
+    "peak_wired_plus_compressor_gib": 89.22198486328125
+  },
+  "checks": {
+    "main_build_exit": 0,
+    "agent_test_exit": 0,
+    "fixed_main_build_exit": 0,
+    "fixed_agent_test_exit": 0,
+    "source_diff_check_exit": 0
+  },
+  "initial_failed_screen": "live/result.json retained: importer rejected own exported session-date prefix before cleanup",
+  "model_scenario_changed_for_rerun": false,
+  "prefill_chunk_override": 2048,
+  "prefill_preset_default_changed": false
+}

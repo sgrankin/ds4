@@ -1,0 +1,33 @@
+{
+  "status": "FIXED160_FIRST_PRETHIRD_STRUCTURAL_CHOICE_BOUND",
+  "source_controller_sha256": "35cdd6bcfae031c12b16a235a624b9e69271cb6c42f42cb6f00c4a63febb10c7",
+  "actual_prepared_manifest_sha256": "d13eaf4e51b10d9dc0849b26e7648ea790173a96f90e6d234256df63742e4d63",
+  "chosen_edit_sha256": "480057204ff830e9a5428f1af75f398377f1055354fc80a85adc720ae1b2e32a",
+  "candidate": 0,
+  "geometry": {
+    "status": "SELECTED_BEFORE_THIRD_EVAL",
+    "candidate": 0,
+    "displacement": 11,
+    "source_start": 2106,
+    "source_end": 2987,
+    "destination_start": 2095,
+    "destination_end": 2976,
+    "reused": 881,
+    "fresh": 387,
+    "latest_user_start": 2977,
+    "user_id": 128803,
+    "old_tokens": 3374,
+    "edited_tokens": 3363,
+    "budget": 167772160,
+    "preallocation_peak_with_reserves": 137150794,
+    "current_payload_forecast": 30140128,
+    "actual_commit_rechecks_admission": true,
+    "old_text_bytes": 14542,
+    "edited_text_bytes": 14498
+  },
+  "latest_user_whole_region_fresh": true,
+  "source_suffix_full_tokens_equal": true,
+  "native_build_or_GGUF_or_model_or_guard_access": false,
+  "generated_grader_outcomes_read": false,
+  "no_index_override": true
+}

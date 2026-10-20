@@ -1,0 +1,14 @@
+{
+  "native_reference_exact": true,
+  "default_off_native_reference_exact": true,
+  "bf0_previous_fullraw_exact": true,
+  "native_demand_io_equal": true,
+  "pool_repeat_raw_equal": false,
+  "pool_repeat_demand_io_equal": false,
+  "pool_repeat_counters_equal": false,
+  "pool_repeat_late_equal": false,
+  "reference_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+  "earlier_async_raw_equality_required": false,
+  "approximate_repeat_equality_required": false,
+  "scope": "Whole-engine prefill+decode explicit logical I/O and fullraw quality; instrumented, no latency/physical-SSD claim; native-before +default-off controls; deterministic BF0 fullraw audit; pool payload admission-age80/default vs1600, queueTTL80 fixed; background teardown bytes included once"
+}

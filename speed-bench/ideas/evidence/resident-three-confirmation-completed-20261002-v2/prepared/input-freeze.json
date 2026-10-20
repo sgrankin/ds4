@@ -1,0 +1,95 @@
+{
+  "scope": "Untouched confirmation16 inputs; candidate selection will use other calibration outcomes and be frozen before running these cases.",
+  "selection": "case index 2 mod6, first16 of96; distinct from screen0mod6, firstholdout3mod6, broader calibration1mod6",
+  "manifest_sha256": "026134fbeb20786e1736db71ffc85de46515823112dabbaf9859b98a57c296b9",
+  "cases": [
+    {
+      "case": "case_002",
+      "prompt_sha256": "d8e1e8643286f089a9d077d13b956b508cc9b0f8ddbfbaa822b9ee5bfcfbf42d",
+      "continuation_sha256": "a433abcf92003278cb15f05590eda5f52a54653e4222b335a870d30ef264845e"
+    },
+    {
+      "case": "case_008",
+      "prompt_sha256": "b2a0fb5191b3eaa8ddc5dc0179d1855f2e70026939244b64a9ff53e8e20b7e57",
+      "continuation_sha256": "fa8e18d33656767f826b8ef3d748a7746e3c434e5690d259435e32c6149a6a63"
+    },
+    {
+      "case": "case_014",
+      "prompt_sha256": "cc9c5221fd202db38651897123fe8a016b751171ad55ef2c3c069055369f9e10",
+      "continuation_sha256": "70a5d6f7ff04be14f84385cda6aa0391e645795fd2a37be1a20279dab5cda727"
+    },
+    {
+      "case": "case_020",
+      "prompt_sha256": "16d00e1834936ced31054c0c7b45afbe70d95fe84a50c0b53097ae74cf6503e8",
+      "continuation_sha256": "adb79f1316ddbb6e6fedec3b2c14beffb4137ef67e4f59b3fbec0a2594eede7a"
+    },
+    {
+      "case": "case_026",
+      "prompt_sha256": "9552b1e51d0858bfc4f85dc826845fe7676787fadd3bd87a0639cab7b64d789d",
+      "continuation_sha256": "8edf56cfb1c2490cf7f30d6c8a293ed0c15c461df1fe61e04a8af3e6b7199878"
+    },
+    {
+      "case": "case_032",
+      "prompt_sha256": "8e2d282cca4757754f6ca4377e10560752c17061f778cf42bb019e6aefa03755",
+      "continuation_sha256": "5754f2017a97cbb191251084c2903ddeff2650a5a1aa758a8e3bdc21731c22f5"
+    },
+    {
+      "case": "case_038",
+      "prompt_sha256": "3bc771633e8b72decbff33c2c22f6f832cfa19a9429d21ba086a0efb1ba53980",
+      "continuation_sha256": "a1a04a70beea32f0d761a842a75d560049701ee9e462bcc4533df38e6141a0f7"
+    },
+    {
+      "case": "case_044",
+      "prompt_sha256": "069980ebef0283567728c418687e91cf86580cb0892783d09bf1d41226827efc",
+      "continuation_sha256": "fc260f52161e80a6ea7ad5fcc85993f596aeb900f1bf667148d0e8662dfe5c4b"
+    },
+    {
+      "case": "case_050",
+      "prompt_sha256": "1d98ea7c819f2a1ce198fc4ff3ec9de24962441bc1964753e821348b54f6f7de",
+      "continuation_sha256": "f87ad7bad38526ee8dda21c2f9021145ac8add8660078c302965411b1d044ba4"
+    },
+    {
+      "case": "case_056",
+      "prompt_sha256": "ba4dde22d1a48306c3b521ceca74365dbdef3503c97fe96abe3efc4de5932043",
+      "continuation_sha256": "5433d0e4f8601e543b29a6ee0235a8b88ec1dc4117e97db89e4de166ee0d4b75"
+    },
+    {
+      "case": "case_062",
+      "prompt_sha256": "c8171bff3b73571c59afa0a421de252a000322410d2979ffe5799ef2037fdd0a",
+      "continuation_sha256": "b2a6da8a3620ba2c1d62b78c1be6c22aacd70913487b7e43e43878fd50d5e9aa"
+    },
+    {
+      "case": "case_068",
+      "prompt_sha256": "16693a5f52a371bcc30281dfc2da58a7f5b0d405223e2f3b0b2297565512a5d8",
+      "continuation_sha256": "5f3a3adc488dd0cfed33e0c9f898eaa6e688bdd9499d8cdb6d820557c6a9be63"
+    },
+    {
+      "case": "case_074",
+      "prompt_sha256": "7e9f0b27ebc7bdadc0a9b1eb6562d063ba99d99b7aaf610ebe0c736984386728",
+      "continuation_sha256": "9663bd270f197779864032912db99c244b6e33ad95a3a899ad7f8108436d0317"
+    },
+    {
+      "case": "case_080",
+      "prompt_sha256": "56aee7c107e6c8ff1358759e0981c38a37c7fa63a8f2d0c3159302acfc3c20b2",
+      "continuation_sha256": "0094e8b87646075f27d9cd0b14864892a18c645d6ea625adf618b912d3634165"
+    },
+    {
+      "case": "case_086",
+      "prompt_sha256": "2eaa5a9b09939897bf22bc9ebd9059642eb3afe1acc1cc137c7a47211acf7393",
+      "continuation_sha256": "6f1ea2b7249a8853bc8f1b2360e8022643349789433aa67099e87778bbc2fd24"
+    },
+    {
+      "case": "case_092",
+      "prompt_sha256": "df704f5ad622440c36f79b410bd695d50d54c1e2b4997cc4a57966aa185f73f6",
+      "continuation_sha256": "5f25121e650375b8da80d7a483186518c87bd8e59deb38e57db72febba277ca2"
+    }
+  ],
+  "settings": {
+    "cases": 16,
+    "target_tokens": 32,
+    "ctx": 4096,
+    "cache_gb": 64,
+    "chunk": 512
+  },
+  "model_opened": false
+}

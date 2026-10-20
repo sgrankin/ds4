@@ -1,0 +1,18 @@
+{
+  "manifest_sha256": "9781896e85d6ae9eee030f034a9fab0a0e0f3e2290c2c3930be20a5a36e32ca2",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run_suffix_pair_tape_followup.py",
+    "--case",
+    "inverse-parity-pending",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1",
+    "--manifest-sha256",
+    "9781896e85d6ae9eee030f034a9fab0a0e0f3e2290c2c3930be20a5a36e32ca2"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

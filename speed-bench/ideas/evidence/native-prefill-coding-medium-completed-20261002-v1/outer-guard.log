@@ -1,0 +1,32 @@
+{
+  "status": "PREFLIGHT_PASS_UNEXECUTED",
+  "utc": "2026-10-02T22:00:15.809997+00:00",
+  "frozen_assets_checked": 120,
+  "prepared_command_sha256": "cc4c66987480740eaf6b242feb905f1a65e383cfe2197351d075cf3290c4667e",
+  "plan_sha256": "c9ddf59fcafd7b8d38568efb3288ed1c527c0644f62b11b4978132621aca2d5e",
+  "binary_sha256": "7a00cc766c17a1e1076e92bf0e1a73ade9d650756d40e07eba16b58a737204f3",
+  "driver_sha256": "aed2c7413af8bd33533ae08a3369fafc2bbe7279a46bf4242babcfdc8593ffd1",
+  "guard_sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+  "removed_inherited_ds4_keys": [],
+  "clean_ds4_environment_at_guard_entry": true,
+  "guard_lock_contract": "The pinned MAIN guard acquires its shared model-job flock before child spawn; frozen driver additionally verifies direct MAIN guard parent and held lock before real model stat/open.",
+  "model_scope": "No model path resolve/stat/hash, tokenizer or engine open occurred in this preflight.",
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1-pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1-build/run_native_prefill_coding.py",
+    "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1-build/plan.json",
+    "c9ddf59fcafd7b8d38568efb3288ed1c527c0644f62b11b4978132621aca2d5e",
+    "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1"
+  ]
+}
+{"event": "arm_start", "arm": "native64", "cache_gib": 64}
+{"arm": "native64", "cache_gib": 64, "correct": 4, "total": 4, "score_rc": 0, "generated_tokens": 574, "cap_hits": 0}
+{"event": "arm_start", "arm": "selected64", "cache_gib": 64}
+{"arm": "selected64", "cache_gib": 64, "correct": 4, "total": 4, "score_rc": 0, "generated_tokens": 569, "cap_hits": 0}
+{"event": "arm_start", "arm": "native80", "cache_gib": 80}
+{"arm": "native80", "cache_gib": 80, "correct": 4, "total": 4, "score_rc": 0, "generated_tokens": 569, "cap_hits": 0}
+{"status": "complete", "child_returncode": 0}

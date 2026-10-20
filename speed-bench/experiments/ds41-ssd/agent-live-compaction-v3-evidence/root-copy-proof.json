@@ -1,0 +1,12 @@
+{
+  "source_revision": "2ce7a259283b71bc0d6ed962db0b186f43995800",
+  "index_sha256": "945656ea646bbc4c1b2b4d94268195efaa389947639ebd2212c4a83ceb545db1",
+  "listed_files": 165,
+  "listed_bytes": 3728387,
+  "all_source_and_copied_files_match": true,
+  "original_artifacts_mutated": false,
+  "original_harness_status": "FAILED",
+  "original_guard_rc": 3,
+  "separate_task_gold_pass": true,
+  "document_sha256": "b396db3ce1147a33ef102420db8f6aeebb13b5dd35c7cc0164746136043d8a5a"
+}

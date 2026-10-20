@@ -1,0 +1,1 @@
+{"id":"msg_2d9c7735ceb375317e6d21bf","type":"message","role":"user","status":"completed","content":[{"type":"input_text","text":"A local SDK item."}]}

@@ -1,0 +1,22 @@
+test_all_inherited_ds4_keys_removed (__main__.PilotTests.test_all_inherited_ds4_keys_removed) ... ok
+test_candidate_footer_requires_real_substitutions (__main__.PilotTests.test_candidate_footer_requires_real_substitutions) ... ok
+test_candidate_knobs_only_restored_after_each_native_warm (__main__.PilotTests.test_candidate_knobs_only_restored_after_each_native_warm) ... ok
+test_existing_prefix_mismatch_rejected (__main__.PilotTests.test_existing_prefix_mismatch_rejected) ... ok
+test_fixed_text_preserves_original_task_gold_fixture (__main__.PilotTests.test_fixed_text_preserves_original_task_gold_fixture) ... ok
+test_frozen_arms_hold_prefill_and_cache_constant (__main__.PilotTests.test_frozen_arms_hold_prefill_and_cache_constant) ... ok
+test_frozen_asset_tampering_rejected (__main__.PilotTests.test_frozen_asset_tampering_rejected) ... ok
+test_high_append_rejected_before_generation (__main__.PilotTests.test_high_append_rejected_before_generation) ... ok
+test_last_capped_token_is_not_evaluated (__main__.PilotTests.test_last_capped_token_is_not_evaluated) ... ok
+test_low_append_rejected_before_generation (__main__.PilotTests.test_low_append_rejected_before_generation) ... ok
+test_maximum1023_is_accepted (__main__.PilotTests.test_maximum1023_is_accepted) ... ok
+test_minimum256_is_accepted (__main__.PilotTests.test_minimum256_is_accepted) ... ok
+test_model_hashing_forbidden (__main__.PilotTests.test_model_hashing_forbidden) ... ok
+test_native_controls_use_exact_bytes_and_native_decisions (__main__.PilotTests.test_native_controls_use_exact_bytes_and_native_decisions) ... ok
+test_native_decision_change_rejected (__main__.PilotTests.test_native_decision_change_rejected) ... ok
+test_real_c_success_and_exact_assembly (__main__.PilotTests.test_real_c_success_and_exact_assembly) ... ok
+test_unheld_guard_rejected (__main__.PilotTests.test_unheld_guard_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.217s
+
+OK

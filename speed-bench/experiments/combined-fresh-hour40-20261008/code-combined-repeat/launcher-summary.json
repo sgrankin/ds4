@@ -1,0 +1,65 @@
+{
+  "mode": "reuse",
+  "arm": "combined-repeat",
+  "route_settings": {
+    "enabled": true,
+    "gap": 0.9,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 3,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": true
+  },
+  "prefill_route_settings": {
+    "enabled": true,
+    "gap": 0.9,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 3,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": true
+  },
+  "server_identity": {
+    "sha256": "97e94d3d47a3e9b1c2db14e048e17eef8628b4672725893d1879dda666c40325",
+    "size_bytes": 3251016,
+    "source_revision": "8586646bceccc9bdd26d6f41484e5fcc2e1b4bc7",
+    "reported_version": null,
+    "version_note": "The server has no version flag; SHA256 identifies the measured binary."
+  },
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/combined-fresh-hour40-20261008/run.py",
+  "right_shift_enabled": true,
+  "seconds": 200.86550145799993,
+  "phases": [
+    {
+      "phase": "interval_groups",
+      "returncode": 0,
+      "seconds": 100.14946099999361,
+      "startup_seconds": 0.41697191703133285,
+      "client_seconds": 98.30923745798646,
+      "shutdown_seconds": 1.4228544589714147,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "dependency_layers",
+      "returncode": 0,
+      "seconds": 100.71215416694758,
+      "startup_seconds": 0.4157944999751635,
+      "client_seconds": 98.44942770898342,
+      "shutdown_seconds": 1.8465947919758037,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/cache-combined-repeat",
+  "store": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/store-combined-repeat",
+  "timeout_seconds": 600
+}

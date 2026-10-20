@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "physical_and_tracked_file_sets_exact": true,
+  "files": 325,
+  "all100_runtime_shader_hashes_still_exact": true,
+  "source_freeze": "6a7496015b10a9dc6d9ea571b96bef3de0beb975",
+  "import_proof_sha256": "3866f1e710264d738b55f816000d960967f42670480c62299b3f1e51ed31ab8b"
+}

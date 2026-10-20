@@ -1,0 +1,35 @@
+{
+  "actual_math16_outcomes_opened": false,
+  "archive_command_executed": false,
+  "cpu_stdout_sha256": "5d1c91e59dad4c47135628b2afe8990e8ea4d2fc11ed144a4c9336bb634b82c2",
+  "execution_plan_sha256": "265c7707458dd753ed2f9e7787fa6c4a883263d2ada5df4bb5eb6c84058393a6",
+  "limits": "Synthetic retention fixtures do not rescore or simulate the native producer; the released original summary and independently pinned ROOT audit are mandatory gates.",
+  "main_runtime100_files_opened": false,
+  "model_or_helper_or_guard_executed": false,
+  "registry_sha256": "2e3d2865bf8a8028164c931828c55c30a619222182fd121e59e834c8760c481e",
+  "result": {
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "speed-bench/math16-archive/test_archive.py"
+    ],
+    "cwd": "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive-v2",
+    "elapsed_seconds": 0.8408620357513428,
+    "model_or_helper_or_guard_executed": false,
+    "production_outcomes_read": false,
+    "returncode": 0,
+    "source_freeze": "88434d852ab85464efdb860e97334aeef791af45",
+    "synthetic_only": true
+  },
+  "retained_fixture_index": {
+    "bytes": 1285028,
+    "mode": 420,
+    "sha256": "00a0224dfd9cb807a6daa99cec9ca6bc84d0d91012ce2eead8c36aba520b5d58"
+  },
+  "schema": "math16-archive-source-cpu-proof-v1",
+  "source_freeze": "88434d852ab85464efdb860e97334aeef791af45",
+  "source_sha256": "07de1fffdf6a8fecbd98e0868df9d7bd5b840be87ad8894e751956fa841c6c64",
+  "status": "SYNTHETIC_CPU_PASS",
+  "synthetic_fixture_files": 4322,
+  "test_source_sha256": "6397cb4c37a674790a3b4e6bdd46ea7189ed003f04ce30a043430764948a268c",
+  "tests_run": 14
+}

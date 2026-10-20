@@ -1,0 +1,752 @@
+{
+  "status": "FIRST_ATTEMPTS_ARCHIVED_NO_RESCORING",
+  "arms": {
+    "reuse": {
+      "controller": {
+        "status": "FIRST_FAILURE_RETAINED",
+        "model_phase_status": "FIRST_FAILURE_RETAINED",
+        "overall_success": false,
+        "completed": [
+          1,
+          2
+        ],
+        "submitted": 3,
+        "error": "ControlFailure: First external gold/file attempt failed/mutated; no later repair",
+        "final_returncode": 3,
+        "partial_gold_checks": [
+          {
+            "turn": 1,
+            "answer": "CODE=2718",
+            "passed": true
+          },
+          {
+            "turn": 2,
+            "answer": "READY",
+            "passed": true
+          }
+        ],
+        "persistence": "NOT_EXERCISED",
+        "producer_status_preserved": true
+      },
+      "pressure": {
+        "child_returncode": 3,
+        "normal": 240,
+        "bad": 0,
+        "swap_growth_gb": 0.0,
+        "peak_wired_compressor_gib": 84.14540100097656,
+        "root_release_time": 1791006766.3994439
+      },
+      "structure": {
+        "arm": "reuse",
+        "selection": {
+          "selection": {
+            "status": "SELECTED_BEFORE_THIRD_EVAL",
+            "candidate": 0,
+            "displacement": 11,
+            "source_start": 2107,
+            "source_end": 2988,
+            "destination_start": 2096,
+            "destination_end": 2977,
+            "reused": 881,
+            "fresh": 409,
+            "latest_user_start": 2978,
+            "user_id": 128803,
+            "old_tokens": 3397,
+            "edited_tokens": 3386,
+            "budget": 167772160,
+            "preallocation_peak_with_reserves": 137145130,
+            "current_payload_forecast": 30138084,
+            "actual_commit_rechecks_admission": true,
+            "old_text_bytes": 14653,
+            "edited_text_bytes": 14609
+          },
+          "old_ids_sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f",
+          "edited_ids_sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb",
+          "before_sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133",
+          "after_sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+        },
+        "structure": {
+          "reused": 881,
+          "fresh": 409,
+          "source_start": 2107,
+          "source_end": 2988,
+          "destination_start": 2096,
+          "destination_end": 2977,
+          "rebuilt_pairs": 1320,
+          "boundary_pairs": 0,
+          "copied_bytes": 23566848,
+          "unique_peak": 132716631,
+          "budget": 167772160,
+          "latest_user_start": 2978,
+          "latest_user_fresh": true
+        },
+        "preedit_raw": {
+          "vocab": 129280,
+          "pos": 2988,
+          "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+        }
+      },
+      "initial_controls": {
+        "1": {
+          "turn": 1,
+          "answer": "CODE=2718",
+          "passed": true
+        },
+        "2": {
+          "turn": 2,
+          "answer": "READY",
+          "passed": true
+        }
+      },
+      "rounds": {
+        "round_count": 5,
+        "generated_tokens": 170,
+        "tokens_by_turn": {
+          "1": 4,
+          "2": 2,
+          "3": 164
+        },
+        "cap_rounds": [],
+        "round_flags": [
+          {
+            "turn": 1,
+            "tool_round": 0,
+            "context_limited": false,
+            "model_stopped": true,
+            "got_tool": false,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          },
+          {
+            "turn": 2,
+            "tool_round": 0,
+            "context_limited": false,
+            "model_stopped": true,
+            "got_tool": false,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          },
+          {
+            "turn": 3,
+            "tool_round": 0,
+            "context_limited": false,
+            "model_stopped": false,
+            "got_tool": true,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          },
+          {
+            "turn": 3,
+            "tool_round": 1,
+            "context_limited": false,
+            "model_stopped": false,
+            "got_tool": true,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          },
+          {
+            "turn": 3,
+            "tool_round": 2,
+            "context_limited": false,
+            "model_stopped": true,
+            "got_tool": false,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          }
+        ],
+        "parsed_calls": [
+          {
+            "turn": 3,
+            "tool_round": 0,
+            "call_index": 0,
+            "call": {
+              "name": "write",
+              "args": [
+                {
+                  "name": "path",
+                  "value": "access.py",
+                  "is_string": true
+                },
+                {
+                  "name": "content",
+                  "value": "def current_access_line():\n    return \"CODE=2718\"\n",
+                  "is_string": true
+                }
+              ]
+            }
+          },
+          {
+            "turn": 3,
+            "tool_round": 1,
+            "call_index": 0,
+            "call": {
+              "name": "bash",
+              "args": [
+                {
+                  "name": "command",
+                  "value": "python3 run_grader.py",
+                  "is_string": true
+                }
+              ]
+            }
+          }
+        ],
+        "stop_or_cap_cause_inferred": false
+      },
+      "token_piece_trace": {
+        "rounds": [
+          {
+            "turn": 1,
+            "tool_round": 0,
+            "generated": 4,
+            "piece_bytes": 9,
+            "piece_sha256": "480164ceb0557a5a7c66769b219515180691ab6a56f9308009d94380fc1ae5b8",
+            "valid_utf8": true,
+            "control_answer": "CODE=2718"
+          },
+          {
+            "turn": 2,
+            "tool_round": 0,
+            "generated": 2,
+            "piece_bytes": 5,
+            "piece_sha256": "c2e3ac47f4a325469c1a2d5f117e463ec943c721986d5d9f09ac4540b7d80526",
+            "valid_utf8": true,
+            "control_answer": "READY"
+          },
+          {
+            "turn": 3,
+            "tool_round": 0,
+            "generated": 84,
+            "piece_bytes": 399,
+            "piece_sha256": "1d9f6867159a0dbc5b0bda759b348ad214c021eda8fc031b70c63a3ada7c8eb0",
+            "valid_utf8": true
+          },
+          {
+            "turn": 3,
+            "tool_round": 1,
+            "generated": 42,
+            "piece_bytes": 189,
+            "piece_sha256": "d18e3d5b8daa683f210c10d526cc9fcae10e15a43084e5d99ce3fc4c30b59671",
+            "valid_utf8": true
+          },
+          {
+            "turn": 3,
+            "tool_round": 2,
+            "generated": 38,
+            "piece_bytes": 148,
+            "piece_sha256": "9b6ff71e612cd1b3ce955040d2245d20721e0d4fa90ffdb3225bdeb5b213ed59",
+            "valid_utf8": true
+          }
+        ],
+        "ordered_ID_piece_stream_sha256": "5417813bd07fd40b0ff58a39e12703c8dda5344ce0c477bbf5c795c2393266ed",
+        "full_generated_logits_available": false,
+        "trace_text_is_byte_pieces": true
+      },
+      "parsed_call_audit": {
+        "findings": [],
+        "grader_wrapper_parsed_invocations": 1,
+        "hard_OS_sandbox_claimed": false,
+        "audit_scope": "actual parsed call arguments; indirect/unparsed access is not proven absent"
+      },
+      "first_grader": {
+        "status": "FIRST_ATTEMPT_PRESERVED",
+        "records": {
+          "grader-started.json": true,
+          "grader-command-result.json": true,
+          "grader-command-failure.json": false,
+          "grader-attempts.jsonl": true,
+          "first-graded-access.py": true
+        },
+        "started": {
+          "status": "FIRST_GRADING_STARTED",
+          "code_sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26"
+        },
+        "attempts": [
+          {
+            "passed": false,
+            "checks": {
+              "source_exists": true,
+              "pure_module": true,
+              "callable_exists": true,
+              "current_value": false,
+              "obsolete_absent": false
+            },
+            "error": null,
+            "source_sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26"
+          }
+        ],
+        "command_result": {
+          "returncode": 3,
+          "passed": false,
+          "stdout": "FAIL\n",
+          "stderr": ""
+        },
+        "command_failure": null,
+        "parsed_wrapper_invocations": 1,
+        "rescore_or_repair_performed": false,
+        "post_first_check_only_is_separate_audit": true
+      },
+      "shared_snapshot": {
+        "snapshot_sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064",
+        "root": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run",
+        "root_identity": {
+          "device": 16777230,
+          "inode": 1671818
+        },
+        "files": {
+          ".owner.json": {
+            "bytes": 153,
+            "sha256": "8a07a476e0fd2d4b40b8eed00b5c8f7a3ac13af1489af290bffef076667d749e",
+            "mode": 420,
+            "device": 16777230,
+            "inode": 1671821
+          },
+          "live-context.txt": {
+            "bytes": 15751,
+            "sha256": "cade13f041fa79197de609ea3201d2d45180d99de1199db72af7a423c80e3916",
+            "mode": 420,
+            "device": 16777230,
+            "inode": 1676931
+          },
+          "project/access.py": {
+            "bytes": 50,
+            "sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26",
+            "mode": 420,
+            "device": 16777230,
+            "inode": 1676919
+          },
+          "project/run_grader.py": {
+            "bytes": 1732,
+            "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+            "mode": 493,
+            "device": 16777230,
+            "inode": 1671820
+          }
+        },
+        "current_mutable_shared_root_read_or_reset": false
+      }
+    },
+    "native": {
+      "controller": {
+        "status": "FIRST_FAILURE_RETAINED",
+        "model_phase_status": "FIRST_FAILURE_RETAINED",
+        "overall_success": false,
+        "completed": [
+          1,
+          2
+        ],
+        "submitted": 3,
+        "error": "ControlFailure: First observed generation-limit round retained; stop/cap cause is not inferred",
+        "final_returncode": 3,
+        "partial_gold_checks": [
+          {
+            "turn": 1,
+            "answer": "CODE=2718",
+            "passed": true
+          },
+          {
+            "turn": 2,
+            "answer": "READY",
+            "passed": true
+          }
+        ],
+        "persistence": "NOT_EXERCISED",
+        "producer_status_preserved": true
+      },
+      "pressure": {
+        "child_returncode": 3,
+        "normal": 435,
+        "bad": 0,
+        "swap_growth_gb": 0.0,
+        "peak_wired_compressor_gib": 85.54277038574219,
+        "root_release_time": 1791007758.257067
+      },
+      "structure": {
+        "arm": "native",
+        "selection": {
+          "selection": {
+            "status": "SELECTED_BEFORE_THIRD_EVAL",
+            "candidate": 0,
+            "displacement": 11,
+            "source_start": 2107,
+            "source_end": 2988,
+            "destination_start": 2096,
+            "destination_end": 2977,
+            "reused": 881,
+            "fresh": 409,
+            "latest_user_start": 2978,
+            "user_id": 128803,
+            "old_tokens": 3397,
+            "edited_tokens": 3386,
+            "budget": 167772160,
+            "preallocation_peak_with_reserves": 137145130,
+            "current_payload_forecast": 30138084,
+            "actual_commit_rechecks_admission": true,
+            "old_text_bytes": 14653,
+            "edited_text_bytes": 14609
+          },
+          "old_ids_sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f",
+          "edited_ids_sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb",
+          "before_sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133",
+          "after_sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+        },
+        "structure": {
+          "native_source_byte_exact": true,
+          "native_import_returncode": 1,
+          "approximate": false
+        },
+        "preedit_raw": {
+          "vocab": 129280,
+          "pos": 2988,
+          "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+        }
+      },
+      "initial_controls": {
+        "1": {
+          "turn": 1,
+          "answer": "CODE=2718",
+          "passed": true
+        },
+        "2": {
+          "turn": 2,
+          "answer": "READY",
+          "passed": true
+        }
+      },
+      "rounds": {
+        "round_count": 5,
+        "generated_tokens": 866,
+        "tokens_by_turn": {
+          "1": 4,
+          "2": 2,
+          "3": 860
+        },
+        "cap_rounds": [
+          {
+            "turn": 3,
+            "tool_round": 2,
+            "generated": 512,
+            "limit": 512,
+            "model_stopped": false,
+            "context_limited": false
+          }
+        ],
+        "round_flags": [
+          {
+            "turn": 1,
+            "tool_round": 0,
+            "context_limited": false,
+            "model_stopped": true,
+            "got_tool": false,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          },
+          {
+            "turn": 2,
+            "tool_round": 0,
+            "context_limited": false,
+            "model_stopped": true,
+            "got_tool": false,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          },
+          {
+            "turn": 3,
+            "tool_round": 0,
+            "context_limited": false,
+            "model_stopped": false,
+            "got_tool": true,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          },
+          {
+            "turn": 3,
+            "tool_round": 1,
+            "context_limited": false,
+            "model_stopped": false,
+            "got_tool": true,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": false
+          },
+          {
+            "turn": 3,
+            "tool_round": 2,
+            "context_limited": false,
+            "model_stopped": false,
+            "got_tool": false,
+            "malformed_tool": false,
+            "early_tool_error": false,
+            "interrupted": false,
+            "at_limit": true
+          }
+        ],
+        "parsed_calls": [
+          {
+            "turn": 3,
+            "tool_round": 0,
+            "call_index": 0,
+            "call": {
+              "name": "read",
+              "args": [
+                {
+                  "name": "path",
+                  "value": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run/live-context.txt",
+                  "is_string": true
+                },
+                {
+                  "name": "max_lines",
+                  "value": "200",
+                  "is_string": false
+                }
+              ]
+            }
+          },
+          {
+            "turn": 3,
+            "tool_round": 1,
+            "call_index": 0,
+            "call": {
+              "name": "list",
+              "args": [
+                {
+                  "name": "path",
+                  "value": ".",
+                  "is_string": true
+                }
+              ]
+            }
+          }
+        ],
+        "stop_or_cap_cause_inferred": false
+      },
+      "token_piece_trace": {
+        "rounds": [
+          {
+            "turn": 1,
+            "tool_round": 0,
+            "generated": 4,
+            "piece_bytes": 9,
+            "piece_sha256": "480164ceb0557a5a7c66769b219515180691ab6a56f9308009d94380fc1ae5b8",
+            "valid_utf8": true,
+            "control_answer": "CODE=2718"
+          },
+          {
+            "turn": 2,
+            "tool_round": 0,
+            "generated": 2,
+            "piece_bytes": 5,
+            "piece_sha256": "c2e3ac47f4a325469c1a2d5f117e463ec943c721986d5d9f09ac4540b7d80526",
+            "valid_utf8": true,
+            "control_answer": "READY"
+          },
+          {
+            "turn": 3,
+            "tool_round": 0,
+            "generated": 147,
+            "piece_bytes": 661,
+            "piece_sha256": "8b880a9341245386df21aafe5f25ac08d79b5c96a60494db181e58ced6c96c8d",
+            "valid_utf8": true
+          },
+          {
+            "turn": 3,
+            "tool_round": 1,
+            "generated": 201,
+            "piece_bytes": 1048,
+            "piece_sha256": "4cb93f74a79298440fdc00fce3a618a63a42a1c75a08a6661fa4dbc6215f2c59",
+            "valid_utf8": true
+          },
+          {
+            "turn": 3,
+            "tool_round": 2,
+            "generated": 512,
+            "piece_bytes": 2495,
+            "piece_sha256": "58066a392941b85d040ab52bd4882c216d258803da1889562df1f8fa4d07de7b",
+            "valid_utf8": true
+          }
+        ],
+        "ordered_ID_piece_stream_sha256": "bea2fb2655dc3d6d70071975b3f290c1682a151427e101ce8e2a55aff1a3659b",
+        "full_generated_logits_available": false,
+        "trace_text_is_byte_pieces": true
+      },
+      "parsed_call_audit": {
+        "findings": [
+          {
+            "turn": 3,
+            "tool_round": 0,
+            "call_index": 0,
+            "findings": [
+              "private/live-source-access-attempt"
+            ],
+            "call": {
+              "name": "read",
+              "args": [
+                {
+                  "name": "path",
+                  "value": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run/live-context.txt",
+                  "is_string": true
+                },
+                {
+                  "name": "max_lines",
+                  "value": "200",
+                  "is_string": false
+                }
+              ]
+            }
+          }
+        ],
+        "grader_wrapper_parsed_invocations": 0,
+        "hard_OS_sandbox_claimed": false,
+        "audit_scope": "actual parsed call arguments; indirect/unparsed access is not proven absent"
+      },
+      "first_grader": {
+        "status": "NOT_AVAILABLE",
+        "records": {
+          "grader-started.json": false,
+          "grader-command-result.json": false,
+          "grader-command-failure.json": false,
+          "grader-attempts.jsonl": false,
+          "first-graded-access.py": false
+        },
+        "parsed_wrapper_invocations": 0,
+        "no_grade_inferred": true
+      },
+      "shared_snapshot": {
+        "snapshot_sha256": "9aa12c14c83b04c7d1e801e985bb28c361be8006e7f96063d3a0fadbebd75f81",
+        "root": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run",
+        "root_identity": {
+          "device": 16777230,
+          "inode": 1671818
+        },
+        "files": {
+          ".owner.json": {
+            "bytes": 154,
+            "sha256": "7a5459ad0c33eb37e5b453f28cb86b4bc9a4a551fda7a23ec68ca15667e4863a",
+            "mode": 420,
+            "device": 16777230,
+            "inode": 1690499
+          },
+          "live-context.txt": {
+            "bytes": 24231,
+            "sha256": "74f5d2758aadd45576a3ed806bbf60cc940cdffd957abc7c93209a4990669ff6",
+            "mode": 420,
+            "device": 16777230,
+            "inode": 1718545
+          },
+          "project/run_grader.py": {
+            "bytes": 1732,
+            "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+            "mode": 493,
+            "device": 16777230,
+            "inode": 1690498
+          }
+        },
+        "current_mutable_shared_root_read_or_reset": false
+      }
+    }
+  },
+  "preedit_control_parity": {
+    "selected-old.ids": {
+      "byte_exact": true,
+      "A": {
+        "bytes": 13604,
+        "mode": 420,
+        "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f"
+      },
+      "B": {
+        "bytes": 13604,
+        "mode": 420,
+        "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f"
+      }
+    },
+    "selected-edited.ids": {
+      "byte_exact": true,
+      "A": {
+        "bytes": 13560,
+        "mode": 420,
+        "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb"
+      },
+      "B": {
+        "bytes": 13560,
+        "mode": 420,
+        "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb"
+      }
+    },
+    "selected-before.txt": {
+      "byte_exact": true,
+      "A": {
+        "bytes": 14653,
+        "mode": 420,
+        "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133"
+      },
+      "B": {
+        "bytes": 14653,
+        "mode": 420,
+        "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133"
+      }
+    },
+    "selected-after.txt": {
+      "byte_exact": true,
+      "A": {
+        "bytes": 14609,
+        "mode": 420,
+        "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+      },
+      "B": {
+        "bytes": 14609,
+        "mode": 420,
+        "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+      }
+    },
+    "preedit-state.bin": {
+      "byte_exact": true,
+      "A": {
+        "bytes": 30138084,
+        "mode": 420,
+        "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f"
+      },
+      "B": {
+        "bytes": 30138084,
+        "mode": 420,
+        "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f"
+      }
+    },
+    "preedit-logits.bin": {
+      "byte_exact": true,
+      "A": {
+        "bytes": 517136,
+        "mode": 420,
+        "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+      },
+      "B": {
+        "bytes": 517136,
+        "mode": 420,
+        "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+      }
+    }
+  },
+  "task_comparison_valid": false,
+  "semantic_cache_regression_or_success_claimed": false,
+  "speed_claimed": false,
+  "forgetting_claimed": false,
+  "full_generated_logit_distribution_available": false,
+  "persistence": "NOT_EXERCISED",
+  "scope": "one externally edited task; initial native source parity and transaction structure are distinct from failed task outcomes"
+}

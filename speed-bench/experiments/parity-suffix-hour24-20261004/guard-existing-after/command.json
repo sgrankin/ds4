@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/parity-suffix-hour24-20261004/launch.py",
+    "--arm",
+    "existing-after",
+    "--output",
+    "speed-bench/experiments/parity-suffix-hour24-20261004/existing-after",
+    "--cache",
+    ".workspaces/server-agent-day-20261004/parity24-cache-after",
+    "--store",
+    ".workspaces/server-agent-day-20261004/parity24-store-after",
+    "--shared",
+    ".workspaces/server-agent-day-20261004/concurrent-visible"
+  ],
+  "initial": {
+    "time": 1791140070.519588,
+    "level": 1,
+    "swap_gb": 0.012998046875,
+    "physical_gb": 128.0,
+    "free_gb": 57.33372497558594,
+    "file_backed_gb": 54.64439392089844,
+    "wired_gb": 3.04986572265625,
+    "compressor_gb": 9.189437866210938
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

@@ -1,0 +1,40 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.21 GiB (raw 0.01 + compressed 0.20) + buffers 2.68 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 76.25 GiB planned
+ds4: memory detail: ctx=32768 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=32769 backend=metal
+ds4: V4.1 static context buffers 2951.63 MiB (ctx=32768), Engram disk-only
+RAGGED_DISPATCH phase=0 rows=16 ignored_duplicate_endpoints=1
+REPLAY_CACHE phase=0 configured_slots=6136 resident_entries=6136
+RAGGED_DISPATCH phase=1 rows=2 ignored_duplicate_endpoints=1
+REPLAY_CACHE phase=1 configured_slots=6136 resident_entries=6136
+REPLAY_CACHE phase=2 configured_slots=6136 resident_entries=6136
+RAGGED_DISPATCH phase=3 rows=3 ignored_duplicate_endpoints=1
+REPLAY_CACHE phase=3 configured_slots=6136 resident_entries=6136
+REPLAY_CACHE phase=4 configured_slots=6136 resident_entries=6136
+RAGGED_DISPATCH phase=5 rows=9 ignored_duplicate_endpoints=1
+REPLAY_CACHE phase=5 configured_slots=6136 resident_entries=6136
+REPLAY_CACHE phase=6 configured_slots=6136 resident_entries=6136
+RAGGED_DISPATCH phase=7 rows=1 ignored_duplicate_endpoints=1
+REPLAY_CACHE phase=7 configured_slots=6136 resident_entries=6136
+REPLAY_CACHE phase=8 configured_slots=6136 resident_entries=6136
+ds4: Metal memory ragged main final, branches excluded: runtime 2.62 GiB + streaming experts 56.88 GiB = 59.50 GiB tracked live
+ds4:   runtime tensors live 2680.18 MiB peak 2680.18 MiB
+ds4:   macOS task memory footprint 60.36 GiB, resident 66.87 GiB, virtual 735.15 GiB
+ds4:   mmap model wrapper creations 4801 buffers 651.30 GiB cumulative, 3.89 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=392369 misses=38931 hit_rate=0.910 wraps=116793 evictions=32795 buffer_allocs=15 buffer_reuses=32795 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=241.20 GiB pread_ms=9868.770
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1334.085 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 40.77 MiB (flash mask 0.02, pad 0.19, tmp 4.02, blk 0.00, ring 0.00, kv 0.75, compressor 0.02, router 0.75, indexer 4.28, moe 30.76, f16 0.00, raw-store 0.00)
+ds4: V4.1 static context buffers 2951.63 MiB (ctx=32768), Engram disk-only
+RAGGED_BRANCH_CACHE phase=3 configured_slots=6136 resident_entries=6136
+ds4: V4.1 static context buffers 2951.63 MiB (ctx=32768), Engram disk-only
+RAGGED_BRANCH_CACHE phase=5 configured_slots=6136 resident_entries=6136

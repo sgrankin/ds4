@@ -1,0 +1,30 @@
+{
+  "gold": {
+    "completed": true,
+    "ignored_heartbeats": 2,
+    "text": "abc"
+  },
+  "oracle_input": {
+    "events": [
+      {
+        "type": "heartbeat"
+      },
+      {
+        "text": "ab",
+        "type": "delta"
+      },
+      {
+        "type": "heartbeat"
+      },
+      {
+        "text": "c",
+        "type": "delta"
+      },
+      {
+        "type": "end"
+      }
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Typed stream heartbeat/data/end distinction; not truncated-message parser fuzzing or exit-status ledgers."
+}

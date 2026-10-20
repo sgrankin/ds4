@@ -1,0 +1,19 @@
+{
+  "status": "ROOT_STATIC_EXACT_IO15_REVIEW_PASS_UNRUN_NO_MODEL_GRANT",
+  "time": 1791008549.7121038,
+  "source_freeze": "7cb0e9606dac3fa69b3c6bcb1c5c3f5e32021e6a",
+  "qualified_freeze": "67e898cff50ab02f9d42924c30d40251f2161afa",
+  "plan_sha256": "830ff89029da47b5da25a359d434b0a705a283cc50f7b85aec4a596853d149e0",
+  "command_sha256": "cdb7767206d208e2d29e3406567cb4d27ae7e8666b8657e12d2e5e357cd7aedf",
+  "publication_sha256": "4c24bfb51dbc227560ce4c7e3f2a14250e613d8e4af3952f3a39a0f1a36a4d7f",
+  "fresh_static_assets_verified": 355,
+  "fresh_publication_payloads_verified": 49,
+  "actual_CPU_cases": 27,
+  "original15_policy_order_settings_inputs_phases_exact": true,
+  "full_read_new_build_authority_and_runner_analysis_test_diff": true,
+  "exact_replay_build_manifest_sha256": "d9f1128c4e2bc97c2cfe00a400ec7c5366eb7000af1abdaf74b79d22deb7a113",
+  "root_actual_same_frontend_old_and_demand_links": true,
+  "no_native_compile_helper_model_metadata_tokenizer_guard": true,
+  "scope": "Default/unset0 and nativebracket full129280 vectors/fullcanonical/cache/logicalIO exact; enabled outputstate exact with IO/cache changes retained across original15 arms",
+  "limitations": "Cumulative preclose logicalP+D counters; no priorca24IO comparison, workerconcurrency/reset/growth/semantic/physicalSSD/timing/default claim. Original9bd remainsunrun separate."
+}

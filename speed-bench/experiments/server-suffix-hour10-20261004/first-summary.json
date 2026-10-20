@@ -1,0 +1,26 @@
+{
+  "source_endpoint": 2048,
+  "anchor_ends_in_edited": [
+    1239
+  ],
+  "displacements": [
+    809
+  ],
+  "odd_displacement": [
+    true
+  ],
+  "measurements": {
+    "native": {
+      "total_seconds": 206.6964357090037,
+      "edited_seconds": 121.59565000000293,
+      "correct": 3
+    },
+    "reuse": {
+      "total_seconds": 165.16141845899983,
+      "edited_seconds": 77.71274716699554,
+      "correct": 3
+    }
+  },
+  "whole_saving": 0.2009469447672465,
+  "edited_saving": 0.3608920453404898
+}

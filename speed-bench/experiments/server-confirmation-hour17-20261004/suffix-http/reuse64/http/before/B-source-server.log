@@ -1,0 +1,33 @@
+1004 12:10:28 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prompt start
+1004 12:10:28 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source
+1004 12:10:43 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 512/1074 (47.7%) chunk=0.00 t/s avg=33.63 t/s 15.226s
+1004 12:10:45 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 576/1074 (53.6%) chunk=45.56 t/s avg=34.64 t/s 16.630s
+1004 12:10:46 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 640/1074 (59.6%) chunk=49.64 t/s avg=35.71 t/s 17.920s
+1004 12:10:47 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 704/1074 (65.5%) chunk=39.25 t/s avg=36.01 t/s 19.551s
+1004 12:10:49 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 768/1074 (71.5%) chunk=45.89 t/s avg=36.67 t/s 20.945s
+1004 12:10:50 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 832/1074 (77.5%) chunk=46.79 t/s avg=37.29 t/s 22.313s
+1004 12:10:52 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 896/1074 (83.4%) chunk=49.53 t/s avg=37.96 t/s 23.605s
+1004 12:10:53 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 960/1074 (89.4%) chunk=49.13 t/s avg=38.54 t/s 24.908s
+1004 12:10:54 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 1010/1074 (94.0%) chunk=46.80 t/s avg=38.88 t/s 25.976s
+1004 12:10:56 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prefill chunk 1074/1074 (100.0%) chunk=31.30 t/s avg=38.33 t/s 28.021s
+1004 12:10:56 ds4-server: chat ctx=0..1074:1074 RESPPROTO TOOLS prompt done 28.143s
+1004 12:10:59 ds4-server: chat ctx=1074..1124:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=18.42 t/s avg=18.42 t/s 2.714s
+1004 12:11:01 ds4-server: chat ctx=1124..1170:46 gen=96 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=20.40 t/s avg=19.32 t/s 4.969s
+1004 12:11:01 ds4-server: tool calls ctx=0..1074:1074 RESPPROTO n=1 raw_tool_text=1 ids=[call_490ae24d5cf797963252194f50cdf6f8] names=[read]
+1004 12:11:01 ds4-server: reasoning_summary id=chatcmpl-a32ae20816a5f117a1025086 ctx=0..1074:1074 budget=0 thinking_tokens=0 forced=0 deferred=0
+1004 12:11:01 ds4-server: chat ctx=0..1074:1074 gen=96 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 33.112s
+1004 12:11:01 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1170 prompt=1697
+1004 12:11:01 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prompt start
+1004 12:11:03 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 64/527 (12.1%) chunk=0.00 t/s avg=30.39 t/s 2.106s
+1004 12:11:05 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 128/527 (24.3%) chunk=38.44 t/s avg=33.94 t/s 3.771s
+1004 12:11:06 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 192/527 (36.4%) chunk=42.05 t/s avg=36.27 t/s 5.293s
+1004 12:11:08 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 256/527 (48.6%) chunk=43.82 t/s avg=37.91 t/s 6.753s
+1004 12:11:09 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 320/527 (60.7%) chunk=43.81 t/s avg=38.96 t/s 8.214s
+1004 12:11:11 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 384/527 (72.9%) chunk=45.67 t/s avg=39.94 t/s 9.615s
+1004 12:11:12 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 448/527 (85.0%) chunk=46.53 t/s avg=40.76 t/s 10.991s
+1004 12:11:12 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 463/527 (87.9%) chunk=44.07 t/s avg=40.86 t/s 11.331s
+1004 12:11:14 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prefill chunk 527/527 (100.0%) chunk=41.73 t/s avg=40.96 t/s 12.865s
+1004 12:11:14 ds4-server: chat ctx=1170..1697:527 RESPPROTO TOOLS prompt done 13.009s
+1004 12:11:14 ds4-server: chat ctx=1697..1699:2 gen=2 RESPPROTO TOOLS decoding chunk=12.27 t/s avg=12.27 t/s 0.163s
+1004 12:11:14 ds4-server: reasoning_summary id=chatcmpl-0321ad1a51833f1fc4b90603 ctx=1170..1697:527 budget=0 thinking_tokens=0 forced=0 deferred=0
+1004 12:11:14 ds4-server: chat ctx=1170..1697:527 gen=2 RESPPROTO TOOLS finish=stop 13.172s

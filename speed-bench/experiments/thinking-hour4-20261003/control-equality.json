@@ -1,0 +1,31 @@
+{
+  "checked_by": "ROOT completed-run sample-tuple comparison",
+  "arms": [
+    "native-before",
+    "native-after"
+  ],
+  "tuple_fields": [
+    "round",
+    "token",
+    "rng_before",
+    "rng_after"
+  ],
+  "tasks": {
+    "intervals": {
+      "sample_tuples": 1573,
+      "exact_equal": true
+    },
+    "ledger": {
+      "sample_tuples": 565,
+      "exact_equal": true
+    }
+  },
+  "raw_logits_compared": false,
+  "full_hidden_state_compared": false,
+  "native_helper_seconds": {
+    "before": 160.16278125000827,
+    "after": 159.59936133399606,
+    "mean": 159.88107129200216
+  },
+  "scope": "Sample token and RNG tuple identity only; PT_LIGHT_AUDIT omits full raw vectors."
+}

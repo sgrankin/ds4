@@ -1,0 +1,228 @@
+{
+  "status": "INDEPENDENT_COMPLETE_PAIRED_ARCHIVE_AND_RAW_CONTROL_VERIFICATION_PASS",
+  "copied_files": 409,
+  "physical_with_top_index": 410,
+  "protected_original_references": 13,
+  "all_copied_and_original_bytes_SHA_modes_equal": true,
+  "full129280_native_preedit_raw_finite_both": true,
+  "opaque_ID_header16bytes_bounds_and_extents_independent": true,
+  "all6_preedit_files_equal": true,
+  "independent_work_counts": {
+    "reuse": {
+      "status": "FIRST_FAILURE_RETAINED",
+      "rc": 3,
+      "completed": [
+        1,
+        2
+      ],
+      "error": "ControlFailure: First external gold/file attempt failed/mutated; no later repair",
+      "generated_tokens": 170,
+      "tokens_by_turn": {
+        "1": 4,
+        "2": 2,
+        "3": 164
+      },
+      "observed_rounds": 5,
+      "parsed_call_count": 2,
+      "parsed_call_names": [
+        "write",
+        "bash"
+      ],
+      "cap_rounds": [],
+      "forbidden_access_findings": [],
+      "grader": {
+        "status": "FIRST_ATTEMPT_PRESERVED",
+        "records": {
+          "grader-started.json": true,
+          "grader-command-result.json": true,
+          "grader-command-failure.json": false,
+          "grader-attempts.jsonl": true,
+          "first-graded-access.py": true
+        },
+        "started": {
+          "status": "FIRST_GRADING_STARTED",
+          "code_sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26"
+        },
+        "attempts": [
+          {
+            "passed": false,
+            "checks": {
+              "source_exists": true,
+              "pure_module": true,
+              "callable_exists": true,
+              "current_value": false,
+              "obsolete_absent": false
+            },
+            "error": null,
+            "source_sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26"
+          }
+        ],
+        "command_result": {
+          "returncode": 3,
+          "passed": false,
+          "stdout": "FAIL\n",
+          "stderr": ""
+        },
+        "command_failure": null,
+        "parsed_wrapper_invocations": 1,
+        "rescore_or_repair_performed": false,
+        "post_first_check_only_is_separate_audit": true
+      },
+      "control_raw_header": [
+        1163416113,
+        1,
+        129280,
+        2988
+      ],
+      "opaque_ID_headers": {
+        "selected-old.ids": {
+          "count": 3397,
+          "native_User_ID": 128803
+        },
+        "selected-edited.ids": {
+          "count": 3386,
+          "native_User_ID": 128803
+        }
+      },
+      "pressure": {
+        "child_returncode": 3,
+        "normal": 240,
+        "bad": 0,
+        "swap_growth_gb": 0.0,
+        "peak_wired_compressor_gib": 84.14540100097656,
+        "root_release_time": 1791006766.3994439
+      },
+      "structure": {
+        "reused": 881,
+        "fresh": 409,
+        "source_start": 2107,
+        "source_end": 2988,
+        "destination_start": 2096,
+        "destination_end": 2977,
+        "rebuilt_pairs": 1320,
+        "boundary_pairs": 0,
+        "copied_bytes": 23566848,
+        "unique_peak": 132716631,
+        "budget": 167772160,
+        "latest_user_start": 2978,
+        "latest_user_fresh": true
+      }
+    },
+    "native": {
+      "status": "FIRST_FAILURE_RETAINED",
+      "rc": 3,
+      "completed": [
+        1,
+        2
+      ],
+      "error": "ControlFailure: First observed generation-limit round retained; stop/cap cause is not inferred",
+      "generated_tokens": 866,
+      "tokens_by_turn": {
+        "1": 4,
+        "2": 2,
+        "3": 860
+      },
+      "observed_rounds": 5,
+      "parsed_call_count": 2,
+      "parsed_call_names": [
+        "read",
+        "list"
+      ],
+      "cap_rounds": [
+        {
+          "turn": 3,
+          "tool_round": 2,
+          "generated": 512,
+          "limit": 512,
+          "model_stopped": false,
+          "context_limited": false
+        }
+      ],
+      "forbidden_access_findings": [
+        {
+          "turn": 3,
+          "tool_round": 0,
+          "call_index": 0,
+          "findings": [
+            "private/live-source-access-attempt"
+          ],
+          "call": {
+            "name": "read",
+            "args": [
+              {
+                "name": "path",
+                "value": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run/live-context.txt",
+                "is_string": true
+              },
+              {
+                "name": "max_lines",
+                "value": "200",
+                "is_string": false
+              }
+            ]
+          }
+        }
+      ],
+      "grader": {
+        "status": "NOT_AVAILABLE",
+        "records": {
+          "grader-started.json": false,
+          "grader-command-result.json": false,
+          "grader-command-failure.json": false,
+          "grader-attempts.jsonl": false,
+          "first-graded-access.py": false
+        },
+        "parsed_wrapper_invocations": 0,
+        "no_grade_inferred": true
+      },
+      "control_raw_header": [
+        1163416113,
+        1,
+        129280,
+        2988
+      ],
+      "opaque_ID_headers": {
+        "selected-old.ids": {
+          "count": 3397,
+          "native_User_ID": 128803
+        },
+        "selected-edited.ids": {
+          "count": 3386,
+          "native_User_ID": 128803
+        }
+      },
+      "pressure": {
+        "child_returncode": 3,
+        "normal": 435,
+        "bad": 0,
+        "swap_growth_gb": 0.0,
+        "peak_wired_compressor_gib": 85.54277038574219,
+        "root_release_time": 1791007758.257067
+      },
+      "structure": {
+        "native_source_byte_exact": true,
+        "native_import_returncode": 1,
+        "approximate": false
+      }
+    }
+  },
+  "archive_index_sha256": "a8bba9b646654ecf954ed2809faf4c995b98fe8ba19037d1a566acf232700313",
+  "paired_analysis_sha256": "75eb2c3346cc54956c43c2f05bcb3a638ec03050c0e3a4a4c36fd3d2ba054a07",
+  "no_models_helpers_guard_graders_compilers_executed": true,
+  "scope": "both failed first task attempts retained; preedit vector is one native full-vocab control per arm, generated trace pieces are not full generated logits",
+  "all_original_root_physical_inventories_complete": true,
+  "original_root_file_counts": {
+    "reuse": 153,
+    "native": 162,
+    "prior-A-structural-archive": 31,
+    "prior-controls-and-refusals": 37,
+    "qualified-caller-build": 10,
+    "prior-B-static-prepare": 5,
+    "post-release-procedure": 2
+  },
+  "post_first_check_only_audit_record_available": {
+    "reuse": false,
+    "native": false
+  },
+  "grader_scope_clarification": "post_first_check_only_is_separate_audit describes the accounting convention, not whether that audit occurred. Neither failed arm has a final-grader record; the pinned controller raises on A first grading failure before its check-only call."
+}

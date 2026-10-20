@@ -1,0 +1,1 @@
+Earlier approved shipping policy: compute net units as batches times units_per_batch minus reserved_units, then round net down to a whole multiple of 8. Later policy revisions, if supplied, override this earlier decision.

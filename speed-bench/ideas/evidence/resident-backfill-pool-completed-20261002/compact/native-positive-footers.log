@@ -1,0 +1,2 @@
+PROBE_IO enabled=1 pread_calls=67908 requested_bytes=225302446080 returned_bytes=225302446080 cache_loader_bytes=225302446080 cache_hits=191684 cache_misses=22636 cache_evictions=16500
+ds4: resident-route layers=0 substitutions=0 native_misses=0 skipped_loads=0 skipped_bytes=0 mean_mass=0.00000000 mean_score_gap=0.00000000 mean_affinity_ratio=0.00000000 mean_rank=0.000 full_snapshots=0 double_layers=0 planned_substitutions=0

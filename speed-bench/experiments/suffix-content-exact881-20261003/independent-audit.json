@@ -1,0 +1,480 @@
+{
+  "status": "ROOT_INDEPENDENT_SUFFIX_CONTENT_BYTE_AND_FP64_AUDIT_PASS",
+  "time": 1791021628.117537,
+  "manifest_sha256": "302e16abeb7b04926bba39011170bb53d18acd4be743ade6739238dcc5c5c583",
+  "ROOT_release_sha256": "6637ae60b6d0881e51aa6e3ce62f5e555c275a61b5ab84c245120c6da7f3e624",
+  "runner_result_sha256": "e920a69e0bdc777483371fe0fb29dd67d16b222b9f7d11cafa614c8102388578",
+  "arms": {
+    "old0-native-before": {
+      "raw": {
+        "source-reconstructed": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/source-reconstructed.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+        },
+        "prefix": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/prefix.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "2b0b4b52540cdf79cecc11d0bede8bc4d68eaafa70f13da0ceecce3843f7a057"
+        },
+        "content": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/content.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "21c0b6c038576d6233cd581982ba212666ea11460c9878d152b67d55397501ce"
+        },
+        "edited": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/edited.raw.bin",
+          "bytes": 2585648,
+          "mode": 420,
+          "sha256": "ffb3549aec7ceb2432a1247adca72dda5a1b8907046a7028b38657543b9c8529"
+        }
+      },
+      "states": {
+        "source-reconstructed": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/source-reconstructed.state.bin",
+          "bytes": 30138084,
+          "mode": 420,
+          "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+          "native_body_sha256": "87b606231835224e47417616f1770158b4f3179b6c8dc7d8b9676833285414b2",
+          "diagnostic_magic_only": false
+        },
+        "prefix": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/prefix.state.bin",
+          "bytes": 24425716,
+          "mode": 420,
+          "sha256": "127901b1d1c8ca246e9b172ac801a5b334a22ce299704264bb794037e1d56989",
+          "native_body_sha256": "af6b01d17e8e74298ad020e94eb3bffd72da9010fb307b01f6c0858097c04bc0",
+          "diagnostic_magic_only": false
+        },
+        "content": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/content.state.bin",
+          "bytes": 30076088,
+          "mode": 420,
+          "sha256": "5195a038a534e6923312a2b266fe7227da2dad768f6b4932c4463efd5e74e671",
+          "native_body_sha256": "43be28424a73b59be54a1783370f15f8f2a8718df5120a158e9a250976e6cebc",
+          "diagnostic_magic_only": false
+        },
+        "edited.prompt": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/edited.prompt.state.bin",
+          "bytes": 32699684,
+          "mode": 420,
+          "sha256": "89839983f1bcc76ab9f7d08e1328d84dec168108e8947db16ff4a1854e8ab2d3",
+          "native_body_sha256": "cf132b800a715863aa2d1572e388c218e5af19af13e1482bc54d0336d6db9006",
+          "diagnostic_magic_only": false
+        },
+        "edited.final": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before/edited.final.state.bin",
+          "bytes": 32725300,
+          "mode": 420,
+          "sha256": "f3219ee0512b666edc44caed48f3a562c07af4de852733ebffbccd5930da45ac",
+          "native_body_sha256": "cffd2f77ee7660535cbaa79e00e326eef24a3abce5fc31f9a5f2340c6f331440",
+          "diagnostic_magic_only": false
+        }
+      },
+      "teacher_ids": [
+        83552,
+        31,
+        18321,
+        19
+      ],
+      "independent_FP64_nll": [
+        1.4668656967849323,
+        0.008150075390386036,
+        0.10104936256286479,
+        0.0015077767311808543
+      ],
+      "delta_nll_each": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "KL_each_including_terminal": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "content_io_delta": {
+        "pread_calls": 15867,
+        "pread_requested": 52642897920,
+        "pread_returned": 52642897920,
+        "cache_loader_returned": 52642897920,
+        "hits": 206151,
+        "misses": 5289,
+        "evictions": 5289,
+        "process_disk_read": 24079020032
+      },
+      "starting_cache_before_content": {
+        "pread_calls": 46578,
+        "pread_returned": 154534625280,
+        "hits": 239354,
+        "misses": 15526,
+        "evictions": 9390
+      },
+      "content_wall_ms_diagnostic": 19792.309
+    },
+    "new0-fullshort": {
+      "raw": {
+        "source-reconstructed": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/source-reconstructed.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+        },
+        "prefix": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/prefix.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "2b0b4b52540cdf79cecc11d0bede8bc4d68eaafa70f13da0ceecce3843f7a057"
+        },
+        "content": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/content.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "21c0b6c038576d6233cd581982ba212666ea11460c9878d152b67d55397501ce"
+        },
+        "edited": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/edited.raw.bin",
+          "bytes": 2585648,
+          "mode": 420,
+          "sha256": "ffb3549aec7ceb2432a1247adca72dda5a1b8907046a7028b38657543b9c8529"
+        }
+      },
+      "states": {
+        "source-reconstructed": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/source-reconstructed.state.bin",
+          "bytes": 30138084,
+          "mode": 420,
+          "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+          "native_body_sha256": "87b606231835224e47417616f1770158b4f3179b6c8dc7d8b9676833285414b2",
+          "diagnostic_magic_only": false
+        },
+        "prefix": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/prefix.state.bin",
+          "bytes": 24425716,
+          "mode": 420,
+          "sha256": "127901b1d1c8ca246e9b172ac801a5b334a22ce299704264bb794037e1d56989",
+          "native_body_sha256": "af6b01d17e8e74298ad020e94eb3bffd72da9010fb307b01f6c0858097c04bc0",
+          "diagnostic_magic_only": false
+        },
+        "content": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/content.state.bin",
+          "bytes": 30076088,
+          "mode": 420,
+          "sha256": "5195a038a534e6923312a2b266fe7227da2dad768f6b4932c4463efd5e74e671",
+          "native_body_sha256": "43be28424a73b59be54a1783370f15f8f2a8718df5120a158e9a250976e6cebc",
+          "diagnostic_magic_only": false
+        },
+        "edited.prompt": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/edited.prompt.state.bin",
+          "bytes": 32699684,
+          "mode": 420,
+          "sha256": "89839983f1bcc76ab9f7d08e1328d84dec168108e8947db16ff4a1854e8ab2d3",
+          "native_body_sha256": "cf132b800a715863aa2d1572e388c218e5af19af13e1482bc54d0336d6db9006",
+          "diagnostic_magic_only": false
+        },
+        "edited.final": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort/edited.final.state.bin",
+          "bytes": 32725300,
+          "mode": 420,
+          "sha256": "f3219ee0512b666edc44caed48f3a562c07af4de852733ebffbccd5930da45ac",
+          "native_body_sha256": "cffd2f77ee7660535cbaa79e00e326eef24a3abce5fc31f9a5f2340c6f331440",
+          "diagnostic_magic_only": false
+        }
+      },
+      "teacher_ids": [
+        83552,
+        31,
+        18321,
+        19
+      ],
+      "independent_FP64_nll": [
+        1.4668656967849323,
+        0.008150075390386036,
+        0.10104936256286479,
+        0.0015077767311808543
+      ],
+      "delta_nll_each": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "KL_each_including_terminal": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "content_io_delta": {
+        "pread_calls": 12972,
+        "pread_requested": 43037982720,
+        "pread_returned": 43037982720,
+        "cache_loader_returned": 43037982720,
+        "hits": 207116,
+        "misses": 4324,
+        "evictions": 4324,
+        "process_disk_read": 19619274752
+      },
+      "starting_cache_before_content": {
+        "pread_calls": 46578,
+        "pread_returned": 154534625280,
+        "hits": 239354,
+        "misses": 15526,
+        "evictions": 9390
+      },
+      "content_wall_ms_diagnostic": 18354.994
+    },
+    "new1-clippedcone": {
+      "raw": {
+        "source-reconstructed": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/source-reconstructed.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+        },
+        "prefix": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/prefix.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "2b0b4b52540cdf79cecc11d0bede8bc4d68eaafa70f13da0ceecce3843f7a057"
+        },
+        "content": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/content.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "21c0b6c038576d6233cd581982ba212666ea11460c9878d152b67d55397501ce"
+        },
+        "edited": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/edited.raw.bin",
+          "bytes": 2585648,
+          "mode": 420,
+          "sha256": "ffb3549aec7ceb2432a1247adca72dda5a1b8907046a7028b38657543b9c8529"
+        }
+      },
+      "states": {
+        "source-reconstructed": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/source-reconstructed.state.bin",
+          "bytes": 30138084,
+          "mode": 420,
+          "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+          "native_body_sha256": "87b606231835224e47417616f1770158b4f3179b6c8dc7d8b9676833285414b2",
+          "diagnostic_magic_only": false
+        },
+        "prefix": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/prefix.state.bin",
+          "bytes": 24425716,
+          "mode": 420,
+          "sha256": "127901b1d1c8ca246e9b172ac801a5b334a22ce299704264bb794037e1d56989",
+          "native_body_sha256": "af6b01d17e8e74298ad020e94eb3bffd72da9010fb307b01f6c0858097c04bc0",
+          "diagnostic_magic_only": false
+        },
+        "content": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/content.state.bin",
+          "bytes": 30076088,
+          "mode": 420,
+          "sha256": "c4afe39d2ebacaf93e24eea6c33974406b80a8150ccb037f83f299ca5985e1e6",
+          "native_body_sha256": "43be28424a73b59be54a1783370f15f8f2a8718df5120a158e9a250976e6cebc",
+          "diagnostic_magic_only": true
+        },
+        "edited.prompt": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/edited.prompt.state.bin",
+          "bytes": 32699684,
+          "mode": 420,
+          "sha256": "adc9a5a3bc145970dfe2ba59847e980f793c4c960369baf1c6a071e70a2ab65d",
+          "native_body_sha256": "cf132b800a715863aa2d1572e388c218e5af19af13e1482bc54d0336d6db9006",
+          "diagnostic_magic_only": true
+        },
+        "edited.final": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone/edited.final.state.bin",
+          "bytes": 32725300,
+          "mode": 420,
+          "sha256": "f2f7cd17ae4708cf92473dbe50a9f4a1e245753d37e2268c1cc6170e2b551752",
+          "native_body_sha256": "cffd2f77ee7660535cbaa79e00e326eef24a3abce5fc31f9a5f2340c6f331440",
+          "diagnostic_magic_only": true
+        }
+      },
+      "teacher_ids": [
+        83552,
+        31,
+        18321,
+        19
+      ],
+      "independent_FP64_nll": [
+        1.4668656967849323,
+        0.008150075390386036,
+        0.10104936256286479,
+        0.0015077767311808543
+      ],
+      "delta_nll_each": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "KL_each_including_terminal": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "content_io_delta": {
+        "pread_calls": 11739,
+        "pread_requested": 38947184640,
+        "pread_returned": 38947184640,
+        "cache_loader_returned": 38947184640,
+        "hits": 188711,
+        "misses": 3913,
+        "evictions": 3913,
+        "process_disk_read": 17599295488
+      },
+      "starting_cache_before_content": {
+        "pread_calls": 46578,
+        "pread_returned": 154534625280,
+        "hits": 239354,
+        "misses": 15526,
+        "evictions": 9390
+      },
+      "content_wall_ms_diagnostic": 17334.009
+    },
+    "old0-native-after": {
+      "raw": {
+        "source-reconstructed": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/source-reconstructed.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+        },
+        "prefix": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/prefix.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "2b0b4b52540cdf79cecc11d0bede8bc4d68eaafa70f13da0ceecce3843f7a057"
+        },
+        "content": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/content.raw.bin",
+          "bytes": 517136,
+          "mode": 420,
+          "sha256": "21c0b6c038576d6233cd581982ba212666ea11460c9878d152b67d55397501ce"
+        },
+        "edited": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/edited.raw.bin",
+          "bytes": 2585648,
+          "mode": 420,
+          "sha256": "ffb3549aec7ceb2432a1247adca72dda5a1b8907046a7028b38657543b9c8529"
+        }
+      },
+      "states": {
+        "source-reconstructed": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/source-reconstructed.state.bin",
+          "bytes": 30138084,
+          "mode": 420,
+          "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+          "native_body_sha256": "87b606231835224e47417616f1770158b4f3179b6c8dc7d8b9676833285414b2",
+          "diagnostic_magic_only": false
+        },
+        "prefix": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/prefix.state.bin",
+          "bytes": 24425716,
+          "mode": 420,
+          "sha256": "127901b1d1c8ca246e9b172ac801a5b334a22ce299704264bb794037e1d56989",
+          "native_body_sha256": "af6b01d17e8e74298ad020e94eb3bffd72da9010fb307b01f6c0858097c04bc0",
+          "diagnostic_magic_only": false
+        },
+        "content": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/content.state.bin",
+          "bytes": 30076088,
+          "mode": 420,
+          "sha256": "5195a038a534e6923312a2b266fe7227da2dad768f6b4932c4463efd5e74e671",
+          "native_body_sha256": "43be28424a73b59be54a1783370f15f8f2a8718df5120a158e9a250976e6cebc",
+          "diagnostic_magic_only": false
+        },
+        "edited.prompt": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/edited.prompt.state.bin",
+          "bytes": 32699684,
+          "mode": 420,
+          "sha256": "89839983f1bcc76ab9f7d08e1328d84dec168108e8947db16ff4a1854e8ab2d3",
+          "native_body_sha256": "cf132b800a715863aa2d1572e388c218e5af19af13e1482bc54d0336d6db9006",
+          "diagnostic_magic_only": false
+        },
+        "edited.final": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after/edited.final.state.bin",
+          "bytes": 32725300,
+          "mode": 420,
+          "sha256": "f3219ee0512b666edc44caed48f3a562c07af4de852733ebffbccd5930da45ac",
+          "native_body_sha256": "cffd2f77ee7660535cbaa79e00e326eef24a3abce5fc31f9a5f2340c6f331440",
+          "diagnostic_magic_only": false
+        }
+      },
+      "teacher_ids": [
+        83552,
+        31,
+        18321,
+        19
+      ],
+      "independent_FP64_nll": [
+        1.4668656967849323,
+        0.008150075390386036,
+        0.10104936256286479,
+        0.0015077767311808543
+      ],
+      "delta_nll_each": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "KL_each_including_terminal": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "content_io_delta": {
+        "pread_calls": 42672,
+        "pread_requested": 141575454720,
+        "pread_returned": 141575454720,
+        "cache_loader_returned": 141575454720,
+        "hits": 197216,
+        "misses": 14224,
+        "evictions": 14224,
+        "process_disk_read": 23167369216
+      },
+      "starting_cache_before_content": {
+        "pread_calls": 145857,
+        "pread_returned": 483918520320,
+        "hits": 709466,
+        "misses": 67580,
+        "evictions": 61444
+      },
+      "content_wall_ms_diagnostic": 20878.499
+    }
+  },
+  "full_raw_rows": 32,
+  "full_state_payloads": 20,
+  "every_raw_FP32_finite": true,
+  "all_history_IDs_exact": true,
+  "all_normalized_state_bodies_exact": true,
+  "only_mode2_three_magic_words_normalized": true,
+  "CSV_headers_literal_no_duplicate_column": true,
+  "independent_FP64_csv_max_nll_error": 3.197442310920451e-14,
+  "NLL_error_is_reported_not_fitted": true,
+  "output_rows_full": 35240,
+  "output_rows_clipped": 32104,
+  "output_row_reduction_fraction": 0.08898978433598181,
+  "warm_KV_rows_clipped": 832,
+  "native_carry_bytes_existing_not_incremental": 354287616,
+  "clipped_pread_returned_reduction_vs_same_start_native": 0.26016260162601623,
+  "native_after_starting_cache_differs": true,
+  "diagnostic_seconds": 0.5773227079989738,
+  "no_model_helper_or_candidate_execution": true,
+  "no_speed_generalization_or_default_claim": true
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "arm": "repeat-native-before",
+    "returncode": 0
+  },
+  {
+    "arm": "repeat-tail128",
+    "returncode": 0
+  },
+  {
+    "arm": "repeat-native-after",
+    "returncode": 0
+  }
+]

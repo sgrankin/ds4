@@ -1,0 +1,4 @@
+CURRENT CODE RECORD
+def transform(x):
+    return (x * 7 + 3) % 1000
+END CURRENT CODE RECORD

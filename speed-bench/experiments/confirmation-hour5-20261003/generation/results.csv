@@ -1,0 +1,13 @@
+arm,case,pass,fields_correct,failure_reason,seconds,returncode,generated_tokens,token_cap,cap_status,completion_status,stop_reason,prefill_ms,decode_ms,prefill_tps,generation_tps
+affinity-strong,confirm_g01_bitmask,False,False,required factual fields differ from gold,5.351590250007575,0,12,128,not_reached,complete,stop_token,3457.2,770.374,16.2,15.58
+affinity-strong,confirm_g02_current_access,True,True,,5.686701708007604,0,17,128,not_reached,complete,stop_token,3351.25,1180.657,15.52,14.4
+affinity-strong,confirm_g03_recurrence,False,False,required factual fields differ from gold,5.375524750008481,0,15,128,not_reached,complete,stop_token,3337.834,895.904,16.78,16.74
+affinity-strong,confirm_g04_stack,False,False,required factual fields differ from gold,6.84275070799049,0,14,128,not_reached,complete,stop_token,4868.51,742.159,17.46,18.86
+deadline-age8,confirm_g01_bitmask,False,False,required factual fields differ from gold,5.534307125009946,0,12,128,not_reached,complete,stop_token,3636.762,790.62,15.4,15.18
+deadline-age8,confirm_g02_current_access,True,True,,5.789591166991158,0,17,128,not_reached,complete,stop_token,3426.26,1198.638,15.18,14.18
+deadline-age8,confirm_g03_recurrence,False,False,required factual fields differ from gold,5.3894959580065915,0,15,128,not_reached,complete,stop_token,3351.443,946.645,16.71,15.85
+deadline-age8,confirm_g04_stack,False,False,required factual fields differ from gold,7.004022332999739,0,14,128,not_reached,complete,stop_token,4976.853,795.759,17.08,17.59
+native,confirm_g01_bitmask,False,False,required factual fields differ from gold,9.189155250001932,0,12,128,not_reached,complete,stop_token,4445.143,1258.284,12.6,9.54
+native,confirm_g02_current_access,True,True,,6.38022383399948,0,14,128,not_reached,complete,stop_token,3659.604,1438.606,14.21,9.73
+native,confirm_g03_recurrence,False,False,required factual fields differ from gold,6.0162893749948125,0,15,128,not_reached,complete,stop_token,3562.43,1291.815,15.72,11.61
+native,confirm_g04_stack,False,False,required factual fields differ from gold,7.541794415999902,0,14,128,not_reached,complete,stop_token,5043.855,1167.9,16.85,11.99

@@ -1,0 +1,100 @@
+{
+  "status": "ALL_EIGHT_FIRST_ATTEMPTS_STRICT_PASS",
+  "generations": 8,
+  "distinct_tasks": 2,
+  "generations_per_arm": 2,
+  "strict_passes_by_arm": {
+    "budget256": 2,
+    "budget256-affinity": 2,
+    "native-after": 2,
+    "native-before": 2
+  },
+  "unit_inputs_per_generation": 161,
+  "unit_checks_are_not_independent_generations": true,
+  "native_repeat_checks": [
+    {
+      "task": "join",
+      "samples": 849,
+      "token_RNG_tuples_equal": true,
+      "all_sample_records_equal": true,
+      "tuple_fields": [
+        "round",
+        "pos",
+        "token",
+        "rng_before",
+        "rng_after",
+        "piece_hex",
+        "inside",
+        "greedy",
+        "stop"
+      ],
+      "whole_event_records_equal": true,
+      "fullraw_read": false
+    },
+    {
+      "task": "window_argmax",
+      "samples": 680,
+      "token_RNG_tuples_equal": true,
+      "all_sample_records_equal": true,
+      "tuple_fields": [
+        "round",
+        "pos",
+        "token",
+        "rng_before",
+        "rng_after",
+        "piece_hex",
+        "inside",
+        "greedy",
+        "stop"
+      ],
+      "whole_event_records_equal": true,
+      "fullraw_read": false
+    }
+  ],
+  "latency": {
+    "native_before_pair_seconds": 133.82549570901028,
+    "native_after_pair_seconds": 129.5480185420165,
+    "native_mean_pair_seconds": 131.6867571255134,
+    "budget256_pair_seconds": 120.05372866700054,
+    "combined_pair_seconds": 100.21847254200839,
+    "budget256_saving_vs_native_mean_percent": 8.833863565662236,
+    "combined_saving_vs_native_mean_percent": 23.896316737082323,
+    "combined_saving_vs_fastest_native_percent": 22.639903203533464
+  },
+  "pressure": {
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "samples": 469,
+    "level_counts": {
+      "1": 469
+    },
+    "bad_reason_samples": 0,
+    "max_consecutive_bad": 0,
+    "swap_start_gib": 0.024599609375,
+    "swap_end_gib": 0.024599609375,
+    "swap_growth_gib": 0.0,
+    "peak_wired_plus_compressor_gib": 78.79988098144531,
+    "min_physical_minus_wired_and_compressor_gib": 49.20011901855469,
+    "min_free_gib": 0.105560302734375,
+    "elapsed_pressure_seconds": 483.74563121795654
+  },
+  "routing_activation": [
+    {
+      "task": "join",
+      "substitutions": 10509,
+      "route_footer": "ds4: resident-route layers=25600 substitutions=10509 native_misses=14690 skipped_loads=10509 skipped_bytes=104599019520 mean_mass=0.12125483 mean_score_gap=0.10812410 mean_affinity_ratio=0.89602204 mean_rank=7.612 full_snapshots=8838 double_layers=1438 planned_substitutions=10509 drops=0 triple_layers=117",
+      "native_weights_footer": "ds4: resident-route-native-weights requested=1 substitutions=10509",
+      "original_deadline_footer_present": false
+    },
+    {
+      "task": "window_argmax",
+      "substitutions": 10954,
+      "route_footer": "ds4: resident-route layers=23840 substitutions=10954 native_misses=14816 skipped_loads=10954 skipped_bytes=109028229120 mean_mass=0.11987000 mean_score_gap=0.10706341 mean_affinity_ratio=0.89743649 mean_rank=7.688 full_snapshots=9055 double_layers=1625 planned_substitutions=10954 drops=0 triple_layers=137",
+      "native_weights_footer": "ds4: resident-route-native-weights requested=1 substitutions=10954",
+      "original_deadline_footer_present": false
+    }
+  ],
+  "scope": "One seed, two unused generated-code tasks; all arms same light-audit helper. Process wall includes startup/prefill/tools/close. Native repeats compare tokens/RNG/events only, no raw vectors. No original staging, physical SSD benefit or general quality claim."
+}

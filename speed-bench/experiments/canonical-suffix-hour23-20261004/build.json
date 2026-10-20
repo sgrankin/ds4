@@ -1,0 +1,37 @@
+{
+  "start_utc": "2026-10-04 18:11:00",
+  "deadline_utc": "2026-10-04 19:01:00",
+  "budget_note": "10 minutes prior source audit/launcher/candidate preparation charged",
+  "compiled_runtime_revision": "7adb0d85736bc820e828fb2aa56372813c45b957",
+  "server_sha256": "f812c5ebd1d91bde916ba24f90be660b84d32b85a4416c6c216e9233c11273fc",
+  "build_command": "make -j2 ds4-server ds4_test",
+  "build_returncode": 0,
+  "check_command": "./ds4_test --server",
+  "check_returncode": 0,
+  "build_log": ".workspaces/server-agent-day-20261004/item23-build.log",
+  "check_log": ".workspaces/server-agent-day-20261004/item23-server-tests.log",
+  "one_change": "DS4_SERVER_CONTEXT_SUFFIX_CANONICAL 0/1/0; skip sampled-ID splicing for full-input text Responses suffix clients; even geometry stays required",
+  "fixed": "Q2/cache64/ctx8192/chunk512/batch2/GAP0/noeffort/temp0/tail64/hot0/SSD4096/newdirs/samepaths",
+  "driver": "../concurrent-sessions-hour19-20261004/run.py",
+  "arms": [
+    "existing-before",
+    "canonical",
+    "existing-after"
+  ],
+  "metrics": "actual8readchecks/arm, grades/caps, warm cost, group and whole wall, graftcoverage/geometry, cache counters/pressure",
+  "measurement_finished_utc": "2026-10-04 18:28:36",
+  "guard": {
+    "existing-before": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "canonical": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "existing-after": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  }
+}

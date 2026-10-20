@@ -1,0 +1,8 @@
+{
+  "original_cpu_proof_field": "ae68ca0d4f6c42a3259c69211730b33b39bcbb27e419528314d67b7db247623a",
+  "clarified_field_identifies": "cpu_stdout_json_sha256 for original cpu-test.json",
+  "frozen38_jj_blob_and_disk_sha256": "b1ccef6fcecc518849a25ccc6585567bbed8b3bf4b8e9085eb2d5179b4e83084",
+  "bytes": 9125,
+  "original_cpu_proof_unchanged": true,
+  "first_archiver_refusal_before_large_raw_hash_or_archive_creation": true
+}

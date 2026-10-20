@@ -1,0 +1,48 @@
+{
+  "start_utc": "2026-10-04 19:47:00 UTC",
+  "budget_note": "10 minutes prior caller/launcher/method preparation charged",
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "build_and_checks": "Item25 make -j2 ds4-server ds4_test; ./ds4_test --server passed",
+  "arms": [
+    "native-before",
+    "reuse",
+    "native-after"
+  ],
+  "fixed": "full-input/storefalse/stable instructions+tools/high READ0 WRITE128 FINAL1/global2048/temp0/GAP0/hot0SSD4096/batch2/ctx8192/chunk512/tile64limit1024/canonical1PAD1",
+  "one_change": "suffix0 versus suffix64 on the same authored CLM edit and actual READ/WRITE/FINAL tasks",
+  "cases": "frozen Item17 ledger/LRU configs and independent first-write161 graders; same confirmation-visible paths",
+  "restart_scope": "ledger completes before restart; LRU actual READ and WRITE occur afterward, no pending-source SSD claim",
+  "deadline_utc": "2026-10-04 20:37:00 UTC",
+  "grader_path_fix": {
+    "observed_utc": "2026-10-04 19:50:26 UTC",
+    "change": "str(code) -> str(code.resolve()) in existing grader argv only",
+    "reason": "relative first-code path resolved under grader cwd=PRACTICAL",
+    "scope": "original native-before HTTP outputs and first implementations retained; regraded saved code without model retry; raw grader failures and child3 retained",
+    "saved_regrades": {
+      "ledger": {
+        "correct": true,
+        "tests": 161
+      },
+      "lru": {
+        "correct": true,
+        "tests": 161
+      }
+    }
+  },
+  "measurement_finished_utc": "2026-10-04 20:00:10 UTC",
+  "guards": {
+    "native-before": {
+      "status": "complete",
+      "child_returncode": 3
+    },
+    "reuse": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "native-after": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  }
+}

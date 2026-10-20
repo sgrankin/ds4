@@ -1,0 +1,650 @@
+[
+  {
+    "cases": 16,
+    "tokens": 492,
+    "avg_nll": 0.406444660426,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 492,
+    "startup_ms": 2718.599,
+    "prefill_ms": 19896.908,
+    "decode_ms": 30280.896,
+    "metrics_ms": 1166.946,
+    "name": "baseline",
+    "gap": null,
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_000": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_006": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_012": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_018": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_024": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_030": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_036": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_042": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_048": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_054": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_060": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_066": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_072": {
+        "tokens": 12,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_078": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_084": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_090": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  },
+  {
+    "cases": 16,
+    "tokens": 492,
+    "avg_nll": 0.406444660426,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 492,
+    "startup_ms": 227.626,
+    "prefill_ms": 19142.402,
+    "decode_ms": 29801.23,
+    "metrics_ms": 1167.406,
+    "name": "off",
+    "gap": "0",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_000": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_006": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_012": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_018": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_024": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_030": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_036": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_042": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_048": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_054": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_060": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_066": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_072": {
+        "tokens": 12,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_078": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_084": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_090": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  },
+  {
+    "cases": 16,
+    "tokens": 492,
+    "avg_nll": 0.404922439544,
+    "delta_nll": -0.00152222088103,
+    "policy_delta_nll": -0.00152222088103,
+    "kl_base_to_raw": 0.00719230617438,
+    "kl_base_to_policy": 0.00719230617438,
+    "tv": 0.0183143567787,
+    "argmax_flips": 7,
+    "bit_equal_rows": 23,
+    "startup_ms": 217.108,
+    "prefill_ms": 19089.663,
+    "decode_ms": 28957.301,
+    "metrics_ms": 1064.428,
+    "name": "gap-0.02",
+    "gap": "0.02",
+    "prompt_mean_delta_nll": -0.0014664530560702155,
+    "prompt_bootstrap_95": [
+      -0.019128939360754906,
+      0.01069614944813965
+    ],
+    "worst_prompt_delta_nll": 0.02907516760774857,
+    "kl_p99": 0.174309016064,
+    "kl_max": 0.401777483242,
+    "per_prompt": {
+      "case_000": {
+        "tokens": 32,
+        "delta_nll": -0.01148438615924066,
+        "kl": 0.0015996214081266792
+      },
+      "case_006": {
+        "tokens": 32,
+        "delta_nll": 0.0064107919675635925,
+        "kl": 0.004357818910057236
+      },
+      "case_012": {
+        "tokens": 32,
+        "delta_nll": 0.010098988670885206,
+        "kl": 0.0011872221911671931
+      },
+      "case_018": {
+        "tokens": 32,
+        "delta_nll": -0.00928208539026116,
+        "kl": 0.0019443755633819597
+      },
+      "case_024": {
+        "tokens": 32,
+        "delta_nll": 0.016978378312754675,
+        "kl": 0.0020385730805809552
+      },
+      "case_030": {
+        "tokens": 32,
+        "delta_nll": 0.017629952206081535,
+        "kl": 0.0021447789844890298
+      },
+      "case_036": {
+        "tokens": 32,
+        "delta_nll": -0.029546151052318607,
+        "kl": 0.003371086362555195
+      },
+      "case_042": {
+        "tokens": 32,
+        "delta_nll": 0.010255097446634283,
+        "kl": 0.0006199026394862691
+      },
+      "case_048": {
+        "tokens": 32,
+        "delta_nll": 0.0195906924829958,
+        "kl": 0.0011787862843558796
+      },
+      "case_054": {
+        "tokens": 32,
+        "delta_nll": -0.10626468038526306,
+        "kl": 0.05594399587155551
+      },
+      "case_060": {
+        "tokens": 32,
+        "delta_nll": 0.02907516760774857,
+        "kl": 0.011524454964661358
+      },
+      "case_066": {
+        "tokens": 32,
+        "delta_nll": 0.008238621883132957,
+        "kl": 0.0020913935075439513
+      },
+      "case_072": {
+        "tokens": 12,
+        "delta_nll": -9.456456200614461e-05,
+        "kl": 1.2349455117872645e-05
+      },
+      "case_078": {
+        "tokens": 32,
+        "delta_nll": -0.01619502454854484,
+        "kl": 0.004806679775094208
+      },
+      "case_084": {
+        "tokens": 32,
+        "delta_nll": 0.006667260426142209,
+        "kl": 0.0009056368937481352
+      },
+      "case_090": {
+        "tokens": 32,
+        "delta_nll": 0.024458692196572197,
+        "kl": 0.016862749948633397
+      }
+    }
+  },
+  {
+    "cases": 16,
+    "tokens": 492,
+    "avg_nll": 0.404064839124,
+    "delta_nll": -0.00237982130101,
+    "policy_delta_nll": -0.00237982130101,
+    "kl_base_to_raw": 0.00699428773075,
+    "kl_base_to_policy": 0.00699428773075,
+    "tv": 0.019671413265,
+    "argmax_flips": 7,
+    "bit_equal_rows": 19,
+    "startup_ms": 246.229,
+    "prefill_ms": 19134.302,
+    "decode_ms": 28102.999,
+    "metrics_ms": 1095.763,
+    "name": "gap-0.05",
+    "gap": "0.05",
+    "prompt_mean_delta_nll": -0.0022931951865481715,
+    "prompt_bootstrap_95": [
+      -0.010980649664239464,
+      0.00470720397331032
+    ],
+    "worst_prompt_delta_nll": 0.021674328066164057,
+    "kl_p99": 0.119055072398,
+    "kl_max": 0.310699829178,
+    "per_prompt": {
+      "case_000": {
+        "tokens": 32,
+        "delta_nll": -0.004754603410585166,
+        "kl": 0.002159275468966879
+      },
+      "case_006": {
+        "tokens": 32,
+        "delta_nll": -0.003389495615850582,
+        "kl": 0.005899476993772947
+      },
+      "case_012": {
+        "tokens": 32,
+        "delta_nll": 0.002013207822261118,
+        "kl": 0.001735215859025256
+      },
+      "case_018": {
+        "tokens": 32,
+        "delta_nll": 0.007236816881994167,
+        "kl": 0.0015986372097144632
+      },
+      "case_024": {
+        "tokens": 32,
+        "delta_nll": 0.013935811725022562,
+        "kl": 0.001662034253523021
+      },
+      "case_030": {
+        "tokens": 32,
+        "delta_nll": 0.021674328066164057,
+        "kl": 0.004961328453966875
+      },
+      "case_036": {
+        "tokens": 32,
+        "delta_nll": -0.01903141618029723,
+        "kl": 0.0021765224876926534
+      },
+      "case_042": {
+        "tokens": 32,
+        "delta_nll": 0.007103557466098669,
+        "kl": 0.000670352297886616
+      },
+      "case_048": {
+        "tokens": 32,
+        "delta_nll": 0.009741484145247293,
+        "kl": 0.0013333648947432698
+      },
+      "case_054": {
+        "tokens": 32,
+        "delta_nll": -0.022524246194978195,
+        "kl": 0.037537289994986435
+      },
+      "case_060": {
+        "tokens": 32,
+        "delta_nll": -0.04458063874514807,
+        "kl": 0.02738640679099288
+      },
+      "case_066": {
+        "tokens": 32,
+        "delta_nll": -0.002466029153087894,
+        "kl": 0.00403610147225232
+      },
+      "case_072": {
+        "tokens": 12,
+        "delta_nll": -0.00016219277061574702,
+        "kl": 3.9440702242445226e-05
+      },
+      "case_078": {
+        "tokens": 32,
+        "delta_nll": 0.003330585184424594,
+        "kl": 0.002971260352637482
+      },
+      "case_084": {
+        "tokens": 32,
+        "delta_nll": 0.006208494673212873,
+        "kl": 0.0011113822476177613
+      },
+      "case_090": {
+        "tokens": 32,
+        "delta_nll": -0.011026786878633194,
+        "kl": 0.012283734819129206
+      }
+    }
+  },
+  {
+    "cases": 16,
+    "tokens": 492,
+    "avg_nll": 0.399971145271,
+    "delta_nll": -0.00647351515439,
+    "policy_delta_nll": -0.00647351515439,
+    "kl_base_to_raw": 0.0101137092983,
+    "kl_base_to_policy": 0.0101137092983,
+    "tv": 0.0237670594271,
+    "argmax_flips": 8,
+    "bit_equal_rows": 16,
+    "startup_ms": 217.744,
+    "prefill_ms": 19313.906,
+    "decode_ms": 27729.545,
+    "metrics_ms": 1018.22,
+    "name": "gap-0.10",
+    "gap": "0.10",
+    "prompt_mean_delta_nll": -0.006215933237804553,
+    "prompt_bootstrap_95": [
+      -0.019214395934427576,
+      0.004313702558293498
+    ],
+    "worst_prompt_delta_nll": 0.02293523193027935,
+    "kl_p99": 0.169308465821,
+    "kl_max": 0.714481763948,
+    "per_prompt": {
+      "case_000": {
+        "tokens": 32,
+        "delta_nll": -0.022158909660538607,
+        "kl": 0.0022324061956978604
+      },
+      "case_006": {
+        "tokens": 32,
+        "delta_nll": -0.03348005297818049,
+        "kl": 0.009527919672317847
+      },
+      "case_012": {
+        "tokens": 32,
+        "delta_nll": 0.0023871989035397566,
+        "kl": 0.0014675843264802828
+      },
+      "case_018": {
+        "tokens": 32,
+        "delta_nll": 0.0036497719374283667,
+        "kl": 0.00403591222692927
+      },
+      "case_024": {
+        "tokens": 32,
+        "delta_nll": 0.02293523193027935,
+        "kl": 0.005585828515287897
+      },
+      "case_030": {
+        "tokens": 32,
+        "delta_nll": 0.009406012390079556,
+        "kl": 0.003040323593423807
+      },
+      "case_036": {
+        "tokens": 32,
+        "delta_nll": -0.0015698650967642639,
+        "kl": 0.005009937018092873
+      },
+      "case_042": {
+        "tokens": 32,
+        "delta_nll": 0.012701437596387052,
+        "kl": 0.0018473562771810573
+      },
+      "case_048": {
+        "tokens": 32,
+        "delta_nll": 0.006508983312241113,
+        "kl": 0.002363604397007025
+      },
+      "case_054": {
+        "tokens": 32,
+        "delta_nll": -0.03896079791295765,
+        "kl": 0.07089858293189456
+      },
+      "case_060": {
+        "tokens": 32,
+        "delta_nll": -0.07326733082439017,
+        "kl": 0.027116211931319797
+      },
+      "case_066": {
+        "tokens": 32,
+        "delta_nll": -0.0014898682440255876,
+        "kl": 0.006354425230103647
+      },
+      "case_072": {
+        "tokens": 12,
+        "delta_nll": 0.0001205819101157063,
+        "kl": 1.5508158609489655e-05
+      },
+      "case_078": {
+        "tokens": 32,
+        "delta_nll": 0.011638194317334618,
+        "kl": 0.0017626920159072594
+      },
+      "case_084": {
+        "tokens": 32,
+        "delta_nll": 0.0030316308189879126,
+        "kl": 0.00024836591251244095
+      },
+      "case_090": {
+        "tokens": 32,
+        "delta_nll": -0.0009071502044094942,
+        "kl": 0.014001314657042255
+      }
+    }
+  },
+  {
+    "cases": 16,
+    "tokens": 492,
+    "avg_nll": 0.406444660426,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 492,
+    "startup_ms": 217.251,
+    "prefill_ms": 19127.871,
+    "decode_ms": 29438.134,
+    "metrics_ms": 1019.605,
+    "name": "baseline-repeat",
+    "gap": null,
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_000": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_006": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_012": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_018": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_024": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_030": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_036": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_042": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_048": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_054": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_060": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_066": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_072": {
+        "tokens": 12,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_078": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_084": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_090": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  }
+]

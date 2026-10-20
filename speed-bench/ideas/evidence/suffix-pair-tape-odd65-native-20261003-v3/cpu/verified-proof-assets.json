@@ -1,0 +1,72 @@
+{
+  "source_proof_sha256": "08eaa89263c4ac239c69369a094c3dc087f0ee412acb94cb2611e7dd4796aecb",
+  "assets": {
+    "call_sites": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/call-sites.txt",
+      "bytes": 696,
+      "sha256": "e73e06ebd395647be02a0edb703f14654ccb0fe7b8d1d5002e0b56dbe6296d15"
+    },
+    "capture_source": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/capture-source.c",
+      "bytes": 1761,
+      "sha256": "9e2c7a2ad97eda07fc390aac558a54984b0b77c37d3de2d10bb451f1f1bf5a92"
+    },
+    "first_failure.diff": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/coverage-fix.diff",
+      "bytes": 171,
+      "sha256": "ba4cdcd3b71c019a36407b951183f9b86c75cc75ada9ee6e3883598e2e00ed0a"
+    },
+    "first_failure.header": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/first-failed-header.h",
+      "bytes": 7116,
+      "sha256": "019286903b9a209269c150545e97aec6f67b813950edcd160a16974036b7f302"
+    },
+    "first_failure.log": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/first-failure-contiguous-coverage.log",
+      "bytes": 45,
+      "sha256": "2247e0d053d76236fa2c1ffd8e58e3738f0a929b0f3f30883497334dc0b49f07"
+    },
+    "production.binary": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape",
+      "bytes": 69560,
+      "sha256": "20a85c0bfc39416dbef5488e3d4b027dd07e8c1607694fd6478e458c6ecd1d58"
+    },
+    "production.log": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/production-fixed.log",
+      "bytes": 168,
+      "sha256": "87d1eda428de7a5215e2536e3eb937cadc181443689a21bbd06299e71923ad14"
+    },
+    "sanitizers.binary": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape_san",
+      "bytes": 97272,
+      "sha256": "7f3f04f53752c3a835f29ecf162b5d9db29ca49b76af39176633de1b2471872d"
+    },
+    "sanitizers.first_run_log": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/asan-ubsan.log",
+      "bytes": 75,
+      "sha256": "98ad709d1780271908f3b0fdc68a0a53ee46c82b0b7894d6a3599bfc8f129266"
+    },
+    "sanitizers.log": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/asan-ubsan-supported.log",
+      "bytes": 168,
+      "sha256": "87d1eda428de7a5215e2536e3eb937cadc181443689a21bbd06299e71923ad14"
+    },
+    "source.Makefile": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/Makefile",
+      "bytes": 55008,
+      "sha256": "3cd1680abef19c903c53fa95c4baa428b851455f38cd018f9ca4382194f7f88f"
+    },
+    "source.ds4_suffix_pair_tape.h": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_suffix_pair_tape.h",
+      "bytes": 7139,
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0"
+    },
+    "source.tests/test_suffix_pair_tape.c": {
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/tests/test_suffix_pair_tape.c",
+      "bytes": 18031,
+      "sha256": "8c68d7c31717c963f422e187dbadda18a43b35971785d7c95b736d0b3598a941"
+    }
+  },
+  "binaries_retained_original": true,
+  "model_assets_accessed": false
+}

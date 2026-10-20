@@ -1,0 +1,30 @@
+{
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "time": 1791001425.182719,
+  "manifest_sha256": "d13eaf4e51b10d9dc0849b26e7648ea790173a96f90e6d234256df63742e4d63",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/run_agent_suffix_pair_actual_memory160.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1",
+    "--manifest-sha256",
+    "d13eaf4e51b10d9dc0849b26e7648ea790173a96f90e6d234256df63742e4d63"
+  ],
+  "prepared_command_sha256": "ac4501a2bfb61b9e3e91163dbbfe75670cd704cfb50044f6d8c545c40684562b",
+  "root_launch_cwd": "/Volumes/Models/ds4",
+  "prepared_evidence_freeze": "3d410056fd401b540845a9a311de9c6a2d3506f3",
+  "preceding_release_sha256": "fc6e941b9100c5f4eac98460da507e51dcc86d94d691b4eb1ae5821b814d9f38",
+  "source_freeze": "86f834866f81ae8cb33c9c9f00e4df86a3b7a95c",
+  "fresh_ps_model_processes": [],
+  "lock_reacquired_before_launch": true,
+  "experiment": "SEPARATE_FIXED160_MEMORY_ADMISSION_FIRST_ATTEMPT",
+  "first_third_semantic_result_not_previously_observed": true,
+  "task_only_memory_budget_diff_deep_verified": true,
+  "all_prompt_grader_updater_bytes_exact_prior128": true,
+  "no_automatic_retry_or_budget_expansion": true
+}

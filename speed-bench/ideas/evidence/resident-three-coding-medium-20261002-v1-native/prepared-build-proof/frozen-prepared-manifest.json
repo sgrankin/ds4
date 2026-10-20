@@ -1,0 +1,18 @@
+{
+  "cpu_tests": 17,
+  "files": {
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/evidence/resident-three-coding-medium-20261002-v1-prepared/COMMAND.md": "a1c4014958d7e5711c549e750b4c339056781562009bf0a0645d8860cf8dae1c",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/evidence/resident-three-coding-medium-20261002-v1-prepared/README.md": "4272963757b460adaca68d67a405fe54920fde3ae28251ceafe0c83ae5f7512c",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/evidence/resident-three-coding-medium-20261002-v1-prepared/cpu-preflight.json": "ddb93812a0a2b1b004fe5ee63c2e9752dfc421349250837a767cd74c1ce3a564",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/evidence/resident-three-coding-medium-20261002-v1-prepared/plan.json": "851ffa9623b568d94459372e705d2e09703a78e94e86810b3f34619919f432d2",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/evidence/resident-three-coding-medium-20261002-v1-prepared/prepared-command.json": "bf96b33b14be3dd9f9719adb296f0f1b96032b8a6a159efcc63abe3090f0a30f",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/launch_native_prefill_coding.py": "2a4abe5ecf98dfe670d4952577f8c4e4b7a69b90be41f237b2e57dea0c89cec1",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/prepare_native_prefill_coding.py": "9b738aa098bbc55bfa7889c350f3280185e2cbb74a2ebb539c4ac758ce51652b",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/run_native_prefill_coding.py": "00d5e9a9fc34eb63da333f9808902f9c6c422cc73240baf6cd80a72f6190e159",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/tests/test_native_prefill_coding.py": "87a975e68119dc935256ed3722e01f0bbcb3030fb4330166415a02a712ab28af"
+  },
+  "model_metadata_or_tokenizer_used": false,
+  "runtime_parent": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "source_revision": "911c99381e90ed8027991d09d2c488476578e111",
+  "status": "FROZEN_PREPARED_UNRUN"
+}

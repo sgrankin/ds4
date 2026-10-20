@@ -1,0 +1,34 @@
+{
+  "gold": {
+    "ids": [
+      9,
+      2,
+      7
+    ],
+    "requests": 3,
+    "stop_reason": "null_cursor"
+  },
+  "oracle_input": {
+    "pages": [
+      {
+        "ids": [
+          9,
+          2
+        ],
+        "next_cursor": "k1"
+      },
+      {
+        "ids": [],
+        "next_cursor": "k2"
+      },
+      {
+        "ids": [
+          7
+        ],
+        "next_cursor": null
+      }
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Cursor-driven termination across an empty page; not stable deduplication, queue ordering or failure retry."
+}

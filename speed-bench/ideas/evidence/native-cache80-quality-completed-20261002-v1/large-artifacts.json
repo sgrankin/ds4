@@ -1,0 +1,26 @@
+[
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-cache-quality/speed-bench/ideas/artifacts/native-cache80-quality-20261002-v1/reference.bin",
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "verified_by": "completed driver: pinned before/after each arm"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-cache-quality/speed-bench/ideas/artifacts/native-cache80-quality-20261002-v1/native64-raw.bin",
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "verified_by": "completed driver full-file digest"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-cache-quality/speed-bench/ideas/artifacts/native-cache80-quality-20261002-v1/native80a-raw.bin",
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "verified_by": "completed driver full-file digest"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-cache-quality/speed-bench/ideas/artifacts/native-cache80-quality-20261002-v1/native80b-raw.bin",
+    "bytes": 264777744,
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "verified_by": "completed driver full-file digest"
+  }
+]

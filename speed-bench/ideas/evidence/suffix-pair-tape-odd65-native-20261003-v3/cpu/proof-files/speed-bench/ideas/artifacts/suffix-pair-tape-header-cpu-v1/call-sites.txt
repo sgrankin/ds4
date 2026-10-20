@@ -1,0 +1,11 @@
+40200: #include "ds4_suffix_pair_tape.h"
+40279: ds41_suffix_pair_tape_free(g->suffix_pair_tape);
+40355: ds41_suffix_pair_tape_reset(g->suffix_pair_tape);
+40756: !ds41_suffix_pair_tape_record(g->suffix_pair_tape, g->ctx, owner, pos, 1,
+41706: !ds41_suffix_pair_tape_record(g->suffix_pair_tape, g->ctx, owner, start, count,
+65163: return ds41_suffix_pair_tape_owned_bytes(t);
+65197: ds41_suffix_pair_tape_free(g->suffix_pair_tape);
+65201: ds41_suffix_pair_tape_free(t);
+65225: if (!ds41_suffix_pair_tape_coverage(t, s->ds41_graph.ctx, end, &first, &bytes)) goto fail;
+65234: if (!ds41_suffix_pair_tape_copy(t, s->ds41_graph.ctx, first, end,
+65425: ds41_suffix_pair_tape_reset(g->suffix_pair_tape);

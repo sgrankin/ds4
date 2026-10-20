@@ -1,0 +1,11 @@
+{
+  "time": 1790988268.762042,
+  "archive_source_revision": "afb277ac648dbb0b6a17c7a589be4a171f941499",
+  "archive_manifest_sha256": "7587aa5b1948c59319195cb7602bae8c223b850e00c1abfa7c5d7d4ba656d3e5",
+  "source": "/Volumes/Models/ds4/.workspaces/idea-suffix-odd65-archive/speed-bench/ideas/evidence/suffix-pair-tape-odd65-native-20261003-v3",
+  "destination": "/Volumes/Models/ds4/speed-bench/ideas/evidence/suffix-pair-tape-odd65-native-20261003-v3",
+  "verified_files": 119,
+  "copied_files": 120,
+  "model_metadata_touched": false,
+  "runtime_merged": false
+}

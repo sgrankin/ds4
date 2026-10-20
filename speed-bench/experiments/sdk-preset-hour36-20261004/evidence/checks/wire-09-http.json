@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "headers": {
+    "connection": "close",
+    "content-length": "123",
+    "content-type": "application/json"
+  }
+}

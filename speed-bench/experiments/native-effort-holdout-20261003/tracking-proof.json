@@ -1,0 +1,16 @@
+{
+  "first_glob_physical_files": 253,
+  "first_glob_tracked_files": 204,
+  "first_missing_files": 49,
+  "cause": "Hidden .workspaces provenance and ignored __pycache__ were not matched by the first glob despite --include-ignored; explicit path tracking corrected before freeze.",
+  "corrective_command": [
+    "jj",
+    "file",
+    "track",
+    "--include-ignored",
+    "speed-bench/experiments/native-effort-holdout-20261003/provenance/.workspaces",
+    "speed-bench/experiments/native-effort-holdout-20261003/prepared-v2/__pycache__"
+  ],
+  "all253_original_physical_files_tracked_after_correction": true,
+  "original_run_files_unchanged": true
+}

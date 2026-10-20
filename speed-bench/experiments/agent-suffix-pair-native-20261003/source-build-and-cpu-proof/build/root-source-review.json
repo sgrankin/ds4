@@ -1,0 +1,13 @@
+{
+  "time": 1790994110.349026,
+  "status": "ROOT_SOURCE_REVIEW_PASS_CPU_ONLY_GRANT",
+  "source_revision": "1e377e5504fb30ff3d835079553f71766ddf8deb",
+  "manifest_sha256": "6decf0e44cd49b1f6a90ed4112a24249c8766be36ff7811bdf810bff0d1e2672",
+  "plan_sha256": "d901fc6817d84a24288cf4b50487ce27aa75eae1ffe4aeaa6d743d61de0ad08d",
+  "source_files_checked": 37,
+  "objects_checked": 14,
+  "serial_commands": 6,
+  "scope": "Only frozen2callercompile+2link+fixture--selftest+driver CPU tests. No core/Metal/model/helper without --selftest/tokenizer or modelstat grant.",
+  "cpu_parallel_to_root_resident_study": true,
+  "model_unrun": true
+}

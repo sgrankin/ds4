@@ -1,0 +1,38 @@
+{
+  "archive_execution_authorized": false,
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive-v2/speed-bench/math16-archive/archive.py",
+    "--registry-sha256",
+    "2e3d2865bf8a8028164c931828c55c30a619222182fd121e59e834c8760c481e",
+    "--release",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/root-release-proof.json",
+    "--release-sha256",
+    "d35de4e3bef0f0c678395509042087d93d6a98358744acbf0adec095d1d32f72",
+    "--producer-summary",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/producer-analysis.json",
+    "--producer-summary-sha256",
+    "c79c5d113189f552f4cbb4a15274dae1f245a1cbe9c1bf309935a19aa996325e",
+    "--independent-audit",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/root-independent-outcome-audit.json",
+    "--independent-audit-sha256",
+    "9853844fba01c8260fcbe44facf4b1ad77f9eb787cc77477a59f3203d52a55b3",
+    "--destination",
+    "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive-v2/speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1",
+    "--root-archive-granted"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive-v2",
+  "destination_exclusive": true,
+  "model_or_helper_or_guard_authorized": false,
+  "outcome_files_read_during_preparation": false,
+  "prepared_only": true,
+  "root_review_required_before_execution": true,
+  "schema": "math16-postrelease-archive-execution-plan-v1",
+  "source_files_before_cpu": {
+    "README.md": "39e8d128d28828a62b29f7c729cb27cb0b0dd12a1ca45e102a6ba55c0d1f6e39",
+    "administrative-first-refusal.json": "438317300e0d01526bb0307070cdf99948d41a1bde987a3fe2960502c8dfdc0b",
+    "archive.py": "07de1fffdf6a8fecbd98e0868df9d7bd5b840be87ad8894e751956fa841c6c64",
+    "source-authorities.json": "2e3d2865bf8a8028164c931828c55c30a619222182fd121e59e834c8760c481e",
+    "test_archive.py": "6397cb4c37a674790a3b4e6bdd46ea7189ed003f04ce30a043430764948a268c"
+  }
+}

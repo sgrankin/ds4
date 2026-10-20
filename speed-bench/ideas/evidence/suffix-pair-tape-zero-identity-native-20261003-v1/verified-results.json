@@ -1,0 +1,627 @@
+{
+  "status": "RETAINED_NATIVE_ZERO_IDENTITY_VERIFIED",
+  "source_revision": "d04460a9f726c371cbc91349897e33fc2447f0d6",
+  "prepared_directory": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1",
+  "prepared_manifest_sha256": "75f0a2112be005b863f1ca19cdc12f17d2172e7f6713fca2709109816de86b31",
+  "command_sha256": "0b2dd19a52e980749352a8fa115d0e077015f82f160a61f3859d17a9d8417d86",
+  "native_control_identity": {
+    "reference_sha256": "d04828d7157f1e9cbedb425104cddb72bc5ff61802c0880e4da311d4e5216f9e",
+    "teacher_token_hex": "04010000ed5e0000112000000e000000ebd90100310100005a1a00000e000000cc020000c900000056000000e8ac0000a50d00008d55000007060000d9d50000",
+    "state": {
+      ".source.state.bin": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199",
+      ".fresh.state.bin": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+    }
+  },
+  "arms": [
+    {
+      "arm": "old-native-before",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": true,
+        "identity_native_state_equal": true,
+        "identity_native_logits_equal": true,
+        "identity_reuse_state_equal": false,
+        "prefix": 2017,
+        "shift": 0,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92556975,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 1388.585,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/old-native-before.raw.bin",
+        "bytes": 9308256,
+        "sha256": "8e8f5c2a36ecc96f5eeb1faea1e78844e6efe692ae5a7b363a47ffc2502deb28",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "d04828d7157f1e9cbedb425104cddb72bc5ff61802c0880e4da311d4e5216f9e",
+        "candidate_sha256": null,
+        "teacher_token_hex": "04010000ed5e0000112000000e000000ebd90100310100005a1a00000e000000cc020000c900000056000000e8ac0000a50d00008d55000007060000d9d50000",
+        "teacher_ids": [
+          260,
+          24301,
+          8209,
+          14,
+          121323,
+          305,
+          6746,
+          14,
+          716,
+          201,
+          86,
+          44264,
+          3493,
+          21901,
+          1543,
+          54745
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/old-native-before.source.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/old-native-before.fresh.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        }
+      }
+    },
+    {
+      "arm": "new-native",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": true,
+        "identity_native_state_equal": true,
+        "identity_native_logits_equal": true,
+        "identity_reuse_state_equal": false,
+        "prefix": 2017,
+        "shift": 0,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92556975,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 1451.443,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/new-native.raw.bin",
+        "bytes": 9308256,
+        "sha256": "8e8f5c2a36ecc96f5eeb1faea1e78844e6efe692ae5a7b363a47ffc2502deb28",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "d04828d7157f1e9cbedb425104cddb72bc5ff61802c0880e4da311d4e5216f9e",
+        "candidate_sha256": null,
+        "teacher_token_hex": "04010000ed5e0000112000000e000000ebd90100310100005a1a00000e000000cc020000c900000056000000e8ac0000a50d00008d55000007060000d9d50000",
+        "teacher_ids": [
+          260,
+          24301,
+          8209,
+          14,
+          121323,
+          305,
+          6746,
+          14,
+          716,
+          201,
+          86,
+          44264,
+          3493,
+          21901,
+          1543,
+          54745
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/new-native.source.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/new-native.fresh.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        }
+      }
+    },
+    {
+      "arm": "new-tape-native",
+      "summary": {
+        "mode": "tape-native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": true,
+        "identity_native_state_equal": true,
+        "identity_native_logits_equal": true,
+        "identity_reuse_state_equal": false,
+        "prefix": 2017,
+        "shift": 0,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 117722879,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 1826.018,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/new-tape-native.raw.bin",
+        "bytes": 9308256,
+        "sha256": "8e8f5c2a36ecc96f5eeb1faea1e78844e6efe692ae5a7b363a47ffc2502deb28",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "d04828d7157f1e9cbedb425104cddb72bc5ff61802c0880e4da311d4e5216f9e",
+        "candidate_sha256": null,
+        "teacher_token_hex": "04010000ed5e0000112000000e000000ebd90100310100005a1a00000e000000cc020000c900000056000000e8ac0000a50d00008d55000007060000d9d50000",
+        "teacher_ids": [
+          260,
+          24301,
+          8209,
+          14,
+          121323,
+          305,
+          6746,
+          14,
+          716,
+          201,
+          86,
+          44264,
+          3493,
+          21901,
+          1543,
+          54745
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/new-tape-native.source.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/new-tape-native.fresh.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        }
+      }
+    },
+    {
+      "arm": "suffix-reuse",
+      "summary": {
+        "mode": "reuse",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": true,
+        "identity_native_state_equal": true,
+        "identity_native_logits_equal": true,
+        "identity_reuse_state_equal": true,
+        "prefix": 2017,
+        "shift": 0,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 17,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 117722879,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": true,
+        "precancel_preserves_state": true,
+        "partial_cancel_invalidates": true,
+        "approximate_export_blocked": true,
+        "pair_inputs_reused": 195,
+        "pair_rows_rebuilt": 99,
+        "pair_boundary_rows": 3,
+        "reused_tokens": 65,
+        "fresh_tail_tokens": 1,
+        "fresh_ms_diagnostic": 1774.899,
+        "reuse_ms_diagnostic": 48.558,
+        "mean_kl": 2.9271283851e-26,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 17
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/suffix-reuse.raw.bin",
+        "bytes": 18099296,
+        "sha256": "7d23620a10454549041463ff7e76ca14f67d58e2b82e0e554f8a3dc497bc127c",
+        "reference_rows": 18,
+        "candidate_rows": 17,
+        "reference_sha256": "d04828d7157f1e9cbedb425104cddb72bc5ff61802c0880e4da311d4e5216f9e",
+        "candidate_sha256": "980d583ad2b0ca6c94b4c36003cc090e07d0e233171ba33404b45ac408dc6ed1",
+        "teacher_token_hex": "04010000ed5e0000112000000e000000ebd90100310100005a1a00000e000000cc020000c900000056000000e8ac0000a50d00008d55000007060000d9d50000",
+        "teacher_ids": [
+          260,
+          24301,
+          8209,
+          14,
+          121323,
+          305,
+          6746,
+          14,
+          716,
+          201,
+          86,
+          44264,
+          3493,
+          21901,
+          1543,
+          54745
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/suffix-reuse.source.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/suffix-reuse.fresh.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        },
+        ".private.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/suffix-reuse.private.state.bin",
+          "bytes": 24350912,
+          "sha256": "50d9c6f51d60e8052636451ab763c2904af9aed6d2a735dada92e99cc32fe0ef"
+        }
+      }
+    },
+    {
+      "arm": "old-native-after",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": true,
+        "identity_native_state_equal": true,
+        "identity_native_logits_equal": true,
+        "identity_reuse_state_equal": false,
+        "prefix": 2017,
+        "shift": 0,
+        "span": 65,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92556975,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 1765.069,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/old-native-after.raw.bin",
+        "bytes": 9308256,
+        "sha256": "8e8f5c2a36ecc96f5eeb1faea1e78844e6efe692ae5a7b363a47ffc2502deb28",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "d04828d7157f1e9cbedb425104cddb72bc5ff61802c0880e4da311d4e5216f9e",
+        "candidate_sha256": null,
+        "teacher_token_hex": "04010000ed5e0000112000000e000000ebd90100310100005a1a00000e000000cc020000c900000056000000e8ac0000a50d00008d55000007060000d9d50000",
+        "teacher_ids": [
+          260,
+          24301,
+          8209,
+          14,
+          121323,
+          305,
+          6746,
+          14,
+          716,
+          201,
+          86,
+          44264,
+          3493,
+          21901,
+          1543,
+          54745
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/old-native-after.source.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/old-native-after.fresh.state.bin",
+          "bytes": 24350912,
+          "sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+        }
+      }
+    }
+  ],
+  "private_state": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run/suffix-reuse.private.state.bin",
+    "bytes": 24350912,
+    "sha256": "50d9c6f51d60e8052636451ab763c2904af9aed6d2a735dada92e99cc32fe0ef"
+  },
+  "independent_math": {
+    "method": "Streamed FP32 rows; FP64 math.fsum/logsumexp, independent log-ratio arithmetic",
+    "rows": [
+      {
+        "step": 0,
+        "target": 260,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 1,
+        "target": 24301,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 2,
+        "target": 8209,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 3,
+        "target": 14,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 4,
+        "target": 121323,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 5,
+        "target": 305,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 6,
+        "target": 6746,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 7,
+        "target": 14,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 8,
+        "target": 716,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 9,
+        "target": 201,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 10,
+        "target": 86,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 11,
+        "target": 44264,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 12,
+        "target": 3493,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 13,
+        "target": 21901,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 14,
+        "target": 1543,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 15,
+        "target": 54745,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      },
+      {
+        "step": 16,
+        "target": -1,
+        "delta_nll": 0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "argmax_flip": 0,
+        "bit_equal": 1
+      }
+    ],
+    "summary": {
+      "mean_kl": 0.0,
+      "mean_tv": 0.0,
+      "sum_delta_nll": 0.0,
+      "argmax_flips": 0,
+      "bit_equal_rows": 17
+    }
+  },
+  "pressure": {
+    "samples": 310,
+    "normal_samples": 310,
+    "bad_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_plus_compressor_gib": 83.00228881835938
+  },
+  "historical_release_proof": {
+    "time": 1790988322.428965,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "lock_reacquired": true,
+    "live_model_processes": [],
+    "normal_pressure_samples": 310,
+    "bad_pressure_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gib": 83.00228881835938
+  },
+  "identity_byte_controls": {
+    "source_fresh_native_state_exact": true,
+    "source_fresh_native_initial_vector_exact": true,
+    "candidate_all17_full_vectors_exact": true,
+    "diagnostic_body_exact_after_validated4byte_tag": true,
+    "normalized_diagnostic_sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199",
+    "C_reported_KL_roundoff": 2.9271283851e-26,
+    "independent_identical_vector_KL": 0.0,
+    "canonical_normalization": "DSSD\u2192DSV4 first4 bytes ONLY"
+  },
+  "main_launch_log": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-followup-zero-root-launch-20261003-v1.log",
+    "bytes": 878,
+    "sha256": "2be9d9cfca71343ba00ed9301da4e30387d3d5bcbc666ae1276b06becf98b225"
+  },
+  "timing_diagnostic": true,
+  "accuracy_claim": false,
+  "forgetting_claim": false,
+  "default_promotion": false,
+  "archive_model_assets_accessed": false
+}

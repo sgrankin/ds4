@@ -1,0 +1,35 @@
+{
+  "status": "FIRST_FAILURE_RETAINED",
+  "phase": "agent_exit",
+  "error": "RuntimeError: Agent infrastructure/process exit differs: 1",
+  "cleanup": {
+    "attempted": false,
+    "error": null,
+    "leader_reaped": true
+  },
+  "submitted": 3,
+  "completed": [
+    1,
+    2
+  ],
+  "overall_success": false,
+  "partial_gold_checks": [
+    {
+      "turn": 1,
+      "answer": "CODE=2718",
+      "passed": true
+    },
+    {
+      "turn": 2,
+      "answer": "READY",
+      "passed": true
+    }
+  ],
+  "deadline_seconds": 900,
+  "cleanup_reserve_seconds": 12,
+  "elapsed_seconds": 117.26378275000025,
+  "agent_returncode": 1,
+  "persistence": "NOT_EXERCISED",
+  "first_attempt": true,
+  "no_retries": true
+}

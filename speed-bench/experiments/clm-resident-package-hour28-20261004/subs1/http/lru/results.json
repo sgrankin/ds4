@@ -1,0 +1,132 @@
+[
+  {
+    "case": "lru",
+    "arm": "subs1",
+    "protocol": "full-input-clm",
+    "write_budget": 128,
+    "final_policy": "budget1",
+    "global_cap": 2048,
+    "wall_seconds": 106.70979983301368,
+    "http_output_tokens": 657,
+    "http_reasoning_tokens": 189,
+    "actual_read_count": 1,
+    "actual_write_count": 1,
+    "calls": [
+      {
+        "role": "READ",
+        "name": "read",
+        "call_id": "call_6670619fef6347cc4198f678c7baa858",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/config.json\",\"whole\":true,\"raw\":true}",
+        "executed": true,
+        "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/config.json",
+        "output": "{\n  \"capacity\": 2,\n  \"sample\": [\n    \"a\",\n    \"b\",\n    \"a\",\n    \"c\",\n    \"b\",\n    \"d\"\n  ]\n}\n",
+        "tool_ms": 0.48579199938103557
+      },
+      {
+        "role": "WRITE",
+        "name": "write",
+        "call_id": "call_f4d65b899479efb8c1710f2037daa44e",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py\",\"content\":\"def solve(payload, config):\\n    capacity = config[\\\"capacity\\\"]\\n    if capacity <= 0:\\n        return {\\\"cache\\\": [], \\\"hits\\\": 0, \\\"misses\\\": len(payload), \\\"evictions\\\": []}\\n\\n    cache = {}\\n    hits = 0\\n    misses = 0\\n    evictions = []\\n\\n    for key in payload:\\n        if key in cache:\\n            hits += 1\\n            del cache[key]\\n            cache[key] = True\\n        else:\\n            misses += 1\\n            cache[key] = True\\n            if len(cache) > capacity:\\n                lru = next(iter(cache))\\n                del cache[lru]\\n                evictions.append(lru)\\n\\n    return {\\n        \\\"cache\\\": list(cache.keys()),\\n        \\\"hits\\\": hits,\\n        \\\"misses\\\": misses,\\n        \\\"evictions\\\": evictions,\\n    }\\n\"}",
+        "executed": true,
+        "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py",
+        "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py",
+        "tool_ms": 0.8467080187983811
+      }
+    ],
+    "replies": [
+      {
+        "role": "READ",
+        "budget": 0,
+        "effort": "high",
+        "seconds": 54.6617224579968,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1573,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1573
+          },
+          "output_tokens": 156,
+          "output_tokens_details": {
+            "reasoning_tokens": 61
+          },
+          "total_tokens": 1729
+        },
+        "requested_max_output_tokens": 2048,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "role": "WRITE",
+        "budget": 128,
+        "effort": "high",
+        "seconds": 44.08189525001217,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1065,
+          "input_tokens_details": {
+            "cached_tokens": 455,
+            "cache_write_tokens": 610
+          },
+          "output_tokens": 390,
+          "output_tokens_details": {
+            "reasoning_tokens": 128
+          },
+          "total_tokens": 1455
+        },
+        "requested_max_output_tokens": 1892,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "role": "FINAL",
+        "budget": 1,
+        "effort": "high",
+        "seconds": 7.963219457975356,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1497,
+          "input_tokens_details": {
+            "cached_tokens": 1455,
+            "cache_write_tokens": 42
+          },
+          "output_tokens": 111,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1608
+        },
+        "requested_max_output_tokens": 1502,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      }
+    ],
+    "first_code_path": "speed-bench/experiments/clm-resident-package-hour28-20261004/subs1/http/lru/lru/first-solution.py",
+    "grade": {
+      "correct": true,
+      "tests": 161,
+      "returncode": 0
+    },
+    "complete": true,
+    "cap": false,
+    "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`.\n\nIt uses an ordered dict as the LRU cache: hits move a key to most-recently-used, misses insert at MRU and evict the least-recently-used key when capacity is exceeded, appending evicted keys in order. Non-positive capacity yields all misses with empty cache/evictions and zero hits. Inputs are not mutated.",
+    "final_text_length": 444,
+    "final_text_bytes": 444,
+    "first_code_bytes": 709,
+    "errors": [],
+    "config_unchanged": true,
+    "context_edit": {
+      "removed_blocks": 2,
+      "before_bytes": 5601,
+      "after_bytes": 2083,
+      "seconds": 0.0003022919991053641
+    },
+    "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+    "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+    "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+    "pass": true
+  }
+]

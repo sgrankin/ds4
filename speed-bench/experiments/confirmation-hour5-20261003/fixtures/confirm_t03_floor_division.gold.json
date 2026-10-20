@@ -1,0 +1,13 @@
+{
+  "gold": {
+    "quotient": -4,
+    "remainder": 3,
+    "reconstructed": -17
+  },
+  "oracle_input": {
+    "question": "Use Python integer arithmetic for dividend=-17 and divisor=5. Report quotient using //, remainder using %, and reconstructed=quotient*divisor+remainder. Return JSON first and explain why division truncating toward zero would be different."
+  },
+  "explanation": "Floor division rounds the quotient down to negative four rather than truncating it toward zero. Multiplying negative four by five gives negative twenty, leaving a positive remainder of three. The identity negative twenty plus three equals negative seventeen reconstructs the dividend. A truncation-based quotient would instead be negative three.",
+  "category": "code",
+  "scope": "New authored content, fixed before any model outcome."
+}

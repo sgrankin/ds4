@@ -1,0 +1,12 @@
+{
+  "gold": {
+    "label": "N4-東京",
+    "notice": "カフェは18:10に閉まります。受け取りロッカーはN4-東京です。"
+  },
+  "oracle_input": {
+    "closes": "18:10",
+    "locker_label": "N4-東京"
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Japanese fictional pickup notice and exact mixed-script label; not Italian shop-tense translation or Unicode scalar enumeration."
+}

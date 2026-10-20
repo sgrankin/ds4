@@ -1,0 +1,12 @@
+{
+  "status": "ALL219_PHYSICAL_TRACKED_ARCHIVE_FILES_AND37_EXTERNAL_REFS_PASS",
+  "manifest_sha256": "153eea2a4c6d693598dc286f1c85c9e80d10581bae45d8fbf0ab00cca0a392ff",
+  "cpu_build_index_sha256": "d963f75c29501f81eabc35bd28d1f34c6cbe91d9b2bf791d57080b501ee8ad35",
+  "physical_tracked_count": 219,
+  "external_count": 37,
+  "prior_check_refusals": [
+    "Toolde0f03: jj file list working-copy snapshot hit restricted .git; added --ignore-working-copy before all proof/docs writes",
+    "Tool6dcd25: exact tracking caught one ignored Python bytecode file; explicitly tracked it before proof/docs writes"
+  ],
+  "model_accessed": false
+}

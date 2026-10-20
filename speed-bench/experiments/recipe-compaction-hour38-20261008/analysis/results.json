@@ -1,0 +1,3259 @@
+{
+  "screens": [
+    {
+      "screen": "screen-equivalent64",
+      "case": "equivalent-instructions",
+      "fresh_tail_requested": 64,
+      "teacher_rows": 174,
+      "delta_nll_nats_per_token": 0.00693040915996,
+      "perplexity_change_fraction": 0.006954480020362953,
+      "mean_kl": 0.00504236561244,
+      "mean_tv": 0.00928989407445,
+      "argmax_flips": 1,
+      "byte_equal_rows": 0,
+      "fresh_edit_ms": 47001.274,
+      "reuse_edit_ms": 11167.522,
+      "edit_saving_percent": 76.23995894238952,
+      "source_capture_ms": 5.062,
+      "setup_ms": 84479.615,
+      "reused_tokens": 1472,
+      "fresh_tail_actual": 64,
+      "query_fully_fresh": true,
+      "destination_end": 1984,
+      "latest_user_start": 2024,
+      "fresh_greedy_cap": false,
+      "reuse_greedy_cap": false,
+      "raw_summary": {
+        "case": "equivalent-instructions",
+        "system_edit": true,
+        "teacher_tokens": 174,
+        "rows": 174,
+        "teacher_cap": 512,
+        "greedy_cap": 512,
+        "raw_dump": false,
+        "prerope_originals": true,
+        "prerope_bytes": 2444012,
+        "source_capture_ms": 5.062,
+        "setup_ms": 84479.615,
+        "latest_user_start": 2024,
+        "query_fully_fresh": true,
+        "source_start": 1280,
+        "source_end": 2752,
+        "destination_start": 512,
+        "destination_end": 1984,
+        "reused_tokens": 1472,
+        "fresh_tail_tokens": 64,
+        "copied_bytes": 19906560,
+        "sum_delta_nll": 1.20589119383,
+        "mean_delta_nll": 0.00693040915996,
+        "perplexity_ratio": 1.00695448002,
+        "mean_kl": 0.00504236561244,
+        "mean_tv": 0.00928989407445,
+        "argmax_flips": 1,
+        "byte_equal_rows": 0,
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 47001.274,
+            "teacher_logprob": -8.56135021396,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 179,
+            "greedy": "```python\ndef solve(payload, config):\n    capacity = config[\"capacity\"]\n    rate = config[\"rate\"]\n    tokens = capacity\n    previous = 0\n    accepted = []\n    rejected = []\n    remaining = []\n    index = 0\n    for event in payload:\n        t = event[\"t\"]\n        cost = event[\"cost\"]\n        elapsed = t - previous\n        tokens = tokens + elapsed * rate\n        if tokens > capacity:\n            tokens = capacity\n        previous = t\n        if cost <= tokens:\n            accepted.append(index)\n            tokens = tokens - cost\n        else:\n            rejected.append(index)\n        remaining.append(tokens)\n        index = index + 1\n    return {\n        \"accepted\": accepted,\n        \"rejected\": rejected,\n        \"remaining\": remaining,\n        \"tokens\": tokens\n    }\n```"
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 11167.522,
+            "teacher_logprob": -9.76724140779,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 172,
+            "greedy": "def solve(payload, config):\n    capacity = config[\"capacity\"]\n    rate = config[\"rate\"]\n    tokens = capacity\n    previous = 0\n    accepted = []\n    rejected = []\n    remaining = []\n    index = 0\n    for event in payload:\n        t = event[\"t\"]\n        cost = event[\"cost\"]\n        tokens = tokens + (t - previous) * rate\n        if tokens > capacity:\n            tokens = capacity\n        previous = t\n        if cost <= tokens:\n            accepted.append(index)\n            tokens = tokens - cost\n        else:\n            rejected.append(index)\n        remaining.append(tokens)\n        index = index + 1\n    return {\n        \"accepted\": accepted,\n        \"rejected\": rejected,\n        \"remaining\": remaining,\n        \"tokens\": tokens\n    }"
+          }
+        ]
+      },
+      "grades": {
+        "fresh": {
+          "returncode": 3,
+          "grade": {
+            "correct": false,
+            "reason": "SyntaxError",
+            "message": "invalid syntax (<unknown>, line 1)",
+            "tests_complete": false,
+            "passed": 0
+          }
+        },
+        "reuse": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        }
+      },
+      "fresh_unfenced_diagnostic": {
+        "scope": "Diagnostic extraction of one enclosing Markdown fence; original first output and raw format failure retained; no model retry",
+        "command": [
+          "/opt/homebrew/bin/python3",
+          "-B",
+          "speed-bench/experiments/fresh-clm-coding-hour32-20261004/practical/grade.py",
+          "bucket",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/screen-equivalent64/fresh-code-unfenced.py"
+        ],
+        "returncode": 0,
+        "grade": {
+          "correct": true,
+          "tests": 161,
+          "passed": 161,
+          "failed": 0,
+          "first_failure": null
+        },
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-oracle",
+          "--model",
+          "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+          "--fixtures",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/fixtures/equivalent-instructions",
+          "--case",
+          "equivalent-instructions",
+          "--out",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/screen-equivalent64",
+          "--prefix",
+          "256",
+          "--source-edit",
+          "1024",
+          "--edit",
+          "256",
+          "--unchanged",
+          "1536",
+          "--fresh-tail",
+          "64",
+          "--teacher",
+          "512",
+          "--greedy",
+          "512",
+          "--ctx",
+          "8192",
+          "--chunk",
+          "512",
+          "--cache-gb",
+          "64",
+          "--system-edit"
+        ],
+        "cwd": "/Volumes/Models/ds4",
+        "environment": {
+          "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+          "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+          "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+          "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+          "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+          "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+          "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+          "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+          "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+          "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+          "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+          "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+          "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+          "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+          "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+          "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+          "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+          "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+          "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+          "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+          "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+          "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+          "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+          "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+          "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+          "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+          "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+          "DS4_METAL_V41_SELECTED_TILE": "64",
+          "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+        },
+        "oracle_sha256": "41b5bfdff89ebbd835c893cea670699ac8219d8e92ddacee4d9a94f11c6c9724",
+        "runtime_revision": "9c6918f0ae2e",
+        "fixture": {
+          "case": "equivalent-instructions",
+          "practical_case": "bucket",
+          "system_edit": true,
+          "teacher_origin": "retained actual Item37 code-native-before first implementation, unmodified",
+          "teacher_source": "/Volumes/Models/ds4/speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/bucket/bucket/first-solution.py",
+          "teacher_sha256": "c6086eeaece2342e4cebbfab8e00bae32258fa0cac0c7a53377cd118fb1f3943",
+          "teacher_scope": "up to512 tokens; retain actual target length, no artificial teacher padding",
+          "notes": "algorithm contract excludes tool protocol; independent existing161-case grader; current contract/config occur only in retained C, not A/B padding",
+          "source_edit": 1024,
+          "edit": 256,
+          "prefix": 256,
+          "unchanged": 1536
+        }
+      },
+      "result": {
+        "returncode": 0,
+        "grades": {
+          "fresh": {
+            "returncode": 3,
+            "grade": {
+              "correct": false,
+              "reason": "SyntaxError",
+              "message": "invalid syntax (<unknown>, line 1)",
+              "tests_complete": false,
+              "passed": 0
+            }
+          },
+          "reuse": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          }
+        }
+      }
+    },
+    {
+      "screen": "screen-favorable64",
+      "case": "irrelevant-planning-cleanup",
+      "fresh_tail_requested": 64,
+      "teacher_rows": 137,
+      "delta_nll_nats_per_token": 0.0178105560209,
+      "perplexity_change_fraction": 0.01797010981345682,
+      "mean_kl": 0.0104221510909,
+      "mean_tv": 0.00901789384202,
+      "argmax_flips": 2,
+      "byte_equal_rows": 0,
+      "fresh_edit_ms": 47698.091,
+      "reuse_edit_ms": 11087.374,
+      "edit_saving_percent": 76.755099066753,
+      "source_capture_ms": 5.121,
+      "setup_ms": 85973.089,
+      "reused_tokens": 1472,
+      "fresh_tail_actual": 64,
+      "query_fully_fresh": true,
+      "destination_end": 1984,
+      "latest_user_start": 2024,
+      "fresh_greedy_cap": false,
+      "reuse_greedy_cap": false,
+      "raw_summary": {
+        "case": "irrelevant-planning-cleanup",
+        "system_edit": false,
+        "teacher_tokens": 137,
+        "rows": 137,
+        "teacher_cap": 512,
+        "greedy_cap": 512,
+        "raw_dump": false,
+        "prerope_originals": true,
+        "prerope_bytes": 2444012,
+        "source_capture_ms": 5.121,
+        "setup_ms": 85973.089,
+        "latest_user_start": 2024,
+        "query_fully_fresh": true,
+        "source_start": 1280,
+        "source_end": 2752,
+        "destination_start": 512,
+        "destination_end": 1984,
+        "reused_tokens": 1472,
+        "fresh_tail_tokens": 64,
+        "copied_bytes": 19906560,
+        "sum_delta_nll": 2.44004617487,
+        "mean_delta_nll": 0.0178105560209,
+        "perplexity_ratio": 1.01797010981,
+        "mean_kl": 0.0104221510909,
+        "mean_tv": 0.00901789384202,
+        "argmax_flips": 2,
+        "byte_equal_rows": 0,
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 47698.091,
+            "teacher_logprob": -14.5067782752,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 140,
+            "greedy": "def solve(payload, config):\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    ttl = config[\"ttl\"]\n    index = 0\n    for event in payload:\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] >= ttl:\n                accepted.append(index)\n                last_accepted[key] = t\n            else:\n                rejected.append(index)\n        index = index + 1\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 11087.374,
+            "teacher_logprob": -16.9468244501,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 138,
+            "greedy": "def solve(payload, config):\n    ttl = config[\"ttl\"]\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    index = 0\n    for event in payload:\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] >= ttl:\n                accepted.append(index)\n                last_accepted[key] = t\n            else:\n                rejected.append(index)\n        index += 1\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          }
+        ]
+      },
+      "grades": {
+        "fresh": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        },
+        "reuse": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        }
+      },
+      "fresh_unfenced_diagnostic": null,
+      "execution": {
+        "command": [
+          "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-oracle",
+          "--model",
+          "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+          "--fixtures",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/fixtures/irrelevant-planning-cleanup",
+          "--case",
+          "irrelevant-planning-cleanup",
+          "--out",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/screen-favorable64",
+          "--prefix",
+          "256",
+          "--source-edit",
+          "1024",
+          "--edit",
+          "256",
+          "--unchanged",
+          "1536",
+          "--fresh-tail",
+          "64",
+          "--teacher",
+          "512",
+          "--greedy",
+          "512",
+          "--ctx",
+          "8192",
+          "--chunk",
+          "512",
+          "--cache-gb",
+          "64"
+        ],
+        "cwd": "/Volumes/Models/ds4",
+        "environment": {
+          "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+          "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+          "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+          "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+          "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+          "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+          "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+          "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+          "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+          "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+          "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+          "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+          "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+          "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+          "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+          "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+          "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+          "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+          "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+          "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+          "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+          "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+          "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+          "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+          "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+          "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+          "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+          "DS4_METAL_V41_SELECTED_TILE": "64",
+          "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+        },
+        "oracle_sha256": "41b5bfdff89ebbd835c893cea670699ac8219d8e92ddacee4d9a94f11c6c9724",
+        "runtime_revision": "9c6918f0ae2e",
+        "fixture": {
+          "case": "irrelevant-planning-cleanup",
+          "practical_case": "dedupe",
+          "system_edit": false,
+          "teacher_origin": "retained actual Item37 code-native-before first implementation, unmodified",
+          "teacher_source": "/Volumes/Models/ds4/speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/dedupe/dedupe/first-solution.py",
+          "teacher_sha256": "44053a0315d8e7a77684d5bf3e522816a78492ead72e1fb8d7f08c4b5b2e23e4",
+          "teacher_scope": "up to512 tokens; retain actual target length, no artificial teacher padding",
+          "notes": "algorithm contract excludes tool protocol; independent existing161-case grader; current contract/config occur only in retained C, not A/B padding",
+          "source_edit": 1024,
+          "edit": 256,
+          "prefix": 256,
+          "unchanged": 1536,
+          "edit_kind": "favorable deletion of irrelevant completed planning; current contract/config unchanged"
+        }
+      },
+      "result": {
+        "returncode": 0,
+        "grades": {
+          "fresh": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          },
+          "reuse": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          }
+        }
+      }
+    },
+    {
+      "screen": "screen-stress64",
+      "case": "changed-fact-stress",
+      "fresh_tail_requested": 64,
+      "teacher_rows": 137,
+      "delta_nll_nats_per_token": -0.00130633340936,
+      "perplexity_change_fraction": -0.001305480527294999,
+      "mean_kl": 0.00361822006642,
+      "mean_tv": 0.00765760229862,
+      "argmax_flips": 3,
+      "byte_equal_rows": 0,
+      "fresh_edit_ms": 47744.916,
+      "reuse_edit_ms": 11302.605,
+      "edit_saving_percent": 76.32710255475159,
+      "source_capture_ms": 5.003,
+      "setup_ms": 86126.584,
+      "reused_tokens": 1472,
+      "fresh_tail_actual": 64,
+      "query_fully_fresh": true,
+      "destination_end": 1984,
+      "latest_user_start": 2024,
+      "fresh_greedy_cap": false,
+      "reuse_greedy_cap": false,
+      "raw_summary": {
+        "case": "changed-fact-stress",
+        "system_edit": false,
+        "teacher_tokens": 137,
+        "rows": 137,
+        "teacher_cap": 512,
+        "greedy_cap": 512,
+        "raw_dump": false,
+        "prerope_originals": true,
+        "prerope_bytes": 2444012,
+        "source_capture_ms": 5.003,
+        "setup_ms": 86126.584,
+        "latest_user_start": 2024,
+        "query_fully_fresh": true,
+        "source_start": 1280,
+        "source_end": 2752,
+        "destination_start": 512,
+        "destination_end": 1984,
+        "reused_tokens": 1472,
+        "fresh_tail_tokens": 64,
+        "copied_bytes": 19906560,
+        "sum_delta_nll": -0.178967677082,
+        "mean_delta_nll": -0.00130633340936,
+        "perplexity_ratio": 0.998694519473,
+        "mean_kl": 0.00361822006642,
+        "mean_tv": 0.00765760229862,
+        "argmax_flips": 3,
+        "byte_equal_rows": 0,
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 47744.916,
+            "teacher_logprob": -17.2450627808,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 130,
+            "greedy": "def solve(payload, config):\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    ttl = config[\"ttl\"]\n    for index, event in enumerate(payload):\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] >= ttl:\n                accepted.append(index)\n                last_accepted[key] = t\n            else:\n                rejected.append(index)\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 11302.605,
+            "teacher_logprob": -17.0660951037,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 140,
+            "greedy": "def solve(payload, config):\n    ttl = config[\"ttl\"]\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    index = 0\n    for event in payload:\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] >= ttl:\n                accepted.append(index)\n                last_accepted[key] = t\n            else:\n                rejected.append(index)\n        index = index + 1\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          }
+        ]
+      },
+      "grades": {
+        "fresh": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        },
+        "reuse": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        }
+      },
+      "fresh_unfenced_diagnostic": null,
+      "execution": {
+        "command": [
+          "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-oracle",
+          "--model",
+          "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+          "--fixtures",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/fixtures/changed-fact-stress",
+          "--case",
+          "changed-fact-stress",
+          "--out",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/screen-stress64",
+          "--prefix",
+          "256",
+          "--source-edit",
+          "1024",
+          "--edit",
+          "256",
+          "--unchanged",
+          "1536",
+          "--fresh-tail",
+          "64",
+          "--teacher",
+          "512",
+          "--greedy",
+          "512",
+          "--ctx",
+          "8192",
+          "--chunk",
+          "512",
+          "--cache-gb",
+          "64"
+        ],
+        "cwd": "/Volumes/Models/ds4",
+        "environment": {
+          "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+          "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+          "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+          "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+          "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+          "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+          "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+          "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+          "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+          "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+          "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+          "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+          "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+          "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+          "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+          "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+          "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+          "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+          "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+          "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+          "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+          "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+          "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+          "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+          "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+          "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+          "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+          "DS4_METAL_V41_SELECTED_TILE": "64",
+          "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+        },
+        "oracle_sha256": "41b5bfdff89ebbd835c893cea670699ac8219d8e92ddacee4d9a94f11c6c9724",
+        "runtime_revision": "9c6918f0ae2e",
+        "fixture": {
+          "case": "changed-fact-stress",
+          "practical_case": "dedupe",
+          "system_edit": false,
+          "teacher_origin": "retained actual Item37 code-native-before first implementation, unmodified",
+          "teacher_source": "/Volumes/Models/ds4/speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/dedupe/dedupe/first-solution.py",
+          "teacher_sha256": "44053a0315d8e7a77684d5bf3e522816a78492ead72e1fb8d7f08c4b5b2e23e4",
+          "teacher_scope": "up to512 tokens; retain actual target length, no artificial teacher padding",
+          "notes": "algorithm contract excludes tool protocol; independent existing161-case grader; current contract/config occur only in retained C, not A/B padding",
+          "source_edit": 1024,
+          "edit": 256,
+          "prefix": 256,
+          "unchanged": 1536,
+          "edit_kind": "stress correction of stale earlier algorithm fact; retained current contract/config unchanged"
+        }
+      },
+      "result": {
+        "returncode": 0,
+        "grades": {
+          "fresh": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          },
+          "reuse": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          }
+        }
+      }
+    },
+    {
+      "screen": "screen-summary128",
+      "case": "ordinary-summary",
+      "fresh_tail_requested": 128,
+      "teacher_rows": 137,
+      "delta_nll_nats_per_token": -0.00724262781712,
+      "perplexity_change_fraction": -0.007216463193254979,
+      "mean_kl": 0.00305626018612,
+      "mean_tv": 0.00791463301022,
+      "argmax_flips": 1,
+      "byte_equal_rows": 0,
+      "fresh_edit_ms": 46882.45,
+      "reuse_edit_ms": 12827.795,
+      "edit_saving_percent": 72.63838600585079,
+      "source_capture_ms": 5.001,
+      "setup_ms": 82386.822,
+      "reused_tokens": 1408,
+      "fresh_tail_actual": 128,
+      "query_fully_fresh": true,
+      "destination_end": 1920,
+      "latest_user_start": 2024,
+      "fresh_greedy_cap": false,
+      "reuse_greedy_cap": false,
+      "raw_summary": {
+        "case": "ordinary-summary",
+        "system_edit": false,
+        "teacher_tokens": 137,
+        "rows": 137,
+        "teacher_cap": 512,
+        "greedy_cap": 512,
+        "raw_dump": false,
+        "prerope_originals": true,
+        "prerope_bytes": 2402892,
+        "source_capture_ms": 5.001,
+        "setup_ms": 82386.822,
+        "latest_user_start": 2024,
+        "query_fully_fresh": true,
+        "source_start": 1280,
+        "source_end": 2688,
+        "destination_start": 512,
+        "destination_end": 1920,
+        "reused_tokens": 1408,
+        "fresh_tail_tokens": 128,
+        "copied_bytes": 19496960,
+        "sum_delta_nll": -0.992240010946,
+        "mean_delta_nll": -0.00724262781712,
+        "perplexity_ratio": 0.992783536807,
+        "mean_kl": 0.00305626018612,
+        "mean_tv": 0.00791463301022,
+        "argmax_flips": 1,
+        "byte_equal_rows": 0,
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 46882.45,
+            "teacher_logprob": -16.8866689222,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 130,
+            "greedy": "def solve(payload, config):\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    ttl = config[\"ttl\"]\n    for index, event in enumerate(payload):\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] >= ttl:\n                accepted.append(index)\n                last_accepted[key] = t\n            else:\n                rejected.append(index)\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 12827.795,
+            "teacher_logprob": -15.8944289113,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 140,
+            "greedy": "def solve(payload, config):\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    ttl = config[\"ttl\"]\n    index = 0\n    for event in payload:\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] < ttl:\n                rejected.append(index)\n            else:\n                accepted.append(index)\n                last_accepted[key] = t\n        index = index + 1\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          }
+        ]
+      },
+      "grades": {
+        "fresh": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        },
+        "reuse": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        }
+      },
+      "fresh_unfenced_diagnostic": null,
+      "execution": {
+        "command": [
+          "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-oracle",
+          "--model",
+          "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+          "--fixtures",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/fixtures/ordinary-summary",
+          "--case",
+          "ordinary-summary",
+          "--out",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/screen-summary128",
+          "--prefix",
+          "256",
+          "--source-edit",
+          "1024",
+          "--edit",
+          "256",
+          "--unchanged",
+          "1536",
+          "--fresh-tail",
+          "128",
+          "--teacher",
+          "512",
+          "--greedy",
+          "512",
+          "--ctx",
+          "8192",
+          "--chunk",
+          "512",
+          "--cache-gb",
+          "64"
+        ],
+        "cwd": "/Volumes/Models/ds4",
+        "environment": {
+          "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+          "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+          "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+          "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+          "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+          "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+          "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+          "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+          "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+          "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+          "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+          "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+          "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+          "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+          "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+          "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+          "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+          "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+          "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+          "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+          "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+          "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+          "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+          "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+          "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+          "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+          "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+          "DS4_METAL_V41_SELECTED_TILE": "64",
+          "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+        },
+        "oracle_sha256": "41b5bfdff89ebbd835c893cea670699ac8219d8e92ddacee4d9a94f11c6c9724",
+        "runtime_revision": "9c6918f0ae2e",
+        "fixture": {
+          "case": "ordinary-summary",
+          "practical_case": "dedupe",
+          "system_edit": false,
+          "teacher_origin": "retained actual Item37 code-native-before first implementation, unmodified",
+          "teacher_source": "/Volumes/Models/ds4/speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/dedupe/dedupe/first-solution.py",
+          "teacher_sha256": "44053a0315d8e7a77684d5bf3e522816a78492ead72e1fb8d7f08c4b5b2e23e4",
+          "teacher_scope": "up to512 tokens; retain actual target length, no artificial teacher padding",
+          "notes": "algorithm contract excludes tool protocol; independent existing161-case grader; current contract/config occur only in retained C, not A/B padding",
+          "source_edit": 1024,
+          "edit": 256,
+          "prefix": 256,
+          "unchanged": 1536
+        }
+      },
+      "result": {
+        "returncode": 0,
+        "grades": {
+          "fresh": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          },
+          "reuse": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          }
+        }
+      }
+    },
+    {
+      "screen": "screen-summary256",
+      "case": "ordinary-summary",
+      "fresh_tail_requested": 256,
+      "teacher_rows": 137,
+      "delta_nll_nats_per_token": -0.0143397181416,
+      "perplexity_change_fraction": -0.014237394066776727,
+      "mean_kl": 0.00352470305846,
+      "mean_tv": 0.00933625903837,
+      "argmax_flips": 1,
+      "byte_equal_rows": 0,
+      "fresh_edit_ms": 47088.641,
+      "reuse_edit_ms": 15956.874,
+      "edit_saving_percent": 66.11311420093861,
+      "source_capture_ms": 4.958,
+      "setup_ms": 79930.773,
+      "reused_tokens": 1280,
+      "fresh_tail_actual": 256,
+      "query_fully_fresh": true,
+      "destination_end": 1792,
+      "latest_user_start": 2024,
+      "fresh_greedy_cap": false,
+      "reuse_greedy_cap": false,
+      "raw_summary": {
+        "case": "ordinary-summary",
+        "system_edit": false,
+        "teacher_tokens": 137,
+        "rows": 137,
+        "teacher_cap": 512,
+        "greedy_cap": 512,
+        "raw_dump": false,
+        "prerope_originals": true,
+        "prerope_bytes": 2320652,
+        "source_capture_ms": 4.958,
+        "setup_ms": 79930.773,
+        "latest_user_start": 2024,
+        "query_fully_fresh": true,
+        "source_start": 1280,
+        "source_end": 2560,
+        "destination_start": 512,
+        "destination_end": 1792,
+        "reused_tokens": 1280,
+        "fresh_tail_tokens": 256,
+        "copied_bytes": 18677760,
+        "sum_delta_nll": -1.9645413854,
+        "mean_delta_nll": -0.0143397181416,
+        "perplexity_ratio": 0.985762605933,
+        "mean_kl": 0.00352470305846,
+        "mean_tv": 0.00933625903837,
+        "argmax_flips": 1,
+        "byte_equal_rows": 0,
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 47088.641,
+            "teacher_logprob": -16.8866689222,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 130,
+            "greedy": "def solve(payload, config):\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    ttl = config[\"ttl\"]\n    for index, event in enumerate(payload):\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] >= ttl:\n                accepted.append(index)\n                last_accepted[key] = t\n            else:\n                rejected.append(index)\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 15956.874,
+            "teacher_logprob": -14.9221275368,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 140,
+            "greedy": "def solve(payload, config):\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    ttl = config[\"ttl\"]\n    index = 0\n    for event in payload:\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] < ttl:\n                rejected.append(index)\n            else:\n                accepted.append(index)\n                last_accepted[key] = t\n        index = index + 1\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          }
+        ]
+      },
+      "grades": {
+        "fresh": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        },
+        "reuse": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        }
+      },
+      "fresh_unfenced_diagnostic": null,
+      "execution": {
+        "command": [
+          "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-oracle",
+          "--model",
+          "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+          "--fixtures",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/fixtures/ordinary-summary",
+          "--case",
+          "ordinary-summary",
+          "--out",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/screen-summary256",
+          "--prefix",
+          "256",
+          "--source-edit",
+          "1024",
+          "--edit",
+          "256",
+          "--unchanged",
+          "1536",
+          "--fresh-tail",
+          "256",
+          "--teacher",
+          "512",
+          "--greedy",
+          "512",
+          "--ctx",
+          "8192",
+          "--chunk",
+          "512",
+          "--cache-gb",
+          "64"
+        ],
+        "cwd": "/Volumes/Models/ds4",
+        "environment": {
+          "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+          "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+          "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+          "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+          "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+          "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+          "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+          "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+          "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+          "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+          "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+          "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+          "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+          "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+          "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+          "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+          "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+          "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+          "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+          "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+          "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+          "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+          "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+          "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+          "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+          "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+          "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+          "DS4_METAL_V41_SELECTED_TILE": "64",
+          "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+        },
+        "oracle_sha256": "41b5bfdff89ebbd835c893cea670699ac8219d8e92ddacee4d9a94f11c6c9724",
+        "runtime_revision": "9c6918f0ae2e",
+        "fixture": {
+          "case": "ordinary-summary",
+          "practical_case": "dedupe",
+          "system_edit": false,
+          "teacher_origin": "retained actual Item37 code-native-before first implementation, unmodified",
+          "teacher_source": "/Volumes/Models/ds4/speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/dedupe/dedupe/first-solution.py",
+          "teacher_sha256": "44053a0315d8e7a77684d5bf3e522816a78492ead72e1fb8d7f08c4b5b2e23e4",
+          "teacher_scope": "up to512 tokens; retain actual target length, no artificial teacher padding",
+          "notes": "algorithm contract excludes tool protocol; independent existing161-case grader; current contract/config occur only in retained C, not A/B padding",
+          "source_edit": 1024,
+          "edit": 256,
+          "prefix": 256,
+          "unchanged": 1536
+        }
+      },
+      "result": {
+        "returncode": 0,
+        "grades": {
+          "fresh": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          },
+          "reuse": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          }
+        }
+      }
+    },
+    {
+      "screen": "screen-summary64",
+      "case": "ordinary-summary",
+      "fresh_tail_requested": 64,
+      "teacher_rows": 137,
+      "delta_nll_nats_per_token": -0.00728447378794,
+      "perplexity_change_fraction": -0.007258006314954579,
+      "mean_kl": 0.00226546478232,
+      "mean_tv": 0.00681261062568,
+      "argmax_flips": 1,
+      "byte_equal_rows": 0,
+      "fresh_edit_ms": 46479.367,
+      "reuse_edit_ms": 11026.791,
+      "edit_saving_percent": 76.27594411946272,
+      "source_capture_ms": 5.095,
+      "setup_ms": 83889.142,
+      "reused_tokens": 1472,
+      "fresh_tail_actual": 64,
+      "query_fully_fresh": true,
+      "destination_end": 1984,
+      "latest_user_start": 2024,
+      "fresh_greedy_cap": false,
+      "reuse_greedy_cap": false,
+      "raw_summary": {
+        "case": "ordinary-summary",
+        "system_edit": false,
+        "teacher_tokens": 137,
+        "rows": 137,
+        "teacher_cap": 512,
+        "greedy_cap": 512,
+        "raw_dump": false,
+        "prerope_originals": true,
+        "prerope_bytes": 2444012,
+        "source_capture_ms": 5.095,
+        "setup_ms": 83889.142,
+        "latest_user_start": 2024,
+        "query_fully_fresh": true,
+        "source_start": 1280,
+        "source_end": 2752,
+        "destination_start": 512,
+        "destination_end": 1984,
+        "reused_tokens": 1472,
+        "fresh_tail_tokens": 64,
+        "copied_bytes": 19906560,
+        "sum_delta_nll": -0.997972908948,
+        "mean_delta_nll": -0.00728447378794,
+        "perplexity_ratio": 0.992741993685,
+        "mean_kl": 0.00226546478232,
+        "mean_tv": 0.00681261062568,
+        "argmax_flips": 1,
+        "byte_equal_rows": 0,
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 46479.367,
+            "teacher_logprob": -16.8866689222,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 130,
+            "greedy": "def solve(payload, config):\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    ttl = config[\"ttl\"]\n    for index, event in enumerate(payload):\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] >= ttl:\n                accepted.append(index)\n                last_accepted[key] = t\n            else:\n                rejected.append(index)\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 11026.791,
+            "teacher_logprob": -15.8886960133,
+            "stopped": true,
+            "at_cap": false,
+            "greedy_tokens": 140,
+            "greedy": "def solve(payload, config):\n    accepted = []\n    rejected = []\n    last_accepted = {}\n    ttl = config[\"ttl\"]\n    index = 0\n    for event in payload:\n        key = event[\"key\"]\n        t = event[\"t\"]\n        if key not in last_accepted:\n            accepted.append(index)\n            last_accepted[key] = t\n        else:\n            if t - last_accepted[key] < ttl:\n                rejected.append(index)\n            else:\n                accepted.append(index)\n                last_accepted[key] = t\n        index = index + 1\n    return {\"accepted\": accepted, \"rejected\": rejected}"
+          }
+        ]
+      },
+      "grades": {
+        "fresh": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        },
+        "reuse": {
+          "returncode": 0,
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null
+          }
+        }
+      },
+      "fresh_unfenced_diagnostic": null,
+      "execution": {
+        "command": [
+          "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-oracle",
+          "--model",
+          "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+          "--fixtures",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/fixtures/ordinary-summary",
+          "--case",
+          "ordinary-summary",
+          "--out",
+          "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/screen-summary64",
+          "--prefix",
+          "256",
+          "--source-edit",
+          "1024",
+          "--edit",
+          "256",
+          "--unchanged",
+          "1536",
+          "--fresh-tail",
+          "64",
+          "--teacher",
+          "512",
+          "--greedy",
+          "512",
+          "--ctx",
+          "8192",
+          "--chunk",
+          "512",
+          "--cache-gb",
+          "64"
+        ],
+        "cwd": "/Volumes/Models/ds4",
+        "environment": {
+          "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+          "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+          "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+          "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+          "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+          "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+          "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+          "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+          "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+          "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+          "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+          "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+          "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+          "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+          "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+          "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+          "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+          "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+          "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+          "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+          "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+          "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+          "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+          "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+          "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+          "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+          "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+          "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+          "DS4_METAL_V41_SELECTED_TILE": "64",
+          "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+        },
+        "oracle_sha256": "41b5bfdff89ebbd835c893cea670699ac8219d8e92ddacee4d9a94f11c6c9724",
+        "runtime_revision": "9c6918f0ae2e",
+        "fixture": {
+          "case": "ordinary-summary",
+          "practical_case": "dedupe",
+          "system_edit": false,
+          "teacher_origin": "retained actual Item37 code-native-before first implementation, unmodified",
+          "teacher_source": "/Volumes/Models/ds4/speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/dedupe/dedupe/first-solution.py",
+          "teacher_sha256": "44053a0315d8e7a77684d5bf3e522816a78492ead72e1fb8d7f08c4b5b2e23e4",
+          "teacher_scope": "up to512 tokens; retain actual target length, no artificial teacher padding",
+          "notes": "algorithm contract excludes tool protocol; independent existing161-case grader; current contract/config occur only in retained C, not A/B padding",
+          "source_edit": 1024,
+          "edit": 256,
+          "prefix": 256,
+          "unchanged": 1536
+        }
+      },
+      "result": {
+        "returncode": 0,
+        "grades": {
+          "fresh": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          },
+          "reuse": {
+            "returncode": 0,
+            "grade": {
+              "correct": true,
+              "tests": 161,
+              "passed": 161,
+              "failed": 0,
+              "first_failure": null
+            }
+          }
+        }
+      }
+    }
+  ],
+  "coding": {
+    "code-native-after": {
+      "launcher": {
+        "mode": "native",
+        "arm": "native-after",
+        "route_settings": {
+          "enabled": false,
+          "gap": 0,
+          "max_mass": 0.25,
+          "max_rank": 64,
+          "max_substitutions": 0,
+          "max_total_mass": 0.5,
+          "policy": "replace",
+          "native_weights": false
+        },
+        "fresh_tail": 64,
+        "hot_mb": 0,
+        "server": "/Volumes/Models/ds4/ds4-server",
+        "canonical_suffix_requested": 1,
+        "padding_suffix_requested": 1,
+        "driver": "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/run.py",
+        "seconds": 239.08141345903277,
+        "phases": [
+          {
+            "phase": "dedupe",
+            "returncode": 0,
+            "seconds": 118.8020671249833,
+            "startup_seconds": 0.42008520796662197,
+            "client_seconds": 116.76491316698957,
+            "shutdown_seconds": 1.6163149999920279,
+            "server_returncode": 0,
+            "error": null
+          },
+          {
+            "phase": "bucket",
+            "returncode": 0,
+            "seconds": 120.27573812502669,
+            "startup_seconds": 0.41338370798621327,
+            "client_seconds": 118.31219708296703,
+            "shutdown_seconds": 1.5496885830070823,
+            "server_returncode": 0,
+            "error": null
+          }
+        ],
+        "visible": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible",
+        "cache": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-native-after-cache",
+        "store": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-native-after-store",
+        "timeout_seconds": 600
+      },
+      "cases": {
+        "dedupe": {
+          "case": "dedupe",
+          "arm": "native-after",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 116.55465724994428,
+          "http_output_tokens": 541,
+          "http_reasoning_tokens": 147,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_71d917265f17341a0c9c0dd4c116863c",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json",
+              "output": "{\n  \"ttl\": 5,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 4,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"b\"\n    },\n    {\n      \"t\": 9,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 10,\n      \"key\": \"a\"\n    }\n  ]\n}\n",
+              "tool_ms": 0.24887500330805779
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_22bca6c193c0183b927d107e0c5d74bc",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py\",\"content\":\"def solve(payload, config):\\n    ttl = config[\\\"ttl\\\"]\\n    accepted = []\\n    rejected = []\\n    last_accepted = {}\\n    for index in range(len(payload)):\\n        event = payload[index]\\n        key = event[\\\"key\\\"]\\n        t = event[\\\"t\\\"]\\n        if key not in last_accepted:\\n            accepted.append(index)\\n            last_accepted[key] = t\\n        else:\\n            if t - last_accepted[key] >= ttl:\\n                accepted.append(index)\\n                last_accepted[key] = t\\n            else:\\n                rejected.append(index)\\n    return {\\\"accepted\\\": accepted, \\\"rejected\\\": rejected}\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "tool_ms": 0.2482089912518859
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 53.62531754199881,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1583,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1583
+                },
+                "output_tokens": 115,
+                "output_tokens_details": {
+                  "reasoning_tokens": 20
+                },
+                "total_tokens": 1698
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 56.05351483303821,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1312,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1312
+                },
+                "output_tokens": 340,
+                "output_tokens_details": {
+                  "reasoning_tokens": 127
+                },
+                "total_tokens": 1652
+              },
+              "requested_max_output_tokens": 1933,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 6.873713416978717,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1694,
+                "input_tokens_details": {
+                  "cached_tokens": 1652,
+                  "cache_write_tokens": 42
+                },
+                "output_tokens": 86,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1780
+              },
+              "requested_max_output_tokens": 1593,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-native-after/http/dedupe/dedupe/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve(payload, config)` in `solution.py`. It reads `config[\"ttl\"]`, tracks each key's last accepted timestamp, accepts first occurrences and any later occurrence where `t - last_accepted >= ttl`, leaves rejected duplicates' timestamps unchanged, and returns `{\"accepted\": [...], \"rejected\": [...]}` with original zero-based indices. Payload and config are not mutated.",
+          "final_text_length": 381,
+          "final_text_bytes": 381,
+          "first_code_bytes": 588,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: process the supplied nondecreasing event order once, preserving original zero-based indices and leaving payload/config unchanged. Use exact keys, including empty/Unicode strings, with no stripping, case folding, hash substitution, or sorting. Track only each key's LAST ACCEPTED timestamp. First occurrence accepts; later occurrence accepts when t-last_accepted >= config ttl and updates that timestamp. Rejection does not refresh it. ttl0 accepts every event; empty payload returns two empty lists. Return only {accepted, rejected}; a simple dictionary and ordinary lists suffice. History scans, generators, extra validation, diagnostic reasons, logging, UI and service wrappers were rejected or deferred. Read the actual config, make the required first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5767,
+            "after_bytes": 2936,
+            "seconds": 0.00034258299274370074
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        },
+        "bucket": {
+          "case": "bucket",
+          "arm": "native-after",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 118.11852849996649,
+          "http_output_tokens": 569,
+          "http_reasoning_tokens": 157,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_befc9e62f72a14164810a65d00aebcf7",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json",
+              "output": "{\n  \"capacity\": 5,\n  \"rate\": 1,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"cost\": 4\n    },\n    {\n      \"t\": 1,\n      \"cost\": 4\n    },\n    {\n      \"t\": 2,\n      \"cost\": 1\n    },\n    {\n      \"t\": 10,\n      \"cost\": 8\n    },\n    {\n      \"t\": 10,\n      \"cost\": 5\n    },\n    {\n      \"t\": 10,\n      \"cost\": 0\n    }\n  ]\n}\n",
+              "tool_ms": 0.28079201001673937
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_7e6f5f6af3c3935d8724986d776c00c9",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py\",\"content\":\"def solve(payload, config):\\n    capacity = config[\\\"capacity\\\"]\\n    rate = config[\\\"rate\\\"]\\n    tokens = capacity\\n    previous_t = 0\\n    accepted = []\\n    rejected = []\\n    remaining = []\\n    index = 0\\n    for event in payload:\\n        t = event[\\\"t\\\"]\\n        cost = event[\\\"cost\\\"]\\n        elapsed = t - previous_t\\n        tokens = tokens + elapsed * rate\\n        if tokens > capacity:\\n            tokens = capacity\\n        previous_t = t\\n        if cost <= tokens:\\n            accepted.append(index)\\n            tokens = tokens - cost\\n        else:\\n            rejected.append(index)\\n        remaining.append(tokens)\\n        index = index + 1\\n    return {\\n        \\\"accepted\\\": accepted,\\n        \\\"rejected\\\": rejected,\\n        \\\"remaining\\\": remaining,\\n        \\\"tokens\\\": tokens,\\n    }\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "tool_ms": 0.24883297737687826
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 53.35621620796155,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1561,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1561
+                },
+                "output_tokens": 123,
+                "output_tokens_details": {
+                  "reasoning_tokens": 29
+                },
+                "total_tokens": 1684
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 59.04981241596397,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1341,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1341
+                },
+                "output_tokens": 383,
+                "output_tokens_details": {
+                  "reasoning_tokens": 128
+                },
+                "total_tokens": 1724
+              },
+              "requested_max_output_tokens": 1925,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 5.710424041026272,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1765,
+                "input_tokens_details": {
+                  "cached_tokens": 1724,
+                  "cache_write_tokens": 41
+                },
+                "output_tokens": 63,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1828
+              },
+              "requested_max_output_tokens": 1542,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-native-after/http/bucket/bucket/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve(payload, config)` in the requested solution file. It uses exact integer arithmetic, processes events in one pass, refills before every event, advances the timestamp even on rejection, and returns the accepted/rejected index lists, per-event remaining balances, and final token balance without mutating inputs.",
+          "final_text_length": 328,
+          "final_text_bytes": 328,
+          "first_code_bytes": 775,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: use exact integers and one pass in supplied nondecreasing event order, without sorting or mutating payload/config. Begin at time0 with tokens=capacity. At EVERY event refill min(capacity, tokens+(t-previous_t)*rate), then advance previous_t even on rejection or oversized costs. Accept cost<=tokens and subtract; reject otherwise without spending. cost0 accepts even at capacity0. Return only {accepted, rejected, remaining, tokens}: original zero-based index lists, balance AFTER each event, final balance; empty payload leaves tokens=capacity. Capacity/rate come from the actual config. Fractional credits, rounding, separate queues, real clocks/timers, logging, reason fields and service wrappers were rejected or deferred. Make the required actual read and first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5797,
+            "after_bytes": 3071,
+            "seconds": 0.0003421669825911522
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        }
+      },
+      "grafts": [],
+      "task_seconds": 234.67318574991077,
+      "complete": 2,
+      "caps": 0,
+      "passed": 322,
+      "failed": 0
+    },
+    "code-native-before": {
+      "launcher": {
+        "mode": "native",
+        "arm": "native-before",
+        "route_settings": {
+          "enabled": false,
+          "gap": 0,
+          "max_mass": 0.25,
+          "max_rank": 64,
+          "max_substitutions": 0,
+          "max_total_mass": 0.5,
+          "policy": "replace",
+          "native_weights": false
+        },
+        "fresh_tail": 64,
+        "hot_mb": 0,
+        "server": "/Volumes/Models/ds4/ds4-server",
+        "canonical_suffix_requested": 1,
+        "padding_suffix_requested": 1,
+        "driver": "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/run.py",
+        "seconds": 239.25451874994906,
+        "phases": [
+          {
+            "phase": "dedupe",
+            "returncode": 0,
+            "seconds": 118.69281895895256,
+            "startup_seconds": 0.21404950000578538,
+            "client_seconds": 116.75672962499084,
+            "shutdown_seconds": 1.7217544590239413,
+            "server_returncode": 0,
+            "error": null
+          },
+          {
+            "phase": "bucket",
+            "returncode": 0,
+            "seconds": 120.55817624996416,
+            "startup_seconds": 0.41838954098057,
+            "client_seconds": 118.33133116696263,
+            "shutdown_seconds": 1.8076724999700673,
+            "server_returncode": 0,
+            "error": null
+          }
+        ],
+        "visible": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible",
+        "cache": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-native-before-cache",
+        "store": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-native-before-store",
+        "timeout_seconds": 600
+      },
+      "cases": {
+        "dedupe": {
+          "case": "dedupe",
+          "arm": "native-before",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 116.57687987503596,
+          "http_output_tokens": 541,
+          "http_reasoning_tokens": 147,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_08322cc78498992c2b7a26f556d1e330",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json",
+              "output": "{\n  \"ttl\": 5,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 4,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"b\"\n    },\n    {\n      \"t\": 9,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 10,\n      \"key\": \"a\"\n    }\n  ]\n}\n",
+              "tool_ms": 0.28237502556294203
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_0f1b7a406bc9e6243e035fdc60f37db2",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py\",\"content\":\"def solve(payload, config):\\n    ttl = config[\\\"ttl\\\"]\\n    accepted = []\\n    rejected = []\\n    last_accepted = {}\\n    for index in range(len(payload)):\\n        event = payload[index]\\n        key = event[\\\"key\\\"]\\n        t = event[\\\"t\\\"]\\n        if key not in last_accepted:\\n            accepted.append(index)\\n            last_accepted[key] = t\\n        else:\\n            if t - last_accepted[key] >= ttl:\\n                accepted.append(index)\\n                last_accepted[key] = t\\n            else:\\n                rejected.append(index)\\n    return {\\\"accepted\\\": accepted, \\\"rejected\\\": rejected}\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "tool_ms": 0.2482919953763485
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 53.33616033301223,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1583,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1583
+                },
+                "output_tokens": 115,
+                "output_tokens_details": {
+                  "reasoning_tokens": 20
+                },
+                "total_tokens": 1698
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 56.21801362500992,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1312,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1312
+                },
+                "output_tokens": 340,
+                "output_tokens_details": {
+                  "reasoning_tokens": 127
+                },
+                "total_tokens": 1652
+              },
+              "requested_max_output_tokens": 1933,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 7.02052358299261,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1694,
+                "input_tokens_details": {
+                  "cached_tokens": 1652,
+                  "cache_write_tokens": 42
+                },
+                "output_tokens": 86,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1780
+              },
+              "requested_max_output_tokens": 1593,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-native-before/http/dedupe/dedupe/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve(payload, config)` in `solution.py`. It reads `config[\"ttl\"]`, tracks each key's last accepted timestamp, accepts first occurrences and any later occurrence where `t - last_accepted >= ttl`, leaves rejected duplicates' timestamps unchanged, and returns `{\"accepted\": [...], \"rejected\": [...]}` with original zero-based indices. Payload and config are not mutated.",
+          "final_text_length": 381,
+          "final_text_bytes": 381,
+          "first_code_bytes": 588,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: process the supplied nondecreasing event order once, preserving original zero-based indices and leaving payload/config unchanged. Use exact keys, including empty/Unicode strings, with no stripping, case folding, hash substitution, or sorting. Track only each key's LAST ACCEPTED timestamp. First occurrence accepts; later occurrence accepts when t-last_accepted >= config ttl and updates that timestamp. Rejection does not refresh it. ttl0 accepts every event; empty payload returns two empty lists. Return only {accepted, rejected}; a simple dictionary and ordinary lists suffice. History scans, generators, extra validation, diagnostic reasons, logging, UI and service wrappers were rejected or deferred. Read the actual config, make the required first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5767,
+            "after_bytes": 2936,
+            "seconds": 0.0003737080260179937
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        },
+        "bucket": {
+          "case": "bucket",
+          "arm": "native-before",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 118.11541166703682,
+          "http_output_tokens": 569,
+          "http_reasoning_tokens": 157,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_3b51ac695ad825a9cb208b37f3405958",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json",
+              "output": "{\n  \"capacity\": 5,\n  \"rate\": 1,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"cost\": 4\n    },\n    {\n      \"t\": 1,\n      \"cost\": 4\n    },\n    {\n      \"t\": 2,\n      \"cost\": 1\n    },\n    {\n      \"t\": 10,\n      \"cost\": 8\n    },\n    {\n      \"t\": 10,\n      \"cost\": 5\n    },\n    {\n      \"t\": 10,\n      \"cost\": 0\n    }\n  ]\n}\n",
+              "tool_ms": 0.27962500462308526
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_9ef7dc1982e1ac531049fd1e8bb44036",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py\",\"content\":\"def solve(payload, config):\\n    capacity = config[\\\"capacity\\\"]\\n    rate = config[\\\"rate\\\"]\\n    tokens = capacity\\n    previous_t = 0\\n    accepted = []\\n    rejected = []\\n    remaining = []\\n    index = 0\\n    for event in payload:\\n        t = event[\\\"t\\\"]\\n        cost = event[\\\"cost\\\"]\\n        elapsed = t - previous_t\\n        tokens = tokens + elapsed * rate\\n        if tokens > capacity:\\n            tokens = capacity\\n        previous_t = t\\n        if cost <= tokens:\\n            accepted.append(index)\\n            tokens = tokens - cost\\n        else:\\n            rejected.append(index)\\n        remaining.append(tokens)\\n        index = index + 1\\n    return {\\n        \\\"accepted\\\": accepted,\\n        \\\"rejected\\\": rejected,\\n        \\\"remaining\\\": remaining,\\n        \\\"tokens\\\": tokens,\\n    }\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "tool_ms": 0.2519999979995191
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 53.64589366700966,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1561,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1561
+                },
+                "output_tokens": 123,
+                "output_tokens_details": {
+                  "reasoning_tokens": 29
+                },
+                "total_tokens": 1684
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 58.7609852909809,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1341,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1341
+                },
+                "output_tokens": 383,
+                "output_tokens_details": {
+                  "reasoning_tokens": 128
+                },
+                "total_tokens": 1724
+              },
+              "requested_max_output_tokens": 1925,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 5.706440499983728,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1765,
+                "input_tokens_details": {
+                  "cached_tokens": 1724,
+                  "cache_write_tokens": 41
+                },
+                "output_tokens": 63,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1828
+              },
+              "requested_max_output_tokens": 1542,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-native-before/http/bucket/bucket/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve(payload, config)` in the requested solution file. It uses exact integer arithmetic, processes events in one pass, refills before every event, advances the timestamp even on rejection, and returns the accepted/rejected index lists, per-event remaining balances, and final token balance without mutating inputs.",
+          "final_text_length": 328,
+          "final_text_bytes": 328,
+          "first_code_bytes": 775,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: use exact integers and one pass in supplied nondecreasing event order, without sorting or mutating payload/config. Begin at time0 with tokens=capacity. At EVERY event refill min(capacity, tokens+(t-previous_t)*rate), then advance previous_t even on rejection or oversized costs. Accept cost<=tokens and subtract; reject otherwise without spending. cost0 accepts even at capacity0. Return only {accepted, rejected, remaining, tokens}: original zero-based index lists, balance AFTER each event, final balance; empty payload leaves tokens=capacity. Capacity/rate come from the actual config. Fractional credits, rounding, separate queues, real clocks/timers, logging, reason fields and service wrappers were rejected or deferred. Make the required actual read and first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5797,
+            "after_bytes": 3071,
+            "seconds": 0.00033187499502673745
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        }
+      },
+      "grafts": [],
+      "task_seconds": 234.69229154207278,
+      "complete": 2,
+      "caps": 0,
+      "passed": 322,
+      "failed": 0
+    },
+    "code-reuse128": {
+      "launcher": {
+        "mode": "reuse",
+        "arm": "context-fast",
+        "route_settings": {
+          "enabled": false,
+          "gap": 0,
+          "max_mass": 0.25,
+          "max_rank": 64,
+          "max_substitutions": 0,
+          "max_total_mass": 0.5,
+          "policy": "replace",
+          "native_weights": false
+        },
+        "fresh_tail": 128,
+        "hot_mb": 0,
+        "server": "/Volumes/Models/ds4/ds4-server",
+        "canonical_suffix_requested": 1,
+        "padding_suffix_requested": 1,
+        "driver": "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/run.py",
+        "seconds": 209.74340745795052,
+        "phases": [
+          {
+            "phase": "dedupe",
+            "returncode": 0,
+            "seconds": 103.17802954098443,
+            "startup_seconds": 0.42481466598110273,
+            "client_seconds": 101.37031291698804,
+            "shutdown_seconds": 1.3822339999605902,
+            "server_returncode": 0,
+            "error": null
+          },
+          {
+            "phase": "bucket",
+            "returncode": 0,
+            "seconds": 106.56139975000406,
+            "startup_seconds": 0.42137595801614225,
+            "client_seconds": 104.64937270904193,
+            "shutdown_seconds": 1.4902467079809867,
+            "server_returncode": 0,
+            "error": null
+          }
+        ],
+        "visible": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible",
+        "cache": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-reuse128-cache",
+        "store": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-reuse128-store",
+        "timeout_seconds": 600
+      },
+      "cases": {
+        "dedupe": {
+          "case": "dedupe",
+          "arm": "context-fast",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 101.18879508401733,
+          "http_output_tokens": 533,
+          "http_reasoning_tokens": 154,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_66980856ae87470c938f4f46de56dc3d",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json",
+              "output": "{\n  \"ttl\": 5,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 4,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"b\"\n    },\n    {\n      \"t\": 9,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 10,\n      \"key\": \"a\"\n    }\n  ]\n}\n",
+              "tool_ms": 0.24912500521168113
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_4e629afef56a54bff81e7b28c42b6dce",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py\",\"content\":\"def solve(payload, config):\\n    ttl = config[\\\"ttl\\\"]\\n    accepted = []\\n    rejected = []\\n    last_accepted = {}\\n    index = 0\\n    for event in payload:\\n        key = event[\\\"key\\\"]\\n        t = event[\\\"t\\\"]\\n        if key not in last_accepted:\\n            accepted.append(index)\\n            last_accepted[key] = t\\n        else:\\n            if t - last_accepted[key] >= ttl:\\n                accepted.append(index)\\n                last_accepted[key] = t\\n            else:\\n                rejected.append(index)\\n        index = index + 1\\n    return {\\\"accepted\\\": accepted, \\\"rejected\\\": rejected}\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "tool_ms": 0.26712496764957905
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 49.55362029199023,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1583,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1583
+                },
+                "output_tokens": 121,
+                "output_tokens_details": {
+                  "reasoning_tokens": 26
+                },
+                "total_tokens": 1704
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 45.78421558300033,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1312,
+                "input_tokens_details": {
+                  "cached_tokens": 441,
+                  "cache_write_tokens": 871
+                },
+                "output_tokens": 346,
+                "output_tokens_details": {
+                  "reasoning_tokens": 128
+                },
+                "total_tokens": 1658
+              },
+              "requested_max_output_tokens": 1927,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 5.8489810840110295,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1700,
+                "input_tokens_details": {
+                  "cached_tokens": 1658,
+                  "cache_write_tokens": 42
+                },
+                "output_tokens": 66,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1766
+              },
+              "requested_max_output_tokens": 1581,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-reuse128/http/dedupe/dedupe/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve` in `solution.py`: it tracks each key's last accepted timestamp, accepts first occurrences and later occurrences only when `t - last_accepted >= ttl`, leaves rejected timestamps unchanged, and returns `accepted`/`rejected` as zero-based indices in original order without mutating inputs.",
+          "final_text_length": 306,
+          "final_text_bytes": 306,
+          "first_code_bytes": 585,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: process the supplied nondecreasing event order once, preserving original zero-based indices and leaving payload/config unchanged. Use exact keys, including empty/Unicode strings, with no stripping, case folding, hash substitution, or sorting. Track only each key's LAST ACCEPTED timestamp. First occurrence accepts; later occurrence accepts when t-last_accepted >= config ttl and updates that timestamp. Rejection does not refresh it. ttl0 accepts every event; empty payload returns two empty lists. Return only {accepted, rejected}; a simple dictionary and ordinary lists suffice. History scans, generators, extra validation, diagnostic reasons, logging, UI and service wrappers were rejected or deferred. Read the actual config, make the required first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5767,
+            "after_bytes": 2936,
+            "seconds": 0.0003517080331221223
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        },
+        "bucket": {
+          "case": "bucket",
+          "arm": "context-fast",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 104.45022254204378,
+          "http_output_tokens": 593,
+          "http_reasoning_tokens": 157,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_775aecd6b447e4e0f4982fd8e71a93a0",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json",
+              "output": "{\n  \"capacity\": 5,\n  \"rate\": 1,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"cost\": 4\n    },\n    {\n      \"t\": 1,\n      \"cost\": 4\n    },\n    {\n      \"t\": 2,\n      \"cost\": 1\n    },\n    {\n      \"t\": 10,\n      \"cost\": 8\n    },\n    {\n      \"t\": 10,\n      \"cost\": 5\n    },\n    {\n      \"t\": 10,\n      \"cost\": 0\n    }\n  ]\n}\n",
+              "tool_ms": 0.27837499510496855
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_1e486b945bff56a54a3b167fd969f993",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py\",\"content\":\"def solve(payload, config):\\n    capacity = config[\\\"capacity\\\"]\\n    rate = config[\\\"rate\\\"]\\n    tokens = capacity\\n    previous = 0\\n    accepted = []\\n    rejected = []\\n    remaining = []\\n    for index in range(len(payload)):\\n        event = payload[index]\\n        t = event[\\\"t\\\"]\\n        cost = event[\\\"cost\\\"]\\n        elapsed = t - previous\\n        tokens = tokens + elapsed * rate\\n        if tokens > capacity:\\n            tokens = capacity\\n        previous = t\\n        if cost <= tokens:\\n            accepted.append(index)\\n            tokens = tokens - cost\\n        else:\\n            rejected.append(index)\\n        remaining.append(tokens)\\n    return {\\n        \\\"accepted\\\": accepted,\\n        \\\"rejected\\\": rejected,\\n        \\\"remaining\\\": remaining,\\n        \\\"tokens\\\": tokens,\\n    }\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "tool_ms": 0.30979199800640345
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 49.44751450000331,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1561,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1561
+                },
+                "output_tokens": 123,
+                "output_tokens_details": {
+                  "reasoning_tokens": 29
+                },
+                "total_tokens": 1684
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 47.601077916042414,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1341,
+                "input_tokens_details": {
+                  "cached_tokens": 453,
+                  "cache_write_tokens": 888
+                },
+                "output_tokens": 375,
+                "output_tokens_details": {
+                  "reasoning_tokens": 128
+                },
+                "total_tokens": 1716
+              },
+              "requested_max_output_tokens": 1925,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 7.399327249964699,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1757,
+                "input_tokens_details": {
+                  "cached_tokens": 1716,
+                  "cache_write_tokens": 41
+                },
+                "output_tokens": 95,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1852
+              },
+              "requested_max_output_tokens": 1550,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-reuse128/http/bucket/bucket/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, processes events in order, refills before each event, advances the previous timestamp even on rejection, accepts zero-cost events, and returns the required `accepted`, `rejected`, `remaining`, and `tokens` fields without mutating the inputs.",
+          "final_text_length": 405,
+          "final_text_bytes": 405,
+          "first_code_bytes": 772,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: use exact integers and one pass in supplied nondecreasing event order, without sorting or mutating payload/config. Begin at time0 with tokens=capacity. At EVERY event refill min(capacity, tokens+(t-previous_t)*rate), then advance previous_t even on rejection or oversized costs. Accept cost<=tokens and subtract; reject otherwise without spending. cost0 accepts even at capacity0. Return only {accepted, rejected, remaining, tokens}: original zero-based index lists, balance AFTER each event, final balance; empty payload leaves tokens=capacity. Capacity/rate come from the actual config. Fractional credits, rounding, separate queues, real clocks/timers, logging, reason fields and service wrappers were rejected or deferred. Make the required actual read and first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5797,
+            "after_bytes": 3071,
+            "seconds": 0.0003779170219786465
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        }
+      },
+      "grafts": [
+        {
+          "arm": "code-reuse128",
+          "case": "dedupe",
+          "tail_requested": 128,
+          "line": "1008 12:47:29 ds4-server: suffix APPROXIMATE slot=1 reused=441 fresh=259 graft_fresh=131 source=1142:1583 destination=612:1053 latest_user_start=1149 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 23147.683 ms",
+          "fields": {
+            "slot": "1",
+            "reused": "441",
+            "fresh": "259",
+            "graft_fresh": "131",
+            "source": "1142:1583",
+            "destination": "612:1053",
+            "latest_user_start": "1149",
+            "pre_rope": "1",
+            "source_ssd": "1",
+            "source_approximate": "0",
+            "prefix_pad": "0"
+          },
+          "fresh_actual": 259,
+          "graft_fresh_actual": 131,
+          "destination_end": 1053,
+          "latest_user_start": 1149,
+          "latest_user_outside_graft": true
+        },
+        {
+          "arm": "code-reuse128",
+          "case": "bucket",
+          "tail_requested": 128,
+          "line": "1008 12:49:13 ds4-server: suffix APPROXIMATE slot=1 reused=453 fresh=264 graft_fresh=136 source=1108:1561 destination=624:1077 latest_user_start=1172 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 23361.950 ms",
+          "fields": {
+            "slot": "1",
+            "reused": "453",
+            "fresh": "264",
+            "graft_fresh": "136",
+            "source": "1108:1561",
+            "destination": "624:1077",
+            "latest_user_start": "1172",
+            "pre_rope": "1",
+            "source_ssd": "1",
+            "source_approximate": "0",
+            "prefix_pad": "0"
+          },
+          "fresh_actual": 264,
+          "graft_fresh_actual": 136,
+          "destination_end": 1077,
+          "latest_user_start": 1172,
+          "latest_user_outside_graft": true
+        }
+      ],
+      "task_seconds": 205.6390176260611,
+      "complete": 2,
+      "caps": 0,
+      "passed": 322,
+      "failed": 0
+    },
+    "code-reuse256": {
+      "launcher": {
+        "mode": "reuse",
+        "arm": "context-fast",
+        "route_settings": {
+          "enabled": false,
+          "gap": 0,
+          "max_mass": 0.25,
+          "max_rank": 64,
+          "max_substitutions": 0,
+          "max_total_mass": 0.5,
+          "policy": "replace",
+          "native_weights": false
+        },
+        "fresh_tail": 256,
+        "hot_mb": 0,
+        "server": "/Volumes/Models/ds4/ds4-server",
+        "canonical_suffix_requested": 1,
+        "padding_suffix_requested": 1,
+        "driver": "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/run.py",
+        "seconds": 211.57219437498134,
+        "phases": [
+          {
+            "phase": "dedupe",
+            "returncode": 0,
+            "seconds": 103.57813308300683,
+            "startup_seconds": 0.41974679101258516,
+            "client_seconds": 101.60293979203561,
+            "shutdown_seconds": 1.5546410419628955,
+            "server_returncode": 0,
+            "error": null
+          },
+          {
+            "phase": "bucket",
+            "returncode": 0,
+            "seconds": 107.99027312500402,
+            "startup_seconds": 0.42328745900886133,
+            "client_seconds": 105.77792762499303,
+            "shutdown_seconds": 1.7886481250170618,
+            "server_returncode": 0,
+            "error": null
+          }
+        ],
+        "visible": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible",
+        "cache": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-reuse256-cache",
+        "store": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-reuse256-store",
+        "timeout_seconds": 600
+      },
+      "cases": {
+        "dedupe": {
+          "case": "dedupe",
+          "arm": "context-fast",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 101.42549679201329,
+          "http_output_tokens": 533,
+          "http_reasoning_tokens": 154,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_1580fb905eaac3a1d8b24ff3d6a049fd",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json",
+              "output": "{\n  \"ttl\": 5,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 4,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"b\"\n    },\n    {\n      \"t\": 9,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 10,\n      \"key\": \"a\"\n    }\n  ]\n}\n",
+              "tool_ms": 0.3067500074394047
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_e695eb7bf3f50d4c597a82e98a4c56bd",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py\",\"content\":\"def solve(payload, config):\\n    ttl = config[\\\"ttl\\\"]\\n    accepted = []\\n    rejected = []\\n    last_accepted = {}\\n    index = 0\\n    for event in payload:\\n        key = event[\\\"key\\\"]\\n        t = event[\\\"t\\\"]\\n        if key not in last_accepted:\\n            accepted.append(index)\\n            last_accepted[key] = t\\n        else:\\n            if t - last_accepted[key] >= ttl:\\n                accepted.append(index)\\n                last_accepted[key] = t\\n            else:\\n                rejected.append(index)\\n        index = index + 1\\n    return {\\\"accepted\\\": accepted, \\\"rejected\\\": rejected}\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "tool_ms": 0.27424999279901385
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 49.91249766602414,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1583,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1583
+                },
+                "output_tokens": 121,
+                "output_tokens_details": {
+                  "reasoning_tokens": 26
+                },
+                "total_tokens": 1704
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 45.65485579200322,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1312,
+                "input_tokens_details": {
+                  "cached_tokens": 441,
+                  "cache_write_tokens": 871
+                },
+                "output_tokens": 346,
+                "output_tokens_details": {
+                  "reasoning_tokens": 128
+                },
+                "total_tokens": 1658
+              },
+              "requested_max_output_tokens": 1927,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 5.856021166022401,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1700,
+                "input_tokens_details": {
+                  "cached_tokens": 1658,
+                  "cache_write_tokens": 42
+                },
+                "output_tokens": 66,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1766
+              },
+              "requested_max_output_tokens": 1581,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-reuse256/http/dedupe/dedupe/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve` in `solution.py`: it tracks each key's last accepted timestamp, accepts first occurrences and later occurrences only when `t - last_accepted >= ttl`, leaves rejected timestamps unchanged, and returns `accepted`/`rejected` as zero-based indices in original order without mutating inputs.",
+          "final_text_length": 306,
+          "final_text_bytes": 306,
+          "first_code_bytes": 585,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: process the supplied nondecreasing event order once, preserving original zero-based indices and leaving payload/config unchanged. Use exact keys, including empty/Unicode strings, with no stripping, case folding, hash substitution, or sorting. Track only each key's LAST ACCEPTED timestamp. First occurrence accepts; later occurrence accepts when t-last_accepted >= config ttl and updates that timestamp. Rejection does not refresh it. ttl0 accepts every event; empty payload returns two empty lists. Return only {accepted, rejected}; a simple dictionary and ordinary lists suffice. History scans, generators, extra validation, diagnostic reasons, logging, UI and service wrappers were rejected or deferred. Read the actual config, make the required first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5767,
+            "after_bytes": 2936,
+            "seconds": 0.00037037499714642763
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        },
+        "bucket": {
+          "case": "bucket",
+          "arm": "context-fast",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 105.61129341699416,
+          "http_output_tokens": 593,
+          "http_reasoning_tokens": 157,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_908eb9ebaefaf87e296a8efd181e86f8",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json",
+              "output": "{\n  \"capacity\": 5,\n  \"rate\": 1,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"cost\": 4\n    },\n    {\n      \"t\": 1,\n      \"cost\": 4\n    },\n    {\n      \"t\": 2,\n      \"cost\": 1\n    },\n    {\n      \"t\": 10,\n      \"cost\": 8\n    },\n    {\n      \"t\": 10,\n      \"cost\": 5\n    },\n    {\n      \"t\": 10,\n      \"cost\": 0\n    }\n  ]\n}\n",
+              "tool_ms": 0.2853329642675817
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_d00c7f1cd6af62b026eea355b1495ad7",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py\",\"content\":\"def solve(payload, config):\\n    capacity = config[\\\"capacity\\\"]\\n    rate = config[\\\"rate\\\"]\\n    tokens = capacity\\n    previous = 0\\n    accepted = []\\n    rejected = []\\n    remaining = []\\n    for index in range(len(payload)):\\n        event = payload[index]\\n        t = event[\\\"t\\\"]\\n        cost = event[\\\"cost\\\"]\\n        elapsed = t - previous\\n        tokens = tokens + elapsed * rate\\n        if tokens > capacity:\\n            tokens = capacity\\n        previous = t\\n        if cost <= tokens:\\n            accepted.append(index)\\n            tokens = tokens - cost\\n        else:\\n            rejected.append(index)\\n        remaining.append(tokens)\\n    return {\\n        \\\"accepted\\\": accepted,\\n        \\\"rejected\\\": rejected,\\n        \\\"remaining\\\": remaining,\\n        \\\"tokens\\\": tokens,\\n    }\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "tool_ms": 0.27845799922943115
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 49.394223500043154,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1561,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1561
+                },
+                "output_tokens": 123,
+                "output_tokens_details": {
+                  "reasoning_tokens": 29
+                },
+                "total_tokens": 1684
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 48.51789545803331,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1341,
+                "input_tokens_details": {
+                  "cached_tokens": 453,
+                  "cache_write_tokens": 888
+                },
+                "output_tokens": 375,
+                "output_tokens_details": {
+                  "reasoning_tokens": 128
+                },
+                "total_tokens": 1716
+              },
+              "requested_max_output_tokens": 1925,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 7.697060832986608,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1757,
+                "input_tokens_details": {
+                  "cached_tokens": 1716,
+                  "cache_write_tokens": 41
+                },
+                "output_tokens": 95,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1852
+              },
+              "requested_max_output_tokens": 1550,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-reuse256/http/bucket/bucket/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, processes events in order, refills before each event, advances the previous timestamp even on rejection, accepts zero-cost events, and returns the required `accepted`, `rejected`, `remaining`, and `tokens` fields without mutating the inputs.",
+          "final_text_length": 405,
+          "final_text_bytes": 405,
+          "first_code_bytes": 772,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: use exact integers and one pass in supplied nondecreasing event order, without sorting or mutating payload/config. Begin at time0 with tokens=capacity. At EVERY event refill min(capacity, tokens+(t-previous_t)*rate), then advance previous_t even on rejection or oversized costs. Accept cost<=tokens and subtract; reject otherwise without spending. cost0 accepts even at capacity0. Return only {accepted, rejected, remaining, tokens}: original zero-based index lists, balance AFTER each event, final balance; empty payload leaves tokens=capacity. Capacity/rate come from the actual config. Fractional credits, rounding, separate queues, real clocks/timers, logging, reason fields and service wrappers were rejected or deferred. Make the required actual read and first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5797,
+            "after_bytes": 3071,
+            "seconds": 0.0003886659978888929
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        }
+      },
+      "grafts": [
+        {
+          "arm": "code-reuse256",
+          "case": "dedupe",
+          "tail_requested": 256,
+          "line": "1008 12:51:08 ds4-server: suffix APPROXIMATE slot=1 reused=441 fresh=259 graft_fresh=3 source=1142:1583 destination=612:1053 latest_user_start=1149 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 19224.103 ms",
+          "fields": {
+            "slot": "1",
+            "reused": "441",
+            "fresh": "259",
+            "graft_fresh": "3",
+            "source": "1142:1583",
+            "destination": "612:1053",
+            "latest_user_start": "1149",
+            "pre_rope": "1",
+            "source_ssd": "1",
+            "source_approximate": "0",
+            "prefix_pad": "0"
+          },
+          "fresh_actual": 259,
+          "graft_fresh_actual": 3,
+          "destination_end": 1053,
+          "latest_user_start": 1149,
+          "latest_user_outside_graft": true
+        },
+        {
+          "arm": "code-reuse256",
+          "case": "bucket",
+          "tail_requested": 256,
+          "line": "1008 12:52:51 ds4-server: suffix APPROXIMATE slot=1 reused=453 fresh=264 graft_fresh=8 source=1108:1561 destination=624:1077 latest_user_start=1172 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 19585.372 ms",
+          "fields": {
+            "slot": "1",
+            "reused": "453",
+            "fresh": "264",
+            "graft_fresh": "8",
+            "source": "1108:1561",
+            "destination": "624:1077",
+            "latest_user_start": "1172",
+            "pre_rope": "1",
+            "source_ssd": "1",
+            "source_approximate": "0",
+            "prefix_pad": "0"
+          },
+          "fresh_actual": 264,
+          "graft_fresh_actual": 8,
+          "destination_end": 1077,
+          "latest_user_start": 1172,
+          "latest_user_outside_graft": true
+        }
+      ],
+      "task_seconds": 207.03679020900745,
+      "complete": 2,
+      "caps": 0,
+      "passed": 322,
+      "failed": 0
+    },
+    "code-reuse64": {
+      "launcher": {
+        "mode": "reuse",
+        "arm": "context-fast",
+        "route_settings": {
+          "enabled": false,
+          "gap": 0,
+          "max_mass": 0.25,
+          "max_rank": 64,
+          "max_substitutions": 0,
+          "max_total_mass": 0.5,
+          "policy": "replace",
+          "native_weights": false
+        },
+        "fresh_tail": 64,
+        "hot_mb": 0,
+        "server": "/Volumes/Models/ds4/ds4-server",
+        "canonical_suffix_requested": 1,
+        "padding_suffix_requested": 1,
+        "driver": "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/run.py",
+        "seconds": 214.2736407079501,
+        "phases": [
+          {
+            "phase": "dedupe",
+            "returncode": 0,
+            "seconds": 106.16531491698697,
+            "startup_seconds": 2.726148708956316,
+            "client_seconds": 101.72566512500634,
+            "shutdown_seconds": 1.712798541993834,
+            "server_returncode": 0,
+            "error": null
+          },
+          {
+            "phase": "bucket",
+            "returncode": 0,
+            "seconds": 108.10415254201507,
+            "startup_seconds": 0.4143929170095362,
+            "client_seconds": 105.93138758401619,
+            "shutdown_seconds": 1.7578470000298694,
+            "server_returncode": 0,
+            "error": null
+          }
+        ],
+        "visible": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible",
+        "cache": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-reuse64-cache",
+        "store": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-reuse64-store",
+        "timeout_seconds": 600
+      },
+      "cases": {
+        "dedupe": {
+          "case": "dedupe",
+          "arm": "context-fast",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 101.56091362499865,
+          "http_output_tokens": 533,
+          "http_reasoning_tokens": 154,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_603cb0be0ce711f5c54bef637dfe317b",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json",
+              "output": "{\n  \"ttl\": 5,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 4,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"b\"\n    },\n    {\n      \"t\": 9,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 10,\n      \"key\": \"a\"\n    }\n  ]\n}\n",
+              "tool_ms": 0.347500026691705
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_707b890c88fd32e7067d25c9702dcbc4",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py\",\"content\":\"def solve(payload, config):\\n    ttl = config[\\\"ttl\\\"]\\n    accepted = []\\n    rejected = []\\n    last_accepted = {}\\n    index = 0\\n    for event in payload:\\n        key = event[\\\"key\\\"]\\n        t = event[\\\"t\\\"]\\n        if key not in last_accepted:\\n            accepted.append(index)\\n            last_accepted[key] = t\\n        else:\\n            if t - last_accepted[key] >= ttl:\\n                accepted.append(index)\\n                last_accepted[key] = t\\n            else:\\n                rejected.append(index)\\n        index = index + 1\\n    return {\\\"accepted\\\": accepted, \\\"rejected\\\": rejected}\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+              "tool_ms": 0.24383299751207232
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 50.40102766698692,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1583,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1583
+                },
+                "output_tokens": 121,
+                "output_tokens_details": {
+                  "reasoning_tokens": 26
+                },
+                "total_tokens": 1704
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 45.38588729198091,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1312,
+                "input_tokens_details": {
+                  "cached_tokens": 441,
+                  "cache_write_tokens": 871
+                },
+                "output_tokens": 346,
+                "output_tokens_details": {
+                  "reasoning_tokens": 128
+                },
+                "total_tokens": 1658
+              },
+              "requested_max_output_tokens": 1927,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 5.771615499979816,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1700,
+                "input_tokens_details": {
+                  "cached_tokens": 1658,
+                  "cache_write_tokens": 42
+                },
+                "output_tokens": 66,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1766
+              },
+              "requested_max_output_tokens": 1581,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-reuse64/http/dedupe/dedupe/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve` in `solution.py`: it tracks each key's last accepted timestamp, accepts first occurrences and later occurrences only when `t - last_accepted >= ttl`, leaves rejected timestamps unchanged, and returns `accepted`/`rejected` as zero-based indices in original order without mutating inputs.",
+          "final_text_length": 306,
+          "final_text_bytes": 306,
+          "first_code_bytes": 585,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: process the supplied nondecreasing event order once, preserving original zero-based indices and leaving payload/config unchanged. Use exact keys, including empty/Unicode strings, with no stripping, case folding, hash substitution, or sorting. Track only each key's LAST ACCEPTED timestamp. First occurrence accepts; later occurrence accepts when t-last_accepted >= config ttl and updates that timestamp. Rejection does not refresh it. ttl0 accepts every event; empty payload returns two empty lists. Return only {accepted, rejected}; a simple dictionary and ordinary lists suffice. History scans, generators, extra validation, diagnostic reasons, logging, UI and service wrappers were rejected or deferred. Read the actual config, make the required first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5767,
+            "after_bytes": 2936,
+            "seconds": 0.0003613330191001296
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        },
+        "bucket": {
+          "case": "bucket",
+          "arm": "context-fast",
+          "protocol": "full-input-clm",
+          "write_budget": 128,
+          "final_policy": "budget1",
+          "global_cap": 2048,
+          "wall_seconds": 105.75582833297085,
+          "http_output_tokens": 593,
+          "http_reasoning_tokens": 157,
+          "actual_read_count": 1,
+          "actual_write_count": 1,
+          "calls": [
+            {
+              "role": "READ",
+              "name": "read",
+              "call_id": "call_ee24cf6e9e3ff44e751c513840e77ec9",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json\",\"whole\":true,\"raw\":true}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/config.json",
+              "output": "{\n  \"capacity\": 5,\n  \"rate\": 1,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"cost\": 4\n    },\n    {\n      \"t\": 1,\n      \"cost\": 4\n    },\n    {\n      \"t\": 2,\n      \"cost\": 1\n    },\n    {\n      \"t\": 10,\n      \"cost\": 8\n    },\n    {\n      \"t\": 10,\n      \"cost\": 5\n    },\n    {\n      \"t\": 10,\n      \"cost\": 0\n    }\n  ]\n}\n",
+              "tool_ms": 0.2923750435002148
+            },
+            {
+              "role": "WRITE",
+              "name": "write",
+              "call_id": "call_b9ada51c3ff0b4ed0c0091c629dfbf09",
+              "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py\",\"content\":\"def solve(payload, config):\\n    capacity = config[\\\"capacity\\\"]\\n    rate = config[\\\"rate\\\"]\\n    tokens = capacity\\n    previous = 0\\n    accepted = []\\n    rejected = []\\n    remaining = []\\n    for index in range(len(payload)):\\n        event = payload[index]\\n        t = event[\\\"t\\\"]\\n        cost = event[\\\"cost\\\"]\\n        elapsed = t - previous\\n        tokens = tokens + elapsed * rate\\n        if tokens > capacity:\\n            tokens = capacity\\n        previous = t\\n        if cost <= tokens:\\n            accepted.append(index)\\n            tokens = tokens - cost\\n        else:\\n            rejected.append(index)\\n        remaining.append(tokens)\\n    return {\\n        \\\"accepted\\\": accepted,\\n        \\\"rejected\\\": rejected,\\n        \\\"remaining\\\": remaining,\\n        \\\"tokens\\\": tokens,\\n    }\\n\"}",
+              "executed": true,
+              "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py",
+              "tool_ms": 0.2422920078970492
+            }
+          ],
+          "replies": [
+            {
+              "role": "READ",
+              "budget": 0,
+              "effort": "high",
+              "seconds": 50.27913074998651,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1561,
+                "input_tokens_details": {
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 1561
+                },
+                "output_tokens": 123,
+                "output_tokens_details": {
+                  "reasoning_tokens": 29
+                },
+                "total_tokens": 1684
+              },
+              "requested_max_output_tokens": 2048,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "WRITE",
+              "budget": 128,
+              "effort": "high",
+              "seconds": 47.92957724997541,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1341,
+                "input_tokens_details": {
+                  "cached_tokens": 453,
+                  "cache_write_tokens": 888
+                },
+                "output_tokens": 375,
+                "output_tokens_details": {
+                  "reasoning_tokens": 128
+                },
+                "total_tokens": 1716
+              },
+              "requested_max_output_tokens": 1925,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            },
+            {
+              "role": "FINAL",
+              "budget": 1,
+              "effort": "high",
+              "seconds": 7.545053750043735,
+              "http_status": 200,
+              "response_status": "completed",
+              "usage": {
+                "input_tokens": 1757,
+                "input_tokens_details": {
+                  "cached_tokens": 1716,
+                  "cache_write_tokens": 41
+                },
+                "output_tokens": 95,
+                "output_tokens_details": {
+                  "reasoning_tokens": 0
+                },
+                "total_tokens": 1852
+              },
+              "requested_max_output_tokens": 1550,
+              "incomplete_details": null,
+              "stop_token_observed": null
+            }
+          ],
+          "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-reuse64/http/bucket/bucket/first-solution.py",
+          "grade": {
+            "correct": true,
+            "tests": 161,
+            "passed": 161,
+            "failed": 0,
+            "first_failure": null,
+            "returncode": 0
+          },
+          "complete": true,
+          "cap": false,
+          "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, processes events in order, refills before each event, advances the previous timestamp even on rejection, accepts zero-cost events, and returns the required `accepted`, `rejected`, `remaining`, and `tokens` fields without mutating the inputs.",
+          "final_text_length": 405,
+          "final_text_bytes": 405,
+          "first_code_bytes": 772,
+          "errors": [],
+          "config_unchanged": true,
+          "context_edit": {
+            "removed_blocks": 0,
+            "summarized_blocks": 1,
+            "source_kind": "authored ordinary design discussion",
+            "summary": "Settled design: use exact integers and one pass in supplied nondecreasing event order, without sorting or mutating payload/config. Begin at time0 with tokens=capacity. At EVERY event refill min(capacity, tokens+(t-previous_t)*rate), then advance previous_t even on rejection or oversized costs. Accept cost<=tokens and subtract; reject otherwise without spending. cost0 accepts even at capacity0. Return only {accepted, rejected, remaining, tokens}: original zero-based index lists, balance AFTER each event, final balance; empty payload leaves tokens=capacity. Capacity/rate come from the actual config. Fractional credits, rounding, separate queues, real clocks/timers, logging, reason fields and service wrappers were rejected or deferred. Make the required actual read and first write, then finish briefly under the unchanged coding contract.",
+            "before_bytes": 5797,
+            "after_bytes": 3071,
+            "seconds": 0.00038283399771898985
+          },
+          "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+          "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+          "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+          "pass": true
+        }
+      },
+      "grafts": [
+        {
+          "arm": "code-reuse64",
+          "case": "dedupe",
+          "tail_requested": 64,
+          "line": "1008 12:43:16 ds4-server: suffix APPROXIMATE slot=1 reused=441 fresh=259 graft_fresh=195 source=1142:1583 destination=612:1053 latest_user_start=1149 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 24865.045 ms",
+          "fields": {
+            "slot": "1",
+            "reused": "441",
+            "fresh": "259",
+            "graft_fresh": "195",
+            "source": "1142:1583",
+            "destination": "612:1053",
+            "latest_user_start": "1149",
+            "pre_rope": "1",
+            "source_ssd": "1",
+            "source_approximate": "0",
+            "prefix_pad": "0"
+          },
+          "fresh_actual": 259,
+          "graft_fresh_actual": 195,
+          "destination_end": 1053,
+          "latest_user_start": 1149,
+          "latest_user_outside_graft": true
+        },
+        {
+          "arm": "code-reuse64",
+          "case": "bucket",
+          "tail_requested": 64,
+          "line": "1008 12:45:00 ds4-server: suffix APPROXIMATE slot=1 reused=453 fresh=264 graft_fresh=200 source=1108:1561 destination=624:1077 latest_user_start=1172 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 24826.533 ms",
+          "fields": {
+            "slot": "1",
+            "reused": "453",
+            "fresh": "264",
+            "graft_fresh": "200",
+            "source": "1108:1561",
+            "destination": "624:1077",
+            "latest_user_start": "1172",
+            "pre_rope": "1",
+            "source_ssd": "1",
+            "source_approximate": "0",
+            "prefix_pad": "0"
+          },
+          "fresh_actual": 264,
+          "graft_fresh_actual": 200,
+          "destination_end": 1077,
+          "latest_user_start": 1172,
+          "latest_user_outside_graft": true
+        }
+      ],
+      "task_seconds": 207.3167419579695,
+      "complete": 2,
+      "caps": 0,
+      "passed": 322,
+      "failed": 0
+    }
+  },
+  "comparisons": {
+    "code-reuse128": {
+      "task_change_percent": -12.375738065568509,
+      "task_change_vs_faster_control": -12.372171124310361,
+      "cases": {
+        "dedupe": {
+          "change_percent": -13.191671678662075,
+          "change_vs_faster_control": -13.183396123739444
+        },
+        "bucket": {
+          "change_percent": -11.570519910726041,
+          "change_vs_faster_control": -11.569353170875562
+        }
+      }
+    },
+    "code-reuse256": {
+      "task_change_percent": -11.780137131724455,
+      "task_change_vs_faster_control": -11.776545945200233,
+      "cases": {
+        "dedupe": {
+          "change_percent": -12.988608883370622,
+          "change_vs_faster_control": -12.980313970198065
+        },
+        "bucket": {
+          "change_percent": -10.587535946500093,
+          "change_vs_faster_control": -10.586356237144845
+        }
+      }
+    },
+    "code-reuse64": {
+      "task_change_percent": -11.660847681389397,
+      "task_change_vs_faster_control": -11.657251638921718,
+      "cases": {
+        "dedupe": {
+          "change_percent": -12.872436841908241,
+          "change_vs_faster_control": -12.864130853898425
+        },
+        "bucket": {
+          "change_percent": -10.46517002746702,
+          "change_vs_faster_control": -10.463988703614058
+        }
+      }
+    }
+  },
+  "pressure": [
+    {
+      "guard": "guard-code-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 230,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 88.34770202636719,
+      "initial_swap_gib": 0.014833984375,
+      "peak_swap_gib": 0.014833984375,
+      "max_swap_growth_mib": 0.0
+    },
+    {
+      "guard": "guard-code-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 230,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 88.189208984375,
+      "initial_swap_gib": 0.014833984375,
+      "peak_swap_gib": 0.014833984375,
+      "max_swap_growth_mib": 0.0
+    },
+    {
+      "guard": "guard-code-reuse128",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 202,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 88.77543640136719,
+      "initial_swap_gib": 0.014833984375,
+      "peak_swap_gib": 0.014833984375,
+      "max_swap_growth_mib": 0.0
+    },
+    {
+      "guard": "guard-code-reuse256",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 204,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 88.68440246582031,
+      "initial_swap_gib": 0.014833984375,
+      "peak_swap_gib": 0.014833984375,
+      "max_swap_growth_mib": 0.0
+    },
+    {
+      "guard": "guard-code-reuse64",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 206,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 89.21272277832031,
+      "initial_swap_gib": 0.014833984375,
+      "peak_swap_gib": 0.014833984375,
+      "max_swap_growth_mib": 0.0
+    },
+    {
+      "guard": "guard-screen-equivalent64",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 188,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 87.81498718261719,
+      "initial_swap_gib": 0.015322265625,
+      "peak_swap_gib": 0.015810546875,
+      "max_swap_growth_mib": 0.5000000000000018
+    },
+    {
+      "guard": "guard-screen-favorable64",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 182,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 87.81242370605469,
+      "initial_swap_gib": 0.015810546875,
+      "peak_swap_gib": 0.0166015625,
+      "max_swap_growth_mib": 0.8099999999999987
+    },
+    {
+      "guard": "guard-screen-stress64",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 183,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 89.65199279785156,
+      "initial_swap_gib": 0.0166015625,
+      "peak_swap_gib": 0.0194140625,
+      "max_swap_growth_mib": 2.879999999999999
+    },
+    {
+      "guard": "guard-screen-summary128",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 183,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 87.95710754394531,
+      "initial_swap_gib": 0.014833984375,
+      "peak_swap_gib": 0.014833984375,
+      "max_swap_growth_mib": 0.0
+    },
+    {
+      "guard": "guard-screen-summary256",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 185,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 88.09501647949219,
+      "initial_swap_gib": 0.014833984375,
+      "peak_swap_gib": 0.015322265625,
+      "max_swap_growth_mib": 0.5
+    },
+    {
+      "guard": "guard-screen-summary64",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 182,
+      "adverse_samples": 0,
+      "levels": [
+        1
+      ],
+      "peak_wired_compressor_gib": 87.885498046875,
+      "initial_swap_gib": 0.014833984375,
+      "peak_swap_gib": 0.014833984375,
+      "max_swap_growth_mib": 0.0
+    }
+  ],
+  "pending": [],
+  "native_control_drift_percent": -0.008140783847854216,
+  "native_equality": {
+    "dedupe": {
+      "first_code_equal": true,
+      "role_usage_equal": true
+    },
+    "bucket": {
+      "first_code_equal": true,
+      "role_usage_equal": true
+    }
+  },
+  "edited_context_equality": {
+    "dedupe": true,
+    "bucket": true
+  }
+}

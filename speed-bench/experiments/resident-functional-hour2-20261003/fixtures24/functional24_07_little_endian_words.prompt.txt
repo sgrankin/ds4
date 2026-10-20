@@ -1,0 +1,3 @@
+Decode hex_bytes as consecutive unsigned 16-bit little-endian words. Require exactly two bytes per word. Report words in byte order and their integer sum.
+Literal input JSON: {"hex_bytes": "0102fe001027"}
+Return the requested JSON first, then explain the specific reasoning.

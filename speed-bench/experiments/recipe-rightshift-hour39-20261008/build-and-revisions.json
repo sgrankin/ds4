@@ -1,0 +1,22 @@
+{
+  "runtime_revision": "4cfff6cb",
+  "native_runtime_revision": "9c6918f0ae2e",
+  "compiled_server_and_unit_suite": "make -j2 ds4-server ds4_test",
+  "tests": {
+    "server": "./ds4_test --server",
+    "matcher": ".workspaces/recipe-20261008/right-match-test",
+    "layout": ".workspaces/recipe-20261008/right-layout-test"
+  },
+  "sha256": {
+    "ds4-server": "97e94d3d47a3e9b1c2db14e048e17eef8628b4672725893d1879dda666c40325",
+    ".workspaces/recipe-20261008/right-native-server": "247e2f2fa76a32647ce6ac6c14a2a36b645e4776a3a45bc53ca2fba3b948f5ee",
+    ".workspaces/recipe-20261008/rightshift-oracle": "62cdca1e5bf884aec8380dfacd4691479d205526c0e3269ab4e9f52f7a7b360d",
+    ".workspaces/recipe-20261008/right-repeat": "2f80dd918e0bd73d5007d18bad4e0557061625bfa77335a7212426fd45b9ff5a",
+    "ds4.c": "4de4d714f4d41dc40606e6f7080b7493faa1cee956ed49a3587836f6a4c000ee",
+    "ds4_server.c": "4a57d0c88463e5646673494b589a3caed96a8a0fe4de090f465185e7e78cbc5f",
+    "speed-bench/experiments/recipe-rightshift-hour39-20261008/repeat.c": "fd8c5a0e2a638c4e4763d6280e8ed00955950aaaa3c54051614fd090d2ddfa31",
+    "ds4-agent": "46817ad1acdbfecb4828ea7035cf912fadf52f5261695ac9b217c71742f79766"
+  },
+  "additional_build": "make -j2 ds4-agent (after all model timings)",
+  "additional_smoke": "./ds4-agent --help (exit0); no new agent-model quality qualification"
+}

@@ -1,0 +1,91 @@
+{
+  "case_name": "semantic-secret-c512-t128",
+  "helper_source_commit": "dd49bed6",
+  "core_source_commit": "e580d947",
+  "helper_sha256": "0fdf612e65d2fa4c93635d2a1548907737980b9d99249edcf808bf2ad5751db7",
+  "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t128",
+  "summary": {
+    "case": "secret",
+    "prefix_tokens": 1024,
+    "edit_tokens": 256,
+    "unchanged_tokens": 512,
+    "fresh_tail_tokens": 128,
+    "reused_tokens": 384,
+    "copied_bytes": 12943360,
+    "pending_pairs": 0,
+    "identity_logit_bytes_equal": true,
+    "identity_graph_bytes_equal": true,
+    "canonical_export_blocked": true,
+    "setup_ms": 108095.136,
+    "identity_ms": 3085.207,
+    "rows": 4,
+    "gold_tokens_including_eos": 4,
+    "stale_tokens_including_eos": 3,
+    "mean_kl": 2.07428549415e-06,
+    "mean_tv": 5.17432443956e-06,
+    "sum_delta_nll": 2.02096716393e-05,
+    "argmax_flips": 0,
+    "byte_equal_rows": 0,
+    "greedy_encoding": "JSON byte escapes for non-ASCII",
+    "results": [
+      {
+        "mode": "fresh",
+        "edit_ms": 42003.046,
+        "gold_logprob": -2.01677328349e-05,
+        "stale_logprob": -28.9880461074,
+        "gold_minus_stale_logprob": 28.9880259396,
+        "greedy": "REDACTED",
+        "correct_answer": true,
+        "stale_answer": false,
+        "stopped": true,
+        "greedy_tokens": [
+          63529,
+          13455,
+          3316,
+          1
+        ]
+      },
+      {
+        "mode": "reuse",
+        "edit_ms": 21413.726,
+        "gold_logprob": -4.03774044742e-05,
+        "stale_logprob": -25.4263768202,
+        "gold_minus_stale_logprob": 25.4263364427,
+        "greedy": "REDACTED",
+        "correct_answer": true,
+        "stale_answer": false,
+        "stopped": true,
+        "greedy_tokens": [
+          63529,
+          13455,
+          3316,
+          1
+        ]
+      }
+    ]
+  },
+  "guard": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "pressure": {
+    "samples": 211,
+    "levels": [
+      1
+    ],
+    "adverse_samples": 0,
+    "swap_growth_gb": 0.0,
+    "max_wired_gb": 74.56246948242188,
+    "max_compressor_gb": 8.612228393554688
+  },
+  "semantic_controls_valid": true,
+  "raw_logits": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t128/logits.bin",
+    "bytes": 4136992,
+    "sha256": "852196ff72282a799309d6b6d8754685a1426e27f70e6c0505afec1ace5b9346"
+  },
+  "diagnostic_speedup": 1.9615010484396787,
+  "stale_answer_logprob_gain": 3.5616692871999973,
+  "stale_sequence_probability_fresh": 2.5742548189178044e-13,
+  "stale_sequence_probability_reuse": 9.067025814371726e-12
+}

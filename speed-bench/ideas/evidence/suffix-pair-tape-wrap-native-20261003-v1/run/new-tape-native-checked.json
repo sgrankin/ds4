@@ -1,0 +1,53 @@
+{
+  "arm": "new-tape-native",
+  "summary": {
+    "mode": "tape-native",
+    "endpoint_partition_aligned": true,
+    "identity_native_checked": false,
+    "identity_native_state_equal": false,
+    "identity_native_logits_equal": false,
+    "identity_reuse_state_equal": false,
+    "prefix": 1951,
+    "shift": 65,
+    "span": 129,
+    "tail": 1,
+    "decode": 16,
+    "raw_reference_rows": 18,
+    "raw_candidate_rows": 0,
+    "tape_buffer_and_metadata_bytes": 12582992,
+    "immutable_tape_bytes": 12582912,
+    "peak_staging_bytes_including_reserve": 118107119,
+    "staging_budget_bytes": 134217728,
+    "coverage_rejections_preserve_state": false,
+    "precancel_preserves_state": false,
+    "partial_cancel_invalidates": false,
+    "approximate_export_blocked": false,
+    "pair_inputs_reused": 0,
+    "pair_rows_rebuilt": 0,
+    "pair_boundary_rows": 0,
+    "reused_tokens": 0,
+    "fresh_tail_tokens": 0,
+    "fresh_ms_diagnostic": 2802.489,
+    "reuse_ms_diagnostic": 0.0,
+    "mean_kl": 0,
+    "mean_tv": 0,
+    "sum_delta_nll": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 0
+  },
+  "raw": {
+    "reference_rows": 18,
+    "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+    "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+    "full_sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+    "bytes": 9308256
+  },
+  "state": {
+    ".source.state.bin": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94",
+    ".fresh.state.bin": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+  },
+  "csv_checks": null,
+  "private_state": null,
+  "identity_checks": null,
+  "native_parity": true
+}

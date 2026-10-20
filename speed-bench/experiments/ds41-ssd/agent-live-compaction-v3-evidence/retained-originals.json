@@ -1,0 +1,71 @@
+{
+  "raw_retained_root": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run",
+  "preparation_retained_root": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3",
+  "analysis_retained_root": "/Volumes/Models/ds4/.workspaces/idea-agent-compaction-analysis/speed-bench/ideas/artifacts/agent-compaction-offline-v1",
+  "files": [
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/native-before/trace.log",
+      "sha256": "9d5f111939c6543bc58692a42407c8c2dd63dca136f4ac18035fb91c748685bc",
+      "bytes": 871084,
+      "retained": true,
+      "copy_omitted": true
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/native-before/stdout.log",
+      "sha256": "e90ab19234d327c192db38287137a0d26f974e1f9ecb9137c9247003d463bf17",
+      "bytes": 16141,
+      "retained": true,
+      "copy_omitted": true
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/native-before/ds4-agent",
+      "sha256": "5ca77b0474416981e2c85e7788d4217b7eecd07df59396c04f15cf68ac516576",
+      "bytes": 3049352,
+      "retained": true,
+      "copy_omitted": true
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/broader3/trace.log",
+      "sha256": "50c82e554174cf86602efd56cea9967b0555988ffbee71ff7d7adff6d7689eba",
+      "bytes": 885051,
+      "retained": true,
+      "copy_omitted": true
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/broader3/stdout.log",
+      "sha256": "a1912329532c9c89f4c14caaf53d2722a86ede02ee42ae7809dff84b016df09f",
+      "bytes": 16555,
+      "retained": true,
+      "copy_omitted": true
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/broader3/ds4-agent",
+      "sha256": "5ca77b0474416981e2c85e7788d4217b7eecd07df59396c04f15cf68ac516576",
+      "bytes": 3049352,
+      "retained": true,
+      "copy_omitted": true
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/native-after/trace.log",
+      "sha256": "f8f2a2d83e32a028537ba5df8e585f8bde2218523fa8a5b6e97d72d6df41b4ce",
+      "bytes": 902872,
+      "retained": true,
+      "copy_omitted": true
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/native-after/stdout.log",
+      "sha256": "d4e0e4674e0e67b2a48b4775f22f5ae450735630cccb77638e5cfcf0e312d141",
+      "bytes": 16299,
+      "retained": true,
+      "copy_omitted": true
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-run/native-after/ds4-agent",
+      "sha256": "5ca77b0474416981e2c85e7788d4217b7eecd07df59396c04f15cf68ac516576",
+      "bytes": 3049352,
+      "retained": true,
+      "copy_omitted": true
+    }
+  ],
+  "all_original_projects_checks_traces_retained": true
+}

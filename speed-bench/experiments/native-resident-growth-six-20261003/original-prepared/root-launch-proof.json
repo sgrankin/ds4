@@ -1,0 +1,32 @@
+{
+  "time": 1790990284.959166,
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "source_commit": "aaa62c6bb9024f8ccb41293369963d7a104a9ddc",
+  "manifest_sha256": "a8fd08c721e8ff7f657f4297cc65e112c376c90ec31d7073d2e9369e547049f8",
+  "command_sha256": "93646f869a1e42475375de3e93647672246c64984995da60694190f23fb68501",
+  "verified_assets": 37,
+  "model_metadata_touched_before_guard": false,
+  "cpu_timing_frozen": true,
+  "pause_acknowledgements": {
+    "clm_design": "No running command/build/test/hash/copy/analysis/model; fully paused until ROOT thaw",
+    "resident_experts": "No owned CPU/test/build/model/analysis; no rerun until ROOT thaw",
+    "checkout_recap": "No CPU job/tool cell/build/test/model; no further reads/hash/analysis until ROOT thaw"
+  },
+  "prior_release_proof": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/root-release-proof.json",
+  "prior_release_sha256": "224f3cbf4ad17a2f135b5675be043557bc5710da1436ca86a9e2a0dc0dcc816f",
+  "lock_reacquired_before_launch": true,
+  "live_model_processes_before_launch": [],
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/prepare_native_resident_growth_six.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1",
+    "--root-granted",
+    "--cpu-timing-frozen"
+  ]
+}

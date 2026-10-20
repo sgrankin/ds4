@@ -1,0 +1,44 @@
+{
+  "status": "FIRST_FAILURE_RETAINED",
+  "phase": "agent_output",
+  "error": "ControlFailure: First observed generation-limit round retained; stop/cap cause is not inferred",
+  "cleanup": {
+    "attempted": true,
+    "error": null,
+    "leader_reaped": true
+  },
+  "submitted": 3,
+  "completed": [
+    1,
+    2
+  ],
+  "overall_success": false,
+  "partial_gold_checks": [
+    {
+      "turn": 1,
+      "answer": "CODE=2718",
+      "passed": true
+    },
+    {
+      "turn": 2,
+      "answer": "READY",
+      "passed": true
+    }
+  ],
+  "deadline_seconds": 900,
+  "cleanup_reserve_seconds": 12,
+  "elapsed_seconds": 452.4448029580017,
+  "agent_returncode": -15,
+  "persistence": "NOT_EXERCISED",
+  "first_attempt": true,
+  "no_retries": true,
+  "external_experiment": {
+    "status": "EXTERNAL_PRE_FORWARD_CONTEXT_EDIT_PAIRED_SEMANTICS_V1",
+    "approved_design_sha256": "5b84d01b414655fabf2645114638b4e97848f8810930a4a44473a7880d51085f",
+    "first_attempt_each_arm": true,
+    "no_automatic_chain_or_retry": true,
+    "old_memory160_attempt_remains_invalid_no_reuse": true,
+    "new_A_selection_unrelated_old480057": true,
+    "fixed_budget_bytes": 167772160
+  }
+}

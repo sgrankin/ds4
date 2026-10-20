@@ -1,0 +1,116 @@
+{
+  "status": "NATIVE_PRIVATE_FRONTEND_BUILD_AND_MODEL_FREE_SELFTEST_PASS",
+  "time": 1790998647.7678368,
+  "plan_sha256": "f988bacfd6c2dffaf0cdf55bc39cbea53ceef41da7685949549672a7d947987c",
+  "source_proof_sha256": "365f066ce90f4242910c2166aac9136d11c348ccb31065adbbe66d6be112a5ff",
+  "input_freeze": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-source-freeze-20261003-v1/input-freeze.json",
+    "sha256": "cce60cf7ff19c3ef8d76410c857d0b422c1874d1558c1339551923f3d1a66b83"
+  },
+  "source": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_confirmation_probe.c",
+    "sha256": "dd05bfa3967bc211e9533e4f3108aee2b4bec9b7f44da7bd63a9d6d5b277ea1a"
+  },
+  "header": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_confirmation_cases.h",
+    "sha256": "1884857da9e1a9202c7fb938253f4585385d4a7693b2c8f3b4a4e6682cfc53ef"
+  },
+  "binary": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe",
+    "sha256": "1cdeaaa7f7dcb8d4f073b7694f7cce48a9e3cc6ec1253dd63be7bce93bfaca39",
+    "bytes": 2673104,
+    "mode": 493
+  },
+  "compile_result": {
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "-isysroot",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+      "-O3",
+      "-g",
+      "-mcpu=native",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-function",
+      "-std=c11",
+      "-I",
+      "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation",
+      "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_confirmation_probe.c",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4.o",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_image.o",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_distributed.o",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_tp.o",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_ssd.o",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_metal.o",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_layer_pack.o",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_engram.o",
+      "-lm",
+      "-pthread",
+      "-framework",
+      "Foundation",
+      "-framework",
+      "Metal",
+      "-o",
+      "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe"
+    ],
+    "returncode": 0,
+    "seconds": 0.3272380828857422,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "selftest_result": {
+    "command": [
+      "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe",
+      "--helper-self-test"
+    ],
+    "returncode": 0,
+    "seconds": 0.0063228607177734375,
+    "stdout_bytes": 105,
+    "stderr_bytes": 0,
+    "log_sha256": "38f73849767c9339927c00fcf6ed7e183c01380887a860291f947eb791945a4c"
+  },
+  "borrowed_pins": {
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/ideas/artifacts/reasoning-budget-native-build-v2/build-manifest.json": "aff1ba1b958428568d4b5747ff3046c273d231e0044ed31cff8d09e90064636b",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_probe.c": "48bf48e6ae5b16adffa53129571c9ff3279ed1e5372e3ca8d56738f0aeed519c",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4.o": "d77958a390840f3a555f01df64d52964a656c72e6449c2a1cd8c19f497eb8aca",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_image.o": "752eace0ab62636538b225d4c80011739354649ee395b6648924928079572528",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_distributed.o": "3b09b4b252fd1b06894421b88bc62eeaca24869b839cc17cd22effde1d50dc1a",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_tp.o": "d2f2f5ce0b8bfc7ebcfb0fd80f3eb4e434e89dc4518253cc43a7d253a0b2c2a1",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_ssd.o": "a1fbc20ad4102f4a6f126cde822f2995dd4421153c6256dace554ebca26c2b71",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_metal.o": "ec94b88a9a3da8742c77899e370c1b64869d456ce97d9c8fdba4fae1752bd5ff",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_layer_pack.o": "174b07bfca784e04cb938ae3803e3b97696afcdb886ccd518117ffa3400135c8",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_engram.o": "d94530e0a20a2c196ef24ea839175152dabbdb9ad8245626f01bd81a97f34a4b",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54",
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_probe.c": "48bf48e6ae5b16adffa53129571c9ff3279ed1e5372e3ca8d56738f0aeed519c",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_policy.h": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_policy.h": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_native_api.h": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_native_api.h": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/native_effort_final_score.h": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/native_effort_final_score.h": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/overthink_diagnostics.h": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/overthink_diagnostics.h": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/speed-bench/reasoning_budget_cases.h": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/reasoning_budget_cases.h": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/ds4.h": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/ds4.h": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/ds4_gpu.h": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget/ds4_gpu.h": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/reasoning_budget_signed64.py": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/input-freeze.json": "3295e9bd9b5361c2cb870233f8038b6377e4dca91d778b467092cead2cdec7a4",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+  },
+  "explicit_sdk_sha256": {
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/stdio.h": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+  },
+  "core_or_Metal_rebuild": false,
+  "model_or_tokenizer_or_guard_run": false,
+  "root_grant_sha256": "8b12b61eaaaf936d702ec51640ae52c253a4dd1933e4b7ccfe57ee52ae76f230"
+}

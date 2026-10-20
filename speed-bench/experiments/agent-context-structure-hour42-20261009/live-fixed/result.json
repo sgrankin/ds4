@@ -1,0 +1,23 @@
+{
+  "returncode": 0,
+  "error": null,
+  "seconds": 96.4682657920057,
+  "checks": {
+    "four_turns_complete": true,
+    "original_obsolete_turn_removed": true,
+    "audit_log_not_copied_back": true,
+    "retained_ids_stable": true,
+    "verbatim_archive_present": true,
+    "fresh_archive_answer": true,
+    "one_context_edit": true,
+    "no_automatic_compaction": true,
+    "no_edit_rejection": true
+  },
+  "answer": {
+    "archived_code": "EMBER-7319",
+    "current_key": "COVE-3917"
+  },
+  "first_attempt_model_outputs": true,
+  "case": "live-fixed",
+  "pass": true
+}

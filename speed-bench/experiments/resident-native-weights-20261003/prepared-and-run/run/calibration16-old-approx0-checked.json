@@ -1,0 +1,162 @@
+{
+  "cases": 16,
+  "tokens": 512,
+  "avg_nll": 0.445995361592,
+  "delta_nll": 0.0076013288621,
+  "policy_delta_nll": 0.0076013288621,
+  "kl_base_to_raw": 0.0172143927637,
+  "kl_base_to_policy": 0.0172143927637,
+  "tv": 0.0323783895527,
+  "argmax_flips": 15,
+  "bit_equal_rows": 16,
+  "startup_ms": 198.617,
+  "prefill_ms": 16955.405,
+  "decode_ms": 26480.898,
+  "metrics_ms": 1012.853,
+  "name": "calibration16-old-approx0",
+  "raw_sha256": "89b455eb38161b5937d81d26742ce6971c36129ae1891754b1924d0d29701e61",
+  "layout": {
+    "magic": 1146310961,
+    "vocab": 129280,
+    "cases": 16,
+    "token_limit": 32,
+    "header_bytes": 16,
+    "row_metadata_bytes": 24,
+    "float_bytes": 4,
+    "row_bytes": 517144,
+    "rows": 512,
+    "bytes": 264777744,
+    "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+  },
+  "finite_validation": {
+    "vectors": 512,
+    "fp32_values": 66191360,
+    "finite": true
+  },
+  "cache": {
+    "configured_slots": 6136,
+    "resident_entries": 6136,
+    "hits": 197905,
+    "misses": 16415,
+    "wraps": 49245,
+    "evictions": 10279,
+    "buffer_allocs": 15,
+    "buffer_reuses": 10279
+  },
+  "io": {
+    "enabled": 1,
+    "pread_calls": 49245,
+    "requested_bytes": 163383091200,
+    "returned_bytes": 163383091200,
+    "cache_loader_bytes": 163383091200,
+    "cache_hits": 197905,
+    "cache_misses": 16415,
+    "cache_evictions": 10279
+  },
+  "route": {
+    "layers": 20480,
+    "substitutions": 8307,
+    "native_misses": 13422,
+    "skipped_loads": 8307,
+    "skipped_bytes": 82681896960,
+    "mean_mass": 0.1082649,
+    "mean_score_gap": 0.10277713,
+    "mean_affinity_ratio": 0.91156744,
+    "mean_rank": 7.912,
+    "full_snapshots": 7876,
+    "double_layers": 1086,
+    "planned_substitutions": 8307,
+    "drops": 0,
+    "triple_layers": 80
+  },
+  "prompt_mean_delta_nll": 0.007601328862127325,
+  "prompt_bootstrap_95": [
+    -0.017275422671802865,
+    0.03193909004282403
+  ],
+  "worst_prompt_delta_nll": 0.10111760921684572,
+  "kl_p99": 0.154189521279,
+  "kl_max": 1.64426740744,
+  "per_prompt": {
+    "case_001": {
+      "tokens": 32,
+      "delta_nll": 0.012016801358344433,
+      "kl": 0.007197643206150627
+    },
+    "case_007": {
+      "tokens": 32,
+      "delta_nll": -0.043294145692988645,
+      "kl": 0.01888182441329848
+    },
+    "case_013": {
+      "tokens": 32,
+      "delta_nll": 0.01801970464639589,
+      "kl": 0.007470245169952688
+    },
+    "case_019": {
+      "tokens": 32,
+      "delta_nll": -0.06870373072595633,
+      "kl": 0.01617774470739037
+    },
+    "case_025": {
+      "tokens": 32,
+      "delta_nll": 0.028852686938244495,
+      "kl": 0.008839834757008457
+    },
+    "case_031": {
+      "tokens": 32,
+      "delta_nll": 0.04433547512267583,
+      "kl": 0.013157320758208748
+    },
+    "case_037": {
+      "tokens": 32,
+      "delta_nll": 0.0046789400738115015,
+      "kl": 0.0034531728308374353
+    },
+    "case_043": {
+      "tokens": 32,
+      "delta_nll": 0.04451778138778739,
+      "kl": 0.01817407109758751
+    },
+    "case_049": {
+      "tokens": 32,
+      "delta_nll": -0.07134229194261725,
+      "kl": 0.015020598241938205
+    },
+    "case_055": {
+      "tokens": 32,
+      "delta_nll": 0.05600504593606744,
+      "kl": 0.014662069688797687
+    },
+    "case_061": {
+      "tokens": 32,
+      "delta_nll": 0.04496458348051571,
+      "kl": 0.03821854201880207
+    },
+    "case_067": {
+      "tokens": 32,
+      "delta_nll": 0.011950777193527279,
+      "kl": 0.006111453976775502
+    },
+    "case_073": {
+      "tokens": 32,
+      "delta_nll": 0.022186264689760454,
+      "kl": 0.0022450408926207744
+    },
+    "case_079": {
+      "tokens": 32,
+      "delta_nll": 0.10111760921684572,
+      "kl": 0.06886373079158946
+    },
+    "case_085": {
+      "tokens": 32,
+      "delta_nll": -0.08664052703767855,
+      "kl": 0.018336234532026232
+    },
+    "case_091": {
+      "tokens": 32,
+      "delta_nll": 0.0029562871493018367,
+      "kl": 0.018620757135704734
+    }
+  }
+}

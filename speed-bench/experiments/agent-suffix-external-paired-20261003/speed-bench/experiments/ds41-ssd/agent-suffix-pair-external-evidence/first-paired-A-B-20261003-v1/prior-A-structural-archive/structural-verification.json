@@ -1,0 +1,83 @@
+{
+  "status": "A_STRUCTURAL_COMMIT_REFERENCE_VALID_SEMANTIC_FAILURE_RETAINED",
+  "verified_all114": true,
+  "A_manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "release_sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd",
+  "snapshot_sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064",
+  "root_identity": {
+    "device": 16777230,
+    "inode": 1671818
+  },
+  "shared_inventory_before_copy_exact": true,
+  "shared_final_recorded_copies_exact_bytes_and_modes": true,
+  "selection": {
+    "selection": {
+      "status": "SELECTED_BEFORE_THIRD_EVAL",
+      "candidate": 0,
+      "displacement": 11,
+      "source_start": 2107,
+      "source_end": 2988,
+      "destination_start": 2096,
+      "destination_end": 2977,
+      "reused": 881,
+      "fresh": 409,
+      "latest_user_start": 2978,
+      "user_id": 128803,
+      "old_tokens": 3397,
+      "edited_tokens": 3386,
+      "budget": 167772160,
+      "preallocation_peak_with_reserves": 137145130,
+      "current_payload_forecast": 30138084,
+      "actual_commit_rechecks_admission": true,
+      "old_text_bytes": 14653,
+      "edited_text_bytes": 14609
+    },
+    "old_ids_sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f",
+    "edited_ids_sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb",
+    "before_sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133",
+    "after_sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+  },
+  "actual_approximate_trace": {
+    "reused": 881,
+    "fresh": 409,
+    "source_start": 2107,
+    "source_end": 2988,
+    "destination_start": 2096,
+    "destination_end": 2977,
+    "rebuilt_pairs": 1320,
+    "boundary_pairs": 0,
+    "copied_bytes": 23566848,
+    "unique_peak": 132716631,
+    "budget": 167772160,
+    "latest_user_start": 2978,
+    "latest_user_fresh": true
+  },
+  "preedit_full_vocab_raw": {
+    "vocab": 129280,
+    "pos": 2988,
+    "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+  },
+  "source_canonical_state_pin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/preedit-state.bin",
+    "bytes": 30138084,
+    "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+    "mode": 420
+  },
+  "choice_only_first_prethird_structural_candidate": true,
+  "generated_or_grader_outcomes_used_for_choice": false,
+  "ROOT_reported_semantic_outcome": {
+    "guard_child_returncode": 3,
+    "first_failure_retained": true,
+    "completed_turns": [
+      1,
+      2
+    ],
+    "grade": "FAIL",
+    "reported_code": 2718,
+    "required_code": 3141
+  },
+  "semantic_outcome_authority": "ROOT task message; no generated-output or grader parsing used for binding",
+  "B_preparation_or_model_grant": false,
+  "primary_persistence": "NOT_EXERCISED",
+  "no_semantic_speed_forgetting_default_promotion": true
+}

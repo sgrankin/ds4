@@ -1,0 +1,4 @@
+arm,seconds,edit_seconds,task_pass,grafts,prior_approximate,fresh_reads
+agent-native,347.4520045829995,201.39945650001755,True,0,0,3
+agent-suffix,146.88281087500218,58.323723125009565,True,3,2,3
+agent-native-warm,293.9302574579924,201.5315533749963,True,0,0,3

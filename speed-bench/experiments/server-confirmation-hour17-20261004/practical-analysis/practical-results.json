@@ -1,0 +1,380 @@
+{
+  "rows": [
+    {
+      "case": "ledger",
+      "arm": "budget128",
+      "write_budget": 128,
+      "wall_seconds": 165.1087237920001,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 1041,
+      "http_reasoning_tokens": 577,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "errors": "",
+      "read_seconds": 32.20695766698918,
+      "read_thinking_tokens": 19,
+      "read_status": "completed",
+      "write_seconds": 58.50809558299079,
+      "write_thinking_tokens": 128,
+      "write_status": "completed",
+      "final_seconds": 74.39175133300887,
+      "final_thinking_tokens": 430,
+      "final_status": "completed"
+    },
+    {
+      "case": "lru",
+      "arm": "budget128",
+      "write_budget": 128,
+      "wall_seconds": 130.4726249170053,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 607,
+      "http_reasoning_tokens": 148,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "errors": "",
+      "read_seconds": 31.69305204100965,
+      "read_thinking_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 53.5414064170036,
+      "write_thinking_tokens": 128,
+      "write_status": "completed",
+      "final_seconds": 45.23640012500982,
+      "final_thinking_tokens": 0,
+      "final_status": "completed"
+    },
+    {
+      "case": "ledger",
+      "arm": "budget256",
+      "write_budget": 256,
+      "wall_seconds": 218.96251437500177,
+      "complete": false,
+      "cap": true,
+      "pass": false,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 2048,
+      "http_reasoning_tokens": 1637,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "errors": "FINAL request did not complete",
+      "read_seconds": 31.895626666999306,
+      "read_thinking_tokens": 19,
+      "read_status": "completed",
+      "write_seconds": 64.92833533299563,
+      "write_thinking_tokens": 256,
+      "write_status": "completed",
+      "final_seconds": 122.13676166599907,
+      "final_thinking_tokens": 1362,
+      "final_status": "incomplete"
+    },
+    {
+      "case": "lru",
+      "arm": "budget256",
+      "write_budget": 256,
+      "wall_seconds": 141.96554550000292,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 698,
+      "http_reasoning_tokens": 276,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "errors": "",
+      "read_seconds": 31.67215650000435,
+      "read_thinking_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 60.00220387500303,
+      "write_thinking_tokens": 256,
+      "write_status": "completed",
+      "final_seconds": 50.289338417002,
+      "final_thinking_tokens": 0,
+      "final_status": "completed"
+    },
+    {
+      "case": "ledger",
+      "arm": "native",
+      "write_budget": 0,
+      "wall_seconds": 168.1197583339963,
+      "complete": false,
+      "cap": true,
+      "pass": false,
+      "actual_read_count": 1,
+      "actual_write_count": 0,
+      "http_output_tokens": 2048,
+      "http_reasoning_tokens": 1952,
+      "code_correct": false,
+      "tests_passed": null,
+      "tests_expected": 161,
+      "errors": "WRITE request did not complete",
+      "read_seconds": 32.47241804101213,
+      "read_thinking_tokens": 19,
+      "read_status": "completed",
+      "write_seconds": 135.6464449579944,
+      "write_thinking_tokens": 1933,
+      "write_status": "incomplete",
+      "final_seconds": null,
+      "final_thinking_tokens": 0,
+      "final_status": null
+    },
+    {
+      "case": "lru",
+      "arm": "native",
+      "write_budget": 0,
+      "wall_seconds": 169.1899139159941,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "actual_read_count": 1,
+      "actual_write_count": 1,
+      "http_output_tokens": 1062,
+      "http_reasoning_tokens": 620,
+      "code_correct": true,
+      "tests_passed": 161,
+      "tests_expected": 161,
+      "errors": "",
+      "read_seconds": 31.44959016700159,
+      "read_thinking_tokens": 20,
+      "read_status": "completed",
+      "write_seconds": 78.52433316700626,
+      "write_thinking_tokens": 600,
+      "write_status": "completed",
+      "final_seconds": 59.21436275000451,
+      "final_thinking_tokens": 0,
+      "final_status": "completed"
+    }
+  ],
+  "by_arm": {
+    "budget128": {
+      "cases": 2,
+      "passes": 2,
+      "code_passes": 2,
+      "caps": 0,
+      "wall_seconds": 295.5813487090054,
+      "output_tokens": 1648,
+      "reasoning_tokens": 725,
+      "role_seconds": {
+        "READ": 63.900009707998834,
+        "WRITE": 112.04950199999439,
+        "FINAL": 119.62815145801869
+      },
+      "role_thinking": {
+        "READ": 39,
+        "WRITE": 256,
+        "FINAL": 430
+      },
+      "forced": 2,
+      "deferred": 0
+    },
+    "budget256": {
+      "cases": 2,
+      "passes": 1,
+      "code_passes": 2,
+      "caps": 1,
+      "wall_seconds": 360.9280598750047,
+      "output_tokens": 2746,
+      "reasoning_tokens": 1913,
+      "role_seconds": {
+        "READ": 63.567783167003654,
+        "WRITE": 124.93053920799866,
+        "FINAL": 172.42610008300107
+      },
+      "role_thinking": {
+        "READ": 39,
+        "WRITE": 512,
+        "FINAL": 1362
+      },
+      "forced": 2,
+      "deferred": 0
+    },
+    "native": {
+      "cases": 2,
+      "passes": 1,
+      "code_passes": 1,
+      "caps": 1,
+      "wall_seconds": 337.3096722499904,
+      "output_tokens": 3110,
+      "reasoning_tokens": 2572,
+      "role_seconds": {
+        "READ": 63.92200820801372,
+        "WRITE": 214.17077812500065,
+        "FINAL": 59.21436275000451
+      },
+      "role_thinking": {
+        "READ": 39,
+        "WRITE": 2533,
+        "FINAL": 0
+      },
+      "forced": 0,
+      "deferred": 0
+    }
+  },
+  "budget_summaries": {
+    "budget128": [
+      {
+        "id": "chatcmpl-c7723a4d42000d8b7116cad3",
+        "context": "0..904:904",
+        "budget": 0,
+        "thinking_tokens": 19,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-52cb6333272751f76809276f",
+        "context": "0..1201:1201",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-93a63ffaeb785e6d60b730f0",
+        "context": "0..1695:1695",
+        "budget": 0,
+        "thinking_tokens": 430,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-64f099172b0fe883eaface00",
+        "context": "0..886:886",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-61cd82ed576a31a7acf8cbce",
+        "context": "0..1059:1059",
+        "budget": 128,
+        "thinking_tokens": 128,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-dcf6c29b2bad4b93f887c760",
+        "context": "0..1517:1517",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      }
+    ],
+    "budget256": [
+      {
+        "id": "chatcmpl-0d107f9026b9ab9f32935c7e",
+        "context": "0..904:904",
+        "budget": 0,
+        "thinking_tokens": 19,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-cb28ba848a844a8831031eba",
+        "context": "0..1201:1201",
+        "budget": 256,
+        "thinking_tokens": 256,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-d63888a7ebca0e83585770b7",
+        "context": "0..1810:1810",
+        "budget": 0,
+        "thinking_tokens": 1362,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-5938030cb64ca9f2d19874a7",
+        "context": "0..886:886",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-966e978f12da2e73989c9f99",
+        "context": "0..1059:1059",
+        "budget": 256,
+        "thinking_tokens": 256,
+        "forced": 1,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-48aca63193c395c6174a0903",
+        "context": "0..1640:1640",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      }
+    ],
+    "native": [
+      {
+        "id": "chatcmpl-71632f7e4a10c457ff4196ba",
+        "context": "0..904:904",
+        "budget": 0,
+        "thinking_tokens": 19,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-1287547d09ce3227c7f9fb9b",
+        "context": "0..1201:1201",
+        "budget": 0,
+        "thinking_tokens": 1933,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-17d9098e1a7f67d1028fea2a",
+        "context": "0..886:886",
+        "budget": 0,
+        "thinking_tokens": 20,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-e4c8d74bb37787568b595142",
+        "context": "0..1059:1059",
+        "budget": 0,
+        "thinking_tokens": 600,
+        "forced": 0,
+        "deferred": 0
+      },
+      {
+        "id": "chatcmpl-8521f7c95c4f25193ebaa113",
+        "context": "0..1977:1977",
+        "budget": 0,
+        "thinking_tokens": 0,
+        "forced": 0,
+        "deferred": 0
+      }
+    ]
+  },
+  "scope": "Two new contracts, first attempt, no repair; whole READ/WRITE/FINAL excludes startup/grading. No paired NLL/KL.",
+  "attempted_wall_change_vs_native_percent": {
+    "budget128": -12.370924101476366,
+    "budget256": 7.00198943821273,
+    "native": 0.0
+  },
+  "completed_task_wall_change_vs_native_percent": {
+    "lru/budget128": -22.883922630407305,
+    "lru/budget256": -16.09101144735412,
+    "lru/native": 0.0
+  }
+}

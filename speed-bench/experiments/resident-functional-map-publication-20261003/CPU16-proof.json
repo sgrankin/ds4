@@ -1,0 +1,29 @@
+{
+  "status": "FUNCTIONAL_MAP_PUBLICATION_SYNTHETIC_CPU16_PASS",
+  "source_freeze": "22ca80e1bbeec688d5474069b1d39216d79de6b5",
+  "plan_sha256": "bdb01425b05dc99db34a2659d466f4b2cad17a3d7637b617b0ca0cec491f86c4",
+  "source_proof_sha256": "4bb0b15cb5fb3baa8a6b7a0820165b1cc3e150f9eb275267f2b36b22d686128b",
+  "ROOT_grant_sha256": "689a594537938d586b6a84dab76e28957813b892b76e4004a8f9d90ce062fc3c",
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-functional-map-publication/speed-bench/ideas/resident_functional_map_publication_cpu_prepared_v1/test_resident_functional_map_publication.py"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-map-publication/speed-bench/ideas/resident_functional_map_publication_cpu_prepared_v1",
+  "returncode": 0,
+  "wall_seconds_diagnostic": 1.5121492079997552,
+  "stdout": {
+    "bytes": 0,
+    "mode": 420,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "bytes": 115,
+    "mode": 420,
+    "sha256": "74db7996eac93743a1e68d6b5e1b0c1011e391e5a0618b362daf7d32998ca032"
+  },
+  "all11_literal_and_plan_pins_before_after_exact": true,
+  "no_actual_capture_signature_model_metadata_helper_GPU_compiler_guard": true,
+  "no_native_coefficient_bits_or_quality_proof": true,
+  "no_retry": true
+}

@@ -1,0 +1,44 @@
+{
+  "status": "LITERAL_EXTERNAL_COMPILER_ALIAS_AUTHORITY_ONLY",
+  "original_compiler_proof_sha256": "0fe26c4757dcc4eee736bfb2cbc6efb1a20d69ec9f15a1bb88b8863c41d29b16",
+  "entries": {
+    "/usr/bin/cc": {
+      "key": "selected_wrapper",
+      "sha256": "34129c71a01a74f7f3b2443521519b2e5447553fa187f5fcafaaf8c42cc192e2",
+      "bytes": 200560,
+      "mode": 493,
+      "leaf_symlink": false,
+      "link": null,
+      "resolved": "/usr/bin/cc"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang": {
+      "key": "actual_clang",
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+      "bytes": 124676976,
+      "mode": 493,
+      "leaf_symlink": false,
+      "link": null,
+      "resolved": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/SDKSettings.json": {
+      "key": "sdk_settings",
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+      "bytes": 7948,
+      "mode": 420,
+      "leaf_symlink": false,
+      "link": null,
+      "resolved": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd": {
+      "key": "libSystem_stub",
+      "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab",
+      "bytes": 347931,
+      "mode": 420,
+      "leaf_symlink": true,
+      "link": "libSystem.B.tbd",
+      "resolved": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libSystem.B.tbd"
+    }
+  },
+  "payload_symlink_exception": false,
+  "model_access": false
+}

@@ -1,0 +1,6 @@
+step,session,seconds,seconds_including_edit,correct,fresh_read,complete,pass,text
+A-source,A,49.995903625007486,,True,True,True,True,READY
+B-source,B,49.84150608300115,,True,True,True,True,READY
+A-edit1,A,48.36877858400112,48.36962570800097,True,True,True,True,"{""active_total"": 313, ""archived_code"": ""BEACON-46""}"
+B-edit1,B,48.62116725000669,48.621944250000524,True,True,True,True,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}"
+C-turnover,C,2.304238124997937,,True,False,True,True,READY

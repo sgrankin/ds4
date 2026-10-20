@@ -1,0 +1,207 @@
+{
+  "status": "CPU_DATA_STRUCTURAL_AUDIT_ONLY",
+  "no_engine_tokenizer_model_metadata": true,
+  "old_transcript_tokens": 3397,
+  "edited_transcript_tokens": 3386,
+  "canonical_checkpoint_tokens": 2988,
+  "canonical_checkpoint_is_old_prefix": true,
+  "canonical_embedded_raw_equals_archived_vector": true,
+  "system_tokens": 2011,
+  "system_payload_offset": 8455,
+  "system_payload_bytes": 23889824,
+  "system_text_bytes": 8403,
+  "system_checkpoint_ids_equal_both_transcripts": true,
+  "source_suffix_ids_equal_destination": true,
+  "source_tape_after_system_restore": [
+    2011,
+    2988
+  ],
+  "source_required_span": [
+    2107,
+    2988
+  ],
+  "destination_span": [
+    2096,
+    2977
+  ],
+  "latest_user_start": 2978,
+  "fresh_count": 409,
+  "source_native_replay": [
+    {
+      "op": "load_archived_system_canonical",
+      "end": 2011
+    },
+    {
+      "op": "sync_old_prefix",
+      "end": 2360
+    },
+    {
+      "op": "eval_old_ids",
+      "start": 2360,
+      "end": 2364
+    },
+    {
+      "op": "sync_old_prefix",
+      "end": 2986
+    },
+    {
+      "op": "eval_old_ids",
+      "start": 2986,
+      "end": 2988
+    }
+  ],
+  "original_native_replay_from_zero": [
+    {
+      "op": "sync_old_prefix",
+      "end": 2011
+    },
+    {
+      "op": "sync_old_prefix",
+      "end": 2360
+    },
+    {
+      "op": "eval_old_ids",
+      "start": 2360,
+      "end": 2364
+    },
+    {
+      "op": "sync_old_prefix",
+      "end": 2986
+    },
+    {
+      "op": "eval_old_ids",
+      "start": 2986,
+      "end": 2988
+    }
+  ],
+  "assistant_prefix_ids": [
+    128804,
+    128822
+  ],
+  "assistant_prefix_piece_hex": [
+    "3cefbd9c417373697374616e74efbd9c3e",
+    "3c2f7468696e6b3e"
+  ],
+  "references": {
+    "selected-old.ids": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/selected-old.ids",
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f",
+      "bytes": 13604,
+      "mode": "0o644"
+    },
+    "selected-edited.ids": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/selected-edited.ids",
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb",
+      "bytes": 13560,
+      "mode": "0o644"
+    },
+    "selected-before.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/selected-before.txt",
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133",
+      "bytes": 14653,
+      "mode": "0o644"
+    },
+    "selected-after.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/selected-after.txt",
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a",
+      "bytes": 14609,
+      "mode": "0o644"
+    },
+    "selection.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/selection.json",
+      "sha256": "0526d4cd3da60e3fde4a0596b6590464e9a1dfe107beabb77e3855e1485838ea",
+      "bytes": 453,
+      "mode": "0o644"
+    },
+    "candidate-00.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/candidate-00.json",
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c",
+      "bytes": 81,
+      "mode": "0o644"
+    },
+    "archived_source_canonical": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/preedit-state.bin",
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "bytes": 30138084,
+      "mode": "0o644"
+    },
+    "archived_source_raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/preedit-logits.bin",
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e",
+      "bytes": 517136,
+      "mode": "0o644"
+    },
+    "archived_system_kvc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/cache/sysprompt.kv",
+      "sha256": "0aef55f8fccd9af79398512979a52668a0eb827158df401edced3062b9e3072b",
+      "bytes": 23898279,
+      "mode": "0o600"
+    },
+    "native_source_canonical": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/run/private/preedit-state.bin",
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "bytes": 30138084,
+      "mode": "0o644"
+    },
+    "native_source_raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/run/private/preedit-logits.bin",
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e",
+      "bytes": 517136,
+      "mode": "0o644"
+    },
+    "actual_A_trace": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/trace.log",
+      "sha256": "a0bc4364521ba3c8a37d0b0d65c81553439fa1d46fc3a8a53486feecec338b29",
+      "bytes": 277560,
+      "mode": "0o644"
+    },
+    "actual_A_command": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/command.json",
+      "sha256": "849272ad1d1bde804228a66c8f92e3a370478d0620948f0a3ef6aa28f3c1f31b",
+      "bytes": 8033,
+      "mode": "0o644"
+    },
+    "actual_A_manifest": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/manifest.json",
+      "sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+      "bytes": 28567,
+      "mode": "0o644"
+    },
+    "actual_B_manifest": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/manifest.json",
+      "sha256": "1143a7812d739c9215bed24e186b83eaed8ba5406ef1c67d229b66d2795e8a57",
+      "bytes": 31335,
+      "mode": "0o644"
+    },
+    "actual_A_release": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/root-release-proof.json",
+      "sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd",
+      "bytes": 379,
+      "mode": "0o644"
+    },
+    "actual_B_release": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/root-release-proof.json",
+      "sha256": "7834ec1da8cbb652b3cedc34f3fef6aab28cc26d6a0fd0779eea310ab56545f8",
+      "bytes": 378,
+      "mode": "0o644"
+    },
+    "paired_archive_index": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-index.json",
+      "sha256": "a8bba9b646654ecf954ed2809faf4c995b98fe8ba19037d1a566acf232700313",
+      "bytes": 169860,
+      "mode": "0o644"
+    },
+    "actual_native_build": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-caller-build-v1/build-manifest.json",
+      "sha256": "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64",
+      "bytes": 5177,
+      "mode": "0o644"
+    },
+    "actual_native_build_plan": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/agent_suffix_pair_external_v1/native-build-plan.json",
+      "sha256": "315a52cd24636391c1dcdce3245a186124b12d9053b554400076e7b9293ac335",
+      "bytes": 40888,
+      "mode": "0o644"
+    }
+  }
+}

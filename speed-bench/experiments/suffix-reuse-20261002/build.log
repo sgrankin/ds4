@@ -1,0 +1,4 @@
+cc -O3 -ffast-math -g -mcpu=native -Wall -Wextra -std=c99 -c -o ds4.o ds4.c
+cc -O3 -g -mcpu=native -Wall -Wextra -std=c11 -I. -c -o speed-bench/suffix_reuse_bench.o speed-bench/suffix_reuse_bench.c
+cc -O3 -g -mcpu=native -Wall -Wextra -std=c11 -I. -c -o speed-bench/suffix_reuse_bench.o speed-bench/suffix_reuse_bench.c
+cc -O3 -g -mcpu=native -Wall -Wextra -std=c11 -I. -c -o speed-bench/suffix_reuse_bench.o speed-bench/suffix_reuse_bench.c

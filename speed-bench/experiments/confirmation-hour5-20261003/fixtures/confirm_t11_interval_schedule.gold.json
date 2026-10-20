@@ -1,0 +1,16 @@
+{
+  "gold": {
+    "selected": [
+      "I1",
+      "I2",
+      "I4"
+    ],
+    "count": 3
+  },
+  "oracle_input": {
+    "question": "Choose the largest number of mutually non-overlapping half-open intervals from I1=[0,4), I2=[4,9), I3=[3,5), I4=[9,11). Touching endpoints are allowed. Report selected ids in time order and count. Return JSON first, then explain why three is optimal."
+  },
+  "explanation": "The first interval ends exactly where the second begins, and the second ends where the fourth begins. Half-open intervals allow these touching boundaries, so all three fit. The third interval overlaps both the first and second. All four cannot be selected, and the displayed three-interval schedule therefore attains the maximum.",
+  "category": "math",
+  "scope": "New authored content, fixed before any model outcome."
+}

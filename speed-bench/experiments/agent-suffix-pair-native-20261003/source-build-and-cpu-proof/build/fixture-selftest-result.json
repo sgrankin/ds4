@@ -1,0 +1,14 @@
+{
+  "label": "fixture-selftest",
+  "returncode": 0,
+  "elapsed_seconds": 0.03957758400065359,
+  "command": {
+    "label": "fixture-selftest",
+    "argv": [
+      "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/agent_suffix_pair_native_fixture",
+      "--self-test"
+    ],
+    "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair",
+    "model_free": true
+  }
+}

@@ -1,0 +1,55 @@
+I need to read config.json first, exactly one read call, whole=true raw=true. Then write solution.py.
+
+Let me make the read call.
+
+🛠️ Reading config.json (whole file)...
+
+Now write solution.py. Constraints: module level only plain function definitions, no decorators, annotations, default args, classes, imports. No I/O, dynamic execution, no names/attributes beginning with underscore.
+
+Implement solve(payload, config).
+
+payload: {left: [...], right: [...]}, each item {key, value}. config: {include_unmatched: bool}.
+
+Return list of objects {key, left, right}.
+
+For each left item in order, for every matching right item in right order, emit {key: left key, left: left value, right: right value}. If no match, emit {key, left, right: None} only if include_unmatched true.
+
+Don't mutate payload or config.
+
+Plain function only. Let me write.
+
+def solve(payload, config):
+    left_items = payload["left"]
+    right_items = payload["right"]
+    include_unmatched = config["include_unmatched"]
+    result = []
+    for left_item in left_items:
+        key = left_item["key"]
+        value = left_item["value"]
+        matched = False
+        for right_item in right_items:
+            if right_item["key"] == key:
+                matched = True
+                result.append({"key": key, "left
+
+🛠️ write  path=solution.py
+def solve(payload, config):
+    left_items = payload["left"]
+    right_items = payload["right"]
+    include_unmatched = config["include_unmatched"]
+    result = []
+    for left_item in left_items:
+        key = left_item["key"]
+        value = left_item["value"]
+        matched = False
+        for right_item in right_items:
+            if right_item["key"] == key:
+                matched = True
+                result.append({"key": key, "left": value, "right": right_item["value"]})
+        if not matched and include_unmatched:
+            result.append({"key": key, "left": value, "right": None})
+    return result
+
+
+Created solution.py with `solve(payload, config)`. It iterates left items in order, emits one output object per matching right item in right order (so duplicate keys produce all matching pairs), and emits `{key, left, right: null}` only when `include_unmatched` is true and no right match exists. Keys are compared exactly with `==`, values are passed through unchanged, and neither input is mutated.
+

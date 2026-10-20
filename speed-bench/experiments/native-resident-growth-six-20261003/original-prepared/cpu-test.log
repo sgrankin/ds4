@@ -1,0 +1,16 @@
+test_abba_and_inherited_flags (__main__.TimingTests.test_abba_and_inherited_flags) ... ok
+test_default_native_unsets_selected_overrides_and_three_policies (__main__.TimingTests.test_default_native_unsets_selected_overrides_and_three_policies) ... ok
+test_failures (__main__.TimingTests.test_failures) ... ok
+test_guard_refusal_precedes_model_metadata (__main__.TimingTests.test_guard_refusal_precedes_model_metadata) ... ok
+test_missing_assertions_precede_any_metadata_or_subprocess (__main__.TimingTests.test_missing_assertions_precede_any_metadata_or_subprocess) ... ok
+test_original_nine_phase_input_fits_without_tokenizing (__main__.TimingTests.test_original_nine_phase_input_fits_without_tokenizing) ... ok
+test_parent_and_lock (__main__.TimingTests.test_parent_and_lock) ... ok
+test_pinned_interpreter_alias_and_rejections (__main__.TimingTests.test_pinned_interpreter_alias_and_rejections) ... ok
+test_plan_tamper_and_missing_candidate_footer (__main__.TimingTests.test_plan_tamper_and_missing_candidate_footer) ... ok
+test_replay_history_and_token_failures (__main__.TimingTests.test_replay_history_and_token_failures) ... ok
+test_three_comparisons_keep_primary_and_secondary_distinct (__main__.TimingTests.test_three_comparisons_keep_primary_and_secondary_distinct) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.114s
+
+OK

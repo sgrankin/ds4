@@ -1,0 +1,15 @@
+{
+  "status": "FAILED",
+  "phase": "trace_validation",
+  "stage": 2,
+  "error_type": "ValueError",
+  "error": "Compaction requires a separate replay format",
+  "traceback": "Traceback (most recent call last):\n  File \"/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3/live.py\", line 136, in <module>\n    result,replay=extract(trace)\n                  ~~~~~~~^^^^^^^\n  File \"/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3/trace_session.py\", line 16, in extract\n    raise ValueError('Compaction requires a separate replay format')\nValueError: Compaction requires a separate replay format\n",
+  "agent_pid": 53126,
+  "agent_returncode": 0,
+  "turns_submitted": 3,
+  "turns_observed": 3,
+  "checks_recorded": 3,
+  "elapsed_seconds": 435.1233570830009,
+  "cleanup_grace_seconds": 5.5
+}

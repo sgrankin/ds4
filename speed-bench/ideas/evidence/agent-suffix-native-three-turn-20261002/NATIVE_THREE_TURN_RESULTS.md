@@ -1,0 +1,9 @@
+# Native three-turn agent suffix experiment
+
+Frozen source `7008afd6`, binary `287d38cc…`, runner `5a325c73…`. The agent exited normally in 216.10 seconds. It answered `CODE=2718` before the tool edit and `CODE=3141` afterwards. The updater modified only one earlier record; all other rendered context bytes were preserved. The new code existed only in the local updater and edited conversation, never in the latest user request or tool output.
+
+Actual trace records approximate suffix reuse of **556 tokens**, followed by **476 freshly evaluated tokens**: source/destination `2026:2582`, copied state 14,044,160 bytes. The latest user begins at token 2583 and is entirely fresh. Edit/graft time was 24.878 seconds; this is an unpaired diagnostic, not an end-to-end speedup claim. The final tool-result append separately evaluated 73 tokens in 2.633 seconds. No edits were rejected and no approximate canonical frontiers were exported.
+
+The frozen runner returned **3**, because it also expected a named saved session after closing stdin. The non-interactive runtime does not request a save on EOF (`ds4_agent.c:13715`); the fixture never explicitly requested one. Its raw `pass: false`, return code and failed persistence fields are preserved without amendment. Native semantic/reuse checks passed, while **native persistence was not exercised**. The model-free ASan/UBSan transaction test separately verified approximate zero-KV save/reopen, literal-control safety, and exact rebuilding on reload.
+
+MAIN pressure guard completed normally. See `native-three-turn/pressure-summary.json` for observed memory and `native-three-turn-manifest.json` for raw identities. Original artifact directory remains persistent under `speed-bench/ideas/artifacts/suffix-agent-native`. No extra native-off/reload run was authorized or performed.

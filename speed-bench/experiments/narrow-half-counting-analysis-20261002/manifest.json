@@ -1,0 +1,177 @@
+{
+  "ROOT_exec_session": 25806,
+  "ROOT_guard_pid": 31276,
+  "ROOT_release_utc": "2026-10-02 22:46:10 UTC",
+  "analysis_rc": 0,
+  "analysis_wrapper_sha256": "7830f64402b9972bac164b06dde1e3a6aa4a251cae3187fc29086c0cc9cefcf5",
+  "arms": 2,
+  "checked_summary_sha256": "da0a220fedbb1b6ee35aec255d4cf4e27045f2f5e85db79b411b8d02cb1c373b",
+  "files": {
+    "README.md": "b0d60e3db3cbeed60a935ebd61d28fe3d0091748eeddecda98fcc7b0a12fbd31",
+    "checked-summary.json": "da0a220fedbb1b6ee35aec255d4cf4e27045f2f5e85db79b411b8d02cb1c373b",
+    "derived-results.json": "ed2f71a64969d40692939bee6ae8e8d86d3c887a4e3e5d8dcd27d22c7a579d5b",
+    "existing-core-object-proof.json": "1b52970c2928122f79591befd59545b82aa314de461793384836b8bb448a3fe9",
+    "frozen-generation-queue.json": "2af91c43a8c701cdcec392ef9041607cbf068180ea32528521b9afc01cc495b6",
+    "frozen-producer-manifest.json": "f0ecd76f36be3bdbe24224073c3da59fc33387f21dec8b02e6b5afefb6d97881",
+    "guard/command.json": "0664018202dbc1b7d4be31d541e168f62d4b7ade6552491b8dc6f05d58f10cf0",
+    "guard/pressure.jsonl": "1b27d31220bb0a5df70d9a3d44fc7debdb6ac42e0e48248d34563e428be9831c",
+    "guard/result.json": "b930e7a8282c48851750f8438ef0243df5697004738bb1efd66bc0da0d490c85",
+    "launcher-frozen-manifest.json": "b4f1dec87b03e29ff8f01f65ba40805e0c69047e1310d5399825fcd3c8bd523c",
+    "launcher-frozen-preflight.json": "1606516552d6bcb02fcdc0c87fd06cf4d292f0b2c0f48d5cb80f505af5737915",
+    "producer-output/circular10-lambda0.0.tokens.jsonl": "48f8f0ada66f34147e791e532f5d76907e92469056cf3e2ff6a6ff41ab90453c",
+    "producer-output/circular10-lambda0.0.txt": "54ea8f649f922049c183a22e3e8e8031d84684710951aa1ffd9ab2bbc994c785",
+    "producer-output/circular10-lambda0.5.tokens.jsonl": "bc4d523059a8e4d12aa0f2c6892b4c52dcfcb868111fcb70dc413bd0e3398062",
+    "producer-output/circular10-lambda0.5.txt": "f507e71b3f15cbcc2b1bfcef2a80f969a1accf7594fa2ddb20d950b80d1f95c9",
+    "producer-output/lattice8x6-lambda0.0.tokens.jsonl": "682bd4a22bdd0f84aa18ed6b643dafd88e7b447fa3710735e4ebb05add754805",
+    "producer-output/lattice8x6-lambda0.0.txt": "60827ec952b67cb3064bfa23e906cf065dec3febebd33e3ca0186d2a8b9ca2af",
+    "producer-output/lattice8x6-lambda0.5.tokens.jsonl": "f8ccd34059630f4bfef15154acab67dc6e044efb23a166581aad4a20786f7527",
+    "producer-output/lattice8x6-lambda0.5.txt": "81b2ce6945d002bba73278a3871f055950042bd7a7fdf77579c1bfd5e74a7ec9",
+    "producer-output/marker-map.json": "3f931e0f8494346caec8b7d6262919133ec44068fad86cca9ced158ca14c6d67",
+    "producer-output/restricted_derangements8-lambda0.0.tokens.jsonl": "6a4b67506dfef5fdabd1ae8ae65215652909afd6e0d6bf1d24c0a3bb035048fe",
+    "producer-output/restricted_derangements8-lambda0.0.txt": "38c04ce9f18de3960a7483f8a1cc2ccbe35335ecf5b03581f06bf62099f3eb63",
+    "producer-output/restricted_derangements8-lambda0.5.tokens.jsonl": "e9a96c22882ddbf6e820ffce2284132023acdd7c04f67cf85d4dbd971d448f6d",
+    "producer-output/restricted_derangements8-lambda0.5.txt": "3dabd0186013478069331621d9da42eeb31bbed461703bf09256a9d025a1ad68",
+    "producer-output/results.jsonl": "e930e5fc0cd0479da0222f5d4f99b9916f9624a8aa24c0f1de4c73305ac41c0d",
+    "producer-output/subset_mod7-lambda0.0.tokens.jsonl": "f20761b5964b83183657a4372da15521d12e1af8d6af9cc6b8373fea09d4a7b4",
+    "producer-output/subset_mod7-lambda0.0.txt": "f1eed60a9d95c93344e5b1d6a37337126b3ae8abc4c6b51058f3e756fb1171ba",
+    "producer-output/subset_mod7-lambda0.5.tokens.jsonl": "44cad46da09b5fff0af165a171d53722ec986290ae70f00d3a9da0ed5998e7a3",
+    "producer-output/subset_mod7-lambda0.5.txt": "69345e8453205ce2a5496b24fbe5838f1d17f5260e3ec77820670b79ee83b662",
+    "root-release-proof.json": "d0b6293eeabd8c9ae0ca92e6d441891dd17ee49fbbe3208154113e69f26bfe52",
+    "source-proof.json": "7598117da3759ab39cfa4efe119adf24e2975a8fec760f5002604e94db88acaa"
+  },
+  "no_model_access": true,
+  "no_scoring_repairs": true,
+  "original_output_copies": [
+    {
+      "archive": "producer-output/circular10-lambda0.0.tokens.jsonl",
+      "bytes": 124490,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/circular10-lambda0.0.tokens.jsonl",
+      "sha256": "48f8f0ada66f34147e791e532f5d76907e92469056cf3e2ff6a6ff41ab90453c"
+    },
+    {
+      "archive": "producer-output/circular10-lambda0.0.txt",
+      "bytes": 1459,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/circular10-lambda0.0.txt",
+      "sha256": "54ea8f649f922049c183a22e3e8e8031d84684710951aa1ffd9ab2bbc994c785"
+    },
+    {
+      "archive": "producer-output/circular10-lambda0.5.tokens.jsonl",
+      "bytes": 94697,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/circular10-lambda0.5.tokens.jsonl",
+      "sha256": "bc4d523059a8e4d12aa0f2c6892b4c52dcfcb868111fcb70dc413bd0e3398062"
+    },
+    {
+      "archive": "producer-output/circular10-lambda0.5.txt",
+      "bytes": 1333,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/circular10-lambda0.5.txt",
+      "sha256": "f507e71b3f15cbcc2b1bfcef2a80f969a1accf7594fa2ddb20d950b80d1f95c9"
+    },
+    {
+      "archive": "producer-output/lattice8x6-lambda0.0.tokens.jsonl",
+      "bytes": 476309,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/lattice8x6-lambda0.0.tokens.jsonl",
+      "sha256": "682bd4a22bdd0f84aa18ed6b643dafd88e7b447fa3710735e4ebb05add754805"
+    },
+    {
+      "archive": "producer-output/lattice8x6-lambda0.0.txt",
+      "bytes": 5589,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/lattice8x6-lambda0.0.txt",
+      "sha256": "60827ec952b67cb3064bfa23e906cf065dec3febebd33e3ca0186d2a8b9ca2af"
+    },
+    {
+      "archive": "producer-output/lattice8x6-lambda0.5.tokens.jsonl",
+      "bytes": 476151,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/lattice8x6-lambda0.5.tokens.jsonl",
+      "sha256": "f8ccd34059630f4bfef15154acab67dc6e044efb23a166581aad4a20786f7527"
+    },
+    {
+      "archive": "producer-output/lattice8x6-lambda0.5.txt",
+      "bytes": 5518,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/lattice8x6-lambda0.5.txt",
+      "sha256": "81b2ce6945d002bba73278a3871f055950042bd7a7fdf77579c1bfd5e74a7ec9"
+    },
+    {
+      "archive": "producer-output/marker-map.json",
+      "bytes": 246,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/marker-map.json",
+      "sha256": "3f931e0f8494346caec8b7d6262919133ec44068fad86cca9ced158ca14c6d67"
+    },
+    {
+      "archive": "producer-output/restricted_derangements8-lambda0.0.tokens.jsonl",
+      "bytes": 476047,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/restricted_derangements8-lambda0.0.tokens.jsonl",
+      "sha256": "6a4b67506dfef5fdabd1ae8ae65215652909afd6e0d6bf1d24c0a3bb035048fe"
+    },
+    {
+      "archive": "producer-output/restricted_derangements8-lambda0.0.txt",
+      "bytes": 5499,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/restricted_derangements8-lambda0.0.txt",
+      "sha256": "38c04ce9f18de3960a7483f8a1cc2ccbe35335ecf5b03581f06bf62099f3eb63"
+    },
+    {
+      "archive": "producer-output/restricted_derangements8-lambda0.5.tokens.jsonl",
+      "bytes": 477551,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/restricted_derangements8-lambda0.5.tokens.jsonl",
+      "sha256": "e9a96c22882ddbf6e820ffce2284132023acdd7c04f67cf85d4dbd971d448f6d"
+    },
+    {
+      "archive": "producer-output/restricted_derangements8-lambda0.5.txt",
+      "bytes": 6105,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/restricted_derangements8-lambda0.5.txt",
+      "sha256": "3dabd0186013478069331621d9da42eeb31bbed461703bf09256a9d025a1ad68"
+    },
+    {
+      "archive": "producer-output/results.jsonl",
+      "bytes": 10976,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/results.jsonl",
+      "sha256": "e930e5fc0cd0479da0222f5d4f99b9916f9624a8aa24c0f1de4c73305ac41c0d"
+    },
+    {
+      "archive": "producer-output/subset_mod7-lambda0.0.tokens.jsonl",
+      "bytes": 476499,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/subset_mod7-lambda0.0.tokens.jsonl",
+      "sha256": "f20761b5964b83183657a4372da15521d12e1af8d6af9cc6b8373fea09d4a7b4"
+    },
+    {
+      "archive": "producer-output/subset_mod7-lambda0.0.txt",
+      "bytes": 5739,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/subset_mod7-lambda0.0.txt",
+      "sha256": "f1eed60a9d95c93344e5b1d6a37337126b3ae8abc4c6b51058f3e756fb1171ba"
+    },
+    {
+      "archive": "producer-output/subset_mod7-lambda0.5.tokens.jsonl",
+      "bytes": 474585,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/subset_mod7-lambda0.5.tokens.jsonl",
+      "sha256": "44cad46da09b5fff0af165a171d53722ec986290ae70f00d3a9da0ed5998e7a3"
+    },
+    {
+      "archive": "producer-output/subset_mod7-lambda0.5.txt",
+      "bytes": 4960,
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1/subset_mod7-lambda0.5.txt",
+      "sha256": "69345e8453205ce2a5496b24fbe5838f1d17f5260e3ec77820670b79ee83b662"
+    }
+  ],
+  "parent_corrected_analysis_commit": "f27b7d5a942d4ea5e23849f9209e47ed4dc5a3a7",
+  "pressure": {
+    "adverse_samples": 0,
+    "final_swap_gb": 0.017763671875,
+    "first_utc": "2026-10-02T22:34:01.148378+00:00",
+    "initial_swap_gb": 0.017763671875,
+    "kernel_levels": [
+      1
+    ],
+    "last_utc": "2026-10-02T22:45:18.661809+00:00",
+    "max_consecutive_bad": 0,
+    "maximum_compressor_gb": 7.9367828369140625,
+    "maximum_simultaneous_wired_compressor_gb": 79.59146118164062,
+    "maximum_wired_gb": 72.44877624511719,
+    "minimum_free_gb": 0.0975799560546875,
+    "samples": 656,
+    "swap_growth_gb": 0.0
+  },
+  "producer_guard_rc": 3,
+  "records": 8,
+  "source_review": "checkout_recap PASS f27b before production outcome reads",
+  "status": "CHECKED_COMPLETE_PRODUCER_INVALID_PRESERVED",
+  "timing_scope": "exploratory diagnostic only"
+}

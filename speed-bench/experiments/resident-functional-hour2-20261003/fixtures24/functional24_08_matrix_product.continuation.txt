@@ -1,0 +1,2 @@
+{"product":[[-10,15],[2,16]]}
+A has two rows and three columns, while B has three rows and two columns, so their product has two rows and two columns. The upper-left entry is 1 times 2 plus negative 2 times 3 plus 3 times negative 2, giving negative 10. The upper-right entry is 1 plus 2 plus 12, giving 15. The lower-left entry is zero plus 12 minus 10, giving 2. The lower-right entry is zero minus 4 plus 20, giving 16. Each dot product uses one complete row of A and one complete column of B. No averaging, clipping, or transposition is involved.

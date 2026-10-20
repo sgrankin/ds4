@@ -1,0 +1,3953 @@
+{
+  "routes_sha256": "68b8766f048d656f3c076c8f8071714d4a7b66f2786944f93e6d439c6e08680f",
+  "script_sha256": "615265f1532dc2db6da103e9946670ffba31ec4c2a333553b41fec55cb6097b6",
+  "layers": 40,
+  "experts_per_layer": 384,
+  "selected": 6,
+  "tokens": 3136,
+  "segment_lengths": [
+    53,
+    74,
+    1802,
+    720,
+    59,
+    428
+  ],
+  "warmup_tokens_per_segment": 64,
+  "limitations": [
+    "Prefill and its cache seeding/frequency changes are absent.",
+    "reset starts every stretch empty with zero history; carry ignores all missing prefill.",
+    "Equal-size global cache; no layer quotas, slab constraints, prefetch or older in-flight work.",
+    "Current selected group protected. ARC/2Q skip pinned entries and may use the other queue.",
+    "aging16 is a route-only approximation of native policy, not calibrated native cache replay.",
+    "future uses next-use eviction with group protection; not a proven group-optimal bound.",
+    "64-token warmup is accounting only; no future information used by online policies.",
+    "No latency or inference speed is measured."
+  ],
+  "results": [
+    {
+      "policy": "lru",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 116386,
+        "groups": 125440,
+        "all_hit_groups": 53836,
+        "miss_rate": 0.15463701105442176,
+        "all_hit_fraction": 0.42917729591836734
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 92188,
+        "groups": 110720,
+        "all_hit_groups": 50169,
+        "miss_rate": 0.13877047206165705,
+        "all_hit_fraction": 0.45311596820809247
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4227,
+            "groups": 2960,
+            "all_hit_groups": 965
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 60058,
+            "groups": 72080,
+            "all_hit_groups": 33148
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 55783,
+            "groups": 69520,
+            "all_hit_groups": 32533
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 29381,
+            "groups": 28800,
+            "all_hit_groups": 10948
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 24921,
+            "groups": 26240,
+            "all_hit_groups": 10398
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 15381,
+            "groups": 17120,
+            "all_hit_groups": 7658
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11287,
+            "groups": 14560,
+            "all_hit_groups": 7006
+          }
+        }
+      ]
+    },
+    {
+      "policy": "lfu",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 127663,
+        "groups": 125440,
+        "all_hit_groups": 49141,
+        "miss_rate": 0.1696202699829932,
+        "all_hit_fraction": 0.39174904336734695
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 103470,
+        "groups": 110720,
+        "all_hit_groups": 45473,
+        "miss_rate": 0.1557532514450867,
+        "all_hit_fraction": 0.4107026734104046
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4227,
+            "groups": 2960,
+            "all_hit_groups": 965
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 72361,
+            "groups": 72080,
+            "all_hit_groups": 28042
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 68086,
+            "groups": 69520,
+            "all_hit_groups": 27427
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 28125,
+            "groups": 28800,
+            "all_hit_groups": 11366
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 23670,
+            "groups": 26240,
+            "all_hit_groups": 10815
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 15611,
+            "groups": 17120,
+            "all_hit_groups": 7651
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11517,
+            "groups": 14560,
+            "all_hit_groups": 6999
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging16",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 116381,
+        "groups": 125440,
+        "all_hit_groups": 53840,
+        "miss_rate": 0.15463036777210884,
+        "all_hit_fraction": 0.4292091836734694
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 92183,
+        "groups": 110720,
+        "all_hit_groups": 50173,
+        "miss_rate": 0.13876294556840077,
+        "all_hit_fraction": 0.45315209537572254
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4227,
+            "groups": 2960,
+            "all_hit_groups": 965
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 60056,
+            "groups": 72080,
+            "all_hit_groups": 33150
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 55781,
+            "groups": 69520,
+            "all_hit_groups": 32535
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 29378,
+            "groups": 28800,
+            "all_hit_groups": 10950
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 24918,
+            "groups": 26240,
+            "all_hit_groups": 10400
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 15381,
+            "groups": 17120,
+            "all_hit_groups": 7658
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11287,
+            "groups": 14560,
+            "all_hit_groups": 7006
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging64",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 109606,
+        "groups": 125440,
+        "all_hit_groups": 56538,
+        "miss_rate": 0.14562872023809523,
+        "all_hit_fraction": 0.45071747448979593
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 85413,
+        "groups": 110720,
+        "all_hit_groups": 52870,
+        "miss_rate": 0.12857207369942197,
+        "all_hit_fraction": 0.477510838150289
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4227,
+            "groups": 2960,
+            "all_hit_groups": 965
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 56794,
+            "groups": 72080,
+            "all_hit_groups": 34461
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 52519,
+            "groups": 69520,
+            "all_hit_groups": 33846
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 26348,
+            "groups": 28800,
+            "all_hit_groups": 12090
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 21893,
+            "groups": 26240,
+            "all_hit_groups": 11539
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 14898,
+            "groups": 17120,
+            "all_hit_groups": 7905
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 10804,
+            "groups": 14560,
+            "all_hit_groups": 7253
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging256",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 118024,
+        "groups": 125440,
+        "all_hit_groups": 52818,
+        "miss_rate": 0.15681335034013605,
+        "all_hit_fraction": 0.42106186224489794
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 93831,
+        "groups": 110720,
+        "all_hit_groups": 49150,
+        "miss_rate": 0.14124367774566474,
+        "all_hit_fraction": 0.4439125722543353
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4227,
+            "groups": 2960,
+            "all_hit_groups": 965
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 64171,
+            "groups": 72080,
+            "all_hit_groups": 31107
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 59896,
+            "groups": 69520,
+            "all_hit_groups": 30492
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 27077,
+            "groups": 28800,
+            "all_hit_groups": 11828
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 22622,
+            "groups": 26240,
+            "all_hit_groups": 11277
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 15210,
+            "groups": 17120,
+            "all_hit_groups": 7801
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11116,
+            "groups": 14560,
+            "all_hit_groups": 7149
+          }
+        }
+      ]
+    },
+    {
+      "policy": "slru",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 110254,
+        "groups": 125440,
+        "all_hit_groups": 56277,
+        "miss_rate": 0.14648968962585035,
+        "all_hit_fraction": 0.44863679846938775
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 86061,
+        "groups": 110720,
+        "all_hit_groups": 52609,
+        "miss_rate": 0.12954750722543354,
+        "all_hit_fraction": 0.47515354046242775
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4227,
+            "groups": 2960,
+            "all_hit_groups": 965
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 57916,
+            "groups": 72080,
+            "all_hit_groups": 34006
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 53641,
+            "groups": 69520,
+            "all_hit_groups": 33391
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 25892,
+            "groups": 28800,
+            "all_hit_groups": 12276
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 21437,
+            "groups": 26240,
+            "all_hit_groups": 11725
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 14880,
+            "groups": 17120,
+            "all_hit_groups": 7913
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 10786,
+            "groups": 14560,
+            "all_hit_groups": 7261
+          }
+        }
+      ]
+    },
+    {
+      "policy": "twoq",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 122554,
+        "groups": 125440,
+        "all_hit_groups": 50164,
+        "miss_rate": 0.16283216411564627,
+        "all_hit_fraction": 0.3999043367346939
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 98310,
+        "groups": 110720,
+        "all_hit_groups": 46513,
+        "miss_rate": 0.14798591040462428,
+        "all_hit_fraction": 0.42009573699421965
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4272,
+            "groups": 2960,
+            "all_hit_groups": 945
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 242,
+            "groups": 400,
+            "all_hit_groups": 212
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 63850,
+            "groups": 72080,
+            "all_hit_groups": 30897
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 59549,
+            "groups": 69520,
+            "all_hit_groups": 30290
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 30173,
+            "groups": 28800,
+            "all_hit_groups": 10389
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 25693,
+            "groups": 26240,
+            "all_hit_groups": 9847
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 16920,
+            "groups": 17120,
+            "all_hit_groups": 6816
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 12826,
+            "groups": 14560,
+            "all_hit_groups": 6164
+          }
+        }
+      ]
+    },
+    {
+      "policy": "arc",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 112446,
+        "groups": 125440,
+        "all_hit_groups": 55429,
+        "miss_rate": 0.14940210459183673,
+        "all_hit_fraction": 0.4418765943877551
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 88253,
+        "groups": 110720,
+        "all_hit_groups": 51761,
+        "miss_rate": 0.13284712186897882,
+        "all_hit_fraction": 0.4674945809248555
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4227,
+            "groups": 2960,
+            "all_hit_groups": 965
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 58535,
+            "groups": 72080,
+            "all_hit_groups": 33837
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 54260,
+            "groups": 69520,
+            "all_hit_groups": 33222
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 27112,
+            "groups": 28800,
+            "all_hit_groups": 11769
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 22657,
+            "groups": 26240,
+            "all_hit_groups": 11218
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 15233,
+            "groups": 17120,
+            "all_hit_groups": 7741
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11139,
+            "groups": 14560,
+            "all_hit_groups": 7089
+          }
+        }
+      ]
+    },
+    {
+      "policy": "future",
+      "capacity": 4096,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 66115,
+        "groups": 125440,
+        "all_hit_groups": 81118,
+        "miss_rate": 0.08784412202380952,
+        "all_hit_fraction": 0.6466677295918367
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 41947,
+        "groups": 110720,
+        "all_hit_groups": 77443,
+        "miss_rate": 0.06314276252408478,
+        "all_hit_fraction": 0.6994490606936417
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 29738,
+            "groups": 72080,
+            "all_hit_groups": 49799
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 25465,
+            "groups": 69520,
+            "all_hit_groups": 49184
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 15022,
+            "groups": 28800,
+            "all_hit_groups": 18383
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 10590,
+            "groups": 26240,
+            "all_hit_groups": 17825
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 9792,
+            "groups": 17120,
+            "all_hit_groups": 10852
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 5698,
+            "groups": 14560,
+            "all_hit_groups": 10200
+          }
+        }
+      ]
+    },
+    {
+      "policy": "lru",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 49950,
+        "groups": 125440,
+        "all_hit_groups": 92789,
+        "miss_rate": 0.06636639030612244,
+        "all_hit_fraction": 0.7397082270408163
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 25782,
+        "groups": 110720,
+        "all_hit_groups": 89114,
+        "miss_rate": 0.0388096098265896,
+        "all_hit_fraction": 0.8048591040462427
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 18966,
+            "groups": 72080,
+            "all_hit_groups": 57466
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 14693,
+            "groups": 69520,
+            "all_hit_groups": 56851
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 10846,
+            "groups": 28800,
+            "all_hit_groups": 21517
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 6414,
+            "groups": 26240,
+            "all_hit_groups": 20959
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8575,
+            "groups": 17120,
+            "all_hit_groups": 11722
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4481,
+            "groups": 14560,
+            "all_hit_groups": 11070
+          }
+        }
+      ]
+    },
+    {
+      "policy": "lfu",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 49611,
+        "groups": 125440,
+        "all_hit_groups": 93006,
+        "miss_rate": 0.06591597576530613,
+        "all_hit_fraction": 0.741438137755102
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 25443,
+        "groups": 110720,
+        "all_hit_groups": 89331,
+        "miss_rate": 0.038299313583815026,
+        "all_hit_fraction": 0.8068190028901734
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 18674,
+            "groups": 72080,
+            "all_hit_groups": 57700
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 14401,
+            "groups": 69520,
+            "all_hit_groups": 57085
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 10827,
+            "groups": 28800,
+            "all_hit_groups": 21482
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 6395,
+            "groups": 26240,
+            "all_hit_groups": 20924
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8547,
+            "groups": 17120,
+            "all_hit_groups": 11740
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4453,
+            "groups": 14560,
+            "all_hit_groups": 11088
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging16",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 49950,
+        "groups": 125440,
+        "all_hit_groups": 92789,
+        "miss_rate": 0.06636639030612244,
+        "all_hit_fraction": 0.7397082270408163
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 25782,
+        "groups": 110720,
+        "all_hit_groups": 89114,
+        "miss_rate": 0.0388096098265896,
+        "all_hit_fraction": 0.8048591040462427
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 18966,
+            "groups": 72080,
+            "all_hit_groups": 57466
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 14693,
+            "groups": 69520,
+            "all_hit_groups": 56851
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 10846,
+            "groups": 28800,
+            "all_hit_groups": 21517
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 6414,
+            "groups": 26240,
+            "all_hit_groups": 20959
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8575,
+            "groups": 17120,
+            "all_hit_groups": 11722
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4481,
+            "groups": 14560,
+            "all_hit_groups": 11070
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging64",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 49952,
+        "groups": 125440,
+        "all_hit_groups": 92790,
+        "miss_rate": 0.06636904761904762,
+        "all_hit_fraction": 0.7397161989795918
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 25784,
+        "groups": 110720,
+        "all_hit_groups": 89115,
+        "miss_rate": 0.0388126204238921,
+        "all_hit_fraction": 0.8048681358381503
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 18968,
+            "groups": 72080,
+            "all_hit_groups": 57467
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 14695,
+            "groups": 69520,
+            "all_hit_groups": 56852
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 10846,
+            "groups": 28800,
+            "all_hit_groups": 21517
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 6414,
+            "groups": 26240,
+            "all_hit_groups": 20959
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8575,
+            "groups": 17120,
+            "all_hit_groups": 11722
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4481,
+            "groups": 14560,
+            "all_hit_groups": 11070
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging256",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 48982,
+        "groups": 125440,
+        "all_hit_groups": 93475,
+        "miss_rate": 0.06508025085034014,
+        "all_hit_fraction": 0.7451769770408163
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 24814,
+        "groups": 110720,
+        "all_hit_groups": 89800,
+        "miss_rate": 0.037352480732177264,
+        "all_hit_fraction": 0.8110549132947977
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 18129,
+            "groups": 72080,
+            "all_hit_groups": 58077
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 13856,
+            "groups": 69520,
+            "all_hit_groups": 57462
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 10743,
+            "groups": 28800,
+            "all_hit_groups": 21574
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 6311,
+            "groups": 26240,
+            "all_hit_groups": 21016
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8547,
+            "groups": 17120,
+            "all_hit_groups": 11740
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4453,
+            "groups": 14560,
+            "all_hit_groups": 11088
+          }
+        }
+      ]
+    },
+    {
+      "policy": "slru",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 49340,
+        "groups": 125440,
+        "all_hit_groups": 93255,
+        "miss_rate": 0.06555590986394558,
+        "all_hit_fraction": 0.7434231505102041
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 25172,
+        "groups": 110720,
+        "all_hit_groups": 89580,
+        "miss_rate": 0.037891377649325625,
+        "all_hit_fraction": 0.8090679190751445
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 18408,
+            "groups": 72080,
+            "all_hit_groups": 57917
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 14135,
+            "groups": 69520,
+            "all_hit_groups": 57302
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 10822,
+            "groups": 28800,
+            "all_hit_groups": 21514
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 6390,
+            "groups": 26240,
+            "all_hit_groups": 20956
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8547,
+            "groups": 17120,
+            "all_hit_groups": 11740
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4453,
+            "groups": 14560,
+            "all_hit_groups": 11088
+          }
+        }
+      ]
+    },
+    {
+      "policy": "twoq",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 56549,
+        "groups": 125440,
+        "all_hit_groups": 87721,
+        "miss_rate": 0.07513419430272109,
+        "all_hit_fraction": 0.6993064413265306
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 32381,
+        "groups": 110720,
+        "all_hit_groups": 84046,
+        "miss_rate": 0.04874307562620424,
+        "all_hit_fraction": 0.7590859826589595
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 23035,
+            "groups": 72080,
+            "all_hit_groups": 54334
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 18762,
+            "groups": 69520,
+            "all_hit_groups": 53719
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 13113,
+            "groups": 28800,
+            "all_hit_groups": 19718
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 8681,
+            "groups": 26240,
+            "all_hit_groups": 19160
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8838,
+            "groups": 17120,
+            "all_hit_groups": 11585
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4744,
+            "groups": 14560,
+            "all_hit_groups": 10933
+          }
+        }
+      ]
+    },
+    {
+      "policy": "arc",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 49615,
+        "groups": 125440,
+        "all_hit_groups": 93051,
+        "miss_rate": 0.06592129039115646,
+        "all_hit_fraction": 0.741796875
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 25447,
+        "groups": 110720,
+        "all_hit_groups": 89376,
+        "miss_rate": 0.03830533477842004,
+        "all_hit_fraction": 0.8072254335260116
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 18696,
+            "groups": 72080,
+            "all_hit_groups": 57710
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 14423,
+            "groups": 69520,
+            "all_hit_groups": 57095
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 10809,
+            "groups": 28800,
+            "all_hit_groups": 21517
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 6377,
+            "groups": 26240,
+            "all_hit_groups": 20959
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8547,
+            "groups": 17120,
+            "all_hit_groups": 11740
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4453,
+            "groups": 14560,
+            "all_hit_groups": 11088
+          }
+        }
+      ]
+    },
+    {
+      "policy": "future",
+      "capacity": 8253,
+      "scenario": "reset",
+      "all": {
+        "requests": 752640,
+        "misses": 42912,
+        "groups": 125440,
+        "all_hit_groups": 98635,
+        "miss_rate": 0.057015306122448976,
+        "all_hit_fraction": 0.7863121811224489
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 18744,
+        "groups": 110720,
+        "all_hit_groups": 94960,
+        "miss_rate": 0.028215317919075146,
+        "all_hit_fraction": 0.8576589595375722
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 4224,
+            "groups": 2960,
+            "all_hit_groups": 967
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 194,
+            "groups": 400,
+            "all_hit_groups": 234
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 12819,
+            "groups": 72080,
+            "all_hit_groups": 62611
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 8546,
+            "groups": 69520,
+            "all_hit_groups": 61996
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 10014,
+            "groups": 28800,
+            "all_hit_groups": 22175
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 5582,
+            "groups": 26240,
+            "all_hit_groups": 21617
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 3871,
+            "groups": 2360,
+            "all_hit_groups": 570
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 8516,
+            "groups": 17120,
+            "all_hit_groups": 11765
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 4422,
+            "groups": 14560,
+            "all_hit_groups": 11113
+          }
+        }
+      ]
+    },
+    {
+      "policy": "lru",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 107876,
+        "groups": 125440,
+        "all_hit_groups": 55778,
+        "miss_rate": 0.14333014455782314,
+        "all_hit_fraction": 0.44465880102040817
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 92188,
+        "groups": 110720,
+        "all_hit_groups": 50169,
+        "miss_rate": 0.13877047206165705,
+        "all_hit_fraction": 0.45311596820809247
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1894,
+            "groups": 2960,
+            "all_hit_groups": 1600
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 58874,
+            "groups": 72080,
+            "all_hit_groups": 33311
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 55783,
+            "groups": 69520,
+            "all_hit_groups": 32533
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 27818,
+            "groups": 28800,
+            "all_hit_groups": 11259
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 24921,
+            "groups": 26240,
+            "all_hit_groups": 10398
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 1697,
+            "groups": 2360,
+            "all_hit_groups": 1178
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 14125,
+            "groups": 17120,
+            "all_hit_groups": 7883
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11287,
+            "groups": 14560,
+            "all_hit_groups": 7006
+          }
+        }
+      ]
+    },
+    {
+      "policy": "lfu",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 140882,
+        "groups": 125440,
+        "all_hit_groups": 41640,
+        "miss_rate": 0.18718377976190476,
+        "all_hit_fraction": 0.3319515306122449
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 120361,
+        "groups": 110720,
+        "all_hit_groups": 37606,
+        "miss_rate": 0.18117925096339113,
+        "all_hit_fraction": 0.3396495664739884
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1912,
+            "groups": 2960,
+            "all_hit_groups": 1600
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 196,
+            "groups": 400,
+            "all_hit_groups": 239
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 76153,
+            "groups": 72080,
+            "all_hit_groups": 25424
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 72730,
+            "groups": 69520,
+            "all_hit_groups": 24809
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 32402,
+            "groups": 28800,
+            "all_hit_groups": 9293
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 28889,
+            "groups": 26240,
+            "all_hit_groups": 8649
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 4051,
+            "groups": 2360,
+            "all_hit_groups": 408
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 22896,
+            "groups": 17120,
+            "all_hit_groups": 4368
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 18546,
+            "groups": 14560,
+            "all_hit_groups": 3909
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging16",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 107874,
+        "groups": 125440,
+        "all_hit_groups": 55779,
+        "miss_rate": 0.14332748724489797,
+        "all_hit_fraction": 0.44466677295918366
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 92188,
+        "groups": 110720,
+        "all_hit_groups": 50169,
+        "miss_rate": 0.13877047206165705,
+        "all_hit_fraction": 0.45311596820809247
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1894,
+            "groups": 2960,
+            "all_hit_groups": 1600
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 232
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 58874,
+            "groups": 72080,
+            "all_hit_groups": 33311
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 55783,
+            "groups": 69520,
+            "all_hit_groups": 32533
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 27815,
+            "groups": 28800,
+            "all_hit_groups": 11260
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 24920,
+            "groups": 26240,
+            "all_hit_groups": 10398
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 1697,
+            "groups": 2360,
+            "all_hit_groups": 1178
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 14126,
+            "groups": 17120,
+            "all_hit_groups": 7883
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11288,
+            "groups": 14560,
+            "all_hit_groups": 7006
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging64",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 101215,
+        "groups": 125440,
+        "all_hit_groups": 58266,
+        "miss_rate": 0.13447996386054423,
+        "all_hit_fraction": 0.46449298469387756
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 85513,
+        "groups": 110720,
+        "all_hit_groups": 52745,
+        "miss_rate": 0.1287226035645472,
+        "all_hit_fraction": 0.4763818641618497
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1904,
+            "groups": 2960,
+            "all_hit_groups": 1601
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 187,
+            "groups": 400,
+            "all_hit_groups": 242
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 56036,
+            "groups": 72080,
+            "all_hit_groups": 34321
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 52969,
+            "groups": 69520,
+            "all_hit_groups": 33570
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 24088,
+            "groups": 28800,
+            "all_hit_groups": 12736
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 21372,
+            "groups": 26240,
+            "all_hit_groups": 11825
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 1824,
+            "groups": 2360,
+            "all_hit_groups": 1112
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 13895,
+            "groups": 17120,
+            "all_hit_groups": 7949
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 10985,
+            "groups": 14560,
+            "all_hit_groups": 7108
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging256",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 117598,
+        "groups": 125440,
+        "all_hit_groups": 51041,
+        "miss_rate": 0.15624734268707482,
+        "all_hit_fraction": 0.40689572704081634
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 98658,
+        "groups": 110720,
+        "all_hit_groups": 46566,
+        "miss_rate": 0.14850975433526012,
+        "all_hit_fraction": 0.4205744219653179
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1912,
+            "groups": 2960,
+            "all_hit_groups": 1600
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 196,
+            "groups": 400,
+            "all_hit_groups": 239
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 65389,
+            "groups": 72080,
+            "all_hit_groups": 29885
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 61966,
+            "groups": 69520,
+            "all_hit_groups": 29270
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 24744,
+            "groups": 28800,
+            "all_hit_groups": 12484
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 21645,
+            "groups": 26240,
+            "all_hit_groups": 11703
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 2686,
+            "groups": 2360,
+            "all_hit_groups": 744
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 19399,
+            "groups": 17120,
+            "all_hit_groups": 5781
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 14851,
+            "groups": 14560,
+            "all_hit_groups": 5354
+          }
+        }
+      ]
+    },
+    {
+      "policy": "slru",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 102904,
+        "groups": 125440,
+        "all_hit_groups": 57518,
+        "miss_rate": 0.13672406462585035,
+        "all_hit_fraction": 0.45852997448979593
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 86793,
+        "groups": 110720,
+        "all_hit_groups": 52191,
+        "miss_rate": 0.13064938583815028,
+        "all_hit_fraction": 0.4713782514450867
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1913,
+            "groups": 2960,
+            "all_hit_groups": 1599
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 197,
+            "groups": 400,
+            "all_hit_groups": 238
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 57356,
+            "groups": 72080,
+            "all_hit_groups": 33764
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 54209,
+            "groups": 69520,
+            "all_hit_groups": 33073
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 24130,
+            "groups": 28800,
+            "all_hit_groups": 12672
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 21249,
+            "groups": 26240,
+            "all_hit_groups": 11811
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 1914,
+            "groups": 2360,
+            "all_hit_groups": 1069
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 14123,
+            "groups": 17120,
+            "all_hit_groups": 7867
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11138,
+            "groups": 14560,
+            "all_hit_groups": 7069
+          }
+        }
+      ]
+    },
+    {
+      "policy": "twoq",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 113106,
+        "groups": 125440,
+        "all_hit_groups": 52523,
+        "miss_rate": 0.15027901785714284,
+        "all_hit_fraction": 0.41871014030612247
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 95896,
+        "groups": 110720,
+        "all_hit_groups": 47608,
+        "miss_rate": 0.14435211946050097,
+        "all_hit_fraction": 0.42998554913294795
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 2383,
+            "groups": 2960,
+            "all_hit_groups": 1360
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 307,
+            "groups": 400,
+            "all_hit_groups": 183
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 62480,
+            "groups": 72080,
+            "all_hit_groups": 31245
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 58928,
+            "groups": 69520,
+            "all_hit_groups": 30623
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 27683,
+            "groups": 28800,
+            "all_hit_groups": 11094
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 24589,
+            "groups": 26240,
+            "all_hit_groups": 10311
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 2059,
+            "groups": 2360,
+            "all_hit_groups": 980
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 15033,
+            "groups": 17120,
+            "all_hit_groups": 7297
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 12072,
+            "groups": 14560,
+            "all_hit_groups": 6491
+          }
+        }
+      ]
+    },
+    {
+      "policy": "arc",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 104720,
+        "groups": 125440,
+        "all_hit_groups": 56880,
+        "miss_rate": 0.13913690476190477,
+        "all_hit_fraction": 0.4534438775510204
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 88567,
+        "groups": 110720,
+        "all_hit_groups": 51509,
+        "miss_rate": 0.13331978564547206,
+        "all_hit_fraction": 0.46521856936416184
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1912,
+            "groups": 2960,
+            "all_hit_groups": 1600
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 196,
+            "groups": 400,
+            "all_hit_groups": 239
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 57979,
+            "groups": 72080,
+            "all_hit_groups": 33625
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 54921,
+            "groups": 69520,
+            "all_hit_groups": 32876
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 25158,
+            "groups": 28800,
+            "all_hit_groups": 12246
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 21976,
+            "groups": 26240,
+            "all_hit_groups": 11490
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 1801,
+            "groups": 2360,
+            "all_hit_groups": 1129
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 14402,
+            "groups": 17120,
+            "all_hit_groups": 7733
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 11474,
+            "groups": 14560,
+            "all_hit_groups": 6904
+          }
+        }
+      ]
+    },
+    {
+      "policy": "future",
+      "capacity": 4096,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 50813,
+        "groups": 125440,
+        "all_hit_groups": 86334,
+        "miss_rate": 0.06751302083333334,
+        "all_hit_fraction": 0.688249362244898
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 39888,
+        "groups": 110720,
+        "all_hit_groups": 78615,
+        "miss_rate": 0.06004335260115607,
+        "all_hit_fraction": 0.7100343208092486
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 26952,
+            "groups": 72080,
+            "all_hit_groups": 50663
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 25054,
+            "groups": 69520,
+            "all_hit_groups": 49443
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 11426,
+            "groups": 28800,
+            "all_hit_groups": 19720
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 9657,
+            "groups": 26240,
+            "all_hit_groups": 18389
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 909,
+            "groups": 2360,
+            "all_hit_groups": 1623
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 6354,
+            "groups": 17120,
+            "all_hit_groups": 12058
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 5046,
+            "groups": 14560,
+            "all_hit_groups": 10500
+          }
+        }
+      ]
+    },
+    {
+      "policy": "lru",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 30744,
+        "groups": 125440,
+        "all_hit_groups": 100707,
+        "miss_rate": 0.040848214285714286,
+        "all_hit_fraction": 0.8028300382653061
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 21250,
+        "groups": 110720,
+        "all_hit_groups": 92127,
+        "miss_rate": 0.03198759633911368,
+        "all_hit_fraction": 0.8320718930635839
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 15475,
+            "groups": 72080,
+            "all_hit_groups": 58855
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 13577,
+            "groups": 69520,
+            "all_hit_groups": 57635
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 5131,
+            "groups": 28800,
+            "all_hit_groups": 24259
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 4500,
+            "groups": 26240,
+            "all_hit_groups": 22254
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 673,
+            "groups": 2360,
+            "all_hit_groups": 1785
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 4293,
+            "groups": 17120,
+            "all_hit_groups": 13538
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 3042,
+            "groups": 14560,
+            "all_hit_groups": 11955
+          }
+        }
+      ]
+    },
+    {
+      "policy": "lfu",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 32513,
+        "groups": 125440,
+        "all_hit_groups": 99034,
+        "miss_rate": 0.04319860756802721,
+        "all_hit_fraction": 0.7894929846938775
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 22816,
+        "groups": 110720,
+        "all_hit_groups": 90576,
+        "miss_rate": 0.03434489402697495,
+        "all_hit_fraction": 0.8180635838150289
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 15644,
+            "groups": 72080,
+            "all_hit_groups": 58592
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 13746,
+            "groups": 69520,
+            "all_hit_groups": 57372
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 6112,
+            "groups": 28800,
+            "all_hit_groups": 23419
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 5468,
+            "groups": 26240,
+            "all_hit_groups": 21407
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 1044,
+            "groups": 2360,
+            "all_hit_groups": 1536
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 4541,
+            "groups": 17120,
+            "all_hit_groups": 13217
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 3471,
+            "groups": 14560,
+            "all_hit_groups": 11514
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging16",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 30744,
+        "groups": 125440,
+        "all_hit_groups": 100707,
+        "miss_rate": 0.040848214285714286,
+        "all_hit_fraction": 0.8028300382653061
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 21250,
+        "groups": 110720,
+        "all_hit_groups": 92127,
+        "miss_rate": 0.03198759633911368,
+        "all_hit_fraction": 0.8320718930635839
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 15475,
+            "groups": 72080,
+            "all_hit_groups": 58855
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 13577,
+            "groups": 69520,
+            "all_hit_groups": 57635
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 5131,
+            "groups": 28800,
+            "all_hit_groups": 24259
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 4500,
+            "groups": 26240,
+            "all_hit_groups": 22254
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 673,
+            "groups": 2360,
+            "all_hit_groups": 1785
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 4293,
+            "groups": 17120,
+            "all_hit_groups": 13538
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 3042,
+            "groups": 14560,
+            "all_hit_groups": 11955
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging64",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 30743,
+        "groups": 125440,
+        "all_hit_groups": 100709,
+        "miss_rate": 0.0408468856292517,
+        "all_hit_fraction": 0.8028459821428572
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 21250,
+        "groups": 110720,
+        "all_hit_groups": 92129,
+        "miss_rate": 0.03198759633911368,
+        "all_hit_fraction": 0.8320899566473988
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 15477,
+            "groups": 72080,
+            "all_hit_groups": 58856
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 13579,
+            "groups": 69520,
+            "all_hit_groups": 57636
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 5131,
+            "groups": 28800,
+            "all_hit_groups": 24259
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 4500,
+            "groups": 26240,
+            "all_hit_groups": 22254
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 673,
+            "groups": 2360,
+            "all_hit_groups": 1785
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 4290,
+            "groups": 17120,
+            "all_hit_groups": 13539
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 3040,
+            "groups": 14560,
+            "all_hit_groups": 11956
+          }
+        }
+      ]
+    },
+    {
+      "policy": "aging256",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 28886,
+        "groups": 125440,
+        "all_hit_groups": 102042,
+        "miss_rate": 0.03837957057823129,
+        "all_hit_fraction": 0.8134725765306122
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 19521,
+        "groups": 110720,
+        "all_hit_groups": 93367,
+        "miss_rate": 0.029384934971098266,
+        "all_hit_fraction": 0.8432713150289017
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 14494,
+            "groups": 72080,
+            "all_hit_groups": 59587
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 12596,
+            "groups": 69520,
+            "all_hit_groups": 58367
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 4668,
+            "groups": 28800,
+            "all_hit_groups": 24598
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 4004,
+            "groups": 26240,
+            "all_hit_groups": 22618
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 634,
+            "groups": 2360,
+            "all_hit_groups": 1816
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 3918,
+            "groups": 17120,
+            "all_hit_groups": 13771
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 2790,
+            "groups": 14560,
+            "all_hit_groups": 12099
+          }
+        }
+      ]
+    },
+    {
+      "policy": "slru",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 29737,
+        "groups": 125440,
+        "all_hit_groups": 101486,
+        "miss_rate": 0.03951025722789116,
+        "all_hit_fraction": 0.8090401785714286
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 20353,
+        "groups": 110720,
+        "all_hit_groups": 92813,
+        "miss_rate": 0.03063734344894027,
+        "all_hit_fraction": 0.8382677023121388
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 14969,
+            "groups": 72080,
+            "all_hit_groups": 59272
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 13071,
+            "groups": 69520,
+            "all_hit_groups": 58052
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 4961,
+            "groups": 28800,
+            "all_hit_groups": 24390
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 4356,
+            "groups": 26240,
+            "all_hit_groups": 22368
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 648,
+            "groups": 2360,
+            "all_hit_groups": 1811
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 3987,
+            "groups": 17120,
+            "all_hit_groups": 13743
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 2795,
+            "groups": 14560,
+            "all_hit_groups": 12110
+          }
+        }
+      ]
+    },
+    {
+      "policy": "twoq",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 35778,
+        "groups": 125440,
+        "all_hit_groups": 96753,
+        "miss_rate": 0.047536670918367344,
+        "all_hit_fraction": 0.7713089923469387
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 26137,
+        "groups": 110720,
+        "all_hit_groups": 88268,
+        "miss_rate": 0.0393439908477842,
+        "all_hit_fraction": 0.7972182080924856
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 19739,
+            "groups": 72080,
+            "all_hit_groups": 55556
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 17841,
+            "groups": 69520,
+            "all_hit_groups": 54336
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 5609,
+            "groups": 28800,
+            "all_hit_groups": 23851
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 4881,
+            "groups": 26240,
+            "all_hit_groups": 21903
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 702,
+            "groups": 2360,
+            "all_hit_groups": 1757
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 4556,
+            "groups": 17120,
+            "all_hit_groups": 13319
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 3284,
+            "groups": 14560,
+            "all_hit_groups": 11746
+          }
+        }
+      ]
+    },
+    {
+      "policy": "arc",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 30342,
+        "groups": 125440,
+        "all_hit_groups": 100977,
+        "miss_rate": 0.0403140943877551,
+        "all_hit_fraction": 0.8049824617346939
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 20906,
+        "groups": 110720,
+        "all_hit_groups": 92357,
+        "miss_rate": 0.031469773603082854,
+        "all_hit_fraction": 0.8341492052023122
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 15318,
+            "groups": 72080,
+            "all_hit_groups": 58958
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 13420,
+            "groups": 69520,
+            "all_hit_groups": 57738
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 5065,
+            "groups": 28800,
+            "all_hit_groups": 24310
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 4455,
+            "groups": 26240,
+            "all_hit_groups": 22286
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 658,
+            "groups": 2360,
+            "all_hit_groups": 1792
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 4129,
+            "groups": 17120,
+            "all_hit_groups": 13647
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 2900,
+            "groups": 14560,
+            "all_hit_groups": 12050
+          }
+        }
+      ]
+    },
+    {
+      "policy": "future",
+      "capacity": 8253,
+      "scenario": "carry",
+      "all": {
+        "requests": 752640,
+        "misses": 17369,
+        "groups": 125440,
+        "all_hit_groups": 111767,
+        "miss_rate": 0.023077434098639455,
+        "all_hit_fraction": 0.890999681122449
+      },
+      "after_warmup": {
+        "requests": 664320,
+        "misses": 9330,
+        "groups": 110720,
+        "all_hit_groups": 102085,
+        "miss_rate": 0.01404443641618497,
+        "all_hit_fraction": 0.9220104768786127
+      },
+      "segments": [
+        {
+          "segment": 0,
+          "tokens": 53,
+          "all": {
+            "requests": 12720,
+            "misses": 3468,
+            "groups": 2120,
+            "all_hit_groups": 547
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 1,
+          "tokens": 74,
+          "all": {
+            "requests": 17760,
+            "misses": 1704,
+            "groups": 2960,
+            "all_hit_groups": 1723
+          },
+          "after_warmup": {
+            "requests": 2400,
+            "misses": 131,
+            "groups": 400,
+            "all_hit_groups": 283
+          }
+        },
+        {
+          "segment": 2,
+          "tokens": 1802,
+          "all": {
+            "requests": 432480,
+            "misses": 8535,
+            "groups": 72080,
+            "all_hit_groups": 64647
+          },
+          "after_warmup": {
+            "requests": 417120,
+            "misses": 6637,
+            "groups": 69520,
+            "all_hit_groups": 63427
+          }
+        },
+        {
+          "segment": 3,
+          "tokens": 720,
+          "all": {
+            "requests": 172800,
+            "misses": 1762,
+            "groups": 28800,
+            "all_hit_groups": 27124
+          },
+          "after_warmup": {
+            "requests": 157440,
+            "misses": 1494,
+            "groups": 26240,
+            "all_hit_groups": 24814
+          }
+        },
+        {
+          "segment": 4,
+          "tokens": 59,
+          "all": {
+            "requests": 14160,
+            "misses": 294,
+            "groups": 2360,
+            "all_hit_groups": 2084
+          },
+          "after_warmup": {}
+        },
+        {
+          "segment": 5,
+          "tokens": 428,
+          "all": {
+            "requests": 102720,
+            "misses": 1606,
+            "groups": 17120,
+            "all_hit_groups": 15642
+          },
+          "after_warmup": {
+            "requests": 87360,
+            "misses": 1068,
+            "groups": 14560,
+            "all_hit_groups": 13561
+          }
+        }
+      ]
+    }
+  ]
+}

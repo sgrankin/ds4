@@ -1,0 +1,25 @@
+{
+  "sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+  "layout": {
+    "magic": 1146310961,
+    "vocab": 129280,
+    "cases": 16,
+    "token_limit": 32,
+    "header_bytes": 16,
+    "row_metadata_bytes": 24,
+    "float_bytes": 4,
+    "row_bytes": 517144,
+    "rows": 512,
+    "bytes": 264777744,
+    "metadata_sha256": "6b0aa0e5910a408c61de64a895bd387bf375b1eb9f86e001787de54e12d7f802"
+  },
+  "rows": 512,
+  "created_before_candidate": true,
+  "policy": {
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+    "DS4_METAL_STREAMING_EXPERT_IO_METRICS": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MODE": "native"
+  }
+}

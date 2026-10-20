@@ -1,0 +1,264 @@
+{
+  "status": "ANALYSIS_INTEGRITY_PASS",
+  "summaries": [
+    {
+      "directory": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort50-counting-four-20261002-v1",
+      "records": 4,
+      "arms": {
+        "0.0": {
+          "cases": 4,
+          "correct": 1,
+          "incorrect": 0,
+          "invalid": 3,
+          "cap_hits": 3,
+          "tokens": 6336,
+          "reasoning_tokens": 6335,
+          "decode_seconds": 287.799959,
+          "tokens_per_solved_task": 6336.0,
+          "completed_correct": 1,
+          "capped_correct": 0
+        }
+      },
+      "cases": [
+        {
+          "case": "circular10",
+          "arms": {
+            "0.0": {
+              "status": "CORRECT",
+              "parsed_answer": "123",
+              "expected": "123",
+              "tokens": 192,
+              "reasoning_tokens": 191,
+              "ordinary_generated_thinking_tokens": 190,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 0,
+              "cap_hit": false,
+              "parse_reason": "none",
+              "trace_sha256": "cc3899a5c74eea039731856cbea2f66965a2642a4e076c9802afdb06dd58ae53",
+              "diagnostics": {
+                "temperature_float_value": 0.6000000238418579,
+                "stride": 32,
+                "sampling_steps": 193,
+                "active_steps": 0,
+                "thinking_marker_selections": 0,
+                "active_marker_selections": 0,
+                "pre_filter_samples": 6,
+                "raw_marker_mass_mean": 3.19059216392e-08,
+                "raw_marker_mass_max": 1.91218035934e-07,
+                "policy_kl_mean_pre_filter": 0,
+                "selected_delta_nll_sum_pre_filter": 0,
+                "sampled_argmax_changes": 0,
+                "cpu_seconds": 0.005091,
+                "token_trace": "circular10-lambda0.0.tokens.jsonl"
+              }
+            }
+          }
+        },
+        {
+          "case": "restricted_derangements8",
+          "arms": {
+            "0.0": {
+              "status": "INVALID",
+              "parsed_answer": "",
+              "expected": "10860",
+              "tokens": 2048,
+              "reasoning_tokens": 2048,
+              "ordinary_generated_thinking_tokens": 2048,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 0,
+              "cap_hit": true,
+              "parse_reason": "unclosed_reasoning",
+              "trace_sha256": "ea0c05a24ca0c5e8face256b053ff2f63943fa11c686a1925839722ac0799ed9",
+              "diagnostics": {
+                "temperature_float_value": 0.6000000238418579,
+                "stride": 32,
+                "sampling_steps": 2048,
+                "active_steps": 0,
+                "thinking_marker_selections": 7,
+                "active_marker_selections": 0,
+                "pre_filter_samples": 64,
+                "raw_marker_mass_mean": 0.0134712766373,
+                "raw_marker_mass_max": 0.854893747315,
+                "policy_kl_mean_pre_filter": 0,
+                "selected_delta_nll_sum_pre_filter": 0,
+                "sampled_argmax_changes": 0,
+                "cpu_seconds": 0.059388,
+                "token_trace": "restricted_derangements8-lambda0.0.tokens.jsonl"
+              }
+            }
+          }
+        },
+        {
+          "case": "lattice8x6",
+          "arms": {
+            "0.0": {
+              "status": "INVALID",
+              "parsed_answer": "",
+              "expected": "2002",
+              "tokens": 2048,
+              "reasoning_tokens": 2048,
+              "ordinary_generated_thinking_tokens": 2048,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 0,
+              "cap_hit": true,
+              "parse_reason": "unclosed_reasoning",
+              "trace_sha256": "0c2806756da4ef5f7a691f220e0446d102e68f6f01ba5f7fca58b511a9b8262c",
+              "diagnostics": {
+                "temperature_float_value": 0.6000000238418579,
+                "stride": 32,
+                "sampling_steps": 2048,
+                "active_steps": 0,
+                "thinking_marker_selections": 6,
+                "active_marker_selections": 0,
+                "pre_filter_samples": 64,
+                "raw_marker_mass_mean": 0.000792097193288,
+                "raw_marker_mass_max": 0.0375117700998,
+                "policy_kl_mean_pre_filter": 0,
+                "selected_delta_nll_sum_pre_filter": 0,
+                "sampled_argmax_changes": 0,
+                "cpu_seconds": 0.062133,
+                "token_trace": "lattice8x6-lambda0.0.tokens.jsonl"
+              }
+            }
+          }
+        },
+        {
+          "case": "subset_mod7",
+          "arms": {
+            "0.0": {
+              "status": "INVALID",
+              "parsed_answer": "",
+              "expected": "132",
+              "tokens": 2048,
+              "reasoning_tokens": 2048,
+              "ordinary_generated_thinking_tokens": 2048,
+              "reached_late_threshold": true,
+              "estimated_policy_sampling_steps": 0,
+              "cap_hit": true,
+              "parse_reason": "unclosed_reasoning",
+              "trace_sha256": "7b07492ba9e72b5a7841a8b64bb9c0fa6df632d37282b11ebd404bcac87553ae",
+              "diagnostics": {
+                "temperature_float_value": 0.6000000238418579,
+                "stride": 32,
+                "sampling_steps": 2048,
+                "active_steps": 0,
+                "thinking_marker_selections": 4,
+                "active_marker_selections": 0,
+                "pre_filter_samples": 64,
+                "raw_marker_mass_mean": 0.00233807517259,
+                "raw_marker_mass_max": 0.0825969647948,
+                "policy_kl_mean_pre_filter": 0,
+                "selected_delta_nll_sum_pre_filter": 0,
+                "sampled_argmax_changes": 0,
+                "cpu_seconds": 0.058288,
+                "token_trace": "subset_mod7-lambda0.0.tokens.jsonl"
+              }
+            }
+          }
+        }
+      ],
+      "correctness_regressions": [],
+      "correctness_improvements": [],
+      "all_records_correct": false,
+      "timing_qualification": "exploratory arm timings; cache reuse prevents a speedup claim",
+      "expected_records": 4,
+      "complete": true,
+      "configuration": {
+        "revision": "cee2d1426766064ec18740621c34faf006f9919a",
+        "cache_gib_requested": 64.0,
+        "max_tokens": 2048,
+        "think_level": 50,
+        "suite": "counting",
+        "candidate": null,
+        "case_limit": 4,
+        "overthink_after": 0,
+        "case_offset": 0,
+        "diagnostic_stride": 32,
+        "marker_profile": "hesitation",
+        "native_only": true
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 3
+      },
+      "host_pressure": {
+        "samples": 301,
+        "minimum_free_gib": 0.112823486328125,
+        "maximum_wired_gib": 70.91012573242188,
+        "maximum_compressor_gib": 7.3091583251953125,
+        "maximum_swap_gib": 0.017763671875,
+        "maximum_kernel_level": 1
+      },
+      "completed_correct_rule": "Recorded CORRECT plus !cap_hit, stopped and think_closed; producer strict status/counts remain unchanged.",
+      "expected_arms": 1,
+      "native_only": true,
+      "validated_case_ids": [
+        "circular10",
+        "restricted_derangements8",
+        "lattice8x6",
+        "subset_mod7"
+      ],
+      "trace_integrity": [
+        {
+          "case": "circular10",
+          "penalty": 0,
+          "token_trace_sha256": "5b3c75570137e5bcbd3b801eabd16c685a7a47cac1729e47e70889555a0e1e49",
+          "raw_trace_sha256": "cc3899a5c74eea039731856cbea2f66965a2642a4e076c9802afdb06dd58ae53",
+          "sampling_steps": 193,
+          "reconstructed_raw_bytes": 707
+        },
+        {
+          "case": "restricted_derangements8",
+          "penalty": 0,
+          "token_trace_sha256": "2f71cf2053d4724d8ebef152229c557977d1f1cf4ff5bcf44c37d16933fde3b3",
+          "raw_trace_sha256": "ea0c05a24ca0c5e8face256b053ff2f63943fa11c686a1925839722ac0799ed9",
+          "sampling_steps": 2048,
+          "reconstructed_raw_bytes": 6109
+        },
+        {
+          "case": "lattice8x6",
+          "penalty": 0,
+          "token_trace_sha256": "e9d83d73e6d7b35bed022c00d78eaf4a9d88721b802d993032cd5d80adba2489",
+          "raw_trace_sha256": "0c2806756da4ef5f7a691f220e0446d102e68f6f01ba5f7fca58b511a9b8262c",
+          "sampling_steps": 2048,
+          "reconstructed_raw_bytes": 6817
+        },
+        {
+          "case": "subset_mod7",
+          "penalty": 0,
+          "token_trace_sha256": "4af57089530ac8f3db5df26afde96907d0c9948004d41aeb2f7dddf5cfcb8e23",
+          "raw_trace_sha256": "7b07492ba9e72b5a7841a8b64bb9c0fa6df632d37282b11ebd404bcac87553ae",
+          "sampling_steps": 2048,
+          "reconstructed_raw_bytes": 5900
+        }
+      ],
+      "original_aggregation_sha256": "dbd8d472b86cb34c696a1ee4ae217a8dfcf83e6a17e51c2891883427faae746a",
+      "analysis_scope": "Recorded strict-final-v2 outcomes unchanged; no scoring repair, model access or cross-effort KL comparison.",
+      "execution_returncode": 3,
+      "record_integrity_status": "PASS",
+      "strict_outcome_status": "INVALID_PRESENT",
+      "job": "native-effort50",
+      "frozen_manifest_sha256": "0fa9d14061a5146051f8de1be7bed62729afe9875d9df989d086c5f9cc9772c4",
+      "frozen_queue_sha256": "2af91c43a8c701cdcec392ef9041607cbf068180ea32528521b9afc01cc495b6",
+      "fixture_sha256": "0e4b4eff5154cf199984829019e03678686deef50e6abb5fff02eeeff854b5e1"
+    }
+  ],
+  "native_effort_comparison": [
+    {
+      "job": "native-effort50",
+      "effort": 50,
+      "cases": 4,
+      "correct": 1,
+      "incorrect": 0,
+      "invalid": 3,
+      "cap_hits": 3,
+      "tokens": 6336,
+      "reasoning_tokens": 6335,
+      "decode_seconds": 287.799959,
+      "tokens_per_solved_task": 6336.0,
+      "completed_correct": 1,
+      "capped_correct": 0
+    }
+  ],
+  "comparison_scope": "Strict accuracy/caps/reasoning tokens on the same four cases; prompts differ by effort prefix, so no cross-effort KL or raw-logit equivalence claim."
+}

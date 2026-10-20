@@ -1,0 +1,11 @@
+{
+  "samples": 208,
+  "levels": [
+    1
+  ],
+  "bad_samples": 0,
+  "swap_growth_gb": 0.0,
+  "max_wired_gb": 73.75285339355469,
+  "max_compressor_gb": 8.647491455078125,
+  "min_free_gb": 0.1116485595703125
+}

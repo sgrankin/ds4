@@ -1,0 +1,134 @@
+{
+  "status": "HELPER_BUILD_COMPLETE_MODEL_UNRUN",
+  "objects": {
+    "ds4_help.o": {
+      "sha256": "5f21d0a292a83eef20d60075ff8deb4f99d7558a595e11b3c91b5269acde4a6d",
+      "bytes": 104464
+    },
+    "ds4_prompt_prefix.o": {
+      "sha256": "5f2622d747eb78c92b1f5ca497d9fc76a17b1c7d0382bf7357754d00a141e7c3",
+      "bytes": 17032
+    },
+    "ds4_web.o": {
+      "sha256": "9177a3aeedbe40a76bcc1c5c3926e8ab546c86df9e276f19d99e7d92d442a70b",
+      "bytes": 145592
+    },
+    "ds4_kvstore.o": {
+      "sha256": "b691bcb29940c71568ed5fb8e6c5cdb568c83a9fa108cf755c52512a0ee5192e",
+      "bytes": 97360
+    },
+    "linenoise.o": {
+      "sha256": "6a8a0f16ab289e069cfd8ec4ecff66ad0d0d2d71a8d1b30bdb8a73bd9ffaaca6",
+      "bytes": 130824
+    },
+    "ds4.o": {
+      "sha256": "45da7d4af7fbb2b2ae298408a3cd87c266e41c5fcf0fcfaecb7ba3b155af02cf",
+      "bytes": 5650520
+    },
+    "ds4_image.o": {
+      "sha256": "ebdae98d494de74fd560daed53aad2bd934ff7012499fc2cde82e7e994278f60",
+      "bytes": 165664
+    },
+    "ds4_distributed.o": {
+      "sha256": "5e8a183b83abed129a7ab0ea1b6ce298ce3c1483d246829dafab98aacc5d8635",
+      "bytes": 427104
+    },
+    "ds4_tp.o": {
+      "sha256": "6efa29f9f0235e49502596cd04be4c3440bacb1a1b4f365ec78b9d7012e3320c",
+      "bytes": 207432
+    },
+    "ds4_ssd.o": {
+      "sha256": "aa2a18d7cc4b805af138691fd8208042837a045e30b6ed02def90c4b07d37434",
+      "bytes": 13736
+    },
+    "ds4_metal.o": {
+      "sha256": "813ff15ec709934f97bd41c018e5cab3cf796d4921b3adff46203efbe7ce80b7",
+      "bytes": 2803056
+    },
+    "ds4_layer_pack.o": {
+      "sha256": "efa53eacf5c197bd0ee5c6c140e70fd5924673f788e6876cac3656deea3b694d",
+      "bytes": 11264
+    },
+    "ds4_engram.o": {
+      "sha256": "41eefb68d54c36192c579379d9f9f9b7f35b3df619be97caed967ecb8b568982",
+      "bytes": 30064
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "cc",
+        "-O1",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-std=c11",
+        "-I.",
+        "tests/test_agent_context_suffix_mock.c",
+        "/Volumes/Models/ds4/ds4_help.o",
+        "/Volumes/Models/ds4/ds4_prompt_prefix.o",
+        "/Volumes/Models/ds4/ds4_web.o",
+        "/Volumes/Models/ds4/ds4_kvstore.o",
+        "/Volumes/Models/ds4/linenoise.o",
+        "/Volumes/Models/ds4/ds4.o",
+        "/Volumes/Models/ds4/ds4_image.o",
+        "/Volumes/Models/ds4/ds4_distributed.o",
+        "/Volumes/Models/ds4/ds4_tp.o",
+        "/Volumes/Models/ds4/ds4_ssd.o",
+        "/Volumes/Models/ds4/ds4_metal.o",
+        "/Volumes/Models/ds4/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-protected-user/speed-bench/ideas/artifacts/suffix-protected-user-cpu-v1/production"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "cc",
+        "-O1",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-std=c11",
+        "-I.",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "tests/test_agent_context_suffix_mock.c",
+        "/Volumes/Models/ds4/ds4_help.o",
+        "/Volumes/Models/ds4/ds4_prompt_prefix.o",
+        "/Volumes/Models/ds4/ds4_web.o",
+        "/Volumes/Models/ds4/ds4_kvstore.o",
+        "/Volumes/Models/ds4/linenoise.o",
+        "/Volumes/Models/ds4/ds4.o",
+        "/Volumes/Models/ds4/ds4_image.o",
+        "/Volumes/Models/ds4/ds4_distributed.o",
+        "/Volumes/Models/ds4/ds4_tp.o",
+        "/Volumes/Models/ds4/ds4_ssd.o",
+        "/Volumes/Models/ds4/ds4_metal.o",
+        "/Volumes/Models/ds4/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-protected-user/speed-bench/ideas/artifacts/suffix-protected-user-cpu-v1/asan-ubsan"
+      ],
+      "returncode": 0
+    }
+  ],
+  "model_opened": false
+}

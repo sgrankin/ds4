@@ -1,0 +1,1 @@
+Answer the final question using the current deployment record. Neutral inventory notes do not change deployment facts. Reply only with the four-digit code.

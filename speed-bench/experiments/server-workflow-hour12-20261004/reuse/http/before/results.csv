@@ -1,0 +1,6 @@
+step,session,seconds,seconds_including_edit,correct,fresh_read,complete,pass,text
+A-source,A,53.49014862500189,,True,True,True,True,READY
+B-source,B,53.153345332990284,,True,True,True,True,READY
+A-edit1,A,41.08154454200121,41.08200850000139,True,True,True,True,"{""active_total"":416,""archived_code"":""RIVER-73""}"
+B-edit1,B,39.28197541600093,39.28243320900947,True,True,True,True,"{""active_total"": 202, ""archived_code"": ""CEDAR-91""}"
+C-turnover,C,2.233882333006477,,True,False,True,True,READY

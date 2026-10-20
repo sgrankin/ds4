@@ -1,0 +1,68 @@
+{
+  "jobs": [
+    {
+      "directory": "pressure-admitted24",
+      "samples": 485,
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "peak_wired_compressed_gib": 79.3941650390625,
+      "swap_growth_gib": 0.0
+    },
+    {
+      "directory": "pressure-generation",
+      "samples": 306,
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "peak_wired_compressed_gib": 77.7744140625,
+      "swap_growth_gib": 0.0
+    },
+    {
+      "directory": "pressure-screen",
+      "samples": 133,
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "peak_wired_compressed_gib": 78.95405578613281,
+      "swap_growth_gib": 0.0
+    },
+    {
+      "directory": "pressure-strong24",
+      "samples": 738,
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "peak_wired_compressed_gib": 79.46162414550781,
+      "swap_growth_gib": 0.0
+    },
+    {
+      "directory": "pressure-suite24",
+      "samples": 888,
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "peak_wired_compressed_gib": 80.0904541015625,
+      "swap_growth_gib": 0.0
+    },
+    {
+      "directory": "pressure-ttl-screen",
+      "samples": 77,
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "peak_wired_compressed_gib": 78.77464294433594,
+      "swap_growth_gib": 0.0
+    }
+  ],
+  "samples": 2627,
+  "all_pressure_normal": true,
+  "peak_wired_compressed_gib": 80.0904541015625,
+  "maximum_per_job_swap_growth_gib": 0.0
+}

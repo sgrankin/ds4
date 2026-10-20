@@ -1,0 +1,37 @@
+{
+  "role": "assistant",
+  "content": [
+    {
+      "type": "toolCall",
+      "id": "call_9a300d95e3c70141f8bd7254f67d76a8|fc_b26133274277ce017bf734c2",
+      "name": "read",
+      "arguments": {
+        "path": "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/client-first/checks/pi-config.json",
+        "whole": true,
+        "raw": true
+      }
+    }
+  ],
+  "api": "openai-responses",
+  "provider": "local-ds4",
+  "model": "deepseek-v4.1-flash",
+  "usage": {
+    "input": 0,
+    "output": 99,
+    "cacheRead": 0,
+    "cacheWrite": 311,
+    "reasoning": 0,
+    "totalTokens": 410,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "total": 0
+    }
+  },
+  "stopReason": "toolUse",
+  "timestamp": 1791129040970,
+  "responseId": "resp_49763eaa6e0af49302092bb2",
+  "rawStopReason": "completed"
+}

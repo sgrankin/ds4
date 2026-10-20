@@ -1,0 +1,14 @@
+{
+  "first_attempts": 48,
+  "independent_audit_sha256": "9853844fba01c8260fcbe44facf4b1ad77f9eb787cc77477a59f3203d52a55b3",
+  "limitations": "One fixed set and seed. Original wrong/INVALID/caps and both paired discordances retained. Raw artifacts are text bytes, not vocabulary logits. No cross-prefix KL/NLL, equal-quality, quantization-causality, speed, SSD or default-promotion claim.",
+  "main_runtime100_unchanged": true,
+  "original_guard_child_returncode": 3,
+  "plan_sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+  "preserved_original_scores": true,
+  "producer_summary_sha256": "c79c5d113189f552f4cbb4a15274dae1f245a1cbe9c1bf309935a19aa996325e",
+  "release_sha256": "d35de4e3bef0f0c678395509042087d93d6a98358744acbf0adec095d1d32f72",
+  "rescored": false,
+  "status": "RELEASED_EVIDENCE_ARCHIVE",
+  "unique_cases": 16
+}

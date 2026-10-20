@@ -1,0 +1,9 @@
+{
+  "B": {
+    "startup_prefill_ms": 14919.024,
+    "append_prefill_ms": 87911.122,
+    "decode_ms": 178393.308,
+    "model_ms": 281223.45399999997,
+    "turn_model_ms": 266304.43
+  }
+}

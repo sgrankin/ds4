@@ -1,0 +1,76 @@
+{
+  "step": "B-edited",
+  "session": "B",
+  "seconds": 47.13375420800003,
+  "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+  "answer": {
+    "active_total": 231,
+    "archived_code": "ORBIT-57"
+  },
+  "gold": {
+    "active_total": 231,
+    "archived_code": "ORBIT-57"
+  },
+  "correct": true,
+  "fresh_read": true,
+  "complete": true,
+  "calls": [
+    {
+      "name": "read",
+      "call_id": "call_b88a7a9289669f373645d7f2f8b84828",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json\",\"whole\":true,\"raw\":true}",
+      "read": true,
+      "error": null,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json",
+      "text": "{\n  \"archived_code\": \"ORBIT-57\"\n}\n"
+    }
+  ],
+  "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json",
+  "replies": [
+    {
+      "seconds": 43.71265349999885,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1436,
+        "input_tokens_details": {
+          "cached_tokens": 527,
+          "cache_write_tokens": 909
+        },
+        "output_tokens": 93,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1529
+      },
+      "incomplete_details": null
+    },
+    {
+      "seconds": 3.420269249996636,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1554,
+        "input_tokens_details": {
+          "cached_tokens": 1529,
+          "cache_write_tokens": 25
+        },
+        "output_tokens": 18,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1572
+      },
+      "incomplete_details": null
+    }
+  ],
+  "errors": [],
+  "suffix_log_lines": [],
+  "exact_hit_log_lines": [],
+  "slot_eviction_log_lines": [],
+  "pass": true,
+  "group": "edited-AB",
+  "queue_inclusive_seconds": 47.13461904101132,
+  "seconds_including_edit": 47.13461904101132,
+  "edit_seconds": 0.0005604579928331077
+}

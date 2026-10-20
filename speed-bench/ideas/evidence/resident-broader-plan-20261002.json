@@ -1,0 +1,37 @@
+{
+  "status": "locked before broader results",
+  "scope": "exploratory latency-quality frontier, default remains native",
+  "reason": "Initial .05/.12/rank12 policy avoided381 of5179 native misses on toolreplay; published cache-aware routing uses materially more substitution and may backfill originals.",
+  "reference_source": "https://github.com/pmerolla/fomoe",
+  "protected_native_contributions": 4,
+  "cache_gib": [
+    64,
+    80
+  ],
+  "variants": [
+    {
+      "name": "balanced",
+      "gap": 0.15,
+      "max_mass": 0.18,
+      "max_total_mass": 0.3,
+      "max_rank": 24,
+      "max_subs": 2
+    },
+    {
+      "name": "broader",
+      "gap": 0.3,
+      "max_mass": 0.2,
+      "max_total_mass": 0.35,
+      "max_rank": 48,
+      "max_subs": 2
+    }
+  ],
+  "validation": [
+    "raw full-vocabulary KL and deltaNLL on frozen tool trajectory",
+    "independent heldout16 reference continuations",
+    "native/off/no-op byte controls for neutral overhead build",
+    "separate profile-off ABBA at matchingcache/context/chunk",
+    "generated task correctness and actualcompletion before recommendation"
+  ],
+  "limitations": "Router-affinity similarity does not prove functional expert similarity. Metrics on fixed continuations do not establish free-running accuracy. Backfill not yet implemented."
+}

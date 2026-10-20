@@ -1,0 +1,2 @@
+{"favorable":24,"total":42,"numerator":4,"denominator":7}
+There are seven choices for the first ball and six for the second, giving forty-two ordered outcomes. A red followed by a blue has four times three possibilities, and blue followed by red has another three times four. The twenty-four favorable outcomes yield twenty-four over forty-two, which reduces to four sevenths.

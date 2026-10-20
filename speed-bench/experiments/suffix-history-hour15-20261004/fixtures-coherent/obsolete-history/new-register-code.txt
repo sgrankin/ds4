@@ -1,0 +1,1 @@
+Current shipping policy supersedes the earlier decision: compute net units as batches times units_per_batch minus reserved_units, then round net down to a whole multiple of 10. The former rounding rule is obsolete. Permanent policy.json contains this current rule.

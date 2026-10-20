@@ -1,0 +1,84 @@
+{
+  "parent": "cee2d1426766064ec18740621c34faf006f9919a",
+  "objects": {
+    "ds4.o": {
+      "sha256": "d77958a390840f3a555f01df64d52964a656c72e6449c2a1cd8c19f497eb8aca",
+      "bytes": 5606328
+    },
+    "ds4_image.o": {
+      "sha256": "752eace0ab62636538b225d4c80011739354649ee395b6648924928079572528",
+      "bytes": 165728
+    },
+    "ds4_distributed.o": {
+      "sha256": "3b09b4b252fd1b06894421b88bc62eeaca24869b839cc17cd22effde1d50dc1a",
+      "bytes": 427168
+    },
+    "ds4_tp.o": {
+      "sha256": "d2f2f5ce0b8bfc7ebcfb0fd80f3eb4e434e89dc4518253cc43a7d253a0b2c2a1",
+      "bytes": 207496
+    },
+    "ds4_ssd.o": {
+      "sha256": "a1fbc20ad4102f4a6f126cde822f2995dd4421153c6256dace554ebca26c2b71",
+      "bytes": 13800
+    },
+    "ds4_metal.o": {
+      "sha256": "ec94b88a9a3da8742c77899e370c1b64869d456ce97d9c8fdba4fae1752bd5ff",
+      "bytes": 2798776
+    },
+    "ds4_layer_pack.o": {
+      "sha256": "174b07bfca784e04cb938ae3803e3b97696afcdb886ccd518117ffa3400135c8",
+      "bytes": 11320
+    },
+    "ds4_engram.o": {
+      "sha256": "d94530e0a20a2c196ef24ea839175152dabbdb9ad8245626f01bd81a97f34a4b",
+      "bytes": 30120
+    }
+  },
+  "runtime_sources_equal_native": {
+    "ds4_ssd.c": "6f093186ee5cde476f08f808a993f46665ab25ac0c1b8c207cb404c7b94cd999",
+    "ds4_prompt_prefix.c": "61826ac373e18fe8e8876d3661a014975cf17629baeedf3084ed5f4a1aff0e48",
+    "ds4_agent.c": "3daa599a6af81389620e7c01aa1c56c88c3be68a090e1da6197f25ae40393296",
+    "ds4_distributed.c": "08ff11e22f2c5791de72cc910d94a6817c7a8310bde4b9cee57379f3be75e0f2",
+    "ds4_layer_pack.c": "ed93c59f8f7579e03ee74ffda8e4677653d408b6f2fc53db54270825909f23ce",
+    "ds4_tp.c": "3f9277262ac26ae11ed55c60e369aea84ac335b174ef5ba3fb92e431495eda0c",
+    "ds4_server.c": "9324cd8bd87b52abd8fe2848ba029a207e4e3371f43f07c8d04a26fcc8977071",
+    "ds4_image.c": "6da84ab6ec63e0fe5351781c358798b2f5c6085aea77e8293c6f7b9569cb470c",
+    "ds4_help.c": "15d71ea67e1a356bd3d905cd5f28024972374942aea7ef6f221e20f5b892e4f4",
+    "ds4_cli.c": "ddf0871860c1d6e58946ada50055482fe26724ed64fbe0706c112b6bceddc81e",
+    "ds4.c": "efb1af06ab8f262b6aabf201da1aeb5052fcd2699b3c26e889d24fc39eead798",
+    "ds4_gpu_args.c": "8df9f52e84ce55e55e87e6558d10e7b3380d416cdddbd82c11dd82def1acf890",
+    "ds4_engram.c": "1e82b031fd19b3d0861780d44da2506677c36ad2b4e85349f2ac8e5d53eb9c92",
+    "ds4_kvstore.c": "e8d9849f979470d500c5f3370a59bd5b10283eb694cae042f6103e8d1bebe2dc",
+    "ds4_eval_cases.c": "9e61d65d5c4db4fd312955b9ce4aed487b0487748b2cb8f91cf6b80b9b5cc764",
+    "ds4_web.c": "89625148524c2bcfecf72ead19be7189adced08df5bb8d1b558d5ecfc73aaf14",
+    "ds4_eval.c": "4092ce91692e99b6cbb846401f075969362de5d2ea62662513979e18480f9a60",
+    "ds4_bench.c": "a35ca8b9995c6cda914df961fa0261cea766317a002085eb6d47cd12f85cb17c",
+    "ds4_resident_route.h": "b3c6bccc7f5faedadd999734a48c2f044121064a1822ad887cb28a21ee9246d3",
+    "ds4_gpu.h": "f03ac2afd23092e46908246cfc0000328865169d428d4fbfa115af59ca2edd5f",
+    "ds4_kvstore.h": "e6d0e2836385285718436d89292d1052099b7cc9a2c8a1c79d3d59e214d81c3b",
+    "ds4_engram.h": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+    "ds4_gpu_args.h": "bb9398a37f0e5f346641aee6d556c4703a41ed2c09442693e48dab591a50d993",
+    "ds4.h": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b",
+    "ds4_rocm.h": "f6a80e4c221004cdaaa08829c8930c9db2b9b21d009db829aca46c012365e3ed",
+    "ds4_eval_cases.h": "39bc494d1a95ec095a16a0ed8c52326e6cb67cb11c20613aeccfc2108fa545a2",
+    "ds4_qwen4_vision.h": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+    "ds4_web.h": "e43748a12480a31186961c8f2b67510441e139d3b9b82d35b6ba8017a65849a8",
+    "ds4_ssd.h": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+    "ds4_prompt_prefix.h": "3c5806bf5ed3e451adbf5487ac7105ca32a549c4e1e17d7c61883b52e570b7b1",
+    "ds4_tool_text.h": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+    "ds4_rocm_memory.h": "e3c4b2d4bf4b854f98940bc44ba73140c72f99e999ba141f8210e41841ea7dd0",
+    "ds4_distributed.h": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+    "ds4_linux_memory.h": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+    "ds4_overthink_markers.h": "0e869906f35c80e49d5363cadf25306c97f044c5c0d44ab473b8c51a55d9c863",
+    "ds4_image.h": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+    "ds4_gpu_mgpu.h": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+    "ds4_tp.h": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+    "ds4_layer_pack.h": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+    "ds4_gpu_tp.h": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+    "ds4_help.h": "0b4af2be3ec7278a3f56489c945b88a56a744c0743c6f63fbbe70c0d9498ec0c",
+    "ds4_deepseek41_gpu.h": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+    "ds4_metal.m": "c7213d4148bd3ba876f4f6bc4b499bdb1b17266923586309444f876ae5fc52f8"
+  },
+  "core_runtime_unchanged": true,
+  "shader_count": 26
+}

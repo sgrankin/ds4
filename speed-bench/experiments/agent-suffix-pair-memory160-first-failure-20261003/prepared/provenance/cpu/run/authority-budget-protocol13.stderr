@@ -1,0 +1,18 @@
+test_all26_shader_payloads_mandatory_before_model_identity (__main__.Authority.test_all26_shader_payloads_mandatory_before_model_identity) ... ok
+test_budget160_parser_rejects_old128_and_accepts_new_bound (__main__.Authority.test_budget160_parser_rejects_old128_and_accepts_new_bound) ... ok
+test_complete_nonmodel_manifest_accepted (__main__.Authority.test_complete_nonmodel_manifest_accepted) ... ok
+test_exact_typed_finite_grant (__main__.Authority.test_exact_typed_finite_grant) ... ok
+test_manifest_duplicate_and_nonfinite_fields_rejected (__main__.Authority.test_manifest_duplicate_and_nonfinite_fields_rejected) ... ok
+test_missing_or_forged_corrective_attempt_tag_refused (__main__.Authority.test_missing_or_forged_corrective_attempt_tag_refused) ... ok
+test_missing_or_forged_grant_before_first_model_identity (__main__.Authority.test_missing_or_forged_grant_before_first_model_identity) ... ok
+test_only_task_budget_and_provenance_change_all_literals_golds_identical (__main__.Authority.test_only_task_budget_and_provenance_change_all_literals_golds_identical) ... ok
+test_prepared_command_duplicate_field_rejected (__main__.Authority.test_prepared_command_duplicate_field_rejected) ... ok
+test_private_caller_delta_is_only_include_and_budget_macro (__main__.Authority.test_private_caller_delta_is_only_include_and_budget_macro) ... ok
+test_production_protocol_gate_and_delivered_bytes_stay_exact (__main__.Authority.test_production_protocol_gate_and_delivered_bytes_stay_exact) ... ok
+test_shared_admission_writer160_boundaries_and_actual128_failure (__main__.Authority.test_shared_admission_writer160_boundaries_and_actual128_failure) ... ok
+test_single_child_prelaunch_guard_and_grant_recheck (__main__.Authority.test_single_child_prelaunch_guard_and_grant_recheck) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.028s
+
+OK

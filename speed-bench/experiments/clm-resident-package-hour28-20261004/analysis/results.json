@@ -1,0 +1,1409 @@
+{
+  "rows": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "wall_seconds": 109.02886525000213,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "saved regrade-iter.stdout",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 1159,
+      "output_tokens": 755,
+      "thinking_tokens": 205,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the winning event per exact key by highest revision, breaking ties by the last payload occurrence, emits winning puts in `live`, emits winning deletes in `deleted` only when `include_deleted` is true, sorts both lists by key using normal Python string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+      "read_seconds": 50.24434204102727,
+      "read_thinking": 76,
+      "read_cached": 0,
+      "read_fresh": 1591,
+      "read_input_tokens": 1591,
+      "read_output_tokens": 172,
+      "write_seconds": 50.48374829199747,
+      "write_thinking": 128,
+      "write_cached": 473,
+      "write_fresh": 735,
+      "write_input_tokens": 1208,
+      "write_output_tokens": 471,
+      "final_seconds": 8.297852208983386,
+      "final_thinking": 1,
+      "final_cached": 1679,
+      "final_fresh": 43,
+      "final_input_tokens": 1722,
+      "final_output_tokens": 112
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "wall_seconds": 100.93602554200334,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "saved regrade-iter.stdout",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 806,
+      "output_tokens": 630,
+      "thinking_tokens": 168,
+      "final_text": "Implemented `solve(payload, config)` in `solution.py`. It tracks hits/misses with an LRU list, moves hit keys to most-recently-used, evicts the least-recently-used key on overflow (recording evictions in order), and returns `{cache, hits, misses, evictions}`. Non-positive capacity yields all misses with empty cache/evictions and zero hits. Inputs are not mutated.",
+      "read_seconds": 47.89348091700231,
+      "read_thinking": 40,
+      "read_cached": 0,
+      "read_fresh": 1573,
+      "read_input_tokens": 1573,
+      "read_output_tokens": 135,
+      "write_seconds": 45.63163054198958,
+      "write_thinking": 128,
+      "write_cached": 455,
+      "write_fresh": 610,
+      "write_input_tokens": 1065,
+      "write_output_tokens": 404,
+      "final_seconds": 7.408628666016739,
+      "final_thinking": 0,
+      "final_cached": 1469,
+      "final_fresh": 42,
+      "final_input_tokens": 1511,
+      "final_output_tokens": 91
+    },
+    {
+      "arm": "subs3",
+      "case": "ledger",
+      "wall_seconds": 99.05921241600299,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "saved regrade-iter.stdout",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 1159,
+      "output_tokens": 703,
+      "thinking_tokens": 157,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the latest revision per exact key, resolving ties by the last payload occurrence, emits winning puts as `live`, emits winning deletes as `deleted` only when `include_deleted` is true, sorts both lists by key using normal string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+      "read_seconds": 46.77146695801639,
+      "read_thinking": 28,
+      "read_cached": 0,
+      "read_fresh": 1591,
+      "read_input_tokens": 1591,
+      "read_output_tokens": 124,
+      "write_seconds": 45.611908249993576,
+      "write_thinking": 128,
+      "write_cached": 473,
+      "write_fresh": 735,
+      "write_input_tokens": 1208,
+      "write_output_tokens": 471,
+      "final_seconds": 6.672929124993971,
+      "final_thinking": 1,
+      "final_cached": 1679,
+      "final_fresh": 43,
+      "final_input_tokens": 1722,
+      "final_output_tokens": 108
+    },
+    {
+      "arm": "subs3",
+      "case": "lru",
+      "wall_seconds": 102.78668525000103,
+      "raw_driver_pass": false,
+      "raw_grade_correct": false,
+      "raw_grade_reason": "NameError",
+      "grade_source": "saved regrade-iter.stdout",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 755,
+      "output_tokens": 779,
+      "thinking_tokens": 193,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`.\n\nIt uses an insertion-ordered dict as the LRU list (least-recent first, most-recent last):\n- Hits move the key to most-recently-used.\n- Misses insert as most-recently-used and evict the least-recently-used key when capacity is exceeded, appending it to `evictions`.\n- `capacity <= 0` yields all misses, zero hits, and empty `cache`/`evictions`.\n- Keys are compared exactly, empty keys are preserved, and neither `payload` nor `config` is mutated.\n\nFor the sample (`capacity: 2`, accesses `a, b, a, c, b, d`), the result is `cache: [\"b\", \"d\"]`, `hits: 1`, `misses: 5`, `evictions: [\"a\", \"c\", \"b\"]`.",
+      "read_seconds": 49.10606808299781,
+      "read_thinking": 78,
+      "read_cached": 0,
+      "read_fresh": 1573,
+      "read_input_tokens": 1573,
+      "read_output_tokens": 173,
+      "write_seconds": 41.41625229199417,
+      "write_thinking": 115,
+      "write_cached": 455,
+      "write_fresh": 610,
+      "write_input_tokens": 1065,
+      "write_output_tokens": 387,
+      "final_seconds": 12.262059333006619,
+      "final_thinking": 0,
+      "final_cached": 1452,
+      "final_fresh": 42,
+      "final_input_tokens": 1494,
+      "final_output_tokens": 219
+    },
+    {
+      "arm": "subs1",
+      "case": "ledger",
+      "wall_seconds": 105.14663879200816,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 964,
+      "output_tokens": 688,
+      "thinking_tokens": 164,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects, per exact key, the event with the greatest revision (last event wins on ties), emits winning puts as `{key, revision, value}`, emits winning deletes as `{key, revision}` only when `config[\"include_deleted\"]` is true, sorts both lists by key using normal Python string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+      "read_seconds": 48.98736495900084,
+      "read_thinking": 35,
+      "read_cached": 0,
+      "read_fresh": 1591,
+      "read_input_tokens": 1591,
+      "read_output_tokens": 131,
+      "write_seconds": 47.5444287089922,
+      "write_thinking": 128,
+      "write_cached": 473,
+      "write_fresh": 735,
+      "write_input_tokens": 1208,
+      "write_output_tokens": 434,
+      "final_seconds": 8.612579125008779,
+      "final_thinking": 1,
+      "final_cached": 1642,
+      "final_fresh": 43,
+      "final_input_tokens": 1685,
+      "final_output_tokens": 123
+    },
+    {
+      "arm": "subs1",
+      "case": "lru",
+      "wall_seconds": 106.70979983301368,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 709,
+      "output_tokens": 657,
+      "thinking_tokens": 189,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/lru/solution.py`.\n\nIt uses an ordered dict as the LRU cache: hits move a key to most-recently-used, misses insert at MRU and evict the least-recently-used key when capacity is exceeded, appending evicted keys in order. Non-positive capacity yields all misses with empty cache/evictions and zero hits. Inputs are not mutated.",
+      "read_seconds": 54.6617224579968,
+      "read_thinking": 61,
+      "read_cached": 0,
+      "read_fresh": 1573,
+      "read_input_tokens": 1573,
+      "read_output_tokens": 156,
+      "write_seconds": 44.08189525001217,
+      "write_thinking": 128,
+      "write_cached": 455,
+      "write_fresh": 610,
+      "write_input_tokens": 1065,
+      "write_output_tokens": 390,
+      "final_seconds": 7.963219457975356,
+      "final_thinking": 0,
+      "final_cached": 1455,
+      "final_fresh": 42,
+      "final_input_tokens": 1497,
+      "final_output_tokens": 111
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "wall_seconds": 113.40748499997426,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 1159,
+      "output_tokens": 755,
+      "thinking_tokens": 205,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the winning event per exact key by highest revision, breaking ties by the last payload occurrence, emits winning puts in `live`, emits winning deletes in `deleted` only when `include_deleted` is true, sorts both lists by key using normal Python string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+      "read_seconds": 52.12291295899195,
+      "read_thinking": 76,
+      "read_cached": 0,
+      "read_fresh": 1591,
+      "read_input_tokens": 1591,
+      "read_output_tokens": 172,
+      "write_seconds": 52.733705999999074,
+      "write_thinking": 128,
+      "write_cached": 473,
+      "write_fresh": 735,
+      "write_input_tokens": 1208,
+      "write_output_tokens": 471,
+      "final_seconds": 8.54833058299846,
+      "final_thinking": 1,
+      "final_cached": 1679,
+      "final_fresh": 43,
+      "final_input_tokens": 1722,
+      "final_output_tokens": 112
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "wall_seconds": 102.01455666698166,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 806,
+      "output_tokens": 630,
+      "thinking_tokens": 168,
+      "final_text": "Implemented `solve(payload, config)` in `solution.py`. It tracks hits/misses with an LRU list, moves hit keys to most-recently-used, evicts the least-recently-used key on overflow (recording evictions in order), and returns `{cache, hits, misses, evictions}`. Non-positive capacity yields all misses with empty cache/evictions and zero hits. Inputs are not mutated.",
+      "read_seconds": 49.712741082999855,
+      "read_thinking": 40,
+      "read_cached": 0,
+      "read_fresh": 1573,
+      "read_input_tokens": 1573,
+      "read_output_tokens": 135,
+      "write_seconds": 44.65477941700374,
+      "write_thinking": 128,
+      "write_cached": 455,
+      "write_fresh": 610,
+      "write_input_tokens": 1065,
+      "write_output_tokens": 404,
+      "final_seconds": 7.6436820840172,
+      "final_thinking": 0,
+      "final_cached": 1469,
+      "final_fresh": 42,
+      "final_input_tokens": 1511,
+      "final_output_tokens": 91
+    }
+  ],
+  "by_arm": {
+    "native-before": {
+      "task_wall_seconds": 209.96489079200546,
+      "launcher_wall_seconds": 214.38055845801136,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1385,
+      "thinking_tokens": 373,
+      "role_seconds": {
+        "READ": 98.13782295802957,
+        "WRITE": 96.11537883398705,
+        "FINAL": 15.706480875000125
+      },
+      "role_thinking": {
+        "READ": 116,
+        "WRITE": 256,
+        "FINAL": 1
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 928,
+        "FINAL": 3148
+      },
+      "role_fresh": {
+        "READ": 3164,
+        "WRITE": 1345,
+        "FINAL": 85
+      },
+      "forced": 3,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 170
+    },
+    "subs3": {
+      "task_wall_seconds": 201.84589766600402,
+      "launcher_wall_seconds": 206.63353720799205,
+      "raw_driver_passes": 1,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1482,
+      "thinking_tokens": 350,
+      "role_seconds": {
+        "READ": 95.8775350410142,
+        "WRITE": 87.02816054198775,
+        "FINAL": 18.93498845800059
+      },
+      "role_thinking": {
+        "READ": 106,
+        "WRITE": 243,
+        "FINAL": 1
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 928,
+        "FINAL": 3131
+      },
+      "role_fresh": {
+        "READ": 3164,
+        "WRITE": 1345,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 170
+    },
+    "subs1": {
+      "task_wall_seconds": 211.85643862502184,
+      "launcher_wall_seconds": 216.56939291697927,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1345,
+      "thinking_tokens": 353,
+      "role_seconds": {
+        "READ": 103.64908741699765,
+        "WRITE": 91.62632395900437,
+        "FINAL": 16.575798582984135
+      },
+      "role_thinking": {
+        "READ": 96,
+        "WRITE": 256,
+        "FINAL": 1
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 928,
+        "FINAL": 3097
+      },
+      "role_fresh": {
+        "READ": 3164,
+        "WRITE": 1345,
+        "FINAL": 85
+      },
+      "forced": 3,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 170
+    },
+    "native-after": {
+      "task_wall_seconds": 215.42204166695592,
+      "launcher_wall_seconds": 219.8670917910058,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1385,
+      "thinking_tokens": 373,
+      "role_seconds": {
+        "READ": 101.8356540419918,
+        "WRITE": 97.38848541700281,
+        "FINAL": 16.19201266701566
+      },
+      "role_thinking": {
+        "READ": 116,
+        "WRITE": 256,
+        "FINAL": 1
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 928,
+        "FINAL": 3148
+      },
+      "role_fresh": {
+        "READ": 3164,
+        "WRITE": 1345,
+        "FINAL": 85
+      },
+      "forced": 3,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 170
+    }
+  },
+  "controls_vs_native_before": {
+    "native-before": {
+      "ledger": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "lru": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "subs3": {
+      "ledger": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          true,
+          false
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "lru": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "subs1": {
+      "ledger": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "lru": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "native-after": {
+      "ledger": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "lru": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    }
+  },
+  "grafts": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "slot": 1,
+      "reused": 473,
+      "fresh": 299,
+      "graft_fresh": 235,
+      "source": "1118:1591",
+      "destination": "436:909",
+      "latest_user_start": 1006,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 22.197555,
+      "raw_log": "1004 16:06:19 ds4-server: suffix APPROXIMATE slot=1 reused=473 fresh=299 graft_fresh=235 source=1118:1591 destination=436:909 latest_user_start=1006 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 22197.555 ms"
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "slot": 1,
+      "reused": 455,
+      "fresh": 174,
+      "graft_fresh": 110,
+      "source": "1118:1573",
+      "destination": "436:891",
+      "latest_user_start": 987,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 20.074246,
+      "raw_log": "1004 16:08:06 ds4-server: suffix APPROXIMATE slot=1 reused=455 fresh=174 graft_fresh=110 source=1118:1573 destination=436:891 latest_user_start=987 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 20074.246 ms"
+    },
+    {
+      "arm": "subs3",
+      "case": "ledger",
+      "slot": 1,
+      "reused": 473,
+      "fresh": 299,
+      "graft_fresh": 235,
+      "source": "1118:1591",
+      "destination": "436:909",
+      "latest_user_start": 1006,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 22.459495999999998,
+      "raw_log": "1004 16:10:39 ds4-server: suffix APPROXIMATE slot=1 reused=473 fresh=299 graft_fresh=235 source=1118:1591 destination=436:909 latest_user_start=1006 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 22459.496 ms"
+    },
+    {
+      "arm": "subs3",
+      "case": "lru",
+      "slot": 1,
+      "reused": 455,
+      "fresh": 174,
+      "graft_fresh": 110,
+      "source": "1118:1573",
+      "destination": "436:891",
+      "latest_user_start": 987,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 20.392409,
+      "raw_log": "1004 16:12:21 ds4-server: suffix APPROXIMATE slot=1 reused=455 fresh=174 graft_fresh=110 source=1118:1573 destination=436:891 latest_user_start=987 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 20392.409 ms"
+    },
+    {
+      "arm": "subs1",
+      "case": "ledger",
+      "slot": 1,
+      "reused": 473,
+      "fresh": 299,
+      "graft_fresh": 235,
+      "source": "1118:1591",
+      "destination": "436:909",
+      "latest_user_start": 1006,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 23.079215,
+      "raw_log": "1004 16:15:57 ds4-server: suffix APPROXIMATE slot=1 reused=473 fresh=299 graft_fresh=235 source=1118:1591 destination=436:909 latest_user_start=1006 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 23079.215 ms"
+    },
+    {
+      "arm": "subs1",
+      "case": "lru",
+      "slot": 1,
+      "reused": 455,
+      "fresh": 174,
+      "graft_fresh": 110,
+      "source": "1118:1573",
+      "destination": "436:891",
+      "latest_user_start": 987,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.102783,
+      "raw_log": "1004 16:17:49 ds4-server: suffix APPROXIMATE slot=1 reused=455 fresh=174 graft_fresh=110 source=1118:1573 destination=436:891 latest_user_start=987 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21102.783 ms"
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "slot": 1,
+      "reused": 473,
+      "fresh": 299,
+      "graft_fresh": 235,
+      "source": "1118:1591",
+      "destination": "436:909",
+      "latest_user_start": 1006,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 24.201823,
+      "raw_log": "1004 16:19:49 ds4-server: suffix APPROXIMATE slot=1 reused=473 fresh=299 graft_fresh=235 source=1118:1591 destination=436:909 latest_user_start=1006 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 24201.823 ms"
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "slot": 1,
+      "reused": 455,
+      "fresh": 174,
+      "graft_fresh": 110,
+      "source": "1118:1573",
+      "destination": "436:891",
+      "latest_user_start": 987,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 19.416266,
+      "raw_log": "1004 16:21:38 ds4-server: suffix APPROXIMATE slot=1 reused=455 fresh=174 graft_fresh=110 source=1118:1573 destination=436:891 latest_user_start=987 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 19416.266 ms"
+    }
+  ],
+  "visible_continuations": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1679,
+      "prompt": 1722,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 16:06:47 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1679 prompt=1722 approximate=1"
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1469,
+      "prompt": 1511,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 16:08:31 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1469 prompt=1511 approximate=1"
+    },
+    {
+      "arm": "subs3",
+      "case": "ledger",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1679,
+      "prompt": 1722,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 16:11:02 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1679 prompt=1722 approximate=1"
+    },
+    {
+      "arm": "subs3",
+      "case": "lru",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1452,
+      "prompt": 1494,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 16:12:42 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1452 prompt=1494 approximate=1"
+    },
+    {
+      "arm": "subs1",
+      "case": "ledger",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1642,
+      "prompt": 1685,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 16:16:22 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1642 prompt=1685 approximate=1"
+    },
+    {
+      "arm": "subs1",
+      "case": "lru",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1455,
+      "prompt": 1497,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 16:18:12 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1455 prompt=1497 approximate=1"
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1679,
+      "prompt": 1722,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 16:20:18 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1679 prompt=1722 approximate=1"
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1469,
+      "prompt": 1511,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 16:22:03 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1469 prompt=1511 approximate=1"
+    }
+  ],
+  "reasoning_summaries": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "context": "0..1591:1591",
+      "budget": 0,
+      "thinking": 76,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "context": "473..1208:735",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "context": "1679..1722:43",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "context": "0..1573:1573",
+      "budget": 0,
+      "thinking": 40,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "context": "455..1065:610",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "context": "1469..1511:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3",
+      "case": "ledger",
+      "context": "0..1591:1591",
+      "budget": 0,
+      "thinking": 28,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3",
+      "case": "ledger",
+      "context": "473..1208:735",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3",
+      "case": "ledger",
+      "context": "1679..1722:43",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3",
+      "case": "lru",
+      "context": "0..1573:1573",
+      "budget": 0,
+      "thinking": 78,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3",
+      "case": "lru",
+      "context": "455..1065:610",
+      "budget": 128,
+      "thinking": 115,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3",
+      "case": "lru",
+      "context": "1452..1494:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "ledger",
+      "context": "0..1591:1591",
+      "budget": 0,
+      "thinking": 35,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "ledger",
+      "context": "473..1208:735",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "ledger",
+      "context": "1642..1685:43",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "lru",
+      "context": "0..1573:1573",
+      "budget": 0,
+      "thinking": 61,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "lru",
+      "context": "455..1065:610",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "lru",
+      "context": "1455..1497:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "context": "0..1591:1591",
+      "budget": 0,
+      "thinking": 76,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "context": "473..1208:735",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "context": "1679..1722:43",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "context": "0..1573:1573",
+      "budget": 0,
+      "thinking": 40,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "context": "455..1065:610",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "context": "1469..1511:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    }
+  ],
+  "cache_shutdowns": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "hot_bytes": 0,
+      "ssd_bytes": 109125137,
+      "metadata_bytes": 74991,
+      "endpoints": 7,
+      "chunks": 392,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "hot_bytes": 0,
+      "ssd_bytes": 214519509,
+      "metadata_bytes": 151878,
+      "endpoints": 14,
+      "chunks": 797,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs3",
+      "case": "ledger",
+      "hot_bytes": 0,
+      "ssd_bytes": 109125137,
+      "metadata_bytes": 74990,
+      "endpoints": 7,
+      "chunks": 392,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs3",
+      "case": "lru",
+      "hot_bytes": 0,
+      "ssd_bytes": 214391208,
+      "metadata_bytes": 150757,
+      "endpoints": 14,
+      "chunks": 790,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "ledger",
+      "hot_bytes": 0,
+      "ssd_bytes": 108872799,
+      "metadata_bytes": 75790,
+      "endpoints": 7,
+      "chunks": 397,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "lru",
+      "hot_bytes": 0,
+      "ssd_bytes": 214168456,
+      "metadata_bytes": 152517,
+      "endpoints": 14,
+      "chunks": 801,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "hot_bytes": 0,
+      "ssd_bytes": 109125137,
+      "metadata_bytes": 74990,
+      "endpoints": 7,
+      "chunks": 392,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "hot_bytes": 0,
+      "ssd_bytes": 214519509,
+      "metadata_bytes": 151877,
+      "endpoints": 14,
+      "chunks": 797,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    }
+  ],
+  "guard_summaries": [
+    {
+      "arm": "native-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 207,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.01763671875,
+      "swap_last_gb": 0.01763671875,
+      "peak_wired_compressor_gb": 86.06141662597656,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "subs3",
+      "status": "complete",
+      "child_returncode": 3,
+      "samples": 200,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.01763671875,
+      "swap_last_gb": 0.01763671875,
+      "peak_wired_compressor_gb": 86.30146789550781,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "subs1",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 210,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.01763671875,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 86.34678649902344,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "native-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 213,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.018125,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 86.59197998046875,
+      "max_consecutive_bad": 0
+    }
+  ],
+  "route_summaries": [
+    {
+      "arm": "subs3",
+      "case": "ledger",
+      "layers": 28120,
+      "substitutions": 12384,
+      "native_misses": 17320,
+      "skipped_loads": 12384,
+      "skipped_bytes": 123261419520,
+      "mean_mass": 0.12006707,
+      "mean_score_gap": 0.10692094,
+      "mean_affinity_ratio": 0.89451821,
+      "mean_rank": 7.658,
+      "full_snapshots": 10332,
+      "double_layers": 1719,
+      "planned_substitutions": 12384,
+      "drops": 0,
+      "triple_layers": 167,
+      "raw_log": "ds4: resident-route layers=28120 substitutions=12384 native_misses=17320 skipped_loads=12384 skipped_bytes=123261419520 mean_mass=0.12006707 mean_score_gap=0.10692094 mean_affinity_ratio=0.89451821 mean_rank=7.658 full_snapshots=10332 double_layers=1719 planned_substitutions=12384 drops=0 triple_layers=167",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=12384"
+      ]
+    },
+    {
+      "arm": "subs3",
+      "case": "lru",
+      "layers": 31160,
+      "substitutions": 14296,
+      "native_misses": 20080,
+      "skipped_loads": 14296,
+      "skipped_bytes": 142292090880,
+      "mean_mass": 0.11982494,
+      "mean_score_gap": 0.11256049,
+      "mean_affinity_ratio": 0.89128029,
+      "mean_rank": 7.681,
+      "full_snapshots": 11843,
+      "double_layers": 2117,
+      "planned_substitutions": 14296,
+      "drops": 0,
+      "triple_layers": 169,
+      "raw_log": "ds4: resident-route layers=31160 substitutions=14296 native_misses=20080 skipped_loads=14296 skipped_bytes=142292090880 mean_mass=0.11982494 mean_score_gap=0.11256049 mean_affinity_ratio=0.89128029 mean_rank=7.681 full_snapshots=11843 double_layers=2117 planned_substitutions=14296 drops=0 triple_layers=169",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=14296"
+      ]
+    },
+    {
+      "arm": "subs1",
+      "case": "ledger",
+      "layers": 27520,
+      "substitutions": 3897,
+      "native_misses": 13913,
+      "skipped_loads": 3897,
+      "skipped_bytes": 38787932160,
+      "mean_mass": 0.11210576,
+      "mean_score_gap": 0.05812312,
+      "mean_affinity_ratio": 0.953264,
+      "mean_rank": 7.311,
+      "full_snapshots": 3899,
+      "double_layers": 0,
+      "planned_substitutions": 3897,
+      "drops": 0,
+      "triple_layers": 0,
+      "raw_log": "ds4: resident-route layers=27520 substitutions=3897 native_misses=13913 skipped_loads=3897 skipped_bytes=38787932160 mean_mass=0.11210576 mean_score_gap=0.05812312 mean_affinity_ratio=0.95326400 mean_rank=7.311 full_snapshots=3899 double_layers=0 planned_substitutions=3897 drops=0 triple_layers=0",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=3897"
+      ]
+    },
+    {
+      "arm": "subs1",
+      "case": "lru",
+      "layers": 26280,
+      "substitutions": 3943,
+      "native_misses": 13855,
+      "skipped_loads": 3943,
+      "skipped_bytes": 39245783040,
+      "mean_mass": 0.11129483,
+      "mean_score_gap": 0.05765297,
+      "mean_affinity_ratio": 0.9541268,
+      "mean_rank": 7.311,
+      "full_snapshots": 3943,
+      "double_layers": 0,
+      "planned_substitutions": 3943,
+      "drops": 0,
+      "triple_layers": 0,
+      "raw_log": "ds4: resident-route layers=26280 substitutions=3943 native_misses=13855 skipped_loads=3943 skipped_bytes=39245783040 mean_mass=0.11129483 mean_score_gap=0.05765297 mean_affinity_ratio=0.95412680 mean_rank=7.311 full_snapshots=3943 double_layers=0 planned_substitutions=3943 drops=0 triple_layers=0",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=3943"
+      ]
+    }
+  ],
+  "route_totals": {
+    "native-before": {
+      "layers": 0,
+      "substitutions": 0,
+      "native_misses": 0,
+      "skipped_loads": 0,
+      "skipped_bytes": 0,
+      "double_layers": 0,
+      "triple_layers": 0,
+      "drops": 0
+    },
+    "subs3": {
+      "layers": 59280,
+      "substitutions": 26680,
+      "native_misses": 37400,
+      "skipped_loads": 26680,
+      "skipped_bytes": 265553510400,
+      "double_layers": 3836,
+      "triple_layers": 336,
+      "drops": 0
+    },
+    "subs1": {
+      "layers": 53800,
+      "substitutions": 7840,
+      "native_misses": 27768,
+      "skipped_loads": 7840,
+      "skipped_bytes": 78033715200,
+      "double_layers": 0,
+      "triple_layers": 0,
+      "drops": 0
+    },
+    "native-after": {
+      "layers": 0,
+      "substitutions": 0,
+      "native_misses": 0,
+      "skipped_loads": 0,
+      "skipped_bytes": 0,
+      "double_layers": 0,
+      "triple_layers": 0,
+      "drops": 0
+    }
+  },
+  "source_profiles": {
+    "native-before": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/coding28-cache-before",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0"
+      },
+      "route_profile_same_after_restart": true
+    },
+    "subs3": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/coding28-cache-subs3",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true
+    },
+    "subs1": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/coding28-cache-subs1",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true
+    },
+    "native-after": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/coding28-cache-after",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0"
+      },
+      "route_profile_same_after_restart": true
+    }
+  },
+  "native_mean": {
+    "task_wall_seconds": 212.6934662294807,
+    "launcher_wall_seconds": 217.12382512450858
+  },
+  "change_vs_native_mean_percent": {
+    "native-before": {
+      "task_wall_seconds": -1.2828675397726141,
+      "launcher_wall_seconds": -1.2634572299581204
+    },
+    "subs3": {
+      "task_wall_seconds": -5.100094871636973,
+      "launcher_wall_seconds": -4.83147711242694
+    },
+    "subs1": {
+      "task_wall_seconds": -0.3935370556027107,
+      "launcher_wall_seconds": -0.25535300292880425
+    },
+    "native-after": {
+      "task_wall_seconds": 1.282867539772603,
+      "launcher_wall_seconds": 1.2634572299581093
+    }
+  },
+  "native_after_vs_before_percent": {
+    "task_wall_seconds": 2.599077805039518,
+    "launcher_wall_seconds": 2.559249482536008
+  },
+  "scope": "Raw iter-scope grader failure retained; saved first attempts regraded with only builtin iter restored, without model retries or gold/code changes. Fixed full-input suffix64; resident off vsmax3 plus post-observation max1. Own-policy source warming. Generated READ histories diverge. No private identity, paired NLL, additive gain or pending-source restart claim.",
+  "change_vs_faster_native_percent": {
+    "native-before": {
+      "task_wall_seconds": 0.0,
+      "launcher_wall_seconds": 0.0
+    },
+    "subs3": {
+      "task_wall_seconds": -3.8668336860395613,
+      "launcher_wall_seconds": -3.6136771476582563
+    },
+    "subs1": {
+      "task_wall_seconds": 0.9008876797836463,
+      "launcher_wall_seconds": 1.0210041781361534
+    },
+    "native-after": {
+      "task_wall_seconds": 2.599077805039518,
+      "launcher_wall_seconds": 2.559249482536008
+    }
+  },
+  "case_change_vs_native_mean_percent": {
+    "native-before": {
+      "ledger": -1.9684821051286772,
+      "lru": -0.5314254895153359
+    },
+    "subs3": {
+      "ledger": -10.932532111159732,
+      "lru": 1.292328537553189
+    },
+    "subs1": {
+      "ledger": -5.459122419655571,
+      "lru": 5.158407205879345
+    },
+    "native-after": {
+      "ledger": 1.9684821051286772,
+      "lru": 0.531425489515347
+    }
+  }
+}

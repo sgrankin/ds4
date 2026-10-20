@@ -1,0 +1,170 @@
+{
+  "status": "FIRST_A_STRUCTURAL_SHARED_ARCHIVE_COMPLETE_WITH_ROOT_ATTESTATION",
+  "exclude_only_actual_top_index": "archive-index.json",
+  "archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1",
+  "A_manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "release_sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd",
+  "snapshot_sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064",
+  "files": {
+    "README.md": {
+      "bytes": 1153,
+      "sha256": "9a0240103f698e44d8086b9d174bcf9604a13f0c7d029e43a01af5ed607e2e93",
+      "mode": 420
+    },
+    "attestation-extension-provenance.json": {
+      "bytes": 609,
+      "sha256": "7038b952275c7515d91767b35191634a8eb2c5ea346b997bafa5cb9ebbf57265",
+      "mode": 420
+    },
+    "original-shared-preservation.json": {
+      "bytes": 1461,
+      "sha256": "b0c4d07191eb8d51c409c877980f92e34cfe20397cdfa15e75afd87ede6e4a2a",
+      "mode": 420
+    },
+    "pre-attestation-archive-index.json": {
+      "bytes": 5517,
+      "sha256": "b7d7617b242e3e76c0ac47bf3999f232b1c93c0843fd1fc3f96fff3cbe402de7",
+      "mode": 420
+    },
+    "prepared-assets-verified.json": {
+      "bytes": 44499,
+      "sha256": "63e7739b52257c6edba64061d8e9bb58d61ae3ec268291bd6f21b5b72d3957bf",
+      "mode": 420
+    },
+    "procedure.json": {
+      "bytes": 4835,
+      "sha256": "b621660cf82e426c3b5057a6207ce96ce0268307ccc3119c03c25659198d6f2a",
+      "mode": 420
+    },
+    "reference/A-manifest.json": {
+      "bytes": 28567,
+      "sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+      "mode": 420
+    },
+    "reference/A-prepared-command.json": {
+      "bytes": 1084,
+      "sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5",
+      "mode": 420
+    },
+    "reference/binding.json": {
+      "bytes": 2268,
+      "sha256": "bc0a6189aaf90ef0fb75a1731983abeb0de0f233ae5a9f5ceaa2c7c19278cdfe",
+      "mode": 420
+    },
+    "reference/candidate-00.json": {
+      "bytes": 81,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c",
+      "mode": 420
+    },
+    "reference/choice.bin": {
+      "bytes": 16,
+      "sha256": "3d30dd104d057b865bdc80df7c53dfec31513f4673d1d8b0c14078ce87ee30d3",
+      "mode": 420
+    },
+    "reference/commit.json": {
+      "bytes": 238,
+      "sha256": "92b641bf7eff5a6586ca1b8d5eb610fc57c2615c376c94f24537d79738529438",
+      "mode": 420
+    },
+    "reference/preedit-logits.bin": {
+      "bytes": 517136,
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e",
+      "mode": 420
+    },
+    "reference/selected-after.txt": {
+      "bytes": 14609,
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a",
+      "mode": 420
+    },
+    "reference/selected-before.txt": {
+      "bytes": 14653,
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133",
+      "mode": 420
+    },
+    "reference/selected-edited.ids": {
+      "bytes": 13560,
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb",
+      "mode": 420
+    },
+    "reference/selected-old.ids": {
+      "bytes": 13604,
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f",
+      "mode": 420
+    },
+    "reference/selection.json": {
+      "bytes": 453,
+      "sha256": "0526d4cd3da60e3fde4a0596b6590464e9a1dfe107beabb77e3855e1485838ea",
+      "mode": 420
+    },
+    "root-archive-verification-first-refusal-v1.json": {
+      "bytes": 499,
+      "sha256": "fade0557b5187afe16c52c9514371031413ffa40eb59b84507fbb21cdc11c142",
+      "mode": 420
+    },
+    "root-release-proof.json": {
+      "bytes": 379,
+      "sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd",
+      "mode": 420
+    },
+    "root-shared-archive-proof.json": {
+      "bytes": 1243,
+      "sha256": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c",
+      "mode": 420
+    },
+    "run_agent_suffix_pair_external.py": {
+      "bytes": 45121,
+      "sha256": "2b72efaa8ab4a81d22769ad04a02316defc234e977a40be4fb19dbeb31443153",
+      "mode": 420
+    },
+    "shared-final/.owner.json": {
+      "bytes": 153,
+      "sha256": "8a07a476e0fd2d4b40b8eed00b5c8f7a3ac13af1489af290bffef076667d749e",
+      "mode": 420
+    },
+    "shared-final/live-context.txt": {
+      "bytes": 15751,
+      "sha256": "cade13f041fa79197de609ea3201d2d45180d99de1199db72af7a423c80e3916",
+      "mode": 420
+    },
+    "shared-final/project/access.py": {
+      "bytes": 50,
+      "sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26",
+      "mode": 420
+    },
+    "shared-final/project/run_grader.py": {
+      "bytes": 1732,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+      "mode": 493
+    },
+    "shared-snapshot.json": {
+      "bytes": 1306,
+      "sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064",
+      "mode": 420
+    },
+    "structural-verification.json": {
+      "bytes": 3049,
+      "sha256": "2192c373b3b692d9341ef6d544455a7855b65d3bb496a77a0eca4435f6f3d3f0",
+      "mode": 420
+    },
+    "task.json": {
+      "bytes": 24752,
+      "sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c",
+      "mode": 420
+    }
+  },
+  "protected_external_files": {
+    "reference/preedit-state.bin": {
+      "protected_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/preedit-state.bin",
+      "original_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/preedit-state.bin",
+      "jj_copy_expected": false,
+      "bytes": 30138084,
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "mode": 420
+    }
+  },
+  "all_physical_files_except_index_accounted": true,
+  "ROOT_archival_attestation_not_yet_present": false,
+  "previous_immutable_index_sha256": "b7d7617b242e3e76c0ac47bf3999f232b1c93c0843fd1fc3f96fff3cbe402de7",
+  "previous_immutable_freeze": "0215418b41d52dd869709cca8859b2cd6faa9c80",
+  "ROOT_archive_proof_sha256": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c"
+}

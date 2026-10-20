@@ -1,0 +1,18 @@
+{
+  "parent_argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run_ragged_native_tail_qualification.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/plan.json",
+    "--plan-sha256",
+    "ad7cf0569eff888aae3ba3871a08b1e7c74a55b780a7e7eb9652552a408c1c1e",
+    "--root-granted"
+  ],
+  "framework_samefile": true,
+  "lock_held": true,
+  "inherited_cwd": "/Volumes/Models/ds4"
+}

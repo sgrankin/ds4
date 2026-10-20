@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "manifest_sha256": "fb1b0a842ba418be6aa04802ee445e589ea05fd5b7b542df46f1a5675e1b2a10",
+  "command_sha256": "edbb32f6ce3af3fb221b0a2319236240f22180a14e92a43caa21b8a0c4494c41",
+  "verified_assets": 38,
+  "source_or_inference_revision": "41c9e357e0562d614fef9dd3fa0e3d109a05f581",
+  "model_opened": false,
+  "model_metadata_touched": false,
+  "guard_called": false,
+  "run_directory_absent": true,
+  "sole_model_grant": false
+}

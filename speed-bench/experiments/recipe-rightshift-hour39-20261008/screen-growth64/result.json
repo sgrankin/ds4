@@ -1,0 +1,25 @@
+{
+  "returncode": 0,
+  "grades": {
+    "fresh": {
+      "returncode": 0,
+      "grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null
+      }
+    },
+    "reuse": {
+      "returncode": 0,
+      "grade": {
+        "correct": true,
+        "tests": 161,
+        "passed": 161,
+        "failed": 0,
+        "first_failure": null
+      }
+    }
+  }
+}

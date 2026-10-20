@@ -1,0 +1,8 @@
+{
+  "cpu-preflight-proof.json": "dd6f7079887898860b37f2c62d11ed05f7b86b79db516b3dd7439577555ba88b",
+  "manifest.json": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+  "prepare_resident_native_weights_study.py": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+  "prepared-command.json": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+  "test_resident_native_weights_study.py": "a2973266c8a43d6f10ae8ca57c8810197cfe567b1603c617982f7439a3047cde",
+  "tests.log": "ab0cb6bb0266a844c4dce6a837090ee83c01e754e718c00413b51677f52e9692"
+}

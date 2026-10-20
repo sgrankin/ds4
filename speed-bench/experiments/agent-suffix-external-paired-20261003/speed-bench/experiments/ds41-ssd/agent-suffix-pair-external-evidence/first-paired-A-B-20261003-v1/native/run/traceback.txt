@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/run_agent_suffix_pair_external.py", line 296, in drive
+    if b'PAIR_ACTUAL_ROUND ' in block and (private/'rounds.jsonl').exists():validate_rounds(rounds(private/'rounds.jsonl'))
+                                                                            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/run_agent_suffix_pair_external.py", line 162, in validate_rounds
+    if r['at_limit']:raise ControlFailure('First observed generation-limit round retained; stop/cap cause is not inferred')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ControlFailure: First observed generation-limit round retained; stop/cap cause is not inferred

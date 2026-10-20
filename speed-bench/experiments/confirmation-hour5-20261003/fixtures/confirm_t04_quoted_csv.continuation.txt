@@ -1,0 +1,2 @@
+{"names":["green, tea","coffee"],"total_quantity":6}
+The comma within the quoted first name is part of that field, not a column separator. The data rows therefore contain the names green, tea and coffee, with quantities four and two. Their sum is six. The header is not a data row and does not contribute a name or quantity.

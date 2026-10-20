@@ -1,0 +1,1743 @@
+{
+  "archive_command_returncode": 0,
+  "directories": {
+    "speed-bench/ideas/evidence/math16-archive-launch-20261003-v1": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/gates": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/__pycache__": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/pressure": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/source": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure": 493,
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static": 493
+  },
+  "excluded_only_top_selfmanifest": "speed-bench/ideas/evidence/math16-archive-launch-20261003-v1/manifest.json",
+  "files": {
+    "speed-bench/ideas/evidence/math16-archive-launch-20261003-v1/README.md": {
+      "bytes": 2162,
+      "mode": 420,
+      "sha256": "3d5cd8bc5a114b5be48e918b811d6581367f84e44f3f72ef1d4ed7e6dbc95aeb"
+    },
+    "speed-bench/ideas/evidence/math16-archive-launch-20261003-v1/command-result.json": {
+      "bytes": 1889,
+      "mode": 420,
+      "sha256": "5e0fdb112286fd4df08ab249fc29dcf578f010c3ee3fbba65459efa55325ea41"
+    },
+    "speed-bench/ideas/evidence/math16-archive-launch-20261003-v1/command.log": {
+      "bytes": 66,
+      "mode": 420,
+      "sha256": "ae227808b9c7ff11b8b75dbd15cc7cd96865a563b4a0d72f96f9d8a4a7d3a036"
+    },
+    "speed-bench/ideas/evidence/math16-archive-launch-20261003-v1/independent-archive-review.json": {
+      "bytes": 1654,
+      "mode": 420,
+      "sha256": "b914d36a4b66a93cfbdec6b9dd96963ccc95baf98b5074ab203add281f27ca0a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/archive-observations.json": {
+      "bytes": 859,
+      "mode": 420,
+      "sha256": "941d1819f3dfcf89cc660c72e3c33f9b6a995d9468d1733af5a75b353877c661"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/external-payload-references.json": {
+      "bytes": 1523,
+      "mode": 420,
+      "sha256": "242a9840b577e98e56448ed2823bde8977014f8cad705716407f9048134d9640"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/gates/independent-audit-source.py": {
+      "bytes": 11774,
+      "mode": 420,
+      "sha256": "8a6a1947792743a12c86f81ea467325d5832e5d853ccb026923e7bb4f6d04a8f"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/gates/runtime100-authority.json": {
+      "bytes": 9865,
+      "mode": 420,
+      "sha256": "2f4c1ee85cd8bf6c411366f7907c406de12d7e18aa2a4af2efc28de462538360"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/manifest.json": {
+      "bytes": 197257,
+      "mode": 420,
+      "sha256": "d94265779dc9098e1b845e0b1645392881c250f664387fb25e1bb24ecaeb5f45"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/BANANA_no_adjacent_A.prompt.ids": {
+      "bytes": 303,
+      "mode": 420,
+      "sha256": "7bb9f2bd4a8d98b1350cf14468750124b1a78db480025c8e6db79eaff85877ff"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/BANANA_no_adjacent_A.tokens.jsonl": {
+      "bytes": 60045,
+      "mode": 420,
+      "sha256": "25b8832c5bb3c323e5e7ea31eb66bb4cf9cf59c7cec4bfb11f5d70f77d7a1c33"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/BANANA_no_adjacent_A.txt": {
+      "bytes": 802,
+      "mode": 420,
+      "sha256": "07fa4dcc0c8a5f0de3ef0d143da8df44840e47621cdcc0aaaba855b4ec4dadb5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/balls9_four_bins_max4.prompt.ids": {
+      "bytes": 328,
+      "mode": 420,
+      "sha256": "dcc180a6b5cba0ef0c61ff9c542bfea5dda130b785b5ceb717948d2e3a7f35dd"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/balls9_four_bins_max4.tokens.jsonl": {
+      "bytes": 50879,
+      "mode": 420,
+      "sha256": "a9bd7dadc00cd0f2c1ffb9fc5b2bbe5220b6c1997ac1ee80692a91e04b229f90"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/balls9_four_bins_max4.txt": {
+      "bytes": 638,
+      "mode": 420,
+      "sha256": "39e9f0dfff18cc08529d266e26ffb708b8e166f9eec08976f2eef42afd1fee37"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/bounded10x8_avoid5x4.prompt.ids": {
+      "bytes": 331,
+      "mode": 420,
+      "sha256": "21d3b3c76267814c99bd9f32248dc9a5bf9e8468388dac5716903e3a92f08e7a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/bounded10x8_avoid5x4.tokens.jsonl": {
+      "bytes": 479338,
+      "mode": 420,
+      "sha256": "12621bf0b750af092db3b511d211d979434806794c41904de54fee430b48e9fe"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/bounded10x8_avoid5x4.txt": {
+      "bytes": 6000,
+      "mode": 420,
+      "sha256": "260fc2f88a2b2db4b206d67697e7f9606b12e4db9b2291eb61c7f9c3f73d1d31"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/circular14_five.prompt.ids": {
+      "bytes": 357,
+      "mode": 420,
+      "sha256": "2ef4dac639fdc38b3f821c5f0c180e1e3859844cd691b27f05e2687d97b3dfe2"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/circular14_five.tokens.jsonl": {
+      "bytes": 94427,
+      "mode": 420,
+      "sha256": "dadf761d1595af03073904ada0c46888cab793c621153508cbee0de4691d4dc3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/circular14_five.txt": {
+      "bytes": 1446,
+      "mode": 420,
+      "sha256": "e322f0c4003e2c36209de07176e7854fd541fac27bf294c869e4773aaae6cc68"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/composition18_five_max6.prompt.ids": {
+      "bytes": 272,
+      "mode": 420,
+      "sha256": "2599023c7ebc4d6fcf14876dae6b097bcd58a438f1ddff6f738390e8b8b73781"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/composition18_five_max6.tokens.jsonl": {
+      "bytes": 84792,
+      "mode": 420,
+      "sha256": "b029a1e8a5ff1af4befc613ed16a7a9521dc7a15a5badb0ea1366ddd2c6ef565"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/composition18_five_max6.txt": {
+      "bytes": 978,
+      "mode": 420,
+      "sha256": "6b933624bca372fac59340250da831b384971714d6cdc3385b8258ebd56c8ef5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/cycle9_three_colors.prompt.ids": {
+      "bytes": 368,
+      "mode": 420,
+      "sha256": "7d23903c235308ae30d06454bfae01b03b5cbdcb702b946f4ec5856a73443ae4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/cycle9_three_colors.tokens.jsonl": {
+      "bytes": 19240,
+      "mode": 420,
+      "sha256": "d5438ba8b0d221f9af3ddff28b931c33591f77cf14dc22d6540e9cf32a20b195"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/cycle9_three_colors.txt": {
+      "bytes": 229,
+      "mode": 420,
+      "sha256": "505783b399f6613d7ca6c32938d0b0294dc9b350052a270a640b0d57ea3f8220"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/deranged8_first_two_odd.prompt.ids": {
+      "bytes": 347,
+      "mode": 420,
+      "sha256": "ef5dd03a82fbf3a3628fec219f0c8e94b0093442097973e7b9a6b3d1aa9da5de"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/deranged8_first_two_odd.tokens.jsonl": {
+      "bytes": 439881,
+      "mode": 420,
+      "sha256": "b89086656825208ff0ab16a6e02626d5af885ee45b50ffa2b38b490e8e308be5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/deranged8_first_two_odd.txt": {
+      "bytes": 5596,
+      "mode": 420,
+      "sha256": "d5f7278837ede1df8952e7e49ba9c834f7d9ae9fc617d7c2d9b45f506fbd5c11"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/digits8_sum12_no_equal_neighbors.prompt.ids": {
+      "bytes": 361,
+      "mode": 420,
+      "sha256": "5bafbc99aff6343581c715bda9a541065c8c21b0c22b9a31d52558a2a44d2823"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/digits8_sum12_no_equal_neighbors.tokens.jsonl": {
+      "bytes": 250617,
+      "mode": 420,
+      "sha256": "53abe82cbe50d8d5ce26913602676135081ba361ff6b58f247d61edaa7ec039a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/digits8_sum12_no_equal_neighbors.txt": {
+      "bytes": 2582,
+      "mode": 420,
+      "sha256": "0880ce79023bad9e401190f3f2e703ff4b1cdd4d85887afb271fa643729369e1"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/dyck7_three_interior_returns.prompt.ids": {
+      "bytes": 361,
+      "mode": 420,
+      "sha256": "37281fdea043754acc193e47fcffff6836b5877ae5e2cf4ad432733bf65e52e7"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/dyck7_three_interior_returns.tokens.jsonl": {
+      "bytes": 252533,
+      "mode": 420,
+      "sha256": "884c2b202f71d749043f538b4acf1fbe87f6b7a800efad95e5e6f7e0a3b5ae20"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/dyck7_three_interior_returns.txt": {
+      "bytes": 3436,
+      "mode": 420,
+      "sha256": "bc8db9871a443f39daef804d89f44f6302f2d6e50799b2bedc2ad3b8d3178b2d"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/ladder2x5_three_colors.prompt.ids": {
+      "bytes": 345,
+      "mode": 420,
+      "sha256": "9ad3b4aff420de273e6e4253a367567c6bfc88faef0ad9654dbcf5a21599ff52"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/ladder2x5_three_colors.tokens.jsonl": {
+      "bytes": 207768,
+      "mode": 420,
+      "sha256": "9e5bfdafe63383f733df32c69c9c10241e34b64a49e6335b72d1a8c97a2ef2b1"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/ladder2x5_three_colors.txt": {
+      "bytes": 2548,
+      "mode": 420,
+      "sha256": "0366f4489348b975f22fd84ba53b17153da94f11d22bc6e9248763816d401fdb"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/linear12_four_gap2.prompt.ids": {
+      "bytes": 330,
+      "mode": 420,
+      "sha256": "fa73040525ed682f2d3c6888fffa686cb2975b01dade044dbdd4aaa2fb8f8cd0"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/linear12_four_gap2.tokens.jsonl": {
+      "bytes": 55589,
+      "mode": 420,
+      "sha256": "76cb5b60ce796ef6777705a6d7c9d593401c89fd64d2d8c9ad0d3bcc02116c8b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/linear12_four_gap2.txt": {
+      "bytes": 718,
+      "mode": 420,
+      "sha256": "9299848ef0f752e7a33c9e1c0222adf840298d167757f66452d359651ee7b2bc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/permutations9_two_forbidden.prompt.ids": {
+      "bytes": 336,
+      "mode": 420,
+      "sha256": "3399c75e9dad21a62edecc1dc0616c258f81ea23676d51b96273686dfc9b03bc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/permutations9_two_forbidden.tokens.jsonl": {
+      "bytes": 500813,
+      "mode": 420,
+      "sha256": "995aa78757f299ab59b10daab101f0895f83e3126ca44996e749bd851eabe537"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/permutations9_two_forbidden.txt": {
+      "bytes": 5758,
+      "mode": 420,
+      "sha256": "f089aec079b329fc1b62274f01d6537a415b3ea8bb941421a21b93300304847b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/results.jsonl": {
+      "bytes": 29491,
+      "mode": 420,
+      "sha256": "34ccc1129720d55f9863b139e89bc765077b99ee99182aa22477c416d2470cf8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/subset15_seven_mod5.prompt.ids": {
+      "bytes": 308,
+      "mode": 420,
+      "sha256": "558d3397d547e6387252ac771144f92de37e9195c7867a8b380192d09bc12d2d"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/subset15_seven_mod5.tokens.jsonl": {
+      "bytes": 502614,
+      "mode": 420,
+      "sha256": "02358b3068f9ad948de119996a753c39f8ace558c1f22c9603cca356c662210c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/subset15_seven_mod5.txt": {
+      "bytes": 5098,
+      "mode": 420,
+      "sha256": "400aa256e91b997444ef0ada6b2e9280cda137c814517083c7f036f6644949a4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/subset16_six_nonconsecutive_threeodd.prompt.ids": {
+      "bytes": 284,
+      "mode": 420,
+      "sha256": "433b01820c720f1d360b88118f469a3423b5cfae6d929884d42a43747e05a899"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/subset16_six_nonconsecutive_threeodd.tokens.jsonl": {
+      "bytes": 505437,
+      "mode": 420,
+      "sha256": "7fd973f45a47d0926d4a69a151530e14a202586aaa5dfa001089efbdfd67f2d8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/subset16_six_nonconsecutive_threeodd.txt": {
+      "bytes": 6324,
+      "mode": 420,
+      "sha256": "910ba97ff590561a8dae06c9c6a2417f87bebc7c994c5795c10f0dff30003a2e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/tiles2x8_domino_square.prompt.ids": {
+      "bytes": 386,
+      "mode": 420,
+      "sha256": "0905d2053256a7378cf6506c30291b6b25eb1a0feab5f909b1bd517844b58154"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/tiles2x8_domino_square.tokens.jsonl": {
+      "bytes": 192404,
+      "mode": 420,
+      "sha256": "89c02681211a49ec86fa2199a5f8a70fd740fdfddf339d7482bb994156227f00"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/tiles2x8_domino_square.txt": {
+      "bytes": 2699,
+      "mode": 420,
+      "sha256": "4d64d10b1499acbb1f2756b2305c1090745093664ccd3056e6f43543c7c55ab8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/words_A3B4C3_noAB.prompt.ids": {
+      "bytes": 319,
+      "mode": 420,
+      "sha256": "0dbd34dcfd4bbf68386c15b97ec3ce0894b091554254e65f4c0ad88929be8aab"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/words_A3B4C3_noAB.tokens.jsonl": {
+      "bytes": 506512,
+      "mode": 420,
+      "sha256": "65192bc0874df0c411dff97de397fe745240bb5f319a73626f81530da72a61c2"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/budget1024/words_A3B4C3_noAB.txt": {
+      "bytes": 6722,
+      "mode": 420,
+      "sha256": "0fe3514389739e914718a10a3bcc02d7506765304241203d3b55980b454baa2b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/BANANA_no_adjacent_A.prompt.ids": {
+      "bytes": 303,
+      "mode": 420,
+      "sha256": "7bb9f2bd4a8d98b1350cf14468750124b1a78db480025c8e6db79eaff85877ff"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/BANANA_no_adjacent_A.tokens.jsonl": {
+      "bytes": 60045,
+      "mode": 420,
+      "sha256": "25b8832c5bb3c323e5e7ea31eb66bb4cf9cf59c7cec4bfb11f5d70f77d7a1c33"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/BANANA_no_adjacent_A.txt": {
+      "bytes": 802,
+      "mode": 420,
+      "sha256": "07fa4dcc0c8a5f0de3ef0d143da8df44840e47621cdcc0aaaba855b4ec4dadb5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/balls9_four_bins_max4.prompt.ids": {
+      "bytes": 328,
+      "mode": 420,
+      "sha256": "dcc180a6b5cba0ef0c61ff9c542bfea5dda130b785b5ceb717948d2e3a7f35dd"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/balls9_four_bins_max4.tokens.jsonl": {
+      "bytes": 50879,
+      "mode": 420,
+      "sha256": "a9bd7dadc00cd0f2c1ffb9fc5b2bbe5220b6c1997ac1ee80692a91e04b229f90"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/balls9_four_bins_max4.txt": {
+      "bytes": 638,
+      "mode": 420,
+      "sha256": "39e9f0dfff18cc08529d266e26ffb708b8e166f9eec08976f2eef42afd1fee37"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/bounded10x8_avoid5x4.prompt.ids": {
+      "bytes": 331,
+      "mode": 420,
+      "sha256": "21d3b3c76267814c99bd9f32248dc9a5bf9e8468388dac5716903e3a92f08e7a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/bounded10x8_avoid5x4.tokens.jsonl": {
+      "bytes": 504513,
+      "mode": 420,
+      "sha256": "ad6a75be1183fdbbafdc0b74917e760ff03b298872e2939c3eb990e0d69b2290"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/bounded10x8_avoid5x4.txt": {
+      "bytes": 6363,
+      "mode": 420,
+      "sha256": "997444b2e92ccd645598420a79993c35ed0e27068c27cb50af04473d6952ea3e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/circular14_five.prompt.ids": {
+      "bytes": 357,
+      "mode": 420,
+      "sha256": "2ef4dac639fdc38b3f821c5f0c180e1e3859844cd691b27f05e2687d97b3dfe2"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/circular14_five.tokens.jsonl": {
+      "bytes": 94427,
+      "mode": 420,
+      "sha256": "dadf761d1595af03073904ada0c46888cab793c621153508cbee0de4691d4dc3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/circular14_five.txt": {
+      "bytes": 1446,
+      "mode": 420,
+      "sha256": "e322f0c4003e2c36209de07176e7854fd541fac27bf294c869e4773aaae6cc68"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/composition18_five_max6.prompt.ids": {
+      "bytes": 272,
+      "mode": 420,
+      "sha256": "2599023c7ebc4d6fcf14876dae6b097bcd58a438f1ddff6f738390e8b8b73781"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/composition18_five_max6.tokens.jsonl": {
+      "bytes": 84792,
+      "mode": 420,
+      "sha256": "b029a1e8a5ff1af4befc613ed16a7a9521dc7a15a5badb0ea1366ddd2c6ef565"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/composition18_five_max6.txt": {
+      "bytes": 978,
+      "mode": 420,
+      "sha256": "6b933624bca372fac59340250da831b384971714d6cdc3385b8258ebd56c8ef5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/cycle9_three_colors.prompt.ids": {
+      "bytes": 368,
+      "mode": 420,
+      "sha256": "7d23903c235308ae30d06454bfae01b03b5cbdcb702b946f4ec5856a73443ae4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/cycle9_three_colors.tokens.jsonl": {
+      "bytes": 19240,
+      "mode": 420,
+      "sha256": "d5438ba8b0d221f9af3ddff28b931c33591f77cf14dc22d6540e9cf32a20b195"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/cycle9_three_colors.txt": {
+      "bytes": 229,
+      "mode": 420,
+      "sha256": "505783b399f6613d7ca6c32938d0b0294dc9b350052a270a640b0d57ea3f8220"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/deranged8_first_two_odd.prompt.ids": {
+      "bytes": 347,
+      "mode": 420,
+      "sha256": "ef5dd03a82fbf3a3628fec219f0c8e94b0093442097973e7b9a6b3d1aa9da5de"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/deranged8_first_two_odd.tokens.jsonl": {
+      "bytes": 504479,
+      "mode": 420,
+      "sha256": "c73559177d7545fcfe040aaaac78761e77c8e081fe07dbf79ec3244570bbeff0"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/deranged8_first_two_odd.txt": {
+      "bytes": 6367,
+      "mode": 420,
+      "sha256": "3150bd0129f64f68e06a1341e50e2cee602c7a99e68ec89baac4e42c8b55808e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/digits8_sum12_no_equal_neighbors.prompt.ids": {
+      "bytes": 361,
+      "mode": 420,
+      "sha256": "5bafbc99aff6343581c715bda9a541065c8c21b0c22b9a31d52558a2a44d2823"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/digits8_sum12_no_equal_neighbors.tokens.jsonl": {
+      "bytes": 500086,
+      "mode": 420,
+      "sha256": "232776aab6af8a912a2cf8d21ddd088ff433d72908900a0890507b8648f19ead"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/digits8_sum12_no_equal_neighbors.txt": {
+      "bytes": 4434,
+      "mode": 420,
+      "sha256": "4036c21629ab0d866d91a2e1965a3f388386c3904552764a18890745865bc6d0"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/dyck7_three_interior_returns.prompt.ids": {
+      "bytes": 361,
+      "mode": 420,
+      "sha256": "37281fdea043754acc193e47fcffff6836b5877ae5e2cf4ad432733bf65e52e7"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/dyck7_three_interior_returns.tokens.jsonl": {
+      "bytes": 339318,
+      "mode": 420,
+      "sha256": "9c6c40af8f807a51446dbda5bb1a660953847ef2f6c96425ffaad83a88bcaf90"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/dyck7_three_interior_returns.txt": {
+      "bytes": 4310,
+      "mode": 420,
+      "sha256": "4be223a5e46d89a7e7186f9f9135effdb5d966d68e66496723db91012500fbf3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/ladder2x5_three_colors.prompt.ids": {
+      "bytes": 345,
+      "mode": 420,
+      "sha256": "9ad3b4aff420de273e6e4253a367567c6bfc88faef0ad9654dbcf5a21599ff52"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/ladder2x5_three_colors.tokens.jsonl": {
+      "bytes": 207768,
+      "mode": 420,
+      "sha256": "9e5bfdafe63383f733df32c69c9c10241e34b64a49e6335b72d1a8c97a2ef2b1"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/ladder2x5_three_colors.txt": {
+      "bytes": 2548,
+      "mode": 420,
+      "sha256": "0366f4489348b975f22fd84ba53b17153da94f11d22bc6e9248763816d401fdb"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/linear12_four_gap2.prompt.ids": {
+      "bytes": 330,
+      "mode": 420,
+      "sha256": "fa73040525ed682f2d3c6888fffa686cb2975b01dade044dbdd4aaa2fb8f8cd0"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/linear12_four_gap2.tokens.jsonl": {
+      "bytes": 55589,
+      "mode": 420,
+      "sha256": "76cb5b60ce796ef6777705a6d7c9d593401c89fd64d2d8c9ad0d3bcc02116c8b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/linear12_four_gap2.txt": {
+      "bytes": 718,
+      "mode": 420,
+      "sha256": "9299848ef0f752e7a33c9e1c0222adf840298d167757f66452d359651ee7b2bc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/permutations9_two_forbidden.prompt.ids": {
+      "bytes": 336,
+      "mode": 420,
+      "sha256": "3399c75e9dad21a62edecc1dc0616c258f81ea23676d51b96273686dfc9b03bc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/permutations9_two_forbidden.tokens.jsonl": {
+      "bytes": 503205,
+      "mode": 420,
+      "sha256": "95edd99a5daff44878086955930d643d0c28bed0bf1e314aef2f02cfd6877f20"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/permutations9_two_forbidden.txt": {
+      "bytes": 5736,
+      "mode": 420,
+      "sha256": "6074495ca7dfe62abbf530185ce0d2897077dfd51161c87636d8e623980d2c51"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/results.jsonl": {
+      "bytes": 18604,
+      "mode": 420,
+      "sha256": "f52349345bcaf72e2fc085eda1401f86e195af90456201a530ba53c29c3400bf"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/subset15_seven_mod5.prompt.ids": {
+      "bytes": 308,
+      "mode": 420,
+      "sha256": "558d3397d547e6387252ac771144f92de37e9195c7867a8b380192d09bc12d2d"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/subset15_seven_mod5.tokens.jsonl": {
+      "bytes": 501993,
+      "mode": 420,
+      "sha256": "3f115342d5951e84689723fcebf6e9b4f2e7a4b013a1cafa4fab3fbc5b7c269e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/subset15_seven_mod5.txt": {
+      "bytes": 5238,
+      "mode": 420,
+      "sha256": "6c7543353e36a6eb40ed3f514ece59b0fc48fb1412fc091c1a7dcee4dd7de379"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/subset16_six_nonconsecutive_threeodd.prompt.ids": {
+      "bytes": 284,
+      "mode": 420,
+      "sha256": "433b01820c720f1d360b88118f469a3423b5cfae6d929884d42a43747e05a899"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/subset16_six_nonconsecutive_threeodd.tokens.jsonl": {
+      "bytes": 503851,
+      "mode": 420,
+      "sha256": "3fd0b44b17d0f726eac205c23b73fc2659bd1eaf2514873ddde18341f2716ae9"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/subset16_six_nonconsecutive_threeodd.txt": {
+      "bytes": 6097,
+      "mode": 420,
+      "sha256": "75b58043cbfb4458942c60810b16724273a0f697d7345ebe55e5523ebad14922"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/tiles2x8_domino_square.prompt.ids": {
+      "bytes": 386,
+      "mode": 420,
+      "sha256": "0905d2053256a7378cf6506c30291b6b25eb1a0feab5f909b1bd517844b58154"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/tiles2x8_domino_square.tokens.jsonl": {
+      "bytes": 192404,
+      "mode": 420,
+      "sha256": "89c02681211a49ec86fa2199a5f8a70fd740fdfddf339d7482bb994156227f00"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/tiles2x8_domino_square.txt": {
+      "bytes": 2699,
+      "mode": 420,
+      "sha256": "4d64d10b1499acbb1f2756b2305c1090745093664ccd3056e6f43543c7c55ab8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/words_A3B4C3_noAB.prompt.ids": {
+      "bytes": 319,
+      "mode": 420,
+      "sha256": "0dbd34dcfd4bbf68386c15b97ec3ce0894b091554254e65f4c0ad88929be8aab"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/words_A3B4C3_noAB.tokens.jsonl": {
+      "bytes": 507511,
+      "mode": 420,
+      "sha256": "d560a0bbd114b784a651e8e361214ccf83864b2bc6b2031f4a6e4f214def7b96"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-after/words_A3B4C3_noAB.txt": {
+      "bytes": 7603,
+      "mode": 420,
+      "sha256": "ca60e2e82e359d7315e8fd680ac66b3423dc39caffbeddad04fa27db520a27a1"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/BANANA_no_adjacent_A.prompt.ids": {
+      "bytes": 303,
+      "mode": 420,
+      "sha256": "7bb9f2bd4a8d98b1350cf14468750124b1a78db480025c8e6db79eaff85877ff"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/BANANA_no_adjacent_A.tokens.jsonl": {
+      "bytes": 60045,
+      "mode": 420,
+      "sha256": "25b8832c5bb3c323e5e7ea31eb66bb4cf9cf59c7cec4bfb11f5d70f77d7a1c33"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/BANANA_no_adjacent_A.txt": {
+      "bytes": 802,
+      "mode": 420,
+      "sha256": "07fa4dcc0c8a5f0de3ef0d143da8df44840e47621cdcc0aaaba855b4ec4dadb5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/balls9_four_bins_max4.prompt.ids": {
+      "bytes": 328,
+      "mode": 420,
+      "sha256": "dcc180a6b5cba0ef0c61ff9c542bfea5dda130b785b5ceb717948d2e3a7f35dd"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/balls9_four_bins_max4.tokens.jsonl": {
+      "bytes": 50879,
+      "mode": 420,
+      "sha256": "a9bd7dadc00cd0f2c1ffb9fc5b2bbe5220b6c1997ac1ee80692a91e04b229f90"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/balls9_four_bins_max4.txt": {
+      "bytes": 638,
+      "mode": 420,
+      "sha256": "39e9f0dfff18cc08529d266e26ffb708b8e166f9eec08976f2eef42afd1fee37"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/bounded10x8_avoid5x4.prompt.ids": {
+      "bytes": 331,
+      "mode": 420,
+      "sha256": "21d3b3c76267814c99bd9f32248dc9a5bf9e8468388dac5716903e3a92f08e7a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/bounded10x8_avoid5x4.tokens.jsonl": {
+      "bytes": 504513,
+      "mode": 420,
+      "sha256": "ad6a75be1183fdbbafdc0b74917e760ff03b298872e2939c3eb990e0d69b2290"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/bounded10x8_avoid5x4.txt": {
+      "bytes": 6363,
+      "mode": 420,
+      "sha256": "997444b2e92ccd645598420a79993c35ed0e27068c27cb50af04473d6952ea3e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/circular14_five.prompt.ids": {
+      "bytes": 357,
+      "mode": 420,
+      "sha256": "2ef4dac639fdc38b3f821c5f0c180e1e3859844cd691b27f05e2687d97b3dfe2"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/circular14_five.tokens.jsonl": {
+      "bytes": 94427,
+      "mode": 420,
+      "sha256": "dadf761d1595af03073904ada0c46888cab793c621153508cbee0de4691d4dc3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/circular14_five.txt": {
+      "bytes": 1446,
+      "mode": 420,
+      "sha256": "e322f0c4003e2c36209de07176e7854fd541fac27bf294c869e4773aaae6cc68"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/composition18_five_max6.prompt.ids": {
+      "bytes": 272,
+      "mode": 420,
+      "sha256": "2599023c7ebc4d6fcf14876dae6b097bcd58a438f1ddff6f738390e8b8b73781"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/composition18_five_max6.tokens.jsonl": {
+      "bytes": 84792,
+      "mode": 420,
+      "sha256": "b029a1e8a5ff1af4befc613ed16a7a9521dc7a15a5badb0ea1366ddd2c6ef565"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/composition18_five_max6.txt": {
+      "bytes": 978,
+      "mode": 420,
+      "sha256": "6b933624bca372fac59340250da831b384971714d6cdc3385b8258ebd56c8ef5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/cycle9_three_colors.prompt.ids": {
+      "bytes": 368,
+      "mode": 420,
+      "sha256": "7d23903c235308ae30d06454bfae01b03b5cbdcb702b946f4ec5856a73443ae4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/cycle9_three_colors.tokens.jsonl": {
+      "bytes": 19240,
+      "mode": 420,
+      "sha256": "d5438ba8b0d221f9af3ddff28b931c33591f77cf14dc22d6540e9cf32a20b195"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/cycle9_three_colors.txt": {
+      "bytes": 229,
+      "mode": 420,
+      "sha256": "505783b399f6613d7ca6c32938d0b0294dc9b350052a270a640b0d57ea3f8220"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/deranged8_first_two_odd.prompt.ids": {
+      "bytes": 347,
+      "mode": 420,
+      "sha256": "ef5dd03a82fbf3a3628fec219f0c8e94b0093442097973e7b9a6b3d1aa9da5de"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/deranged8_first_two_odd.tokens.jsonl": {
+      "bytes": 504479,
+      "mode": 420,
+      "sha256": "c73559177d7545fcfe040aaaac78761e77c8e081fe07dbf79ec3244570bbeff0"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/deranged8_first_two_odd.txt": {
+      "bytes": 6367,
+      "mode": 420,
+      "sha256": "3150bd0129f64f68e06a1341e50e2cee602c7a99e68ec89baac4e42c8b55808e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/digits8_sum12_no_equal_neighbors.prompt.ids": {
+      "bytes": 361,
+      "mode": 420,
+      "sha256": "5bafbc99aff6343581c715bda9a541065c8c21b0c22b9a31d52558a2a44d2823"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/digits8_sum12_no_equal_neighbors.tokens.jsonl": {
+      "bytes": 500086,
+      "mode": 420,
+      "sha256": "232776aab6af8a912a2cf8d21ddd088ff433d72908900a0890507b8648f19ead"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/digits8_sum12_no_equal_neighbors.txt": {
+      "bytes": 4434,
+      "mode": 420,
+      "sha256": "4036c21629ab0d866d91a2e1965a3f388386c3904552764a18890745865bc6d0"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/dyck7_three_interior_returns.prompt.ids": {
+      "bytes": 361,
+      "mode": 420,
+      "sha256": "37281fdea043754acc193e47fcffff6836b5877ae5e2cf4ad432733bf65e52e7"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/dyck7_three_interior_returns.tokens.jsonl": {
+      "bytes": 339318,
+      "mode": 420,
+      "sha256": "9c6c40af8f807a51446dbda5bb1a660953847ef2f6c96425ffaad83a88bcaf90"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/dyck7_three_interior_returns.txt": {
+      "bytes": 4310,
+      "mode": 420,
+      "sha256": "4be223a5e46d89a7e7186f9f9135effdb5d966d68e66496723db91012500fbf3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/ladder2x5_three_colors.prompt.ids": {
+      "bytes": 345,
+      "mode": 420,
+      "sha256": "9ad3b4aff420de273e6e4253a367567c6bfc88faef0ad9654dbcf5a21599ff52"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/ladder2x5_three_colors.tokens.jsonl": {
+      "bytes": 207768,
+      "mode": 420,
+      "sha256": "9e5bfdafe63383f733df32c69c9c10241e34b64a49e6335b72d1a8c97a2ef2b1"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/ladder2x5_three_colors.txt": {
+      "bytes": 2548,
+      "mode": 420,
+      "sha256": "0366f4489348b975f22fd84ba53b17153da94f11d22bc6e9248763816d401fdb"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/linear12_four_gap2.prompt.ids": {
+      "bytes": 330,
+      "mode": 420,
+      "sha256": "fa73040525ed682f2d3c6888fffa686cb2975b01dade044dbdd4aaa2fb8f8cd0"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/linear12_four_gap2.tokens.jsonl": {
+      "bytes": 55589,
+      "mode": 420,
+      "sha256": "76cb5b60ce796ef6777705a6d7c9d593401c89fd64d2d8c9ad0d3bcc02116c8b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/linear12_four_gap2.txt": {
+      "bytes": 718,
+      "mode": 420,
+      "sha256": "9299848ef0f752e7a33c9e1c0222adf840298d167757f66452d359651ee7b2bc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/permutations9_two_forbidden.prompt.ids": {
+      "bytes": 336,
+      "mode": 420,
+      "sha256": "3399c75e9dad21a62edecc1dc0616c258f81ea23676d51b96273686dfc9b03bc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/permutations9_two_forbidden.tokens.jsonl": {
+      "bytes": 503205,
+      "mode": 420,
+      "sha256": "95edd99a5daff44878086955930d643d0c28bed0bf1e314aef2f02cfd6877f20"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/permutations9_two_forbidden.txt": {
+      "bytes": 5736,
+      "mode": 420,
+      "sha256": "6074495ca7dfe62abbf530185ce0d2897077dfd51161c87636d8e623980d2c51"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/results.jsonl": {
+      "bytes": 18604,
+      "mode": 420,
+      "sha256": "a89f7d659b4209c320ff9f79e1efc80c1383ce113ac27a4dd35ac00f75a32ec8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/subset15_seven_mod5.prompt.ids": {
+      "bytes": 308,
+      "mode": 420,
+      "sha256": "558d3397d547e6387252ac771144f92de37e9195c7867a8b380192d09bc12d2d"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/subset15_seven_mod5.tokens.jsonl": {
+      "bytes": 501993,
+      "mode": 420,
+      "sha256": "3f115342d5951e84689723fcebf6e9b4f2e7a4b013a1cafa4fab3fbc5b7c269e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/subset15_seven_mod5.txt": {
+      "bytes": 5238,
+      "mode": 420,
+      "sha256": "6c7543353e36a6eb40ed3f514ece59b0fc48fb1412fc091c1a7dcee4dd7de379"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/subset16_six_nonconsecutive_threeodd.prompt.ids": {
+      "bytes": 284,
+      "mode": 420,
+      "sha256": "433b01820c720f1d360b88118f469a3423b5cfae6d929884d42a43747e05a899"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/subset16_six_nonconsecutive_threeodd.tokens.jsonl": {
+      "bytes": 503851,
+      "mode": 420,
+      "sha256": "3fd0b44b17d0f726eac205c23b73fc2659bd1eaf2514873ddde18341f2716ae9"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/subset16_six_nonconsecutive_threeodd.txt": {
+      "bytes": 6097,
+      "mode": 420,
+      "sha256": "75b58043cbfb4458942c60810b16724273a0f697d7345ebe55e5523ebad14922"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/tiles2x8_domino_square.prompt.ids": {
+      "bytes": 386,
+      "mode": 420,
+      "sha256": "0905d2053256a7378cf6506c30291b6b25eb1a0feab5f909b1bd517844b58154"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/tiles2x8_domino_square.tokens.jsonl": {
+      "bytes": 192404,
+      "mode": 420,
+      "sha256": "89c02681211a49ec86fa2199a5f8a70fd740fdfddf339d7482bb994156227f00"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/tiles2x8_domino_square.txt": {
+      "bytes": 2699,
+      "mode": 420,
+      "sha256": "4d64d10b1499acbb1f2756b2305c1090745093664ccd3056e6f43543c7c55ab8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/words_A3B4C3_noAB.prompt.ids": {
+      "bytes": 319,
+      "mode": 420,
+      "sha256": "0dbd34dcfd4bbf68386c15b97ec3ce0894b091554254e65f4c0ad88929be8aab"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/words_A3B4C3_noAB.tokens.jsonl": {
+      "bytes": 507511,
+      "mode": 420,
+      "sha256": "d560a0bbd114b784a651e8e361214ccf83864b2bc6b2031f4a6e4f214def7b96"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/native-before/words_A3B4C3_noAB.txt": {
+      "bytes": 7603,
+      "mode": 420,
+      "sha256": "ca60e2e82e359d7315e8fd680ac66b3423dc39caffbeddad04fa27db520a27a1"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/__pycache__/analyze_reasoning_budget_confirmation.cpython-314.pyc": {
+      "bytes": 39072,
+      "mode": 420,
+      "sha256": "952628561bc7ae51e7e9df5a5ce2eda05a25c0264a8a4b7c6a9e2d9c7516b4fb"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/__pycache__/reasoning_budget_signed64.cpython-314.pyc": {
+      "bytes": 19245,
+      "mode": 420,
+      "sha256": "97ccbc1df43673e6bc464122ba0b050c2388eaed317b8320873a40b3e2a633c5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/analyze_reasoning_budget_confirmation.py": {
+      "bytes": 23844,
+      "mode": 420,
+      "sha256": "55ec3271731b75ace8a466cec622eadb13c98cef4ed7df13088eef07634ee3b6"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/cpu-proof.json": {
+      "bytes": 1327,
+      "mode": 420,
+      "sha256": "520b83df758e074fe6cc2e12ce9c27a900b21dd004fa0cb17ae4a4809daf1fac"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/cpu-tests.log": {
+      "bytes": 1521,
+      "mode": 420,
+      "sha256": "831ac1838d7a55965ef8b0e51e6b6d0b9cc8085e387d63f8887c620d0191a1d6"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/fixture.json": {
+      "bytes": 4660,
+      "mode": 420,
+      "sha256": "f0eeb1effe60fb75af9572d6e81b7a102f1eb83cfe995a2e919109e7b2ed8703"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/argsort.metal": {
+      "bytes": 11174,
+      "mode": 420,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/bin.metal": {
+      "bytes": 6580,
+      "mode": 420,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/concat.metal": {
+      "bytes": 1932,
+      "mode": 420,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/cpy.metal": {
+      "bytes": 10154,
+      "mode": 420,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/deepseek4_vision.metal": {
+      "bytes": 7815,
+      "mode": 420,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/dense.metal": {
+      "bytes": 113439,
+      "mode": 420,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/dsv41.metal": {
+      "bytes": 12508,
+      "mode": 420,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/dsv4_hc.metal": {
+      "bytes": 63069,
+      "mode": 420,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/dsv4_kv.metal": {
+      "bytes": 22218,
+      "mode": 420,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/dsv4_misc.metal": {
+      "bytes": 282139,
+      "mode": 420,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/dsv4_rope.metal": {
+      "bytes": 35980,
+      "mode": 420,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/flash_attn.metal": {
+      "bytes": 61784,
+      "mode": 420,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/get_rows.metal": {
+      "bytes": 6976,
+      "mode": 420,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/glm53_bf16.metal": {
+      "bytes": 5466,
+      "mode": 420,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/glm53_kda.metal": {
+      "bytes": 13116,
+      "mode": 420,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/glm53_vision.metal": {
+      "bytes": 11295,
+      "mode": 420,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/glu.metal": {
+      "bytes": 2129,
+      "mode": 420,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/moe.metal": {
+      "bytes": 423032,
+      "mode": 420,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/norm.metal": {
+      "bytes": 14766,
+      "mode": 420,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/qwen4.metal": {
+      "bytes": 232464,
+      "mode": 420,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/qwen4_vision.metal": {
+      "bytes": 7402,
+      "mode": 420,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/repeat.metal": {
+      "bytes": 1640,
+      "mode": 420,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/set_rows.metal": {
+      "bytes": 1909,
+      "mode": 420,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/softmax.metal": {
+      "bytes": 7679,
+      "mode": 420,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/sum_rows.metal": {
+      "bytes": 2737,
+      "mode": 420,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/metal/unary.metal": {
+      "bytes": 10104,
+      "mode": 420,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/plan.json": {
+      "bytes": 42429,
+      "mode": 420,
+      "sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/prepared-command.json": {
+      "bytes": 967,
+      "mode": 420,
+      "sha256": "042bccda630cccc02df9dd8a6f8ce9f19efd35bc1d74e276718ebee9c82a42b5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/pressure/command.json": {
+      "bytes": 939,
+      "mode": 420,
+      "sha256": "0e4a34ceb49150219a1f6e29f967a8fb9161f84fc7b6609189aab2bef89566a4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/pressure/pressure.jsonl": {
+      "bytes": 715109,
+      "mode": 420,
+      "sha256": "b70f1fb21831aaf25e8cb1f7ce96e39795da57a1d8b7080c1db686c037495aeb"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/pressure/result.json": {
+      "bytes": 52,
+      "mode": 420,
+      "sha256": "b930e7a8282c48851750f8438ef0243df5697004738bb1efd66bc0da0d490c85"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/producer-analysis.json": {
+      "bytes": 38613,
+      "mode": 420,
+      "sha256": "c79c5d113189f552f4cbb4a15274dae1f245a1cbe9c1bf309935a19aa996325e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/reasoning_budget_signed64.py": {
+      "bytes": 9410,
+      "mode": 420,
+      "sha256": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/root-independent-audit-source-proof.json": {
+      "bytes": 563,
+      "mode": 420,
+      "sha256": "0806e7d040a86cf65de8d401566d56d289031e012bad3b2c2dffca0111c18ed6"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/root-independent-outcome-audit.json": {
+      "bytes": 1465,
+      "mode": 420,
+      "sha256": "9853844fba01c8260fcbe44facf4b1ad77f9eb787cc77477a59f3203d52a55b3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/root-launch-proof.json": {
+      "bytes": 1524,
+      "mode": 420,
+      "sha256": "7dfab3f14590cb7b9062ada10ed187ba1df7bf193e9fd1872fc2a59182c42706"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/root-release-proof.json": {
+      "bytes": 379,
+      "mode": 420,
+      "sha256": "d35de4e3bef0f0c678395509042087d93d6a98358744acbf0adec095d1d32f72"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/root-static-review.json": {
+      "bytes": 1112,
+      "mode": 420,
+      "sha256": "10d486c7baf9c7abb038daa7c5cf8a4e5bdb6c90131050dba46e221eb1a42dd4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/budget1024-command.json": {
+      "bytes": 5960,
+      "mode": 420,
+      "sha256": "8fc9b1e806751594a3c8591b49c348476babd89566626dc249f89094c77d48ea"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/budget1024-process.json": {
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "96ac66f04d65e35bdffa89c5d790b494df668b49e7f1618e4798e82d7ac31946"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/budget1024-started.json": {
+      "bytes": 18,
+      "mode": 420,
+      "sha256": "229706f4846730bc0d95d1c46b854b2c4a23d5c254c0876d51a1ce54fd1f21c7"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/budget1024-stderr.log": {
+      "bytes": 2952,
+      "mode": 420,
+      "sha256": "a6f03b4431a85652ad1de586f3c9eadf37b08d8cb94e76447b871dd964fc8f4b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/budget1024-stdout.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/budget1024-summary.json": {
+      "bytes": 8486,
+      "mode": 420,
+      "sha256": "e9cfaf4f0f37d2a3573bdefc6ece8092d397f760ed3a634a29b443f5f81ee4c5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/complete.json": {
+      "bytes": 285,
+      "mode": 420,
+      "sha256": "b2c2c07390aa50e25b646b8f900b8fb9dc578d5dff60fbd5a6f897db92604409"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/launch.json": {
+      "bytes": 143,
+      "mode": 420,
+      "sha256": "8a7f38bcaf865d7a9236093b16664cdfbe6526f3e800561a1f60dd04c4e322f3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/model-identity.json": {
+      "bytes": 129,
+      "mode": 420,
+      "sha256": "82085185f0dc8bc751624a954a11b4861533295f49a5e9a6d3824c54b82d982d"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-after-command.json": {
+      "bytes": 5959,
+      "mode": 420,
+      "sha256": "53b6b8d3bf6c0b2bfd63bd96ad66cdc2829776d9785e13d6b7976e9917d12588"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-after-process.json": {
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "96ac66f04d65e35bdffa89c5d790b494df668b49e7f1618e4798e82d7ac31946"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-after-started.json": {
+      "bytes": 19,
+      "mode": 420,
+      "sha256": "1956d7886e4e3535004c7cbaf10981e9fd63f46714452d37f80489e6361b5d16"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-after-stderr.log": {
+      "bytes": 2900,
+      "mode": 420,
+      "sha256": "361bfb84896da5c0fd8dffe7b8e21fc613cf8575f48434c664caeec66f42fdb4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-after-stdout.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-after-summary.json": {
+      "bytes": 8467,
+      "mode": 420,
+      "sha256": "ecf16ecfcaa214b45caa16e172a585a51774fc9bba0024e37650a4cbdabc349f"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-before-command.json": {
+      "bytes": 5960,
+      "mode": 420,
+      "sha256": "30f0e3d225ea01b6ca2adff3d99c7150b772dce3d8f1c5c6a03921a9cc2d17e4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-before-process.json": {
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "96ac66f04d65e35bdffa89c5d790b494df668b49e7f1618e4798e82d7ac31946"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-before-started.json": {
+      "bytes": 19,
+      "mode": 420,
+      "sha256": "9350022e58cb7465b826cc86346b5e91595ee3eff85a66e8c1a7291fc17d8399"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-before-stderr.log": {
+      "bytes": 2900,
+      "mode": 420,
+      "sha256": "361bfb84896da5c0fd8dffe7b8e21fc613cf8575f48434c664caeec66f42fdb4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-before-stdout.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/native-before-summary.json": {
+      "bytes": 8467,
+      "mode": 420,
+      "sha256": "ecf16ecfcaa214b45caa16e172a585a51774fc9bba0024e37650a4cbdabc349f"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run/parent-proof.json": {
+      "bytes": 1011,
+      "mode": 420,
+      "sha256": "ce64714f633fac21841ac6b65f9a6f0ecb634d82015aed333d6cd7a48a76a937"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/run_reasoning_budget_confirmation.py": {
+      "bytes": 25269,
+      "mode": 420,
+      "sha256": "ad4531a128767f902934d26fd2373fd1d08f88e6b3926e92a302109dba5a3d29"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/runner-tests.py": {
+      "bytes": 21959,
+      "mode": 420,
+      "sha256": "43be8eb9762bd8aa512f9600611000fe89be534a5c09d0d73bc1c1613373701d"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/source/native_effort_final_score.h": {
+      "bytes": 6246,
+      "mode": 420,
+      "sha256": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/source/overthink_diagnostics.h": {
+      "bytes": 2104,
+      "mode": 420,
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/source/reasoning_budget_confirmation_cases.h": {
+      "bytes": 4113,
+      "mode": 420,
+      "sha256": "1884857da9e1a9202c7fb938253f4585385d4a7693b2c8f3b4a4e6682cfc53ef"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/source/reasoning_budget_confirmation_probe.c": {
+      "bytes": 10480,
+      "mode": 420,
+      "sha256": "dd05bfa3967bc211e9533e4f3108aee2b4bec9b7f44da7bd63a9d6d5b277ea1a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/source/reasoning_budget_native_api.h": {
+      "bytes": 32935,
+      "mode": 420,
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/original/prepared/source/reasoning_budget_policy.h": {
+      "bytes": 1819,
+      "mode": 420,
+      "sha256": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/README.md": {
+      "bytes": 3289,
+      "mode": 420,
+      "sha256": "39e8d128d28828a62b29f7c729cb27cb0b0dd12a1ca45e102a6ba55c0d1f6e39"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/administrative-first-refusal.json": {
+      "bytes": 657,
+      "mode": 420,
+      "sha256": "438317300e0d01526bb0307070cdf99948d41a1bde987a3fe2960502c8dfdc0b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/archive.py": {
+      "bytes": 18733,
+      "mode": 420,
+      "sha256": "07de1fffdf6a8fecbd98e0868df9d7bd5b840be87ad8894e751956fa841c6c64"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/cpu-proof.json": {
+      "bytes": 1622,
+      "mode": 420,
+      "sha256": "e93e193f09a204963be69fe42830137dfa49c3c83eda42f057d979f65f738bbf"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/cpu-tests.log": {
+      "bytes": 1793,
+      "mode": 420,
+      "sha256": "5d1c91e59dad4c47135628b2afe8990e8ea4d2fc11ed144a4c9336bb634b82c2"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/execution-plan.json": {
+      "bytes": 2288,
+      "mode": 420,
+      "sha256": "265c7707458dd753ed2f9e7787fa6c4a883263d2ada5df4bb5eb6c84058393a6"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/source-authorities.json": {
+      "bytes": 44689,
+      "mode": 420,
+      "sha256": "2e3d2865bf8a8028164c931828c55c30a619222182fd121e59e834c8760c481e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/synthetic-fixture-index.json": {
+      "bytes": 1285028,
+      "mode": 420,
+      "sha256": "00a0224dfd9cb807a6daa99cec9ca6bc84d0d91012ce2eead8c36aba520b5d58"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/procedure/test_archive.py": {
+      "bytes": 15325,
+      "mode": 420,
+      "sha256": "6397cb4c37a674790a3b4e6bdd46ea7189ed003f04ce30a043430764948a268c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/000-SDKSettings.json": {
+      "bytes": 7948,
+      "mode": 420,
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/001-stdio.h": {
+      "bytes": 3069,
+      "mode": 420,
+      "sha256": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/002-libSystem.B.tbd": {
+      "bytes": 347931,
+      "mode": 420,
+      "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/003-SDKSettings.json": {
+      "bytes": 7948,
+      "mode": 420,
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/004-stdio.h": {
+      "bytes": 3069,
+      "mode": 420,
+      "sha256": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/005-libSystem.tbd": {
+      "bytes": 347931,
+      "mode": 420,
+      "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/008-ds4_distributed.o": {
+      "bytes": 427168,
+      "mode": 420,
+      "sha256": "3b09b4b252fd1b06894421b88bc62eeaca24869b839cc17cd22effde1d50dc1a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/009-ds4_engram.o": {
+      "bytes": 30120,
+      "mode": 420,
+      "sha256": "d94530e0a20a2c196ef24ea839175152dabbdb9ad8245626f01bd81a97f34a4b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/010-ds4_image.o": {
+      "bytes": 165728,
+      "mode": 420,
+      "sha256": "752eace0ab62636538b225d4c80011739354649ee395b6648924928079572528"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/011-ds4_layer_pack.o": {
+      "bytes": 11320,
+      "mode": 420,
+      "sha256": "174b07bfca784e04cb938ae3803e3b97696afcdb886ccd518117ffa3400135c8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/013-ds4_ssd.o": {
+      "bytes": 13800,
+      "mode": 420,
+      "sha256": "a1fbc20ad4102f4a6f126cde822f2995dd4421153c6256dace554ebca26c2b71"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/014-ds4_tp.o": {
+      "bytes": 207496,
+      "mode": 420,
+      "sha256": "d2f2f5ce0b8bfc7ebcfb0fd80f3eb4e434e89dc4518253cc43a7d253a0b2c2a1"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/015-math16-budget-confirmation-literal-proof-20261003-v2.json": {
+      "bytes": 1498843,
+      "mode": 420,
+      "sha256": "80af9c9f29118cc80506b566c5abd3a6fa98b13fe1d47960f4ea522923cc7fd3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/016-math16-budget-confirmation-literal-refusal-v1.json": {
+      "bytes": 561,
+      "mode": 420,
+      "sha256": "b9da7cfa8c22ecd75bf6105bb410e0ae1171cd7e31f818583325bf4e8563f080"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/017-analyze_reasoning_budget_confirmation.py": {
+      "bytes": 23844,
+      "mode": 420,
+      "sha256": "55ec3271731b75ace8a466cec622eadb13c98cef4ed7df13088eef07634ee3b6"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/018-cpu-proof.json": {
+      "bytes": 1327,
+      "mode": 420,
+      "sha256": "83e84d6bea03f9fd9d257e9451a1e1107b5b74a3815590f5f855580d233eb333"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/019-cpu-tests.log": {
+      "bytes": 1299,
+      "mode": 420,
+      "sha256": "91e93fdd6d6f0d72b50d08b40becb40a1f414a61e259dbeab073b3aeb954d8ca"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/020-fixture.json": {
+      "bytes": 4660,
+      "mode": 420,
+      "sha256": "f0eeb1effe60fb75af9572d6e81b7a102f1eb83cfe995a2e919109e7b2ed8703"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/021-argsort.metal": {
+      "bytes": 11174,
+      "mode": 420,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/022-bin.metal": {
+      "bytes": 6580,
+      "mode": 420,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/023-concat.metal": {
+      "bytes": 1932,
+      "mode": 420,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/024-cpy.metal": {
+      "bytes": 10154,
+      "mode": 420,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/025-deepseek4_vision.metal": {
+      "bytes": 7815,
+      "mode": 420,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/026-dense.metal": {
+      "bytes": 113439,
+      "mode": 420,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/027-dsv41.metal": {
+      "bytes": 12508,
+      "mode": 420,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/028-dsv4_hc.metal": {
+      "bytes": 63069,
+      "mode": 420,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/029-dsv4_kv.metal": {
+      "bytes": 22218,
+      "mode": 420,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/030-dsv4_misc.metal": {
+      "bytes": 282139,
+      "mode": 420,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/031-dsv4_rope.metal": {
+      "bytes": 35980,
+      "mode": 420,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/032-flash_attn.metal": {
+      "bytes": 61784,
+      "mode": 420,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/033-get_rows.metal": {
+      "bytes": 6976,
+      "mode": 420,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/034-glm53_bf16.metal": {
+      "bytes": 5466,
+      "mode": 420,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/035-glm53_kda.metal": {
+      "bytes": 13116,
+      "mode": 420,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/036-glm53_vision.metal": {
+      "bytes": 11295,
+      "mode": 420,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/037-glu.metal": {
+      "bytes": 2129,
+      "mode": 420,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/038-moe.metal": {
+      "bytes": 423032,
+      "mode": 420,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/039-norm.metal": {
+      "bytes": 14766,
+      "mode": 420,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/040-qwen4.metal": {
+      "bytes": 232464,
+      "mode": 420,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/041-qwen4_vision.metal": {
+      "bytes": 7402,
+      "mode": 420,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/042-repeat.metal": {
+      "bytes": 1640,
+      "mode": 420,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/043-set_rows.metal": {
+      "bytes": 1909,
+      "mode": 420,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/044-softmax.metal": {
+      "bytes": 7679,
+      "mode": 420,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/045-sum_rows.metal": {
+      "bytes": 2737,
+      "mode": 420,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/046-unary.metal": {
+      "bytes": 10104,
+      "mode": 420,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/047-preparation-first-failure.json": {
+      "bytes": 107,
+      "mode": 420,
+      "sha256": "f4759dce9ee1c25741fd5150fdc8ada9b040d701286670272e0047cc307549dc"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/048-reasoning_budget_signed64.py": {
+      "bytes": 9410,
+      "mode": 420,
+      "sha256": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/049-run_reasoning_budget_confirmation.py": {
+      "bytes": 24290,
+      "mode": 420,
+      "sha256": "08d0689008dd2e95e4bd505b2fb16ab839beef7b3c7891f12b1bd4ea9e860b98"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/050-runner-tests.py": {
+      "bytes": 17513,
+      "mode": 420,
+      "sha256": "771c9a149ac8e890afe916fd9924d9b0b90b44a22b22054d7b6521f4d04f28cd"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/051-native_effort_final_score.h": {
+      "bytes": 6246,
+      "mode": 420,
+      "sha256": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/052-overthink_diagnostics.h": {
+      "bytes": 2104,
+      "mode": 420,
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/053-reasoning_budget_confirmation_cases.h": {
+      "bytes": 4113,
+      "mode": 420,
+      "sha256": "1884857da9e1a9202c7fb938253f4585385d4a7693b2c8f3b4a4e6682cfc53ef"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/054-reasoning_budget_confirmation_probe.c": {
+      "bytes": 10480,
+      "mode": 420,
+      "sha256": "dd05bfa3967bc211e9533e4f3108aee2b4bec9b7f44da7bd63a9d6d5b277ea1a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/055-reasoning_budget_native_api.h": {
+      "bytes": 32935,
+      "mode": 420,
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/056-reasoning_budget_policy.h": {
+      "bytes": 1819,
+      "mode": 420,
+      "sha256": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/096-math16-budget-confirmation-readiness-20261003-v2.json": {
+      "bytes": 2066,
+      "mode": 420,
+      "sha256": "5c864803a1330c279488f7bc0f0d1200e813c61e4e866ce373ef7c0f7db4d537"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/097-ds4.h": {
+      "bytes": 35802,
+      "mode": 420,
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/098-ds4_gpu.h": {
+      "bytes": 152618,
+      "mode": 420,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/099-build-manifest.json": {
+      "bytes": 9912,
+      "mode": 420,
+      "sha256": "b67874d6642d3c68ea280fa4410fd27235eb654c0b9c3fd8c0b79a5dea072ccf"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/100-build-plan.json": {
+      "bytes": 10959,
+      "mode": 420,
+      "sha256": "f988bacfd6c2dffaf0cdf55bc39cbea53ceef41da7685949549672a7d947987c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/101-build-source.py": {
+      "bytes": 6870,
+      "mode": 420,
+      "sha256": "41cde67468589614d0e33481969611d371208c15e59a838147a64bdbb33f5e21"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/102-build-tests.py": {
+      "bytes": 2399,
+      "mode": 420,
+      "sha256": "b299b55f78227d710cfea8ddd4f19b46bff675046baad30ec0031ed0b88ddda8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/103-compile-result.json": {
+      "bytes": 1596,
+      "mode": 420,
+      "sha256": "6263e93892e2ad4d8a0114cf865e1453946a22c249211be7a6a58db9d1b75603"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/104-compile.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/105-cpu-proof.json": {
+      "bytes": 586,
+      "mode": 420,
+      "sha256": "be202b1c166d18ddc81171c71a4b25ab45909e25fc1b346088f168d8eae7a078"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/106-cpu-tests.log": {
+      "bytes": 348,
+      "mode": 420,
+      "sha256": "cbe3819600e10911a124a58de3e9fbc1d734c2ad4f1b452e9fb6d3c531818c58"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/108-Info.plist": {
+      "bytes": 664,
+      "mode": 420,
+      "sha256": "946312bf633bc3ee52a10589d3dab4fda736019c45650055381696d8684fb017"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/110-reasoning-budget-confirmation-probe.yml": {
+      "bytes": 273,
+      "mode": 420,
+      "sha256": "621b46cfe077f7d477ded26290733e0a18e46f4b084a6fa852bcb473a68dbe68"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/111-review-findings.json": {
+      "bytes": 587,
+      "mode": 420,
+      "sha256": "29465bd52afea7ddf6ac11035ecb28e373d6d43acc5c968a05d427e6abe8346e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/112-root-build-grant.json": {
+      "bytes": 2221,
+      "mode": 420,
+      "sha256": "8b12b61eaaaf936d702ec51640ae52c253a4dd1933e4b7ccfe57ee52ae76f230"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/113-root-preflight-refusal-v1.json": {
+      "bytes": 236,
+      "mode": 420,
+      "sha256": "41faccb0960d54b1b7df249b5945c348d62806e4d1df72c0edd78a0ed46ad2a8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/114-root-preflight-refusal-v2.json": {
+      "bytes": 308,
+      "mode": 420,
+      "sha256": "79bfea51871233983bc03ca0849c14706466726ea3e9f09c31a0eee3b781cb38"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/115-selftest-result.json": {
+      "bytes": 426,
+      "mode": 420,
+      "sha256": "20ae36d74f7f9277acffc0a69c0fa8f3c6151b55d4bdecd2650401675dcf797a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/116-selftest.log": {
+      "bytes": 105,
+      "mode": 420,
+      "sha256": "38f73849767c9339927c00fcf6ed7e183c01380887a860291f947eb791945a4c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/117-source-proof.json": {
+      "bytes": 1435,
+      "mode": 420,
+      "sha256": "365f066ce90f4242910c2166aac9136d11c348ccb31065adbbe66d6be112a5ff"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/118-build-plan.json": {
+      "bytes": 7722,
+      "mode": 420,
+      "sha256": "8e1cbd7f9b72e14767394bc2235380fd612d42ba37ae4de4890476cb9adf1cc5"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/119-cpu-proof.json": {
+      "bytes": 605,
+      "mode": 420,
+      "sha256": "2a37950447052abc232be2af035da83522bffd65432350b0352b53d608a84a6c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/120-fixture-source.py": {
+      "bytes": 16448,
+      "mode": 420,
+      "sha256": "c34e4f5902e547b3e4351a827c01199c388efbc77eb2260c373bf5866e304b46"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/121-fixture.json": {
+      "bytes": 4660,
+      "mode": 420,
+      "sha256": "f0eeb1effe60fb75af9572d6e81b7a102f1eb83cfe995a2e919109e7b2ed8703"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/122-gold-proof.json": {
+      "bytes": 1269,
+      "mode": 420,
+      "sha256": "f03be386f51017e58c947a492b75886a3c894b9ef5f4b489d15ab111b0894615"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/123-input-freeze.json": {
+      "bytes": 2938,
+      "mode": 420,
+      "sha256": "cce60cf7ff19c3ef8d76410c857d0b422c1874d1558c1339551923f3d1a66b83"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/124-reasoning_budget_confirmation_cases.h": {
+      "bytes": 4113,
+      "mode": 420,
+      "sha256": "1884857da9e1a9202c7fb938253f4585385d4a7693b2c8f3b4a4e6682cfc53ef"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/125-reasoning_budget_confirmation_probe.c": {
+      "bytes": 10480,
+      "mode": 420,
+      "sha256": "dd05bfa3967bc211e9533e4f3108aee2b4bec9b7f44da7bd63a9d6d5b277ea1a"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/126-native_effort_final_score.h": {
+      "bytes": 6246,
+      "mode": 420,
+      "sha256": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/127-overthink_diagnostics.h": {
+      "bytes": 2104,
+      "mode": 420,
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/128-reasoning_budget_cases.h": {
+      "bytes": 1295,
+      "mode": 420,
+      "sha256": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/129-reasoning_budget_native_api.h": {
+      "bytes": 32935,
+      "mode": 420,
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/130-reasoning_budget_policy.h": {
+      "bytes": 1819,
+      "mode": 420,
+      "sha256": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/131-reasoning_budget_probe.c": {
+      "bytes": 10449,
+      "mode": 420,
+      "sha256": "48bf48e6ae5b16adffa53129571c9ff3279ed1e5372e3ca8d56738f0aeed519c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/132-reasoning_budget_signed64.py": {
+      "bytes": 9410,
+      "mode": 420,
+      "sha256": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/133-ds4.h": {
+      "bytes": 35802,
+      "mode": 420,
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/134-ds4_gpu.h": {
+      "bytes": 152618,
+      "mode": 420,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/135-build-manifest.json": {
+      "bytes": 5440,
+      "mode": 420,
+      "sha256": "aff1ba1b958428568d4b5747ff3046c273d231e0044ed31cff8d09e90064636b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/136-native_effort_final_score.h": {
+      "bytes": 6246,
+      "mode": 420,
+      "sha256": "d7a5d2dd85047ca290365594f12f917ee71a1bb42fb565c639a2f5a4fda6b7b3"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/137-overthink_diagnostics.h": {
+      "bytes": 2104,
+      "mode": 420,
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/138-reasoning_budget_cases.h": {
+      "bytes": 1295,
+      "mode": 420,
+      "sha256": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/139-reasoning_budget_native_api.h": {
+      "bytes": 32935,
+      "mode": 420,
+      "sha256": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/140-reasoning_budget_policy.h": {
+      "bytes": 1819,
+      "mode": 420,
+      "sha256": "cce49e24c7a7e538131d5c3ccdb3384128bbef68f19d897b625bf93117924a0c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/141-reasoning_budget_probe.c": {
+      "bytes": 10449,
+      "mode": 420,
+      "sha256": "48bf48e6ae5b16adffa53129571c9ff3279ed1e5372e3ca8d56738f0aeed519c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/142-input-freeze.json": {
+      "bytes": 34069,
+      "mode": 420,
+      "sha256": "3295e9bd9b5361c2cb870233f8038b6377e4dca91d778b467092cead2cdec7a4"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/143-pressure_run.py": {
+      "bytes": 9066,
+      "mode": 420,
+      "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/144-Python": {
+      "bytes": 33568,
+      "mode": 493,
+      "sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/145-python3.14": {
+      "bytes": 34640,
+      "mode": 493,
+      "sha256": "7ebde552773a4045532637b114d645a313e045ac07b26f5e520bf039f1e34063"
+    },
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1/static/146-python3.14": {
+      "bytes": 34640,
+      "mode": 493,
+      "sha256": "7ebde552773a4045532637b114d645a313e045ac07b26f5e520bf039f1e34063"
+    }
+  },
+  "main_runtime100_verified_unchanged": true,
+  "model_helper_guard_execution": false,
+  "original_model_job_returncode": 3,
+  "roots": [
+    "speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1",
+    "speed-bench/ideas/evidence/math16-archive-launch-20261003-v1"
+  ],
+  "schema": "math16-archive-publication-physical-index-v1",
+  "source_cpu_freeze": "622df4518a6e06c0276d068ac16750f7c4891c37",
+  "tool_source_freeze": "88434d852ab85464efdb860e97334aeef791af45"
+}

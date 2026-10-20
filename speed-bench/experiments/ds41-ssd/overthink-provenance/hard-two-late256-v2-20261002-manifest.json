@@ -1,0 +1,75 @@
+{
+  "created_utc": "2026-10-02T16:49:03.634167+00:00",
+  "revision": "86bfd7a2",
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-logits",
+  "argv": [
+    "env",
+    "DS4_OVERTHINK_PENALTY=0.5",
+    "DS4_OVERTHINK_AFTER=256",
+    "python3",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-logits/speed-bench/ideas/artifacts/hard-two-late256-v2-20261002-pressure",
+    "--",
+    "/Volumes/Models/ds4/.workspaces/idea-logits/speed-bench/overthink_pilot",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "hard-two-late256-v2-20261002",
+    "1024",
+    "75",
+    "hard",
+    "1.0",
+    "--cache-gb",
+    "64.0",
+    "--cases",
+    "2"
+  ],
+  "pilot_argv": [
+    "/Volumes/Models/ds4/.workspaces/idea-logits/speed-bench/overthink_pilot",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "hard-two-late256-v2-20261002",
+    "1024",
+    "75",
+    "hard",
+    "1.0",
+    "--cache-gb",
+    "64.0",
+    "--cases",
+    "2"
+  ],
+  "binary": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-logits/speed-bench/overthink_pilot",
+    "sha256": "66cd35892f61bf9fe72378d02c20effd0dfb93b8548ee14c11abe487ed981fb9",
+    "bytes": 2671248
+  },
+  "guard": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c"
+  },
+  "source_sha256": {
+    "ds4.c": "f274c5d1eef540b39e82f97a97465b04d453e1152df2fdcdeadf1341be555dc2",
+    "ds4.h": "045d4f597ac463ce6e34e1c9402ad8b29fcfc05a1cd9f029a12285abb5223ad7",
+    "speed-bench/overthink_pilot.c": "ee785c65d104718ef0a909798ed4f61a6285a2e2c597105af22059f7b953438c",
+    "speed-bench/overthink_gold.py": "7b10aa3f7f3fd16fde421bb28565bdcc45844b908f02f7f88c15c9f05b235057"
+  },
+  "model": {
+    "path": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "bytes": 365713686528,
+    "mtime_ns": 1789237692837653163,
+    "sha256": "not read: model payload is intentionally not hashed"
+  },
+  "cache_gib_requested": 64.0,
+  "max_tokens": 1024,
+  "think_level": 75,
+  "suite": "hard",
+  "candidate": 1.0,
+  "case_limit": 2,
+  "overthink_after": 256,
+  "policy_environment": {
+    "DS4_OVERTHINK_PENALTY": "0.5",
+    "DS4_OVERTHINK_SCOPE": null,
+    "DS4_OVERTHINK_AFTER": "256",
+    "DS4_PILOT_CACHE_GIB": null,
+    "DS4_PILOT_CASE_LIMIT": null
+  },
+  "results_dir": "/Volumes/Models/ds4/.workspaces/idea-logits/speed-bench/ideas/artifacts/hard-two-late256-v2-20261002",
+  "pressure_dir": "/Volumes/Models/ds4/.workspaces/idea-logits/speed-bench/ideas/artifacts/hard-two-late256-v2-20261002-pressure"
+}

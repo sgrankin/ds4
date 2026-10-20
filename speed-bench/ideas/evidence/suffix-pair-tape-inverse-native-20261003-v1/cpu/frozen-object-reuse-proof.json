@@ -1,0 +1,55 @@
+{
+  "original_build_manifest": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261002-v2/build-manifest.json",
+    "sha256": "94b113ec1a01bde2f1ed79eff71e97b4927a0195ac00690ae60c11c82c623736"
+  },
+  "objects": {
+    "ds4.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4.o",
+      "sha256": "c24c30d24ac774339377f9b3995c6ae132e3025bd8f1e78ad363875bbe6ce803",
+      "bytes": 5672616
+    },
+    "ds4_image.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_image.o",
+      "sha256": "ebdae98d494de74fd560daed53aad2bd934ff7012499fc2cde82e7e994278f60",
+      "bytes": 165664
+    },
+    "ds4_distributed.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_distributed.o",
+      "sha256": "5e8a183b83abed129a7ab0ea1b6ce298ce3c1483d246829dafab98aacc5d8635",
+      "bytes": 427104
+    },
+    "ds4_tp.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_tp.o",
+      "sha256": "6efa29f9f0235e49502596cd04be4c3440bacb1a1b4f365ec78b9d7012e3320c",
+      "bytes": 207432
+    },
+    "ds4_ssd.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_ssd.o",
+      "sha256": "aa2a18d7cc4b805af138691fd8208042837a045e30b6ed02def90c4b07d37434",
+      "bytes": 13736
+    },
+    "ds4_metal.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_metal.o",
+      "sha256": "813ff15ec709934f97bd41c018e5cab3cf796d4921b3adff46203efbe7ce80b7",
+      "bytes": 2803056
+    },
+    "ds4_layer_pack.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_layer_pack.o",
+      "sha256": "efa53eacf5c197bd0ee5c6c140e70fd5924673f788e6876cac3656deea3b694d",
+      "bytes": 11264
+    },
+    "ds4_engram.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/ds4_engram.o",
+      "sha256": "41eefb68d54c36192c579379d9f9f9b7f35b3df619be97caed967ecb8b568982",
+      "bytes": 30064
+    },
+    "native-baseline-core.o": {
+      "original_source": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-build-v1/native-baseline-core.o",
+      "sha256": "45da7d4af7fbb2b2ae298408a3cd87c266e41c5fcf0fcfaecb7ba3b155af02cf",
+      "bytes": 5650520
+    }
+  },
+  "core_source_unchanged": true,
+  "model_assets_accessed": false
+}

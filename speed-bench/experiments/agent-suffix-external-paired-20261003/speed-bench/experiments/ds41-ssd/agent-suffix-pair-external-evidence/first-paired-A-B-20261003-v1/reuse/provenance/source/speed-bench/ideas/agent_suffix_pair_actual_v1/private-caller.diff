@@ -1,0 +1,30 @@
+--- frozen/ds4_agent.c
++++ private/agent_suffix_pair_actual.c
+@@ -11229,6 +11229,8 @@
+     pthread_mutex_unlock(&w->mu);
+ }
+ 
++#include "agent_suffix_pair_actual_hook.inc"
++
+ /* Run one user turn until the assistant stops or returns a tool call.  Tool
+  * results are appended to the transcript and the loop continues, which gives
+  * the model native DSML tool iteration without a client/server protocol. */
+@@ -11263,6 +11265,10 @@
+             agent_set_status(w, AGENT_WORKER_IDLE);
+             return 0;
+         }
++        agent_set_error(w, compact_err);
++        return 1;
++    }
++    if (!pair_actual_select_after_user(w, user_text, compact_err, sizeof(compact_err))) {
+         agent_set_error(w, compact_err);
+         return 1;
+     }
+@@ -11592,6 +11598,7 @@
+         worker_set_greedy_sampling(w, false);
+         if (!got_tool && dsml.state == AGENT_DSML_DONE && dsml.calls.len > 0)
+             got_tool = true;
++        pair_actual_round_observation(w, tool_round, generated, carried_generation, max_tokens, context_limited, model_stopped, got_tool, malformed_tool, early_tool_error, interrupted, &dsml.calls);
+         if (interrupted) {
+             agent_worker_append_assistant_turn_end(w);
+             agent_dsml_parser_free(&dsml);

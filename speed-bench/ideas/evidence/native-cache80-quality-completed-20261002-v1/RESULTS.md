@@ -1,0 +1,7 @@
+Native cache quality completed on 2026-10-02, guarded from 20:40:26.527547 to 20:43:01.643702 UTC, return code 0. The 16 unchanged validation-broad prompts and first 32 continuation tokens gave 512 rows per arm. Native64, native80a and native80b all had 512/512 rows bit equal to the retained 64-GiB reference. Every full raw export SHA equaled reference SHA `1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8`; the two 80-GiB repeats were exact too.
+
+Measured 64-versus-80 raw delta-NLL, KL, total variation and argmax flips were all zero. The driver also validated every candidate header, 24-byte row key, count and size, and pinned REF, inputs, helper, shaders, driver and guard around all arms.
+
+The same frozen `0ba1889b...` helper was used for all arms, with all inherited DS4 environment variables removed and only frozen shader paths supplied. Cache argv 64/80/80 was the only inference change. Peak wired memory was 86.765 GiB, peak compressor 7.069 GiB, swap unchanged at 0.0245996 GiB, pressure level 1 throughout 150 samples. The MAIN model lock was explicitly acquired/released after the guard completed.
+
+This establishes exact logits for this fixed short-continuation fixture. It does not establish free-generation task correctness or universal equivalence on larger contexts. Times include row exports/hashing and are diagnostic. The separate native cache replay ABBA owns the latency result. No defaults changed here. Full raw records remain in persistent ignored artifacts; their verified paths/hashes/sizes are in large-artifacts.json.

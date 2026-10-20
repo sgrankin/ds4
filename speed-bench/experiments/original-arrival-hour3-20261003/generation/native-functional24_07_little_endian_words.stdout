@@ -1,0 +1,9 @@
+{"words": [513, 254, 4112], "sum": 4879}
+
+Explanation: The hex string `0102fe001027` is split into consecutive two-byte groups: `01 02`, `fe 00`, and `10 27`. Each pair is interpreted as an unsigned 16-bit little-endian word, meaning the first byte is the low byte and the second byte is the high byte.
+
+- `01 02` → low byte `0x01`, high byte `0x02` → `0x0201` = 513
+- `fe 00` → low byte `0xfe`, high byte `0x00` → `0x00fe` = 254
+- `10 27` → low byte `0x10`, high byte `0x27` → `0x2710` = 10000? Wait, let's recalculate: `0x2710` is 10000, not 4112.
+
+Let me correct that. `10 27` little-endian means low byte `0x10`, high byte `0x27`, so the word is `0x2710` = 10000. Then the sum would

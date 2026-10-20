@@ -1,0 +1,39 @@
+Current retained task contract:
+Task: Integer token bucket event reducer.
+Create solution.py containing def solve(payload, config). payload is a list of events with nonnegative integer t timestamps in nondecreasing order and nonnegative integer cost values. config capacity and rate are nonnegative integers. Begin at time0 with tokens equal to capacity. At EVERY event, first refill tokens by (t minus previous event timestamp) times rate, capped at capacity, then set previous timestamp to t. If cost <= tokens, accept and subtract cost; otherwise reject without spending any tokens. Oversized costs are rejected but still perform the refill and timestamp advance. Zero cost is accepted even at capacity0. Return {accepted, rejected, remaining, tokens}. accepted/rejected are zero-based payload indices in order; remaining contains the balance AFTER each event; tokens is the final balance (capacity for an empty payload). Use exact integer arithmetic and do not mutate payload or config.
+
+Coding constraints:
+Implement the requested function using Python builtins only. At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports. No I/O, dynamic execution, or names/attributes beginning with underscore. Follow the task tool contract exactly. Do not search for or read private grading files.
+
+Actual retained configuration read:
+{
+  "capacity": 5,
+  "rate": 1,
+  "sample": [
+    {
+      "t": 0,
+      "cost": 4
+    },
+    {
+      "t": 1,
+      "cost": 4
+    },
+    {
+      "t": 2,
+      "cost": 1
+    },
+    {
+      "t": 10,
+      "cost": 8
+    },
+    {
+      "t": 10,
+      "cost": 5
+    },
+    {
+      "t": 10,
+      "cost": 0
+    }
+  ]
+}
+The config read is complete. All relevant current requirements above remain unchanged by the context edit.

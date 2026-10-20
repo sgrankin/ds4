@@ -1,0 +1,6 @@
+{
+  "status": "REFUSED_BEFORE_COMPILE",
+  "reason": "ROOT added unsupported arbitrary >30 argv-length assertion; exact frozen compiler argv has29 entries. No grant/compiler/selftest started; removed assumption and verified8 pinned objects instead.",
+  "compile_started": false,
+  "selftest_started": false
+}

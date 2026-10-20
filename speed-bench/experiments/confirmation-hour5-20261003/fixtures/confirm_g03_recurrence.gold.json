@@ -1,0 +1,12 @@
+{
+  "gold": {
+    "a6": 20,
+    "first_difference": 3
+  },
+  "oracle_input": {
+    "question": "A sequence has a0=2, a1=5, and an=2*a(n-1)-a(n-2) for every n>=2. Return only JSON with a6 and the constant first_difference."
+  },
+  "explanation": "Values are 2,5,8,11,14,17,20; each adjacent difference is three.",
+  "category": "math",
+  "scope": "New authored content, fixed before any model outcome."
+}

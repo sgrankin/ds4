@@ -1,0 +1,77 @@
+{
+  "files": {
+    "bf0-command.json": "e0f7caad5763718273f92ef4cf48c8d3c6a04cb22e848fedd1dac81c6cc31870",
+    "bf0.csv": "163a7131785a757b8ebd31970bce64a824f5ee60f85bf23e53dc4d16e502b17f",
+    "bf0.log": "0b486e39231fa985ccbcfe2f6be5bd11550e64d91ca89a559eac2eb91f909f21",
+    "checks.json": "e8709d48cac645c376ac510e5cbf0dc862e46ad8c2748d26e03f63f38b95169b",
+    "compact-result.json": "17bceb7afba22575f0a1143ad3b96e5ded7b3d5ff23ce42b2c31ac5d5e977fff",
+    "native-after-command.json": "5b186021138a77073de60d32112e0702589e2db2fb31961b107467feba7a13b9",
+    "native-after.csv": "398756f72cf175e7b2ca418814f0600da34c1e3977f54e3cea4f4be54d59860f",
+    "native-after.log": "815c8b8f3dccf16fd9eebf20dfbd359c0580ed955527c44672ed29e0b6596aad",
+    "native-before-command.json": "134d5cb5c46e50a00bd98dab614e2776dee4efcd9efecb50908a944f4bf37bf4",
+    "native-before.csv": "b8a6324a2aac31a616936007b938238e55a5fc16943224eecbfe55eeb1e7126a",
+    "native-before.log": "d72cb5f82a3852f784ae8153b5c7400ce2da0f612578a7db0d78224e97d95638",
+    "pool-default80-command.json": "8b713164e5e6291a1e2e76adff94f4debeee5f1c8a0115d3025d29766a8480a6",
+    "pool-default80.csv": "580c8df01f08a9e3f2de4a2546b05ba1600d9be57aae2607af8aae75f1bc433d",
+    "pool-default80.log": "3a22f995c70570bf3baabb1c48ff029959036c21260f554b7b5ad30dbbb1668b",
+    "pool-ready1600-command.json": "0fe3b303a040b7c0913657596100182c3de3bf5babaf0613b187a2b0356c2069",
+    "pool-ready1600-repeat-command.json": "89245d47a7aa8db15f0e2d217b8bab0ee0e3761ec6865cda53374c04444068b9",
+    "pool-ready1600-repeat.csv": "0e844610f0827e85d23886063b43331c8c86a98d9e14e6e2775b88d2bb863eaa",
+    "pool-ready1600-repeat.log": "cca7c56dd9951301d1d75db03c02c73a68907c9cb2a1c8a87822cc9eebd495ae",
+    "pool-ready1600.csv": "74a1378a7bf3f317702ae961f130735da86ffb60fd3a145e236287dcc49bcb08",
+    "pool-ready1600.log": "d9ba977b4488d4445691899fd3a36d584cb688d4cafa053361e02bed2b9773ea",
+    "prepared-command.json": "894aeffd391d3002e1a02a662c1caa98e56108ba6af77e4cc423c1ed05bba2c7",
+    "prepared-manifest.json": "614ba8fd88c5031e181db2409aaa7365127c57547cda5b78e27d69e25ad6e625",
+    "pressure-command.json": "172588aa3eae1644bccd0f9c5b9c0c7e08507ab3d48823d31835ae50a950a17b",
+    "pressure-result.json": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+    "root-release-proof.json": "28561e08d6b82b2e5ad1780ca4517bf08acd94dc9a611809c1944d52e570539b",
+    "summary.json": "698473b257c52425eba3b2288275524614d52932ef923fa26fbe6a44503a47da"
+  },
+  "full_raw": [
+    {
+      "name": "native-before",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-age-study/speed-bench/ideas/artifacts/resident-pool-age-prepared-20261002/run/native-before-raw.bin",
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "bytes": 264777744,
+      "rows": 512
+    },
+    {
+      "name": "bf0",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-age-study/speed-bench/ideas/artifacts/resident-pool-age-prepared-20261002/run/bf0-raw.bin",
+      "sha256": "ceb6df37c311a1b294353c58865510581e41cc086c5f89c826ac0460a8647b86",
+      "bytes": 264777744,
+      "rows": 512
+    },
+    {
+      "name": "pool-default80",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-age-study/speed-bench/ideas/artifacts/resident-pool-age-prepared-20261002/run/pool-default80-raw.bin",
+      "sha256": "c91448204931eb55ffe1f9ebca166e7306227081a95443da5ddb85531e8b67c5",
+      "bytes": 264777744,
+      "rows": 512
+    },
+    {
+      "name": "pool-ready1600",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-age-study/speed-bench/ideas/artifacts/resident-pool-age-prepared-20261002/run/pool-ready1600-raw.bin",
+      "sha256": "594b5d34f1f5d9c63a39066f8c610afed429deb0ca3554ab1b68ab2916f85d32",
+      "bytes": 264777744,
+      "rows": 512
+    },
+    {
+      "name": "pool-ready1600-repeat",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-age-study/speed-bench/ideas/artifacts/resident-pool-age-prepared-20261002/run/pool-ready1600-repeat-raw.bin",
+      "sha256": "f7602324479275f5910fc5c7b7d6e6f4fb9d45ed6f5605851f098d866a24d1e3",
+      "bytes": 264777744,
+      "rows": 512
+    },
+    {
+      "name": "native-after",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-age-study/speed-bench/ideas/artifacts/resident-pool-age-prepared-20261002/run/native-after-raw.bin",
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "bytes": 264777744,
+      "rows": 512
+    }
+  ],
+  "raw_artifact_root": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-age-study/speed-bench/ideas/artifacts/resident-pool-age-prepared-20261002",
+  "runtime_build_manifest": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-age/speed-bench/ideas/artifacts/resident-pool-age-build/manifest.json",
+  "build_manifest_sha256": "d5f267d9f0e785340a4dd6776fd7dc2453e7b73c5f10b5b4d618e6e74f727e5f"
+}

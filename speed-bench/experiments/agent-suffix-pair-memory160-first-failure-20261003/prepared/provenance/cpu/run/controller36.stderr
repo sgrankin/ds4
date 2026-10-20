@@ -1,0 +1,41 @@
+test_actual_wrapper_first_wrong_file_cannot_be_repaired (__main__.FrozenEdit.test_actual_wrapper_first_wrong_file_cannot_be_repaired) ... ok
+test_actual_wrapper_timeout_preserves_claim_before_any_later_pass (__main__.FrozenEdit.test_actual_wrapper_timeout_preserves_claim_before_any_later_pass) ... ok
+test_duplicate_or_wrong_type_operation_rejected (__main__.FrozenEdit.test_duplicate_or_wrong_type_operation_rejected) ... ok
+test_exact_all_candidates_preserve_appended_history (__main__.FrozenEdit.test_exact_all_candidates_preserve_appended_history) ... ok
+test_gold_current_and_old_and_unsafe (__main__.FrozenEdit.test_gold_current_and_old_and_unsafe) ... ok
+test_project_wrapper_contains_no_gold_and_prompts_one_write (__main__.FrozenEdit.test_project_wrapper_contains_no_gold_and_prompts_one_write) ... ok
+test_updater_atomic_current_not_old_selection_and_no_echo (__main__.FrozenEdit.test_updater_atomic_current_not_old_selection_and_no_echo) ... ok
+test_updater_failure_is_retained_and_no_repair (__main__.FrozenEdit.test_updater_failure_is_retained_and_no_repair) ... ok
+test_jsonl_truncation_duplicate_fields (__main__.NativeObservations.test_jsonl_truncation_duplicate_fields) ... ok
+test_read_contamination_and_single_updater (__main__.NativeObservations.test_read_contamination_and_single_updater) ... ok
+test_round_order_and_stop (__main__.NativeObservations.test_round_order_and_stop) ... ok
+test_token_trace_lossless_and_truncated (__main__.NativeObservations.test_token_trace_lossless_and_truncated) ... ok
+test_typed_limit_and_tool_flags (__main__.NativeObservations.test_typed_limit_and_tool_flags) ... ok
+test_already_reaped_leader_never_signaled (__main__.OwnershipAndAuthority.test_already_reaped_leader_never_signaled) ... ok
+test_guard_rejection_precedes_model_access (__main__.OwnershipAndAuthority.test_guard_rejection_precedes_model_access) ... ok
+test_parent_inspection_absolute_bounded (__main__.OwnershipAndAuthority.test_parent_inspection_absolute_bounded) ... ok
+test_private_caller_three_observational_seams_original_unchanged (__main__.OwnershipAndAuthority.test_private_caller_three_observational_seams_original_unchanged) ... ok
+test_signals_all_before_first_reap (__main__.OwnershipAndAuthority.test_signals_all_before_first_reap) ... ok
+test_timeout_pipe_holder_keeps_birth_anchor_and_closes_handles (__main__.OwnershipAndAuthority.test_timeout_pipe_holder_keeps_birth_anchor_and_closes_handles) ... ok
+test_duplicate_completed_marker (__main__.TinyProtocol.test_duplicate_completed_marker) ... ok
+test_eligibility_failure_is_retained (__main__.TinyProtocol.test_eligibility_failure_is_retained) ... ok
+test_fixture_mutation_is_separate_overall_failure (__main__.TinyProtocol.test_fixture_mutation_is_separate_overall_failure) ... ok
+test_infrastructure_exit_not_semantic_failure (__main__.TinyProtocol.test_infrastructure_exit_not_semantic_failure) ... ok
+test_missing_round_and_selection_failure (__main__.TinyProtocol.test_missing_round_and_selection_failure) ... ok
+test_observed_round_limit (__main__.TinyProtocol.test_observed_round_limit) ... ok
+test_three_ordered_completions_single_multiline_write (__main__.TinyProtocol.test_three_ordered_completions_single_multiline_write) ... ok
+test_truncated_trace (__main__.TinyProtocol.test_truncated_trace) ... ok
+test_whole_deadline_includes_eof_cleanup (__main__.TinyProtocol.test_whole_deadline_includes_eof_cleanup) ... ok
+test_whole_deadline_includes_external_checker (__main__.TinyProtocol.test_whole_deadline_includes_external_checker) ... ok
+test_wrong_control_first_failure_not_repaired (__main__.TinyProtocol.test_wrong_control_first_failure_not_repaired) ... ok
+test_actual_commit_geometry_bound (__main__.TypedGeometry.test_actual_commit_geometry_bound) ... ok
+test_candidate_order_cannot_skip_or_fake_splice (__main__.TypedGeometry.test_candidate_order_cannot_skip_or_fake_splice) ... ok
+test_malformed_geometry_and_budget (__main__.TypedGeometry.test_malformed_geometry_and_budget) ... ok
+test_opaque_id_bounds_and_duplicate_json (__main__.TypedGeometry.test_opaque_id_bounds_and_duplicate_json) ... ok
+test_truncated_ids_and_literal_corruption (__main__.TypedGeometry.test_truncated_ids_and_literal_corruption) ... ok
+test_valid_odd_full_user_and_first_eligible (__main__.TypedGeometry.test_valid_odd_full_user_and_first_eligible) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 10.331s
+
+OK

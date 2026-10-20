@@ -1,0 +1,10 @@
+{
+  "model_job": "narrow-half-effort75-pair",
+  "exec_session": 25806,
+  "guard_returncode": 3,
+  "record_count": 8,
+  "MAIN_flock_reacquired_and_released": true,
+  "owned_helper_remaining": [],
+  "model_metadata_accessed": false,
+  "verified_utc": "2026-10-02 22:46:10 UTC"
+}

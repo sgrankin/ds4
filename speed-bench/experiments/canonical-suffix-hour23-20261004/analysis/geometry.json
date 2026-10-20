@@ -1,0 +1,107 @@
+{
+  "method": "Read little-endian manifest metadata and token-ID chunks only. Verify each token chunk size/SHA1. Match native endpoint last64 in actual edited prompt, extend backward, check both-even starts. No model/tokenizer/KV/pre-RoPE/logits read.",
+  "cache_path": ".workspaces/server-agent-day-20261004/canonical23-cache-candidate",
+  "base_profile": "c012d28b049720b89667ba27d6cded52e414816f",
+  "rows": [
+    {
+      "session": "A",
+      "profile": "a5104cc24db2cf2892385930bc38411a0d71d6e3",
+      "source_manifest": "5895b621c076395c4cd6b5934ed0e219e2dc293d",
+      "destination_manifest": "7d78ef6fec54d5e007ae15743f2a2acfef3f7d0f",
+      "source_tokens": 1694,
+      "destination_tokens": 1437,
+      "destination_approximate": true,
+      "source_end": 1694,
+      "destination_end": 1342,
+      "shift": 352,
+      "raw_source_start": 659,
+      "raw_destination_start": 307,
+      "raw_reused": 1035,
+      "both_even_possible": true,
+      "even_source_start": 660,
+      "even_destination_start": 308,
+      "even_reused": 1034,
+      "source_token_chunk_sha1": [
+        "789e4f5a6212ad97cbf48619ef906bc9b9e6f3d5"
+      ],
+      "destination_token_chunk_sha1": [
+        "ea224a7c2afb5c7432fcc92145588dba415c27a9"
+      ]
+    },
+    {
+      "session": "B",
+      "profile": "e06bce3d6bd1f34706211896ce897063aade3eb7",
+      "source_manifest": "2eaf9ad00b542a4486274d1e849533f02b2aaf3c",
+      "destination_manifest": "ba58a0677d50c642a20af2f4835ddffff6e19207",
+      "source_tokens": 1692,
+      "destination_tokens": 1436,
+      "destination_approximate": false,
+      "source_end": 1692,
+      "destination_end": 1341,
+      "shift": 351,
+      "raw_source_start": 658,
+      "raw_destination_start": 307,
+      "raw_reused": 1034,
+      "both_even_possible": false,
+      "even_source_start": null,
+      "even_destination_start": null,
+      "even_reused": null,
+      "source_token_chunk_sha1": [
+        "8a9d85ae806ab56e67a0f733eb8938dfa9b49df6"
+      ],
+      "destination_token_chunk_sha1": [
+        "6b6e035951f9f7a6aef29be6824738dadc8b8b84"
+      ]
+    },
+    {
+      "session": "C",
+      "profile": "a1a8b3c431ef8a432e97b85f5e153c9143d10e78",
+      "source_manifest": "f846304eee36b1aa52dbf0710041740c1698aa2a",
+      "destination_manifest": "7d2dd5b0d54ce0f1323422527a7b0076457338a5",
+      "source_tokens": 1694,
+      "destination_tokens": 1437,
+      "destination_approximate": true,
+      "source_end": 1694,
+      "destination_end": 1342,
+      "shift": 352,
+      "raw_source_start": 659,
+      "raw_destination_start": 307,
+      "raw_reused": 1035,
+      "both_even_possible": true,
+      "even_source_start": 660,
+      "even_destination_start": 308,
+      "even_reused": 1034,
+      "source_token_chunk_sha1": [
+        "d1a5950c8477edbdab6ec7ca7a173b3b2732d567"
+      ],
+      "destination_token_chunk_sha1": [
+        "b2036ab14a2a627367564afb9415dcb0e6c360bb"
+      ]
+    },
+    {
+      "session": "D",
+      "profile": "e00a8acec010282efc630b22bd8d4c754d37f280",
+      "source_manifest": "c8fad1cb71c7ec08d458b53c3179f22b93bd5c15",
+      "destination_manifest": "e6dbfbefc0eedb0f65990adcb04ec20a52175048",
+      "source_tokens": 1692,
+      "destination_tokens": 1436,
+      "destination_approximate": false,
+      "source_end": 1692,
+      "destination_end": 1341,
+      "shift": 351,
+      "raw_source_start": 658,
+      "raw_destination_start": 307,
+      "raw_reused": 1034,
+      "both_even_possible": false,
+      "even_source_start": null,
+      "even_destination_start": null,
+      "even_reused": null,
+      "source_token_chunk_sha1": [
+        "a47818eddaef1f88185158638d0a522c10cc7c8c"
+      ],
+      "destination_token_chunk_sha1": [
+        "52206a6faac7f1ff5d64a1be9dd15a86a89891f0"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "python3",
+    "speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/retry_candidate.py"
+  ],
+  "initial": {
+    "time": 1790961368.584406,
+    "level": 1,
+    "swap_gb": 0.03015625,
+    "physical_gb": 128.0,
+    "free_gb": 55.82237243652344,
+    "file_backed_gb": 55.43119812011719,
+    "wired_gb": 5.2145843505859375,
+    "compressor_gb": 6.4034881591796875
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

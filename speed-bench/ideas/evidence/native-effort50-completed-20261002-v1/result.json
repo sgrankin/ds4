@@ -1,0 +1,64 @@
+{
+  "execution_status": "COMPLETE_WITH_INVALID_CAPPED_RESULTS",
+  "producer_returncode": 3,
+  "guard_returncode": 3,
+  "native50": {
+    "cases": 4,
+    "correct": 1,
+    "incorrect": 0,
+    "invalid": 3,
+    "cap_hits": 3,
+    "tokens": 6336,
+    "reasoning_tokens": 6335,
+    "decode_seconds": 287.799959,
+    "tokens_per_solved_task": 6336.0,
+    "completed_correct": 1,
+    "capped_correct": 0
+  },
+  "record_integrity_status": "PASS",
+  "strict_outcome_status": "INVALID_PRESENT",
+  "computed_record_totals": {
+    "generated_tokens": 6336,
+    "reasoning_tokens": 6335
+  },
+  "pressure": {
+    "samples": 301,
+    "normal_samples": 301,
+    "adverse_samples": 0,
+    "swap_growth_gib": 0,
+    "host_pressure": {
+      "samples": 301,
+      "minimum_free_gib": 0.112823486328125,
+      "maximum_wired_gib": 70.91012573242188,
+      "maximum_compressor_gib": 7.3091583251953125,
+      "maximum_swap_gib": 0.017763671875,
+      "maximum_kernel_level": 1
+    }
+  },
+  "root_release": {
+    "time": 1790983622.190748,
+    "root_session": 34982,
+    "guard_returncode": 3,
+    "root_lock_reacquired": true,
+    "matching_live_model_processes": [],
+    "samples": 301,
+    "pressure_levels": [
+      1
+    ],
+    "adverse_samples": 0,
+    "swap_growth_gib": 0.0
+  },
+  "accepted_analysis_commit": "f27b7d5a942d4ea5e23849f9209e47ed4dc5a3a7",
+  "checked_summary_sha256": "2eba56b1f26b823a145c83359c801699ce15de682b149b278c19e5dc9bd49ff5",
+  "helper_sha256": "f0596bf4fb3035871c4bd7b1393161b005377fca2bc0a6e28b868b852cd3f571",
+  "source_revision": "cee2d1426766064ec18740621c34faf006f9919a",
+  "queue_launcher_sha256": "98204b286e48ab100c6f5cfa1fa4565530f7a74f32ae5931fe351c230262640d",
+  "queue_sha256": "2af91c43a8c701cdcec392ef9041607cbf068180ea32528521b9afc01cc495b6",
+  "preserved_preflight_identity_records": 98,
+  "rescored": false,
+  "model_metadata_read": false,
+  "model_payload_read": false,
+  "helper_executed": false,
+  "model_guard_acquired": false,
+  "defaults_promoted": false
+}

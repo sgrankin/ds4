@@ -1,0 +1,106 @@
+{
+  "order": "ABBA",
+  "one_evolving_replay": true,
+  "phase_count": 7,
+  "cache_slots_all_phases": 6136,
+  "stats": {
+    "A": {
+      "startup_prefill_ms": {
+        "values_ms": [
+          64965.195,
+          63931.947
+        ],
+        "mean_ms": 64448.570999999996,
+        "repeat_range_over_mean_percent": 1.6032132039048619
+      },
+      "append_prefill_ms": {
+        "values_ms": [
+          22405.117,
+          22471.984
+        ],
+        "mean_ms": 22438.550499999998,
+        "repeat_range_over_mean_percent": 0.29800053261017023
+      },
+      "decode_ms": {
+        "values_ms": [
+          18340.934999999998,
+          18332.717
+        ],
+        "mean_ms": 18336.826,
+        "repeat_range_over_mean_percent": 0.04481691651541613
+      },
+      "model_ms": {
+        "values_ms": [
+          105711.247,
+          104736.648
+        ],
+        "mean_ms": 105223.94750000001,
+        "repeat_range_over_mean_percent": 0.9262140635809182
+      },
+      "turn_model_ms": {
+        "values_ms": [
+          40746.051999999996,
+          40804.701
+        ],
+        "mean_ms": 40775.3765,
+        "repeat_range_over_mean_percent": 0.143834355520923
+      }
+    },
+    "B": {
+      "startup_prefill_ms": {
+        "values_ms": [
+          52962.345,
+          54257.071
+        ],
+        "mean_ms": 53609.708,
+        "repeat_range_over_mean_percent": 2.415096161314668
+      },
+      "append_prefill_ms": {
+        "values_ms": [
+          14193.324999999999,
+          14478.018
+        ],
+        "mean_ms": 14335.6715,
+        "repeat_range_over_mean_percent": 1.98590627582392
+      },
+      "decode_ms": {
+        "values_ms": [
+          18298.247,
+          18080.316
+        ],
+        "mean_ms": 18189.281499999997,
+        "repeat_range_over_mean_percent": 1.1981286891403629
+      },
+      "model_ms": {
+        "values_ms": [
+          85453.917,
+          86815.405
+        ],
+        "mean_ms": 86134.661,
+        "repeat_range_over_mean_percent": 1.5806505583158885
+      },
+      "turn_model_ms": {
+        "values_ms": [
+          32491.572,
+          32558.334
+        ],
+        "mean_ms": 32524.953,
+        "repeat_range_over_mean_percent": 0.20526393996633538
+      }
+    }
+  },
+  "change_percent": {
+    "startup_prefill_ms": -16.81784845159716,
+    "append_prefill_ms": -36.11141905088744,
+    "decode_ms": -0.8046348915564994,
+    "model_ms": -18.14157989083237,
+    "turn_model_ms": -20.233837693687505
+  },
+  "A_repeats_and_prior_native64_boundary_logits_and_final_state_exact": true,
+  "B_repeats_and_prior_native80_boundary_logits_and_final_state_exact": true,
+  "boundary_scope": "Recorded seven complete vocabulary vectors (one after each phase) and final full snapshot hashes. This does not assert raw343 teacher-forced-row identity.",
+  "prior_summary_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/native-cache64-v80-abba-20261002/summary.json",
+  "prior_summary_sha256": "82d7df10dc06fdcc24eb78052a80a892c5f8c17d8b2811fb61df0dca555a902f",
+  "hash_record_scope": "Runner hashed phase logits/final snapshot after inference, then removed those binary dumps; recorded hashes/byte sizes remain. This audit validates recorded equality and retained assets, without rehashing removed dumps.",
+  "timing_scope": "C phase wall times exclude sampling, tools and subsequent raw/state/hash I/O; process wall time is separate."
+}

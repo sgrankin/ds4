@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/driver.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2",
+    "--manifest-sha256",
+    "1b537cb53a217d25fd13ee5957b405955a9a0ae63da9e372dde23092ccfe7fcd"
+  ],
+  "manifest_sha256": "1b537cb53a217d25fd13ee5957b405955a9a0ae63da9e372dde23092ccfe7fcd",
+  "launch_requires_root_grant": true,
+  "automatic_holdout_run": false
+}

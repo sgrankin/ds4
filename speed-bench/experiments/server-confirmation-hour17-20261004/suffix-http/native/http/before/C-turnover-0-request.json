@@ -1,0 +1,19 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "instructions": "Follow the newest request. Use the read tool for advertised files. Never guess a file's current content from an earlier answer. Active inventory tool results remain authoritative after obsolete dispatch notes are removed.",
+  "input": [
+    {
+      "role": "user",
+      "content": "Reply READY only."
+    }
+  ],
+  "prompt_cache_key": "ds4-hour17-confirmation-C",
+  "store": false,
+  "stream": false,
+  "temperature": 0,
+  "seed": 20261004,
+  "max_output_tokens": 64,
+  "reasoning": {
+    "effort": "none"
+  }
+}

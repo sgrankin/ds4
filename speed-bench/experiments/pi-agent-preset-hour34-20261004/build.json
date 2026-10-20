@@ -1,0 +1,16 @@
+{
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "frozen_spec_sha256": "8045f9098824503baca82175c31ccda279b1b0537e0588a4b4e7f166963cb0b8",
+  "frozen_cases_sha256": "45c595388a9f2540da864619916be9f5e7674a4516758a91f59bfc38d9b9917d",
+  "preparation_start_utc": "2026-10-04 22:34 UTC",
+  "start_utc": "2026-10-04 22:38 UTC",
+  "deadline_utc": "2026-10-04 22:53 UTC",
+  "scope": "Actual installed Pi CLI coding-agent first-write compatibility through ds4-local persistent-fast; no latency comparison",
+  "fixed": "frozen32 dedupe algorithm/config/161-check grader; Pi-native read/write tools; isolated config; thinking off; max output2048; first write retained, no retries",
+  "output": ".workspaces/server-agent-day-20261004/pi34-first",
+  "budget_note": "4 minutes source preparation charged; stop and report by22:53 UTC",
+  "measurement_finish_utc": "2026-10-04 22:39:38 UTC",
+  "finish_utc": "2026-10-04 22:42 UTC",
+  "independent_audit": "Actual Pi JSON tool events/read bytes/first code/original grade/preset runtime/guard agree; no blocker."
+}

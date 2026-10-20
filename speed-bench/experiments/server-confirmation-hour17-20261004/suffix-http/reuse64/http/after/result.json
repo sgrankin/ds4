@@ -1,0 +1,179 @@
+{
+  "phase": "after",
+  "mode": "reuse",
+  "steps": [
+    {
+      "step": "A-edit2",
+      "session": "A",
+      "seconds": 30.90322995799943,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-47\"}",
+      "answer": {
+        "active_total": 313,
+        "archived_code": "BEACON-47"
+      },
+      "gold": {
+        "active_total": 313,
+        "archived_code": "BEACON-47"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_3fa862068785ba171aaec2b7ac492998",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/archive.json",
+          "text": "{\n  \"archived_code\": \"BEACON-47\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/archive.json",
+      "replies": [
+        {
+          "seconds": 28.918250540998997,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1340,
+            "input_tokens_details": {
+              "cached_tokens": 786,
+              "cache_write_tokens": 554
+            },
+            "output_tokens": 96,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1436
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.9836195410025539,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1462,
+            "input_tokens_details": {
+              "cached_tokens": 1436,
+              "cache_write_tokens": 26
+            },
+            "output_tokens": 19,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1481
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1004 12:12:56 ds4-server: suffix APPROXIMATE slot=0 reused=786 fresh=242 graft_fresh=178 source=664:1450 destination=312:1098 latest_user_start=1241 pre_rope=1 source_ssd=1 source_approximate=1 21559.315 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 30.90384387499944,
+      "edit_seconds": 0.00020587501057889313
+    },
+    {
+      "step": "B-edit2",
+      "session": "B",
+      "seconds": 46.040450500004226,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-58\"}",
+      "answer": {
+        "active_total": 231,
+        "archived_code": "ORBIT-58"
+      },
+      "gold": {
+        "active_total": 231,
+        "archived_code": "ORBIT-58"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_8359bed21a70f5f18059f864458325da",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json",
+          "text": "{\n  \"archived_code\": \"ORBIT-58\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/B/archive.json",
+      "replies": [
+        {
+          "seconds": 44.20014570800413,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1338,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1338
+            },
+            "output_tokens": 96,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1434
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.8390202919981675,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1459,
+            "input_tokens_details": {
+              "cached_tokens": 1434,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1477
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1004 12:13:05 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 46.04109666698787,
+      "edit_seconds": 0.00021133299742359668
+    }
+  ],
+  "edits": [
+    {
+      "removed_bytes": 1823,
+      "remaining_blocks": 0,
+      "session": "A",
+      "seconds": 0.00020587501057889313
+    },
+    {
+      "removed_bytes": 1822,
+      "remaining_blocks": 0,
+      "session": "B",
+      "seconds": 0.00021133299742359668
+    }
+  ],
+  "seconds": 76.9466653749987,
+  "source_warmup_seconds": 0,
+  "edited_seconds": 76.94494054198731,
+  "suffix_grafts_observed": 1,
+  "approximate_ssd_sources_observed": 1,
+  "pass": true,
+  "restart_owned_by_ROOT": true
+}

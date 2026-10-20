@@ -1,0 +1,29 @@
+{
+  "status": "FAILED_DEFAULT_BYTE_DIFFERENTIAL_PRESERVED",
+  "runtime_source_commit": "f2c8d08408bb89ec0a7d76eddf039f6dbdf8e5f2",
+  "production_flags": [
+    "-O3",
+    "-ffast-math",
+    "-Wall",
+    "-Wextra",
+    "-std=c11"
+  ],
+  "source_test_sha256": "ac86f37e5e0cc192b291aaf98cc38b035df3673b4061790d410bc5c89ea704c4",
+  "original_first_failure_retained": true,
+  "typed_probability_mock_reproduction": {
+    "mode": "apply",
+    "max_subs": 3,
+    "native_weights_flag": "unset",
+    "selected_ids_exact": true,
+    "other_five_weights_exact": true,
+    "different_slot": 4,
+    "old_bits": "3e375581",
+    "new_bits": "3e375582",
+    "ulp_difference": 1
+  },
+  "all_equality_contracts_unchanged": true,
+  "asan_run": false,
+  "core_or_metal_build": false,
+  "model_or_metadata_access": false,
+  "interpretation": "The original fake probability storage had a declared-type aliasing hazard. Typed-float correction reproduces the same default coefficient difference under preserved optimization flags. Runtime correction and later model parity remain pending."
+}

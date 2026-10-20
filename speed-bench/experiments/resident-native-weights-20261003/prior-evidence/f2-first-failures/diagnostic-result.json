@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_resident_native_weights.py",
+    "-v"
+  ],
+  "returncode": 1,
+  "runtime_source_commit": "f2c8d08408bb89ec0a7d76eddf039f6dbdf8e5f2",
+  "test_change": "Only failed-equality bit diagnostics added in new child; original first failure retained."
+}

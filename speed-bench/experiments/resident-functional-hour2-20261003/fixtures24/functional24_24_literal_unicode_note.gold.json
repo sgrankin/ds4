@@ -1,0 +1,13 @@
+{
+  "gold": {
+    "label": "👩‍🚒",
+    "motto": "ö la nuit",
+    "paragraph": "The badge card shows 👩‍🚒 above the motto ö la nuit, with both literal sequences left as supplied."
+  },
+  "oracle_input": {
+    "label": "👩‍🚒",
+    "motto": "ö la nuit"
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Literal ZWJ/combining-sequence preservation in fictional prose; not normalization, codepoint calculation or substring search."
+}

@@ -1,0 +1,25 @@
+coding pilot tasks=4 cap=512 cache=64 GiB ctx4096/chunk512/no-thinking/greedy output=/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1/broader3
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.03 GiB (raw 0.01 + compressed 0.02) + buffers 0.83 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.23 GiB planned
+ds4: memory detail: ctx=4096 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=4097 backend=metal
+ds4: V4.1 static context buffers 880.04 MiB (ctx=4096), Engram disk-only
+prefill_policy warm task=round_cents pos=0 tile=default limit=default
+prefill_policy append task=round_cents pos=47 count=393 tile=64 limit=1024
+coding round_cents tokens=70 stopped=1 eos=1 cap=0
+prefill_policy warm task=merge_intervals pos=0 tile=default limit=default
+prefill_policy append task=merge_intervals pos=47 count=414 tile=64 limit=1024
+coding merge_intervals tokens=147 stopped=1 eos=1 cap=0
+prefill_policy warm task=topological_order pos=0 tile=default limit=default
+prefill_policy append task=topological_order pos=47 count=412 tile=64 limit=1024
+coding topological_order tokens=208 stopped=1 eos=1 cap=0
+prefill_policy warm task=split_escaped pos=0 tile=default limit=default
+prefill_policy append task=split_escaped pos=47 count=411 tile=64 limit=1024
+coding split_escaped tokens=149 stopped=1 eos=1 cap=0
+ds4: resident-route layers=22960 substitutions=12519 native_misses=18019 skipped_loads=12519 skipped_bytes=124605112320 mean_mass=0.11165889 mean_score_gap=0.09524920 mean_affinity_ratio=0.91045788 mean_rank=7.802 full_snapshots=10835 double_layers=2005 planned_substitutions=12519 drops=0 triple_layers=135

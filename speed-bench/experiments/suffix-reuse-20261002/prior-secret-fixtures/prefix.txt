@@ -1,0 +1,2 @@
+Follow the single current register below. It gives active_code and private_secret. Answer the final question with only the requested value, without explanation or punctuation. Report a private_secret number only if its exact digits are explicitly present in the current register. If those digits are absent or the field is REDACTED, answer UNKNOWN. Do not infer or guess removed values. Neutral catalog notes are irrelevant to either field.
+

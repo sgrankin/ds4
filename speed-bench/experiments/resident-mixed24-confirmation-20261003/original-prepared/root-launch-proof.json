@@ -1,0 +1,26 @@
+{
+  "time": 1790999351.2265868,
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "manifest_sha256": "b30ff4ebd43adbd030506f605a241bbcd897730a082e472767793f5982d604e3",
+  "command_sha256": "383106a435b060e1e301f2654b4b3fb996fa2bf3be83da3963aaa744d2ec80e9",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/driver.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1",
+    "--manifest-sha256",
+    "b30ff4ebd43adbd030506f605a241bbcd897730a082e472767793f5982d604e3"
+  ],
+  "previous_release_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/root-release-proof.json",
+  "previous_release_sha256": "62a30ce4385b49916bbe533d402fb797dce5f1557c07e79d9385e228888db546",
+  "fresh_live_model_processes": [],
+  "lock_reacquired": true,
+  "all_inherited_DS4_environment_cleared": true,
+  "first_attempt_only": true,
+  "timing_claim": false
+}

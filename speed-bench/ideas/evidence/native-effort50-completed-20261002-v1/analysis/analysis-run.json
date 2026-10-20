@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "speed-bench/summarize_overthink_checked.py",
+    "--job",
+    "native-effort50",
+    "--output",
+    "speed-bench/experiments/native-effort50-counting-analysis-20261002/checked-summary.json"
+  ],
+  "returncode": 0,
+  "accepted_analysis_commit": "f27b7d5a942d4ea5e23849f9209e47ed4dc5a3a7",
+  "checked_source_sha256": "7830f64402b9972bac164b06dde1e3a6aa4a251cae3187fc29086c0cc9cefcf5",
+  "producer_guard_returncode": 3,
+  "expected_records": 4,
+  "expected_arms": 1,
+  "model_metadata_accessed": false,
+  "model_guard_acquired": false
+}

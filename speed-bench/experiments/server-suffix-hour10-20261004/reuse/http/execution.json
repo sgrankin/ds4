@@ -1,0 +1,15 @@
+{
+  "mode": "reuse",
+  "base_url": "http://127.0.0.1:54020",
+  "session_id": "ds4-hour10-ordinary-context",
+  "delete_a_lines": 48,
+  "delete_b_lines": 32,
+  "source_and_edited_contexts": "context-*.txt",
+  "server_started_by_driver": false,
+  "reuse_server_env": {
+    "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "1",
+    "fresh_tail_tokens": 128
+  },
+  "source_warmup_in_total": true,
+  "max_output_tokens": 32
+}

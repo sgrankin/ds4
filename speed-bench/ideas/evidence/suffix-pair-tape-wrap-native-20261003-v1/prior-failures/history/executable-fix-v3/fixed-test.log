@@ -1,0 +1,41 @@
+test_absolute_and_parent_path_escape (__main__.CPU.test_absolute_and_parent_path_escape) ... ok
+test_actual_raw_geometry_both_extents (__main__.CPU.test_actual_raw_geometry_both_extents) ... ok
+test_csv_duplicate_missing_reordered_rows_targets (__main__.CPU.test_csv_duplicate_missing_reordered_rows_targets) ... ok
+test_csv_nonfinite_ranges_flags_terminal_nll (__main__.CPU.test_csv_nonfinite_ranges_flags_terminal_nll) ... ok
+test_csv_ordered_teacher_rows_and_terminal (__main__.CPU.test_csv_ordered_teacher_rows_and_terminal) ... ok
+test_csv_summary_arithmetic (__main__.CPU.test_csv_summary_arithmetic) ... ok
+test_diagnostic_context_layout_and_extent (__main__.CPU.test_diagnostic_context_layout_and_extent) ... ok
+test_diagnostic_private_tag_header_size_and_hash (__main__.CPU.test_diagnostic_private_tag_header_size_and_hash) ... ok
+test_diagnostic_rejects_canonical_or_private_wrong_magic (__main__.CPU.test_diagnostic_rejects_canonical_or_private_wrong_magic) ... ok
+test_each_mandatory_asset_omission (__main__.CPU.test_each_mandatory_asset_omission) ... ok
+test_each_probe_must_be_executable (__main__.CPU.test_each_probe_must_be_executable) ... ok
+test_explicit_manifest_wrong_before_asset_read (__main__.CPU.test_explicit_manifest_wrong_before_asset_read) ... ok
+test_fixed_controls_cannot_change (__main__.CPU.test_fixed_controls_cannot_change) ... ok
+test_guard_exact_parent_framework_held_lock (__main__.CPU.test_guard_exact_parent_framework_held_lock) ... ok
+test_guard_exact_suffix_cannot_change (__main__.CPU.test_guard_exact_suffix_cannot_change) ... ok
+test_guard_foreign_interpreter_alias (__main__.CPU.test_guard_foreign_interpreter_alias) ... ok
+test_guard_framework_samefile_alias_allowed (__main__.CPU.test_guard_framework_samefile_alias_allowed) ... ok
+test_guard_interpreter_hash_pins (__main__.CPU.test_guard_interpreter_hash_pins) ... ok
+test_guard_pinned_framework_and_guard_hash (__main__.CPU.test_guard_pinned_framework_and_guard_hash) ... ok
+test_guard_unheld_lock_and_unexpected_error (__main__.CPU.test_guard_unheld_lock_and_unexpected_error) ... ok
+test_literal_ds4_prefix_clear_uses_production_expression (__main__.CPU.test_literal_ds4_prefix_clear_uses_production_expression) ... ok
+test_model_hash_refusal_before_open (__main__.CPU.test_model_hash_refusal_before_open) ... ok
+test_prepared_command_digest_suffix_and_cwd (__main__.CPU.test_prepared_command_digest_suffix_and_cwd) ... ok
+test_raw_header_and_target_contract (__main__.CPU.test_raw_header_and_target_contract) ... ok
+test_raw_native_and_candidate_truncation_and_extra (__main__.CPU.test_raw_native_and_candidate_truncation_and_extra) ... ok
+test_run_guard_failure_never_calls_model (__main__.CPU.test_run_guard_failure_never_calls_model) ... ok
+test_run_manifest_failure_never_calls_guard_or_model (__main__.CPU.test_run_manifest_failure_never_calls_guard_or_model) ... ok
+test_same_length_pin_drift (__main__.CPU.test_same_length_pin_drift) ... ok
+test_size_pin_drift (__main__.CPU.test_size_pin_drift) ... ok
+test_summary_counts_are_literal_nonnegative_ints (__main__.CPU.test_summary_counts_are_literal_nonnegative_ints) ... ok
+test_summary_finite_metrics_exclude_bool (__main__.CPU.test_summary_finite_metrics_exclude_bool) ... ok
+test_summary_geometry_rows_budget_controls (__main__.CPU.test_summary_geometry_rows_budget_controls) ... ok
+test_summary_literal_control_booleans (__main__.CPU.test_summary_literal_control_booleans) ... ok
+test_summary_three_valid_modes (__main__.CPU.test_summary_three_valid_modes) ... ok
+test_valid_inventory_and_command_authority (__main__.CPU.test_valid_inventory_and_command_authority) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 0.126s
+
+OK
+{"pass_": true, "tests": 35, "rejected_cases": 225, "models": 0, "model_metadata_reads": 0, "gpu_devices": 0, "artifact_root": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-pilot-cpu-v1"}

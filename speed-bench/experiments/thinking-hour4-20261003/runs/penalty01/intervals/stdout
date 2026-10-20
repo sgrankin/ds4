@@ -1,0 +1,95 @@
+We need read config.json whole raw. Then write solution.py. Only one read call and one write call. Let's read config.json.
+
+🛠️ Reading config.json (whole file)...
+
+We need implement solve(payload, config). Payload list of integer [start,end] intervals. Ignore empty or reversed intervals. Return sorted nonoverlapping [start,end] intervals covering input union; obey merge_touching in config.
+
+Need understand semantics. Half-open interval coalescing. Intervals [start,end) presumably. Empty if start >= end? Reversed if start > end? "Ignore empty or reversed intervals." Empty interval maybe start == end. Reversed start > end. So valid start < end. merge_touching true means merge intervals that touch, i.e., [1,4) and [4,6) merge to [1,6). If false, touching intervals remain separate? But "sorted nonoverlapping intervals covering input union" — if merge_touching false, [1,4) and [4,6) are nonoverlapping half-open (they share endpoint but no overlap), so keep separate. If true, merge into [1,6). Also overlapping intervals merge regardless.
+
+Config may be dict with merge_touching key. Could be missing? Use config.get? But no imports, builtins only. Can use dict methods. "obey merge_touching in config." We can access config["merge_touching"]? If missing maybe default? Probably present. But robust: config.get("merge_touching", False)? That's builtin method, allowed. Names/attributes beginning underscore not allowed. .get is fine.
+
+No decorators, annotations, default args, classes, imports. Plain function definitions only at module level. So def solve(payload, config): ... and maybe helper defs. No default args.
+
+Need produce sorted nonoverlapping intervals covering union. Algorithm:
+- collect valid intervals where start < end.
+- sort by start.
+- merge: iterate, if current start <= last end when merge_touching true? Actually for half-open, overlap if start < last_end. Touch if start == last_end. Merge if start <= last_end when merge_touching true; if false merge only if start < last_end. But also if same? start == last_end and merge_touching false keep separate.
+- For overlapping: start < last_end merge. If start == last_end and merge_touching false keep separate. If start > last_end keep separate.
+- If merge_touching true: merge if start <= last_end.
+- If false: merge if start < last_end.
+But what about intervals [1,4) and [3,3)? ignored. [3,3) empty. [4,4) empty. sample: [8,11), [1,4), [4,6), [3,3). Valid: [8,11), [1,4), [4,6). Sort: [1,4), [4,6), [8,11). merge_touching true: [1,4) and [4,6) merge -> [1,6); then [8,11) separate -> [[1,6],[8,11]]. If false: [[1,4],[4,6],[8,11]].
+
+Need consider payload may contain intervals as lists, maybe tuples? Return list of lists. "integer [start,end] intervals". We'll handle any sequence with indexing. Could use for interval in payload: start = interval[0]; end = interval[1]. If malformed? Not specified. Ignore empty or reversed. Maybe also ignore non-integer? Not required. We'll assume.
+
+Could config be None? Probably dict. Use config.get("merge_touching", False). But if config is None, .get fails. Not specified. We'll assume dict.
+
+Potential issue: "Ignore empty or reversed intervals." Empty could mean start == end, or maybe start >= end? Reversed start > end. We ignore start >= end. That covers both.
+
+Sorting: sorted(valid, key=lambda x: x[0]) uses lambda, allowed? Plain function definitions only at module level: no decorators, annotations, default argument values, classes, or imports. Lambdas inside function are expressions, not module-level definitions. Should be okay. But maybe avoid lambda? Could sort tuples naturally since valid list of [start,end], sorting sorts by start then end. sorted(valid) works because lists compare lexicographically. That's fine. But if intervals are tuples also fine. Use sorted(valid). But if payload contains mixed list/tuple? Comparisons between list and tuple fail. Not likely. Could sort with key function? We can define helper def _key? Names beginning underscore prohibited. Could define def interval_start(interval): return interval[0], then sorted(valid, key=interval_start). That's plain function definition. But sorted key expects function; okay. But simpler: sorted(valid) if all lists. Payload sample lists. Return lists. We'll convert each valid interval to [start, end] list, so all lists. Then sorted works.
+
+Algorithm details:
+def solve(payload, config):
+    merge_touching = config.get("merge_touching", False)
+    valid = []
+    for interval in payload:
+        start = interval[0]
+        end = interval[1]
+        if start < end:
+            valid.append([start, end])
+    valid = sorted(valid)
+    result = []
+    for interval in valid:
+        if not result:
+            result.append(interval)
+        else:
+            last = result[-1]
+            if merge_touching:
+                if interval[0] <= last[1]:
+                    if interval[1] > last[1]:
+                        last[1] = interval[1]
+                    # else keep
+                else:
+                    result.append(interval)
+            else:
+                if interval[0] < last[1]:
+                    if interval[1] > last[1]:
+                        last[1] = interval[1]
+                else:
+                    result.append(interval)
+    return result
+
+Wait for merge_touching false, if interval[0] < last[1] merge. But what if interval[0] == last[1]? Keep separate. Good. But what about interval fully contained? e.g., [1,10), [2,3). start 2 < 10, merge, end 3 not > 10, keep [1,10). Good.
+
+But subtle: if merge_touching false and intervals overlap but one starts equal to last end? That's touching, not overlapping. Keep separate. Good.
+
+But "covering the input union" — if merge_touching false, union of half-open intervals [1,4) and [4,6) is [1,6), but output [[1,4],[4,6]] still covers union as set? Yes, union of output equals union. Nonoverlapping half-open. Fine.
+
+Potential issue: config could be a dict with key "merge_touching" but maybe value false. .get works.
+
+No imports. No I/O. No underscore names. We should not use attributes beginning underscore. config.get is method, name get not underscore. result[-1] indexing okay. list.append okay.
+
+Could there be a requirement to ignore empty intervals where start == end but reversed start > end. We ignore start >= end. Good.
+
+Could payload be empty. Returns [].
+
+Could config missing merge_touching. Default? Maybe should be false. The task says "obey merge_touching in config." If absent maybe false. We'll use .get.
+
+Potential issue: "At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports." So module should contain only def solve. No other statements. Our code only def solve. Good.
+
+Need exactly one write call. Write solution.py with complete implementation. Let's do it.
+
+But before write, think about whether config might be a JSON object loaded as dict. Yes.
+
+Should we handle intervals as lists of length 2. If payload has e.g. [1,2,3]? Not specified. We'll ignore extra.
+
+Could intervals be reversed e.g. [5,2]. start < end false -> ignore. Good.
+
+Could empty interval [3,3]. start < end false -> ignore. Good.
+
+What about merge_touching true and adjacent intervals [1,4), [4,6), [6,8) -> merge all to [1,8). Our algorithm: last [1,4], interval [4,6], 4 <= 4 true, end 6 > 4 -> last [1,6]; interval [6,8], 6 <= 6 true -> [1,8]. Good.
+
+What about merge_touching false and [1,4), [4,6), [6,8) -> [[1,4],[4,6],[6,8]]. Good.
+
+What about overlapping intervals [1,5), [2,3), [4,6). Sort [1,5], [2,3], [4,6]. merge_touching false: [1,5] then [2,3] start 2 < 5 merge keep [1,5]; [4,6] start 4 < 5 merge end 6 -> [1,6]. Good.
+
+What about merge_touching true with [1,5), [5,

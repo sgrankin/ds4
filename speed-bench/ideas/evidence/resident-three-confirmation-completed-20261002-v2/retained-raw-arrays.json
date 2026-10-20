@@ -1,0 +1,82 @@
+{
+  "reference.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/reference.bin",
+    "sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+    "bytes": 264777744,
+    "verified_by_archive_full_streaming_sha_once": true,
+    "copied": false,
+    "layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "6b0aa0e5910a408c61de64a895bd387bf375b1eb9f86e001787de54e12d7f802"
+    }
+  },
+  "native-before-raw.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-before-raw.bin",
+    "sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+    "bytes": 264777744,
+    "verified_by_archive_full_streaming_sha_once": true,
+    "copied": false,
+    "layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "6b0aa0e5910a408c61de64a895bd387bf375b1eb9f86e001787de54e12d7f802"
+    }
+  },
+  "broader3-raw.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/broader3-raw.bin",
+    "sha256": "6ba6007cc701425d767b72a94dea7118edaf00a6abaf5d1ca1497d89d5ddeb0a",
+    "bytes": 264777744,
+    "verified_by_archive_full_streaming_sha_once": true,
+    "copied": false,
+    "layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "6b0aa0e5910a408c61de64a895bd387bf375b1eb9f86e001787de54e12d7f802"
+    }
+  },
+  "native-after-raw.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-after-raw.bin",
+    "sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+    "bytes": 264777744,
+    "verified_by_archive_full_streaming_sha_once": true,
+    "copied": false,
+    "layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "6b0aa0e5910a408c61de64a895bd387bf375b1eb9f86e001787de54e12d7f802"
+    }
+  }
+}

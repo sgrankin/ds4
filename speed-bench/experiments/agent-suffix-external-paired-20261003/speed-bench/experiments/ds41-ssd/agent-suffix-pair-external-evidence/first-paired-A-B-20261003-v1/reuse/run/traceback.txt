@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run_agent_suffix_pair_external.py", line 306, in drive
+    else:checked=checker(records,work_deadline)
+                 ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run_agent_suffix_pair_external.py", line 484, in checker
+    if started.get('status')!='FIRST_GRADING_STARTED' or len(attempts)!=1 or attempts[0].get('passed') is not True or graded.get('passed') is not True or type(graded.get('returncode')) is not int or graded['returncode']!=0 or started.get('code_sha256')!=sha(project/'access.py') or attempts[0].get('source_sha256')!=started['code_sha256'] or sha(private/'first-graded-access.py')!=started['code_sha256']:raise ControlFailure('First external gold/file attempt failed/mutated; no later repair')
+                                                                                                                                                                                                                                                                                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ControlFailure: First external gold/file attempt failed/mutated; no later repair

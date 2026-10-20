@@ -1,0 +1,32 @@
+{
+  "mode": "native",
+  "phase": "edited-2",
+  "seconds": 52.53442625000025,
+  "http_status": 200,
+  "response_status": "completed",
+  "text": "{\"code\":\"MAPLE-42\",\"reserve\":73}",
+  "gold": {
+    "code": "MAPLE-42",
+    "reserve": 73
+  },
+  "correct": true,
+  "complete": true,
+  "error": null,
+  "input_tokens": 1949,
+  "output_tokens": 13,
+  "usage": {
+    "input_tokens": 1949,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 1949
+    },
+    "output_tokens": 13,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 1962
+  },
+  "incomplete_details": null,
+  "suffix_log_lines": [],
+  "pass": true
+}

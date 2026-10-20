@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/tests/test_reasoning_budget_confirmation_build.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "source_sha256": "41cde67468589614d0e33481969611d371208c15e59a838147a64bdbb33f5e21",
+  "test_sha256": "b299b55f78227d710cfea8ddd4f19b46bff675046baad30ec0031ed0b88ddda8",
+  "log_sha256": "cbe3819600e10911a124a58de3e9fbc1d734c2ad4f1b452e9fb6d3c531818c58",
+  "model_or_metadata_opened": false,
+  "compiler_or_caller_executed": false,
+  "gold_tests_rerun": false
+}

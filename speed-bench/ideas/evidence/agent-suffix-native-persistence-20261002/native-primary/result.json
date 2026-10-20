@@ -1,0 +1,50 @@
+{
+  "pass": true,
+  "suffix_mode": "on",
+  "turns_sent": 3,
+  "agent_returncode": 0,
+  "seconds": 210.11303204199794,
+  "old_control_correct": true,
+  "final_answer_correct": true,
+  "final_assistant_text": "</think>CODE=3141<\uff5cend\u2581of\u2581sentence\uff5c>",
+  "approximate_reuses": [
+    {
+      "reused": 556,
+      "fresh": 480
+    }
+  ],
+  "fully_fresh_latest_query": true,
+  "protected_and_other_bytes_preserved": true,
+  "updated_fact_retained": true,
+  "rejected_edits": 0,
+  "named_session_files": [
+    {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary/cache/e2597c652b01e8050f3a5ce32ba4f9f2968f4fcc.kv",
+      "tokens": 3142,
+      "payload_bytes": 0
+    }
+  ],
+  "text_only_named_save": true,
+  "approximate_save_notice": true,
+  "private_native_persistence": {
+    "pass": true,
+    "save_called": true,
+    "approximate_before": true,
+    "approximate_after": true,
+    "canonical_blocked_before": true,
+    "canonical_blocked_after": true,
+    "checkpoint_byte_equal": true,
+    "logits_byte_equal": true,
+    "private_graph_byte_equal": true,
+    "suffix_source_rejected": true,
+    "saved_zero_kv": true,
+    "save_ms": 0.609,
+    "optional_reopen_requested": false,
+    "reopened": false,
+    "reload_exact": false,
+    "reload_query_correct": false,
+    "reload_ms": 0.0,
+    "error": ""
+  },
+  "pre_save_answer_correct": true
+}

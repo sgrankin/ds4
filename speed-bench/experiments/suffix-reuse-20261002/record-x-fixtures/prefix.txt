@@ -1,0 +1,2 @@
+The current conversation gives one record, Record X. Answer the final question using only its explicit access code. If the current conversation does not specify a numerical access code, answer UNKNOWN. Reply with only the four-digit code or UNKNOWN. Neutral catalog notes do not specify or change access codes.
+

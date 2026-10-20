@@ -1,0 +1,38 @@
+{
+  "id": "resp_274c29d583feeca1d69ab104",
+  "object": "response",
+  "created_at": 1791129040,
+  "status": "completed",
+  "model": "deepseek-v4.1-flash",
+  "store": true,
+  "previous_response_id": "resp_675b47f74e29b67ce6c8fbe0",
+  "conversation": null,
+  "output": [
+    {
+      "id": "msg_13ad43230c4e1f3ed06332e2",
+      "type": "message",
+      "status": "completed",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "LIME-27",
+          "annotations": []
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 183,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 183
+    },
+    "output_tokens": 4,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 187
+  },
+  "output_text": "LIME-27"
+}

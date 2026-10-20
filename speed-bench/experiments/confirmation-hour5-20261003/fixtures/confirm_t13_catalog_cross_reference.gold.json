@@ -1,0 +1,15 @@
+{
+  "gold": {
+    "owner": "Theo",
+    "materials": [
+      "linen",
+      "glass"
+    ]
+  },
+  "oracle_input": {
+    "question": "A fictional catalog defines Kestrel as a copper lamp, Mica as a linen bag, and Alder as a glass bowl. Order O17 contains Mica and Alder; its owner is Theo. Order O18 contains Kestrel; its owner is Hazel. Report owner and materials for O17, preserving order of its items. Return JSON first, then explain the cross-reference."
+  },
+  "explanation": "Order O17 names Mica first and Alder second. Looking up those names in the catalog gives linen for Mica and glass for Alder. Theo owns this order. Kestrel and Hazel belong to the other order and contribute nothing to the requested result. Item order remains the order printed in O17.",
+  "category": "facts",
+  "scope": "New authored content, fixed before any model outcome."
+}

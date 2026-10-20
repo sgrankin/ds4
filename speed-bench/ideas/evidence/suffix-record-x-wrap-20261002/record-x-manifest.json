@@ -1,0 +1,69 @@
+{
+  "status": "separate fixture prepared; unchanged protocol helper copied and CPU self-tested; native pending",
+  "helper_source_commit": "ccd3d384",
+  "core_source_commit": "6c2efad0",
+  "helper": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-build-20261002/suffix_fact_oracle",
+  "helper_sha256": "89bba403421f4739ac9d87c38342562ed591123606ccb423f9c1c20cff44ff1a",
+  "helper_copy_source": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-prior-secret-build-20261002/suffix_fact_oracle",
+  "binary_byte_identical_to_prior_protocol": true,
+  "fixture_hashes": {
+    "notes.txt": "f0d022de02fbaa79443f75047d77a0db17b776be3def5464b895f9ec41841929",
+    "prefix.txt": "f36c2f17b58d87f555af4b0073d5cafcacf2a94517c73a1ab8e8a7b15d4abc4e",
+    "new-register-secret.txt": "d34e5ffb2dd018d10e99dfb5d948f38be7820dacaff5df8f6a29a60d495cdf27",
+    "README.md": "e4b5ac4657e01d2394a075dc1320b7db9043eb7d9f2bf4baef0853f168e0915e",
+    "question-secret.txt": "019557efd9e030e1d2fef6fa70b5b036546af10dbfb182ce6ed5b9425d4472e4",
+    "old-register.txt": "4efea8cfb9bf185086459c20794b0526ad09ff5fb2f96b652be85cbb358dcd1c"
+  },
+  "source_contract": "freshly evaluated checkpoint with no prior suffix graft; no generic forward-policy history validation; fixture controls native resident/off",
+  "command": {
+    "cwd": "/Volumes/Models/ds4",
+    "argv": [
+      "python3",
+      "speed-bench/ideas/pressure_run.py",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-c512-t128",
+      "--",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-build-20261002/suffix_fact_oracle",
+      "--model",
+      "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+      "--fixtures",
+      "/Volumes/Models/ds4/.workspaces/idea-context/speed-bench/experiments/suffix-reuse-20261002/record-x-fixtures",
+      "--case",
+      "prior-secret",
+      "--out",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-c512-t128",
+      "--prefix",
+      "1024",
+      "--edit",
+      "256",
+      "--unchanged",
+      "512",
+      "--fresh-tail",
+      "128",
+      "--greedy",
+      "16",
+      "--ctx",
+      "4096",
+      "--chunk",
+      "256",
+      "--cache-gb",
+      "64"
+    ],
+    "status": "prepared only; native GPU grant pending",
+    "semantic_fixture": "Record X current access-code lookup",
+    "protocol_label": "prior-secret enables mandatory original/fresh controls, not model text",
+    "required_controls": [
+      "original exact context answers6829 and stops",
+      "fresh edited context answersUNKNOWN and stops",
+      "full tokenized question plus assistant prefix wholly after cacheendpoint",
+      "identity graph/logit bytes and branch initial-endpoint bytes equal"
+    ]
+  },
+  "notes": [
+    "Only new fixture wording/model input is changed; source protocol and binary remain exactly89bba.",
+    "No before-redaction temporal premise and no private-secret/redaction instruction in model input.",
+    "No literal removed digits in edited record, prefix, notes or fully fresh query.",
+    "Every result requires valid original-known and fresh-UNKNOWN greedy controls; final rc3 is semantic failure.",
+    "Approximate K1 same-position suffix384; source/destination at1280, cachedendpoint1664; actual query bound still checked at native runtime.",
+    "Diagnostics compare raw full-vocabulary gold rows, independent gold/stale complete likelihoods and free answers; paired time is not balanced latency."
+  ]
+}

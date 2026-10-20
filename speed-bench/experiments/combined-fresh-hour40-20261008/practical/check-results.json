@@ -1,0 +1,14 @@
+{
+  "status": "GOLD_SANITY_PASS",
+  "cases": {
+    "interval_groups": 161,
+    "dependency_layers": 161
+  },
+  "independent_checks": "interval all-pairs connectivity vs sorted sweep; recursive dependency depth vs simultaneous ready rounds",
+  "hand_checks": 3,
+  "seeds": [
+    20261008401,
+    20261008402
+  ],
+  "model_executed": false
+}

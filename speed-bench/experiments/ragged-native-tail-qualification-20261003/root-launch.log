@@ -1,0 +1,7 @@
+{"arm": "old0-default", "checked": true}
+{"arm": "new0-default", "checked": true}
+{"arm": "new1-default", "checked": true}
+{"arm": "old0-fast", "checked": true}
+{"arm": "new0-fast", "checked": true}
+{"arm": "new1-fast", "checked": true}
+{"status": "complete", "child_returncode": 0}

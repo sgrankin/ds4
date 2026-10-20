@@ -1,0 +1,10 @@
+{
+  "status": "COMPLETE",
+  "arms": [
+    "native-before",
+    "budget1024",
+    "native-after"
+  ],
+  "returncode": 3,
+  "interpretation": "First attempts retained; offline final analysis separately requires actual ROOT release proof. No task generalization, KL/NLL or speed claim."
+}

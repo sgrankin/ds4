@@ -1,0 +1,5 @@
+{
+  "type": "ValueError",
+  "message": "no implicit asset aliases",
+  "model_or_guard_or_compile": false
+}

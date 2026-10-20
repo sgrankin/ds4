@@ -1,0 +1,21 @@
+{
+  "status": "SOURCE_REFUSAL_UNRUN",
+  "chosen_edit_sha256": "480057204ff830e9a5428f1af75f398377f1055354fc80a85adc720ae1b2e32a",
+  "actual_prepared_manifest_sha256": "d13eaf4e51b10d9dc0849b26e7648ea790173a96f90e6d234256df63742e4d63",
+  "actual_live_path_in_system_and_selected_before": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/run/live-context.txt",
+  "proposed_baseline_live_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160-baseline/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-baseline-prepared-20261003-v1/run/live-context.txt",
+  "source": "ds4_agent.c:5223-5224 appends cfg.gen.live_context_path in system message; controllers use their own prepared/run/live-context.txt.",
+  "reason": "Different advertised absolute path changes system context; strict full prethird opaque source IDs/text must not be relaxed. Current baseline cannot be launched as an exact matched control.",
+  "baseline_frozen_source": "ff0d686045b3d23bf36491fcf7fc1d6888464e66",
+  "baseline_build_manifest_sha256": "b4704fa9cfcdcabfe2f0b1d2005342c5c6d8953d6f33e3c07ac9a5f332c43be6",
+  "native_model_or_GGUF_or_guard_execution": false,
+  "live_file_overwrite_or_pinned_source_repair": false,
+  "updater_presence": {
+    "runtime_project_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/run/project/update_context.py",
+    "runtime_project_sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93",
+    "frozen_updater_sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93",
+    "equal": true
+  },
+  "source_cwd_contract": "Controller passes --chdir run/project; agent chdir after engine open(ds4_agent.c14594), then bash uses posix_spawn /bin/sh -c inheriting cwd(9904-9905). System advertises live-context file under run/, without advertising actual project working directory.",
+  "model_path_choice_inference": "ROOT reports first tool explicitly ls run/, then find parent. The updater exists in project/; source supports ambiguous advertised file neighborhood rather than missing input. No model motivation claim."
+}

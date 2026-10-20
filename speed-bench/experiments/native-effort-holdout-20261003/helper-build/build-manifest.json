@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "cc",
+    "-O3",
+    "-g",
+    "-mcpu=native",
+    "-Wall",
+    "-Wextra",
+    "-std=c11",
+    "-I",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/native_effort_holdout.c",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4.o",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_image.o",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_distributed.o",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_tp.o",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_ssd.o",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_metal.o",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_layer_pack.o",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_engram.o",
+    "-lm",
+    "-pthread",
+    "-framework",
+    "Foundation",
+    "-framework",
+    "Metal",
+    "-o",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/ideas/artifacts/native-effort-holdout-helper-build-v1/native-effort-holdout"
+  ],
+  "compile_returncode": 0,
+  "self_test_argv": [
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/ideas/artifacts/native-effort-holdout-helper-build-v1/native-effort-holdout",
+    "--helper-self-test"
+  ],
+  "self_test_returncode": 0,
+  "binary": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/ideas/artifacts/native-effort-holdout-helper-build-v1/native-effort-holdout",
+  "binary_sha256": "a03bff186ded7251164154edb4c5e319447222f3a5d9faaf8cbe60e93f67ae35",
+  "objects": {
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4.o": "d77958a390840f3a555f01df64d52964a656c72e6449c2a1cd8c19f497eb8aca",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_image.o": "752eace0ab62636538b225d4c80011739354649ee395b6648924928079572528",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_distributed.o": "3b09b4b252fd1b06894421b88bc62eeaca24869b839cc17cd22effde1d50dc1a",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_tp.o": "d2f2f5ce0b8bfc7ebcfb0fd80f3eb4e434e89dc4518253cc43a7d253a0b2c2a1",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_ssd.o": "a1fbc20ad4102f4a6f126cde822f2995dd4421153c6256dace554ebca26c2b71",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_metal.o": "ec94b88a9a3da8742c77899e370c1b64869d456ce97d9c8fdba4fae1752bd5ff",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_layer_pack.o": "174b07bfca784e04cb938ae3803e3b97696afcdb886ccd518117ffa3400135c8",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_engram.o": "d94530e0a20a2c196ef24ea839175152dabbdb9ad8245626f01bd81a97f34a4b"
+  },
+  "source_sha256": {
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/ds4.h": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/native_effort_holdout.c": "6d8830a211ec79a8c4486ba1a44a8ba6ab805bf99731023edc6e4d3811c35954",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/native_effort_final_score.h": "6b840f01d3ffb54720d1467cfff8f382fb395ee7fa8a2d1ccc3919e14c5a24c6",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/native_effort_holdout_cases.h": "10e0cab288d2151a8d84656b5e55a7ae45dad21a94f2470dde040531f24d8cc6",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/experiments/ds41-ssd/native-effort-holdout/input-freeze-v1.json": "ad2f0510ebc2684a77f21ebb0f22fe3cb2eb9918890826108192064926dfcc3a"
+  },
+  "native_core_parent_commit": "685ff0ba8864d66e7ca7ef60107536ac00fd2cb2",
+  "core_or_metal_built": false,
+  "model_opened": false,
+  "model_metadata_read": false,
+  "gpu_work": false
+}

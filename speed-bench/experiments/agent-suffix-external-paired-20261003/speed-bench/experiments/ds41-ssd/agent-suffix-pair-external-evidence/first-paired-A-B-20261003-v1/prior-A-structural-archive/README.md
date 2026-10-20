@@ -1,0 +1,5 @@
+Released first external suffix A: structural reuse PASS; semantic first failure retained.
+
+The first pre-third candidate is0, odd deletion11; source2107:2988 shifts to2096:2977, reuses881tokens and evaluates409fresh tokens with the whole latest User region fresh. The actual importer returned2 and the session was approximate before third sampling. The first grade failed (ROOT reports2718 rather than3141); only turns1/2 completed. This structural choice is eligible to define a separately granted exact B control; no grader or generated outcome selects it.
+
+All114 prepared pins and the released ROOT proof were checked. The recorded shared files were copied with exact bytes/modes; original inode identities and inventory remained unchanged. Canonical state is retained as a protected large-file reference with both original and archive-copy hashes. The complete index includes every physical file except itself. ROOT must independently publish the archival attestation before any B preparation. No B preparation/model/guard/helper/model metadata access occurred. Persistence NOT_EXERCISED; no accuracy, forgetting, speed or default-promotion claim.

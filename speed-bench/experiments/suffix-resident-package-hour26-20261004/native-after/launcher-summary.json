@@ -1,0 +1,46 @@
+{
+  "mode": "reuse",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "arm": "native-after",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/concurrent-sessions-hour19-20261004/run.py",
+  "route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_substitutions": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "seconds": 297.78004133301147,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 0,
+      "seconds": 244.15394879100495,
+      "startup_seconds": 0.42328791599720716,
+      "client_seconds": 241.98339854201186,
+      "shutdown_seconds": 1.7467451660049846,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 53.622302666000905,
+      "startup_seconds": 0.4161488749959972,
+      "client_seconds": 51.42563166600303,
+      "shutdown_seconds": 1.7800718340004096,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/package26-cache-after",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/package26-store-after",
+  "timeout_seconds": 600
+}

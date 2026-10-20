@@ -1,0 +1,38 @@
+{
+  "mode": "reuse",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "ssd_mb": 128,
+  "arm": "ssd128",
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/concurrent-sessions-hour19-20261004/run.py",
+  "seconds": 352.08772404099,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 3,
+      "seconds": 271.4077590839879,
+      "startup_seconds": 0.4345691250055097,
+      "client_seconds": 269.6124379169778,
+      "shutdown_seconds": 1.3599641670007259,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 80.67662762498367,
+      "startup_seconds": 0.4216696670046076,
+      "client_seconds": 78.65723929100204,
+      "shutdown_seconds": 1.597337792016333,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/ssd29-cache-128",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/ssd29-store-128",
+  "timeout_seconds": 600
+}

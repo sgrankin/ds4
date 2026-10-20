@@ -1,0 +1,13 @@
+{
+  "verified_utc": "2026-10-02 22:33:54 UTC",
+  "verifier": "ROOT",
+  "guard_result_observed": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "MAIN_model_flock_reacquired_and_released": true,
+  "owned_joint_probe_or_driver_remaining": [],
+  "method": "ROOT executed nonblocking flock on MAIN model-job.lock and ps ownership check before launching next narrow-half job",
+  "subsequent_model_job": "ROOT session25806 narrow-half pair launched22:34:02UTC; current occupied lock therefore belongs to a new granted job",
+  "model_metadata_accessed": false
+}

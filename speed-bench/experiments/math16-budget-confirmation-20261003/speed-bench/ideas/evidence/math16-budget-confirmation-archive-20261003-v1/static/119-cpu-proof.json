@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_reasoning_budget_confirmation.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "tests": 5,
+  "source_sha256": "c34e4f5902e547b3e4351a827c01199c388efbc77eb2260c373bf5866e304b46",
+  "test_sha256": "290ff5772ecd89e8a57dad26ac1bc6415a9f386c8506540260e8c87c3b47edc7",
+  "log_sha256": "6f55ab65aea822e6a1a0ba260b1855e30171903ba05f052dbbaa7309f19b1ff6",
+  "model_or_metadata_opened": false,
+  "tokenizer_opened": false,
+  "core_or_private_frontend_compiled": false
+}

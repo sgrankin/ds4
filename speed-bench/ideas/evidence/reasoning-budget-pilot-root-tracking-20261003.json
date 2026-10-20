@@ -1,0 +1,13 @@
+{
+  "time": 1790997195.593313,
+  "status": "ROOT_TRACKED_PHYSICAL_AND_JJ_BYTES_EXACT",
+  "archive": "speed-bench/experiments/reasoning-budget-pilot-20261003",
+  "total_files": 252,
+  "all_hidden_and_ignored_included": true,
+  "all_jj_file_show_bytes_equal": true,
+  "jj_file_show_color_never_required_for_literal_control_bytes": true,
+  "first_default_color_binary_refusal": "pyc_ESC_sanitized_to_U241B_then_literal_color_never_PASS",
+  "tracked_paths_sha256": "5c6a95c377d8111c594d631f08f87fe6db5f01f8f5d9dda0b683a06164ab84dc",
+  "first_directory_track_68_omissions_retained_and_corrected": true,
+  "model_metadata_accessed": false
+}

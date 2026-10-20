@@ -1,0 +1,18 @@
+{
+  "base": "67696070",
+  "files": {
+    "speed-bench/context_frontier_bench": "2f1e674ae1fd88773d9f677247c629f432e030d3903177f732d2c051cdef2871",
+    "ds4_agent.c": "152ce33a06b6201ba2cab50c556283c3d43af3d62507be6fd428cf8155cbdb1f",
+    "speed-bench/promessi_sposi.txt": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f"
+  },
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "ssd_streaming": true,
+  "initial_measurement_binary_sha256": "2f1e674ae1fd88773d9f677247c629f432e030d3903177f732d2c051cdef2871",
+  "final_files": {
+    "speed-bench/context_frontier_bench.c": "a6962dad1744c9a2914f10d32218c026c1e1df5516451a457ffd379ea5ac65d4",
+    "speed-bench/context_frontier_bench": "f618a5a5dc1333f89a1b9d3044a6fa13ba54dbe3b5329619ccaf8c10e5d93816",
+    "ds4_agent.c": "152ce33a06b6201ba2cab50c556283c3d43af3d62507be6fd428cf8155cbdb1f",
+    "tests/test_agent_compact_prefix.c": "27ba42cf0a953c8b2481a185c4f3706793b1027dcb32a0f98ace43973bd4967d",
+    "speed-bench/experiments/context-frontier-20261002/agent-prefix.tokens": "57ebd86db7a8075d3c19902555220090f760b00903fe671aea5eaef5a18cb8fc"
+  }
+}

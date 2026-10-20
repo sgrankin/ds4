@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/driver.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2",
+    "--manifest-sha256",
+    "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1"
+  ],
+  "manifest_sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+  "launch_requires_root_grant": true
+}

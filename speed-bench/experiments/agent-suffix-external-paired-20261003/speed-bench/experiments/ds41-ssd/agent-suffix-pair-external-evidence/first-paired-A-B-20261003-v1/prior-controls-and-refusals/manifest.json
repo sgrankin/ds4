@@ -1,0 +1,202 @@
+{
+  "status": "MOCK17_PROD_ASAN_UBSAN_PASS_STATIC_A114_PREPARED_UNGRANTED",
+  "source_qualified": "d3647e3d1c3df4e54ec3d7d17a27c7eec40d45b5",
+  "CPU48": "90bb01c1e4d1083b539ad25457b182a90453acd0",
+  "mock_source": "2690c2459388f4c94ab1e4ca6ceb64082229e4ec",
+  "first_mock_failure": "33e8493b3477fd3c8dfce7c934c784036988e9fa",
+  "prepared_manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "prepared_command_sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5",
+  "prepared_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse",
+  "native_build_sha256": "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64",
+  "production_control_unchanged": true,
+  "first_static_preparer_refusal_retained": true,
+  "model_or_guard_or_native_caller_executed": false,
+  "files": {
+    "agent-suffix-pair-external-controls-diagnosis-correction/correction.json": {
+      "bytes": 1112,
+      "sha256": "3cf4a6df2b0e5296bb85119f4ebe3203c2835c7b8f60793be66924e1fab47a08",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-diagnosis-correction/immutable-controls.inc": {
+      "bytes": 10311,
+      "sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v1/attempt.json": {
+      "bytes": 1576,
+      "sha256": "8d13c85deb554e5a4981f4dedd5d33d5a13163a7e96899e729d963f1d1661e0d",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v1/controls-normal": {
+      "bytes": 60592,
+      "sha256": "4dd24f358cc70e1a48d72193fe97dbbd8deb3e229b41658afd97ea04863761ca",
+      "mode": 493
+    },
+    "agent-suffix-pair-external-controls-mock-v1/libc-control-mock-compile.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v1/libc-control-mock-compile.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v1/libc-control-mock-selftest.stderr": {
+      "bytes": 137,
+      "sha256": "919e41b0ba6210c7012887c0c90a93938ec823ca35d2d3b5c8cccffcc127b2e1",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v1/libc-control-mock-selftest.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/attempt.json": {
+      "bytes": 3170,
+      "sha256": "3158951d4843569b16b3858cf7360b0d227c4dcaacf73a38aaa4841606fdd541",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/controls-asan-ubsan": {
+      "bytes": 89264,
+      "sha256": "9d885dca686bbca1a0c0fc7d007a91a52c3f398a71eec8a2c46d5f79ee2e9555",
+      "mode": 493
+    },
+    "agent-suffix-pair-external-controls-mock-v2/controls-normal": {
+      "bytes": 60480,
+      "sha256": "4ea0040e66f1b926768fed390614c8716174b40bccca7ee547f7e9d99b44e05b",
+      "mode": 493
+    },
+    "agent-suffix-pair-external-controls-mock-v2/libc-control-mock-asan-ubsan-compile.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/libc-control-mock-asan-ubsan-compile.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/libc-control-mock-asan-ubsan-selftest.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/libc-control-mock-asan-ubsan-selftest.stdout": {
+      "bytes": 92,
+      "sha256": "527dd1e8d374214419deea319e963e8dbbe65bf7b25c56498bb3b03021bdca0a",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/libc-control-mock-compile.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/libc-control-mock-compile.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/libc-control-mock-selftest.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/libc-control-mock-selftest.stdout": {
+      "bytes": 92,
+      "sha256": "527dd1e8d374214419deea319e963e8dbbe65bf7b25c56498bb3b03021bdca0a",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-controls-mock-v2/proof.json": {
+      "bytes": 3725,
+      "sha256": "603b639dd045fbb38681d1fa9db0de890b48cb5d3bac5dc863c9a4038ed6e072",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-preparer-v1-refusal/failure.json": {
+      "bytes": 638,
+      "sha256": "ecc5fcc0f01d1b7829c20c24634df1e95cc958f68aa50c8428dae453409174eb",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-preparer-v2-cpu/proof.json": {
+      "bytes": 730,
+      "sha256": "dcf3311fc58e778656490115cfc783baef7a8959e40ab9dfb5c94fb416caa196",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-preparer-v2-cpu/stderr": {
+      "bytes": 616,
+      "sha256": "1554ab99d0f668fde1709ace8c3e8e8870f45f7952f0bfcfb499fd33f9442398",
+      "mode": 420
+    },
+    "agent-suffix-pair-external-preparer-v2-cpu/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    "earlier-claim-retracted.json": {
+      "bytes": 556,
+      "sha256": "826b405dc8f04aeeed799341d71936bc29d3977ab1b79e829ff8b5f5ae614e5f",
+      "mode": 420
+    },
+    "original-bool-mock.c": {
+      "bytes": 11020,
+      "sha256": "2fe6ebb6b0ba707b95abdb3f1e289704c3c5dc7aebc124c71719c4ca07e7bb05",
+      "mode": 420
+    },
+    "prepared/manifest.json": {
+      "bytes": 28567,
+      "sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+      "mode": 420
+    },
+    "prepared/nonmodel-preflight.json": {
+      "bytes": 287,
+      "sha256": "9a234f951891023c93f04684402ae2fcc74023fc45c29dc9b6eb8fc6bdb1a8ed",
+      "mode": 420
+    },
+    "prepared/prepared-command.json": {
+      "bytes": 1084,
+      "sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5",
+      "mode": 420
+    },
+    "source/speed-bench/agent_suffix_pair_external_controls.inc": {
+      "bytes": 10311,
+      "sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960",
+      "mode": 420
+    },
+    "source/speed-bench/ideas/agent_suffix_pair_external_controls_mock_v1/plan.json": {
+      "bytes": 6160,
+      "sha256": "3bfe1f496e8cbcd0314acbbf93db38bce34bd40b421caede629e61821b3e2570",
+      "mode": 420
+    },
+    "source/speed-bench/ideas/agent_suffix_pair_external_controls_mock_v2/plan.json": {
+      "bytes": 6470,
+      "sha256": "4957c369583ba4edc8d30b399597df079a1b67d79dc4877316b7b688647d42c8",
+      "mode": 420
+    },
+    "source/speed-bench/ideas/agent_suffix_pair_external_v1/compiler-alias-proof.json": {
+      "bytes": 1908,
+      "sha256": "6c1326b0ba46651d9f55c8556e89efbb6f195c4b23651fd60462f67717362f12",
+      "mode": 420
+    },
+    "source/speed-bench/ideas/prepare_agent_suffix_pair_external_v2.py": {
+      "bytes": 10327,
+      "sha256": "455d89136847e30cdc7012f8fa4ae9765c278da45dd5c0b9cb0acbc5b2a376c2",
+      "mode": 420
+    },
+    "source/tests/test_agent_suffix_pair_external_controls.c": {
+      "bytes": 11215,
+      "sha256": "ecc909a2322e74ddac9656d3bb4dd2f538a8e25671c437c9f6205fe29afafbb8",
+      "mode": 420
+    },
+    "source/tests/test_agent_suffix_pair_external_preparer_v2.py": {
+      "bytes": 2113,
+      "sha256": "a01d06abf91f40434e3e88a60fcd4f2a0626466662eb2748f76f2bdf6fc53e02",
+      "mode": 420
+    }
+  },
+  "scope": [
+    "Actual private controls with libc-only API mocks; no native tokenizer/graph/RoPE orsemantic proof.",
+    "Original48Python and4staticalias tests; mock17 checks pernormal andsanitizedrun, not independent semanticcases.",
+    "Actual model arms are UNRUN; each requires separateROOTgrant.",
+    "Primary persistence NOT_EXERCISED; no forgetting/stateexact/speed/default claim."
+  ]
+}

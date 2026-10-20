@@ -1,0 +1,50 @@
+We need answer count. Need solve derangements with additional restrictions on 1,2. Need count permutations of 8 no fixed points, p1 !=2, p2 !=1. Need integer.
+
+Let's compute. Total derangements !8 = 40320? Derangements n=8 = 14833? Let's recall !8=14833. Need exclude those with p1=2 or p2=1 among derangements. Since derangement already no fixed. Events A: p1=2, B:p2=1. Need !8 - |A|-|B| + |A∩B|.
+
+By symmetry |A|=|B|. Count derangements with p1=2. Then remaining positions {3..8}? Let's map: p1=2. Since p2 cannot? Derangement condition p2 !=2 automatically? p2 cannot equal2 because 2 used at p1. Need p2 !=1? Wait event A only p1=2, derangement includes p2 !=2, p3!=3... p8!=8. Also p? p1=2 not fixed yes. Remaining permutation on values {1,3,4,5,6,7,8} assigned to positions 2..8. Restrictions: position2 cannot value2 (already unavailable) and cannot value1? Derangement requires p2 !=2 only, value2 unavailable, so no extra. Positions 3..8 cannot equal themselves. Value1 has no restriction (position1 already used? Actually p1=2, value1 can go anywhere remaining; no position1). So count permutations of 7 items with positions 2..8, values {1,3,4,5,6,7,8}, where positions 3-8 cannot take corresponding values 3-8. Position2 can take anything except value2 unavailable. Thus effectively derangements of 7? Let's relabel values: position2 corresponds to value1? Need restrictions for positions 3..8 exclude values 3..8. There are 7 positions, 7 values. One position (2) has no forbidden value, six positions (3..8) each forbid one distinct value among six. Value1 is not forbidden anywhere. Count permutations of 7 with 6 forbidden position-value pairs (i forbids i for i=3..8). This is inclusion-exclusion. Number = sum_{k=0}^6 (-1)^k C(6,k) (7-k)!? Because choose k forbidden positions among six, fix them to their values, remaining 7-k arbitrary. Yes. Compute.
+
+For n=7 with 6 restrictions. Sum k=0..6 (-1)^k C(6,k)(7-k)!.
+k0 5040
+k1 -6*720=-4320 =>720
+k2 +15*120=1800 =>2520? Wait 5040-4320=720; +1800=2520.
+k3 -20*24=-480 =>2040.
+k4 +15*6=90 =>2130.
+k5 -6*2=-12 =>2118.
+k6 +1*1=1 =>2119. So |A|=2119? Need check.
+
+Alternatively derangements !7=1854 plus? Let's verify. Count permutations of 7 with one unconstrained position and 6 deranged positions. Formula 2119 plausible.
+
+Now |A∩B|: p1=2, p2=1. Remaining positions 3..8 values {3,4,5,6,7,8} must avoid fixed points. This is derangements of 6 = !6 = 265. So intersection =265.
+
+Then desired = !8 - 2*2119 + 265 = 14833 -4238 +265 = 10860? 14833-4238=10595; +265=10860. Need ensure !8 correct. Let's verify derangements numbers: !1=0, !2=1, !3=2, !4=9, !5=44, !6=265, !7=1854, !8=14833. Yes.
+
+But wait event A count maybe should be derangements of 7? Let's recalc carefully.
+
+We need permutations p of {1..8} deranged and p1 !=2, p2 !=1. Let total derangements !8=14833.
+
+A: p1=2. Since p1=2, p2 cannot be2 but that's okay. Derangement condition for i=2 is p2 !=2, already true because value2 used. So p2 can be 1? In event A, p2=1 is allowed (this is intersection). Remaining positions 2..8 values {1,3,4,5,6,7,8}. Restrictions: p3 !=3, p4 !=4, ..., p8 !=8. Position2 no restriction? Wait p2 !=2 but value2 not in remaining, so indeed no restriction. Thus count permutations of 7 with 6 forbidden matches. Formula above. Let's maybe compute via inclusion-exclusion with 6 restrictions. Sum C(6,k)(7-k)! alternating. We got 2119.
+
+Let's verify by another method: total 7! =5040. Forbid six specific pairs. Inclusion-exclusion. Let's compute again:
+k=0: 5040
+k=1: -6*720 = -4320 =>720
+k=2: +15*120 =1800 =>2520
+k=3: -20*24 = -480 =>2040
+k=4: +15*6 =90 =>2130
+k=5: -6*2 = -12 =>2118
+k=6: +1*1 =1 =>2119. Yes.
+
+Intersection: p1=2,p2=1. Remaining positions 3..8 values {3..8}; all six must be deranged. !6=265. Yes.
+
+Then answer 14833 - 2*2119 +265 = 14833 -4238 +265 = 10860. Need final only integer.
+
+Double-check maybe total derangements n=8 is 14833 yes. Let's list derangements: !0=1,!1=0,!2=1,!3=2,!4=9,!5=44,!6=265,!7=1854,!8=14833. Yes.
+
+Could there be p1 !=2 and p2 !=1 in addition to no fixed. We used derangements and excluded A/B. Correct.
+
+Let's maybe test via direct inclusion-exclusion over all restrictions: no p_i=i for i=1..8, plus p1 !=2, p2 !=1. Forbidden pairs: (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(1,2),(2,1). Count permutations avoiding 10 forbidden pairs. Inclusion-exclusion complicated. Our result 10860. Let's sanity via maybe using rook polynomial. Total 8! =40320. Need count. Derangements 14833. Additional restrictions among derangements: p1=2 or p2=1. Count A=2119, B=2119, intersection=265. So valid =14833 -2119 -2119 +265=10860. Probability valid among derangements ~0.732. Among all 0.269. Seems plausible.
+
+Let's ensure A and B disjoint? Not disjoint, intersection p1=2,p2=1. In derangements, can p1=2 and p2=1 yes. Count 265. Inclusion-exclusion subtract union = |A|+|B|-|A∩B| = 2119+2119-265=3973. 14833-3973=10860. Yes.
+
+Need final only integer. 
+</think>10860

@@ -1,0 +1,6 @@
+
+CURRENT REGISTER
+active_code = 3141
+private_secret = 6829
+END CURRENT REGISTER
+

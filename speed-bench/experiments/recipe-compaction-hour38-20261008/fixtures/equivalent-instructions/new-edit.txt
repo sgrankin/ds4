@@ -1,0 +1,1 @@
+Coding policy: implement solve(payload, config) as plain Python functions with builtins only. Preserve inputs, exact values and order. No imports, classes, decorators, annotations, defaults, I/O, dynamic execution, or hidden state. Follow the retained current contract and config; return data, without printing.

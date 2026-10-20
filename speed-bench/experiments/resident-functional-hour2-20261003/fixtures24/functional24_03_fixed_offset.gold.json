@@ -1,0 +1,11 @@
+{
+  "gold": {
+    "utc": "2026-04-17T12:00:00Z"
+  },
+  "oracle_input": {
+    "local": "2026-04-17T17:45:00",
+    "offset_minutes_east": 345
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Fixed fractional-hour offset conversion; not ambiguous deadline clarification or elapsed train travel."
+}

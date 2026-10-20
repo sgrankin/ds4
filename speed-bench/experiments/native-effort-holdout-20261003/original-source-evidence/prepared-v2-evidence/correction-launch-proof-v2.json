@@ -1,0 +1,49 @@
+{
+  "status": "CPU_PREPARED_NOT_MODEL_GRANTED",
+  "parser_source_commit": "a5b6aa6e0320da7c824b8a9056af33f36c8d2cb3",
+  "old_unrun_source_commit": "5ffaa7eb41acc5336decdcdbecef2b162969e260",
+  "old_unrun_artifact": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/ideas/artifacts/native-effort-holdout-prepared-20261003-v1",
+  "original_plan_sha256": "e7c3c8a0e960a8630f872ccfe3963503b08dbffbc305af926e8fe66c9322dbd6",
+  "plan_sha256": "4ddcb09eeec73b54ba3c823157e463687fc756ca1441b36961c74a5a19828b80",
+  "command_sha256": "d25fb20188f24d5a2fb8473fed526040d5707212551b9208baa0387f83787b37",
+  "launcher_sha256": "91d47864dd883e06a41a433ff81ae2261622a0f1f66c5e541b19e97c071f6fbc",
+  "analyzer_sha256": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e",
+  "helper_binary_sha256": "a03bff186ded7251164154edb4c5e319447222f3a5d9faaf8cbe60e93f67ae35",
+  "core_objects": {
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4.o": "d77958a390840f3a555f01df64d52964a656c72e6449c2a1cd8c19f497eb8aca",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_image.o": "752eace0ab62636538b225d4c80011739354649ee395b6648924928079572528",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_distributed.o": "3b09b4b252fd1b06894421b88bc62eeaca24869b839cc17cd22effde1d50dc1a",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_tp.o": "d2f2f5ce0b8bfc7ebcfb0fd80f3eb4e434e89dc4518253cc43a7d253a0b2c2a1",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_ssd.o": "a1fbc20ad4102f4a6f126cde822f2995dd4421153c6256dace554ebca26c2b71",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_metal.o": "ec94b88a9a3da8742c77899e370c1b64869d456ce97d9c8fdba4fae1752bd5ff",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_layer_pack.o": "174b07bfca784e04cb938ae3803e3b97696afcdb886ccd518117ffa3400135c8",
+    "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_engram.o": "d94530e0a20a2c196ef24ea839175152dabbdb9ad8245626f01bd81a97f34a4b"
+  },
+  "input_sha256": "ad2f0510ebc2684a77f21ebb0f22fe3cb2eb9918890826108192064926dfcc3a",
+  "asset_count": 58,
+  "helper_build_manifest": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/ideas/artifacts/native-effort-holdout-helper-build-v1/build-manifest.json",
+  "preparation_build_path_override": "Read-only original helper build, no recompile or original asset mutation.",
+  "original_cpu_proof_v1": "Historical V1 proof retained unchanged; signed64-parser-correction-v2.json separately pins current parser/tests.",
+  "model_access": false,
+  "model_metadata_read": false,
+  "runtime_or_helper_build": false,
+  "unchanged_policies_inputs_helper_core": true,
+  "estimate_minutes": [
+    90,
+    110
+  ],
+  "new_default_preflight": {
+    "status": "PREFLIGHT_PASS",
+    "assets": 58,
+    "returncode": 0,
+    "model_access": false,
+    "tool_chunk": "7d593a"
+  },
+  "original_v1_default_preflight": {
+    "status": "PREFLIGHT_PASS",
+    "assets": 55,
+    "returncode": 0,
+    "model_access": false,
+    "tool_chunk": "672f1b"
+  }
+}

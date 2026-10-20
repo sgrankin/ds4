@@ -1,0 +1,47 @@
+{
+  "arm": "new-tape-native",
+  "summary": {
+    "mode": "tape-native",
+    "prefix": 1409,
+    "shift": 65,
+    "span": 512,
+    "tail": 128,
+    "decode": 16,
+    "raw_reference_rows": 18,
+    "raw_candidate_rows": 0,
+    "tape_buffer_and_metadata_bytes": 12582992,
+    "immutable_tape_bytes": 12582912,
+    "peak_staging_bytes_including_reserve": 113379963,
+    "staging_budget_bytes": 134217728,
+    "coverage_rejections_preserve_state": false,
+    "precancel_preserves_state": false,
+    "partial_cancel_invalidates": false,
+    "approximate_export_blocked": false,
+    "pair_inputs_reused": 0,
+    "pair_rows_rebuilt": 0,
+    "pair_boundary_rows": 0,
+    "reused_tokens": 0,
+    "fresh_tail_tokens": 0,
+    "fresh_ms_diagnostic": 14823.908,
+    "reuse_ms_diagnostic": 0.0,
+    "mean_kl": 0,
+    "mean_tv": 0,
+    "sum_delta_nll": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 0
+  },
+  "raw": {
+    "reference_rows": 18,
+    "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+    "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+    "full_sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+    "bytes": 9308256
+  },
+  "state": {
+    ".source.state.bin": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2",
+    ".fresh.state.bin": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+  },
+  "csv_checks": null,
+  "private_state": null,
+  "native_parity": true
+}

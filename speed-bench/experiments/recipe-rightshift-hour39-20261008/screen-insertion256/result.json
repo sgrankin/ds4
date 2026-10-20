@@ -1,0 +1,25 @@
+{
+  "returncode": 0,
+  "grades": {
+    "fresh": {
+      "returncode": 3,
+      "grade": {
+        "correct": false,
+        "reason": "SyntaxError",
+        "message": "invalid syntax (<unknown>, line 1)",
+        "tests_complete": false,
+        "passed": 0
+      }
+    },
+    "reuse": {
+      "returncode": 3,
+      "grade": {
+        "correct": false,
+        "reason": "SyntaxError",
+        "message": "invalid syntax (<unknown>, line 1)",
+        "tests_complete": false,
+        "passed": 0
+      }
+    }
+  }
+}

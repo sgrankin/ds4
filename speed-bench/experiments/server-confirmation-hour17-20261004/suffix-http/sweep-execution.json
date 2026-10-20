@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "speed-bench/experiments/server-confirmation-hour17-20261004/suffix_sweep.py",
+    "--timeout",
+    "600"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "order": [
+    "reuse64",
+    "native"
+  ],
+  "shared_visible_paths": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared",
+  "wall_cap_seconds": 600.0,
+  "model": "deepseek-v4.1-flash",
+  "scope": "New facts in existing workflow family; no generated-history paired NLL.",
+  "guard": "One external ROOT pressure guard; no nested guards."
+}

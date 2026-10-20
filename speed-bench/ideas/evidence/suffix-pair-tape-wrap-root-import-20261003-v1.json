@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "time": 1790991484.415922,
+  "archive_revision": "ffb13b131de72d19dc91567e96213685267668b4",
+  "source": "/Volumes/Models/ds4/.workspaces/idea-suffix-wrap-archive/speed-bench/ideas/evidence/suffix-pair-tape-wrap-native-20261003-v1",
+  "destination": "/Volumes/Models/ds4/speed-bench/ideas/evidence/suffix-pair-tape-wrap-native-20261003-v1",
+  "manifest_sha256": "e1c3b7dce52fec6350db566281a598f8f5ba72386f30d5bfbb3dda3445620cbc",
+  "indexed_files": 135,
+  "physical_files_including_self_manifest": 136,
+  "all_files_accounted_for": true,
+  "copied_payload_hashes_exact": true,
+  "core_or_metal_changed": false,
+  "model_opened_by_import": false
+}

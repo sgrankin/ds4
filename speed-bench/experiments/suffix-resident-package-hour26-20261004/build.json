@@ -1,0 +1,32 @@
+{
+  "start_utc": "2026-10-04 19:29:00 UTC",
+  "budget_note": "10 minutes prior launcher/method preparation charged",
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "runtime_build_and_checks": "Item25 make -j2 ds4-server ds4_test; ./ds4_test --server passed",
+  "fixed": "canonical1/PAD1/suffix64/hot0SSD4096/Q2cache64/batch2/ctx8192/chunk512/tile64limit1024/temp0/noeffort",
+  "arms": [
+    "native-before",
+    "subs3",
+    "native-after"
+  ],
+  "one_change": "resident GAP.90 mass.25 rank64 subs3 totalmass.50 replace/nativeweights1 versus GAP0/nativeweights0",
+  "profile": "own new cache namespace per arm; same profile source warming and restart; same advertised paths",
+  "driver": "../concurrent-sessions-hour19-20261004/run.py",
+  "deadline_utc": "2026-10-04 20:19:00 UTC",
+  "measurement_finished_utc": "2026-10-04 19:44:33 UTC",
+  "guards": {
+    "native-before": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "subs3": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "native-after": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  }
+}

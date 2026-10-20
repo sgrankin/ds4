@@ -1,0 +1,39 @@
+arm,phase,group,step,session,queue_inclusive_seconds,http_task_seconds,edit_seconds,correct,read_isolated,actual_reads,complete,cap,pass,stored_pass,grade_agrees,output_tokens,input_tokens,cached_tokens,text,errors
+control-before,before,warm-AB,A-warm,A,92.10754608298885,92.10718083300162,0,True,True,1,True,False,True,True,True,95,2767,1166,READY,
+control-before,before,warm-AB,B-warm,B,91.99822233401937,91.99780474998988,0,True,True,1,True,False,True,True,True,95,2763,1164,READY,
+control-before,before,warm-CD,C-warm,C,91.0211856669921,91.02081645900034,0,True,True,1,True,False,True,True,True,95,2767,1166,READY,
+control-before,before,warm-CD,D-warm,D,90.91075995800202,90.9104508330056,0,True,True,1,True,False,True,True,True,95,2763,1164,READY,
+control-before,before,edited-AB,A-edited,A,51.811342500004685,51.810634166991804,0.00030212500132620335,True,True,1,True,False,True,True,True,109,2993,2564,"{""active_total"":313,""archived_code"":""BEACON-46""}",
+control-before,before,edited-AB,B-edited,B,51.857680540997535,51.85713249997934,0.00027637500897981226,True,True,1,True,False,True,True,True,111,2992,2564,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}",
+control-before,after,edited-CD,C-edited,C,50.94119799998589,50.940559499984374,0.00025483398349024355,True,True,1,True,False,True,True,True,108,2992,2564,"{""active_total"":267,""archived_code"":""CEDAR-70""}",
+control-before,after,edited-CD,D-edited,D,50.981978541996796,50.98145658301655,0.0002781249932013452,True,True,1,True,False,True,True,True,108,2992,2564,"{""active_total"":197,""archived_code"":""DELTA-83""}",
+ssd512,before,warm-AB,A-warm,A,91.02624025000841,91.02589725001599,0,True,True,1,True,False,True,True,True,95,2767,1166,READY,
+ssd512,before,warm-AB,B-warm,B,90.9177484580141,90.91734658399946,0,True,True,1,True,False,True,True,True,95,2763,1164,READY,
+ssd512,before,warm-CD,C-warm,C,95.97365691600135,95.9733563750051,0,True,True,1,True,False,True,True,True,95,2767,1166,READY,
+ssd512,before,warm-CD,D-warm,D,95.86472379197949,95.86436791697633,0,True,True,1,True,False,True,True,True,95,2763,1164,READY,
+ssd512,before,edited-AB,A-edited,A,52.32371770800091,52.32304062502226,0.0003054579719901085,True,True,1,True,False,True,True,True,109,2993,2564,"{""active_total"":313,""archived_code"":""BEACON-46""}",
+ssd512,before,edited-AB,B-edited,B,52.46568104199832,52.465019750001375,0.0003382090071681887,True,True,1,True,False,True,True,True,111,2992,2564,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}",
+ssd512,after,edited-CD,C-edited,C,51.384300833015004,51.383594707993325,0.00032020799699239433,True,True,1,True,False,True,True,True,108,2992,2564,"{""active_total"":267,""archived_code"":""CEDAR-70""}",
+ssd512,after,edited-CD,D-edited,D,51.42555616598111,51.42492299998412,0.0003458330174908042,True,True,1,True,False,True,True,True,108,2992,2564,"{""active_total"":197,""archived_code"":""DELTA-83""}",
+ssd128,before,warm-AB,A-warm,A,94.20621125001344,94.20583687498583,0,True,True,1,True,False,True,True,True,95,2767,1166,READY,
+ssd128,before,warm-AB,B-warm,B,94.310085916979,94.30973558401456,0,True,True,1,True,False,True,True,True,95,2763,1164,READY,
+ssd128,before,warm-CD,C-warm,C,96.06911554199178,96.06881420800346,0,False,True,1,True,False,False,False,True,134,2776,1175,"Inventory numbers retained from the active file:
+
+- batches: 19
+- items_per_batch: 15
+- reserved_items: 18
+
+READY",
+ssd128,before,warm-CD,D-warm,D,80.96011641601217,80.95976887497818,0,True,True,1,True,False,True,True,True,95,2763,1164,READY,
+ssd128,before,edited-AB,A-edited,A,79.13616429199465,79.1354568329989,0.00035429198760539293,True,True,1,True,False,True,True,True,112,2994,1530,"{""active_total"": 313, ""archived_code"": ""BEACON-46""}",
+ssd128,before,edited-AB,B-edited,B,79.04597066700808,79.04531645899988,0.0003090420213993639,True,True,1,True,False,True,True,True,111,2991,1529,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}",
+ssd128,after,edited-CD,C-edited,C,78.52834662501118,78.52774104199489,0.0002705839870031923,True,True,1,True,False,True,True,True,111,3071,1569,"{""active_total"": 267, ""archived_code"": ""CEDAR-70""}",
+ssd128,after,edited-CD,D-edited,D,78.43622358402354,78.43556395801716,0.00030312497983686626,True,True,1,True,False,True,True,True,108,2991,1529,"{""active_total"":197,""archived_code"":""DELTA-83""}",
+control-after,before,warm-AB,A-warm,A,92.61629649999668,92.61595345800743,0,True,True,1,True,False,True,True,True,95,2767,1166,READY,
+control-after,before,warm-AB,B-warm,B,92.50722612501704,92.50689695801702,0,True,True,1,True,False,True,True,True,95,2763,1164,READY,
+control-after,before,warm-CD,C-warm,C,93.87054733300465,93.87025129201356,0,True,True,1,True,False,True,True,True,95,2767,1166,READY,
+control-after,before,warm-CD,D-warm,D,93.76175637499546,93.76143570800195,0,True,True,1,True,False,True,True,True,95,2763,1164,READY,
+control-after,before,edited-AB,A-edited,A,51.44523745900369,51.444547082995996,0.00035854100133292377,True,True,1,True,False,True,True,True,109,2993,2564,"{""active_total"":313,""archived_code"":""BEACON-46""}",
+control-after,before,edited-AB,B-edited,B,51.48900204099482,51.48832862501149,0.0003690830199047923,True,True,1,True,False,True,True,True,111,2992,2564,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}",
+control-after,after,edited-CD,C-edited,C,50.58598870798596,50.58539504199871,0.0002647500077728182,True,True,1,True,False,True,True,True,108,2992,2564,"{""active_total"":267,""archived_code"":""CEDAR-70""}",
+control-after,after,edited-CD,D-edited,D,50.54218195800786,50.54152333398815,0.00028866701177321374,True,True,1,True,False,True,True,True,108,2992,2564,"{""active_total"":197,""archived_code"":""DELTA-83""}",

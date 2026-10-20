@@ -1,0 +1,39 @@
+{
+  "key": "join",
+  "prompt": "Task: Stable duplicate-key left join.\nCreate /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible/join/solution.py containing def solve(payload, config). payload is an object with left and right lists of objects, each containing a string key and a JSON value. Compare keys exactly, with no Unicode normalization. For each left item in its original order, emit one object {key: its key, left: its value, right: the matching right value} for EVERY matching right item, in original right order. Duplicates on both sides therefore form all matching pairs. If no right item matches, emit one object with right null only when config include_unmatched is true; otherwise omit it. Preserve empty string keys and all JSON values. Do not mutate payload or config.\nThe project contains /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible/join/config.json with the configuration and one sample INPUT (no expected output). You must first make exactly one read tool call for path /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible/join/config.json, with whole=true and raw=true, and consume its result. Then make exactly one write tool call for path /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible/join/solution.py containing your complete implementation. These are the only allowed tools and paths. Do not call bash, list, edit, more, web, search, or any other tool. Do not read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible/join/solution.py or any other file. No second write or correction is permitted. After the write, finish with a brief plain answer. External tests will run once after your first attempt; do not try to run them.\n",
+  "system": "Implement the requested function using Python builtins only. At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports. No I/O, dynamic execution, or names/attributes beginning with underscore. Follow the task tool contract exactly. Do not search for or read private grading files.",
+  "config": {
+    "include_unmatched": true,
+    "sample": {
+      "left": [
+        {
+          "key": "é",
+          "value": "first"
+        },
+        {
+          "key": "missing",
+          "value": 0
+        },
+        {
+          "key": "é",
+          "value": "second"
+        }
+      ],
+      "right": [
+        {
+          "key": "é",
+          "value": null
+        },
+        {
+          "key": "é",
+          "value": 99
+        },
+        {
+          "key": "é",
+          "value": false
+        }
+      ]
+    }
+  },
+  "tests_per_task": 161
+}

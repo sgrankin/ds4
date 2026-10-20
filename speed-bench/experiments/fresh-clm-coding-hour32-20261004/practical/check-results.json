@@ -1,0 +1,26 @@
+{
+  "status": "GOLD_SANITY_PASS",
+  "cases": {
+    "dedupe": 161,
+    "bucket": 161
+  },
+  "hand_edges": 4,
+  "independent_checks": "dedupe accepted-history scan vs per-key clock; bucket delta arithmetic vs unit-time refill",
+  "model_or_tokenizer_or_compiler_executed": false,
+  "reference_grades": {
+    "dedupe": {
+      "tests": 161,
+      "passed": 161,
+      "failed": 0
+    },
+    "bucket": {
+      "tests": 161,
+      "passed": 161,
+      "failed": 0
+    }
+  },
+  "reference_commands": [
+    "python3 -B grade.py dedupe reference-dedupe.py",
+    "python3 -B grade.py bucket reference-bucket.py"
+  ]
+}

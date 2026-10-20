@@ -1,0 +1,1 @@
+Use Python integer arithmetic for dividend=-17 and divisor=5. Report quotient using //, remainder using %, and reconstructed=quotient*divisor+remainder. Return JSON first and explain why division truncating toward zero would be different.

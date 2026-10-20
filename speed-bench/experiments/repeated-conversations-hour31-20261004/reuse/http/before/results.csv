@@ -1,0 +1,6 @@
+step,session,round,seconds,seconds_including_edit,correct,fresh_read,complete,cap,pass,text
+B-warm,B,,97.79344995800056,,True,True,True,False,True,READY
+B-edit1,B,1,40.73498508401099,40.73839462499018,True,True,True,False,True,"{""active_total"": 231, ""archived_code"": ""ORBIT-57""}"
+B-edit2,B,2,29.780239458021242,29.78366533300141,True,True,True,False,True,"{""active_total"": 231, ""archived_code"": ""ORBIT-58""}"
+B-edit3,B,3,29.76121991701075,29.764823125005933,True,True,True,False,True,"{""active_total"": 231, ""archived_code"": ""ORBIT-59""}"
+B-edit4,B,4,29.98976575001143,29.993517875002,True,True,True,False,True,"{""active_total"": 231, ""archived_code"": ""ORBIT-60""}"

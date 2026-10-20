@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "case": "fixed_points9",
+      "prompt": "How many permutations p of {1,2,3,4,5,6,7,8,9} have exactly three fixed points? A fixed point is a position i with p(i)=i. There are no other restrictions. Put only the integer count in your final answer.",
+      "answer": "22260",
+      "kind": "integer",
+      "gold_methods": [
+        "fixed_points_enumeration",
+        "fixed_points_formula"
+      ],
+      "gold_results": [
+        22260,
+        22260
+      ]
+    },
+    {
+      "case": "necklaces12_weight4",
+      "prompt": "How many necklaces consist of twelve beads, exactly four black and eight white, when rotations are identified but reflections are counted as different unless they are also rotations? Put only the integer count in your final answer.",
+      "answer": "43",
+      "kind": "integer",
+      "gold_methods": [
+        "necklace_orbits",
+        "necklace_burnside"
+      ],
+      "gold_results": [
+        43,
+        43
+      ]
+    },
+    {
+      "case": "onto7to4",
+      "prompt": "How many functions from the labeled set {1,2,3,4,5,6,7} to the labeled set {A,B,C,D} are onto? Onto means that every one of A,B,C,D occurs at least once as an image. Put only the integer count in your final answer.",
+      "answer": "8400",
+      "kind": "integer",
+      "gold_methods": [
+        "onto_enumeration",
+        "onto_inclusion_exclusion"
+      ],
+      "gold_results": [
+        8400,
+        8400
+      ]
+    },
+    {
+      "case": "domino3by8",
+      "prompt": "How many tilings of a 3-by-8 rectangular grid use twelve identical 1-by-2 dominoes? Dominoes may be horizontal or vertical. Grid positions are fixed, and rotations or reflections of a tiling are counted separately if they occupy different grid cells. Put only the integer count in your final answer.",
+      "answer": "153",
+      "kind": "integer",
+      "gold_methods": [
+        "domino_board",
+        "domino_closed_recurrence"
+      ],
+      "gold_results": [
+        153,
+        153
+      ]
+    },
+    {
+      "case": "partitions20_5_max7",
+      "prompt": "How many nondecreasing five-tuples of positive integers (a,b,c,d,e) satisfy a+b+c+d+e=20 and e<=7? Count each nondecreasing tuple once. Put only the integer count in your final answer.",
+      "answer": "32",
+      "kind": "integer",
+      "gold_methods": [
+        "partition_enumeration",
+        "partition_recurrence"
+      ],
+      "gold_results": [
+        32,
+        32
+      ]
+    },
+    {
+      "case": "connected_graph6_edges7",
+      "prompt": "How many simple undirected connected graphs have the labeled vertex set {1,2,3,4,5,6} and exactly seven edges? Loops and multiple edges are forbidden. Put only the integer count in your final answer.",
+      "answer": "5700",
+      "kind": "integer",
+      "gold_methods": [
+        "graph_enumeration",
+        "graph_component_recurrence"
+      ],
+      "gold_results": [
+        5700,
+        5700
+      ]
+    }
+  ],
+  "model_opened": false,
+  "model_metadata_read": false,
+  "inputs_selected_without_model_outcomes": true
+}

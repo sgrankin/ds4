@@ -1,0 +1,5 @@
+{
+  "parent_ps_command": "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /Volumes/Models/ds4/speed-bench/ideas/pressure_run.py /Volumes/Models/ds4/speed-bench/ideas/artifacts/abba-parent-probe-20261002-pressure -- /opt/homebrew/opt/python@3.14/bin/python3.14 /Volumes/Models/ds4/speed-bench/ideas/artifacts/abba-parent-probe-20261002.py",
+  "child_sys_executable": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+  "model_metadata_used": false
+}

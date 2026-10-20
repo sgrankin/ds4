@@ -1,0 +1,38 @@
+{
+  "name": "state-new-native0",
+  "logits_sha256": "f91a39503f60233d633b08586229fb1b2e18958e60632efaec9d742ab977e652",
+  "snapshot_sha256": "f71f06ea4d72e4329eb7c67a4ba462b284d21352756f8ec50022ec8c9276f2b0",
+  "state_validation": {
+    "header": [
+      878072644,
+      2,
+      8192,
+      1,
+      128,
+      128,
+      8193,
+      2665,
+      40,
+      512,
+      128,
+      129280,
+      4273201
+    ],
+    "bytes": 28078040,
+    "history_tokens": 2665,
+    "phase_vectors": 7,
+    "finite_logit_values": 1034240,
+    "internal_state_sentinels_preserved": true
+  },
+  "cache": {
+    "configured_slots": 6136,
+    "resident_entries": 6136,
+    "hits": 371277,
+    "misses": 34803,
+    "wraps": 104409,
+    "evictions": 28667,
+    "buffer_allocs": 15,
+    "buffer_reuses": 28667
+  },
+  "route": null
+}

@@ -1,0 +1,234 @@
+{
+  "status": "PASS",
+  "teacher_cases": 16,
+  "generation_cases": 4,
+  "results": [
+    {
+      "case": "confirm_t01_python_slices",
+      "independently_computed": {
+        "forward": [
+          22,
+          44,
+          66
+        ],
+        "backward": [
+          77,
+          44,
+          11
+        ]
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t02_dictionary_update",
+      "independently_computed": {
+        "items": [
+          [
+            "a",
+            3
+          ],
+          [
+            "b",
+            9
+          ],
+          [
+            "c",
+            -2
+          ]
+        ],
+        "sum": 10
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t03_floor_division",
+      "independently_computed": {
+        "quotient": -4,
+        "remainder": 3,
+        "reconstructed": -17
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t04_quoted_csv",
+      "independently_computed": {
+        "names": [
+          "green, tea",
+          "coffee"
+        ],
+        "total_quantity": 6
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t05_boolean_filter",
+      "independently_computed": {
+        "ids": [
+          4,
+          9
+        ],
+        "score_sum": 20
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t06_modular_power",
+      "independently_computed": {
+        "remainder": 7
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t07_fraction_sum",
+      "independently_computed": {
+        "numerator": 25,
+        "denominator": 36
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t08_combined_work",
+      "independently_computed": {
+        "time_numerator": 36,
+        "time_denominator": 5,
+        "whole_hours": 7,
+        "minutes": 12
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t09_two_colors",
+      "independently_computed": {
+        "favorable": 24,
+        "total": 42,
+        "numerator": 4,
+        "denominator": 7
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t10_gcd_lcm",
+      "independently_computed": {
+        "gcd": 6,
+        "lcm": 420
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t11_interval_schedule",
+      "independently_computed": {
+        "selected": [
+          "I1",
+          "I2",
+          "I4"
+        ],
+        "count": 3
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t12_shipping_revision",
+      "independently_computed": {
+        "crates": 3,
+        "color": "blue",
+        "dock": "C"
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t13_catalog_cross_reference",
+      "independently_computed": {
+        "owner": "Theo",
+        "materials": [
+          "linen",
+          "glass"
+        ]
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t14_custom_units",
+      "independently_computed": {
+        "meters": 8400,
+        "kilometers": 8.4
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t15_ready_rule",
+      "independently_computed": {
+        "ready": false,
+        "blocking_field": "alarm"
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_t16_fictional_day_cycle",
+      "independently_computed": {
+        "day": "white",
+        "complete_cycles": 2,
+        "remainder": 5
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_g01_bitmask",
+      "independently_computed": {
+        "decimal": 36,
+        "hex": "24"
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_g02_current_access",
+      "independently_computed": {
+        "current_code": "8736",
+        "obsolete_code": "5127"
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_g03_recurrence",
+      "independently_computed": {
+        "a6": 20,
+        "first_difference": 3
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    },
+    {
+      "case": "confirm_g04_stack",
+      "independently_computed": {
+        "stack": [
+          10
+        ],
+        "popped": [
+          9,
+          6
+        ]
+      },
+      "gold_equal": true,
+      "teacher_json_equal": true
+    }
+  ],
+  "scope": "Direct stdlib arithmetic/enumeration and supplied-record extraction; no model/tokenizer/native helper.",
+  "command": "python3 speed-bench/experiments/confirmation-hour5-20261003/check_gold.py"
+}

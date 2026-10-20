@@ -1,0 +1,18 @@
+{
+  "parent_argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/run_reasoning_budget.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/plan.json",
+    "--plan-sha256",
+    "d78f72e601fd811280d62adc9d2971bd7612ab10c58b29fdde47abfcb026a286",
+    "--root-granted"
+  ],
+  "exact_suffix": true,
+  "framework_samefile": true,
+  "lock_held": true
+}

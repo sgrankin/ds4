@@ -1,0 +1,23 @@
+[
+  {
+    "label": "semantic-secret-c512-t64",
+    "returncode": 0,
+    "epoch_complete": 1790972163.726099,
+    "guard_pid": 59803,
+    "helper_sha256": "0fdf612e65d2fa4c93635d2a1548907737980b9d99249edcf808bf2ad5751db7"
+  },
+  {
+    "label": "semantic-secret-c512-t128",
+    "returncode": 0,
+    "epoch_complete": 1790972383.571145,
+    "guard_pid": 61343,
+    "helper_sha256": "0fdf612e65d2fa4c93635d2a1548907737980b9d99249edcf808bf2ad5751db7"
+  },
+  {
+    "label": "prior-secret-c512-t128",
+    "returncode": 3,
+    "epoch_complete": 1790972626.059703,
+    "guard_pid": 62592,
+    "helper_sha256": "89bba403421f4739ac9d87c38342562ed591123606ccb423f9c1c20cff44ff1a"
+  }
+]

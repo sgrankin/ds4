@@ -1,0 +1,9 @@
+{
+  "status": "RETRACTED_DIAGNOSIS_PRESERVED",
+  "earlier_incorrect_claim": "Production API mismatch: pair_external_commit tests !agent_replace_file, so0success fails",
+  "correction": "Original immutable production actually tests agent_replace_file(...) unnegated; int0success was correct. Only boolmock returned1 and causedfailure.",
+  "actual_source_delta": false,
+  "attempted_noop_string_replacement": true,
+  "immutable_source_controls_sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960",
+  "native_build_valid_unrun": true
+}

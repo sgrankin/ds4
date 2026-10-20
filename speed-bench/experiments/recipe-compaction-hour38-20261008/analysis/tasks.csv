@@ -1,0 +1,11 @@
+arm,mode,tail,case,wall_seconds,complete,cap,correct,passed,failed,unresolved,read_count,write_count,config_unchanged,errors,grading_error,first_failure
+code-native-after,native,64,dedupe,116.55465724994428,True,False,True,161,0,0,1,1,True,[],null,null
+code-native-after,native,64,bucket,118.11852849996649,True,False,True,161,0,0,1,1,True,[],null,null
+code-native-before,native,64,dedupe,116.57687987503596,True,False,True,161,0,0,1,1,True,[],null,null
+code-native-before,native,64,bucket,118.11541166703682,True,False,True,161,0,0,1,1,True,[],null,null
+code-reuse128,reuse,128,dedupe,101.18879508401733,True,False,True,161,0,0,1,1,True,[],null,null
+code-reuse128,reuse,128,bucket,104.45022254204378,True,False,True,161,0,0,1,1,True,[],null,null
+code-reuse256,reuse,256,dedupe,101.42549679201329,True,False,True,161,0,0,1,1,True,[],null,null
+code-reuse256,reuse,256,bucket,105.61129341699416,True,False,True,161,0,0,1,1,True,[],null,null
+code-reuse64,reuse,64,dedupe,101.56091362499865,True,False,True,161,0,0,1,1,True,[],null,null
+code-reuse64,reuse,64,bucket,105.75582833297085,True,False,True,161,0,0,1,1,True,[],null,null

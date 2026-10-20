@@ -1,0 +1,42 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+1003 20:30:46 ds4-server: context buffers 1174.48 MiB (ctx=8192, backend=metal, prefill_chunk=512, raw_kv_rows=128, compressed_kv_rows=8193)
+1003 20:30:46 ds4-server: 2 resident sessions request at least 2.29 GiB of context buffers, or 1.21 GiB when the model shares one prefill workspace
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+1003 20:30:46 ds4-server: state cache enabled dir=/Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/server/state-cache profile=c012d28b049720b89667ba27d6cded52e414816f
+1003 20:30:46 ds4-server: batched mode enabled resident_sessions=2 prefill_quantum=2048 mixed_prefill_quantum=128 decode_coalesce_us=2000
+1003 20:30:46 ds4-server: listening on http://127.0.0.1:51784
+1003 20:30:46 ds4-server: chat ctx=0..2128:2128 prompt start
+1003 20:30:46 ds4-server: chat ctx=0..2128:2128 prompt start
+1003 20:31:00 ds4-server: chat ctx=0..2128:2128 prefill chunk 512/2128 (24.1%) chunk=0.00 t/s avg=35.17 t/s 14.558s
+1003 20:31:15 ds4-server: chat ctx=0..2128:2128 prefill chunk 1024/2128 (48.1%) chunk=33.53 t/s avg=34.33 t/s 29.828s
+1003 20:31:31 ds4-server: chat ctx=0..2128:2128 prefill chunk 1536/2128 (72.2%) chunk=32.28 t/s avg=33.62 t/s 45.688s
+1003 20:31:34 ds4-server: chat ctx=0..2128:2128 prefill chunk 1600/2128 (75.2%) chunk=28.56 t/s avg=33.38 t/s 47.929s
+1003 20:31:35 ds4-server: chat ctx=0..2128:2128 prefill chunk 1664/2128 (78.2%) chunk=46.44 t/s avg=33.75 t/s 49.307s
+1003 20:31:36 ds4-server: chat ctx=0..2128:2128 prefill chunk 1728/2128 (81.2%) chunk=47.44 t/s avg=34.11 t/s 50.656s
+1003 20:31:38 ds4-server: chat ctx=0..2128:2128 prefill chunk 1792/2128 (84.2%) chunk=49.01 t/s avg=34.49 t/s 51.962s
+1003 20:31:39 ds4-server: chat ctx=0..2128:2128 prefill chunk 1856/2128 (87.2%) chunk=50.64 t/s avg=34.87 t/s 53.226s
+1003 20:31:40 ds4-server: chat ctx=0..2128:2128 prefill chunk 1920/2128 (90.2%) chunk=50.22 t/s avg=35.23 t/s 54.500s
+1003 20:31:41 ds4-server: chat ctx=0..2128:2128 prefill chunk 1984/2128 (93.2%) chunk=50.84 t/s avg=35.58 t/s 55.759s
+1003 20:31:43 ds4-server: chat ctx=0..2128:2128 prefill chunk 2048/2128 (96.2%) chunk=50.95 t/s avg=35.92 t/s 57.015s
+1003 20:31:43 ds4-server: state cache exact hit slot=0 tokens=2048
+1003 20:31:44 ds4-server: chat ctx=0..2128:2128 prefill chunk 2112/2128 (99.2%) chunk=0.00 t/s avg=35.95 t/s 58.745s
+1003 20:31:45 ds4-server: chat ctx=0..2128:2128 prefill chunk 2128/2128 (100.0%) chunk=24.09 t/s avg=35.82 t/s 59.409s
+1003 20:31:45 ds4-server: chat ctx=0..2128:2128 prompt done 59.476s
+1003 20:31:46 ds4-server: chat ctx=0..2128:2128 prefill chunk 2112/2128 (99.2%) chunk=17.25 t/s avg=34.78 t/s 60.726s
+1003 20:31:47 ds4-server: chat ctx=0..2128:2128 prefill chunk 2128/2128 (100.0%) chunk=32.92 t/s avg=34.76 t/s 61.212s
+1003 20:31:47 ds4-server: chat ctx=0..2128:2128 prompt done 61.283s
+1003 20:31:47 ds4-server: chat ctx=2128..2130:2 gen=2 decoding chunk=1.01 t/s avg=1.01 t/s 1.977s
+1003 20:31:47 ds4-server: chat ctx=0..2128:2128 gen=2 finish=stop 61.453s
+1003 20:31:47 ds4-server: chat ctx=2128..2130:2 gen=2 decoding chunk=9.13 t/s avg=9.13 t/s 0.219s
+1003 20:31:47 ds4-server: chat ctx=0..2128:2128 gen=2 finish=stop 61.502s
+1003 20:31:47 ds4-server: shutdown requested, draining requests

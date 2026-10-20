@@ -1,0 +1,51 @@
+{
+  "status": "SYNTHETIC_ARCHIVE_CPU_PASS",
+  "source_freeze": "d590b44bdc91c1b42aaed90152fc017bbb89cae0",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "tests/test_archive_agent_suffix_external_pair.py",
+    "-v"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive",
+  "plan_sha256": "184c6ef13c1da92448b19fc2903f01349f8471207be2a1915c456a6175a20802",
+  "returncode": 0,
+  "before": {
+    "speed-bench/ideas/archive_agent_suffix_external_pair.py": {
+      "bytes": 24965,
+      "mode": 420,
+      "sha256": "4ee40bfb03c3c585274ef920bb7d8832547b3ac666f61a2364bc50d2f7b81da4"
+    },
+    "tests/test_archive_agent_suffix_external_pair.py": {
+      "bytes": 11538,
+      "mode": 420,
+      "sha256": "14f27614d6f7d426aa1c5cc160421825aa2d6814133c166192e11d23d24b4f58"
+    },
+    "speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration-v2.json": {
+      "bytes": 5437,
+      "mode": 420,
+      "sha256": "9458b192b8c03aaf6b180f558095fecbe3d1f16e46e793ff6dbfb071a2bbfb33"
+    }
+  },
+  "after": {
+    "speed-bench/ideas/archive_agent_suffix_external_pair.py": {
+      "bytes": 24965,
+      "mode": 420,
+      "sha256": "4ee40bfb03c3c585274ef920bb7d8832547b3ac666f61a2364bc50d2f7b81da4"
+    },
+    "tests/test_archive_agent_suffix_external_pair.py": {
+      "bytes": 11538,
+      "mode": 420,
+      "sha256": "14f27614d6f7d426aa1c5cc160421825aa2d6814133c166192e11d23d24b4f58"
+    },
+    "speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration-v2.json": {
+      "bytes": 5437,
+      "mode": 420,
+      "sha256": "9458b192b8c03aaf6b180f558095fecbe3d1f16e46e793ff6dbfb071a2bbfb33"
+    }
+  },
+  "started": 1791008510.104558,
+  "ended": 1791008510.254289,
+  "actual_production_outcomes_read": false,
+  "models_helpers_compilers_graders_guard_executed": false,
+  "new_test": "literal historical archive authority before outcomes"
+}

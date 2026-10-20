@@ -1,0 +1,96 @@
+{
+  "status": "CALLER_COMPILE_LINK_PASS",
+  "source_freeze": "86f834866f81ae8cb33c9c9f00e4df86a3b7a95c",
+  "cpu_evidence": "ae7804d2b6f3f58e0545994fa7bb5fb926f4789b",
+  "plan_sha256": "5979691ef5ab42b8cdcf44703a1a3a211abd37c8a266e3725f489b7f21456985",
+  "root_grant_sha256": "ab4b0c736046fc7e1b3b4b07033928a750633ca8a96e5dec7eeeed43b12de668",
+  "results": [
+    {
+      "label": "ds4-agent-pair-memory160-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-I.",
+        "-Wno-unused-function",
+        "-ffast-math",
+        "-std=c99",
+        "-c",
+        "speed-bench/agent_suffix_pair_actual_memory160.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-caller-build-v1/ds4-agent-pair-memory160.o"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160",
+      "returncode": 0,
+      "start": 1791001311.3581,
+      "elapsed": 1.132972002029419,
+      "warning": false
+    },
+    {
+      "label": "ds4-agent-pair-memory160-link",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-I.",
+        "-Wno-unused-function",
+        "-ffast-math",
+        "-std=c99",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-caller-build-v1/ds4-agent-pair-memory160",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-caller-build-v1/ds4-agent-pair-memory160.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_help.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_prompt_prefix.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_web.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_kvstore.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/linenoise.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_image.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_distributed.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_tp.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_ssd.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_metal.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_engram.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-build-plan-v1/objects/ds4_gpu_args.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160",
+      "returncode": 0,
+      "start": 1791001312.558926,
+      "elapsed": 0.060913801193237305,
+      "warning": false
+    }
+  ],
+  "outputs": {
+    "ds4-agent-pair-memory160.o": {
+      "bytes": 1030768,
+      "sha256": "b9c338b94b8e388bca4357172623fb9a96255c0435ae489e670ac713666fb6ab",
+      "mode": 420
+    },
+    "ds4-agent-pair-memory160": {
+      "bytes": 3087096,
+      "sha256": "7f98e773809b6847c41d5eb4d798f7855b97a905b9f59d9e92dffc80fbdc495c",
+      "mode": 493
+    }
+  },
+  "all_pins_unchanged": true,
+  "serial_compilers": 1,
+  "native_core_Metal_built": false,
+  "model_stat_open_or_executable_run": false
+}

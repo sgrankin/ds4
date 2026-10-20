@@ -1,0 +1,10 @@
+{
+  "status": "ROOT_INDEPENDENT_AUDIT_SOURCE_FROZEN_BEFORE_BUDGET_OUTCOMES",
+  "time": 1791004271.943708,
+  "plan_sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+  "source_sha256": "8a6a1947792743a12c86f81ea467325d5832e5d853ccb026923e7bb4f6d04a8f",
+  "candidate_outcomes_absent": true,
+  "selfchecks": "10signed64controls plus RNG state check passed",
+  "scope": "48 independent final scores/tokenpiece work/paired counts; raw generation artifacts are text, not full-vocabulary logits",
+  "model_or_helper_or_guard_executed": false
+}

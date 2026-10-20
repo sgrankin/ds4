@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-prepared-20261003-v2/run_native_effort_holdout.py",
+    "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-prepared-20261003-v2/plan.json",
+    "4ddcb09eeec73b54ba3c823157e463687fc756ca1441b36961c74a5a19828b80"
+  ],
+  "initial": {
+    "time": 1790991298.951892,
+    "level": 1,
+    "swap_gb": 0.017763671875,
+    "physical_gb": 128.0,
+    "free_gb": 55.972015380859375,
+    "file_backed_gb": 52.40168762207031,
+    "wired_gb": 4.7938232421875,
+    "compressor_gb": 9.295486450195312
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

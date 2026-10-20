@@ -1,0 +1,32 @@
+{
+  "schema": "root-granted-math16-archive-launch-v1",
+  "execution_plan_sha256": "265c7707458dd753ed2f9e7787fa6c4a883263d2ada5df4bb5eb6c84058393a6",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive-v2/speed-bench/math16-archive/archive.py",
+    "--registry-sha256",
+    "2e3d2865bf8a8028164c931828c55c30a619222182fd121e59e834c8760c481e",
+    "--release",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/root-release-proof.json",
+    "--release-sha256",
+    "d35de4e3bef0f0c678395509042087d93d6a98358744acbf0adec095d1d32f72",
+    "--producer-summary",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/producer-analysis.json",
+    "--producer-summary-sha256",
+    "c79c5d113189f552f4cbb4a15274dae1f245a1cbe9c1bf309935a19aa996325e",
+    "--independent-audit",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/root-independent-outcome-audit.json",
+    "--independent-audit-sha256",
+    "9853844fba01c8260fcbe44facf4b1ad77f9eb787cc77477a59f3203d52a55b3",
+    "--destination",
+    "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive-v2/speed-bench/ideas/evidence/math16-budget-confirmation-archive-20261003-v1",
+    "--root-archive-granted"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive-v2",
+  "start_time": 1791006678.626152,
+  "end_time": 1791006679.2697878,
+  "returncode": 0,
+  "model_or_helper_or_guard_executed": false,
+  "root_exact_one_archive_grant": true,
+  "cpu_proof_sha256": "e93e193f09a204963be69fe42830137dfa49c3c83eda42f057d979f65f738bbf"
+}

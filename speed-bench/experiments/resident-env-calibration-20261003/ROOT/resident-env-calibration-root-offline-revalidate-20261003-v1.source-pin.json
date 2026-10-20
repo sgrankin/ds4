@@ -1,0 +1,9 @@
+{
+  "time": 1790998963.669919,
+  "status": "ROOT_OFFLINE_REVALIDATOR_SOURCE_PINNED_BEFORE_EXECUTION",
+  "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-env-calibration-root-offline-revalidate-20261003-v1.py",
+  "sha256": "10ac683b32d9259ea659c9503e8bf9b1534c299bbaa97b91d35d07f0a32f68fc",
+  "source_frozen_calibration_used": true,
+  "full_fp64_metric_tolerance": 1e-08,
+  "model_stat_or_open": false
+}

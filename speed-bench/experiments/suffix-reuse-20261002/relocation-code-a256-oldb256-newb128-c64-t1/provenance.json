@@ -1,0 +1,106 @@
+{
+  "case_name": "relocation-code-a256-oldb256-newb128-c64-t1",
+  "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-relocation-code-a256-oldb256-newb128-c64-t1",
+  "helper_source_commit": "a727354a",
+  "core_source_commit": "6c2efad0",
+  "helper_sha256": "d33dfe8ae2ef03cd27d82bac641d144eea8d8fc1954edb8861d4e88dbb7d051a",
+  "summary": {
+    "case": "code",
+    "fresh_prefix_bytes_equal": true,
+    "fresh_prefix_raw_rows_per_layer": 64,
+    "fresh_prefix_compressed_rows": 960,
+    "fresh_prefix_index_rows": 960,
+    "prefix_tokens": 256,
+    "edit_tokens": 128,
+    "source_edit_tokens": 256,
+    "unchanged_tokens": 64,
+    "fresh_tail_tokens": 1,
+    "source_start": 512,
+    "destination_start": 384,
+    "source_end": 575,
+    "destination_end": 447,
+    "raw_keys_repaired": 2520,
+    "compressed_keys_repaired": 156,
+    "index_keys_repaired": 156,
+    "reused_tokens": 63,
+    "copied_bytes": 5572608,
+    "pending_pairs": 3,
+    "identity_logit_bytes_equal": true,
+    "identity_graph_bytes_equal": true,
+    "canonical_export_blocked": true,
+    "invalid_candidates_unchanged": true,
+    "precancel_unchanged": true,
+    "postgraft_cancel_invalidated": true,
+    "setup_ms": 31229.342,
+    "identity_ms": 49.127,
+    "rows": 3,
+    "gold_tokens_including_eos": 3,
+    "stale_tokens_including_eos": 3,
+    "mean_kl": 1.13211453888e-05,
+    "mean_tv": 1.35751960933e-05,
+    "sum_delta_nll": -3.85656567659e-05,
+    "argmax_flips": 0,
+    "byte_equal_rows": 0,
+    "greedy_encoding": "JSON byte escapes for non-ASCII",
+    "results": [
+      {
+        "mode": "fresh",
+        "edit_ms": 4625.565,
+        "gold_logprob": -7.25318119876e-05,
+        "stale_logprob": -20.5283960427,
+        "gold_minus_stale_logprob": 20.5283235109,
+        "greedy": "3141",
+        "correct_answer": true,
+        "stale_answer": false,
+        "stopped": true,
+        "greedy_tokens": [
+          18321,
+          19,
+          1
+        ]
+      },
+      {
+        "mode": "reuse",
+        "edit_ms": 3104.604,
+        "gold_logprob": -3.39661552218e-05,
+        "stale_logprob": -17.2610485289,
+        "gold_minus_stale_logprob": 17.2610145627,
+        "greedy": "3141",
+        "correct_answer": true,
+        "stale_answer": false,
+        "stopped": true,
+        "greedy_tokens": [
+          18321,
+          19,
+          1
+        ]
+      }
+    ]
+  },
+  "guard": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "pressure": {
+    "samples": 52,
+    "levels": [
+      1
+    ],
+    "adverse_samples": 0,
+    "swap_growth_gb": 0.0,
+    "max_wired_gb": 75.48226928710938,
+    "max_compressor_gb": 8.356491088867188
+  },
+  "raw_logits": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-relocation-code-a256-oldb256-newb128-c64-t1/logits.bin",
+    "bytes": 3102748,
+    "sha256": "cfc870b3433825077672a443a5fa7a3487c92c6e677d387120f1cb04e2bf6c8e"
+  },
+  "diagnostic_speedup": 1.4899049927140466,
+  "diagnostic_elapsed_reduction_fraction": 0.3288162635267259,
+  "stale_answer_logprob_gain": 3.267347513799997,
+  "stale_answer_sequence_probabilities": {
+    "fresh": 1.215152756308355e-09,
+    "reuse": 3.188760282391205e-08
+  }
+}

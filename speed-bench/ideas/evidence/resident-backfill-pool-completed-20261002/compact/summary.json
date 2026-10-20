@@ -1,0 +1,1263 @@
+[
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.43839403273,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 512,
+    "startup_ms": 2463.703,
+    "prefill_ms": 19446.484,
+    "decode_ms": 31763.961,
+    "metrics_ms": 1082.379,
+    "name": "native-before",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/native-before-raw.bin",
+    "io": {
+      "demand": {
+        "enabled": 1,
+        "pread_calls": 67908,
+        "requested_bytes": 225302446080,
+        "returned_bytes": 225302446080,
+        "cache_loader_bytes": 225302446080,
+        "cache_hits": 191684,
+        "cache_misses": 22636,
+        "cache_evictions": 16500
+      },
+      "stage": null,
+      "pool": null,
+      "total_requested_logical_bytes": 225302446080,
+      "total_returned_logical_bytes": 225302446080,
+      "scope": "whole-engine P+D plus background teardown reads; logical only; cache_loader_bytes not added again"
+    },
+    "route": null,
+    "late": null
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.43839403273,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 512,
+    "startup_ms": 223.232,
+    "prefill_ms": 19490.472,
+    "decode_ms": 31703.479,
+    "metrics_ms": 1024.529,
+    "name": "native-positive",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/native-positive-raw.bin",
+    "io": {
+      "demand": {
+        "enabled": 1,
+        "pread_calls": 67908,
+        "requested_bytes": 225302446080,
+        "returned_bytes": 225302446080,
+        "cache_loader_bytes": 225302446080,
+        "cache_hits": 191684,
+        "cache_misses": 22636,
+        "cache_evictions": 16500
+      },
+      "stage": null,
+      "pool": null,
+      "total_requested_logical_bytes": 225302446080,
+      "total_returned_logical_bytes": 225302446080,
+      "scope": "whole-engine P+D plus background teardown reads; logical only; cache_loader_bytes not added again"
+    },
+    "route": {
+      "layers": 0,
+      "substitutions": 0,
+      "native_misses": 0,
+      "skipped_loads": 0,
+      "skipped_bytes": 0,
+      "mean_mass": 0.0,
+      "mean_score_gap": 0.0,
+      "mean_affinity_ratio": 0.0,
+      "mean_rank": 0.0,
+      "full_snapshots": 0,
+      "double_layers": 0,
+      "planned_substitutions": 0
+    },
+    "late": null
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.459426517267,
+    "delta_nll": 0.021032484537,
+    "policy_delta_nll": 0.021032484537,
+    "kl_base_to_raw": 0.0126620184131,
+    "kl_base_to_policy": 0.0126620184131,
+    "tv": 0.0265077269717,
+    "argmax_flips": 13,
+    "bit_equal_rows": 17,
+    "startup_ms": 234.999,
+    "prefill_ms": 19985.198,
+    "decode_ms": 29328.974,
+    "metrics_ms": 1018.719,
+    "name": "bf0",
+    "prompt_mean_delta_nll": 0.02103248453695004,
+    "prompt_bootstrap_95": [
+      0.005001062883730748,
+      0.042382054753039786
+    ],
+    "worst_prompt_delta_nll": 0.1360649832132081,
+    "kl_p99": 0.190973388357,
+    "kl_max": 1.11871335481,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": -0.018157818207844824,
+        "kl": 0.008260501993492679
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": -0.0021821297790267924,
+        "kl": 0.0072279963952283895
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.014955859808998875,
+        "kl": 0.007780038652827489
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": -0.009491492468733532,
+        "kl": 0.005116359177801828
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.03924481869164798,
+        "kl": 0.007808072196670723
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.002911377805472667,
+        "kl": 0.0073532246753608204
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.006406558802959958,
+        "kl": 0.003357243775078898
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0345728513428423,
+        "kl": 0.013602828283647908
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.06393259931023476,
+        "kl": 0.02754921849639703
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.010889571112407317,
+        "kl": 0.006130214714650114
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.04103131228032461,
+        "kl": 0.019435094090468417
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.016517304573911006,
+        "kl": 0.004134540970488096
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.0298646351421657,
+        "kl": 0.0017658225736611106
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.1360649832132081,
+        "kl": 0.06232754752089182
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": -0.03920967988401343,
+        "kl": 0.011990820212288707
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.00916900084664597,
+        "kl": 0.008752770881250843
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record_sha256": "ceb6df37c311a1b294353c58865510581e41cc086c5f89c826ac0460a8647b86",
+    "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/bf0-raw.bin",
+    "io": {
+      "demand": {
+        "enabled": 1,
+        "pread_calls": 59277,
+        "requested_bytes": 196666859520,
+        "returned_bytes": 196666859520,
+        "cache_loader_bytes": 196666859520,
+        "cache_hits": 194561,
+        "cache_misses": 19759,
+        "cache_evictions": 13623
+      },
+      "stage": null,
+      "pool": null,
+      "total_requested_logical_bytes": 196666859520,
+      "total_returned_logical_bytes": 196666859520,
+      "scope": "whole-engine P+D plus background teardown reads; logical only; cache_loader_bytes not added again"
+    },
+    "route": {
+      "layers": 20480,
+      "substitutions": 3521,
+      "native_misses": 11777,
+      "skipped_loads": 3521,
+      "skipped_bytes": 35045498880,
+      "mean_mass": 0.0994985,
+      "mean_score_gap": 0.06978896,
+      "mean_affinity_ratio": 0.95299369,
+      "mean_rank": 7.426,
+      "full_snapshots": 3605,
+      "double_layers": 0,
+      "planned_substitutions": 3521
+    },
+    "late": null
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.458083559794,
+    "delta_nll": 0.0196895270637,
+    "policy_delta_nll": 0.0196895270637,
+    "kl_base_to_raw": 0.0118208685099,
+    "kl_base_to_policy": 0.0118208685099,
+    "tv": 0.025422657281,
+    "argmax_flips": 12,
+    "bit_equal_rows": 17,
+    "startup_ms": 218.532,
+    "prefill_ms": 19643.383,
+    "decode_ms": 28971.889,
+    "metrics_ms": 1104.258,
+    "name": "bf1-global-late1",
+    "prompt_mean_delta_nll": 0.01968952706364406,
+    "prompt_bootstrap_95": [
+      0.0050184961783694216,
+      0.037656700278706635
+    ],
+    "worst_prompt_delta_nll": 0.1093122431096983,
+    "kl_p99": 0.178880761206,
+    "kl_max": 1.12828495973,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": -0.01886020788076404,
+        "kl": 0.007815033562195192
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 0.010307782966545468,
+        "kl": 0.005276550632453188
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.013743907293062999,
+        "kl": 0.007549592724961148
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": -0.008628243738507688,
+        "kl": 0.00513789165474754
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.04004050970068538,
+        "kl": 0.0079905988401377
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.002911377805472667,
+        "kl": 0.0073532246753608204
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.006406558802959958,
+        "kl": 0.003357243775078898
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0345728513428423,
+        "kl": 0.013602828283647908
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.06393259931023476,
+        "kl": 0.02754921849639703
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.010889571112407317,
+        "kl": 0.006130214714650114
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.02638336428550217,
+        "kl": 0.021337203461909673
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.016517304573911006,
+        "kl": 0.004134540970488096
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.0373264638762812,
+        "kl": 0.0019216192998383137
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.1093122431096983,
+        "kl": 0.04916960432434737
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": -0.038992650388672806,
+        "kl": 0.012055759860722864
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.00916900084664597,
+        "kl": 0.008752770881250843
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record_sha256": "5c0aa48c4d07fa6d68bc04a5805333ba3df7c1063d4d5ae3d78db5a1f264612c",
+    "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/bf1-global-late1-raw.bin",
+    "io": {
+      "demand": {
+        "enabled": 1,
+        "pread_calls": 59151,
+        "requested_bytes": 196248821760,
+        "returned_bytes": 196248821760,
+        "cache_loader_bytes": 196248821760,
+        "cache_hits": 196464,
+        "cache_misses": 19751,
+        "cache_evictions": 13615
+      },
+      "stage": {
+        "attempts": 3539,
+        "started": 249,
+        "busy_skips": 40,
+        "ready_skips": 3250,
+        "completed": 249,
+        "failed": 0,
+        "consumed": 34,
+        "expired": 215,
+        "resets": 0,
+        "pread_calls": 747,
+        "requested_bytes": 2478366720,
+        "returned_bytes": 2478366720,
+        "copied_bytes": 338411520,
+        "peak_bytes": 9953280,
+        "live_bytes": 0,
+        "state": 0
+      },
+      "pool": null,
+      "total_requested_logical_bytes": 198727188480,
+      "total_returned_logical_bytes": 198727188480,
+      "scope": "whole-engine P+D plus background teardown reads; logical only; cache_loader_bytes not added again"
+    },
+    "route": {
+      "layers": 20480,
+      "substitutions": 3539,
+      "native_misses": 11785,
+      "skipped_loads": 3539,
+      "skipped_bytes": 35224657920,
+      "mean_mass": 0.09943021,
+      "mean_score_gap": 0.06946717,
+      "mean_affinity_ratio": 0.95339125,
+      "mean_rank": 7.423,
+      "full_snapshots": 3621,
+      "double_layers": 0,
+      "planned_substitutions": 3539
+    },
+    "late": {
+      "tentative": 3539,
+      "rollbacks": 2,
+      "final_substitutions": 3537,
+      "cancelled": 0,
+      "candidate_finish": 3539,
+      "candidate_finish_failures": 0,
+      "ready_checks": 3539,
+      "not_ready": 3537,
+      "no_victim": 0,
+      "installs": 2,
+      "install_failures": 0
+    }
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.455162569364,
+    "delta_nll": 0.0167685366335,
+    "policy_delta_nll": 0.0167685366335,
+    "kl_base_to_raw": 0.011395275926,
+    "kl_base_to_policy": 0.011395275926,
+    "tv": 0.0247713463042,
+    "argmax_flips": 14,
+    "bit_equal_rows": 17,
+    "startup_ms": 205.856,
+    "prefill_ms": 19423.472,
+    "decode_ms": 29103.945,
+    "metrics_ms": 1035.251,
+    "name": "bf1-pool-late1",
+    "prompt_mean_delta_nll": 0.016768536633550588,
+    "prompt_bootstrap_95": [
+      -0.000671138834652496,
+      0.03980721998315226
+    ],
+    "worst_prompt_delta_nll": 0.14703806223156762,
+    "kl_p99": 0.192727411207,
+    "kl_max": 1.09306258428,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": -0.007593646764349437,
+        "kl": 0.006033263290886515
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 2.8561312606286844e-05,
+        "kl": 0.0067964471790406536
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.010582013913519803,
+        "kl": 0.005725723178314626
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": -0.027540403459393115,
+        "kl": 0.006124439962485244
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.01294491547628997,
+        "kl": 0.003601931252334909
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.004790007247845091,
+        "kl": 0.006180664484744219
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.011309580204653473,
+        "kl": 0.002213894539853158
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0245368672414666,
+        "kl": 0.012460978627258465
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.05364129922199771,
+        "kl": 0.024990747929191807
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": -0.003261992438819351,
+        "kl": 0.008509445349489914
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.05105522342469933,
+        "kl": 0.018060472198099715
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.01637151409967974,
+        "kl": 0.003144016305874776
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.01416459052165643,
+        "kl": 0.003569510439198394
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.14703806223156762,
+        "kl": 0.05722760227941613
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": -0.05073994063402578,
+        "kl": 0.008947644197988262
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.01096993453741504,
+        "kl": 0.008737633601579768
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record_sha256": "de4a6170e27c551b94d54bf99eab5405d5c79c3745c41bbf8dd41eca78c41ae1",
+    "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/bf1-pool-late1-raw.bin",
+    "io": {
+      "demand": {
+        "enabled": 1,
+        "pread_calls": 58752,
+        "requested_bytes": 194925035520,
+        "returned_bytes": 194925035520,
+        "cache_loader_bytes": 194925035520,
+        "cache_hits": 196381,
+        "cache_misses": 19843,
+        "cache_evictions": 13707
+      },
+      "stage": {
+        "attempts": 0,
+        "started": 0,
+        "busy_skips": 0,
+        "ready_skips": 0,
+        "completed": 0,
+        "failed": 0,
+        "consumed": 0,
+        "expired": 0,
+        "resets": 0,
+        "pread_calls": 0,
+        "requested_bytes": 0,
+        "returned_bytes": 0,
+        "copied_bytes": 0,
+        "peak_bytes": 0,
+        "live_bytes": 0,
+        "state": 0
+      },
+      "pool": {
+        "requests": 3408,
+        "invalid_requests": 0,
+        "dedup_ready": 0,
+        "dedup_reading": 0,
+        "dedup_queued": 25,
+        "queued": 3157,
+        "queue_updates": 226,
+        "queue_expired": 473,
+        "queue_ready_drops": 0,
+        "queue_reading_drops": 0,
+        "admissions": 2683,
+        "busy_defers": 725,
+        "handoff_defers": 0,
+        "budget_defers": 0,
+        "worker_starts": 1,
+        "worker_start_failures": 0,
+        "read_started": 2683,
+        "completed": 2683,
+        "failed": 0,
+        "pread_calls": 8049,
+        "requested_bytes": 26704650240,
+        "returned_bytes": 26704650240,
+        "allocations": 2683,
+        "allocation_failures": 0,
+        "frees": 2683,
+        "free_failures": 0,
+        "allocated_bytes": 26726629376,
+        "freed_bytes": 26726629376,
+        "dup_opens": 2683,
+        "dup_closes": 2683,
+        "dup_failures": 0,
+        "consumed_future": 255,
+        "consumed_late": 4,
+        "copied_bytes": 2577899520,
+        "ready_replaced": 395,
+        "ready_expired": 2021,
+        "reset_ready_discards": 8,
+        "ready_superseded": 0,
+        "ready_superseded_bytes": 0,
+        "reset_result_discards": 0,
+        "reset_queue_discards": 1,
+        "resets": 2,
+        "joins": 1,
+        "limit_bytes": 419430400,
+        "metadata_bytes": 16384,
+        "stack_bytes": 0,
+        "guard_bytes": 0,
+        "payload_live_bytes": 0,
+        "payload_peak_bytes": 209190912,
+        "owned_live_bytes": 16384,
+        "owned_peak_bytes": 209498112,
+        "step": 20480,
+        "enabled": 1,
+        "ready_count": 0,
+        "ready_peak": 21,
+        "queue_count": 0,
+        "queue_peak": 10,
+        "worker_active": 0,
+        "worker_state": 0,
+        "worker_present": 0
+      },
+      "total_requested_logical_bytes": 221629685760,
+      "total_returned_logical_bytes": 221629685760,
+      "scope": "whole-engine P+D plus background teardown reads; logical only; cache_loader_bytes not added again"
+    },
+    "route": {
+      "layers": 20480,
+      "substitutions": 3408,
+      "native_misses": 11752,
+      "skipped_loads": 3408,
+      "skipped_bytes": 33920778240,
+      "mean_mass": 0.09943737,
+      "mean_score_gap": 0.06949988,
+      "mean_affinity_ratio": 0.95362456,
+      "mean_rank": 7.433,
+      "full_snapshots": 3488,
+      "double_layers": 0,
+      "planned_substitutions": 3408
+    },
+    "late": {
+      "tentative": 3408,
+      "rollbacks": 4,
+      "final_substitutions": 3404,
+      "cancelled": 0,
+      "candidate_finish": 3408,
+      "candidate_finish_failures": 0,
+      "ready_checks": 3408,
+      "not_ready": 3404,
+      "no_victim": 0,
+      "installs": 4,
+      "install_failures": 0
+    }
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.454512312997,
+    "delta_nll": 0.016118280267,
+    "policy_delta_nll": 0.016118280267,
+    "kl_base_to_raw": 0.0121028778936,
+    "kl_base_to_policy": 0.0121028778936,
+    "tv": 0.0258476022235,
+    "argmax_flips": 11,
+    "bit_equal_rows": 17,
+    "startup_ms": 221.835,
+    "prefill_ms": 20245.124,
+    "decode_ms": 29955.905,
+    "metrics_ms": 1039.082,
+    "name": "bf1-pool-late1-repeat",
+    "prompt_mean_delta_nll": 0.016118280266972856,
+    "prompt_bootstrap_95": [
+      -0.001858623314916341,
+      0.03795141384957947
+    ],
+    "worst_prompt_delta_nll": 0.14604749570289338,
+    "kl_p99": 0.19439935587,
+    "kl_max": 1.13014334573,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": -0.00753207529969064,
+        "kl": 0.008838253788698548
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 0.0037612874656047573,
+        "kl": 0.007621699509977848
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.0116904257043502,
+        "kl": 0.006088767501821826
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": -0.03092011778104218,
+        "kl": 0.005367947106243172
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.035827751198298056,
+        "kl": 0.007334765734355945
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.021610655474180344,
+        "kl": 0.009241996689493378
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.009200054902985743,
+        "kl": 0.0029825935526123465
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.02461230143216607,
+        "kl": 0.012349205263853587
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.04356870771131185,
+        "kl": 0.02478842456730134
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": -0.00012056791967116806,
+        "kl": 0.008818150295645685
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": -0.0057011054780493585,
+        "kl": 0.018983345886443424
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.019259214156362135,
+        "kl": 0.004101607684887988
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.035446870170105005,
+        "kl": 0.002068608261517323
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.14604749570289338,
+        "kl": 0.05702770191556188
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": -0.055906855588293614,
+        "kl": 0.009185452767655594
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.007048442420055123,
+        "kl": 0.008847525771523949
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record_sha256": "76a43dcbb8df6fd1fcb3d917d2c72998719240ed02652c02f075e75dceeff3bb",
+    "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/bf1-pool-late1-repeat-raw.bin",
+    "io": {
+      "demand": {
+        "enabled": 1,
+        "pread_calls": 58746,
+        "requested_bytes": 194905128960,
+        "returned_bytes": 194905128960,
+        "cache_loader_bytes": 194905128960,
+        "cache_hits": 196394,
+        "cache_misses": 19837,
+        "cache_evictions": 13701
+      },
+      "stage": {
+        "attempts": 0,
+        "started": 0,
+        "busy_skips": 0,
+        "ready_skips": 0,
+        "completed": 0,
+        "failed": 0,
+        "consumed": 0,
+        "expired": 0,
+        "resets": 0,
+        "pread_calls": 0,
+        "requested_bytes": 0,
+        "returned_bytes": 0,
+        "copied_bytes": 0,
+        "peak_bytes": 0,
+        "live_bytes": 0,
+        "state": 0
+      },
+      "pool": {
+        "requests": 3447,
+        "invalid_requests": 0,
+        "dedup_ready": 0,
+        "dedup_reading": 0,
+        "dedup_queued": 24,
+        "queued": 3198,
+        "queue_updates": 225,
+        "queue_expired": 488,
+        "queue_ready_drops": 0,
+        "queue_reading_drops": 0,
+        "admissions": 2709,
+        "busy_defers": 738,
+        "handoff_defers": 0,
+        "budget_defers": 0,
+        "worker_starts": 1,
+        "worker_start_failures": 0,
+        "read_started": 2709,
+        "completed": 2709,
+        "failed": 0,
+        "pread_calls": 8127,
+        "requested_bytes": 26963435520,
+        "returned_bytes": 26963435520,
+        "allocations": 2709,
+        "allocation_failures": 0,
+        "frees": 2709,
+        "free_failures": 0,
+        "allocated_bytes": 26985627648,
+        "freed_bytes": 26985627648,
+        "dup_opens": 2709,
+        "dup_closes": 2709,
+        "dup_failures": 0,
+        "consumed_future": 254,
+        "consumed_late": 1,
+        "copied_bytes": 2538086400,
+        "ready_replaced": 422,
+        "ready_expired": 2024,
+        "reset_ready_discards": 8,
+        "ready_superseded": 0,
+        "ready_superseded_bytes": 0,
+        "reset_result_discards": 0,
+        "reset_queue_discards": 1,
+        "resets": 2,
+        "joins": 1,
+        "limit_bytes": 419430400,
+        "metadata_bytes": 16384,
+        "stack_bytes": 0,
+        "guard_bytes": 0,
+        "payload_live_bytes": 0,
+        "payload_peak_bytes": 229113856,
+        "owned_live_bytes": 16384,
+        "owned_peak_bytes": 229421056,
+        "step": 20480,
+        "enabled": 1,
+        "ready_count": 0,
+        "ready_peak": 23,
+        "queue_count": 0,
+        "queue_peak": 10,
+        "worker_active": 0,
+        "worker_state": 0,
+        "worker_present": 0
+      },
+      "total_requested_logical_bytes": 221868564480,
+      "total_returned_logical_bytes": 221868564480,
+      "scope": "whole-engine P+D plus background teardown reads; logical only; cache_loader_bytes not added again"
+    },
+    "route": {
+      "layers": 20480,
+      "substitutions": 3447,
+      "native_misses": 11771,
+      "skipped_loads": 3447,
+      "skipped_bytes": 34308956160,
+      "mean_mass": 0.0995125,
+      "mean_score_gap": 0.06984708,
+      "mean_affinity_ratio": 0.95340045,
+      "mean_rank": 7.431,
+      "full_snapshots": 3531,
+      "double_layers": 0,
+      "planned_substitutions": 3447
+    },
+    "late": {
+      "tentative": 3447,
+      "rollbacks": 1,
+      "final_substitutions": 3446,
+      "cancelled": 0,
+      "candidate_finish": 3447,
+      "candidate_finish_failures": 0,
+      "ready_checks": 3447,
+      "not_ready": 3446,
+      "no_victim": 0,
+      "installs": 1,
+      "install_failures": 0
+    }
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.43839403273,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 512,
+    "startup_ms": 217.386,
+    "prefill_ms": 19569.767,
+    "decode_ms": 31823.955,
+    "metrics_ms": 1108.424,
+    "name": "native-after",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/native-after-raw.bin",
+    "io": {
+      "demand": {
+        "enabled": 1,
+        "pread_calls": 67908,
+        "requested_bytes": 225302446080,
+        "returned_bytes": 225302446080,
+        "cache_loader_bytes": 225302446080,
+        "cache_hits": 191684,
+        "cache_misses": 22636,
+        "cache_evictions": 16500
+      },
+      "stage": null,
+      "pool": null,
+      "total_requested_logical_bytes": 225302446080,
+      "total_returned_logical_bytes": 225302446080,
+      "scope": "whole-engine P+D plus background teardown reads; logical only; cache_loader_bytes not added again"
+    },
+    "route": null,
+    "late": null
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "status": "STATIC_PREPARATION_REFUSAL_BEFORE_OUTPUT",
+  "preparer_sha256": "6166355111b88664baf674a23e5da59ac0da7081e20a76248627757353597eff",
+  "qualified_source_freeze": "d3647e3d1c3df4e54ec3d7d17a27c7eec40d45b5",
+  "qualified_plan_sha256": "315a52cd24636391c1dcdce3245a186124b12d9053b554400076e7b9293ac335",
+  "build_manifest_sha256": "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64",
+  "error": "ValueError: Payload symlink forbidden",
+  "failed_at": "prepare:49 -> check:28 -> pin:25; pinned compiler libSystem_stub authority",
+  "original_output_created": false,
+  "model_or_guard_or_native_executed": false
+}

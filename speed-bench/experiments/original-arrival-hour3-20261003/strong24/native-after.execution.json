@@ -1,0 +1,42 @@
+{
+  "argv": [
+    "/Volumes/Models/ds4/.workspaces/idea-resident-original-deadline-native/speed-bench/ideas/artifacts/original-deadline-strong-direct-v1/quality-original-deadline",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "/Volumes/Models/ds4/speed-bench/experiments/resident-functional-hour2-20261003/all.tsv",
+    "/Volumes/Models/ds4/speed-bench/experiments/original-arrival-hour3-20261003/strong24/native-after.csv",
+    "/Volumes/Models/ds4/speed-bench/experiments/original-arrival-hour3-20261003/strong24/reference.bin",
+    "compare",
+    "--cases",
+    "24",
+    "--tokens",
+    "32",
+    "--ctx",
+    "8192",
+    "--cache-gb",
+    "64",
+    "--chunk",
+    "512",
+    "--candidate-record",
+    "/Volumes/Models/ds4/speed-bench/experiments/original-arrival-hour3-20261003/strong24/native-after.bin"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-resident-original-deadline-native",
+  "environment": {
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace",
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+    "DS4_METAL_STREAMING_EXPERT_IO_METRICS": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_PROFILE": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MODE": "native",
+    "DS4_METAL_V41_ORIGINAL_DEADLINE": "0"
+  },
+  "model_bytes": 365713686528,
+  "model_mtime_ns": 1789237692837653163,
+  "returncode": 0,
+  "seconds": 131.43134345801082
+}

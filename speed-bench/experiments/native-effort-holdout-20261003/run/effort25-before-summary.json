@@ -1,0 +1,88 @@
+{
+  "level": 25,
+  "cases": 6,
+  "completed_correct": 5,
+  "correct": 5,
+  "capped_correct": 0,
+  "incorrect": 0,
+  "invalid": 1,
+  "cap_hits": 1,
+  "generated_tokens": 5002,
+  "reasoning_tokens": 4994,
+  "producer_returncode": 3,
+  "per_case": [
+    {
+      "case": "fixed_points9",
+      "status": "CORRECT",
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 182,
+      "reasoning_tokens": 180,
+      "parsed_answer": "22260",
+      "raw_sha256": "e6f07121b449561223f6a17a1866e21f892dcca1e754c412dea42950dbab08e5",
+      "token_sha256": "6f890b69dab3f0c764dca9dd7ef704f1705b651115942963f344b20cfe2153e1",
+      "prompt_sha256": "4f801ffd25baf186b681096c90ce686a131503569f889f06a0c73ed766ca078a"
+    },
+    {
+      "case": "necklaces12_weight4",
+      "status": "CORRECT",
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 686,
+      "reasoning_tokens": 685,
+      "parsed_answer": "43",
+      "raw_sha256": "a92fc28cbdf5584819a6eb3444ab3b1778a615cacc11279690ebddc0649f11c0",
+      "token_sha256": "3f118f3356cad1e1e9e265d20c90aa21cd0cd88a830f5ac2c688bedb29d9a8a0",
+      "prompt_sha256": "cabbae7293fd10a5b0da9c87067537f6e6fb9ab2e8ddc241a17f14ddaa1f90e2"
+    },
+    {
+      "case": "onto7to4",
+      "status": "CORRECT",
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 215,
+      "reasoning_tokens": 213,
+      "parsed_answer": "8400",
+      "raw_sha256": "b5c87f45378fd16fe2ba54e71759390cae846b027f1d793a5315eb5568da4126",
+      "token_sha256": "8b5288e0ecdb1cd4865aaab62e8c244a0377a7c6e39a57ebd620f26a7bf63bc7",
+      "prompt_sha256": "4b4140f4dcae402de37452db0ef7cb6cb4b82cd4bd13202289b2934ed5439592"
+    },
+    {
+      "case": "domino3by8",
+      "status": "CORRECT",
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 658,
+      "reasoning_tokens": 657,
+      "parsed_answer": "153",
+      "raw_sha256": "2554ce5bcdefb80f2f20cdc06fd8e5b7a01ec0b552022fc192e1026a95d0e971",
+      "token_sha256": "6317ad00d4b716009f4759ce05a4f72da1a212dda47879acab672d68455961ca",
+      "prompt_sha256": "986e6540283c4cc1a449fbbf9f74f8535fa9868b036b4b0c3ad0cee3956cab9b"
+    },
+    {
+      "case": "partitions20_5_max7",
+      "status": "INVALID",
+      "cap_hit": true,
+      "stopped": false,
+      "generated_tokens": 2048,
+      "reasoning_tokens": 2048,
+      "parsed_answer": "",
+      "raw_sha256": "6207c85521c8161404707867c2ce2779eaab9776309ed131ed781ff4cd34daca",
+      "token_sha256": "f74856449022a073df4e0af4dfbf51f577c1ef4f2e25cbc93a401e9f634e274d",
+      "prompt_sha256": "f77bcf1ef0edb91efea1b097f4725c9d8bf57b4bf75cb5d69f9ececc1d1588ce"
+    },
+    {
+      "case": "connected_graph6_edges7",
+      "status": "CORRECT",
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 1213,
+      "reasoning_tokens": 1211,
+      "parsed_answer": "5700",
+      "raw_sha256": "967280d5af7f475dd913e78a8c4a84c226782ae8c1b2c8fb73500a19efebbff1",
+      "token_sha256": "85522c49aa9b682b38346baa5e21e5f6646d64af8e9ea603ce4c344b4de55b6d",
+      "prompt_sha256": "d4106da3c28208dc42ed20866e2a2525415e5681e6923673e9d0fd563e740f12"
+    }
+  ],
+  "arm": "effort25-before"
+}

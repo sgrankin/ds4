@@ -1,0 +1,20 @@
+[
+  {
+    "arm": "reuse64",
+    "mode": "reuse",
+    "fresh_tail_lower_bound": 64,
+    "seconds": 251.8392902080086,
+    "returncode": 0,
+    "timed_out": false,
+    "output": "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/suffix-http/reuse64"
+  },
+  {
+    "arm": "native",
+    "mode": "native",
+    "fresh_tail_lower_bound": 64,
+    "seconds": 293.47967179099214,
+    "returncode": 0,
+    "timed_out": false,
+    "output": "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/suffix-http/native"
+  }
+]

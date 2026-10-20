@@ -1,0 +1,129 @@
+We need answer integer. Need solve. Need count 7-subsets of 1..15 sum ≡3 mod5.
+
+We need compute. Let's reason carefully. Numbers 1..15, residues mod5: each residue 0,1,2,3,4 appears exactly 3 times (1-5 etc). Need choose 7 elements, unordered distinct, sum mod5 =3.
+
+We need count coefficient of x^? We can do generating functions over residues with multiplicity 3 for each residue. Count choices of counts c0..c4 sum 7, each 0..3, weighted product C(3,c_i), condition sum i*c_i ≡3 mod5. Need sum.
+
+Let's compute. There are total C(15,7)=6435? Actually 15 choose7=6435. Need residue distribution likely near uniform. Need exact.
+
+We can enumerate counts c_i ∈0..3 sum 7. Weight multinomial product 3 choose c. Condition weighted sum mod5.
+
+Let's do dynamic or manual. Need count.
+
+Let residues 0..4. For each count vector length5 sum7 max3. Weight ∏ C(3,c_i). Sum condition Σ i c_i ≡3 mod5. Since c0 irrelevant.
+
+Total sum over all count vectors sum7 = C(15,7)=6435. Need mod distribution. Because 15 elements with each residue 3. There may be exact uniform? Sum mod5 distribution? Let's compute.
+
+Use generating function ∏_{r=0}^4 (1 + y x^r)^3? Need coefficient y^7 x^3 mod x^5-1. Could compute via roots or DP.
+
+Let's enumerate count vectors. Number of c_i 0..3 sum7. Let d_i = 3 - c_i? Since max3 and total 7, sum d_i = 15-7=8, d_i ∈0..3. Weight ∏ C(3,c_i)=∏ C(3,d_i) (since C(3,c)=C(3,3-c)=C(3,d)). Condition Σ i c_i ≡3. Express c_i=3-d_i. Sum c_i=7. Weighted sum = Σ i(3-d_i)=3Σ i - Σ i d_i = 3*10 - Σ i d_i =30 - Σ i d_i ≡0 - Σ i d_i mod5 (since30≡0). Need ≡3 => Σ i d_i ≡ -3 ≡2 mod5. d_i sum=8, each 0..3. Weight ∏ C(3,d_i). This may be simpler? Need count weighted d vectors sum8 max3, weighted sum mod5=2.
+
+There are 5 variables d_i ∈0..3 sum8. Since max3, sum max15. Let e_i = 3 - d_i? Then e_i ∈0..3 sum=15-8=7. Back same. Not simpler.
+
+Maybe enumerate d vectors sum8. Number unweighted? Coefficient (1+x+x^2+x^3)^5 x^8. Could enumerate. Weighted by C(3,d). Need mod5.
+
+Alternative use inclusion/exponential? Let's do DP manually.
+
+Since only 5 residues, sum7 max3. Count vectors c sum7. Number of unweighted maybe 101? Let's compute weighted.
+
+Could use generating polynomial in y and z mod5. Need coefficient y^7 z^3 of ∏_{r=0}^4 (1 + y z^r)^3? Actually each residue has 3 elements, choose any subset count c: generating (1 + y z^r)^3 = Σ_{c=0}^3 C(3,c) y^c z^{rc}. Need coefficient y^7 z^3 modulo z^5=1.
+
+Can compute via dynamic over residues. Let's do DP with y degree up to7 and z residues. Start P0(y,z)=1. For each residue r, multiply by (1 + y z^r)^3 = 1 +3 y z^r +3 y^2 z^{2r}+ y^3 z^{3r}. Need final y^7 z^3. We can convolve.
+
+Maybe use coefficient extraction by y first? Let's do DP manually with arrays for y degree and z residue. 5 steps. Manageable.
+
+Let's define for each residue r, polynomial in y with coefficients vector over z mod5. Need final y=7.
+
+Start after no residues: y0: z0 coeff1.
+
+Process r=0: factor (1+y)^3 = 1+3y+3y^2+y^3, z residue unaffected (r=0). So after r0:
+y0: z0:1
+y1: z0:3
+y2: z0</think>Let's compute systematically.
+
+We need coefficient of \(y^7 x^3\) in
+\[
+\prod_{r=0}^{4}(1+y x^r)^3 \pmod{x^5-1}.
+\]
+
+Let's do DP over residues.
+
+After r=0 factor \((1+y)^3\):
+- y0: x^0: 1
+- y1: x^0: 3
+- y2: x^0: 3
+- y3: x^0: 1
+
+Process r=1 factor \(1+3y x+3y^2 x^2+y^3 x^3\). Need combine. I'll maintain table (degree y -> residues coeff). Let's compute with convolution. Maybe use polynomial multiplication.
+
+Let A after r0:
+A0=1 at x0
+A1=3 at x0
+A2=3 at x0
+A3=1 at x0.
+
+Multiply by B for r=1: B0=1 x0, B1=3 x1, B2=3 x2, B3=1 x3.
+
+After r=0,1, degrees up to6. Need table. Let's list coefficients by y degree and x residue.
+
+Initialize empty. For each a deg d coeff c at x s, add to d+k residue s + k*r (for r=1) with B_k coeff b.
+
+Let's compute manually.
+
+A has only s=0.
+
+For d=0 c=1:
+k0: y0 x0 +1
+k1: y1 x1 +3
+k2: y2 x2 +3
+k3: y3 x3 +1
+
+d=1 c=3:
+k0: y1 x0 +3
+k1: y2 x1 +9
+k2: y3 x2 +9
+k3: y4 x3 +3
+
+d=2 c=3:
+k0: y2 x0 +3
+k1: y3 x1 +9
+k2: y4 x2 +9
+k3: y5 x3 +3
+
+d=3 c=1:
+k0: y3 x0 +1
+k1: y4 x1 +3
+k2: y5 x2 +3
+k3: y6 x3 +1
+
+Now aggregate by y degree.
+
+y0: x0:1
+y1: x1:3, x0:3 => residues 0:3,1:3
+y2: x2:3, x1:9, x0:3 => res0 3, res1 9, res2 3
+y3: x3:1, x2:9, x1:9, x0:1 => res0 1, res1 9, res2 9, res3 1
+y4: x3:3, x2:9, x1:3 => res1 3, res2 9, res3 3
+y5: x3:3, x2:3 => res2 3, res3 3
+y6: x3:1
+
+Check total coefficients sum by y: y0 1, y1 6, y2 15, y3 20, y4 15, y5 6, y6 1 = C(6,k) yes.
+
+Now process r=2 factor \(1+3y x^2+3y^2 x^4+y^3 x^6≡x^1\). Since mod5, residues: k0 shift0 coeff1; k1 shift2 coeff3; k2 shift4 coeff3; k3 shift1 coeff1.
+
+Need after three residues. Degrees up to9. We need eventually y7. Let's compute DP. Current table P2 (after r=0,1) with y degrees 0..6 and residue coeffs. Multiply by B2.
+
+I'll create new table Q y degree 0..9. Need careful. Let's represent P[d][r] for d=0..6.
+
+P0: r0=1
+P1: r0=3, r1=3
+P2: r0=3, r1=9, r2=3
+P3: r0=1, r1=9, r2=9, r3=1
+P4: r1=3, r2=9, r3=3
+P5: r2=3, r3=3
+P6: r3=1
+
+Multiply by B2:
+B0: k0 shift0 coeff1
+B1: k1 shift2 coeff3
+B2: k2 shift4 coeff3
+B3: k3

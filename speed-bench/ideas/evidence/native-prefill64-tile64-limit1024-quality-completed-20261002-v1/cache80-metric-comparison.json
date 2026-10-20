@@ -1,0 +1,49 @@
+{
+  "rows": 343,
+  "fields": [
+    "case",
+    "step",
+    "target",
+    "prompt_tokens",
+    "base_nll",
+    "raw_nll",
+    "delta_raw_nll",
+    "raw_kl",
+    "raw_tv",
+    "argmax_flip"
+  ],
+  "all_serialized_non_timing_fields_equal": true,
+  "differing_cells": 0,
+  "canonical_non_timing_sha256": "21d4745c9723749f00d124eced46750835af429cc6406d8dd3de49cc488d4a07",
+  "tile_source_csv": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-quality/speed-bench/ideas/artifacts/native-prefill64-tile64-limit1024-quality-20261002-v1/tile64-limit1024.csv",
+  "tile_source_csv_sha256": "c94c63b6e34724aa90f050348c9e1744665d09bec7d1adcd6061af31f8f8c534",
+  "native80_source_csv": "/Volumes/Models/ds4/.workspaces/idea-native-cache-replay-quality/speed-bench/ideas/artifacts/native-cache-replay-quality-20261002-v1/native80-old.csv",
+  "native80_source_csv_sha256": "7f5ed71a1bbd8713689cce84b69cc47b5ee971d7f884d175587fd3af700befef",
+  "scope": "Equality of printed per-row metrics at helper serialization precision; no cross-policy raw-logit byte identity assertion.",
+  "flip_rows": [
+    {
+      "case": "phase_002",
+      "step": "9",
+      "target": "271",
+      "prompt_tokens": "1958",
+      "base_nll": "0.560580890409",
+      "raw_nll": "0.709369998305",
+      "delta_raw_nll": "0.148789107896",
+      "raw_kl": "0.0126303193749",
+      "raw_tv": "0.0792268774754",
+      "argmax_flip": "1"
+    },
+    {
+      "case": "phase_006",
+      "step": "132",
+      "target": "30",
+      "prompt_tokens": "2600",
+      "base_nll": "0.585270889592",
+      "raw_nll": "0.767068173842",
+      "delta_raw_nll": "0.18179728425",
+      "raw_kl": "0.0171782658638",
+      "raw_tv": "0.092584576851",
+      "argmax_flip": "1"
+    }
+  ]
+}

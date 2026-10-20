@@ -1,0 +1,13 @@
+{
+  "gold": {
+    "day": "white",
+    "complete_cycles": 2,
+    "remainder": 5
+  },
+  "oracle_input": {
+    "question": "A fictional calendar repeats these six day names in order: amber, bronze, cobalt, jade, violet, white. Today is amber. Advance exactly seventeen days, where tomorrow is one day ahead. Report day and complete_cycles plus remainder in JSON, then explain without using the real calendar."
+  },
+  "explanation": "Seventeen days contain two complete cycles of six days, with five days remaining. Starting at amber, five forward steps reach bronze, cobalt, jade, violet, and white. The answer is therefore white. This calendar has its own six-day cycle, so weekdays and real-world date rules are irrelevant.",
+  "category": "facts",
+  "scope": "New authored content, fixed before any model outcome."
+}

@@ -1,0 +1,150 @@
+{
+  "source_evidence_revision": "f4ad01536e5cd9f88344c20f59cb09b08cbfe78b",
+  "source_activation_revision": "2282da3976dbd6e4d523448471fe1de2672d5a95",
+  "refs": {
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/manifest.json",
+      "sha256": "4fd586f3f23bd666985d39e5cffdbbbc56e5ad0b70113de250677970d31577d8",
+      "bytes": 185117,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/original-retention-index.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/original-retention-index.json",
+      "sha256": "2de2b2779cf765320ac547fe10b046eaa2ca03587d1c934fc810cf10134e33e6",
+      "bytes": 470429,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/archive-grant.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/archive-grant.json",
+      "sha256": "6da147b026985a15dfb9d0f2a8870565174b0f857be06c929cb6f94fed1d4785",
+      "bytes": 1848,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/root-release.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/root-release.json",
+      "sha256": "15b39bbeb2f7f18e4236eebb075dc80fcb5b84d00cb791c5734e5bb0d57ef9bd",
+      "bytes": 528,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/root-launch.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/root-launch.json",
+      "sha256": "ba413bd586b2c9967e272d4dfcaad3d684adaa4bce49f451e57571b89e8ce856",
+      "bytes": 1735,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/qualified-plan.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/qualified-plan.json",
+      "sha256": "56a52845ee9ed3f1621cf949fa645436d6efc733e928b14e6a3c4a54bddb49a3",
+      "bytes": 56795,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/qualified-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/authorities/qualified-command.json",
+      "sha256": "2f4b895349a27641913308a7f6bdb58d465d30f87d2855b6623a5e4f711af450",
+      "bytes": 860,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/runtime100-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/artifacts/practical40-archive-v3/runtime100-proof.json",
+      "sha256": "7f924bd6fd2cb1a89f37f6586a98bbc57cc59f4940eafcde8e1ca11de80ff1b7",
+      "bytes": 9298,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/manifest.json",
+      "sha256": "0dd7ccbaf1ea2eea2c67f954788e918946c7e98c45b9a7d732530eac8b064103",
+      "bytes": 245366,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/publication-review.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/publication-review.json",
+      "sha256": "31d1067940d7f4e551719883e8459d22a66edba0ce7265adbdba88b17af3fb06",
+      "bytes": 2992,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/practical40-archive-root-grant-v3.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/practical40-archive-root-grant-v3.json",
+      "sha256": "6da147b026985a15dfb9d0f2a8870565174b0f857be06c929cb6f94fed1d4785",
+      "bytes": 1848,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/practical40-archive-root-v3.stdout.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/practical40-archive-root-v3.stdout.log",
+      "sha256": "91b2657f1a408909774b1f236eb9070206fe9300b3902eac4adbc88af5688961",
+      "bytes": 65,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/practical40-archive-root-v3.stderr.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/practical40-archive-root-v3.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/metadata-inspection-first-refusal.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-completed-independent-archive-20261003-v3/metadata-inspection-first-refusal.json",
+      "sha256": "05d86528142771cb7aa6a67701af3325fe832f705970b66093a51e262ac72017",
+      "bytes": 365,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-archive-v2-cpu-and-first-refusal-20261003/original-copy-index.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-archive-v2-cpu-and-first-refusal-20261003/original-copy-index.json",
+      "sha256": "298e5fb7f0a64e44650fdefaac013a916b0e77fade4b8185f1ebed58158790ed",
+      "bytes": 2976,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-archive-source-20261003-v1/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-archive-source-20261003-v1/manifest.json",
+      "sha256": "4dee123953a25f01b4ecbd22f90e37dc1be9d005d61545743ac55570269650ba",
+      "bytes": 2752,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-archive-source-20261003-v2/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-archive-source-20261003-v2/manifest.json",
+      "sha256": "e7bab67facfd185ab1cbde7b8fc799b1d7cec1b6844fcf2dd574fb25f26fabc6",
+      "bytes": 2963,
+      "mode": 420
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-archive-activation-v3-source-20261003/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-practical-tools-result-archive/speed-bench/ideas/evidence/practical40-archive-activation-v3-source-20261003/manifest.json",
+      "sha256": "3cfecfdf45998f68a9e9e2b3193bd964931c56f5056e348270973459cd9cb29f",
+      "bytes": 4340,
+      "mode": 420
+    }
+  },
+  "original_preregistration_source": "203ac72e8b3b2629e7899e9eb5bfc4c079167924",
+  "matched_build_manifest_sha256": "ec88344b91b8cb224acbaf1ac41390bec1a514d4d53d268772d8bc2372b28d42",
+  "fixed_policies": [
+    {
+      "name": "native",
+      "mode": "native",
+      "GAP": "0",
+      "NATIVE_WEIGHTS": "0"
+    },
+    {
+      "name": "protected-weights1",
+      "GAP": ".30",
+      "MAX_MASS": ".12",
+      "MAX_RANK": "24",
+      "MAX_SUBS": "1",
+      "POLICY": "replace",
+      "NATIVE_WEIGHTS": "1",
+      "original_six_GPU_coefficient_bits_untouched": true,
+      "MODE": "apply"
+    },
+    {
+      "name": "anchor-affinity3",
+      "GAP": ".30",
+      "MAX_MASS": ".20",
+      "MAX_TOTAL_MASS": ".40",
+      "MAX_RANK": "48",
+      "MAX_SUBS": "3",
+      "POLICY": "replace",
+      "NATIVE_WEIGHTS": "0",
+      "MODE": "apply"
+    }
+  ],
+  "large_raw_original_refs": 43,
+  "raw_reference_payload_bytes": 26979701760,
+  "large_file_rehash_or_copy": false,
+  "no_new_auditor_grader_or_model_execution": true
+}

@@ -1,0 +1,16 @@
+{
+  "status": "STATIC_ALIAS_CPU4_PASS",
+  "source_freeze": "02d593bee3fd9508930b02dd6a0eb53257e00d10",
+  "argv": [
+    "python3",
+    "tests/test_agent_suffix_pair_external_preparer_v2.py"
+  ],
+  "returncode": 0,
+  "elapsed": 0.3119790554046631,
+  "model_or_guard_or_native_compiler_executed": false,
+  "files": {
+    "tests/test_agent_suffix_pair_external_preparer_v2.py": "a01d06abf91f40434e3e88a60fcd4f2a0626466662eb2748f76f2bdf6fc53e02",
+    "speed-bench/ideas/prepare_agent_suffix_pair_external_v2.py": "455d89136847e30cdc7012f8fa4ae9765c278da45dd5c0b9cb0acbc5b2a376c2",
+    "speed-bench/ideas/agent_suffix_pair_external_v1/compiler-alias-proof.json": "6c1326b0ba46651d9f55c8556e89efbb6f195c4b23651fd60462f67717362f12"
+  }
+}

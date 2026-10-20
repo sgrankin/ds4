@@ -1,0 +1,66 @@
+{
+  "start_utc": "2026-10-04 20:29:00 UTC",
+  "budget_note": "10 minutes prior quota-source/launcher preparation charged",
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "arms": [
+    "control-before4096",
+    "ssd512",
+    "ssd128",
+    "control-after4096"
+  ],
+  "one_change": "SSD cache capacity 4096/512/128/4096 MiB",
+  "fixed": "canonical1/PAD1/suffix64/hot0/GAP0/Q2cache64/batch2/ctx8192/chunk512/tile64limit1024/temp0/noeffort",
+  "driver": "../concurrent-sessions-hour19-20261004/run.py",
+  "observed_working_set": "Item26 approximately485 MiB before restart and610 MiB afterward",
+  "quota_behavior": "unreferenced least-used endpoints evict; insufficient admission warns/skips cache store, suffix source miss recomputes; no runtime changes needed",
+  "deadline_utc": "2026-10-04 21:19:00 UTC",
+  "measurement_finished_utc": "2026-10-04 20:50:01 UTC",
+  "guards": {
+    "control-before": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 280,
+      "bad_samples": 0,
+      "swap_first_gib": 0.018125,
+      "swap_last_gib": 0.018125,
+      "peak_wired_compressor_gib": 86.81196594238281
+    },
+    "ssd512": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 285,
+      "bad_samples": 0,
+      "swap_first_gib": 0.018125,
+      "swap_last_gib": 0.018125,
+      "peak_wired_compressor_gib": 85.32675170898438
+    },
+    "ssd128": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 3
+      },
+      "samples": 340,
+      "bad_samples": 0,
+      "swap_first_gib": 0.018125,
+      "swap_last_gib": 0.018125,
+      "peak_wired_compressor_gib": 84.96397399902344
+    },
+    "control-after": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 283,
+      "bad_samples": 0,
+      "swap_first_gib": 0.018125,
+      "swap_last_gib": 0.018125,
+      "peak_wired_compressor_gib": 84.69169616699219
+    }
+  },
+  "report_finished_utc": "2026-10-04 20:54:00 UTC"
+}

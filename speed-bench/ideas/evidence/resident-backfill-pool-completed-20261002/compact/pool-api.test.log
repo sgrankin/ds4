@@ -1,0 +1,2 @@
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+PASS: public pool enable/global-ownership rejection, actual file reads, read-only metrics, READY decline, matching-model reset, no Metal initialization

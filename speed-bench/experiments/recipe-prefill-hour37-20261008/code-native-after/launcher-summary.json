@@ -1,0 +1,56 @@
+{
+  "mode": "native",
+  "arm": "native-after",
+  "route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 0,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "prefill_route_settings": {
+    "gap": 0.0,
+    "max_substitutions": 3,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": true
+  },
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/fresh-clm-coding-hour32-20261004/run.py",
+  "seconds": 229.08776520797983,
+  "phases": [
+    {
+      "phase": "dedupe",
+      "returncode": 0,
+      "seconds": 113.46533629199257,
+      "startup_seconds": 0.21438566700089723,
+      "client_seconds": 111.88444333401276,
+      "shutdown_seconds": 1.3662420829641633,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "bucket",
+      "returncode": 0,
+      "seconds": 115.61891245801235,
+      "startup_seconds": 0.4218849160242826,
+      "client_seconds": 113.42914966697572,
+      "shutdown_seconds": 1.767482833005488,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/recipe-20261008/code-native-after-cache",
+  "store": "/Volumes/Models/ds4/.workspaces/recipe-20261008/code-native-after-store",
+  "timeout_seconds": 600
+}

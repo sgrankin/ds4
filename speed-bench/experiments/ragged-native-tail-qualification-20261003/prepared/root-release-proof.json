@@ -1,0 +1,15 @@
+{
+  "time": 1791003274.396784,
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "lock_reacquired": true,
+  "live_model_processes": [],
+  "normal_pressure_samples": 1033,
+  "bad_pressure_samples": 0,
+  "swap_growth_gb": 0.0,
+  "peak_wired_compressor_gib": 88.5167236328125,
+  "fresh_ps_args_and_comm": true,
+  "all_owned_ancestors_excluded": true
+}

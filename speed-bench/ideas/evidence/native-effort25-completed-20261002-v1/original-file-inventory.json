@@ -1,0 +1,172 @@
+{
+  "producer-output/circular10-lambda0.0.tokens.jsonl": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/circular10-lambda0.0.tokens.jsonl",
+    "sha256": "fe1bc88fed548c4ab59cb60e1d3b8d3624561783ebc6989050b78dd638850716",
+    "bytes": 48594
+  },
+  "producer-output/circular10-lambda0.0.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/circular10-lambda0.0.txt",
+    "sha256": "1bf24fac24c0b0f96eeca6959a6af14b9a23e4888e8a693e149c5a15e3efac49",
+    "bytes": 579
+  },
+  "producer-output/lattice8x6-lambda0.0.tokens.jsonl": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/lattice8x6-lambda0.0.tokens.jsonl",
+    "sha256": "f9cbe1e66c176fd187c9811d65342f3d13c16a3f79e4bac30034028704f9beb0",
+    "bytes": 476784
+  },
+  "producer-output/lattice8x6-lambda0.0.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/lattice8x6-lambda0.0.txt",
+    "sha256": "32b139b66a9d684c8b3246344265c8bb8fe9e4da2bbab31dacf74346eb940cc3",
+    "bytes": 5833
+  },
+  "producer-output/marker-map.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/marker-map.json",
+    "sha256": "3f931e0f8494346caec8b7d6262919133ec44068fad86cca9ced158ca14c6d67",
+    "bytes": 246
+  },
+  "producer-output/restricted_derangements8-lambda0.0.tokens.jsonl": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/restricted_derangements8-lambda0.0.tokens.jsonl",
+    "sha256": "b98ec4985fed5a14435aaa9297c1b1019b5ead878d7e889ba5dc2e705250ead8",
+    "bytes": 391564
+  },
+  "producer-output/restricted_derangements8-lambda0.0.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/restricted_derangements8-lambda0.0.txt",
+    "sha256": "a4c69d560afc0a1fde833ca8560cc57c12da185fab4021f868fe84d2590d567d",
+    "bytes": 4979
+  },
+  "producer-output/results.jsonl": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/results.jsonl",
+    "sha256": "20d83461e345c15387c594e2f31102704f3391ff64f5749f48cdd8876a8d8540",
+    "bytes": 5424
+  },
+  "producer-output/root-release-proof.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/root-release-proof.json",
+    "sha256": "e44678b37043e90830f887b77780c744e80b06e94112d90f78175d738de607bd",
+    "bytes": 255
+  },
+  "producer-output/subset_mod7-lambda0.0.tokens.jsonl": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/subset_mod7-lambda0.0.tokens.jsonl",
+    "sha256": "b3230643391474f82286a5ef7f874aa55993b9af68378069f7f51c4c3f1bc8d0",
+    "bytes": 477674
+  },
+  "producer-output/subset_mod7-lambda0.0.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1/subset_mod7-lambda0.0.txt",
+    "sha256": "bb22acdcca5f1232eb13748704ce7269d2c82e8f5e50f713ab5f25ed4c487726",
+    "bytes": 6190
+  },
+  "guard/command.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1-pressure/command.json",
+    "sha256": "4283668d0be1198c59956ab4a0382aad5c68fc140ceb0c7341d2680c0db0c71a",
+    "bytes": 772
+  },
+  "guard/pressure.jsonl": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1-pressure/pressure.jsonl",
+    "sha256": "65af18bc524f8edde70d5d45ac0b4c491bd8160b036f34db0fdc57d9c7200799",
+    "bytes": 76623
+  },
+  "guard/result.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1-pressure/result.json",
+    "sha256": "b930e7a8282c48851750f8438ef0243df5697004738bb1efd66bc0da0d490c85",
+    "bytes": 52
+  },
+  "frozen-producer-manifest.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1-manifest.json",
+    "sha256": "9041555a8cfb4aba60ffc9ca479d9bf5e5edb9b9d022d0fec4771d4d08dbc7d6",
+    "bytes": 3991
+  },
+  "frozen-generation-queue.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/experiments/ds41-ssd/overthink-provenance/counting-study/generation-queue-v1.json",
+    "sha256": "2af91c43a8c701cdcec392ef9041607cbf068180ea32528521b9afc01cc495b6",
+    "bytes": 16433
+  },
+  "native25-98-file-preflight.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-native-only-analysis/speed-bench/experiments/overthink-queue-launcher-20261002/native-effort25-preflight.json",
+    "sha256": "4921892957f3a5656e9511565e0a7b32a8a3a11d0e224f45b4a12a6c9810ba89",
+    "bytes": 21495
+  },
+  "launcher-frozen-manifest.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-native-only-analysis/speed-bench/experiments/overthink-queue-launcher-20261002/manifest.json",
+    "sha256": "b4f1dec87b03e29ff8f01f65ba40805e0c69047e1310d5399825fcd3c8bd523c",
+    "bytes": 4396
+  },
+  "analysis/checked-summary.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-native-only-analysis/speed-bench/experiments/native-effort25-counting-analysis-20261002/checked-summary.json",
+    "sha256": "ce2ca66defb63131ab9ad170c9eee84291d91bb48da7e03aed710133588da769",
+    "bytes": 10167
+  },
+  "analysis/analysis-run.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-native-only-analysis/speed-bench/experiments/native-effort25-counting-analysis-20261002/analysis-run.json",
+    "sha256": "e8cbfae461c5a5c4716bd611fad8d72a508aace8d6423e817c7a51038cb39ee5",
+    "bytes": 536
+  },
+  "analysis/analysis.log": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-native-only-analysis/speed-bench/experiments/native-effort25-counting-analysis-20261002/analysis.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "source/summarize_overthink_checked.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-native-only-analysis/speed-bench/summarize_overthink_checked.py",
+    "sha256": "7830f64402b9972bac164b06dde1e3a6aa4a251cae3187fc29086c0cc9cefcf5",
+    "bytes": 17458
+  },
+  "source/run_overthink_queue.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-queue-launcher/speed-bench/run_overthink_queue.py",
+    "sha256": "98204b286e48ab100c6f5cfa1fa4565530f7a74f32ae5931fe351c230262640d",
+    "bytes": 9694
+  },
+  "source/pressure_run.py": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+    "bytes": 9066
+  },
+  "source/speed-bench/overthink_pilot.c": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/overthink_pilot.c",
+    "sha256": "e4c7463b9ab7798ceab39ceada06c870060e3be22111a162f92bed69a07bc0da",
+    "bytes": 32639
+  },
+  "source/speed-bench/prepare_overthink_run.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/prepare_overthink_run.py",
+    "sha256": "7a9c99ec743eafcbef452e4a5062536814370bcd65406fa6351dfd9f06420536",
+    "bytes": 8219
+  },
+  "source/speed-bench/overthink_diagnostics.h": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/overthink_diagnostics.h",
+    "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e",
+    "bytes": 2104
+  },
+  "source/speed-bench/overthink_counting_cases.h": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/overthink_counting_cases.h",
+    "sha256": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173",
+    "bytes": 1295
+  },
+  "source/speed-bench/overthink_counting_gold.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/overthink_counting_gold.py",
+    "sha256": "9787d185cb5166e50cb54a94da0593214ba3e78d0d5967786b70336b343ac1fc",
+    "bytes": 3196
+  },
+  "source/speed-bench/overthink_gold.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/overthink_gold.py",
+    "sha256": "7b10aa3f7f3fd16fde421bb28565bdcc45844b908f02f7f88c15c9f05b235057",
+    "bytes": 1961
+  },
+  "source/ds4_overthink_markers.h": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_overthink_markers.h",
+    "sha256": "0e869906f35c80e49d5363cadf25306c97f044c5c0d44ab473b8c51a55d9c863",
+    "bytes": 1517
+  },
+  "cases-v1.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/experiments/ds41-ssd/overthink-provenance/counting-study/cases-v1.json",
+    "sha256": "0e4b4eff5154cf199984829019e03678686deef50e6abb5fff02eeeff854b5e1",
+    "bytes": 2464
+  },
+  "existing-core-object-proof.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/experiments/ds41-ssd/overthink-provenance/counting-study/native-effort-prepared-v1/core-objects.json",
+    "sha256": "1b52970c2928122f79591befd59545b82aa314de461793384836b8bb448a3fe9",
+    "bytes": 1197
+  },
+  "source/archive_native_effort25.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-effort25-archive/speed-bench/ideas/archive_native_effort25.py",
+    "sha256": "22d3592fcd335c77e8218c64fff033004e88f676efa7aadc1349846101611e25",
+    "bytes": 13664
+  }
+}

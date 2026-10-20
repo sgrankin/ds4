@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive/tests/test_resident_confirmation.py", line 38, in <module>
+    with tempfile.TemporaryDirectory(dir=root/'speed-bench/ideas/artifacts') as folder:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/tempfile.py", line 907, in __init__
+    self.name = mkdtemp(suffix, prefix, dir)
+                ~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/tempfile.py", line 381, in mkdtemp
+    _os.mkdir(file, 0o700)
+    ~~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive/speed-bench/ideas/artifacts/tmpn6df8_ls'

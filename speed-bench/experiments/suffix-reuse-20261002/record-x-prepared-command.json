@@ -1,0 +1,43 @@
+{
+  "cwd": "/Volumes/Models/ds4",
+  "argv": [
+    "python3",
+    "speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-c512-t128",
+    "--",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-build-20261002/suffix_fact_oracle",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--fixtures",
+    "/Volumes/Models/ds4/.workspaces/idea-context/speed-bench/experiments/suffix-reuse-20261002/record-x-fixtures",
+    "--case",
+    "prior-secret",
+    "--out",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-record-x-c512-t128",
+    "--prefix",
+    "1024",
+    "--edit",
+    "256",
+    "--unchanged",
+    "512",
+    "--fresh-tail",
+    "128",
+    "--greedy",
+    "16",
+    "--ctx",
+    "4096",
+    "--chunk",
+    "256",
+    "--cache-gb",
+    "64"
+  ],
+  "status": "prepared only; native GPU grant pending",
+  "semantic_fixture": "Record X current access-code lookup",
+  "protocol_label": "prior-secret enables mandatory original/fresh controls, not model text",
+  "required_controls": [
+    "original exact context answers6829 and stops",
+    "fresh edited context answersUNKNOWN and stops",
+    "full tokenized question plus assistant prefix wholly after cacheendpoint",
+    "identity graph/logit bytes and branch initial-endpoint bytes equal"
+  ]
+}

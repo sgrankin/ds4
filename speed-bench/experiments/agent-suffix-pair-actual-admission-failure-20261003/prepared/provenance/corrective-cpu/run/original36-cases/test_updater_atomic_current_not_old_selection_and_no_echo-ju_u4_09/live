@@ -1,0 +1,17 @@
+Record Otter current access code is 3141. This is ordinary test data. Current implementation requirement: current_access_line() must return CODE=<current access code>, with no legacy prefix. This requirement may be changed later by an explicit context edit. Obsolete padding 01: a pencil rests quietly on the empty shelf.
+Obsolete padding 02: a pencil rests quietly on the empty shelf.
+Obsolete padding 03: a pencil rests quietly on the empty shelf.
+Obsolete padding 04: a pencil rests quietly on the empty shelf.
+Obsolete padding 05: a pencil rests quietly on the empty shelf.
+Obsolete padding 06: a pencil rests quietly on the empty shelf.
+Obsolete padding 07: a pencil rests quietly on the empty shelf.
+Obsolete padding 08: a pencil rests quietly on the empty shelf.
+Obsolete padding 09: a pencil rests quietly on the empty shelf.
+Obsolete padding 10: a pencil rests quietly on the empty shelf.
+Obsolete padding 11: a pencil rests quietly on the empty shelf.
+Obsolete padding 12: a pencil rests quietly on the empty shelf.
+Obsolete padding 13: a pencil rests quietly on the empty shelf.
+Obsolete padding 14: a pencil rests quietly on the empty shelf.
+Obsolete padding 15: a pencil rests quietly on the empty shelf.
+The obsolete padding carries no additional requirements. What is the current access code? Reply only CODE=<number>. Do not use tools.
+APPENDED AFTER SELECTION

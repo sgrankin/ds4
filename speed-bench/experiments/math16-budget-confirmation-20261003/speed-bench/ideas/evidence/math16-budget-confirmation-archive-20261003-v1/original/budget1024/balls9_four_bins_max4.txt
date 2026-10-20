@@ -1,0 +1,4 @@
+We need answer integer. Need solve. Count nonnegative integers x1..x4 sum 9, each <=4. Labeled bins. Need count ordered occupancy lists. Let's compute.
+
+Total without upper = C(9+4-1,3)=C(12,3)=220. Subtract xi>=5. For each bin, set yi=xi-5, sum remaining 4 among 4: C(4+4-1,3)=C(7,3)=35. Four bins =>140. Need inclusion-exclusion for two bins >=5: set two subtract 5 each, remaining sum -1? 9-10=-1 impossible. So count=220-140=80. Check maybe at most four per bin, sum 9 across 4, max total capacity 16. Count 80. Let's verify via generating function coefficient (1+x+...+x^4)^4 at x^9. Could be 80. Need final only integer. 
+</think>80

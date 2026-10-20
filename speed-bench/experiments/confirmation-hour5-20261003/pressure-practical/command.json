@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/thinking-hour4-20261003/run.py",
+    "--helper",
+    "/Volumes/Models/ds4/.workspaces/idea-thinking-hour5-combined/build/practical-write-agent",
+    "--tasks-file",
+    "/Volumes/Models/ds4/speed-bench/experiments/confirmation-hour5-20261003/practical/spec.json",
+    "--grader",
+    "/Volumes/Models/ds4/speed-bench/experiments/confirmation-hour5-20261003/practical/grade.py",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/confirmation-hour5-20261003/practical-results",
+    "--env",
+    "DS4_METAL_V41_RESIDENT_ROUTE_PROFILE=1",
+    "native-before",
+    "budget256",
+    "budget256-affinity",
+    "native-after"
+  ],
+  "initial": {
+    "time": 1791039085.603209,
+    "level": 1,
+    "swap_gb": 0.024599609375,
+    "physical_gb": 128.0,
+    "free_gb": 56.455596923828125,
+    "file_backed_gb": 54.73146057128906,
+    "wired_gb": 3.64349365234375,
+    "compressor_gb": 7.92388916015625
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

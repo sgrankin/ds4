@@ -1,0 +1,17 @@
+{
+  "gold": {
+    "stack": [
+      10
+    ],
+    "popped": [
+      9,
+      6
+    ]
+  },
+  "oracle_input": {
+    "question": "Start with an empty stack, written bottom to top. Execute PUSH 4, PUSH 9, POP, PUSH 6, DUP, POP, ADD. DUP copies the top; ADD pops the top two and pushes their sum. POP discards its top but records that number. Return only JSON with final stack and popped numbers in POP order."
+  },
+  "explanation": "Explicit POPs remove nine then six; the final ADD combines four and six into ten.",
+  "category": "code",
+  "scope": "New authored content, fixed before any model outcome."
+}

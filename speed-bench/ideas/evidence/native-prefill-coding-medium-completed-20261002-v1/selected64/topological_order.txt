@@ -1,0 +1,30 @@
+```python
+import heapq
+
+def topological_order(n: int, edges: list[tuple[int, int]]) -> list[int] | None:
+    indegree = [0] * n
+    adj = [[] for _ in range(n)]
+    seen = set()
+    for u, v in edges:
+        if (u, v) in seen:
+            continue
+        seen.add((u, v))
+        adj[u].append(v)
+        indegree[v] += 1
+
+    heap = [i for i in range(n) if indegree[i] == 0]
+    heapq.heapify(heap)
+
+    order = []
+    while heap:
+        u = heapq.heappop(heap)
+        order.append(u)
+        for v in adj[u]:
+            indegree[v] -= 1
+            if indegree[v] == 0:
+                heapq.heappush(heap, v)
+
+    if len(order) != n:
+        return None
+    return order
+```

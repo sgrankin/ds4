@@ -1,0 +1,10 @@
+{
+  "rebuild_mean_ms": 59025.9145,
+  "restore_mean_ms": 24362.1065,
+  "reduction_percent": 58.726422612223985,
+  "speedup": 2.422857584174833,
+  "one_edit_reduction_with_save_percent": 58.70542166695274,
+  "all_logits_exact": true,
+  "all_state_exact": true,
+  "all_decode_exact": true
+}

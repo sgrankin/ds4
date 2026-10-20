@@ -1,0 +1,1 @@
+Earlier planning proposed lamp checks, shelf counts and weather readings. These notes contain no deployment code.

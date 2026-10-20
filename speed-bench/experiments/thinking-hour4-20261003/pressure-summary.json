@@ -1,0 +1,46 @@
+{
+  "guards": [
+    {
+      "guard": "pressure-screen",
+      "sample_count": 1083,
+      "normal_samples": 1083,
+      "bad_samples": 0,
+      "peak_wired_compressor_gib": 78.89729309082031,
+      "swap_initial_gib": 0.024599609375,
+      "swap_final_gib": 0.024599609375,
+      "swap_max_gib": 0.024599609375,
+      "swap_growth_gib": 0.0,
+      "first_sample_utc": "2026-10-03T14:19:00.114298+00:00",
+      "last_sample_utc": "2026-10-03T14:37:38.505318+00:00",
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      }
+    },
+    {
+      "guard": "pressure-extra",
+      "sample_count": 348,
+      "normal_samples": 348,
+      "bad_samples": 0,
+      "peak_wired_compressor_gib": 83.73109436035156,
+      "swap_initial_gib": 0.024599609375,
+      "swap_final_gib": 0.024599609375,
+      "swap_max_gib": 0.024599609375,
+      "swap_growth_gib": 0.0,
+      "first_sample_utc": "2026-10-03T14:38:16.110538+00:00",
+      "last_sample_utc": "2026-10-03T14:44:15.295889+00:00",
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      }
+    }
+  ],
+  "total_samples": 1431,
+  "normal_samples": 1431,
+  "bad_samples": 0,
+  "peak_wired_compressor_gib": 83.73109436035156,
+  "swap_initial_gib": 0.024599609375,
+  "swap_final_gib": 0.024599609375,
+  "swap_growth_gib": 0.0,
+  "source": "Existing completed pressure-screen and pressure-extra JSONL; no new pressure probe."
+}

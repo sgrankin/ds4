@@ -1,0 +1,103 @@
+{
+  "status": "FIRST_CPU_FAILURE_RETAINED",
+  "source_freeze": "38f6cda50321a7828c6a78a8568b5d3a1d645154",
+  "runtime_sources": {
+    "speed-bench/agent_suffix_pair_external.c": {
+      "bytes": 593959,
+      "sha256": "1a2b89f1e0b8325f4e34aaebad4aaa2d64da376caff9eb44c69cb73520205f74",
+      "mode": 420
+    },
+    "speed-bench/agent_suffix_pair_external_hook.inc": {
+      "bytes": 11703,
+      "sha256": "765eed11409029b711c91e9b5dfd1400996d388e55209f658f5621f0be7fe792",
+      "mode": 420
+    },
+    "speed-bench/agent_suffix_pair_external_controls.inc": {
+      "bytes": 10311,
+      "sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960",
+      "mode": 420
+    },
+    "speed-bench/agent_suffix_pair_external_literals.h": {
+      "bytes": 11924,
+      "sha256": "a6b56fc04f7ff0cf2d76cf84aa8855dc92b4dbbd8655880c4ffeaf3426fba7d9",
+      "mode": 420
+    },
+    "speed-bench/ideas/run_agent_suffix_pair_external.py": {
+      "bytes": 45041,
+      "sha256": "17902eb8816f107bffaa30e3017d9a419ad11655a515db23e5d43b6634f7bcb3",
+      "mode": 420
+    },
+    "speed-bench/ideas/prepare_agent_suffix_pair_external.py": {
+      "bytes": 8716,
+      "sha256": "4280652469533fe4e576a2bf43f2e970d3155c3aac183962debff974a94eaf1e",
+      "mode": 420
+    },
+    "speed-bench/agent_suffix_pair_actual_ownership.h": {
+      "bytes": 2295,
+      "sha256": "cd6f259b1bed287ef2cce67597a6bf5082a3c83bd0a5c036e4335e1846969982",
+      "mode": 420
+    },
+    "speed-bench/agent_suffix_pair_actual_admission.h": {
+      "bytes": 1849,
+      "sha256": "a92300e30416e1a6a5cb6fd3cbfd7466cb9dfa3de3a3ab807f95c283f9c755f8",
+      "mode": 420
+    },
+    "ds4_agent.c": {
+      "bytes": 593557,
+      "sha256": "3c0dc3d9141f33cea40878c3724f9893d23c229b492434ea9455bdcac7464806",
+      "mode": 420
+    },
+    "ds4.h": {
+      "bytes": 37885,
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631",
+      "mode": 420
+    },
+    "speed-bench/ideas/agent_suffix_pair_external_v1/task.json": {
+      "bytes": 24752,
+      "sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c",
+      "mode": 420
+    },
+    "speed-bench/ideas/agent_suffix_pair_external_v1/first.txt": {
+      "bytes": 1395,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2",
+      "mode": 420
+    },
+    "speed-bench/ideas/agent_suffix_pair_external_v1/second.txt": {
+      "bytes": 2681,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153",
+      "mode": 420
+    },
+    "speed-bench/ideas/agent_suffix_pair_external_v1/third.txt": {
+      "bytes": 1906,
+      "sha256": "acb5e79e7d5991099be0788b252b09d0ee6c147e02266f69e1ec5848486f149f",
+      "mode": 420
+    },
+    "speed-bench/ideas/agent_suffix_pair_external_v1/grader.py": {
+      "bytes": 2461,
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0",
+      "mode": 420
+    },
+    "speed-bench/ideas/agent_suffix_pair_external_v1/run_grader.py": {
+      "bytes": 1732,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354",
+      "mode": 420
+    },
+    "speed-bench/ideas/agent_suffix_pair_external_v1/approved-design.json": {
+      "bytes": 10137,
+      "sha256": "5b84d01b414655fabf2645114638b4e97848f8810930a4a44473a7880d51085f",
+      "mode": 420
+    }
+  },
+  "model_or_native_access": false,
+  "source_pins_before": true,
+  "argv": [
+    "python3",
+    "speed-bench/ideas/test_agent_suffix_pair_external.py"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+  "start": 1791004894.276962,
+  "elapsed": 7.342962980270386,
+  "returncode": 1,
+  "case_directory": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-cpu-v1/cases",
+  "source_pins_after": true
+}

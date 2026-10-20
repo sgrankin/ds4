@@ -1,0 +1,60 @@
+We need read config.json whole raw. Then write solution.py. Must obey: exactly one read call config.json whole=true raw=true. Then exactly one write call solution.py. No other tools. Let's do read.
+
+🛠️ Reading config.json (whole file)...
+
+Need write solution.py. Constraints: module level only plain function definitions: no decorators, annotations, default args, classes, imports. No I/O, dynamic execution, names/attributes beginning underscore. Use Python builtins only. Function solve(payload, config). Return list.
+
+Need handle window less than 1 or greater than payload length -> empty. payload list ints. config window integer. For each consecutive window exactly width, absolute zero-based index of max, earliest tie. Return increasing window-start order.
+
+Implementation:
+
+def solve(payload, config):
+    window = config["window"]
+    length = len(payload)
+    if window < 1 or window > length:
+        return []
+    result = []
+    start = 0
+    while start + window <= length:
+        best_index = start
+        best_value = payload[start]
+        offset = 1
+        while offset < window:
+            index = start + offset
+            value = payload[index]
+            if value > best_value:
+                best_value = value
+                best_index = index
+            offset = offset + 1
+        result.append(best_index)
+        start = start + 1
+    return result
+
+No imports, no underscores. Names: best_index etc no leading underscore
+
+🛠️ write  path=solution.py
+def solve(payload, config):
+    window = config["window"]
+    length = len(payload)
+    if window < 1 or window > length:
+        return []
+    result = []
+    start = 0
+    while start + window <= length:
+        best_index = start
+        best_value = payload[start]
+        offset = 1
+        while offset < window:
+            index = start + offset
+            value = payload[index]
+            if value > best_value:
+                best_value = value
+                best_index = index
+            offset = offset + 1
+        result.append(best_index)
+        start = start + 1
+    return result
+
+
+Implemented `solve` in solution.py using only builtins. It returns the earliest absolute index of each window's maximum, or an empty list when the window size is invalid.
+

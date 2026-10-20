@@ -1,0 +1,15 @@
+We need answer count paths from (0,0) to (7,7) with steps R,U, never y>x (i.e., stay below or on diagonal y=x? Starting (0,0) y=x. Need never y>x means y <= x at all points. Since steps right increases x, up increases y. From (0,0) to (7,7). This is Catalan paths below diagonal? Usually Dyck paths with R=up? Let's define coordinates x,y. Condition y<=x. Starting (0,0) equality. First step must R (x=1,y=0). Ending (7,7) equality. Count Catalan number C_7 = 1/(8) binom(14,7)=429? Wait Catalan C_n counts paths from (0,0) to (n,n) not crossing y=x? If condition y<=x, yes Catalan C_n = 429 for n=7. But exclude paths through (2,2) or (4,4). Need count paths avoiding both points.
+
+Need compute number of Catalan paths length 14 from (0,0) to (7,7) staying y<=x, not visiting (2,2) or (4,4). Note (2,2), (4,4) are on diagonal. Any path that reaches diagonal at those points. Need avoid.
+
+We can use decomposition. Catalan paths from (0,0) to (n,n) staying y<=x. A path through (k,k) at some point decomposes into Catalan path from (0,0) to (k,k) and Catalan path from (k,k) to (n,n) (translation) staying below diagonal. Since condition resets at diagonal. Number through (k,k) = C_k * C_{n-k}? Need check orientation. From (k,k) to (n,n), translate to (0,0) length n-k, condition y<=x relative? Original after (k,k), need y<=x. Let x=k+a, y=k+b. Condition k+b <= k+a => b<=a. Steps R/U. So yes Catalan path length n-k. Thus count through (2,2): C_2 * C_5 = 2*42=84? C_2=2, C_5=42. Through (4,4): C_4 * C_3 =14*5=70. Through both (2,2) and (4,4): C_2 * C_2 * C_3? From 0 to2 C2=2, 2 to4 length2 C2=2, 4 to7 length3 C3=5 => 20. Avoid either = total - through2 - through4 + both = 429 -84 -70 +20 = 295. Need verify.
+
+But wait condition "never have y>x" includes endpoints? At (0,0) y=x, at (7,7) equality. Fine. Paths through (2,2) or (4,4) are exactly those hitting diagonal at those points. Since diagonal points are allowed (y=x not >). So yes.
+
+Need final integer only. But let's ensure no subtlety: "do not pass through either (2,2) or (4,4)" means cannot visit those points. We excluded.
+
+Let's double-check with alternative reflection / inclusion-exclusion. Total Catalan C_7=429. Through (2,2): number of Catalan paths from (0,0) to (7,7) that visit (2,2). Is it C_2*C_5 = 2*42=84? Let's enumerate maybe. From (0,0) to (2,2) staying y<=x. Paths length4: RRUU? Check y<=x: (1,0),(2,0),(2,1),(2,2) yes. RURU: (1,0),(1,1),(2,1),(2,2) yes. U first invalid. So 2. From (2,2) to (7,7) length10 Catalan C5=42. Yes.
+
+Through (4,4): C4*C3=14*5=70. Through both: C2*C2*C3=2*2*5=20. Inclusion-exclusion: 429 - 84 - 70 +20 = 295. Good.
+
+Need final answer only integer.</think>295

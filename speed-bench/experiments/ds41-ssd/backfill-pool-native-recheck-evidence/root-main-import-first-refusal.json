@@ -1,0 +1,7 @@
+{
+  "status": "FIRST_IMPORT_REFUSED_BEFORE_COPY",
+  "reason": "ROOT verifier assumed no tar directory or enclosing root; retained tar legitimately has enclosing directory",
+  "failed_member": "resident-pool-recheck-completed-20261003-v1",
+  "source_assets_modified": false,
+  "model_metadata_touched": false
+}

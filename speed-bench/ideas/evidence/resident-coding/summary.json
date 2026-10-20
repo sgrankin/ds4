@@ -1,0 +1,69 @@
+{
+  "scope": "first ledger-reconciliation task only",
+  "baseline": "baseline-ds41",
+  "candidate": "resident-ds41-full275",
+  "model": "gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "policy": {
+    "gap": 0.05,
+    "max_mass": 0.12,
+    "max_substitutions": 1
+  },
+  "per_arm_timeout_seconds": 275,
+  "complete_turn_success": false,
+  "complete_harness_success": false,
+  "timing_qualification": "No throughput claim; timeouts, earlier excluded attempts, one pair and background indexing",
+  "excluded_attempts": [
+    "wrong model alias rejected SSD streaming before inference",
+    "shortened candidate budget before full-budget retry"
+  ],
+  "checks": {
+    "baseline-ds41": {
+      "csv_unchanged": true,
+      "original_tests_byte_unchanged": true,
+      "original_test_definitions_unchanged": true,
+      "held_out": {
+        "rc": 0,
+        "stdout": "PASS held-out stage 0\n",
+        "stderr": ""
+      },
+      "unit_tests": {
+        "rc": 0,
+        "stdout": "",
+        "stderr": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+      },
+      "original_unit_test_count": 5,
+      "generated_fix_passes": true,
+      "completed_model_turn": false,
+      "complete_harness_success": false,
+      "scope": "first original reconciliation task only; since and CLI tasks not evaluated",
+      "changed_existing_files": [
+        "ledger/money.py",
+        "ledger/report.py"
+      ]
+    },
+    "resident-ds41-full275": {
+      "csv_unchanged": true,
+      "original_tests_byte_unchanged": true,
+      "original_test_definitions_unchanged": true,
+      "held_out": {
+        "rc": 0,
+        "stdout": "PASS held-out stage 0\n",
+        "stderr": ""
+      },
+      "unit_tests": {
+        "rc": 0,
+        "stdout": "",
+        "stderr": "test_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... ok\ntest_decimal_money (test_report.ReportTests.test_decimal_money) ... ok\ntest_retry (test_report.ReportTests.test_retry) ... ok\ntest_void (test_report.ReportTests.test_void) ... ok\ntest_zero_balance (test_report.ReportTests.test_zero_balance) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+      },
+      "original_unit_test_count": 5,
+      "generated_fix_passes": true,
+      "completed_model_turn": false,
+      "complete_harness_success": false,
+      "scope": "first original reconciliation task only; since and CLI tasks not evaluated",
+      "changed_existing_files": [
+        "ledger/money.py",
+        "ledger/report.py"
+      ]
+    }
+  }
+}

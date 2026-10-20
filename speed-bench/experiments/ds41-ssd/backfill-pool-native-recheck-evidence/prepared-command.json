@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-pool-recheck-study-fixed/speed-bench/ideas/artifacts/resident-pool-recheck-prepared-20261002-v2/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-pool-recheck-study-fixed/speed-bench/ideas/artifacts/resident-pool-recheck-prepared-20261002-v2/run_resident_pool_recheck_study.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-pool-recheck-study-fixed/speed-bench/ideas/artifacts/resident-pool-recheck-prepared-20261002-v2",
+    "--manifest-sha256",
+    "04ea5a8c9b599d958fc1635019a610143d39e2bc1fad64b6ef8dcc4af78b8bc7"
+  ],
+  "manifest_sha256": "04ea5a8c9b599d958fc1635019a610143d39e2bc1fad64b6ef8dcc4af78b8bc7",
+  "launch_requires_root_grant": true
+}

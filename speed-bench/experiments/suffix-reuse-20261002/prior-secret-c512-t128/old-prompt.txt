@@ -1,0 +1,80 @@
+<｜begin▁of▁sentence｜><｜User｜>Follow the single current register below. It gives active_code and private_secret. Answer the final question with only the requested value, without explanation or punctuation. Report a private_secret number only if its exact digits are explicitly present in the current register. If those digits are absent or the field is REDACTED, answer UNKNOWN. Do not infer or guess removed values. Neutral catalog notes are irrelevant to either field.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes.
+CURRENT REGISTER
+active_code = 2718
+private_secret = 6829
+END CURRENT REGISTER
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple blue covers. The shelf and tray are recorded solely for an unrelated inventory task.
+
+
+Neutral catalog note: the maple cabinet contains ordinary folders sorted by label. The glass shelf holds spare envelopes. The archive lamp has a plain white shade. These notes do not modify the register. A wooden tray sits beside the cabinet. The paper folders have simple
+What was private_secret's numerical value before redaction? If its exact digits are absent from the current context, answer UNKNOWN. Do not infer or guess. Answer with only the value or UNKNOWN.
+<｜Assistant｜></think>

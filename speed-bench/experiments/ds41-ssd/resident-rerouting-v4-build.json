@@ -1,0 +1,32 @@
+{
+  "experiment": "resident-rerouting-v4",
+  "base_commit": "67696070",
+  "parent_v3_commit": "46b1ffac0a7b",
+  "gpu_runs_by_implementation_agent": 0,
+  "selector_test": "passed",
+  "selector_differential": "50000 maxsubs1 cases identical to v3 with/without fast-math; maxsubs2 invariants pass",
+  "metal_build": "warning-free",
+  "changed_runtime": [
+    "ds41_resident_route_configure",
+    "ds41_resident_route_apply",
+    "ds4_resident_route_choose_plan",
+    "ds4_resident_route_weak_pair"
+  ],
+  "parameters": {
+    "MAX_SUBS": "default1, opt-in2",
+    "MAX_TOTAL_MASS": "default.20, applied only when MAX_SUBS2"
+  },
+  "sha256": {
+    "ds4.c": "732775e0f0d574c05422e1b4c7ddbf378585fd85286cadbf9e00112552b28b9c",
+    "ds4_resident_route.h": "b3c6bccc7f5faedadd999734a48c2f044121064a1822ad887cb28a21ee9246d3",
+    "ds4_gpu.h": "f03ac2afd23092e46908246cfc0000328865169d428d4fbfa115af59ca2edd5f",
+    "ds4_metal.m": "c7213d4148bd3ba876f4f6bc4b499bdb1b17266923586309444f876ae5fc52f8",
+    "ds4.o": "6e313d31e2eea730b88aa44cdeb6b7d1aa67f53f34f39a836718e2a1c3f2b233",
+    "ds4_metal.o": "bc0f8f77873c86549480d155702f52394d9735a74c27b8f11f2161100ba36ecc",
+    "libds4_resident.dylib": "60be54ed6c3fb4b91792a365e38ba382f629d7a1ab488f12577eeb792f4c3e2d",
+    "ds4": "cbdbb97755b9a4c59818919d49e70eefe71411689ba25823649d4df93aa099fe",
+    "ds4-agent": "85c3957a5a92df46c5d8ef212cc8555ece0101472a8ea7ddf4269bbf0b7df8fc",
+    "speed-bench/agent-session/replay": "58c8f09036dc43a3c66f080190c82e742b106b3159723fbf9fd43b8fbf5c1528",
+    "tests/test_resident_route.c": "232b9627e443b457496edd110cdc5c12f8adcba76047456edb91eef67f23e7fa"
+  }
+}

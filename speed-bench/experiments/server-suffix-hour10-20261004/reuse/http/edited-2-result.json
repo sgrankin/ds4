@@ -1,0 +1,34 @@
+{
+  "mode": "reuse",
+  "phase": "edited-2",
+  "seconds": 9.61632445899886,
+  "http_status": 200,
+  "response_status": "completed",
+  "text": "{\"code\":\"MAPLE-42\",\"reserve\":73}",
+  "gold": {
+    "code": "MAPLE-42",
+    "reserve": 73
+  },
+  "correct": true,
+  "complete": true,
+  "error": null,
+  "input_tokens": 1932,
+  "output_tokens": 13,
+  "usage": {
+    "input_tokens": 1932,
+    "input_tokens_details": {
+      "cached_tokens": 1568,
+      "cache_write_tokens": 364
+    },
+    "output_tokens": 13,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 1945
+  },
+  "incomplete_details": null,
+  "suffix_log_lines": [
+    "1004 09:09:25 ds4-server: suffix APPROXIMATE slot=1 reused=1568 fresh=328 source=480:2048 destination=36:1604 latest_user_start=1901 pre_rope=1 source_ssd=1 source_approximate=0 8686.571 ms"
+  ],
+  "pass": true
+}

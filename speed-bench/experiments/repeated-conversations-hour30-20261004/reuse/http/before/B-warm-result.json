@@ -1,0 +1,77 @@
+{
+  "step": "B-warm",
+  "session": "B",
+  "conversation": "conv_0d7e4332d2c608fbf06e3957",
+  "seconds": 21.473491832992295,
+  "text": "READY",
+  "answer": null,
+  "gold": "READY",
+  "correct": true,
+  "complete": true,
+  "cap": false,
+  "fresh_read": true,
+  "calls": [
+    {
+      "name": "read",
+      "call_id": "call_35e057d2a34d67e7505d687f64d57096",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-visible/B/active.json\",\"whole\":true,\"raw\":true}",
+      "read": true,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-visible/B/active.json",
+      "text": "{\n  \"batches\": 31,\n  \"items_per_batch\": 8,\n  \"reserved_items\": 17,\n  \"notes\": [\n    \"Dispatch note 00: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 01: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 02: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 03: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 04: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 05: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 06: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 07: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 08: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 09: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 10: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 11: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 12: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 13: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 14: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 15: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 16: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 17: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 18: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 19: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 20: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 21: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 22: current batch counts are authoritative; obsolete shipment logs may be archived.\",\n    \"Dispatch note 23: current batch counts are authoritative; obsolete shipment logs may be archived.\"\n  ]\n}\n"
+    }
+  ],
+  "replies": [
+    {
+      "seconds": 7.9623876250116155,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1380,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1380
+        },
+        "output_tokens": 103,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1483
+      },
+      "id": "resp_43bbad57c928c86f867a6824",
+      "conversation": {
+        "id": "conv_0d7e4332d2c608fbf06e3957"
+      },
+      "incomplete_details": null,
+      "requested_max_output_tokens": 128
+    },
+    {
+      "seconds": 13.507609041989781,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 2010,
+        "input_tokens_details": {
+          "cached_tokens": 1483,
+          "cache_write_tokens": 527
+        },
+        "output_tokens": 2,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2012
+      },
+      "id": "resp_aba4602771ca654caae97597",
+      "conversation": {
+        "id": "conv_0d7e4332d2c608fbf06e3957"
+      },
+      "incomplete_details": null,
+      "requested_max_output_tokens": 128
+    }
+  ],
+  "errors": [],
+  "suffix_log_lines": [
+    "1004 17:02:49 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+  ],
+  "exact_hit_log_lines": [
+    "1004 17:02:49 ds4-server: state cache exact hit slot=1 tokens=1316"
+  ],
+  "pass": true
+}

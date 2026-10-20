@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/fresh-clm-coding-hour32-20261004/launch.py",
+    "--arm",
+    "native-after",
+    "--output",
+    "speed-bench/experiments/fresh-clm-coding-hour32-20261004/native-after",
+    "--cache",
+    ".workspaces/server-agent-day-20261004/fresh32-cache-native-after",
+    "--store",
+    ".workspaces/server-agent-day-20261004/fresh32-store-native-after",
+    "--visible",
+    ".workspaces/server-agent-day-20261004/fresh32-visible",
+    "--global-cap",
+    "2048",
+    "--timeout",
+    "600"
+  ],
+  "initial": {
+    "time": 1791152216.303106,
+    "level": 1,
+    "swap_gb": 0.021787109375,
+    "physical_gb": 128.0,
+    "free_gb": 58.214324951171875,
+    "file_backed_gb": 54.16581726074219,
+    "wired_gb": 3.5509185791015625,
+    "compressor_gb": 9.396163940429688
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

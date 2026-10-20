@@ -1,0 +1,12 @@
+{
+  "gold": {
+    "current_code": "8736",
+    "obsolete_code": "5127"
+  },
+  "oracle_input": {
+    "question": "A fictional record lists obsolete access code 5127. The signed current update replaces it with 8736 and says no other change is valid. Report only JSON with current_code and obsolete_code, both strings."
+  },
+  "explanation": "The explicitly current update supplies 8736; the superseded code is 5127.",
+  "category": "facts",
+  "scope": "New authored content, fixed before any model outcome."
+}

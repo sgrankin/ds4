@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "bytes": 124676976,
+      "mode": 493,
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+      "source": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang"
+    },
+    {
+      "bytes": 5606328,
+      "mode": 420,
+      "sha256": "d77958a390840f3a555f01df64d52964a656c72e6449c2a1cd8c19f497eb8aca",
+      "source": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4.o"
+    },
+    {
+      "bytes": 2798776,
+      "mode": 420,
+      "sha256": "ec94b88a9a3da8742c77899e370c1b64869d456ce97d9c8fdba4fae1752bd5ff",
+      "source": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_metal.o"
+    },
+    {
+      "bytes": 2673104,
+      "mode": 493,
+      "sha256": "1cdeaaa7f7dcb8d4f073b7694f7cce48a9e3cc6ec1253dd63be7bce93bfaca39",
+      "source": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe"
+    },
+    {
+      "bytes": 4975732,
+      "mode": 420,
+      "sha256": "a903adc983d872dcca30ee86c4eb5c3a17f8d37d4c4f47e47a0fa182fbe85cf2",
+      "source": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe.dSYM/Contents/Resources/DWARF/reasoning-budget-confirmation-probe"
+    }
+  ],
+  "strictly_greater": true,
+  "threshold_bytes": 2097152
+}

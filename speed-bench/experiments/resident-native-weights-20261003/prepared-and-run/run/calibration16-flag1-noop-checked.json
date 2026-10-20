@@ -1,0 +1,162 @@
+{
+  "cases": 16,
+  "tokens": 512,
+  "avg_nll": 0.43839403273,
+  "delta_nll": 0,
+  "policy_delta_nll": 0,
+  "kl_base_to_raw": 0,
+  "kl_base_to_policy": 0,
+  "tv": 0,
+  "argmax_flips": 0,
+  "bit_equal_rows": 512,
+  "startup_ms": 198.661,
+  "prefill_ms": 16745.796,
+  "decode_ms": 31853.008,
+  "metrics_ms": 1089.91,
+  "name": "calibration16-flag1-noop",
+  "raw_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+  "layout": {
+    "magic": 1146310961,
+    "vocab": 129280,
+    "cases": 16,
+    "token_limit": 32,
+    "header_bytes": 16,
+    "row_metadata_bytes": 24,
+    "float_bytes": 4,
+    "row_bytes": 517144,
+    "rows": 512,
+    "bytes": 264777744,
+    "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+  },
+  "finite_validation": {
+    "vectors": 512,
+    "fp32_values": 66191360,
+    "finite": true
+  },
+  "cache": {
+    "configured_slots": 6136,
+    "resident_entries": 6136,
+    "hits": 191695,
+    "misses": 22625,
+    "wraps": 67875,
+    "evictions": 16489,
+    "buffer_allocs": 15,
+    "buffer_reuses": 16489
+  },
+  "io": {
+    "enabled": 1,
+    "pread_calls": 67875,
+    "requested_bytes": 225192960000,
+    "returned_bytes": 225192960000,
+    "cache_loader_bytes": 225192960000,
+    "cache_hits": 191695,
+    "cache_misses": 22625,
+    "cache_evictions": 16489
+  },
+  "route": {
+    "layers": 20480,
+    "substitutions": 0,
+    "native_misses": 11018,
+    "skipped_loads": 0,
+    "skipped_bytes": 0,
+    "mean_mass": 0.0,
+    "mean_score_gap": 0.0,
+    "mean_affinity_ratio": 0.0,
+    "mean_rank": 0.0,
+    "full_snapshots": 6430,
+    "double_layers": 0,
+    "planned_substitutions": 6483,
+    "drops": 0,
+    "triple_layers": 0
+  },
+  "prompt_mean_delta_nll": 0.0,
+  "prompt_bootstrap_95": [
+    0.0,
+    0.0
+  ],
+  "worst_prompt_delta_nll": 0.0,
+  "kl_p99": 0.0,
+  "kl_max": 0.0,
+  "per_prompt": {
+    "case_001": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_007": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_013": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_019": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_025": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_031": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_037": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_043": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_049": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_055": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_061": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_067": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_073": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_079": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_085": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_091": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    }
+  }
+}

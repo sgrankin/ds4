@@ -1,0 +1,153 @@
+{
+  "arm": "suffix-reuse",
+  "summary": {
+    "mode": "reuse",
+    "endpoint_partition_aligned": true,
+    "identity_native_checked": false,
+    "identity_native_state_equal": false,
+    "identity_native_logits_equal": false,
+    "identity_reuse_state_equal": false,
+    "prefix": 1408,
+    "shift": 65,
+    "span": 65,
+    "tail": 1,
+    "decode": 16,
+    "raw_reference_rows": 18,
+    "raw_candidate_rows": 17,
+    "tape_buffer_and_metadata_bytes": 12582992,
+    "immutable_tape_bytes": 12582912,
+    "peak_staging_bytes_including_reserve": 106814075,
+    "staging_budget_bytes": 134217728,
+    "coverage_rejections_preserve_state": true,
+    "precancel_preserves_state": true,
+    "partial_cancel_invalidates": true,
+    "approximate_export_blocked": true,
+    "pair_inputs_reused": 195,
+    "pair_rows_rebuilt": 96,
+    "pair_boundary_rows": 0,
+    "reused_tokens": 65,
+    "fresh_tail_tokens": 1,
+    "fresh_ms_diagnostic": 1486.067,
+    "reuse_ms_diagnostic": 86.343,
+    "mean_kl": 0.116563892813,
+    "mean_tv": 0.0682032358879,
+    "sum_delta_nll": -1.3726906342,
+    "argmax_flips": 1,
+    "bit_equal_rows": 0
+  },
+  "raw": {
+    "reference_rows": 18,
+    "reference_sha256": "fab1ace9ec151b58a7a18117c4bd0e38dd9126a36068c7b97b0f793158197f5f",
+    "teacher_token_hex": "ff1f0100670600004f0f00002ed7000093c0000023010000b9110000e6d300007a3900003480000014010000d2c301008ccc01008a8800000d010000d9020000",
+    "full_sha256": "4fa3238e229873162759824bede1509e10f478b3bb5b0ac08bbb1193226efdbd",
+    "bytes": 18099296
+  },
+  "state": {
+    ".source.state.bin": "f841b8cd20fed2a14ce8482154dbe274af67c2fd4935aed143ad62aab6267e47",
+    ".fresh.state.bin": "a4d9d89d5bd1bf632c71d2d14a218fb04c0a16347690fd819cb9120f17f86a6d"
+  },
+  "csv_checks": {
+    "rows": 17,
+    "teacher_rows": 16,
+    "quality_rows": [
+      {
+        "delta_nll": 0.0205224972883,
+        "kl": 0.0182620054236,
+        "tv": 0.0221401178654
+      },
+      {
+        "delta_nll": 0.00292348899192,
+        "kl": 0.0050519249952,
+        "tv": 0.0100959469906
+      },
+      {
+        "delta_nll": 0.291768417675,
+        "kl": 0.0427010987033,
+        "tv": 0.117030232957
+      },
+      {
+        "delta_nll": 0.652606697509,
+        "kl": 0.00552652421512,
+        "tv": 0.0105912431458
+      },
+      {
+        "delta_nll": -0.0228607131868,
+        "kl": 0.0199374844938,
+        "tv": 0.0226834067914
+      },
+      {
+        "delta_nll": 0.112206099254,
+        "kl": 0.0191466998729,
+        "tv": 0.0829121641965
+      },
+      {
+        "delta_nll": -6.99744690991e-06,
+        "kl": 4.83142485922e-06,
+        "tv": 6.99745424573e-06
+      },
+      {
+        "delta_nll": -0.0519128853682,
+        "kl": 0.0113677687634,
+        "tv": 0.0458829299532
+      },
+      {
+        "delta_nll": -3.89432130987e-09,
+        "kl": 2.99022181928e-09,
+        "tv": 3.89432940498e-09
+      },
+      {
+        "delta_nll": 3.23366822563e-05,
+        "kl": 1.79221339033e-05,
+        "tv": 3.24691314086e-05
+      },
+      {
+        "delta_nll": 1.5961177624e-05,
+        "kl": 1.14218460027e-05,
+        "tv": 1.60147271731e-05
+      },
+      {
+        "delta_nll": 1.24626848219e-05,
+        "kl": 9.82490016692e-06,
+        "tv": 1.61603691683e-05
+      },
+      {
+        "delta_nll": 0.0403544806644,
+        "kl": 0.00605733654038,
+        "tv": 0.0366726704716
+      },
+      {
+        "delta_nll": -6.07579154277e-05,
+        "kl": 1.5638325417e-05,
+        "tv": 6.39240953389e-05
+      },
+      {
+        "delta_nll": -2.14191435499,
+        "kl": 1.74309146555,
+        "tv": 0.608578431661
+      },
+      {
+        "delta_nll": -0.276377363326,
+        "kl": 0.108771895007,
+        "tv": 0.19083624204
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.00161233263548,
+        "tv": 0.01189605435
+      }
+    ],
+    "checked_summary": {
+      "mean_kl": 0.11656389281298536,
+      "mean_tv": 0.06820323588789201,
+      "sum_delta_nll": -1.3726906342003367
+    }
+  },
+  "private_state": {
+    "sha256": "d5ec39ecd2de50503a6606fc2515e39f1900485d071fdb50865682a18f0083cf",
+    "bytes": 20442428,
+    "diagnostic_magic": "DSSD",
+    "canonical_export": false
+  },
+  "identity_checks": null,
+  "native_parity": true
+}

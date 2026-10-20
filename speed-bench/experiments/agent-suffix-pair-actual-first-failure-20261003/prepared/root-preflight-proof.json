@@ -1,0 +1,16 @@
+{
+  "time": 1790997718.014772,
+  "status": "ROOT_NONMODEL_SOURCE_AND_ALL_ASSETS_PASS",
+  "manifest_sha256": "1719ce2a865edcd3e8a711353b1226fc61f090a8aa2ef577ab6a1878b45791bb",
+  "command_sha256": "a346c428f4f593a8cf4d552fbe91e9799c8c2bcd596b7a8d50fac68b60e5889e",
+  "payload_pins": 289,
+  "explicit_shaders": 26,
+  "source_review": true,
+  "caller_build_review": true,
+  "root_model_launch_granted": false,
+  "model_metadata_opened": false,
+  "first_attempt_only": true,
+  "semantic_success_unverified": true,
+  "persistence": "NOT_EXERCISED",
+  "timing_claim": false
+}

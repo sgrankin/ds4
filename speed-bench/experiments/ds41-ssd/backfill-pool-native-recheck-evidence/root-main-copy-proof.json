@@ -1,0 +1,14 @@
+{
+  "time": 1790988812.95206,
+  "source_revision": "26939e7a9cd112876705ac39e84cd7706a501998",
+  "source": "/Volumes/Models/ds4/.workspaces/idea-resident-pool-recheck-result/speed-bench/experiments/ds41-ssd/backfill-pool-native-recheck-evidence",
+  "destination": "/Volumes/Models/ds4/speed-bench/experiments/ds41-ssd/backfill-pool-native-recheck-evidence",
+  "evidence_index_sha256": "190a489cdcff74218cfb9d56ef5394f7d3e6d789ab4381bde4fb3cca601c8abc",
+  "verified_copied_assets": 16,
+  "verified_archive_files": 225,
+  "validated_archive_directories": 18,
+  "report_sha256": "dff30a30580c1e77eba9c930c2a36bf873e255c6ba99c0c4217e245b217b59d8",
+  "runtime_merged": false,
+  "model_metadata_touched": false,
+  "first_import_refusal_sha256": "70eace6c7eb2e12700887fac1efe490638a59ff3a0c682ac74d76d30c69e4213"
+}

@@ -1,0 +1,22 @@
+data: {"type":"response.created","sequence_number":0,"response":{"id":"resp_93be08be5c7352cb97b8c5e1","object":"response","created_at":1791154632,"status":"in_progress","model":"deepseek-v4.1-flash","output":[]}}
+
+data: {"type":"response.output_item.added","sequence_number":1,"output_index":0,"item":{"id":"msg_815260c1fb5f025c7770da02","type":"message","status":"in_progress","role":"assistant","content":[]}}
+
+data: {"type":"response.content_part.added","sequence_number":2,"item_id":"msg_815260c1fb5f025c7770da02","output_index":0,"content_index":0,"part":{"type":"output_text","text":"","annotations":[]}}
+
+data: {"type":"response.output_text.delta","sequence_number":3,"item_id":"msg_815260c1fb5f025c7770da02","output_index":0,"content_index":0,"delta":"CO"}
+
+data: {"type":"response.output_text.delta","sequence_number":4,"item_id":"msg_815260c1fb5f025c7770da02","output_index":0,"content_index":0,"delta":"VE"}
+
+data: {"type":"response.output_text.delta","sequence_number":5,"item_id":"msg_815260c1fb5f025c7770da02","output_index":0,"content_index":0,"delta":"-"}
+
+data: {"type":"response.output_text.delta","sequence_number":6,"item_id":"msg_815260c1fb5f025c7770da02","output_index":0,"content_index":0,"delta":"42"}
+
+data: {"type":"response.output_text.done","sequence_number":7,"item_id":"msg_815260c1fb5f025c7770da02","output_index":0,"content_index":0,"text":"COVE-42"}
+
+data: {"type":"response.content_part.done","sequence_number":8,"item_id":"msg_815260c1fb5f025c7770da02","output_index":0,"content_index":0,"part":{"type":"output_text","text":"COVE-42","annotations":[]}}
+
+data: {"type":"response.output_item.done","sequence_number":9,"output_index":0,"item":{"id":"msg_815260c1fb5f025c7770da02","type":"message","status":"completed","role":"assistant","content":[{"type":"output_text","text":"COVE-42","annotations":[]}]}}
+
+data: {"type":"response.completed","sequence_number":10,"response":{"id":"resp_93be08be5c7352cb97b8c5e1","object":"response","created_at":1791154632,"status":"completed","model":"deepseek-v4.1-flash","store":false,"previous_response_id":null,"conversation":null,"output":[{"id":"msg_815260c1fb5f025c7770da02","type":"message","status":"completed","role":"assistant","content":[{"type":"output_text","text":"COVE-42","annotations":[]}]}],"usage":{"input_tokens":422,"input_tokens_details":{"cached_tokens":402,"cache_write_tokens":20},"output_tokens":4,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":426}}}
+

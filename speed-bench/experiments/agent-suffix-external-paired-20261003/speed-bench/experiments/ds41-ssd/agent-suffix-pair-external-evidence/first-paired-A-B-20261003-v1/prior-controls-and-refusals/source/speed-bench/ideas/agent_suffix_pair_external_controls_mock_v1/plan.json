@@ -1,0 +1,127 @@
+{
+  "status": "SOURCE_FROZEN_MOCK_UNCOMPILED_UNGRANTED",
+  "qualified_native_source": "d3647e3d1c3df4e54ec3d7d17a27c7eec40d45b5",
+  "qualified_native_plan_sha256": "315a52cd24636391c1dcdce3245a186124b12d9053b554400076e7b9293ac335",
+  "files": {
+    "fixture": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/tests/test_agent_suffix_pair_external_controls.c",
+      "bytes": 11020,
+      "sha256": "2fe6ebb6b0ba707b95abdb3f1e289704c3c5dc7aebc124c71719c4ca07e7bb05",
+      "mode": 420
+    },
+    "actual_controls": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/agent_suffix_pair_external_controls.inc",
+      "bytes": 10311,
+      "sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960",
+      "mode": 420
+    }
+  },
+  "compiler_sdk_proof": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/evidence/agent-suffix-pair-native-source-prepared-20261003-v1/compiler-sdk-proof.json",
+    "bytes": 1438,
+    "sha256": "0fe26c4757dcc4eee736bfb2cbc6efb1a20d69ec9f15a1bb88b8863c41d29b16"
+  },
+  "compiler_authorities": {
+    "selected_wrapper": {
+      "path": "/usr/bin/cc",
+      "bytes": 200560,
+      "sha256": "34129c71a01a74f7f3b2443521519b2e5447553fa187f5fcafaaf8c42cc192e2"
+    },
+    "actual_clang": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "bytes": 124676976,
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+    },
+    "sdk_settings": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/SDKSettings.json",
+      "bytes": 7948,
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+    },
+    "libSystem_stub": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd",
+      "bytes": 347931,
+      "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+    }
+  },
+  "commands": [
+    {
+      "label": "libc-control-mock-compile",
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-std=c99",
+        "-pthread",
+        "tests/test_agent_suffix_pair_external_controls.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/controls-normal"
+      ]
+    },
+    {
+      "label": "libc-control-mock-selftest",
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/controls-normal",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/normal-cases"
+      ]
+    },
+    {
+      "label": "libc-control-mock-asan-ubsan-compile",
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-std=c99",
+        "-pthread",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "tests/test_agent_suffix_pair_external_controls.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/controls-asan-ubsan"
+      ]
+    },
+    {
+      "label": "libc-control-mock-asan-ubsan-selftest",
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/controls-asan-ubsan",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/sanitized-cases"
+      ],
+      "env": {
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      }
+    }
+  ],
+  "output": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1",
+  "serial_compilers": 1,
+  "borrowed_native_objects": [],
+  "native_headers_or_engine_or_gpu_or_model": false,
+  "expected_checks": 17,
+  "coverage": [
+    "actual frozen C control function bodies with libc-only deterministic API stubs",
+    "canonical/raw control serialization and A/B byte comparison, truncation/mismatch, finitebit rejection",
+    "forecast before snapshot allocation + actual reported-cap recheck",
+    "canonical snapshot released before raw control; both released before import",
+    "actual commit export->replace->import with all text scratch freed; return2/1/approx gates",
+    "export/replace/read/admission failures avoid import; allocator identities balanced"
+  ],
+  "limitations": [
+    "Does not qualify native tokenizer/source eligibility/RoPE/graph or semantic outcome.",
+    "Mock owned-byte total is a fixed independent fixture value; production ledger already separately validated, no global peak claim.",
+    "Reported-cap rejection is metadata gate test; does not allocate a huge real snapshot.",
+    "Native old/new/state/teacher and real worker transaction controls remain earlier retained separate evidence."
+  ]
+}

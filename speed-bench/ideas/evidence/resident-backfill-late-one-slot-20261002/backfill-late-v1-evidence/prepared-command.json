@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002/run_resident_late_study.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002"
+  ],
+  "launch_requires_root_grant": true
+}

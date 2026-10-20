@@ -1,0 +1,32 @@
+{
+  "gold": {
+    "values": [
+      3,
+      5,
+      8
+    ]
+  },
+  "oracle_input": {
+    "replies": [
+      {
+        "call_id": "qC",
+        "value": 8
+      },
+      {
+        "call_id": "qA",
+        "value": 3
+      },
+      {
+        "call_id": "qB",
+        "value": 5
+      }
+    ],
+    "submitted": [
+      "qA",
+      "qB",
+      "qC"
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Correlates asynchronous replies by opaque call identity; not job sorting or topological dependencies."
+}

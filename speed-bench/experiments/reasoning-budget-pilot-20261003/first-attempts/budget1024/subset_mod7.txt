@@ -1,0 +1,142 @@
+We need answer count. Need solve. Need be careful. Count 6-subsets of 1..12 sum ≡2 mod7. Need integer only.
+
+Let's compute. Total C(12,6)=924. Need modulo distribution. We can use generating functions mod7. Elements residues 1..12 mod7: residues:
+1: {1,8} two
+2:{2,9} two
+3:{3,10} two
+4:{4,11} two
+5:{5,12} two
+6:{6} one
+0:{7} one.
+Need coefficient of x^6 y^2 in product over elements (1 + t x^res? Actually subset size and sum mod7). Use polynomial P(z,w)=∏_{r counts} (1 + z w^r)^{c_r} where z size, w mod7. Need coeff z^6 w^2.
+
+Could compute via roots of unity or dynamic. Let's do manually maybe.
+
+Need count. Could enumerate via generating functions. Since 12 small. Let's compute coefficient.
+
+Let variable q for sum mod7. Product:
+(1+z q)^2 for residues 1..5 each (since two elements)
+(1+z q^6)(1+z) for residues 6,0.
+
+Need coeff z^6 q^2.
+
+Can use inclusion? Maybe compute all 6-subsets sums mod7. Since elements 1..12. Pair complements? Total 924. Symmetry? The set residues counts. Sum over all 6-subsets maybe distribution not uniform due counts.
+
+Let's compute with generating functions. Need coefficient z^6. We can expand in z up to 6 and mod q. Maybe use grouping.
+
+Let A(q)=∏_{r=1}^5 (1+z q^r)^2 * (1+z q^6)(1+z). Need z^6.
+
+Could compute coefficient via elementary symmetric of residues multiset. Need sum over 6-element subsets of residues (with multiplicity? Wait elements distinct but residues duplicate. Product with two factors per residue 1-5 accounts choosing either element? Actually two elements same residue, factor (1+z q^r)^2. Yes choosing none, one, or both. For residue 6 and 0 one each.
+
+We need count of choices selecting total 6 elements among 12 with residue sum mod7=2. This is exactly.
+
+Could use dynamic DP. Let's do systematic. Maybe exploit 12 elements residues: two each 1-5, one 6, one 0. Need 6 elements. Sum mod7. Count.
+
+Let base choose from pairs residues 1-5: for each residue r, can choose k=0,1,2 elements, contributes k*r mod7 and weight C(2,k)=1,2,1. Plus optional 6 (k=0/1) and 0 (k=0/1). Need total k=6.
+
+Compute via generating polynomial in k and mod. Let's do convolution.
+
+Maybe use complement? 6-subsets of 12. Sum total of all elements =78 ≡1 mod7? 78 mod7=1. Complement size 6 sum = total - subset sum ≡1 - s. If subset sum ≡2, complement sum ≡ -1 ≡6. Count same as 6-subsets sum 6? Not directly.
+
+Let's compute DP manually. Need count for size 6 sum 2.
+
+I can use polynomial over residues with size. Let's define for residues 1-5 pairs. For each r, choices:
+k0: size0 sum0 coeff1
+k1: size1 sum r coeff2
+k2: size2 sum 2r coeff1.
+Then convolve five residues. Then add optional residues 6 and 0.
+
+Could compute using symmetry. Since pairs for 1..5 symmetric under multiplication? Mod7 nonzero group. Counts: residues 1-5 have two each, residue 6 one, 0 one. Not fully symmetric because missing? Actually residues 1-5 all two, 6 one. Multiplication by nonzero permutes 1-5 and sends 6 to other? 6 maps to -1 etc not preserving set? Counts differ.
+
+Maybe use generating function with roots easier. But manual DP possible.
+
+Let's compute coefficient using combinatorial selection by residue counts. Let n_r total elements with residue r: n0=1,n6=1,n1..n5=2. Need choose x_r from n_r, sum x_r=6, sum r x_r ≡2 mod7, product C(n_r,x_r). Since n small.
+
+We can enumerate x0,x6 and x1..x5.
+
+Let y_r = x_r for r=1..5 (0..2). x0∈{0,1}, x6∈{0,</think>We need count 6-subsets of {1..12} sum ≡2 mod7.
+
+Residues mod 7:
+1: {1,8} count 2
+2: {2,9} count 2
+3: {3,10} count 2
+4: {4,11} count 2
+5: {5,12} count 2
+6: {6} count 1
+0: {7} count 1
+
+Need choose total 6 elements. Let's compute via DP.
+
+Let F be choices from residues 1..5 with two elements each. For each residue r, possible selected count k:
+k=0: size 0, sum 0, coeff 1
+k=1: size 1, sum r, coeff 2
+k=2: size 2, sum 2r, coeff 1
+
+Convolve residues 1..5, then add optional residue 6 and 0.
+
+I'll compute coefficients for size 6 and sum mod 7.
+
+Using dynamic calculation. Let's represent after residues 1..5 counts by size and sum mod7.
+
+Start dp[0][0]=1.
+
+Residue 1:
+size0 sum0 +1
+size1 sum1 +2
+size2 sum2 +1
+
+Residue 2:
+Convolve. Let's maybe do all five systematically with arrays.
+
+I'll compute full dp up to size10. Need final size 4,5,6 depending optional 6/0. Since optional add at most 2. Need after 1..5 sizes 4,5,6 maybe. Let's compute.
+
+Maybe use polynomial multiplication. I'll do manual table.
+
+After residues 1 and 2:
+For each previous (s,sum):
+(0,0): add sizes 0 sum0 coeff1; 1 sum2 coeff2; 2 sum4 coeff1.
+(1,1): coeff2 -> sizes1 sum1 coeff2; size2 sum3 coeff4; size3 sum5 coeff2.
+(2,2): coeff1 -> sizes2 sum2 coeff1; size3 sum4 coeff2; size4 sum6 coeff1.
+Aggregate size0: sum0 1.
+size1: sum1 2, sum2 2.
+size2: sum2 1, sum3 4, sum4 1.
+size3: sum4 2, sum5 2.
+size4: sum6 1.
+Check total sum coeff: 1+4+6+4+1=16 = (1+2+1)^2 yes.
+
+Now convolve residue3 choices (0:0 +1, 1:3 +2, 2:6 +1). Need eventually. Let's create dp after 1..3.
+
+For each current size s,sum c, add k=0,1,2.
+
+I'll list current C2:
+s0: (0:1)
+s1: (1:2),(2:2)
+s2: (2:1),(3:4),(4:1)
+s3: (4:2),(5:2)
+s4: (6:1)
+
+Add r=3.
+
+New size0: sum0 1.
+
+size1:
+from s0 k1: sum3 coeff 1*2=2.
+from s1 k0: sums1 coeff2, sum2 coeff2.
+So size1: sum1 2, sum2 2, sum3 2.
+
+size2:
+from s0 k2: sum6 coeff1.
+from s1 k1: (1+3=4) coeff2*2=4; (2+3=5) coeff2*2=4.
+from s2 k0: sum2 1, sum3 4, sum4 1.
+Aggregate:
+sum2:1
+sum3:4
+sum4: from s1 k1 sum4 4 + s2 k0 sum4 1 =5
+sum5:4
+sum6:1
+Check total size2 coeff 1+4+5+4+1=15? C? Number choose 2 from 6 elements? Actually residues 1-3 each 2 total6, choose2 total C(6,2)=15 yes.
+
+size3:
+from s1 k2: sums 1+6=0 coeff2*1=2; 2+6=1 coeff2*1=2.
+from s2 k1: sums2+3=5 coeff1*2=2; 3+3=6 coeff4*2=8; 4+3=0 coeff1*2=2.
+from s3 k0

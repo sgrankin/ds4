@@ -1,0 +1,33 @@
+{
+  "source": "/Library/Logs/DiagnosticReports/panic-full-2026-10-02-120822.0002.panic",
+  "panic_utc": "2026-10-02T16:02:59Z",
+  "reboot_utc": "2026-10-02T16:03:19Z",
+  "wired_gib": 93.40678405761719,
+  "compressor_gib": 33.276763916015625,
+  "free_mib": 13.921875,
+  "memory_pressure_flag": false,
+  "processes": {
+    "10368": {
+      "procname": "overthink_pilot",
+      "residentMemoryBytes": 86181288928,
+      "pageIns": 4481,
+      "parentPid": 68447,
+      "processUptime": 556.7080540657043
+    },
+    "11371": {
+      "procname": "ds4",
+      "residentMemoryBytes": 2015712,
+      "pageIns": 1817174,
+      "parentPid": 68447,
+      "processUptime": 170.70805406570435
+    },
+    "11372": {
+      "procname": "ds4",
+      "residentMemoryBytes": 2015712,
+      "pageIns": 1790070,
+      "parentPid": 68447,
+      "processUptime": 170.70805406570435
+    }
+  },
+  "causality": "Concurrent model-opening diagnostic jobs and severe memory pressure are established; the exact watchdog stall cause is not established."
+}

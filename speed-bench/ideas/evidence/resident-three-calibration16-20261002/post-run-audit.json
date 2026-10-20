@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "failures": [],
+  "controls": {
+    "native-before": {
+      "full_raw_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "full_raw_equal": true,
+      "bit_equal_rows": 512
+    },
+    "positive-native": {
+      "full_raw_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "full_raw_equal": true,
+      "bit_equal_rows": 512
+    },
+    "native-after": {
+      "full_raw_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "full_raw_equal": true,
+      "bit_equal_rows": 512
+    }
+  },
+  "old_sub2": {
+    "serialized_quality_equal": true,
+    "previous_rows": 512,
+    "current_rows": 512,
+    "first_mismatched_rows": [],
+    "route_fields_equal": true,
+    "route_field_mismatches": {},
+    "retrospective_raw_byte_proof": false
+  },
+  "routing": {
+    "sub1": {
+      "layers": "20480",
+      "substitutions": "3521",
+      "native_misses": "11777",
+      "skipped_loads": "3521",
+      "skipped_bytes": "35045498880",
+      "mean_mass": "0.09949850",
+      "mean_score_gap": "0.06978896",
+      "mean_affinity_ratio": "0.95299369",
+      "mean_rank": "7.426",
+      "full_snapshots": "3605",
+      "double_layers": "0",
+      "planned_substitutions": "3521",
+      "drops": "0",
+      "triple_layers": "0"
+    },
+    "sub2": {
+      "layers": "20480",
+      "substitutions": "6464",
+      "native_misses": "12718",
+      "skipped_loads": "6464",
+      "skipped_bytes": "64338001920",
+      "mean_mass": "0.10421444",
+      "mean_score_gap": "0.09077311",
+      "mean_affinity_ratio": "0.92680168",
+      "mean_rank": "7.703",
+      "full_snapshots": "6179",
+      "double_layers": "625",
+      "planned_substitutions": "6464",
+      "drops": "0",
+      "triple_layers": "0"
+    },
+    "sub3": {
+      "layers": "20480",
+      "substitutions": "8299",
+      "native_misses": "13433",
+      "skipped_loads": "8299",
+      "skipped_bytes": "82602270720",
+      "mean_mass": "0.10826591",
+      "mean_score_gap": "0.10258580",
+      "mean_affinity_ratio": "0.91109869",
+      "mean_rank": "7.912",
+      "full_snapshots": "7888",
+      "double_layers": "1074",
+      "planned_substitutions": "8299",
+      "drops": "0",
+      "triple_layers": "80"
+    }
+  },
+  "demand_io_exact_bytes_available": false,
+  "scope": "Calibration quality/full raw controls; no timing promotion"
+}

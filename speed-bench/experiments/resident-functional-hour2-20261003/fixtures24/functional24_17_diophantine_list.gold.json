@@ -1,0 +1,21 @@
+{
+  "gold": {
+    "solutions": [
+      [
+        6,
+        7
+      ],
+      [
+        17,
+        0
+      ]
+    ]
+  },
+  "oracle_input": {
+    "a_coefficient": 7,
+    "b_coefficient": 11,
+    "total": 119
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Lists bounded linear Diophantine solutions; not simultaneous remainder/CRT examples or bin occupancy counts."
+}

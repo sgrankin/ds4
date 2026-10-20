@@ -1,0 +1,27 @@
+test_actual_dispatch_completion_and_difference (__main__.Fixtures.test_actual_dispatch_completion_and_difference) ... ok
+test_artifact_inventory_refusal_before_raw_or_snapshot_reads (__main__.Fixtures.test_artifact_inventory_refusal_before_raw_or_snapshot_reads) ... ok
+test_branch_io_typed_complete_order (__main__.Fixtures.test_branch_io_typed_complete_order) ... ok
+test_cache_all_phases_and_footer_scope (__main__.Fixtures.test_cache_all_phases_and_footer_scope) ... ok
+test_canonical_complete_bytes_header_history_and_opaque_sentinels (__main__.Fixtures.test_canonical_complete_bytes_header_history_and_opaque_sentinels) ... ok
+test_complete_release_pressure_child_and_type_balance (__main__.Fixtures.test_complete_release_pressure_child_and_type_balance) ... ok
+test_direct_parent_framework_alias_exact_suffix_and_held_lock (__main__.Fixtures.test_direct_parent_framework_alias_exact_suffix_and_held_lock) ... ok
+test_explicit_root_proof_exact_command_and_typed_grant (__main__.Fixtures.test_explicit_root_proof_exact_command_and_typed_grant) ... ok
+test_final_phase_has_no_invented_target_nll (__main__.Fixtures.test_final_phase_has_no_invented_target_nll) ... ok
+test_fixed_plan_inventory_authority_and_controls (__main__.Fixtures.test_fixed_plan_inventory_authority_and_controls) ... ok
+test_main_csv_geometry_duplicates_truncation_nonfinite (__main__.Fixtures.test_main_csv_geometry_duplicates_truncation_nonfinite) ... ok
+test_native_controls_require_raw_state_cache_io_dispatch (__main__.Fixtures.test_native_controls_require_raw_state_cache_io_dispatch) ... ok
+test_no_explicit_grant_has_no_child_or_model (__main__.Fixtures.test_no_explicit_grant_has_no_child_or_model) ... ok
+test_raw_extents_nonfinite_and_independent_metrics (__main__.Fixtures.test_raw_extents_nonfinite_and_independent_metrics) ... ok
+test_release_gate_precedes_every_outcome_read (__main__.Fixtures.test_release_gate_precedes_every_outcome_read) ... ok
+test_simulated_asset_drift_blocks_next_launch_before_metadata (__main__.Fixtures.test_simulated_asset_drift_blocks_next_launch_before_metadata) ... ok
+test_simulated_first_failure_stops_no_candidate_or_retry (__main__.Fixtures.test_simulated_first_failure_stops_no_candidate_or_retry) ... ok
+test_simulated_native_drift_stops_before_candidate (__main__.Fixtures.test_simulated_native_drift_stops_before_candidate) ... ok
+test_simulated_six_producer_order_controls_env_no_retry (__main__.Fixtures.test_simulated_six_producer_order_controls_env_no_retry) ... ok
+test_static_asset_alias_mode_and_model_hash_refusal (__main__.Fixtures.test_static_asset_alias_mode_and_model_hash_refusal) ... ok
+test_strict_json_and_number_types (__main__.Fixtures.test_strict_json_and_number_types) ... ok
+test_teacher_rows_score_before_target_no_duplicates (__main__.Fixtures.test_teacher_rows_score_before_target_no_duplicates) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.351s
+
+OK

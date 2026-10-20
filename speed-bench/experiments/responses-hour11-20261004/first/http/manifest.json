@@ -1,0 +1,153 @@
+{
+  "fixture": {
+    "nonce": "8b944ca176",
+    "literal": "MEM_1aa28a40735f5edd",
+    "private_literal": "PRIVATE_1d1930821cc6fc85",
+    "old_marker": "OLD_8b944ca176",
+    "new_marker": "NEW_8b944ca176",
+    "fork_marker": "FORK_8b944ca176"
+  },
+  "parent": {
+    "id": "resp_7844d14a725aaf4bf355d349",
+    "object": "response",
+    "created_at": 1791120554,
+    "status": "completed",
+    "model": "deepseek-v4.1-flash",
+    "store": true,
+    "previous_response_id": null,
+    "output": [
+      {
+        "id": "msg_b6a359c867b321246083be1f",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":37,\"marker\":\"OLD_8b944ca176\"}",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 67,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 67
+      },
+      "output_tokens": 30,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 97
+    }
+  },
+  "child": {
+    "id": "resp_02f7cb4fbcadfef67088f92f",
+    "object": "response",
+    "created_at": 1791120559,
+    "status": "completed",
+    "model": "deepseek-v4.1-flash",
+    "store": true,
+    "previous_response_id": "resp_7844d14a725aaf4bf355d349",
+    "output": [
+      {
+        "id": "msg_5d82e522b21e19d78cdd2756",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":37,\"marker\":\"NEW_8b944ca176\"}",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 109,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 109
+      },
+      "output_tokens": 30,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 139
+    }
+  },
+  "pending_tool": {
+    "id": "resp_b6c062e23b4a393797cc2ec2",
+    "object": "response",
+    "created_at": 1791120616,
+    "status": "completed",
+    "model": "deepseek-v4.1-flash",
+    "store": true,
+    "previous_response_id": "resp_7844d14a725aaf4bf355d349",
+    "output": [
+      {
+        "id": "fc_922559c422b7d77ad2c5a3e2",
+        "type": "function_call",
+        "status": "completed",
+        "name": "lookup_count",
+        "call_id": "call_dfda3a5e227b110dbd4079893b926b3f",
+        "arguments": "{\"key\":\"subject\"}"
+      }
+    ],
+    "usage": {
+      "input_tokens": 340,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 340
+      },
+      "output_tokens": 38,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 378
+    }
+  },
+  "private_parent": {
+    "id": "resp_922bffc674425bb91d19d35d",
+    "object": "response",
+    "created_at": 1791120625,
+    "status": "completed",
+    "model": "deepseek-v4.1-flash",
+    "store": true,
+    "previous_response_id": null,
+    "output": [
+      {
+        "id": "msg_b70d7da1585e568d95f53afd",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"memory\":\"PRIVATE_1d1930821cc6fc85\",\"count\":19,\"marker\":\"PRIVATE_8b944ca176\"}",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 70,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 70
+      },
+      "output_tokens": 131,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 201
+    }
+  },
+  "model": "deepseek-v4.1-flash",
+  "store_dir": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/responses",
+  "before_base_url": "http://127.0.0.1:55186/v1",
+  "server_restart_owned_by": "ROOT"
+}

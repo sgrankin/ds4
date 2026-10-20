@@ -1,0 +1,2 @@
+{"ids":[4,9],"score_sum":20}
+The first and third rows satisfy both conditions. The second row fails the active condition despite its high score, and the fourth fails the score threshold despite being active. Retaining the qualifying rows in their original order gives identifiers four and nine. Their scores eight and twelve sum to twenty.

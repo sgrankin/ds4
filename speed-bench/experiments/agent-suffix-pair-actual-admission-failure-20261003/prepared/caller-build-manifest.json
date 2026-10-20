@@ -1,0 +1,96 @@
+{
+  "status": "CALLER_COMPILE_LINK_PASS",
+  "source_freeze": "cd03499cec7d3db424b4bcb4e4ffb068f580f38b",
+  "cpu_evidence": "c0fb1a31208b2c1b5fe366a2c105321cad154be6",
+  "plan_sha256": "a885d6497600dc2a6862544f0550e150a52d434aef54ee4fab23dcd0270e6a0a",
+  "root_grant_sha256": "afc57ac5339b88d9c2e474712fcf131821b0ae45e57b88f9b7f663067728397d",
+  "results": [
+    {
+      "label": "ds4-agent-pair-actual-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-I.",
+        "-Wno-unused-function",
+        "-ffast-math",
+        "-std=c99",
+        "-c",
+        "speed-bench/agent_suffix_pair_actual.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-caller-build-v2/ds4-agent-pair-actual.o"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery",
+      "returncode": 0,
+      "start": 1791000430.0824268,
+      "elapsed": 1.1381361484527588,
+      "warning": false
+    },
+    {
+      "label": "ds4-agent-pair-actual-link",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-I.",
+        "-Wno-unused-function",
+        "-ffast-math",
+        "-std=c99",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-caller-build-v2/ds4-agent-pair-actual",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-caller-build-v2/ds4-agent-pair-actual.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_help.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_prompt_prefix.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_web.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_kvstore.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/linenoise.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_image.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_distributed.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_tp.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_ssd.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_metal.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_engram.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-build-plan-v1/objects/ds4_gpu_args.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery",
+      "returncode": 0,
+      "start": 1791000431.288032,
+      "elapsed": 0.05863809585571289,
+      "warning": false
+    }
+  ],
+  "outputs": {
+    "ds4-agent-pair-actual.o": {
+      "bytes": 1030752,
+      "sha256": "5a21a2fd0a2e33c957557a9a79e09500e7ab0030134442ae66dc6f7e09200cf5",
+      "mode": 420
+    },
+    "ds4-agent-pair-actual": {
+      "bytes": 3087080,
+      "sha256": "34b2397d94eb27c46196a41551620f0ffdbe7567210edbe99afbb3ce422e2857",
+      "mode": 493
+    }
+  },
+  "all_pins_unchanged": true,
+  "serial_compilers": 1,
+  "native_core_Metal_built": false,
+  "model_stat_open_or_executable_run": false
+}

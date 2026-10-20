@@ -1,0 +1,27 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+reasoning_budget effort=25 budget=0 forced=0 case=circular14_five status=CORRECT generated=382 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=linear12_four_gap2 status=CORRECT generated=226 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=permutations9_two_forbidden status=INVALID generated=2048 stopped=0 cap=1
+reasoning_budget effort=25 budget=0 forced=0 case=deranged8_first_two_odd status=INVALID generated=2048 stopped=0 cap=1
+reasoning_budget effort=25 budget=0 forced=0 case=dyck7_three_interior_returns status=CORRECT generated=1379 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=bounded10x8_avoid5x4 status=INVALID generated=2048 stopped=0 cap=1
+reasoning_budget effort=25 budget=0 forced=0 case=subset15_seven_mod5 status=INVALID generated=2048 stopped=0 cap=1
+reasoning_budget effort=25 budget=0 forced=0 case=subset16_six_nonconsecutive_threeodd status=INVALID generated=2048 stopped=0 cap=1
+reasoning_budget effort=25 budget=0 forced=0 case=tiles2x8_domino_square status=CORRECT generated=781 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=composition18_five_max6 status=CORRECT generated=346 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=balls9_four_bins_max4 status=CORRECT generated=207 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=cycle9_three_colors status=CORRECT generated=78 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=ladder2x5_three_colors status=CORRECT generated=847 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=words_A3B4C3_noAB status=INVALID generated=2048 stopped=0 cap=1
+reasoning_budget effort=25 budget=0 forced=0 case=BANANA_no_adjacent_A status=CORRECT generated=244 stopped=1 cap=0
+reasoning_budget effort=25 budget=0 forced=0 case=digits8_sum12_no_equal_neighbors status=INVALID generated=2048 stopped=0 cap=1

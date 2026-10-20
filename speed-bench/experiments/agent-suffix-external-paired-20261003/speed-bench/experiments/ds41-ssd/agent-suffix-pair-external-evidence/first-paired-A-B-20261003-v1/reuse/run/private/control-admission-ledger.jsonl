@@ -1,0 +1,5 @@
+{"stage":"canonical_forecast","worker_owned_bytes":94069666,"staged_bytes":30138085,"allocated_caps":false,"reserve_bytes":8519864,"budget_bytes":167772160,"admitted":true,"observed_global_peak":false}
+{"stage":"canonical_allocated","worker_owned_bytes":94069666,"staged_bytes":30138085,"allocated_caps":true,"reserve_bytes":8519864,"budget_bytes":167772160,"admitted":true,"observed_global_peak":false}
+{"stage":"raw_logits_forecast","worker_owned_bytes":94069666,"staged_bytes":517120,"allocated_caps":false,"reserve_bytes":8519864,"budget_bytes":167772160,"admitted":true,"observed_global_peak":false}
+{"stage":"raw_logits_allocated","worker_owned_bytes":94069666,"staged_bytes":517120,"allocated_caps":true,"reserve_bytes":8519864,"budget_bytes":167772160,"admitted":true,"observed_global_peak":false}
+{"stage":"before_import_forecast","worker_owned_bytes":94069666,"staged_bytes":34555600,"allocated_caps":false,"reserve_bytes":8519864,"budget_bytes":167772160,"admitted":true,"observed_global_peak":false}

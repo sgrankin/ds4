@@ -1,0 +1,24 @@
+{
+  "native_before_after_reference_fullraw_exact": true,
+  "native_demand_io_equal": true,
+  "reference_sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+  "rows": 512,
+  "prompts": 16,
+  "policy_locked_before_confirmation": true,
+  "policy": [
+    "broader3",
+    {
+      "DS4_METAL_V41_SELECTED_TILE": "64",
+      "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+      "DS4_METAL_STREAMING_EXPERT_IO_METRICS": "1",
+      "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".30",
+      "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".20",
+      "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".40",
+      "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "48",
+      "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+      "DS4_METAL_V41_RESIDENT_ROUTE_MODE": "apply",
+      "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+    }
+  ],
+  "timing_promoted": false
+}

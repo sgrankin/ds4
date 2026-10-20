@@ -1,0 +1,76 @@
+{
+  "step": "B-edited",
+  "session": "B",
+  "seconds": 73.54069983299996,
+  "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+  "answer": {
+    "active_total": 231,
+    "archived_code": "ORBIT-57"
+  },
+  "gold": {
+    "active_total": 231,
+    "archived_code": "ORBIT-57"
+  },
+  "correct": true,
+  "fresh_read": true,
+  "complete": true,
+  "calls": [
+    {
+      "name": "read",
+      "call_id": "call_8d1974cb1866bcdbd5c8c3bbeab10224",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json\",\"whole\":true,\"raw\":true}",
+      "read": true,
+      "error": null,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json",
+      "text": "{\n  \"archived_code\": \"ORBIT-57\"\n}\n"
+    }
+  ],
+  "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/B/archive.json",
+  "replies": [
+    {
+      "seconds": 47.43768195800658,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1437,
+        "input_tokens_details": {
+          "cached_tokens": 1034,
+          "cache_write_tokens": 403
+        },
+        "output_tokens": 93,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1530
+      },
+      "incomplete_details": null
+    },
+    {
+      "seconds": 26.102304750005715,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1556,
+        "input_tokens_details": {
+          "cached_tokens": 1034,
+          "cache_write_tokens": 522
+        },
+        "output_tokens": 18,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1574
+      },
+      "incomplete_details": null
+    }
+  ],
+  "errors": [],
+  "suffix_log_lines": [],
+  "exact_hit_log_lines": [],
+  "slot_eviction_log_lines": [],
+  "pass": true,
+  "group": "edited-AB",
+  "queue_inclusive_seconds": 73.54210687500017,
+  "seconds_including_edit": 73.54210687500017,
+  "edit_seconds": 0.0009205839887727052
+}

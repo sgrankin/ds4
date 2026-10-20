@@ -1,0 +1,14 @@
+{
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "samples": 380,
+  "swap_min_gib": 0.025576171875,
+  "swap_max_gib": 0.025576171875,
+  "swap_growth_gib": 0.0,
+  "max_wired_gib": 73.7723388671875,
+  "max_compressor_gib": 8.740524291992188,
+  "max_pressure_level": 1,
+  "bad_samples": 0
+}

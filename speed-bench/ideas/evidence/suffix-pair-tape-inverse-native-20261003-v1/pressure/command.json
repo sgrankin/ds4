@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1/run_suffix_pair_tape_followup.py",
+    "--case",
+    "inverse-parity-pending",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-inverse-parity-pending-prepared-20261003-v1",
+    "--manifest-sha256",
+    "9781896e85d6ae9eee030f034a9fab0a0e0f3e2290c2c3930be20a5a36e32ca2"
+  ],
+  "initial": {
+    "time": 1790988354.023072,
+    "level": 1,
+    "swap_gb": 0.017763671875,
+    "physical_gb": 128.0,
+    "free_gb": 57.55760192871094,
+    "file_backed_gb": 56.21983337402344,
+    "wired_gb": 3.0805206298828125,
+    "compressor_gb": 8.327362060546875
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

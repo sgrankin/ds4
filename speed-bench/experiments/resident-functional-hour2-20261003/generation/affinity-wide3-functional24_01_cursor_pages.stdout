@@ -1,0 +1,3 @@
+{"ids": [9, 2, 7], "requests": 3, "stop_reason": "next_cursor is null"}
+
+Explanation: I processed the pages in request order. Page 1 had ids [9, 2] and next_cursor "k1", so I appended 9 and 2 and continued. Page 2 had an empty ids list but next_cursor "k2", so the empty list was not a termination signal; I appended nothing and continued. Page 3 had ids [7] and next_cursor null, so I appended 7 and stopped because next_cursor was null. The final ids are [9, 2, 7], with 3 requests made, and the stop reason is that the last page's next_cursor was null.

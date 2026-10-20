@@ -1,0 +1,16 @@
+{"tokens": 1, "bit_equal_rows": 1, "name": "reference", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+{"tokens": 1, "bit_equal_rows": 1, "name": "native-before", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+{"tokens": 1, "bit_equal_rows": 1, "name": "native-after", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+.{"tokens": 1, "bit_equal_rows": 1, "name": "reference", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+{"tokens": 1, "bit_equal_rows": 1, "name": "native-before", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+{"tokens": 1, "bit_equal_rows": 1, "name": "native-after", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+.{"tokens": 1, "bit_equal_rows": 1, "name": "reference", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+{"tokens": 1, "bit_equal_rows": 1, "name": "native-before", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+{"tokens": 1, "bit_equal_rows": 1, "name": "native-after", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+{"tokens": 1, "bit_equal_rows": 1, "name": "native-before", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+{"tokens": 1, "bit_equal_rows": 1, "name": "native-after", "kl_p99": 0.0, "kl_max": 0.0, "phase_mean_delta_nll": 0.0, "worst_phase_delta_nll": 0.0}
+...
+----------------------------------------------------------------------
+Ran 5 tests in 0.425s
+
+OK

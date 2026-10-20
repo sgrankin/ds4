@@ -1,0 +1,24 @@
+{
+  "files": {
+    "build-step-2.json": "f12a14380ac1de14fb6ffe5c31021856d338b6abc980fc1c7b6f74be85fe3b7d",
+    "build-only.py": "4569fe87d925768639b51f643beaf65fb62331c4ff73ccafecd60361c8b6a861",
+    "build-step-3.json": "88c67787814c14c01cb06c2055cea9b26f197fa994fcd9a13156dfbf775fe93f",
+    "build-step-4.json": "51d2b5c5c0f4567384d26a34f60fa1a9508935106165949a3580546ab0c3b865",
+    "build-manifest.json": "e2cfda6426c8ec7c371ec18a12dff60932c1c2f5b166a7ba5b5ccafdc06aa91f",
+    "build-step-5.json": "c5038926d6b455b6e8e483e0899503f99866bc11b0b42e08d913a512d5d4d346",
+    "build-step-6.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build-step-7.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build-step-5.log": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+    "build-step-6.json": "dc24820bbfccd3731061a29db2267d4f6c5dc3460732ac16ce47ef3394a29e47",
+    "build-step-4.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build-step-0.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build-step-7.json": "02b5ff88419ecc6242287a391eb47d05b758ce24d0ac42b2b8ead9fd4290c334",
+    "build-step-1.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build-step-3.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build-step-2.log": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+    "build-step-0.json": "a1fe400025f12b74edbe16c5c168dffa6f8c3a94fd685df253de84d38e42984e",
+    "build-step-1.json": "052b65f84f70d909d14250b3bba3b46c888fc9168f32b6f93da9eb979f49b89b",
+    "build-result.json": "42602811cc52af9165e0e3d71cc23d3a8c95b698bd84547af78627825ab912a9"
+  },
+  "retained_artifact_root": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5"
+}

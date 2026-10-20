@@ -1,0 +1,147 @@
+{
+  "cases": 16,
+  "tokens": 512,
+  "avg_nll": 0.394008867483,
+  "delta_nll": 0,
+  "policy_delta_nll": 0,
+  "kl_base_to_raw": 0,
+  "kl_base_to_policy": 0,
+  "tv": 0,
+  "argmax_flips": 0,
+  "bit_equal_rows": 512,
+  "startup_ms": 199.351,
+  "prefill_ms": 16102.847,
+  "decode_ms": 30705.346,
+  "metrics_ms": 1104.294,
+  "name": "heldout16-new-native0",
+  "raw_sha256": "06964c44aa79e58a60c3b6f8aa6386d6a1baaef5e8df219719ca7bf77afc88df",
+  "layout": {
+    "magic": 1146310961,
+    "vocab": 129280,
+    "cases": 16,
+    "token_limit": 32,
+    "header_bytes": 16,
+    "row_metadata_bytes": 24,
+    "float_bytes": 4,
+    "row_bytes": 517144,
+    "rows": 512,
+    "bytes": 264777744,
+    "metadata_sha256": "6b0aa0e5910a408c61de64a895bd387bf375b1eb9f86e001787de54e12d7f802"
+  },
+  "finite_validation": {
+    "vectors": 512,
+    "fp32_values": 66191360,
+    "finite": true
+  },
+  "cache": {
+    "configured_slots": 6136,
+    "resident_entries": 6136,
+    "hits": 192055,
+    "misses": 20825,
+    "wraps": 62475,
+    "evictions": 14689,
+    "buffer_allocs": 15,
+    "buffer_reuses": 14689
+  },
+  "io": {
+    "enabled": 1,
+    "pread_calls": 62475,
+    "requested_bytes": 207277056000,
+    "returned_bytes": 207277056000,
+    "cache_loader_bytes": 207277056000,
+    "cache_hits": 192055,
+    "cache_misses": 20825,
+    "cache_evictions": 14689
+  },
+  "route": null,
+  "prompt_mean_delta_nll": 0.0,
+  "prompt_bootstrap_95": [
+    0.0,
+    0.0
+  ],
+  "worst_prompt_delta_nll": 0.0,
+  "kl_p99": 0.0,
+  "kl_max": 0.0,
+  "per_prompt": {
+    "case_002": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_008": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_014": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_020": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_026": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_032": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_038": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_044": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_050": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_056": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_062": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_068": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_074": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_080": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_086": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    },
+    "case_092": {
+      "tokens": 32,
+      "delta_nll": 0.0,
+      "kl": 0.0
+    }
+  }
+}

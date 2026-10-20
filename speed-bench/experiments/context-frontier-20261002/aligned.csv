@@ -1,0 +1,5 @@
+trial,mode,prefix,new_tokens,snapshot_bytes,save_ms,restore_ms,sync_ms,total_ms,staged_logit_mismatch,cold_logit_mismatch,cold_max_abs,cold_rmse,staged_state_equal,decode_rows_equal,logit_hash,state_hash
+0,rebuild,2048,768,24118324,12.396,0.000,62019.293,62019.293,0,0,0,0,1,1,89317165284b7cf6,7bee145a6dfd9c41
+1,restore,2048,768,24118324,12.396,4.596,24246.249,24250.845,0,0,0,0,1,1,89317165284b7cf6,7bee145a6dfd9c41
+2,restore,2048,768,24118324,12.396,0.861,24472.507,24473.368,0,0,0,0,1,1,89317165284b7cf6,7bee145a6dfd9c41
+3,rebuild,2048,768,24118324,12.396,0.000,56032.536,56032.536,0,0,0,0,1,1,89317165284b7cf6,7bee145a6dfd9c41

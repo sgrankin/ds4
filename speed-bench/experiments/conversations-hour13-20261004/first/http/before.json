@@ -1,0 +1,1470 @@
+{
+  "phase": "before",
+  "utc": "2026-10-04T14:03:12.081545+00:00",
+  "argv": [
+    "/Volumes/Models/ds4/speed-bench/experiments/conversations-hour13-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:56991",
+    "--phase",
+    "before",
+    "--output-dir",
+    "speed-bench/experiments/conversations-hour13-20261004/first/http",
+    "--store-dir",
+    ".workspaces/server-agent-day-20261004/conversations-store"
+  ],
+  "base_url": "http://127.0.0.1:56991/v1",
+  "store_dir": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/conversations-store",
+  "model": "deepseek-v4.1-flash",
+  "total_seconds": 73.05522504200053,
+  "rows": [
+    {
+      "name": "routes-create",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations",
+      "request": {
+        "metadata": {
+          "label": "routes"
+        },
+        "items": [
+          {
+            "role": "user",
+            "content": "Route note 00."
+          },
+          {
+            "role": "user",
+            "content": "Route note 01."
+          },
+          {
+            "role": "user",
+            "content": "Route note 02."
+          },
+          {
+            "role": "user",
+            "content": "Route note 03."
+          },
+          {
+            "role": "user",
+            "content": "Route note 04."
+          },
+          {
+            "role": "user",
+            "content": "Route note 05."
+          },
+          {
+            "role": "user",
+            "content": "Route note 06."
+          },
+          {
+            "role": "user",
+            "content": "Route note 07."
+          },
+          {
+            "role": "user",
+            "content": "Route note 08."
+          },
+          {
+            "role": "user",
+            "content": "Route note 09."
+          },
+          {
+            "role": "user",
+            "content": "Route note 10."
+          },
+          {
+            "role": "user",
+            "content": "Route note 11."
+          },
+          {
+            "role": "user",
+            "content": "Route note 12."
+          },
+          {
+            "role": "user",
+            "content": "Route note 13."
+          },
+          {
+            "role": "user",
+            "content": "Route note 14."
+          },
+          {
+            "role": "user",
+            "content": "Route note 15."
+          },
+          {
+            "role": "user",
+            "content": "Route note 16."
+          },
+          {
+            "role": "user",
+            "content": "Route note 17."
+          },
+          {
+            "role": "user",
+            "content": "Route note 18."
+          },
+          {
+            "role": "user",
+            "content": "Route note 19."
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.009919165997416712,
+      "body": {
+        "id": "conv_d73a73d432d1007ae27a38ac",
+        "object": "conversation",
+        "created_at": 1791122519,
+        "metadata": {
+          "label": "routes"
+        }
+      },
+      "wire": "{\"id\":\"conv_d73a73d432d1007ae27a38ac\",\"object\":\"conversation\",\"created_at\":1791122519,\"metadata\":{\"label\": \"routes\"}}",
+      "error": null,
+      "response_id": "conv_d73a73d432d1007ae27a38ac",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-add-four",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations/conv_d73a73d432d1007ae27a38ac/items",
+      "request": {
+        "items": [
+          {
+            "role": "user",
+            "content": "Route note 20."
+          },
+          {
+            "role": "user",
+            "content": "Route note 21."
+          },
+          {
+            "role": "user",
+            "content": "Route note 22."
+          },
+          {
+            "role": "user",
+            "content": "Route note 23."
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.0005859999946551397,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_1e72e2aa515e74288caa0599",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 20."
+              }
+            ]
+          },
+          {
+            "id": "msg_cb75da750a9293081ce5f4be",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 21."
+              }
+            ]
+          },
+          {
+            "id": "msg_a6b8ef7385c8d8dfc726de77",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 22."
+              }
+            ]
+          },
+          {
+            "id": "msg_01423f068bd2637e4face8db",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 23."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_1e72e2aa515e74288caa0599",
+        "last_id": "msg_01423f068bd2637e4face8db",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_1e72e2aa515e74288caa0599\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 20.\"}]},{\"id\":\"msg_cb75da750a9293081ce5f4be\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 21.\"}]},{\"id\":\"msg_a6b8ef7385c8d8dfc726de77\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 22.\"}]},{\"id\":\"msg_01423f068bd2637e4face8db\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 23.\"}]}],\"first_id\":\"msg_1e72e2aa515e74288caa0599\",\"last_id\":\"msg_01423f068bd2637e4face8db\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-get",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_d73a73d432d1007ae27a38ac",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00021483299497049302,
+      "body": {
+        "id": "conv_d73a73d432d1007ae27a38ac",
+        "object": "conversation",
+        "created_at": 1791122519,
+        "metadata": {
+          "label": "routes"
+        }
+      },
+      "wire": "{\"id\":\"conv_d73a73d432d1007ae27a38ac\",\"object\":\"conversation\",\"created_at\":1791122519,\"metadata\":{\"label\": \"routes\"}}",
+      "error": null,
+      "response_id": "conv_d73a73d432d1007ae27a38ac",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-all-asc",
+      "result": "FAIL",
+      "method": "GET",
+      "route": "/conversations/conv_d73a73d432d1007ae27a38ac/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.000240708002820611,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_01423f068bd2637e4face8db",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 23."
+              }
+            ]
+          },
+          {
+            "id": "msg_a6b8ef7385c8d8dfc726de77",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 22."
+              }
+            ]
+          },
+          {
+            "id": "msg_cb75da750a9293081ce5f4be",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 21."
+              }
+            ]
+          },
+          {
+            "id": "msg_1e72e2aa515e74288caa0599",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 20."
+              }
+            ]
+          },
+          {
+            "id": "msg_501036271a3f7c31e47be8db",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 19."
+              }
+            ]
+          },
+          {
+            "id": "msg_706da6ff126766dbe47fa177",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 18."
+              }
+            ]
+          },
+          {
+            "id": "msg_8df865a9e17452e9a4c1cae4",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 17."
+              }
+            ]
+          },
+          {
+            "id": "msg_0f65eb812ff30f0b8e133c35",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 16."
+              }
+            ]
+          },
+          {
+            "id": "msg_e372c3a605efd19a0e85bf7f",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 15."
+              }
+            ]
+          },
+          {
+            "id": "msg_bc13b6889b1e297a4edd376d",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 14."
+              }
+            ]
+          },
+          {
+            "id": "msg_b81e10679656ae069073b933",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 13."
+              }
+            ]
+          },
+          {
+            "id": "msg_71cc359b87e29c6b2788874b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 12."
+              }
+            ]
+          },
+          {
+            "id": "msg_6f0dd8c25d2dc5360a89edfc",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 11."
+              }
+            ]
+          },
+          {
+            "id": "msg_c3a159eed45e7edceda0f753",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 10."
+              }
+            ]
+          },
+          {
+            "id": "msg_b85862c566d546dbc5554d3d",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 09."
+              }
+            ]
+          },
+          {
+            "id": "msg_e8b086e70f14d672330f5634",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 08."
+              }
+            ]
+          },
+          {
+            "id": "msg_7ab2ab9b0e55330679b2ded8",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 07."
+              }
+            ]
+          },
+          {
+            "id": "msg_e7798052a1d6668b42bda1e2",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 06."
+              }
+            ]
+          },
+          {
+            "id": "msg_f8457b7a3d9035cb94bce271",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 05."
+              }
+            ]
+          },
+          {
+            "id": "msg_868da76ea473630327da019b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 04."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_01423f068bd2637e4face8db",
+        "last_id": "msg_868da76ea473630327da019b",
+        "has_more": true
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_01423f068bd2637e4face8db\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 23.\"}]},{\"id\":\"msg_a6b8ef7385c8d8dfc726de77\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 22.\"}]},{\"id\":\"msg_cb75da750a9293081ce5f4be\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 21.\"}]},{\"id\":\"msg_1e72e2aa515e74288caa0599\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 20.\"}]},{\"id\":\"msg_501036271a3f7c31e47be8db\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 19.\"}]},{\"id\":\"msg_706da6ff126766dbe47fa177\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 18.\"}]},{\"id\":\"msg_8df865a9e17452e9a4c1cae4\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 17.\"}]},{\"id\":\"msg_0f65eb812ff30f0b8e133c35\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 16.\"}]},{\"id\":\"msg_e372c3a605efd19a0e85bf7f\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 15.\"}]},{\"id\":\"msg_bc13b6889b1e297a4edd376d\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 14.\"}]},{\"id\":\"msg_b81e10679656ae069073b933\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 13.\"}]},{\"id\":\"msg_71cc359b87e29c6b2788874b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 12.\"}]},{\"id\":\"msg_6f0dd8c25d2dc5360a89edfc\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 11.\"}]},{\"id\":\"msg_c3a159eed45e7edceda0f753\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 10.\"}]},{\"id\":\"msg_b85862c566d546dbc5554d3d\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 09.\"}]},{\"id\":\"msg_e8b086e70f14d672330f5634\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 08.\"}]},{\"id\":\"msg_7ab2ab9b0e55330679b2ded8\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 07.\"}]},{\"id\":\"msg_e7798052a1d6668b42bda1e2\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 06.\"}]},{\"id\":\"msg_f8457b7a3d9035cb94bce271\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 05.\"}]},{\"id\":\"msg_868da76ea473630327da019b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 04.\"}]}],\"first_id\":\"msg_01423f068bd2637e4face8db\",\"last_id\":\"msg_868da76ea473630327da019b\",\"has_more\":true}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "active-create",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations",
+      "request": {
+        "metadata": {
+          "label": "active"
+        },
+        "items": [
+          {
+            "role": "user",
+            "content": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+          },
+          {
+            "role": "user",
+            "content": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.00039945899334270507,
+      "body": {
+        "id": "conv_0f817f9536e70545da02f023",
+        "object": "conversation",
+        "created_at": 1791122519,
+        "metadata": {
+          "label": "active"
+        }
+      },
+      "wire": "{\"id\":\"conv_0f817f9536e70545da02f023\",\"object\":\"conversation\",\"created_at\":1791122519,\"metadata\":{\"label\": \"active\"}}",
+      "error": null,
+      "response_id": "conv_0f817f9536e70545da02f023",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "active-initial-items",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_0f817f9536e70545da02f023/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00018429099873173982,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_633bbe9da071820c1d952474",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+              }
+            ]
+          },
+          {
+            "id": "msg_b6098f6dece9fbb14ae23a5b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_633bbe9da071820c1d952474",
+        "last_id": "msg_b6098f6dece9fbb14ae23a5b",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_633bbe9da071820c1d952474\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\n\"}]},{\"id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Obsolete audit log.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\n\"}]}],\"first_id\":\"msg_633bbe9da071820c1d952474\",\"last_id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "source-storefalse",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "max_output_tokens": 64,
+        "reasoning": {
+          "effort": "none"
+        },
+        "conversation": "conv_0f817f9536e70545da02f023",
+        "input": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.",
+        "store": false,
+        "temperature": 0,
+        "instructions": "Use the conversation's active facts. Answer the newest question directly, with only the requested JSON."
+      },
+      "http_status": 200,
+      "seconds": 32.07380079200084,
+      "body": {
+        "id": "resp_3c353d08c14eb6d727a51453",
+        "object": "response",
+        "created_at": 1791122551,
+        "status": "completed",
+        "model": "deepseek-v4.1-flash",
+        "store": false,
+        "previous_response_id": null,
+        "conversation": {
+          "id": "conv_0f817f9536e70545da02f023"
+        },
+        "output": [
+          {
+            "id": "msg_01fd1ea9008064f83084528b",
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input_tokens": 1134,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1134
+          },
+          "output_tokens": 13,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1147
+        }
+      },
+      "wire": "{\"id\":\"resp_3c353d08c14eb6d727a51453\",\"object\":\"response\",\"created_at\":1791122551,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"conversation\":{\"id\":\"conv_0f817f9536e70545da02f023\"},\"output\":[{\"id\":\"msg_01fd1ea9008064f83084528b\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":1134,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":1134},\"output_tokens\":13,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":1147}}",
+      "error": null,
+      "independent_gold": {
+        "site": "MAPLE",
+        "total": 416
+      },
+      "expects_function_call": false,
+      "response_id": "resp_3c353d08c14eb6d727a51453",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "{\"site\": \"MAPLE\", \"total\": 416}",
+      "usage": {
+        "input_tokens": 1134,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1134
+        },
+        "output_tokens": 13,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1147
+      },
+      "store": false,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "conversation_echo_correct": true
+    },
+    {
+      "name": "source-appended-once",
+      "result": "FAIL",
+      "method": "GET",
+      "route": "/conversations/conv_0f817f9536e70545da02f023/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0005130000063218176,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_01fd1ea9008064f83084528b",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_9553c693a651fb7b8303df7f",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_633bbe9da071820c1d952474",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+              }
+            ]
+          },
+          {
+            "id": "msg_b6098f6dece9fbb14ae23a5b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_01fd1ea9008064f83084528b",
+        "last_id": "msg_b6098f6dece9fbb14ae23a5b",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_01fd1ea9008064f83084528b\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_9553c693a651fb7b8303df7f\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.\"}]},{\"id\":\"msg_633bbe9da071820c1d952474\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\n\"}]},{\"id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Obsolete audit log.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\n\"}]}],\"first_id\":\"msg_01fd1ea9008064f83084528b\",\"last_id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "append_once_correct": false
+    },
+    {
+      "name": "storefalse-response404",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/responses/resp_3c353d08c14eb6d727a51453",
+      "request": null,
+      "http_status": 404,
+      "seconds": 0.00031304199364967644,
+      "body": {
+        "error": {
+          "message": "response was not found",
+          "type": "invalid_request_error"
+        }
+      },
+      "wire": "{\"error\":{\"message\":\"response was not found\",\"type\":\"invalid_request_error\"}}\n",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "delete-obsolete-log",
+      "result": "PASS",
+      "method": "DELETE",
+      "route": "/conversations/conv_0f817f9536e70545da02f023/items/msg_633bbe9da071820c1d952474",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0004570840101223439,
+      "body": {
+        "id": "conv_0f817f9536e70545da02f023",
+        "object": "conversation",
+        "created_at": 1791122519,
+        "metadata": {
+          "label": "active"
+        }
+      },
+      "wire": "{\"id\":\"conv_0f817f9536e70545da02f023\",\"object\":\"conversation\",\"created_at\":1791122519,\"metadata\":{\"label\": \"active\"}}",
+      "error": null,
+      "response_id": "conv_0f817f9536e70545da02f023",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "edited-public-items",
+      "result": "FAIL",
+      "method": "GET",
+      "route": "/conversations/conv_0f817f9536e70545da02f023/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00020762499480042607,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_01fd1ea9008064f83084528b",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_9553c693a651fb7b8303df7f",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_b6098f6dece9fbb14ae23a5b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_01fd1ea9008064f83084528b",
+        "last_id": "msg_b6098f6dece9fbb14ae23a5b",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_01fd1ea9008064f83084528b\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_9553c693a651fb7b8303df7f\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.\"}]},{\"id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Obsolete audit log.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\n\"}]}],\"first_id\":\"msg_01fd1ea9008064f83084528b\",\"last_id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "after-item-delete-memory",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "max_output_tokens": 64,
+        "reasoning": {
+          "effort": "none"
+        },
+        "conversation": {
+          "id": "conv_0f817f9536e70545da02f023"
+        },
+        "input": "Report the active site and net usable units again as JSON with site and total.",
+        "store": true,
+        "temperature": 0,
+        "instructions": "Use the conversation's active facts. Answer the newest question directly, with only the requested JSON."
+      },
+      "http_status": 200,
+      "seconds": 20.528942292003194,
+      "body": {
+        "id": "resp_4f584123037a8481e5c645ab",
+        "object": "response",
+        "created_at": 1791122571,
+        "status": "completed",
+        "model": "deepseek-v4.1-flash",
+        "store": true,
+        "previous_response_id": null,
+        "conversation": {
+          "id": "conv_0f817f9536e70545da02f023"
+        },
+        "output": [
+          {
+            "id": "msg_c6fbcae884932911f50acce6",
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input_tokens": 568,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 568
+          },
+          "output_tokens": 13,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 581
+        }
+      },
+      "wire": "{\"id\":\"resp_4f584123037a8481e5c645ab\",\"object\":\"response\",\"created_at\":1791122571,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":true,\"previous_response_id\":null,\"conversation\":{\"id\":\"conv_0f817f9536e70545da02f023\"},\"output\":[{\"id\":\"msg_c6fbcae884932911f50acce6\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":568,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":568},\"output_tokens\":13,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":581}}",
+      "error": null,
+      "independent_gold": {
+        "site": "MAPLE",
+        "total": 416
+      },
+      "expects_function_call": false,
+      "response_id": "resp_4f584123037a8481e5c645ab",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "{\"site\": \"MAPLE\", \"total\": 416}",
+      "usage": {
+        "input_tokens": 568,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 568
+        },
+        "output_tokens": 13,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 581
+      },
+      "store": true,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "conversation_echo_correct": true
+    },
+    {
+      "name": "edited-appended-once",
+      "result": "FAIL",
+      "method": "GET",
+      "route": "/conversations/conv_0f817f9536e70545da02f023/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00046191598812583834,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_c6fbcae884932911f50acce6",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_f7f50acf3c4523c6bee783ec",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Report the active site and net usable units again as JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_01fd1ea9008064f83084528b",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_9553c693a651fb7b8303df7f",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_b6098f6dece9fbb14ae23a5b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_c6fbcae884932911f50acce6",
+        "last_id": "msg_b6098f6dece9fbb14ae23a5b",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_c6fbcae884932911f50acce6\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_f7f50acf3c4523c6bee783ec\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Report the active site and net usable units again as JSON with site and total.\"}]},{\"id\":\"msg_01fd1ea9008064f83084528b\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_9553c693a651fb7b8303df7f\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.\"}]},{\"id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Obsolete audit log.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\n\"}]}],\"first_id\":\"msg_c6fbcae884932911f50acce6\",\"last_id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "append_once_correct": false
+    },
+    {
+      "name": "isolated-create",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations",
+      "request": {
+        "metadata": {
+          "label": "isolated"
+        },
+        "items": [
+          {
+            "role": "user",
+            "content": "Active facts: site=CEDAR, packages=19, units_per_package=11, damaged=7."
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.00036795799678657204,
+      "body": {
+        "id": "conv_aea4e786fd81a3a92c454eb7",
+        "object": "conversation",
+        "created_at": 1791122571,
+        "metadata": {
+          "label": "isolated"
+        }
+      },
+      "wire": "{\"id\":\"conv_aea4e786fd81a3a92c454eb7\",\"object\":\"conversation\",\"created_at\":1791122571,\"metadata\":{\"label\": \"isolated\"}}",
+      "error": null,
+      "response_id": "conv_aea4e786fd81a3a92c454eb7",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "second-conversation-isolated",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "max_output_tokens": 64,
+        "reasoning": {
+          "effort": "none"
+        },
+        "conversation": "conv_aea4e786fd81a3a92c454eb7",
+        "input": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.",
+        "store": false,
+        "temperature": 0,
+        "instructions": "Use the conversation's active facts. Answer the newest question directly, with only the requested JSON."
+      },
+      "http_status": 200,
+      "seconds": 2.654476874988177,
+      "body": {
+        "id": "resp_305f42cadcb781de3ce0656c",
+        "object": "response",
+        "created_at": 1791122574,
+        "status": "completed",
+        "model": "deepseek-v4.1-flash",
+        "store": false,
+        "previous_response_id": null,
+        "conversation": {
+          "id": "conv_aea4e786fd81a3a92c454eb7"
+        },
+        "output": [
+          {
+            "id": "msg_429d0584e823c618cb61f364",
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\":\"CEDAR\",\"total\":202}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input_tokens": 73,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 73
+          },
+          "output_tokens": 10,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 83
+        }
+      },
+      "wire": "{\"id\":\"resp_305f42cadcb781de3ce0656c\",\"object\":\"response\",\"created_at\":1791122574,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"conversation\":{\"id\":\"conv_aea4e786fd81a3a92c454eb7\"},\"output\":[{\"id\":\"msg_429d0584e823c618cb61f364\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\":\\\"CEDAR\\\",\\\"total\\\":202}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":73,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":73},\"output_tokens\":10,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":83}}",
+      "error": null,
+      "independent_gold": {
+        "site": "CEDAR",
+        "total": 202
+      },
+      "expects_function_call": false,
+      "response_id": "resp_305f42cadcb781de3ce0656c",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "{\"site\":\"CEDAR\",\"total\":202}",
+      "usage": {
+        "input_tokens": 73,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 73
+        },
+        "output_tokens": 10,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 83
+      },
+      "store": false,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "conversation_echo_correct": true
+    },
+    {
+      "name": "conversation-previous-exclusive",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "conversation": "conv_0f817f9536e70545da02f023",
+        "previous_response_id": "resp_4f584123037a8481e5c645ab",
+        "input": "Continue."
+      },
+      "http_status": 400,
+      "seconds": 0.00035391699930187315,
+      "body": {
+        "error": {
+          "message": "conversation and previous_response_id are mutually exclusive",
+          "type": "invalid_request_error"
+        }
+      },
+      "wire": "{\"error\":{\"message\":\"conversation and previous_response_id are mutually exclusive\",\"type\":\"invalid_request_error\"}}\n",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "pending-tool",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "max_output_tokens": 128,
+        "reasoning": {
+          "effort": "none"
+        },
+        "conversation": "conv_0f817f9536e70545da02f023",
+        "input": "Call lookup_count with key \"subject\" now. After its result, return JSON with site, total and count.",
+        "store": false,
+        "temperature": 0,
+        "instructions": "Use the conversation's active facts. Answer the newest question directly, with only the requested JSON.",
+        "tools": [
+          {
+            "type": "function",
+            "name": "lookup_count",
+            "description": "Get the current count for a named record.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "http_status": 200,
+      "seconds": 17.781260582996765,
+      "body": {
+        "id": "resp_84eae6ce9ccf11dba5e13348",
+        "object": "response",
+        "created_at": 1791122592,
+        "status": "completed",
+        "model": "deepseek-v4.1-flash",
+        "store": false,
+        "previous_response_id": null,
+        "conversation": {
+          "id": "conv_0f817f9536e70545da02f023"
+        },
+        "output": [
+          {
+            "id": "fc_4fb10a9cabdb2648299a7fc2",
+            "type": "function_call",
+            "status": "completed",
+            "name": "lookup_count",
+            "call_id": "call_df0c935285fa070583b4acea24527521",
+            "arguments": "{\"key\":\"subject\"}"
+          }
+        ],
+        "usage": {
+          "input_tokens": 831,
+          "input_tokens_details": {
+            "cached_tokens": 188,
+            "cache_write_tokens": 643
+          },
+          "output_tokens": 38,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 869
+        }
+      },
+      "wire": "{\"id\":\"resp_84eae6ce9ccf11dba5e13348\",\"object\":\"response\",\"created_at\":1791122592,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"conversation\":{\"id\":\"conv_0f817f9536e70545da02f023\"},\"output\":[{\"id\":\"fc_4fb10a9cabdb2648299a7fc2\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"lookup_count\",\"call_id\":\"call_df0c935285fa070583b4acea24527521\",\"arguments\":\"{\\\"key\\\":\\\"subject\\\"}\"}],\"usage\":{\"input_tokens\":831,\"input_tokens_details\":{\"cached_tokens\":188,\"cache_write_tokens\":643},\"output_tokens\":38,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":869}}",
+      "error": null,
+      "independent_gold": null,
+      "expects_function_call": true,
+      "response_id": "resp_84eae6ce9ccf11dba5e13348",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": {
+        "input_tokens": 831,
+        "input_tokens_details": {
+          "cached_tokens": 188,
+          "cache_write_tokens": 643
+        },
+        "output_tokens": 38,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 869
+      },
+      "store": false,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "conversation_echo_correct": true
+    },
+    {
+      "name": "pending-appended-once",
+      "result": "FAIL",
+      "method": "GET",
+      "route": "/conversations/conv_0f817f9536e70545da02f023/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0003193340089637786,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "fc_4fb10a9cabdb2648299a7fc2",
+            "type": "function_call",
+            "status": "completed",
+            "name": "lookup_count",
+            "call_id": "call_df0c935285fa070583b4acea24527521",
+            "arguments": "{\"key\":\"subject\"}"
+          },
+          {
+            "id": "msg_d67b301bc2289e2152f5cd44",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Call lookup_count with key \"subject\" now. After its result, return JSON with site, total and count."
+              }
+            ]
+          },
+          {
+            "id": "msg_c6fbcae884932911f50acce6",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_f7f50acf3c4523c6bee783ec",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Report the active site and net usable units again as JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_01fd1ea9008064f83084528b",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_9553c693a651fb7b8303df7f",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_b6098f6dece9fbb14ae23a5b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+              }
+            ]
+          }
+        ],
+        "first_id": "fc_4fb10a9cabdb2648299a7fc2",
+        "last_id": "msg_b6098f6dece9fbb14ae23a5b",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"fc_4fb10a9cabdb2648299a7fc2\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"lookup_count\",\"call_id\":\"call_df0c935285fa070583b4acea24527521\",\"arguments\":\"{\\\"key\\\":\\\"subject\\\"}\"},{\"id\":\"msg_d67b301bc2289e2152f5cd44\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Call lookup_count with key \\\"subject\\\" now. After its result, return JSON with site, total and count.\"}]},{\"id\":\"msg_c6fbcae884932911f50acce6\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_f7f50acf3c4523c6bee783ec\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Report the active site and net usable units again as JSON with site and total.\"}]},{\"id\":\"msg_01fd1ea9008064f83084528b\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_9553c693a651fb7b8303df7f\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.\"}]},{\"id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Obsolete audit log.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\n\"}]}],\"first_id\":\"fc_4fb10a9cabdb2648299a7fc2\",\"last_id\":\"msg_b6098f6dece9fbb14ae23a5b\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "append_once_correct": false
+    },
+    {
+      "name": "pending-storefalse-response404",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/responses/resp_84eae6ce9ccf11dba5e13348",
+      "request": null,
+      "http_status": 404,
+      "seconds": 0.00022070799604989588,
+      "body": {
+        "error": {
+          "message": "response was not found",
+          "type": "invalid_request_error"
+        }
+      },
+      "wire": "{\"error\":{\"message\":\"response was not found\",\"type\":\"invalid_request_error\"}}\n",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    }
+  ],
+  "counts": {
+    "PASS": 14,
+    "FAIL": 5,
+    "ERROR": 0,
+    "SKIP": 0
+  },
+  "store_files": [
+    {
+      "name": "resp_4f584123037a8481e5c645ab.json",
+      "bytes": 3584
+    }
+  ],
+  "interpretation": "First actual HTTP attempts; no retries/repairs. Server startup/restart time is owned by the outer launcher and excluded here."
+}

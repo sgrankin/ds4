@@ -1,0 +1,115 @@
+{
+  "status": "NATIVE_PARITY_PASS",
+  "runtime_source": "ec1caaa0",
+  "prepared_source": "e42932b6",
+  "production_build_manifest": "/Volumes/Models/ds4/.workspaces/idea-integration-v2/speed-bench/ideas/artifacts/integrated-native-parity-prepared-20261002/build-manifest.json",
+  "scope": "Both default router-off and positive-gap/native-mode controls; seven phase-end full-vocabulary vectors and final canonical graph exactly match retained original native64 baseline. Not all343 per-token vectors. Timings diagnostic only; concurrent CPU work was allowed.",
+  "retained_binary_dumps": [
+    {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/integrated-native-parity-20261002/0-A/logits.bin",
+      "bytes": 3619840,
+      "sha256": "2fc84e4de8d80d2b11d78d4a666d881adf277082dedf69b84106369bac134608",
+      "tracked_in_compact_archive": false
+    },
+    {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/integrated-native-parity-20261002/0-A/snapshot.bin",
+      "bytes": 28078040,
+      "sha256": "a5258dce8d307c58b9580687b5849c1a5c9e3c92b45ef26c6c6dfe037bd8cfab",
+      "tracked_in_compact_archive": false
+    },
+    {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/integrated-native-parity-20261002/1-B/logits.bin",
+      "bytes": 3619840,
+      "sha256": "2fc84e4de8d80d2b11d78d4a666d881adf277082dedf69b84106369bac134608",
+      "tracked_in_compact_archive": false
+    },
+    {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/integrated-native-parity-20261002/1-B/snapshot.bin",
+      "bytes": 28078040,
+      "sha256": "a5258dce8d307c58b9580687b5849c1a5c9e3c92b45ef26c6c6dfe037bd8cfab",
+      "tracked_in_compact_archive": false
+    }
+  ],
+  "archive_files": [
+    {
+      "path": "0-A/run.json",
+      "sha256": "0f256ddb4c35c675b439b145c01a592a3fcf6c691458f7b1c15d2aa8fc113f10",
+      "bytes": 4263
+    },
+    {
+      "path": "0-A/stderr.log",
+      "sha256": "5eaf2491b23b08b098a9ece912ceee67f66d9893af0a752e59f0faa5b2ff577c",
+      "bytes": 3296
+    },
+    {
+      "path": "0-A/timings.csv",
+      "sha256": "1f9f245f1afa359809e329593812daa3ce886c4f6cf40de738d5290bc9176663",
+      "bytes": 244
+    },
+    {
+      "path": "1-B/run.json",
+      "sha256": "b7d44f7c2c1c9bf9a0eac703c370eb6fdc51f423f79bb15eb3bea56c538df8e5",
+      "bytes": 4420
+    },
+    {
+      "path": "1-B/stderr.log",
+      "sha256": "f231c449fe8e42e22a35e282dd3668efef669527cf7c8cc924b2b90d75a384d4",
+      "bytes": 3548
+    },
+    {
+      "path": "1-B/timings.csv",
+      "sha256": "c38035832be3cfc70c64593d818e8daeb1975ef91d60500b65b6d67ec2f2ed56",
+      "bytes": 244
+    },
+    {
+      "path": "RESULTS.md",
+      "sha256": "7d687c7fb6e4e4e5df15a63532c9784003f5ad4628030e6fa6823cdd06e8c245",
+      "bytes": 1029
+    },
+    {
+      "path": "comparison.json",
+      "sha256": "af41ed260157ecdfbd3217d08e72abe5bceed044a7bbd4b98360f1859aaeaf17",
+      "bytes": 748
+    },
+    {
+      "path": "guard-command.json",
+      "sha256": "1834078f4980adffb8aeccfe39c3c7c151128a7627050beea84a85355b996be8",
+      "bytes": 1404
+    },
+    {
+      "path": "guard-pressure.jsonl",
+      "sha256": "1d75cafb889c7353c18b02817e4a2612bb9d32cbabb39825c1f483f246aa159a",
+      "bytes": 54707
+    },
+    {
+      "path": "guard-result.json",
+      "sha256": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+      "bytes": 52
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "f09b232e414ae45aa40a8e1aae9e0a6833fefa7722e4dfb7e4c1f3e4698e5f72",
+      "bytes": 10423
+    },
+    {
+      "path": "native-parity-checks.json",
+      "sha256": "b332952a1335a3e066e10f75557cc2e78765b14d9018f3c216df8d72cc69fb14",
+      "bytes": 211
+    },
+    {
+      "path": "plan.json",
+      "sha256": "0761bfa45d42668ad7afc5f68348edb6d90793fa0cd2fb9d7ae74c2f87676752",
+      "bytes": 6544
+    },
+    {
+      "path": "pressure-summary.json",
+      "sha256": "ee2b44661e56bd7166c5383801e0672b1bf5799222a4f70f9b92019240b522da",
+      "bytes": 232
+    },
+    {
+      "path": "summary.json",
+      "sha256": "d713180db72d572d6c2892a81bf0f5d2f419cefdc2fc131c18b0badb697f47f0",
+      "bytes": 6626
+    }
+  ]
+}

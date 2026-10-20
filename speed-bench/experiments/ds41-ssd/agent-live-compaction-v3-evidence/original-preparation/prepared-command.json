@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3-pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3/run_resident_agent_live.py",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-resident3-live/speed-bench/ideas/artifacts/resident-agent-three-live-prepared-20261002-v3/plan.json",
+    "b6a4b9649054454f985c083c72a692203dc442accca487e8c66f26a331f48e49"
+  ],
+  "plan_sha256": "b6a4b9649054454f985c083c72a692203dc442accca487e8c66f26a331f48e49",
+  "asset_count": 112,
+  "status": "PREPARED_UNEXECUTED",
+  "model_metadata_touched": false
+}

@@ -1,0 +1,5 @@
+{
+  "type": "ValueError",
+  "message": "explicit non-model asset",
+  "model_stat_or_helper_or_build": false
+}

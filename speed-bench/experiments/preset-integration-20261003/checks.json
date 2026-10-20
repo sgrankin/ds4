@@ -1,0 +1,20 @@
+{
+  "commands": [
+    "sh -n ds4-local",
+    "./ds4-local context-fast --help",
+    "make -j1 ds4-agent ds4_agent_test",
+    "./ds4_agent_test",
+    "./ds4-local resident-fast --help"
+  ],
+  "build_returncode": 0,
+  "agent_test_returncode": 0,
+  "native_weights_source": "qualified private 8a47 apply/config path; legacy coefficient apply body retained",
+  "model_runs": 0,
+  "timing_scope": "wrapper and source integration; no new performance qualification",
+  "files": {
+    "ds4-local": "a335ae586e3ca22b93b826dc1c6bbc4e64e01250e4cdd3d57376ce199ffcb14d",
+    "ds4.c": "30808df78ee7dbba7f597ddfbf04c6a52404d0b4edd8f03845edc9e0b65b873c",
+    "ds4_resident_native_weights.h": "abdc7b52f270b16b198257a835c6682a6f6da355050ed7e55adf75c2d742907b",
+    "ds4-agent": "92a8790a0057baa08f04bd4427efec2d2c5833f3224034fe751315c27c4b40b6"
+  }
+}

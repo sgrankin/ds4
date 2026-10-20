@@ -1,0 +1,13 @@
+screen,case,tail,mode,correct,tests,passed,failed,unresolved,returncode,cap,stopped,greedy_tokens,first_failure,error
+screen-equivalent64,equivalent-instructions,64,fresh,False,161,0,0,161,3,False,True,179,null,"""SyntaxError"""
+screen-equivalent64,equivalent-instructions,64,reuse,True,161,161,0,0,0,False,True,172,null,null
+screen-favorable64,irrelevant-planning-cleanup,64,fresh,True,161,161,0,0,0,False,True,140,null,null
+screen-favorable64,irrelevant-planning-cleanup,64,reuse,True,161,161,0,0,0,False,True,138,null,null
+screen-stress64,changed-fact-stress,64,fresh,True,161,161,0,0,0,False,True,130,null,null
+screen-stress64,changed-fact-stress,64,reuse,True,161,161,0,0,0,False,True,140,null,null
+screen-summary128,ordinary-summary,128,fresh,True,161,161,0,0,0,False,True,130,null,null
+screen-summary128,ordinary-summary,128,reuse,True,161,161,0,0,0,False,True,140,null,null
+screen-summary256,ordinary-summary,256,fresh,True,161,161,0,0,0,False,True,130,null,null
+screen-summary256,ordinary-summary,256,reuse,True,161,161,0,0,0,False,True,140,null,null
+screen-summary64,ordinary-summary,64,fresh,True,161,161,0,0,0,False,True,130,null,null
+screen-summary64,ordinary-summary,64,reuse,True,161,161,0,0,0,False,True,140,null,null

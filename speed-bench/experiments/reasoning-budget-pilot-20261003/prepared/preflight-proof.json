@@ -1,0 +1,32 @@
+{
+  "source_commit": "0294de2a1b4b4efe899891189c5086360fd87f80",
+  "preserved_v1_source_commit": "28c5c0d336953b33932d4ea6e02f878a6555776e",
+  "helper_source_commit": "a3a726027492fd7e74f15e7a3b7e21fdc71612f9",
+  "plan_sha256": "d78f72e601fd811280d62adc9d2971bd7612ab10c58b29fdde47abfcb026a286",
+  "prepared_command_sha256": "6d9fda86c40a13d7857612fc98e5f62e73b888d604a05c326d390bd4ab4ab3e1",
+  "driver_sha256": "d3afdee0cb0b03083df0b29e087d58ac38fc5f69db2710198d7825e1a9645f2c",
+  "analyzer_sha256": "fd57c19c551a09049303f35b38299e6b403d850debdde80f3ecdb26107766377",
+  "cpu_proof_sha256": "062449b55866bf9bbe2013d0ba8417ce391e93950c6f24353d7e9a106af2bf8e",
+  "binary_sha256": "6d567272bbf58bb1674e67fa0448cfac9aa8444bab453aa3286943ea28b34d29",
+  "assets": 76,
+  "verify_command": "PYTHONDONTWRITEBYTECODE=1 python3 /Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/run_reasoning_budget.py --verify /Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/plan.json --plan-sha256 d78f72e601fd811280d62adc9d2971bd7612ab10c58b29fdde47abfcb026a286",
+  "verify_returncode": 0,
+  "verify_result": {
+    "verified": true,
+    "assets": 76,
+    "model_or_guard_executed": false
+  },
+  "preserved_verification_pin_refusal": {
+    "tool_chunk": "d69add",
+    "returncode": 1,
+    "supplied_sha256": "7158990341d7030405487a4289898928d458f5c97c52c252f4f3b430d8966c0b",
+    "message": "explicit verification pin; source/plan unchanged; correction used actual prepared-command pin, no model/guard executed."
+  },
+  "root_grant_proof_absent": true,
+  "run_absent": true,
+  "pressure_absent": true,
+  "arm_outputs_absent": true,
+  "model_stat_or_tokenizer_or_engine_or_gpu": false,
+  "helper_or_caller_or_core_or_metal_build": false,
+  "no_launch_authorized": true
+}

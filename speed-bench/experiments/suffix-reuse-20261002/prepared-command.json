@@ -1,0 +1,32 @@
+{
+  "cwd": "/Volumes/Models/ds4",
+  "argv": [
+    "python3",
+    "speed-bench/ideas/pressure_run.py",
+    "speed-bench/ideas/artifacts/suffix-same-position-smoke",
+    "--",
+    ".workspaces/idea-context/speed-bench/suffix_reuse_bench",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--prefix",
+    "256",
+    "--edit",
+    "32",
+    "--unchanged",
+    "128",
+    "--fresh-tail",
+    "1",
+    "--decode",
+    "4",
+    "--ctx",
+    "2048",
+    "--chunk",
+    "256",
+    "--cache-gb",
+    "64",
+    "--summary",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-same-position-smoke/summary.json",
+    "--raw",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-same-position-smoke/logits.bin"
+  ]
+}

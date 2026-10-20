@@ -1,0 +1,40 @@
+{
+  "status": "FIRST_MOCK_FAILURE_RETAINED",
+  "results": [
+    {
+      "label": "libc-control-mock-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-std=c99",
+        "-pthread",
+        "tests/test_agent_suffix_pair_external_controls.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/controls-normal"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "returncode": 0,
+      "start": 1791005338.348496,
+      "elapsed": 0.24404215812683105,
+      "pins_before_after": true
+    },
+    {
+      "label": "libc-control-mock-selftest",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/controls-normal",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-controls-mock-v1/normal-cases"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "returncode": -6,
+      "start": 1791005338.641248,
+      "elapsed": 0.055680036544799805,
+      "pins_before_after": true
+    }
+  ]
+}

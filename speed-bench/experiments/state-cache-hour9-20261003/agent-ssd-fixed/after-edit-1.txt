@@ -1,0 +1,538 @@
+<｜begin▁of▁sentence｜><｜System｜>You are a coding agent running in a local workspace. Use tools for local file and system work. Avoid printing large file contents or large code blocks as answers; create or edit files with tools, then summarize results briefly.
+
+## Tools
+
+You have access to native DSML tools. Invoke tools by writing exactly this shape:
+
+<｜DSML｜ calls>
+<｜DSML｜ invoke name="$TOOL_NAME">
+<｜DSML｜ parameter name="$PARAMETER_NAME" string="true|false">$PARAMETER_VALUE</｜DSML｜ parameter>
+</｜DSML｜ invoke>
+</｜DSML｜ calls>
+
+Tool calls are not allowed inside <think></think>; finish thinking before emitting DSML.
+
+String parameters use raw text and string="true". Numbers and booleans use JSON text and string="false".
+
+Inside string values only, escape a literal closing parameter tag as &lt;/｜DSML｜ parameter>. To write that escaped spelling literally, use &amp;lt;/｜DSML｜ parameter>. Other HTML entities are unchanged.
+
+Read defaults to a context-sized bounded chunk, not the whole file. For first looks at large files, prefer read with explicit max_lines around 80-160; if read says more lines are available, call more with count=<lines> to read the next chunk. Use more for exact continuation; a byte-limited chunk can end within a line. If the user explicitly asks you to read a complete file into context, call read with whole=true. A whole-file read may fail if the result would not fit the current context; then explain that and use chunks.
+
+Read output is limited to 128 KiB. Use more to continue, including within an oversized line; whole=true fails rather than returning an excerpt. raw=true omits line numbers but still reports truncation.
+Search mode is literal (default) or regex (POSIX extended). Defaults: path=., case_sensitive=true, context=0, max_results=50. context is 0-5, max_results is 1-500. The search skips .git and nested symlinks, and reports incomplete coverage.
+bash timeout_sec defaults to 3600; refresh_sec defaults to 60 and waits up to that many seconds. bash_status returns immediately unless refresh_sec is given. Jobs keep running and timeouts remain active between calls.
+Write and edit replace complete files atomically, follow existing symlink targets, and reject hard-linked files.
+
+## Editing files
+
+When editing files, state the target filename before the edit; for the edit tool, put path first.
+Use edit with path, old, and new for changes. The old text must match exactly once in the current file; otherwise edit fails for safety. Read enough of the file to provide the exact old text being replaced.
+To insert text, use edit with old set to an exact unique anchor and new set to that anchor plus the added text.
+Use read raw=true only when you need plain file text without line numbers.
+
+For long-running bash commands, pass refresh_sec. If a bash job is still running, use bash_status to check it early or bash_stop to terminate it.
+
+Use google_search to find web pages. Use visit_page to read a known URL with a visible browser. The first web call may ask the user for permission to start Chrome.
+
+### Available Tool Schemas
+
+{
+  "type": "function",
+  "function": {
+    "name": "google_search",
+    "description": "Search Google in a visible browser and return compact Markdown links.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {"type": "string"}
+      },
+      "required": ["query"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "visit_page",
+    "description": "Open a URL in a visible browser and return rendered page Markdown.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "url": {"type": "string"}
+      },
+      "required": ["url"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "bash",
+    "description": "Run a shell command.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "command": {"type": "string"},
+        "timeout_sec": {"type": "integer"},
+        "refresh_sec": {"type": "integer"}
+      },
+      "required": ["command"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "bash_status",
+    "description": "Report current status and recent output for a bash job.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "job": {"type": "integer"},
+        "pid": {"type": "integer"},
+        "refresh_sec": {"type": "integer"}
+      },
+      "required": ["job"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "bash_stop",
+    "description": "Terminate a running bash job and report its final output.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "job": {"type": "integer"},
+        "pid": {"type": "integer"},
+        "refresh_sec": {"type": "integer"}
+      },
+      "required": ["job"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "read",
+    "description": "Read a text file or a range of lines.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": {"type": "string"},
+        "start_line": {"type": "integer"},
+        "max_lines": {"type": "integer"},
+        "whole": {"type": "boolean"},
+        "raw": {"type": "boolean"}
+      },
+      "required": ["path"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "more",
+    "description": "Continue the previous read.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "count": {"type": "integer"}
+      }
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "write",
+    "description": "Create or overwrite a text file.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": {"type": "string"},
+        "content": {"type": "string"}
+      },
+      "required": ["path", "content"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "edit",
+    "description": "Replace exactly one old text match.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": {"type": "string"},
+        "old": {"type": "string"},
+        "new": {"type": "string"}
+      },
+      "required": ["path", "old", "new"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "search",
+    "description": "Search files and return compact edit-friendly matches.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {"type": "string"},
+        "path": {"type": "string"},
+        "mode": {"type": "string", "enum": ["literal", "regex"]},
+        "glob": {"type": "string"},
+        "context": {"type": "integer"},
+        "max_results": {"type": "integer"},
+        "case_sensitive": {"type": "boolean"}
+      },
+      "required": ["query"]
+    }
+  }
+}
+
+{
+  "type": "function",
+  "function": {
+    "name": "list",
+    "description": "List one directory compactly.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": {"type": "string"}
+      },
+      "required": ["path"]
+    }
+  }
+}
+
+# Rules
+
+- Always use strict syntax for DSML tool stanzas.
+- This system runs on local inference of a few hundred tokens/s of prefill, and a few tens of tokens/s decoding speed. Use read/search to get the exact text you need, then use edit instead of rewriting whole files.
+- Write code that is reliable and works well; always have a mental model of what is going on in complex parts of the code.
+- Work in a way that preserves the current system configuration integrity, unless explicitly asked otherwise by the user.
+
+
+You are a helpful coding assistant running inside ds4-agent.Live context file: /Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/agent-shared/context.txt
+This file mirrors your complete current rendered chat context, including reasoning, and is refreshed before tool execution. You may read it and edit conversation text with the ordinary file or bash tools to remove redundant material or replace old observations with concise notes. Preserve this initial system/tool/prefix section exactly and retain the chat delimiters around turns you keep. Accepted edits replace your live context after the tools finish; tool results are then appended. Keep task requirements, useful evidence, and the latest user request. Use this only when reducing context helps the task; ordinary turns need no file edit.Current local date and time at session start: 2026-10-02 11:20:00 EDT. Use this only when date or time matters.<｜User｜>The next three disjoint marked spans are disposable old history. Their useful code will later be stored in a permanent archive.
+[old history archived]
+[DISPOSABLE_OLD_BEGIN]
+Old audit code: RIVER-73.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+[DISPOSABLE_OLD_END]
+[DISPOSABLE_OLD_BEGIN]
+Old audit code: RIVER-73.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+old audit log unchanged.
+[DISPOSABLE_OLD_END]
+Do not use tools now. Reply READY only.
+<｜Assistant｜></think>READY<｜end▁of▁sentence｜><｜User｜>Use the read tool once to read /Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/agent-shared/work/active.json, with whole=true and raw=true. This file is the self-contained active inventory specification. Retain the three numeric rules and notes from its tool result. Do not read other files. Then reply READY only.
+<｜Assistant｜></think>
+
+<｜DSML｜ calls>
+<｜DSML｜ invoke name="read">
+<｜DSML｜ parameter name="path" string="true">/Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/agent-shared/work/active.json</｜DSML｜ parameter>
+<｜DSML｜ parameter name="whole" string="false">true</｜DSML｜ parameter>
+<｜DSML｜ parameter name="raw" string="false">true</｜DSML｜ parameter>
+</｜DSML｜ invoke>
+</｜DSML｜ calls><｜end▁of▁sentence｜><｜User｜><tool_result>Tool result 1 (read):
+{
+  "batches": 17,
+  "items_per_batch": 25,
+  "reserved_items": 9,
+  "notes": [
+    "Active processing note 0: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 1: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 2: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 3: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 4: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 5: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 6: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 7: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 8: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 9: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 10: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 11: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 12: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 13: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 14: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 15: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 16: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 17: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 18: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 19: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 20: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 21: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 22: retain the current inventory rules; old audit prose is disposable.",
+    "Active processing note 23: retain the current inventory rules; old audit prose is disposable."
+  ]
+}
+</tool_result><｜Assistant｜></think>READY<｜end▁of▁sentence｜><｜User｜>Reply READY only, without tools or calculations. Keep the active specification from the preceding read result. Its batches, items per batch, and reserved items define the calculation: multiply the first two quantities and subtract the reserved quantity. The three disposable old logs will be removed one at a time between questions. Their code will be put into permanent storage. Retrieve it from storage every time you are asked, even if an earlier answer already contained it. Preserve this entire request and the unchanged active specification. Keep numeric values numeric and the archived code a string. Do not summarize or edit files yourself. Wait for each question. This is a readiness turn, so provide exactly READY and finish.
+<｜Assistant｜></think>READY<｜end▁of▁sentence｜>

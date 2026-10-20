@@ -1,0 +1,22 @@
+{
+  "gold": {
+    "constant": -7,
+    "linear": 4
+  },
+  "oracle_input": {
+    "dividend_ascending": [
+      -5,
+      1,
+      0,
+      -2,
+      3
+    ],
+    "divisor_ascending": [
+      1,
+      1,
+      1
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Polynomial remainder algebra; not modular integer powers or sequence extrapolation."
+}

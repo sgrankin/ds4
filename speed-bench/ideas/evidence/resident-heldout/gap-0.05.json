@@ -1,0 +1,1 @@
+{"cases":16,"tokens":512,"avg_nll":0.464346485348,"delta_nll":-0.00558920737518,"policy_delta_nll":-0.00558920737518,"kl_base_to_raw":0.00505763484821,"kl_base_to_policy":0.00505763484821,"tv":0.017964460483,"argmax_flips":10,"bit_equal_rows":22,"startup_ms":225.332,"prefill_ms":18973.502,"decode_ms":31546.008,"metrics_ms":1027.195}

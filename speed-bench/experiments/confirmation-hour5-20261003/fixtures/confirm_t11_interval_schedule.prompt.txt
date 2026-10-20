@@ -1,0 +1,1 @@
+Choose the largest number of mutually non-overlapping half-open intervals from I1=[0,4), I2=[4,9), I3=[3,5), I4=[9,11). Touching endpoints are allowed. Report selected ids in time order and count. Return JSON first, then explain why three is optimal.

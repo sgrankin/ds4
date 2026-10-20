@@ -1,0 +1,77 @@
+We need answer count permutations of 1..9 such that for every i, p(i) differs from i and from i+1, with successor of 9 =1. Need count. Need solve. Let's reason carefully. We need permutations p on positions i=1..9, values 1..9. Constraint: p(i) != i and p(i) != i+1 mod 9 (where for i=9, i+1=1). So forbidden values for position i are {i, i+1 mod 9}. Count permutations avoiding 9 forbidden pairs, one per row, columns. This is number of perfect matchings in bipartite graph complement of cycle? Positions rows 1..9, values columns 1..9. Forbidden: row i forbids column i and i+1 (mod n). Allowed: columns not i,i+1. Need count permutations with no adjacent (cyclic) mapping? Equivalent permutations π of [n] such that π(i) not in {i,i+1 mod n}. Count derangements with no "successor" forbidden. For n=9.
+
+Need compute exact. Could use inclusion-exclusion or rook polynomial. Let's derive. n=9 small. Need count. Let's compute reliably.
+
+We need permutations π on n=9 avoiding cells (i,i) and (i,i+1 mod n). This is number of permutations avoiding a 2-regular? Forbidden board consists of two disjoint permutation matrices? Cells (i,i) main diagonal and (i,i+1 mod n) shifted diagonal. Together form cycle? Actually cells: for each row i two columns. Board B has 18 cells. Need permutations avoiding B.
+
+Use inclusion-exclusion over forbidden cells. Count permutations containing a set S of forbidden cells. Since forbidden cells form graph on rows/columns? Need sum (-1)^|S| N(S), where N(S)= number permutations containing S if S is matching (no repeated row/col), else 0. So count = sum over matchings in forbidden board of (-1)^k * (n-k)!.
+
+Thus need rook numbers r_k of forbidden board B (number ways place k nonattacking rooks on forbidden cells). Then count = Σ_{k=0}^n (-1)^k r_k (n-k)!.
+
+Forbidden board B = diagonal D0 cells (i,i) and shifted D1 cells (i,i+1 mod n). Need rook numbers for n=9.
+
+This board can be seen as bipartite graph rows i, columns j where j=i or j=i+1 mod n. Need matchings size k in graph. Since each row degree 2, each column degree 2? Column j forbidden from rows j (diagonal) and j-1 (shift predecessor). Yes degree 2. Graph is 2-regular bipartite? Edges: row i connects col i and col i+1. This is a cycle of length 2n? Let's see vertices rows and cols alternating. Edges: row i-col i, row i-col i+1. col i connected row i and row i-1. The bipartite graph is a single cycle length 2n? For n=9, edges form cycle: row1-col1-row? col1 also row9. row1-col2-row2-col2? Wait col2 connected row2 and row1. Sequence row1-col2-row2-col3-row3-...-row9-col1-row1. Yes cycle length 18. So forbidden board is a 2n-cycle bipartite graph.
+
+Rook numbers = matchings of size k in cycle C_{2n} bipartite. Number of k-matchings in cycle graph C_m (m=2n) is? For cycle length m, number of matchings of size k = (m/(m-k)) * binom(m-k, k)? Need formula. For C_m, number of k-edge matchings = (m/(m-k)) * C(m-k, k) maybe for k? Let's verify. For cycle C_m, number independent edge sets size k. Formula: m/(m-k) * binom(m-k, k) for k <= floor(m/2). Yes. Here m=18. r_k = 18/(18-k) * binom(18-k, k). But wait matchings in forbidden board correspond edge sets in bipartite cycle with no shared vertices. In cycle graph, matching edges no adjacent edges. Yes same. Need k up to 9 (since n rows max). For k=9? In C18, perfect matching? Cycle even has 2 perfect matchings. Formula 18/(9)*binom(9,9)=2 yes. Good.
+
+Then count = Σ_{k=0}^9 (-1)^k r_k (9-k)!.
+
+Let's compute. r_k for m=18:
+k=0: 1</think>Let's compute rook numbers for cycle C18.
+
+Formula: \(r_k = \frac{18}{18-k}\binom{18-k}{k}\).
+
+Compute k=0..9:
+
+k=0: 1
+k=1: 18/(17)*C17,1 = 18? Actually 18/17*17=18. yes.
+k=2: 18/16*C16,2 = 18/16*120=135.
+k=3: 18/15*C15,3 = 18/15*455 = 546? 455*6/5=546.
+k=4: 18/14*C14,4 = 18/14*1001 = 1287? 1001*9/7=1287.
+k=5: 18/13*C13,5 = 18/13*1287? C13,5=1287? Wait C13,5=1287? C13,5=13*12*11*10*9/120 = 1287 yes. 18/13*1287 = 1782? 1287/13=99, *18=1782.
+k=6: 18/12*C12,6 = 18/12*924 = 1386? 924*3/2=1386.
+k=7: 18/11*C11,7 = C11,7=C11,4=330. 18/11*330=540.
+k=8: 18/10*C10,8 = C10,8=45. 18/10*45=81.
+k=9: 18/9*C9,9 = 2.
+
+Check r_5: C13,5 = 1287 yes. r_4 C14,4=1001. Good.
+
+Now count = Σ (-1)^k r_k (9-k)!.
+
+Compute factorials:
+0!=1
+1!=1
+2!=2
+3!=6
+4!=24
+5!=120
+6!=720
+7!=5040
+8!=40320
+9!=362880
+
+Terms:
+k=0: +1*362880 = 362880
+k=1: -18*40320 = -725760
+k=2: +135*5040 = 680400? 135*5040=680400 yes.
+k=3: -546*720 = -393120? 546*720 = 393,120.
+k=4: +1287*120 = 154440.
+k=5: -1782*24 = -42768.
+k=6: +1386*6 = 8316.
+k=7: -540*2 = -1080.
+k=8: +81*1 = 81.
+k=9: -2*1 = -2.
+
+Sum: 362880 -725760 = -362880.
++680400 = 317520.
+-393120 = -75600? Wait 317520-393120=-75600.
++154440 = 78840.
+-42768 = 36072.
++8316 = 44388.
+-1080 = 43308.
++81 = 43389.
+-2 = 43387.
+
+So answer 43387? Need verify. Let's cross-check via alternative recurrence maybe. Count permutations avoiding both diagonal and shifted diagonal. For n=9. I recall ménage numbers? This is straight ménage? Number of permutations with no i and no i+1 mod n. This is "ménage problem" for couples? Actually ménage numbers count seating n couples around table with spouses not adjacent and sexes alternating. Number of permutations π such that π(i) not i and not i+1? That's number of ways to seat wives relative to husbands? Ménage numbers U_n. For n=3? Let's recall ménage numbers: 0,1,2,13,80,579,4738,43387,439792... Wait sequence? Ménage numbers (A000179?) For n=3 =1? Let's recall. The problem exactly: permutations p of {1,...,n} such that p(i) differs from i and i+1 (mod n). This is ménage number? Yes. For n=9, ménage number maybe 43387. I remember sequence: n=1:0, n=2:0, n=3:1, n=4:2, n=5:13, n=6:80, n=7:579, n=8:4738, n=9:43387. Yes. So answer 43387.
+
+Need final only integer.</think>43387

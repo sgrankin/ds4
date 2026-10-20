@@ -1,0 +1,48 @@
+{
+  "time": 1790992826.0455549,
+  "scope": "Post hoc manual review of the three completed first-arm effort0 outputs only. No modification of primary frozen scores; no assessment of capped answers or unseen later outcomes.",
+  "primary_scores_changed": false,
+  "results_path": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-six-20261003-v1-effort0-before/results.jsonl",
+  "results_sha256": "6d63595b02764de82dd8c5f4f44db319d534493a9da79d581afae2a1da1f66ee",
+  "observations": [
+    {
+      "case": "fixed_points9",
+      "original_status": "INVALID",
+      "original_parse_reason": "unsupported_final_format",
+      "diagnostic_review": "Correct terminal numeric answer with explanatory prose; fails primary format rule.",
+      "observed_terminal_answer": "22260",
+      "expected": "22260",
+      "basis": "single terminal boxed number after Final answer",
+      "terminal_excerpt": "\nActually, known derangement numbers: \\(!6 = 265\\).\n\n---\n\n**Step 3: Multiply.**\n\n\\[\n\\binom{9}{3} \\times !6 = 84 \\times 265\n\\]\n\n---\n\n**Step 4: Calculate \\(84 \\times 265\\).**\n\n- \\(265 \\times 80 = 21200\\)\n- \\(265 \\times 4 = 1060\\)\n- Sum: \\(21200 + 1060 = 22260\\)\n\n---\n\nFinal answer:\n\n\\[\n\\boxed{22260}\n\\]",
+      "raw_path": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-six-20261003-v1-effort0-before/fixed_points9.txt",
+      "raw_sha256": "51caf1088b842ae39d6fcf776801d0def4def09922910537e37bd80332167afb",
+      "not_an_automated_secondary_scorer": true
+    },
+    {
+      "case": "necklaces12_weight4",
+      "original_status": "INVALID",
+      "original_parse_reason": "unsupported_final_format",
+      "diagnostic_review": "Correct terminal numeric answer with explanatory prose; fails primary format rule.",
+      "observed_terminal_answer": "43",
+      "expected": "43",
+      "basis": "single terminal boxed number after Final answer",
+      "terminal_excerpt": " permutation as some rotation. In the dihedral group, a reflection is never equal to a rotation as a permutation unless n=... For n=12, no reflection is a rotation. So indeed equivalence classes are the same as rotation-only.\n\nThus the necklace count is 43.\n\n---\n\n**Final answer**:  \n\\[\n\\boxed{43}\n\\]",
+      "raw_path": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-six-20261003-v1-effort0-before/necklaces12_weight4.txt",
+      "raw_sha256": "21b1de8aca096c9204d150f84d455a64ba2ae0d496c061f42fc0021ac056d23d",
+      "not_an_automated_secondary_scorer": true
+    },
+    {
+      "case": "onto7to4",
+      "original_status": "INVALID",
+      "original_parse_reason": "unsupported_final_format",
+      "diagnostic_review": "Correct terminal numeric answer with explanatory prose; fails primary format rule.",
+      "observed_terminal_answer": "8400",
+      "expected": "8400",
+      "basis": "Final integer count label and matching standalone terminal integer",
+      "terminal_excerpt": "): \\(-\\binom{4}{3} \\cdot 1^7 = -4 \\cdot 1 = -4\\)\n- \\(j=4\\): \\(+\\binom{4}{4} \\cdot 0^7 = 1 \\cdot 0 = 0\\)\n\n---\n\n### Step 4 \u2013 Sum them\n\\[\n16384 - 8748 + 768 - 4 + 0\n\\]\nFirst: \\(16384 - 8748 = 7636\\)  \nThen: \\(7636 + 768 = 8404\\)  \nThen: \\(8404 - 4 = 8400\\)\n\n---\n\n**Final integer count**: 8400\n\n---\n\n8400",
+      "raw_path": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-six-20261003-v1-effort0-before/onto7to4.txt",
+      "raw_sha256": "b5906df733b81ec62dfd476784a36e2494702fe2d5f3fe31ff66f9f2e39e23ac",
+      "not_an_automated_secondary_scorer": true
+    }
+  ]
+}

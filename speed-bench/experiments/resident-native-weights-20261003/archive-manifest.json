@@ -1,0 +1,1975 @@
+{
+  "physical_files_including_hidden": {
+    ".gitignore": {
+      "bytes": 4,
+      "sha256": "ed8c28596f96fdc7f1ab9fcb5d0ec466379c8e3a3a83462a5fa3e91978bacc23",
+      "mode_octal": "0o644"
+    },
+    "analysis-source/archive_resident_native_weights_study.py": {
+      "bytes": 13102,
+      "sha256": "6d80a05b76dc5c8d45d5ad2c1131bda483b26808df42a6840c779cf9fad7558f",
+      "mode_octal": "0o644"
+    },
+    "analysis-source/prepare_resident_native_weights_study.py": {
+      "bytes": 33065,
+      "sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+      "mode_octal": "0o644"
+    },
+    "analysis-source/test_resident_native_weights_study.py": {
+      "bytes": 15410,
+      "sha256": "a2973266c8a43d6f10ae8ca57c8810197cfe567b1603c617982f7439a3047cde",
+      "mode_octal": "0o644"
+    },
+    "compact-summary.json": {
+      "bytes": 8202,
+      "sha256": "490d99556748b69442f22de8a774e1d39c44413ba22a65d99968da74af3fa06b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/__pycache__/driver.cpython-314.pyc": {
+      "bytes": 67246,
+      "sha256": "7311d91d3c2db150fab48bba522b2f9074a4a8994a894cca4b7c8e095bba00bc",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/__pycache__/raw_helpers.cpython-314.pyc": {
+      "bytes": 25288,
+      "sha256": "d139a4b7b4bf1e1b5fa68e7a861e6be5628acd614b9fd3f799999131bb445b3b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/build-manifest.json": {
+      "bytes": 70382,
+      "sha256": "e2cfda6426c8ec7c371ec18a12dff60932c1c2f5b166a7ba5b5ccafdc06aa91f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/build-plan.json": {
+      "bytes": 159457,
+      "sha256": "f798a1a977f61b7fc7a0f023da452e91f41a09516614e097e361e6bdd925638f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/fixtures.tsv": {
+      "bytes": 5744,
+      "sha256": "f437dd3b450e43ed815c6c079e3dc383384d316c9686476d0a187637abf77285",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/000-continuation.txt": {
+      "bytes": 279,
+      "sha256": "b98e88381d78807023fa7052f5a287d6aba53053351290b23935b5d76846fa49",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/000-prompt.txt": {
+      "bytes": 89,
+      "sha256": "ad31c6a139fc6f959fd03493ac5db9b22ef591b8ba0f4e34c3a1d67cde1be299",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/001-continuation.txt": {
+      "bytes": 288,
+      "sha256": "6bd99b86118c94c926936a959317ad22453972ed6472a38dc36c473b2cc32fd1",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/001-prompt.txt": {
+      "bytes": 118,
+      "sha256": "3838472568045eb00528fd3d0d737cf77dbfcb6a405bfcf265d77ce12bfca42d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/002-continuation.txt": {
+      "bytes": 213,
+      "sha256": "b48855a7c2637bddbf05b86dc76de696e9676f883febd6108253044b7b303cbf",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/002-prompt.txt": {
+      "bytes": 67,
+      "sha256": "94169b777fe85c1597f6f7625a530dce8b3a1586e4c80fb8ed9257aaee77ac87",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/003-continuation.txt": {
+      "bytes": 322,
+      "sha256": "58107d97081d56fb8c3c748e7e5fd7f6f5407aed9fbef082bee3f8d7cf9812ee",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/003-prompt.txt": {
+      "bytes": 106,
+      "sha256": "fd856e975de64137ec3929e778003a3ca4ceb8ed7c9e8e7471faf63257aba344",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/004-continuation.txt": {
+      "bytes": 282,
+      "sha256": "301d89bb2d28e7b58f4fb41eb2ab51699af7c96ca6bf7b668e475483c5693ab3",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/004-prompt.txt": {
+      "bytes": 91,
+      "sha256": "d8739f43727e986e38822c7a339f4d5c2d1b893a4a8ab6a565b793843abc029f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/005-continuation.txt": {
+      "bytes": 289,
+      "sha256": "07d3c98e4cf96ea8963138a3351b94232fd51204830733f284f3366626bf53af",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/005-prompt.txt": {
+      "bytes": 88,
+      "sha256": "b53b3a2dabfde42744b86aef174f2aeb466f2992d5f4b012e15763c47c869daa",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/006-continuation.txt": {
+      "bytes": 211,
+      "sha256": "43d06e1b97e5229f084b089eabe7efbb178c1786e6aa714b170ccbdcdc8d23e4",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/006-prompt.txt": {
+      "bytes": 138,
+      "sha256": "0f3767217e174ef9eb1db952fec395fc379d14f1977c71473cae192b79c9550d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/007-continuation.txt": {
+      "bytes": 311,
+      "sha256": "7b63e5194530e3c094b6365e2927923576c281de5cf5003dfbe218d1223650d6",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/007-prompt.txt": {
+      "bytes": 112,
+      "sha256": "d301e9105fd926a6a101cbba905ae1ce1488ef650470a647bbe6236f8715d954",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/008-continuation.txt": {
+      "bytes": 264,
+      "sha256": "452c155ea209046c1886486540b381f142dcabf07ff14bfc82256a26ba33f7a9",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/008-prompt.txt": {
+      "bytes": 132,
+      "sha256": "0cc6f80eaaac68c48da44ffcc79c9577f19947b770d9919489f010414b3ba7c8",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/009-continuation.txt": {
+      "bytes": 346,
+      "sha256": "9d3d290ac728766c438cabd55ec69e02f2841d3c53f925450fd49799b685fe2d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/009-prompt.txt": {
+      "bytes": 71,
+      "sha256": "b325441bb5d967e8bd1cea370c7a7dde8ebc54c29b4af7bb4bccfdddcc754064",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/010-continuation.txt": {
+      "bytes": 227,
+      "sha256": "c5dfc361f099d5559e97433bc5e075d16d0b53fa1e06e5592b92f0bd5c785812",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/010-prompt.txt": {
+      "bytes": 95,
+      "sha256": "75aa34c3d9627095691f14f313c5825a5da6f8dde7ec36e4287ac2e1a493210b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/011-continuation.txt": {
+      "bytes": 222,
+      "sha256": "89f83d712aac2efb6f5cd5f5da81575911317dc724e71199cdddb94882e19cfa",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/011-prompt.txt": {
+      "bytes": 91,
+      "sha256": "7b6b4aa350b200ce72327a0a1d1a4da363e83c692c1e39551cd0a1e068dc3e6c",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/012-continuation.txt": {
+      "bytes": 234,
+      "sha256": "de3116af87d5dc15f1bb5dc37b664414e85537437fbf1333ab799c3ed342c986",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/012-prompt.txt": {
+      "bytes": 82,
+      "sha256": "437cbb9052fe063611831b6a7cbbfb36d2fddc6feb766df28fb02226d89b8cca",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/013-continuation.txt": {
+      "bytes": 236,
+      "sha256": "8ffdb6d7324bf8cbd02b6ea006cc1dc16b781b3676570d45a5a17c97492f6e87",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/013-prompt.txt": {
+      "bytes": 83,
+      "sha256": "6a61d7e77689cb6574b42987df6a8c49daf5e0f38dadfa90d2b2e52fcef20e3a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/014-continuation.txt": {
+      "bytes": 330,
+      "sha256": "ab26f20101e2d6cc33769425d5e1334c6f70959315b82c79fbc16bf9a2909012",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/014-prompt.txt": {
+      "bytes": 98,
+      "sha256": "003a8396ba34adf18cd4c1e9ef1385a559cbdfae48f4ef5e5b1d998a5a2bfdc7",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/015-continuation.txt": {
+      "bytes": 306,
+      "sha256": "77e61f27e2334ab677f404caa9637ec037b9808e63c6dadf18d69f02a4104dff",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/calibration16/inputs/015-prompt.txt": {
+      "bytes": 84,
+      "sha256": "8b6ffd97874bd304112fc6bd4559631aeda1ee6bbc51fc799301310b207fccfa",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/cpu-preflight-proof.json": {
+      "bytes": 1165,
+      "sha256": "dd6f7079887898860b37f2c62d11ed05f7b86b79db516b3dd7439577555ba88b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/driver.py": {
+      "bytes": 33065,
+      "sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/fixtures.tsv": {
+      "bytes": 5616,
+      "sha256": "a6e6e5f1658e9b383b5d0ddec38f626ee73e3e613579f63c2e40c475c60a5a62",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/000-continuation.txt": {
+      "bytes": 256,
+      "sha256": "a433abcf92003278cb15f05590eda5f52a54653e4222b335a870d30ef264845e",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/000-prompt.txt": {
+      "bytes": 114,
+      "sha256": "d8e1e8643286f089a9d077d13b956b508cc9b0f8ddbfbaa822b9ee5bfcfbf42d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/001-continuation.txt": {
+      "bytes": 258,
+      "sha256": "fa8e18d33656767f826b8ef3d748a7746e3c434e5690d259435e32c6149a6a63",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/001-prompt.txt": {
+      "bytes": 88,
+      "sha256": "b2a0fb5191b3eaa8ddc5dc0179d1855f2e70026939244b64a9ff53e8e20b7e57",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/002-continuation.txt": {
+      "bytes": 321,
+      "sha256": "70a5d6f7ff04be14f84385cda6aa0391e645795fd2a37be1a20279dab5cda727",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/002-prompt.txt": {
+      "bytes": 77,
+      "sha256": "cc9c5221fd202db38651897123fe8a016b751171ad55ef2c3c069055369f9e10",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/003-continuation.txt": {
+      "bytes": 283,
+      "sha256": "adb79f1316ddbb6e6fedec3b2c14beffb4137ef67e4f59b3fbec0a2594eede7a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/003-prompt.txt": {
+      "bytes": 94,
+      "sha256": "16d00e1834936ced31054c0c7b45afbe70d95fe84a50c0b53097ae74cf6503e8",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/004-continuation.txt": {
+      "bytes": 310,
+      "sha256": "8edf56cfb1c2490cf7f30d6c8a293ed0c15c461df1fe61e04a8af3e6b7199878",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/004-prompt.txt": {
+      "bytes": 92,
+      "sha256": "9552b1e51d0858bfc4f85dc826845fe7676787fadd3bd87a0639cab7b64d789d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/005-continuation.txt": {
+      "bytes": 246,
+      "sha256": "5754f2017a97cbb191251084c2903ddeff2650a5a1aa758a8e3bdc21731c22f5",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/005-prompt.txt": {
+      "bytes": 92,
+      "sha256": "8e2d282cca4757754f6ca4377e10560752c17061f778cf42bb019e6aefa03755",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/006-continuation.txt": {
+      "bytes": 216,
+      "sha256": "a1a04a70beea32f0d761a842a75d560049701ee9e462bcc4533df38e6141a0f7",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/006-prompt.txt": {
+      "bytes": 129,
+      "sha256": "3bc771633e8b72decbff33c2c22f6f832cfa19a9429d21ba086a0efb1ba53980",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/007-continuation.txt": {
+      "bytes": 213,
+      "sha256": "fc260f52161e80a6ea7ad5fcc85993f596aeb900f1bf667148d0e8662dfe5c4b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/007-prompt.txt": {
+      "bytes": 114,
+      "sha256": "069980ebef0283567728c418687e91cf86580cb0892783d09bf1d41226827efc",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/008-continuation.txt": {
+      "bytes": 221,
+      "sha256": "f87ad7bad38526ee8dda21c2f9021145ac8add8660078c302965411b1d044ba4",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/008-prompt.txt": {
+      "bytes": 117,
+      "sha256": "1d98ea7c819f2a1ce198fc4ff3ec9de24962441bc1964753e821348b54f6f7de",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/009-continuation.txt": {
+      "bytes": 340,
+      "sha256": "5433d0e4f8601e543b29a6ee0235a8b88ec1dc4117e97db89e4de166ee0d4b75",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/009-prompt.txt": {
+      "bytes": 104,
+      "sha256": "ba4dde22d1a48306c3b521ceca74365dbdef3503c97fe96abe3efc4de5932043",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/010-continuation.txt": {
+      "bytes": 323,
+      "sha256": "b2a6da8a3620ba2c1d62b78c1be6c22aacd70913487b7e43e43878fd50d5e9aa",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/010-prompt.txt": {
+      "bytes": 81,
+      "sha256": "c8171bff3b73571c59afa0a421de252a000322410d2979ffe5799ef2037fdd0a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/011-continuation.txt": {
+      "bytes": 244,
+      "sha256": "5f3a3adc488dd0cfed33e0c9f898eaa6e688bdd9499d8cdb6d820557c6a9be63",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/011-prompt.txt": {
+      "bytes": 98,
+      "sha256": "16693a5f52a371bcc30281dfc2da58a7f5b0d405223e2f3b0b2297565512a5d8",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/012-continuation.txt": {
+      "bytes": 219,
+      "sha256": "9663bd270f197779864032912db99c244b6e33ad95a3a899ad7f8108436d0317",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/012-prompt.txt": {
+      "bytes": 85,
+      "sha256": "7e9f0b27ebc7bdadc0a9b1eb6562d063ba99d99b7aaf610ebe0c736984386728",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/013-continuation.txt": {
+      "bytes": 325,
+      "sha256": "0094e8b87646075f27d9cd0b14864892a18c645d6ea625adf618b912d3634165",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/013-prompt.txt": {
+      "bytes": 117,
+      "sha256": "56aee7c107e6c8ff1358759e0981c38a37c7fa63a8f2d0c3159302acfc3c20b2",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/014-continuation.txt": {
+      "bytes": 297,
+      "sha256": "6f1ea2b7249a8853bc8f1b2360e8022643349789433aa67099e87778bbc2fd24",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/014-prompt.txt": {
+      "bytes": 94,
+      "sha256": "2eaa5a9b09939897bf22bc9ebd9059642eb3afe1acc1cc137c7a47211acf7393",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/015-continuation.txt": {
+      "bytes": 298,
+      "sha256": "5f25121e650375b8da80d7a483186518c87bd8e59deb38e57db72febba277ca2",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/heldout16/inputs/015-prompt.txt": {
+      "bytes": 102,
+      "sha256": "df704f5ad622440c36f79b410bd695d50d54c1e2b4997cc4a57966aa185f73f6",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/input-identity-proof.json": {
+      "bytes": 1204,
+      "sha256": "0839fb8a7d4fd61cccbe6d65a3ded0fb2b4abe0b7e3104466ea5a2ede54aff71",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/manifest.json": {
+      "bytes": 85102,
+      "sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/argsort.metal": {
+      "bytes": 11174,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/bin.metal": {
+      "bytes": 6580,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/concat.metal": {
+      "bytes": 1932,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/cpy.metal": {
+      "bytes": 10154,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/deepseek4_vision.metal": {
+      "bytes": 7815,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/dense.metal": {
+      "bytes": 113439,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/dsv41.metal": {
+      "bytes": 12508,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/dsv4_hc.metal": {
+      "bytes": 63069,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/dsv4_kv.metal": {
+      "bytes": 22218,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/dsv4_misc.metal": {
+      "bytes": 282139,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/dsv4_rope.metal": {
+      "bytes": 35980,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/flash_attn.metal": {
+      "bytes": 61784,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/get_rows.metal": {
+      "bytes": 6976,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/glm53_bf16.metal": {
+      "bytes": 5466,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/glm53_kda.metal": {
+      "bytes": 13116,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/glm53_vision.metal": {
+      "bytes": 11295,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/glu.metal": {
+      "bytes": 2129,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/moe.metal": {
+      "bytes": 423032,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/norm.metal": {
+      "bytes": 14766,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/qwen4.metal": {
+      "bytes": 232464,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/qwen4_vision.metal": {
+      "bytes": 7402,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/repeat.metal": {
+      "bytes": 1640,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/set_rows.metal": {
+      "bytes": 1909,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/softmax.metal": {
+      "bytes": 7679,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/sum_rows.metal": {
+      "bytes": 2737,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/metal/unary.metal": {
+      "bytes": 10104,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/prepared-command.json": {
+      "bytes": 1042,
+      "sha256": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/pressure/command.json": {
+      "bytes": 938,
+      "sha256": "6165b9a9d8788a81342563f91cbd5652ce2c207637de8edece6451decd64b650",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/pressure/pressure.jsonl": {
+      "bytes": 273121,
+      "sha256": "c0a7ebd7d7e3300e623f57207b0ce5b0c5313e651d764449e1ce5da0b70a76e0",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/pressure/result.json": {
+      "bytes": 52,
+      "sha256": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/raw_helpers.py": {
+      "bytes": 15137,
+      "sha256": "dbeae546e41e6443bff714265b5be64bc2ec4b15b78c0ca8e71afb044a5eb132",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/root-launch-proof.json": {
+      "bytes": 1910,
+      "sha256": "dae59490825ad3027a0e679db9dafaa2116785558ee8bb4f2dae91d780a0c3d7",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/root-preflight-proof.json": {
+      "bytes": 694,
+      "sha256": "efce526a205202bbb61c63e1fd27c993497009297f3abd60064becfe83fd161b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/root-release-proof.json": {
+      "bytes": 303,
+      "sha256": "a2fc29cebc7f593b6436c44471b6b749412111f54d9c6204f19ba2134fa9314c",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-lookup-checked.json": {
+      "bytes": 3236,
+      "sha256": "5704a2ce16495bc6351b37ab9ea27df56ed93c29e404548d6ddab38f20c308ad",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-lookup-command.json": {
+      "bytes": 6693,
+      "sha256": "f58bcab6256a3e753ca7be88061ce7baa9b240f7f35bc964b681fe989440d3b2",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-lookup-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-lookup.csv": {
+      "bytes": 47427,
+      "sha256": "8ea9f6438923e912b20903bca6018ff88d4f4ea3802af388264e6df79d2530ef",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-lookup.log": {
+      "bytes": 4161,
+      "sha256": "df4034077fbbe03eb6b44af021f0913a2d9e239f2db369ed71df869bb457bbb2",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-lookup.stdout": {
+      "bytes": 259,
+      "sha256": "6cc449cf1924c1974d5f96bd16f0d3fce06a19f5c68e7c05475214c9cee930a1",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-native-checked.json": {
+      "bytes": 3228,
+      "sha256": "99368fe82aae0ac206984b73ba0fa93f4b019f97482eb58eb17e78e1855d9a81",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-native-command.json": {
+      "bytes": 6693,
+      "sha256": "37ab538c64a96893651bdf7340ab34bc30ac366db817a702e01af27bea916d62",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-native-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-native.csv": {
+      "bytes": 47426,
+      "sha256": "811e2c831461748f4bb053dd34f70e2c07bbea6f08ae69e44a8d92950216ee91",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-native.log": {
+      "bytes": 4153,
+      "sha256": "8410a753da0432bfc8cff45ae9d85b500914df52d3ffcb990c19f1940ad04d4d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-native.stdout": {
+      "bytes": 259,
+      "sha256": "3b5ec2f09b6f26b256ee89aa8f92901a32cc1a97d6360967c34a82a135061b9e",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-noop-checked.json": {
+      "bytes": 3239,
+      "sha256": "8e3124eedfdaa356be2c038a16f8c274e523067dd2c15ae5def42f4b743b4e70",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-noop-command.json": {
+      "bytes": 6687,
+      "sha256": "0a0c5057c3669742feade158c2b01f9271f85df3cb637f7aa7aa66cadf4311fd",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-noop-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-noop.csv": {
+      "bytes": 47427,
+      "sha256": "caed571a789e7f40aa8ff4fd1b1e11bf1fc527a15962aa8fbbd956fd3322997a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-noop.log": {
+      "bytes": 4167,
+      "sha256": "a237d6a3da385619d3ceb4e87532328064027c2fb9c337e800249387813895e5",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-flag1-noop.stdout": {
+      "bytes": 259,
+      "sha256": "380cb85ab83f18aabf3342ad6b801d63bdfae89d2b55a09a9dc399cfd7f52702",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-native-weights1-checked.json": {
+      "bytes": 3984,
+      "sha256": "cfee32fb98f5bca78502bf60947430b7650b3390622d77e789e801553089168c",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-native-weights1-command.json": {
+      "bytes": 6698,
+      "sha256": "081969dc715c668c824c5ec39d94150be14b990d7d8c4b738d07007447a6768d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-native-weights1-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-native-weights1.csv": {
+      "bytes": 92196,
+      "sha256": "d5afc0aa731a33f5eaaedb779ee1ae72181fd4e1a67d7e2cc389f8623a764724",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-native-weights1.log": {
+      "bytes": 4320,
+      "sha256": "ac174f4ac0cf4522cc198c17cf41da6f75f11be584d156c5dc3a6612d442e066",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-native-weights1.stdout": {
+      "bytes": 331,
+      "sha256": "db1dd62fde4759a0273e716a07ba12e7be9040da402cc648980524cc1d730a93",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-approx0-checked.json": {
+      "bytes": 3980,
+      "sha256": "b57e627c99effc91a9ba9e13ef25c901a14fc5fe6a0a05d84777643d10a61697",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-approx0-command.json": {
+      "bytes": 6690,
+      "sha256": "d2be4b48b1973b0b938bc65cea18278ccc2dfb3e0b13ac79a4225e88c1fbd732",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-approx0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-approx0.csv": {
+      "bytes": 92226,
+      "sha256": "f6acb08844b257f6b19926a09c6282099fd854b345537badbe0b52cde6c70b7b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-approx0.log": {
+      "bytes": 4257,
+      "sha256": "f94a214d3da15621903881da8280e4b6581c45a62975ebecd73af181adbdc4af",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-approx0.stdout": {
+      "bytes": 330,
+      "sha256": "a91410771246b60c145a93fdcaa31c2dbcf67738b26b535f38d205316f69792c",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-native0-checked.json": {
+      "bytes": 2890,
+      "sha256": "667b12f5bf15194ed0af035c37a3de9338873ae32aa392bd6acc183e496916d0",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-native0-command.json": {
+      "bytes": 6424,
+      "sha256": "8b9796c79d7b9661f2d54507441615d3f6fdc39825ba5dbc02cde3ded869fbf3",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-native0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-native0.csv": {
+      "bytes": 47427,
+      "sha256": "cf867e690a2d90a46694438baf710bc909eea5b183535999ec484850b2485033",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-native0.log": {
+      "bytes": 3822,
+      "sha256": "c1b60acffdcd05f7037d6dfd50006586142117ece07e1369a1f3b44bcdf5bcc8",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-new-native0.stdout": {
+      "bytes": 259,
+      "sha256": "db998db1b01167c86c6e39ec42f516cb200198dc092d7ca4e7f8ba9a79d8a936",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-approx0-checked.json": {
+      "bytes": 3980,
+      "sha256": "18fab65962dc79ae9cc7bcd9eb46c98cb397061622a5a2c9c80a813ee58ed301",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-approx0-command.json": {
+      "bytes": 6690,
+      "sha256": "e336cead959379ba0286bebdb2d77ab9752605a30769c60af6912b6371643c40",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-approx0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-approx0.csv": {
+      "bytes": 92226,
+      "sha256": "6eda86fc74ee29128fcb1250cd3e8c1cc564185f55bd50e54da5525da5d961b2",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-approx0.log": {
+      "bytes": 4257,
+      "sha256": "4ce996501044014712bc65ff9ea9f80eb6ed7de008f52286e98435192d55bff4",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-approx0.stdout": {
+      "bytes": 330,
+      "sha256": "9002116f4a27afdfeadc10fdfbc059be84946ebac780e36d4cf3b0560d70a2c4",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-after-checked.json": {
+      "bytes": 2894,
+      "sha256": "6a21dcb3fde7c7f5c0cc695ce5816a9bece971689db21c8beff2c73435fce4ea",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-after-command.json": {
+      "bytes": 6434,
+      "sha256": "28fb2160ee0117ffaa117a37de5fd9cba94c69301eb03322527369afe23090b4",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-after-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-after.csv": {
+      "bytes": 47426,
+      "sha256": "15aced8916e8305c1007b84efe0d17f81fa0164f74725a47dc2d8066ebb36bce",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-after.log": {
+      "bytes": 3822,
+      "sha256": "e334ffb0b09fbc10a1e70a46cb6b4304c468a6bbf50d0505b0c0aa05873678b0",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-after.stdout": {
+      "bytes": 259,
+      "sha256": "e53c3d6f4b8b7ee2cdeec5e9baf6d63b85267d33dcc1d8d36b3df36fef3602bf",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-checked.json": {
+      "bytes": 2889,
+      "sha256": "214d18029c71b1be0cb11b9708d5453fcb22f65aa39acfedf5ad354fded5b993",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-command.json": {
+      "bytes": 6219,
+      "sha256": "1f297c30b062135e53bd09a2a06d0c4097f9a22b84612a4cd0d1229a81e7699d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native.csv": {
+      "bytes": 47427,
+      "sha256": "6e443b1668e32baaf85c2101ad83e8001e00dba074b7795c5b755cd396d29c02",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native.log": {
+      "bytes": 3823,
+      "sha256": "e9b467bbfa36dd3ced2155041f163a59601d2c22ec076c945989e4dcde495ea9",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-old-native.stdout": {
+      "bytes": 259,
+      "sha256": "4080daf05e469dd2f5dcfd8ff82e2d280142b9726e84328365f44abce8746b1f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/calibration16-reference-proof.json": {
+      "bytes": 458,
+      "sha256": "ccda04beee8435da1f204a50041dd8eaeb28bfd3feef7f3e0a4408842fd1969d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-native-weights1-checked.json": {
+      "bytes": 3987,
+      "sha256": "784045857322773681cb3175d4d1ef7a6a4edab44e4fd61efd1e7d9ff4942b6f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-native-weights1-command.json": {
+      "bytes": 6682,
+      "sha256": "2db344e62ed06edc0abc11e72ceba2a24866a04a696904d77df044ed7e0115cf",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-native-weights1-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-native-weights1.csv": {
+      "bytes": 92324,
+      "sha256": "2abd955b7c21f366187e3c677e64ead6679ef311cd689edee68b9a78a83e5571",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-native-weights1.log": {
+      "bytes": 4323,
+      "sha256": "54d148ad077b559c603348a2da93d4947f18d6cb4cd27b0a3eb6ae4fe84a28b8",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-native-weights1.stdout": {
+      "bytes": 332,
+      "sha256": "355404edacaab8ffc7c1b35f4fa8f928295bb3796203e13befb0c464b7ce9f35",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-approx0-checked.json": {
+      "bytes": 3977,
+      "sha256": "e5079f356413680e9c488e37694a532dc4b5d1f06be2dfa73633b5ce93448a19",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-approx0-command.json": {
+      "bytes": 6674,
+      "sha256": "bf6f9488c1661d6968d11e191cab49ac5515d82e6c5fed90192e86da24cee672",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-approx0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-approx0.csv": {
+      "bytes": 92301,
+      "sha256": "dc70316d0ecb4f83ab12799aa2d9b2437cb24a6b07ce45b2bf659aa3b946c126",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-approx0.log": {
+      "bytes": 4256,
+      "sha256": "25bb1593ef175f55ee7eaaea37ec868c7872eb36838577ba1efeb97cfa4227d5",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-approx0.stdout": {
+      "bytes": 332,
+      "sha256": "572391378e200bd0288705427ec7415f947136f15af0c37b59bf2457be44bbf8",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-native0-checked.json": {
+      "bytes": 2887,
+      "sha256": "97ca62fda90f3bb1248057a0b2ec95e1bfa52f332b170fb17a4580c45562585a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-native0-command.json": {
+      "bytes": 6408,
+      "sha256": "1ac71f2692ac968e3d1e00568a5c49f2d00abcf33329fdf95b08a02212555f5b",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-native0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-native0.csv": {
+      "bytes": 47409,
+      "sha256": "1e9312be790bfb773f6c4f759a03c00190474b52de4f3c7601ca7ace2d587c03",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-native0.log": {
+      "bytes": 3822,
+      "sha256": "389996b42d795feddcf0d9f9e0e39c2adcfbcb0295d3d33db6cfd0c664a42166",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-new-native0.stdout": {
+      "bytes": 260,
+      "sha256": "e812b00f0855f8626468542d09f9d422420d554f6462bbbbb7254c16de52c4fc",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-approx0-checked.json": {
+      "bytes": 3978,
+      "sha256": "e93dd77c3207f8f9f9f97d276196ceb1a66ec40b48d73de9530135717079a564",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-approx0-command.json": {
+      "bytes": 6674,
+      "sha256": "941f661fab810dd18c8cb67d6d171666f1c7aa390bfeda93aec2df4f33731184",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-approx0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-approx0.csv": {
+      "bytes": 92300,
+      "sha256": "1ae4dab7136e28867d19514d22cac1b40d96357fcb4790a0f447ba8ad7ebce40",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-approx0.log": {
+      "bytes": 4256,
+      "sha256": "ba1f79c44c7c33c4d667ee6ae24edd9fccc447d8ffb63278c64066daaac2a66f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-approx0.stdout": {
+      "bytes": 332,
+      "sha256": "a48589050bc909ba1898a15d9acdd90cf2aa56071e68cfef333f535c4ff6c8ec",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-after-checked.json": {
+      "bytes": 2892,
+      "sha256": "9e395e32dcd3353da44b08f7b142aa2602d9903a45d149891fca1c452fe2ad38",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-after-command.json": {
+      "bytes": 6418,
+      "sha256": "1c6eb76c4dfebbcc509515b98f0b5cc7fe7c989da7da6df6a4bebe974364bae6",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-after-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-after.csv": {
+      "bytes": 47409,
+      "sha256": "4873b74f11e12ea065a6944eedda87d5f8b4747c7a9febb4644d1cf820aeb194",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-after.log": {
+      "bytes": 3822,
+      "sha256": "12757ea01f5606cb8dc2177bc3922982afa38b28af4a4ebc5509080ad2fd1c09",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-after.stdout": {
+      "bytes": 260,
+      "sha256": "058a3c8329150dbcd6515e7c84fe5e0c250dc9bd5b778e34ef467d25b3490682",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-checked.json": {
+      "bytes": 2886,
+      "sha256": "fd16be86a0bf07d82e369f34e4f893410d48e115558638b16c57b9f622ac0e49",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-command.json": {
+      "bytes": 6207,
+      "sha256": "7892757029cda17c6d6eb208f5d6c5bb7149968808113153c4797a5dc5f6dd2e",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native.csv": {
+      "bytes": 47409,
+      "sha256": "104dae4c07d5a7a4447184c07e08f901298225eef8f38a6c9d40f21e96396f1f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native.log": {
+      "bytes": 3822,
+      "sha256": "1953d33dac2b8cb278a27c96a9fb768bd17ab04b71a7cd4b771857b2e6f1080f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-old-native.stdout": {
+      "bytes": 260,
+      "sha256": "8d275c412fea2b0bd0bcee1da85915b8c5fde502d73da55f877cad865ff5b354",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/heldout16-reference-proof.json": {
+      "bytes": 458,
+      "sha256": "e563d297e62e61bd7fa9d617fe8edd5ccc7d1aad6c41269da954aab08b59256f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/model-identity.json": {
+      "bytes": 193,
+      "sha256": "54fb77dd54ef8c4d692dff920a5554f28a8a0f0954bbb18d491372efcd6fb339",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-approx0-checked.json": {
+      "bytes": 1197,
+      "sha256": "341c70d5f95837d2d93ade84e11de59e8a3a9570ac62ac49437f73a66f8cf4e7",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-approx0-command.json": {
+      "bytes": 6372,
+      "sha256": "36fdbb06d6b9ac468d89abbc4c01c0a26e44f02f055b254b1ae9e7467bd89837",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-approx0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-approx0.log": {
+      "bytes": 3596,
+      "sha256": "fe85955619809349bf597f884f3b6c93b2e4784ead7a359224384a77fddf34b6",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-approx0.stdout": {
+      "bytes": 242,
+      "sha256": "3767631674fbc8536771a2f2ad2db17c4c3baa09e151cae9de196a167e9c9e97",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-native0-checked.json": {
+      "bytes": 806,
+      "sha256": "5c32433b26867d2ed16963c14a79be6768b9f72f34f5e05d925db274023d5c1e",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-native0-command.json": {
+      "bytes": 6106,
+      "sha256": "09f7520f32794f26a8340b4d9e3593b6bdbaf9700465fc9bf2623ecb233e176a",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-native0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-native0.log": {
+      "bytes": 3298,
+      "sha256": "e14320a554328d16a5807b58a42e060fadf8289f46a4fabfd851779096f04606",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-new-native0.stdout": {
+      "bytes": 242,
+      "sha256": "f85c0360949c9800d6eb648b0ff307eac3e0675cafaf514b2c4d537ff76d97d6",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-approx0-checked.json": {
+      "bytes": 1197,
+      "sha256": "238bde63409309ecace914311d4ef4102ba89df4bec5aea3ad12eff431e3ab33",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-approx0-command.json": {
+      "bytes": 6372,
+      "sha256": "599439e503dff758b2155005771fad9d758b7fa5fbc677e268f8ccd9ff52fc6c",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-approx0-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-approx0.log": {
+      "bytes": 3596,
+      "sha256": "f1cc881942884a58580b32c595be7ab375cb15f809ff739bde49ec3e3559cc5f",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-approx0.stdout": {
+      "bytes": 242,
+      "sha256": "1076dc5bb94d7452167872d4a63a4c38e53286231fc6ad6cc37532345aad657d",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-native-checked.json": {
+      "bytes": 805,
+      "sha256": "7d28b2831fbb796722e976ed21df1bae81c9a47da0e3ec065caee0022d3a9839",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-native-command.json": {
+      "bytes": 6104,
+      "sha256": "e09fe37231602ed301da30cb4009a7555a42b0883272cf7bb0f263da11eeec40",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-native-exit.json": {
+      "bytes": 22,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-native.log": {
+      "bytes": 3298,
+      "sha256": "e72f185760fc023374e57488fb74c7948034e6c084bcfc6967b909f17461a380",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/state-old-native.stdout": {
+      "bytes": 242,
+      "sha256": "b6436510c84e1ecd034e74411f9ddfdbad558b9cbc5ca5c6c88880e452274fab",
+      "mode_octal": "0o644"
+    },
+    "prepared-and-run/run/summary.json": {
+      "bytes": 66189,
+      "sha256": "c143efdd78fc352a3a6a6e0b76fac82f571fa56c58355103bd08be6d4b98ea64",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-manifest.json": {
+      "bytes": 70382,
+      "sha256": "e2cfda6426c8ec7c371ec18a12dff60932c1c2f5b166a7ba5b5ccafdc06aa91f",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-only.py": {
+      "bytes": 4794,
+      "sha256": "4569fe87d925768639b51f643beaf65fb62331c4ff73ccafecd60361c8b6a861",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-result.json": {
+      "bytes": 46658,
+      "sha256": "42602811cc52af9165e0e3d71cc23d3a8c95b698bd84547af78627825ab912a9",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-0.json": {
+      "bytes": 5108,
+      "sha256": "a1fe400025f12b74edbe16c5c168dffa6f8c3a94fd685df253de84d38e42984e",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-0.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-1.json": {
+      "bytes": 6151,
+      "sha256": "052b65f84f70d909d14250b3bba3b46c888fc9168f32b6f93da9eb979f49b89b",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-1.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-2.json": {
+      "bytes": 4487,
+      "sha256": "f12a14380ac1de14fb6ffe5c31021856d338b6abc980fc1c7b6f74be85fe3b7d",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-2.log": {
+      "bytes": 28,
+      "sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-3.json": {
+      "bytes": 5108,
+      "sha256": "88c67787814c14c01cb06c2055cea9b26f197fa994fcd9a13156dfbf775fe93f",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-3.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-4.json": {
+      "bytes": 6149,
+      "sha256": "51d2b5c5c0f4567384d26a34f60fa1a9508935106165949a3580546ab0c3b865",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-4.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-5.json": {
+      "bytes": 4486,
+      "sha256": "c5038926d6b455b6e8e483e0899503f99866bc11b0b42e08d913a512d5d4d346",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-5.log": {
+      "bytes": 28,
+      "sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-6.json": {
+      "bytes": 6194,
+      "sha256": "dc24820bbfccd3731061a29db2267d4f6c5dc3460732ac16ce47ef3394a29e47",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-6.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-7.json": {
+      "bytes": 6194,
+      "sha256": "02b5ff88419ecc6242287a391eb47d05b758ce24d0ac42b2b8ead9fd4290c334",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/build-step-7.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-pass-v5/index.json": {
+      "bytes": 1945,
+      "sha256": "25af39db134cc08c10be4ccc30a6d23b81bc70042346ae08a39d25ff020bb862",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v3/build-plan.json": {
+      "bytes": 155863,
+      "sha256": "cd0bc3bc3cfcead432a3479835f32bffa5aba0b2909eeb21b0bef69106094df9",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v3/index.json": {
+      "bytes": 712,
+      "sha256": "89b5a45f7e984d58689a720938d5c7d9e6266f05fb8c61f42bb3eb2a7aac9646",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v3/input-identity-proof.json": {
+      "bytes": 1204,
+      "sha256": "0839fb8a7d4fd61cccbe6d65a3ded0fb2b4abe0b7e3104466ea5a2ede54aff71",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v3/planning-refusal-v1.json": {
+      "bytes": 246,
+      "sha256": "eb2063c2377b04095ef70c0cfbd52c7823f18b65673004d94203be98119c34f1",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v3/proof.json": {
+      "bytes": 492,
+      "sha256": "7a2e1f22f1e4df4ad83a8a931af3ce25695eb478e37ca70951a4769f4a9187c1",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v5/build-plan-v4.json": {
+      "bytes": 157270,
+      "sha256": "0af3bd79ba604ff4f9d7eccdba9003b0263bc8685e043cf4a3819c559446da9e",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v5/build-plan-v5.json": {
+      "bytes": 159457,
+      "sha256": "f798a1a977f61b7fc7a0f023da452e91f41a09516614e097e361e6bdd925638f",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v5/index.json": {
+      "bytes": 357,
+      "sha256": "a65af074a2adf9f2c00ae007b2cf89bd0f2fff37b52cf81117a50165d58ec520",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/build-plan-v5/proof.json": {
+      "bytes": 1853,
+      "sha256": "7c4bb9d36c0c1728bfdc9ff75087b474c1cdcbed3fcea8ddcec0ff169d9c0ff7",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/cpu-pass-v3/actual-functions-mock.c": {
+      "bytes": 41607,
+      "sha256": "d9c16abd324d3f35d4efadf99ac96493e4df8e966f6aac897e969bfff92ccf56",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/cpu-pass-v3/asan-ubsan-result.json": {
+      "bytes": 1221,
+      "sha256": "ec99a223af048e2df88e2e28a185a9d19cb7e7626399273b2e5cb270eb3f8d91",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/cpu-pass-v3/asan-ubsan.log": {
+      "bytes": 549,
+      "sha256": "5c3fcaa4a9f32f21eb49d4ed3263a95056af9f0b93e97d453a8bf44491576f1a",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/cpu-pass-v3/index.json": {
+      "bytes": 581,
+      "sha256": "f36f8217160c497294e99f0b45a647008d2d99c34a09ab594727188d063d52c4",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/cpu-pass-v3/production-result.json": {
+      "bytes": 1133,
+      "sha256": "4e58a5e438262ebc6e10ef568d948e579811546505ed8b508e991df4524d8519",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/cpu-pass-v3/production.log": {
+      "bytes": 549,
+      "sha256": "52d07b7ea4d2d6f5978a06dbdcef4317b4e49d027eb2b478e6430ad38509446f",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/cpu-pass-v3/proof.json": {
+      "bytes": 975,
+      "sha256": "a4c997f252f69b22c6396bafdfe241efedb2b04467653c48a0cddf29e9920f7c",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/f2-first-failures/diagnostic-result.json": {
+      "bytes": 361,
+      "sha256": "64ed16435967dd9f7f243482de76443a816b71d17bf7963d7601a761bd4f6f6a",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/f2-first-failures/diagnostic.log": {
+      "bytes": 1972,
+      "sha256": "14c86f67eb2fc52fb97c47e4a714a217023f11e6164f9342673e1bd65b934772",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/f2-first-failures/index.json": {
+      "bytes": 706,
+      "sha256": "4aedf302f81c12c9cfe34bb30d8b98946ee10af21ad74cc807602244715ba35a",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/f2-first-failures/production-result.json": {
+      "bytes": 432,
+      "sha256": "058f1e5b6f28f40a35451b9a5a1af33705b408c64bcba9364a9e8a616d564726",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/f2-first-failures/production.log": {
+      "bytes": 1540,
+      "sha256": "bf790b35b8ed20218f023c512224b5cb206b7308d3d14bc2b8abd14e3214dc15",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/f2-first-failures/proof.json": {
+      "bytes": 1068,
+      "sha256": "4c90d0397019d26cc03f88d329652797854ac8227da1995b4393302188f41a01",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/f2-first-failures/typed-probability-diagnostic-result.json": {
+      "bytes": 428,
+      "sha256": "a8cf4874b46f180d537ce6a3c8de5809cf1ea3e94e25435d5cfc17156eac0754",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/f2-first-failures/typed-probability-diagnostic.log": {
+      "bytes": 1972,
+      "sha256": "18a8c62fb730f95d223409d422c838df007c8f73d42520775562e2efd9ce2b87",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepare-v1/prepare_resident_native_weights_study.py": {
+      "bytes": 32881,
+      "sha256": "94507d90aea2723deb15b6918cc56c0fd24af61536e5b9780719cc5308c080e3",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepare-v1/proof.json": {
+      "bytes": 645,
+      "sha256": "f67b1216efbbc77d42482ffcbda9d6fa23d24f5113a12324ce942e50f72cf9c5",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepare-v1/test_resident_native_weights_study.py": {
+      "bytes": 15177,
+      "sha256": "2a1ff492c6b4db6ed2566ef1676a1e6799e1c9042252c0f7d3449b667697f6ba",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepare-v1/tests.log": {
+      "bytes": 2197,
+      "sha256": "ab0cb6bb0266a844c4dce6a837090ee83c01e754e718c00413b51677f52e9692",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepared-v2/cpu-preflight-proof.json": {
+      "bytes": 1165,
+      "sha256": "dd6f7079887898860b37f2c62d11ed05f7b86b79db516b3dd7439577555ba88b",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepared-v2/index.json": {
+      "bytes": 591,
+      "sha256": "8c2592cf9738109c328bb89baab2fd2254cbf5e694eba47d9291478523e9c3f3",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepared-v2/manifest.json": {
+      "bytes": 85102,
+      "sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepared-v2/prepare_resident_native_weights_study.py": {
+      "bytes": 33065,
+      "sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepared-v2/prepared-command.json": {
+      "bytes": 1042,
+      "sha256": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepared-v2/test_resident_native_weights_study.py": {
+      "bytes": 15410,
+      "sha256": "a2973266c8a43d6f10ae8ca57c8810197cfe567b1603c617982f7439a3047cde",
+      "mode_octal": "0o644"
+    },
+    "prior-evidence/study-prepared-v2/tests.log": {
+      "bytes": 2197,
+      "sha256": "ab0cb6bb0266a844c4dce6a837090ee83c01e754e718c00413b51677f52e9692",
+      "mode_octal": "0o644"
+    },
+    "retained-large-files.json": {
+      "bytes": 15779,
+      "sha256": "9f124203499396701991e744189246f3cbb58106c7280b3ded2e60e7c4be1c62",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4.c": {
+      "bytes": 3924430,
+      "sha256": "e2626fa0661728037c5752d1730754f6bcc039c92b339a047bc78435b07b41d0",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4.h": {
+      "bytes": 35802,
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_deepseek41_gpu.h": {
+      "bytes": 7317,
+      "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_distributed.h": {
+      "bytes": 3782,
+      "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_engram.h": {
+      "bytes": 2496,
+      "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_gpu.h": {
+      "bytes": 152618,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_gpu_mgpu.h": {
+      "bytes": 10742,
+      "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_gpu_tp.h": {
+      "bytes": 2678,
+      "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_image.h": {
+      "bytes": 4504,
+      "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_layer_pack.h": {
+      "bytes": 2838,
+      "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_linux_memory.h": {
+      "bytes": 1168,
+      "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_qwen4_unicode.inc": {
+      "bytes": 24985,
+      "sha256": "7ba13d74558dd013f38f691908bddcddb81c7874a5ab582e5bbc865764617b61",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_qwen4_vision.h": {
+      "bytes": 666,
+      "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_resident_native_weights.h": {
+      "bytes": 1189,
+      "sha256": "abdc7b52f270b16b198257a835c6682a6f6da355050ed7e55adf75c2d742907b",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_resident_route.h": {
+      "bytes": 14647,
+      "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_ssd.h": {
+      "bytes": 1349,
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_streaming_hotlist.inc": {
+      "bytes": 192470,
+      "sha256": "f531a6ce780abd31eeabafb865221f8407965f358184850996a5e010a6386d92",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_streaming_hotlist_glm52.inc": {
+      "bytes": 94282,
+      "sha256": "f90296ccf162cbf4d438a6e44c129b0367683ba9cf72a54621ca14b2ad5c2cb8",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_suffix_layout.h": {
+      "bytes": 1251,
+      "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_tool_text.h": {
+      "bytes": 1755,
+      "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/new8a47/ds4_tp.h": {
+      "bytes": 11344,
+      "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4.c": {
+      "bytes": 3916709,
+      "sha256": "fa2f155d8051b3885da59a325031cc811144a150d1f0ae27e84b65f4c1b974c5",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4.h": {
+      "bytes": 35802,
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_deepseek41_gpu.h": {
+      "bytes": 7317,
+      "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_distributed.h": {
+      "bytes": 3782,
+      "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_engram.h": {
+      "bytes": 2496,
+      "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_gpu.h": {
+      "bytes": 152618,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_gpu_mgpu.h": {
+      "bytes": 10742,
+      "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_gpu_tp.h": {
+      "bytes": 2678,
+      "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_image.h": {
+      "bytes": 4504,
+      "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_layer_pack.h": {
+      "bytes": 2838,
+      "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_linux_memory.h": {
+      "bytes": 1168,
+      "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_qwen4_unicode.inc": {
+      "bytes": 24985,
+      "sha256": "7ba13d74558dd013f38f691908bddcddb81c7874a5ab582e5bbc865764617b61",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_qwen4_vision.h": {
+      "bytes": 666,
+      "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_resident_route.h": {
+      "bytes": 14647,
+      "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_ssd.h": {
+      "bytes": 1349,
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_streaming_hotlist.inc": {
+      "bytes": 192470,
+      "sha256": "f531a6ce780abd31eeabafb865221f8407965f358184850996a5e010a6386d92",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_streaming_hotlist_glm52.inc": {
+      "bytes": 94282,
+      "sha256": "f90296ccf162cbf4d438a6e44c129b0367683ba9cf72a54621ca14b2ad5c2cb8",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_suffix_layout.h": {
+      "bytes": 1251,
+      "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_tool_text.h": {
+      "bytes": 1755,
+      "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+      "mode_octal": "0o644"
+    },
+    "runtime-source/old7c6e/ds4_tp.h": {
+      "bytes": 11344,
+      "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+      "mode_octal": "0o644"
+    }
+  },
+  "physical_directories_including_hidden": [
+    "analysis-source",
+    "prepared-and-run",
+    "prepared-and-run/__pycache__",
+    "prepared-and-run/calibration16",
+    "prepared-and-run/calibration16/inputs",
+    "prepared-and-run/heldout16",
+    "prepared-and-run/heldout16/inputs",
+    "prepared-and-run/metal",
+    "prepared-and-run/pressure",
+    "prepared-and-run/run",
+    "prior-evidence",
+    "prior-evidence/build-pass-v5",
+    "prior-evidence/build-plan-v3",
+    "prior-evidence/build-plan-v5",
+    "prior-evidence/cpu-pass-v3",
+    "prior-evidence/f2-first-failures",
+    "prior-evidence/study-prepare-v1",
+    "prior-evidence/study-prepared-v2",
+    "runtime-source",
+    "runtime-source/new8a47",
+    "runtime-source/old7c6e"
+  ],
+  "self_excluded": "archive-manifest.json",
+  "expected_tracked_files": [
+    ".gitignore",
+    "analysis-source/archive_resident_native_weights_study.py",
+    "analysis-source/prepare_resident_native_weights_study.py",
+    "analysis-source/test_resident_native_weights_study.py",
+    "archive-manifest.json",
+    "compact-summary.json",
+    "prepared-and-run/__pycache__/driver.cpython-314.pyc",
+    "prepared-and-run/__pycache__/raw_helpers.cpython-314.pyc",
+    "prepared-and-run/build-manifest.json",
+    "prepared-and-run/build-plan.json",
+    "prepared-and-run/calibration16/fixtures.tsv",
+    "prepared-and-run/calibration16/inputs/000-continuation.txt",
+    "prepared-and-run/calibration16/inputs/000-prompt.txt",
+    "prepared-and-run/calibration16/inputs/001-continuation.txt",
+    "prepared-and-run/calibration16/inputs/001-prompt.txt",
+    "prepared-and-run/calibration16/inputs/002-continuation.txt",
+    "prepared-and-run/calibration16/inputs/002-prompt.txt",
+    "prepared-and-run/calibration16/inputs/003-continuation.txt",
+    "prepared-and-run/calibration16/inputs/003-prompt.txt",
+    "prepared-and-run/calibration16/inputs/004-continuation.txt",
+    "prepared-and-run/calibration16/inputs/004-prompt.txt",
+    "prepared-and-run/calibration16/inputs/005-continuation.txt",
+    "prepared-and-run/calibration16/inputs/005-prompt.txt",
+    "prepared-and-run/calibration16/inputs/006-continuation.txt",
+    "prepared-and-run/calibration16/inputs/006-prompt.txt",
+    "prepared-and-run/calibration16/inputs/007-continuation.txt",
+    "prepared-and-run/calibration16/inputs/007-prompt.txt",
+    "prepared-and-run/calibration16/inputs/008-continuation.txt",
+    "prepared-and-run/calibration16/inputs/008-prompt.txt",
+    "prepared-and-run/calibration16/inputs/009-continuation.txt",
+    "prepared-and-run/calibration16/inputs/009-prompt.txt",
+    "prepared-and-run/calibration16/inputs/010-continuation.txt",
+    "prepared-and-run/calibration16/inputs/010-prompt.txt",
+    "prepared-and-run/calibration16/inputs/011-continuation.txt",
+    "prepared-and-run/calibration16/inputs/011-prompt.txt",
+    "prepared-and-run/calibration16/inputs/012-continuation.txt",
+    "prepared-and-run/calibration16/inputs/012-prompt.txt",
+    "prepared-and-run/calibration16/inputs/013-continuation.txt",
+    "prepared-and-run/calibration16/inputs/013-prompt.txt",
+    "prepared-and-run/calibration16/inputs/014-continuation.txt",
+    "prepared-and-run/calibration16/inputs/014-prompt.txt",
+    "prepared-and-run/calibration16/inputs/015-continuation.txt",
+    "prepared-and-run/calibration16/inputs/015-prompt.txt",
+    "prepared-and-run/cpu-preflight-proof.json",
+    "prepared-and-run/driver.py",
+    "prepared-and-run/heldout16/fixtures.tsv",
+    "prepared-and-run/heldout16/inputs/000-continuation.txt",
+    "prepared-and-run/heldout16/inputs/000-prompt.txt",
+    "prepared-and-run/heldout16/inputs/001-continuation.txt",
+    "prepared-and-run/heldout16/inputs/001-prompt.txt",
+    "prepared-and-run/heldout16/inputs/002-continuation.txt",
+    "prepared-and-run/heldout16/inputs/002-prompt.txt",
+    "prepared-and-run/heldout16/inputs/003-continuation.txt",
+    "prepared-and-run/heldout16/inputs/003-prompt.txt",
+    "prepared-and-run/heldout16/inputs/004-continuation.txt",
+    "prepared-and-run/heldout16/inputs/004-prompt.txt",
+    "prepared-and-run/heldout16/inputs/005-continuation.txt",
+    "prepared-and-run/heldout16/inputs/005-prompt.txt",
+    "prepared-and-run/heldout16/inputs/006-continuation.txt",
+    "prepared-and-run/heldout16/inputs/006-prompt.txt",
+    "prepared-and-run/heldout16/inputs/007-continuation.txt",
+    "prepared-and-run/heldout16/inputs/007-prompt.txt",
+    "prepared-and-run/heldout16/inputs/008-continuation.txt",
+    "prepared-and-run/heldout16/inputs/008-prompt.txt",
+    "prepared-and-run/heldout16/inputs/009-continuation.txt",
+    "prepared-and-run/heldout16/inputs/009-prompt.txt",
+    "prepared-and-run/heldout16/inputs/010-continuation.txt",
+    "prepared-and-run/heldout16/inputs/010-prompt.txt",
+    "prepared-and-run/heldout16/inputs/011-continuation.txt",
+    "prepared-and-run/heldout16/inputs/011-prompt.txt",
+    "prepared-and-run/heldout16/inputs/012-continuation.txt",
+    "prepared-and-run/heldout16/inputs/012-prompt.txt",
+    "prepared-and-run/heldout16/inputs/013-continuation.txt",
+    "prepared-and-run/heldout16/inputs/013-prompt.txt",
+    "prepared-and-run/heldout16/inputs/014-continuation.txt",
+    "prepared-and-run/heldout16/inputs/014-prompt.txt",
+    "prepared-and-run/heldout16/inputs/015-continuation.txt",
+    "prepared-and-run/heldout16/inputs/015-prompt.txt",
+    "prepared-and-run/input-identity-proof.json",
+    "prepared-and-run/manifest.json",
+    "prepared-and-run/metal/argsort.metal",
+    "prepared-and-run/metal/bin.metal",
+    "prepared-and-run/metal/concat.metal",
+    "prepared-and-run/metal/cpy.metal",
+    "prepared-and-run/metal/deepseek4_vision.metal",
+    "prepared-and-run/metal/dense.metal",
+    "prepared-and-run/metal/dsv41.metal",
+    "prepared-and-run/metal/dsv4_hc.metal",
+    "prepared-and-run/metal/dsv4_kv.metal",
+    "prepared-and-run/metal/dsv4_misc.metal",
+    "prepared-and-run/metal/dsv4_rope.metal",
+    "prepared-and-run/metal/flash_attn.metal",
+    "prepared-and-run/metal/get_rows.metal",
+    "prepared-and-run/metal/glm53_bf16.metal",
+    "prepared-and-run/metal/glm53_kda.metal",
+    "prepared-and-run/metal/glm53_vision.metal",
+    "prepared-and-run/metal/glu.metal",
+    "prepared-and-run/metal/moe.metal",
+    "prepared-and-run/metal/norm.metal",
+    "prepared-and-run/metal/qwen4.metal",
+    "prepared-and-run/metal/qwen4_vision.metal",
+    "prepared-and-run/metal/repeat.metal",
+    "prepared-and-run/metal/set_rows.metal",
+    "prepared-and-run/metal/softmax.metal",
+    "prepared-and-run/metal/sum_rows.metal",
+    "prepared-and-run/metal/unary.metal",
+    "prepared-and-run/prepared-command.json",
+    "prepared-and-run/pressure/command.json",
+    "prepared-and-run/pressure/pressure.jsonl",
+    "prepared-and-run/pressure/result.json",
+    "prepared-and-run/raw_helpers.py",
+    "prepared-and-run/root-launch-proof.json",
+    "prepared-and-run/root-preflight-proof.json",
+    "prepared-and-run/root-release-proof.json",
+    "prepared-and-run/run/calibration16-flag1-lookup-checked.json",
+    "prepared-and-run/run/calibration16-flag1-lookup-command.json",
+    "prepared-and-run/run/calibration16-flag1-lookup-exit.json",
+    "prepared-and-run/run/calibration16-flag1-lookup.csv",
+    "prepared-and-run/run/calibration16-flag1-lookup.log",
+    "prepared-and-run/run/calibration16-flag1-lookup.stdout",
+    "prepared-and-run/run/calibration16-flag1-native-checked.json",
+    "prepared-and-run/run/calibration16-flag1-native-command.json",
+    "prepared-and-run/run/calibration16-flag1-native-exit.json",
+    "prepared-and-run/run/calibration16-flag1-native.csv",
+    "prepared-and-run/run/calibration16-flag1-native.log",
+    "prepared-and-run/run/calibration16-flag1-native.stdout",
+    "prepared-and-run/run/calibration16-flag1-noop-checked.json",
+    "prepared-and-run/run/calibration16-flag1-noop-command.json",
+    "prepared-and-run/run/calibration16-flag1-noop-exit.json",
+    "prepared-and-run/run/calibration16-flag1-noop.csv",
+    "prepared-and-run/run/calibration16-flag1-noop.log",
+    "prepared-and-run/run/calibration16-flag1-noop.stdout",
+    "prepared-and-run/run/calibration16-native-weights1-checked.json",
+    "prepared-and-run/run/calibration16-native-weights1-command.json",
+    "prepared-and-run/run/calibration16-native-weights1-exit.json",
+    "prepared-and-run/run/calibration16-native-weights1.csv",
+    "prepared-and-run/run/calibration16-native-weights1.log",
+    "prepared-and-run/run/calibration16-native-weights1.stdout",
+    "prepared-and-run/run/calibration16-new-approx0-checked.json",
+    "prepared-and-run/run/calibration16-new-approx0-command.json",
+    "prepared-and-run/run/calibration16-new-approx0-exit.json",
+    "prepared-and-run/run/calibration16-new-approx0.csv",
+    "prepared-and-run/run/calibration16-new-approx0.log",
+    "prepared-and-run/run/calibration16-new-approx0.stdout",
+    "prepared-and-run/run/calibration16-new-native0-checked.json",
+    "prepared-and-run/run/calibration16-new-native0-command.json",
+    "prepared-and-run/run/calibration16-new-native0-exit.json",
+    "prepared-and-run/run/calibration16-new-native0.csv",
+    "prepared-and-run/run/calibration16-new-native0.log",
+    "prepared-and-run/run/calibration16-new-native0.stdout",
+    "prepared-and-run/run/calibration16-old-approx0-checked.json",
+    "prepared-and-run/run/calibration16-old-approx0-command.json",
+    "prepared-and-run/run/calibration16-old-approx0-exit.json",
+    "prepared-and-run/run/calibration16-old-approx0.csv",
+    "prepared-and-run/run/calibration16-old-approx0.log",
+    "prepared-and-run/run/calibration16-old-approx0.stdout",
+    "prepared-and-run/run/calibration16-old-native-after-checked.json",
+    "prepared-and-run/run/calibration16-old-native-after-command.json",
+    "prepared-and-run/run/calibration16-old-native-after-exit.json",
+    "prepared-and-run/run/calibration16-old-native-after.csv",
+    "prepared-and-run/run/calibration16-old-native-after.log",
+    "prepared-and-run/run/calibration16-old-native-after.stdout",
+    "prepared-and-run/run/calibration16-old-native-checked.json",
+    "prepared-and-run/run/calibration16-old-native-command.json",
+    "prepared-and-run/run/calibration16-old-native-exit.json",
+    "prepared-and-run/run/calibration16-old-native.csv",
+    "prepared-and-run/run/calibration16-old-native.log",
+    "prepared-and-run/run/calibration16-old-native.stdout",
+    "prepared-and-run/run/calibration16-reference-proof.json",
+    "prepared-and-run/run/heldout16-native-weights1-checked.json",
+    "prepared-and-run/run/heldout16-native-weights1-command.json",
+    "prepared-and-run/run/heldout16-native-weights1-exit.json",
+    "prepared-and-run/run/heldout16-native-weights1.csv",
+    "prepared-and-run/run/heldout16-native-weights1.log",
+    "prepared-and-run/run/heldout16-native-weights1.stdout",
+    "prepared-and-run/run/heldout16-new-approx0-checked.json",
+    "prepared-and-run/run/heldout16-new-approx0-command.json",
+    "prepared-and-run/run/heldout16-new-approx0-exit.json",
+    "prepared-and-run/run/heldout16-new-approx0.csv",
+    "prepared-and-run/run/heldout16-new-approx0.log",
+    "prepared-and-run/run/heldout16-new-approx0.stdout",
+    "prepared-and-run/run/heldout16-new-native0-checked.json",
+    "prepared-and-run/run/heldout16-new-native0-command.json",
+    "prepared-and-run/run/heldout16-new-native0-exit.json",
+    "prepared-and-run/run/heldout16-new-native0.csv",
+    "prepared-and-run/run/heldout16-new-native0.log",
+    "prepared-and-run/run/heldout16-new-native0.stdout",
+    "prepared-and-run/run/heldout16-old-approx0-checked.json",
+    "prepared-and-run/run/heldout16-old-approx0-command.json",
+    "prepared-and-run/run/heldout16-old-approx0-exit.json",
+    "prepared-and-run/run/heldout16-old-approx0.csv",
+    "prepared-and-run/run/heldout16-old-approx0.log",
+    "prepared-and-run/run/heldout16-old-approx0.stdout",
+    "prepared-and-run/run/heldout16-old-native-after-checked.json",
+    "prepared-and-run/run/heldout16-old-native-after-command.json",
+    "prepared-and-run/run/heldout16-old-native-after-exit.json",
+    "prepared-and-run/run/heldout16-old-native-after.csv",
+    "prepared-and-run/run/heldout16-old-native-after.log",
+    "prepared-and-run/run/heldout16-old-native-after.stdout",
+    "prepared-and-run/run/heldout16-old-native-checked.json",
+    "prepared-and-run/run/heldout16-old-native-command.json",
+    "prepared-and-run/run/heldout16-old-native-exit.json",
+    "prepared-and-run/run/heldout16-old-native.csv",
+    "prepared-and-run/run/heldout16-old-native.log",
+    "prepared-and-run/run/heldout16-old-native.stdout",
+    "prepared-and-run/run/heldout16-reference-proof.json",
+    "prepared-and-run/run/model-identity.json",
+    "prepared-and-run/run/state-new-approx0-checked.json",
+    "prepared-and-run/run/state-new-approx0-command.json",
+    "prepared-and-run/run/state-new-approx0-exit.json",
+    "prepared-and-run/run/state-new-approx0.log",
+    "prepared-and-run/run/state-new-approx0.stdout",
+    "prepared-and-run/run/state-new-native0-checked.json",
+    "prepared-and-run/run/state-new-native0-command.json",
+    "prepared-and-run/run/state-new-native0-exit.json",
+    "prepared-and-run/run/state-new-native0.log",
+    "prepared-and-run/run/state-new-native0.stdout",
+    "prepared-and-run/run/state-old-approx0-checked.json",
+    "prepared-and-run/run/state-old-approx0-command.json",
+    "prepared-and-run/run/state-old-approx0-exit.json",
+    "prepared-and-run/run/state-old-approx0.log",
+    "prepared-and-run/run/state-old-approx0.stdout",
+    "prepared-and-run/run/state-old-native-checked.json",
+    "prepared-and-run/run/state-old-native-command.json",
+    "prepared-and-run/run/state-old-native-exit.json",
+    "prepared-and-run/run/state-old-native.log",
+    "prepared-and-run/run/state-old-native.stdout",
+    "prepared-and-run/run/summary.json",
+    "prior-evidence/build-pass-v5/build-manifest.json",
+    "prior-evidence/build-pass-v5/build-only.py",
+    "prior-evidence/build-pass-v5/build-result.json",
+    "prior-evidence/build-pass-v5/build-step-0.json",
+    "prior-evidence/build-pass-v5/build-step-0.log",
+    "prior-evidence/build-pass-v5/build-step-1.json",
+    "prior-evidence/build-pass-v5/build-step-1.log",
+    "prior-evidence/build-pass-v5/build-step-2.json",
+    "prior-evidence/build-pass-v5/build-step-2.log",
+    "prior-evidence/build-pass-v5/build-step-3.json",
+    "prior-evidence/build-pass-v5/build-step-3.log",
+    "prior-evidence/build-pass-v5/build-step-4.json",
+    "prior-evidence/build-pass-v5/build-step-4.log",
+    "prior-evidence/build-pass-v5/build-step-5.json",
+    "prior-evidence/build-pass-v5/build-step-5.log",
+    "prior-evidence/build-pass-v5/build-step-6.json",
+    "prior-evidence/build-pass-v5/build-step-6.log",
+    "prior-evidence/build-pass-v5/build-step-7.json",
+    "prior-evidence/build-pass-v5/build-step-7.log",
+    "prior-evidence/build-pass-v5/index.json",
+    "prior-evidence/build-plan-v3/build-plan.json",
+    "prior-evidence/build-plan-v3/index.json",
+    "prior-evidence/build-plan-v3/input-identity-proof.json",
+    "prior-evidence/build-plan-v3/planning-refusal-v1.json",
+    "prior-evidence/build-plan-v3/proof.json",
+    "prior-evidence/build-plan-v5/build-plan-v4.json",
+    "prior-evidence/build-plan-v5/build-plan-v5.json",
+    "prior-evidence/build-plan-v5/index.json",
+    "prior-evidence/build-plan-v5/proof.json",
+    "prior-evidence/cpu-pass-v3/actual-functions-mock.c",
+    "prior-evidence/cpu-pass-v3/asan-ubsan-result.json",
+    "prior-evidence/cpu-pass-v3/asan-ubsan.log",
+    "prior-evidence/cpu-pass-v3/index.json",
+    "prior-evidence/cpu-pass-v3/production-result.json",
+    "prior-evidence/cpu-pass-v3/production.log",
+    "prior-evidence/cpu-pass-v3/proof.json",
+    "prior-evidence/f2-first-failures/diagnostic-result.json",
+    "prior-evidence/f2-first-failures/diagnostic.log",
+    "prior-evidence/f2-first-failures/index.json",
+    "prior-evidence/f2-first-failures/production-result.json",
+    "prior-evidence/f2-first-failures/production.log",
+    "prior-evidence/f2-first-failures/proof.json",
+    "prior-evidence/f2-first-failures/typed-probability-diagnostic-result.json",
+    "prior-evidence/f2-first-failures/typed-probability-diagnostic.log",
+    "prior-evidence/study-prepare-v1/prepare_resident_native_weights_study.py",
+    "prior-evidence/study-prepare-v1/proof.json",
+    "prior-evidence/study-prepare-v1/test_resident_native_weights_study.py",
+    "prior-evidence/study-prepare-v1/tests.log",
+    "prior-evidence/study-prepared-v2/cpu-preflight-proof.json",
+    "prior-evidence/study-prepared-v2/index.json",
+    "prior-evidence/study-prepared-v2/manifest.json",
+    "prior-evidence/study-prepared-v2/prepare_resident_native_weights_study.py",
+    "prior-evidence/study-prepared-v2/prepared-command.json",
+    "prior-evidence/study-prepared-v2/test_resident_native_weights_study.py",
+    "prior-evidence/study-prepared-v2/tests.log",
+    "retained-large-files.json",
+    "runtime-source/new8a47/ds4.c",
+    "runtime-source/new8a47/ds4.h",
+    "runtime-source/new8a47/ds4_deepseek41_gpu.h",
+    "runtime-source/new8a47/ds4_distributed.h",
+    "runtime-source/new8a47/ds4_engram.h",
+    "runtime-source/new8a47/ds4_gpu.h",
+    "runtime-source/new8a47/ds4_gpu_mgpu.h",
+    "runtime-source/new8a47/ds4_gpu_tp.h",
+    "runtime-source/new8a47/ds4_image.h",
+    "runtime-source/new8a47/ds4_layer_pack.h",
+    "runtime-source/new8a47/ds4_linux_memory.h",
+    "runtime-source/new8a47/ds4_qwen4_unicode.inc",
+    "runtime-source/new8a47/ds4_qwen4_vision.h",
+    "runtime-source/new8a47/ds4_resident_native_weights.h",
+    "runtime-source/new8a47/ds4_resident_route.h",
+    "runtime-source/new8a47/ds4_ssd.h",
+    "runtime-source/new8a47/ds4_streaming_hotlist.inc",
+    "runtime-source/new8a47/ds4_streaming_hotlist_glm52.inc",
+    "runtime-source/new8a47/ds4_suffix_layout.h",
+    "runtime-source/new8a47/ds4_tool_text.h",
+    "runtime-source/new8a47/ds4_tp.h",
+    "runtime-source/old7c6e/ds4.c",
+    "runtime-source/old7c6e/ds4.h",
+    "runtime-source/old7c6e/ds4_deepseek41_gpu.h",
+    "runtime-source/old7c6e/ds4_distributed.h",
+    "runtime-source/old7c6e/ds4_engram.h",
+    "runtime-source/old7c6e/ds4_gpu.h",
+    "runtime-source/old7c6e/ds4_gpu_mgpu.h",
+    "runtime-source/old7c6e/ds4_gpu_tp.h",
+    "runtime-source/old7c6e/ds4_image.h",
+    "runtime-source/old7c6e/ds4_layer_pack.h",
+    "runtime-source/old7c6e/ds4_linux_memory.h",
+    "runtime-source/old7c6e/ds4_qwen4_unicode.inc",
+    "runtime-source/old7c6e/ds4_qwen4_vision.h",
+    "runtime-source/old7c6e/ds4_resident_route.h",
+    "runtime-source/old7c6e/ds4_ssd.h",
+    "runtime-source/old7c6e/ds4_streaming_hotlist.inc",
+    "runtime-source/old7c6e/ds4_streaming_hotlist_glm52.inc",
+    "runtime-source/old7c6e/ds4_suffix_layout.h",
+    "runtime-source/old7c6e/ds4_tool_text.h",
+    "runtime-source/old7c6e/ds4_tp.h"
+  ]
+}

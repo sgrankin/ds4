@@ -1,0 +1,2 @@
+{"time_numerator":36,"time_denominator":5,"whole_hours":7,"minutes":12}
+The rates add to one twelfth plus one eighteenth of a tank per hour, which is five thirty-sixths. The reciprocal is thirty-six fifths of an hour. This is seven hours plus one fifth of an hour. Multiplying the fractional hour by sixty gives twelve minutes, for seven hours and twelve minutes total.

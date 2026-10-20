@@ -1,0 +1,20 @@
+{
+  "time": 1790988991.9147258,
+  "source_revision": "469d75322cd8cb2ad17a7f021906ca0cf1bd894f",
+  "status": "PASS",
+  "plan_sha256": "4ddcb09eeec73b54ba3c823157e463687fc756ca1441b36961c74a5a19828b80",
+  "command_sha256": "d25fb20188f24d5a2fb8473fed526040d5707212551b9208baa0387f83787b37",
+  "launcher_sha256": "91d47864dd883e06a41a433ff81ae2261622a0f1f66c5e541b19e97c071f6fbc",
+  "verified_nonmodel_assets": 58,
+  "model_metadata_touched": false,
+  "model_opened": false,
+  "guard_called": false,
+  "sole_model_grant": false,
+  "stdout": [
+    {
+      "status": "PREFLIGHT_PASS",
+      "assets": 58,
+      "model_access": false
+    }
+  ]
+}

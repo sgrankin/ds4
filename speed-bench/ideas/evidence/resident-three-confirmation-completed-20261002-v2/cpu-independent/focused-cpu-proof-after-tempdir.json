@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "tests/test_resident_confirmation.py"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive",
+  "returncode": 0,
+  "frozen_source_commit": "38c758fe730f7d3780d93bad11ca27bf07aeadd4",
+  "test_source_sha256": "b1ccef6fcecc518849a25ccc6585567bbed8b3bf4b8e9085eb2d5179b4e83084",
+  "driver_source_sha256": "0d7f2b62875fe2517911b9bd06303bc97a92b3f6198dc2132bcfe99ce726e156",
+  "test_log_sha256": "ae68ca0d4f6c42a3259c69211730b33b39bcbb27e419528314d67b7db247623a",
+  "first_invocation_preserved": "focused-cpu-proof.json",
+  "setup_correction": "Created absent ignored artifacts directory required by original TemporaryDirectory parent; no test/source changes.",
+  "tests_execute_model_or_gpu": false,
+  "model_metadata_opened": false,
+  "builds_run": false,
+  "model_job_guard_acquired": false
+}

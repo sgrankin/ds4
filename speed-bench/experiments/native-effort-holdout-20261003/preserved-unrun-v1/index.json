@@ -1,0 +1,14 @@
+{
+  "files": {
+    "analyze_native_effort_holdout.py": "e96c266db1300abe8cea4b7de5c4dd9ddff9e941cc0a80b9c77fa28ca3240e6b",
+    "cpu-launch-proof.json": "cd2e695e70358f9a54accb8d65cef0876655885599c18b4d293ec368b358a400",
+    "launch_native_effort_holdout.py": "021dd649470b19ce5f71116da7eb3e953e9e011d66e7a9af24301a59fc66b7e5",
+    "native-effort-holdout": "a03bff186ded7251164154edb4c5e319447222f3a5d9faaf8cbe60e93f67ae35",
+    "plan.json": "e7c3c8a0e960a8630f872ccfe3963503b08dbffbc305af926e8fe66c9322dbd6",
+    "prepared-command.json": "cb168d647421abf296bbe3640c3b82ec24234f6ba43b06a4ad0a625716b12c2c",
+    "run_native_effort_holdout.py": "f46820ecb228b0a067b937e9b5271e57dc8cb3cef74cc0dc6c19210063298564"
+  },
+  "source_component_commit": "dde6f238a4edc569a698ba84c32216229f94d2f0",
+  "model_opened": false,
+  "model_metadata_read": false
+}

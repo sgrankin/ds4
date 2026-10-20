@@ -1,0 +1,4 @@
+{
+  "status": "FIRST_UPDATE_FAILURE_RETAINED",
+  "error": "ValueError: Frozen operation is not unique"
+}

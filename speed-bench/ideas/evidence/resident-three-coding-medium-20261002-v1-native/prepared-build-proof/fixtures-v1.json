@@ -1,0 +1,489 @@
+{
+  "version": "resident-coding-v1",
+  "purpose": "Preregistered first-completion Python function accuracy, no-thinking greedy",
+  "task_order": [
+    "round_cents",
+    "merge_intervals",
+    "topological_order",
+    "split_escaped"
+  ],
+  "input_contract": "JSON arrays for interval/edge pairs are converted to tuples before calling; returns are canonicalized to JSON.",
+  "allowed_imports": [
+    "decimal",
+    "heapq",
+    "collections"
+  ],
+  "tasks": [
+    {
+      "id": "round_cents",
+      "function": "round_cents",
+      "prompt": "Write Python 3 code. Return only the requested function and any necessary standard-library imports, as bare code or one python code fence. Do not include examples, prose, or tests. Imports may use only decimal, heapq, and collections. Do not mutate input arguments. Implement round_cents(value: str) -> int. Input is a valid signed decimal string with optional leading + or -, at least one integer digit, and optionally a decimal point followed by one or more digits. Return the nearest integer number of cents, rounding exact half cents away from zero. Perform exact decimal arithmetic; do not use binary float.",
+      "tests": [
+        {
+          "args": [
+            "0"
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "1"
+          ],
+          "expected": 100
+        },
+        {
+          "args": [
+            "1.005"
+          ],
+          "expected": 101
+        },
+        {
+          "args": [
+            "-1.005"
+          ],
+          "expected": -101
+        },
+        {
+          "args": [
+            "-0.004"
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "-0.005"
+          ],
+          "expected": -1
+        },
+        {
+          "args": [
+            "12.999"
+          ],
+          "expected": 1300
+        },
+        {
+          "args": [
+            "-12.999"
+          ],
+          "expected": -1300
+        },
+        {
+          "args": [
+            "+2.675"
+          ],
+          "expected": 268
+        },
+        {
+          "args": [
+            "12345678901234567890.015"
+          ],
+          "expected": 1234567890123456789002
+        },
+        {
+          "args": [
+            "0007.04500"
+          ],
+          "expected": 705
+        }
+      ]
+    },
+    {
+      "id": "merge_intervals",
+      "function": "merge_intervals",
+      "prompt": "Write Python 3 code. Return only the requested function and any necessary standard-library imports, as bare code or one python code fence. Do not include examples, prose, or tests. Imports may use only decimal, heapq, and collections. Do not mutate input arguments. Implement merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]. Each input is a closed interval (start, end) with start <= end. Return the union as sorted, disjoint closed intervals. Intervals merge if they overlap or touch at the same endpoint. Integer adjacency alone does not count as touching: (1,2) and (3,4) stay separate. Empty input returns [].",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                2
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                3,
+                5
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                3,
+                5
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              1,
+              5
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                10
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                10,
+                10
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              1,
+              10
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                -5,
+                -2
+              ],
+              [
+                -3,
+                0
+              ],
+              [
+                2,
+                2
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              -5,
+              0
+            ],
+            [
+              2,
+              2
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                2,
+                2
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                2,
+                2
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "topological_order",
+      "function": "topological_order",
+      "prompt": "Write Python 3 code. Return only the requested function and any necessary standard-library imports, as bare code or one python code fence. Do not include examples, prose, or tests. Imports may use only decimal, heapq, and collections. Do not mutate input arguments. Implement topological_order(n: int, edges: list[tuple[int, int]]) -> list[int] | None. Vertices are 0 through n-1, n >= 0. Edge (u,v) means u must precede v. Return the lexicographically smallest valid topological order, or None if any directed cycle exists, including a self-loop. Duplicate edges are redundant constraints. Include isolated vertices. All endpoints are valid.",
+      "tests": [
+        {
+          "args": [
+            0,
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            4,
+            [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          ],
+          "expected": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "args": [
+            4,
+            [
+              [
+                3,
+                1
+              ],
+              [
+                3,
+                2
+              ]
+            ]
+          ],
+          "expected": [
+            0,
+            3,
+            1,
+            2
+          ]
+        },
+        {
+          "args": [
+            3,
+            [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          ],
+          "expected": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "args": [
+            3,
+            [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                0
+              ]
+            ]
+          ],
+          "expected": null
+        },
+        {
+          "args": [
+            2,
+            [
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          "expected": null
+        },
+        {
+          "args": [
+            5,
+            [
+              [
+                4,
+                2
+              ],
+              [
+                2,
+                0
+              ],
+              [
+                1,
+                0
+              ]
+            ]
+          ],
+          "expected": [
+            1,
+            3,
+            4,
+            2,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "split_escaped",
+      "function": "split_escaped",
+      "prompt": "Write Python 3 code. Return only the requested function and any necessary standard-library imports, as bare code or one python code fence. Do not include examples, prose, or tests. Imports may use only decimal, heapq, and collections. Do not mutate input arguments. Implement split_escaped(text: str, delimiter: str) -> list[str]. delimiter is exactly one character and is not a backslash. Split at each unescaped delimiter, preserving empty fields. A backslash escapes the immediately following character, including a delimiter, another backslash, or any other character; remove that escape backslash. A trailing backslash with no following character is preserved literally. There is no quoting syntax.",
+      "tests": [
+        {
+          "args": [
+            "",
+            "|"
+          ],
+          "expected": [
+            ""
+          ]
+        },
+        {
+          "args": [
+            "|",
+            "|"
+          ],
+          "expected": [
+            "",
+            ""
+          ]
+        },
+        {
+          "args": [
+            "a||b|",
+            "|"
+          ],
+          "expected": [
+            "a",
+            "",
+            "b",
+            ""
+          ]
+        },
+        {
+          "args": [
+            "a\\|b|c",
+            "|"
+          ],
+          "expected": [
+            "a|b",
+            "c"
+          ]
+        },
+        {
+          "args": [
+            "one\\\\two|three",
+            "|"
+          ],
+          "expected": [
+            "one\\two",
+            "three"
+          ]
+        },
+        {
+          "args": [
+            "abc\\",
+            "|"
+          ],
+          "expected": [
+            "abc\\"
+          ]
+        },
+        {
+          "args": [
+            "a\\qb|c",
+            "|"
+          ],
+          "expected": [
+            "aqb",
+            "c"
+          ]
+        },
+        {
+          "args": [
+            "\\||\\\\|x",
+            "|"
+          ],
+          "expected": [
+            "|",
+            "\\",
+            "x"
+          ]
+        },
+        {
+          "args": [
+            "first\\,field,,last",
+            ","
+          ],
+          "expected": [
+            "first,field",
+            "",
+            "last"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "sha256": "e5b96e9245343447c49c7db3a24a5b68f202475538d12b13b876553a202da21d",
+  "metadata": {
+    "magic": 1146310961,
+    "vocab": 129280,
+    "cases": 24,
+    "token_limit": 32,
+    "header_bytes": 16,
+    "row_metadata_bytes": 24,
+    "float_bytes": 4,
+    "row_bytes": 517144,
+    "rows": 768,
+    "bytes": 397166608,
+    "metadata_sha256": "e09f2b3acdbdac3ac26fbc4b33c780a49bf36caccbf18cb9dcd78b0a394d6180"
+  },
+  "created_before_candidate": true
+}

@@ -1,0 +1,112 @@
+{
+  "scope": "Actual merged agent helper instrumented with ASan/UBSan and mocked session/tokenizer seams, linked to ordinary production core; real core diagnostic parser/import rejection in separate model-free test. No model or GPU opened.",
+  "commands": [
+    {
+      "argv": [
+        "cc",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-function",
+        "-std=c99",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I.",
+        "-c",
+        "tests/test_agent_context_suffix_mock.c",
+        "-o",
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/mock.o"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "cc",
+        "-O1",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-I.",
+        "-c",
+        "tests/test_suffix_diagnostic_format.c",
+        "-o",
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/tag.o"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "cc",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-o",
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/mock",
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/mock.o",
+        "ds4_help.o",
+        "ds4_prompt_prefix.o",
+        "ds4_web.o",
+        "ds4_kvstore.o",
+        "linenoise.o",
+        "ds4_gpu_args.o",
+        "ds4.o",
+        "ds4_image.o",
+        "ds4_distributed.o",
+        "ds4_tp.o",
+        "ds4_ssd.o",
+        "ds4_metal.o",
+        "ds4_layer_pack.o",
+        "ds4_engram.o",
+        "-lm",
+        "-lpthread",
+        "-framework",
+        "Accelerate",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "cc",
+        "-o",
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/tag",
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/tag.o",
+        "ds4_image.o",
+        "ds4_distributed.o",
+        "ds4_tp.o",
+        "ds4_ssd.o",
+        "ds4_metal.o",
+        "ds4_layer_pack.o",
+        "ds4_engram.o",
+        "-lm",
+        "-lpthread",
+        "-framework",
+        "Accelerate",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/mock",
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/mock-fixtures"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "speed-bench/ideas/artifacts/main-integration-cpu-20261002/tag"
+      ],
+      "returncode": 0
+    }
+  ]
+}

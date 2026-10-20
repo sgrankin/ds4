@@ -1,0 +1,13 @@
+{
+  "returncode": 0,
+  "argv": [
+    "/opt/homebrew/bin/node",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/client-smoke.mjs",
+    "--base-url",
+    "http://127.0.0.1:62637/v1",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/client-first/checks"
+  ],
+  "seconds": 50.790000666995184,
+  "server_returncode_after_shutdown": 0
+}

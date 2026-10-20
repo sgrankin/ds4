@@ -1,0 +1,10 @@
+{
+  "native_reference_exact": true,
+  "bf0_prior_raw_exact": true,
+  "native_demand_io_equal": true,
+  "bf1_repeat_raw_equal": true,
+  "reference_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+  "bf0_sha256": "3cc8f88de88258e79f89cfb211ce49372af3b5ea9956e365e07d158573947eb1",
+  "earlier_async_bf1_raw_equality_required": false,
+  "scope": "Whole-engine prefill+decode explicit logical I/O and fullraw quality; instrumented, no latency/physical-SSD claim"
+}

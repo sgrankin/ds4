@@ -1,0 +1,184 @@
+{
+  "arms": [
+    {
+      "name": "native-before",
+      "tokens": 512,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "argmax_flips": 0,
+      "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 67908,
+          "requested_bytes": 225302446080,
+          "returned_bytes": 225302446080,
+          "cache_loader_bytes": 225302446080,
+          "cache_hits": 191684,
+          "cache_misses": 22636,
+          "cache_evictions": 16500
+        },
+        "stage": null,
+        "total_requested_logical_bytes": 225302446080,
+        "total_returned_logical_bytes": 225302446080
+      }
+    },
+    {
+      "name": "bf0",
+      "tokens": 512,
+      "delta_nll": 0.0138603055631,
+      "kl_base_to_raw": 0.0126513775484,
+      "argmax_flips": 20,
+      "candidate_record_sha256": "3cc8f88de88258e79f89cfb211ce49372af3b5ea9956e365e07d158573947eb1",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 52923,
+          "requested_bytes": 175585812480,
+          "returned_bytes": 175585812480,
+          "cache_loader_bytes": 175585812480,
+          "cache_hits": 196679,
+          "cache_misses": 17641,
+          "cache_evictions": 11505
+        },
+        "stage": null,
+        "total_requested_logical_bytes": 175585812480,
+        "total_returned_logical_bytes": 175585812480
+      }
+    },
+    {
+      "name": "bf1",
+      "tokens": 512,
+      "delta_nll": 0.0119374559396,
+      "kl_base_to_raw": 0.0130951350661,
+      "argmax_flips": 17,
+      "candidate_record_sha256": "cc2a5d02e3fd6e7ea363b8ed38fbb8dc92947668545df2672991f8d600a0ae26",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 52794,
+          "requested_bytes": 175157821440,
+          "returned_bytes": 175157821440,
+          "cache_loader_bytes": 175157821440,
+          "cache_hits": 196716,
+          "cache_misses": 17622,
+          "cache_evictions": 11486
+        },
+        "stage": {
+          "attempts": 5833,
+          "started": 251,
+          "busy_skips": 70,
+          "ready_skips": 5512,
+          "completed": 251,
+          "failed": 0,
+          "consumed": 24,
+          "expired": 226,
+          "resets": 1,
+          "pread_calls": 753,
+          "requested_bytes": 2498273280,
+          "returned_bytes": 2498273280,
+          "copied_bytes": 238878720,
+          "peak_bytes": 9953280,
+          "live_bytes": 0,
+          "state": 0
+        },
+        "total_requested_logical_bytes": 177656094720,
+        "total_returned_logical_bytes": 177656094720
+      }
+    },
+    {
+      "name": "bf1-repeat",
+      "tokens": 512,
+      "delta_nll": 0.0119374559396,
+      "kl_base_to_raw": 0.0130951350661,
+      "argmax_flips": 17,
+      "candidate_record_sha256": "cc2a5d02e3fd6e7ea363b8ed38fbb8dc92947668545df2672991f8d600a0ae26",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 52794,
+          "requested_bytes": 175157821440,
+          "returned_bytes": 175157821440,
+          "cache_loader_bytes": 175157821440,
+          "cache_hits": 196716,
+          "cache_misses": 17622,
+          "cache_evictions": 11486
+        },
+        "stage": {
+          "attempts": 5833,
+          "started": 251,
+          "busy_skips": 74,
+          "ready_skips": 5508,
+          "completed": 251,
+          "failed": 0,
+          "consumed": 24,
+          "expired": 226,
+          "resets": 1,
+          "pread_calls": 753,
+          "requested_bytes": 2498273280,
+          "returned_bytes": 2498273280,
+          "copied_bytes": 238878720,
+          "peak_bytes": 9953280,
+          "live_bytes": 0,
+          "state": 0
+        },
+        "total_requested_logical_bytes": 177656094720,
+        "total_returned_logical_bytes": 177656094720
+      }
+    },
+    {
+      "name": "native-after",
+      "tokens": 512,
+      "delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "argmax_flips": 0,
+      "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 67908,
+          "requested_bytes": 225302446080,
+          "returned_bytes": 225302446080,
+          "cache_loader_bytes": 225302446080,
+          "cache_hits": 191684,
+          "cache_misses": 22636,
+          "cache_evictions": 16500
+        },
+        "stage": null,
+        "total_requested_logical_bytes": 225302446080,
+        "total_returned_logical_bytes": 225302446080
+      }
+    }
+  ],
+  "bf1_net_change_vs_bf0_bytes": 2070282240,
+  "bf1_net_change_percent": 1.179071481208549,
+  "bf0_saving_vs_native_bytes": 49716633600,
+  "bf0_saving_vs_native_percent": 22.06661954408906,
+  "pressure": {
+    "samples": 252,
+    "levels": [
+      1
+    ],
+    "max_bad": 0,
+    "swap_first": 0.025087890625,
+    "swap_last": 0.025087890625,
+    "swap_max": 0.025087890625,
+    "min_free_gb": 0.120086669921875,
+    "max_wired_gb": 71.508544921875,
+    "max_compressor_gb": 6.98089599609375
+  },
+  "scope": "Whole-engine prefill plus decode explicit requested/returned logical reads, not physical SSD traffic or latency.",
+  "source_commit": "dd7703abf861c043b252e9a8b0f3fa46fc2d2510",
+  "raw_artifacts": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-io-study/speed-bench/ideas/artifacts/backfill-io-prepared-20261002",
+  "checks": {
+    "native_reference_exact": true,
+    "bf0_prior_raw_exact": true,
+    "native_demand_io_equal": true,
+    "bf1_repeat_raw_equal": true,
+    "reference_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "bf0_sha256": "3cc8f88de88258e79f89cfb211ce49372af3b5ea9956e365e07d158573947eb1",
+    "earlier_async_bf1_raw_equality_required": false,
+    "scope": "Whole-engine prefill+decode explicit logical I/O and fullraw quality; instrumented, no latency/physical-SSD claim"
+  },
+  "conclusion": "Resident BF0 reduces total logical reads22.07% versus native; current future-only BF1 increases total1.18% versus BF0 despite improving mean reference likelihood. No blanket staging-capacity expansion or default promotion."
+}

@@ -1,0 +1,117 @@
+{
+  "status": "VERIFIED_COMPLETE_FIRST_ATTEMPTS",
+  "base_commit": "b97268bd3583dbaa6a4cf9bba75c40f492cd99b6",
+  "parser_source_commit": "a5b6aa6e0320da7c824b8a9056af33f36c8d2cb3",
+  "immutable_launch_commit": "469d75322cd8cb2ad17a7f021906ca0cf1bd894f",
+  "plan_sha256": "4ddcb09eeec73b54ba3c823157e463687fc756ca1441b36961c74a5a19828b80",
+  "prepared_command_sha256": "d25fb20188f24d5a2fb8473fed526040d5707212551b9208baa0387f83787b37",
+  "analyzer_sha256": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e",
+  "assets_verified": 58,
+  "first_attempts": 36,
+  "unique_problems": 6,
+  "independent_arm_counts": [
+    {
+      "arm": "effort0-before",
+      "effort": 0,
+      "unique_cases": 6,
+      "correct": 0,
+      "completed_correct": 0,
+      "incorrect": 0,
+      "invalid": 6,
+      "caps": 3,
+      "generated": 8437,
+      "reasoning": 0,
+      "producer_returncode": 3
+    },
+    {
+      "arm": "effort25-before",
+      "effort": 25,
+      "unique_cases": 6,
+      "correct": 5,
+      "completed_correct": 5,
+      "incorrect": 0,
+      "invalid": 1,
+      "caps": 1,
+      "generated": 5002,
+      "reasoning": 4994,
+      "producer_returncode": 3
+    },
+    {
+      "arm": "effort75-before",
+      "effort": 75,
+      "unique_cases": 6,
+      "correct": 4,
+      "completed_correct": 4,
+      "incorrect": 0,
+      "invalid": 2,
+      "caps": 2,
+      "generated": 5974,
+      "reasoning": 5968,
+      "producer_returncode": 3
+    },
+    {
+      "arm": "effort75-after",
+      "effort": 75,
+      "unique_cases": 6,
+      "correct": 4,
+      "completed_correct": 4,
+      "incorrect": 0,
+      "invalid": 2,
+      "caps": 2,
+      "generated": 5974,
+      "reasoning": 5968,
+      "producer_returncode": 3
+    },
+    {
+      "arm": "effort25-after",
+      "effort": 25,
+      "unique_cases": 6,
+      "correct": 5,
+      "completed_correct": 5,
+      "incorrect": 0,
+      "invalid": 1,
+      "caps": 1,
+      "generated": 5002,
+      "reasoning": 4994,
+      "producer_returncode": 3
+    },
+    {
+      "arm": "effort0-after",
+      "effort": 0,
+      "unique_cases": 6,
+      "correct": 0,
+      "completed_correct": 0,
+      "incorrect": 0,
+      "invalid": 6,
+      "caps": 3,
+      "generated": 8437,
+      "reasoning": 0,
+      "producer_returncode": 3
+    }
+  ],
+  "exact_repeats": [
+    0,
+    25,
+    75
+  ],
+  "full_native_rng_steps_verified": 38850,
+  "original_strict_scores_changed": false,
+  "outer_guard_returncode": 3,
+  "manual_review": "Three stopped effort0-before outputs have correct terminal numbers within prose; primary INVALID scores unchanged. This is ROOT posthoc observation, not a secondary scorer or assessment of capped outputs.",
+  "pressure": {
+    "samples": 2017,
+    "bad": 0,
+    "swap_growth_gb": 0,
+    "peak_wired_compressor_gib": 80.44197082519531
+  },
+  "original_run_unmodified": true,
+  "model_opened_or_statted_or_guarded": false,
+  "helper_or_build_executed": false,
+  "preserved_archive_refusal": "First CPU archive attempt assumed prepared-command.command, but actual frozen schema is argv. Refusal happened before outcomes/DEST creation; only archive reader key corrected, original assets unchanged.",
+  "limitations": [
+    "Six unique problems, one fixed seed;36 attempts include exact deterministic repeats, not36 independent problems.",
+    "Strict format-sensitive scorer remains literal and preregistered; posthoc prose observations remain separate.",
+    "Effort0 uses the genuine no-thinking protocol; displayed prose can still explain its reasoning.",
+    "Different effort prefixes prevent cross-effort KL/NLL or causal quantization inference; no speed/default/quality-generalization claim."
+  ]
+}

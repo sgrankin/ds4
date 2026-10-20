@@ -1,0 +1,59 @@
+{
+  "arm": "native-before",
+  "mode": "native",
+  "summary": {
+    "mode": "native",
+    "prefix": 1409,
+    "shift": 65,
+    "span": 512,
+    "tail": 128,
+    "decode": 16,
+    "user_id": 128803,
+    "latest_user_start": 1921,
+    "fresh_latest_user": true,
+    "source_move_no_reload": false,
+    "precancel_preserves_state": false,
+    "postmove_cancel_rolls_back": false,
+    "canonical_and_diagnostic_gates": false,
+    "text_only_save_state_unchanged": false,
+    "transaction_peak_bytes_including_reserves": 0,
+    "app_budget_bytes": 134217728,
+    "global_peak_observed": false,
+    "performed_phase_admissions_checked": true,
+    "mean_kl": 0,
+    "mean_tv": 0,
+    "sum_delta_nll": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 0,
+    "reuse_ms_diagnostic": 0.0
+  },
+  "raw": {
+    "full_sha256": "ba0242103b99617e25eb10e060001a489215182ced6db407b4989f80cf77dec7",
+    "bytes": 9825376,
+    "source_sha256": "170c0af12914207bcc8470d3d36c19800bf92d573436d506c28305caa7395e64",
+    "branch_sha256": "9f1357b4277143434035b08adaac0400dd0e3894c7ea7716cd7bf37c9292a6bb",
+    "source_rows": 2,
+    "branch_rows": 17,
+    "teacher_ids": [
+      31375,
+      15248,
+      14,
+      399,
+      688,
+      110634,
+      1298,
+      16549,
+      3937,
+      302,
+      64937,
+      14908,
+      85190,
+      603,
+      48,
+      2666
+    ]
+  },
+  "checks": {
+    "native_exact": true
+  }
+}

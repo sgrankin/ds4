@@ -1,0 +1,4 @@
+Parse this CSV with a header and standard double-quoted fields: name,quantity
+"green, tea",4
+coffee,2
+. Report names in row order and total_quantity as an integer. Return JSON first, then explain the quoted comma.

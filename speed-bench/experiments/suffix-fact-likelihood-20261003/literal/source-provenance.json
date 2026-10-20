@@ -1,0 +1,98 @@
+{
+  "status": "ARCHIVED_FACT_SOURCE_FROZEN",
+  "source_freeze": "74f59004c35778e19c6630a7696936d576f54d8f",
+  "source_pins": {
+    "README.md": {
+      "bytes": 6840,
+      "mode": 420,
+      "sha256": "126f7bf352192c9a659644a996bd028b71c31213c23de7a54f965de142cb1176"
+    },
+    "archived_fact_probe.c": {
+      "bytes": 25308,
+      "mode": 420,
+      "sha256": "922521eabaf78125b9cc0458a6230e029fe56e7d0bba0341769e099dd0793c6e"
+    },
+    "cpu-plan.json": {
+      "bytes": 5249,
+      "mode": 420,
+      "sha256": "942b178a14d36bd6550b4839c6fa369fe630114666600e7e54fbfe61d4164692"
+    },
+    "fact_format.h": {
+      "bytes": 4338,
+      "mode": 420,
+      "sha256": "70553be9ecfd37ad8bfcf249b14d05b87dac863dbbdddd83a8ace608ebc29884"
+    },
+    "fact_input_pins.h": {
+      "bytes": 1652,
+      "mode": 420,
+      "sha256": "fe3b3a541b60e0429b70b97cbc75b2f3ddc19db47b9e495780ec6f141d9fb951"
+    },
+    "fixture-facts.json": {
+      "bytes": 8679,
+      "mode": 420,
+      "sha256": "049d6a0917dc4a20688a5d313fa8b8f15d0010988b69805797f3ed9ea635861c"
+    },
+    "inputs/candidate-00.json": {
+      "bytes": 81,
+      "mode": 420,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c"
+    },
+    "inputs/selected-after.txt": {
+      "bytes": 14609,
+      "mode": 420,
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+    },
+    "inputs/selected-before.txt": {
+      "bytes": 14653,
+      "mode": 420,
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133"
+    },
+    "inputs/selected-edited.ids": {
+      "bytes": 13560,
+      "mode": 420,
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb"
+    },
+    "inputs/selected-old.ids": {
+      "bytes": 13604,
+      "mode": 420,
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f"
+    },
+    "inputs/selection.json": {
+      "bytes": 453,
+      "mode": 420,
+      "sha256": "0526d4cd3da60e3fde4a0596b6590464e9a1dfe107beabb77e3855e1485838ea"
+    },
+    "inputs/teacher.txt": {
+      "bytes": 9,
+      "mode": 420,
+      "sha256": "5aa5376bdf7259403fc5e1f5a1cc4e94dd1860bb0b6fd01682f1018c7e411b1c"
+    },
+    "native-build-plan.json": {
+      "bytes": 16974,
+      "mode": 420,
+      "sha256": "9083de51baf87d5f9b44cbcc6ba0017f3b9efd4c0c98b04b5c5f081168ab5e3a"
+    },
+    "proposal.json": {
+      "bytes": 10042,
+      "mode": 420,
+      "sha256": "27ff97897b1fac70172d889132fd655b2a2aca78dd1258c6282a5b619287313e"
+    },
+    "run_archived_fact_probe.py": {
+      "bytes": 11717,
+      "mode": 420,
+      "sha256": "322fd6ba8992691884419a9423baa326ebdae6bd39404109891bf2f80a2ae4a1"
+    },
+    "test_fact_format.c": {
+      "bytes": 3422,
+      "mode": 420,
+      "sha256": "7029a315604743a64c20d6c3b1071d11c54d506a5bd0b594b2cfcd02346498af"
+    },
+    "test_runner_contract.py": {
+      "bytes": 4185,
+      "mode": 420,
+      "sha256": "91698bc1f33b7163f6eb9168857dcef49b8066f812b437b51ed759ce62cfcbe8"
+    }
+  },
+  "root_review": "Complete literal19 source package reviewed before actual5serialCPUpass; 77 checks normal/sanitized and12 runner contracts, zero compilerwarnings",
+  "model_or_native_access": false
+}

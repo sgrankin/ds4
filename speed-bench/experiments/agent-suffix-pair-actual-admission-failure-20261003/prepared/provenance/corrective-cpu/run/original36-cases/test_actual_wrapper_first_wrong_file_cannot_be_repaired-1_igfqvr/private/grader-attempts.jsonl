@@ -1,0 +1,1 @@
+{"passed": false, "checks": {"source_exists": true, "pure_module": true, "callable_exists": true, "current_value": false, "obsolete_absent": false}, "error": null, "source_sha256": "389881d9b8ae84862b4ee40381b656a04e868a34fe1187fa13968d17a6c1a893"}

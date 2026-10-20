@@ -1,0 +1,105 @@
+{
+  "mode": "reuse",
+  "requests": [
+    {
+      "mode": "reuse",
+      "phase": "source",
+      "seconds": 0.7576556669955608,
+      "http_status": 200,
+      "response_status": "completed",
+      "text": "READY",
+      "gold": "READY",
+      "correct": true,
+      "complete": true,
+      "error": null,
+      "input_tokens": 3114,
+      "output_tokens": 2,
+      "usage": {
+        "input_tokens": 3114,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 3114
+        },
+        "output_tokens": 2,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3116
+      },
+      "incomplete_details": null,
+      "suffix_log_lines": [],
+      "pass": true
+    },
+    {
+      "mode": "reuse",
+      "phase": "edited-1",
+      "seconds": 38.04268970900739,
+      "http_status": 200,
+      "response_status": "completed",
+      "text": "{\"total\":416}",
+      "gold": {
+        "total": 416
+      },
+      "correct": true,
+      "complete": true,
+      "error": null,
+      "input_tokens": 2356,
+      "output_tokens": 5,
+      "usage": {
+        "input_tokens": 2356,
+        "input_tokens_details": {
+          "cached_tokens": 1220,
+          "cache_write_tokens": 1136
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2361
+      },
+      "incomplete_details": null,
+      "suffix_log_lines": [
+        "1004 09:20:03 ds4-server: suffix APPROXIMATE slot=1 reused=1220 fresh=1100 graft_fresh=972 source=828:2048 destination=36:1256 latest_user_start=2325 pre_rope=1 source_ssd=1 source_approximate=0 33769.411 ms"
+      ],
+      "pass": true
+    },
+    {
+      "mode": "reuse",
+      "phase": "edited-2",
+      "seconds": 6.775183958001435,
+      "http_status": 200,
+      "response_status": "completed",
+      "text": "{\"code\":\"MAPLE-42\",\"reserve\":73}",
+      "gold": {
+        "code": "MAPLE-42",
+        "reserve": 73
+      },
+      "correct": true,
+      "complete": true,
+      "error": null,
+      "input_tokens": 1949,
+      "output_tokens": 13,
+      "usage": {
+        "input_tokens": 1949,
+        "input_tokens_details": {
+          "cached_tokens": 1732,
+          "cache_write_tokens": 217
+        },
+        "output_tokens": 13,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1962
+      },
+      "incomplete_details": null,
+      "suffix_log_lines": [
+        "1004 09:20:11 ds4-server: suffix APPROXIMATE slot=1 reused=1732 fresh=165 graft_fresh=37 source=496:2228 destination=52:1784 latest_user_start=1918 pre_rope=1 source_ssd=1 source_approximate=1 2747.777 ms"
+      ],
+      "pass": true
+    }
+  ],
+  "seconds": 45.57752779099974,
+  "source_warmup_seconds": 0.7576556669955608,
+  "edited_seconds": 44.817873667008826,
+  "pass": true
+}

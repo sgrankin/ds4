@@ -1,0 +1,397 @@
+{
+  "runtime_revision": "ceab3478a59c",
+  "driver_revision": "5badc887c301",
+  "order": [
+    "native",
+    "reuse"
+  ],
+  "settings": {
+    "context": 8192,
+    "cache_experts": "64GB",
+    "prefill_chunk": 512,
+    "session_slots": 2,
+    "state_cache_hot_mb": 0,
+    "state_cache_ssd_mb": 1024,
+    "fresh_tail": 128,
+    "temperature": 0,
+    "reasoning_effort": "none",
+    "tool_cap": 128,
+    "final_cap": 64,
+    "seed": 20261004
+  },
+  "metric": "step sums include archive write and history edit for edited steps; server startup/restart excluded",
+  "arms": {
+    "native": {
+      "source_warmup_seconds": 105.32428191600775,
+      "ordinary_edit_seconds": 106.18552216599346,
+      "changed_archive_after_restart_seconds": 85.29024354099238,
+      "all_edited_seconds": 191.47576570698584,
+      "turnover_seconds": 2.282120167001267,
+      "all_task_step_seconds": 299.08216778999486,
+      "task_steps_without_cold_sources_seconds": 193.7578858739871,
+      "all_driver_phase_seconds": 299.08531745801156,
+      "driver_phases_without_cold_sources_seconds": 193.7610355420038,
+      "server_startup_seconds": {
+        "before": 0.20989908400224522,
+        "after": 0.42052733300079126
+      },
+      "correct_steps": 7,
+      "completed_steps": 7,
+      "passed_steps": 7,
+      "required_fresh_reads": 6,
+      "fresh_file_reads": 6,
+      "step_count": 7,
+      "grafts_observed": 0,
+      "approximate_ssd_sources_observed": 0,
+      "steps": [
+        {
+          "step": "A-source",
+          "session": "A",
+          "seconds": 52.96757616600371,
+          "seconds_including_edit": null,
+          "text": "READY",
+          "gold": "READY",
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/active.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-source",
+          "session": "B",
+          "seconds": 52.35670575000404,
+          "seconds_including_edit": null,
+          "text": "READY",
+          "gold": "READY",
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/active.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "A-edit1",
+          "session": "A",
+          "seconds": 52.61454787501134,
+          "seconds_including_edit": 52.61500362500374,
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-73\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 09:41:25 slot 0: request reuses nothing; evicting checkpoint (2057 tokens, idle 52 s, protected)"
+          ]
+        },
+        {
+          "step": "B-edit1",
+          "session": "B",
+          "seconds": 53.57007991599676,
+          "seconds_including_edit": 53.570518540989724,
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-91\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 09:42:18 slot 0: request reuses nothing; evicting checkpoint (1786 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "C-turnover",
+          "session": "C",
+          "seconds": 2.282120167001267,
+          "seconds_including_edit": null,
+          "text": "READY",
+          "gold": "READY",
+          "correct": true,
+          "fresh_read": false,
+          "required_read": null,
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 09:43:11 slot 0: request reuses nothing; evicting checkpoint (1790 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "A-edit2",
+          "session": "A",
+          "seconds": 42.436501125004725,
+          "seconds_including_edit": 42.436923749992275,
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-edit2",
+          "session": "B",
+          "seconds": 42.8528892500035,
+          "seconds_including_edit": 42.853319791000104,
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [],
+          "slot_eviction_log_lines": []
+        }
+      ],
+      "guard_result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "guard_command": [
+        "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+        "-B",
+        "speed-bench/experiments/server-workflow-hour12-20261004/launch.py",
+        "--mode",
+        "native",
+        "--output",
+        "speed-bench/experiments/server-workflow-hour12-20261004/native",
+        "--cache",
+        ".workspaces/server-agent-day-20261004/workflow-native-cache",
+        "--shared",
+        ".workspaces/server-agent-day-20261004/workflow-shared"
+      ],
+      "pressure": {
+        "samples": 293,
+        "normal_samples": 293,
+        "bad_samples": 0,
+        "initial_swap_gib": 0.012998046875,
+        "min_swap_gib": 0.012998046875,
+        "max_swap_gib": 0.012998046875,
+        "swap_growth_gib": 0.0,
+        "peak_wired_compressor_gib": 84.98832702636719
+      }
+    },
+    "reuse": {
+      "source_warmup_seconds": 106.64349395799218,
+      "ordinary_edit_seconds": 80.36444170901086,
+      "changed_archive_after_restart_seconds": 71.99207575000764,
+      "all_edited_seconds": 152.3565174590185,
+      "turnover_seconds": 2.233882333006477,
+      "all_task_step_seconds": 261.23389375001716,
+      "task_steps_without_cold_sources_seconds": 154.59039979202498,
+      "all_driver_phase_seconds": 261.2368904160103,
+      "driver_phases_without_cold_sources_seconds": 154.5933964580181,
+      "server_startup_seconds": {
+        "before": 0.420314667004277,
+        "after": 0.42249174999597017
+      },
+      "correct_steps": 7,
+      "completed_steps": 7,
+      "passed_steps": 7,
+      "required_fresh_reads": 6,
+      "fresh_file_reads": 6,
+      "step_count": 7,
+      "grafts_observed": 3,
+      "approximate_ssd_sources_observed": 1,
+      "steps": [
+        {
+          "step": "A-source",
+          "session": "A",
+          "seconds": 53.49014862500189,
+          "seconds_including_edit": null,
+          "text": "READY",
+          "gold": "READY",
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/active.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [
+            "1004 09:45:42 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+          ],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-source",
+          "session": "B",
+          "seconds": 53.153345332990284,
+          "seconds_including_edit": null,
+          "text": "READY",
+          "gold": "READY",
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/active.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [
+            "1004 09:46:36 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "A-edit1",
+          "session": "A",
+          "seconds": 41.08154454200121,
+          "seconds_including_edit": 41.08200850000139,
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-73\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [
+            "1004 09:48:00 ds4-server: suffix APPROXIMATE slot=0 reused=563 fresh=784 graft_fresh=656 source=808:1371 destination=306:869 latest_user_start=1557 pre_rope=1 source_ssd=1 source_approximate=0 30890.023 ms"
+          ],
+          "slot_eviction_log_lines": [
+            "1004 09:47:29 slot 0: request reuses nothing; evicting checkpoint (2057 tokens, idle 53 s, protected)"
+          ]
+        },
+        {
+          "step": "B-edit1",
+          "session": "B",
+          "seconds": 39.28197541600093,
+          "seconds_including_edit": 39.28243320900947,
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-91\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [
+            "1004 09:48:39 ds4-server: suffix APPROXIMATE slot=0 reused=463 fresh=227 graft_fresh=99 source=1466:1929 destination=964:1427 latest_user_start=1558 pre_rope=1 source_ssd=1 source_approximate=0 28967.409 ms"
+          ],
+          "slot_eviction_log_lines": [
+            "1004 09:48:10 slot 0: request reuses nothing; evicting checkpoint (1786 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "C-turnover",
+          "session": "C",
+          "seconds": 2.233882333006477,
+          "seconds_including_edit": null,
+          "text": "READY",
+          "gold": "READY",
+          "correct": true,
+          "fresh_read": false,
+          "required_read": null,
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 09:48:49 slot 0: request reuses nothing; evicting checkpoint (1790 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "A-edit2",
+          "session": "A",
+          "seconds": 28.85505995899439,
+          "seconds_including_edit": 28.855489250010578,
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [
+            "1004 09:49:12 ds4-server: suffix APPROXIMATE slot=0 reused=841 fresh=231 graft_fresh=103 source=812:1653 destination=310:1151 latest_user_start=1286 pre_rope=1 source_ssd=1 source_approximate=1 18685.324 ms"
+          ],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-edit2",
+          "session": "B",
+          "seconds": 43.13616504200036,
+          "seconds_including_edit": 43.136586499997065,
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "correct": true,
+          "fresh_read": true,
+          "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+          "complete": true,
+          "pass": true,
+          "suffix_log_lines": [
+            "1004 09:49:23 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "slot_eviction_log_lines": []
+        }
+      ],
+      "guard_result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "guard_command": [
+        "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+        "-B",
+        "speed-bench/experiments/server-workflow-hour12-20261004/launch.py",
+        "--mode",
+        "reuse",
+        "--output",
+        "speed-bench/experiments/server-workflow-hour12-20261004/reuse",
+        "--cache",
+        ".workspaces/server-agent-day-20261004/workflow-reuse-cache",
+        "--shared",
+        ".workspaces/server-agent-day-20261004/workflow-shared"
+      ],
+      "pressure": {
+        "samples": 257,
+        "normal_samples": 257,
+        "bad_samples": 0,
+        "initial_swap_gib": 0.012998046875,
+        "min_swap_gib": 0.012998046875,
+        "max_swap_gib": 0.012998046875,
+        "swap_growth_gib": 0.0,
+        "peak_wired_compressor_gib": 84.67327880859375
+      }
+    }
+  },
+  "savings_fraction": {
+    "source_warmup_seconds": -0.012525241264274234,
+    "ordinary_edit_seconds": 0.24316950117378577,
+    "changed_archive_after_restart_seconds": 0.15591663523147692,
+    "all_edited_seconds": 0.2043039133622334,
+    "all_task_step_seconds": 0.12654807981247962,
+    "task_steps_without_cold_sources_seconds": 0.20214653925071824,
+    "all_driver_phase_seconds": 0.126547258700905,
+    "driver_phases_without_cold_sources_seconds": 0.2021440429156608
+  }
+}

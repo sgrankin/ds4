@@ -1,0 +1,189 @@
+{
+  "schema": "ragged-native-tail-six-qualification-v1",
+  "status": "SOURCE_CPU_ONLY_NO_HELPER_BUILD_OR_MODEL_PLAN_YET",
+  "original_geometry": [
+    1859,
+    90,
+    72,
+    8192,
+    8,
+    16384,
+    8,
+    38,
+    8
+  ],
+  "fixed_geometry": [
+    1859,
+    90,
+    72,
+    8320,
+    8,
+    16895,
+    8,
+    38,
+    8
+  ],
+  "positions": [
+    1859,
+    1949,
+    2021,
+    10341,
+    10349,
+    27244,
+    27252,
+    27290,
+    27298
+  ],
+  "cached_prefixes": [
+    0,
+    1859,
+    0,
+    2021,
+    0,
+    10349,
+    0,
+    27252,
+    0
+  ],
+  "prefill_tokens": 27202,
+  "decode_tokens": 96,
+  "final_position": 27298,
+  "context": 32768,
+  "cache_GB": 64,
+  "prefill_chunk": 512,
+  "configured_slots": 6136,
+  "teacher_forced_only": true,
+  "extensions": {
+    "phase3": "original phase3 first128 IDs appended",
+    "phase5": "original phase5 first511 IDs appended"
+  },
+  "all_original_input_ID_order_preserved": true,
+  "cumulative_prefix_adjustment": 639,
+  "original_authority": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/session.txt",
+    "bytes": 122688,
+    "sha256": "a859a10f9d74987789aa982a6d061db3991be11cec884e277fc5da4ce9f92adb",
+    "mode": "0o644"
+  },
+  "original_growth_manifest": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/manifest.json",
+    "bytes": 9137,
+    "sha256": "a8fd08c721e8ff7f657f4297cc65e112c376c90ec31d7073d2e9369e547049f8",
+    "mode": "0o644"
+  },
+  "derived_replay": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/ragged-growth.txt",
+    "bytes": 125574,
+    "sha256": "059d281d116ac8a8df5979443565e1eed95370dbfa232917de6c396073218613",
+    "mode": "0o644"
+  },
+  "branch_targets": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/branch-targets.txt",
+    "bytes": 300,
+    "sha256": "27c86007454415311764368cdf0acecaad68bf47fa57797997584082de47cdd1",
+    "mode": "0o644"
+  },
+  "branch_provenance": {
+    "3": "original phase4 D8 followed by original phase5 first24 IDs",
+    "5": "original phase6 D8 followed by original phase7 first24 IDs"
+  },
+  "branches32_each": true,
+  "branch_timing_and_IO_excluded_from_main": true,
+  "branches_restore_complete_canonical_and_raw_exact_before_prediction": true,
+  "score_before_target": true,
+  "arms": [
+    {
+      "name": "old0-default",
+      "binary": "old",
+      "flag": 0,
+      "policy": "default",
+      "exact_reference": null
+    },
+    {
+      "name": "new0-default",
+      "binary": "new",
+      "flag": 0,
+      "policy": "default",
+      "exact_reference": "old0-default"
+    },
+    {
+      "name": "new1-default",
+      "binary": "new",
+      "flag": 1,
+      "policy": "default",
+      "exact_reference": "old0-default"
+    },
+    {
+      "name": "old0-fast",
+      "binary": "old",
+      "flag": 0,
+      "policy": "fast",
+      "exact_reference": null
+    },
+    {
+      "name": "new0-fast",
+      "binary": "new",
+      "flag": 0,
+      "policy": "fast",
+      "exact_reference": "old0-fast"
+    },
+    {
+      "name": "new1-fast",
+      "binary": "new",
+      "flag": 1,
+      "policy": "fast",
+      "exact_reference": null
+    }
+  ],
+  "flag": "DS4_METAL_V41_LONG_APPEND_NATIVE_TAIL",
+  "routing_gap": "0/native",
+  "default_selected": "unset8/256",
+  "fast_selected": "64/1024",
+  "runtime_defaults_unchanged": true,
+  "short_count_reachability": "On __APPLE__ cuda_row_batch_supported returnsfalse, so short_count0; gcarry_cap wide path avoids encoder residency. Actual callback dispatch must confirm.",
+  "mandatory_dispatch_tails": {
+    "phase3": {
+      "fast0": [
+        64,
+        64
+      ],
+      "fast1": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    },
+    "phase5": {
+      "fast0": [
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        63
+      ],
+      "fast1": [
+        511
+      ]
+    }
+  },
+  "qualification_controls": "old/new0 bothpolicies full9vectors/canonical/cache exact; new1default exactolddefault; each branch restore fullstate/raw exact; old/new0/default1 full64branchvectors/state/IO exact; fast1 diagnostics require actual changeddispatch.",
+  "guard_requirements": "Future exactMAINguard461e/directframework+heldflock/explicitROOTsolegrant BEFORE firstmodelstat/engine; exclusiveprepared/run paths. Freeze actual binaries+38source/26shader+helper/build/CPU/input authorities after separatebuildgrant; no automatic run/retry/scheduler.",
+  "previous_no_tail_qualification": "Original14controls passed perROOT; fixedP8192/P16384 leave no selectedtail. Preserve original preparation/run/release asreferences; do not run itsquiet no-op plan.",
+  "quality_scope": "Nine phase-end vectors+64 fixed teacher predictions; artificial ID-extended contexts and recorded nextD8/nextP24 continuations, no generated semantic/heldout/general equalquality claim."
+}

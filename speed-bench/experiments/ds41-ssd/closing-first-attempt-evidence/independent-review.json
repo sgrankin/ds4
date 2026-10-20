@@ -1,0 +1,7 @@
+{
+  "reviewer": "/root/checkout_recap",
+  "original_source_commit": "d02ab023a7eab835d404c3ef5e0bfc684787e94e",
+  "corrective_source_commit": "bb9336921b50081d1f642a2e644297481aa71fad",
+  "status": "PASS",
+  "scope": "Read-only source and CPU fixtures; no live pilot outcomes, model metadata, builds or production analysis executed by reviewer. Original native/circular/rc3/cap/temperature logic unchanged. Corrective gate accepted actual metadata fixture and rejected 17 pure-function negative cases."
+}

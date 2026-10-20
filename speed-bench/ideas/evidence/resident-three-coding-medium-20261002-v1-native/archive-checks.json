@@ -1,0 +1,167 @@
+{
+  "all_original_prepared_sources_assets_unchanged": true,
+  "all_three_arms_4_of_4_and_34_of_34": true,
+  "both_native_controls_exact_historical_all_retained_vectors_code_decisions": true,
+  "candidate_generated_decisions_code_differ_three_of_four": true,
+  "candidate_warm_initial_all_four_fullvectors_exact": true,
+  "contiguous_token_raw_EOS_checks": [
+    {
+      "arm": "native-before",
+      "contiguous_steps": true,
+      "native_stream_sha256": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93",
+      "prompt_sha256": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8",
+      "raw_reconstruction_exact": true,
+      "task": "round_cents",
+      "terminal_EOS": true,
+      "tokens": 70
+    },
+    {
+      "arm": "native-before",
+      "contiguous_steps": true,
+      "native_stream_sha256": "ec7fb3492a93dfcab0015ca1c6685ee0d58963cc56c0744a30590bdd0e3cd732",
+      "prompt_sha256": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831",
+      "raw_reconstruction_exact": true,
+      "task": "merge_intervals",
+      "terminal_EOS": true,
+      "tokens": 147
+    },
+    {
+      "arm": "native-before",
+      "contiguous_steps": true,
+      "native_stream_sha256": "4abb7407c9b3baeffe1061936fbcfa0f553104892b5178342a6e7240e89fcb36",
+      "prompt_sha256": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05",
+      "raw_reconstruction_exact": true,
+      "task": "topological_order",
+      "terminal_EOS": true,
+      "tokens": 203
+    },
+    {
+      "arm": "native-before",
+      "contiguous_steps": true,
+      "native_stream_sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3",
+      "prompt_sha256": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3",
+      "raw_reconstruction_exact": true,
+      "task": "split_escaped",
+      "terminal_EOS": true,
+      "tokens": 149
+    },
+    {
+      "arm": "broader3",
+      "contiguous_steps": true,
+      "native_stream_sha256": "d787145966628a505aba05c27c0927122246ec8494f722d788c32787517fcdb7",
+      "prompt_sha256": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8",
+      "raw_reconstruction_exact": true,
+      "task": "round_cents",
+      "terminal_EOS": true,
+      "tokens": 70
+    },
+    {
+      "arm": "broader3",
+      "contiguous_steps": true,
+      "native_stream_sha256": "d748d3e8b1d40ea69afcf438c310a6f12bd32ac65448eb0a0c614373aa8610f7",
+      "prompt_sha256": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831",
+      "raw_reconstruction_exact": true,
+      "task": "merge_intervals",
+      "terminal_EOS": true,
+      "tokens": 147
+    },
+    {
+      "arm": "broader3",
+      "contiguous_steps": true,
+      "native_stream_sha256": "78fc55a5938a1a7237d91e5615543c8b514e1ca304052aea2f17b98185c62378",
+      "prompt_sha256": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05",
+      "raw_reconstruction_exact": true,
+      "task": "topological_order",
+      "terminal_EOS": true,
+      "tokens": 208
+    },
+    {
+      "arm": "broader3",
+      "contiguous_steps": true,
+      "native_stream_sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3",
+      "prompt_sha256": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3",
+      "raw_reconstruction_exact": true,
+      "task": "split_escaped",
+      "terminal_EOS": true,
+      "tokens": 149
+    },
+    {
+      "arm": "native-after",
+      "contiguous_steps": true,
+      "native_stream_sha256": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93",
+      "prompt_sha256": "c00ee314773d30f70baf7817ba5a8c9416715dba20cbd33330b3bfa0820d9bc8",
+      "raw_reconstruction_exact": true,
+      "task": "round_cents",
+      "terminal_EOS": true,
+      "tokens": 70
+    },
+    {
+      "arm": "native-after",
+      "contiguous_steps": true,
+      "native_stream_sha256": "ec7fb3492a93dfcab0015ca1c6685ee0d58963cc56c0744a30590bdd0e3cd732",
+      "prompt_sha256": "76e7cda724e7d2645596178aa45b6fbea49d938889bac033ed2c6ecc7b85f831",
+      "raw_reconstruction_exact": true,
+      "task": "merge_intervals",
+      "terminal_EOS": true,
+      "tokens": 147
+    },
+    {
+      "arm": "native-after",
+      "contiguous_steps": true,
+      "native_stream_sha256": "4abb7407c9b3baeffe1061936fbcfa0f553104892b5178342a6e7240e89fcb36",
+      "prompt_sha256": "52dec65ceeaa311c3e1e269b218ba52cb05bbba6eb375779bc399d9710489f05",
+      "raw_reconstruction_exact": true,
+      "task": "topological_order",
+      "terminal_EOS": true,
+      "tokens": 203
+    },
+    {
+      "arm": "native-after",
+      "contiguous_steps": true,
+      "native_stream_sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3",
+      "prompt_sha256": "83499f777c2292f0a8c2e721a3c230ff48fc894681f269d34c8ca2d0b1c6baf3",
+      "raw_reconstruction_exact": true,
+      "task": "split_escaped",
+      "terminal_EOS": true,
+      "tokens": 149
+    }
+  ],
+  "guard_rc": 0,
+  "model_metadata_accessed": false,
+  "no_cap_hits": true,
+  "pressure": {
+    "adverse_samples": 0,
+    "final_swap_gb": 0.017763671875,
+    "first_utc": "2026-10-02T23:00:17.452900+00:00",
+    "initial_swap_gb": 0.017763671875,
+    "last_utc": "2026-10-02T23:05:15.066486+00:00",
+    "levels": [
+      1
+    ],
+    "maximum_compressor_gb": 7.7022857666015625,
+    "maximum_simultaneous_wired_compressor_gb": 79.56341552734375,
+    "maximum_wired_gb": 71.97775268554688,
+    "minimum_free_gb": 0.118743896484375,
+    "samples": 289,
+    "swap_growth_gb": 0.0
+  },
+  "raw_vector_copy_performed": false,
+  "resident_route": {
+    "double_layers": 2005,
+    "drops": 0,
+    "full_snapshots": 10835,
+    "layers": 22960,
+    "mean_affinity_ratio": "0.91045788",
+    "mean_mass": "0.11165889",
+    "mean_rank": "7.802",
+    "mean_score_gap": "0.09524920",
+    "native_misses": 18019,
+    "planned_substitutions": 12519,
+    "skipped_bytes": 124605112320,
+    "skipped_loads": 12519,
+    "substitutions": 12519,
+    "triple_layers": 135
+  },
+  "scorer_rerun": false,
+  "status": "PASS"
+}

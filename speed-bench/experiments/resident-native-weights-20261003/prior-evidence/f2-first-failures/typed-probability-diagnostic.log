@@ -1,0 +1,26 @@
+test_actual_functions_with_tensor_mocks_and_frozen_default (test_resident_native_weights.NativeWeightMocks.test_actual_functions_with_tensor_mocks_and_frozen_default) ... DIFFERENTIAL mode=apply subs=3 flag=unset
+slot=0 old_id=0 new_id=0 old_weight=3ec093e7 new_weight=3ec093e7
+slot=1 old_id=1 new_id=1 old_weight=3e9a0fec new_weight=3e9a0fec
+slot=2 old_id=2 new_id=2 old_weight=3e8aa7ee new_weight=3e8aa7ee
+slot=3 old_id=8 new_id=8 old_weight=3e74f57a new_weight=3e74f57a
+slot=4 old_id=7 new_id=7 old_weight=3e375581 new_weight=3e375582
+slot=5 old_id=6 new_id=6 old_weight=3e091d88 new_weight=3e091d88
+Assertion failed: (!memcmp(old_ids,ids_tensor.bytes,24) && !memcmp(old_weights,weight_tensor.bytes,24)), function old_default_differential, file mock.c, line 589.
+ERROR
+
+======================================================================
+ERROR: test_actual_functions_with_tensor_mocks_and_frozen_default (test_resident_native_weights.NativeWeightMocks.test_actual_functions_with_tensor_mocks_and_frozen_default)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/tests/test_resident_native_weights.py", line 216, in test_actual_functions_with_tensor_mocks_and_frozen_default
+    subprocess.run([str(p/'mock')],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/native-weights-cpu/tmpeh2i0muy/mock']' died with <Signals.SIGABRT: 6>.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.655s
+
+FAILED (errors=1)

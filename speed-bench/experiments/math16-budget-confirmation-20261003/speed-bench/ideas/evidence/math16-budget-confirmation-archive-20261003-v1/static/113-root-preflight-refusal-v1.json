@@ -1,0 +1,6 @@
+{
+  "status": "REFUSED_BEFORE_COMPILE",
+  "reason": "ROOT first preflight passed input_freeze dict to file hasher; TypeError before grant or compiler; corrected to nested path",
+  "compile_started": false,
+  "selftest_started": false
+}

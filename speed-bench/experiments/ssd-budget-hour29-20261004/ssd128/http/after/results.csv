@@ -1,0 +1,3 @@
+step,session,group,seconds,queue_inclusive_seconds,seconds_including_edit,correct,fresh_read,complete,pass,text
+C-edited,C,edited-CD,78.52774104199489,78.52834662501118,78.52834662501118,True,True,True,True,"{""active_total"": 267, ""archived_code"": ""CEDAR-70""}"
+D-edited,D,edited-CD,78.43556395801716,78.43622358402354,78.43622358402354,True,True,True,True,"{""active_total"":197,""archived_code"":""DELTA-83""}"

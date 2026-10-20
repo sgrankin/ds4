@@ -1,0 +1,2 @@
+{"stack":[10],"popped":[9,6]}
+Explicit POPs remove nine then six; the final ADD combines four and six into ten.

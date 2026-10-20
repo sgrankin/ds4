@@ -1,0 +1,20 @@
+{
+  "source_commit": "38c758fe730f7d3780d93bad11ca27bf07aeadd4",
+  "parent_preserved": "e6312f6280cc90b353eb96187d42f3b9835ed2b1",
+  "source_disk_frozen_copy_equal": true,
+  "manifest_sha256": "b80ecd4abdee67976e4b3824892ff34514a7214fa58687dd3746e692e4657df9",
+  "command_sha256": "009da3bdbc763311e7e5d83b055e5cdb9450cb8bbda6ca022b7ed2dd1e4af7c1",
+  "wrapper_sha256": "0d7f2b62875fe2517911b9bd06303bc97a92b3f6198dc2132bcfe99ce726e156",
+  "cpu_test_sha256": "ae68ca0d4f6c42a3259c69211730b33b39bcbb27e419528314d67b7db247623a",
+  "required_asset_count": 64,
+  "required_asset_identity_check": true,
+  "explicit_manifest_argv_pin": true,
+  "model_metadata_accessed": false,
+  "model_opened": false,
+  "helper_rebuilt": false,
+  "core_rebuilt": false,
+  "input_content_inspected_for_selection": false,
+  "binary_sha256": "1ced202ca2ddf3d3394007b1bfafae4cea7ae4c27c8f4173c11b650fdb1dacd5",
+  "input_freeze_sha256": "f46b45e17bc110d6b66fdf125b53935e8b16849f437d8c04bf9fa910c9b3c5de",
+  "source_tsv_sha256": "026134fbeb20786e1736db71ffc85de46515823112dabbaf9859b98a57c296b9"
+}

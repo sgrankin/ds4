@@ -1,0 +1,9 @@
+{
+  "url": "http://127.0.0.1:62637/v1/conversations",
+  "method": "POST",
+  "body": {
+    "metadata": {
+      "smoke": "installed-sdk"
+    }
+  }
+}

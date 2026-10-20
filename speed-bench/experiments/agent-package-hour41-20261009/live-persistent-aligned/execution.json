@@ -1,0 +1,33 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/ds4-local",
+    "persistent-fast",
+    "--model",
+    "gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--nothink",
+    "--temp",
+    "0",
+    "--tokens",
+    "512",
+    "--seed",
+    "20261009",
+    "--non-interactive",
+    "--chdir",
+    "/Volumes/Models/ds4/.workspaces/agent-package-20261009/live-shared/work",
+    "--live-context-file",
+    "/Volumes/Models/ds4/.workspaces/agent-package-20261009/live-shared/context.txt",
+    "--trace",
+    "/Volumes/Models/ds4/speed-bench/experiments/agent-package-hour41-20261009/live-persistent-aligned/agent.trace"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "explicit_env": {
+    "DS4_AGENT_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/agent-package-20261009/live-shared/bootstrap-cache",
+    "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/agent-package-20261009/live-shared/state-cache",
+    "DS4_STATE_CACHE_HOT_MB": "0",
+    "DS4_STATE_CACHE_SSD_MB": "8192",
+    "DS4_AGENT_TEST_TIME": "1791504000"
+  },
+  "preset_settings": "ds4-local + preset-check.json",
+  "eof_saves_named_session": false,
+  "geometry_authority": "actual agent trace; no parity or model retry"
+}

@@ -1,0 +1,7 @@
+ACTIVE FACTS — retain this section verbatim.
+packages = 17
+units_per_package = 25
+damaged_units = 9
+archive_code = MAPLE-42
+reserve_count = 73
+END ACTIVE FACTS

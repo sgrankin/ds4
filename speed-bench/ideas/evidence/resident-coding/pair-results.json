@@ -1,0 +1,21 @@
+{
+  "started": 1790960891.664216,
+  "scope": "first reconciliation task only",
+  "results": [
+    {
+      "arm": "baseline-ds41",
+      "rc": 1,
+      "wall_sec": 277.30790975000036,
+      "summary": null,
+      "checks": null
+    },
+    {
+      "arm": "resident-ds41",
+      "rc": 1,
+      "wall_sec": 123.00313533400004,
+      "summary": null,
+      "checks": null
+    }
+  ],
+  "completed": true
+}

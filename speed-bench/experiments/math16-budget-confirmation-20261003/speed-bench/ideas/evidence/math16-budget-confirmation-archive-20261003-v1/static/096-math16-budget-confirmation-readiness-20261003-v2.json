@@ -1,0 +1,45 @@
+{
+  "status": "PREPARED_UNRUN_NO_MODEL_GRANT",
+  "source_revision": "542fcb86866578d528d6168bd9299de5d7f90cd8",
+  "plan": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/plan.json",
+    "sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed"
+  },
+  "command": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/prepared-command.json",
+    "sha256": "042bccda630cccc02df9dd8a6f8ce9f19efd35bc1d74e276718ebee9c82a42b5"
+  },
+  "CPU": {
+    "proof_path": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-runner-cpu-20261003-v2/proof.json",
+    "proof_sha256": "520b83df758e074fe6cc2e12ce9c27a900b21dd004fa0cb17ae4a4809daf1fac",
+    "log_sha256": "831ac1838d7a55965ef8b0e51e6b6d0b9cc8085e387d63f8887c620d0191a1d6",
+    "passed_tests": 12
+  },
+  "literal": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-literal-proof-20261003-v2.json",
+    "sha256": "80af9c9f29118cc80506b566c5abd3a6fa98b13fe1d47960f4ea522923cc7fd3",
+    "regular_files": 5009,
+    "symlinks": 1
+  },
+  "standalone_verify": {
+    "returncode": 0,
+    "assets": 104,
+    "model_or_guard_executed": false
+  },
+  "ROOT_build_manifest_sha256": "b67874d6642d3c68ea280fa4410fd27235eb654c0b9c3fd8c0b79a5dea072ccf",
+  "binary_sha256": "1cdeaaa7f7dcb8d4f073b7694f7cce48a9e3cc6ec1253dd63be7bce93bfaca39",
+  "input_freeze_sha256": "cce60cf7ff19c3ef8d76410c857d0b422c1874d1558c1339551923f3d1a66b83",
+  "fixed_arms": [
+    0,
+    1024,
+    0
+  ],
+  "all_first_attempts": 48,
+  "estimated_minutes": [
+    75,
+    110
+  ],
+  "no_policy_or_input_changes": true,
+  "first_preparation_and_admin_refusals_retained": true,
+  "model_or_GGUF_stat_or_tokenizer_or_guard_or_native_build_executed_by_us": false
+}

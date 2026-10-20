@@ -1,0 +1,2 @@
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+Assertion failed: (before.worker_active==1 && before.worker_state==0 && before.owned_peak_bytes<=before.limit_bytes), function main, file test_resident_pool_api.c, line 35.

@@ -1,0 +1,7 @@
+{
+  "status": "PASS_NOT_GRANTED_NOT_RUN",
+  "manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "command_sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5",
+  "files": 114,
+  "model_stat_or_guard_or_native_executed": false
+}

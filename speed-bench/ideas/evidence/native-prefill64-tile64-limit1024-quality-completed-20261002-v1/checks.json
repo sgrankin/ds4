@@ -1,0 +1,13 @@
+{
+  "native_before_after_all343_rows_exact": true,
+  "reference_sha256": "f3690213afdae2d292d33fd74753c1fd010a04b482fca14cc6a9eb7d91f3ee3b",
+  "rows": 343,
+  "candidate_environment": {
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0"
+  },
+  "all_ds4_environment_cleared": true,
+  "raw_scope": "Compare arms verify full-vocabulary row alignment/memcmp in C; no candidate raw file exported.",
+  "timing_scope": "diagnostic only"
+}

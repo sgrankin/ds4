@@ -1,0 +1,5 @@
+--- first-failed-header.h
++++ ds4_suffix_pair_tape.h
+@@ contiguous-range retention @@
+-    if (first < p) first = p;
++    if (count > t->capacity && first < p) first = p;

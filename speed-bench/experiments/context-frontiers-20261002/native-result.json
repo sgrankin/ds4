@@ -1,0 +1,39 @@
+{
+  "status": "pass",
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "samples": 152,
+  "elapsed_to_last_sample_s": 155.93694806098938,
+  "min_free_gb": 0.1173858642578125,
+  "max_wired_gb": 77.35499572753906,
+  "max_compressor_gb": 9.147613525390625,
+  "max_swap_gb": 0.03015625,
+  "swap_growth_gb": 0.0,
+  "pressure_levels": [
+    1
+  ],
+  "adverse_samples": 0,
+  "longest_prefix_tokens": 2304,
+  "changed_suffix_tokens": 512,
+  "restore_ms": 6.61,
+  "suffix_ms": 17129.717,
+  "assertions": {
+    "saved_frontier_complete_payload_bit_identity": true,
+    "partition_matched_replay_complete_payload_bit_identity": true,
+    "all_vocabulary_logits_in_payload": true,
+    "count_eviction": true,
+    "retained_ram_bound_64_mib": true,
+    "wrong_prefix_leaves_live_payload_unchanged": true,
+    "wrong_context_entry_dropped": true,
+    "corrupt_payload_invalidation_and_normal_rebuild_tokens": true,
+    "image_exclusion_and_release": true,
+    "one_mib_skip_before_allocation": true
+  },
+  "limitations": [
+    "timings are single regression diagnostics, not a controlled task latency comparison",
+    "corrupt fallback verifies token transcript only",
+    "cold rebuild under different prefill partitioning is not compared"
+  ]
+}

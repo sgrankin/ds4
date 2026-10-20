@@ -1,0 +1,11 @@
+arm,case,match,ids,cached,prompt,fresh,approximate,raw_log
+count0-reference,dedupe,visible-prefix,1,1478,1521,43,1,1004 18:11:34 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1478 prompt=1521 approximate=1
+count0-reference,bucket,visible-prefix,1,1535,1577,42,1,1004 18:13:17 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1
+subs3-before,dedupe,visible-prefix,1,1478,1521,43,1,1004 18:15:02 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1478 prompt=1521 approximate=1
+subs3-before,bucket,visible-prefix,1,1535,1577,42,1,1004 18:16:37 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1
+subs1,dedupe,visible-prefix,1,1486,1529,43,1,1004 18:25:32 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1486 prompt=1529 approximate=1
+subs1,bucket,visible-prefix,1,1535,1577,42,1,1004 18:27:11 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1
+subs2,dedupe,visible-prefix,1,1486,1529,43,1,1004 18:29:02 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1486 prompt=1529 approximate=1
+subs2,bucket,visible-prefix,1,1535,1577,42,1,1004 18:30:42 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1
+subs3-after,dedupe,visible-prefix,1,1478,1521,43,1,1004 18:32:34 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1478 prompt=1521 approximate=1
+subs3-after,bucket,visible-prefix,1,1535,1577,42,1,1004 18:34:10 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1

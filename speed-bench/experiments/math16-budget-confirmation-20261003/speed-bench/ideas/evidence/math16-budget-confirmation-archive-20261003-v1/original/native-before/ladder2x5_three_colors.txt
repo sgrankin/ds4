@@ -1,0 +1,27 @@
+We need answer integer. Need solve. Need count proper colorings of 2x5 grid graph (ladder graph) with 3 labeled colors. Need count.
+
+We can compute. Ladder graph P2 x P5, 10 vertices. Chromatic polynomial for ladder? Need q=3. Count proper 3-colorings of 2 by n ladder.
+
+Let's derive. For each column, two vertical adjacent cells must differ. Let column state be ordered pair (top,bottom) with top != bottom. There are 3*2=6 states. Adjacent columns: top-top differ, bottom-bottom differ. Count sequences length 5 over 6 states with transition constraints.
+
+Need count for n=5. Could DP. States can be represented unordered pair? Since colors labeled. For a column, pair {a,b} with a!=b. Top/bottom orientation matters (2 orientations). Transition from column state (a,b) to (c,d): c!=a, d!=b, c!=d. Count.
+
+Let's compute DP manually. There are 6 states. Symmetry. Need total after 5 columns starting any state. Since transition matrix symmetric? Count total = sum over all sequences.
+
+Let's do recurrence maybe.
+
+Let state (top,bottom). Given previous (a,b). Next (c,d) with c != a, d != b, c != d. Count number of ordered pairs c,d from colors {1,2,3}. For fixed a,b distinct. Enumerate. Colors 1,2,3. Let a=1,b=2. c !=1, so c in {2,3}; d !=2, d in {1,3}; c!=d.
+c=2: d !=2 already, d in {1,3}, c!=d => d=1 or3? d=3 !=2 yes, d=1 yes. Both? d=1,3. But d !=2 yes. c=2,d=1 valid; c=2,d=3 valid.
+c=3: d in {1,3}, c!=d => d=1 only (d=3 invalid). So total 3. Thus each state has 3 successors. Total sequences length 5 = 6 * 3^4 = 486? Wait transition count per state constant 3? Need check if all previous states have exactly 3 successors. Yes for any ordered distinct pair. Then total = 6 * 3^(5-1)=486. Is it that simple? Need ensure transition count from any state exactly 3. Let's verify for a=1,b=3. c !=1 => {2,3}; d !=3 => {1,2}; c!=d.
+c=2: d in {1,2}, d!=2 => d=1. (d=2 invalid) =>1
+c=3: d in {1,2}, c!=d => d=1,2 both !=3. total2. total3. Yes.
+
+So count 486. But wait, is there any issue cells labeled? Colors labeled. Yes.
+
+Let's cross-check with chromatic polynomial ladder. For n=5, q=3 maybe? Ladder graph P_n square? Chromatic polynomial for ladder L_n = (q-2)??? Let's test n=1: 2 vertical cells adjacent: q(q-1)=3*2=6. Formula 6*3^(n-1) for n=1 gives 6. n=2: 2x2 grid cycle C4? Proper 3-colorings C4 = (q-1)^4 + (q-1)? Actually C4 chromatic = (q-1)^4 + (q-1) = 2^4+2=18 for q=3. Our formula 6*3=18. Good. n=3: 6*9=54. Let's maybe DP? Seems.
+
+Final answer only integer. 486. 
+Need ensure no diagonal constraints. Yes.
+
+Final. 
+</think>486

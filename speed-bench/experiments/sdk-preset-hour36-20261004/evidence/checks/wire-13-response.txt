@@ -1,0 +1,14 @@
+: prefill
+
+data: {"type":"response.created","sequence_number":0,"response":{"id":"resp_a0eff3e9da16cc9bc6e1759b","object":"response","created_at":1791154627,"status":"in_progress","model":"deepseek-v4.1-flash","output":[]}}
+
+data: {"type":"response.output_item.added","sequence_number":1,"output_index":0,"item":{"id":"fc_fb9b1c219f094e1a52dd26c7","type":"function_call","status":"in_progress","name":"read","call_id":"call_b23d3477c67c916faddd9eaf252b12c5","arguments":""}}
+
+data: {"type":"response.function_call_arguments.delta","sequence_number":2,"item_id":"fc_fb9b1c219f094e1a52dd26c7","output_index":0,"delta":"{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/sdk36-first/checks/pi-config.json\",\"whole\":true,\"raw\":true}"}
+
+data: {"type":"response.function_call_arguments.done","sequence_number":3,"item_id":"fc_fb9b1c219f094e1a52dd26c7","output_index":0,"name":"read","arguments":"{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/sdk36-first/checks/pi-config.json\",\"whole\":true,\"raw\":true}"}
+
+data: {"type":"response.output_item.done","sequence_number":4,"output_index":0,"item":{"id":"fc_fb9b1c219f094e1a52dd26c7","type":"function_call","status":"completed","name":"read","call_id":"call_b23d3477c67c916faddd9eaf252b12c5","arguments":"{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/sdk36-first/checks/pi-config.json\",\"whole\":true,\"raw\":true}"}}
+
+data: {"type":"response.completed","sequence_number":5,"response":{"id":"resp_a0eff3e9da16cc9bc6e1759b","object":"response","created_at":1791154627,"status":"completed","model":"deepseek-v4.1-flash","store":false,"previous_response_id":null,"conversation":null,"output":[{"id":"fc_fb9b1c219f094e1a52dd26c7","type":"function_call","status":"completed","name":"read","call_id":"call_b23d3477c67c916faddd9eaf252b12c5","arguments":"{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/sdk36-first/checks/pi-config.json\",\"whole\":true,\"raw\":true}"}],"usage":{"input_tokens":307,"input_tokens_details":{"cached_tokens":0,"cache_write_tokens":307},"output_tokens":95,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":402}}}
+

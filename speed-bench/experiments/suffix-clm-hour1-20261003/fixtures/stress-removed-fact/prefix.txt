@@ -1,0 +1,1 @@
+Answer using the active deployment record for Record X. If that record is absent, reply only UNKNOWN. If the record is present, reply only its four-digit code. Unrelated inventory notes do not supply deployment codes.

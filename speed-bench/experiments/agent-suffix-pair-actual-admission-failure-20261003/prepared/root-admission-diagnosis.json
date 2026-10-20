@@ -1,0 +1,22 @@
+{
+  "status": "ROOT_ADMISSION_FORECAST_FAILURE_DIAGNOSED",
+  "time": 1791000748.34161,
+  "task_sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283",
+  "manifest_sha256": "53a3326e3c6a8b46d15c86302f2008c06f82d953bb817509f9610847d6ef4b88",
+  "controller_outcome_sha256": "f9705d68794b88f6726f964e65b78b0e572d58e76efa9cdbc9f286b81ff5e240",
+  "admission_ledger_sha256": "00212e25cac46fbe647f07e750c276a09bfb7609f009f8b55d11dc031dac02e6",
+  "release_sha256": "fc6e941b9100c5f4eac98460da507e51dcc86d94d691b4eb1ae5821b814d9f38",
+  "third_exact_protocol_guard_passed": true,
+  "first_two_controls_passed": true,
+  "selection_created": false,
+  "candidate_attempt_files": 0,
+  "third_evaluation_or_RNG_or_semantic_grading": false,
+  "forecast_bytes": 137150794,
+  "budget_bytes": 134217728,
+  "excess_bytes": 2933066,
+  "canonical_undo_forecast_not_selector_allocated": true,
+  "global_peak_not_observed": true,
+  "new_separate_memory_experiment_fixed_budget_bytes": 167772160,
+  "new_budget_chosen_before_any_third_semantic_result": true,
+  "original_failure_unmodified": true
+}

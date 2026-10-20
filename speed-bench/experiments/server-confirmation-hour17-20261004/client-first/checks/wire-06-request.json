@@ -1,0 +1,13 @@
+{
+  "url": "http://127.0.0.1:62637/v1/conversations/conv_2ff3c5e09fadfd7513fdbbff/items",
+  "method": "POST",
+  "body": {
+    "items": [
+      {
+        "type": "message",
+        "role": "user",
+        "content": "A local SDK item."
+      }
+    ]
+  }
+}

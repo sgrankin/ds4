@@ -1,0 +1,7 @@
+We need answer integer. Need solve. Binary strings length 14 circular, exactly five 1s no adjacent including 14-1. Count labeled positions.
+
+This is number of independent sets size 5 on cycle C14. Formula n/(n-k) * binom(n-k, k) for k? For cycle length n, k nonadjacent = n/(n-k) * C(n-k, k). n=14 k=5 => 14/(9)*C(9,5)=14/9*126=14*14=196? 126/9=14 yes. Check. Alternatively choose gaps positive around cycle sum 14 with 5 ones, zeros gaps between ones at least 1. Let gaps x_i >=1 sum zeros? Actually 5 ones, 9 zeros. Need at least one zero between consecutive ones cyclically, so gaps of zeros between ones positive integers sum 9. Number positive compositions of 9 into 5 parts = C(8,4)=70. But labeled strings? For each gap sequence and starting at a chosen 1? Since positions labeled and ones indistinguishable. If we fix a distinguished starting one? Positive gap sequences count arrangements up to rotation? Need multiply by? Let's verify formula 196.
+
+Let's derive: Circular binary strings with 5 ones no adjacent. There are 14 choices for a designated position? If choose a particular one as first? Number gap sequences positive sum 9 into 5 = C(8,4)=70. For each gap sequence, place first 1 at a chosen position? But if choose position of first 1 among 14, and gap sequence determines subsequent ones, each actual string with 5 ones counted 5 times (each one as first). So count = 14*70/5 = 196. Yes.
+
+Need final only integer.</think>196

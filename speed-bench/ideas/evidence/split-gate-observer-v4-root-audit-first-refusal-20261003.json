@@ -1,0 +1,10 @@
+{
+  "status": "ROOT_ADMIN_STATIC_PATH_COMPARISON_REFUSAL_BEFORE_PROOF_OR_JJ_MUTATION",
+  "time": 1791010050.159903,
+  "first_tool_chunk": "3c6f45",
+  "diagnostic_tool_chunk": "b0d707",
+  "reason": "ROOT compared relocated calibration16/fixtures.tsv to old raw SHA although TSV contains prepared absolute paths.",
+  "corrected_ROOT_check_only": "Normalize exact old/new prepared path prefix and require whole TSV equality; all input payloads/cases remain exactly equal.",
+  "producer_sources_and_preparation_unchanged": true,
+  "no_model_helper_guard_compiler_execution": true
+}

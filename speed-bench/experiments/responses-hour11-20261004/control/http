@@ -1,0 +1,435 @@
+{
+  "utc": "2026-10-04T13:34:31.667237+00:00",
+  "argv": [
+    "/Volumes/Models/ds4/speed-bench/experiments/responses-hour11-20261004/control.py",
+    "--base-url",
+    "http://127.0.0.1:55475",
+    "--manifest",
+    "speed-bench/experiments/responses-hour11-20261004/first/http/manifest.json",
+    "--output",
+    "speed-bench/experiments/responses-hour11-20261004/control/http"
+  ],
+  "manifest": "/Volumes/Models/ds4/speed-bench/experiments/responses-hour11-20261004/first/http/manifest.json",
+  "base_url": "http://127.0.0.1:55475/v1",
+  "pairs": [
+    {
+      "name": "changed-instructions-count",
+      "anchor": "saved-child",
+      "independent_gold": {
+        "memory": "MEM_1aa28a40735f5edd",
+        "count": 82,
+        "marker": "FORK_8b944ca176"
+      },
+      "arms": {
+        "full": {
+          "request": {
+            "model": "deepseek-v4.1-flash",
+            "store": false,
+            "temperature": 0,
+            "reasoning": {
+              "effort": "none"
+            },
+            "max_output_tokens": 96,
+            "instructions": "When answering, return only JSON with keys \"memory\", \"count\", \"marker\". Use the known facts. The current instruction marker is \"FORK_8b944ca176\".",
+            "input": [
+              {
+                "type": "message",
+                "role": "user",
+                "content": [
+                  {
+                    "type": "input_text",
+                    "text": "Memory literal is MEM_1aa28a40735f5edd. Current count is 37. Report these facts."
+                  }
+                ]
+              },
+              {
+                "id": "msg_b6a359c867b321246083be1f",
+                "type": "message",
+                "status": "completed",
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "output_text",
+                    "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":37,\"marker\":\"OLD_8b944ca176\"}",
+                    "annotations": []
+                  }
+                ]
+              },
+              {
+                "type": "message",
+                "role": "user",
+                "content": [
+                  {
+                    "type": "input_text",
+                    "text": "Report the remembered literal and current count."
+                  }
+                ]
+              },
+              {
+                "id": "msg_5d82e522b21e19d78cdd2756",
+                "type": "message",
+                "status": "completed",
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "output_text",
+                    "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":37,\"marker\":\"NEW_8b944ca176\"}",
+                    "annotations": []
+                  }
+                ]
+              },
+              {
+                "type": "message",
+                "role": "user",
+                "content": [
+                  {
+                    "type": "input_text",
+                    "text": "The current count is now 82. Report memory and current count."
+                  }
+                ]
+              }
+            ]
+          },
+          "http_status": 200,
+          "seconds": 11.923065333001432,
+          "error": null,
+          "wire": "{\"id\":\"resp_3b244220c35abdf445e8e80a\",\"object\":\"response\",\"created_at\":1791120851,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"output\":[{\"id\":\"msg_63d2bc57daee53bd49d81979\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"memory\\\":\\\"MEM_1aa28a40735f5edd\\\",\\\"count\\\":82,\\\"marker\\\":\\\"NEW_8b944ca176\\\"}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":158,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":158},\"output_tokens\":30,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":188}}",
+          "body": {
+            "id": "resp_3b244220c35abdf445e8e80a",
+            "object": "response",
+            "created_at": 1791120851,
+            "status": "completed",
+            "model": "deepseek-v4.1-flash",
+            "store": false,
+            "previous_response_id": null,
+            "output": [
+              {
+                "id": "msg_63d2bc57daee53bd49d81979",
+                "type": "message",
+                "status": "completed",
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "output_text",
+                    "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":82,\"marker\":\"NEW_8b944ca176\"}",
+                    "annotations": []
+                  }
+                ]
+              }
+            ],
+            "usage": {
+              "input_tokens": 158,
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 158
+              },
+              "output_tokens": 30,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 188
+            }
+          },
+          "actual_text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":82,\"marker\":\"NEW_8b944ca176\"}",
+          "input_tokens": 158,
+          "output_tokens": 30,
+          "response_status": "completed",
+          "incomplete_details": null,
+          "gold_pass": false
+        },
+        "previous": {
+          "request": {
+            "model": "deepseek-v4.1-flash",
+            "store": false,
+            "temperature": 0,
+            "reasoning": {
+              "effort": "none"
+            },
+            "max_output_tokens": 96,
+            "instructions": "When answering, return only JSON with keys \"memory\", \"count\", \"marker\". Use the known facts. The current instruction marker is \"FORK_8b944ca176\".",
+            "previous_response_id": "resp_02f7cb4fbcadfef67088f92f",
+            "input": "The current count is now 82. Report memory and current count."
+          },
+          "http_status": 200,
+          "seconds": 1.2191272500058403,
+          "error": null,
+          "wire": "{\"id\":\"resp_fcf60c2982fce051938d5a4b\",\"object\":\"response\",\"created_at\":1791120853,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":\"resp_02f7cb4fbcadfef67088f92f\",\"output\":[{\"id\":\"msg_b41a8d65590c676e5935da7b\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"memory\\\":\\\"MEM_1aa28a40735f5edd\\\",\\\"count\\\":82,\\\"marker\\\":\\\"NEW_8b944ca176\\\"}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":158,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":158},\"output_tokens\":30,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":188}}",
+          "body": {
+            "id": "resp_fcf60c2982fce051938d5a4b",
+            "object": "response",
+            "created_at": 1791120853,
+            "status": "completed",
+            "model": "deepseek-v4.1-flash",
+            "store": false,
+            "previous_response_id": "resp_02f7cb4fbcadfef67088f92f",
+            "output": [
+              {
+                "id": "msg_b41a8d65590c676e5935da7b",
+                "type": "message",
+                "status": "completed",
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "output_text",
+                    "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":82,\"marker\":\"NEW_8b944ca176\"}",
+                    "annotations": []
+                  }
+                ]
+              }
+            ],
+            "usage": {
+              "input_tokens": 158,
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 158
+              },
+              "output_tokens": 30,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 188
+            }
+          },
+          "actual_text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":82,\"marker\":\"NEW_8b944ca176\"}",
+          "input_tokens": 158,
+          "output_tokens": 30,
+          "response_status": "completed",
+          "incomplete_details": null,
+          "gold_pass": false
+        }
+      },
+      "pair_agreement": true,
+      "prompt_input_tokens_match": true,
+      "input_token_delta_previous_minus_full": 0,
+      "both_gold": false
+    },
+    {
+      "name": "changed-instructions-tool-output",
+      "anchor": "pending-tool",
+      "independent_gold": {
+        "memory": "MEM_1aa28a40735f5edd",
+        "count": 61,
+        "marker": "TOOL_FINAL_8b944ca176"
+      },
+      "arms": {
+        "full": {
+          "request": {
+            "model": "deepseek-v4.1-flash",
+            "store": false,
+            "temperature": 0,
+            "reasoning": {
+              "effort": "none"
+            },
+            "max_output_tokens": 96,
+            "instructions": "When answering, return only JSON with keys \"memory\", \"count\", \"marker\". Use the known facts. The current instruction marker is \"TOOL_FINAL_8b944ca176\".",
+            "tools": [
+              {
+                "type": "function",
+                "name": "lookup_count",
+                "description": "Get the current count for a named record.",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "key"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ],
+            "tool_choice": "auto",
+            "input": [
+              {
+                "type": "message",
+                "role": "user",
+                "content": [
+                  {
+                    "type": "input_text",
+                    "text": "Memory literal is MEM_1aa28a40735f5edd. Current count is 37. Report these facts."
+                  }
+                ]
+              },
+              {
+                "id": "msg_b6a359c867b321246083be1f",
+                "type": "message",
+                "status": "completed",
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "output_text",
+                    "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":37,\"marker\":\"OLD_8b944ca176\"}",
+                    "annotations": []
+                  }
+                ]
+              },
+              {
+                "type": "message",
+                "role": "user",
+                "content": [
+                  {
+                    "type": "input_text",
+                    "text": "Call lookup_count with key \"subject\" now. Wait for its result."
+                  }
+                ]
+              },
+              {
+                "id": "fc_922559c422b7d77ad2c5a3e2",
+                "type": "function_call",
+                "status": "completed",
+                "name": "lookup_count",
+                "call_id": "call_dfda3a5e227b110dbd4079893b926b3f",
+                "arguments": "{\"key\":\"subject\"}"
+              },
+              {
+                "type": "function_call_output",
+                "call_id": "call_dfda3a5e227b110dbd4079893b926b3f",
+                "output": "{\"count\":61}"
+              }
+            ]
+          },
+          "http_status": 200,
+          "seconds": 16.949269624994486,
+          "error": null,
+          "wire": "{\"id\":\"resp_cb81eb3109f90728944a38cd\",\"object\":\"response\",\"created_at\":1791120870,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"output\":[{\"id\":\"msg_a3cd99182598915007dc3f62\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"memory\\\":\\\"MEM_1aa28a40735f5edd\\\",\\\"count\\\":61,\\\"marker\\\":\\\"TOOL_FINAL_8b944ca176\\\"}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":396,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":396},\"output_tokens\":33,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":429}}",
+          "body": {
+            "id": "resp_cb81eb3109f90728944a38cd",
+            "object": "response",
+            "created_at": 1791120870,
+            "status": "completed",
+            "model": "deepseek-v4.1-flash",
+            "store": false,
+            "previous_response_id": null,
+            "output": [
+              {
+                "id": "msg_a3cd99182598915007dc3f62",
+                "type": "message",
+                "status": "completed",
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "output_text",
+                    "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":61,\"marker\":\"TOOL_FINAL_8b944ca176\"}",
+                    "annotations": []
+                  }
+                ]
+              }
+            ],
+            "usage": {
+              "input_tokens": 396,
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 396
+              },
+              "output_tokens": 33,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 429
+            }
+          },
+          "actual_text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":61,\"marker\":\"TOOL_FINAL_8b944ca176\"}",
+          "input_tokens": 396,
+          "output_tokens": 33,
+          "response_status": "completed",
+          "incomplete_details": null,
+          "gold_pass": true
+        },
+        "previous": {
+          "request": {
+            "model": "deepseek-v4.1-flash",
+            "store": false,
+            "temperature": 0,
+            "reasoning": {
+              "effort": "none"
+            },
+            "max_output_tokens": 96,
+            "instructions": "When answering, return only JSON with keys \"memory\", \"count\", \"marker\". Use the known facts. The current instruction marker is \"TOOL_FINAL_8b944ca176\".",
+            "tools": [
+              {
+                "type": "function",
+                "name": "lookup_count",
+                "description": "Get the current count for a named record.",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "key"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ],
+            "tool_choice": "auto",
+            "previous_response_id": "resp_b6c062e23b4a393797cc2ec2",
+            "input": [
+              {
+                "type": "function_call_output",
+                "call_id": "call_dfda3a5e227b110dbd4079893b926b3f",
+                "output": "{\"count\":61}"
+              }
+            ]
+          },
+          "http_status": 200,
+          "seconds": 1.5436325000046054,
+          "error": null,
+          "wire": "{\"id\":\"resp_ac7221d6e7fa53fc18b637e0\",\"object\":\"response\",\"created_at\":1791120871,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":\"resp_b6c062e23b4a393797cc2ec2\",\"output\":[{\"id\":\"msg_fff11aa44be25e311bf9e5e5\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"memory\\\":\\\"MEM_1aa28a40735f5edd\\\",\\\"count\\\":61,\\\"marker\\\":\\\"TOOL_FINAL_8b944ca176\\\"}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":396,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":396},\"output_tokens\":33,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":429}}",
+          "body": {
+            "id": "resp_ac7221d6e7fa53fc18b637e0",
+            "object": "response",
+            "created_at": 1791120871,
+            "status": "completed",
+            "model": "deepseek-v4.1-flash",
+            "store": false,
+            "previous_response_id": "resp_b6c062e23b4a393797cc2ec2",
+            "output": [
+              {
+                "id": "msg_fff11aa44be25e311bf9e5e5",
+                "type": "message",
+                "status": "completed",
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "output_text",
+                    "text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":61,\"marker\":\"TOOL_FINAL_8b944ca176\"}",
+                    "annotations": []
+                  }
+                ]
+              }
+            ],
+            "usage": {
+              "input_tokens": 396,
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 396
+              },
+              "output_tokens": 33,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 429
+            }
+          },
+          "actual_text": "{\"memory\":\"MEM_1aa28a40735f5edd\",\"count\":61,\"marker\":\"TOOL_FINAL_8b944ca176\"}",
+          "input_tokens": 396,
+          "output_tokens": 33,
+          "response_status": "completed",
+          "incomplete_details": null,
+          "gold_pass": true
+        }
+      },
+      "pair_agreement": true,
+      "prompt_input_tokens_match": true,
+      "input_token_delta_previous_minus_full": 0,
+      "both_gold": true
+    }
+  ],
+  "interpretation": "Greedy first attempts; same current instructions and facts, full public input versus stored replay. Original sampled failures retained separately. No retries or repairs; timings diagnostic."
+}

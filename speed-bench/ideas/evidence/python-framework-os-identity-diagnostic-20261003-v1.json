@@ -1,0 +1,22 @@
+{
+  "status": "ACTUAL_OS_FRAMEWORK_IDENTITY_DIAGNOSTIC_PASS",
+  "time": 1791014383.312553,
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "-c",
+    "import sys,os,subprocess,json;print(json.dumps(dict(sys_executable=sys.executable,ps_comm=subprocess.check_output([\"/bin/ps\",\"-p\",str(os.getpid()),\"-o\",\"comm=\"],text=True,timeout=2).strip(),samefile_sys_executable=os.path.samefile(sys.executable,'/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python'))))"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "returncode": 0,
+  "stdout": "{\"sys_executable\": \"/opt/homebrew/opt/python@3.14/bin/python3.14\", \"ps_comm\": \"/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python\", \"samefile_sys_executable\": false}\n",
+  "stderr": "",
+  "observed": {
+    "sys_executable": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "ps_comm": "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "samefile_sys_executable": false
+  },
+  "framework_sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d",
+  "scope": "No modelstat/helper/guard/compiler/GPU; sys.executable reports configured launcher alias while actual OS comm names pinned framework executable",
+  "inherited_launcher_variables_present": {}
+}

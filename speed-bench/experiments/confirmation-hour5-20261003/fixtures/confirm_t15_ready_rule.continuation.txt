@@ -1,0 +1,2 @@
+{"ready":false,"blocking_field":"alarm"}
+Readiness requires all three conditions at once. The current permit and lock satisfy their conditions, but the current alarm has not been acknowledged. This makes ready false, with alarm as the blocking field. The note about yesterday refers to an older state and cannot replace the explicitly superseding current record.

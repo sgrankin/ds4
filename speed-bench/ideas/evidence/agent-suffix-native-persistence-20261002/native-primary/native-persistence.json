@@ -1,0 +1,20 @@
+{
+  "pass": true,
+  "save_called": true,
+  "approximate_before": true,
+  "approximate_after": true,
+  "canonical_blocked_before": true,
+  "canonical_blocked_after": true,
+  "checkpoint_byte_equal": true,
+  "logits_byte_equal": true,
+  "private_graph_byte_equal": true,
+  "suffix_source_rejected": true,
+  "saved_zero_kv": true,
+  "save_ms": 0.609000,
+  "optional_reopen_requested": false,
+  "reopened": false,
+  "reload_exact": false,
+  "reload_query_correct": false,
+  "reload_ms": 0.000000,
+  "error": ""
+}

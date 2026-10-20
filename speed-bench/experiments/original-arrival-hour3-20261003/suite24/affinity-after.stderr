@@ -1,0 +1,49 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+PROBE case=functional24_01_cursor_pages tokens=32 nll=0.820543 kl=0.00564659 prefill_ms=9432.806 decode_ms=2316.848
+PROBE case=functional24_02_call_correlation tokens=32 nll=2.225137 kl=0.00992748 prefill_ms=3974.780 decode_ms=1695.373
+PROBE case=functional24_03_fixed_offset tokens=32 nll=1.698471 kl=0.00713039 prefill_ms=3501.237 decode_ms=1769.836
+PROBE case=functional24_04_stream_events tokens=32 nll=1.648814 kl=0.00477403 prefill_ms=4027.838 decode_ms=1753.039
+PROBE case=functional24_05_artifact_delta tokens=32 nll=2.165552 kl=0.0243905 prefill_ms=4293.420 decode_ms=1846.412
+PROBE case=functional24_06_three_way_fields tokens=32 nll=1.422647 kl=0.00409722 prefill_ms=4138.882 decode_ms=1737.872
+PROBE case=functional24_07_little_endian_words tokens=32 nll=2.098929 kl=0.00867458 prefill_ms=2034.926 decode_ms=1684.233
+PROBE case=functional24_08_matrix_product tokens=32 nll=0.931681 kl=0.00349937 prefill_ms=2790.796 decode_ms=1599.096
+PROBE case=functional24_09_left_join_null tokens=32 nll=0.393801 kl=0.000956464 prefill_ms=5298.490 decode_ms=1563.020
+PROBE case=functional24_10_form_query tokens=32 nll=0.235063 kl=0.00232452 prefill_ms=3571.873 decode_ms=1591.197
+PROBE case=functional24_11_crc8 tokens=32 nll=2.009070 kl=0.0128256 prefill_ms=3987.222 decode_ms=1643.084
+PROBE case=functional24_12_grid_components tokens=32 nll=1.156160 kl=0.00848051 prefill_ms=2733.769 decode_ms=1791.485
+PROBE case=functional24_13_absolute_integral tokens=32 nll=1.590959 kl=0.0060136 prefill_ms=2394.820 decode_ms=1636.508
+PROBE case=functional24_14_polygon_area tokens=32 nll=2.197469 kl=0.0135166 prefill_ms=2237.390 decode_ms=1586.706
+PROBE case=functional24_15_geometric_fraction tokens=32 nll=2.333666 kl=0.00650573 prefill_ms=2248.094 decode_ms=1579.917
+PROBE case=functional24_16_weighted_median tokens=32 nll=1.641226 kl=0.00338392 prefill_ms=3062.789 decode_ms=1631.277
+PROBE case=functional24_17_diophantine_list tokens=32 nll=2.127158 kl=0.0126825 prefill_ms=2053.792 decode_ms=1610.590
+PROBE case=functional24_18_polynomial_remainder tokens=32 nll=2.795778 kl=0.0178606 prefill_ms=2800.116 decode_ms=1527.016
+PROBE case=functional24_19_french_route tokens=32 nll=0.641351 kl=0.00356176 prefill_ms=3847.839 decode_ms=1708.456
+PROBE case=functional24_20_japanese_notice tokens=32 nll=0.895225 kl=0.00590721 prefill_ms=3010.722 decode_ms=1810.646
+PROBE case=functional24_21_ceramic_sequence tokens=32 nll=1.854673 kl=0.00577495 prefill_ms=3143.116 decode_ms=1793.460
+PROBE case=functional24_22_invented_game tokens=32 nll=2.844187 kl=0.0143914 prefill_ms=4564.209 decode_ms=1730.537
+PROBE case=functional24_23_casefold_pair tokens=32 nll=1.840667 kl=0.00669434 prefill_ms=2652.916 decode_ms=1751.882
+PROBE case=functional24_24_literal_unicode_note tokens=32 nll=0.749286 kl=0.00806637 prefill_ms=2882.144 decode_ms=1798.276
+ds4: Metal memory quality probe final: runtime 0.89 GiB + streaming experts 56.88 GiB = 57.77 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.61 GiB, resident 66.38 GiB, virtual 732.85 GiB
+ds4:   mmap model wrapper creations 569 buffers 9.38 GiB cumulative, 1.23 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=712592 misses=66688 hit_rate=0.914 wraps=200064 evictions=60552 buffer_allocs=15 buffer_reuses=60552 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=618.18 GiB pread_ms=38200.299
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1088.893 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 4.53 MiB (flash mask 0.02, pad 0.06, tmp 4.02, blk 0.00, ring 0.00, kv 0.33, compressor 0.02, router 0.09, indexer 0.00, moe 0.00, f16 0.00, raw-store 0.00)
+PROBE_IO enabled=1 pread_calls=200064 requested_bytes=663764336640 returned_bytes=663764336640 cache_loader_bytes=663764336640 cache_hits=712592 cache_misses=66688 cache_evictions=60552
+ds4: resident-route layers=30720 substitutions=2932 native_misses=14067 skipped_loads=2932 skipped_bytes=29183016960 mean_mass=0.09285302 mean_score_gap=0.06351774 mean_affinity_ratio=0.94908128 mean_rank=7.320 full_snapshots=2996 double_layers=0 planned_substitutions=2932 drops=0 triple_layers=0
+ds4: resident-route-native-weights requested=1 substitutions=2932

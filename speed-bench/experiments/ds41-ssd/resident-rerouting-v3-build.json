@@ -1,0 +1,28 @@
+{
+  "experiment": "resident-rerouting-v3",
+  "base_commit": "67696070",
+  "parent_v2_commit": "16d3e5d25e15",
+  "gpu_runs_by_implementation_agent": 0,
+  "selector_test": "passed",
+  "selector_differential": "50000 cases identical to v2, with and without -ffast-math",
+  "metal_build": "warning-free",
+  "changed_runtime": [
+    "ds41_resident_route_apply",
+    "ds4_gpu_stream_expert_cache_snapshot_selected",
+    "ds4_resident_route_weakest"
+  ],
+  "guard": "selected6 identity + weakest miss + mass eligibility before full384 snapshot",
+  "sha256": {
+    "ds4.c": "97d6997df38e1ef4b8e40069cc8bc8b1cbb88b699c9ee8de03e575960cb5c542",
+    "ds4_resident_route.h": "623cd58e97372f8ac08bf4b6f1099f10ef4127861ffe3ad14da933c099cdd9de",
+    "ds4_gpu.h": "f03ac2afd23092e46908246cfc0000328865169d428d4fbfa115af59ca2edd5f",
+    "ds4_metal.m": "c7213d4148bd3ba876f4f6bc4b499bdb1b17266923586309444f876ae5fc52f8",
+    "ds4.o": "0fcb28df5838eb90c3b9a1c53be9b11c5932c78279e868869eb1c47bc19ff5a7",
+    "ds4_metal.o": "bc0f8f77873c86549480d155702f52394d9735a74c27b8f11f2161100ba36ecc",
+    "libds4_resident.dylib": "f3fe66ea4cf2f4a4a9aaba4db36bc0c6df885f0728a840cb883adb96bb1270b7",
+    "ds4": "514a595df96cc203a24bd6a107c7a27b75f5296af388aaac5cfbd1fe6a8efda7",
+    "ds4-agent": "63947e368af1bfcc878974b22d99a94a5617ba663376192ce8e3682c9dd534ba",
+    "speed-bench/agent-session/replay": "5258a479b1dce075dd5cfc45c5df36d16e8c96d55d0c91c0212417b6986e4fad",
+    "tests/test_resident_route.c": "3e7da61a4d70ac101b9238fb1dc936180dfbec2a0f3345b20183752d46a11350"
+  }
+}

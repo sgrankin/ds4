@@ -1,0 +1,48 @@
+{
+  "calibration16": {
+    "prior": "/Volumes/Models/ds4/speed-bench/ideas/evidence/resident-three-calibration16-20261002/reference-manifest.json",
+    "sha256": "d5c373e7a4ddc7338ef08c1615b519d4283bd651804f8c5ee9910c90b2012f95",
+    "ordered_case_ids": [
+      "case_001",
+      "case_007",
+      "case_013",
+      "case_019",
+      "case_025",
+      "case_031",
+      "case_037",
+      "case_043",
+      "case_049",
+      "case_055",
+      "case_061",
+      "case_067",
+      "case_073",
+      "case_079",
+      "case_085",
+      "case_091"
+    ],
+    "prompt_and_continuation_hashes_all_exact": true
+  },
+  "heldout16": {
+    "prior": "/Volumes/Models/ds4/speed-bench/ideas/evidence/confirmation16-input-freeze-20261002/input-freeze.json",
+    "sha256": "f46b45e17bc110d6b66fdf125b53935e8b16849f437d8c04bf9fa910c9b3c5de",
+    "ordered_case_ids": [
+      "case_002",
+      "case_008",
+      "case_014",
+      "case_020",
+      "case_026",
+      "case_032",
+      "case_038",
+      "case_044",
+      "case_050",
+      "case_056",
+      "case_062",
+      "case_068",
+      "case_074",
+      "case_080",
+      "case_086",
+      "case_092"
+    ],
+    "prompt_and_continuation_hashes_all_exact": true
+  }
+}

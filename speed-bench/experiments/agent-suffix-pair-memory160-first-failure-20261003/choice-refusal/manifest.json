@@ -1,0 +1,60 @@
+{
+  "status": "FIRST_PRETHIRD_CHOICE_BOUND_BASELINE_SOURCE_REFUSED_UNRUN",
+  "first_choice_source_only": true,
+  "chosen_edit_sha256": "480057204ff830e9a5428f1af75f398377f1055354fc80a85adc720ae1b2e32a",
+  "generated_grader_outcomes_read_for_choice": false,
+  "choice_not_selected_by_later_success_or_failure": true,
+  "native_model_or_guard_or_GGUF_access": false,
+  "files": {
+    "binding-proof.json": {
+      "bytes": 1179,
+      "sha256": "95efbab68ef82bcbd39c1e9acd8180fc184e40b67380ffb8f6a243a7add91ba4",
+      "mode": 420
+    },
+    "chosen-edit.json": {
+      "bytes": 2822,
+      "sha256": "480057204ff830e9a5428f1af75f398377f1055354fc80a85adc720ae1b2e32a",
+      "mode": 420
+    },
+    "chosen-reference/candidate-00.json": {
+      "bytes": 81,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c",
+      "mode": 420
+    },
+    "chosen-reference/selected-after.txt": {
+      "bytes": 14498,
+      "sha256": "f3f1e72c4dcb3dac9c2bff040466bb1195323b2832dfc78c3f725779516555dd",
+      "mode": 420
+    },
+    "chosen-reference/selected-before.txt": {
+      "bytes": 14542,
+      "sha256": "55ce742df351f02de09df16190a9daccd2fab78c1171c350bd9464e71444a2a3",
+      "mode": 420
+    },
+    "chosen-reference/selected-edited.ids": {
+      "bytes": 13468,
+      "sha256": "7fdcf080f4b79807c8f62d7a3cf05ad6d6040b7b88e3c51fb8ba31aa6ef783a0",
+      "mode": 420
+    },
+    "chosen-reference/selected-old.ids": {
+      "bytes": 13512,
+      "sha256": "e2ca1f3b9499d0cda274e378f9951a66bcb8434d47d3e61ff01915e2564c150b",
+      "mode": 420
+    },
+    "chosen-reference/selection.json": {
+      "bytes": 453,
+      "sha256": "0556584a02e4ffbacdb99186e9d8f882188c5c33965d0a4f2b33b34adda726b9",
+      "mode": 420
+    },
+    "source-refusal.json": {
+      "bytes": 2273,
+      "sha256": "57f6d361b0e679c98278a718e77c755c575ef61af1b0d30c2540ab2b59a38c75",
+      "mode": 420
+    },
+    "task.json": {
+      "bytes": 25417,
+      "sha256": "11a9e6c778dcc79ebd4e6f3dbfcc6b30c57ac20f544db30a982f57431a5961aa",
+      "mode": 420
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "label": "original36-tests",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/test_agent_suffix_pair_actual.py"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 10.44169306755066,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "0af172643363b41261557c83a28094a167fc00f82fb765439504703db86bfe06",
+  "warning": false,
+  "tests": 36
+}

@@ -1,0 +1,1 @@
+Literal small source files and ROOT build plan/result. No binary/object/dSYM copies. headers.patch compares the retained qualified source_base header copies in before/ with the copied compiled source in source/; external source files are not edited. buildplan.json retains its original proposal status; result.json records actual compile/link return codes and binary digest.

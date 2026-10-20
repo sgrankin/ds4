@@ -1,0 +1,124 @@
+We need answer count. Need solve. Need be careful. We need count 6-subsets of 1..12 with sum ≡2 mod7. Need integer.
+
+Let's compute. Total C(12,6)=924. Need mod 7 distribution. We can use generating functions or symmetry. Set residues mod7 among 1..12. Numbers 1..12 residues:
+1,2,3,4,5,6,0,1,2,3,4,5. Counts residues 0:1 (7), 1:2 (1,8), 2:2 (2,9), 3:2 (3,10), 4:2 (4,11), 5:2 (5,12), 6:1 (6). Need choose 6 elements, sum residue 2.
+
+We can compute coefficient of product ∏_{r} (1 + y x^r?) Need count subsets size 6 and sum mod7. Since residues counts. Use generating polynomial in t for size and z mod7:
+P(t,z)=∏_{r=0}^6 (1 + t z^r)^{c_r}, c_0=1,c_6=1, others c=2.
+Need coefficient t^6 z^2 mod z^7-1.
+
+Could compute via roots or combinatorial. Since 12 elements, 6-subsets. Maybe complement symmetry? Sum total 78 ≡? 78 mod7 = 1? 70+8=78 ≡1. A 6-subset sum s, complement 6-subset sum 78-s ≡1-s mod7. Desired s=2 corresponds complement sum ≡1-2=-1≡6. Count for sum 2 equals count for sum 6 by complement bijection. Total 924. Need distribution. Could exploit residues counts.
+
+Let's compute manually. Need exact count. Could enumerate via dynamic programming. Let's do robust.
+
+Approach: Count 6-subsets from multiset residues counts. Need sum mod7=2. Use generating function. Since counts mostly 2 except 0,6. We can compute coefficient t^6.
+
+Maybe use inclusion with pairs? There are 12 actual numbers. Residue counts. Need unordered subsets. We can use polynomial.
+
+Let's compute with DP over residues counts. Need coefficient size 6 mod7. I can do manual table. Since only 7 residues and size up to6. Let's compute polynomial F(t,z)=∏_{r=0}^6 (1 + t z^r)^{c_r}. c0=1, c6=1, c1..5=2.
+
+For c=2 factor (1 + t z^r)^2 = 1 + 2 t z^r + t^2 z^{2r}. c=1 factor 1+t z^r.
+
+Need coefficient t^6. Could convolve. Maybe easier count by selecting counts n_r ≤ c_r, sum n_r=6, sum r n_r ≡2 mod7. Number product C(c_r,n_r). Need sum over n vector. 7 variables, total 6. Could enumerate counts. Since c0,c6 max1, others max2. Need count.
+
+Let's do generating function in t and z. Could compute coefficient t^6 via elementary symmetric? Maybe use residue grouping.
+
+Alternative use all subsets of size6 from 12. Since 12=2*6? There is pairing? Numbers residues counts. Maybe distribution nearly uniform. Total 924 = 7*132 exactly? 7*132=924. Ah total divisible by 7. Maybe each residue sum count exactly 132? If so answer 132. Need verify. Is distribution uniform? Total 924/7=132. Need check if all residues equally likely. Not always. Need determine.
+
+Set {1..12}. There may be symmetry modulo 7? Counts residues: c0=c6=1, c1..c5=2. Not fully symmetric under multiplication? Maybe distribution uniform? Let's test small.
+
+Total 6-subsets 924. Need sum mod7. Complement maps s to 1-s, not necessarily uniform. There is translation by adding? The set residues counts not invariant under +1? Counts shift: c0=1,c1=2,c2=2,c3=2,c4=2,c5=2,c6=1. Not invariant. Multiplication? Hmm.
+
+Let's compute. Need exact.
+
+Let's do DP. Since c1..c5=2, c0,c6=1. We can separate residue 0 and 6 singles. Let base residues 1..5 each two copies. Need choose k from these 10 elements plus optional 0,6. Count sum mod7.
+
+Maybe compute distribution for choosing up to? Let A = product over r=1..5 (1 + t z^r)^2. B=(1+t)(1+t z^6) for optional 0,6. Need coeff t^6.
+
+Could compute A coefficients for sizes m. Then combine B (choose none/0/6/both) sizes 0,1,2 with residues 0,6,0+6≡6? Wait z^6. B terms:
+none: size0 residue0
+0: t residue0
+6: t z^6
+both: t^2 z^6
+Need A size 6,5,4 respectively with residue target adjusted.
+
+Maybe compute A for sizes 4,5,6 distributions. A has 10 elements residues 1..5 each twice. Need coefficients. Maybe manageable.
+
+Alternatively compute full DP by residues. Let's do table. Need coefficient t^6 z^2.
+
+Let's perform convolution over factors. Use modular 7. I can do dynamic programming manually with size up to6 and residues. Factor for each residue count. Maybe lengthy but manageable.
+
+Let's define for each residue r with count c, factor. We'll convolve. Start dp size/residue. Need final.
+
+Maybe use polynomial with t. I'll compute step by step.
+
+Initial dp[0][0]=1.
+
+Process residue 0 count1: factor (1 + t z^0). After:
+size0 res0:1
+size1 res0:1.
+
+Process residue 1 count2: factor 1 + 2 t z^1 + t^2 z^2.
+Convolve.
+
+Let's maintain dp as dict size -> array residues counts.
+
+After r0:
+s0: [1,0,0,0,0,0,0]
+s1: [1,0,0,0,0,0,0] (res0)
+
+Process r1 c2:
+For each existing size s, add:
+- no: same
+- one: +2 at res+1 size+1
+- two: +1 at res+2 size+2.
+
+Let's compute arrays.
+
+Start s0 res0=1.
+After r1:
+size0: res0 +1.
+size1: from s0 one: res1 +2.
+size2: from s0 two: res2 +1.
+Also existing s1? Wait after r0 there was s1 res0=1. Need include. Let's process all existing s0,s1.
+
+Existing s0 res0=1:
+no -> s0 res0 +1
+one -> s1 res1 +2
+two -> s2 res2 +1
+
+Existing s1 res0=1:
+no -> s1 res0 +1
+one -> s2 res1 +2
+two -> s3 res2 +1
+
+Thus after r1:
+s0: res0=1.
+s1: res0=1, res1=2.
+s2: res1=2, res2=1.
+s3: res2=1.
+Others 0. Check total coefficients: s0 1, s1 3, s2 3, s3 1 = (1+t)^? Actually product (1+t)^1(1+2t z + t^2 z^2). Fine.
+
+Process r2 c2. Need convolve. Current up to s3. Add one shift +2 coeff2, two shift +4 coeff1. Let's build new arrays sizes up to5 maybe.
+
+I'll use arrays length7. Current:
+s0: [1,0,0,0,0,0,0]
+s1: [1,2,0,0,0,0,0]? Wait res0=1, res1=2. array index0=1,index1=2.
+s2: index1=2,index2=1.
+s3: index2=1.
+
+Let's process each current size to new sizes.
+
+For s0 res0=1:
+no -> new s0 res0 +1
+one -> new s1 res2 +2
+two -> new s2 res4 +1
+
+s1 array: res0=1,res1=2.
+no -> new s1 add same: res0+1,res1+2
+one -> new s2 add shift +2 coeff2: res0 value1 -> res2 +2; res1 value2 -> res3 +4
+two -> new s3 add shift +4 coeff1: res0 -> res4 +1; res1 -> res5 +2
+
+s2 array: res1=2,res2=1.
+no -> new s2 add: res1+2,res2+1
+one -> new s3 shift+2 coeff2: res1 2 -> res3 +4; res2 1 -> res4 +2

@@ -1,0 +1,1 @@
+{"type":"init","policy_type":"protocol-boundary-token","write_budget":0,"global_decision_cap":2048,"read_final_native":true}

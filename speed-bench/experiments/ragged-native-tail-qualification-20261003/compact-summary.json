@@ -1,0 +1,772 @@
+{
+  "status": "COMPLETE_SIX_NATIVE_CONTROLS_AND_RAGGED_DIAGNOSTICS",
+  "all_six_first_attempts_retained": true,
+  "native_controls_exact": true,
+  "both_actual_tail_dispatches_changed": true,
+  "quality": {
+    "phase_end_rows": [
+      {
+        "phase": 0,
+        "pos": 1859,
+        "target": 16856,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 1,
+        "pos": 1949,
+        "target": 5718,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 2,
+        "pos": 2021,
+        "target": 1,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "pos": 10341,
+        "target": 5718,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 4,
+        "pos": 10349,
+        "target": 1,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "pos": 27244,
+        "target": 5718,
+        "delta_nll": 1.98529672383021,
+        "kl": 1.7657675771549515e-05,
+        "tv": 4.161037342394729e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 6,
+        "pos": 27252,
+        "target": 1,
+        "delta_nll": 0.16398432485537384,
+        "kl": 0.011736352628362836,
+        "tv": 0.03889493259063013,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 7,
+        "pos": 27290,
+        "target": 5718,
+        "delta_nll": -1.1161173173859957,
+        "kl": 8.068816074449107e-05,
+        "tv": 0.00010706974725898544,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 8,
+        "pos": 27298,
+        "target": null,
+        "kl": 0.04507268667348279,
+        "tv": 0.10560250326152919,
+        "bit_equal": false,
+        "argmax_flip": false
+      }
+    ],
+    "predictions": 64,
+    "mean_delta_nll": 0.052747547512279835,
+    "max_delta_nll": 1.98529672383021,
+    "min_delta_nll": -0.09694242983244195,
+    "mean_KL": 0.005184205505910306,
+    "max_KL": 0.1894208557108794,
+    "mean_TV": 0.007180820531686977,
+    "bit_equal_vectors": 32,
+    "argmax_flips": 0,
+    "scope": "Two fixed artificial ID-extended contexts, 32 original next-D/next-P teacher targets each. No generated semantic or broad equal-quality claim."
+  },
+  "independent_fp64_audit": {
+    "status": "ROOT_INDEPENDENT_FULL_RAW_FP64_PASS",
+    "rows": [
+      {
+        "phase": 3,
+        "step": 0,
+        "target": 5718,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 1,
+        "target": 678,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 2,
+        "target": 1904,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 3,
+        "target": 513,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 4,
+        "target": 18040,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 5,
+        "target": 270,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 6,
+        "target": 2775,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 7,
+        "target": 16,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 8,
+        "target": 1,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 9,
+        "target": 128803,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 10,
+        "target": 30,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 11,
+        "target": 72461,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 12,
+        "target": 46148,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 13,
+        "target": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 14,
+        "target": 42639,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 15,
+        "target": 1529,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 16,
+        "target": 223,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 17,
+        "target": 19,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 18,
+        "target": 343,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 19,
+        "target": 1795,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 20,
+        "target": 3395,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 21,
+        "target": 1610,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 22,
+        "target": 2599,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 23,
+        "target": 26432,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 24,
+        "target": 698,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 25,
+        "target": 23042,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 26,
+        "target": 28,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 27,
+        "target": 6243,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 28,
+        "target": 223,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 29,
+        "target": 19,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 30,
+        "target": 15,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 31,
+        "target": 553,
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 0,
+        "target": 5718,
+        "delta_nll": 1.98529672383021,
+        "kl": 1.7657675772959635e-05,
+        "tv": 4.1610373423281266e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 1,
+        "target": 678,
+        "delta_nll": 0.00037395389534085983,
+        "kl": 9.95845696658257e-05,
+        "tv": 0.0003980282297568245,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 2,
+        "target": 1904,
+        "delta_nll": 0.025728339852863158,
+        "kl": 0.010814057474107113,
+        "tv": 0.04453303918487627,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 3,
+        "target": 513,
+        "delta_nll": 0.0038431829410745973,
+        "kl": 0.0013462998548886545,
+        "tv": 0.004246035822526858,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 4,
+        "target": 18040,
+        "delta_nll": 0.02427656893956559,
+        "kl": 0.00550712648378312,
+        "tv": 0.02538439313225527,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 5,
+        "target": 270,
+        "delta_nll": 0.0002769009224203615,
+        "kl": 0.0004333891562951755,
+        "tv": 0.0007877170430828549,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 6,
+        "target": 2775,
+        "delta_nll": 0.0003421346775388844,
+        "kl": 0.0005537483552708315,
+        "tv": 0.0010525172786816474,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 7,
+        "target": 16,
+        "delta_nll": 0.04151816086146262,
+        "kl": 0.016907922954410105,
+        "tv": 0.049957120724321104,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 8,
+        "target": 1,
+        "delta_nll": 0.1639843248553725,
+        "kl": 0.011736352628361493,
+        "tv": 0.0388949325906297,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 9,
+        "target": 128803,
+        "delta_nll": 1.2288507068657122,
+        "kl": 0.18942085571087908,
+        "tv": 0.1577298125480142,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 10,
+        "target": 30,
+        "delta_nll": -0.0969424298324443,
+        "kl": 0.06123165960632992,
+        "tv": 0.08862332183415646,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 11,
+        "target": 72461,
+        "delta_nll": -0.01441869417604038,
+        "kl": 0.02035253620370884,
+        "tv": 0.026058724199565692,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 12,
+        "target": 46148,
+        "delta_nll": 0.0006842231975876575,
+        "kl": 0.00030327731941364627,
+        "tv": 0.0007425981866674578,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 13,
+        "target": 32,
+        "delta_nll": 0.008099523969488695,
+        "kl": 0.011134314381284094,
+        "tv": 0.014765191715799788,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 14,
+        "target": 42639,
+        "delta_nll": -0.0005674031728297678,
+        "kl": 0.00046023127641426964,
+        "tv": 0.0006050516052253454,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 15,
+        "target": 1529,
+        "delta_nll": -6.535255424323642e-05,
+        "kl": 2.646744745342616e-05,
+        "tv": 6.82115135556222e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 16,
+        "target": 223,
+        "delta_nll": -0.00011855195497808765,
+        "kl": 0.00012098933408224765,
+        "tv": 0.00022698995101536754,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 17,
+        "target": 19,
+        "delta_nll": 0.00032535716194374625,
+        "kl": 5.060238744000803e-05,
+        "tv": 0.00033390622202294,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 18,
+        "target": 343,
+        "delta_nll": 8.159835933731381e-05,
+        "kl": 2.4689905380305002e-05,
+        "tv": 0.0001271865571382077,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 19,
+        "target": 1795,
+        "delta_nll": 3.416076313570858e-05,
+        "kl": 6.559500360781152e-05,
+        "tv": 0.0001277609011571951,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 20,
+        "target": 3395,
+        "delta_nll": 0.004183288044485235,
+        "kl": 0.0009242396851785247,
+        "tv": 0.004149376354040317,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 21,
+        "target": 1610,
+        "delta_nll": -6.864486432328924e-05,
+        "kl": 0.00010695996264750583,
+        "tv": 0.000278099154668148,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 22,
+        "target": 2599,
+        "delta_nll": 1.4246936498438502e-05,
+        "kl": 1.3806277428941212e-05,
+        "tv": 2.78529899090799e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 23,
+        "target": 26432,
+        "delta_nll": -2.276174664833571e-05,
+        "kl": 1.841088989747359e-05,
+        "tv": 5.877569762699029e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 24,
+        "target": 698,
+        "delta_nll": 1.1352474690005136e-06,
+        "kl": 4.7304850969559204e-07,
+        "tv": 1.4678450095741652e-06,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 25,
+        "target": 23042,
+        "delta_nll": -1.2145814340480871e-05,
+        "kl": 7.980781330840759e-06,
+        "tv": 2.0079473676880446e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 26,
+        "target": 28,
+        "delta_nll": 0.00014454126859980015,
+        "kl": 3.7095738447574475e-05,
+        "tv": 0.00016461980475902005,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 27,
+        "target": 6243,
+        "delta_nll": 5.736531519035654e-05,
+        "kl": 1.8405157431641997e-05,
+        "tv": 6.312250162581956e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 28,
+        "target": 223,
+        "delta_nll": 9.440862589294468e-06,
+        "kl": 7.341399509637499e-06,
+        "tv": 1.4216455055706049e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 29,
+        "target": 19,
+        "delta_nll": -1.1653272213691453e-05,
+        "kl": 1.3886060544207994e-05,
+        "tv": 1.5599426538740706e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 30,
+        "target": 15,
+        "delta_nll": -1.2406006721312027e-05,
+        "kl": 5.816421120029302e-06,
+        "tv": 1.5231433158241743e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 31,
+        "target": 553,
+        "delta_nll": -4.2794587199433036e-05,
+        "kl": 2.7379227661447067e-05,
+        "tv": 5.9923278022277396e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      }
+    ],
+    "mean_delta_nll": 0.052747547512279745,
+    "mean_KL": 0.005184205505910257,
+    "max_KL": 0.18942085571087908,
+    "argmax_flips": 0,
+    "bit_equal_vectors": 32,
+    "plan_sha256": "ad7cf0569eff888aae3ba3871a08b1e7c74a55b780a7e7eb9652552a408c1c1e",
+    "release_sha256": "86a39683081648e9ea0471654187cebb9735518b064814a7829070e2953671d6",
+    "producer_summary_sha256": "6baa3e40a2713a0377c620dbf1dfddfa9eac0bd59673163b1f078d4bb565c4fb",
+    "audit_source_sha256": "5982b3c1ad688be552a2d002cedd20f280e9f83f7e29c977b94828b33e2e1a9d",
+    "vocab": 129280,
+    "teacher_vectors": 64,
+    "absolute_tolerance": 1e-09,
+    "model_or_native_helper_run": false,
+    "speed_or_semantic_claim": false
+  },
+  "quiet_timing_grant": false,
+  "default_promotion": false,
+  "decision": "Do not advance this two-tail setting to quiet timing: the511-row branch changes probabilities, and profiled single-order timings show no encouraging improvement. This is an exploratory fixture result, not a preregistered quality threshold or a semantic test.",
+  "limitations": "Nine phase-end and64 fixed teacher vectors on one synthetic extension. Diagnostic/profiled timings and rounded main IO attribution; no SSD, semantic correctness, general equal-quality, speed or default claim. Original no-tail controls remain separate."
+}

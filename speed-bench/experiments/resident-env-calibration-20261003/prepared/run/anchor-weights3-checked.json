@@ -1,0 +1,162 @@
+{
+  "cases": 16,
+  "tokens": 512,
+  "avg_nll": 0.44310810593,
+  "delta_nll": 0.00471407320001,
+  "policy_delta_nll": 0.00471407320001,
+  "kl_base_to_raw": 0.0176448900607,
+  "kl_base_to_policy": 0.0176448900607,
+  "tv": 0.0318631639756,
+  "argmax_flips": 18,
+  "bit_equal_rows": 16,
+  "startup_ms": 226.933,
+  "prefill_ms": 17507.868,
+  "decode_ms": 26789.589,
+  "metrics_ms": 1056.596,
+  "name": "anchor-weights3",
+  "raw_sha256": "48f13f8291728241cd42da081db0923bc1cb6e86b79cb89286be79a1e29025b4",
+  "layout": {
+    "magic": 1146310961,
+    "vocab": 129280,
+    "cases": 16,
+    "token_limit": 32,
+    "header_bytes": 16,
+    "row_metadata_bytes": 24,
+    "float_bytes": 4,
+    "row_bytes": 517144,
+    "rows": 512,
+    "bytes": 264777744,
+    "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+  },
+  "finite_validation": {
+    "vectors": 512,
+    "fp32_values": 66191360,
+    "finite": true
+  },
+  "cache": {
+    "configured_slots": 6136,
+    "resident_entries": 6136,
+    "hits": 197894,
+    "misses": 16426,
+    "wraps": 49278,
+    "evictions": 10290,
+    "buffer_allocs": 15,
+    "buffer_reuses": 10290
+  },
+  "io": {
+    "enabled": 1,
+    "pread_calls": 49278,
+    "requested_bytes": 163492577280,
+    "returned_bytes": 163492577280,
+    "cache_loader_bytes": 163492577280,
+    "cache_hits": 197894,
+    "cache_misses": 16426,
+    "cache_evictions": 10290
+  },
+  "route": {
+    "layers": 20480,
+    "substitutions": 8359,
+    "native_misses": 13493,
+    "skipped_loads": 8359,
+    "skipped_bytes": 83199467520,
+    "mean_mass": 0.10845012,
+    "mean_score_gap": 0.10340459,
+    "mean_affinity_ratio": 0.91077246,
+    "mean_rank": 7.916,
+    "full_snapshots": 7900,
+    "double_layers": 1114,
+    "planned_substitutions": 8359,
+    "drops": 0,
+    "triple_layers": 76
+  },
+  "prompt_mean_delta_nll": 0.004714073199991111,
+  "prompt_bootstrap_95": [
+    -0.01611781880453994,
+    0.0255474523671116
+  ],
+  "worst_prompt_delta_nll": 0.09599086437557197,
+  "kl_p99": 0.295910843508,
+  "kl_max": 1.309989526,
+  "per_prompt": {
+    "case_001": {
+      "tokens": 32,
+      "delta_nll": 0.010287580573020455,
+      "kl": 0.005477586196171541
+    },
+    "case_007": {
+      "tokens": 32,
+      "delta_nll": -0.012634400757446962,
+      "kl": 0.0132287153248028
+    },
+    "case_013": {
+      "tokens": 32,
+      "delta_nll": 0.013781228356933628,
+      "kl": 0.00594632233107715
+    },
+    "case_019": {
+      "tokens": 32,
+      "delta_nll": -0.059423222312309745,
+      "kl": 0.016282508315281264
+    },
+    "case_025": {
+      "tokens": 32,
+      "delta_nll": 0.02151502196177598,
+      "kl": 0.01025319641846782
+    },
+    "case_031": {
+      "tokens": 32,
+      "delta_nll": 0.026898525684377055,
+      "kl": 0.018778266302699943
+    },
+    "case_037": {
+      "tokens": 32,
+      "delta_nll": 0.0002742979695516886,
+      "kl": 0.00419822231237678
+    },
+    "case_043": {
+      "tokens": 32,
+      "delta_nll": 0.020355514211767654,
+      "kl": 0.020816006141681956
+    },
+    "case_049": {
+      "tokens": 32,
+      "delta_nll": -0.06652561175555165,
+      "kl": 0.012201057960320363
+    },
+    "case_055": {
+      "tokens": 32,
+      "delta_nll": 0.05837387876287629,
+      "kl": 0.023777936496116776
+    },
+    "case_061": {
+      "tokens": 32,
+      "delta_nll": 0.010456972815063074,
+      "kl": 0.052304329062382186
+    },
+    "case_067": {
+      "tokens": 32,
+      "delta_nll": -0.0031352987837794527,
+      "kl": 0.0045186012720194926
+    },
+    "case_073": {
+      "tokens": 32,
+      "delta_nll": 0.03314402737809917,
+      "kl": 0.002716781015454214
+    },
+    "case_079": {
+      "tokens": 32,
+      "delta_nll": 0.09599086437557197,
+      "kl": 0.054071189161805505
+    },
+    "case_085": {
+      "tokens": 32,
+      "delta_nll": -0.0755047364070498,
+      "kl": 0.021545718863790624
+    },
+    "case_091": {
+      "tokens": 32,
+      "delta_nll": 0.0015705291269584296,
+      "kl": 0.01620180379724243
+    }
+  }
+}

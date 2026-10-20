@@ -1,0 +1,4 @@
+mode,phase,seconds,http_status,response_status,input_tokens,output_tokens,correct,complete,pass,error,text
+native,source,85.10078570900077,200,completed,3114,2,True,True,True,,READY
+native,edited-1,67.65639512499911,200,completed,2339,5,True,True,True,,"{""total"":416}"
+native,edited-2,53.939254875003826,200,completed,1932,13,True,True,True,,"{""code"":""MAPLE-42"",""reserve"":73}"

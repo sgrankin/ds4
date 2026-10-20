@@ -1,0 +1,55 @@
+{
+  "status": "RELEASED",
+  "time": 1791021381.464971,
+  "manifest_sha256": "302e16abeb7b04926bba39011170bb53d18acd4be743ade6739238dcc5c5c583",
+  "ROOT_launch_sha256": "8503e575d5ee53f1a7e2cc30ea79a0a32e08ed9437e363cd0d7051f2012ef62d",
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "guard_result_sha256": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+  "runner_result_sha256": "e920a69e0bdc777483371fe0fb29dd67d16b222b9f7d11cafa614c8102388578",
+  "runner_status": "ALL_FOUR_NATIVE_CONTROLS_EXACT",
+  "completed_or_attempted_arms": [
+    {
+      "name": "old0-native-before",
+      "returncode": 0
+    },
+    {
+      "name": "new0-fullshort",
+      "returncode": 0
+    },
+    {
+      "name": "new1-clippedcone",
+      "returncode": 0
+    },
+    {
+      "name": "old0-native-after",
+      "returncode": 0
+    }
+  ],
+  "live_model_processes": [],
+  "lock_reacquired": true,
+  "normal_samples": 428,
+  "bad_samples": 0,
+  "initial_swap_gib": 0.020810546875,
+  "final_swap_gib": 0.024599609375,
+  "max_swap_gib": 0.024599609375,
+  "swapgrowth_gib": 0.0037890625000000025,
+  "peak_wired_compressor_gib": 84.68794250488281,
+  "pressure_ledger_sha256": "df6acf77d90447a1de658b725beaaf9019d0ee7adcf60d91aed7783ac8cea1e2",
+  "fresh_ps_args_sha256": "cc3ed77c9a701f1b65628867a1d1b64adeef3bec8e7fcc47a77ef9c6069559b9",
+  "fresh_ps_comm_sha256": "60cc23bc962174bcba6710120c1455fef7cf543a167928e01070cbf7ca341417",
+  "all_ancestors_excluded": [
+    30402,
+    2072,
+    2064,
+    1244,
+    1213,
+    759,
+    1
+  ],
+  "free_disk_gib": 165.26091384887695,
+  "no_retry": true,
+  "timing": "diagnostic only; CPU evidence work overlapped"
+}

@@ -1,0 +1,9 @@
+{
+  "status": "PASS_NOT_GRANTED_NOT_RUN",
+  "manifest_sha256": "d13eaf4e51b10d9dc0849b26e7648ea790173a96f90e6d234256df63742e4d63",
+  "command_sha256": "ac4501a2bfb61b9e3e91163dbbfe75670cd704cfb50044f6d8c545c40684562b",
+  "files": 117,
+  "exact26_shaders": true,
+  "all59sources14objects_compiler_sdk_cpu_priorfailure_verified": true,
+  "model_or_guard_or_caller_executed": false
+}

@@ -1,0 +1,1546 @@
+{
+  "complete": true,
+  "execution": {
+    "argv": [
+      "speed-bench/experiments/server-suffix-curve-hour14-20261004/http_sweep.py"
+    ],
+    "cwd": "/Volumes/Models/ds4",
+    "runtime_revision": "3fb450f7",
+    "launcher": "/Volumes/Models/ds4/speed-bench/experiments/server-workflow-hour12-20261004/launch.py",
+    "shared_visible_paths": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared",
+    "order": [
+      "tail64",
+      "tail256",
+      "tail128",
+      "native"
+    ],
+    "omitted_tail128": false,
+    "interpretation": "HTTP task curve; histories may differ. Separate from core NLL curve.",
+    "guard": "One external ROOT pressure guard; no nested guards."
+  },
+  "arms": [
+    {
+      "arm": "tail64",
+      "complete": true,
+      "launcher": {
+        "arm": "tail64",
+        "mode": "reuse",
+        "fresh_tail_lower_bound": 64,
+        "seconds": 264.2426060419966,
+        "returncode": 0,
+        "output": "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/tail64"
+      },
+      "groups": {
+        "source_warmup": {
+          "seconds": 106.11066129199753,
+          "observed_seconds": 106.11066129199753,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 0
+        },
+        "ordinary": {
+          "seconds": 77.03623200001311,
+          "observed_seconds": 77.03623200001311,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 2
+        },
+        "stress": {
+          "seconds": 72.26114675099961,
+          "observed_seconds": 72.26114675099961,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 1
+        },
+        "all_edited": {
+          "seconds": 149.29737875101273,
+          "observed_seconds": 149.29737875101273,
+          "recorded": 4,
+          "expected": 4,
+          "correct": 4,
+          "passed": 4,
+          "grafted_steps": 3
+        },
+        "all_task": {
+          "seconds": 257.7796219599986,
+          "observed_seconds": 257.7796219599986,
+          "recorded": 7,
+          "expected": 7,
+          "correct": 7,
+          "passed": 7,
+          "grafted_steps": 3
+        },
+        "excluding_source": {
+          "seconds": 151.6689606680011,
+          "observed_seconds": 151.6689606680011,
+          "recorded": 5,
+          "expected": 5,
+          "correct": 5,
+          "passed": 5,
+          "grafted_steps": 3
+        }
+      },
+      "steps": [
+        {
+          "step": "A-source",
+          "seconds": 52.75643887500337,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:23:19 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-source",
+          "seconds": 53.35422241699416,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:24:12 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "A-edit1",
+          "seconds": 40.99989091700991,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-73\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 563,
+              "fresh": 784,
+              "graft_fresh": 720,
+              "source_ssd": 1,
+              "source_approximate": 0,
+              "line": "1004 10:25:38 ds4-server: suffix APPROXIMATE slot=0 reused=563 fresh=784 graft_fresh=720 source=808:1371 destination=306:869 latest_user_start=1557 pre_rope=1 source_ssd=1 source_approximate=0 32533.220 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:25:38 ds4-server: suffix APPROXIMATE slot=0 reused=563 fresh=784 graft_fresh=720 source=808:1371 destination=306:869 latest_user_start=1557 pre_rope=1 source_ssd=1 source_approximate=0 32533.220 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:25:05 slot 0: request reuses nothing; evicting checkpoint (2057 tokens, idle 53 s, protected)"
+          ]
+        },
+        {
+          "step": "B-edit1",
+          "seconds": 36.03634108300321,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-91\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 591,
+              "fresh": 99,
+              "graft_fresh": 35,
+              "source_ssd": 1,
+              "source_approximate": 0,
+              "line": "1004 10:26:14 ds4-server: suffix APPROXIMATE slot=0 reused=591 fresh=99 graft_fresh=35 source=1466:2057 destination=964:1555 latest_user_start=1558 pre_rope=1 source_ssd=1 source_approximate=0 27405.595 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:26:14 ds4-server: suffix APPROXIMATE slot=0 reused=591 fresh=99 graft_fresh=35 source=1466:2057 destination=964:1555 latest_user_start=1558 pre_rope=1 source_ssd=1 source_approximate=0 27405.595 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:25:46 slot 0: request reuses nothing; evicting checkpoint (1786 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "C-turnover",
+          "seconds": 2.3715819169883616,
+          "correct": true,
+          "pass": true,
+          "fresh_read": false,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:26:22 slot 0: request reuses nothing; evicting checkpoint (1790 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "A-edit2",
+          "seconds": 29.043901959012146,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 841,
+              "fresh": 231,
+              "graft_fresh": 167,
+              "source_ssd": 1,
+              "source_approximate": 1,
+              "line": "1004 10:26:47 ds4-server: suffix APPROXIMATE slot=0 reused=841 fresh=231 graft_fresh=167 source=812:1653 destination=310:1151 latest_user_start=1286 pre_rope=1 source_ssd=1 source_approximate=1 20612.668 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:26:47 ds4-server: suffix APPROXIMATE slot=0 reused=841 fresh=231 graft_fresh=167 source=812:1653 destination=310:1151 latest_user_start=1286 pre_rope=1 source_ssd=1 source_approximate=1 20612.668 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-edit2",
+          "seconds": 43.21724479198747,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:26:56 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        }
+      ],
+      "server_execution": {
+        "before": {
+          "command": [
+            "/Volumes/Models/ds4/ds4-server",
+            "--model",
+            "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58169",
+            "--ssd-streaming",
+            "--ssd-streaming-cache-experts",
+            "64GB",
+            "--ctx",
+            "8192",
+            "--prefill-chunk",
+            "512",
+            "--batched-session",
+            "2",
+            "--tokens",
+            "128"
+          ],
+          "cwd": "/Volumes/Models/ds4",
+          "environment": {
+            "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+            "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+            "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+            "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+            "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+            "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+            "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+            "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+            "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+            "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+            "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+            "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+            "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+            "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+            "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+            "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+            "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+            "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+            "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+            "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+            "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+            "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+            "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+            "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+            "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+            "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+            "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-tail64",
+            "DS4_STATE_CACHE_HOT_MB": "0",
+            "DS4_STATE_CACHE_SSD_MB": "1024",
+            "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+            "DS4_METAL_V41_SELECTED_TILE": "64",
+            "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+            "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "1",
+            "DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL": "64"
+          }
+        },
+        "after": {
+          "command": [
+            "/Volumes/Models/ds4/ds4-server",
+            "--model",
+            "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58346",
+            "--ssd-streaming",
+            "--ssd-streaming-cache-experts",
+            "64GB",
+            "--ctx",
+            "8192",
+            "--prefill-chunk",
+            "512",
+            "--batched-session",
+            "2",
+            "--tokens",
+            "128"
+          ],
+          "cwd": "/Volumes/Models/ds4",
+          "environment": {
+            "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+            "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+            "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+            "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+            "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+            "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+            "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+            "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+            "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+            "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+            "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+            "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+            "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+            "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+            "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+            "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+            "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+            "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+            "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+            "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+            "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+            "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+            "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+            "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+            "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+            "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+            "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-tail64",
+            "DS4_STATE_CACHE_HOT_MB": "0",
+            "DS4_STATE_CACHE_SSD_MB": "1024",
+            "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+            "DS4_METAL_V41_SELECTED_TILE": "64",
+            "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+            "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "1",
+            "DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL": "64"
+          }
+        }
+      },
+      "server_startups": [
+        {
+          "seconds": 2.720887874995242,
+          "pid": 60868,
+          "port": 58169
+        },
+        {
+          "seconds": 0.414320250012679,
+          "pid": 61682,
+          "port": 58346
+        }
+      ],
+      "startup_restart_seconds": 3.135208125007921,
+      "driver_phase_seconds": 257.7833593739924,
+      "graft_count": 3,
+      "approximate_source_grafts": 1,
+      "fresh_reads": 6
+    },
+    {
+      "arm": "tail256",
+      "complete": true,
+      "launcher": {
+        "arm": "tail256",
+        "mode": "reuse",
+        "fresh_tail_lower_bound": 256,
+        "seconds": 273.95089470800303,
+        "returncode": 0,
+        "output": "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/tail256"
+      },
+      "groups": {
+        "source_warmup": {
+          "seconds": 106.17740554201009,
+          "observed_seconds": 106.17740554201009,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 0
+        },
+        "ordinary": {
+          "seconds": 82.85973600001307,
+          "observed_seconds": 82.85973600001307,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 2
+        },
+        "stress": {
+          "seconds": 78.44402029100456,
+          "observed_seconds": 78.44402029100456,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 1
+        },
+        "all_edited": {
+          "seconds": 161.30375629101763,
+          "observed_seconds": 161.30375629101763,
+          "recorded": 4,
+          "expected": 4,
+          "correct": 4,
+          "passed": 4,
+          "grafted_steps": 3
+        },
+        "all_task": {
+          "seconds": 269.6658122080262,
+          "observed_seconds": 269.6658122080262,
+          "recorded": 7,
+          "expected": 7,
+          "correct": 7,
+          "passed": 7,
+          "grafted_steps": 3
+        },
+        "excluding_source": {
+          "seconds": 163.4884066660161,
+          "observed_seconds": 163.4884066660161,
+          "recorded": 5,
+          "expected": 5,
+          "correct": 5,
+          "passed": 5,
+          "grafted_steps": 3
+        }
+      },
+      "steps": [
+        {
+          "step": "A-source",
+          "seconds": 53.244681666998076,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:27:41 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-source",
+          "seconds": 52.932723875012016,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:28:34 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "A-edit1",
+          "seconds": 40.962040334008634,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-73\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 563,
+              "fresh": 784,
+              "graft_fresh": 528,
+              "source_ssd": 1,
+              "source_approximate": 0,
+              "line": "1004 10:29:56 ds4-server: suffix APPROXIMATE slot=0 reused=563 fresh=784 graft_fresh=528 source=808:1371 destination=306:869 latest_user_start=1557 pre_rope=1 source_ssd=1 source_approximate=0 28213.612 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:29:56 ds4-server: suffix APPROXIMATE slot=0 reused=563 fresh=784 graft_fresh=528 source=808:1371 destination=306:869 latest_user_start=1557 pre_rope=1 source_ssd=1 source_approximate=0 28213.612 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:29:27 slot 0: request reuses nothing; evicting checkpoint (2057 tokens, idle 53 s, protected)"
+          ]
+        },
+        {
+          "step": "B-edit1",
+          "seconds": 41.89769566600444,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "text": "{\"active_total\":202,\"archived_code\":\"CEDAR-91\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 335,
+              "fresh": 355,
+              "graft_fresh": 99,
+              "source_ssd": 1,
+              "source_approximate": 0,
+              "line": "1004 10:30:37 ds4-server: suffix APPROXIMATE slot=0 reused=335 fresh=355 graft_fresh=99 source=1466:1801 destination=964:1299 latest_user_start=1558 pre_rope=1 source_ssd=1 source_approximate=0 28923.589 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:30:37 ds4-server: suffix APPROXIMATE slot=0 reused=335 fresh=355 graft_fresh=99 source=1466:1801 destination=964:1299 latest_user_start=1558 pre_rope=1 source_ssd=1 source_approximate=0 28923.589 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:30:08 slot 0: request reuses nothing; evicting checkpoint (1786 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "C-turnover",
+          "seconds": 2.184650374998455,
+          "correct": true,
+          "pass": true,
+          "fresh_read": false,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:30:50 slot 0: request reuses nothing; evicting checkpoint (1787 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "A-edit2",
+          "seconds": 35.21537829100271,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 585,
+              "fresh": 487,
+              "graft_fresh": 231,
+              "source_ssd": 1,
+              "source_approximate": 1,
+              "line": "1004 10:31:17 ds4-server: suffix APPROXIMATE slot=0 reused=585 fresh=487 graft_fresh=231 source=812:1397 destination=310:895 latest_user_start=1286 pre_rope=1 source_ssd=1 source_approximate=1 22238.714 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:31:17 ds4-server: suffix APPROXIMATE slot=0 reused=585 fresh=487 graft_fresh=231 source=812:1397 destination=310:895 latest_user_start=1286 pre_rope=1 source_ssd=1 source_approximate=1 22238.714 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-edit2",
+          "seconds": 43.228642000001855,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "text": "{\"active_total\":202,\"archived_code\":\"CEDAR-92\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:31:30 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        }
+      ],
+      "server_execution": {
+        "before": {
+          "command": [
+            "/Volumes/Models/ds4/ds4-server",
+            "--model",
+            "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58414",
+            "--ssd-streaming",
+            "--ssd-streaming-cache-experts",
+            "64GB",
+            "--ctx",
+            "8192",
+            "--prefill-chunk",
+            "512",
+            "--batched-session",
+            "2",
+            "--tokens",
+            "128"
+          ],
+          "cwd": "/Volumes/Models/ds4",
+          "environment": {
+            "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+            "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+            "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+            "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+            "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+            "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+            "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+            "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+            "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+            "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+            "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+            "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+            "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+            "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+            "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+            "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+            "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+            "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+            "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+            "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+            "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+            "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+            "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+            "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+            "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+            "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+            "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-tail256",
+            "DS4_STATE_CACHE_HOT_MB": "0",
+            "DS4_STATE_CACHE_SSD_MB": "1024",
+            "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+            "DS4_METAL_V41_SELECTED_TILE": "64",
+            "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+            "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "1",
+            "DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL": "256"
+          }
+        },
+        "after": {
+          "command": [
+            "/Volumes/Models/ds4/ds4-server",
+            "--model",
+            "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58575",
+            "--ssd-streaming",
+            "--ssd-streaming-cache-experts",
+            "64GB",
+            "--ctx",
+            "8192",
+            "--prefill-chunk",
+            "512",
+            "--batched-session",
+            "2",
+            "--tokens",
+            "128"
+          ],
+          "cwd": "/Volumes/Models/ds4",
+          "environment": {
+            "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+            "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+            "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+            "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+            "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+            "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+            "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+            "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+            "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+            "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+            "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+            "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+            "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+            "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+            "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+            "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+            "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+            "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+            "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+            "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+            "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+            "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+            "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+            "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+            "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+            "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+            "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-tail256",
+            "DS4_STATE_CACHE_HOT_MB": "0",
+            "DS4_STATE_CACHE_SSD_MB": "1024",
+            "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+            "DS4_METAL_V41_SELECTED_TILE": "64",
+            "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+            "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "1",
+            "DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL": "256"
+          }
+        }
+      },
+      "server_startups": [
+        {
+          "seconds": 0.4132193749974249,
+          "pid": 61998,
+          "port": 58414
+        },
+        {
+          "seconds": 0.41704029199900106,
+          "pid": 62830,
+          "port": 58575
+        }
+      ],
+      "startup_restart_seconds": 0.830259666996426,
+      "driver_phase_seconds": 269.66936699999496,
+      "graft_count": 3,
+      "approximate_source_grafts": 1,
+      "fresh_reads": 6
+    },
+    {
+      "arm": "tail128",
+      "complete": true,
+      "launcher": {
+        "arm": "tail128",
+        "mode": "reuse",
+        "fresh_tail_lower_bound": 128,
+        "seconds": 264.7896720830031,
+        "returncode": 0,
+        "output": "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/tail128"
+      },
+      "groups": {
+        "source_warmup": {
+          "seconds": 105.95916024998587,
+          "observed_seconds": 105.95916024998587,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 0
+        },
+        "ordinary": {
+          "seconds": 80.25321066600736,
+          "observed_seconds": 80.25321066600736,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 2
+        },
+        "stress": {
+          "seconds": 71.98021441600577,
+          "observed_seconds": 71.98021441600577,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 1
+        },
+        "all_edited": {
+          "seconds": 152.23342508201313,
+          "observed_seconds": 152.23342508201313,
+          "recorded": 4,
+          "expected": 4,
+          "correct": 4,
+          "passed": 4,
+          "grafted_steps": 3
+        },
+        "all_task": {
+          "seconds": 260.4353287069971,
+          "observed_seconds": 260.4353287069971,
+          "recorded": 7,
+          "expected": 7,
+          "correct": 7,
+          "passed": 7,
+          "grafted_steps": 3
+        },
+        "excluding_source": {
+          "seconds": 154.47616845701123,
+          "observed_seconds": 154.47616845701123,
+          "recorded": 5,
+          "expected": 5,
+          "correct": 5,
+          "passed": 5,
+          "grafted_steps": 3
+        }
+      },
+      "steps": [
+        {
+          "step": "A-source",
+          "seconds": 53.068008791989996,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:32:15 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-source",
+          "seconds": 52.891151457995875,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:33:08 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "A-edit1",
+          "seconds": 41.0078017909982,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-73\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 563,
+              "fresh": 784,
+              "graft_fresh": 656,
+              "source_ssd": 1,
+              "source_approximate": 0,
+              "line": "1004 10:34:32 ds4-server: suffix APPROXIMATE slot=0 reused=563 fresh=784 graft_fresh=656 source=808:1371 destination=306:869 latest_user_start=1557 pre_rope=1 source_ssd=1 source_approximate=0 30899.044 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:34:32 ds4-server: suffix APPROXIMATE slot=0 reused=563 fresh=784 graft_fresh=656 source=808:1371 destination=306:869 latest_user_start=1557 pre_rope=1 source_ssd=1 source_approximate=0 30899.044 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:34:01 slot 0: request reuses nothing; evicting checkpoint (2057 tokens, idle 53 s, protected)"
+          ]
+        },
+        {
+          "step": "B-edit1",
+          "seconds": 39.24540887500916,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-91\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 463,
+              "fresh": 227,
+              "graft_fresh": 99,
+              "source_ssd": 1,
+              "source_approximate": 0,
+              "line": "1004 10:35:11 ds4-server: suffix APPROXIMATE slot=0 reused=463 fresh=227 graft_fresh=99 source=1466:1929 destination=964:1427 latest_user_start=1558 pre_rope=1 source_ssd=1 source_approximate=0 28880.665 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:35:11 ds4-server: suffix APPROXIMATE slot=0 reused=463 fresh=227 graft_fresh=99 source=1466:1929 destination=964:1427 latest_user_start=1558 pre_rope=1 source_ssd=1 source_approximate=0 28880.665 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:34:42 slot 0: request reuses nothing; evicting checkpoint (1786 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "C-turnover",
+          "seconds": 2.242743374998099,
+          "correct": true,
+          "pass": true,
+          "fresh_read": false,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:35:21 slot 0: request reuses nothing; evicting checkpoint (1790 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "A-edit2",
+          "seconds": 28.741137332996004,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 841,
+              "fresh": 231,
+              "graft_fresh": 103,
+              "source_ssd": 1,
+              "source_approximate": 1,
+              "line": "1004 10:35:44 ds4-server: suffix APPROXIMATE slot=0 reused=841 fresh=231 graft_fresh=103 source=812:1653 destination=310:1151 latest_user_start=1286 pre_rope=1 source_ssd=1 source_approximate=1 18648.722 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 10:35:44 ds4-server: suffix APPROXIMATE slot=0 reused=841 fresh=231 graft_fresh=103 source=812:1653 destination=310:1151 latest_user_start=1286 pre_rope=1 source_ssd=1 source_approximate=1 18648.722 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-edit2",
+          "seconds": 43.23907708300976,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 10:35:54 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        }
+      ],
+      "server_execution": {
+        "before": {
+          "command": [
+            "/Volumes/Models/ds4/ds4-server",
+            "--model",
+            "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58655",
+            "--ssd-streaming",
+            "--ssd-streaming-cache-experts",
+            "64GB",
+            "--ctx",
+            "8192",
+            "--prefill-chunk",
+            "512",
+            "--batched-session",
+            "2",
+            "--tokens",
+            "128"
+          ],
+          "cwd": "/Volumes/Models/ds4",
+          "environment": {
+            "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+            "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+            "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+            "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+            "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+            "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+            "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+            "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+            "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+            "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+            "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+            "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+            "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+            "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+            "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+            "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+            "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+            "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+            "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+            "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+            "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+            "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+            "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+            "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+            "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+            "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+            "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-tail128",
+            "DS4_STATE_CACHE_HOT_MB": "0",
+            "DS4_STATE_CACHE_SSD_MB": "1024",
+            "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+            "DS4_METAL_V41_SELECTED_TILE": "64",
+            "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+            "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "1",
+            "DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL": "128"
+          }
+        },
+        "after": {
+          "command": [
+            "/Volumes/Models/ds4/ds4-server",
+            "--model",
+            "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58816",
+            "--ssd-streaming",
+            "--ssd-streaming-cache-experts",
+            "64GB",
+            "--ctx",
+            "8192",
+            "--prefill-chunk",
+            "512",
+            "--batched-session",
+            "2",
+            "--tokens",
+            "128"
+          ],
+          "cwd": "/Volumes/Models/ds4",
+          "environment": {
+            "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+            "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+            "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+            "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+            "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+            "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+            "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+            "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+            "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+            "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+            "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+            "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+            "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+            "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+            "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+            "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+            "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+            "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+            "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+            "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+            "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+            "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+            "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+            "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+            "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+            "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+            "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-tail128",
+            "DS4_STATE_CACHE_HOT_MB": "0",
+            "DS4_STATE_CACHE_SSD_MB": "1024",
+            "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+            "DS4_METAL_V41_SELECTED_TILE": "64",
+            "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+            "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "1",
+            "DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL": "128"
+          }
+        }
+      },
+      "server_startups": [
+        {
+          "seconds": 0.41789445899485145,
+          "pid": 63183,
+          "port": 58655
+        },
+        {
+          "seconds": 0.4228642499947455,
+          "pid": 63987,
+          "port": 58816
+        }
+      ],
+      "startup_restart_seconds": 0.8407587089895969,
+      "driver_phase_seconds": 260.43858345800254,
+      "graft_count": 3,
+      "approximate_source_grafts": 1,
+      "fresh_reads": 6
+    },
+    {
+      "arm": "native",
+      "complete": true,
+      "launcher": {
+        "arm": "native",
+        "mode": "native",
+        "fresh_tail_lower_bound": 128,
+        "seconds": 303.4831651660061,
+        "returncode": 0,
+        "output": "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/native"
+      },
+      "groups": {
+        "source_warmup": {
+          "seconds": 104.66205220800475,
+          "observed_seconds": 104.66205220800475,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 0
+        },
+        "ordinary": {
+          "seconds": 106.38583233299141,
+          "observed_seconds": 106.38583233299141,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 0
+        },
+        "stress": {
+          "seconds": 85.28558945799887,
+          "observed_seconds": 85.28558945799887,
+          "recorded": 2,
+          "expected": 2,
+          "correct": 2,
+          "passed": 2,
+          "grafted_steps": 0
+        },
+        "all_edited": {
+          "seconds": 191.67142179099028,
+          "observed_seconds": 191.67142179099028,
+          "recorded": 4,
+          "expected": 4,
+          "correct": 4,
+          "passed": 4,
+          "grafted_steps": 0
+        },
+        "all_task": {
+          "seconds": 298.58106216500164,
+          "observed_seconds": 298.58106216500164,
+          "recorded": 7,
+          "expected": 7,
+          "correct": 7,
+          "passed": 7,
+          "grafted_steps": 0
+        },
+        "excluding_source": {
+          "seconds": 193.9190099569969,
+          "observed_seconds": 193.9190099569969,
+          "recorded": 5,
+          "expected": 5,
+          "correct": 5,
+          "passed": 5,
+          "grafted_steps": 0
+        }
+      },
+      "steps": [
+        {
+          "step": "A-source",
+          "seconds": 52.50896829100384,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-source",
+          "seconds": 52.15308391700091,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "A-edit1",
+          "seconds": 52.82059683300031,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-73\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-73"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:38:25 slot 0: request reuses nothing; evicting checkpoint (2057 tokens, idle 52 s, protected)"
+          ]
+        },
+        {
+          "step": "B-edit1",
+          "seconds": 53.565235499991104,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-91\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-91"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:39:18 slot 0: request reuses nothing; evicting checkpoint (1786 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "C-turnover",
+          "seconds": 2.247588166006608,
+          "correct": true,
+          "pass": true,
+          "fresh_read": false,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 10:40:11 slot 0: request reuses nothing; evicting checkpoint (1790 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "A-edit2",
+          "seconds": 42.585221291999915,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}",
+          "gold": {
+            "active_total": 416,
+            "archived_code": "RIVER-74"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-edit2",
+          "seconds": 42.70036816599895,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}",
+          "gold": {
+            "active_total": 202,
+            "archived_code": "CEDAR-92"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        }
+      ],
+      "server_execution": {
+        "before": {
+          "command": [
+            "/Volumes/Models/ds4/ds4-server",
+            "--model",
+            "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58879",
+            "--ssd-streaming",
+            "--ssd-streaming-cache-experts",
+            "64GB",
+            "--ctx",
+            "8192",
+            "--prefill-chunk",
+            "512",
+            "--batched-session",
+            "2",
+            "--tokens",
+            "128"
+          ],
+          "cwd": "/Volumes/Models/ds4",
+          "environment": {
+            "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+            "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+            "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+            "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+            "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+            "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+            "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+            "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+            "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+            "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+            "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+            "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+            "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+            "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+            "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+            "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+            "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+            "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+            "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+            "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+            "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+            "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+            "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+            "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+            "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+            "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+            "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-native",
+            "DS4_STATE_CACHE_HOT_MB": "0",
+            "DS4_STATE_CACHE_SSD_MB": "1024",
+            "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+            "DS4_METAL_V41_SELECTED_TILE": "64",
+            "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+            "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "0",
+            "DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL": "128"
+          }
+        },
+        "after": {
+          "command": [
+            "/Volumes/Models/ds4/ds4-server",
+            "--model",
+            "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "59077",
+            "--ssd-streaming",
+            "--ssd-streaming-cache-experts",
+            "64GB",
+            "--ctx",
+            "8192",
+            "--prefill-chunk",
+            "512",
+            "--batched-session",
+            "2",
+            "--tokens",
+            "128"
+          ],
+          "cwd": "/Volumes/Models/ds4",
+          "environment": {
+            "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/metal/flash_attn.metal",
+            "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/metal/dense.metal",
+            "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/metal/glm53_bf16.metal",
+            "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/metal/glm53_vision.metal",
+            "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/metal/deepseek4_vision.metal",
+            "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/metal/glm53_kda.metal",
+            "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/metal/moe.metal",
+            "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_hc.metal",
+            "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/metal/unary.metal",
+            "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/metal/dsv4_kv.metal",
+            "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/metal/dsv41.metal",
+            "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/metal/dsv4_rope.metal",
+            "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/metal/dsv4_misc.metal",
+            "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/metal/argsort.metal",
+            "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/metal/cpy.metal",
+            "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/metal/concat.metal",
+            "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/get_rows.metal",
+            "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/metal/sum_rows.metal",
+            "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/metal/softmax.metal",
+            "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/metal/repeat.metal",
+            "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/metal/glu.metal",
+            "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/metal/norm.metal",
+            "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/metal/bin.metal",
+            "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/metal/set_rows.metal",
+            "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/metal/qwen4.metal",
+            "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/metal/qwen4_vision.metal",
+            "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-native",
+            "DS4_STATE_CACHE_HOT_MB": "0",
+            "DS4_STATE_CACHE_SSD_MB": "1024",
+            "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+            "DS4_METAL_V41_SELECTED_TILE": "64",
+            "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+            "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "0",
+            "DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL": "128"
+          }
+        }
+      },
+      "server_startups": [
+        {
+          "seconds": 0.42472329099837225,
+          "pid": 64299,
+          "port": 58879
+        },
+        {
+          "seconds": 0.4194685000111349,
+          "pid": 65223,
+          "port": 59077
+        }
+      ],
+      "startup_restart_seconds": 0.8441917910095071,
+      "driver_phase_seconds": 298.5872453329939,
+      "graft_count": 0,
+      "approximate_source_grafts": 0,
+      "fresh_reads": 6
+    }
+  ],
+  "interpretation": "One reverse-order HTTP sweep, separate from core NLL curve. Ratios appear only after all planned arms complete. Failures and fallback remain included. Edited sums include file/context edits; step sums exclude server startup/restart; launcher wall includes them. Any sent Responses seed is ignored and is not a reproducibility guarantee."
+}

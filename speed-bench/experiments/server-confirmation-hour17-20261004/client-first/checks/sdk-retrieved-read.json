@@ -1,0 +1,33 @@
+{
+  "id": "resp_675b47f74e29b67ce6c8fbe0",
+  "object": "response",
+  "created_at": 1791129028,
+  "status": "completed",
+  "model": "deepseek-v4.1-flash",
+  "store": true,
+  "previous_response_id": null,
+  "conversation": null,
+  "output": [
+    {
+      "id": "fc_ad4600b8d0785521747338bc",
+      "type": "function_call",
+      "status": "completed",
+      "name": "read",
+      "call_id": "call_a88fc3ac6cc5acc8eac136f7d48685f4",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/client-first/checks/sdk-config.json\",\"whole\":true,\"raw\":true}"
+    }
+  ],
+  "usage": {
+    "input_tokens": 296,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 296
+    },
+    "output_tokens": 99,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 395
+  },
+  "output_text": ""
+}

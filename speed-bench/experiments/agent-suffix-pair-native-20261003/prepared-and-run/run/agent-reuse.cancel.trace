@@ -1,0 +1,8 @@
+2026-10-02 22:44:02.834 prefill sync done prompt=1409 cached=0 suffix=1409 rc=0 37368.556 ms
+2026-10-02 22:44:02.842 context frontier captured tokens=1409 bytes=32623165 retained=1 retained_bytes=32623165 pair_tape=385:1409 tape_bytes=12582912 ring_bytes=12582992 7.640 ms
+2026-10-02 22:44:04.338 prefill sync done prompt=1474 cached=1409 suffix=65 rc=0 1493.593 ms
+2026-10-02 22:44:16.389 prefill sync done prompt=1986 cached=1474 suffix=512 rc=0 12051.391 ms
+2026-10-02 22:44:16.396 context frontier captured tokens=1986 bytes=36312133 retained=2 retained_bytes=68935298 pair_tape=962:1986 tape_bytes=12582912 ring_bytes=12582992 6.530 ms
+2026-10-02 22:44:19.461 prefill sync done prompt=2114 cached=1986 suffix=128 rc=0 3062.533 ms
+2026-10-02 22:44:19.471 context frontier restore hit tokens=1409 2.193 ms
+2026-10-02 22:44:19.472 context pair suffix exact fallback rollback=ok interrupted=1 error=source/prefix sync was interrupted source_released=1

@@ -1,0 +1,16 @@
+[
+  {
+    "argv": [
+      "./ds4_agent_test"
+    ],
+    "rc": 0,
+    "seconds": 5.221980500000427
+  },
+  {
+    "argv": [
+      "./tests/test_resident_route"
+    ],
+    "rc": 0,
+    "seconds": 0.012251957999978913
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "time": 1790988744.713847,
+  "archive_source_revision": "9f75c3a1c130dfc3e69f584570f528e024caa00a",
+  "archive_manifest_sha256": "a1d61aed2f4051bdde1d7d6bbe69af74f3a1308033fe88ceb72c4d734de1e413",
+  "source": "/Volumes/Models/ds4/.workspaces/idea-suffix-zero-archive/speed-bench/ideas/evidence/suffix-pair-tape-zero-identity-native-20261003-v1",
+  "destination": "/Volumes/Models/ds4/speed-bench/ideas/evidence/suffix-pair-tape-zero-identity-native-20261003-v1",
+  "verified_files": 98,
+  "copied_files": 100,
+  "model_metadata_touched": false,
+  "runtime_merged": false
+}

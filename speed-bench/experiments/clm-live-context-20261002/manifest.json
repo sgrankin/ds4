@@ -1,0 +1,14 @@
+{
+  "base": "93c38b7d33fd41d93138f80ba5ed3c098a2112be",
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "files": {
+    "ds4_agent.c": "9afadbe032a4fd4ab3cc29fed464c0fa16093a7ddf2af40562669106b73fd934",
+    "ds4_help.c": "15d71ea67e1a356bd3d905cd5f28024972374942aea7ef6f221e20f5b892e4f4",
+    "ds4-agent": "6ba95f08a79d76abaf24c7fcdff91720af662596ab7ce5b617dcfad18ac35b21",
+    "tests/test_agent_live_context.c": "6dabd1a9065f66dec798ae9f6f5ac39fd36779286edba7d9412d0340feaf8e7b",
+    "tests/test_agent_live_context": "42c77c9ad0ff2d0ea405322af8305deccbd39f961d46a5c4654f79523bf4906c",
+    "speed-bench/clm_live_context_smoke.py": "14756bda8bcce473299ad3145129a064c4bb37cd2e49cbdf2824c531d1a030da",
+    "speed-bench/experiments/clm-live-context-20261002/e2e/result.json": "78cb78fb35bb3d1c5faf136e508470784136b01d70c444a68232abcca9cdbd5d",
+    "speed-bench/experiments/clm-live-context-20261002/native-format-test.log": "4266911e13cdb5f9971ba899184c4a4ecd811e737f2aee8f1b2f27bb58386a70"
+  }
+}

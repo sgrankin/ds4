@@ -1,0 +1,92 @@
+We need answer integer. Need solve combinatorics. Need count paths from (0,0) to (10,8) using right/up unit steps. Conditions: at every visited point y <= x+2. Never visit (5,4). Need count.
+
+Let's compute carefully. Paths length 18, 10 R, 8 U. Constraint y <= x+2 => y - x <= 2. Let d = y - x. Start d=0. R decreases d by1, U increases d by1. Need d<=2 at all times. End at (10,8): d=-2. Avoid point (5,4): at that point x=5,y=4, d=-1, and number steps? 9 steps, with R=5,U=4.
+
+Need count paths with d<=2 from (0,0) to (10,8), excluding those that pass through (5,4). Since (5,4) satisfies constraint d=-1. Need total constrained paths minus constrained paths through (5,4). But paths through (5,4) must satisfy constraint before and after. Count product? Need ensure global constraint d<=2. Since d at (5,4)=-1. Prefix from (0,0) to (5,4) with d<=2. Suffix from (5,4) to (10,8) with d<=2. Since suffix starts d=-1. Translation? Count independent product because condition local and no other coupling except start/end d. Yes.
+
+Let's compute.
+
+Total paths with d<=2. Equivalent paths with 10 R, 8 U, partial sums d<=2. Start d=0. Let steps R=-1, U=+1. Need max <=2. End -2. This is generalized ballot with upper barrier 2.
+
+Could use reflection. Count sequences of 10 R (-1) and 8 U (+1) such that partial sum <=2. Start 0. End -2. Let transform maybe reverse? Let a=U=8, b=R=10. Constraint partial d<=2.
+
+Known formula for paths with steps +1/-1 staying <= k (upper bound) from 0 to -2? Use reflection for upper barrier at 3? Since d<=2. Count total C(18,8) minus bad paths hitting 3. Reflection principle for upper barrier: number paths from 0 to -2 with max >=3 equals number paths from 0 reflected to? For upper boundary k=3 (first hit 3). Reflect prefix up to first hit 3 across line d=3? Mapping start 0 to 6? End -2 to? Let's derive.
+
+For paths with +1/-1, upper barrier a (forbidden >= a). Count from i to j staying < a. Reflection maps start i to 2a - i? If first hit a. For upper bound d<=2, forbidden d=3. Bad paths from 0 to -2 hitting 3. Reflect prefix across line d=3: start 0 -> 6. End unchanged -2. Number bad = paths from 6 to -2 with same steps? Need counts steps? Reflection changes U/R counts? Wait reflecting prefix changes individual steps +1<->-1, so total number of U/R changes. Standard formula for paths with steps ±1 from i to j staying below a: bad = paths from 2a - i to j. But this counts paths with same total steps? The reflected path has different number of up/down? Let's check.
+
+Original has U=8, R=10, net -2. Reflected start 6 to end -2 net -8 over 18 steps. That implies U? Let u-r=-8, u+r=18 => u=5, r=13. Not same as original. Reflection formula for arbitrary steps? It counts paths with same length but different counts? Hmm reflection of prefix swaps signs, so total U count changes. The bijection between original sequences with U=8,R=10 and reflected sequences from 6 to -2 with length 18 but U=5,R=13. Number of reflected sequences with those counts? C(18,5). Is that equal bad? Let's test small.
+
+Wait standard reflection for paths from (0,0) to (n,m) with steps E,N staying below line y=x+c? Reflection maps to path with different endpoint? It preserves total steps but swaps E/N in prefix, so total E count changes. Number of reflected paths from reflected start to endpoint with length n+m and required steps determined by net. Formula C(n+m, something). Yes.
+
+For d partial sum. Original steps: U=8, R=10. Forbidden hit d=3. Reflect prefix to line d=3. Start d=0 -> d=6. End d=-2. Ref</think>Let's compute via dynamic programming or reflection.
+
+Total paths with constraint \(y \le x+2\), i.e. \(d=y-x \le 2\), from (0,0) to (10,8). Steps:
+- R: \(d\) decreases by 1
+- U: \(d\) increases by 1
+
+Need 10 R and 8 U, ending \(d=-2\), never \(d>2\).
+
+Use reflection principle. Forbidden boundary \(d=3\). Number of unrestricted paths:
+\[
+\binom{18}{8}
+\]
+Bad paths that hit \(d=3\). Reflect prefix up to first hit \(d=3\), mapping start \(d=0\) to \(d=6\). End remains \(d=-2\). The reflected path has net change \(-8\) over 18 steps, so it has 5 U and 13 R. Thus bad count:
+\[
+\binom{18}{5}
+\]
+So total valid:
+\[
+\binom{18}{8}-\binom{18}{5}
+=43758-8568=35190
+\]
+
+Now count valid paths through (5,4). At (5,4), \(d=-1\). Prefix from (0,0) to (5,4): 5 R, 4 U, ending \(d=-1\), constraint \(d\le2\). Unrestricted count:
+\[
+\binom{9}{4}=126
+\]
+Bad hit \(d=3\). Reflect start \(d=0\) to \(d=6\), end \(d=-1\). Net \(-7\) over 9 steps => U=1, R=8. Bad:
+\[
+\binom{9}{1}=9
+\]
+Prefix valid:
+\[
+126-9=117
+\]
+
+Suffix from (5,4) to (10,8): need 5 R, 4 U, net \(d\) change \(-1\), starting \(d=-1\), ending \(d=-2\), constraint \(d\le2\). Translate by subtracting start \(d=-1\): need partial sum \(s \le 3\) from 0 to -1 with 5 R (-1) and 4 U (+1). Forbidden hit \(d=4\) in original? Let's use translated boundary: start 0, end -1, constraint s <=3. Bad hit 4. Reflect start 0 to 8, end -1. Net -9 over 9 steps => U=0, R=9. Bad:
+\[
+\binom{9}{0}=1
+\]
+Unrestricted suffix:
+\[
+\binom{9}{4}=126
+\]
+Valid suffix:
+\[
+126-1=125
+\]
+
+Thus paths through (5,4):
+\[
+117 \times 125 = 14625
+\]
+
+Exclude:
+\[
+35190-14625=20565
+\]
+
+Final answer:
+\[
+\boxed{20565}
+\]
+
+Need ensure no issue: path through (5,4) at step 9. Prefix and suffix constraints independent yes. Count product.
+
+Let's verify total via DP maybe. Total valid 35190? Let's check formula. For upper barrier d<=2, start 0 end -2, steps U=8,R=10. Reflection bad hit 3. Reflect start to 6, end -2. Net -8, length 18 => U? Let u-r=-8, u+r=18 => u=5, r=13. Count C(18,5)=8568. total C(18,8)=43758. diff 35190. Seems plausible.
+
+Prefix through (5,4): start 0 end -1, U=4,R=5 length9. Bad hit3 reflect start 6 end -1 net -7 => u-r=-7, u+r=9 => u=1,r=8. C(9,1)=9. valid 117.
+
+Suffix: start d=-1 end -2, U=4,R=5. Constraint d<=2. Let translate start 0 end -1. Boundary s<=3. Bad hit4 reflect start 8 end -1 net -9 length9 => u=0,r=9. C(9,0)=1. valid 125. Product 14625. Difference 20565.
+
+Need final only integer.</think>20565

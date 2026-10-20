@@ -1,0 +1,34 @@
+[
+  {
+    "arm": "tail64",
+    "mode": "reuse",
+    "fresh_tail_lower_bound": 64,
+    "seconds": 264.2426060419966,
+    "returncode": 0,
+    "output": "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/tail64"
+  },
+  {
+    "arm": "tail256",
+    "mode": "reuse",
+    "fresh_tail_lower_bound": 256,
+    "seconds": 273.95089470800303,
+    "returncode": 0,
+    "output": "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/tail256"
+  },
+  {
+    "arm": "tail128",
+    "mode": "reuse",
+    "fresh_tail_lower_bound": 128,
+    "seconds": 264.7896720830031,
+    "returncode": 0,
+    "output": "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/tail128"
+  },
+  {
+    "arm": "native",
+    "mode": "native",
+    "fresh_tail_lower_bound": 128,
+    "seconds": 303.4831651660061,
+    "returncode": 0,
+    "output": "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/native"
+  }
+]

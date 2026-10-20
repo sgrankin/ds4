@@ -1,0 +1,6 @@
+guard,status,child_returncode,samples,adverse_samples,levels,peak_wired_compressor_gib,initial_swap_gib,peak_swap_gib,max_swap_growth_mib
+guard-combined,complete,0,194,0,[1],89.48614501953125,0.020205078125,0.020205078125,0.0
+guard-combined-repeat,complete,0,193,0,[1],88.87298583984375,0.020205078125,0.020205078125,0.0
+guard-native-after,complete,0,245,0,[1],88.650146484375,0.020205078125,0.020693359375,0.5
+guard-native-before,complete,0,260,0,[1],91.05422973632812,0.020205078125,0.020205078125,0.0
+guard-suffix-only,complete,0,220,0,[1],88.98905944824219,0.020205078125,0.020205078125,0.0

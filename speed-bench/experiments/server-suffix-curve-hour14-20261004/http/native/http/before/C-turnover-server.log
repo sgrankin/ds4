@@ -1,0 +1,8 @@
+1004 10:40:11 slot 0: request reuses nothing; evicting checkpoint (1790 tokens, idle 0 s, protected)
+1004 10:40:11 ds4-server: live kv cache miss RESPPROTO live=1790 prompt=48 common=2 vision=match reason=token-mismatch
+1004 10:40:11 ds4-server: chat ctx=0..48:48 RESPPROTO prompt start
+1004 10:40:11 ds4-server: chat ctx=0..48:48 RESPPROTO prefill chunk 1/48 (2.1%) chunk=0.00 t/s avg=7.44 t/s 0.134s
+1004 10:40:13 ds4-server: chat ctx=0..48:48 RESPPROTO prefill chunk 48/48 (100.0%) chunk=24.04 t/s avg=22.97 t/s 2.089s
+1004 10:40:13 ds4-server: chat ctx=0..48:48 RESPPROTO prompt done 2.124s
+1004 10:40:13 ds4-server: chat ctx=48..50:2 gen=2 RESPPROTO decoding chunk=16.34 t/s avg=16.34 t/s 0.122s
+1004 10:40:13 ds4-server: chat ctx=0..48:48 gen=2 RESPPROTO finish=stop 2.247s

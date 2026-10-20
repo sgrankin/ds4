@@ -1,0 +1,10 @@
+[
+  {
+    "phase": "before",
+    "returncode": 3
+  },
+  {
+    "phase": "after",
+    "returncode": 0
+  }
+]

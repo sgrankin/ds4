@@ -1,0 +1,5 @@
+[
+  {"name":"ordinary-cleanup","gold":"456","contrast":"459","contrast_meaning":"net before rounding","current_multiple":8,"interpretation":"Ordinary compaction retains the valid rule in the edited visible context."},
+  {"name":"helpful-history","gold":"456","contrast":"UNKNOWN","contrast_meaning":"rounding rule absent from visible shortened context","current_multiple":8,"interpretation":"A still-valid earlier decision is archived and omitted from the shortened visible context. Fresh abstention is information loss, not an unexplained accuracy regression."},
+  {"name":"obsolete-history","gold":"450","contrast":"456","contrast_meaning":"obsolete rounding multiple","current_multiple":10,"interpretation":"The old rule is explicitly superseded; the current visible rule and permanent archive agree."}
+]

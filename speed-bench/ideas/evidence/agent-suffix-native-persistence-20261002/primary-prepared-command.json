@@ -1,0 +1,25 @@
+{
+  "status": "prepared only; no model opened",
+  "cwd": "/Volumes/Models/ds4",
+  "argv": [
+    "python3",
+    "speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary-guard",
+    "--",
+    "python3",
+    "/Volumes/Models/ds4/.workspaces/idea-context-agent/speed-bench/agent_suffix_persistence_smoke.py",
+    "--agent",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-build-20261002/agent_suffix_persistence_fixture",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary",
+    "--expected-agent-sha256",
+    "5942e2f928f703af288919e7c130c5677c6e094b0568bbf069e4f8a91f5663ad",
+    "--timeout",
+    "420"
+  ],
+  "binary_sha256": "5942e2f928f703af288919e7c130c5677c6e094b0568bbf069e4f8a91f5663ad",
+  "estimated_seconds": "216\u2013270 primary; optionalreopen adds~150\u2013200",
+  "optional_reopen": false
+}

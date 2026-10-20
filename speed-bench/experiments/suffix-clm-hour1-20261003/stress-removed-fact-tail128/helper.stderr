@@ -1,0 +1,28 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.03 GiB (raw 0.01 + compressed 0.02) + buffers 0.83 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.23 GiB planned
+ds4: memory detail: ctx=4096 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=4097 backend=metal
+ds4: V4.1 static context buffers 880.04 MiB (ctx=4096), Engram disk-only
+PHASE old_A complete_ms=25362.582
+PHASE old_B complete_ms=5582.201
+PHASE old_C complete_ms=7908.223
+PHASE old_fresh_tail complete_ms=2808.887
+DIAGNOSTIC_IMPORT distinct_magic=1 import_rejected=1 graph_and_logits_unchanged=1
+PHASE identity_graph_and_logits complete_ms=2580.448
+ORIGINAL_CALIBRATION greedy=6829 expected=6829 known=1 gold_lp=-6.24912545 stale_lp=-0.00200587135 endpoint_bytes_equal=1
+DIAGNOSTIC_SOURCE tag_only_rejected=1 canonical_prefix_unchanged=1
+TRANSACTIONS invalid_candidates_unchanged=1 precancel_unchanged=1 postgraft_cancel_invalidated=1
+PHASE fresh_B_prime complete_ms=2565.132
+PHASE replayed_C_and_fresh_tail complete_ms=10364.361
+FACT case=prior-secret mode=fresh C=512 tail=128 greedy=UNKNOWN correct=1 stale=0 gold_lp=-0.000063 stale_lp=-33.302271 edit_ms=12929.613
+PHASE reuse_B_prime complete_ms=2525.428
+PHASE relocated_C_and_fresh_tail complete_ms=2648.368
+PREFIX_OWNERSHIP raw_rows_per_layer=0 compressed_rows=2880 index_rows=2880 bytes_equal=1
+FACT case=prior-secret mode=reuse C=512 tail=128 greedy=6712 correct=0 stale=0 gold_lp=-1.668516 stale_lp=-4.197467 edit_ms=5173.861
+FACT_ORACLE PASS identity_bytes=1 case=prior-secret C=512 tail=128 baseline_correct=1 original_known=1 reuse_correct=0 reuse_stale=0 branch_endpoint_bytes_equal=1 mean_kl=0.556095369 delta_nll=1.66845244

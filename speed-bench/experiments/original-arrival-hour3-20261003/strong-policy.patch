@@ -1,0 +1,88 @@
+--- a/ds4_original_deadline_gate.h
++++ b/ds4_original_deadline_gate.h
+@@ -17,4 +17,15 @@
+         rank && !strcmp(rank,"24") && subs && !strcmp(subs,"1") &&
+         weights && !strcmp(weights,"1") && policy && !strcmp(policy,"replace");
+ }
++/* Separate measured strong policy; the original weak policy stays unchanged. */
++static inline int ds4_od_strong_policy(const char *gap,const char *mass,
++        const char *rank,const char *subs,const char *weights,const char *policy,
++        const char *total_mass) {
++    return gap && (!strcmp(gap,".90") || !strcmp(gap,"0.90")) &&
++        mass && (!strcmp(mass,".25") || !strcmp(mass,"0.25")) &&
++        rank && !strcmp(rank,"64") && subs && !strcmp(subs,"3") &&
++        weights && !strcmp(weights,"1") && policy && !strcmp(policy,"replace") &&
++        total_mass && (!strcmp(total_mass,".50") || !strcmp(total_mass,"0.50"));
++}
++
+ #endif
+--- a/ds4.c
++++ b/ds4.c
+@@ -41535,8 +41535,15 @@
+           getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK"),
+           getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS"),
+           getenv("DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS"),
+-          getenv("DS4_METAL_V41_RESIDENT_ROUTE_POLICY")))
+-        ds4_die("original deadline requires fixed .30/.12/rank24/sub1/native weights/replace");
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_POLICY")) &&
++       !ds4_od_strong_policy(getenv("DS4_METAL_V41_RESIDENT_ROUTE_GAP"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_POLICY"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS")))
++        ds4_die("original deadline requires fixed weak1 or strong3 native-weight replace policy");
+     const char *conflicts[]={"DS4_METAL_V41_RESIDENT_ROUTE_BACKFILL",
+         "DS4_METAL_V41_RESIDENT_ROUTE_BACKFILL_LATE",
+         "DS4_METAL_V41_RESIDENT_ROUTE_BACKFILL_POOL",
+@@ -41552,9 +41559,13 @@
+        DS4_N_EXPERT_USED!=6 || DS4_N_EMBD!=5120 || DS4_N_FF_EXP!=2304)
+         ds4_die("original deadline requires fixed ordinary scalar DS4.1 text SSD layout");
+     if(!decode) { ds41_original_deadline_stop(g);return; }
++    const bool weak_policy=g->resident_route_max_subs==1 &&
++        g->resident_route_max_rank==24 && g->resident_route_max_mass==0.12f;
++    const bool strong_policy=g->resident_route_max_subs==3 &&
++        g->resident_route_max_rank==64 && g->resident_route_max_mass==0.25f &&
++        g->resident_route_max_total_mass==0.50f;
+     if(!g->resident_route_native_weights || g->resident_route_drop_weak ||
+-       g->resident_route_max_subs!=1 || g->resident_route_max_rank!=24 ||
+-       g->resident_route_max_mass!=0.12f)
++       (!weak_policy && !strong_policy))
+         ds4_die("original deadline configured resident policy differs");
+     if(!ds4_gpu_original_deadline_token_begin(g,m->map,m->size,m->fd))
+         ds4_die("original deadline owner/model/slab admission refused");
+--- a/ds4_original_deadline_native.inc
++++ b/ds4_original_deadline_native.inc
+@@ -364,13 +364,27 @@
+        !ds4_od_native_ids(candidate) || c->window_active) return -1;
+     unsigned changes=0,slot=0;for(unsigned i=0;i<6;i++)if(native[i]!=candidate[i]){changes++;slot=i;}
+     c->ticket_valid=0;c->deadline_finished=0;c->current_table=*t;memcpy(c->candidate,candidate,sizeof c->candidate);
+-    if(!changes) return 0;if(changes!=1) return -1;
++    if(!changes) return 0;if(changes>3) return -1;
++    /* Strong policy stages only the FIRST changed slot, not the strongest:
++     * native IDs have no assumed ordering. All other substitutes stay final. */
++    if(changes>1) for(unsigned i=0;i<6;i++) if(native[i]!=candidate[i]) {slot=i;break;}
+     ds4_od_request q={.serial=c->serial,.changed_slot=slot};
+     if(!ds4_od_native_expert(c,t,(uint32_t)native[slot],&q.expert)) return -1;
+-    memcpy(q.native,native,sizeof q.native);memcpy(q.candidate,candidate,sizeof q.candidate);
++    if(changes==1) {
++        memcpy(q.native,native,sizeof q.native);
++    } else {
++        memcpy(q.native,candidate,sizeof q.native);q.native[slot]=native[slot];
++    }
++    memcpy(q.candidate,candidate,sizeof q.candidate);
+     c->window_active=1;g_original_deadline_protect_layer=t->layer;
+-    memcpy(g_original_deadline_protect_ids,native,sizeof q.native);
+-    g_original_deadline_protect_ids[6]=candidate[slot];g_original_deadline_protect_count=7;
++    if(changes==1) {
++        memcpy(g_original_deadline_protect_ids,native,sizeof q.native);
++        g_original_deadline_protect_ids[6]=candidate[slot];
++    } else {
++        memcpy(g_original_deadline_protect_ids,candidate,sizeof q.candidate);
++        g_original_deadline_protect_ids[6]=native[slot];
++    }
++    g_original_deadline_protect_count=7;
+     const int status=ds4_od_try_arm(c->reader,&q,&c->ticket);
+     c->ticket_valid=status==1;return status;
+ }

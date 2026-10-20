@@ -1,0 +1,1 @@
+A Python dictionary starts as {"a":3,"b":4}. Assign b=9, then assign c=-2. Report items as key/value pairs in dictionary iteration order and sum as the sum of values. Return JSON first, then explain.

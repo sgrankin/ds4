@@ -1,0 +1,52 @@
+[
+  {
+    "name": "suffix-mock-build",
+    "command": [
+      "cc",
+      "-O2",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-function",
+      "-std=c11",
+      "-I.",
+      "-o",
+      "/Volumes/Models/ds4/.workspaces/agent-mirror-20261009/suffix-mock",
+      "tests/test_agent_context_suffix_mock.c",
+      "ds4_help.o",
+      "ds4_prompt_prefix.o",
+      "ds4_web.o",
+      "ds4_kvstore.o",
+      "ds4_state_cache.o",
+      "linenoise.o",
+      "ds4_gpu_args.o",
+      "ds4.o",
+      "ds4_image.o",
+      "ds4_distributed.o",
+      "ds4_tp.o",
+      "ds4_ssd.o",
+      "ds4_metal.o",
+      "ds4_layer_pack.o",
+      "ds4_engram.o",
+      "-lm",
+      "-pthread",
+      "-framework",
+      "Foundation",
+      "-framework",
+      "Metal"
+    ],
+    "exit_code": 0,
+    "seconds": 0.9385337909916416,
+    "log": "suffix-mock-build.log"
+  },
+  {
+    "name": "suffix-mock",
+    "command": [
+      "/Volumes/Models/ds4/.workspaces/agent-mirror-20261009/suffix-mock",
+      "/Volumes/Models/ds4/.workspaces/agent-mirror-20261009/mock-state-20261009T151120"
+    ],
+    "exit_code": 0,
+    "seconds": 0.06664999999338761,
+    "log": "suffix-mock.log"
+  }
+]

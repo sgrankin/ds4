@@ -1,0 +1,49 @@
+{
+  "status": "ROOT_INDEPENDENT_PAIRED_ARCHIVE_BYTES_AND_PREEDIT_CONTROL_AUDIT_PASS",
+  "time": 1791008920.3623948,
+  "qualified_archive_freeze": "709b0269bc219c1af716647fe8adce49860f3e20",
+  "publication_sha256": "b6106a98555179bbd90c26a1af44ff34df72adbb7a3d3fe3d85d181d02a241e4",
+  "archive_index_sha256": "a8bba9b646654ecf954ed2809faf4c995b98fe8ba19037d1a566acf232700313",
+  "publication_payloads_verified": 416,
+  "archive_payloads_verified": 409,
+  "protected_original_references_verified": 13,
+  "all_original_copied_bytes_modes_equal": true,
+  "nested_archive_physical_inventory_exact": true,
+  "whole6preedit_control_parity": {
+    "selected-old.ids": {
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f",
+      "bytes": 13604,
+      "mode": 420
+    },
+    "selected-edited.ids": {
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb",
+      "bytes": 13560,
+      "mode": 420
+    },
+    "selected-before.txt": {
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133",
+      "bytes": 14653,
+      "mode": 420
+    },
+    "selected-after.txt": {
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a",
+      "bytes": 14609,
+      "mode": 420
+    },
+    "preedit-state.bin": {
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "bytes": 30138084,
+      "mode": 420
+    },
+    "preedit-logits.bin": {
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e",
+      "bytes": 517136,
+      "mode": 420
+    }
+  },
+  "both129280rawFP32finite_header_position2988": true,
+  "opaque_old3397_edited3386_IDs_valid": true,
+  "ROOT_full_archive_source_review": true,
+  "task_outcomes": "Bothfirstattemptsfailed; retaineddifferentfailuremodes, nosemanticcache-regression/success/speed/forgetting/persistenceclaim",
+  "model_helper_GGUFstat_grader_guard_or_nativebuild_executed": false
+}

@@ -1,0 +1,12 @@
+{
+  "run_name": "hard-two-half-v2-20261002",
+  "status": "PREPARED_UNEXECUTED",
+  "checked_utc": "2026-10-02T17:15:00.494013+00:00",
+  "source_revision": "86bfd7a2",
+  "candidate": 0.5,
+  "overthink_after": 0,
+  "case_limit": 2,
+  "cache_gib_requested": 64,
+  "max_tokens": 1024,
+  "reason": "No serial GPU slot granted for this optional comparison; no model process or result/pressure directory was created."
+}

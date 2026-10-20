@@ -1,0 +1,171 @@
+{
+  "returncode": 0,
+  "error": null,
+  "seconds": 139.837027208996,
+  "mode": "suffix",
+  "prerope": 1,
+  "turns_sent": 6,
+  "turn_completions": [
+    {
+      "turn": 1,
+      "seconds_from_start": 60.32698270899709
+    },
+    {
+      "turn": 2,
+      "seconds_from_start": 82.871686708997
+    },
+    {
+      "turn": 3,
+      "seconds_from_start": 87.72584370900586
+    },
+    {
+      "turn": 4,
+      "seconds_from_start": 102.30546858400339
+    },
+    {
+      "turn": 5,
+      "seconds_from_start": 120.89908216700132
+    },
+    {
+      "turn": 6,
+      "seconds_from_start": 138.2666072090069
+    }
+  ],
+  "edits": [
+    {
+      "edit": 1,
+      "removed_bytes": 3269,
+      "replacement": "[old history archived]",
+      "remaining_blocks": 2,
+      "active_tool_result_unchanged": true,
+      "byte_edit_seconds": 0.0034151250001741573
+    },
+    {
+      "edit": 2,
+      "removed_bytes": 3269,
+      "replacement": "[old history archived]",
+      "remaining_blocks": 1,
+      "active_tool_result_unchanged": true,
+      "byte_edit_seconds": 0.0005609170038951561
+    },
+    {
+      "edit": 3,
+      "removed_bytes": 3269,
+      "replacement": "[old history archived]",
+      "remaining_blocks": 0,
+      "active_tool_result_unchanged": true,
+      "byte_edit_seconds": 0.0004945410037180409
+    }
+  ],
+  "queries": [
+    {
+      "query": 1,
+      "turn": 4,
+      "answer": {
+        "active_total": 416,
+        "archived_code": "RIVER-73"
+      },
+      "answer_correct": true,
+      "fresh_archive_read": true,
+      "seconds_including_edit": 14.580412583003636,
+      "source_geometry": [
+        {
+          "reused": 2073,
+          "fresh": 144,
+          "source_start": 2712,
+          "source_end": 4785,
+          "destination_start": 2050,
+          "destination_end": 4123,
+          "shift": 662,
+          "aligned": true,
+          "span_lengths_equal": true,
+          "line": "2026-10-03 20:46:27.313 context suffix APPROXIMATE reused=2073 fresh=144 source=2712:4785 destination=2050:4123 copied_bytes=23761408 latest_user_start=4124 latest_user_fresh=1 pre_rope=1 prior_approximate=0 source_ssd=1 3623.908 ms",
+          "pre_rope": 1,
+          "prior_approximate": 0
+        }
+      ],
+      "context_edit_trace": [
+        "2026-10-03 20:46:27.313 context suffix APPROXIMATE reused=2073 fresh=144 source=2712:4785 destination=2050:4123 copied_bytes=23761408 latest_user_start=4124 latest_user_fresh=1 pre_rope=1 prior_approximate=0 source_ssd=1 3623.908 ms",
+        "2026-10-03 20:46:27.313 live context edit committed tokens=4929->4267 file=/Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/agent-shared/context.txt"
+      ],
+      "final_assistant": "</think>{\"active_total\": 416, \"archived_code\": \"RIVER-73\"}<｜end▁of▁sentence｜>"
+    },
+    {
+      "query": 2,
+      "turn": 5,
+      "answer": {
+        "active_total": 416,
+        "archived_code": "RIVER-73"
+      },
+      "answer_correct": true,
+      "fresh_archive_read": true,
+      "seconds_including_edit": 18.59303537500091,
+      "source_geometry": [
+        {
+          "reused": 1550,
+          "fresh": 256,
+          "source_start": 3378,
+          "source_end": 4928,
+          "destination_start": 2054,
+          "destination_end": 3604,
+          "shift": 1324,
+          "aligned": true,
+          "span_lengths_equal": true,
+          "line": "2026-10-03 20:46:46.804 context suffix APPROXIMATE reused=1550 fresh=256 source=3378:4928 destination=2054:3604 copied_bytes=20405760 latest_user_start=3809 latest_user_fresh=1 pre_rope=1 prior_approximate=1 source_ssd=1 8538.829 ms",
+          "pre_rope": 1,
+          "prior_approximate": 1
+        }
+      ],
+      "context_edit_trace": [
+        "2026-10-03 20:46:46.804 context suffix APPROXIMATE reused=1550 fresh=256 source=3378:4928 destination=2054:3604 copied_bytes=20405760 latest_user_start=3809 latest_user_fresh=1 pre_rope=1 prior_approximate=1 source_ssd=1 8538.829 ms",
+        "2026-10-03 20:46:46.805 live context edit committed tokens=4522->3860 file=/Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/agent-shared/context.txt"
+      ],
+      "final_assistant": "</think>{\"active_total\": 416, \"archived_code\": \"RIVER-73\"}<｜end▁of▁sentence｜>"
+    },
+    {
+      "query": 3,
+      "turn": 6,
+      "answer": {
+        "active_total": 416,
+        "archived_code": "RIVER-73"
+      },
+      "answer_correct": true,
+      "fresh_archive_read": true,
+      "seconds_including_edit": 17.367708874997334,
+      "source_geometry": [
+        {
+          "reused": 1137,
+          "fresh": 256,
+          "source_start": 3384,
+          "source_end": 4521,
+          "destination_start": 2060,
+          "destination_end": 3197,
+          "shift": 1324,
+          "aligned": true,
+          "span_lengths_equal": true,
+          "line": "2026-10-03 20:47:04.428 context suffix APPROXIMATE reused=1137 fresh=256 source=3384:4521 destination=2060:3197 copied_bytes=17771008 latest_user_start=3402 latest_user_fresh=1 pre_rope=1 prior_approximate=1 source_ssd=1 7571.804 ms",
+          "pre_rope": 1,
+          "prior_approximate": 1
+        }
+      ],
+      "context_edit_trace": [
+        "2026-10-03 20:47:04.428 context suffix APPROXIMATE reused=1137 fresh=256 source=3384:4521 destination=2060:3197 copied_bytes=17771008 latest_user_start=3402 latest_user_fresh=1 pre_rope=1 prior_approximate=1 source_ssd=1 7571.804 ms",
+        "2026-10-03 20:47:04.428 live context edit committed tokens=4115->3453 file=/Volumes/Models/ds4/speed-bench/experiments/state-cache-hour9-20261003/agent-shared/context.txt"
+      ],
+      "final_assistant": "</think>{\"active_total\": 416, \"archived_code\": \"RIVER-73\"}<｜end▁of▁sentence｜>"
+    }
+  ],
+  "active_tool_read": true,
+  "successful_grafts": 3,
+  "grafts_from_prior_approximate": 2,
+  "pre_rope_grafts": 3,
+  "source_endpoints": [
+    4785,
+    4928,
+    4521
+  ],
+  "immutable_original_source_claim": false,
+  "task_pass": true,
+  "repeated_prerope_observed": true,
+  "experiment_pass": true
+}

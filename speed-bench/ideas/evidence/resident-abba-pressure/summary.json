@@ -1,0 +1,11 @@
+{
+  "samples": 441,
+  "all_normal_kernel_pressure": true,
+  "swap_start_gb": 0.00109375,
+  "swap_max_gb": 0.03796875,
+  "wired_max_gb": 80.68804931640625,
+  "compressor_max_gb": 9.77496337890625,
+  "native_controls_bit_identical": true,
+  "candidate_repetitions_bit_identical": true,
+  "background_pdf_indexing_observed": true
+}

@@ -1,0 +1,11 @@
+{
+  "native64_all343_rows_exact": true,
+  "native80_repeat_all343_rows_exact": true,
+  "old_reference_sha256": "f3690213afdae2d292d33fd74753c1fd010a04b482fca14cc6a9eb7d91f3ee3b",
+  "new_reference_sha256": "cf5b0ea8e62426d8682b603d09b83501a9de97b5a2535537acaf0dcc50ecf482",
+  "native80_record_equals_old_raw": false,
+  "rows": 343,
+  "all_ds4_environment_cleared": true,
+  "raw_export_scope": "Record arms write complete raw files; compare arms use C per-row full-vocab memcmp and do not export raw.",
+  "timing_scope": "diagnostic only"
+}

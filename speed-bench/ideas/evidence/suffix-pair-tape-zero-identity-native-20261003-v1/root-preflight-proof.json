@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "case": "zero-odd-identity-wrap",
+  "manifest_sha256": "75f0a2112be005b863f1ca19cdc12f17d2172e7f6713fca2709109816de86b31",
+  "command_sha256": "0b2dd19a52e980749352a8fa115d0e077015f82f160a61f3859d17a9d8417d86",
+  "verified_nonmodel_assets": 38,
+  "model_metadata_touched": false,
+  "model_opened": false,
+  "guard_called": false,
+  "sole_model_grant": false
+}

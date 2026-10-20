@@ -1,0 +1,30 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_resident_native_weights.py",
+    "-v"
+  ],
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "RESIDENT_NATIVE_WEIGHTS_TEST_SANITIZE": "1",
+    "ASAN_OPTIONS": "detect_leaks=0"
+  },
+  "returncode": 0,
+  "source_commit": "8a47faf344c2b4eb7b716d25a83c518a03711836",
+  "source_and_fixture_sha256": {
+    "ds4.c": "e2626fa0661728037c5752d1730754f6bcc039c92b339a047bc78435b07b41d0",
+    "ds4_resident_native_weights.h": "abdc7b52f270b16b198257a835c6682a6f6da355050ed7e55adf75c2d742907b",
+    "Makefile": "7fdc44e0e8883f3302f102c9597064cbfd66e5311795da0307f154cf07577073",
+    "tests/test_resident_native_weights.py": "595e43d24ab6add995fe8f7c9a860d959c8e3d129583b3316f33463813a967d4",
+    "tests/fixtures/resident_native_weights_7c6e7b32.c": "0fd00733c3eb35a427895b70c5343a586d337037582c565068c7e2342e1b40b4",
+    "ds4_resident_route.h": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e"
+  },
+  "source_pins_unchanged": true,
+  "scope": "actual production configurator/literallegacy/native-helper/dispatcher compiled only against model-free mocks; no core or model build"
+}

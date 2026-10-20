@@ -1,0 +1,26 @@
+{
+  "guard-native": {
+    "samples": 125,
+    "bad": 0,
+    "swap_growth_gb": 0.003173828125,
+    "peak_wired_compressor_gb": 84.71720886230469
+  },
+  "guard-server": {
+    "samples": 66,
+    "bad": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gb": 84.61770629882812
+  },
+  "guard-agent-ssd": {
+    "samples": 272,
+    "bad": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gb": 84.78866577148438
+  },
+  "guard-agent-ssd-fixed": {
+    "samples": 136,
+    "bad": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gb": 84.31829833984375
+  }
+}

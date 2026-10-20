@@ -1,0 +1,57 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+PROBE case=confirm_t01_python_slices tokens=32 nll=1.647006 kl=0.014287 prefill_ms=4274.391 decode_ms=2128.684
+ds4: ORIGINAL_DEADLINE generation=1 requests=7 started=7 completed=7 failed=0 promoted=3 future=0 expired=3 deadline_tries=7 deadline_misses=4 logical_requested=69672960 pread_calls=21 pread_requested=69672960 pread_returned=69672960 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t02_dictionary_update tokens=32 nll=1.208972 kl=0.0192824 prefill_ms=2670.433 decode_ms=1916.811
+ds4: ORIGINAL_DEADLINE generation=2 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t03_floor_division tokens=32 nll=2.340281 kl=0.010993 prefill_ms=1833.423 decode_ms=1464.441
+ds4: ORIGINAL_DEADLINE generation=3 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t04_quoted_csv tokens=32 nll=1.251406 kl=0.033427 prefill_ms=1942.258 decode_ms=1480.488
+ds4: ORIGINAL_DEADLINE generation=4 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t05_boolean_filter tokens=32 nll=1.603395 kl=0.0255084 prefill_ms=2633.991 decode_ms=1527.002
+ds4: ORIGINAL_DEADLINE generation=5 requests=5 started=5 completed=5 failed=0 promoted=0 future=1 expired=3 deadline_tries=5 deadline_misses=5 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t06_modular_power tokens=32 nll=2.489678 kl=0.0391164 prefill_ms=1212.897 decode_ms=1447.651
+ds4: ORIGINAL_DEADLINE generation=6 requests=5 started=5 completed=5 failed=0 promoted=1 future=0 expired=3 deadline_tries=5 deadline_misses=4 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t07_fraction_sum tokens=32 nll=2.068783 kl=0.016858 prefill_ms=976.918 decode_ms=1383.929
+ds4: ORIGINAL_DEADLINE generation=7 requests=5 started=5 completed=5 failed=0 promoted=0 future=1 expired=3 deadline_tries=5 deadline_misses=5 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t08_combined_work tokens=32 nll=1.277387 kl=0.0148703 prefill_ms=1811.537 decode_ms=1381.850
+ds4: ORIGINAL_DEADLINE generation=8 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t09_two_colors tokens=32 nll=1.497487 kl=0.00604654 prefill_ms=1578.393 decode_ms=1414.016
+ds4: ORIGINAL_DEADLINE generation=9 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t10_gcd_lcm tokens=32 nll=1.775162 kl=0.0134886 prefill_ms=889.025 decode_ms=1439.480
+ds4: ORIGINAL_DEADLINE generation=10 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t11_interval_schedule tokens=32 nll=1.162691 kl=0.019135 prefill_ms=2120.969 decode_ms=1531.803
+ds4: ORIGINAL_DEADLINE generation=11 requests=6 started=6 completed=6 failed=0 promoted=0 future=3 expired=2 deadline_tries=6 deadline_misses=6 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t12_shipping_revision tokens=32 nll=1.960720 kl=0.0123392 prefill_ms=2526.019 decode_ms=1501.119
+ds4: ORIGINAL_DEADLINE generation=12 requests=6 started=6 completed=6 failed=0 promoted=0 future=2 expired=3 deadline_tries=6 deadline_misses=6 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t13_catalog_cross_reference tokens=32 nll=1.672923 kl=0.0519592 prefill_ms=2651.247 decode_ms=1513.673
+ds4: ORIGINAL_DEADLINE generation=13 requests=5 started=5 completed=5 failed=0 promoted=0 future=1 expired=3 deadline_tries=5 deadline_misses=5 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t14_custom_units tokens=32 nll=1.635309 kl=0.0073332 prefill_ms=1739.801 decode_ms=1487.846
+ds4: ORIGINAL_DEADLINE generation=14 requests=6 started=6 completed=6 failed=0 promoted=0 future=2 expired=3 deadline_tries=6 deadline_misses=6 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t15_ready_rule tokens=32 nll=1.781303 kl=0.0135036 prefill_ms=2503.750 decode_ms=1556.532
+ds4: ORIGINAL_DEADLINE generation=15 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=confirm_t16_fictional_day_cycle tokens=32 nll=1.499791 kl=0.0101138 prefill_ms=1802.594 decode_ms=1437.504
+ds4: Metal memory quality probe final: runtime 0.89 GiB + streaming experts 56.87 GiB = 57.76 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.63 GiB, resident 66.40 GiB, virtual 732.85 GiB
+ds4:   mmap model wrapper creations 569 buffers 9.38 GiB cumulative, 1.23 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6135 expert=9.49 MiB target=56.88 GiB live=56.87 GiB, hits=322928 misses=25349 hit_rate=0.927 wraps=76047 evictions=19214 buffer_allocs=15 buffer_reuses=19214 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=234.85 GiB pread_ms=14290.256
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1014.802 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 4.44 MiB (flash mask 0.02, pad 0.06, tmp 4.02, blk 0.00, ring 0.00, kv 0.23, compressor 0.02, router 0.09, indexer 0.00, moe 0.00, f16 0.00, raw-store 0.00)
+PROBE_IO enabled=1 pread_calls=76005 requested_bytes=252166348800 returned_bytes=252166348800 cache_loader_bytes=252166348800 cache_hits=322928 cache_misses=25349 cache_evictions=19214
+ds4: ORIGINAL_DEADLINE generation=16 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+ds4: resident-route layers=20480 substitutions=9156 native_misses=12689 skipped_loads=9156 skipped_bytes=91132231680 mean_mass=0.11608680 mean_score_gap=0.12330849 mean_affinity_ratio=0.87958707 mean_rank=7.751 full_snapshots=7577 double_layers=1339 planned_substitutions=9156 drops=0 triple_layers=120
+ds4: resident-route-native-weights requested=1 substitutions=9156

@@ -1,0 +1,5 @@
+{
+  "prior_read_only_lookup_failure": "Initially looked for ROOT source-review proof under MAIN; found it under this persistent workspace before any build command. No output/build/model process was created by that failed lookup.",
+  "first_attempt": true,
+  "model_metadata_accessed": false
+}

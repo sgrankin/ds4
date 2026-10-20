@@ -1,0 +1,47 @@
+{
+  "mode": "native",
+  "arm": "native-after",
+  "route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 0,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/recipe-compaction-hour38-20261008/run.py",
+  "seconds": 239.08141345903277,
+  "phases": [
+    {
+      "phase": "dedupe",
+      "returncode": 0,
+      "seconds": 118.8020671249833,
+      "startup_seconds": 0.42008520796662197,
+      "client_seconds": 116.76491316698957,
+      "shutdown_seconds": 1.6163149999920279,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "bucket",
+      "returncode": 0,
+      "seconds": 120.27573812502669,
+      "startup_seconds": 0.41338370798621327,
+      "client_seconds": 118.31219708296703,
+      "shutdown_seconds": 1.5496885830070823,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-native-after-cache",
+  "store": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-native-after-store",
+  "timeout_seconds": 600
+}

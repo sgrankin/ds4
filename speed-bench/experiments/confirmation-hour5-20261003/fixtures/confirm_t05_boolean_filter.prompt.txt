@@ -1,0 +1,1 @@
+Rows are [{"id":4,"active":true,"score":8},{"id":7,"active":false,"score":15},{"id":9,"active":true,"score":12},{"id":3,"active":true,"score":5}]. Retain rows whose active is true and score is at least 8. Report ids in original order and score_sum. Return JSON first, then explain.

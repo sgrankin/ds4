@@ -1,0 +1,17 @@
+test_actual_controller_delivers_all_three_immutable_multiline_prompts (__main__.Delivery.test_actual_controller_delivers_all_three_immutable_multiline_prompts) ... ok
+test_actual_source_gate_all_conditions_and_bad_lf (__main__.Delivery.test_actual_source_gate_all_conditions_and_bad_lf) ... ok
+test_atomic_bound_includes_added_protocol_byte (__main__.Delivery.test_atomic_bound_includes_added_protocol_byte) ... ok
+test_exact_production_extractions_have_no_native_dependencies (__main__.Delivery.test_exact_production_extractions_have_no_native_dependencies) ... ok
+test_file_task_literal_and_delivery_bind_exactly (__main__.Delivery.test_file_task_literal_and_delivery_bind_exactly) ... ok
+test_first_failure_is_retained_with_no_edit_or_third_evaluation (__main__.Delivery.test_first_failure_is_retained_with_no_edit_or_third_evaluation) ... ok
+test_multiline_and_extra_lf_preserved_then_exact_gate_refuses (__main__.Delivery.test_multiline_and_extra_lf_preserved_then_exact_gate_refuses) ... ok
+test_no_trimming_or_tolerant_lf_handling (__main__.Delivery.test_no_trimming_or_tolerant_lf_handling) ... ok
+test_nul_and_nonstrings_refused_before_write (__main__.Delivery.test_nul_and_nonstrings_refused_before_write) ... ok
+test_observation_only_hook_delta_keeps_all_admission_branches_exact (__main__.Delivery.test_observation_only_hook_delta_keeps_all_admission_branches_exact) ... ok
+test_ownership_header_and_task_sampling_bytes_unchanged (__main__.Delivery.test_ownership_header_and_task_sampling_bytes_unchanged) ... ok
+test_shared_actual_ledger_typed_reservations_and_boundary_failures (__main__.Delivery.test_shared_actual_ledger_typed_reservations_and_boundary_failures) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.281s
+
+OK

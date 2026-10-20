@@ -1,0 +1,14 @@
+{
+  "time": 1790984181.101388,
+  "root_session": 7261,
+  "guard_returncode": 0,
+  "root_lock_reacquired": true,
+  "matching_live_model_processes": [],
+  "samples": 140,
+  "pressure_levels": [
+    1
+  ],
+  "adverse_samples": 0,
+  "swap_growth_gib": 0.0,
+  "peak_wired_plus_compressor_gib": 77.41761779785156
+}

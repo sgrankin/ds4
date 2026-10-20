@@ -1,0 +1,32 @@
+{
+  "gold": {
+    "median": 9,
+    "total_weight": 12
+  },
+  "oracle_input": {
+    "pairs": [
+      [
+        2,
+        1
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        9,
+        2
+      ],
+      [
+        15,
+        4
+      ],
+      [
+        20,
+        2
+      ]
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Weighted lower-median boundary; not running means or averages of percentages."
+}

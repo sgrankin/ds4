@@ -1,0 +1,15 @@
+{
+  "time": 1790985605.681302,
+  "root_session": 7063,
+  "guard_returncode": 3,
+  "root_lock_reacquired": true,
+  "matching_live_model_processes": [],
+  "samples": 1264,
+  "pressure_levels": [
+    1
+  ],
+  "adverse_samples": 0,
+  "swap_growth_gib": 0.0,
+  "peak_wired_plus_compressor_gib": 83.05398559570312,
+  "scope": "Original guarded harness rc3 retained; actual task checks9/9 pass, all3 frontends reject compaction replay format"
+}

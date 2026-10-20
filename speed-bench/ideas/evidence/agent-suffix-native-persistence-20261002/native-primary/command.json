@@ -1,0 +1,39 @@
+{
+  "argv": [
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-build-20261002/agent_suffix_persistence_fixture",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--ctx",
+    "8192",
+    "--prefill-chunk",
+    "256",
+    "--nothink",
+    "--temp",
+    "0",
+    "--tokens",
+    "512",
+    "--seed",
+    "41",
+    "--non-interactive",
+    "--chdir",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary",
+    "--live-context-file",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary/context.txt",
+    "--trace",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary/agent.trace"
+  ],
+  "env": {
+    "DS4_AGENT_CACHE_DIR": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary/cache",
+    "DS4_AGENT_CONTEXT_SUFFIX_REUSE": "1",
+    "DS4_AGENT_CONTEXT_SUFFIX_FRESH_TAIL": "128",
+    "DS4_AGENT_CONTEXT_FRONTIER_MB": "128",
+    "DS4_AGENT_COMPACT_PREFIX_CACHE": "1",
+    "DS4_AGENT_TEST_TIME": "1790974400",
+    "DS4_SUFFIX_FIXTURE_RESULT": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary/native-persistence.json",
+    "DS4_SUFFIX_FIXTURE_TRANSCRIPT_BEFORE_SAVE": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary/pre-save-context.txt",
+    "DS4_SUFFIX_FIXTURE_REOPEN": "0"
+  }
+}

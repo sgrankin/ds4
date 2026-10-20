@@ -1,0 +1,39 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.03 GiB (raw 0.01 + compressed 0.02) + buffers 0.83 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.23 GiB planned
+ds4: memory detail: ctx=4096 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=4097 backend=metal
+ds4: V4.1 static context buffers 880.04 MiB (ctx=4096), Engram disk-only
+PROBE case=case_001 tokens=32 nll=0.150020 kl=0.00515791 prefill_ms=2820.894 decode_ms=2138.206
+PROBE case=case_007 tokens=32 nll=0.433352 kl=0.0140843 prefill_ms=1344.437 decode_ms=2124.220
+PROBE case=case_013 tokens=32 nll=0.533553 kl=0.00485945 prefill_ms=2055.827 decode_ms=1646.414
+PROBE case=case_019 tokens=32 nll=0.619945 kl=0.00846871 prefill_ms=899.562 decode_ms=1589.034
+PROBE case=case_025 tokens=32 nll=0.193576 kl=0.00736372 prefill_ms=840.282 decode_ms=1537.375
+PROBE case=case_031 tokens=32 nll=0.608938 kl=0.00885622 prefill_ms=792.123 decode_ms=1615.911
+PROBE case=case_037 tokens=32 nll=0.308713 kl=0.00414235 prefill_ms=1624.891 decode_ms=1664.598
+PROBE case=case_043 tokens=32 nll=0.519548 kl=0.0147928 prefill_ms=1034.107 decode_ms=1647.631
+PROBE case=case_049 tokens=32 nll=0.477784 kl=0.00896306 prefill_ms=931.959 decode_ms=1725.783
+PROBE case=case_055 tokens=32 nll=0.305056 kl=0.011033 prefill_ms=737.178 decode_ms=1729.589
+PROBE case=case_061 tokens=32 nll=0.458940 kl=0.0395212 prefill_ms=851.547 decode_ms=1778.936
+PROBE case=case_067 tokens=32 nll=0.084173 kl=0.00244254 prefill_ms=1311.689 decode_ms=1597.074
+PROBE case=case_073 tokens=32 nll=0.511110 kl=0.00159324 prefill_ms=1097.480 decode_ms=1513.691
+PROBE case=case_079 tokens=32 nll=0.782042 kl=0.0321825 prefill_ms=926.725 decode_ms=1612.229
+PROBE case=case_085 tokens=32 nll=0.552561 kl=0.0204825 prefill_ms=851.809 decode_ms=1681.177
+PROBE case=case_091 tokens=32 nll=0.696760 kl=0.0184786 prefill_ms=815.568 decode_ms=1570.549
+ds4: Metal memory quality probe final: runtime 0.61 GiB + streaming experts 56.88 GiB = 57.49 GiB tracked live
+ds4:   runtime tensors live 620.84 MiB peak 620.84 MiB
+ds4:   macOS task memory footprint 57.58 GiB, resident 66.37 GiB, virtual 732.54 GiB
+ds4:   mmap model wrapper creations 569 buffers 9.38 GiB cumulative, 1.23 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=196679 misses=17641 hit_rate=0.918 wraps=52923 evictions=11505 buffer_allocs=15 buffer_reuses=11505 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=163.53 GiB pread_ms=9991.967
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=932.351 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 4.26 MiB (flash mask 0.02, pad 0.06, tmp 4.02, blk 0.00, ring 0.00, kv 0.13, compressor 0.02, router 0.01, indexer 0.00, moe 0.00, f16 0.00, raw-store 0.00)
+ds4: resident-route layers=20480 substitutions=6464 native_misses=12718 skipped_loads=6464 skipped_bytes=64338001920 mean_mass=0.10421444 mean_score_gap=0.09077311 mean_affinity_ratio=0.92680168 mean_rank=7.703 full_snapshots=6179 double_layers=625 planned_substitutions=6464 drops=0 native_weight_layers=0

@@ -1,0 +1,2719 @@
+{
+  "status": "ALL_EIGHT_FIRST_ATTEMPTS_RELEASED_REVALIDATED",
+  "time": 1790999403.911444,
+  "source_parent": "a55dd1b21c4485d60d3913a8f425e65c899b61a0",
+  "manifest_sha256": "1b537cb53a217d25fd13ee5957b405955a9a0ae63da9e372dde23092ccfe7fcd",
+  "command_sha256": "8c8c3e885830b3ec59322af2e396e4ef380efa2c919db183a7b9739cd03d4b30",
+  "root_release_sha256": "01822321357fef03caed40f8f187984164299ed17f7017839b8529f3fb45698f",
+  "root_analysis_sha256": "927db4fecba30435a4701590c13a3c9dc3d1078794daa76bd102d94a87bd45d7",
+  "root_selection_sha256": "78f27d9fe84e961dcde9a0b003994b62606bba684f886c02f68683381c785835",
+  "local_files": {
+    "prepared/__pycache__/driver.cpython-314.pyc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/__pycache__/driver.cpython-314.pyc",
+      "sha256": "3729d1adeb1d943173165a40b72d812b5ce82d0e708542bea64698b9195df8bc",
+      "bytes": 41812,
+      "mode": 420
+    },
+    "prepared/cpu-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/cpu-proof.json",
+      "sha256": "55fb791357557aa42fbb61d47971e621a459f93d49de41da804ec987b3413b2e",
+      "bytes": 808,
+      "mode": 420
+    },
+    "prepared/driver.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/driver.py",
+      "sha256": "7184efeb16794d88f59f7f6fef5507d09c750189be708b8187d55895a5a0e8ff",
+      "bytes": 21199,
+      "mode": 420
+    },
+    "prepared/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/manifest.json",
+      "sha256": "1b537cb53a217d25fd13ee5957b405955a9a0ae63da9e372dde23092ccfe7fcd",
+      "bytes": 81509,
+      "mode": 420
+    },
+    "prepared/prepared-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/prepared-command.json",
+      "sha256": "8c8c3e885830b3ec59322af2e396e4ef380efa2c919db183a7b9739cd03d4b30",
+      "bytes": 1091,
+      "mode": 420
+    },
+    "prepared/pressure/command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/pressure/command.json",
+      "sha256": "a13d2ef86fc41dec18d6b5cdcdcb6ac795f19fc6995d2afa62561e7992e24506",
+      "bytes": 947,
+      "mode": 420
+    },
+    "prepared/pressure/pressure.jsonl": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/pressure/pressure.jsonl",
+      "sha256": "a12cb2bebe2ff306dd965246543fa385fe6521f904922487baeee1e6b7735649",
+      "bytes": 101792,
+      "mode": 420
+    },
+    "prepared/pressure/result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/pressure/result.json",
+      "sha256": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+      "bytes": 52,
+      "mode": 420
+    },
+    "prepared/qualification-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/qualification-manifest.json",
+      "sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+      "bytes": 85102,
+      "mode": 420
+    },
+    "prepared/qualification-release.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/qualification-release.json",
+      "sha256": "a2fc29cebc7f593b6436c44471b6b749412111f54d9c6204f19ba2134fa9314c",
+      "bytes": 303,
+      "mode": 420
+    },
+    "prepared/qualification-summary.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/qualification-summary.json",
+      "sha256": "c143efdd78fc352a3a6a6e0b76fac82f571fa56c58355103bd08be6d4b98ea64",
+      "bytes": 66189,
+      "mode": 420
+    },
+    "prepared/root-launch-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-launch-proof.json",
+      "sha256": "fa5d2434178e390ae721c12a0ac3948c11761353fd0d904a3634690fda5251ae",
+      "bytes": 1680,
+      "mode": 420
+    },
+    "prepared/root-offline-revalidation.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-offline-revalidation.json",
+      "sha256": "927db4fecba30435a4701590c13a3c9dc3d1078794daa76bd102d94a87bd45d7",
+      "bytes": 5229,
+      "mode": 420
+    },
+    "prepared/root-preflight-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-preflight-proof.json",
+      "sha256": "a1525273ed9dc97bfd5f19e04ecfd7eaa72a15d5ce7e1efcd2adcc39178b3ab7",
+      "bytes": 478,
+      "mode": 420
+    },
+    "prepared/root-release-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-release-proof.json",
+      "sha256": "01822321357fef03caed40f8f187984164299ed17f7017839b8529f3fb45698f",
+      "bytes": 305,
+      "mode": 420
+    },
+    "prepared/root-selection.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-selection.json",
+      "sha256": "78f27d9fe84e961dcde9a0b003994b62606bba684f886c02f68683381c785835",
+      "bytes": 658,
+      "mode": 420
+    },
+    "prepared/run/anchor-affinity3-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-affinity3-checked.json",
+      "sha256": "3f37607def39aafe45b501b55153656a0e9af2699993e12fcf4b420ffcebb0d6",
+      "bytes": 3971,
+      "mode": 420
+    },
+    "prepared/run/anchor-affinity3-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-affinity3-command.json",
+      "sha256": "03bb2e2b2e16457804520731427495bd925581e384c996037bb7aa6551224f62",
+      "bytes": 6682,
+      "mode": 420
+    },
+    "prepared/run/anchor-affinity3-exit.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-affinity3-exit.json",
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "bytes": 22,
+      "mode": 420
+    },
+    "prepared/run/anchor-affinity3.csv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-affinity3.csv",
+      "sha256": "79dc96cc284eb96109e8de0e548d2eabd4b60989042dfebd75b59c39964770d1",
+      "bytes": 92226,
+      "mode": 420
+    },
+    "prepared/run/anchor-affinity3.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-affinity3.log",
+      "sha256": "18e2fd2f9380cb0ee92d0a3c728c284d36a10d8e3ce160e1dd2943052fefbb77",
+      "bytes": 4257,
+      "mode": 420
+    },
+    "prepared/run/anchor-affinity3.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-affinity3.stdout",
+      "sha256": "2d00074791c3761ff1d2704e70def59141ce98fa624d0bfd5dbdea5cdd68665f",
+      "bytes": 330,
+      "mode": 420
+    },
+    "prepared/run/anchor-weights3-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-weights3-checked.json",
+      "sha256": "ad31ef959ac492f9a9c1ddc5789666d947e41ffb2f947c896d7e21a1c8a50d35",
+      "bytes": 3970,
+      "mode": 420
+    },
+    "prepared/run/anchor-weights3-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-weights3-command.json",
+      "sha256": "caa5751300eb3d3cd6b961ccdb40d8eb4979bce1620695f5963165d4ede0be2e",
+      "bytes": 6680,
+      "mode": 420
+    },
+    "prepared/run/anchor-weights3-exit.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-weights3-exit.json",
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "bytes": 22,
+      "mode": 420
+    },
+    "prepared/run/anchor-weights3.csv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-weights3.csv",
+      "sha256": "28525ab2c2b0ceddc4cdd08f0801de20ce16cc443d2225f9423725f4db2e491f",
+      "bytes": 92196,
+      "mode": 420
+    },
+    "prepared/run/anchor-weights3.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-weights3.log",
+      "sha256": "ac16a1b9fbcc6d3d39200a27f0145263a57bdcd49568cc9ceb5a17cfcaf3e488",
+      "bytes": 4320,
+      "mode": 420
+    },
+    "prepared/run/anchor-weights3.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-weights3.stdout",
+      "sha256": "589b48208fb94a393ba6a357c881722852792ec2e276713e40666a3c3e7dcf7f",
+      "bytes": 331,
+      "mode": 420
+    },
+    "prepared/run/closer-weights3-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/closer-weights3-checked.json",
+      "sha256": "92ff6ba3016dc57dc30390a50379e27069a417be09997fdbd7150530d7b14155",
+      "bytes": 3972,
+      "mode": 420
+    },
+    "prepared/run/closer-weights3-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/closer-weights3-command.json",
+      "sha256": "774959fc2b8a2acef30e920dd34cf4d466a4798a17bb4f951d357943af3c4883",
+      "bytes": 6680,
+      "mode": 420
+    },
+    "prepared/run/closer-weights3-exit.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/closer-weights3-exit.json",
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "bytes": 22,
+      "mode": 420
+    },
+    "prepared/run/closer-weights3.csv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/closer-weights3.csv",
+      "sha256": "7fd70a315aaca85364c7877a51eb8720bebe324cf5e34e1b58c14e4377945a51",
+      "bytes": 92428,
+      "mode": 420
+    },
+    "prepared/run/closer-weights3.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/closer-weights3.log",
+      "sha256": "b7f705b38710287f8d55d530b2cbbab366b8268bd3e97de8e0effeff3e250d1c",
+      "bytes": 4325,
+      "mode": 420
+    },
+    "prepared/run/closer-weights3.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/closer-weights3.stdout",
+      "sha256": "a5f5a09d952b0b9659b1e4cc40fd51f2c5f674898f84ef762399fa437e4ef062",
+      "bytes": 330,
+      "mode": 420
+    },
+    "prepared/run/decision.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/decision.json",
+      "sha256": "0d23bd126c9391d53ac9d05f65bfa6b10ddbef8fc3ba6179b6becb23e0c7eb5d",
+      "bytes": 2961,
+      "mode": 420
+    },
+    "prepared/run/model-identity.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/model-identity.json",
+      "sha256": "54fb77dd54ef8c4d692dff920a5554f28a8a0f0954bbb18d491372efcd6fb339",
+      "bytes": 193,
+      "mode": 420
+    },
+    "prepared/run/native-after-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-after-checked.json",
+      "sha256": "a04acdcd16d523c6990bf771d680a63c32545e5f46e72f6e4bd75c5874433720",
+      "bytes": 2876,
+      "mode": 420
+    },
+    "prepared/run/native-after-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-after-command.json",
+      "sha256": "e680a5297773b22822b8ad63ff6a4e26a811a2b18057b42decea33e2c33f116c",
+      "bytes": 6673,
+      "mode": 420
+    },
+    "prepared/run/native-after-exit.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-after-exit.json",
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "bytes": 22,
+      "mode": 420
+    },
+    "prepared/run/native-after.csv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-after.csv",
+      "sha256": "760630e04bf416e2942ee3a2c188c1f4abbefa6a7b304ba056a68ce22543f8c5",
+      "bytes": 47426,
+      "mode": 420
+    },
+    "prepared/run/native-after.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-after.log",
+      "sha256": "80c85511a1d6197b0d6c1178e8d456bdcc379ff5996c5fedd1c595f7f24e60b5",
+      "bytes": 3823,
+      "mode": 420
+    },
+    "prepared/run/native-after.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-after.stdout",
+      "sha256": "59caa91e78ba98c12cfbe7c9145a860acd7a393d901da79bea691748e78a432a",
+      "bytes": 259,
+      "mode": 420
+    },
+    "prepared/run/native-before-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-before-checked.json",
+      "sha256": "298fdc7036186cfebf93c05ebf9c5e7c169dbf0ea7df0aa01b9701ba3ff17d19",
+      "bytes": 2879,
+      "mode": 420
+    },
+    "prepared/run/native-before-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-before-command.json",
+      "sha256": "63b64b1b78bb21956a607e146a064e6667c5d08ad9aeed76ac05751d8fdb2012",
+      "bytes": 6675,
+      "mode": 420
+    },
+    "prepared/run/native-before-exit.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-before-exit.json",
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "bytes": 22,
+      "mode": 420
+    },
+    "prepared/run/native-before.csv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-before.csv",
+      "sha256": "875e14674b61cd04ec6ffe3eb5390045e484489153a1a2064ef4a2fe5b81e3fc",
+      "bytes": 47430,
+      "mode": 420
+    },
+    "prepared/run/native-before.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-before.log",
+      "sha256": "8a31b0f5b3b9fa3f64b4b25d63f8ef708586d479defe392809090149c6b4fe9a",
+      "bytes": 3824,
+      "mode": 420
+    },
+    "prepared/run/native-before.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-before.stdout",
+      "sha256": "21a957acebde12d5751279f7dc06f4c95e3b32f70a59e937dff66e47b7db65d5",
+      "bytes": 260,
+      "mode": 420
+    },
+    "prepared/run/protected-weights1-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights1-checked.json",
+      "sha256": "e20ee973cbe5eb9d18ff5455d5c2b38dcdc07f3e89abbe910c4d1c21034c6e6e",
+      "bytes": 3991,
+      "mode": 420
+    },
+    "prepared/run/protected-weights1-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights1-command.json",
+      "sha256": "bac711cd99a5fd88175876d983df74dffd12f63b7bf446758886acff2da0520b",
+      "bytes": 6686,
+      "mode": 420
+    },
+    "prepared/run/protected-weights1-exit.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights1-exit.json",
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "bytes": 22,
+      "mode": 420
+    },
+    "prepared/run/protected-weights1.csv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights1.csv",
+      "sha256": "80f43caf7471923097995c6d2fe5a625e766449b23da76f8cfb7ffb3319a6d68",
+      "bytes": 92508,
+      "mode": 420
+    },
+    "prepared/run/protected-weights1.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights1.log",
+      "sha256": "45b261c32906b8ebc945aeb223816af238614ad3da0ebf18d30c7ac61890e159",
+      "bytes": 4322,
+      "mode": 420
+    },
+    "prepared/run/protected-weights1.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights1.stdout",
+      "sha256": "f4619e54d1c3b6ce05fe2fc3d4516f11c70315734ac6da22325f7eee45dfecbb",
+      "bytes": 332,
+      "mode": 420
+    },
+    "prepared/run/protected-weights2-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights2-checked.json",
+      "sha256": "2f4c140a5399361b1d4cdd55fe9a13e68ccad47d0a0e16ef708bb772ad957ff3",
+      "bytes": 3975,
+      "mode": 420
+    },
+    "prepared/run/protected-weights2-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights2-command.json",
+      "sha256": "6033d7b408eeb8eb821d4f33c5b2273b9b01a072a587e31580838053fa4c7168",
+      "bytes": 6686,
+      "mode": 420
+    },
+    "prepared/run/protected-weights2-exit.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights2-exit.json",
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "bytes": 22,
+      "mode": 420
+    },
+    "prepared/run/protected-weights2.csv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights2.csv",
+      "sha256": "22a6b717a3a458aa00eb916c887f835101cf770a1cf6aaf4f0dae41feae9a122",
+      "bytes": 92390,
+      "mode": 420
+    },
+    "prepared/run/protected-weights2.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights2.log",
+      "sha256": "7466bc91c057c9a4b4b3790fb7cfcd80c9f194d35f37eb790668099901031968",
+      "bytes": 4323,
+      "mode": 420
+    },
+    "prepared/run/protected-weights2.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights2.stdout",
+      "sha256": "7396d5a0e88e9ad6764c6dc613fd831bd10b8277948ed5e56dbb54cb8d5d5930",
+      "bytes": 330,
+      "mode": 420
+    },
+    "prepared/run/summary.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/summary.json",
+      "sha256": "8cc7abe5432263a42722a99bb5c33888de2ace6c1e9c6c28fefcdd1a7027002e",
+      "bytes": 38371,
+      "mode": 420
+    },
+    "prepared/run/wider-weights3-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/wider-weights3-checked.json",
+      "sha256": "39ed39e2c42f3982ee86bd9aaa42b8b85c6f017076383f4aa723770f8273d743",
+      "bytes": 3966,
+      "mode": 420
+    },
+    "prepared/run/wider-weights3-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/wider-weights3-command.json",
+      "sha256": "27d4c5180b79923542c27e9213cecdffb5e165c92c168687af7749337b4b46dc",
+      "bytes": 6678,
+      "mode": 420
+    },
+    "prepared/run/wider-weights3-exit.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/wider-weights3-exit.json",
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+      "bytes": 22,
+      "mode": 420
+    },
+    "prepared/run/wider-weights3.csv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/wider-weights3.csv",
+      "sha256": "3800b5975005783bf9d7982faa545646600b12cdb54355f4ae675f4c23601a4e",
+      "bytes": 92210,
+      "mode": 420
+    },
+    "prepared/run/wider-weights3.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/wider-weights3.log",
+      "sha256": "fe65c24e3a55de1f3a0369247f8ebbc802626eb227af242492fa99065891514e",
+      "bytes": 4324,
+      "mode": 420
+    },
+    "prepared/run/wider-weights3.stdout": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/wider-weights3.stdout",
+      "sha256": "ba50bf13a11ee9fbfbe609d1f2394d4c1e6778914a37ef6dfe5d852fecf54899",
+      "bytes": 331,
+      "mode": 420
+    },
+    "prepared/test_resident_env_calibration.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/test_resident_env_calibration.py",
+      "sha256": "f97ab08c6aff27eb050f5740acdf6193036cff4d4cceb257248a3934491cbaca",
+      "bytes": 16981,
+      "mode": 420
+    },
+    "ROOT/resident-env-calibration-root-offline-revalidate-20261003-v1.py": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-env-calibration-root-offline-revalidate-20261003-v1.py",
+      "sha256": "10ac683b32d9259ea659c9503e8bf9b1534c299bbaa97b91d35d07f0a32f68fc",
+      "bytes": 7322,
+      "mode": 420
+    },
+    "ROOT/resident-env-calibration-root-offline-revalidate-20261003-v1.source-pin.json": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-env-calibration-root-offline-revalidate-20261003-v1.source-pin.json",
+      "sha256": "6f58b8fd1e23bb2c5dd9c8717ff8af358d1f3550cb0d818b967abc6cee48e131",
+      "bytes": 420,
+      "mode": 420
+    },
+    "ROOT/resident-env-calibration-root-launch-20261003-v2.log": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-env-calibration-root-launch-20261003-v2.log",
+      "sha256": "f903cd0944d835aa2cb18fc22b23cbae62d9a17c622ed2e80c21aed3b0b83ddb",
+      "bytes": 3813,
+      "mode": 420
+    }
+  },
+  "external_files": {
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-affinity3.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-affinity3.raw",
+      "sha256": "89b455eb38161b5937d81d26742ce6971c36129ae1891754b1924d0d29701e61",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "retained_full_vocabulary_first_attempt_record"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-weights3.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/anchor-weights3.raw",
+      "sha256": "48f13f8291728241cd42da081db0923bc1cb6e86b79cb89286be79a1e29025b4",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "retained_full_vocabulary_first_attempt_record"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/closer-weights3.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/closer-weights3.raw",
+      "sha256": "774ddb5048be8e849dcf8d57552e3e0670fcc4a70267b91b081c17a7efa1755c",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "retained_full_vocabulary_first_attempt_record"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-after.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-after.raw",
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "retained_full_vocabulary_first_attempt_record"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-before.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/native-before.raw",
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "retained_full_vocabulary_first_attempt_record"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights1.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights1.raw",
+      "sha256": "ce5331c0c121e27f5b9f9b6297879165b8026bddf9c36dd33be0263d09cf1c4a",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "retained_full_vocabulary_first_attempt_record"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights2.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/protected-weights2.raw",
+      "sha256": "f47dd03eac614a1551aa9fc43dcc07cbba6fa7b531d913c2da5c0809da608596",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "retained_full_vocabulary_first_attempt_record"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/wider-weights3.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/wider-weights3.raw",
+      "sha256": "f9be7e717defda5c838d4343b0b1268b8cc16469e6207b87cef700aa4a155f57",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "retained_full_vocabulary_first_attempt_record"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4.c",
+      "sha256": "fa2f155d8051b3885da59a325031cc811144a150d1f0ae27e84b65f4c1b974c5",
+      "bytes": 3916709,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_qwen4_unicode.inc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_qwen4_unicode.inc",
+      "sha256": "7ba13d74558dd013f38f691908bddcddb81c7874a5ab582e5bbc865764617b61",
+      "bytes": 24985,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_streaming_hotlist_glm52.inc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_streaming_hotlist_glm52.inc",
+      "sha256": "f90296ccf162cbf4d438a6e44c129b0367683ba9cf72a54621ca14b2ad5c2cb8",
+      "bytes": 94282,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_streaming_hotlist.inc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_streaming_hotlist.inc",
+      "sha256": "f531a6ce780abd31eeabafb865221f8407965f358184850996a5e010a6386d92",
+      "bytes": 192470,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu.h",
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+      "bytes": 152618,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu_tp.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu_tp.h",
+      "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+      "bytes": 2678,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_deepseek41_gpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_deepseek41_gpu.h",
+      "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+      "bytes": 7317,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_qwen4_vision.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_qwen4_vision.h",
+      "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+      "bytes": 666,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu_mgpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu_mgpu.h",
+      "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+      "bytes": 10742,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_layer_pack.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_layer_pack.h",
+      "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+      "bytes": 2838,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_linux_memory.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_linux_memory.h",
+      "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+      "bytes": 1168,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_tp.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_tp.h",
+      "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+      "bytes": 11344,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4.h",
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+      "bytes": 35802,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_ssd.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_ssd.h",
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+      "bytes": 1349,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_suffix_layout.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_suffix_layout.h",
+      "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b",
+      "bytes": 1251,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_resident_route.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_resident_route.h",
+      "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+      "bytes": 14647,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_engram.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_engram.h",
+      "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+      "bytes": 2496,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_image.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_image.h",
+      "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+      "bytes": 4504,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_distributed.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_distributed.h",
+      "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+      "bytes": 3782,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_tool_text.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_tool_text.h",
+      "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+      "bytes": 1755,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4.c",
+      "sha256": "e2626fa0661728037c5752d1730754f6bcc039c92b339a047bc78435b07b41d0",
+      "bytes": 3924430,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_qwen4_unicode.inc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_qwen4_unicode.inc",
+      "sha256": "7ba13d74558dd013f38f691908bddcddb81c7874a5ab582e5bbc865764617b61",
+      "bytes": 24985,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_streaming_hotlist_glm52.inc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_streaming_hotlist_glm52.inc",
+      "sha256": "f90296ccf162cbf4d438a6e44c129b0367683ba9cf72a54621ca14b2ad5c2cb8",
+      "bytes": 94282,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_streaming_hotlist.inc": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_streaming_hotlist.inc",
+      "sha256": "f531a6ce780abd31eeabafb865221f8407965f358184850996a5e010a6386d92",
+      "bytes": 192470,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu.h",
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+      "bytes": 152618,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu_tp.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu_tp.h",
+      "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+      "bytes": 2678,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_deepseek41_gpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_deepseek41_gpu.h",
+      "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+      "bytes": 7317,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_qwen4_vision.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_qwen4_vision.h",
+      "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+      "bytes": 666,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu_mgpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu_mgpu.h",
+      "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+      "bytes": 10742,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_layer_pack.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_layer_pack.h",
+      "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+      "bytes": 2838,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_linux_memory.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_linux_memory.h",
+      "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+      "bytes": 1168,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_tp.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_tp.h",
+      "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+      "bytes": 11344,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4.h",
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+      "bytes": 35802,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_ssd.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_ssd.h",
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+      "bytes": 1349,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_suffix_layout.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_suffix_layout.h",
+      "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b",
+      "bytes": 1251,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_resident_native_weights.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_resident_native_weights.h",
+      "sha256": "abdc7b52f270b16b198257a835c6682a6f6da355050ed7e55adf75c2d742907b",
+      "bytes": 1189,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_resident_route.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_resident_route.h",
+      "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+      "bytes": 14647,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_engram.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_engram.h",
+      "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+      "bytes": 2496,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_image.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_image.h",
+      "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+      "bytes": 4504,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_distributed.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_distributed.h",
+      "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+      "bytes": 3782,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_tool_text.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_tool_text.h",
+      "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+      "bytes": 1755,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/quality_probe.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/quality_probe.c",
+      "sha256": "065f4b6aa8588279649523efacd2a0a5f3f44d79671d8b4e6ea92271fc6a4e0c",
+      "bytes": 16428,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/replay.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/replay.c",
+      "sha256": "ca24a6f3dd1daac70eda57413b412205436d9ea5a2f5eb018e6a951f7730fcb2",
+      "bytes": 8345,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o",
+      "sha256": "955a7d909bf5e9a792777960dceb3d809e3779f46e68f99d120aef8a3d712eed",
+      "bytes": 165728,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o",
+      "sha256": "c1c362737fc39bc8dd5b40ff3f4d03f99c6f35ac381923a7316947437bb34b27",
+      "bytes": 427168,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o",
+      "sha256": "9d97e0d9c7e3d78928ba9d911daf96fcf85178352ac567fdcdf78a68f9b2b7a1",
+      "bytes": 207496,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o",
+      "sha256": "2e418c6f60f1cdc3abdd4473eabbaaf8b9ed29b535d211149c44463cab50a408",
+      "bytes": 13800,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o",
+      "sha256": "f32bf8251fe2619c795e74ad634fdd43e76cebde0b555177aa9f4be57b3c380b",
+      "bytes": 2803120,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o",
+      "sha256": "dd072b50b2ba9983f3f5ef37127cec23b4d807265cfe0bffda1764ce0b217cba",
+      "bytes": 11320,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o",
+      "sha256": "177b20ea91d0483862a65534a48ade524526362689b654433cf234eeee4fad71",
+      "bytes": 30128,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_image.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_image.c",
+      "sha256": "6da84ab6ec63e0fe5351781c358798b2f5c6085aea77e8293c6f7b9569cb470c",
+      "bytes": 44856,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_image.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_image.h",
+      "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+      "bytes": 4504,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_distributed.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_distributed.c",
+      "sha256": "08ff11e22f2c5791de72cc910d94a6817c7a8310bde4b9cee57379f3be75e0f2",
+      "bytes": 324309,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_distributed.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_distributed.h",
+      "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+      "bytes": 3782,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_tp.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_tp.c",
+      "sha256": "3f9277262ac26ae11ed55c60e369aea84ac335b174ef5ba3fb92e431495eda0c",
+      "bytes": 131555,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_tp.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_tp.h",
+      "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+      "bytes": 11344,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_ssd.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_ssd.c",
+      "sha256": "6f093186ee5cde476f08f808a993f46665ab25ac0c1b8c207cb404c7b94cd999",
+      "bytes": 7602,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_ssd.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_ssd.h",
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+      "bytes": 1349,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_layer_pack.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_layer_pack.c",
+      "sha256": "ed93c59f8f7579e03ee74ffda8e4677653d408b6f2fc53db54270825909f23ce",
+      "bytes": 5975,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_layer_pack.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_layer_pack.h",
+      "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+      "bytes": 2838,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_engram.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_engram.c",
+      "sha256": "1e82b031fd19b3d0861780d44da2506677c36ad2b4e85349f2ac8e5d53eb9c92",
+      "bytes": 12903,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_engram.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_engram.h",
+      "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+      "bytes": 2496,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_gpu.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_gpu.h",
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+      "bytes": 152618,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_metal.m": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_metal.m",
+      "sha256": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+      "bytes": 2360348,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/build-manifest.json": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/build-manifest.json",
+      "sha256": "6c359e3d1988f2cc8f2d546eb32d9c36e1f4cf7bd8af92754317b5977783a549",
+      "bytes": 3713,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-integration-v2/speed-bench/ideas/artifacts/integrated-native-parity-prepared-20261002/build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-integration-v2/speed-bench/ideas/artifacts/integrated-native-parity-prepared-20261002/build-manifest.json",
+      "sha256": "45ae311ab600178da4e91c1cdf7ccdb11e9d3db44ff6c538c261e7c9d9d44ea4",
+      "bytes": 3418,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/validation-broad.tsv": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/validation-broad.tsv",
+      "sha256": "9814d6b0c670870d3559c79d56475108d80e4004cc12fc7b829627d6144a813d",
+      "bytes": 3091,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_001.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_001.txt",
+      "sha256": "ad31c6a139fc6f959fd03493ac5db9b22ef591b8ba0f4e34c3a1d67cde1be299",
+      "bytes": 89,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_001.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_001.txt",
+      "sha256": "b98e88381d78807023fa7052f5a287d6aba53053351290b23935b5d76846fa49",
+      "bytes": 279,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_007.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_007.txt",
+      "sha256": "3838472568045eb00528fd3d0d737cf77dbfcb6a405bfcf265d77ce12bfca42d",
+      "bytes": 118,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_007.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_007.txt",
+      "sha256": "6bd99b86118c94c926936a959317ad22453972ed6472a38dc36c473b2cc32fd1",
+      "bytes": 288,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_013.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_013.txt",
+      "sha256": "94169b777fe85c1597f6f7625a530dce8b3a1586e4c80fb8ed9257aaee77ac87",
+      "bytes": 67,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_013.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_013.txt",
+      "sha256": "b48855a7c2637bddbf05b86dc76de696e9676f883febd6108253044b7b303cbf",
+      "bytes": 213,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_019.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_019.txt",
+      "sha256": "fd856e975de64137ec3929e778003a3ca4ceb8ed7c9e8e7471faf63257aba344",
+      "bytes": 106,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_019.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_019.txt",
+      "sha256": "58107d97081d56fb8c3c748e7e5fd7f6f5407aed9fbef082bee3f8d7cf9812ee",
+      "bytes": 322,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_025.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_025.txt",
+      "sha256": "d8739f43727e986e38822c7a339f4d5c2d1b893a4a8ab6a565b793843abc029f",
+      "bytes": 91,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_025.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_025.txt",
+      "sha256": "301d89bb2d28e7b58f4fb41eb2ab51699af7c96ca6bf7b668e475483c5693ab3",
+      "bytes": 282,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_031.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_031.txt",
+      "sha256": "b53b3a2dabfde42744b86aef174f2aeb466f2992d5f4b012e15763c47c869daa",
+      "bytes": 88,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_031.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_031.txt",
+      "sha256": "07d3c98e4cf96ea8963138a3351b94232fd51204830733f284f3366626bf53af",
+      "bytes": 289,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_037.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_037.txt",
+      "sha256": "0f3767217e174ef9eb1db952fec395fc379d14f1977c71473cae192b79c9550d",
+      "bytes": 138,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_037.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_037.txt",
+      "sha256": "43d06e1b97e5229f084b089eabe7efbb178c1786e6aa714b170ccbdcdc8d23e4",
+      "bytes": 211,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_043.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_043.txt",
+      "sha256": "d301e9105fd926a6a101cbba905ae1ce1488ef650470a647bbe6236f8715d954",
+      "bytes": 112,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_043.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_043.txt",
+      "sha256": "7b63e5194530e3c094b6365e2927923576c281de5cf5003dfbe218d1223650d6",
+      "bytes": 311,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_049.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_049.txt",
+      "sha256": "0cc6f80eaaac68c48da44ffcc79c9577f19947b770d9919489f010414b3ba7c8",
+      "bytes": 132,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_049.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_049.txt",
+      "sha256": "452c155ea209046c1886486540b381f142dcabf07ff14bfc82256a26ba33f7a9",
+      "bytes": 264,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_055.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_055.txt",
+      "sha256": "b325441bb5d967e8bd1cea370c7a7dde8ebc54c29b4af7bb4bccfdddcc754064",
+      "bytes": 71,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_055.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_055.txt",
+      "sha256": "9d3d290ac728766c438cabd55ec69e02f2841d3c53f925450fd49799b685fe2d",
+      "bytes": 346,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_061.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_061.txt",
+      "sha256": "75aa34c3d9627095691f14f313c5825a5da6f8dde7ec36e4287ac2e1a493210b",
+      "bytes": 95,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_061.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_061.txt",
+      "sha256": "c5dfc361f099d5559e97433bc5e075d16d0b53fa1e06e5592b92f0bd5c785812",
+      "bytes": 227,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_067.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_067.txt",
+      "sha256": "7b6b4aa350b200ce72327a0a1d1a4da363e83c692c1e39551cd0a1e068dc3e6c",
+      "bytes": 91,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_067.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_067.txt",
+      "sha256": "89f83d712aac2efb6f5cd5f5da81575911317dc724e71199cdddb94882e19cfa",
+      "bytes": 222,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_073.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_073.txt",
+      "sha256": "437cbb9052fe063611831b6a7cbbfb36d2fddc6feb766df28fb02226d89b8cca",
+      "bytes": 82,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_073.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_073.txt",
+      "sha256": "de3116af87d5dc15f1bb5dc37b664414e85537437fbf1333ab799c3ed342c986",
+      "bytes": 234,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_079.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_079.txt",
+      "sha256": "6a61d7e77689cb6574b42987df6a8c49daf5e0f38dadfa90d2b2e52fcef20e3a",
+      "bytes": 83,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_079.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_079.txt",
+      "sha256": "8ffdb6d7324bf8cbd02b6ea006cc1dc16b781b3676570d45a5a17c97492f6e87",
+      "bytes": 236,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_085.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_085.txt",
+      "sha256": "003a8396ba34adf18cd4c1e9ef1385a559cbdfae48f4ef5e5b1d998a5a2bfdc7",
+      "bytes": 98,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_085.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_085.txt",
+      "sha256": "ab26f20101e2d6cc33769425d5e1334c6f70959315b82c79fbc16bf9a2909012",
+      "bytes": 330,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_091.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_091.txt",
+      "sha256": "8b6ffd97874bd304112fc6bd4559631aeda1ee6bbc51fc799301310b207fccfa",
+      "bytes": 84,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_091.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_091.txt",
+      "sha256": "77e61f27e2334ab677f404caa9637ec037b9808e63c6dadf18d69f02a4104dff",
+      "bytes": 306,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/evidence/confirmation16-input-freeze-20261002/confirmation16.tsv": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/evidence/confirmation16-input-freeze-20261002/confirmation16.tsv",
+      "sha256": "026134fbeb20786e1736db71ffc85de46515823112dabbaf9859b98a57c296b9",
+      "bytes": 3012,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_002.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_002.txt",
+      "sha256": "d8e1e8643286f089a9d077d13b956b508cc9b0f8ddbfbaa822b9ee5bfcfbf42d",
+      "bytes": 114,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_002.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_002.txt",
+      "sha256": "a433abcf92003278cb15f05590eda5f52a54653e4222b335a870d30ef264845e",
+      "bytes": 256,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_008.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_008.txt",
+      "sha256": "b2a0fb5191b3eaa8ddc5dc0179d1855f2e70026939244b64a9ff53e8e20b7e57",
+      "bytes": 88,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_008.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_008.txt",
+      "sha256": "fa8e18d33656767f826b8ef3d748a7746e3c434e5690d259435e32c6149a6a63",
+      "bytes": 258,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_014.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_014.txt",
+      "sha256": "cc9c5221fd202db38651897123fe8a016b751171ad55ef2c3c069055369f9e10",
+      "bytes": 77,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_014.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_014.txt",
+      "sha256": "70a5d6f7ff04be14f84385cda6aa0391e645795fd2a37be1a20279dab5cda727",
+      "bytes": 321,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_020.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_020.txt",
+      "sha256": "16d00e1834936ced31054c0c7b45afbe70d95fe84a50c0b53097ae74cf6503e8",
+      "bytes": 94,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_020.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_020.txt",
+      "sha256": "adb79f1316ddbb6e6fedec3b2c14beffb4137ef67e4f59b3fbec0a2594eede7a",
+      "bytes": 283,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_026.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_026.txt",
+      "sha256": "9552b1e51d0858bfc4f85dc826845fe7676787fadd3bd87a0639cab7b64d789d",
+      "bytes": 92,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_026.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_026.txt",
+      "sha256": "8edf56cfb1c2490cf7f30d6c8a293ed0c15c461df1fe61e04a8af3e6b7199878",
+      "bytes": 310,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_032.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_032.txt",
+      "sha256": "8e2d282cca4757754f6ca4377e10560752c17061f778cf42bb019e6aefa03755",
+      "bytes": 92,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_032.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_032.txt",
+      "sha256": "5754f2017a97cbb191251084c2903ddeff2650a5a1aa758a8e3bdc21731c22f5",
+      "bytes": 246,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_038.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_038.txt",
+      "sha256": "3bc771633e8b72decbff33c2c22f6f832cfa19a9429d21ba086a0efb1ba53980",
+      "bytes": 129,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_038.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_038.txt",
+      "sha256": "a1a04a70beea32f0d761a842a75d560049701ee9e462bcc4533df38e6141a0f7",
+      "bytes": 216,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_044.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_044.txt",
+      "sha256": "069980ebef0283567728c418687e91cf86580cb0892783d09bf1d41226827efc",
+      "bytes": 114,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_044.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_044.txt",
+      "sha256": "fc260f52161e80a6ea7ad5fcc85993f596aeb900f1bf667148d0e8662dfe5c4b",
+      "bytes": 213,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_050.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_050.txt",
+      "sha256": "1d98ea7c819f2a1ce198fc4ff3ec9de24962441bc1964753e821348b54f6f7de",
+      "bytes": 117,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_050.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_050.txt",
+      "sha256": "f87ad7bad38526ee8dda21c2f9021145ac8add8660078c302965411b1d044ba4",
+      "bytes": 221,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_056.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_056.txt",
+      "sha256": "ba4dde22d1a48306c3b521ceca74365dbdef3503c97fe96abe3efc4de5932043",
+      "bytes": 104,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_056.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_056.txt",
+      "sha256": "5433d0e4f8601e543b29a6ee0235a8b88ec1dc4117e97db89e4de166ee0d4b75",
+      "bytes": 340,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_062.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_062.txt",
+      "sha256": "c8171bff3b73571c59afa0a421de252a000322410d2979ffe5799ef2037fdd0a",
+      "bytes": 81,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_062.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_062.txt",
+      "sha256": "b2a6da8a3620ba2c1d62b78c1be6c22aacd70913487b7e43e43878fd50d5e9aa",
+      "bytes": 323,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_068.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_068.txt",
+      "sha256": "16693a5f52a371bcc30281dfc2da58a7f5b0d405223e2f3b0b2297565512a5d8",
+      "bytes": 98,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_068.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_068.txt",
+      "sha256": "5f3a3adc488dd0cfed33e0c9f898eaa6e688bdd9499d8cdb6d820557c6a9be63",
+      "bytes": 244,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_074.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_074.txt",
+      "sha256": "7e9f0b27ebc7bdadc0a9b1eb6562d063ba99d99b7aaf610ebe0c736984386728",
+      "bytes": 85,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_074.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_074.txt",
+      "sha256": "9663bd270f197779864032912db99c244b6e33ad95a3a899ad7f8108436d0317",
+      "bytes": 219,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_080.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_080.txt",
+      "sha256": "56aee7c107e6c8ff1358759e0981c38a37c7fa63a8f2d0c3159302acfc3c20b2",
+      "bytes": 117,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_080.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_080.txt",
+      "sha256": "0094e8b87646075f27d9cd0b14864892a18c645d6ea625adf618b912d3634165",
+      "bytes": 325,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_086.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_086.txt",
+      "sha256": "2eaa5a9b09939897bf22bc9ebd9059642eb3afe1acc1cc137c7a47211acf7393",
+      "bytes": 94,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_086.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_086.txt",
+      "sha256": "6f1ea2b7249a8853bc8f1b2360e8022643349789433aa67099e87778bbc2fd24",
+      "bytes": 297,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_092.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_092.txt",
+      "sha256": "df704f5ad622440c36f79b410bd695d50d54c1e2b4997cc4a57966aa185f73f6",
+      "bytes": 102,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_092.txt": {
+      "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_092.txt",
+      "sha256": "5f25121e650375b8da80d7a483186518c87bd8e59deb38e57db72febba277ca2",
+      "bytes": 298,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/evidence/confirmation16-input-freeze-20261002/input-freeze.json": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/evidence/confirmation16-input-freeze-20261002/input-freeze.json",
+      "sha256": "f46b45e17bc110d6b66fdf125b53935e8b16849f437d8c04bf9fa910c9b3c5de",
+      "bytes": 4134,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/latency-session.txt": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/latency-session.txt",
+      "sha256": "31e3e00a9f3e17ae16692d2f998f0a2fc63c501552ea01b3de47e11d2a35e928",
+      "bytes": 13016,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/flash_attn.metal",
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+      "bytes": 61784,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dense.metal",
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+      "bytes": 113439,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_bf16.metal",
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+      "bytes": 5466,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_vision.metal",
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+      "bytes": 11295,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/deepseek4_vision.metal",
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+      "bytes": 7815,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_kda.metal",
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+      "bytes": 13116,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/moe.metal",
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+      "bytes": 423032,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_hc.metal",
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+      "bytes": 63069,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/unary.metal",
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf",
+      "bytes": 10104,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_kv.metal",
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+      "bytes": 22218,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv41.metal",
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+      "bytes": 12508,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_rope.metal",
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+      "bytes": 35980,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_misc.metal",
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+      "bytes": 282139,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/argsort.metal",
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+      "bytes": 11174,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/cpy.metal",
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+      "bytes": 10154,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/concat.metal",
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+      "bytes": 1932,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/get_rows.metal",
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+      "bytes": 6976,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/sum_rows.metal",
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+      "bytes": 2737,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/softmax.metal",
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+      "bytes": 7679,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/repeat.metal",
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+      "bytes": 1640,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glu.metal",
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+      "bytes": 2129,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/norm.metal",
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+      "bytes": 14766,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/bin.metal",
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+      "bytes": 6580,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/set_rows.metal",
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+      "bytes": 1909,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/qwen4.metal",
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+      "bytes": 232464,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/qwen4_vision.metal",
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+      "bytes": 7402,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/usr/bin/cc": {
+      "path": "/usr/bin/cc",
+      "sha256": "34129c71a01a74f7f3b2443521519b2e5447553fa187f5fcafaaf8c42cc192e2",
+      "bytes": 200560,
+      "mode": 493,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/evidence/resident-native-weights-calibration16-20261002/compact-summary.json": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/evidence/resident-native-weights-calibration16-20261002/compact-summary.json",
+      "sha256": "afb14a1f2eb142e9f0f0c514710cc22e6578169439a825df0cc663eebe092f00",
+      "bytes": 28321,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/Makefile": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/Makefile",
+      "sha256": "7fdc44e0e8883f3302f102c9597064cbfd66e5311795da0307f154cf07577073",
+      "bytes": 55321,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_build.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_build.py",
+      "sha256": "6e93d08820c726262ebeea538e5c9f35edad093126558ba60158bb855e7b31a8",
+      "bytes": 16758,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/cpu-pass-v3/proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/cpu-pass-v3/proof.json",
+      "sha256": "a4c997f252f69b22c6396bafdfe241efedb2b04467653c48a0cddf29e9920f7c",
+      "bytes": 975,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/cpu-pass-v3/index.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/cpu-pass-v3/index.json",
+      "sha256": "f36f8217160c497294e99f0b45a647008d2d99c34a09ab594727188d063d52c4",
+      "bytes": 581,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+      "bytes": 124676976,
+      "mode": 493,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/build-plan.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/build-plan.json",
+      "sha256": "cd0bc3bc3cfcead432a3479835f32bffa5aba0b2909eeb21b0bef69106094df9",
+      "bytes": 155863,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_compiler_fix.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_compiler_fix.py",
+      "sha256": "5569e72da0218cb1dbce5e146cbceba6ca1de01f77491a0ea820bf30faf6084d",
+      "bytes": 3996,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json",
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+      "bytes": 7948,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist",
+      "sha256": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+      "bytes": 5538,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h",
+      "sha256": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54",
+      "bytes": 3069,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/usr/bin/xcrun": {
+      "path": "/usr/bin/xcrun",
+      "sha256": "bbe7671518a3905f9d3fce54312fbc77c2876b0d62aca74a0688fa869d31a8a9",
+      "bytes": 199024,
+      "mode": 493,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v4/build-plan.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v4/build-plan.json",
+      "sha256": "0af3bd79ba604ff4f9d7eccdba9003b0263bc8685e043cf4a3819c559446da9e",
+      "bytes": 157270,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_sdk_fix.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_sdk_fix.py",
+      "sha256": "cde487dfbab5cecbc8002aaa0825b78b00695e13d049c75cb3767e98d31cccca",
+      "bytes": 3208,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o",
+      "sha256": "8a8d7e10eff13587e35011754ac907b8a015cf6e7970a42cc19a6bfebb810ccd",
+      "bytes": 5651024,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-old7c6e": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-old7c6e",
+      "sha256": "9e125fb44fb12c3f76e8d2372943809f41223a4bdfcd4fe8bccbc6a1c27fe77f",
+      "bytes": 2695760,
+      "mode": 493,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-old7c6e": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-old7c6e",
+      "sha256": "fe1d2f10f0c377c7c4a98a5ad18b772a387709afd5711c4bfe87d4032b779e3c",
+      "bytes": 2691728,
+      "mode": 493,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o",
+      "sha256": "edfcbdd8bc9a25952320fcf644093d76a9b7f9d5b395fc5352429acdab60be51",
+      "bytes": 5667424,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-new8a47": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-new8a47",
+      "sha256": "98aec43ad68e14cc163cf2a381b52085984a6f8b9cdc451d1747a34a9826915f",
+      "bytes": 2696656,
+      "mode": 493,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-new8a47": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-new8a47",
+      "sha256": "4d2e34d042b19a67ae13a1a85072e7f6551870b1e64339fea417d19eb37fe1ca",
+      "bytes": 2692624,
+      "mode": 493,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-2.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-2.json",
+      "sha256": "f12a14380ac1de14fb6ffe5c31021856d338b6abc980fc1c7b6f74be85fe3b7d",
+      "bytes": 4487,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-3.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-3.json",
+      "sha256": "88c67787814c14c01cb06c2055cea9b26f197fa994fcd9a13156dfbf775fe93f",
+      "bytes": 5108,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-4.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-4.json",
+      "sha256": "51d2b5c5c0f4567384d26a34f60fa1a9508935106165949a3580546ab0c3b865",
+      "bytes": 6149,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-5.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-5.json",
+      "sha256": "c5038926d6b455b6e8e483e0899503f99866bc11b0b42e08d913a512d5d4d346",
+      "bytes": 4486,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-6.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-6.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-7.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-7.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-5.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-5.log",
+      "sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+      "bytes": 28,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-6.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-6.json",
+      "sha256": "dc24820bbfccd3731061a29db2267d4f6c5dc3460732ac16ce47ef3394a29e47",
+      "bytes": 6194,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-4.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-4.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-0.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-0.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-7.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-7.json",
+      "sha256": "02b5ff88419ecc6242287a391eb47d05b758ce24d0ac42b2b8ead9fd4290c334",
+      "bytes": 6194,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-1.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-1.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-3.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-3.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-2.log": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-2.log",
+      "sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+      "bytes": 28,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-0.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-0.json",
+      "sha256": "a1fe400025f12b74edbe16c5c168dffa6f8c3a94fd685df253de84d38e42984e",
+      "bytes": 5108,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-1.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-1.json",
+      "sha256": "052b65f84f70d909d14250b3bba3b46c888fc9168f32b6f93da9eb979f49b89b",
+      "bytes": 6151,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-result.json",
+      "sha256": "42602811cc52af9165e0e3d71cc23d3a8c95b698bd84547af78627825ab912a9",
+      "bytes": 46658,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-only.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-only.py",
+      "sha256": "4569fe87d925768639b51f643beaf65fb62331c4ff73ccafecd60361c8b6a861",
+      "bytes": 4794,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/opt/homebrew/lib/python3.14/site-packages/numpy/__init__.py": {
+      "path": "/opt/homebrew/lib/python3.14/site-packages/numpy/__init__.py",
+      "sha256": "09295a80660f17925ae23765ce8cbd7ff7ceae968d5f2f89349f1cb74c0b9e11",
+      "bytes": 25220,
+      "mode": 292,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/opt/homebrew/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-darwin.so": {
+      "path": "/opt/homebrew/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-darwin.so",
+      "sha256": "3f300bbe048de52ab5c38882fee8cc58e52b92ded52fa7958916fb129cb97bb8",
+      "bytes": 3289664,
+      "mode": 292,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-manifest.json",
+      "sha256": "e2cfda6426c8ec7c371ec18a12dff60932c1c2f5b166a7ba5b5ccafdc06aa91f",
+      "bytes": 70382,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-plan.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-plan.json",
+      "sha256": "f798a1a977f61b7fc7a0f023da452e91f41a09516614e097e361e6bdd925638f",
+      "bytes": 159457,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/build-plan-v3/input-identity-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/build-plan-v3/input-identity-proof.json",
+      "sha256": "0839fb8a7d4fd61cccbe6d65a3ded0fb2b4abe0b7e3104466ea5a2ede54aff71",
+      "bytes": 1204,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py": {
+      "path": "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+      "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+      "bytes": 9066,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python": {
+      "path": "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+      "sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d",
+      "bytes": 33568,
+      "mode": 493,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_study.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_study.py",
+      "sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+      "bytes": 33065,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/raw_helpers.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/raw_helpers.py",
+      "sha256": "dbeae546e41e6443bff714265b5be64bc2ec4b15b78c0ca8e71afb044a5eb132",
+      "bytes": 15137,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/driver.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/driver.py",
+      "sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+      "bytes": 33065,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/build-manifest.json",
+      "sha256": "e2cfda6426c8ec7c371ec18a12dff60932c1c2f5b166a7ba5b5ccafdc06aa91f",
+      "bytes": 70382,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/build-plan.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/build-plan.json",
+      "sha256": "f798a1a977f61b7fc7a0f023da452e91f41a09516614e097e361e6bdd925638f",
+      "bytes": 159457,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/input-identity-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/input-identity-proof.json",
+      "sha256": "0839fb8a7d4fd61cccbe6d65a3ded0fb2b4abe0b7e3104466ea5a2ede54aff71",
+      "bytes": 1204,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/000-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/000-prompt.txt",
+      "sha256": "ad31c6a139fc6f959fd03493ac5db9b22ef591b8ba0f4e34c3a1d67cde1be299",
+      "bytes": 89,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/000-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/000-continuation.txt",
+      "sha256": "b98e88381d78807023fa7052f5a287d6aba53053351290b23935b5d76846fa49",
+      "bytes": 279,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/001-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/001-prompt.txt",
+      "sha256": "3838472568045eb00528fd3d0d737cf77dbfcb6a405bfcf265d77ce12bfca42d",
+      "bytes": 118,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/001-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/001-continuation.txt",
+      "sha256": "6bd99b86118c94c926936a959317ad22453972ed6472a38dc36c473b2cc32fd1",
+      "bytes": 288,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/002-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/002-prompt.txt",
+      "sha256": "94169b777fe85c1597f6f7625a530dce8b3a1586e4c80fb8ed9257aaee77ac87",
+      "bytes": 67,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/002-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/002-continuation.txt",
+      "sha256": "b48855a7c2637bddbf05b86dc76de696e9676f883febd6108253044b7b303cbf",
+      "bytes": 213,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/003-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/003-prompt.txt",
+      "sha256": "fd856e975de64137ec3929e778003a3ca4ceb8ed7c9e8e7471faf63257aba344",
+      "bytes": 106,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/003-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/003-continuation.txt",
+      "sha256": "58107d97081d56fb8c3c748e7e5fd7f6f5407aed9fbef082bee3f8d7cf9812ee",
+      "bytes": 322,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/004-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/004-prompt.txt",
+      "sha256": "d8739f43727e986e38822c7a339f4d5c2d1b893a4a8ab6a565b793843abc029f",
+      "bytes": 91,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/004-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/004-continuation.txt",
+      "sha256": "301d89bb2d28e7b58f4fb41eb2ab51699af7c96ca6bf7b668e475483c5693ab3",
+      "bytes": 282,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/005-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/005-prompt.txt",
+      "sha256": "b53b3a2dabfde42744b86aef174f2aeb466f2992d5f4b012e15763c47c869daa",
+      "bytes": 88,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/005-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/005-continuation.txt",
+      "sha256": "07d3c98e4cf96ea8963138a3351b94232fd51204830733f284f3366626bf53af",
+      "bytes": 289,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/006-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/006-prompt.txt",
+      "sha256": "0f3767217e174ef9eb1db952fec395fc379d14f1977c71473cae192b79c9550d",
+      "bytes": 138,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/006-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/006-continuation.txt",
+      "sha256": "43d06e1b97e5229f084b089eabe7efbb178c1786e6aa714b170ccbdcdc8d23e4",
+      "bytes": 211,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/007-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/007-prompt.txt",
+      "sha256": "d301e9105fd926a6a101cbba905ae1ce1488ef650470a647bbe6236f8715d954",
+      "bytes": 112,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/007-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/007-continuation.txt",
+      "sha256": "7b63e5194530e3c094b6365e2927923576c281de5cf5003dfbe218d1223650d6",
+      "bytes": 311,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/008-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/008-prompt.txt",
+      "sha256": "0cc6f80eaaac68c48da44ffcc79c9577f19947b770d9919489f010414b3ba7c8",
+      "bytes": 132,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/008-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/008-continuation.txt",
+      "sha256": "452c155ea209046c1886486540b381f142dcabf07ff14bfc82256a26ba33f7a9",
+      "bytes": 264,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/009-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/009-prompt.txt",
+      "sha256": "b325441bb5d967e8bd1cea370c7a7dde8ebc54c29b4af7bb4bccfdddcc754064",
+      "bytes": 71,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/009-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/009-continuation.txt",
+      "sha256": "9d3d290ac728766c438cabd55ec69e02f2841d3c53f925450fd49799b685fe2d",
+      "bytes": 346,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/010-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/010-prompt.txt",
+      "sha256": "75aa34c3d9627095691f14f313c5825a5da6f8dde7ec36e4287ac2e1a493210b",
+      "bytes": 95,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/010-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/010-continuation.txt",
+      "sha256": "c5dfc361f099d5559e97433bc5e075d16d0b53fa1e06e5592b92f0bd5c785812",
+      "bytes": 227,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/011-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/011-prompt.txt",
+      "sha256": "7b6b4aa350b200ce72327a0a1d1a4da363e83c692c1e39551cd0a1e068dc3e6c",
+      "bytes": 91,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/011-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/011-continuation.txt",
+      "sha256": "89f83d712aac2efb6f5cd5f5da81575911317dc724e71199cdddb94882e19cfa",
+      "bytes": 222,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/012-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/012-prompt.txt",
+      "sha256": "437cbb9052fe063611831b6a7cbbfb36d2fddc6feb766df28fb02226d89b8cca",
+      "bytes": 82,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/012-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/012-continuation.txt",
+      "sha256": "de3116af87d5dc15f1bb5dc37b664414e85537437fbf1333ab799c3ed342c986",
+      "bytes": 234,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/013-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/013-prompt.txt",
+      "sha256": "6a61d7e77689cb6574b42987df6a8c49daf5e0f38dadfa90d2b2e52fcef20e3a",
+      "bytes": 83,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/013-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/013-continuation.txt",
+      "sha256": "8ffdb6d7324bf8cbd02b6ea006cc1dc16b781b3676570d45a5a17c97492f6e87",
+      "bytes": 236,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/014-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/014-prompt.txt",
+      "sha256": "003a8396ba34adf18cd4c1e9ef1385a559cbdfae48f4ef5e5b1d998a5a2bfdc7",
+      "bytes": 98,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/014-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/014-continuation.txt",
+      "sha256": "ab26f20101e2d6cc33769425d5e1334c6f70959315b82c79fbc16bf9a2909012",
+      "bytes": 330,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/015-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/015-prompt.txt",
+      "sha256": "8b6ffd97874bd304112fc6bd4559631aeda1ee6bbc51fc799301310b207fccfa",
+      "bytes": 84,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/015-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/015-continuation.txt",
+      "sha256": "77e61f27e2334ab677f404caa9637ec037b9808e63c6dadf18d69f02a4104dff",
+      "bytes": 306,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/fixtures.tsv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/fixtures.tsv",
+      "sha256": "f437dd3b450e43ed815c6c079e3dc383384d316c9686476d0a187637abf77285",
+      "bytes": 5744,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/000-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/000-prompt.txt",
+      "sha256": "d8e1e8643286f089a9d077d13b956b508cc9b0f8ddbfbaa822b9ee5bfcfbf42d",
+      "bytes": 114,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/000-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/000-continuation.txt",
+      "sha256": "a433abcf92003278cb15f05590eda5f52a54653e4222b335a870d30ef264845e",
+      "bytes": 256,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/001-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/001-prompt.txt",
+      "sha256": "b2a0fb5191b3eaa8ddc5dc0179d1855f2e70026939244b64a9ff53e8e20b7e57",
+      "bytes": 88,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/001-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/001-continuation.txt",
+      "sha256": "fa8e18d33656767f826b8ef3d748a7746e3c434e5690d259435e32c6149a6a63",
+      "bytes": 258,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/002-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/002-prompt.txt",
+      "sha256": "cc9c5221fd202db38651897123fe8a016b751171ad55ef2c3c069055369f9e10",
+      "bytes": 77,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/002-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/002-continuation.txt",
+      "sha256": "70a5d6f7ff04be14f84385cda6aa0391e645795fd2a37be1a20279dab5cda727",
+      "bytes": 321,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/003-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/003-prompt.txt",
+      "sha256": "16d00e1834936ced31054c0c7b45afbe70d95fe84a50c0b53097ae74cf6503e8",
+      "bytes": 94,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/003-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/003-continuation.txt",
+      "sha256": "adb79f1316ddbb6e6fedec3b2c14beffb4137ef67e4f59b3fbec0a2594eede7a",
+      "bytes": 283,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/004-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/004-prompt.txt",
+      "sha256": "9552b1e51d0858bfc4f85dc826845fe7676787fadd3bd87a0639cab7b64d789d",
+      "bytes": 92,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/004-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/004-continuation.txt",
+      "sha256": "8edf56cfb1c2490cf7f30d6c8a293ed0c15c461df1fe61e04a8af3e6b7199878",
+      "bytes": 310,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/005-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/005-prompt.txt",
+      "sha256": "8e2d282cca4757754f6ca4377e10560752c17061f778cf42bb019e6aefa03755",
+      "bytes": 92,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/005-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/005-continuation.txt",
+      "sha256": "5754f2017a97cbb191251084c2903ddeff2650a5a1aa758a8e3bdc21731c22f5",
+      "bytes": 246,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/006-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/006-prompt.txt",
+      "sha256": "3bc771633e8b72decbff33c2c22f6f832cfa19a9429d21ba086a0efb1ba53980",
+      "bytes": 129,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/006-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/006-continuation.txt",
+      "sha256": "a1a04a70beea32f0d761a842a75d560049701ee9e462bcc4533df38e6141a0f7",
+      "bytes": 216,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/007-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/007-prompt.txt",
+      "sha256": "069980ebef0283567728c418687e91cf86580cb0892783d09bf1d41226827efc",
+      "bytes": 114,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/007-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/007-continuation.txt",
+      "sha256": "fc260f52161e80a6ea7ad5fcc85993f596aeb900f1bf667148d0e8662dfe5c4b",
+      "bytes": 213,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/008-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/008-prompt.txt",
+      "sha256": "1d98ea7c819f2a1ce198fc4ff3ec9de24962441bc1964753e821348b54f6f7de",
+      "bytes": 117,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/008-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/008-continuation.txt",
+      "sha256": "f87ad7bad38526ee8dda21c2f9021145ac8add8660078c302965411b1d044ba4",
+      "bytes": 221,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/009-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/009-prompt.txt",
+      "sha256": "ba4dde22d1a48306c3b521ceca74365dbdef3503c97fe96abe3efc4de5932043",
+      "bytes": 104,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/009-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/009-continuation.txt",
+      "sha256": "5433d0e4f8601e543b29a6ee0235a8b88ec1dc4117e97db89e4de166ee0d4b75",
+      "bytes": 340,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/010-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/010-prompt.txt",
+      "sha256": "c8171bff3b73571c59afa0a421de252a000322410d2979ffe5799ef2037fdd0a",
+      "bytes": 81,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/010-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/010-continuation.txt",
+      "sha256": "b2a6da8a3620ba2c1d62b78c1be6c22aacd70913487b7e43e43878fd50d5e9aa",
+      "bytes": 323,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/011-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/011-prompt.txt",
+      "sha256": "16693a5f52a371bcc30281dfc2da58a7f5b0d405223e2f3b0b2297565512a5d8",
+      "bytes": 98,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/011-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/011-continuation.txt",
+      "sha256": "5f3a3adc488dd0cfed33e0c9f898eaa6e688bdd9499d8cdb6d820557c6a9be63",
+      "bytes": 244,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/012-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/012-prompt.txt",
+      "sha256": "7e9f0b27ebc7bdadc0a9b1eb6562d063ba99d99b7aaf610ebe0c736984386728",
+      "bytes": 85,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/012-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/012-continuation.txt",
+      "sha256": "9663bd270f197779864032912db99c244b6e33ad95a3a899ad7f8108436d0317",
+      "bytes": 219,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/013-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/013-prompt.txt",
+      "sha256": "56aee7c107e6c8ff1358759e0981c38a37c7fa63a8f2d0c3159302acfc3c20b2",
+      "bytes": 117,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/013-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/013-continuation.txt",
+      "sha256": "0094e8b87646075f27d9cd0b14864892a18c645d6ea625adf618b912d3634165",
+      "bytes": 325,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/014-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/014-prompt.txt",
+      "sha256": "2eaa5a9b09939897bf22bc9ebd9059642eb3afe1acc1cc137c7a47211acf7393",
+      "bytes": 94,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/014-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/014-continuation.txt",
+      "sha256": "6f1ea2b7249a8853bc8f1b2360e8022643349789433aa67099e87778bbc2fd24",
+      "bytes": 297,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/015-prompt.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/015-prompt.txt",
+      "sha256": "df704f5ad622440c36f79b410bd695d50d54c1e2b4997cc4a57966aa185f73f6",
+      "bytes": 102,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/015-continuation.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/015-continuation.txt",
+      "sha256": "5f25121e650375b8da80d7a483186518c87bd8e59deb38e57db72febba277ca2",
+      "bytes": 298,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/fixtures.tsv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/fixtures.tsv",
+      "sha256": "a6e6e5f1658e9b383b5d0ddec38f626ee73e3e613579f63c2e40c475c60a5a62",
+      "bytes": 5616,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/flash_attn.metal",
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+      "bytes": 61784,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dense.metal",
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+      "bytes": 113439,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_bf16.metal",
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+      "bytes": 5466,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_vision.metal",
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+      "bytes": 11295,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/deepseek4_vision.metal",
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+      "bytes": 7815,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_kda.metal",
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+      "bytes": 13116,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/moe.metal",
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+      "bytes": 423032,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_hc.metal",
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+      "bytes": 63069,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/unary.metal",
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf",
+      "bytes": 10104,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_kv.metal",
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+      "bytes": 22218,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv41.metal",
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+      "bytes": 12508,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_rope.metal",
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+      "bytes": 35980,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_misc.metal",
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+      "bytes": 282139,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/argsort.metal",
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+      "bytes": 11174,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/cpy.metal",
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+      "bytes": 10154,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/concat.metal",
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+      "bytes": 1932,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/get_rows.metal",
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+      "bytes": 6976,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/sum_rows.metal",
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+      "bytes": 2737,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/softmax.metal",
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+      "bytes": 7679,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/repeat.metal",
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+      "bytes": 1640,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glu.metal",
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+      "bytes": 2129,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/norm.metal",
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+      "bytes": 14766,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/bin.metal",
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+      "bytes": 6580,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/set_rows.metal",
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+      "bytes": 1909,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/qwen4.metal",
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+      "bytes": 232464,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/qwen4_vision.metal",
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+      "bytes": 7402,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/root-release-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/root-release-proof.json",
+      "sha256": "a2fc29cebc7f593b6436c44471b6b749412111f54d9c6204f19ba2134fa9314c",
+      "bytes": 303,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/summary.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/summary.json",
+      "sha256": "c143efdd78fc352a3a6a6e0b76fac82f571fa56c58355103bd08be6d4b98ea64",
+      "bytes": 66189,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-approx0-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-approx0-checked.json",
+      "sha256": "18fab65962dc79ae9cc7bcd9eb46c98cb397061622a5a2c9c80a813ee58ed301",
+      "bytes": 3980,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-native-weights1-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-native-weights1-checked.json",
+      "sha256": "cfee32fb98f5bca78502bf60947430b7650b3390622d77e789e801553089168c",
+      "bytes": 3984,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-native-checked.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-native-checked.json",
+      "sha256": "214d18029c71b1be0cb11b9708d5453fcb22f65aa39acfedf5ad354fded5b993",
+      "bytes": 2889,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/manifest.json",
+      "sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+      "bytes": 85102,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/prepared-command.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/prepared-command.json",
+      "sha256": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+      "bytes": 1042,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-reference.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-reference.raw",
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-approx0.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-approx0.raw",
+      "sha256": "89b455eb38161b5937d81d26742ce6971c36129ae1891754b1924d0d29701e61",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-native-weights1.raw": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-native-weights1.raw",
+      "sha256": "48f13f8291728241cd42da081db0923bc1cb6e86b79cb89286be79a1e29025b4",
+      "bytes": 264777744,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/prepare_resident_env_calibration.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/prepare_resident_env_calibration.py",
+      "sha256": "7184efeb16794d88f59f7f6fef5507d09c750189be708b8187d55895a5a0e8ff",
+      "bytes": 21199,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/tests/test_resident_env_calibration.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/tests/test_resident_env_calibration.py",
+      "sha256": "f97ab08c6aff27eb050f5740acdf6193036cff4d4cceb257248a3934491cbaca",
+      "bytes": 16981,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-cpu-v2/cpu-result.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-cpu-v2/cpu-result.json",
+      "sha256": "55fb791357557aa42fbb61d47971e621a459f93d49de41da804ec987b3413b2e",
+      "bytes": 808,
+      "mode": 420,
+      "role": "frozen_runtime_provenance_and_source_qualification"
+    }
+  },
+  "excluded_only_self": "archive-index.json",
+  "selected_policy": "anchor-affinity3",
+  "advance": false,
+  "scope": "All six policy tradeoffs and failed screens retained; no speed, physical SSD, semantic-task or default promotion claim"
+}

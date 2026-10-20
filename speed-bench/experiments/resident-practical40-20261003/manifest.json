@@ -1,0 +1,43 @@
+{
+  "exclude_only": "manifest.json",
+  "files": {
+    "README.md": {
+      "sha256": "a3d93b63e61da3e410ae7753bd0252122873ef30d9955fde6b8dea5e87477577",
+      "bytes": 2509,
+      "mode": 420
+    },
+    "import-guard-refusal.json": {
+      "sha256": "ce62e7556824352d33cb5b91f33434e138e8e8735cc82b62a43c25b2d9b25b3b",
+      "bytes": 672,
+      "mode": 420
+    },
+    "independent-audit.reference.json": {
+      "sha256": "8cc26f226aee02b6d18208b8b2898a706c5a44077d283c14a5abc978aa195832",
+      "bytes": 513,
+      "mode": 420
+    },
+    "provenance-references.json": {
+      "sha256": "5209e5c183846b01ffe3307d016741d37452fe03a8ba298a9203514239f36ea1",
+      "bytes": 9772,
+      "mode": 420
+    },
+    "results-per-case.csv": {
+      "sha256": "f774922ffebf7af731d60a3b2f21037cb0f15a0d48624398b14c1ef3491a56b6",
+      "bytes": 4489,
+      "mode": 420
+    },
+    "results.json": {
+      "sha256": "01cbc7b151e446688133c5c6e071a4d491f54fddc8ee4becc902b15aa365d2b5",
+      "bytes": 16304,
+      "mode": 420
+    },
+    "runtime100-proof.json": {
+      "sha256": "cee65f2f77f7a803d1e49b1d36428c2160917185213ec9673247b7ff7d9a13a4",
+      "bytes": 18773,
+      "mode": 420
+    }
+  },
+  "source_evidence_revision": "f4ad01536e5cd9f88344c20f59cb09b08cbfe78b",
+  "all_payload_files_below2MiB": true,
+  "no_model_or_raw_array_copy": true
+}

@@ -1,0 +1,31 @@
+{
+  "key": "interval_groups",
+  "prompt": "Task: Interval groups with index provenance.\nCreate /Volumes/Models/ds4/.workspaces/combined-fresh-20261008/visible/interval_groups/solution.py containing def solve(payload, config). payload is an arbitrary-order list of intervals with integer start/end and start < end; each denotes [start,end). config gap is a nonnegative integer. Sort conceptually by (start,end,original index). Start a group from the first interval. A following interval joins the current group if its start <= the current group maximum end + gap; joining updates the maximum end. Otherwise start a new group. Thus touching intervals DO join at gap0 despite half-open notation, and equality with the gap boundary joins. This is transitive grouping, not comparing only with the immediately previous interval end. Return {groups}, where groups is the list of {start,end,indices} in increasing group start order. start/end are the minimum start and maximum end of all original intervals in that group; indices are original zero-based payload positions sorted numerically within each group. Duplicate intervals keep their distinct indices. Empty input returns {groups:[]}. Use exact integer arithmetic, permit negative endpoints, and do not mutate payload or config.\nThe project contains /Volumes/Models/ds4/.workspaces/combined-fresh-20261008/visible/interval_groups/config.json with the configuration and one sample INPUT (no expected output). You must first make exactly one read tool call for path /Volumes/Models/ds4/.workspaces/combined-fresh-20261008/visible/interval_groups/config.json, with whole=true and raw=true, and consume its result. Then make exactly one write tool call for path /Volumes/Models/ds4/.workspaces/combined-fresh-20261008/visible/interval_groups/solution.py containing your complete implementation. These are the only allowed tools and paths. Do not call bash, list, edit, more, web, search, or any other tool. Do not read /Volumes/Models/ds4/.workspaces/combined-fresh-20261008/visible/interval_groups/solution.py or any other file. No second write or correction is permitted. After the write, finish with a brief plain answer. External tests will run once after your first attempt; do not try to run them.\n",
+  "system": "Implement the requested function using Python builtins only. At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports. No I/O, dynamic execution, or names/attributes beginning with underscore. Follow the task tool contract exactly. Do not search for or read private grading files.",
+  "config": {
+    "gap": 1,
+    "sample": [
+      {
+        "start": 8,
+        "end": 10
+      },
+      {
+        "start": 0,
+        "end": 2
+      },
+      {
+        "start": 3,
+        "end": 5
+      },
+      {
+        "start": 1,
+        "end": 4
+      },
+      {
+        "start": 12,
+        "end": 13
+      }
+    ]
+  },
+  "tests_per_task": 161
+}

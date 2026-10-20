@@ -1,0 +1,34 @@
+{
+  "command": "python3 tests/test_reasoning_budget_runner.py > speed-bench/ideas/artifacts/reasoning-budget-runner-cpu-v2.log 2>&1",
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner",
+  "returncode": 0,
+  "result": {
+    "cpu_only": true,
+    "model_opened": false,
+    "model_metadata_touched": false,
+    "real_helper_executed": false,
+    "tests_run": 26,
+    "negative_trials": 138,
+    "failures": 0,
+    "errors": 0,
+    "pass_": true,
+    "fixtures": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-cpu-fixtures-1790993688987589000",
+    "fake_producer": "Actual Python subprocesses copy independently scripted token/piece/RNG timelines; production analyzer and driver arm loop execute unchanged."
+  },
+  "stdout_log": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-runner-cpu-v2.log",
+  "first_stdout_log": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-runner-cpu-first.log",
+  "fixture_result": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-cpu-fixtures-1790993688987589000/result.json",
+  "sources": {
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/run_reasoning_budget.py": "d3afdee0cb0b03083df0b29e087d58ac38fc5f69db2710198d7825e1a9645f2c",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/analyze_reasoning_budget.py": "fd57c19c551a09049303f35b38299e6b403d850debdde80f3ecdb26107766377",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/reasoning_budget_signed64.py": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/tests/test_reasoning_budget_runner.py": "583a60335b7604f9b1502ab8d54eec7a91d6dffc25fe3accaba29c79437b9137"
+  },
+  "preserved_v1_source": "28c5c0d336953b33932d4ea6e02f878a6555776e",
+  "v1_preparation_first_failure": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v1/preparation-first-failure.json",
+  "correction": "Allow only the exact Homebrew launch alias resolving to pinned Cellar shim7ebde552, independently from framework Python b80d260a. Other symlink assets refuse. No helper/core/Metal/model changes.",
+  "limits": [
+    "Actual Python CPU synthetic subprocess producers only; no real helper/model/metadata/GPU/compiler or shared model lock.",
+    "Guard/framework/heldlock tests use bounded /bin/ps mocks; actual pinned launcher alias resolution and SHA are independently checked without executing it."
+  ]
+}

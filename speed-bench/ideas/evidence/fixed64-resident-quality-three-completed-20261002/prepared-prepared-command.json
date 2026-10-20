@@ -1,0 +1,20 @@
+{
+  "all_ds4_environment_cleared_by_driver": true,
+  "binary_sha256": "53c06b0828d0da9a04fdf1200f7a7155681907cf6e866d5ad781759f08b4f47b",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-20261002-v1-pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/experiments/fixed64-resident-quality-three-20261002/run_joint_quality.py",
+    "--plan",
+    "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/experiments/fixed64-resident-quality-three-20261002/prepared-plan.json",
+    "--run"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "driver_sha256": "e22ec47d273a86b77479b8312299976cdb773bed2bb1b658e42df4a38578c5a5",
+  "guard_sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+  "launch_requires_root_grant": true,
+  "prepared_plan_sha256": "fdbbf0a4ad7c61f96d1511a588b927bb79807133e7d3e8e381498ed5a09cfba6"
+}

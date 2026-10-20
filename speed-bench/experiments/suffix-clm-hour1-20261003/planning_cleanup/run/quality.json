@@ -1,0 +1,72 @@
+{
+  "status": "DISTINCT_SERVING_POLICY_N1_RAW_DIAGNOSTIC",
+  "reference": "changed-unarmed-native",
+  "candidate": "fresh-changed-isolation",
+  "same_edited_opaque_history": true,
+  "raw_untempered_full_vocab_softmax": true,
+  "rows": [
+    {
+      "position": 319,
+      "target": -1,
+      "delta_nll": null,
+      "kl_native_to_isolation": 2.039566064123136,
+      "tv": 0.6592094843066524,
+      "argmax_native": 1527,
+      "argmax_isolation": 1,
+      "raw_byte_equal": false
+    },
+    {
+      "position": 447,
+      "target": 83552,
+      "delta_nll": 6.141951425320258e-05,
+      "kl_native_to_isolation": 3.5596206055425085e-05,
+      "tv": 6.333124196827869e-05,
+      "argmax_native": 83552,
+      "argmax_isolation": 83552,
+      "raw_byte_equal": false
+    },
+    {
+      "position": 448,
+      "target": 31,
+      "delta_nll": 8.627047428433343e-06,
+      "kl_native_to_isolation": 3.175909128461221e-05,
+      "tv": 3.1716881542992594e-05,
+      "argmax_native": 31,
+      "argmax_isolation": 31,
+      "raw_byte_equal": false
+    },
+    {
+      "position": 449,
+      "target": 18321,
+      "delta_nll": 6.222864440275089e-05,
+      "kl_native_to_isolation": 3.2017175669734715e-05,
+      "tv": 7.798853103272749e-05,
+      "argmax_native": 18321,
+      "argmax_isolation": 18321,
+      "raw_byte_equal": false
+    },
+    {
+      "position": 450,
+      "target": 19,
+      "delta_nll": 2.571054605482459e-05,
+      "kl_native_to_isolation": 4.834176127359364e-06,
+      "tv": 2.7240810949885413e-05,
+      "argmax_native": 19,
+      "argmax_isolation": 19,
+      "raw_byte_equal": false
+    },
+    {
+      "position": 451,
+      "target": -1,
+      "delta_nll": null,
+      "kl_native_to_isolation": 7.026651245753425e-06,
+      "tv": 1.0611969495504336e-05,
+      "argmax_native": 1,
+      "argmax_isolation": 1,
+      "raw_byte_equal": false
+    }
+  ],
+  "four_teacher_sum_delta_nll": 0.0001579857521392114,
+  "no_original_native_parity_claim": true,
+  "no_generated_accuracy_or_speed_or_forgetting_claim": true
+}

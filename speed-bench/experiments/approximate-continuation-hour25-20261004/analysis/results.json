@@ -1,0 +1,2391 @@
+{
+  "by_arm": {
+    "before": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 328.7190365419956,
+      "launcher_wall_seconds": 334.8930029579933,
+      "all_group_makespan_seconds": 328.7142190000013,
+      "edited_group_makespan_seconds": 147.42095979199803,
+      "sum_queue_inclusive_seconds": 656.8897939989838,
+      "approximate_hits": 6,
+      "ssd_approximate_hits": 6,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 6,
+      "hot_read_ops": 0,
+      "disk_read_ops": 499,
+      "endpoint_evictions": 0,
+      "primary_grafts": 4,
+      "completion_grafts": 2,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 0,
+      "phase_log_graft_count": 6
+    },
+    "fixed": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 289.0390650000045,
+      "launcher_wall_seconds": 295.81209095900704,
+      "all_group_makespan_seconds": 289.03375550000055,
+      "edited_group_makespan_seconds": 102.47474754200084,
+      "sum_queue_inclusive_seconds": 577.7558025009494,
+      "approximate_hits": 4,
+      "ssd_approximate_hits": 4,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 4,
+      "hot_read_ops": 0,
+      "disk_read_ops": 329,
+      "endpoint_evictions": 0,
+      "primary_grafts": 4,
+      "completion_grafts": 0,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 4,
+      "phase_log_graft_count": 4
+    },
+    "after": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 333.42516441701446,
+      "launcher_wall_seconds": 340.3601190000045,
+      "all_group_makespan_seconds": 333.41938354198646,
+      "edited_group_makespan_seconds": 147.06173179199686,
+      "sum_queue_inclusive_seconds": 666.1454564579908,
+      "approximate_hits": 6,
+      "ssd_approximate_hits": 6,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 6,
+      "hot_read_ops": 0,
+      "disk_read_ops": 499,
+      "endpoint_evictions": 0,
+      "primary_grafts": 4,
+      "completion_grafts": 2,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 0,
+      "phase_log_graft_count": 6
+    }
+  },
+  "steps": [
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 90.42742374999216,
+      "http_task_seconds": 90.42686937500548,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 90.5318542499881,
+      "http_task_seconds": 90.5315181670012,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 90.76108904200373,
+      "http_task_seconds": 90.76077404100215,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 90.65354141600255,
+      "http_task_seconds": 90.65309712500311,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 74.14664274999814,
+      "http_task_seconds": 74.14569649999612,
+      "edit_seconds": 0.0005280829936964437,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2994,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 74.36244058299053,
+      "http_task_seconds": 74.36157387499406,
+      "edit_seconds": 0.0005592919915216044,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2993,
+      "cached_tokens": 2068,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "before",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 72.94856591599819,
+      "http_task_seconds": 72.94731966700056,
+      "edit_seconds": 0.0006781669944757596,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "before",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 73.0582362920104,
+      "http_task_seconds": 73.05721274999087,
+      "edit_seconds": 0.0007195829966804013,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2993,
+      "cached_tokens": 2068,
+      "text": "{\"active_total\": 197, \"archived_code\": \"DELTA-83\"}",
+      "errors": ""
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 91.36161329099559,
+      "http_task_seconds": 91.36127254100575,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 91.24869795898849,
+      "http_task_seconds": 91.24821375000465,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 95.19711741599895,
+      "http_task_seconds": 95.19677191600204,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 95.08955087499635,
+      "http_task_seconds": 95.08918683300726,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 51.206890416986425,
+      "http_task_seconds": 51.20568324999476,
+      "edit_seconds": 0.0008552079962100834,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 51.252157083989005,
+      "http_task_seconds": 51.25095524999779,
+      "edit_seconds": 0.0008725419902475551,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "fixed",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 51.22235354199074,
+      "http_task_seconds": 51.22133083299559,
+      "edit_seconds": 0.0007214580109575763,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "fixed",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 51.17742191700381,
+      "http_task_seconds": 51.176331333001144,
+      "edit_seconds": 0.0006286669959081337,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "errors": ""
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 92.3630312919995,
+      "http_task_seconds": 92.36265120800817,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 92.4688205410057,
+      "http_task_seconds": 92.46848683300777,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 93.88850387500133,
+      "http_task_seconds": 93.88816362500074,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 93.77847495800233,
+      "http_task_seconds": 93.77808554199873,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 73.3314589169895,
+      "http_task_seconds": 73.32987170900742,
+      "edit_seconds": 0.0010463329963386059,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2994,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 73.54210687500017,
+      "http_task_seconds": 73.54069983299996,
+      "edit_seconds": 0.0009205839887727052,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2993,
+      "cached_tokens": 2068,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "after",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 73.25372204100131,
+      "http_task_seconds": 73.2528189579898,
+      "edit_seconds": 0.0003582500066841021,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "after",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 73.51933795899095,
+      "http_task_seconds": 73.51864658400882,
+      "edit_seconds": 0.0003793340001720935,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2993,
+      "cached_tokens": 2068,
+      "text": "{\"active_total\": 197, \"archived_code\": \"DELTA-83\"}",
+      "errors": ""
+    }
+  ],
+  "groups": [
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 90.53202525000961,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 90.47963899999013,
+      "max_queue_inclusive_seconds": 90.5318542499881,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:07:27 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:07:54 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 90.76123395799368,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 90.70731522900314,
+      "max_queue_inclusive_seconds": 90.76108904200373,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:08:58 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:09:26 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:08:58 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:08:58 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 74.36256374999357,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 74.25454166649433,
+      "max_queue_inclusive_seconds": 74.36244058299053,
+      "approximate_hits": 3,
+      "ssd_approximate_hits": 3,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 3,
+      "route_log_lines": [
+        "1004 15:10:46 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17042.977 ms",
+        "1004 15:11:05 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17513.484 ms",
+        "1004 15:11:39 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=214 graft_fresh=150 source=658:1692 destination=308:1342 latest_user_start=1531 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 21207.598 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:10:28 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:10:28 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)",
+        "1004 15:11:17 slot 0: request reuses nothing; evicting checkpoint (1530 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "before",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 73.05839604200446,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 73.0034011040043,
+      "max_queue_inclusive_seconds": 73.0582362920104,
+      "approximate_hits": 3,
+      "ssd_approximate_hits": 3,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 1,
+      "route_log_lines": [
+        "1004 15:12:02 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17003.325 ms",
+        "1004 15:12:19 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17196.357 ms",
+        "1004 15:12:53 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=214 graft_fresh=150 source=658:1692 destination=308:1342 latest_user_start=1531 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 21123.395 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:12:32 slot 1: request reuses nothing; evicting checkpoint (1530 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 91.3617541249987,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 91.30515562499204,
+      "max_queue_inclusive_seconds": 91.36161329099559,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:13:13 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:13:13 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 95.19725383300101,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 95.14333414549765,
+      "max_queue_inclusive_seconds": 95.19711741599895,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:14:44 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:15:13 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:14:44 slot 0: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:14:44 slot 1: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 51.25226541700249,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 51.229523750487715,
+      "max_queue_inclusive_seconds": 51.252157083989005,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:16:37 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17069.012 ms",
+        "1004 15:16:54 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17354.545 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:16:20 slot 0: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:16:20 slot 1: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "fixed",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 51.22248212499835,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 51.19988772949728,
+      "max_queue_inclusive_seconds": 51.22235354199074,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:17:30 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 16873.113 ms",
+        "1004 15:17:50 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17366.713 ms"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 92.46899687500263,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 92.4159259165026,
+      "max_queue_inclusive_seconds": 92.4688205410057,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 15:18:20 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 15:18:46 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 93.88865487498697,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 93.83348941650183,
+      "max_queue_inclusive_seconds": 93.88850387500133,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 15:19:52 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 15:20:21 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:19:52 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:19:52 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 73.54224024999712,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 73.43678289599484,
+      "max_queue_inclusive_seconds": 73.54210687500017,
+      "approximate_hits": 3,
+      "ssd_approximate_hits": 3,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 3,
+      "route_log_lines": [
+        "1004 15:21:43 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17057.836 ms",
+        "1004 15:22:00 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17320.840 ms",
+        "1004 15:22:36 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=214 graft_fresh=150 source=658:1692 destination=308:1342 latest_user_start=1531 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 21149.193 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:21:26 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 15:21:26 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)",
+        "1004 15:22:13 slot 0: request reuses nothing; evicting checkpoint (1530 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "after",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 73.51949154199974,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 73.38652999999613,
+      "max_queue_inclusive_seconds": 73.51933795899095,
+      "approximate_hits": 3,
+      "ssd_approximate_hits": 3,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 1,
+      "route_log_lines": [
+        "1004 15:22:59 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16997.215 ms",
+        "1004 15:23:17 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17637.451 ms",
+        "1004 15:23:52 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=214 graft_fresh=150 source=658:1692 destination=308:1342 latest_user_start=1531 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 20839.514 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 15:23:30 slot 1: request reuses nothing; evicting checkpoint (1530 tokens, idle 0 s, protected)"
+      ]
+    }
+  ],
+  "cache_shutdowns": [
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 530363240,
+      "metadata_bytes": 408537,
+      "endpoints": 43,
+      "chunks": 1924,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 249,
+      "endpoint_evictions": 0,
+      "arm": "before",
+      "phase": "before",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 684226566,
+      "metadata_bytes": 498288,
+      "endpoints": 50,
+      "chunks": 2473,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 250,
+      "endpoint_evictions": 0,
+      "arm": "before",
+      "phase": "after",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 487345286,
+      "metadata_bytes": 379173,
+      "endpoints": 40,
+      "chunks": 1774,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 164,
+      "endpoint_evictions": 0,
+      "arm": "fixed",
+      "phase": "before",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 619014302,
+      "metadata_bytes": 458571,
+      "endpoints": 46,
+      "chunks": 2260,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "fixed",
+      "phase": "after",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 530363240,
+      "metadata_bytes": 408536,
+      "endpoints": 43,
+      "chunks": 1924,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 249,
+      "endpoint_evictions": 0,
+      "arm": "after",
+      "phase": "before",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 684226566,
+      "metadata_bytes": 498287,
+      "endpoints": 50,
+      "chunks": 2473,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 250,
+      "endpoint_evictions": 0,
+      "arm": "after",
+      "phase": "after",
+      "configured_hot_mb": 0,
+      "configured_hot_bytes": 0,
+      "hot_bytes_within_configured_cap": true
+    }
+  ],
+  "scope": "Only visible continuation on same-profile approximate graphs changes. Canonical1/PAD1/hot0/suffix64 fixed. Native sources remain canonical; ID-only bypass unchanged. Logical chunk reads are not physical SSD traffic. No paired generated-history NLL or additive claim.",
+  "change_vs_old_before_percent": {
+    "before": {
+      "launcher_wall_seconds": 0.0,
+      "client_phase_wall_seconds": 0.0,
+      "edited_group_makespan_seconds": 0.0
+    },
+    "fixed": {
+      "launcher_wall_seconds": -11.669671105038981,
+      "client_phase_wall_seconds": -12.071090241505312,
+      "edited_group_makespan_seconds": -30.48834596750255
+    },
+    "after": {
+      "launcher_wall_seconds": 1.632496347705703,
+      "client_phase_wall_seconds": 1.4316566282639442,
+      "edited_group_makespan_seconds": -0.24367498387476427
+    }
+  },
+  "group_change_vs_old_before_percent": {
+    "warm-AB": {
+      "before": 0.0,
+      "fixed": 0.9165031630494758,
+      "after": 2.1395430176713193
+    },
+    "warm-CD": {
+      "before": 0.0,
+      "fixed": 4.887571137541413,
+      "after": 3.445767295804636
+    },
+    "edited-AB": {
+      "before": 0.0,
+      "fixed": -31.077866560232835,
+      "after": -1.1031404225846364
+    },
+    "edited-CD": {
+      "before": 0.0,
+      "fixed": -29.888301824271768,
+      "after": 0.6311327992065019
+    }
+  },
+  "change_vs_old_after_percent": {
+    "before": {
+      "launcher_wall_seconds": -1.6062739835894568,
+      "client_phase_wall_seconds": -1.411449517689345,
+      "edited_group_makespan_seconds": 0.24427020926780507
+    },
+    "fixed": {
+      "launcher_wall_seconds": -13.088498197697728,
+      "client_phase_wall_seconds": -13.31216241420109,
+      "edited_group_makespan_seconds": -30.318549704731858
+    },
+    "after": {
+      "launcher_wall_seconds": 0.0,
+      "client_phase_wall_seconds": 0.0,
+      "edited_group_makespan_seconds": 0.0
+    }
+  },
+  "group_change_vs_old_after_percent": {
+    "warm-AB": {
+      "before": -2.094725465240388,
+      "fixed": -1.1974205273370453,
+      "after": 0.0
+    },
+    "warm-CD": {
+      "before": -3.3309891606791653,
+      "fixed": 1.3937775120502538,
+      "after": 0.0
+    },
+    "edited-AB": {
+      "before": 1.1154453511449614,
+      "fixed": -30.309077826869036,
+      "after": 0.0
+    },
+    "edited-CD": {
+      "before": -0.6271744952586755,
+      "fixed": -30.32802451342267,
+      "after": 0.0
+    }
+  },
+  "old_bracket_after_vs_before_percent": {
+    "launcher_wall_seconds": 1.632496347705703,
+    "client_phase_wall_seconds": 1.4316566282639442,
+    "edited_group_makespan_seconds": -0.24367498387476427
+  },
+  "fixed_change_vs_old_mean_percent": {
+    "launcher_wall_seconds": -12.384828343701548,
+    "client_phase_wall_seconds": -12.696036729951699,
+    "edited_group_makespan_seconds": -30.403551400050887
+  },
+  "text_and_usage_vs_old_before": {
+    "before": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      }
+    },
+    "fixed": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": false
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": false
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": false
+      },
+      "D-edited": {
+        "text_byte_equal": false,
+        "grade_equal": true,
+        "token_totals_equal": false
+      }
+    },
+    "after": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      }
+    }
+  },
+  "grafts": [
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.042977,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:10:46 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17042.977 ms"
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.513484000000002,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:11:05 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17513.484 ms"
+    },
+    {
+      "arm": "before",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 214,
+      "graft_fresh": 150,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1531,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 21.207598,
+      "request_part": "tool-result continuation",
+      "raw_log": "1004 15:11:39 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=214 graft_fresh=150 source=658:1692 destination=308:1342 latest_user_start=1531 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 21207.598 ms"
+    },
+    {
+      "arm": "before",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.003325,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:12:02 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17003.325 ms"
+    },
+    {
+      "arm": "before",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.196357,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:12:19 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17196.357 ms"
+    },
+    {
+      "arm": "before",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 214,
+      "graft_fresh": 150,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1531,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 21.123395000000002,
+      "request_part": "tool-result continuation",
+      "raw_log": "1004 15:12:53 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=214 graft_fresh=150 source=658:1692 destination=308:1342 latest_user_start=1531 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 21123.395 ms"
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.069011999999997,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:16:37 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17069.012 ms"
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.354544999999998,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:16:54 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17354.545 ms"
+    },
+    {
+      "arm": "fixed",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 16.873113,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:17:30 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 16873.113 ms"
+    },
+    {
+      "arm": "fixed",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.366713,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:17:50 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17366.713 ms"
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.057835999999998,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:21:43 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17057.836 ms"
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.32084,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:22:00 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17320.840 ms"
+    },
+    {
+      "arm": "after",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 214,
+      "graft_fresh": 150,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1531,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 21.149193,
+      "request_part": "tool-result continuation",
+      "raw_log": "1004 15:22:36 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=214 graft_fresh=150 source=658:1692 destination=308:1342 latest_user_start=1531 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 21149.193 ms"
+    },
+    {
+      "arm": "after",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 16.997215,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:22:59 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16997.215 ms"
+    },
+    {
+      "arm": "after",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.637451000000002,
+      "request_part": "edited primary",
+      "raw_log": "1004 15:23:17 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17637.451 ms"
+    },
+    {
+      "arm": "after",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 214,
+      "graft_fresh": 150,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1531,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 20.839513999999998,
+      "request_part": "tool-result continuation",
+      "raw_log": "1004 15:23:52 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=214 graft_fresh=150 source=658:1692 destination=308:1342 latest_user_start=1531 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 20839.514 ms"
+    }
+  ],
+  "visible_continuations": [
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:17:07 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "fixed",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1556,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 15:17:08 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1"
+    },
+    {
+      "arm": "fixed",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:18:01 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "fixed",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 15:18:02 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    }
+  ],
+  "actual_reply_usage": {
+    "before": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1557,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 27
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 522
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1574
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1571
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 522
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1574
+        }
+      ]
+    },
+    "fixed": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1572
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ]
+    },
+    "after": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1557,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 27
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 522
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1574
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1571
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 522
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1574
+        }
+      ]
+    }
+  },
+  "public_reply_controls_vs_old_before": {
+    "before": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      }
+    },
+    "fixed": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": false
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": false
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": false
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          false
+        ],
+        "reply_usage_equal": false
+      }
+    },
+    "after": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      }
+    }
+  }
+}

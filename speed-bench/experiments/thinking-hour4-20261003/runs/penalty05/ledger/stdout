@@ -1,0 +1,56 @@
+I need to read config.json first with whole=true raw=true, then write solution.py. Let me do that.
+
+🛠️ Reading config.json (whole file)...
+
+Config has "initial" balances. Payload events. Only first event with an id counts. Start with initial balances in config; unseen accounts start at zero. Return balances object including initial accounts.
+
+So balances = copy of config["initial"]. Process events: if id seen, skip. Else mark seen, account balance += delta (unseen accounts start at zero).
+
+Return balances object including initial accounts. Should we include accounts from events even if net zero? Probably yes, since unseen accounts start at zero and we add delta. Let's include them.
+
+Implement plain function, no imports, no decorators, no annotations, no defaults, no classes, no underscore names.
+
+def solve(payload, config):
+    initial = config["initial"]
+    balances = {}
+    for account in initial:
+        balances[account] = initial[account]
+    seen = {}
+    for event in payload:
+        eid = event["id"]
+        if eid in seen:
+            continue
+        seen[eid] = True
+        account = event["account"]
+        delta = event["delta"]
+        if account in balances:
+            balances[account] = balances[account] + delta
+        else:
+            balances[account] = delta
+    return balances
+
+That's it. Write.
+
+🛠️ write  path=solution.py
+def solve(payload, config):
+    initial = config["initial"]
+    balances = {}
+    for account in initial:
+        balances[account] = initial[account]
+    seen = {}
+    for event in payload:
+        eid = event["id"]
+        if eid in seen:
+            continue
+        seen[eid] = True
+        account = event["account"]
+        delta = event["delta"]
+        if account in balances:
+            balances[account] = balances[account] + delta
+        else:
+            balances[account] = delta
+    return balances
+
+
+Created solution.py. It copies config["initial"] into the result, then applies each event only once per id (first occurrence wins), adding delta to the account's balance and starting unseen accounts at zero.
+

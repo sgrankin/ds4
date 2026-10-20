@@ -1,0 +1,2 @@
+We need answer. Need parse. "largest eight-digit base-2 integer" means binary integer with exactly 8 digits? Largest eight-digit base-2 integer is 11111111_2 = 255 decimal. Need only decimal integer final. Ensure no extra. 
+</think>255

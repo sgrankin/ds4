@@ -1,0 +1,67 @@
+{
+  "budget": 1024,
+  "producer_returncode": 3,
+  "cases": 4,
+  "completed_correct": 2,
+  "incorrect": 1,
+  "invalid": 1,
+  "capped_correct": 0,
+  "cap_hits": 1,
+  "forced_cases": 3,
+  "generated_tokens": 4310,
+  "reasoning_tokens": 3283,
+  "per_case": [
+    {
+      "case": "circular10",
+      "status": "CORRECT",
+      "stopped": true,
+      "cap_hit": false,
+      "generated_tokens": 209,
+      "reasoning_tokens": 208,
+      "parsed_answer": "123",
+      "force_step": null,
+      "raw_sha256": "1bf24fac24c0b0f96eeca6959a6af14b9a23e4888e8a693e149c5a15e3efac49",
+      "token_sha256": "34b7631116e2d00fc0c756908f75fb50234d4d6859fbb03634a3d4388f135b52",
+      "prompt_sha256": "08a9b2329ac7bf0e202bb6ffbcb2b4dccd34cf8a8172872225b17404c2b53581"
+    },
+    {
+      "case": "restricted_derangements8",
+      "status": "CORRECT",
+      "stopped": true,
+      "cap_hit": false,
+      "generated_tokens": 1027,
+      "reasoning_tokens": 1025,
+      "parsed_answer": "10860",
+      "force_step": 1024,
+      "raw_sha256": "1e7f4e35b93770cca243d4b1b3a5e7cb6cfed47fa742e79d8c258adb7e3f5da4",
+      "token_sha256": "53318220224795f815d79e897363b0135f176dd01c1c68d7a0f6071677dcb0b0",
+      "prompt_sha256": "2c578d465ffa857e40bfd3f093cac83ebebe0c6a24b571c62665ce8e9e7f454a"
+    },
+    {
+      "case": "lattice8x6",
+      "status": "INCORRECT",
+      "stopped": true,
+      "cap_hit": false,
+      "generated_tokens": 1026,
+      "reasoning_tokens": 1025,
+      "parsed_answer": "42",
+      "force_step": 1024,
+      "raw_sha256": "a902436052da1ba1e281c13f0f1e148216431a3e9443fc516acc7bc4fca4ef05",
+      "token_sha256": "14157ffa630a1d9d9f9b1d8695b069629539d8c5e8f3fd82db774f7585a9c467",
+      "prompt_sha256": "02763b4080864120c1a45cff59f21c50f37df6746163b1dfed229fbd2fabc80f"
+    },
+    {
+      "case": "subset_mod7",
+      "status": "INVALID",
+      "stopped": false,
+      "cap_hit": true,
+      "generated_tokens": 2048,
+      "reasoning_tokens": 1025,
+      "parsed_answer": "",
+      "force_step": 1024,
+      "raw_sha256": "d8f8a9767f64c1636514a9bc0856302a1c4af033278837dcc724331c0ab69c1d",
+      "token_sha256": "45310ed0ae8e8760197af1b1f6528c3f1aef1f1e807dff9f6d624bd86d73adc0",
+      "prompt_sha256": "948eb4280a9ac8c742ea987b6bc3af7fbf698e5f111764c8a1d622b3314733fe"
+    }
+  ]
+}

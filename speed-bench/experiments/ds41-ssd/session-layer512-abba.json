@@ -1,0 +1,1786 @@
+[
+  {
+    "variant": "A",
+    "logits_sha256": "dbb7917fd94cef6332878b8e74bfa328ecab7c28001de6eb1b02c212c1d55be0",
+    "snapshot_sha256": "4038547fda7c3050dbb562e488a12b33f89527ea7c7927d142d978b2c36319fe",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 15151.482,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3813.758,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4021.965,
+        "first_decode_ms": 74.337
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9371.535,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4083.097,
+        "first_decode_ms": 64.483
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2026.357,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9726.178,
+        "first_decode_ms": 65.879
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 3350,
+        "tokens": 685,
+        "ms": 17127.966,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 3414,
+        "tokens": 64,
+        "ms": 3937.76,
+        "first_decode_ms": 95.342
+      },
+      {
+        "phase": 9,
+        "kind": "P",
+        "context": 4240,
+        "tokens": 826,
+        "ms": 19876.416,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 10,
+        "kind": "D",
+        "context": 5182,
+        "tokens": 942,
+        "ms": 54676.757,
+        "first_decode_ms": 102.278
+      },
+      {
+        "phase": 11,
+        "kind": "P",
+        "context": 5543,
+        "tokens": 361,
+        "ms": 10555.053,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 12,
+        "kind": "D",
+        "context": 5597,
+        "tokens": 54,
+        "ms": 3230.412,
+        "first_decode_ms": 84.305
+      },
+      {
+        "phase": 13,
+        "kind": "P",
+        "context": 5759,
+        "tokens": 162,
+        "ms": 4265.467,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 14,
+        "kind": "D",
+        "context": 5832,
+        "tokens": 73,
+        "ms": 4336.649,
+        "first_decode_ms": 83.372
+      },
+      {
+        "phase": 15,
+        "kind": "P",
+        "context": 5916,
+        "tokens": 84,
+        "ms": 2324.608,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 16,
+        "kind": "D",
+        "context": 6005,
+        "tokens": 89,
+        "ms": 5723.367,
+        "first_decode_ms": 71.133
+      },
+      {
+        "phase": 17,
+        "kind": "P",
+        "context": 6097,
+        "tokens": 92,
+        "ms": 2795.487,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 18,
+        "kind": "D",
+        "context": 7273,
+        "tokens": 1176,
+        "ms": 69525.822,
+        "first_decode_ms": 70.126
+      },
+      {
+        "phase": 19,
+        "kind": "P",
+        "context": 7551,
+        "tokens": 278,
+        "ms": 8167.982,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 20,
+        "kind": "D",
+        "context": 7605,
+        "tokens": 54,
+        "ms": 3149.678,
+        "first_decode_ms": 67.719
+      },
+      {
+        "phase": 21,
+        "kind": "P",
+        "context": 7819,
+        "tokens": 214,
+        "ms": 5700.959,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 22,
+        "kind": "D",
+        "context": 7891,
+        "tokens": 72,
+        "ms": 4740.636,
+        "first_decode_ms": 68.784
+      },
+      {
+        "phase": 23,
+        "kind": "P",
+        "context": 7953,
+        "tokens": 62,
+        "ms": 2037.662,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 24,
+        "kind": "D",
+        "context": 8187,
+        "tokens": 234,
+        "ms": 13682.669,
+        "first_decode_ms": 70.495
+      },
+      {
+        "phase": 25,
+        "kind": "P",
+        "context": 8312,
+        "tokens": 125,
+        "ms": 3690.406,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 26,
+        "kind": "D",
+        "context": 8435,
+        "tokens": 123,
+        "ms": 7275.772,
+        "first_decode_ms": 87.25
+      },
+      {
+        "phase": 27,
+        "kind": "P",
+        "context": 8563,
+        "tokens": 128,
+        "ms": 3037.0,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 28,
+        "kind": "D",
+        "context": 8710,
+        "tokens": 147,
+        "ms": 8835.546,
+        "first_decode_ms": 71.699
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "0",
+        "misses": "7800",
+        "evictions": "0"
+      },
+      {
+        "hits": "20365",
+        "misses": "9035",
+        "evictions": "1213",
+        "miss_pread": "11.45",
+        "pread_ms": "871.525"
+      },
+      {
+        "hits": "36669",
+        "misses": "10011",
+        "evictions": "2189",
+        "miss_pread": "20.50",
+        "pread_ms": "1336.411"
+      },
+      {
+        "hits": "104198",
+        "misses": "14722",
+        "evictions": "6900",
+        "miss_pread": "64.16",
+        "pread_ms": "4740.951"
+      },
+      {
+        "hits": "121190",
+        "misses": "15490",
+        "evictions": "7668",
+        "miss_pread": "71.28",
+        "pread_ms": "5149.989"
+      },
+      {
+        "hits": "137617",
+        "misses": "16343",
+        "evictions": "8521",
+        "miss_pread": "79.19",
+        "pread_ms": "5776.298"
+      },
+      {
+        "hits": "183997",
+        "misses": "17243",
+        "evictions": "9421",
+        "miss_pread": "87.53",
+        "pread_ms": "6279.399"
+      },
+      {
+        "hits": "342760",
+        "misses": "22880",
+        "evictions": "15058",
+        "miss_pread": "139.79",
+        "pread_ms": "10424.754"
+      },
+      {
+        "hits": "356984",
+        "misses": "24016",
+        "evictions": "16194",
+        "miss_pread": "150.32",
+        "pread_ms": "10928.088"
+      },
+      {
+        "hits": "550536",
+        "misses": "28704",
+        "evictions": "20882",
+        "miss_pread": "193.77",
+        "pread_ms": "14893.363"
+      },
+      {
+        "hits": "765575",
+        "misses": "39745",
+        "evictions": "31923",
+        "miss_pread": "296.12",
+        "pread_ms": "20358.884"
+      },
+      {
+        "hits": "848497",
+        "misses": "43463",
+        "evictions": "35641",
+        "miss_pread": "330.59",
+        "pread_ms": "23307.579"
+      },
+      {
+        "hits": "860764",
+        "misses": "44156",
+        "evictions": "36334",
+        "miss_pread": "337.01",
+        "pread_ms": "23652.056"
+      },
+      {
+        "hits": "898523",
+        "misses": "45277",
+        "evictions": "37455",
+        "miss_pread": "347.40",
+        "pread_ms": "24565.963"
+      },
+      {
+        "hits": "915116",
+        "misses": "46204",
+        "evictions": "38382",
+        "miss_pread": "355.99",
+        "pread_ms": "25011.021"
+      },
+      {
+        "hits": "934556",
+        "misses": "46924",
+        "evictions": "39102",
+        "miss_pread": "362.67",
+        "pread_ms": "25558.770"
+      },
+      {
+        "hits": "954365",
+        "misses": "48475",
+        "evictions": "40653",
+        "miss_pread": "377.05",
+        "pread_ms": "26316.635"
+      },
+      {
+        "hits": "975188",
+        "misses": "49732",
+        "evictions": "41910",
+        "miss_pread": "388.70",
+        "pread_ms": "27281.395"
+      },
+      {
+        "hits": "1242990",
+        "misses": "64170",
+        "evictions": "56348",
+        "miss_pread": "522.53",
+        "pread_ms": "34614.951"
+      },
+      {
+        "hits": "1306631",
+        "misses": "67249",
+        "evictions": "59427",
+        "miss_pread": "551.08",
+        "pread_ms": "37029.491"
+      },
+      {
+        "hits": "1318952",
+        "misses": "67888",
+        "evictions": "60066",
+        "miss_pread": "557.00",
+        "pread_ms": "37346.091"
+      },
+      {
+        "hits": "1368680",
+        "misses": "69520",
+        "evictions": "61698",
+        "miss_pread": "572.13",
+        "pread_ms": "38666.582"
+      },
+      {
+        "hits": "1384591",
+        "misses": "70889",
+        "evictions": "63067",
+        "miss_pread": "584.82",
+        "pread_ms": "39317.441"
+      },
+      {
+        "hits": "1398464",
+        "misses": "71896",
+        "evictions": "64074",
+        "miss_pread": "594.15",
+        "pread_ms": "40087.268"
+      },
+      {
+        "hits": "1451916",
+        "misses": "74604",
+        "evictions": "66782",
+        "miss_pread": "619.25",
+        "pread_ms": "41433.708"
+      },
+      {
+        "hits": "1480399",
+        "misses": "76121",
+        "evictions": "68299",
+        "miss_pread": "633.32",
+        "pread_ms": "42670.759"
+      },
+      {
+        "hits": "1508442",
+        "misses": "77598",
+        "evictions": "69776",
+        "miss_pread": "647.01",
+        "pread_ms": "43399.041"
+      },
+      {
+        "hits": "1538519",
+        "misses": "78241",
+        "evictions": "70419",
+        "miss_pread": "652.97",
+        "pread_ms": "43977.329"
+      },
+      {
+        "hits": "1571896",
+        "misses": "80144",
+        "evictions": "72322",
+        "miss_pread": "670.61",
+        "pread_ms": "44937.427"
+      }
+    ],
+    "startup_prefill_ms": 15151.482,
+    "append_prefill_ms": 94790.656,
+    "decode_ms": 196946.308,
+    "model_ms": 306888.446
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "dbb7917fd94cef6332878b8e74bfa328ecab7c28001de6eb1b02c212c1d55be0",
+    "snapshot_sha256": "4038547fda7c3050dbb562e488a12b33f89527ea7c7927d142d978b2c36319fe",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14966.729,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 4122.372,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4080.712,
+        "first_decode_ms": 80.883
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 10152.105,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4043.936,
+        "first_decode_ms": 87.532
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 1953.604,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10084.001,
+        "first_decode_ms": 62.564
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 3350,
+        "tokens": 685,
+        "ms": 18250.922,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 3414,
+        "tokens": 64,
+        "ms": 3969.445,
+        "first_decode_ms": 121.837
+      },
+      {
+        "phase": 9,
+        "kind": "P",
+        "context": 4240,
+        "tokens": 826,
+        "ms": 20760.685,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 10,
+        "kind": "D",
+        "context": 5182,
+        "tokens": 942,
+        "ms": 54753.911,
+        "first_decode_ms": 120.829
+      },
+      {
+        "phase": 11,
+        "kind": "P",
+        "context": 5543,
+        "tokens": 361,
+        "ms": 10221.912,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 12,
+        "kind": "D",
+        "context": 5597,
+        "tokens": 54,
+        "ms": 3278.097,
+        "first_decode_ms": 88.221
+      },
+      {
+        "phase": 13,
+        "kind": "P",
+        "context": 5759,
+        "tokens": 162,
+        "ms": 4597.386,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 14,
+        "kind": "D",
+        "context": 5832,
+        "tokens": 73,
+        "ms": 4278.899,
+        "first_decode_ms": 98.29
+      },
+      {
+        "phase": 15,
+        "kind": "P",
+        "context": 5916,
+        "tokens": 84,
+        "ms": 2222.611,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 16,
+        "kind": "D",
+        "context": 6005,
+        "tokens": 89,
+        "ms": 5706.471,
+        "first_decode_ms": 69.903
+      },
+      {
+        "phase": 17,
+        "kind": "P",
+        "context": 6097,
+        "tokens": 92,
+        "ms": 2788.792,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 18,
+        "kind": "D",
+        "context": 7273,
+        "tokens": 1176,
+        "ms": 69958.505,
+        "first_decode_ms": 72.064
+      },
+      {
+        "phase": 19,
+        "kind": "P",
+        "context": 7551,
+        "tokens": 278,
+        "ms": 8100.807,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 20,
+        "kind": "D",
+        "context": 7605,
+        "tokens": 54,
+        "ms": 3191.051,
+        "first_decode_ms": 92.786
+      },
+      {
+        "phase": 21,
+        "kind": "P",
+        "context": 7819,
+        "tokens": 214,
+        "ms": 5853.197,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 22,
+        "kind": "D",
+        "context": 7891,
+        "tokens": 72,
+        "ms": 4746.319,
+        "first_decode_ms": 71.605
+      },
+      {
+        "phase": 23,
+        "kind": "P",
+        "context": 7953,
+        "tokens": 62,
+        "ms": 1972.697,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 24,
+        "kind": "D",
+        "context": 8187,
+        "tokens": 234,
+        "ms": 13753.162,
+        "first_decode_ms": 64.998
+      },
+      {
+        "phase": 25,
+        "kind": "P",
+        "context": 8312,
+        "tokens": 125,
+        "ms": 3685.763,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 26,
+        "kind": "D",
+        "context": 8435,
+        "tokens": 123,
+        "ms": 7277.874,
+        "first_decode_ms": 85.626
+      },
+      {
+        "phase": 27,
+        "kind": "P",
+        "context": 8563,
+        "tokens": 128,
+        "ms": 3320.937,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 28,
+        "kind": "D",
+        "context": 8710,
+        "tokens": 147,
+        "ms": 8851.301,
+        "first_decode_ms": 73.689
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "0",
+        "misses": "7800",
+        "evictions": "0"
+      },
+      {
+        "hits": "20365",
+        "misses": "9035",
+        "evictions": "1213",
+        "miss_pread": "11.45",
+        "pread_ms": "894.128"
+      },
+      {
+        "hits": "36669",
+        "misses": "10011",
+        "evictions": "2189",
+        "miss_pread": "20.50",
+        "pread_ms": "1333.182"
+      },
+      {
+        "hits": "104084",
+        "misses": "14836",
+        "evictions": "7014",
+        "miss_pread": "65.22",
+        "pread_ms": "4945.488"
+      },
+      {
+        "hits": "121089",
+        "misses": "15591",
+        "evictions": "7769",
+        "miss_pread": "72.22",
+        "pread_ms": "5326.550"
+      },
+      {
+        "hits": "137698",
+        "misses": "16262",
+        "evictions": "8440",
+        "miss_pread": "78.44",
+        "pread_ms": "5836.636"
+      },
+      {
+        "hits": "184080",
+        "misses": "17160",
+        "evictions": "9338",
+        "miss_pread": "86.76",
+        "pread_ms": "6318.686"
+      },
+      {
+        "hits": "342447",
+        "misses": "23193",
+        "evictions": "15371",
+        "miss_pread": "142.69",
+        "pread_ms": "10966.260"
+      },
+      {
+        "hits": "356687",
+        "misses": "24313",
+        "evictions": "16491",
+        "miss_pread": "153.07",
+        "pread_ms": "11452.853"
+      },
+      {
+        "hits": "549459",
+        "misses": "29781",
+        "evictions": "21959",
+        "miss_pread": "203.76",
+        "pread_ms": "15679.108"
+      },
+      {
+        "hits": "764491",
+        "misses": "40829",
+        "evictions": "33007",
+        "miss_pread": "306.17",
+        "pread_ms": "21118.520"
+      },
+      {
+        "hits": "847498",
+        "misses": "44462",
+        "evictions": "36640",
+        "miss_pread": "339.85",
+        "pread_ms": "23933.060"
+      },
+      {
+        "hits": "859739",
+        "misses": "45181",
+        "evictions": "37359",
+        "miss_pread": "346.51",
+        "pread_ms": "24289.044"
+      },
+      {
+        "hits": "896887",
+        "misses": "46913",
+        "evictions": "39091",
+        "miss_pread": "362.57",
+        "pread_ms": "25675.910"
+      },
+      {
+        "hits": "913514",
+        "misses": "47806",
+        "evictions": "39984",
+        "miss_pread": "370.84",
+        "pread_ms": "26116.811"
+      },
+      {
+        "hits": "932954",
+        "misses": "48526",
+        "evictions": "40704",
+        "miss_pread": "377.52",
+        "pread_ms": "26660.580"
+      },
+      {
+        "hits": "952785",
+        "misses": "50055",
+        "evictions": "42233",
+        "miss_pread": "391.69",
+        "pread_ms": "27404.964"
+      },
+      {
+        "hits": "973608",
+        "misses": "51312",
+        "evictions": "43490",
+        "miss_pread": "403.34",
+        "pread_ms": "28361.929"
+      },
+      {
+        "hits": "1241410",
+        "misses": "65750",
+        "evictions": "57928",
+        "miss_pread": "537.18",
+        "pread_ms": "35798.029"
+      },
+      {
+        "hits": "1304960",
+        "misses": "68920",
+        "evictions": "61098",
+        "miss_pread": "566.56",
+        "pread_ms": "38232.486"
+      },
+      {
+        "hits": "1317275",
+        "misses": "69565",
+        "evictions": "61743",
+        "miss_pread": "572.54",
+        "pread_ms": "38557.993"
+      },
+      {
+        "hits": "1366526",
+        "misses": "71674",
+        "evictions": "63852",
+        "miss_pread": "592.09",
+        "pread_ms": "40244.876"
+      },
+      {
+        "hits": "1382441",
+        "misses": "73039",
+        "evictions": "65217",
+        "miss_pread": "604.75",
+        "pread_ms": "40902.652"
+      },
+      {
+        "hits": "1396382",
+        "misses": "73978",
+        "evictions": "66156",
+        "miss_pread": "613.45",
+        "pread_ms": "41601.848"
+      },
+      {
+        "hits": "1449840",
+        "misses": "76680",
+        "evictions": "68858",
+        "miss_pread": "638.50",
+        "pread_ms": "42936.057"
+      },
+      {
+        "hits": "1478323",
+        "misses": "78197",
+        "evictions": "70375",
+        "miss_pread": "652.56",
+        "pread_ms": "44182.823"
+      },
+      {
+        "hits": "1506366",
+        "misses": "79674",
+        "evictions": "71852",
+        "miss_pread": "666.25",
+        "pread_ms": "44916.428"
+      },
+      {
+        "hits": "1536443",
+        "misses": "80317",
+        "evictions": "72495",
+        "miss_pread": "672.21",
+        "pread_ms": "45514.259"
+      },
+      {
+        "hits": "1569820",
+        "misses": "82220",
+        "evictions": "74398",
+        "miss_pread": "689.85",
+        "pread_ms": "46448.562"
+      }
+    ],
+    "startup_prefill_ms": 14966.729,
+    "append_prefill_ms": 98003.79,
+    "decode_ms": 197973.684,
+    "model_ms": 310944.203
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "dbb7917fd94cef6332878b8e74bfa328ecab7c28001de6eb1b02c212c1d55be0",
+    "snapshot_sha256": "4038547fda7c3050dbb562e488a12b33f89527ea7c7927d142d978b2c36319fe",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14950.815,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3717.556,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4117.565,
+        "first_decode_ms": 76.263
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9818.581,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4184.999,
+        "first_decode_ms": 87.564
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 1942.485,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10016.331,
+        "first_decode_ms": 63.263
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 3350,
+        "tokens": 685,
+        "ms": 17750.314,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 3414,
+        "tokens": 64,
+        "ms": 3966.039,
+        "first_decode_ms": 114.823
+      },
+      {
+        "phase": 9,
+        "kind": "P",
+        "context": 4240,
+        "tokens": 826,
+        "ms": 20609.092,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 10,
+        "kind": "D",
+        "context": 5182,
+        "tokens": 942,
+        "ms": 54919.583,
+        "first_decode_ms": 121.905
+      },
+      {
+        "phase": 11,
+        "kind": "P",
+        "context": 5543,
+        "tokens": 361,
+        "ms": 10060.967,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 12,
+        "kind": "D",
+        "context": 5597,
+        "tokens": 54,
+        "ms": 3275.903,
+        "first_decode_ms": 98.969
+      },
+      {
+        "phase": 13,
+        "kind": "P",
+        "context": 5759,
+        "tokens": 162,
+        "ms": 4571.055,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 14,
+        "kind": "D",
+        "context": 5832,
+        "tokens": 73,
+        "ms": 4313.192,
+        "first_decode_ms": 99.252
+      },
+      {
+        "phase": 15,
+        "kind": "P",
+        "context": 5916,
+        "tokens": 84,
+        "ms": 2225.797,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 16,
+        "kind": "D",
+        "context": 6005,
+        "tokens": 89,
+        "ms": 5705.446,
+        "first_decode_ms": 70.681
+      },
+      {
+        "phase": 17,
+        "kind": "P",
+        "context": 6097,
+        "tokens": 92,
+        "ms": 2776.271,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 18,
+        "kind": "D",
+        "context": 7273,
+        "tokens": 1176,
+        "ms": 69787.588,
+        "first_decode_ms": 72.668
+      },
+      {
+        "phase": 19,
+        "kind": "P",
+        "context": 7551,
+        "tokens": 278,
+        "ms": 8052.098,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 20,
+        "kind": "D",
+        "context": 7605,
+        "tokens": 54,
+        "ms": 3205.399,
+        "first_decode_ms": 91.841
+      },
+      {
+        "phase": 21,
+        "kind": "P",
+        "context": 7819,
+        "tokens": 214,
+        "ms": 5863.671,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 22,
+        "kind": "D",
+        "context": 7891,
+        "tokens": 72,
+        "ms": 4754.129,
+        "first_decode_ms": 72.531
+      },
+      {
+        "phase": 23,
+        "kind": "P",
+        "context": 7953,
+        "tokens": 62,
+        "ms": 1975.573,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 24,
+        "kind": "D",
+        "context": 8187,
+        "tokens": 234,
+        "ms": 13740.378,
+        "first_decode_ms": 64.799
+      },
+      {
+        "phase": 25,
+        "kind": "P",
+        "context": 8312,
+        "tokens": 125,
+        "ms": 3681.401,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 26,
+        "kind": "D",
+        "context": 8435,
+        "tokens": 123,
+        "ms": 7256.2,
+        "first_decode_ms": 88.644
+      },
+      {
+        "phase": 27,
+        "kind": "P",
+        "context": 8563,
+        "tokens": 128,
+        "ms": 3270.879,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 28,
+        "kind": "D",
+        "context": 8710,
+        "tokens": 147,
+        "ms": 8872.114,
+        "first_decode_ms": 72.304
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "0",
+        "misses": "7800",
+        "evictions": "0"
+      },
+      {
+        "hits": "20365",
+        "misses": "9035",
+        "evictions": "1213",
+        "miss_pread": "11.45",
+        "pread_ms": "918.341"
+      },
+      {
+        "hits": "36669",
+        "misses": "10011",
+        "evictions": "2189",
+        "miss_pread": "20.50",
+        "pread_ms": "1386.886"
+      },
+      {
+        "hits": "104084",
+        "misses": "14836",
+        "evictions": "7014",
+        "miss_pread": "65.22",
+        "pread_ms": "4980.939"
+      },
+      {
+        "hits": "121089",
+        "misses": "15591",
+        "evictions": "7769",
+        "miss_pread": "72.22",
+        "pread_ms": "5372.425"
+      },
+      {
+        "hits": "137698",
+        "misses": "16262",
+        "evictions": "8440",
+        "miss_pread": "78.44",
+        "pread_ms": "5878.433"
+      },
+      {
+        "hits": "184080",
+        "misses": "17160",
+        "evictions": "9338",
+        "miss_pread": "86.76",
+        "pread_ms": "6384.804"
+      },
+      {
+        "hits": "342447",
+        "misses": "23193",
+        "evictions": "15371",
+        "miss_pread": "142.69",
+        "pread_ms": "11063.680"
+      },
+      {
+        "hits": "356687",
+        "misses": "24313",
+        "evictions": "16491",
+        "miss_pread": "153.07",
+        "pread_ms": "11551.610"
+      },
+      {
+        "hits": "549459",
+        "misses": "29781",
+        "evictions": "21959",
+        "miss_pread": "203.76",
+        "pread_ms": "15793.722"
+      },
+      {
+        "hits": "764491",
+        "misses": "40829",
+        "evictions": "33007",
+        "miss_pread": "306.17",
+        "pread_ms": "21327.726"
+      },
+      {
+        "hits": "847498",
+        "misses": "44462",
+        "evictions": "36640",
+        "miss_pread": "339.85",
+        "pread_ms": "24103.159"
+      },
+      {
+        "hits": "859739",
+        "misses": "45181",
+        "evictions": "37359",
+        "miss_pread": "346.51",
+        "pread_ms": "24470.944"
+      },
+      {
+        "hits": "896887",
+        "misses": "46913",
+        "evictions": "39091",
+        "miss_pread": "362.57",
+        "pread_ms": "25848.413"
+      },
+      {
+        "hits": "913514",
+        "misses": "47806",
+        "evictions": "39984",
+        "miss_pread": "370.84",
+        "pread_ms": "26280.425"
+      },
+      {
+        "hits": "932954",
+        "misses": "48526",
+        "evictions": "40704",
+        "miss_pread": "377.52",
+        "pread_ms": "26840.284"
+      },
+      {
+        "hits": "952785",
+        "misses": "50055",
+        "evictions": "42233",
+        "miss_pread": "391.69",
+        "pread_ms": "27600.782"
+      },
+      {
+        "hits": "973608",
+        "misses": "51312",
+        "evictions": "43490",
+        "miss_pread": "403.34",
+        "pread_ms": "28562.066"
+      },
+      {
+        "hits": "1241410",
+        "misses": "65750",
+        "evictions": "57928",
+        "miss_pread": "537.18",
+        "pread_ms": "35928.012"
+      },
+      {
+        "hits": "1304960",
+        "misses": "68920",
+        "evictions": "61098",
+        "miss_pread": "566.56",
+        "pread_ms": "38412.281"
+      },
+      {
+        "hits": "1317275",
+        "misses": "69565",
+        "evictions": "61743",
+        "miss_pread": "572.54",
+        "pread_ms": "38737.141"
+      },
+      {
+        "hits": "1366526",
+        "misses": "71674",
+        "evictions": "63852",
+        "miss_pread": "592.09",
+        "pread_ms": "40421.918"
+      },
+      {
+        "hits": "1382441",
+        "misses": "73039",
+        "evictions": "65217",
+        "miss_pread": "604.75",
+        "pread_ms": "41071.746"
+      },
+      {
+        "hits": "1396382",
+        "misses": "73978",
+        "evictions": "66156",
+        "miss_pread": "613.45",
+        "pread_ms": "41781.512"
+      },
+      {
+        "hits": "1449840",
+        "misses": "76680",
+        "evictions": "68858",
+        "miss_pread": "638.50",
+        "pread_ms": "43121.789"
+      },
+      {
+        "hits": "1478323",
+        "misses": "78197",
+        "evictions": "70375",
+        "miss_pread": "652.56",
+        "pread_ms": "44354.296"
+      },
+      {
+        "hits": "1506366",
+        "misses": "79674",
+        "evictions": "71852",
+        "miss_pread": "666.25",
+        "pread_ms": "45085.709"
+      },
+      {
+        "hits": "1536443",
+        "misses": "80317",
+        "evictions": "72495",
+        "miss_pread": "672.21",
+        "pread_ms": "45687.973"
+      },
+      {
+        "hits": "1569820",
+        "misses": "82220",
+        "evictions": "74398",
+        "miss_pread": "689.85",
+        "pread_ms": "46647.888"
+      }
+    ],
+    "startup_prefill_ms": 14950.815,
+    "append_prefill_ms": 96315.74,
+    "decode_ms": 198114.866,
+    "model_ms": 309381.421
+  },
+  {
+    "variant": "A",
+    "logits_sha256": "dbb7917fd94cef6332878b8e74bfa328ecab7c28001de6eb1b02c212c1d55be0",
+    "snapshot_sha256": "4038547fda7c3050dbb562e488a12b33f89527ea7c7927d142d978b2c36319fe",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14907.66,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3814.231,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4112.443,
+        "first_decode_ms": 76.317
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9497.605,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4157.344,
+        "first_decode_ms": 62.586
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2033.318,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10079.225,
+        "first_decode_ms": 68.603
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 3350,
+        "tokens": 685,
+        "ms": 17240.177,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 3414,
+        "tokens": 64,
+        "ms": 3968.322,
+        "first_decode_ms": 95.281
+      },
+      {
+        "phase": 9,
+        "kind": "P",
+        "context": 4240,
+        "tokens": 826,
+        "ms": 20195.685,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 10,
+        "kind": "D",
+        "context": 5182,
+        "tokens": 942,
+        "ms": 54865.412,
+        "first_decode_ms": 102.322
+      },
+      {
+        "phase": 11,
+        "kind": "P",
+        "context": 5543,
+        "tokens": 361,
+        "ms": 10078.933,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 12,
+        "kind": "D",
+        "context": 5597,
+        "tokens": 54,
+        "ms": 3225.197,
+        "first_decode_ms": 82.195
+      },
+      {
+        "phase": 13,
+        "kind": "P",
+        "context": 5759,
+        "tokens": 162,
+        "ms": 4022.158,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 14,
+        "kind": "D",
+        "context": 5832,
+        "tokens": 73,
+        "ms": 4358.144,
+        "first_decode_ms": 79.263
+      },
+      {
+        "phase": 15,
+        "kind": "P",
+        "context": 5916,
+        "tokens": 84,
+        "ms": 2217.672,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 16,
+        "kind": "D",
+        "context": 6005,
+        "tokens": 89,
+        "ms": 5734.745,
+        "first_decode_ms": 70.691
+      },
+      {
+        "phase": 17,
+        "kind": "P",
+        "context": 6097,
+        "tokens": 92,
+        "ms": 2759.395,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 18,
+        "kind": "D",
+        "context": 7273,
+        "tokens": 1176,
+        "ms": 68424.078,
+        "first_decode_ms": 71.523
+      },
+      {
+        "phase": 19,
+        "kind": "P",
+        "context": 7551,
+        "tokens": 278,
+        "ms": 7965.741,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 20,
+        "kind": "D",
+        "context": 7605,
+        "tokens": 54,
+        "ms": 3192.9,
+        "first_decode_ms": 68.347
+      },
+      {
+        "phase": 21,
+        "kind": "P",
+        "context": 7819,
+        "tokens": 214,
+        "ms": 5419.337,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 22,
+        "kind": "D",
+        "context": 7891,
+        "tokens": 72,
+        "ms": 4806.408,
+        "first_decode_ms": 64.658
+      },
+      {
+        "phase": 23,
+        "kind": "P",
+        "context": 7953,
+        "tokens": 62,
+        "ms": 2036.706,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 24,
+        "kind": "D",
+        "context": 8187,
+        "tokens": 234,
+        "ms": 13774.294,
+        "first_decode_ms": 71.049
+      },
+      {
+        "phase": 25,
+        "kind": "P",
+        "context": 8312,
+        "tokens": 125,
+        "ms": 3686.782,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 26,
+        "kind": "D",
+        "context": 8435,
+        "tokens": 123,
+        "ms": 7286.115,
+        "first_decode_ms": 86.565
+      },
+      {
+        "phase": 27,
+        "kind": "P",
+        "context": 8563,
+        "tokens": 128,
+        "ms": 3219.119,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 28,
+        "kind": "D",
+        "context": 8710,
+        "tokens": 147,
+        "ms": 8870.392,
+        "first_decode_ms": 73.206
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "0",
+        "misses": "7800",
+        "evictions": "0"
+      },
+      {
+        "hits": "20365",
+        "misses": "9035",
+        "evictions": "1213",
+        "miss_pread": "11.45",
+        "pread_ms": "893.170"
+      },
+      {
+        "hits": "36669",
+        "misses": "10011",
+        "evictions": "2189",
+        "miss_pread": "20.50",
+        "pread_ms": "1359.177"
+      },
+      {
+        "hits": "104198",
+        "misses": "14722",
+        "evictions": "6900",
+        "miss_pread": "64.16",
+        "pread_ms": "4796.608"
+      },
+      {
+        "hits": "121190",
+        "misses": "15490",
+        "evictions": "7668",
+        "miss_pread": "71.28",
+        "pread_ms": "5191.340"
+      },
+      {
+        "hits": "137617",
+        "misses": "16343",
+        "evictions": "8521",
+        "miss_pread": "79.19",
+        "pread_ms": "5811.787"
+      },
+      {
+        "hits": "183997",
+        "misses": "17243",
+        "evictions": "9421",
+        "miss_pread": "87.53",
+        "pread_ms": "6288.465"
+      },
+      {
+        "hits": "342760",
+        "misses": "22880",
+        "evictions": "15058",
+        "miss_pread": "139.79",
+        "pread_ms": "10441.879"
+      },
+      {
+        "hits": "356984",
+        "misses": "24016",
+        "evictions": "16194",
+        "miss_pread": "150.32",
+        "pread_ms": "10933.108"
+      },
+      {
+        "hits": "550536",
+        "misses": "28704",
+        "evictions": "20882",
+        "miss_pread": "193.77",
+        "pread_ms": "14824.993"
+      },
+      {
+        "hits": "765575",
+        "misses": "39745",
+        "evictions": "31923",
+        "miss_pread": "296.12",
+        "pread_ms": "20348.725"
+      },
+      {
+        "hits": "848497",
+        "misses": "43463",
+        "evictions": "35641",
+        "miss_pread": "330.59",
+        "pread_ms": "23173.905"
+      },
+      {
+        "hits": "860764",
+        "misses": "44156",
+        "evictions": "36334",
+        "miss_pread": "337.01",
+        "pread_ms": "23549.214"
+      },
+      {
+        "hits": "898523",
+        "misses": "45277",
+        "evictions": "37455",
+        "miss_pread": "347.40",
+        "pread_ms": "24429.505"
+      },
+      {
+        "hits": "915116",
+        "misses": "46204",
+        "evictions": "38382",
+        "miss_pread": "355.99",
+        "pread_ms": "24911.373"
+      },
+      {
+        "hits": "934556",
+        "misses": "46924",
+        "evictions": "39102",
+        "miss_pread": "362.67",
+        "pread_ms": "25466.809"
+      },
+      {
+        "hits": "954365",
+        "misses": "48475",
+        "evictions": "40653",
+        "miss_pread": "377.05",
+        "pread_ms": "26257.090"
+      },
+      {
+        "hits": "975188",
+        "misses": "49732",
+        "evictions": "41910",
+        "miss_pread": "388.70",
+        "pread_ms": "27205.519"
+      },
+      {
+        "hits": "1242990",
+        "misses": "64170",
+        "evictions": "56348",
+        "miss_pread": "522.53",
+        "pread_ms": "34550.289"
+      },
+      {
+        "hits": "1306631",
+        "misses": "67249",
+        "evictions": "59427",
+        "miss_pread": "551.08",
+        "pread_ms": "36924.628"
+      },
+      {
+        "hits": "1318952",
+        "misses": "67888",
+        "evictions": "60066",
+        "miss_pread": "557.00",
+        "pread_ms": "37258.612"
+      },
+      {
+        "hits": "1368680",
+        "misses": "69520",
+        "evictions": "61698",
+        "miss_pread": "572.13",
+        "pread_ms": "38519.976"
+      },
+      {
+        "hits": "1384591",
+        "misses": "70889",
+        "evictions": "63067",
+        "miss_pread": "584.82",
+        "pread_ms": "39208.353"
+      },
+      {
+        "hits": "1398464",
+        "misses": "71896",
+        "evictions": "64074",
+        "miss_pread": "594.15",
+        "pread_ms": "39983.451"
+      },
+      {
+        "hits": "1451916",
+        "misses": "74604",
+        "evictions": "66782",
+        "miss_pread": "619.25",
+        "pread_ms": "41352.197"
+      },
+      {
+        "hits": "1480399",
+        "misses": "76121",
+        "evictions": "68299",
+        "miss_pread": "633.32",
+        "pread_ms": "42600.935"
+      },
+      {
+        "hits": "1508442",
+        "misses": "77598",
+        "evictions": "69776",
+        "miss_pread": "647.01",
+        "pread_ms": "43331.922"
+      },
+      {
+        "hits": "1538519",
+        "misses": "78241",
+        "evictions": "70419",
+        "miss_pread": "652.97",
+        "pread_ms": "43921.888"
+      },
+      {
+        "hits": "1571896",
+        "misses": "80144",
+        "evictions": "72322",
+        "miss_pread": "670.61",
+        "pread_ms": "44873.982"
+      }
+    ],
+    "startup_prefill_ms": 14907.66,
+    "append_prefill_ms": 94186.859,
+    "decode_ms": 196855.019,
+    "model_ms": 305949.538
+  }
+]

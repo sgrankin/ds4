@@ -1,0 +1,9 @@
+[
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-prepared-20261003-v2/run/cache/sysprompt.kv",
+    "sha256": "a60c50f0efa0eb88311bc7fb1631c435bc6fc51cff802c1a1a31ec1abcca4807",
+    "bytes": 23883429,
+    "mode": 384,
+    "scope": "retained native-system-prompt cache; named persistence/reload NOT_EXERCISED"
+  }
+]

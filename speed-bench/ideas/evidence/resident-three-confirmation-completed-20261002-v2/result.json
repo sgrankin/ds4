@@ -1,0 +1,62 @@
+{
+  "status": "COMPLETE_RAW_NATIVE_CONTROLS_PASS_APPROXIMATE_QUALITY_CHANGED",
+  "root_session": 7261,
+  "producer_and_guard_returncode": 0,
+  "frozen_source": "38c758fe730f7d3780d93bad11ca27bf07aeadd4",
+  "frozen_manifest_sha256": "b80ecd4abdee67976e4b3824892ff34514a7214fa58687dd3746e692e4657df9",
+  "command_sha256": "009da3bdbc763311e7e5d83b055e5cdb9450cb8bbda6ca022b7ed2dd1e4af7c1",
+  "helper_sha256": "1ced202ca2ddf3d3394007b1bfafae4cea7ae4c27c8f4173c11b650fdb1dacd5",
+  "inputs_selection": "case index 2 mod6, first16 of96; distinct from screen0mod6, firstholdout3mod6, broader calibration1mod6",
+  "input_outcome_selection": false,
+  "inputs": 16,
+  "teacher_forced_rows": 512,
+  "mean_delta_nll": 0.007225281991277502,
+  "paired_prompt_bootstrap_95": [
+    -0.007474102478924773,
+    0.020921816617445996
+  ],
+  "bootstrap": {
+    "unit": "paired per-prompt mean deltaNLL",
+    "prompts": 16,
+    "resamples": 2000,
+    "seed": 20261002,
+    "interval": "sorted bootstrap indices49/1949"
+  },
+  "worst_prompt_delta_nll": 0.04389140869033563,
+  "mean_kl": 0.012595251885385343,
+  "kl_p99": 0.169840250749,
+  "kl_max": 0.603620837045,
+  "mean_tv": 0.0286127251672,
+  "argmax_flips": 20,
+  "bit_equal_rows": 16,
+  "whole_prefill_plus_decode_logical_native_bytes": 207277056000,
+  "whole_prefill_plus_decode_logical_candidate_bytes": 147995320320,
+  "logical_bytes_reduction_percent": 28.60024009603842,
+  "logical_bytes_difference": 59281735680,
+  "quality_interpretation": "Positive mean deltaNLL; paired prompt bootstrap interval crosses zero. This does not establish equal quality or generalization.",
+  "io_scope": "Cumulative explicit expert-loader requested=returned=cache-loader bytes over all prefill and decode; no background worker. Logical read bytes, not physical SSD traffic.",
+  "timing_claim": false,
+  "equal_quality_claim": false,
+  "defaults_promoted": false,
+  "independent_resident_arithmetic_review": "PASS mean, KL, worst prompt, paired bootstrap, fixed 2mod6 case order and requested/returned sums",
+  "archive_full_raw_streaming_sha_verified_once": true,
+  "original_cpu_test_pin_mismatch": {
+    "original_cpu_proof_field": "ae68ca0d4f6c42a3259c69211730b33b39bcbb27e419528314d67b7db247623a",
+    "clarified_field_identifies": "cpu_stdout_json_sha256 for original cpu-test.json",
+    "frozen38_jj_blob_and_disk_sha256": "b1ccef6fcecc518849a25ccc6585567bbed8b3bf4b8e9085eb2d5179b4e83084",
+    "bytes": 9125,
+    "original_cpu_proof_unchanged": true,
+    "first_archiver_refusal_before_large_raw_hash_or_archive_creation": true
+  },
+  "independent_actual_frozen38_cpu_tests": {
+    "trials": 37,
+    "returncode": 0,
+    "source_sha256": "b1ccef6fcecc518849a25ccc6585567bbed8b3bf4b8e9085eb2d5179b4e83084",
+    "log_sha256": "ae68ca0d4f6c42a3259c69211730b33b39bcbb27e419528314d67b7db247623a",
+    "first_missing_temp_parent_invocation_preserved": true
+  },
+  "model_metadata_opened_by_archive": false,
+  "model_opened_by_archive": false,
+  "build_or_gpu_called_by_archive": false,
+  "original_run_mutated": false
+}

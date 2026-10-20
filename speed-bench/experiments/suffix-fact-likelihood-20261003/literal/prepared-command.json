@@ -1,0 +1,16 @@
+{
+  "manifest_sha256": "bc63e581d14dc9cc6d1a528c5b17462345e5a73d69b998e74566021ff6dab0d5",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/artifacts/suffix-archived-fact-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/artifacts/suffix-archived-fact-prepared-20261003-v1/run_archived_fact_probe.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-quality-plan/speed-bench/ideas/artifacts/suffix-archived-fact-prepared-20261003-v1",
+    "--manifest-sha256",
+    "bc63e581d14dc9cc6d1a528c5b17462345e5a73d69b998e74566021ff6dab0d5"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

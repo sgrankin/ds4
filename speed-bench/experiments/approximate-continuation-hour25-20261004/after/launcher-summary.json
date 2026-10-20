@@ -1,0 +1,37 @@
+{
+  "mode": "reuse",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "arm": "after",
+  "server": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/ds4-server-before-approx-continuation",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/concurrent-sessions-hour19-20261004/run.py",
+  "seconds": 340.3601190000045,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 0,
+      "seconds": 264.5861459579901,
+      "startup_seconds": 2.727079499993124,
+      "client_seconds": 260.0192018749949,
+      "shutdown_seconds": 1.8396108750021085,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 75.77006129099755,
+      "startup_seconds": 0.42307691600581165,
+      "client_seconds": 73.61375795800996,
+      "shutdown_seconds": 1.7328338749939576,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/continuation25-cache-after",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/continuation25-store-after",
+  "timeout_seconds": 600
+}

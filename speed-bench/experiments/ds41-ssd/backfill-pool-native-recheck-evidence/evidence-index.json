@@ -1,0 +1,21 @@
+{
+  "files": {
+    "archive-proof.json": "d682474fac7285affe46f2d12dc13d593962935eda219e0a1fbd7fe6d7ba922e",
+    "archive_resident_pool_recheck.py": "0a70131fb2f0d2b8884d06c9f956d25316963578997d22cfad2d1f12824336c6",
+    "compact.json": "e7fb9336bc6f6efea731c2290472b163f313187ffc3b239f2e36d1c26dc372e4",
+    "completed-small-artifacts.tar.gz": "acbaa3fdcf930927ffcf6f954a3fc6cf04f443961f97bc9d8189390dc1c09cf4",
+    "independent-review.json": "c54dd4599e7317dbfb930e60c025cd78b3ff960abebf69893061f58c2e2d1153",
+    "index.json": "a7464a17a27df972071e23d14c76332f27c558a56731e93ccb40ef97f2046872",
+    "prepared-command.json": "a33f2c4f148666dc0dcb4b60b897327a012e98df33e871bfa508970ae5b2062b",
+    "prepared-manifest.json": "04ea5a8c9b599d958fc1635019a610143d39e2bc1fad64b6ef8dcc4af78b8bc7",
+    "preserved-unrun-v1/speed-bench/experiments/ds41-ssd/BACKFILL_POOL_NATIVE_RECHECK_STUDY.md": "331583fc739213b42a7bf9ec96ba02cd005ec34bcea8c4d6a916af70ffbc887a",
+    "preserved-unrun-v1/speed-bench/ideas/run_resident_pool_recheck_study.py": "1656d15a37d34881289918082ee49c0d288e138e253eddc8e83c882e37bf497f",
+    "preserved-unrun-v1/status.json": "6598269ee5d6889f1ee90d62299950312beaceb4f61cd6c84cb9d6fec78e47b1",
+    "preserved-unrun-v1/tests/test_resident_pool_recheck_study.py": "66a1d57a64636da0ea59eb01637d720feb8ba90fa18e0b4180fe886b444f8e16",
+    "retained-original-pins.json": "c92557f2fed6105a85f1e68f752850a6b95ec3ee7978b1e186fd94131dc861e6",
+    "root-release-proof.json": "601804e3bea15277ead215dd6a16ce1d27fc7d6e33db29545f85661f938d6689",
+    "runtime-build-manifest.json": "569c712f36a2f11940a1bc5bdbf6959fbdf6fe2a2be8509783f5f9d9184eaaa8",
+    "study-cpu-proof.json": "cf97af6a76da9068cb9daac7cba762888207232310324d92f6a0735a08edf71f"
+  },
+  "all_originals_retained": true
+}

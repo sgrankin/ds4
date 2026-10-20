@@ -1,0 +1,220 @@
+{
+  "commands": [
+    {
+      "label": "baseline-frontend-compile",
+      "argv": [
+        "cc",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c11",
+        "-I.",
+        "-DDS4_PAIR_TAPE_BASELINE",
+        "-c",
+        "speed-bench/suffix_pair_tape_followup_bench.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/baseline-frontend.o"
+      ],
+      "returncode": 0,
+      "log": "baseline-frontend-compile.log"
+    },
+    {
+      "label": "new-frontend-compile",
+      "argv": [
+        "cc",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c11",
+        "-I.",
+        "-c",
+        "speed-bench/suffix_pair_tape_followup_bench.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/new-frontend.o"
+      ],
+      "returncode": 0,
+      "log": "new-frontend-compile.log"
+    },
+    {
+      "label": "new-link",
+      "argv": [
+        "cc",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/new-probe",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/new-frontend.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_image.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_distributed.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_tp.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_ssd.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_metal.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "returncode": 0,
+      "log": "new-link.log"
+    },
+    {
+      "label": "new-selftest",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/new-probe",
+        "--self-test"
+      ],
+      "returncode": 0,
+      "log": "new-selftest.log"
+    },
+    {
+      "label": "baseline-link",
+      "argv": [
+        "cc",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/baseline-probe",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/baseline-frontend.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/native-baseline-core.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_image.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_distributed.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_tp.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_ssd.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_metal.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "returncode": 0,
+      "log": "baseline-link.log"
+    },
+    {
+      "label": "baseline-selftest",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/baseline-probe",
+        "--self-test"
+      ],
+      "returncode": 0,
+      "log": "baseline-selftest.log"
+    },
+    {
+      "label": "state-fixture-compile",
+      "argv": [
+        "cc",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c11",
+        "-I.",
+        "tests/test_suffix_pair_tape_followup_state.c",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_image.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_distributed.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_tp.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_ssd.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_metal.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/state-fixture-test"
+      ],
+      "returncode": 0,
+      "log": "state-fixture-compile.log"
+    },
+    {
+      "label": "actual-state-fixture",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/state-fixture-test",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/cpu-state-fixture"
+      ],
+      "returncode": 0,
+      "log": "actual-state-fixture.log"
+    },
+    {
+      "label": "driver-cpu-tests",
+      "argv": [
+        "python3",
+        "tests/test_suffix_pair_tape_followup.py"
+      ],
+      "returncode": 0,
+      "log": "driver-cpu-tests.log"
+    },
+    {
+      "label": "final-state-fixture-compile",
+      "argv": [
+        "cc",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c11",
+        "-I.",
+        "tests/test_suffix_pair_tape_followup_state.c",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_image.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_distributed.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_tp.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_ssd.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_metal.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/state-fixture-test"
+      ],
+      "returncode": 0,
+      "log": "final-state-fixture-compile.log"
+    },
+    {
+      "label": "final-actual-state-fixture",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/state-fixture-test",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/cpu-state-fixture-final"
+      ],
+      "returncode": 0,
+      "log": "final-actual-state-fixture.log"
+    },
+    {
+      "label": "extended-driver-cpu-tests",
+      "argv": [
+        "python3",
+        "tests/test_suffix_pair_tape_followup.py"
+      ],
+      "returncode": 0,
+      "log": "extended-driver-cpu-tests.log"
+    }
+  ],
+  "max_concurrent_compilers": 2,
+  "model_assets_accessed": false,
+  "core_metal_compiled": false
+}

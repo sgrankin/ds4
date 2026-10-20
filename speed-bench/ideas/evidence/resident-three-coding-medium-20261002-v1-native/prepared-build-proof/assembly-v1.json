@@ -1,0 +1,13 @@
+{
+  "version": "native-prefill-coding-assembly-v1",
+  "warm_user": "We will work on independent Python function requests in this session. The first message only establishes the session. No implementation is requested yet. Please acknowledge that you are ready for the next request.",
+  "warm_assistant": "Ready for the next request.",
+  "append_preamble": "Project context for the next independent function request:\nThe requested function is a small component of a Python application. Its behavior is determined by the complete function contract below. The function will be imported and called directly by another part of the application. Input values will satisfy the stated input contract. The caller needs the return value rather than a printed explanation. The code should have no interaction with files, networks, terminals, or an external service.\nThe application already has its own user interface, configuration, logging, and command-line entry point. None of those layers is part of this request. Supply only the requested function and any necessary imports allowed by the function contract. Do not add a main block, demonstration calls, generated tests, or output printed to the terminal. Code may be bare Python or a single complete Python code fence.\nEach request in this session is independent. Do not reuse state from another request or refer to an earlier function. There are no hidden project-specific data types, classes, frameworks, or third-party packages to implement. The required function name, arguments, return type, edge cases, and numerical rules are given below. Follow those rules directly. Keep all supplied input arguments unchanged. Return the required type even when the result is empty. The application will inspect the return value and compare it with the stated contract.\n\nFunction contract:\n",
+  "append_eligibility": {
+    "min_tokens_inclusive": 256,
+    "max_tokens_exclusive": 1024,
+    "existing_position_positive": true
+  },
+  "task_fixture_sha256": "d1ea470ff2cb70476ee6504a55a06b8756156a3ca2df67739c556d4941e5f2c7",
+  "meaning": "Fixed earlier context plus a fixed general contract preamble; original task text and all34 independent gold checks are unchanged. Counts are validated with the native tokenizer only inside a future granted guard run; there is no claim of CPU-verified token counts."
+}

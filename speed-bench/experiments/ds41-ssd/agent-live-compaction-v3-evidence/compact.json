@@ -1,0 +1,93 @@
+{
+  "status": "SEPARATE_OFFLINE_TASK_COMPLETION_PASS_ALL_THREE",
+  "arms": [
+    {
+      "arm": "native-before",
+      "task_status": "SEPARATE_OFFLINE_TASK_COMPLETION_PASS",
+      "original_harness": "FAILED",
+      "private_frontend_rc": 1,
+      "actual_agent_rc": 0,
+      "recorded_turn_checks": 3,
+      "independent_final_cpu_commands": 4,
+      "required_final_files": 10,
+      "project_files": 11,
+      "trace_rounds": 17,
+      "tool_calls": 20,
+      "epochs": 2,
+      "compactions": 1,
+      "traced_live_history_tokens": 3861,
+      "candidate_exercised_resident_routes": false,
+      "native_bit_identity_claim": false
+    },
+    {
+      "arm": "broader3",
+      "task_status": "SEPARATE_OFFLINE_TASK_COMPLETION_PASS",
+      "original_harness": "FAILED",
+      "private_frontend_rc": 1,
+      "actual_agent_rc": 0,
+      "recorded_turn_checks": 3,
+      "independent_final_cpu_commands": 4,
+      "required_final_files": 10,
+      "project_files": 11,
+      "trace_rounds": 19,
+      "tool_calls": 22,
+      "epochs": 2,
+      "compactions": 1,
+      "traced_live_history_tokens": 4055,
+      "candidate_exercised_resident_routes": true,
+      "native_bit_identity_claim": false
+    },
+    {
+      "arm": "native-after",
+      "task_status": "SEPARATE_OFFLINE_TASK_COMPLETION_PASS",
+      "original_harness": "FAILED",
+      "private_frontend_rc": 1,
+      "actual_agent_rc": 0,
+      "recorded_turn_checks": 3,
+      "independent_final_cpu_commands": 4,
+      "required_final_files": 10,
+      "project_files": 11,
+      "trace_rounds": 18,
+      "tool_calls": 21,
+      "epochs": 2,
+      "compactions": 1,
+      "traced_live_history_tokens": 4078,
+      "candidate_exercised_resident_routes": false,
+      "native_bit_identity_claim": false
+    }
+  ],
+  "ordered_recorded_stages_pass": 9,
+  "independent_final_cpu_commands_pass": 12,
+  "original_guard_rc": 3,
+  "original_frontends_rc": [
+    1,
+    1,
+    1
+  ],
+  "actual_agents_rc": [
+    0,
+    0,
+    0
+  ],
+  "pressure": {
+    "samples": 1264,
+    "levels": [
+      1
+    ],
+    "adverse_samples": 0,
+    "swap_growth_gib": 0.0,
+    "peak_wired_plus_compressor_gib": 83.05398559570312
+  },
+  "root_release_proof_verified": true,
+  "analyzer_source_commit": "02e5d3b1a380344e5c5e99ad83e5703ddf196b08",
+  "original_v3_source_commit": "4b5d631b98d559db67689b45f1bffdd02de029e6",
+  "runtime_source_commit": "b58344d4358c39b0c45defe1b86a8d5108366388",
+  "original_plan_sha256": "b6a4b9649054454f985c083c72a692203dc442accca487e8c66f26a331f48e49",
+  "binary_sha256": "5ca77b0474416981e2c85e7788d4217b7eecd07df59396c04f15cf68ac516576",
+  "model_metadata_read": false,
+  "model_opened": false,
+  "original_harness_outcomes_rewritten": false,
+  "interpretation": "Completed actual tasks across three different live tool/model trajectories. Internal summary generation untraced. No flat replay, native bit identity, speed or SSD I/O benefit claim.",
+  "parser_scope": "UTF8 trace text with JSON-compatible escaped strings. Producer \\xNN/invalidUTF8 forms are unsupported and fail closed.",
+  "frozen_nonmodel_assets_verified": 114
+}

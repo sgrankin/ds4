@@ -1,0 +1,29 @@
+{
+  "time": 1790995589.146175,
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "manifest_sha256": "d78f72e601fd811280d62adc9d2971bd7612ab10c58b29fdde47abfcb026a286",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/run_reasoning_budget.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-runner/speed-bench/ideas/artifacts/reasoning-budget-pilot-prepared-20261003-v2/plan.json",
+    "--plan-sha256",
+    "d78f72e601fd811280d62adc9d2971bd7612ab10c58b29fdde47abfcb026a286",
+    "--root-granted"
+  ],
+  "source_revision": "0294de2a1b4b4efe899891189c5086360fd87f80",
+  "qualification_freeze": "960cbb20c85b16110a0f2d907784f41ef07df730",
+  "all76assets_verified": true,
+  "previous_release_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/root-release-proof.json",
+  "previous_release_sha256": "7612614677880f117c198695000d8b476730168ebad20a5e208dad44c9c6e2b4",
+  "cpu_parallel_allowed": true,
+  "timing_diagnostic": true,
+  "production_defaults_changed": false,
+  "model_metadata_touched_before_guard": false,
+  "root_independent_caller_review": "forced128822 no native sampling/RNG advance,>=2remaining slots, eval token then immediate outside-phase-info before next sample; budget0 historical common-fields control before1024 candidate; cap/wrong/INVALID retained"
+}

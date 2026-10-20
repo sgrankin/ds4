@@ -1,0 +1,1 @@
+For this fictional race only, one league equals 240 rods and one rod equals 5 meters. The route is seven leagues. Report meters and kilometers as numbers in JSON, then explain. Use these supplied definitions rather than historical unit conventions.

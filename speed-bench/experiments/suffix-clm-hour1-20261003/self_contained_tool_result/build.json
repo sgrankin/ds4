@@ -1,0 +1,57 @@
+{
+  "source_sha256": "e4ed1d7d28f297c1fcb60465988d0e562bfd3597aa9c02885b9a673e2bd355b5",
+  "commands": [
+    {
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-std=c99",
+        "-I",
+        "/Volumes/Models/ds4/.workspaces/idea-clm-block-graft-cast/speed-bench/clm-block-graft-cast-v2/source",
+        "-c",
+        "/Volumes/Models/ds4/speed-bench/experiments/suffix-clm-hour1-20261003/self_contained_tool_result/oracle.c",
+        "-o",
+        "/Volumes/Models/ds4/speed-bench/experiments/suffix-clm-hour1-20261003/self_contained_tool_result/oracle.o"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-clm-block-oracle-ordinary",
+      "returncode": 0,
+      "seconds": 0.07800995899015106
+    },
+    {
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+        "-o",
+        "/Volumes/Models/ds4/speed-bench/experiments/suffix-clm-hour1-20261003/self_contained_tool_result/probe",
+        "/Volumes/Models/ds4/speed-bench/experiments/suffix-clm-hour1-20261003/self_contained_tool_result/oracle.o",
+        "/Volumes/Models/ds4/.workspaces/idea-clm-block-graft-cast/speed-bench/ideas/artifacts/clm-block-graft-core-v2/private-clm.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-clm-block-oracle-ordinary",
+      "returncode": 0,
+      "seconds": 0.05464816698804498
+    }
+  ],
+  "reused_core": "/Volumes/Models/ds4/.workspaces/idea-clm-block-graft-cast/speed-bench/ideas/artifacts/clm-block-graft-core-v2/private-clm.o"
+}

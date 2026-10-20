@@ -1,0 +1,19 @@
+{
+  "preserved_source": "460e3624bc735140e33b711d494eb9169ed4e648",
+  "preserved_evidence": "a164b7c94152aa8ce6e187cbda5cc8ee79c57a50",
+  "reviewer": "checkout_recap",
+  "finding": "pair_actual_owned read w->out/out_cap without w->mu; worker_consume transfers/reset undermu and publication/realloc also usesmu.",
+  "production_source_sha256": "3c0dc3d9141f33cea40878c3724f9893d23c229b492434ea9455bdcac7464806",
+  "production_pointers": [
+    "ds4_agent.c:1709",
+    "ds4_agent.c:12286",
+    "ds4_agent.c:13964"
+  ],
+  "correction": "Snapshot pointer/cap and deduplicate under the same mutex; no output dereference. Only recorded caps are read afterunlock. Extract exact private ledger header for standalone CPU fixture; other worker-owned buffers remain stable during the worker callback.",
+  "additional_authority_review": "Mandatory inventory previously omitted26shaderpayloads; strict manifest/command decode and exactROOTlaunchproof now required beforeidentity/onechild.",
+  "limitations": [
+    "Tool-call audit and instructions are not a hard OS sandbox. Immutable first grading attempt and source snapshot prevent accepted later repairs.",
+    "Ledger samples worker-owned output pointer/cap and deduplicates under mu; after unlock only recorded caps are read. A subsequent UI transfer may overcount. Buffers already owned by the UI and global observed peak are excluded; this is not a global128MiB hard cap."
+  ],
+  "native_model_or_compile_attempt": false
+}

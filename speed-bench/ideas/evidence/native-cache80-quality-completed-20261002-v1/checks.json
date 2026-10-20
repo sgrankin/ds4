@@ -1,0 +1,11 @@
+{
+  "native64_all_rows_exact": true,
+  "native64_raw_sha_exact": true,
+  "native80_repeat_raw_sha_exact": true,
+  "native80_raw_equals_native64": true,
+  "reference_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+  "native80_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+  "total_rows": 512,
+  "all_ds4_environment_cleared": true,
+  "timing_claim": "none; diagnostic instrumented execution"
+}

@@ -1,0 +1,50 @@
+{
+  "method": "POST",
+  "route": "/responses",
+  "body": {
+    "model": "deepseek-v4.1-flash",
+    "conversation": "conv_649d14bab40cbbd2b2804b65",
+    "input": [
+      {
+        "role": "user",
+        "content": "Read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-visible/B/archive.json again now using read with whole=true and raw=true. A fresh read is required even if an earlier answer contained a code. Use the retained active inventory tool result to calculate batches * items_per_batch - reserved_items. Reply only JSON with active_total (integer) and archived_code (string) from the current file."
+      }
+    ],
+    "instructions": "Follow the newest request. Use the read tool for advertised files. Never guess a file's current content from an earlier answer. Active inventory tool results remain authoritative after obsolete dispatch notes are removed.",
+    "tools": [
+      {
+        "type": "function",
+        "name": "read",
+        "description": "Read one advertised JSON file in full.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "whole": {
+              "type": "boolean"
+            },
+            "raw": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "path",
+            "whole",
+            "raw"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "tool_choice": "auto",
+    "store": false,
+    "stream": false,
+    "temperature": 0,
+    "reasoning": {
+      "effort": "none"
+    },
+    "max_output_tokens": 128
+  }
+}

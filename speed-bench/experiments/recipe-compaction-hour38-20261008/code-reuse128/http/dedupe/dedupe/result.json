@@ -1,0 +1,136 @@
+{
+  "case": "dedupe",
+  "arm": "context-fast",
+  "protocol": "full-input-clm",
+  "write_budget": 128,
+  "final_policy": "budget1",
+  "global_cap": 2048,
+  "wall_seconds": 101.18879508401733,
+  "http_output_tokens": 533,
+  "http_reasoning_tokens": 154,
+  "actual_read_count": 1,
+  "actual_write_count": 1,
+  "calls": [
+    {
+      "role": "READ",
+      "name": "read",
+      "call_id": "call_66980856ae87470c938f4f46de56dc3d",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json\",\"whole\":true,\"raw\":true}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/config.json",
+      "output": "{\n  \"ttl\": 5,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 4,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"b\"\n    },\n    {\n      \"t\": 9,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 10,\n      \"key\": \"a\"\n    }\n  ]\n}\n",
+      "tool_ms": 0.24912500521168113
+    },
+    {
+      "role": "WRITE",
+      "name": "write",
+      "call_id": "call_4e629afef56a54bff81e7b28c42b6dce",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py\",\"content\":\"def solve(payload, config):\\n    ttl = config[\\\"ttl\\\"]\\n    accepted = []\\n    rejected = []\\n    last_accepted = {}\\n    index = 0\\n    for event in payload:\\n        key = event[\\\"key\\\"]\\n        t = event[\\\"t\\\"]\\n        if key not in last_accepted:\\n            accepted.append(index)\\n            last_accepted[key] = t\\n        else:\\n            if t - last_accepted[key] >= ttl:\\n                accepted.append(index)\\n                last_accepted[key] = t\\n            else:\\n                rejected.append(index)\\n        index = index + 1\\n    return {\\\"accepted\\\": accepted, \\\"rejected\\\": rejected}\\n\"}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+      "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/compaction-visible/dedupe/solution.py",
+      "tool_ms": 0.26712496764957905
+    }
+  ],
+  "replies": [
+    {
+      "role": "READ",
+      "budget": 0,
+      "effort": "high",
+      "seconds": 49.55362029199023,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1583,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1583
+        },
+        "output_tokens": 121,
+        "output_tokens_details": {
+          "reasoning_tokens": 26
+        },
+        "total_tokens": 1704
+      },
+      "requested_max_output_tokens": 2048,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "WRITE",
+      "budget": 128,
+      "effort": "high",
+      "seconds": 45.78421558300033,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1312,
+        "input_tokens_details": {
+          "cached_tokens": 441,
+          "cache_write_tokens": 871
+        },
+        "output_tokens": 346,
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        },
+        "total_tokens": 1658
+      },
+      "requested_max_output_tokens": 1927,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "FINAL",
+      "budget": 1,
+      "effort": "high",
+      "seconds": 5.8489810840110295,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1700,
+        "input_tokens_details": {
+          "cached_tokens": 1658,
+          "cache_write_tokens": 42
+        },
+        "output_tokens": 66,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1766
+      },
+      "requested_max_output_tokens": 1581,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    }
+  ],
+  "first_code_path": "speed-bench/experiments/recipe-compaction-hour38-20261008/code-reuse128/http/dedupe/dedupe/first-solution.py",
+  "grade": {
+    "correct": true,
+    "tests": 161,
+    "passed": 161,
+    "failed": 0,
+    "first_failure": null,
+    "returncode": 0
+  },
+  "complete": true,
+  "cap": false,
+  "final_text": "Implemented `solve` in `solution.py`: it tracks each key's last accepted timestamp, accepts first occurrences and later occurrences only when `t - last_accepted >= ttl`, leaves rejected timestamps unchanged, and returns `accepted`/`rejected` as zero-based indices in original order without mutating inputs.",
+  "final_text_length": 306,
+  "final_text_bytes": 306,
+  "first_code_bytes": 585,
+  "errors": [],
+  "config_unchanged": true,
+  "context_edit": {
+    "removed_blocks": 0,
+    "summarized_blocks": 1,
+    "source_kind": "authored ordinary design discussion",
+    "summary": "Settled design: process the supplied nondecreasing event order once, preserving original zero-based indices and leaving payload/config unchanged. Use exact keys, including empty/Unicode strings, with no stripping, case folding, hash substitution, or sorting. Track only each key's LAST ACCEPTED timestamp. First occurrence accepts; later occurrence accepts when t-last_accepted >= config ttl and updates that timestamp. Rejection does not refresh it. ttl0 accepts every event; empty payload returns two empty lists. Return only {accepted, rejected}; a simple dictionary and ordinary lists suffice. History scans, generators, extra validation, diagnostic reasons, logging, UI and service wrappers were rejected or deferred. Read the actual config, make the required first write, then finish briefly under the unchanged coding contract.",
+    "before_bytes": 5767,
+    "after_bytes": 2936,
+    "seconds": 0.0003517080331221223
+  },
+  "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+  "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+  "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+  "pass": true
+}

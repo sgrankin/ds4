@@ -1,0 +1,14 @@
+{
+  "thermal": {
+    "returncode": 0,
+    "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n"
+  },
+  "pressure": {
+    "returncode": 0,
+    "output": "kern.memorystatus_vm_pressure_level: 1\n"
+  },
+  "processes": {
+    "returncode": 0,
+    "output": "  PID  PPID  %CPU    RSS COMM\n 2329   735   0.0 384000 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.57/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n  735     1   0.3 229200 /Applications/ChatGPT.app/Contents/MacOS/ChatGPT\n 2072  2064   4.2 200464 /Users/sgrankin/.codex/packages/standalone/releases/0.160.0-aarch64-apple-darwin/bin/codex\n  773     1   0.0 181184 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd\n 2483   735   0.0 124944 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.57/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n  778     1   0.0 100064 /Applications/Zed.app/Contents/MacOS/zed\n 2343   735   0.0  92784 /Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\n 2664   735   0.0  72176 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.57/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n 2064  1244   5.8  58256 codex\n29741   735   0.0  54336 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.57/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n 1798   735   0.0  49776 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.57/Helpers/Codex (Service).app/Contents/MacOS/Codex (Service)\n 1779   735   0.0  49536 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/154.0.8037.57/Helpers/Codex (Service).app/Contents/MacOS/Codex (Service)"
+  }
+}

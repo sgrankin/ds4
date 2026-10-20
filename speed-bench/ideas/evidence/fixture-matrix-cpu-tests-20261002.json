@@ -1,0 +1,8 @@
+{
+  "scope": "fixture matrix no-model tests only",
+  "tests": 8,
+  "failures": 0,
+  "errors": 0,
+  "passed": true,
+  "seconds": 0.602
+}

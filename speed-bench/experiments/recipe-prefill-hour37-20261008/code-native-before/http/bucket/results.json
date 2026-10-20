@@ -1,0 +1,135 @@
+[
+  {
+    "case": "bucket",
+    "arm": "native-before",
+    "protocol": "full-input-clm",
+    "write_budget": 128,
+    "final_policy": "budget1",
+    "global_cap": 2048,
+    "wall_seconds": 120.68799858400598,
+    "http_output_tokens": 585,
+    "http_reasoning_tokens": 155,
+    "actual_read_count": 1,
+    "actual_write_count": 1,
+    "calls": [
+      {
+        "role": "READ",
+        "name": "read",
+        "call_id": "call_1eca2fbfdbfe9c4c3ffa5a34009c5922",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/bucket/config.json\",\"whole\":true,\"raw\":true}",
+        "executed": true,
+        "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/bucket/config.json",
+        "output": "{\n  \"capacity\": 5,\n  \"rate\": 1,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"cost\": 4\n    },\n    {\n      \"t\": 1,\n      \"cost\": 4\n    },\n    {\n      \"t\": 2,\n      \"cost\": 1\n    },\n    {\n      \"t\": 10,\n      \"cost\": 8\n    },\n    {\n      \"t\": 10,\n      \"cost\": 5\n    },\n    {\n      \"t\": 10,\n      \"cost\": 0\n    }\n  ]\n}\n",
+        "tool_ms": 0.2773340092971921
+      },
+      {
+        "role": "WRITE",
+        "name": "write",
+        "call_id": "call_b4ce079ecfca6f6eb75f0731c807f88b",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/bucket/solution.py\",\"content\":\"def solve(payload, config):\\n    capacity = config[\\\"capacity\\\"]\\n    rate = config[\\\"rate\\\"]\\n    tokens = capacity\\n    previous = 0\\n    accepted = []\\n    rejected = []\\n    remaining = []\\n    index = 0\\n    for event in payload:\\n        t = event[\\\"t\\\"]\\n        cost = event[\\\"cost\\\"]\\n        elapsed = t - previous\\n        tokens = tokens + elapsed * rate\\n        if tokens > capacity:\\n            tokens = capacity\\n        previous = t\\n        if cost <= tokens:\\n            accepted.append(index)\\n            tokens = tokens - cost\\n        else:\\n            rejected.append(index)\\n        remaining.append(tokens)\\n        index = index + 1\\n    return {\\n        \\\"accepted\\\": accepted,\\n        \\\"rejected\\\": rejected,\\n        \\\"remaining\\\": remaining,\\n        \\\"tokens\\\": tokens,\\n    }\\n\"}",
+        "executed": true,
+        "path": "/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/bucket/solution.py",
+        "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/bucket/solution.py",
+        "tool_ms": 0.25287503376603127
+      }
+    ],
+    "replies": [
+      {
+        "role": "READ",
+        "budget": 0,
+        "effort": "high",
+        "seconds": 56.483416708011646,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1566,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1566
+          },
+          "output_tokens": 120,
+          "output_tokens_details": {
+            "reasoning_tokens": 27
+          },
+          "total_tokens": 1686
+        },
+        "requested_max_output_tokens": 2048,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "role": "WRITE",
+        "budget": 128,
+        "effort": "high",
+        "seconds": 57.21648687502602,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1147,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1147
+          },
+          "output_tokens": 379,
+          "output_tokens_details": {
+            "reasoning_tokens": 128
+          },
+          "total_tokens": 1526
+        },
+        "requested_max_output_tokens": 1928,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "role": "FINAL",
+        "budget": 1,
+        "effort": "high",
+        "seconds": 6.986150167009328,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1566,
+          "input_tokens_details": {
+            "cached_tokens": 1526,
+            "cache_write_tokens": 40
+          },
+          "output_tokens": 86,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1652
+        },
+        "requested_max_output_tokens": 1549,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      }
+    ],
+    "first_code_path": "speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/bucket/bucket/first-solution.py",
+    "grade": {
+      "correct": true,
+      "tests": 161,
+      "passed": 161,
+      "failed": 0,
+      "first_failure": null,
+      "returncode": 0
+    },
+    "complete": true,
+    "cap": false,
+    "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/recipe-20261008/code-visible/bucket/solution.py`.\n\nIt refills before each event using elapsed time × rate, caps at capacity, advances the timestamp, accepts costs within the token balance, rejects oversized costs without spending, records zero-based indices and post-event balances, and returns the final token count.",
+    "final_text_length": 390,
+    "final_text_bytes": 391,
+    "first_code_bytes": 769,
+    "errors": [],
+    "config_unchanged": true,
+    "context_edit": {
+      "removed_blocks": 2,
+      "before_bytes": 5643,
+      "after_bytes": 2125,
+      "seconds": 0.0002654999843798578
+    },
+    "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+    "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+    "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+    "pass": true
+  }
+]

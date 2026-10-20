@@ -1,0 +1,25 @@
+{
+  "arm": "high0-before",
+  "write_budget": 128,
+  "final_policy": "unlimited",
+  "returncode": 0,
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/final-thinking-hour20-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:50323",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/final-thinking-hour20-20261004/http/high0-before/checks",
+    "--visible",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible",
+    "--arm",
+    "high0-before",
+    "--final-policy",
+    "unlimited",
+    "--global-cap",
+    "2048"
+  ],
+  "seconds": 175.5846024580096,
+  "server_returncode_after_shutdown": 0
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "phase": "dedupe",
+    "returncode": 0,
+    "seconds": 125.89419374999125,
+    "startup_seconds": 2.704312832967844,
+    "client_seconds": 121.70415845903335,
+    "shutdown_seconds": 1.4853716660290956,
+    "server_returncode": 0,
+    "error": null
+  },
+  {
+    "phase": "bucket",
+    "returncode": 0,
+    "seconds": 135.55990504199872,
+    "startup_seconds": 0.42312083404976875,
+    "client_seconds": 133.61331975000212,
+    "shutdown_seconds": 1.5230582910007797,
+    "server_returncode": 0,
+    "error": null
+  }
+]

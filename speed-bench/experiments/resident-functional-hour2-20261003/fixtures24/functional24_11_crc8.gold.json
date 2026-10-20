@@ -1,0 +1,13 @@
+{
+  "gold": {
+    "decimal": 72,
+    "hex": "48"
+  },
+  "oracle_input": {
+    "bytes_hex": "010203",
+    "initial": 0,
+    "polynomial": 7
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Specified CRC polynomial remainder; not checksum authentication, base conversion or rotate/add arithmetic."
+}

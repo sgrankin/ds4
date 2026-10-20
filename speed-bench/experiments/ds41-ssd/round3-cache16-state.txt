@@ -1,0 +1,3 @@
+ds4: memory: KV 0.61 GiB (raw 0.01 + compressed 0.60) + buffers 8.01 GiB + resident model 9.37 GiB + expert cache 8.88 GiB + prefill expert reserve 7.12 GiB = 33.98 GiB planned
+PASS: tail=38 plus 8 decoded tokens, full snapshot bit-identical; scalar 3.524s, batch 1.192s
+PASS: tail=129 plus 8 decoded tokens, full snapshot bit-identical; scalar 9.828s, batch 3.411s

@@ -1,0 +1,15 @@
+# Canonical materialization for full-input suffix clients
+
+Compare serial arms `existing-before` (requested canonical0), `canonical` (1), `existing-after` (0). The only new requested setting is `DS4_SERVER_CONTEXT_SUFFIX_CANONICAL`. ROOT owns implementing and qualifying its scoped full-input suffix-client behavior before launching: candidate1 bypasses visible-history, tool-call-ID and memory-text materialization shortcuts, and legacy text snapshot splicing. It keeps exact token-prefix reuse and renders the submitted history through req.prompt. The flag applies only to text Responses full-input suffix clients with a nonempty cache hint; incremental tool-only, previous_response_id and Conversation continuations keep existing behavior. This is a policy experiment, not an assumed bug fix or a claim of complete replay accuracy.
+
+Reuse item19 `run.py` directly and keep its fixtures, stable instructions/tools, advertised A–D paths and grading unchanged. All arms enable original-backed suffix reuse with tail64, hot0/SSD4096 MiB, Q2/cache64/ctx8192/chunk512/batch2, GAP0, temperature0 and effort none. Every arm uses a new cache/store; the launcher restarts once between edited A/B and edited C/D. The same `--shared` path is reused across arms and reset by the driver's warmup only for its known files.
+
+The four groups are warm A/B, warm C/D, edited A/B, and edited C/D after restart. Retain all eight reply grades and eight fresh-read checks, including READY format failures, wrong totals/codes, caps, fallbacks and actual source geometry. Compare warm cost separately from edited group makespan and whole launcher wall. Canonical rendering may replay more tokens and may change exact suffix eligibility; report requested policy alongside observed logs, graft source/geometry and cache statistics rather than assume activation or identical token histories. Group log slices are counted once, avoiding duplicated client attribution. Divergent generated histories do not support paired KL/NLL or full native-state parity claims.
+
+The launcher runs one chosen arm per invocation, so ROOT can inspect outcomes without automatic chaining. Repeat this command serially for `canonical` and `existing-after`, changing output/cache/store/guard namespaces while keeping `--shared` identical:
+
+```sh
+python3 -B speed-bench/ideas/pressure_run.py speed-bench/experiments/canonical-suffix-hour23-20261004/guard-existing-before -- python3 -B speed-bench/experiments/canonical-suffix-hour23-20261004/launch.py --arm existing-before --output speed-bench/experiments/canonical-suffix-hour23-20261004/existing-before --cache .workspaces/server-agent-day-20261004/canonical23-cache-before --store .workspaces/server-agent-day-20261004/canonical23-store-before --shared .workspaces/server-agent-day-20261004/concurrent-visible
+```
+
+`launcher-summary.json` and both phase execution files record arm and canonical setting. `http/{before,after}/result.json` retains unchanged item19 data; startup/client/shutdown/whole wall and actual pressure-guard results remain separate evidence. Preparation counts toward item23; the author has not built or launched the unqualified runtime.

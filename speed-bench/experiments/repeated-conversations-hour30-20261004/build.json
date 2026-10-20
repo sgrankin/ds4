@@ -1,0 +1,53 @@
+{
+  "start_utc": "2026-10-04 20:54:00 UTC",
+  "deadline_utc": "2026-10-04 21:44:00 UTC",
+  "budget_note": "10 minutes prior source preparation and API review charged",
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "arms": [
+    "native-before",
+    "reuse",
+    "native-after"
+  ],
+  "one_change": "Conversations suffix reuse off/on/off with three actual item deletions per independent conversation",
+  "fixed": "GAP0/hot0/SSD4096/Q2cache64/batch2/ctx8192/chunk512/tile64limit1024/temp0/noeffort/cap128; PAD1; canonical1 does not apply to Conversation references",
+  "driver": "run.py",
+  "qualification": "8 actual reads and replies, 6 deletions, stable A code and changing B code, restart after edit1, actual approximate SSD sources only if logs show them",
+  "measurement_finished_utc": "2026-10-04 21:14:16 UTC",
+  "guards": {
+    "native-before": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 420,
+      "bad_samples": 0,
+      "swap_first_gib": 0.018125,
+      "swap_last_gib": 0.018125,
+      "peak_wired_compressor_gib": 84.4635009765625
+    },
+    "reuse": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 269,
+      "bad_samples": 0,
+      "swap_first_gib": 0.018125,
+      "swap_last_gib": 0.018125,
+      "peak_wired_compressor_gib": 84.11965942382812
+    },
+    "native-after": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 427,
+      "bad_samples": 0,
+      "swap_first_gib": 0.018125,
+      "swap_last_gib": 0.018125,
+      "peak_wired_compressor_gib": 84.42869567871094
+    }
+  },
+  "report_finished_utc": "2026-10-04 21:19:00 UTC"
+}

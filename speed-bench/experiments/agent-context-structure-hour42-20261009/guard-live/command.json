@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/agent-context-structure-hour42-20261009/run_edit.py"
+  ],
+  "initial": {
+    "time": 1791558800.017856,
+    "level": 1,
+    "swap_gb": 0.020693359375,
+    "physical_gb": 128.0,
+    "free_gb": 50.534942626953125,
+    "file_backed_gb": 47.31825256347656,
+    "wired_gb": 5.1595306396484375,
+    "compressor_gb": 9.177047729492188
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

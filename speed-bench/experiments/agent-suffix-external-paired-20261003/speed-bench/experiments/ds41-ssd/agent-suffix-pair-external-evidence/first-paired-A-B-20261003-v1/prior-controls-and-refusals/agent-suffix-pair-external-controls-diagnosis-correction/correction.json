@@ -1,0 +1,17 @@
+{
+  "status": "EARLIER_PRODUCTION_BUG_DIAGNOSIS_RETRACTED",
+  "immutable_source": "d3647e3d1c3df4e54ec3d7d17a27c7eec40d45b5",
+  "controls_sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960",
+  "native_plan_sha256": "315a52cd24636391c1dcdce3245a186124b12d9053b554400076e7b9293ac335",
+  "native_build_manifest_sha256": "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64",
+  "production_correct_before_any_fix": true,
+  "actual_production_control_delta": false,
+  "attempted_string_replace_matched_zero": true,
+  "production_contract": "export bool is negated; replace int success0/failure nonzero is unnegated",
+  "actual_first_failure_cause": "Mock declared replace bool and returned true on success; that1 caused correct production failure guard before import",
+  "no_second_independent_failure_established": true,
+  "old_native_build_valid_unrun": true,
+  "earlier_incorrect_claim_preserved_in_parent_messages": true,
+  "mock_only_correction": "int return and0success/nonzero; diagnostic before same acceptance assertion",
+  "current_source_bytes_equal_committed": true
+}

@@ -1,0 +1,3520 @@
+[
+  {
+    "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json",
+    "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+    "bytes": 7948,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist",
+    "sha256": "90a738dbf3fd88e7f6d35646e19d3a8a716923b9773ce1b67260466d9ceed370",
+    "bytes": 5538,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h",
+    "sha256": "d2220614f42d3cb678ae0de176ba0ab3256e15fb45b3efdb5d17b8ac1f6a4b54",
+    "bytes": 3069,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+    "bytes": 124676976,
+    "mode": 493,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-integration-v2/speed-bench/ideas/artifacts/integrated-native-parity-prepared-20261002/build-manifest.json",
+    "sha256": "45ae311ab600178da4e91c1cdf7ccdb11e9d3db44ff6c538c261e7c9d9d44ea4",
+    "bytes": 3418,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/manifest.json",
+    "sha256": "1b537cb53a217d25fd13ee5957b405955a9a0ae63da9e372dde23092ccfe7fcd",
+    "bytes": 81509,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-release-proof.json",
+    "sha256": "01822321357fef03caed40f8f187984164299ed17f7017839b8529f3fb45698f",
+    "bytes": 305,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/root-selection.json",
+    "sha256": "78f27d9fe84e961dcde9a0b003994b62606bba684f886c02f68683381c785835",
+    "bytes": 658,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/decision.json",
+    "sha256": "0d23bd126c9391d53ac9d05f65bfa6b10ddbef8fc3ba6179b6becb23e0c7eb5d",
+    "bytes": 2961,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2/run/summary.json",
+    "sha256": "8cc7abe5432263a42722a99bb5c33888de2ace6c1e9c6c28fefcdd1a7027002e",
+    "bytes": 38371,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/prepare_resident_env_calibration.py",
+    "sha256": "7184efeb16794d88f59f7f6fef5507d09c750189be708b8187d55895a5a0e8ff",
+    "bytes": 21199,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/Makefile",
+    "sha256": "7fdc44e0e8883f3302f102c9597064cbfd66e5311795da0307f154cf07577073",
+    "bytes": 55321,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_distributed.c",
+    "sha256": "08ff11e22f2c5791de72cc910d94a6817c7a8310bde4b9cee57379f3be75e0f2",
+    "bytes": 324309,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_distributed.h",
+    "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+    "bytes": 3782,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_engram.c",
+    "sha256": "1e82b031fd19b3d0861780d44da2506677c36ad2b4e85349f2ac8e5d53eb9c92",
+    "bytes": 12903,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_engram.h",
+    "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+    "bytes": 2496,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_gpu.h",
+    "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "bytes": 152618,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_image.c",
+    "sha256": "6da84ab6ec63e0fe5351781c358798b2f5c6085aea77e8293c6f7b9569cb470c",
+    "bytes": 44856,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_image.h",
+    "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+    "bytes": 4504,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_layer_pack.c",
+    "sha256": "ed93c59f8f7579e03ee74ffda8e4677653d408b6f2fc53db54270825909f23ce",
+    "bytes": 5975,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_layer_pack.h",
+    "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+    "bytes": 2838,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_metal.m",
+    "sha256": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+    "bytes": 2360348,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_ssd.c",
+    "sha256": "6f093186ee5cde476f08f808a993f46665ab25ac0c1b8c207cb404c7b94cd999",
+    "bytes": 7602,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_ssd.h",
+    "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+    "bytes": 1349,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_tp.c",
+    "sha256": "3f9277262ac26ae11ed55c60e369aea84ac335b174ef5ba3fb92e431495eda0c",
+    "bytes": 131555,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/ds4_tp.h",
+    "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+    "bytes": 11344,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/argsort.metal",
+    "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+    "bytes": 11174,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/bin.metal",
+    "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+    "bytes": 6580,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/concat.metal",
+    "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+    "bytes": 1932,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/cpy.metal",
+    "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+    "bytes": 10154,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/deepseek4_vision.metal",
+    "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+    "bytes": 7815,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dense.metal",
+    "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+    "bytes": 113439,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv41.metal",
+    "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+    "bytes": 12508,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_hc.metal",
+    "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+    "bytes": 63069,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_kv.metal",
+    "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+    "bytes": 22218,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_misc.metal",
+    "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+    "bytes": 282139,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/dsv4_rope.metal",
+    "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+    "bytes": 35980,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/flash_attn.metal",
+    "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+    "bytes": 61784,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/get_rows.metal",
+    "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+    "bytes": 6976,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_bf16.metal",
+    "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+    "bytes": 5466,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_kda.metal",
+    "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+    "bytes": 13116,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glm53_vision.metal",
+    "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+    "bytes": 11295,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/glu.metal",
+    "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+    "bytes": 2129,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/moe.metal",
+    "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+    "bytes": 423032,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/norm.metal",
+    "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+    "bytes": 14766,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/qwen4.metal",
+    "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+    "bytes": 232464,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/qwen4_vision.metal",
+    "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+    "bytes": 7402,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/repeat.metal",
+    "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+    "bytes": 1640,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/set_rows.metal",
+    "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+    "bytes": 1909,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/softmax.metal",
+    "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+    "bytes": 7679,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/sum_rows.metal",
+    "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+    "bytes": 2737,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/metal/unary.metal",
+    "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf",
+    "bytes": 10104,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/build-plan-v3/input-identity-proof.json",
+    "sha256": "0839fb8a7d4fd61cccbe6d65a3ded0fb2b4abe0b7e3104466ea5a2ede54aff71",
+    "bytes": 1204,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/cpu-pass-v3/index.json",
+    "sha256": "f36f8217160c497294e99f0b45a647008d2d99c34a09ab594727188d063d52c4",
+    "bytes": 581,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/experiments/ds41-ssd/resident-native-weights-next-evidence/cpu-pass-v3/proof.json",
+    "sha256": "a4c997f252f69b22c6396bafdfe241efedb2b04467653c48a0cddf29e9920f7c",
+    "bytes": 975,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/build-plan.json",
+    "sha256": "cd0bc3bc3cfcead432a3479835f32bffa5aba0b2909eeb21b0bef69106094df9",
+    "bytes": 155863,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4.c",
+    "sha256": "e2626fa0661728037c5752d1730754f6bcc039c92b339a047bc78435b07b41d0",
+    "bytes": 3924430,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4.h",
+    "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+    "bytes": 35802,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_deepseek41_gpu.h",
+    "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+    "bytes": 7317,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_distributed.h",
+    "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+    "bytes": 3782,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_engram.h",
+    "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+    "bytes": 2496,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu.h",
+    "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "bytes": 152618,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu_mgpu.h",
+    "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+    "bytes": 10742,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_gpu_tp.h",
+    "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+    "bytes": 2678,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_image.h",
+    "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+    "bytes": 4504,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_layer_pack.h",
+    "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+    "bytes": 2838,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_linux_memory.h",
+    "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+    "bytes": 1168,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_qwen4_unicode.inc",
+    "sha256": "7ba13d74558dd013f38f691908bddcddb81c7874a5ab582e5bbc865764617b61",
+    "bytes": 24985,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_qwen4_vision.h",
+    "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+    "bytes": 666,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_resident_native_weights.h",
+    "sha256": "abdc7b52f270b16b198257a835c6682a6f6da355050ed7e55adf75c2d742907b",
+    "bytes": 1189,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_resident_route.h",
+    "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+    "bytes": 14647,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_ssd.h",
+    "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+    "bytes": 1349,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_streaming_hotlist.inc",
+    "sha256": "f531a6ce780abd31eeabafb865221f8407965f358184850996a5e010a6386d92",
+    "bytes": 192470,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_streaming_hotlist_glm52.inc",
+    "sha256": "f90296ccf162cbf4d438a6e44c129b0367683ba9cf72a54621ca14b2ad5c2cb8",
+    "bytes": 94282,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_suffix_layout.h",
+    "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b",
+    "bytes": 1251,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_tool_text.h",
+    "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+    "bytes": 1755,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/new8a47/ds4_tp.h",
+    "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+    "bytes": 11344,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4.c",
+    "sha256": "fa2f155d8051b3885da59a325031cc811144a150d1f0ae27e84b65f4c1b974c5",
+    "bytes": 3916709,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4.h",
+    "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+    "bytes": 35802,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_deepseek41_gpu.h",
+    "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+    "bytes": 7317,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_distributed.h",
+    "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+    "bytes": 3782,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_engram.h",
+    "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+    "bytes": 2496,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu.h",
+    "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "bytes": 152618,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu_mgpu.h",
+    "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+    "bytes": 10742,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_gpu_tp.h",
+    "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+    "bytes": 2678,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_image.h",
+    "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+    "bytes": 4504,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_layer_pack.h",
+    "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+    "bytes": 2838,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_linux_memory.h",
+    "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+    "bytes": 1168,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_qwen4_unicode.inc",
+    "sha256": "7ba13d74558dd013f38f691908bddcddb81c7874a5ab582e5bbc865764617b61",
+    "bytes": 24985,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_qwen4_vision.h",
+    "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+    "bytes": 666,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_resident_route.h",
+    "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+    "bytes": 14647,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_ssd.h",
+    "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+    "bytes": 1349,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_streaming_hotlist.inc",
+    "sha256": "f531a6ce780abd31eeabafb865221f8407965f358184850996a5e010a6386d92",
+    "bytes": 192470,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_streaming_hotlist_glm52.inc",
+    "sha256": "f90296ccf162cbf4d438a6e44c129b0367683ba9cf72a54621ca14b2ad5c2cb8",
+    "bytes": 94282,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_suffix_layout.h",
+    "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b",
+    "bytes": 1251,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_tool_text.h",
+    "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+    "bytes": 1755,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/old7c6e/ds4_tp.h",
+    "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+    "bytes": 11344,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/quality_probe.c",
+    "sha256": "065f4b6aa8588279649523efacd2a0a5f3f44d79671d8b4e6ea92271fc6a4e0c",
+    "bytes": 16428,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v3/source/replay.c",
+    "sha256": "ca24a6f3dd1daac70eda57413b412205436d9ea5a2f5eb018e6a951f7730fcb2",
+    "bytes": 8345,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v4/build-plan.json",
+    "sha256": "0af3bd79ba604ff4f9d7eccdba9003b0263bc8685e043cf4a3819c559446da9e",
+    "bytes": 157270,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-manifest.json",
+    "sha256": "e2cfda6426c8ec7c371ec18a12dff60932c1c2f5b166a7ba5b5ccafdc06aa91f",
+    "bytes": 70382,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-only.py",
+    "sha256": "4569fe87d925768639b51f643beaf65fb62331c4ff73ccafecd60361c8b6a861",
+    "bytes": 4794,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-plan.json",
+    "sha256": "f798a1a977f61b7fc7a0f023da452e91f41a09516614e097e361e6bdd925638f",
+    "bytes": 159457,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-result.json",
+    "sha256": "42602811cc52af9165e0e3d71cc23d3a8c95b698bd84547af78627825ab912a9",
+    "bytes": 46658,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-0.json",
+    "sha256": "a1fe400025f12b74edbe16c5c168dffa6f8c3a94fd685df253de84d38e42984e",
+    "bytes": 5108,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-0.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-1.json",
+    "sha256": "052b65f84f70d909d14250b3bba3b46c888fc9168f32b6f93da9eb979f49b89b",
+    "bytes": 6151,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-1.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-2.json",
+    "sha256": "f12a14380ac1de14fb6ffe5c31021856d338b6abc980fc1c7b6f74be85fe3b7d",
+    "bytes": 4487,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-2.log",
+    "sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+    "bytes": 28,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-3.json",
+    "sha256": "88c67787814c14c01cb06c2055cea9b26f197fa994fcd9a13156dfbf775fe93f",
+    "bytes": 5108,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-3.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-4.json",
+    "sha256": "51d2b5c5c0f4567384d26a34f60fa1a9508935106165949a3580546ab0c3b865",
+    "bytes": 6149,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-4.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-5.json",
+    "sha256": "c5038926d6b455b6e8e483e0899503f99866bc11b0b42e08d913a512d5d4d346",
+    "bytes": 4486,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-5.log",
+    "sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+    "bytes": 28,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-6.json",
+    "sha256": "dc24820bbfccd3731061a29db2267d4f6c5dc3460732ac16ce47ef3394a29e47",
+    "bytes": 6194,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-6.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-7.json",
+    "sha256": "02b5ff88419ecc6242287a391eb47d05b758ce24d0ac42b2b8ead9fd4290c334",
+    "bytes": 6194,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-step-7.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o",
+    "sha256": "edfcbdd8bc9a25952320fcf644093d76a9b7f9d5b395fc5352429acdab60be51",
+    "bytes": 5667424,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o",
+    "sha256": "8a8d7e10eff13587e35011754ac907b8a015cf6e7970a42cc19a6bfebb810ccd",
+    "bytes": 5651024,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-new8a47",
+    "sha256": "98aec43ad68e14cc163cf2a381b52085984a6f8b9cdc451d1747a34a9826915f",
+    "bytes": 2696656,
+    "mode": 493,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/quality-old7c6e",
+    "sha256": "9e125fb44fb12c3f76e8d2372943809f41223a4bdfcd4fe8bccbc6a1c27fe77f",
+    "bytes": 2695760,
+    "mode": 493,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-new8a47",
+    "sha256": "4d2e34d042b19a67ae13a1a85072e7f6551870b1e64339fea417d19eb37fe1ca",
+    "bytes": 2692624,
+    "mode": 493,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/replay-old7c6e",
+    "sha256": "fe1d2f10f0c377c7c4a98a5ad18b772a387709afd5711c4bfe87d4032b779e3c",
+    "bytes": 2691728,
+    "mode": 493,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/build-manifest.json",
+    "sha256": "e2cfda6426c8ec7c371ec18a12dff60932c1c2f5b166a7ba5b5ccafdc06aa91f",
+    "bytes": 70382,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/build-plan.json",
+    "sha256": "f798a1a977f61b7fc7a0f023da452e91f41a09516614e097e361e6bdd925638f",
+    "bytes": 159457,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/fixtures.tsv",
+    "sha256": "f437dd3b450e43ed815c6c079e3dc383384d316c9686476d0a187637abf77285",
+    "bytes": 5744,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/000-continuation.txt",
+    "sha256": "b98e88381d78807023fa7052f5a287d6aba53053351290b23935b5d76846fa49",
+    "bytes": 279,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/000-prompt.txt",
+    "sha256": "ad31c6a139fc6f959fd03493ac5db9b22ef591b8ba0f4e34c3a1d67cde1be299",
+    "bytes": 89,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/001-continuation.txt",
+    "sha256": "6bd99b86118c94c926936a959317ad22453972ed6472a38dc36c473b2cc32fd1",
+    "bytes": 288,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/001-prompt.txt",
+    "sha256": "3838472568045eb00528fd3d0d737cf77dbfcb6a405bfcf265d77ce12bfca42d",
+    "bytes": 118,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/002-continuation.txt",
+    "sha256": "b48855a7c2637bddbf05b86dc76de696e9676f883febd6108253044b7b303cbf",
+    "bytes": 213,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/002-prompt.txt",
+    "sha256": "94169b777fe85c1597f6f7625a530dce8b3a1586e4c80fb8ed9257aaee77ac87",
+    "bytes": 67,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/003-continuation.txt",
+    "sha256": "58107d97081d56fb8c3c748e7e5fd7f6f5407aed9fbef082bee3f8d7cf9812ee",
+    "bytes": 322,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/003-prompt.txt",
+    "sha256": "fd856e975de64137ec3929e778003a3ca4ceb8ed7c9e8e7471faf63257aba344",
+    "bytes": 106,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/004-continuation.txt",
+    "sha256": "301d89bb2d28e7b58f4fb41eb2ab51699af7c96ca6bf7b668e475483c5693ab3",
+    "bytes": 282,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/004-prompt.txt",
+    "sha256": "d8739f43727e986e38822c7a339f4d5c2d1b893a4a8ab6a565b793843abc029f",
+    "bytes": 91,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/005-continuation.txt",
+    "sha256": "07d3c98e4cf96ea8963138a3351b94232fd51204830733f284f3366626bf53af",
+    "bytes": 289,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/005-prompt.txt",
+    "sha256": "b53b3a2dabfde42744b86aef174f2aeb466f2992d5f4b012e15763c47c869daa",
+    "bytes": 88,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/006-continuation.txt",
+    "sha256": "43d06e1b97e5229f084b089eabe7efbb178c1786e6aa714b170ccbdcdc8d23e4",
+    "bytes": 211,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/006-prompt.txt",
+    "sha256": "0f3767217e174ef9eb1db952fec395fc379d14f1977c71473cae192b79c9550d",
+    "bytes": 138,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/007-continuation.txt",
+    "sha256": "7b63e5194530e3c094b6365e2927923576c281de5cf5003dfbe218d1223650d6",
+    "bytes": 311,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/007-prompt.txt",
+    "sha256": "d301e9105fd926a6a101cbba905ae1ce1488ef650470a647bbe6236f8715d954",
+    "bytes": 112,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/008-continuation.txt",
+    "sha256": "452c155ea209046c1886486540b381f142dcabf07ff14bfc82256a26ba33f7a9",
+    "bytes": 264,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/008-prompt.txt",
+    "sha256": "0cc6f80eaaac68c48da44ffcc79c9577f19947b770d9919489f010414b3ba7c8",
+    "bytes": 132,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/009-continuation.txt",
+    "sha256": "9d3d290ac728766c438cabd55ec69e02f2841d3c53f925450fd49799b685fe2d",
+    "bytes": 346,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/009-prompt.txt",
+    "sha256": "b325441bb5d967e8bd1cea370c7a7dde8ebc54c29b4af7bb4bccfdddcc754064",
+    "bytes": 71,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/010-continuation.txt",
+    "sha256": "c5dfc361f099d5559e97433bc5e075d16d0b53fa1e06e5592b92f0bd5c785812",
+    "bytes": 227,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/010-prompt.txt",
+    "sha256": "75aa34c3d9627095691f14f313c5825a5da6f8dde7ec36e4287ac2e1a493210b",
+    "bytes": 95,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/011-continuation.txt",
+    "sha256": "89f83d712aac2efb6f5cd5f5da81575911317dc724e71199cdddb94882e19cfa",
+    "bytes": 222,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/011-prompt.txt",
+    "sha256": "7b6b4aa350b200ce72327a0a1d1a4da363e83c692c1e39551cd0a1e068dc3e6c",
+    "bytes": 91,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/012-continuation.txt",
+    "sha256": "de3116af87d5dc15f1bb5dc37b664414e85537437fbf1333ab799c3ed342c986",
+    "bytes": 234,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/012-prompt.txt",
+    "sha256": "437cbb9052fe063611831b6a7cbbfb36d2fddc6feb766df28fb02226d89b8cca",
+    "bytes": 82,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/013-continuation.txt",
+    "sha256": "8ffdb6d7324bf8cbd02b6ea006cc1dc16b781b3676570d45a5a17c97492f6e87",
+    "bytes": 236,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/013-prompt.txt",
+    "sha256": "6a61d7e77689cb6574b42987df6a8c49daf5e0f38dadfa90d2b2e52fcef20e3a",
+    "bytes": 83,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/014-continuation.txt",
+    "sha256": "ab26f20101e2d6cc33769425d5e1334c6f70959315b82c79fbc16bf9a2909012",
+    "bytes": 330,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/014-prompt.txt",
+    "sha256": "003a8396ba34adf18cd4c1e9ef1385a559cbdfae48f4ef5e5b1d998a5a2bfdc7",
+    "bytes": 98,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/015-continuation.txt",
+    "sha256": "77e61f27e2334ab677f404caa9637ec037b9808e63c6dadf18d69f02a4104dff",
+    "bytes": 306,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/calibration16/inputs/015-prompt.txt",
+    "sha256": "8b6ffd97874bd304112fc6bd4559631aeda1ee6bbc51fc799301310b207fccfa",
+    "bytes": 84,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/driver.py",
+    "sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+    "bytes": 33065,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/fixtures.tsv",
+    "sha256": "a6e6e5f1658e9b383b5d0ddec38f626ee73e3e613579f63c2e40c475c60a5a62",
+    "bytes": 5616,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/000-continuation.txt",
+    "sha256": "a433abcf92003278cb15f05590eda5f52a54653e4222b335a870d30ef264845e",
+    "bytes": 256,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/000-prompt.txt",
+    "sha256": "d8e1e8643286f089a9d077d13b956b508cc9b0f8ddbfbaa822b9ee5bfcfbf42d",
+    "bytes": 114,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/001-continuation.txt",
+    "sha256": "fa8e18d33656767f826b8ef3d748a7746e3c434e5690d259435e32c6149a6a63",
+    "bytes": 258,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/001-prompt.txt",
+    "sha256": "b2a0fb5191b3eaa8ddc5dc0179d1855f2e70026939244b64a9ff53e8e20b7e57",
+    "bytes": 88,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/002-continuation.txt",
+    "sha256": "70a5d6f7ff04be14f84385cda6aa0391e645795fd2a37be1a20279dab5cda727",
+    "bytes": 321,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/002-prompt.txt",
+    "sha256": "cc9c5221fd202db38651897123fe8a016b751171ad55ef2c3c069055369f9e10",
+    "bytes": 77,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/003-continuation.txt",
+    "sha256": "adb79f1316ddbb6e6fedec3b2c14beffb4137ef67e4f59b3fbec0a2594eede7a",
+    "bytes": 283,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/003-prompt.txt",
+    "sha256": "16d00e1834936ced31054c0c7b45afbe70d95fe84a50c0b53097ae74cf6503e8",
+    "bytes": 94,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/004-continuation.txt",
+    "sha256": "8edf56cfb1c2490cf7f30d6c8a293ed0c15c461df1fe61e04a8af3e6b7199878",
+    "bytes": 310,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/004-prompt.txt",
+    "sha256": "9552b1e51d0858bfc4f85dc826845fe7676787fadd3bd87a0639cab7b64d789d",
+    "bytes": 92,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/005-continuation.txt",
+    "sha256": "5754f2017a97cbb191251084c2903ddeff2650a5a1aa758a8e3bdc21731c22f5",
+    "bytes": 246,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/005-prompt.txt",
+    "sha256": "8e2d282cca4757754f6ca4377e10560752c17061f778cf42bb019e6aefa03755",
+    "bytes": 92,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/006-continuation.txt",
+    "sha256": "a1a04a70beea32f0d761a842a75d560049701ee9e462bcc4533df38e6141a0f7",
+    "bytes": 216,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/006-prompt.txt",
+    "sha256": "3bc771633e8b72decbff33c2c22f6f832cfa19a9429d21ba086a0efb1ba53980",
+    "bytes": 129,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/007-continuation.txt",
+    "sha256": "fc260f52161e80a6ea7ad5fcc85993f596aeb900f1bf667148d0e8662dfe5c4b",
+    "bytes": 213,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/007-prompt.txt",
+    "sha256": "069980ebef0283567728c418687e91cf86580cb0892783d09bf1d41226827efc",
+    "bytes": 114,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/008-continuation.txt",
+    "sha256": "f87ad7bad38526ee8dda21c2f9021145ac8add8660078c302965411b1d044ba4",
+    "bytes": 221,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/008-prompt.txt",
+    "sha256": "1d98ea7c819f2a1ce198fc4ff3ec9de24962441bc1964753e821348b54f6f7de",
+    "bytes": 117,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/009-continuation.txt",
+    "sha256": "5433d0e4f8601e543b29a6ee0235a8b88ec1dc4117e97db89e4de166ee0d4b75",
+    "bytes": 340,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/009-prompt.txt",
+    "sha256": "ba4dde22d1a48306c3b521ceca74365dbdef3503c97fe96abe3efc4de5932043",
+    "bytes": 104,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/010-continuation.txt",
+    "sha256": "b2a6da8a3620ba2c1d62b78c1be6c22aacd70913487b7e43e43878fd50d5e9aa",
+    "bytes": 323,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/010-prompt.txt",
+    "sha256": "c8171bff3b73571c59afa0a421de252a000322410d2979ffe5799ef2037fdd0a",
+    "bytes": 81,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/011-continuation.txt",
+    "sha256": "5f3a3adc488dd0cfed33e0c9f898eaa6e688bdd9499d8cdb6d820557c6a9be63",
+    "bytes": 244,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/011-prompt.txt",
+    "sha256": "16693a5f52a371bcc30281dfc2da58a7f5b0d405223e2f3b0b2297565512a5d8",
+    "bytes": 98,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/012-continuation.txt",
+    "sha256": "9663bd270f197779864032912db99c244b6e33ad95a3a899ad7f8108436d0317",
+    "bytes": 219,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/012-prompt.txt",
+    "sha256": "7e9f0b27ebc7bdadc0a9b1eb6562d063ba99d99b7aaf610ebe0c736984386728",
+    "bytes": 85,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/013-continuation.txt",
+    "sha256": "0094e8b87646075f27d9cd0b14864892a18c645d6ea625adf618b912d3634165",
+    "bytes": 325,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/013-prompt.txt",
+    "sha256": "56aee7c107e6c8ff1358759e0981c38a37c7fa63a8f2d0c3159302acfc3c20b2",
+    "bytes": 117,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/014-continuation.txt",
+    "sha256": "6f1ea2b7249a8853bc8f1b2360e8022643349789433aa67099e87778bbc2fd24",
+    "bytes": 297,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/014-prompt.txt",
+    "sha256": "2eaa5a9b09939897bf22bc9ebd9059642eb3afe1acc1cc137c7a47211acf7393",
+    "bytes": 94,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/015-continuation.txt",
+    "sha256": "5f25121e650375b8da80d7a483186518c87bd8e59deb38e57db72febba277ca2",
+    "bytes": 298,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/heldout16/inputs/015-prompt.txt",
+    "sha256": "df704f5ad622440c36f79b410bd695d50d54c1e2b4997cc4a57966aa185f73f6",
+    "bytes": 102,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/input-identity-proof.json",
+    "sha256": "0839fb8a7d4fd61cccbe6d65a3ded0fb2b4abe0b7e3104466ea5a2ede54aff71",
+    "bytes": 1204,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/manifest.json",
+    "sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+    "bytes": 85102,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/argsort.metal",
+    "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+    "bytes": 11174,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/bin.metal",
+    "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+    "bytes": 6580,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/concat.metal",
+    "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+    "bytes": 1932,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/cpy.metal",
+    "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+    "bytes": 10154,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/deepseek4_vision.metal",
+    "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+    "bytes": 7815,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dense.metal",
+    "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+    "bytes": 113439,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv41.metal",
+    "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+    "bytes": 12508,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_hc.metal",
+    "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+    "bytes": 63069,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_kv.metal",
+    "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+    "bytes": 22218,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_misc.metal",
+    "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+    "bytes": 282139,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_rope.metal",
+    "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+    "bytes": 35980,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/flash_attn.metal",
+    "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+    "bytes": 61784,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/get_rows.metal",
+    "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+    "bytes": 6976,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_bf16.metal",
+    "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+    "bytes": 5466,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_kda.metal",
+    "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+    "bytes": 13116,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_vision.metal",
+    "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+    "bytes": 11295,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glu.metal",
+    "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+    "bytes": 2129,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/moe.metal",
+    "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+    "bytes": 423032,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/norm.metal",
+    "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+    "bytes": 14766,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/qwen4.metal",
+    "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+    "bytes": 232464,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/qwen4_vision.metal",
+    "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+    "bytes": 7402,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/repeat.metal",
+    "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+    "bytes": 1640,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/set_rows.metal",
+    "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+    "bytes": 1909,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/softmax.metal",
+    "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+    "bytes": 7679,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/sum_rows.metal",
+    "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+    "bytes": 2737,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/unary.metal",
+    "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf",
+    "bytes": 10104,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/prepared-command.json",
+    "sha256": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+    "bytes": 1042,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/raw_helpers.py",
+    "sha256": "dbeae546e41e6443bff714265b5be64bc2ec4b15b78c0ca8e71afb044a5eb132",
+    "bytes": 15137,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/root-release-proof.json",
+    "sha256": "a2fc29cebc7f593b6436c44471b6b749412111f54d9c6204f19ba2134fa9314c",
+    "bytes": 303,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-native-weights1-checked.json",
+    "sha256": "cfee32fb98f5bca78502bf60947430b7650b3390622d77e789e801553089168c",
+    "bytes": 3984,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-native-weights1.raw",
+    "sha256": "48f13f8291728241cd42da081db0923bc1cb6e86b79cb89286be79a1e29025b4",
+    "bytes": 264777744,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-approx0-checked.json",
+    "sha256": "18fab65962dc79ae9cc7bcd9eb46c98cb397061622a5a2c9c80a813ee58ed301",
+    "bytes": 3980,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-approx0.raw",
+    "sha256": "89b455eb38161b5937d81d26742ce6971c36129ae1891754b1924d0d29701e61",
+    "bytes": 264777744,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-old-native-checked.json",
+    "sha256": "214d18029c71b1be0cb11b9708d5453fcb22f65aa39acfedf5ad354fded5b993",
+    "bytes": 2889,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/calibration16-reference.raw",
+    "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "bytes": 264777744,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/run/summary.json",
+    "sha256": "c143efdd78fc352a3a6a6e0b76fac82f571fa56c58355103bd08be6d4b98ea64",
+    "bytes": 66189,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/cpu-proof.json",
+    "sha256": "3032cd7cc78cd5e8d4ea93384797b9b35173ffd0373edad985ac4944ccbf3e91",
+    "bytes": 724,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/fixture-source.py",
+    "sha256": "fd9d65a22b8d269ec85b13bd76a3d91a26f8b213a9eb94cea3da8a1aff8d0bd6",
+    "bytes": 23322,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/fixture-tests.py",
+    "sha256": "4ecc564e721f369d8ba7e2a7098dd27f52f33739787e9a24c02c1c911d475a98",
+    "bytes": 5545,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/fixtures.tsv",
+    "sha256": "5e1ec761219019bfa5bef8013d2d83c78a75e7f027f4af3cf43b6ccf41b4da2f",
+    "bytes": 9525,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/input-freeze.json",
+    "sha256": "3295e9bd9b5361c2cb870233f8038b6377e4dca91d778b467092cead2cdec7a4",
+    "bytes": 34069,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_01_agent_stable_patch.continuation.txt",
+    "sha256": "0b479f1326693e7ab640864c3f77bf03d1848adcc06962e28446a99ff05f8075",
+    "bytes": 482,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_01_agent_stable_patch.gold.json",
+    "sha256": "394c674679d63fadd9beff367dfc5e8f520e2aa624cb336a8eff17716c1f6868",
+    "bytes": 356,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_01_agent_stable_patch.prompt.txt",
+    "sha256": "e1cc04ecbb54e20f9f1fe8cd88224256ecd7941a2c0791127e729b6a0e9e8b1a",
+    "bytes": 447,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_02_agent_failed_unit.continuation.txt",
+    "sha256": "703ae7adddf6273260b7ca21892f624b91e91481c151d078ecbfa5c743d5b3a3",
+    "bytes": 525,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_02_agent_failed_unit.gold.json",
+    "sha256": "1ee584d0aa25a2c38edb73f2972a6de47b8638225109c9135034dec677199964",
+    "bytes": 371,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_02_agent_failed_unit.prompt.txt",
+    "sha256": "3712973f407a0f2e16a56fc20062b374a430049278ec4049b948e8cc327d6d5d",
+    "bytes": 342,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_03_agent_dependency_order.continuation.txt",
+    "sha256": "59dd38a540829a729c1d3db10eae2ed108c2fb69dc1c45792488be4bb2d20c37",
+    "bytes": 465,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_03_agent_dependency_order.gold.json",
+    "sha256": "4e51b289747d043ff74002015092f88e0768ace8a5daad5e3d9bf71c15d4cb43",
+    "bytes": 325,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_03_agent_dependency_order.prompt.txt",
+    "sha256": "229f16d2f58e7d9da2ffb60f4ef075d7ec00805f0d8218fdda1f9f027b71b010",
+    "bytes": 301,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_04_agent_immutable_paths.continuation.txt",
+    "sha256": "30562747a2834c24256d279a99eb3ab18a97c7f194bc7e4b8419c4488e6702bf",
+    "bytes": 535,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_04_agent_immutable_paths.gold.json",
+    "sha256": "a651e25bc81992bbac6b94b78ae1ccd5809500eddc34d9a7adef862165715a39",
+    "bytes": 426,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_04_agent_immutable_paths.prompt.txt",
+    "sha256": "2ae7269a461d2e600314913c15fd3f0047c3f95a838e25e8591d11332373ff01",
+    "bytes": 345,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_05_tool_invoice.continuation.txt",
+    "sha256": "31882120afd08b63a68c0d40d38ccaef96792272cd71b26b8e478e9ed80cdf3d",
+    "bytes": 526,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_05_tool_invoice.gold.json",
+    "sha256": "d884442057ee328745cf1004fbee1ce8e9b1ca6704989340327180ad617c3f0f",
+    "bytes": 392,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_05_tool_invoice.prompt.txt",
+    "sha256": "6eb083c7ad0005f6e8bc226cc979a57c7b2801256109a829ff2de1b6b0fd1755",
+    "bytes": 327,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_06_tool_retry_filter.continuation.txt",
+    "sha256": "1fa5b072c0d33bdb36f9e61aae66d6c6eb7876f53d74831713d29d93781e7cf3",
+    "bytes": 473,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_06_tool_retry_filter.gold.json",
+    "sha256": "eadc1dedee8589cb9053fc1a1e2500a4011f0e0f630e68bb49540f542877cbc6",
+    "bytes": 320,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_06_tool_retry_filter.prompt.txt",
+    "sha256": "a112c263b3c24e0832a2fc01af8e5fd466c8d5774ab5b4f3a77cc288b2c339db",
+    "bytes": 326,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_07_tool_lexical_path.continuation.txt",
+    "sha256": "dbbeccd7732c401aec5e703b2522d8c968f0ac687ae0779544a3875bb6f0ad85",
+    "bytes": 454,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_07_tool_lexical_path.gold.json",
+    "sha256": "7ee231c306bba203c18ea1fd268fcdc70df48e57ebb3bd25401a483b4bc8ac6f",
+    "bytes": 263,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_07_tool_lexical_path.prompt.txt",
+    "sha256": "c3616647583785a5315a77a7b13e0a3658375673ec8e4c2866812776e948432f",
+    "bytes": 287,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_08_tool_exit_ledger.continuation.txt",
+    "sha256": "eb3baf0af610c1f7754682a3a1514848ea356074a7091b0e0b7143f8c2e42e3f",
+    "bytes": 480,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_08_tool_exit_ledger.gold.json",
+    "sha256": "d2bb71c4b97d542a46e45488c1780209050ebead6c40d0f55b97b06f1aef3c4a",
+    "bytes": 336,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_08_tool_exit_ledger.prompt.txt",
+    "sha256": "f0daa707973b59108f9295f7c48e09b13b27b9586eb6312ad503d872f17f57ec",
+    "bytes": 292,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_09_code_interval_merge.continuation.txt",
+    "sha256": "cfbc56a90a014819bac3e269cd239f6123518051ebf530bfdbf4879347477b6a",
+    "bytes": 488,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_09_code_interval_merge.gold.json",
+    "sha256": "07cda32bcb3e7d96be4574a5ab3658a83e3f8e63fbd21891c70aaf8b9878f27a",
+    "bytes": 416,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_09_code_interval_merge.prompt.txt",
+    "sha256": "43e73fd70c699eddf64f2ace068e599c9a93866d79fd61dc2cdf86bfd13ccf5f",
+    "bytes": 267,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_10_code_u32_rotate.continuation.txt",
+    "sha256": "b0e0d959cb5b165d5249000938e411b59966cead8917d938ef4921763e3cdb83",
+    "bytes": 508,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_10_code_u32_rotate.gold.json",
+    "sha256": "5c9c83964b8ffd8d72b7781e9f86aa27152ce7d5a6df8ab9cd0f906da686fe7e",
+    "bytes": 354,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_10_code_u32_rotate.prompt.txt",
+    "sha256": "2ccdd0fad865bf9b7cffadb46e75bc3f5a6606fa069609d7a8ee1b264b46447b",
+    "bytes": 278,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_11_code_sql_group.continuation.txt",
+    "sha256": "d3b2a912432a6ef81c2c2625992bd73106ad91f69274afaa0d4ee7b62e5ce678",
+    "bytes": 460,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_11_code_sql_group.gold.json",
+    "sha256": "5940533884f57e2d6b82b8a919a9cda1a7cb64468d1ea9c0b0b409b73022258b",
+    "bytes": 347,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_11_code_sql_group.prompt.txt",
+    "sha256": "ef9a84a4967da9f9788da9a0f81bc4fa48528ba6ced596eb95faef509f6ee2a7",
+    "bytes": 284,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_12_code_regex_fullmatch.continuation.txt",
+    "sha256": "d8adb536946190f611b656d9edd5d53a3d6998c373b3a82e1c2514031cc73f38",
+    "bytes": 515,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_12_code_regex_fullmatch.gold.json",
+    "sha256": "9db74e792fe92c3fb092b36a6f47766e6be20cd940b84e604bdf47aa4b3522e3",
+    "bytes": 380,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_12_code_regex_fullmatch.prompt.txt",
+    "sha256": "9d277b37c998c1f064f23220543015da1f63c9b53e86f2ba3c039eaf91c78815",
+    "bytes": 230,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_13_math_diamond.continuation.txt",
+    "sha256": "09e7d21f4fb1c4146365272fcf810ed195e8c93d694842f95d5d31a1e4ff8da5",
+    "bytes": 447,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_13_math_diamond.gold.json",
+    "sha256": "4e762582eba698d87676129d75f1a2176aa70b122b90890751be35498d64b946",
+    "bytes": 263,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_13_math_diamond.prompt.txt",
+    "sha256": "b981c0c91595397028ee59573b3bf4b73a14284248aadbd5758ff0fb80598b67",
+    "bytes": 189,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_14_math_separated_bits.continuation.txt",
+    "sha256": "432bcd11511bd82f09d89c44a69651f3b34a6527733152b7979098351203f787",
+    "bytes": 482,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_14_math_separated_bits.gold.json",
+    "sha256": "a555971e4bcdc3e318f9b679fa19c9c6a20c8dfa0d1edd8a9f60ad79c6477961",
+    "bytes": 314,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_14_math_separated_bits.prompt.txt",
+    "sha256": "9419c4ebb0472b12c41ab114a538cd2a387163f02ea811e8636b0ca87215fe93",
+    "bytes": 216,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_15_math_modular_power.continuation.txt",
+    "sha256": "a1f1b8047ac57d52c9132401544f31b72629b539cdd5fb59b25d47e1d95d8e5f",
+    "bytes": 498,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_15_math_modular_power.gold.json",
+    "sha256": "eb598276e77e10c3a07f54eb4d1e73f52cc97fff7da984ef8dbb941f0a1e2d32",
+    "bytes": 334,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_15_math_modular_power.prompt.txt",
+    "sha256": "8aad9cf52a124d610b6b5665356a6a374b21fcddb96e2987a9dea089f2e484dd",
+    "bytes": 189,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_16_math_urn.continuation.txt",
+    "sha256": "85eb3e0ffa2ecb2ff785abd8fb663c0f919d58579305258a964b7c33d74ce0dc",
+    "bytes": 469,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_16_math_urn.gold.json",
+    "sha256": "e5bd52925fcee7841a7c45692f8218ce3e6e2c5f319e3c13efcaee901b797104",
+    "bytes": 302,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_16_math_urn.prompt.txt",
+    "sha256": "85192baff8dff7d904798683319bb4585ac565dfb46a4cc17e74748dd40b9719",
+    "bytes": 304,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_17_string_nfc.continuation.txt",
+    "sha256": "44080471d283f94012c6dd467a98df4c15bbaf39bf9ff3a1cf687df697172657",
+    "bytes": 504,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_17_string_nfc.gold.json",
+    "sha256": "6587af5c2a1f753de1fdd4899a8b6854f77d317c0b09ae4cf4fc733efdadcb24",
+    "bytes": 374,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_17_string_nfc.prompt.txt",
+    "sha256": "058e44076d096afdd51e1445596bf2d1cc18af9c23d14e88f9ba7b25addf05f0",
+    "bytes": 270,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_18_string_overlap.continuation.txt",
+    "sha256": "37ee2524550b5716cccd572ca90c4729a3eb95a714cf3543d2cebc9f3173c205",
+    "bytes": 476,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_18_string_overlap.gold.json",
+    "sha256": "ea2f94fba36c4c5770e934f8777eafddddc879be2ffda95beabee699952f3bd9",
+    "bytes": 326,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_18_string_overlap.prompt.txt",
+    "sha256": "28f307a5d34b0147c4f122f62ab770011ec48011b666558a0b9f74764d8988c9",
+    "bytes": 205,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_19_string_quoted_csv.continuation.txt",
+    "sha256": "1dead46bf336e58929630485ca685e35b7dfaeeeb3a43a1a9e8ddcec36343b3b",
+    "bytes": 510,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_19_string_quoted_csv.gold.json",
+    "sha256": "6de5422a662350641af0438c43518f03d1de73d5fe96b02de805f5bef2d3088b",
+    "bytes": 364,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_19_string_quoted_csv.prompt.txt",
+    "sha256": "966ea27e550284d2e5979265deb9680054b65623c247cf2fb43996fed9fe9bab",
+    "bytes": 311,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_20_string_json_escape.continuation.txt",
+    "sha256": "c72eba9f2995429bd3b3aa9baf317f2fe10cceb56eeec99c8d926a43d99e415a",
+    "bytes": 526,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_20_string_json_escape.gold.json",
+    "sha256": "902ffc290cd9c1f0fc5b8885068f7712fec851cff2ced763f4ed4925978d1fbd",
+    "bytes": 352,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_20_string_json_escape.prompt.txt",
+    "sha256": "5f24a5f86753265d2241d90d2d940ed13f6564ee69a72414e3e173fdc74af363",
+    "bytes": 429,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_21_rare_codepoints.continuation.txt",
+    "sha256": "6d242e7278e15d6e1da1e07dfbc0d58627c3f7c65a8e12a80b267b0fa261a1a4",
+    "bytes": 489,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_21_rare_codepoints.gold.json",
+    "sha256": "0bdd7e0f172e031fdb699a2a234de279319e046f34136ecda6e15ab5b76d347d",
+    "bytes": 353,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_21_rare_codepoints.prompt.txt",
+    "sha256": "3c1d490247b688a0a3d316fea4b3833be287ec455d30582b9401aa7e16bd1546",
+    "bytes": 259,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_22_rare_byte_sort.continuation.txt",
+    "sha256": "1667db7038293934edb15857ee050f7449f6669aa8c6d71f7d8fb08b73498816",
+    "bytes": 525,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_22_rare_byte_sort.gold.json",
+    "sha256": "763104ea81020b52a7d201695dfe22046f17495a95e7024db3ac063bbdcf45bc",
+    "bytes": 401,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_22_rare_byte_sort.prompt.txt",
+    "sha256": "20c7d84626c54e7d34c6f5f16ab91691a49b97717fc2f9ee26ea786858c56508",
+    "bytes": 237,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_23_rare_base64.continuation.txt",
+    "sha256": "8bdc25706856d8230c430db38d5b9901dd63696e4d8f2b8298db7404debb4089",
+    "bytes": 493,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_23_rare_base64.gold.json",
+    "sha256": "60f71e97b46221f6bbaaeff43ba4726b9fe3a5758868bb7738099e1e12ab1974",
+    "bytes": 336,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_23_rare_base64.prompt.txt",
+    "sha256": "903cd90e2f72be617785392f96e7e4e216f2c9e3ab546f221c4495ef0b672fd5",
+    "bytes": 216,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_24_rare_base36.continuation.txt",
+    "sha256": "4e512c64ec0f83a8f48bf27f8c8a671aef68bf3a2c499309b30d717ab11c3ecf",
+    "bytes": 503,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_24_rare_base36.gold.json",
+    "sha256": "7733e0b6be08cb17249cfacd79f36097de63618761e8842a2723b9be14f90dfd",
+    "bytes": 380,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/mixed24_24_rare_base36.prompt.txt",
+    "sha256": "57ed2eb3186c14ab25180d5be85396df246626034f642b5d2bca19802c9d5258",
+    "bytes": 248,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_build.py",
+    "sha256": "6e93d08820c726262ebeea538e5c9f35edad093126558ba60158bb855e7b31a8",
+    "bytes": 16758,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_compiler_fix.py",
+    "sha256": "5569e72da0218cb1dbce5e146cbceba6ca1de01f77491a0ea820bf30faf6084d",
+    "bytes": 3996,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_sdk_fix.py",
+    "sha256": "cde487dfbab5cecbc8002aaa0825b78b00695e13d049c75cb3767e98d31cccca",
+    "bytes": 3208,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/prepare_resident_native_weights_study.py",
+    "sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+    "bytes": 33065,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-cpu-v2/cpu-proof.json",
+    "sha256": "d819f9fcf9f37eab9b83c88a909d555fbf88029cf3fc604cf88741021f6f67fd",
+    "bytes": 1007,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/cpu-proof.json",
+    "sha256": "d819f9fcf9f37eab9b83c88a909d555fbf88029cf3fc604cf88741021f6f67fd",
+    "bytes": 1007,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/driver.py",
+    "sha256": "06059d1332a0a513e1187727c66e6cfbd3c15bb1480d81c1b2ffbc6152498fce",
+    "bytes": 24499,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/input-freeze.json",
+    "sha256": "3295e9bd9b5361c2cb870233f8038b6377e4dca91d778b467092cead2cdec7a4",
+    "bytes": 34069,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/manifest.json",
+    "sha256": "b30ff4ebd43adbd030506f605a241bbcd897730a082e472767793f5982d604e3",
+    "bytes": 122400,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/prepared-command.json",
+    "sha256": "383106a435b060e1e301f2654b4b3fb996fa2bf3be83da3963aaa744d2ec80e9",
+    "bytes": 1088,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/pressure/command.json",
+    "sha256": "d06e71c442bf6649a2ca1206c798d0740de1b97b42e6671c5c31c215b332d55e",
+    "bytes": 944,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/pressure/pressure.jsonl",
+    "sha256": "6d4a4a883af015fa3cf774b329d0b651958cd29e96a6527eaeecabe557272689",
+    "bytes": 77941,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/pressure/result.json",
+    "sha256": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+    "bytes": 52,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/root-launch-proof.json",
+    "sha256": "9b00b8dfb0168d50a2f2aa07b42840eaee564146273f3d7d8699757b2cac4433",
+    "bytes": 1632,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/root-release-proof.json",
+    "sha256": "ac67daecdf956de3692008e5dbd185fdb718932b650a3fe15b639a0e178b6ae7",
+    "bytes": 303,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/anchor-affinity3-checked.json",
+    "sha256": "6d5aaad766cb17ecf5e5044ce18faf0e553e140569f14a3368a2a9456b3f6109",
+    "bytes": 5450,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/anchor-affinity3-command.json",
+    "sha256": "c2dd299b7d85fe7d5e6c309512c0e57d27a8e5ff4f849febf9f8ae9b2698ff2f",
+    "bytes": 6667,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/anchor-affinity3-exit.json",
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "bytes": 22,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/anchor-affinity3.csv",
+    "sha256": "79f21c8a7553c865c988c2210249ccb7e89ab89b1b1b068ec4075e3a4cbda7f3",
+    "bytes": 149608,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/anchor-affinity3.log",
+    "sha256": "bc5e110de053357cd9bf52988d8acaca1e3d8ad9fdace888ecd5cf0c4ee9841b",
+    "bytes": 5477,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/anchor-affinity3.raw",
+    "sha256": "114d9a3660a2acb411400172cfabcf8b0266bb40c29599923a0422201c8626a3",
+    "bytes": 397166608,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/anchor-affinity3.stdout",
+    "sha256": "086d08910c05827bc58787388f217b9bafcce36e1b8a290eb3d86ec234f970ad",
+    "bytes": 328,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/confirmation.json",
+    "sha256": "1f9d80b5ef90f36e93cdbccf27fb21c4cf1edd4d533c824f28b96f1bdfa36fa6",
+    "bytes": 2240,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/model-identity.json",
+    "sha256": "54fb77dd54ef8c4d692dff920a5554f28a8a0f0954bbb18d491372efcd6fb339",
+    "bytes": 193,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-after-checked.json",
+    "sha256": "77b8a8b9f78162ed1a3383f976301d554ddbfaa6f9db43eaf4a73d5ff79db9bd",
+    "bytes": 4089,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-after-command.json",
+    "sha256": "7a02a783b76ec1723f94cdf66e959676da95d98aa7223528ba78f48a29fed77e",
+    "bytes": 6658,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-after-exit.json",
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "bytes": 22,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-after.csv",
+    "sha256": "398de904c88079528bba8b9404f226697a622b69858f9b9e7bdd75be57c9c372",
+    "bytes": 83927,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-after.log",
+    "sha256": "c594afc9462f61598765a621b550957525205fe17545081a1e361eb3a03969c6",
+    "bytes": 4978,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-after.raw",
+    "sha256": "e5b96e9245343447c49c7db3a24a5b68f202475538d12b13b876553a202da21d",
+    "bytes": 397166608,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-after.stdout",
+    "sha256": "bbd88f07a9c8f3c74335208d71bed9cd54dd0bdb29fa0cde085eddd9c24fd8d4",
+    "bytes": 259,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-before-checked.json",
+    "sha256": "46f2bf0596b6040ca91cfe29365d2d533f5785bde1ed558ab7d164c2d62e3798",
+    "bytes": 4092,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-before-command.json",
+    "sha256": "969151673bcb218bb6084f554043dcd4c6e533101b5188d10183cc5890f8ec46",
+    "bytes": 6464,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-before-exit.json",
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "bytes": 22,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-before.csv",
+    "sha256": "da76951dff45349a25d978937ae48d97256d642d6cf4f894f4721eeea0468c8b",
+    "bytes": 83927,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-before.log",
+    "sha256": "fe27a36b18ee1174f62f92811e692fb7e065bbb225d97d25c93b79adcdf995c9",
+    "bytes": 4979,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-before.raw",
+    "sha256": "e5b96e9245343447c49c7db3a24a5b68f202475538d12b13b876553a202da21d",
+    "bytes": 397166608,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-before.stdout",
+    "sha256": "15ddf37a070363b56900585f3496d7bf6210ccaeabf9b117962a61fda44f01a9",
+    "bytes": 260,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/native-reference-proof.json",
+    "sha256": "e942fb06d39463c7de70353810db6792c5c94d4933d5921ab0f628b4814b26d5",
+    "bytes": 458,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/run/summary.json",
+    "sha256": "e2af4d08f33eb1538b70b5260c5b0b302eb39303f2dde5dfbe2723ab10dc495d",
+    "bytes": 18925,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/selection.json",
+    "sha256": "78f27d9fe84e961dcde9a0b003994b62606bba684f886c02f68683381c785835",
+    "bytes": 658,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/spec.json",
+    "sha256": "dfc1c57ed41dc975add4ea9c1430fb88f30e8c75accda482a166e432eef39704",
+    "bytes": 2528,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/tests.py",
+    "sha256": "fe39b5b9740c794afe27d3a8e9ca9502c5b9a08e158ec133dab6380ebaafc5d4",
+    "bytes": 18347,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/prepare_resident_mixed24_confirmation.py",
+    "sha256": "06059d1332a0a513e1187727c66e6cfbd3c15bb1480d81c1b2ffbc6152498fce",
+    "bytes": 24499,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/resident_mixed24_confirmation_spec.json",
+    "sha256": "dfc1c57ed41dc975add4ea9c1430fb88f30e8c75accda482a166e432eef39704",
+    "bytes": 2528,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/tests/test_resident_mixed24_confirmation.py",
+    "sha256": "fe39b5b9740c794afe27d3a8e9ca9502c5b9a08e158ec133dab6380ebaafc5d4",
+    "bytes": 18347,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_001.txt",
+    "sha256": "b98e88381d78807023fa7052f5a287d6aba53053351290b23935b5d76846fa49",
+    "bytes": 279,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_002.txt",
+    "sha256": "a433abcf92003278cb15f05590eda5f52a54653e4222b335a870d30ef264845e",
+    "bytes": 256,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_007.txt",
+    "sha256": "6bd99b86118c94c926936a959317ad22453972ed6472a38dc36c473b2cc32fd1",
+    "bytes": 288,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_008.txt",
+    "sha256": "fa8e18d33656767f826b8ef3d748a7746e3c434e5690d259435e32c6149a6a63",
+    "bytes": 258,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_013.txt",
+    "sha256": "b48855a7c2637bddbf05b86dc76de696e9676f883febd6108253044b7b303cbf",
+    "bytes": 213,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_014.txt",
+    "sha256": "70a5d6f7ff04be14f84385cda6aa0391e645795fd2a37be1a20279dab5cda727",
+    "bytes": 321,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_019.txt",
+    "sha256": "58107d97081d56fb8c3c748e7e5fd7f6f5407aed9fbef082bee3f8d7cf9812ee",
+    "bytes": 322,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_020.txt",
+    "sha256": "adb79f1316ddbb6e6fedec3b2c14beffb4137ef67e4f59b3fbec0a2594eede7a",
+    "bytes": 283,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_025.txt",
+    "sha256": "301d89bb2d28e7b58f4fb41eb2ab51699af7c96ca6bf7b668e475483c5693ab3",
+    "bytes": 282,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_026.txt",
+    "sha256": "8edf56cfb1c2490cf7f30d6c8a293ed0c15c461df1fe61e04a8af3e6b7199878",
+    "bytes": 310,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_031.txt",
+    "sha256": "07d3c98e4cf96ea8963138a3351b94232fd51204830733f284f3366626bf53af",
+    "bytes": 289,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_032.txt",
+    "sha256": "5754f2017a97cbb191251084c2903ddeff2650a5a1aa758a8e3bdc21731c22f5",
+    "bytes": 246,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_037.txt",
+    "sha256": "43d06e1b97e5229f084b089eabe7efbb178c1786e6aa714b170ccbdcdc8d23e4",
+    "bytes": 211,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_038.txt",
+    "sha256": "a1a04a70beea32f0d761a842a75d560049701ee9e462bcc4533df38e6141a0f7",
+    "bytes": 216,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_043.txt",
+    "sha256": "7b63e5194530e3c094b6365e2927923576c281de5cf5003dfbe218d1223650d6",
+    "bytes": 311,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_044.txt",
+    "sha256": "fc260f52161e80a6ea7ad5fcc85993f596aeb900f1bf667148d0e8662dfe5c4b",
+    "bytes": 213,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_049.txt",
+    "sha256": "452c155ea209046c1886486540b381f142dcabf07ff14bfc82256a26ba33f7a9",
+    "bytes": 264,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_050.txt",
+    "sha256": "f87ad7bad38526ee8dda21c2f9021145ac8add8660078c302965411b1d044ba4",
+    "bytes": 221,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_055.txt",
+    "sha256": "9d3d290ac728766c438cabd55ec69e02f2841d3c53f925450fd49799b685fe2d",
+    "bytes": 346,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_056.txt",
+    "sha256": "5433d0e4f8601e543b29a6ee0235a8b88ec1dc4117e97db89e4de166ee0d4b75",
+    "bytes": 340,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_061.txt",
+    "sha256": "c5dfc361f099d5559e97433bc5e075d16d0b53fa1e06e5592b92f0bd5c785812",
+    "bytes": 227,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_062.txt",
+    "sha256": "b2a6da8a3620ba2c1d62b78c1be6c22aacd70913487b7e43e43878fd50d5e9aa",
+    "bytes": 323,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_067.txt",
+    "sha256": "89f83d712aac2efb6f5cd5f5da81575911317dc724e71199cdddb94882e19cfa",
+    "bytes": 222,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_068.txt",
+    "sha256": "5f3a3adc488dd0cfed33e0c9f898eaa6e688bdd9499d8cdb6d820557c6a9be63",
+    "bytes": 244,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_073.txt",
+    "sha256": "de3116af87d5dc15f1bb5dc37b664414e85537437fbf1333ab799c3ed342c986",
+    "bytes": 234,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_074.txt",
+    "sha256": "9663bd270f197779864032912db99c244b6e33ad95a3a899ad7f8108436d0317",
+    "bytes": 219,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_079.txt",
+    "sha256": "8ffdb6d7324bf8cbd02b6ea006cc1dc16b781b3676570d45a5a17c97492f6e87",
+    "bytes": 236,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_080.txt",
+    "sha256": "0094e8b87646075f27d9cd0b14864892a18c645d6ea625adf618b912d3634165",
+    "bytes": 325,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_085.txt",
+    "sha256": "ab26f20101e2d6cc33769425d5e1334c6f70959315b82c79fbc16bf9a2909012",
+    "bytes": 330,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_086.txt",
+    "sha256": "6f1ea2b7249a8853bc8f1b2360e8022643349789433aa67099e87778bbc2fd24",
+    "bytes": 297,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_091.txt",
+    "sha256": "77e61f27e2334ab677f404caa9637ec037b9808e63c6dadf18d69f02a4104dff",
+    "bytes": 306,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_092.txt",
+    "sha256": "5f25121e650375b8da80d7a483186518c87bd8e59deb38e57db72febba277ca2",
+    "bytes": 298,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_001.txt",
+    "sha256": "ad31c6a139fc6f959fd03493ac5db9b22ef591b8ba0f4e34c3a1d67cde1be299",
+    "bytes": 89,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_002.txt",
+    "sha256": "d8e1e8643286f089a9d077d13b956b508cc9b0f8ddbfbaa822b9ee5bfcfbf42d",
+    "bytes": 114,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_007.txt",
+    "sha256": "3838472568045eb00528fd3d0d737cf77dbfcb6a405bfcf265d77ce12bfca42d",
+    "bytes": 118,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_008.txt",
+    "sha256": "b2a0fb5191b3eaa8ddc5dc0179d1855f2e70026939244b64a9ff53e8e20b7e57",
+    "bytes": 88,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_013.txt",
+    "sha256": "94169b777fe85c1597f6f7625a530dce8b3a1586e4c80fb8ed9257aaee77ac87",
+    "bytes": 67,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_014.txt",
+    "sha256": "cc9c5221fd202db38651897123fe8a016b751171ad55ef2c3c069055369f9e10",
+    "bytes": 77,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_019.txt",
+    "sha256": "fd856e975de64137ec3929e778003a3ca4ceb8ed7c9e8e7471faf63257aba344",
+    "bytes": 106,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_020.txt",
+    "sha256": "16d00e1834936ced31054c0c7b45afbe70d95fe84a50c0b53097ae74cf6503e8",
+    "bytes": 94,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_025.txt",
+    "sha256": "d8739f43727e986e38822c7a339f4d5c2d1b893a4a8ab6a565b793843abc029f",
+    "bytes": 91,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_026.txt",
+    "sha256": "9552b1e51d0858bfc4f85dc826845fe7676787fadd3bd87a0639cab7b64d789d",
+    "bytes": 92,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_031.txt",
+    "sha256": "b53b3a2dabfde42744b86aef174f2aeb466f2992d5f4b012e15763c47c869daa",
+    "bytes": 88,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_032.txt",
+    "sha256": "8e2d282cca4757754f6ca4377e10560752c17061f778cf42bb019e6aefa03755",
+    "bytes": 92,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_037.txt",
+    "sha256": "0f3767217e174ef9eb1db952fec395fc379d14f1977c71473cae192b79c9550d",
+    "bytes": 138,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_038.txt",
+    "sha256": "3bc771633e8b72decbff33c2c22f6f832cfa19a9429d21ba086a0efb1ba53980",
+    "bytes": 129,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_043.txt",
+    "sha256": "d301e9105fd926a6a101cbba905ae1ce1488ef650470a647bbe6236f8715d954",
+    "bytes": 112,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_044.txt",
+    "sha256": "069980ebef0283567728c418687e91cf86580cb0892783d09bf1d41226827efc",
+    "bytes": 114,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_049.txt",
+    "sha256": "0cc6f80eaaac68c48da44ffcc79c9577f19947b770d9919489f010414b3ba7c8",
+    "bytes": 132,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_050.txt",
+    "sha256": "1d98ea7c819f2a1ce198fc4ff3ec9de24962441bc1964753e821348b54f6f7de",
+    "bytes": 117,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_055.txt",
+    "sha256": "b325441bb5d967e8bd1cea370c7a7dde8ebc54c29b4af7bb4bccfdddcc754064",
+    "bytes": 71,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_056.txt",
+    "sha256": "ba4dde22d1a48306c3b521ceca74365dbdef3503c97fe96abe3efc4de5932043",
+    "bytes": 104,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_061.txt",
+    "sha256": "75aa34c3d9627095691f14f313c5825a5da6f8dde7ec36e4287ac2e1a493210b",
+    "bytes": 95,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_062.txt",
+    "sha256": "c8171bff3b73571c59afa0a421de252a000322410d2979ffe5799ef2037fdd0a",
+    "bytes": 81,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_067.txt",
+    "sha256": "7b6b4aa350b200ce72327a0a1d1a4da363e83c692c1e39551cd0a1e068dc3e6c",
+    "bytes": 91,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_068.txt",
+    "sha256": "16693a5f52a371bcc30281dfc2da58a7f5b0d405223e2f3b0b2297565512a5d8",
+    "bytes": 98,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_073.txt",
+    "sha256": "437cbb9052fe063611831b6a7cbbfb36d2fddc6feb766df28fb02226d89b8cca",
+    "bytes": 82,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_074.txt",
+    "sha256": "7e9f0b27ebc7bdadc0a9b1eb6562d063ba99d99b7aaf610ebe0c736984386728",
+    "bytes": 85,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_079.txt",
+    "sha256": "6a61d7e77689cb6574b42987df6a8c49daf5e0f38dadfa90d2b2e52fcef20e3a",
+    "bytes": 83,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_080.txt",
+    "sha256": "56aee7c107e6c8ff1358759e0981c38a37c7fa63a8f2d0c3159302acfc3c20b2",
+    "bytes": 117,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_085.txt",
+    "sha256": "003a8396ba34adf18cd4c1e9ef1385a559cbdfae48f4ef5e5b1d998a5a2bfdc7",
+    "bytes": 98,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_086.txt",
+    "sha256": "2eaa5a9b09939897bf22bc9ebd9059642eb3afe1acc1cc137c7a47211acf7393",
+    "bytes": 94,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_091.txt",
+    "sha256": "8b6ffd97874bd304112fc6bd4559631aeda1ee6bbc51fc799301310b207fccfa",
+    "bytes": 84,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_092.txt",
+    "sha256": "df704f5ad622440c36f79b410bd695d50d54c1e2b4997cc4a57966aa185f73f6",
+    "bytes": 102,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/build-manifest.json",
+    "sha256": "6c359e3d1988f2cc8f2d546eb32d9c36e1f4cf7bd8af92754317b5977783a549",
+    "bytes": 3713,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o",
+    "sha256": "c1c362737fc39bc8dd5b40ff3f4d03f99c6f35ac381923a7316947437bb34b27",
+    "bytes": 427168,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o",
+    "sha256": "177b20ea91d0483862a65534a48ade524526362689b654433cf234eeee4fad71",
+    "bytes": 30128,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o",
+    "sha256": "955a7d909bf5e9a792777960dceb3d809e3779f46e68f99d120aef8a3d712eed",
+    "bytes": 165728,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o",
+    "sha256": "dd072b50b2ba9983f3f5ef37127cec23b4d807265cfe0bffda1764ce0b217cba",
+    "bytes": 11320,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o",
+    "sha256": "f32bf8251fe2619c795e74ad634fdd43e76cebde0b555177aa9f4be57b3c380b",
+    "bytes": 2803120,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o",
+    "sha256": "2e418c6f60f1cdc3abdd4473eabbaaf8b9ed29b535d211149c44463cab50a408",
+    "bytes": 13800,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o",
+    "sha256": "9d97e0d9c7e3d78928ba9d911daf96fcf85178352ac567fdcdf78a68f9b2b7a1",
+    "bytes": 207496,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/evidence/confirmation16-input-freeze-20261002/confirmation16.tsv",
+    "sha256": "026134fbeb20786e1736db71ffc85de46515823112dabbaf9859b98a57c296b9",
+    "bytes": 3012,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/evidence/confirmation16-input-freeze-20261002/input-freeze.json",
+    "sha256": "f46b45e17bc110d6b66fdf125b53935e8b16849f437d8c04bf9fa910c9b3c5de",
+    "bytes": 4134,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/evidence/resident-native-weights-calibration16-20261002/compact-summary.json",
+    "sha256": "afb14a1f2eb142e9f0f0c514710cc22e6578169439a825df0cc663eebe092f00",
+    "bytes": 28321,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/latency-session.txt",
+    "sha256": "31e3e00a9f3e17ae16692d2f998f0a2fc63c501552ea01b3de47e11d2a35e928",
+    "bytes": 13016,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+    "bytes": 9066,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/validation-broad.tsv",
+    "sha256": "9814d6b0c670870d3559c79d56475108d80e4004cc12fc7b829627d6144a813d",
+    "bytes": 3091,
+    "mode": 420,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d",
+    "bytes": 33568,
+    "mode": 493,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/opt/homebrew/lib/python3.14/site-packages/numpy/__init__.py",
+    "sha256": "09295a80660f17925ae23765ce8cbd7ff7ceae968d5f2f89349f1cb74c0b9e11",
+    "bytes": 25220,
+    "mode": 292,
+    "kind": "pinned original file alias",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring",
+    "linktext": "../../../../Cellar/numpy/2.5.3/lib/python3.14/site-packages/numpy/__init__.py",
+    "linkmode": 493,
+    "resolved_path": "/opt/homebrew/Cellar/numpy/2.5.3/lib/python3.14/site-packages/numpy/__init__.py"
+  },
+  {
+    "path": "/opt/homebrew/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-darwin.so",
+    "sha256": "3f300bbe048de52ab5c38882fee8cc58e52b92ded52fa7958916fb129cb97bb8",
+    "bytes": 3289664,
+    "mode": 292,
+    "kind": "pinned original file alias",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring",
+    "linktext": "../../../../../Cellar/numpy/2.5.3/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-darwin.so",
+    "linkmode": 493,
+    "resolved_path": "/opt/homebrew/Cellar/numpy/2.5.3/lib/python3.14/site-packages/numpy/_core/_multiarray_umath.cpython-314-darwin.so"
+  },
+  {
+    "path": "/usr/bin/cc",
+    "sha256": "34129c71a01a74f7f3b2443521519b2e5447553fa187f5fcafaaf8c42cc192e2",
+    "bytes": 200560,
+    "mode": 493,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  },
+  {
+    "path": "/usr/bin/xcrun",
+    "sha256": "bbe7671518a3905f9d3fce54312fbc77c2876b0d62aca74a0688fa869d31a8a9",
+    "bytes": 199024,
+    "mode": 493,
+    "kind": "file",
+    "verification": "frozen static or result SHA verified by completed independent source audit before and after scoring"
+  }
+]

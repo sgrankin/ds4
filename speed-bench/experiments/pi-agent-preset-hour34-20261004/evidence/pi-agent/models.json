@@ -1,0 +1,30 @@
+{
+  "providers": {
+    "local-ds4": {
+      "baseUrl": "http://127.0.0.1:56979/v1",
+      "api": "openai-responses",
+      "apiKey": "local",
+      "models": [
+        {
+          "id": "ds4",
+          "name": "DS4 local",
+          "reasoning": true,
+          "input": [
+            "text"
+          ],
+          "contextWindow": 8192,
+          "maxTokens": 2048,
+          "thinkingLevelMap": {
+            "off": "none"
+          },
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          }
+        }
+      ]
+    }
+  }
+}

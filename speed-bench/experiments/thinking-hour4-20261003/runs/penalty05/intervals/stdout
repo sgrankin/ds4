@@ -1,0 +1,135 @@
+We need read config.json whole raw. Then write solution.py. Only one read call and one write call. Let's read config.json.
+
+🛠️ Reading config.json (whole file)...
+
+We need implement solve(payload, config). Payload list of integer [start,end] intervals. Ignore empty or reversed intervals. Return sorted nonoverlapping [start,end] intervals covering input union; obey merge_touching in config.
+
+Need understand semantics. Half-open interval coalescing. Intervals [start,end) presumably. Empty if start >= end? Reversed if start > end? "Ignore empty or reversed intervals." Empty interval likely start == end (half-open empty). Reversed start > end. So valid start < end.
+
+merge_touching true: merge if next.start <= current.end? In half-open, touching means next.start == current.end should merge if merge_touching true. If false, only merge overlapping? Actually if merge_touching false, intervals that touch (end == start) remain separate. Overlapping means next.start < current.end. But also if next.start <= current.end and merge_touching true merge. If false, merge only if next.start < current.end. Wait intervals [1,4) and [4,6): touching at 4. If merge_touching true -> [1,6). If false -> [1,4),[4,6). Overlap [1,4),[3,6) -> [1,6) regardless.
+
+What about duplicate/adjacent? Sorting.
+
+Need module-level only plain function definitions: no decorators, annotations, default args, classes, imports. No I/O, dynamic execution, or names/attributes beginning with underscore. So define solve(payload, config). We can use builtins. Need avoid names starting underscore. Use local variables.
+
+Config merge_touching. Could config be dict. Access config["merge_touching"]. Maybe missing? Task says config.json contains configuration. We can assume. But robust? Could use config.get? That's attribute? "names/attributes beginning with underscore" only. get is fine. But no imports. Use builtins only.
+
+Potential issue: no default argument values. Function signature def solve(payload, config): fine.
+
+Implementation:
+
+def solve(payload, config):
+    intervals = []
+    for item in payload:
+        start = item[0]
+        end = item[1]
+        if start < end:
+            intervals.append([start, end])
+    intervals.sort(key=lambda pair: (pair[0], pair[1]))? Lambda is okay? It's a function expression, not def? Module level only plain function definitions; inside function lambda fine? "At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports." Lambdas inside function are okay, but maybe avoid lambda? Could sort with key function? We can sort using intervals.sort() since lists sort lexicographically by start then end. That works. But if payload contains tuples? item[0], item[1] works. We append lists. intervals.sort() sorts by first then second. Good.
+
+    merged = []
+    for interval in intervals:
+        if not merged:
+            merged.append(interval)
+            continue
+        last = merged[-1]
+        if interval[0] < last[1] or (merge_touching and interval[0] == last[1]):
+            if interval[1] > last[1]:
+                last[1] = interval[1]
+        else:
+            merged.append(interval)
+    return merged
+
+But careful: "merge_touching" false: intervals touching remain separate. But what if interval[0] == last[1] and merge_touching false -> append. If interval[0] < last[1] merge. If interval[0] > last[1] append. Good.
+
+But there's subtlety: if merge_touching false and intervals overlap? merge. If interval[0] == last[1] but interval[1] > last[1]? touching, separate. Good.
+
+What about nested intervals? sorted by start, if interval[0] < last[1], merge; if interval[1] > last[1] update. Good.
+
+What if payload has intervals like [3,3]? start < end false ignore. [4,4] ignore. Reversed [5,2] ignore. Good.
+
+Potential config missing merge_touching? Could default? No default argument values, but can use config.get("merge_touching", False)? That's default value in method call, not function default argument? The instruction says no default argument values at module level. Using dict.get with default is okay? Maybe. But likely config always has it. Simpler: merge_touching = config["merge_touching"]. If missing raises. Fine.
+
+But "obey merge_touching in config" maybe config could be boolean? No, config.json dict.
+
+Need no names/attributes beginning underscore. We won't.
+
+Could there be issue with "no imports" and "Python builtins only" — fine.
+
+Should we handle payload not list? Task says list. Fine.
+
+Need ensure no I/O. Fine.
+
+Let's write solution.py. Only one write. Need exact content.
+
+Potential nuance: half-open interval coalescing, merge_touching true means intervals [1,4) and [4,6) merge. Yes.
+
+But what about merge_touching false: "sorted nonoverlapping [start,end] intervals covering the input union". If touching intervals remain separate, they are nonoverlapping in half-open sense (they share boundary point but half-open intervals [1,4) and [4,6) are disjoint). So okay.
+
+What about "Ignore empty or reversed intervals." Empty half-open means start == end. Reversed start > end. We ignore both via start < end.
+
+Potential issue: if input contains intervals with start == end but merge_touching? Ignore.
+
+Let's write.
+
+Need maybe use config.get to avoid KeyError? The config has merge_touching true. Fine.
+
+Could there be a config key "merge_touching" absent in some tests? The project contains config.json with configuration. External tests likely pass config dict with merge_touching. We can be robust with config.get("merge_touching", False) but that uses default value in call, not function signature. Allowed? It says "At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports." This refers to module level definitions. Using get default inside function is not module-level default argument. But maybe they mean no default argument values anywhere? "At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports." Could parse as module-level restrictions. I'd avoid get default anyway. Use config["merge_touching"].
+
+But maybe config may be missing? Not likely.
+
+Let's craft code:
+
+def solve(payload, config):
+    merge_touching = config["merge_touching"]
+    intervals = []
+    for item in payload:
+        start = item[0]
+        end = item[1]
+        if start < end:
+            intervals.append([start, end])
+    intervals.sort()
+    result = []
+    for interval in intervals:
+        if not result:
+            result.append(interval)
+            continue
+        last = result[-1]
+        if interval[0] < last[1]:
+            if interval[1] > last[1]:
+                last[1] = interval[1]
+        elif interval[0] == last[1] and merge_touching:
+            if interval[1] > last[1]:
+                last[1] = interval[1]
+        else:
+            result.append(interval)
+    return result
+
+Wait bug: if interval[0] == last[1] and merge_touching false, goes to else append. Good. If interval[0] < last[1], merge. If interval[0] == last[1] and merge_touching true, merge. If interval[0] > last[1], append. Good.
+
+But what if interval[0] < last[1] but interval[1] <= last[1]? nested, no update. Good.
+
+Potential issue: result.append(interval) appends same list object that's in intervals; later mutation of last[1] mutates the appended list. Fine. But if interval is appended and later another interval merges into it, last[1] update. Good.
+
+Could there be issue with sorting lists of ints. Fine.
+
+Maybe "merge_touching" true means merge when next.start <= current.end, including overlap. We handle overlap separately. Good.
+
+What about intervals with start < end but zero-length? start < end excludes equal. Good.
+
+Could there be payload with tuples and we append lists. Fine.
+
+No imports. No decorators. No annotations. No default args. No classes. No underscore names. Good.
+
+Now write.
+
+🛠️ write  path=solution.py
+def solve(payload, config):
+    merge_touching = config["merge_touching"]
+    intervals = []
+    for item in payload:
+        start = item[0]
+        end = item[1]
+        if start < end:
+            intervals.append([start, end])
+    intervals.sort

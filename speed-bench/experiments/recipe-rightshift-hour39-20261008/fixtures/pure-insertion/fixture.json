@@ -1,0 +1,18 @@
+{
+  "case": "pure-insertion",
+  "practical_case": "dedupe",
+  "system_edit": false,
+  "teacher_origin": "retained actual Item37 code-native-before first implementation, unmodified",
+  "teacher_source": "/Volumes/Models/ds4/speed-bench/experiments/recipe-prefill-hour37-20261008/code-native-before/http/dedupe/dedupe/first-solution.py",
+  "teacher_sha256": "44053a0315d8e7a77684d5bf3e522816a78492ead72e1fb8d7f08c4b5b2e23e4",
+  "teacher_scope": "up to512 tokens; retain actual target length, no artificial teacher padding",
+  "notes": "algorithm contract excludes tool protocol; existing161-case grader; current contract/config only in retained C, not A/B padding; pure-insertion new-edit.txt is only the inserted segment",
+  "source_edit": 256,
+  "edit": 1024,
+  "prefix": 256,
+  "unchanged": 1536,
+  "pure_insertion": true,
+  "edit_kind": "favorable literal insertion of unrelated completed meeting planning after the token-identical original256-token block; no existing source tokens removed",
+  "shift_tokens": 768,
+  "expected_teacher_tokens": 137
+}

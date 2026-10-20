@@ -1,0 +1,136 @@
+{
+  "baseline_sha256": "4de6e5d234c39f2316172846418b723d47d0841b593e20ac73de41adbcc497cd",
+  "candidate_sha256": "4b8af13973bb5fb681363be45be47d8381224ae8bbb0ab510e632074f8d7f0f1",
+  "model_path": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "model_size": 365713686528,
+  "model_mtime_ns": 1789237692837653163,
+  "model_header_sha256": "bcada2bf96d9a5127370a6e226136ae9f07cc162e28c38efc5e39112ef88652f",
+  "manifest_sha256": "82f1d7b68905b1e311886ed5b05839855a9728ecdc665752ddf69b19293fc5e0",
+  "settings": {
+    "cases": 16,
+    "tokens": 32,
+    "ctx": 4096,
+    "cache_gb": 64,
+    "chunk": 512,
+    "gaps": "0.05",
+    "mass": "0.12",
+    "candidate_env": {}
+  },
+  "baseline_source": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/quality-probe-base",
+  "candidate_source": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/quality-probe-integrated",
+  "timing_scope": "Inference calls exclude logit copying, KL arithmetic and reference I/O; screening timings are exploratory.",
+  "inputs": [
+    {
+      "case": "case_003",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_003.txt",
+      "prompt_sha256": "2c0c8aa4e6d305f291689ae42d631fab00a749432dabd864c5d7e33fd17b1edc",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_003.txt",
+      "continuation_sha256": "7a1efb5406865c367adbc5f6ccbf55b390f250f9206203c1389c0ce2c9d8336c"
+    },
+    {
+      "case": "case_009",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_009.txt",
+      "prompt_sha256": "1797757eddae1ffbc6868c819e974631023af829dcce7fbb6e8fe8dc39ab17b3",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_009.txt",
+      "continuation_sha256": "8035cc365e93dee67591ff4e59487078ea60695f58ff56e316c80ad925214450"
+    },
+    {
+      "case": "case_015",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_015.txt",
+      "prompt_sha256": "07df6c8298955af9e683bfc33831a7bd64c9d11793b3cc92a5b8ffe04613dee3",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_015.txt",
+      "continuation_sha256": "dd57f7d86db3439c2067551e6b31efd463043a795b7cca1a498babaf1a982cd6"
+    },
+    {
+      "case": "case_021",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_021.txt",
+      "prompt_sha256": "0001dbe65a5f42ea6176245f7e8f9e991e2e29ef9137d65679cb80b5da217358",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_021.txt",
+      "continuation_sha256": "3eb8f32273408342d85aa79e7044637cc8aa42d5e0719f8f769590908e6cfd9e"
+    },
+    {
+      "case": "case_027",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_027.txt",
+      "prompt_sha256": "42f96ac4f83a13b4008f2ce146fa8455bfc949804448cbb4034710f9015e20f2",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_027.txt",
+      "continuation_sha256": "02a3a80c8ec313e00fd04cde5e708e405b5d7376c119ea86a0b979077e645513"
+    },
+    {
+      "case": "case_033",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_033.txt",
+      "prompt_sha256": "9466613dd22c3a296632fda19e49562b992a2a4b2aea00b4797309f0f01c6c82",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_033.txt",
+      "continuation_sha256": "e978f3a55dddce31380318b76b92f50b78e6a603dd3d2e797f33d35c01c71df2"
+    },
+    {
+      "case": "case_039",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_039.txt",
+      "prompt_sha256": "b6345573554f66634ccc0c1a90910bc0c86e6573d6ac2e4c6ab7143c5c521720",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_039.txt",
+      "continuation_sha256": "4b906612d7fde91c84ea17df5c9948f731fa0444ae4ff72648440ea0a472cd14"
+    },
+    {
+      "case": "case_045",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_045.txt",
+      "prompt_sha256": "b91c83d49d805ec5867ac50bf97d890474d463338d7f667cb106b03bc58c176b",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_045.txt",
+      "continuation_sha256": "10dd64c0122760d9dffa783348a122b693ae1d72aa4c8fbf5686759b39a4a97a"
+    },
+    {
+      "case": "case_051",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_051.txt",
+      "prompt_sha256": "145528cbb6d0cba645e1274b521fd84dc5c6c9bbecddbf0eb39ffbc25b581657",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_051.txt",
+      "continuation_sha256": "0a642535c038f33a11f6051acfded62cda141ecb740d1993f9def6fab0bdbac2"
+    },
+    {
+      "case": "case_057",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_057.txt",
+      "prompt_sha256": "cfccdfa27006da068d4007a396bb81397df31c369a835f94b8bc60e16b99c329",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_057.txt",
+      "continuation_sha256": "37fe7b6c6d85e50831c11bfcceb33635a8e240d252fb5277db8d9fd129451b0b"
+    },
+    {
+      "case": "case_063",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_063.txt",
+      "prompt_sha256": "be62a03c151cac550e5ea359b187d645cc60a6ec0393d7eddc2484f458222bc8",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_063.txt",
+      "continuation_sha256": "dffbb8fc945c023be561c62a2f31238f72b7e6ded71612f41237d394103d356c"
+    },
+    {
+      "case": "case_069",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_069.txt",
+      "prompt_sha256": "e0d66909850fddf9e8ff3fb449219c0e335f253095b1900947c1c1a5e126b70a",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_069.txt",
+      "continuation_sha256": "693351bc2d0ec0ac6ce2424481cfe0938d534316f71a4ac1c27f33f9565648ec"
+    },
+    {
+      "case": "case_075",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_075.txt",
+      "prompt_sha256": "4bfe0b9f83ff1a47782380f0a13b11da0479c1ec96dd12dee3673588ddfb29fd",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_075.txt",
+      "continuation_sha256": "4ef65bef86c9d6c4a954d930ee85c6e093c4a9a37f8411a3020474c7c505a1c8"
+    },
+    {
+      "case": "case_081",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_081.txt",
+      "prompt_sha256": "bc7a7e24bdf4684190d55d93ce3e21df43272ebbd486692b5cde4fa60510f3ff",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_081.txt",
+      "continuation_sha256": "4eab70335f88fbf98fff13edb5ae517c60e637757608943432c4247e556fb5cf"
+    },
+    {
+      "case": "case_087",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_087.txt",
+      "prompt_sha256": "770126da2eb7bb30893208fa8918dee535fd2d11d354f8ad78638318ab996ea7",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_087.txt",
+      "continuation_sha256": "3d640f067d1a3f69177069df7bb4732fdb6cd3ff6d57a16a4397e92064b1cd07"
+    },
+    {
+      "case": "case_093",
+      "prompt_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_093.txt",
+      "prompt_sha256": "9357c603b2a5d1c2b261f80a45c983a194c736f81120a7ceb407a2cdbd82f105",
+      "continuation_path": "gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_093.txt",
+      "continuation_sha256": "62d4f6526ebfe7d760b2cc7b263ab4dde49e611e957e41ff5a9db7a38be5eebd"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+--- before/practical_observer.h
++++ source/practical_observer.h
+@@ -2,6 +2,7 @@
+ #include <math.h>
+ #include "source/ds4_gpu.h"
+ static FILE *pt_events, *pt_raw;
++static bool pt_light_audit;
+ static char pt_dir[PATH_MAX];
+ static char *pt_config;
+ static size_t pt_config_len;
+@@ -26,6 +27,7 @@
+     const char *dir=getenv("PT_AUDIT_OUT");
+     if(!dir || !dir[0] || strlen(dir)>=sizeof(pt_dir))exit(1);
+     strcpy(pt_dir,dir);pt_events=pt_file("events.jsonl");pt_raw=pt_file("raw.fp32");
++    pt_light_audit=getenv("PT_LIGHT_AUDIT") && !strcmp(getenv("PT_LIGHT_AUDIT"),"1");
+     FILE *f=fopen("config.json","rb");if(!f)pt_die("config-open",1);
+     pt_config=xmalloc(16385);pt_config_len=fread(pt_config,1,16385,f);
+     if(ferror(f)||!feof(f)||pt_config_len>16384)pt_die("config-bound",1);
+@@ -80,10 +82,12 @@
+     if(n!=129280)pt_die("vocabulary",1);
+     uint32_t slots=ds4_gpu_stream_expert_cache_configured_count();
+     if(slots!=6136)pt_die("configured-cache-slots",1);
+-    float *raw=xmalloc((size_t)n*sizeof(float));
+-    if(ds4_session_copy_logits(w->session,raw,n)!=n)pt_die("raw-copy",1);
+-    if(fwrite(raw,sizeof(float),n,pt_raw)!=(size_t)n)pt_die("raw-write",1);
+-    free(raw);
++    if(!pt_light_audit) {
++        float *raw=xmalloc((size_t)n*sizeof(float));
++        if(ds4_session_copy_logits(w->session,raw,n)!=n)pt_die("raw-copy",1);
++        if(fwrite(raw,sizeof(float),n,pt_raw)!=(size_t)n)pt_die("raw-write",1);
++        free(raw);
++    }
+     uint64_t before=*rng;
+     int token=worker_sample_with_mode(w,cfg,greedy,rng);
+     size_t length=0;char *piece=ds4_token_text(w->engine,token,&length);
+--- before/practical_write_observer.h
++++ source/practical_write_observer.h
+@@ -15,7 +15,7 @@
+ }
+ static void pt_write_init(void) {
+     pt_w_limit=pw_parse_limit(getenv("PT_WRITE_REASONING_BUDGET"));
+-    if (pt_w_limit < 0) pt_die("literal-write-budget-0-or-1024",1);
++    if (pt_w_limit < 0) pt_die("write-budget-must-be-0-to-2048",1);
+     pt_w_events=pt_file("write-budget.jsonl");
+     fprintf(pt_w_events,"{\"type\":\"init\",\"policy_type\":\"protocol-boundary-token\",\"write_budget\":%d,\"global_decision_cap\":2048,\"read_final_native\":true}\n",pt_w_limit);
+     fflush(pt_w_events);
+@@ -113,10 +113,12 @@
+     if (!piece || length!=8 || memcmp(piece,"</think>",8)) {
+         free(piece); pt_w_die("force-piece-identity",1);
+     }
+-    float *raw=xmalloc((size_t)n*sizeof(float));
+-    if (ds4_session_copy_logits(w->session,raw,n)!=n) pt_w_die("force-raw-copy",1);
+-    if (fwrite(raw,sizeof(float),n,pt_raw)!=(size_t)n) pt_w_die("force-raw-write",1);
+-    free(raw);
++    if(!pt_light_audit) {
++        float *raw=xmalloc((size_t)n*sizeof(float));
++        if (ds4_session_copy_logits(w->session,raw,n)!=n) pt_w_die("force-raw-copy",1);
++        if (fwrite(raw,sizeof(float),n,pt_raw)!=(size_t)n) pt_w_die("force-raw-write",1);
++        free(raw);
++    }
+     uint64_t before=*rng;
+     if (worker_should_interrupt(w)) { free(piece); pt_w_die("interrupted-before-force-reservation",3); }
+     if (pt_w_forced_steps || !pw_reserve_force(&pt_w_policy,&view)) pt_w_die("force-reservation",1);
+--- before/write_budget_policy.h
++++ source/write_budget_policy.h
+@@ -4,6 +4,8 @@
+ #include <stdbool.h>
+ #include <stddef.h>
+ #include <string.h>
++#include <stdlib.h>
++#include <errno.h>
+ 
+ enum { PW_NATIVE = 0, PW_FORCE = 1, PW_REFUSE = -1 };
+ enum { PW_CLOSE_TOKEN = 128822, PW_LIMIT = 1024, PW_TOTAL_CAP = 2048, PW_CONTEXT = 8192 };
+@@ -17,14 +19,17 @@
+     bool greedy, dsml_active, pending_text, delimiter_prefix, assistant_after_boundary;
+ } pw_view;
+ 
+-/* Default is literal 0; empty/whitespace/other spellings are refusals. */
++/* Unset or zero disables the cutoff. Positive cutoffs count WRITE thinking. */
+ static int pw_parse_limit(const char *text) {
+-    if (!text || !strcmp(text, "0")) return 0;
+-    if (!strcmp(text, "1024")) return PW_LIMIT;
+-    return -1;
++    if (!text) return 0;
++    char *end = NULL;
++    errno = 0;
++    const long value = strtol(text, &end, 10);
++    if (errno || end == text || *end || value < 0 || value > PW_TOTAL_CAP) return -1;
++    return (int)value;
+ }
+ static bool pw_arm(pw_policy *p, int limit, int prompt_pos) {
+-    if (!p || (limit != 0 && limit != PW_LIMIT) || prompt_pos < 1 ||
++    if (!p || (limit < 0 || limit > PW_TOTAL_CAP) || prompt_pos < 1 ||
+         prompt_pos > PW_CONTEXT) return false;
+     memset(p,0,sizeof *p);
+     p->limit=limit;p->prompt_pos=prompt_pos;p->last_pos=prompt_pos;p->armed=limit != 0;
+@@ -68,7 +73,7 @@
+ static int pw_decide(const pw_policy *p, const pw_view *v) {
+     if (!p || !v) return PW_REFUSE;
+     if (!p->limit) return PW_NATIVE;
+-    if (p->limit != PW_LIMIT) return PW_REFUSE;
++    if (p->limit < 0 || p->limit > PW_TOTAL_CAP) return PW_REFUSE;
+     if (!p->armed || p->pending || v->pos != v->checkpoint_len ||
+         v->pos < p->last_pos || v->pos < p->prompt_pos || v->pos > PW_CONTEXT ||
+         v->count < p->last_count || v->count > v->pos-p->prompt_pos ||

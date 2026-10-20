@@ -1,0 +1,1607 @@
+{
+  "rows": [
+    {
+      "arm": "write128-before",
+      "case": "dedupe",
+      "wall_seconds": 92.0048349580029,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "write_budget": 128,
+      "first_failure": null,
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 540,
+      "output_tokens": 534,
+      "thinking_tokens": 166,
+      "final_text": "Implemented `solve(payload, config)` in the specified solution file. It tracks each key\u2019s last accepted timestamp, accepts first occurrences and expired duplicates (`t - last >= ttl`), rejects only unexpired duplicates, and returns accepted/rejected zero-based indices in original order without mutating inputs.",
+      "read_seconds": 48.243246541009285,
+      "read_thinking": 38,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 134,
+      "write_seconds": 39.06193266599439,
+      "write_thinking": 128,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 337,
+      "final_seconds": 4.697602041007485,
+      "final_thinking": 0,
+      "final_cached": 1478,
+      "final_fresh": 43,
+      "final_input_tokens": 1521,
+      "final_output_tokens": 63
+    },
+    {
+      "arm": "write128-before",
+      "case": "bucket",
+      "wall_seconds": 96.79491079199943,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "write_budget": 128,
+      "first_failure": null,
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 628,
+      "thinking_tokens": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, starts with `tokens = capacity` at time 0, refills before every event using the elapsed time since the previous event timestamp, caps at capacity, advances the timestamp, accepts zero-cost events even at zero tokens, rejects oversized costs without spending tokens, and returns the required `accepted`, `rejected`, `remaining`, and `tokens` fields without mutating the inputs.",
+      "read_seconds": 48.74046770797577,
+      "read_thinking": 33,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 128,
+      "write_seconds": 40.73742466699332,
+      "write_thinking": 128,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 376,
+      "final_seconds": 7.315071749995695,
+      "final_thinking": 0,
+      "final_cached": 1535,
+      "final_fresh": 42,
+      "final_input_tokens": 1577,
+      "final_output_tokens": 124
+    },
+    {
+      "arm": "write1",
+      "case": "dedupe",
+      "wall_seconds": 84.2668789169984,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "write_budget": 1,
+      "first_failure": null,
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 523,
+      "output_tokens": 427,
+      "thinking_tokens": 39,
+      "final_text": "Implemented `solve(payload, config)` in `dedupe/solution.py`. It tracks each key's last accepted timestamp, accepts first occurrences and any later occurrence where `t - last_accepted >= ttl`, rejects otherwise without refreshing the timestamp, and returns `{\"accepted\": [...], \"rejected\": [...]}` as zero-based indices in original order. With `ttl = 0`, every event is accepted.",
+      "read_seconds": 46.21425874999841,
+      "read_thinking": 38,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 134,
+      "write_seconds": 32.36880954101798,
+      "write_thinking": 1,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 205,
+      "final_seconds": 5.681900124996901,
+      "final_thinking": 0,
+      "final_cached": 1346,
+      "final_fresh": 43,
+      "final_input_tokens": 1389,
+      "final_output_tokens": 88
+    },
+    {
+      "arm": "write1",
+      "case": "bucket",
+      "wall_seconds": 91.0644134170143,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "write_budget": 1,
+      "first_failure": null,
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 502,
+      "thinking_tokens": 34,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt starts with `tokens = capacity` and `previous = 0`, refills by `(t - previous) * rate` capped at capacity before each event, advances the timestamp, accepts when `cost <= tokens` (subtracting cost), rejects otherwise without spending, records zero-based indices and post-event balances, and returns `{accepted, rejected, remaining, tokens}` using exact integer arithmetic without mutating inputs.",
+      "read_seconds": 47.5242177080072,
+      "read_thinking": 33,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 128,
+      "write_seconds": 35.794993041985435,
+      "write_thinking": 1,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 248,
+      "final_seconds": 7.743246416997863,
+      "final_thinking": 0,
+      "final_cached": 1407,
+      "final_fresh": 42,
+      "final_input_tokens": 1449,
+      "final_output_tokens": 126
+    },
+    {
+      "arm": "write32",
+      "case": "dedupe",
+      "wall_seconds": 91.58721216701088,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "write_budget": 32,
+      "first_failure": null,
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 523,
+      "output_tokens": 467,
+      "thinking_tokens": 70,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/solution.py`.\n\nIt tracks the last accepted timestamp per exact key, accepts first occurrences, accepts later occurrences only when `t - last_accepted >= ttl`, rejects otherwise without refreshing the stored timestamp, and returns `{\"accepted\": [...], \"rejected\": [...]}` using original payload indices.",
+      "read_seconds": 50.44941241599736,
+      "read_thinking": 38,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 134,
+      "write_seconds": 34.99283575001755,
+      "write_thinking": 32,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 236,
+      "final_seconds": 6.142952958995011,
+      "final_thinking": 0,
+      "final_cached": 1377,
+      "final_fresh": 43,
+      "final_input_tokens": 1420,
+      "final_output_tokens": 97
+    },
+    {
+      "arm": "write32",
+      "case": "bucket",
+      "wall_seconds": 92.84347270900616,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "write_budget": 32,
+      "first_failure": null,
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 486,
+      "thinking_tokens": 65,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt refills before each event, caps at capacity, advances the timestamp, accepts or rejects based on the cost, records zero-based indices and post-event balances, and returns the final token count.",
+      "read_seconds": 50.21646383299958,
+      "read_thinking": 33,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 128,
+      "write_seconds": 37.31672383300611,
+      "write_thinking": 32,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 280,
+      "final_seconds": 5.308056667010533,
+      "final_thinking": 0,
+      "final_cached": 1439,
+      "final_fresh": 42,
+      "final_input_tokens": 1481,
+      "final_output_tokens": 78
+    },
+    {
+      "arm": "write128-after",
+      "case": "dedupe",
+      "wall_seconds": 94.84001183402142,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "write_budget": 128,
+      "first_failure": null,
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 540,
+      "output_tokens": 534,
+      "thinking_tokens": 166,
+      "final_text": "Implemented `solve(payload, config)` in the specified solution file. It tracks each key\u2019s last accepted timestamp, accepts first occurrences and expired duplicates (`t - last >= ttl`), rejects only unexpired duplicates, and returns accepted/rejected zero-based indices in original order without mutating inputs.",
+      "read_seconds": 49.986940917005995,
+      "read_thinking": 38,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 134,
+      "write_seconds": 40.18542679201346,
+      "write_thinking": 128,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 337,
+      "final_seconds": 4.665235708002001,
+      "final_thinking": 0,
+      "final_cached": 1478,
+      "final_fresh": 43,
+      "final_input_tokens": 1521,
+      "final_output_tokens": 63
+    },
+    {
+      "arm": "write128-after",
+      "case": "bucket",
+      "wall_seconds": 99.63277195900446,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "write_budget": 128,
+      "first_failure": null,
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 628,
+      "thinking_tokens": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, starts with `tokens = capacity` at time 0, refills before every event using the elapsed time since the previous event timestamp, caps at capacity, advances the timestamp, accepts zero-cost events even at zero tokens, rejects oversized costs without spending tokens, and returns the required `accepted`, `rejected`, `remaining`, and `tokens` fields without mutating the inputs.",
+      "read_seconds": 50.36070849999669,
+      "read_thinking": 33,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 128,
+      "write_seconds": 41.676223207992734,
+      "write_thinking": 128,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 376,
+      "final_seconds": 7.5934958750149235,
+      "final_thinking": 0,
+      "final_cached": 1535,
+      "final_fresh": 42,
+      "final_input_tokens": 1577,
+      "final_output_tokens": 124
+    }
+  ],
+  "by_arm": {
+    "write128-before": {
+      "task_wall_seconds": 188.79974575000233,
+      "launcher_wall_seconds": 193.39327000000048,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1162,
+      "thinking_tokens": 327,
+      "role_seconds": {
+        "READ": 96.98371424898505,
+        "WRITE": 79.79935733298771,
+        "FINAL": 12.01267379100318
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "write_budget": 128,
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "write1": {
+      "task_wall_seconds": 175.3312923340127,
+      "launcher_wall_seconds": 179.51534095898387,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 929,
+      "thinking_tokens": 73,
+      "role_seconds": {
+        "READ": 93.73847645800561,
+        "WRITE": 68.16380258300342,
+        "FINAL": 13.425146541994764
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 2,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 2753
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "write_budget": 1,
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "write32": {
+      "task_wall_seconds": 184.43068487601704,
+      "launcher_wall_seconds": 188.84474979201332,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 953,
+      "thinking_tokens": 135,
+      "role_seconds": {
+        "READ": 100.66587624899694,
+        "WRITE": 72.30955958302366,
+        "FINAL": 11.451009626005543
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 64,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 2816
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "write_budget": 32,
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "write128-after": {
+      "task_wall_seconds": 194.47278379302588,
+      "launcher_wall_seconds": 198.75973095800146,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1162,
+      "thinking_tokens": 327,
+      "role_seconds": {
+        "READ": 100.34764941700269,
+        "WRITE": 81.8616500000062,
+        "FINAL": 12.258731583016925
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "write_budget": 128,
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    }
+  },
+  "controls_vs_opening128": {
+    "write128-before": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "write1": {
+      "dedupe": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "write32": {
+      "dedupe": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "write128-after": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "read_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    }
+  },
+  "grafts": [
+    {
+      "arm": "write128-before",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.588163,
+      "raw_log": "1004 18:32:16 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21588.163 ms"
+    },
+    {
+      "arm": "write128-before",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.554848000000003,
+      "raw_log": "1004 18:33:51 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21554.848 ms"
+    },
+    {
+      "arm": "write1",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.191933000000002,
+      "raw_log": "1004 18:43:07 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21191.933 ms"
+    },
+    {
+      "arm": "write1",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 22.051122,
+      "raw_log": "1004 18:44:36 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 22051.122 ms"
+    },
+    {
+      "arm": "write32",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.655925,
+      "raw_log": "1004 18:46:23 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21655.925 ms"
+    },
+    {
+      "arm": "write32",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.836543000000002,
+      "raw_log": "1004 18:47:57 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21836.543 ms"
+    },
+    {
+      "arm": "write128-after",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.833159,
+      "raw_log": "1004 18:49:45 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21833.159 ms"
+    },
+    {
+      "arm": "write128-after",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.618059000000002,
+      "raw_log": "1004 18:51:22 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21618.059 ms"
+    }
+  ],
+  "visible_continuations": [
+    {
+      "arm": "write128-before",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1478,
+      "prompt": 1521,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:32:34 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1478 prompt=1521 approximate=1"
+    },
+    {
+      "arm": "write128-before",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1535,
+      "prompt": 1577,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:34:10 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1"
+    },
+    {
+      "arm": "write1",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1346,
+      "prompt": 1389,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:43:19 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1346 prompt=1389 approximate=1"
+    },
+    {
+      "arm": "write1",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1407,
+      "prompt": 1449,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:44:50 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1407 prompt=1449 approximate=1"
+    },
+    {
+      "arm": "write32",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1377,
+      "prompt": 1420,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:46:37 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1377 prompt=1420 approximate=1"
+    },
+    {
+      "arm": "write32",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1439,
+      "prompt": 1481,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:48:12 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1439 prompt=1481 approximate=1"
+    },
+    {
+      "arm": "write128-after",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1478,
+      "prompt": 1521,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:50:03 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1478 prompt=1521 approximate=1"
+    },
+    {
+      "arm": "write128-after",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1535,
+      "prompt": 1577,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:51:42 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1"
+    }
+  ],
+  "reasoning_summaries": [
+    {
+      "arm": "write128-before",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 38,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-before",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-before",
+      "case": "dedupe",
+      "context": "1478..1521:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-before",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 33,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-before",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-before",
+      "case": "bucket",
+      "context": "1535..1577:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write1",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 38,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write1",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "write1",
+      "case": "dedupe",
+      "context": "1346..1389:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write1",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 33,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write1",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "write1",
+      "case": "bucket",
+      "context": "1407..1449:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write32",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 38,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write32",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 32,
+      "thinking": 32,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "write32",
+      "case": "dedupe",
+      "context": "1377..1420:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write32",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 33,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write32",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 32,
+      "thinking": 32,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "write32",
+      "case": "bucket",
+      "context": "1439..1481:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-after",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 38,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-after",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-after",
+      "case": "dedupe",
+      "context": "1478..1521:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-after",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 33,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-after",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "write128-after",
+      "case": "bucket",
+      "context": "1535..1577:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    }
+  ],
+  "cache_shutdowns": [
+    {
+      "arm": "write128-before",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 106395039,
+      "metadata_bytes": 77235,
+      "endpoints": 7,
+      "chunks": 406,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "write128-before",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 213603968,
+      "metadata_bytes": 151754,
+      "endpoints": 14,
+      "chunks": 801,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "write1",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 105464773,
+      "metadata_bytes": 76910,
+      "endpoints": 7,
+      "chunks": 404,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "write1",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 211771686,
+      "metadata_bytes": 151269,
+      "endpoints": 14,
+      "chunks": 798,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "write32",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 105674832,
+      "metadata_bytes": 76111,
+      "endpoints": 7,
+      "chunks": 399,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "write32",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 212207233,
+      "metadata_bytes": 150470,
+      "endpoints": 14,
+      "chunks": 793,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "write128-after",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 106395039,
+      "metadata_bytes": 77238,
+      "endpoints": 7,
+      "chunks": 406,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "write128-after",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 213603968,
+      "metadata_bytes": 151757,
+      "endpoints": 14,
+      "chunks": 801,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    }
+  ],
+  "guard_summaries": [
+    {
+      "arm": "write128-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 187,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.51518249511719,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "write1",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 174,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.50169372558594,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "write32",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 183,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.21902465820312,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "write128-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 192,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.11604309082031,
+      "max_consecutive_bad": 0
+    }
+  ],
+  "route_summaries": [
+    {
+      "arm": "write128-before",
+      "case": "dedupe",
+      "layers": 21360,
+      "substitutions": 10319,
+      "native_misses": 15045,
+      "skipped_loads": 10319,
+      "skipped_bytes": 102707896320,
+      "mean_mass": 0.12054024,
+      "mean_score_gap": 0.11078908,
+      "mean_affinity_ratio": 0.8912101,
+      "mean_rank": 7.722,
+      "full_snapshots": 8487,
+      "double_layers": 1560,
+      "planned_substitutions": 10319,
+      "drops": 0,
+      "triple_layers": 137,
+      "raw_log": "ds4: resident-route layers=21360 substitutions=10319 native_misses=15045 skipped_loads=10319 skipped_bytes=102707896320 mean_mass=0.12054024 mean_score_gap=0.11078908 mean_affinity_ratio=0.89121010 mean_rank=7.722 full_snapshots=8487 double_layers=1560 planned_substitutions=10319 drops=0 triple_layers=137",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=10319"
+      ]
+    },
+    {
+      "arm": "write128-before",
+      "case": "bucket",
+      "layers": 25120,
+      "substitutions": 11700,
+      "native_misses": 16805,
+      "skipped_loads": 11700,
+      "skipped_bytes": 116453376000,
+      "mean_mass": 0.12132308,
+      "mean_score_gap": 0.11305714,
+      "mean_affinity_ratio": 0.88806224,
+      "mean_rank": 7.704,
+      "full_snapshots": 9645,
+      "double_layers": 1747,
+      "planned_substitutions": 11700,
+      "drops": 0,
+      "triple_layers": 154,
+      "raw_log": "ds4: resident-route layers=25120 substitutions=11700 native_misses=16805 skipped_loads=11700 skipped_bytes=116453376000 mean_mass=0.12132308 mean_score_gap=0.11305714 mean_affinity_ratio=0.88806224 mean_rank=7.704 full_snapshots=9645 double_layers=1747 planned_substitutions=11700 drops=0 triple_layers=154",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=11700"
+      ]
+    },
+    {
+      "arm": "write1",
+      "case": "dedupe",
+      "layers": 17080,
+      "substitutions": 7995,
+      "native_misses": 11692,
+      "skipped_loads": 7995,
+      "skipped_bytes": 79576473600,
+      "mean_mass": 0.12015238,
+      "mean_score_gap": 0.11124244,
+      "mean_affinity_ratio": 0.88992156,
+      "mean_rank": 7.69,
+      "full_snapshots": 6616,
+      "double_layers": 1180,
+      "planned_substitutions": 7995,
+      "drops": 0,
+      "triple_layers": 100,
+      "raw_log": "ds4: resident-route layers=17080 substitutions=7995 native_misses=11692 skipped_loads=7995 skipped_bytes=79576473600 mean_mass=0.12015238 mean_score_gap=0.11124244 mean_affinity_ratio=0.88992156 mean_rank=7.690 full_snapshots=6616 double_layers=1180 planned_substitutions=7995 drops=0 triple_layers=100",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=7995"
+      ]
+    },
+    {
+      "arm": "write1",
+      "case": "bucket",
+      "layers": 20080,
+      "substitutions": 8961,
+      "native_misses": 12829,
+      "skipped_loads": 8961,
+      "skipped_bytes": 89191342080,
+      "mean_mass": 0.12013026,
+      "mean_score_gap": 0.11030204,
+      "mean_affinity_ratio": 0.88948429,
+      "mean_rank": 7.669,
+      "full_snapshots": 7431,
+      "double_layers": 1320,
+      "planned_substitutions": 8961,
+      "drops": 0,
+      "triple_layers": 105,
+      "raw_log": "ds4: resident-route layers=20080 substitutions=8961 native_misses=12829 skipped_loads=8961 skipped_bytes=89191342080 mean_mass=0.12013026 mean_score_gap=0.11030204 mean_affinity_ratio=0.88948429 mean_rank=7.669 full_snapshots=7431 double_layers=1320 planned_substitutions=8961 drops=0 triple_layers=105",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=8961"
+      ]
+    },
+    {
+      "arm": "write32",
+      "case": "dedupe",
+      "layers": 18680,
+      "substitutions": 8559,
+      "native_misses": 12439,
+      "skipped_loads": 8559,
+      "skipped_bytes": 85190123520,
+      "mean_mass": 0.12076848,
+      "mean_score_gap": 0.11018131,
+      "mean_affinity_ratio": 0.89104854,
+      "mean_rank": 7.696,
+      "full_snapshots": 7091,
+      "double_layers": 1243,
+      "planned_substitutions": 8559,
+      "drops": 0,
+      "triple_layers": 113,
+      "raw_log": "ds4: resident-route layers=18680 substitutions=8559 native_misses=12439 skipped_loads=8559 skipped_bytes=85190123520 mean_mass=0.12076848 mean_score_gap=0.11018131 mean_affinity_ratio=0.89104854 mean_rank=7.696 full_snapshots=7091 double_layers=1243 planned_substitutions=8559 drops=0 triple_layers=113",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=8559"
+      ]
+    },
+    {
+      "arm": "write32",
+      "case": "bucket",
+      "layers": 19440,
+      "substitutions": 9047,
+      "native_misses": 12975,
+      "skipped_loads": 9047,
+      "skipped_bytes": 90047324160,
+      "mean_mass": 0.12019827,
+      "mean_score_gap": 0.1136416,
+      "mean_affinity_ratio": 0.88628117,
+      "mean_rank": 7.683,
+      "full_snapshots": 7503,
+      "double_layers": 1340,
+      "planned_substitutions": 9047,
+      "drops": 0,
+      "triple_layers": 102,
+      "raw_log": "ds4: resident-route layers=19440 substitutions=9047 native_misses=12975 skipped_loads=9047 skipped_bytes=90047324160 mean_mass=0.12019827 mean_score_gap=0.11364160 mean_affinity_ratio=0.88628117 mean_rank=7.683 full_snapshots=7503 double_layers=1340 planned_substitutions=9047 drops=0 triple_layers=102",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=9047"
+      ]
+    },
+    {
+      "arm": "write128-after",
+      "case": "dedupe",
+      "layers": 21360,
+      "substitutions": 10319,
+      "native_misses": 15045,
+      "skipped_loads": 10319,
+      "skipped_bytes": 102707896320,
+      "mean_mass": 0.12054024,
+      "mean_score_gap": 0.11078908,
+      "mean_affinity_ratio": 0.8912101,
+      "mean_rank": 7.722,
+      "full_snapshots": 8487,
+      "double_layers": 1560,
+      "planned_substitutions": 10319,
+      "drops": 0,
+      "triple_layers": 137,
+      "raw_log": "ds4: resident-route layers=21360 substitutions=10319 native_misses=15045 skipped_loads=10319 skipped_bytes=102707896320 mean_mass=0.12054024 mean_score_gap=0.11078908 mean_affinity_ratio=0.89121010 mean_rank=7.722 full_snapshots=8487 double_layers=1560 planned_substitutions=10319 drops=0 triple_layers=137",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=10319"
+      ]
+    },
+    {
+      "arm": "write128-after",
+      "case": "bucket",
+      "layers": 25120,
+      "substitutions": 11700,
+      "native_misses": 16805,
+      "skipped_loads": 11700,
+      "skipped_bytes": 116453376000,
+      "mean_mass": 0.12132308,
+      "mean_score_gap": 0.11305714,
+      "mean_affinity_ratio": 0.88806224,
+      "mean_rank": 7.704,
+      "full_snapshots": 9645,
+      "double_layers": 1747,
+      "planned_substitutions": 11700,
+      "drops": 0,
+      "triple_layers": 154,
+      "raw_log": "ds4: resident-route layers=25120 substitutions=11700 native_misses=16805 skipped_loads=11700 skipped_bytes=116453376000 mean_mass=0.12132308 mean_score_gap=0.11305714 mean_affinity_ratio=0.88806224 mean_rank=7.704 full_snapshots=9645 double_layers=1747 planned_substitutions=11700 drops=0 triple_layers=154",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=11700"
+      ]
+    }
+  ],
+  "route_totals": {
+    "write128-before": {
+      "layers": 46480,
+      "substitutions": 22019,
+      "native_misses": 31850,
+      "skipped_loads": 22019,
+      "skipped_bytes": 219161272320,
+      "double_layers": 3307,
+      "triple_layers": 291,
+      "drops": 0
+    },
+    "write1": {
+      "layers": 37160,
+      "substitutions": 16956,
+      "native_misses": 24521,
+      "skipped_loads": 16956,
+      "skipped_bytes": 168767815680,
+      "double_layers": 2500,
+      "triple_layers": 205,
+      "drops": 0
+    },
+    "write32": {
+      "layers": 38120,
+      "substitutions": 17606,
+      "native_misses": 25414,
+      "skipped_loads": 17606,
+      "skipped_bytes": 175237447680,
+      "double_layers": 2583,
+      "triple_layers": 215,
+      "drops": 0
+    },
+    "write128-after": {
+      "layers": 46480,
+      "substitutions": 22019,
+      "native_misses": 31850,
+      "skipped_loads": 22019,
+      "skipped_bytes": 219161272320,
+      "double_layers": 3307,
+      "triple_layers": 291,
+      "drops": 0
+    }
+  },
+  "source_profiles": {
+    "write128-before": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh33-cache-subs3-after",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b",
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b"
+      ]
+    },
+    "write1": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh35-cache-write1",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b",
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b"
+      ]
+    },
+    "write32": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh35-cache-write32",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b",
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b"
+      ]
+    },
+    "write128-after": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh35-cache-write128-after",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b",
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b"
+      ]
+    }
+  },
+  "write128_bracket_mean": {
+    "task_wall_seconds": 191.6362647715141,
+    "launcher_wall_seconds": 196.07650047900097
+  },
+  "change_vs_write128_bracket_mean_percent": {
+    "write128-before": {
+      "task_wall_seconds": -1.4801577482705164,
+      "launcher_wall_seconds": -1.3684610202882808
+    },
+    "write1": {
+      "task_wall_seconds": -8.508291714484029,
+      "launcher_wall_seconds": -8.446274530379394
+    },
+    "write32": {
+      "task_wall_seconds": -3.760029399491893,
+      "launcher_wall_seconds": -3.6882291704110393
+    },
+    "write128-after": {
+      "task_wall_seconds": 1.4801577482705275,
+      "launcher_wall_seconds": 1.3684610202882697
+    }
+  },
+  "closing128_vs_opening128_percent": {
+    "task_wall_seconds": 3.0047911455005183,
+    "launcher_wall_seconds": 2.774895402513722
+  },
+  "scope": "WRITE budget1/32/128 with frozen dedupe/bucket contracts. Opening128 is retained Item33 closing3 evidence; only requested WRITE thinking budget changes. Source profiles and route max3 are fixed in separate cache namespaces. Actual first failures/checks, pipeline/caps and role costs are retained; generated histories may diverge. No retries, paired NLL, additive or general accuracy claim.",
+  "change_vs_faster_write128_percent": {
+    "write128-before": {
+      "task_wall_seconds": 0.0,
+      "launcher_wall_seconds": 0.0
+    },
+    "write1": {
+      "task_wall_seconds": -7.133724339768865,
+      "launcher_wall_seconds": -7.176014470936131
+    },
+    "write32": {
+      "task_wall_seconds": -2.314124341973711,
+      "launcher_wall_seconds": -2.351953719996125
+    },
+    "write128-after": {
+      "task_wall_seconds": 3.0047911455005183,
+      "launcher_wall_seconds": 2.774895402513722
+    }
+  },
+  "case_change_vs_write128_bracket_mean_percent": {
+    "write128-before": {
+      "dedupe": -1.5173963449868877,
+      "bucket": -1.4447358576246905
+    },
+    "write1": {
+      "dedupe": -9.800157335037174,
+      "bucket": -7.279450491253236
+    },
+    "write32": {
+      "dedupe": -1.9644226324786462,
+      "bucket": -5.468036471522575
+    },
+    "write128-after": {
+      "dedupe": 1.5173963449868877,
+      "bucket": 1.4447358576247016
+    }
+  }
+}

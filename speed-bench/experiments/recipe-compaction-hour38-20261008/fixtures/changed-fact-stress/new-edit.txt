@@ -1,0 +1,1 @@
+Corrected fact: only an ACCEPTED event replaces a key's remembered timestamp. Rejected duplicates never refresh it. With ttl5, times0,4,5 for one key accept indices0 and2, reject index1. Equality expires. The retained current contract and actual config remain authoritative. Earlier last-seen discussion was wrong and is archived.

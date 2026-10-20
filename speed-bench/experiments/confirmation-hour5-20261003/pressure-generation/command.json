@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/confirmation-hour5-20261003/run.py",
+    "--generate",
+    "--manifest",
+    "/Volumes/Models/ds4/speed-bench/experiments/confirmation-hour5-20261003/generation.tsv",
+    "--cases",
+    "4",
+    "--tokens",
+    "128",
+    "--group",
+    "generation",
+    "--cli",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-original-deadline-native/speed-bench/ideas/artifacts/original-deadline-admitted-direct-v1/ds4-original-deadline-age8",
+    "native",
+    "deadline-age8",
+    "affinity-strong"
+  ],
+  "initial": {
+    "time": 1791039619.836867,
+    "level": 1,
+    "swap_gb": 0.024599609375,
+    "physical_gb": 128.0,
+    "free_gb": 57.73533630371094,
+    "file_backed_gb": 53.140350341796875,
+    "wired_gb": 3.5955047607421875,
+    "compressor_gb": 7.851287841796875
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

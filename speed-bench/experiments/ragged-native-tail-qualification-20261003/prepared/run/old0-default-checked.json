@@ -1,0 +1,292 @@
+{
+  "phases": [
+    {
+      "phase": 0,
+      "kind": "P",
+      "context": 1859,
+      "tokens": 1859,
+      "ms": 64802.622,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 1,
+      "kind": "P",
+      "context": 1949,
+      "tokens": 90,
+      "ms": 3619.139,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 2,
+      "kind": "D",
+      "context": 2021,
+      "tokens": 72,
+      "ms": 4380.982,
+      "first_decode_ms": 63.594
+    },
+    {
+      "phase": 3,
+      "kind": "P",
+      "context": 10341,
+      "tokens": 8320,
+      "ms": 28995.201,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 4,
+      "kind": "D",
+      "context": 10349,
+      "tokens": 8,
+      "ms": 630.277,
+      "first_decode_ms": 93.417
+    },
+    {
+      "phase": 5,
+      "kind": "P",
+      "context": 27244,
+      "tokens": 16895,
+      "ms": 71473.716,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 6,
+      "kind": "D",
+      "context": 27252,
+      "tokens": 8,
+      "ms": 738.699,
+      "first_decode_ms": 127.026
+    },
+    {
+      "phase": 7,
+      "kind": "P",
+      "context": 27290,
+      "tokens": 38,
+      "ms": 1432.182,
+      "first_decode_ms": 0.0
+    },
+    {
+      "phase": 8,
+      "kind": "D",
+      "context": 27298,
+      "tokens": 8,
+      "ms": 531.042,
+      "first_decode_ms": 68.634
+    }
+  ],
+  "artifacts": {
+    "main.logits.f32": {
+      "sha256": "e3c4d3718e353301da81018f82900bd74093ddaaf1b46f0cc873fbf0ddff7176",
+      "bytes": 4654080
+    },
+    "main.state.bin": {
+      "sha256": "531082edbb9b6628a265088e2e2280da7b5cc273ae766afa2784ea420f36a9f1",
+      "bytes": 185819324
+    },
+    "phase-3.anchor.logits.f32": {
+      "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3",
+      "bytes": 517120
+    },
+    "phase-3.restored.logits.f32": {
+      "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3",
+      "bytes": 517120
+    },
+    "phase-3.branch.logits.f32": {
+      "sha256": "3a22d2f250fbbdb1ce9ddfe98a16e5068a2330ebb7aa5f78192fc7950a404679",
+      "bytes": 16547840
+    },
+    "phase-3.anchor.state.bin": {
+      "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a",
+      "bytes": 77235144
+    },
+    "phase-3.restored.state.bin": {
+      "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a",
+      "bytes": 77235144
+    },
+    "phase-3.branch-final.state.bin": {
+      "sha256": "7c9ea28c6b9904f8ec23f239b477e4de46aea7210ce5b49dfc575403e3f5f2bb",
+      "bytes": 77440072
+    },
+    "phase-5.anchor.logits.f32": {
+      "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b",
+      "bytes": 517120
+    },
+    "phase-5.restored.logits.f32": {
+      "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b",
+      "bytes": 517120
+    },
+    "phase-5.branch.logits.f32": {
+      "sha256": "0f2251aa4e6356c5db73b6937e4b3e6f1c56712a8ae8252b0135d2430ebbef6e",
+      "bytes": 16547840
+    },
+    "phase-5.anchor.state.bin": {
+      "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034",
+      "bytes": 185473508
+    },
+    "phase-5.restored.state.bin": {
+      "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034",
+      "bytes": 185473508
+    },
+    "phase-5.branch-final.state.bin": {
+      "sha256": "d01ae21cdc3e18f9fb1584218e94ece91884e71e514122ab4f02cacd9a3e3247",
+      "bytes": 185678436
+    }
+  },
+  "cache": {
+    "main": [
+      [
+        0,
+        6136,
+        6136
+      ],
+      [
+        1,
+        6136,
+        6136
+      ],
+      [
+        2,
+        6136,
+        6136
+      ],
+      [
+        3,
+        6136,
+        6136
+      ],
+      [
+        4,
+        6136,
+        6136
+      ],
+      [
+        5,
+        6136,
+        6136
+      ],
+      [
+        6,
+        6136,
+        6136
+      ],
+      [
+        7,
+        6136,
+        6136
+      ],
+      [
+        8,
+        6136,
+        6136
+      ]
+    ],
+    "branches": [
+      [
+        3,
+        6136,
+        6136
+      ],
+      [
+        5,
+        6136,
+        6136
+      ]
+    ],
+    "main_footer": {
+      "budget": 6136,
+      "entries": 6136,
+      "hits": 98947,
+      "misses": 27690,
+      "wraps": 83070,
+      "evictions": 21554,
+      "buffer_allocs": 15,
+      "buffer_reuses": 21554
+    },
+    "rounded_attribution": {
+      "expert": 9.49,
+      "target": 56.88,
+      "live": 56.88,
+      "hit_rate": 0.781,
+      "evict_dontneed": 0.0,
+      "miss_willneed": 0.0,
+      "miss_pread": 89.47,
+      "pread_ms": 4196.762
+    },
+    "exact_main_IO_available": false
+  },
+  "branch_IO": [
+    {
+      "phase": 3,
+      "pread_calls": 2457,
+      "requested_bytes": 8151736320,
+      "returned_bytes": 8151736320,
+      "hits": 6861,
+      "misses": 819,
+      "evictions": 819
+    },
+    {
+      "phase": 5,
+      "pread_calls": 1569,
+      "requested_bytes": 5205565440,
+      "returned_bytes": 5205565440,
+      "hits": 7157,
+      "misses": 523,
+      "evictions": 523
+    }
+  ],
+  "dispatch": {
+    "0": [
+      512,
+      512,
+      512,
+      323
+    ],
+    "1": [
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      2
+    ],
+    "3": [
+      8192,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8
+    ],
+    "5": [
+      16384,
+      511
+    ],
+    "7": [
+      8,
+      8,
+      8,
+      8,
+      6
+    ]
+  },
+  "nine_phase_vectors": 9,
+  "score_before_target_vectors": 64,
+  "teacher_forced": true,
+  "interpretation": "Diagnostic timings; branch restoration/evaluation excluded from main. Main rounded IO attribution is not exact demanded bytes."
+}

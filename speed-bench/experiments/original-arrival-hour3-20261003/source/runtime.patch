@@ -1,0 +1,411 @@
+--- a/ds4.c
++++ b/ds4.c
+@@ -48,6 +48,7 @@
+ #include "ds4_engram.h"
+ #include "ds4_resident_route.h"
+ #include "ds4_resident_native_weights.h"
++#include "ds4_original_deadline_gate.h"
+ #include "ds4_suffix_layout.h"
+ #include "ds4_tp.h"
+ #if !defined(DS4_NO_GPU) && !defined(DS4_ROCM_BUILD)
+@@ -2632,6 +2633,10 @@
+ 
+ static void model_close(ds4_model *m) {
+     if (!m) return;
++#if defined(__APPLE__) && !defined(DS4_NO_GPU)
++    if(!ds4_gpu_original_deadline_close_model(m->map,m->size,m->fd))
++        ds4_die("original deadline reader must join before matching model closes");
++#endif
+     if (m->ngram_tensor && m->ngram_fd >= 0) close(m->ngram_fd);
+     free(m->kv);
+     free(m->tensors);
+@@ -40234,6 +40239,7 @@
+     bool resident_route_profile;
+     bool resident_route_drop_weak;
+     bool resident_route_native_weights;
++    bool original_deadline_active;
+ #define DS41_FIELD(name, count) ds4_gpu_tensor *name;
+     DS41_SCRATCH(DS41_FIELD)
+ #undef DS41_FIELD
+@@ -40265,6 +40271,11 @@
+ 
+ static void ds41_graph_free(ds41_gpu_graph *g) {
+     if (!g) return;
++#ifdef __APPLE__
++    if(g->original_deadline_active && !ds4_gpu_original_deadline_close(g))
++        ds4_die("original deadline graph teardown owner mismatch");
++    g->original_deadline_active=false;
++#endif
+ #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
+     ds4_gpu_decode_graphs_invalidate();
+ #endif
+@@ -41508,6 +41519,47 @@
+     return true;
+ }
+ 
++
++static void ds41_original_deadline_stop(ds41_gpu_graph *g) {
++    if(g->original_deadline_active && !ds4_gpu_original_deadline_close(g))
++        ds4_die("original deadline close requires graph owner thread");
++    g->original_deadline_active=false;
++}
++static void ds41_original_deadline_configure(ds41_gpu_graph *g,const ds4_model *m,bool decode) {
++    int enabled;
++    if(!ds4_od_flag(getenv("DS4_METAL_V41_ORIGINAL_DEADLINE"),&enabled))
++        ds4_die("original deadline flag must be literal 0 or 1");
++    if(!enabled) { ds41_original_deadline_stop(g);return; }
++    if(!ds4_od_fixed_policy(getenv("DS4_METAL_V41_RESIDENT_ROUTE_GAP"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS"),
++          getenv("DS4_METAL_V41_RESIDENT_ROUTE_POLICY")))
++        ds4_die("original deadline requires fixed .30/.12/rank24/sub1/native weights/replace");
++    const char *conflicts[]={"DS4_METAL_V41_RESIDENT_ROUTE_BACKFILL",
++        "DS4_METAL_V41_RESIDENT_ROUTE_BACKFILL_LATE",
++        "DS4_METAL_V41_RESIDENT_ROUTE_BACKFILL_POOL",
++        "DS4_METAL_V41_RESIDENT_ROUTE_BACKFILL_POOL_READY_AGE",
++        "DS4_METAL_V41_RESIDENT_ROUTE_BACKFILL_POOL_NATIVE_RECHECK",
++        "DS4_METAL_V41_RESIDENT_ROUTE_PREDICT", "DS4_METAL_V41_STAGED_EXPERT_LOAD", "DS4_METAL_V41_ASYNC_EXPERT_LOAD",
++        "DS4_METAL_V41_GATE_PREFETCH", "DS4_METAL_DISABLE_STREAMING_EXPERT_EARLY_LOAD",
++        "DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS"};
++    for(size_t i=0;i<sizeof conflicts/sizeof conflicts[0];i++)
++        if(getenv(conflicts[i])) ds4_die("original deadline conflicts with another streaming option");
++    if(!g->streaming || g->quality || g->imatrix || g->image_count || g->tp_world!=1 ||
++       ds41_route_oracle.active || DS4_N_LAYER!=40 || DS4_N_EXPERT!=384 ||
++       DS4_N_EXPERT_USED!=6 || DS4_N_EMBD!=5120 || DS4_N_FF_EXP!=2304)
++        ds4_die("original deadline requires fixed ordinary scalar DS4.1 text SSD layout");
++    if(!decode) { ds41_original_deadline_stop(g);return; }
++    if(!g->resident_route_native_weights || g->resident_route_drop_weak ||
++       g->resident_route_max_subs!=1 || g->resident_route_max_rank!=24 ||
++       g->resident_route_max_mass!=0.12f)
++        ds4_die("original deadline configured resident policy differs");
++    if(!ds4_gpu_original_deadline_token_begin(g,m->map,m->size,m->fd))
++        ds4_die("original deadline owner/model/slab admission refused");
++    g->original_deadline_active=true;
++}
+ 
+ static bool ds41_resident_route_apply_dispatch(ds41_gpu_graph *g, const ds4_model *m,
+         const ds4_layer_weights *l, uint32_t il,
+@@ -41545,6 +41597,7 @@
+     const bool early_load = load_eligible && !async_load;
+     metal_graph_selected_async_load load = {0};
+     int32_t selected_ids[DS4_MAX_EXPERT_USED];
++    int32_t original_ids[6];
+     if (async_load) {
+         uint64_t event = 0;
+         /* Commit the routing event before handing it to the worker, so even
+@@ -41596,7 +41649,16 @@
+                     fwrite(resident, 1, DS4_N_EXPERT, ds41_route_oracle.cache) != DS4_N_EXPERT)
+                     ds4_die("routing cache snapshot failed");
+             }
++            if(g->original_deadline_active) {
++                if(l->ffn_gate_exps->type!=DS4_TENSOR_IQ2_XXS ||
++                   l->ffn_up_exps->type!=DS4_TENSOR_IQ2_XXS ||
++                   l->ffn_down_exps->type!=DS4_TENSOR_Q2_K) return false;
++                memcpy(original_ids,selected_ids,sizeof original_ids);
++                if(!ds4_gpu_original_deadline_future_selected(g,&table,original_ids)) return false;
++            }
+             if (!ds41_resident_route_apply_dispatch(g, m, l, il, &table, selected_ids)) return false;
++            if(g->original_deadline_active &&
++               ds4_gpu_original_deadline_arm_selected(g,&table,original_ids,selected_ids)<0) return false;
+             t0 = profile ? now_sec() * 1000.0 : 0.0;
+             if (!ds4_gpu_stream_expert_cache_begin_selected_load(&table, selected_ids,
+                     DS4_N_EXPERT_USED)) return false;
+@@ -41631,9 +41693,20 @@
+             return false;
+         }
+     }
++    if(g->original_deadline_active) {
++        int promoted=0;
++        if(!early_load || !ds4_gpu_flush_commands() ||
++           !ds4_gpu_original_deadline_finish_selected(g,selected_ids,&promoted)) return false;
++        /* Sole promotion write is IDs. Original GPU coefficient bits remain
++         * untouched by adapter, dispatcher, deadline and native address bind. */
++        if(promoted && !ds4_gpu_tensor_write(g->selected,0,selected_ids,sizeof original_ids)) return false;
++        if(!ds4_gpu_routed_moe_set_selected_override(selected_ids,DS4_N_EXPERT_USED) ||
++           !ds4_gpu_original_deadline_bind_ready(g)) return false;
++    } else {
+     if (early_load && (!ds4_gpu_flush_commands() ||
+         !ds4_gpu_routed_moe_set_selected_override(selected_ids, DS4_N_EXPERT_USED)))
+         return false;
++    }
+ #else
+     const bool shared_here = !shared_owner || g->tp_rank == (il & 1u);
+     bool shared_queued = false;
+@@ -42204,25 +42277,43 @@
+ 
+ static DS4_MAYBE_UNUSED bool ds41_graph_step(ds41_gpu_graph *g, const ds4_model *m,
+                                              const ds4_weights *w, int token, float *logits) {
+-    if (!g || !g->valid || g->pos >= g->ctx || token < 0 || (uint32_t)token >= DS4_N_VOCAB) return false;
++    if (!g || !g->valid || g->pos >= g->ctx || token < 0 || (uint32_t)token >= DS4_N_VOCAB) {
++#ifdef __APPLE__
++        if(g) ds41_original_deadline_stop(g);
++#endif
++        return false;
++    }
+     ds41_route_oracle_begin(g, (uint32_t)token);
+ #ifdef __APPLE__
+     ds41_resident_route_configure(g, logits != NULL);
++    ds41_original_deadline_configure(g,m,logits != NULL);
+ #endif
+     uint32_t ids[2][DS4_ENGRAM_COLS];
+     ds4_engram_history next_history = g->history;
+-    if (!ds41_hash_tokens(g, &next_history, &token, 1, &ids[0][0])) return false;
+-    for (uint32_t i = 0; !ds41_image_at(g, g->pos) && i < 2; i++) {
++    if (!ds41_hash_tokens(g, &next_history, &token, 1, &ids[0][0])) {
+ #ifdef __APPLE__
+-        if (!ds4_engram_read_batch(&g->table[i], ids[i], 1, DS4_ENGRAM_COLS, g->rows[i]))
++        ds41_original_deadline_stop(g);
++#endif
++        return false;
++    }
++    for (uint32_t i = 0; !ds41_image_at(g, g->pos) && i < 2; i++) {
++#ifdef __APPLE__
++        if (!ds4_engram_read_batch(&g->table[i], ids[i], 1, DS4_ENGRAM_COLS, g->rows[i])) {
++            ds41_original_deadline_stop(g);
+             return false;
++        }
+ #else
+         if (!ds4_engram_read(&g->table[i], ids[i], DS4_ENGRAM_COLS, g->rows[i])) return false;
+ #endif
+     }
+     const float initial_pre[] = {1, 0, 0, 0};
+     if (!ds4_gpu_tensor_write(g->pre, 0, initial_pre, sizeof(initial_pre)) ||
+-        !ds4_gpu_begin_commands()) return false;
++        !ds4_gpu_begin_commands()) {
++#ifdef __APPLE__
++        ds41_original_deadline_stop(g);
++#endif
++        return false;
++    }
+     g->predict_active = getenv("DS4_METAL_V41_GATE_PREFETCH") != NULL;
+     if (g->predict_active) {
+         if (!g->streaming || g->quality || g->imatrix || g->image_count || g->tp_world != 1 ||
+@@ -42301,6 +42392,9 @@
+         ds41_route_oracle.active = false;
+     }
+     if (!ok) {
++#ifdef __APPLE__
++        ds41_original_deadline_stop(g); /* join/release before rollback or retry */
++#endif
+         g->valid = false;
+         return false;
+     }
+@@ -42723,6 +42817,9 @@
+                               ds4_session_progress_fn progress, void *progress_ud,
+                               int total, ds4_session_cancel_fn cancel, void *cancel_ud,
+                               bool encoder_only, bool resume_encoder) {
++#ifdef __APPLE__
++    ds41_original_deadline_stop(g); /* no lease retained across layer-major prefill */
++#endif
+     const uint32_t encoder_chunk = ds41_encoder_chunk_cap(g, total_count);
+     const bool wide = total_count > encoder_chunk;
+     if ((!g->valid && !resume_encoder) || !total_count || (wide && total_count > g->carry_cap) ||
+@@ -43133,6 +43230,12 @@
+                                    const ds4_model *model, const ds4_weights *weights) {
+     if (!graphs || !tokens || count < 2 || count > DS4_TP_BATCH_MAX_ROWS ||
+         prefill_rows > (uint32_t)count) return false;
++#ifdef __APPLE__
++    int original_deadline;
++    if(!ds4_od_flag(getenv("DS4_METAL_V41_ORIGINAL_DEADLINE"),&original_deadline)) return false;
++    if(original_deadline && prefill_rows!=(uint32_t)count) return false;
++    for(int i=0;i<count;i++) if(graphs[i]) ds41_original_deadline_stop(graphs[i]);
++#endif
+     /* Sparse block masks scale with context, even when prefill caps match.
+      * Attention and Engram history remain private to each session. */
+     ds41_gpu_graph *g = ds41_batch_workspace(graphs, count);
+--- a/ds4_metal.m
++++ b/ds4_metal.m
+@@ -1048,6 +1048,23 @@
+ static uint64_t g_stream_expert_cache_batch_seq;
+ static uint64_t g_stream_expert_cache_owned_seq;
+ static uint64_t g_stream_expert_cache_pending_max_seq;
++/* New owner-only lease metadata. Worker never reads cache/global objects. */
++static int g_original_deadline_enabled;
++static uint32_t g_original_deadline_reserved_slots;
++static uint32_t g_original_deadline_protect_layer, g_original_deadline_protect_count;
++static int32_t g_original_deadline_protect_ids[7];
++static int ds4_gpu_original_deadline_shutdown_current(void);
++static uint32_t ds4_gpu_original_deadline_occupied_count(void) {
++    return g_stream_expert_cache_entry_count + g_original_deadline_reserved_slots;
++}
++static int ds4_gpu_original_deadline_protected(uint32_t layer,uint32_t expert) {
++    if(layer!=g_original_deadline_protect_layer) return 0;
++    for(uint32_t i=0;i<g_original_deadline_protect_count;i++)
++        if(g_original_deadline_protect_ids[i]>=0 &&
++           (uint32_t)g_original_deadline_protect_ids[i]==expert) return 1;
++    return 0;
++}
++
+ static id<MTLBuffer> g_stream_compact_gate_addr_buffers[DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER];
+ static id<MTLBuffer> g_stream_compact_up_addr_buffers[DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER];
+ static id<MTLBuffer> g_stream_compact_down_addr_buffers[DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER];
+@@ -12730,6 +12747,9 @@
+             }
+         }
+ 
++        if(g_original_deadline_enabled &&
++           (g_model_map_ptr!=model_map || g_model_map_size!=model_size) &&
++           !ds4_gpu_original_deadline_shutdown_current()) return 0;
+         ds4_gpu_model_residency_clear();
+         if (!ds4_gpu_map_model_views(model_map, model_size, map_offset, map_size, max_tensor_bytes)) {
+             ds4_gpu_model_residency_clear();
+@@ -12780,6 +12800,9 @@
+         const double t0 = ds4_gpu_now_ms();
+         max_tensor_bytes = ds4_gpu_effective_model_max_tensor_bytes(model_size, max_tensor_bytes);
+ 
++        if(g_original_deadline_enabled &&
++           (g_model_map_ptr!=model_map || g_model_map_size!=model_size) &&
++           !ds4_gpu_original_deadline_shutdown_current()) return 0;
+         ds4_gpu_model_residency_clear();
+         /* Streaming changes the target's active layer, not the auxiliary
+          * vision/drafter models. Single spans need the same bounded lifetime
+@@ -12836,6 +12859,8 @@
+ }
+ 
+ int ds4_gpu_set_model_fd(int fd) {
++    if(g_original_deadline_enabled && fd!=g_model_fd &&
++       !ds4_gpu_original_deadline_shutdown_current()) return 0;
+     g_model_fd = fd;
+     return 1;
+ }
+@@ -15286,6 +15311,7 @@
+ /* Keep the surviving slab prefix warm when workspace growth reduces RAM
+  * available for experts. Callers must drain GPU users before resizing. */
+ static int ds4_gpu_stream_expert_cache_trim(uint32_t experts) {
++    if(g_original_deadline_enabled && !ds4_gpu_original_deadline_shutdown_current()) return 0;
+     if (!g_stream_expert_cache_slab_count) return 0;
+     ds4_gpu_stream_expert_pending_load_clear();
+     for (uint32_t layer = 0; layer < DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER; layer++) {
+@@ -15338,6 +15364,7 @@
+ }
+ 
+ static void ds4_gpu_stream_expert_cache_clear_all(int reset_stats) {
++    if(g_original_deadline_enabled && !ds4_gpu_original_deadline_shutdown_current()) abort();
+     ds4_gpu_stream_expert_pending_load_clear();
+     g_stream_expert_cache_done_seq = g_stream_expert_cache_cb_seq;
+     g_stream_expert_cache_batch_seq = 0;
+@@ -15511,7 +15538,8 @@
+                 &g_stream_expert_cache[layer][expert];
+             if (!e->valid ||
+                 ds4_gpu_stream_expert_cache_entry_inflight(e) ||
+-                ds4_gpu_stream_expert_cache_is_protected(expert, protect_ids, n_protect)) {
++                ds4_gpu_stream_expert_cache_is_protected(expert, protect_ids, n_protect) ||
++                ds4_gpu_original_deadline_protected(layer,expert)) {
+                 continue;
+             }
+             const uint32_t hotness =
+@@ -15540,6 +15568,7 @@
+                 &g_stream_expert_cache[layer][expert])) {
+         return 1;
+     }
++    if(ds4_gpu_original_deadline_protected(layer,expert)) return 1;
+     return layer == protect_layer &&
+            ds4_gpu_stream_expert_cache_is_protected(expert,
+                                                     protect_ids,
+@@ -15577,7 +15606,7 @@
+ 
+     const uint32_t budget = ds4_gpu_stream_expert_cache_configured_budget();
+     if (budget == 0 ||
+-        (!force_reuse && g_stream_expert_cache_entry_count < budget)) {
++        (!force_reuse && ds4_gpu_original_deadline_occupied_count() < budget)) {
+         return 0;
+     }
+ 
+@@ -15693,7 +15722,7 @@
+     }
+ 
+     const uint32_t budget = ds4_gpu_stream_expert_cache_configured_budget();
+-    if (budget == 0 || g_stream_expert_cache_entry_count < budget) {
++    if (budget == 0 || ds4_gpu_original_deadline_occupied_count() < budget) {
+         return 0;
+     }
+ 
+@@ -16058,6 +16087,10 @@
+         return 1;
+     }
+ 
++    /* A detached original still occupies a configured physical slot.
++     * No allocation fallback after forced reuse failed in this experiment. */
++    if(g_original_deadline_enabled && force_reuse) return 0;
++
+     if (ds4_gpu_stream_expert_combined_buffer_enabled()) {
+         if (gate_expert_bytes > UINT64_MAX - gate_expert_bytes ||
+             gate_expert_bytes * 2ull > UINT64_MAX - down_expert_bytes ||
+@@ -16091,6 +16124,8 @@
+                     gate_buf, up_buf, down_buf,
+                     gate_inner, up_inner, down_inner);
+         }
++        /* Experiment admits only existing shared slab slots. */
++        if(g_original_deadline_enabled) return 0;
+         const uint64_t up_off = gate_expert_bytes;
+         const uint64_t down_off = gate_expert_bytes * 2ull;
+         const uint64_t combined_bytes = down_off + down_expert_bytes;
+@@ -16143,9 +16178,9 @@
+         const int32_t *protect_ids,
+         uint32_t n_protect) {
+     const uint32_t budget = ds4_gpu_stream_expert_cache_configured_budget();
+-    if (budget == 0 || g_stream_expert_cache_entry_count <= budget) return;
++    if (budget == 0 || ds4_gpu_original_deadline_occupied_count() <= budget) return;
+ 
+-    while (g_stream_expert_cache_entry_count > budget) {
++    while (ds4_gpu_original_deadline_occupied_count() > budget) {
+         uint32_t victim_layer = UINT32_MAX;
+         uint32_t victim_expert = UINT32_MAX;
+         uint32_t lowest_hotness = UINT32_MAX;
+@@ -16453,7 +16488,7 @@
+     const uint32_t cache_budget =
+         ds4_gpu_stream_expert_cache_configured_budget();
+     const int force_reuse =
+-        cache_budget != 0 && g_stream_expert_cache_entry_count >= cache_budget;
++        cache_budget != 0 && ds4_gpu_original_deadline_occupied_count() >= cache_budget;
+     if (!ds4_gpu_stream_expert_cache_prepare_load_buffers(layer,
+                                                           expert,
+                                                           layer,
+@@ -16715,6 +16750,8 @@
+     }
+     return 1;
+ }
++
++#include "ds4_original_deadline_native.inc"
+ 
+ int ds4_gpu_stream_expert_cache_begin_selected_load(
+         const ds4_gpu_stream_expert_table *table,
+@@ -16857,7 +16894,7 @@
+ 
+     const uint32_t cache_budget =
+         ds4_gpu_stream_expert_cache_configured_budget();
+-    uint32_t reserved_entries = g_stream_expert_cache_entry_count;
++    uint32_t reserved_entries = ds4_gpu_original_deadline_occupied_count();
+     ds4_gpu_stream_expert_reusable_buffers
+         batch_reuse[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SELECTED];
+     for (uint32_t i = 0; i < DS4_METAL_STREAM_EXPERT_CACHE_MAX_SELECTED; i++) {
+@@ -17157,7 +17194,7 @@
+     uint32_t n_tasks = 0;
+     const uint32_t cache_budget =
+         ds4_gpu_stream_expert_cache_configured_budget();
+-    uint32_t reserved_entries = g_stream_expert_cache_entry_count;
++    uint32_t reserved_entries = ds4_gpu_original_deadline_occupied_count();
+     ds4_gpu_stream_expert_reusable_buffers
+         batch_reuse[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SELECTED];
+     for (uint32_t i = 0; i < DS4_METAL_STREAM_EXPERT_CACHE_MAX_SELECTED; i++) {
+@@ -17755,7 +17792,7 @@
+     if (ok) {
+         const uint32_t cache_budget =
+             ds4_gpu_stream_expert_cache_configured_budget();
+-        uint32_t reserved_entries = g_stream_expert_cache_entry_count;
++        uint32_t reserved_entries = ds4_gpu_original_deadline_occupied_count();
+ 
+         for (uint32_t u = 0; u < unique_count; u++) {
+             const uint32_t expert = (uint32_t)unique_ids[u];
+--- a/ds4_gpu.h
++++ b/ds4_gpu.h
+@@ -358,6 +358,7 @@
+     uint64_t    gate_expert_bytes;
+     uint64_t    down_expert_bytes;
+ } ds4_gpu_stream_expert_table;
++#include "ds4_original_deadline_native.h"
+ #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD) && !defined(DS4_NO_GPU)
+ /* Optional CUDA look-ahead between completed layers, inside the existing
+  * expert cache. The foreground owns slots; the reader cannot publish them

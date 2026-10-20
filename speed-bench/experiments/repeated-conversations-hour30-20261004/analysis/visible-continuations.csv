@@ -1,0 +1,25 @@
+arm,phase,step,round,match,ids,cached,prompt,fresh,approximate,raw_log
+native-before,before,A-warm,0,visible-prefix,0,1483,2010,527,0,1004 16:55:07 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0
+native-before,before,B-warm,0,visible-prefix,0,1483,2010,527,0,1004 16:56:00 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0
+native-before,before,A-edit1,1,visible-prefix,0,1872,1898,26,0,1004 16:57:08 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1872 prompt=1898 approximate=0
+native-before,before,B-edit1,1,visible-prefix,0,1872,1897,25,0,1004 16:58:06 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1872 prompt=1897 approximate=0
+native-before,after,A-edit2,2,visible-prefix,0,1777,1803,26,0,1004 16:59:01 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1777 prompt=1803 approximate=0
+native-before,after,B-edit2,2,visible-prefix,0,1775,1800,25,0,1004 16:59:55 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1775 prompt=1800 approximate=0
+native-before,after,A-edit3,3,visible-prefix,0,1682,1708,26,0,1004 17:00:48 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1682 prompt=1708 approximate=0
+native-before,after,B-edit3,3,visible-prefix,0,1678,1703,25,0,1004 17:01:39 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1678 prompt=1703 approximate=0
+reuse,before,A-warm,0,visible-prefix,0,1483,2010,527,0,1004 17:02:36 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0
+reuse,before,B-warm,0,visible-prefix,0,1483,2010,527,0,1004 17:02:57 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0
+reuse,before,A-edit1,1,visible-prefix,0,1873,1899,26,1,1004 17:03:49 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1873 prompt=1899 approximate=1
+reuse,before,B-edit1,1,visible-prefix,0,1873,1898,25,1,1004 17:04:30 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1873 prompt=1898 approximate=1
+reuse,after,A-edit2,2,visible-prefix,0,1777,1803,26,1,1004 17:05:01 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1777 prompt=1803 approximate=1
+reuse,after,B-edit2,2,visible-prefix,0,1775,1800,25,1,1004 17:05:31 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1775 prompt=1800 approximate=1
+reuse,after,A-edit3,3,visible-prefix,0,1683,1709,26,1,1004 17:06:00 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1683 prompt=1709 approximate=1
+reuse,after,B-edit3,3,visible-prefix,0,1679,1704,25,1,1004 17:06:30 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1679 prompt=1704 approximate=1
+native-after,before,A-warm,0,visible-prefix,0,1483,2010,527,0,1004 17:07:29 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0
+native-after,before,B-warm,0,visible-prefix,0,1483,2010,527,0,1004 17:08:22 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0
+native-after,before,A-edit1,1,visible-prefix,0,1872,1898,26,0,1004 17:09:31 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1872 prompt=1898 approximate=0
+native-after,before,B-edit1,1,visible-prefix,0,1872,1897,25,0,1004 17:10:30 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1872 prompt=1897 approximate=0
+native-after,after,A-edit2,2,visible-prefix,0,1777,1803,26,0,1004 17:11:27 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1777 prompt=1803 approximate=0
+native-after,after,B-edit2,2,visible-prefix,0,1775,1800,25,0,1004 17:12:22 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1775 prompt=1800 approximate=0
+native-after,after,A-edit3,3,visible-prefix,0,1682,1708,26,0,1004 17:13:15 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1682 prompt=1708 approximate=0
+native-after,after,B-edit3,3,visible-prefix,0,1678,1703,25,0,1004 17:14:08 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1678 prompt=1703 approximate=0

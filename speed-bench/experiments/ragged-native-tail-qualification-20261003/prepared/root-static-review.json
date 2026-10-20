@@ -1,0 +1,19 @@
+{
+  "status": "ROOT_STATIC_REVIEW_PASS",
+  "time": 1791002017.14581,
+  "plan_sha256": "ad7cf0569eff888aae3ba3871a08b1e7c74a55b780a7e7eb9652552a408c1c1e",
+  "command_sha256": "d77032b8c063828dd6deea63333a2ae27fa397271665106a3bf462874a87b72d",
+  "source_freeze": "48b12ec774c519893375eebe4ee9c231fbbd6759",
+  "prepared_evidence": "31b79f57f586f89fdd98171ca1ce20492db2e4c3",
+  "asset_count": 96,
+  "reviewed": [
+    "driver complete authority/guard/grant before model stat and each arm",
+    "exact six-arm policies and original binaries/build",
+    "complete full-vector/canonical/cache/branchIO controls",
+    "dispatch difference gate both long phases before COMPLETE",
+    "64 score-before-target teacher predictions; lastphase distribution only",
+    "model-free verifier PASS"
+  ],
+  "quality_or_speed_claim": false,
+  "native_model_helper_or_guard_run": false
+}

@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "headers": {
+    "cache-control": "no-cache",
+    "connection": "close",
+    "content-type": "text/event-stream"
+  }
+}

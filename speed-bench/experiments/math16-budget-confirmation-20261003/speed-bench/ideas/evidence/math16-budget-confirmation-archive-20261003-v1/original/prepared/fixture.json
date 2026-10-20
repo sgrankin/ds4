@@ -1,0 +1,85 @@
+{
+  "suite": "math-budget-confirmation16-v1",
+  "cases": [
+    {
+      "case": "circular14_five",
+      "prompt": "Count binary strings of length 14 with exactly five 1s and no adjacent 1s, including adjacency between positions 14 and 1. Positions are labeled, so rotations are different. Put only the integer count in your final answer.",
+      "answer": "196"
+    },
+    {
+      "case": "linear12_four_gap2",
+      "prompt": "Count binary strings of length 12 with exactly four 1s and at least two 0s between consecutive 1s. There is no circular adjacency constraint. Put only the integer count in your final answer.",
+      "answer": "15"
+    },
+    {
+      "case": "permutations9_two_forbidden",
+      "prompt": "Count permutations p of {1,...,9} such that p(i) differs from i and from i+1 for every i, with the cyclic successor of9 defined as1. Put only the integer count in your final answer.",
+      "answer": "43387"
+    },
+    {
+      "case": "deranged8_first_two_odd",
+      "prompt": "Count permutations p of {1,...,8} with p(i)!=i for every i and both p(1) and p(2) odd. Permutations are ordered bijections. Put only the integer count in your final answer.",
+      "answer": "3099"
+    },
+    {
+      "case": "dyck7_three_interior_returns",
+      "prompt": "Count right/up unit-step paths from(0,0) to(7,7) with y<=x at every visited point and exactly three visited points on y=x strictly between start and end. Put only the integer count in your final answer.",
+      "answer": "48"
+    },
+    {
+      "case": "bounded10x8_avoid5x4",
+      "prompt": "Count right/up unit-step paths from(0,0) to(10,8) with y<=x+2 at every visited point that never visit(5,4). Put only the integer count in your final answer.",
+      "answer": "20565"
+    },
+    {
+      "case": "subset15_seven_mod5",
+      "prompt": "Count seven-element subsets of {1,...,15} whose sum is congruent to3 modulo5. Subsets are unordered and elements distinct. Put only the integer count in your final answer.",
+      "answer": "1287"
+    },
+    {
+      "case": "subset16_six_nonconsecutive_threeodd",
+      "prompt": "Count six-element subsets of {1,...,16} with no two consecutive integers and exactly three odd elements. Put only the integer count in your final answer.",
+      "answer": "100"
+    },
+    {
+      "case": "tiles2x8_domino_square",
+      "prompt": "Count tilings of a 2 by 8 rectangular grid using 1 by 2 dominoes (either orientation) and 2 by 2 squares. Tile placements distinguish tilings; same-shaped tiles are indistinguishable. Put only the integer count in your final answer.",
+      "answer": "171"
+    },
+    {
+      "case": "composition18_five_max6",
+      "prompt": "Count ordered lists of five positive integers with sum 18 and each entry at most 6. Put only the integer count in your final answer.",
+      "answer": "780"
+    },
+    {
+      "case": "balls9_four_bins_max4",
+      "prompt": "Distribute nine indistinguishable balls among four labeled bins, at most four balls per bin. Count the possible ordered occupancy lists, allowing empty bins. Put only the integer count in your final answer.",
+      "answer": "80"
+    },
+    {
+      "case": "cycle9_three_colors",
+      "prompt": "Count proper colorings of the labeled 9-vertex cycle with three labeled colors. Adjacent vertices, including vertices 9 and 1, must differ; no quotient by rotations or color permutations. Put only the integer count in your final answer.",
+      "answer": "510"
+    },
+    {
+      "case": "ladder2x5_three_colors",
+      "prompt": "Count colorings of a 2 by 5 grid with three labeled colors such that cells sharing a side differ. Cells are labeled and there are no diagonal adjacency constraints. Put only the integer count in your final answer.",
+      "answer": "486"
+    },
+    {
+      "case": "words_A3B4C3_noAB",
+      "prompt": "Count length 10 words containing exactly three A, four B and three C characters, with no contiguous substring AB. Identical characters are indistinguishable. Put only the integer count in your final answer.",
+      "answer": "700"
+    },
+    {
+      "case": "BANANA_no_adjacent_A",
+      "prompt": "Count distinct anagrams of BANANA with no two adjacent A characters. Identical copies of the same letter are indistinguishable. Put only the integer count in your final answer.",
+      "answer": "12"
+    },
+    {
+      "case": "digits8_sum12_no_equal_neighbors",
+      "prompt": "Count ordered length 8 sequences from digits {0,1,2,3} with sum 12 and no equal neighboring digits. Leading 0s are allowed; there is no circular adjacency constraint. Put only the integer count in your final answer.",
+      "answer": "1492"
+    }
+  ]
+}

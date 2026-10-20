@@ -1,0 +1,15 @@
+{
+  "time": 1790993841.6003551,
+  "status": "ROOT_PREFLIGHT_PASS_MODEL_UNRUN",
+  "source_revision": "6d970cb0374733f109ef4e210861ab5248f1f7b9",
+  "manifest_sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+  "command_sha256": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+  "driver_sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+  "assets_verified": 304,
+  "copied_assets": 97,
+  "arms": 19,
+  "independent_source_review_pending": true,
+  "model_or_tokenizer_stat_or_open": false,
+  "defaults_changed": false,
+  "scope": "P+D requestedlogical IO and same-teacher raw quality; CPU-parallel timing diagnostic only"
+}

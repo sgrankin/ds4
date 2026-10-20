@@ -1,0 +1,56 @@
+{
+  "conversation": "conv_d3f95c27fb0ed697f8e63f1e",
+  "version": 1,
+  "items": [
+    {
+      "id": "msg_c02c38e3936e2bd5449746b5",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Obsolete dispatch note 1; safe to archive.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n"
+        }
+      ]
+    },
+    {
+      "id": "msg_3759000687839d454cc8e716",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Obsolete dispatch note 2; safe to archive.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n"
+        }
+      ]
+    },
+    {
+      "id": "msg_45b5a52682d7a16dcb6a2079",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Obsolete dispatch note 3; safe to archive.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n"
+        }
+      ]
+    },
+    {
+      "id": "msg_3b834f2b3d4ee7b636087189",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Retain the active inventory tool result for later calculations. The historical dispatch notes are obsolete and not authoritative. For each newest archive question, read its current advertised file again; calculate batches * items_per_batch - reserved_items from the retained inventory result."
+        }
+      ]
+    }
+  ],
+  "has_more": false,
+  "private_replay_present": false
+}

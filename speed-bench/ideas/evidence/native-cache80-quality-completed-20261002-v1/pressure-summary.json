@@ -1,0 +1,10 @@
+{
+  "samples": 150,
+  "max_wired_gib": 86.76512145996094,
+  "max_compressor_gib": 7.0686492919921875,
+  "swap_first_gib": 0.024599609375,
+  "swap_last_gib": 0.024599609375,
+  "max_pressure_level": 1,
+  "bad_samples": 0,
+  "main_lock_release_verified": true
+}

@@ -1,0 +1,25 @@
+{
+  "suite": "counting-v1",
+  "cases": [
+    {
+      "case": "circular10",
+      "prompt": "How many binary strings of length 10 have no two adjacent 1s, including adjacency between positions 10 and 1? Positions are labeled; rotations are counted as different strings. There is no restriction on the number of 1s. Put only the integer count in your final answer.",
+      "answer": "123"
+    },
+    {
+      "case": "restricted_derangements8",
+      "prompt": "Count permutations p of {1,2,3,4,5,6,7,8} such that p(i) is not i for every i, p(1) is not 2, and p(2) is not 1. A permutation is a bijection; different ordered lists (p(1),...,p(8)) count separately. Put only the integer count in your final answer.",
+      "answer": "10860"
+    },
+    {
+      "case": "lattice8x6",
+      "prompt": "Count paths from (0,0) to (8,6) using only unit right and unit up steps. Every visited lattice point (x,y), including the start and end, must satisfy y<=x+1. There are no other forbidden points. Put only the integer count in your final answer.",
+      "answer": "2002"
+    },
+    {
+      "case": "subset_mod7",
+      "prompt": "How many subsets of {1,2,3,4,5,6,7,8,9,10,11,12} contain exactly six elements and have an element sum congruent to 2 modulo 7? Elements are distinct and subsets are unordered. Put only the integer count in your final answer.",
+      "answer": "132"
+    }
+  ]
+}

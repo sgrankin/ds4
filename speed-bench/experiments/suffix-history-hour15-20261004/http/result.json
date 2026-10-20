@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/http_run.py",
+    "--base-url",
+    "http://127.0.0.1:59878",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/http/checks"
+  ],
+  "returncode": 3,
+  "seconds": 52.47953454099479
+}

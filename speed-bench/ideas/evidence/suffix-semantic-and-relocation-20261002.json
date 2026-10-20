@@ -1,0 +1,396 @@
+{
+  "status": "three same-position semantic probes and one aligned-deletion native probe complete",
+  "evidence_only": true,
+  "timing_scope": "single paired diagnostic edited-context evaluation; includes B-prime recomputation, excludes A load, setup and answer scoring; no balanced speed claim",
+  "approximation_scope": "K1 old prefix-conditioned suffix; relocation only even starts and displacement multiple128; exact-source cache only",
+  "source_and_binary_separation": "Same-position cases use frozen dd49bed6 helper 0fdf; shifted case uses core6c2efad0 and drivera727354a helperd33d. Later source changes did not replace these artifacts.",
+  "cases": [
+    {
+      "case_name": "semantic-code-c512-t1",
+      "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-code-c512-t1",
+      "helper_source_commit": "dd49bed6",
+      "core_source_commit": "e580d947",
+      "helper_sha256": "0fdf612e65d2fa4c93635d2a1548907737980b9d99249edcf808bf2ad5751db7",
+      "summary": {
+        "case": "code",
+        "prefix_tokens": 1024,
+        "edit_tokens": 256,
+        "unchanged_tokens": 512,
+        "fresh_tail_tokens": 1,
+        "reused_tokens": 511,
+        "copied_bytes": 13764608,
+        "pending_pairs": 3,
+        "identity_logit_bytes_equal": true,
+        "identity_graph_bytes_equal": true,
+        "canonical_export_blocked": true,
+        "setup_ms": 104125.356,
+        "identity_ms": 54.257,
+        "rows": 3,
+        "gold_tokens_including_eos": 3,
+        "stale_tokens_including_eos": 3,
+        "mean_kl": 1.33226641377e-05,
+        "mean_tv": 3.26709762142e-05,
+        "sum_delta_nll": 8.82216762577e-05,
+        "argmax_flips": 0,
+        "byte_equal_rows": 0,
+        "greedy_encoding": "JSON byte escapes for non-ASCII",
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 40454.067,
+            "gold_logprob": -9.64095729756e-05,
+            "stale_logprob": -18.4839139418,
+            "gold_minus_stale_logprob": 18.4838175323,
+            "greedy": "3141",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              18321,
+              19,
+              1
+            ]
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 17551.076,
+            "gold_logprob": -0.000184631249233,
+            "stale_logprob": -17.4557107699,
+            "gold_minus_stale_logprob": 17.4555261386,
+            "greedy": "3141",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              18321,
+              19,
+              1
+            ]
+          }
+        ]
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "pressure": {
+        "samples": 195,
+        "levels": [
+          1
+        ],
+        "adverse_samples": 0,
+        "swap_growth_gb": 0.0,
+        "max_wired_gb": 74.77784729003906,
+        "max_compressor_gb": 8.76837158203125
+      },
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-code-c512-t1/logits.bin",
+        "bytes": 3102748,
+        "sha256": "8162548e9d536ac6b53814d120aecf8be0c1541f14235e316fe035109fda5718"
+      },
+      "diagnostic_speedup": 2.3049337260006166,
+      "diagnostic_elapsed_reduction_fraction": 0.5661480463756585,
+      "stale_answer_logprob_gain": 1.0282031718999995,
+      "stale_answer_sequence_probabilities": {
+        "fresh": 9.387245396204866e-09,
+        "reuse": 2.6247088459210334e-08
+      }
+    },
+    {
+      "case_name": "semantic-secret-c512-t1",
+      "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t1",
+      "helper_source_commit": "dd49bed6",
+      "core_source_commit": "e580d947",
+      "helper_sha256": "0fdf612e65d2fa4c93635d2a1548907737980b9d99249edcf808bf2ad5751db7",
+      "summary": {
+        "case": "secret",
+        "prefix_tokens": 1024,
+        "edit_tokens": 256,
+        "unchanged_tokens": 512,
+        "fresh_tail_tokens": 1,
+        "reused_tokens": 511,
+        "copied_bytes": 13764608,
+        "pending_pairs": 3,
+        "identity_logit_bytes_equal": true,
+        "identity_graph_bytes_equal": true,
+        "canonical_export_blocked": true,
+        "setup_ms": 108121.285,
+        "identity_ms": 53.88,
+        "rows": 4,
+        "gold_tokens_including_eos": 4,
+        "stale_tokens_including_eos": 3,
+        "mean_kl": 8.28989174486e-05,
+        "mean_tv": 8.03254574145e-05,
+        "sum_delta_nll": 0.000306868650249,
+        "argmax_flips": 0,
+        "byte_equal_rows": 0,
+        "greedy_encoding": "JSON byte escapes for non-ASCII",
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 41186.623,
+            "gold_logprob": -2.01677328349e-05,
+            "stale_logprob": -28.9880461074,
+            "gold_minus_stale_logprob": 28.9880259396,
+            "greedy": "REDACTED",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              63529,
+              13455,
+              3316,
+              1
+            ]
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 17599.827,
+            "gold_logprob": -0.000327036383084,
+            "stale_logprob": -9.886778869,
+            "gold_minus_stale_logprob": 9.88645183262,
+            "greedy": "REDACTED",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              63529,
+              13455,
+              3316,
+              1
+            ]
+          }
+        ]
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "pressure": {
+        "samples": 198,
+        "levels": [
+          1
+        ],
+        "adverse_samples": 0,
+        "swap_growth_gb": 0.0,
+        "max_wired_gb": 75.21832275390625,
+        "max_compressor_gb": 8.67535400390625
+      },
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t1/logits.bin",
+        "bytes": 4136992,
+        "sha256": "a318496166cb58709ffc1e6895a3cc8127ff623df8bda7098c5e5244ec16fd6c"
+      },
+      "diagnostic_speedup": 2.340172036918317,
+      "diagnostic_elapsed_reduction_fraction": 0.5726809891648558,
+      "stale_answer_logprob_gain": 19.1012672384,
+      "stale_answer_sequence_probabilities": {
+        "fresh": 2.5742548189178044e-13,
+        "reuse": 5.0842452715133406e-05
+      }
+    },
+    {
+      "case_name": "semantic-code-c1024-t1",
+      "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-code-c1024-t1",
+      "helper_source_commit": "dd49bed6",
+      "core_source_commit": "e580d947",
+      "helper_sha256": "0fdf612e65d2fa4c93635d2a1548907737980b9d99249edcf808bf2ad5751db7",
+      "summary": {
+        "case": "code",
+        "prefix_tokens": 1024,
+        "edit_tokens": 256,
+        "unchanged_tokens": 1024,
+        "fresh_tail_tokens": 1,
+        "reused_tokens": 1023,
+        "copied_bytes": 17041408,
+        "pending_pairs": 3,
+        "identity_logit_bytes_equal": true,
+        "identity_graph_bytes_equal": true,
+        "canonical_export_blocked": true,
+        "setup_ms": 143128.035,
+        "identity_ms": 53.06,
+        "rows": 3,
+        "gold_tokens_including_eos": 3,
+        "stale_tokens_including_eos": 3,
+        "mean_kl": 2.18680308135e-06,
+        "mean_tv": 6.35965197415e-06,
+        "sum_delta_nll": 6.90863003427e-06,
+        "argmax_flips": 0,
+        "byte_equal_rows": 0,
+        "greedy_encoding": "JSON byte escapes for non-ASCII",
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 75507.064,
+            "gold_logprob": -6.80167365736e-05,
+            "stale_logprob": -19.2653297611,
+            "gold_minus_stale_logprob": 19.2652617444,
+            "greedy": "3141",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              18321,
+              19,
+              1
+            ]
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 16841.088,
+            "gold_logprob": -7.49253666079e-05,
+            "stale_logprob": -16.2245735549,
+            "gold_minus_stale_logprob": 16.2244986295,
+            "greedy": "3141",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              18321,
+              19,
+              1
+            ]
+          }
+        ]
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "pressure": {
+        "samples": 263,
+        "levels": [
+          1
+        ],
+        "adverse_samples": 0,
+        "swap_growth_gb": 0.0,
+        "max_wired_gb": 77.39424133300781,
+        "max_compressor_gb": 8.532867431640625
+      },
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-code-c1024-t1/logits.bin",
+        "bytes": 3102748,
+        "sha256": "bf821dfdd2c0df7d64e4bf446476896bf3ecb33d8a451441a08dbaa49db58ad2"
+      },
+      "diagnostic_speedup": 4.4835027285648055,
+      "diagnostic_elapsed_reduction_fraction": 0.7769601000510362,
+      "stale_answer_logprob_gain": 3.0407562061999975,
+      "stale_answer_sequence_probabilities": {
+        "fresh": 4.297081519390376e-09,
+        "reuse": 8.989949121857803e-08
+      }
+    },
+    {
+      "case_name": "relocation-code-a256-oldb256-newb128-c64-t1",
+      "artifact_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-relocation-code-a256-oldb256-newb128-c64-t1",
+      "helper_source_commit": "a727354a",
+      "core_source_commit": "6c2efad0",
+      "helper_sha256": "d33dfe8ae2ef03cd27d82bac641d144eea8d8fc1954edb8861d4e88dbb7d051a",
+      "summary": {
+        "case": "code",
+        "fresh_prefix_bytes_equal": true,
+        "fresh_prefix_raw_rows_per_layer": 64,
+        "fresh_prefix_compressed_rows": 960,
+        "fresh_prefix_index_rows": 960,
+        "prefix_tokens": 256,
+        "edit_tokens": 128,
+        "source_edit_tokens": 256,
+        "unchanged_tokens": 64,
+        "fresh_tail_tokens": 1,
+        "source_start": 512,
+        "destination_start": 384,
+        "source_end": 575,
+        "destination_end": 447,
+        "raw_keys_repaired": 2520,
+        "compressed_keys_repaired": 156,
+        "index_keys_repaired": 156,
+        "reused_tokens": 63,
+        "copied_bytes": 5572608,
+        "pending_pairs": 3,
+        "identity_logit_bytes_equal": true,
+        "identity_graph_bytes_equal": true,
+        "canonical_export_blocked": true,
+        "invalid_candidates_unchanged": true,
+        "precancel_unchanged": true,
+        "postgraft_cancel_invalidated": true,
+        "setup_ms": 31229.342,
+        "identity_ms": 49.127,
+        "rows": 3,
+        "gold_tokens_including_eos": 3,
+        "stale_tokens_including_eos": 3,
+        "mean_kl": 1.13211453888e-05,
+        "mean_tv": 1.35751960933e-05,
+        "sum_delta_nll": -3.85656567659e-05,
+        "argmax_flips": 0,
+        "byte_equal_rows": 0,
+        "greedy_encoding": "JSON byte escapes for non-ASCII",
+        "results": [
+          {
+            "mode": "fresh",
+            "edit_ms": 4625.565,
+            "gold_logprob": -7.25318119876e-05,
+            "stale_logprob": -20.5283960427,
+            "gold_minus_stale_logprob": 20.5283235109,
+            "greedy": "3141",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              18321,
+              19,
+              1
+            ]
+          },
+          {
+            "mode": "reuse",
+            "edit_ms": 3104.604,
+            "gold_logprob": -3.39661552218e-05,
+            "stale_logprob": -17.2610485289,
+            "gold_minus_stale_logprob": 17.2610145627,
+            "greedy": "3141",
+            "correct_answer": true,
+            "stale_answer": false,
+            "stopped": true,
+            "greedy_tokens": [
+              18321,
+              19,
+              1
+            ]
+          }
+        ]
+      },
+      "guard": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "pressure": {
+        "samples": 52,
+        "levels": [
+          1
+        ],
+        "adverse_samples": 0,
+        "swap_growth_gb": 0.0,
+        "max_wired_gb": 75.48226928710938,
+        "max_compressor_gb": 8.356491088867188
+      },
+      "raw_logits": {
+        "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-relocation-code-a256-oldb256-newb128-c64-t1/logits.bin",
+        "bytes": 3102748,
+        "sha256": "cfc870b3433825077672a443a5fa7a3487c92c6e677d387120f1cb04e2bf6c8e"
+      },
+      "diagnostic_speedup": 1.4899049927140466,
+      "diagnostic_elapsed_reduction_fraction": 0.3288162635267259,
+      "stale_answer_logprob_gain": 3.267347513799997,
+      "stale_answer_sequence_probabilities": {
+        "fresh": 1.215152756308355e-09,
+        "reuse": 3.188760282391205e-08
+      }
+    }
+  ],
+  "caveats": [
+    "Greedy REDACTED is not erasure: deleted old secret log probability increased19.1012672384 in the C512/tail1 fixture.",
+    "Different gold and stale answer lengths are reported; complete sequence probabilities include EOS.",
+    "Identity parity is required on exact unchanged same-position edit with matched prefill partitions; changed-context distributions are approximate.",
+    "No approximate state is exported as canonical token-keyed KV."
+  ]
+}

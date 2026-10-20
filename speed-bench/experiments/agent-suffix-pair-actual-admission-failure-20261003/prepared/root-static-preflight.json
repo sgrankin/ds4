@@ -1,0 +1,11 @@
+{
+  "status": "ROOT_FRESH_NONMODEL_PREFLIGHT_PASS",
+  "time": 1791000491.460159,
+  "manifest_sha256": "53a3326e3c6a8b46d15c86302f2008c06f82d953bb817509f9610847d6ef4b88",
+  "command_sha256": "908ed3375c5461bee43c95c40ce56604b11fbb40a7490ced1dbf76e4c80875c5",
+  "assets": 370,
+  "preceding_release_sha256": "ac67daecdf956de3692008e5dbd185fdb718932b650a3fe15b639a0e178b6ae7",
+  "ps_live_model_processes": [],
+  "lock_reacquired": true,
+  "model_metadata_or_caller_or_guard_run": false
+}

@@ -1,0 +1,20 @@
+test_csv_header_extra_field_and_missing_field_rejected (__main__.CPU.test_csv_header_extra_field_and_missing_field_rejected) ... ok
+test_csv_wrong_target_order_nonfinite_and_summary (__main__.CPU.test_csv_wrong_target_order_nonfinite_and_summary) ... ok
+test_each_probe_mode_drift_rejected_despite_equal_bytes (__main__.CPU.test_each_probe_mode_drift_rejected_despite_equal_bytes) ... ok
+test_exact_guard_parent_and_absolute_bounded_ps (__main__.CPU.test_exact_guard_parent_and_absolute_bounded_ps) ... ok
+test_first_nonzero_helper_exit_retained_and_no_next_arm (__main__.CPU.test_first_nonzero_helper_exit_retained_and_no_next_arm) ... {"event": "arm_start", "arm": "old-native-before"}
+ok
+test_guard_fail_before_any_model_or_output (__main__.CPU.test_guard_fail_before_any_model_or_output) ... ok
+test_missing_assets_and_same_byte_length_drift (__main__.CPU.test_missing_assets_and_same_byte_length_drift) ... ok
+test_raw_geometry_and_truncation_all_three_cases (__main__.CPU.test_raw_geometry_and_truncation_all_three_cases) ... ok
+test_retained_identity_checks_real_raw_and_full_state (__main__.CPU.test_retained_identity_checks_real_raw_and_full_state) ... ok
+test_summaries_all_geometries_modes_and_exact_identity (__main__.CPU.test_summaries_all_geometries_modes_and_exact_identity) ... ok
+test_summaries_reject_false_identity_and_wrong_pair_counts (__main__.CPU.test_summaries_reject_false_identity_and_wrong_pair_counts) ... ok
+test_three_cases_manifest_authority_without_model (__main__.CPU.test_three_cases_manifest_authority_without_model) ... ok
+test_wrong_case_geometry_order_policy_and_model (__main__.CPU.test_wrong_case_geometry_order_policy_and_model) ... ok
+test_wrong_command_digest_case_suffix_and_cwd (__main__.CPU.test_wrong_command_digest_case_suffix_and_cwd) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.121s
+
+OK

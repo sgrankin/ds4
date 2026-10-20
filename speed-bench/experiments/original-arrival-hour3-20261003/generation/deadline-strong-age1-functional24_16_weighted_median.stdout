@@ -1,0 +1,23 @@
+{"median": 9, "total_weight": 12}
+
+**Reasoning:**
+
+1. **Sort by value (already ascending):**
+   - (2, 1)
+   - (7, 3)
+   - (9, 2)
+   - (15, 4)
+   - (20, 2)
+
+2. **Total weight:** 1 + 3 + 2 + 4 + 2 = **12**
+
+3. **Half of total weight:** 12 / 2 = **6**
+
+4. **Cumulative weights in ascending order:**
+   - After (2, 1): cumulative = 1
+   - After (7, 3): cumulative = 1 + 3 = 4
+   - After (9, 2): cumulative = 4 + 2 = **6**
+
+5. The smallest value whose cumulative weight is **at least** half (≥ 6) is **9**, since the cumulative weight reaches exactly 6 at value 9. Per the instruction not to average at an exact half boundary, we take the lower weighted median as **9**.
+
+**Result:** median = 9, total_weight = 12.

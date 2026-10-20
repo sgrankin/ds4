@@ -1,0 +1,385 @@
+{
+  "status": "COMPLETE",
+  "case": "wrap-odd-chunk",
+  "geometry": {
+    "prefix": 1951,
+    "shift": 65,
+    "span": 129,
+    "tail": 1,
+    "decode": 16,
+    "ctx": 4096,
+    "chunk": 65,
+    "cache_gb": 64,
+    "capacity": 1024
+  },
+  "arms": [
+    {
+      "arm": "old-native-before",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92941215,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 2869.806,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "raw": {
+        "reference_rows": 18,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "full_sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+        "bytes": 9308256
+      },
+      "state": {
+        ".source.state.bin": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94",
+        ".fresh.state.bin": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      },
+      "csv_checks": null,
+      "private_state": null,
+      "identity_checks": null,
+      "native_parity": true
+    },
+    {
+      "arm": "new-native",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92941215,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 2896.56,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "raw": {
+        "reference_rows": 18,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "full_sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+        "bytes": 9308256
+      },
+      "state": {
+        ".source.state.bin": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94",
+        ".fresh.state.bin": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      },
+      "csv_checks": null,
+      "private_state": null,
+      "identity_checks": null,
+      "native_parity": true
+    },
+    {
+      "arm": "new-tape-native",
+      "summary": {
+        "mode": "tape-native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 118107119,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 2802.489,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "raw": {
+        "reference_rows": 18,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "full_sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+        "bytes": 9308256
+      },
+      "state": {
+        ".source.state.bin": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94",
+        ".fresh.state.bin": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      },
+      "csv_checks": null,
+      "private_state": null,
+      "identity_checks": null,
+      "native_parity": true
+    },
+    {
+      "arm": "suffix-reuse",
+      "summary": {
+        "mode": "reuse",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 17,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 118107119,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": true,
+        "precancel_preserves_state": true,
+        "partial_cancel_invalidates": true,
+        "approximate_export_blocked": true,
+        "pair_inputs_reused": 387,
+        "pair_rows_rebuilt": 195,
+        "pair_boundary_rows": 3,
+        "reused_tokens": 129,
+        "fresh_tail_tokens": 1,
+        "fresh_ms_diagnostic": 2814.539,
+        "reuse_ms_diagnostic": 98.628,
+        "mean_kl": 0.0573944591888,
+        "mean_tv": 0.0771990693971,
+        "sum_delta_nll": 0.422206306317,
+        "argmax_flips": 1,
+        "bit_equal_rows": 0
+      },
+      "raw": {
+        "reference_rows": 18,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "full_sha256": "16a7d9d30aa4bfb75efcbbfd2c8447daf31a03c61d9be58ba7c45e1ac29f5d2e",
+        "bytes": 18099296
+      },
+      "state": {
+        ".source.state.bin": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94",
+        ".fresh.state.bin": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      },
+      "csv_checks": {
+        "rows": 17,
+        "teacher_rows": 16,
+        "quality_rows": [
+          {
+            "delta_nll": 0.457829239507,
+            "kl": 0.319636229532,
+            "tv": 0.344261414585
+          },
+          {
+            "delta_nll": 1.71883019462e-05,
+            "kl": 8.10999174214e-06,
+            "tv": 2.19508680714e-05
+          },
+          {
+            "delta_nll": -0.0350466872445,
+            "kl": 0.0215232473115,
+            "tv": 0.0336491258771
+          },
+          {
+            "delta_nll": -0.00311656664811,
+            "kl": 0.0017545762101,
+            "tv": 0.00310385582731
+          },
+          {
+            "delta_nll": 0.139243398282,
+            "kl": 0.0436119438248,
+            "tv": 0.0214356298704
+          },
+          {
+            "delta_nll": 0.0313079447585,
+            "kl": 0.00627618386589,
+            "tv": 0.0295200160644
+          },
+          {
+            "delta_nll": 0.361849648415,
+            "kl": 0.0357346137269,
+            "tv": 0.103511826832
+          },
+          {
+            "delta_nll": -0.012231943235,
+            "kl": 0.011378313805,
+            "tv": 0.0120888289984
+          },
+          {
+            "delta_nll": -0.0448201079472,
+            "kl": 0.0270345035254,
+            "tv": 0.0415593115118
+          },
+          {
+            "delta_nll": -0.0585832391703,
+            "kl": 0.08179189919,
+            "tv": 0.0560702381036
+          },
+          {
+            "delta_nll": -0.0243803462826,
+            "kl": 0.0213215251511,
+            "tv": 0.0238605565449
+          },
+          {
+            "delta_nll": 0.152558898451,
+            "kl": 0.0854446121165,
+            "tv": 0.133896965327
+          },
+          {
+            "delta_nll": -0.192191978725,
+            "kl": 0.0813120666488,
+            "tv": 0.166629305494
+          },
+          {
+            "delta_nll": 0.0105074273595,
+            "kl": 0.00218696115802,
+            "tv": 0.0103514993344
+          },
+          {
+            "delta_nll": -0.357417204999,
+            "kl": 0.00409429424438,
+            "tv": 0.00901428449689
+          },
+          {
+            "delta_nll": -0.00331936450479,
+            "kl": 0.00471977073334,
+            "tv": 0.00331228216581
+          },
+          {
+            "delta_nll": 0.0,
+            "kl": 0.227876955174,
+            "tv": 0.32009708785
+          }
+        ],
+        "checked_summary": {
+          "mean_kl": 0.05739445918879248,
+          "mean_tv": 0.07719906939712243,
+          "sum_delta_nll": 0.42220630631844625
+        }
+      },
+      "private_state": {
+        "sha256": "0d1fd95e99b59bcd63dd667d736a90ac6b7824324a23e38ba2cb7c50afbde7e6",
+        "bytes": 24338104,
+        "diagnostic_magic": "DSSD",
+        "canonical_export": false
+      },
+      "identity_checks": null,
+      "native_parity": true
+    },
+    {
+      "arm": "old-native-after",
+      "summary": {
+        "mode": "native",
+        "endpoint_partition_aligned": true,
+        "identity_native_checked": false,
+        "identity_native_state_equal": false,
+        "identity_native_logits_equal": false,
+        "identity_reuse_state_equal": false,
+        "prefix": 1951,
+        "shift": 65,
+        "span": 129,
+        "tail": 1,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 92941215,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 2805.101,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "raw": {
+        "reference_rows": 18,
+        "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+        "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+        "full_sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+        "bytes": 9308256
+      },
+      "state": {
+        ".source.state.bin": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94",
+        ".fresh.state.bin": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      },
+      "csv_checks": null,
+      "private_state": null,
+      "identity_checks": null,
+      "native_parity": true
+    }
+  ],
+  "native_controls_exact": true,
+  "quality_scope": "Endpoint-aligned fixed teacher-forced literary trajectory; native parity gate, zero-edit byte identity, full-vocabulary KL and deltaNLL. Per-case controls; configured chunk changes source/fresh as well as repair partition. Timing diagnostic. Not task accuracy, forgetting or default promotion.",
+  "timing_promoted": false
+}

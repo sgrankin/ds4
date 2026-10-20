@@ -1,0 +1,261 @@
+{
+  "prepared-and-run/corpus.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/corpus.txt",
+    "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f",
+    "bytes": 1329139,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/probe": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/probe",
+    "sha256": "f084f160d8ab086bb123532a7b1a1aa7c90bd66d8b5eff892d6dc76e772b7306",
+    "bytes": 2873376,
+    "mode": 493,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.cancel.prefix.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.cancel.prefix.state.bin",
+    "sha256": "1beda606ef158c5e1de784e876d6158fefcca771ac71f9d74df5c5243a1cd0cb",
+    "bytes": 20034616,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.cancel.source.endpoint.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.cancel.source.endpoint.state.bin",
+    "sha256": "f32649a66087401433159c6e1458d9c71907f9981ebb94c4c3f5d1e0861035be",
+    "bytes": 23721276,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.cancel.source.full.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.cancel.source.full.state.bin",
+    "sha256": "2c5febdbc6ddf2991f8144fb9877e6c9b84361d8644e6153ee0913b4bc1b0e9c",
+    "bytes": 24540988,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.precancel.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.precancel.state.bin",
+    "sha256": "2c5febdbc6ddf2991f8144fb9877e6c9b84361d8644e6153ee0913b4bc1b0e9c",
+    "bytes": 24540988,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.prefix.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.prefix.state.bin",
+    "sha256": "1beda606ef158c5e1de784e876d6158fefcca771ac71f9d74df5c5243a1cd0cb",
+    "bytes": 20034616,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.private.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.private.state.bin",
+    "sha256": "64438153baab6b1e5bf85a657630ee5a32968b234f7f71001df5bf70aa041a93",
+    "bytes": 24133176,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.raw.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.raw.bin",
+    "sha256": "e4b57b20945700ed4adc2fb1bd906a200db9d4289506d8cd41983a9e7cf5020d",
+    "bytes": 9825376,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.rollback.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.rollback.state.bin",
+    "sha256": "2c5febdbc6ddf2991f8144fb9877e6c9b84361d8644e6153ee0913b4bc1b0e9c",
+    "bytes": 24540988,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.source.endpoint.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.source.endpoint.state.bin",
+    "sha256": "f32649a66087401433159c6e1458d9c71907f9981ebb94c4c3f5d1e0861035be",
+    "bytes": 23721276,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/agent-reuse.source.full.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/agent-reuse.source.full.state.bin",
+    "sha256": "2c5febdbc6ddf2991f8144fb9877e6c9b84361d8644e6153ee0913b4bc1b0e9c",
+    "bytes": 24540988,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-after.fresh.endpoint.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-after.fresh.endpoint.state.bin",
+    "sha256": "69df3da109e631ebea2c799166e3048c7ce47b2fe27ab221fa0807395bcc2477",
+    "bytes": 23313464,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-after.fresh.full.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-after.fresh.full.state.bin",
+    "sha256": "369b864f228e0c01b184ae6adebb012fb0f5dc8cf5aeb601d9bf40b17d7cd448",
+    "bytes": 24133176,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-after.prefix.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-after.prefix.state.bin",
+    "sha256": "1beda606ef158c5e1de784e876d6158fefcca771ac71f9d74df5c5243a1cd0cb",
+    "bytes": 20034616,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-after.raw.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-after.raw.bin",
+    "sha256": "ba0242103b99617e25eb10e060001a489215182ced6db407b4989f80cf77dec7",
+    "bytes": 9825376,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-after.source.endpoint.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-after.source.endpoint.state.bin",
+    "sha256": "f32649a66087401433159c6e1458d9c71907f9981ebb94c4c3f5d1e0861035be",
+    "bytes": 23721276,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-after.source.full.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-after.source.full.state.bin",
+    "sha256": "2c5febdbc6ddf2991f8144fb9877e6c9b84361d8644e6153ee0913b4bc1b0e9c",
+    "bytes": 24540988,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-before.fresh.endpoint.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-before.fresh.endpoint.state.bin",
+    "sha256": "69df3da109e631ebea2c799166e3048c7ce47b2fe27ab221fa0807395bcc2477",
+    "bytes": 23313464,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-before.fresh.full.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-before.fresh.full.state.bin",
+    "sha256": "369b864f228e0c01b184ae6adebb012fb0f5dc8cf5aeb601d9bf40b17d7cd448",
+    "bytes": 24133176,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-before.prefix.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-before.prefix.state.bin",
+    "sha256": "1beda606ef158c5e1de784e876d6158fefcca771ac71f9d74df5c5243a1cd0cb",
+    "bytes": 20034616,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-before.raw.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-before.raw.bin",
+    "sha256": "ba0242103b99617e25eb10e060001a489215182ced6db407b4989f80cf77dec7",
+    "bytes": 9825376,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-before.source.endpoint.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-before.source.endpoint.state.bin",
+    "sha256": "f32649a66087401433159c6e1458d9c71907f9981ebb94c4c3f5d1e0861035be",
+    "bytes": 23721276,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/native-before.source.full.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/native-before.source.full.state.bin",
+    "sha256": "2c5febdbc6ddf2991f8144fb9877e6c9b84361d8644e6153ee0913b4bc1b0e9c",
+    "bytes": 24540988,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/tape-native.fresh.endpoint.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/tape-native.fresh.endpoint.state.bin",
+    "sha256": "69df3da109e631ebea2c799166e3048c7ce47b2fe27ab221fa0807395bcc2477",
+    "bytes": 23313464,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/tape-native.fresh.full.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/tape-native.fresh.full.state.bin",
+    "sha256": "369b864f228e0c01b184ae6adebb012fb0f5dc8cf5aeb601d9bf40b17d7cd448",
+    "bytes": 24133176,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/tape-native.prefix.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/tape-native.prefix.state.bin",
+    "sha256": "1beda606ef158c5e1de784e876d6158fefcca771ac71f9d74df5c5243a1cd0cb",
+    "bytes": 20034616,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/tape-native.raw.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/tape-native.raw.bin",
+    "sha256": "ba0242103b99617e25eb10e060001a489215182ced6db407b4989f80cf77dec7",
+    "bytes": 9825376,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/tape-native.source.endpoint.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/tape-native.source.endpoint.state.bin",
+    "sha256": "f32649a66087401433159c6e1458d9c71907f9981ebb94c4c3f5d1e0861035be",
+    "bytes": 23721276,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/run/tape-native.source.full.state.bin": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/run/tape-native.source.full.state.bin",
+    "sha256": "2c5febdbc6ddf2991f8144fb9877e6c9b84361d8644e6153ee0913b4bc1b0e9c",
+    "bytes": 24540988,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/source/ds4.c": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/source/ds4.c",
+    "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05",
+    "bytes": 3926808,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/source/ds4_metal.m": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/source/ds4_metal.m",
+    "sha256": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+    "bytes": 2360348,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "prepared-and-run/source/speed-bench/promessi_sposi.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-prepared-20261003-v1/source/speed-bench/promessi_sposi.txt",
+    "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f",
+    "bytes": 1329139,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "source-build-and-cpu-proof/prepared/corpus.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/evidence/agent-suffix-pair-native-cpu-and-prepared-20261003-v1/prepared/corpus.txt",
+    "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f",
+    "bytes": 1329139,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "source-build-and-cpu-proof/prepared/source/ds4.c": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/evidence/agent-suffix-pair-native-cpu-and-prepared-20261003-v1/prepared/source/ds4.c",
+    "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05",
+    "bytes": 3926808,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "source-build-and-cpu-proof/prepared/source/ds4_metal.m": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/evidence/agent-suffix-pair-native-cpu-and-prepared-20261003-v1/prepared/source/ds4_metal.m",
+    "sha256": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+    "bytes": 2360348,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  },
+  "source-build-and-cpu-proof/prepared/source/speed-bench/promessi_sposi.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/evidence/agent-suffix-pair-native-cpu-and-prepared-20261003-v1/prepared/source/speed-bench/promessi_sposi.txt",
+    "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f",
+    "bytes": 1329139,
+    "mode": 420,
+    "reason": "Large immutable source/runtime/raw/state kept in durable workspace; SHA/size/mode verified, not copied into this archive"
+  }
+}

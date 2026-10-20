@@ -1,0 +1,27 @@
+{
+  "status": "RELEASED",
+  "time": 1791012815.30339,
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "lock_reacquired": true,
+  "live_model_processes": [],
+  "normal_samples": 203,
+  "bad_samples": 0,
+  "swapgrowth_gib": 0,
+  "peak_wired_compressor_gib": 85.21820068359375,
+  "fresh_ps_args_comm": true,
+  "all_ancestors_excluded": [
+    1,
+    759,
+    1213,
+    1244,
+    2064,
+    2072,
+    69538
+  ],
+  "disk_free_gib": 200.10151290893555,
+  "completed_arms": 4,
+  "model_retry": false
+}

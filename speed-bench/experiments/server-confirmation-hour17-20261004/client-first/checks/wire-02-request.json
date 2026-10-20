@@ -1,0 +1,22 @@
+{
+  "url": "http://127.0.0.1:62637/v1/responses",
+  "method": "POST",
+  "body": {
+    "model": "deepseek-v4.1-flash",
+    "temperature": 0,
+    "reasoning": {
+      "effort": "none"
+    },
+    "max_output_tokens": 256,
+    "store": true,
+    "previous_response_id": "resp_675b47f74e29b67ce6c8fbe0",
+    "input": [
+      {
+        "type": "function_call_output",
+        "call_id": "call_a88fc3ac6cc5acc8eac136f7d48685f4",
+        "output": "{\"answer\":\"LIME-27\"}\n"
+      }
+    ],
+    "stream": true
+  }
+}

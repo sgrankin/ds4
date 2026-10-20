@@ -1,0 +1,35 @@
+{
+  "mode": "reuse",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "arm": "existing-after",
+  "canonical_suffix_requested": 0,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/concurrent-sessions-hour19-20261004/run.py",
+  "seconds": 328.9659288749972,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 0,
+      "seconds": 254.5068069590052,
+      "startup_seconds": 0.4138632090034662,
+      "client_seconds": 252.2778482499998,
+      "shutdown_seconds": 1.8147712499921909,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 74.45512874999258,
+      "startup_seconds": 0.4156950000033248,
+      "client_seconds": 72.5549899579928,
+      "shutdown_seconds": 1.4840711249999003,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/canonical23-cache-after",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/canonical23-store-after",
+  "timeout_seconds": 600
+}

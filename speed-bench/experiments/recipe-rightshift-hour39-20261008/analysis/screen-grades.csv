@@ -1,0 +1,9 @@
+screen,case,tail,mode,correct,tests,passed,failed,unresolved,returncode,cap,stopped,greedy_tokens,first_failure,error
+screen-growth64,growing-replacement,64,fresh,True,161,161,0,0,0,False,True,172,null,null
+screen-growth64,growing-replacement,64,reuse,True,161,161,0,0,0,False,True,175,null,null
+screen-insertion128,pure-insertion,128,fresh,False,161,0,0,161,3,False,True,144,null,"""SyntaxError"""
+screen-insertion128,pure-insertion,128,reuse,True,161,161,0,0,0,False,True,130,null,null
+screen-insertion256,pure-insertion,256,fresh,False,161,0,0,161,3,False,True,144,null,"""SyntaxError"""
+screen-insertion256,pure-insertion,256,reuse,False,161,0,0,161,3,False,True,144,null,"""SyntaxError"""
+screen-insertion64,pure-insertion,64,fresh,False,161,0,0,161,3,False,True,144,null,"""SyntaxError"""
+screen-insertion64,pure-insertion,64,reuse,False,161,0,0,161,3,False,True,144,null,"""SyntaxError"""

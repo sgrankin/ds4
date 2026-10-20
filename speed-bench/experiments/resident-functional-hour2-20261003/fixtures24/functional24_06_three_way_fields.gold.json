@@ -1,0 +1,25 @@
+{
+  "gold": {
+    "conflicts": [],
+    "merged": {
+      "owner": "Bo",
+      "title": "Final"
+    }
+  },
+  "oracle_input": {
+    "base": {
+      "owner": "Ada",
+      "title": "Draft"
+    },
+    "ours": {
+      "owner": "Ada",
+      "title": "Final"
+    },
+    "theirs": {
+      "owner": "Bo",
+      "title": "Draft"
+    }
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Base-aware field merge of disjoint edits; not sequential configuration overrides or an inventory ledger."
+}

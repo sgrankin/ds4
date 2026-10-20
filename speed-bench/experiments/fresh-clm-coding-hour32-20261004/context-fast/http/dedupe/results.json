@@ -1,0 +1,135 @@
+[
+  {
+    "case": "dedupe",
+    "arm": "context-fast",
+    "protocol": "full-input-clm",
+    "write_budget": 128,
+    "final_policy": "budget1",
+    "global_cap": 2048,
+    "wall_seconds": 99.10787920799339,
+    "http_output_tokens": 566,
+    "http_reasoning_tokens": 148,
+    "actual_read_count": 1,
+    "actual_write_count": 1,
+    "calls": [
+      {
+        "role": "READ",
+        "name": "read",
+        "call_id": "call_330e9a0a940c88aacd45901b362922bd",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/config.json\",\"whole\":true,\"raw\":true}",
+        "executed": true,
+        "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/config.json",
+        "output": "{\n  \"ttl\": 5,\n  \"sample\": [\n    {\n      \"t\": 0,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 4,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 5,\n      \"key\": \"b\"\n    },\n    {\n      \"t\": 9,\n      \"key\": \"a\"\n    },\n    {\n      \"t\": 10,\n      \"key\": \"a\"\n    }\n  ]\n}\n",
+        "tool_ms": 0.34425000194460154
+      },
+      {
+        "role": "WRITE",
+        "name": "write",
+        "call_id": "call_d7862e8637aa94b555bfdbd147315d76",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/solution.py\",\"content\":\"def solve(payload, config):\\n    ttl = config[\\\"ttl\\\"]\\n    accepted = []\\n    rejected = []\\n    last = {}\\n    index = 0\\n    for event in payload:\\n        key = event[\\\"key\\\"]\\n        t = event[\\\"t\\\"]\\n        if key not in last:\\n            accepted.append(index)\\n            last[key] = t\\n        else:\\n            if t - last[key] >= ttl:\\n                accepted.append(index)\\n                last[key] = t\\n            else:\\n                rejected.append(index)\\n        index = index + 1\\n    return {\\\"accepted\\\": accepted, \\\"rejected\\\": rejected}\\n\"}",
+        "executed": true,
+        "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/solution.py",
+        "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/solution.py",
+        "tool_ms": 0.36124998587183654
+      }
+    ],
+    "replies": [
+      {
+        "role": "READ",
+        "budget": 0,
+        "effort": "high",
+        "seconds": 47.224021583999274,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1563,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1563
+          },
+          "output_tokens": 116,
+          "output_tokens_details": {
+            "reasoning_tokens": 20
+          },
+          "total_tokens": 1679
+        },
+        "requested_max_output_tokens": 2048,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "role": "WRITE",
+        "budget": 128,
+        "effort": "high",
+        "seconds": 43.44356270800927,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1141,
+          "input_tokens_details": {
+            "cached_tokens": 445,
+            "cache_write_tokens": 696
+          },
+          "output_tokens": 337,
+          "output_tokens_details": {
+            "reasoning_tokens": 128
+          },
+          "total_tokens": 1478
+        },
+        "requested_max_output_tokens": 1932,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "role": "FINAL",
+        "budget": 1,
+        "effort": "high",
+        "seconds": 8.438000041991472,
+        "http_status": 200,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 1521,
+          "input_tokens_details": {
+            "cached_tokens": 1478,
+            "cache_write_tokens": 43
+          },
+          "output_tokens": 113,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1634
+        },
+        "requested_max_output_tokens": 1595,
+        "incomplete_details": null,
+        "stop_token_observed": null
+      }
+    ],
+    "first_code_path": "speed-bench/experiments/fresh-clm-coding-hour32-20261004/context-fast/http/dedupe/dedupe/first-solution.py",
+    "grade": {
+      "correct": true,
+      "tests": 161,
+      "passed": 161,
+      "failed": 0,
+      "first_failure": null,
+      "returncode": 0
+    },
+    "complete": true,
+    "cap": false,
+    "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/solution.py`.\n\nIt tracks the last accepted timestamp per exact key, accepts first occurrences, accepts later occurrences only when `t - last_accepted >= ttl` (so `ttl == 0` accepts everything), rejects otherwise without refreshing the stored timestamp, and returns `{\"accepted\": [...], \"rejected\": [...]}` as zero-based payload indices in original order.",
+    "final_text_length": 476,
+    "final_text_bytes": 476,
+    "first_code_bytes": 540,
+    "errors": [],
+    "config_unchanged": true,
+    "context_edit": {
+      "removed_blocks": 2,
+      "before_bytes": 5585,
+      "after_bytes": 2067,
+      "seconds": 0.0002692919806577265
+    },
+    "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+    "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+    "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+    "pass": true
+  }
+]

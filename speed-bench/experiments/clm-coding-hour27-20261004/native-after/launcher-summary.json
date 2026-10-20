@@ -1,0 +1,36 @@
+{
+  "mode": "native",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/clm-coding-hour27-20261004/run.py",
+  "seconds": 240.3777656250022,
+  "phases": [
+    {
+      "phase": "ledger",
+      "returncode": 0,
+      "seconds": 120.8817471670045,
+      "startup_seconds": 0.4190724170039175,
+      "client_seconds": 118.69053916700068,
+      "shutdown_seconds": 1.7716782920033438,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "lru",
+      "returncode": 0,
+      "seconds": 119.49173599999631,
+      "startup_seconds": 0.4178936249954859,
+      "client_seconds": 117.2343561250018,
+      "shutdown_seconds": 1.8390915420022793,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/coding27-cache-after",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/coding27-store-after",
+  "timeout_seconds": 900.0
+}

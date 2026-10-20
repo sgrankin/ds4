@@ -1,0 +1,13 @@
+{
+  "all_ds4_environment_cleared": true,
+  "all_phase_configured_slots": 6136,
+  "base_commit": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "native_before_after_all343_raw_exact_REFcf5": true,
+  "phases": 7,
+  "profile_scope": "Instrumented diagnostic quality/I-O replay; no latency promotion or physical SSD-byte claim.",
+  "raw_exported_all_five_arms": true,
+  "reference_sha256": "cf5b0ea8e62426d8682b603d09b83501a9de97b5a2535537acaf0dcc50ecf482",
+  "rows": 343,
+  "sampling_scope": "One correlated teacher-forced trajectory; no generated correctness claim or independent-prompt CI.",
+  "status": "PASS"
+}

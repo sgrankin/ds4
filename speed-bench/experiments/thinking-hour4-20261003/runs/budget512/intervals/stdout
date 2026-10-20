@@ -1,0 +1,79 @@
+We need read config.json whole raw. Then write solution.py. Only one read call and one write call. Let's read config.json.
+
+🛠️ Reading config.json (whole file)...
+
+We need implement solve(payload, config). Payload list of integer [start,end] intervals. Ignore empty or reversed intervals. Return sorted nonoverlapping [start,end] intervals covering input union; obey merge_touching in config.
+
+Need understand semantics. Half-open interval coalescing. Intervals [start,end) presumably. Empty if start >= end? Reversed if start > end? "Ignore empty or reversed intervals." Empty interval maybe start == end. Reversed start > end. So valid start < end. merge_touching true means merge intervals that touch, i.e., [1,4) and [4,6) merge to [1,6). If false, touching intervals remain separate? But "sorted nonoverlapping intervals covering input union" — if merge_touching false, [1,4) and [4,6) are nonoverlapping half-open (they share endpoint but no overlap), so keep separate. If true, merge into [1,6). Also overlapping intervals merge regardless.
+
+Config may be dict or maybe config.json contents passed as config. Need robust. Only plain function definitions, no imports, no decorators, annotations, default args, classes. Module-level only def solve. No underscore names. No I/O. Builtins only.
+
+Need parse config. config likely dict with merge_touching. Could be bool? Task says config.json with configuration. We'll assume dict. Could handle config being dict, maybe missing merge_touching default? Default argument values prohibited, but we can use local default. No imports. Use builtins.
+
+Implementation:
+
+def solve(payload, config):
+    merge_touching = False
+    if isinstance(config, dict):
+        merge_touching = config.get("merge_touching", False)
+    elif isinstance(config, bool):
+        merge_touching = config
+    # maybe config has attribute? no underscore attributes? "names/attributes beginning with underscore" prohibited. Accessing config.merge_touching? Could use getattr? But attributes maybe. Simpler dict.
+
+    intervals = []
+    for item in payload:
+        # item should be [start,end]
+        if not isinstance(item, (list, tuple)) or len(item) != 2: continue? Task says payload list of integer [start,end]. Could just assume. But robust.
+        start = item[0]; end = item[1]
+        if start >= end: continue
+        intervals.append((start, end))
+    intervals.sort
+
+🛠️ write  path=solution.py
+def solve(payload, config):
+    merge_touching = False
+    if isinstance(config, dict):
+        merge_touching = config.get("merge_touching", False)
+    elif isinstance(config, bool):
+        merge_touching = config
+
+    intervals = []
+    for item in payload:
+        if not isinstance(item, (list, tuple)) or len(item) != 2:
+            continue
+        start = item[0]
+        end = item[1]
+        if start >= end:
+            continue
+        intervals.append((start, end))
+
+    intervals.sort()
+
+    result = []
+    for start, end in intervals:
+        if not result:
+            result.append([start, end])
+            continue
+        last_start, last_end = result[-1]
+        if start < last_end or (merge_touching and start == last_end):
+            if end > last_end:
+                result[-1][1] = end
+        else:
+            result.append([start, end])
+
+    return result
+
+Need brief plain answer. Ensure no issues: module level only def solve. No imports. No underscore names. Uses result[-1] okay? "names/attributes beginning with underscore" — result[-1] is indexing not attribute. Fine. isinstance builtin. config.get okay. Could config be object? Probably dict. The sample merge_touching true. Output for sample: intervals [8,11),[1,4),[4,6),[3,3) ignore [3,3) empty. Sort [1,4),[4,6),[8,11). merge_touching true: [1,4) and [4,6) touch -> [1,6). Then [8,11). result [[1,6],[8,11]]. Correct.
+
+Potential concern: "Ignore empty or reversed intervals" — empty might mean start == end; reversed start > end. We do start >= end. Good.
+
+Potential concern: if merge_touching false, overlapping [1,4),[3,6) merge to [1,6), touching [1,4),[4,6) remain separate. Our condition start < last_end merges overlap; start == last_end only if merge_touching. Good.
+
+Potential concern: payload may contain intervals with non-integer? Not needed.
+
+Potential concern: config may be JSON object with key "merge_touching". Good.
+
+Need finish brief.
+
+Implemented `solution.py` with `solve(payload, config)`: it filters empty/reversed intervals, sorts them, and coalesces overlapping intervals plus touching intervals when `merge_touching` is true.
+

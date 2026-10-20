@@ -1,0 +1,22 @@
+[
+  {
+    "phase": "ledger",
+    "returncode": 3,
+    "seconds": 121.39640191599028,
+    "startup_seconds": 0.2141516659903573,
+    "client_seconds": 119.39793641700817,
+    "shutdown_seconds": 1.784034292009892,
+    "server_returncode": 0,
+    "error": null
+  },
+  {
+    "phase": "lru",
+    "returncode": 3,
+    "seconds": 118.77156654099235,
+    "startup_seconds": 0.4143787499924656,
+    "client_seconds": 116.68376174999867,
+    "shutdown_seconds": 1.6728842500015162,
+    "server_returncode": 0,
+    "error": null
+  }
+]

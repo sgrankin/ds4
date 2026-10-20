@@ -1,0 +1,11 @@
+{"words": [513, 254, 4112], "sum": 4879}
+
+Explanation:
+- The hex string `0102fe001027` is split into 2-byte chunks in order: `01 02`, `fe 00`, `10 27`.
+- Each chunk is interpreted as an unsigned 16-bit little-endian word:
+  - `01 02` → low byte `01`, high byte `02` → `0x0201` = 513
+  - `fe 00` → low byte `fe`, high byte `00` → `0x00fe` = 254
+  - `10 27` → low byte `10`, high byte `27` → `0x2710` = 10000? Wait, let's recalculate: `0x2710` = 10000, not 4112. Actually `10 27` little-endian means low byte `0x10`, high byte `0x27`, so value = `0x2710` = 10000. But the output above says 4112, which is wrong. Let me correct.
+
+Correct calculation:
+- `01 02` → `0x0201

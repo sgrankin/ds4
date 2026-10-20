@@ -1,0 +1,242 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
++DWARFSTAR_WAITING
+Let me start by exploring the project.
+
+🛠️ list  path=.
+🛠️ Reading README.md 1:120...
+
+Let me look at the source and tests.
+
+🛠️ list  path=ledger
+🛠️ list  path=tests
+
+
+🛠️ Reading ledger/report.py 1:120...
+🛠️ Reading ledger/money.py 1:120...
+🛠️ Reading ledger/io.py 1:120...
+🛠️ Reading ledger/__init__.py 1:120...
+
+Now let me read the tests and cli.py.
+
+🛠️ Reading tests/test_report.py 1:120...
+🛠️ Reading ledger/cli.py 1:120...
+
+Now let me run the tests to observe failures.
+
+🛠️ $ cd . && python3 -m unittest discover -s tests -v 2>&1
+
+[38;5;208mtest_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... FAIL
+test_decimal_money (test_report.ReportTests.test_decimal_money) ... FAIL
+test_retry (test_report.ReportTests.test_retry) ... FAIL
+test_void (test_report.ReportTests.test_void) ... FAIL
+test_zero_balance (test_report.ReportTests.test_zero_balance) ... FAIL
+
+======================================================================
+FAIL: test_charge_and_refund (test_report.ReportTests.test_charge_and_refund)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/resident-ds41-full275/project/tests/test_report.py", line 19, in test_charge_and_refund
+    self.assertEqual(summarize(rows), {'north': 950})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'north': 1450} != {'north': 950}
+- {'north': 1450}
+?           ^^
+
++ {'north': 950}
+?           ^
+
+
+======================================================================
+FAIL: test_decimal_money (test_report.ReportTests.test_decimal_money)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/resident-ds41-full275/project/tests/test_report.py", line 13, in test_decimal_money
+    self.assertEqual(cents('0.29'), 29)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 28 != 29
+
+======================================================================
+FAIL: test_retry (test_report.ReportTests.test_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/resident-ds41-full275/project/tests/test_report.py", line 23, in test_retry
+    self.assertEqual(summarize([row, dict(row)]), {'north': 400})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'north': 800} != {'north': 400}
+- {'north': 800}
+?           ^
+
++ {'north': 400}
+?           ^
+
+
+======================================================================
+FAIL: test_void (test_report.ReportTests.test_void)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/resident-ds41-full275/project/tests/test_report.py", line 26, in test_void
+    self.assertEqual(summarize([event('v', 'west', 'void', '9.00')]), {})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'west': 900} != {}
+- {'west': 900}
++ {}
+
+======================================================================
+FAIL: test_zero_balance (test_report.ReportTests.test_zero_balance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/resident-ds41-full275/project/tests/test_report.py", line 29, in test_zero_balance
+    self.assertEqual(summarize([event('a', 'east', 'charge', '1.00'),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                event('b', 'east', 'refund', '1.00')]), {'east': 0})
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'east': 200} != {'east': 0}
+- {'east': 200}
+?          --
+
++ {'east': 0}
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+FAILED (failures=5)
+[0mNow I understand the bugs:
+
+1. `cents` uses float multiplication which has rounding issues (0.29 -> 28). Need exact decimal parsing.
+2. `summarize` ignores `kind` — refunds should subtract, voids should have no effect.
+3. Retries: same event_id should count once, using first occurrence.
+4. Accounts with only void events should be omitted; accounts with valid charge/refund netting to zero should be included.
+
+Let me design the fix.
+
+`cents(text)`: parse decimal string exactly. Amount is nonnegative decimal with at most two fractional digits. Use string parsing: split on '.', integer part * 100 + fractional padded to 2 digits.
+
+`summarize(rows)`:
+- Track seen event_ids (first occurrence wins).
+- For each row, if event_id already seen, skip.
+- kind: charge -> +amount, refund -> -amount, void -> no effect.
+- Track accounts that have valid charge/refund events (so zero-balance accounts included). Void-only accounts omitted.
+
+Let me think about the "first occurrence" semantics. Retries repeat the same event_id; count each event exactly once, using its first occurrence. So dedupe by event_id, keeping first.
+
+For accounts: include accounts whose valid charge/refund events net to zero; omit accounts having only void events. So an account is included if it has at least one charge or refund event (after dedup). Void events don't create an account entry.
+
+Let me write the fix.
+
+money.py:
+```python
+def cents(text):
+    """Convert a dollar amount to integer cents."""
+    text = str(text).strip()
+    if '.' in text:
+        whole, frac = text.split('.', 1)
+    else:
+        whole, frac = text, ''
+    frac = (frac + '00')[:2]
+    return int(whole) * 100 + int(frac)
+```
+
+Hmm, but what about negative? Amount is nonnegative per README. Keep simple but handle sign? Let's keep robust: handle leading '-'. Actually README says nonnegative. But to be safe, handle sign. Let me keep it simple and correct for the spec. I'll handle optional sign.
+
+Actually let me be careful: `int(whole)` fails if whole is empty (e.g. ".29"). Not in spec. Keep simple.
+
+report.py:
+```python
+from .money import cents
+
+KINDS = {'charge': 1, 'refund': -1}
+
+
+def summarize(rows):
+    totals = {}
+    seen = set()
+    for row in rows:
+        event_id = row['event_id']
+        if event_id in seen:
+            continue
+        seen.add(event_id)
+        kind = row['kind']
+        if kind not in KINDS:
+            continue
+        account = row['account']
+        totals[account] = totals.get(account, 0) + KINDS[kind] * cents(row['amount'])
+    return totals
+```
+
+Wait — void events: kind 'void' not in KINDS, so skipped, and account not added. Good. Zero-balance accounts: charge + refund net to 0, account added with 0. Good.
+
+But what about unknown kinds? README says kinds are charge, refund, void. Fine.
+
+Let me verify tests:
+- test_decimal_money: cents('0.29') -> whole='0', frac='29' -> 0*100+29=29. cents('19.99') -> 19*100+99=1999. Good.
+- test_charge_and_refund: charge 12.00 -> +1200, refund 2.50 -> -250 => 950. Good.
+- test_retry: row a charge 4.00, duplicate skipped => 400. Good.
+- test_void: void skipped, no account => {}. Good.
+- test_zero_balance: charge 1.00 +100, refund 1.00 -100 => 0, account east present => {'east': 0}. Good.
+
+Now let me make the edits.
+
+Now I understand the bugs. Let me fix `money.py` and `report.py`.
+
+🛠️ edit  path=ledger/money.py
+- def cents(text):
+-     """Convert a dollar amount to integer cents."""
+-     return int(float(text) * 100)
++ def cents(text):
++     """Convert a dollar amount to integer cents."""
++     text = str(text).strip()
++     sign = 1
++     if text.startswith('-'):
++         sign = -1
++         text = text[1:]
++     elif text.startswith('+'):
++         text = text[1:]
++     if '.' in text:
++         whole, frac = text.split('.', 1)
++     else:
++         whole, frac = text, ''
++     frac = (frac + '00')[:2]
++     return sign * (int(whole or '0') * 100 + int(frac))
+🛠️ edit  path=ledger/report.py
+- from .money import cents
+- 
+- 
+- def summarize(rows):
+-     totals = {}
+-     for row in rows:
+-         account = row['account']
+-         amount = cents(row['amount'])
+-         totals[account] = totals.get(account, 0) + amount
+-     return totals
++ from .money import cents
++ 
++ KINDS = {'charge': 1, 'refund': -1}
++ 
++ 
++ def summarize(rows):
++     totals = {}
++     seen = set()
++     for row in rows:
++         event_id = row['event_id']
++         if event_id in seen:
++             continue
++         seen.add(event_id)
++         kind = row['kind']
++         if kind not in KINDS:
++             continue
++         account = row['account']
++         totals[account] = totals.get(account, 0) + KINDS[kind] * cents(row['amount'])
++     return totals
+
+
+🛠️ $ cd

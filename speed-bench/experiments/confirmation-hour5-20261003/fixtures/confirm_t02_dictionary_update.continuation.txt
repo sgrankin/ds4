@@ -1,0 +1,2 @@
+{"items":[["a",3],["b",9],["c",-2]],"sum":10}
+Replacing the value for b preserves its existing position. Adding c appends a new key after a and b. The resulting values are three, nine, and negative two, whose sum is ten. This operation overwrites one value and inserts one key; it does not move the overwritten key to the end.

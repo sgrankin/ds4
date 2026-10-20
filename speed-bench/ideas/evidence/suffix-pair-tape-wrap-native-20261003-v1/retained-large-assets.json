@@ -1,0 +1,417 @@
+{
+  "prepared_binaries": {
+    "baseline-probe": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/baseline-probe",
+      "bytes": 2692080,
+      "sha256": "6ee762d846890d850af362198f2ab9cfb0023294b7050dabd8d8ba72d57d6f5a"
+    },
+    "new-probe": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/new-probe",
+      "bytes": 2710072,
+      "sha256": "8c3585fb8cd57d39bb91a87fc37807b54d20637789f373ac37688f6b8b68ce31"
+    }
+  },
+  "raw_vectors": {
+    "old-native-before": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-before.raw.bin",
+      "bytes": 9308256,
+      "sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+      "reference_rows": 18,
+      "candidate_rows": 0,
+      "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+      "candidate_sha256": null,
+      "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+      "teacher_ids": [
+        283,
+        112322,
+        260,
+        201,
+        265,
+        272,
+        1543,
+        81565,
+        11,
+        2408,
+        11765,
+        3152,
+        2236,
+        8644,
+        15342,
+        71443
+      ]
+    },
+    "new-native": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-native.raw.bin",
+      "bytes": 9308256,
+      "sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+      "reference_rows": 18,
+      "candidate_rows": 0,
+      "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+      "candidate_sha256": null,
+      "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+      "teacher_ids": [
+        283,
+        112322,
+        260,
+        201,
+        265,
+        272,
+        1543,
+        81565,
+        11,
+        2408,
+        11765,
+        3152,
+        2236,
+        8644,
+        15342,
+        71443
+      ]
+    },
+    "new-tape-native": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-tape-native.raw.bin",
+      "bytes": 9308256,
+      "sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+      "reference_rows": 18,
+      "candidate_rows": 0,
+      "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+      "candidate_sha256": null,
+      "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+      "teacher_ids": [
+        283,
+        112322,
+        260,
+        201,
+        265,
+        272,
+        1543,
+        81565,
+        11,
+        2408,
+        11765,
+        3152,
+        2236,
+        8644,
+        15342,
+        71443
+      ]
+    },
+    "suffix-reuse": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.raw.bin",
+      "bytes": 18099296,
+      "sha256": "16a7d9d30aa4bfb75efcbbfd2c8447daf31a03c61d9be58ba7c45e1ac29f5d2e",
+      "reference_rows": 18,
+      "candidate_rows": 17,
+      "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+      "candidate_sha256": "5c92c989518a4a0a2dd8fd9f36a24c1dda46d2e70da42c2bb78d2d6c7d3f9535",
+      "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+      "teacher_ids": [
+        283,
+        112322,
+        260,
+        201,
+        265,
+        272,
+        1543,
+        81565,
+        11,
+        2408,
+        11765,
+        3152,
+        2236,
+        8644,
+        15342,
+        71443
+      ]
+    },
+    "old-native-after": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-after.raw.bin",
+      "bytes": 9308256,
+      "sha256": "2f71bdaeeac2f9a7388b884068495c9c855b4d0e2c5af01bc848f2f7b74a8c13",
+      "reference_rows": 18,
+      "candidate_rows": 0,
+      "reference_sha256": "cf05c8812bca3b25dc1730272d90f4a7ee1c6f67571f07f42f83e9a50e50fb26",
+      "candidate_sha256": null,
+      "teacher_token_hex": "1b010000c2b6010004010000c90000000901000010010000070600009d3e01000b00000068090000f52d0000500c0000bc080000c4210000ee3b000013170100",
+      "teacher_ids": [
+        283,
+        112322,
+        260,
+        201,
+        265,
+        272,
+        1543,
+        81565,
+        11,
+        2408,
+        11765,
+        3152,
+        2236,
+        8644,
+        15342,
+        71443
+      ]
+    }
+  },
+  "native_and_diagnostic_states": {
+    "old-native-before": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-before.source.state.bin",
+        "bytes": 24745916,
+        "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-before.fresh.state.bin",
+        "bytes": 24338104,
+        "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      }
+    },
+    "new-native": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-native.source.state.bin",
+        "bytes": 24745916,
+        "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-native.fresh.state.bin",
+        "bytes": 24338104,
+        "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      }
+    },
+    "new-tape-native": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-tape-native.source.state.bin",
+        "bytes": 24745916,
+        "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/new-tape-native.fresh.state.bin",
+        "bytes": 24338104,
+        "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      }
+    },
+    "suffix-reuse": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.source.state.bin",
+        "bytes": 24745916,
+        "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.fresh.state.bin",
+        "bytes": 24338104,
+        "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      },
+      ".private.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/suffix-reuse.private.state.bin",
+        "bytes": 24338104,
+        "sha256": "0d1fd95e99b59bcd63dd667d736a90ac6b7824324a23e38ba2cb7c50afbde7e6"
+      }
+    },
+    "old-native-after": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-after.source.state.bin",
+        "bytes": 24745916,
+        "sha256": "cbdcc719257b7db0ea413e9ead3fb339d00f10f24dc10cb8467ccc0123659b94"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run/old-native-after.fresh.state.bin",
+        "bytes": 24338104,
+        "sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca"
+      }
+    }
+  },
+  "frozen_inventory": {
+    "auxiliary-object-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/auxiliary-object-proof.json",
+      "bytes": 1240,
+      "sha256": "685cb308a501fb81867d806d00a8e3d60e69a3e7f855a9d3cc3cc5233a65e6bf"
+    },
+    "baseline-core-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/baseline-core-proof.json",
+      "bytes": 1351,
+      "sha256": "9fc7a478ede2feb21d1a15a71e09dc5aa6eb829463feb6acba51cb3e2ae24d3c"
+    },
+    "baseline-probe": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/baseline-probe",
+      "bytes": 2692080,
+      "sha256": "6ee762d846890d850af362198f2ab9cfb0023294b7050dabd8d8ba72d57d6f5a"
+    },
+    "build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/build-manifest.json",
+      "bytes": 3669,
+      "sha256": "2b8c227c2a008bd84c279d39c528a9aa7d11660dba8c573d249f901ae15c44d3"
+    },
+    "corpus.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/corpus.txt",
+      "bytes": 1329139,
+      "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f"
+    },
+    "final-link-cpu-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/final-link-cpu-proof.json",
+      "bytes": 9973,
+      "sha256": "1f1846c95a2edc65dd51fc5cd3a36d56a70dfa12a3956212d6bd5146b9a433d0"
+    },
+    "metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/argsort.metal",
+      "bytes": 11174,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/bin.metal",
+      "bytes": 6580,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/concat.metal",
+      "bytes": 1932,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/cpy.metal",
+      "bytes": 10154,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/deepseek4_vision.metal",
+      "bytes": 7815,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/dense.metal",
+      "bytes": 113439,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/dsv41.metal",
+      "bytes": 12508,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/dsv4_hc.metal",
+      "bytes": 63069,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/dsv4_kv.metal",
+      "bytes": 22218,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/dsv4_misc.metal",
+      "bytes": 282139,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/dsv4_rope.metal",
+      "bytes": 35980,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/flash_attn.metal",
+      "bytes": 61784,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/get_rows.metal",
+      "bytes": 6976,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/glm53_bf16.metal",
+      "bytes": 5466,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/glm53_kda.metal",
+      "bytes": 13116,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/glm53_vision.metal",
+      "bytes": 11295,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/glu.metal",
+      "bytes": 2129,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/moe.metal",
+      "bytes": 423032,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/norm.metal",
+      "bytes": 14766,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/qwen4.metal",
+      "bytes": 232464,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/qwen4_vision.metal",
+      "bytes": 7402,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/repeat.metal",
+      "bytes": 1640,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/set_rows.metal",
+      "bytes": 1909,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/softmax.metal",
+      "bytes": 7679,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/sum_rows.metal",
+      "bytes": 2737,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/metal/unary.metal",
+      "bytes": 10104,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "new-probe": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/new-probe",
+      "bytes": 2710072,
+      "sha256": "8c3585fb8cd57d39bb91a87fc37807b54d20637789f373ac37688f6b8b68ce31"
+    },
+    "run_suffix_pair_tape_followup.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/run_suffix_pair_tape_followup.py",
+      "bytes": 22140,
+      "sha256": "c5870ad13c17adef1c7875974f2cf78b780bc2395ac1cc07e7baa655e6794649"
+    },
+    "source/ds4.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/source/ds4.c",
+      "bytes": 3926808,
+      "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05"
+    },
+    "source/ds4.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/source/ds4.h",
+      "bytes": 37885,
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631"
+    },
+    "source/ds4_suffix_pair_tape.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/source/ds4_suffix_pair_tape.h",
+      "bytes": 7139,
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0"
+    },
+    "source/speed-bench/suffix_pair_tape_followup_bench.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-wrap-odd-chunk-prepared-20261003-v1/source/speed-bench/suffix_pair_tape_followup_bench.c",
+      "bytes": 18917,
+      "sha256": "c799e3acae5fbca324aa76b3e45352b40c7a96580fb0fbaa0ae7b9d8c33599e5"
+    }
+  },
+  "all_large_files_retained_original": true,
+  "no_large_state_vector_binary_copies": true
+}

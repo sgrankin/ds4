@@ -1,0 +1,60 @@
+{
+  "arm": "new-native",
+  "summary": {
+    "mode": "native",
+    "endpoint_partition_aligned": true,
+    "identity_native_checked": true,
+    "identity_native_state_equal": true,
+    "identity_native_logits_equal": true,
+    "identity_reuse_state_equal": false,
+    "prefix": 2017,
+    "shift": 0,
+    "span": 65,
+    "tail": 1,
+    "decode": 16,
+    "raw_reference_rows": 18,
+    "raw_candidate_rows": 0,
+    "tape_buffer_and_metadata_bytes": 0,
+    "immutable_tape_bytes": 0,
+    "peak_staging_bytes_including_reserve": 92556975,
+    "staging_budget_bytes": 134217728,
+    "coverage_rejections_preserve_state": false,
+    "precancel_preserves_state": false,
+    "partial_cancel_invalidates": false,
+    "approximate_export_blocked": false,
+    "pair_inputs_reused": 0,
+    "pair_rows_rebuilt": 0,
+    "pair_boundary_rows": 0,
+    "reused_tokens": 0,
+    "fresh_tail_tokens": 0,
+    "fresh_ms_diagnostic": 1451.443,
+    "reuse_ms_diagnostic": 0.0,
+    "mean_kl": 0,
+    "mean_tv": 0,
+    "sum_delta_nll": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 0
+  },
+  "raw": {
+    "reference_rows": 18,
+    "reference_sha256": "d04828d7157f1e9cbedb425104cddb72bc5ff61802c0880e4da311d4e5216f9e",
+    "teacher_token_hex": "04010000ed5e0000112000000e000000ebd90100310100005a1a00000e000000cc020000c900000056000000e8ac0000a50d00008d55000007060000d9d50000",
+    "full_sha256": "8e8f5c2a36ecc96f5eeb1faea1e78844e6efe692ae5a7b363a47ffc2502deb28",
+    "bytes": 9308256
+  },
+  "state": {
+    ".source.state.bin": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199",
+    ".fresh.state.bin": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+  },
+  "csv_checks": null,
+  "private_state": null,
+  "identity_checks": {
+    "source_fresh_native_state_exact": true,
+    "source_fresh_native_vector_exact": true,
+    "repaired_full_vectors_exact": false,
+    "repaired_normalized_state_sha256": null,
+    "canonical_normalization": null,
+    "retained_raw_sha256": "8e8f5c2a36ecc96f5eeb1faea1e78844e6efe692ae5a7b363a47ffc2502deb28"
+  },
+  "native_parity": true
+}

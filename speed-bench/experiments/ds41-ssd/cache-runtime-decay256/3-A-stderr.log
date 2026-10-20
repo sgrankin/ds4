@@ -1,0 +1,75 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: SSD streaming auto cache budget
+ds4:   metal recommends 112.00 GiB working set
+ds4:   using 79% total for model + cached experts: 89.00 GiB
+ds4:   non-routed weights: 9.37 GiB
+ds4:   routed expert size: 9.49 MiB
+ds4:   expert budget before prefill reserve: 8590 (79.63 GiB)
+ds4: metal SSD streaming cache target 79.63 GiB; effective 79.63 GiB = 7.12 GiB prefill headroom + 72.51 GiB dynamic cache (7822 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.61 GiB (raw 0.01 + compressed 0.60) + buffers 8.01 GiB + resident model 9.37 GiB + expert cache 72.51 GiB + prefill expert reserve 7.12 GiB = 97.61 GiB planned
+ds4: memory detail: ctx=100000 prefill_cap=8192 raw_kv_rows=128 compressed_kv_rows=100001 backend=metal
+ds4: V4.1 static context buffers 8820.49 MiB (ctx=100000), Engram disk-only
+REPLAY phase=0 kind=P context=1859 tokens=1859 start
+REPLAY phase=0 done 15093.310 ms
+REPLAY phase=1 kind=P context=1949 tokens=90 start
+REPLAY phase=1 done 3868.232 ms
+REPLAY phase=2 kind=D context=2021 tokens=72 start
+REPLAY phase=2 done 3818.482 ms
+REPLAY phase=3 kind=P context=2322 tokens=301 start
+REPLAY phase=3 done 9325.211 ms
+REPLAY phase=4 kind=D context=2396 tokens=74 start
+REPLAY phase=4 done 3867.393 ms
+REPLAY phase=5 kind=P context=2468 tokens=72 start
+REPLAY phase=5 done 2031.538 ms
+REPLAY phase=6 kind=D context=2665 tokens=197 start
+REPLAY phase=6 done 9286.087 ms
+REPLAY phase=7 kind=P context=3350 tokens=685 start
+REPLAY phase=7 done 17086.303 ms
+REPLAY phase=8 kind=D context=3414 tokens=64 start
+REPLAY phase=8 done 3749.554 ms
+REPLAY phase=9 kind=P context=4240 tokens=826 start
+REPLAY phase=9 done 19325.093 ms
+REPLAY phase=10 kind=D context=5182 tokens=942 start
+REPLAY phase=10 done 51640.399 ms
+REPLAY phase=11 kind=P context=5543 tokens=361 start
+REPLAY phase=11 done 9829.456 ms
+REPLAY phase=12 kind=D context=5597 tokens=54 start
+REPLAY phase=12 done 3073.938 ms
+REPLAY phase=13 kind=P context=5759 tokens=162 start
+REPLAY phase=13 done 4049.582 ms
+REPLAY phase=14 kind=D context=5832 tokens=73 start
+REPLAY phase=14 done 4096.343 ms
+REPLAY phase=15 kind=P context=5916 tokens=84 start
+REPLAY phase=15 done 2228.997 ms
+REPLAY phase=16 kind=D context=6005 tokens=89 start
+REPLAY phase=16 done 5441.159 ms
+REPLAY phase=17 kind=P context=6097 tokens=92 start
+REPLAY phase=17 done 2774.839 ms
+REPLAY phase=18 kind=D context=7273 tokens=1176 start
+REPLAY phase=18 done 65495.879 ms
+REPLAY phase=19 kind=P context=7551 tokens=278 start
+REPLAY phase=19 done 7885.907 ms
+REPLAY phase=20 kind=D context=7605 tokens=54 start
+REPLAY phase=20 done 2975.769 ms
+REPLAY phase=21 kind=P context=7819 tokens=214 start
+REPLAY phase=21 done 5363.256 ms
+REPLAY phase=22 kind=D context=7891 tokens=72 start
+REPLAY phase=22 done 4301.705 ms
+REPLAY phase=23 kind=P context=7953 tokens=62 start
+REPLAY phase=23 done 2011.540 ms
+REPLAY phase=24 kind=D context=8187 tokens=234 start
+REPLAY phase=24 done 12441.010 ms
+REPLAY phase=25 kind=P context=8312 tokens=125 start
+REPLAY phase=25 done 3614.832 ms
+REPLAY phase=26 kind=D context=8435 tokens=123 start
+REPLAY phase=26 done 6775.615 ms
+REPLAY phase=27 kind=P context=8563 tokens=128 start
+REPLAY phase=27 done 2992.778 ms
+REPLAY phase=28 kind=D context=8710 tokens=147 start
+REPLAY phase=28 done 8239.680 ms

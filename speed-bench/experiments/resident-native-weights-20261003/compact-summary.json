@@ -1,0 +1,223 @@
+{
+  "status": "complete",
+  "first_attempts": 19,
+  "all_helper_returncodes": 0,
+  "source_revision": "6d970cb0374733f109ef4e210861ab5248f1f7b9",
+  "manifest_sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+  "command_sha256": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+  "all_old_new_default_state_and_teacher_controls_exact": true,
+  "all_positive_flag1_noaction_fullraw_io_cache_controls_exact": true,
+  "all_native_brackets_exact": true,
+  "all_raw_vectors_independently_finite": true,
+  "comparisons": {
+    "calibration16": {
+      "dataset_role": "calibration",
+      "affinity": {
+        "delta_nll": 0.0076013288621,
+        "prompt_bootstrap_95": [
+          -0.017275422671802865,
+          0.03193909004282403
+        ],
+        "worst_prompt_delta_nll": 0.10111760921684572,
+        "kl_base_to_raw": 0.0172143927637,
+        "kl_p99": 0.154189521279,
+        "kl_max": 1.64426740744,
+        "argmax_flips": 15,
+        "bit_equal_rows": 16,
+        "raw_sha256": "89b455eb38161b5937d81d26742ce6971c36129ae1891754b1924d0d29701e61",
+        "io": {
+          "enabled": 1,
+          "pread_calls": 49245,
+          "requested_bytes": 163383091200,
+          "returned_bytes": 163383091200,
+          "cache_loader_bytes": 163383091200,
+          "cache_hits": 197905,
+          "cache_misses": 16415,
+          "cache_evictions": 10279
+        },
+        "route": {
+          "layers": 20480,
+          "substitutions": 8307,
+          "native_misses": 13422,
+          "skipped_loads": 8307,
+          "skipped_bytes": 82681896960,
+          "mean_mass": 0.1082649,
+          "mean_score_gap": 0.10277713,
+          "mean_affinity_ratio": 0.91156744,
+          "mean_rank": 7.912,
+          "full_snapshots": 7876,
+          "double_layers": 1086,
+          "planned_substitutions": 8307,
+          "drops": 0,
+          "triple_layers": 80
+        }
+      },
+      "original_gpu_weights": {
+        "delta_nll": 0.00471407320001,
+        "prompt_bootstrap_95": [
+          -0.01611781880453994,
+          0.0255474523671116
+        ],
+        "worst_prompt_delta_nll": 0.09599086437557197,
+        "kl_base_to_raw": 0.0176448900607,
+        "kl_p99": 0.295910843508,
+        "kl_max": 1.309989526,
+        "argmax_flips": 18,
+        "bit_equal_rows": 16,
+        "raw_sha256": "48f13f8291728241cd42da081db0923bc1cb6e86b79cb89286be79a1e29025b4",
+        "io": {
+          "enabled": 1,
+          "pread_calls": 49278,
+          "requested_bytes": 163492577280,
+          "returned_bytes": 163492577280,
+          "cache_loader_bytes": 163492577280,
+          "cache_hits": 197894,
+          "cache_misses": 16426,
+          "cache_evictions": 10290
+        },
+        "route": {
+          "layers": 20480,
+          "substitutions": 8359,
+          "native_misses": 13493,
+          "skipped_loads": 8359,
+          "skipped_bytes": 83199467520,
+          "mean_mass": 0.10845012,
+          "mean_score_gap": 0.10340459,
+          "mean_affinity_ratio": 0.91077246,
+          "mean_rank": 7.916,
+          "full_snapshots": 7900,
+          "double_layers": 1114,
+          "planned_substitutions": 8359,
+          "drops": 0,
+          "triple_layers": 76
+        }
+      },
+      "paired_weight_minus_affinity": {
+        "mean_delta_nll_difference": -0.002887255662136214,
+        "prompt_bootstrap_95": [
+          -0.010354218242373323,
+          0.004442119618613719
+        ],
+        "seed": 20261002,
+        "draws": 2000,
+        "paired_prompts": 16
+      },
+      "native_requested_bytes": 225192960000,
+      "candidate_minus_affinity_requested_bytes": 109486080,
+      "candidate_relative_native_requested_pct": -27.398895027624313
+    },
+    "heldout16": {
+      "dataset_role": "previously used confirmation16; not an untouched new holdout",
+      "affinity": {
+        "delta_nll": 0.00722528199127,
+        "prompt_bootstrap_95": [
+          -0.007474102478924773,
+          0.020921816617445996
+        ],
+        "worst_prompt_delta_nll": 0.04389140869033563,
+        "kl_base_to_raw": 0.0125952518854,
+        "kl_p99": 0.169840250749,
+        "kl_max": 0.603620837045,
+        "argmax_flips": 20,
+        "bit_equal_rows": 16,
+        "raw_sha256": "6ba6007cc701425d767b72a94dea7118edaf00a6abaf5d1ca1497d89d5ddeb0a",
+        "io": {
+          "enabled": 1,
+          "pread_calls": 44607,
+          "requested_bytes": 147995320320,
+          "returned_bytes": 147995320320,
+          "cache_loader_bytes": 147995320320,
+          "cache_hits": 198011,
+          "cache_misses": 14869,
+          "cache_evictions": 8733
+        },
+        "route": {
+          "layers": 20480,
+          "substitutions": 7869,
+          "native_misses": 12505,
+          "skipped_loads": 7869,
+          "skipped_bytes": 78322360320,
+          "mean_mass": 0.10692226,
+          "mean_score_gap": 0.10117685,
+          "mean_affinity_ratio": 0.91111268,
+          "mean_rank": 7.923,
+          "full_snapshots": 7464,
+          "double_layers": 985,
+          "planned_substitutions": 7869,
+          "drops": 0,
+          "triple_layers": 78
+        }
+      },
+      "original_gpu_weights": {
+        "delta_nll": 0.000961626971128,
+        "prompt_bootstrap_95": [
+          -0.01493471182435993,
+          0.01698063154294913
+        ],
+        "worst_prompt_delta_nll": 0.046227658026009845,
+        "kl_base_to_raw": 0.014541100712,
+        "kl_p99": 0.155669542161,
+        "kl_max": 0.780542689997,
+        "argmax_flips": 19,
+        "bit_equal_rows": 16,
+        "raw_sha256": "3a52faca9d558fd3c83393fa6fb7f7960c21b143ab65d858d7185aac3ba5409f",
+        "io": {
+          "enabled": 1,
+          "pread_calls": 44607,
+          "requested_bytes": 147995320320,
+          "returned_bytes": 147995320320,
+          "cache_loader_bytes": 147995320320,
+          "cache_hits": 198011,
+          "cache_misses": 14869,
+          "cache_evictions": 8733
+        },
+        "route": {
+          "layers": 20480,
+          "substitutions": 7871,
+          "native_misses": 12506,
+          "skipped_loads": 7871,
+          "skipped_bytes": 78342266880,
+          "mean_mass": 0.10698728,
+          "mean_score_gap": 0.10123789,
+          "mean_affinity_ratio": 0.91079617,
+          "mean_rank": 7.942,
+          "full_snapshots": 7439,
+          "double_layers": 1011,
+          "planned_substitutions": 7871,
+          "drops": 0,
+          "triple_layers": 82
+        }
+      },
+      "paired_weight_minus_affinity": {
+        "mean_delta_nll_difference": -0.006263655020154604,
+        "prompt_bootstrap_95": [
+          -0.015296434452861028,
+          0.002363261215979134
+        ],
+        "seed": 20261002,
+        "draws": 2000,
+        "paired_prompts": 16
+      },
+      "native_requested_bytes": 207277056000,
+      "candidate_minus_affinity_requested_bytes": 0,
+      "candidate_relative_native_requested_pct": -28.60024009603842
+    }
+  },
+  "release": {
+    "time": 1790995184.3173,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "lock_reacquired": true,
+    "live_model_processes": [],
+    "normal_pressure_samples": 1048,
+    "bad_pressure_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gib": 84.18734741210938
+  },
+  "logical_io_scope": "Direct cumulative explicit cache-loader requested/returned bytes through preclose P+D, including the final unscored teacher eval. No background stage enabled. Teardown source audit shows no new submissions; postclose counters were not measured. No physical SSD or speed claim.",
+  "coefficient_scope": "Flag1 successful ID-only commit counts are measured. Actual GPU six-slot coefficient tensor bits are not exported by this frontend; preservation follows source isolation plus focused actual-function CPU bit tests.",
+  "conclusion": "Mixed quality; mean delta NLL improves uncertainly, KL worsens on both datasets, tail/argmax changes mixed; demand logical bytes essentially unchanged from affinity. Remains opt-in; no adoption or latency claim.",
+  "prior_mixed_native_weights_evidence": "/Volumes/Models/ds4/speed-bench/ideas/evidence/resident-native-weights-calibration16-20261002/compact-summary.json"
+}

@@ -1,0 +1,6 @@
+We need answer only integer. Need solve. Need count binary strings length 10 on cycle C10 with no adjacent 1s (including 10-1). Positions labeled, rotations distinct. Count independent sets in cycle C10. Number binary strings length n cycle with no adjacent 1s = Lucas number? For cycle n, count = F_{n-1}+F_{n+1}? Let's compute n=10. Independent sets in C_n count Lucas L_n? Actually number of independent sets in cycle C_n = F_{n-1}+F_{n+1} = L_n? Lucas L_n = F_{n-1}+F_{n+1}. For n=10, L_10=123? Let's verify. Lucas sequence: L0=2,L1=1,L2=3,L3=4,L4=7,L5=11,L6=18,L7=29,L8=47,L9=76,L10=123. Yes. Need ensure no restriction on number ones includes all independent sets. Count 123.
+
+Let's double-check manually recurrence. For cycle length 10, count = number linear strings length 10 no adjacent plus subtract those with endpoints both 1? Or use formula. Linear length n no adjacent ones = F_{n+2}. For n=10, F12=144. Invalid for cycle are strings with positions 1 and 10 both 1 and no adjacent internal. If endpoints both 1, positions 2 and 9 must be 0. Remaining positions 3-8 length 6 linear no adjacent with boundaries? Actually positions 3 adjacent to 2=0, 8 adjacent to 9=0, so just length6 no adjacent = F_{8}=21? Wait F_{n+2} for length6 = F8=21. Thus cycle count = 144 - 21 = 123. Yes.
+
+Need final only integer. 
+</think>123

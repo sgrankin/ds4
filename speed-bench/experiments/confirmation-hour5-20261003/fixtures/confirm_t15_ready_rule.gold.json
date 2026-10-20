@@ -1,0 +1,12 @@
+{
+  "gold": {
+    "ready": false,
+    "blocking_field": "alarm"
+  },
+  "oracle_input": {
+    "question": "A fictional device is ready exactly when permit is approved, lock is open, and alarm is acknowledged. Current record: permit=approved, lock=open, alarm=unacknowledged. A note says the old alarm was acknowledged yesterday, but the current record supersedes it. Report ready as a boolean and blocking_field as a string in JSON, then explain."
+  },
+  "explanation": "Readiness requires all three conditions at once. The current permit and lock satisfy their conditions, but the current alarm has not been acknowledged. This makes ready false, with alarm as the blocking field. The note about yesterday refers to an older state and cannot replace the explicitly superseding current record.",
+  "category": "facts",
+  "scope": "New authored content, fixed before any model outcome."
+}

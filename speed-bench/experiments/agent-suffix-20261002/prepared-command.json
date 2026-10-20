@@ -1,0 +1,24 @@
+{
+  "status": "prepared only; no model opened",
+  "cwd": "/Volumes/Models/ds4",
+  "agent_sha256": "287d38cc23f72211707e916557f4285a09df2a4831107367529cff03113444df",
+  "argv": [
+    "python3",
+    "speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-native-guard",
+    "--",
+    "python3",
+    "/Volumes/Models/ds4/.workspaces/idea-context-agent/speed-bench/agent_suffix_context_smoke.py",
+    "--agent",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-build-20261002/ds4-agent",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-native",
+    "--expected-agent-sha256",
+    "287d38cc23f72211707e916557f4285a09df2a4831107367529cff03113444df"
+  ],
+  "estimated_seconds": "180\u2013300 including bootstrap; timeout420",
+  "default_fresh_tail": 128,
+  "ssd_cache_gib": 64
+}

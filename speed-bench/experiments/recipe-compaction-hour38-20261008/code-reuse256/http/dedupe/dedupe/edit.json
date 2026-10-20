@@ -1,0 +1,9 @@
+{
+  "removed_blocks": 0,
+  "summarized_blocks": 1,
+  "source_kind": "authored ordinary design discussion",
+  "summary": "Settled design: process the supplied nondecreasing event order once, preserving original zero-based indices and leaving payload/config unchanged. Use exact keys, including empty/Unicode strings, with no stripping, case folding, hash substitution, or sorting. Track only each key's LAST ACCEPTED timestamp. First occurrence accepts; later occurrence accepts when t-last_accepted >= config ttl and updates that timestamp. Rejection does not refresh it. ttl0 accepts every event; empty payload returns two empty lists. Return only {accepted, rejected}; a simple dictionary and ordinary lists suffice. History scans, generators, extra validation, diagnostic reasons, logging, UI and service wrappers were rejected or deferred. Read the actual config, make the required first write, then finish briefly under the unchanged coding contract.",
+  "before_bytes": 5767,
+  "after_bytes": 2936,
+  "seconds": 0.00037037499714642763
+}

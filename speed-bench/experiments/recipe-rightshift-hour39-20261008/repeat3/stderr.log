@@ -1,0 +1,19 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.49 MiB (ctx=8192), Engram disk-only
+SOURCE capture_count=1 start=1024 end=1537 reused=513 setup_ms=41949.286 state_bytes=20854328 prerope_bytes=1662989 live_prerope_bytes=5940652 state_fnv=86bb1e6f586ca5e0 prerope_fnv=2955bc35afdfd586
+MOVE 1 arm=native shift=-66 source=1024:1537 destination=1090:1603 edit_ms=42477.491 teacher_ms=233.544 immutable_state=1 immutable_prerope=1
+LEGACY_RIGHT rejected_before_mutation=1
+MOVE 1 arm=reuse shift=-66 source=1024:1537 destination=1090:1603 edit_ms=31510.881 teacher_ms=255.779 immutable_state=1 immutable_prerope=1
+MOVE 2 arm=native shift=128 source=1024:1537 destination=896:1409 edit_ms=37978.629 teacher_ms=235.490 immutable_state=1 immutable_prerope=1
+MOVE 2 arm=reuse shift=128 source=1024:1537 destination=896:1409 edit_ms=29121.473 teacher_ms=262.249 immutable_state=1 immutable_prerope=1
+MOVE 3 arm=native shift=-514 source=1024:1537 destination=1538:2051 edit_ms=59134.554 teacher_ms=246.024 immutable_state=1 immutable_prerope=1
+MOVE 3 arm=reuse shift=-514 source=1024:1537 destination=1538:2051 edit_ms=47255.107 teacher_ms=269.082 immutable_state=1 immutable_prerope=1

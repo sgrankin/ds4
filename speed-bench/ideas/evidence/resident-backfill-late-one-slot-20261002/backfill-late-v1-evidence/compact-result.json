@@ -1,0 +1,1043 @@
+{
+  "study_commit": "f5f217c24ad97eac64cb3a4c02b98a395ce9691d",
+  "runtime_commit": "c3b74256c96f3e643393c3702ab4950621a1cec8",
+  "full_persistent_artifacts": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002",
+  "rows": [
+    {
+      "cases": 16,
+      "tokens": 512,
+      "avg_nll": 0.43839403273,
+      "delta_nll": 0,
+      "policy_delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "kl_base_to_policy": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "bit_equal_rows": 512,
+      "startup_ms": 2652.577,
+      "prefill_ms": 19888.271,
+      "decode_ms": 32013.381,
+      "metrics_ms": 1019.138,
+      "name": "native-before",
+      "prompt_mean_delta_nll": 0.0,
+      "prompt_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "worst_prompt_delta_nll": 0.0,
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "per_prompt": {
+        "case_001": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_007": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_013": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_019": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_025": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_031": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_037": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_043": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_049": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_055": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_061": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_067": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_073": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_079": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_085": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_091": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        }
+      },
+      "candidate_record_layout": {
+        "magic": 1146310961,
+        "vocab": 129280,
+        "cases": 16,
+        "token_limit": 32,
+        "header_bytes": 16,
+        "row_metadata_bytes": 24,
+        "float_bytes": 4,
+        "row_bytes": 517144,
+        "rows": 512,
+        "bytes": 264777744,
+        "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+      },
+      "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002/run/native-before-raw.bin",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 67908,
+          "requested_bytes": 225302446080,
+          "returned_bytes": 225302446080,
+          "cache_loader_bytes": 225302446080,
+          "cache_hits": 191684,
+          "cache_misses": 22636,
+          "cache_evictions": 16500
+        },
+        "stage": null,
+        "total_requested_logical_bytes": 225302446080,
+        "total_returned_logical_bytes": 225302446080
+      },
+      "route": {
+        "layers": 0,
+        "substitutions": 0,
+        "native_misses": 0,
+        "skipped_loads": 0,
+        "skipped_bytes": 0,
+        "mean_mass": 0.0,
+        "mean_score_gap": 0.0,
+        "mean_affinity_ratio": 0.0,
+        "mean_rank": 0.0,
+        "full_snapshots": 0,
+        "double_layers": 0,
+        "planned_substitutions": 0
+      },
+      "late": null,
+      "logical_bytes_delta_vs_native": 0,
+      "logical_bytes_percent_vs_native": 0.0,
+      "logical_bytes_delta_vs_bf0": 28635586560,
+      "logical_bytes_percent_vs_bf0": 14.56045346424415
+    },
+    {
+      "cases": 16,
+      "tokens": 512,
+      "avg_nll": 0.459426517267,
+      "delta_nll": 0.021032484537,
+      "policy_delta_nll": 0.021032484537,
+      "kl_base_to_raw": 0.0126620184131,
+      "kl_base_to_policy": 0.0126620184131,
+      "tv": 0.0265077269717,
+      "argmax_flips": 13,
+      "bit_equal_rows": 17,
+      "startup_ms": 200.11,
+      "prefill_ms": 20404.271,
+      "decode_ms": 28850.014,
+      "metrics_ms": 1048.679,
+      "name": "bf0",
+      "prompt_mean_delta_nll": 0.02103248453695004,
+      "prompt_bootstrap_95": [
+        0.005001062883730748,
+        0.042382054753039786
+      ],
+      "worst_prompt_delta_nll": 0.1360649832132081,
+      "kl_p99": 0.190973388357,
+      "kl_max": 1.11871335481,
+      "per_prompt": {
+        "case_001": {
+          "tokens": 32,
+          "delta_nll": -0.018157818207844824,
+          "kl": 0.008260501993492679
+        },
+        "case_007": {
+          "tokens": 32,
+          "delta_nll": -0.0021821297790267924,
+          "kl": 0.0072279963952283895
+        },
+        "case_013": {
+          "tokens": 32,
+          "delta_nll": 0.014955859808998875,
+          "kl": 0.007780038652827489
+        },
+        "case_019": {
+          "tokens": 32,
+          "delta_nll": -0.009491492468733532,
+          "kl": 0.005116359177801828
+        },
+        "case_025": {
+          "tokens": 32,
+          "delta_nll": 0.03924481869164798,
+          "kl": 0.007808072196670723
+        },
+        "case_031": {
+          "tokens": 32,
+          "delta_nll": 0.002911377805472667,
+          "kl": 0.0073532246753608204
+        },
+        "case_037": {
+          "tokens": 32,
+          "delta_nll": 0.006406558802959958,
+          "kl": 0.003357243775078898
+        },
+        "case_043": {
+          "tokens": 32,
+          "delta_nll": 0.0345728513428423,
+          "kl": 0.013602828283647908
+        },
+        "case_049": {
+          "tokens": 32,
+          "delta_nll": 0.06393259931023476,
+          "kl": 0.02754921849639703
+        },
+        "case_055": {
+          "tokens": 32,
+          "delta_nll": 0.010889571112407317,
+          "kl": 0.006130214714650114
+        },
+        "case_061": {
+          "tokens": 32,
+          "delta_nll": 0.04103131228032461,
+          "kl": 0.019435094090468417
+        },
+        "case_067": {
+          "tokens": 32,
+          "delta_nll": 0.016517304573911006,
+          "kl": 0.004134540970488096
+        },
+        "case_073": {
+          "tokens": 32,
+          "delta_nll": 0.0298646351421657,
+          "kl": 0.0017658225736611106
+        },
+        "case_079": {
+          "tokens": 32,
+          "delta_nll": 0.1360649832132081,
+          "kl": 0.06232754752089182
+        },
+        "case_085": {
+          "tokens": 32,
+          "delta_nll": -0.03920967988401343,
+          "kl": 0.011990820212288707
+        },
+        "case_091": {
+          "tokens": 32,
+          "delta_nll": 0.00916900084664597,
+          "kl": 0.008752770881250843
+        }
+      },
+      "candidate_record_layout": {
+        "magic": 1146310961,
+        "vocab": 129280,
+        "cases": 16,
+        "token_limit": 32,
+        "header_bytes": 16,
+        "row_metadata_bytes": 24,
+        "float_bytes": 4,
+        "row_bytes": 517144,
+        "rows": 512,
+        "bytes": 264777744,
+        "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+      },
+      "candidate_record_sha256": "ceb6df37c311a1b294353c58865510581e41cc086c5f89c826ac0460a8647b86",
+      "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002/run/bf0-raw.bin",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 59277,
+          "requested_bytes": 196666859520,
+          "returned_bytes": 196666859520,
+          "cache_loader_bytes": 196666859520,
+          "cache_hits": 194561,
+          "cache_misses": 19759,
+          "cache_evictions": 13623
+        },
+        "stage": null,
+        "total_requested_logical_bytes": 196666859520,
+        "total_returned_logical_bytes": 196666859520
+      },
+      "route": {
+        "layers": 20480,
+        "substitutions": 3521,
+        "native_misses": 11777,
+        "skipped_loads": 3521,
+        "skipped_bytes": 35045498880,
+        "mean_mass": 0.0994985,
+        "mean_score_gap": 0.06978896,
+        "mean_affinity_ratio": 0.95299369,
+        "mean_rank": 7.426,
+        "full_snapshots": 3605,
+        "double_layers": 0,
+        "planned_substitutions": 3521
+      },
+      "late": null,
+      "logical_bytes_delta_vs_native": -28635586560,
+      "logical_bytes_percent_vs_native": -12.709842728397247,
+      "logical_bytes_delta_vs_bf0": 0,
+      "logical_bytes_percent_vs_bf0": 0.0
+    },
+    {
+      "cases": 16,
+      "tokens": 512,
+      "avg_nll": 0.462033670055,
+      "delta_nll": 0.023639637325,
+      "policy_delta_nll": 0.023639637325,
+      "kl_base_to_raw": 0.0124907333168,
+      "kl_base_to_policy": 0.0124907333168,
+      "tv": 0.0261459224514,
+      "argmax_flips": 12,
+      "bit_equal_rows": 17,
+      "startup_ms": 220.406,
+      "prefill_ms": 20114.875,
+      "decode_ms": 29445.632,
+      "metrics_ms": 1116.257,
+      "name": "bf1-late0",
+      "prompt_mean_delta_nll": 0.023639637324945985,
+      "prompt_bootstrap_95": [
+        0.007595630439333381,
+        0.04454036213188348
+      ],
+      "worst_prompt_delta_nll": 0.1387806439605711,
+      "kl_p99": 0.183240858672,
+      "kl_max": 1.12573378478,
+      "per_prompt": {
+        "case_001": {
+          "tokens": 32,
+          "delta_nll": -0.018157818207844824,
+          "kl": 0.008260501993492679
+        },
+        "case_007": {
+          "tokens": 32,
+          "delta_nll": 0.0073891728184329285,
+          "kl": 0.005658766179407033
+        },
+        "case_013": {
+          "tokens": 32,
+          "delta_nll": 0.01458646951954595,
+          "kl": 0.007697751131723521
+        },
+        "case_019": {
+          "tokens": 32,
+          "delta_nll": 0.00625734869761464,
+          "kl": 0.004323497479716934
+        },
+        "case_025": {
+          "tokens": 32,
+          "delta_nll": 0.04004050970068538,
+          "kl": 0.0079905988401377
+        },
+        "case_031": {
+          "tokens": 32,
+          "delta_nll": 0.0060925610681315835,
+          "kl": 0.008082210349577918
+        },
+        "case_037": {
+          "tokens": 32,
+          "delta_nll": 0.006304027726141441,
+          "kl": 0.0021982288721479866
+        },
+        "case_043": {
+          "tokens": 32,
+          "delta_nll": 0.03524159262417337,
+          "kl": 0.013487270348368437
+        },
+        "case_049": {
+          "tokens": 32,
+          "delta_nll": 0.06340838345842484,
+          "kl": 0.024991531851780876
+        },
+        "case_055": {
+          "tokens": 32,
+          "delta_nll": 0.020175037823922576,
+          "kl": 0.007482357178704483
+        },
+        "case_061": {
+          "tokens": 32,
+          "delta_nll": 0.04103131228032461,
+          "kl": 0.019435094090468417
+        },
+        "case_067": {
+          "tokens": 32,
+          "delta_nll": 0.016895914104414017,
+          "kl": 0.004049747638422153
+        },
+        "case_073": {
+          "tokens": 32,
+          "delta_nll": 0.0298646351421657,
+          "kl": 0.0017658225736611106
+        },
+        "case_079": {
+          "tokens": 32,
+          "delta_nll": 0.1387806439605711,
+          "kl": 0.06344270878607423
+        },
+        "case_085": {
+          "tokens": 32,
+          "delta_nll": -0.03884459436421354,
+          "kl": 0.012232874873775985
+        },
+        "case_091": {
+          "tokens": 32,
+          "delta_nll": 0.00916900084664597,
+          "kl": 0.008752770881250843
+        }
+      },
+      "candidate_record_layout": {
+        "magic": 1146310961,
+        "vocab": 129280,
+        "cases": 16,
+        "token_limit": 32,
+        "header_bytes": 16,
+        "row_metadata_bytes": 24,
+        "float_bytes": 4,
+        "row_bytes": 517144,
+        "rows": 512,
+        "bytes": 264777744,
+        "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+      },
+      "candidate_record_sha256": "4d1ecec16ef12fc41889bb8067393a6cf7ea809aec5c5ac6591e3c5a6da3d45d",
+      "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002/run/bf1-late0-raw.bin",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 59154,
+          "requested_bytes": 196258775040,
+          "returned_bytes": 196258775040,
+          "cache_loader_bytes": 196258775040,
+          "cache_hits": 194593,
+          "cache_misses": 19751,
+          "cache_evictions": 13615
+        },
+        "stage": {
+          "attempts": 3528,
+          "started": 249,
+          "busy_skips": 38,
+          "ready_skips": 3241,
+          "completed": 249,
+          "failed": 0,
+          "consumed": 33,
+          "expired": 216,
+          "resets": 0,
+          "pread_calls": 747,
+          "requested_bytes": 2478366720,
+          "returned_bytes": 2478366720,
+          "copied_bytes": 328458240,
+          "peak_bytes": 9953280,
+          "live_bytes": 0,
+          "state": 0
+        },
+        "total_requested_logical_bytes": 198737141760,
+        "total_returned_logical_bytes": 198737141760
+      },
+      "route": {
+        "layers": 20480,
+        "substitutions": 3528,
+        "native_misses": 11789,
+        "skipped_loads": 3528,
+        "skipped_bytes": 35115171840,
+        "mean_mass": 0.09958258,
+        "mean_score_gap": 0.06925717,
+        "mean_affinity_ratio": 0.95370084,
+        "mean_rank": 7.419,
+        "full_snapshots": 3615,
+        "double_layers": 0,
+        "planned_substitutions": 3528
+      },
+      "late": null,
+      "logical_bytes_delta_vs_native": -26565304320,
+      "logical_bytes_percent_vs_native": -11.790952465099835,
+      "logical_bytes_delta_vs_bf0": 2070282240,
+      "logical_bytes_percent_vs_bf0": 1.0526848524722965
+    },
+    {
+      "cases": 16,
+      "tokens": 512,
+      "avg_nll": 0.458083559794,
+      "delta_nll": 0.0196895270637,
+      "policy_delta_nll": 0.0196895270637,
+      "kl_base_to_raw": 0.0118208685099,
+      "kl_base_to_policy": 0.0118208685099,
+      "tv": 0.025422657281,
+      "argmax_flips": 12,
+      "bit_equal_rows": 17,
+      "startup_ms": 212.942,
+      "prefill_ms": 19768.105,
+      "decode_ms": 29138.541,
+      "metrics_ms": 1094.087,
+      "name": "bf1-late1",
+      "prompt_mean_delta_nll": 0.01968952706364406,
+      "prompt_bootstrap_95": [
+        0.0050184961783694216,
+        0.037656700278706635
+      ],
+      "worst_prompt_delta_nll": 0.1093122431096983,
+      "kl_p99": 0.178880761206,
+      "kl_max": 1.12828495973,
+      "per_prompt": {
+        "case_001": {
+          "tokens": 32,
+          "delta_nll": -0.01886020788076404,
+          "kl": 0.007815033562195192
+        },
+        "case_007": {
+          "tokens": 32,
+          "delta_nll": 0.010307782966545468,
+          "kl": 0.005276550632453188
+        },
+        "case_013": {
+          "tokens": 32,
+          "delta_nll": 0.013743907293062999,
+          "kl": 0.007549592724961148
+        },
+        "case_019": {
+          "tokens": 32,
+          "delta_nll": -0.008628243738507688,
+          "kl": 0.00513789165474754
+        },
+        "case_025": {
+          "tokens": 32,
+          "delta_nll": 0.04004050970068538,
+          "kl": 0.0079905988401377
+        },
+        "case_031": {
+          "tokens": 32,
+          "delta_nll": 0.002911377805472667,
+          "kl": 0.0073532246753608204
+        },
+        "case_037": {
+          "tokens": 32,
+          "delta_nll": 0.006406558802959958,
+          "kl": 0.003357243775078898
+        },
+        "case_043": {
+          "tokens": 32,
+          "delta_nll": 0.0345728513428423,
+          "kl": 0.013602828283647908
+        },
+        "case_049": {
+          "tokens": 32,
+          "delta_nll": 0.06393259931023476,
+          "kl": 0.02754921849639703
+        },
+        "case_055": {
+          "tokens": 32,
+          "delta_nll": 0.010889571112407317,
+          "kl": 0.006130214714650114
+        },
+        "case_061": {
+          "tokens": 32,
+          "delta_nll": 0.02638336428550217,
+          "kl": 0.021337203461909673
+        },
+        "case_067": {
+          "tokens": 32,
+          "delta_nll": 0.016517304573911006,
+          "kl": 0.004134540970488096
+        },
+        "case_073": {
+          "tokens": 32,
+          "delta_nll": 0.0373264638762812,
+          "kl": 0.0019216192998383137
+        },
+        "case_079": {
+          "tokens": 32,
+          "delta_nll": 0.1093122431096983,
+          "kl": 0.04916960432434737
+        },
+        "case_085": {
+          "tokens": 32,
+          "delta_nll": -0.038992650388672806,
+          "kl": 0.012055759860722864
+        },
+        "case_091": {
+          "tokens": 32,
+          "delta_nll": 0.00916900084664597,
+          "kl": 0.008752770881250843
+        }
+      },
+      "candidate_record_layout": {
+        "magic": 1146310961,
+        "vocab": 129280,
+        "cases": 16,
+        "token_limit": 32,
+        "header_bytes": 16,
+        "row_metadata_bytes": 24,
+        "float_bytes": 4,
+        "row_bytes": 517144,
+        "rows": 512,
+        "bytes": 264777744,
+        "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+      },
+      "candidate_record_sha256": "5c0aa48c4d07fa6d68bc04a5805333ba3df7c1063d4d5ae3d78db5a1f264612c",
+      "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002/run/bf1-late1-raw.bin",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 59151,
+          "requested_bytes": 196248821760,
+          "returned_bytes": 196248821760,
+          "cache_loader_bytes": 196248821760,
+          "cache_hits": 196464,
+          "cache_misses": 19751,
+          "cache_evictions": 13615
+        },
+        "stage": {
+          "attempts": 3539,
+          "started": 249,
+          "busy_skips": 33,
+          "ready_skips": 3257,
+          "completed": 249,
+          "failed": 0,
+          "consumed": 34,
+          "expired": 215,
+          "resets": 0,
+          "pread_calls": 747,
+          "requested_bytes": 2478366720,
+          "returned_bytes": 2478366720,
+          "copied_bytes": 338411520,
+          "peak_bytes": 9953280,
+          "live_bytes": 0,
+          "state": 0
+        },
+        "total_requested_logical_bytes": 198727188480,
+        "total_returned_logical_bytes": 198727188480
+      },
+      "route": {
+        "layers": 20480,
+        "substitutions": 3539,
+        "native_misses": 11785,
+        "skipped_loads": 3539,
+        "skipped_bytes": 35224657920,
+        "mean_mass": 0.09943021,
+        "mean_score_gap": 0.06946717,
+        "mean_affinity_ratio": 0.95339125,
+        "mean_rank": 7.423,
+        "full_snapshots": 3621,
+        "double_layers": 0,
+        "planned_substitutions": 3539
+      },
+      "late": {
+        "tentative": 3539,
+        "rollbacks": 2,
+        "final_substitutions": 3537,
+        "cancelled": 0,
+        "candidate_finish": 3539,
+        "candidate_finish_failures": 0,
+        "ready_checks": 3539,
+        "not_ready": 3537,
+        "no_victim": 0,
+        "installs": 2,
+        "install_failures": 0
+      },
+      "logical_bytes_delta_vs_native": -26575257600,
+      "logical_bytes_percent_vs_native": -11.795370206750311,
+      "logical_bytes_delta_vs_bf0": 2060328960,
+      "logical_bytes_percent_vs_bf0": 1.0476238676046412,
+      "late_rollback_fraction": 0.0005651313930488839
+    },
+    {
+      "cases": 16,
+      "tokens": 512,
+      "avg_nll": 0.45557045616,
+      "delta_nll": 0.0171764234298,
+      "policy_delta_nll": 0.0171764234298,
+      "kl_base_to_raw": 0.0116777822582,
+      "kl_base_to_policy": 0.0116777822582,
+      "tv": 0.0250680469553,
+      "argmax_flips": 11,
+      "bit_equal_rows": 17,
+      "startup_ms": 220.736,
+      "prefill_ms": 20267.882,
+      "decode_ms": 28833.102,
+      "metrics_ms": 1023.221,
+      "name": "bf1-late1-repeat",
+      "prompt_mean_delta_nll": 0.017176423429827146,
+      "prompt_bootstrap_95": [
+        0.002656492970301196,
+        0.03544404064572552
+      ],
+      "worst_prompt_delta_nll": 0.10956662894686545,
+      "kl_p99": 0.194268501357,
+      "kl_max": 1.11263494213,
+      "per_prompt": {
+        "case_001": {
+          "tokens": 32,
+          "delta_nll": -0.01886020788076404,
+          "kl": 0.007815033562195192
+        },
+        "case_007": {
+          "tokens": 32,
+          "delta_nll": 0.010307782966545468,
+          "kl": 0.005276550632453188
+        },
+        "case_013": {
+          "tokens": 32,
+          "delta_nll": 0.013743907293062999,
+          "kl": 0.007549592724961148
+        },
+        "case_019": {
+          "tokens": 32,
+          "delta_nll": -0.008628243738507688,
+          "kl": 0.00513789165474754
+        },
+        "case_025": {
+          "tokens": 32,
+          "delta_nll": 0.04004050970068538,
+          "kl": 0.0079905988401377
+        },
+        "case_031": {
+          "tokens": 32,
+          "delta_nll": 0.002911377805472667,
+          "kl": 0.0073532246753608204
+        },
+        "case_037": {
+          "tokens": 32,
+          "delta_nll": 0.006406558802959958,
+          "kl": 0.003357243775078898
+        },
+        "case_043": {
+          "tokens": 32,
+          "delta_nll": 0.0014307831247329,
+          "kl": 0.01095387973893085
+        },
+        "case_049": {
+          "tokens": 32,
+          "delta_nll": 0.06999254072400585,
+          "kl": 0.02587980719718184
+        },
+        "case_055": {
+          "tokens": 32,
+          "delta_nll": 0.002027133728747969,
+          "kl": 0.004727680756617861
+        },
+        "case_061": {
+          "tokens": 32,
+          "delta_nll": 0.018302299847900355,
+          "kl": 0.021147309153095047
+        },
+        "case_067": {
+          "tokens": 32,
+          "delta_nll": 0.018424477659187352,
+          "kl": 0.003875458561051745
+        },
+        "case_073": {
+          "tokens": 32,
+          "delta_nll": 0.0389333954607165,
+          "kl": 0.001733362163830091
+        },
+        "case_079": {
+          "tokens": 32,
+          "delta_nll": 0.10956662894686545,
+          "kl": 0.05312051157290398
+        },
+        "case_085": {
+          "tokens": 32,
+          "delta_nll": -0.03894517041102278,
+          "kl": 0.012173600241795639
+        },
+        "case_091": {
+          "tokens": 32,
+          "delta_nll": 0.00916900084664597,
+          "kl": 0.008752770881250843
+        }
+      },
+      "candidate_record_layout": {
+        "magic": 1146310961,
+        "vocab": 129280,
+        "cases": 16,
+        "token_limit": 32,
+        "header_bytes": 16,
+        "row_metadata_bytes": 24,
+        "float_bytes": 4,
+        "row_bytes": 517144,
+        "rows": 512,
+        "bytes": 264777744,
+        "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+      },
+      "candidate_record_sha256": "559063e782ee717c6633e79c88247c13c2f3e1c74459e9ba4e9750a2b9cc4a2d",
+      "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002/run/bf1-late1-repeat-raw.bin",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 59211,
+          "requested_bytes": 196447887360,
+          "returned_bytes": 196447887360,
+          "cache_loader_bytes": 196447887360,
+          "cache_hits": 196423,
+          "cache_misses": 19771,
+          "cache_evictions": 13635
+        },
+        "stage": {
+          "attempts": 3529,
+          "started": 250,
+          "busy_skips": 34,
+          "ready_skips": 3245,
+          "completed": 250,
+          "failed": 0,
+          "consumed": 34,
+          "expired": 216,
+          "resets": 0,
+          "pread_calls": 750,
+          "requested_bytes": 2488320000,
+          "returned_bytes": 2488320000,
+          "copied_bytes": 338411520,
+          "peak_bytes": 9953280,
+          "live_bytes": 0,
+          "state": 0
+        },
+        "total_requested_logical_bytes": 198936207360,
+        "total_returned_logical_bytes": 198936207360
+      },
+      "route": {
+        "layers": 20480,
+        "substitutions": 3529,
+        "native_misses": 11794,
+        "skipped_loads": 3529,
+        "skipped_bytes": 35125125120,
+        "mean_mass": 0.09968679,
+        "mean_score_gap": 0.06966313,
+        "mean_affinity_ratio": 0.9532493,
+        "mean_rank": 7.425,
+        "full_snapshots": 3611,
+        "double_layers": 0,
+        "planned_substitutions": 3529
+      },
+      "late": {
+        "tentative": 3529,
+        "rollbacks": 3,
+        "final_substitutions": 3526,
+        "cancelled": 0,
+        "candidate_finish": 3529,
+        "candidate_finish_failures": 0,
+        "ready_checks": 3529,
+        "not_ready": 3526,
+        "no_victim": 0,
+        "installs": 3,
+        "install_failures": 0
+      },
+      "logical_bytes_delta_vs_native": -26366238720,
+      "logical_bytes_percent_vs_native": -11.702597632090473,
+      "logical_bytes_delta_vs_bf0": 2269347840,
+      "logical_bytes_percent_vs_bf0": 1.153904549825402,
+      "late_rollback_fraction": 0.000850099178237461
+    },
+    {
+      "cases": 16,
+      "tokens": 512,
+      "avg_nll": 0.43839403273,
+      "delta_nll": 0,
+      "policy_delta_nll": 0,
+      "kl_base_to_raw": 0,
+      "kl_base_to_policy": 0,
+      "tv": 0,
+      "argmax_flips": 0,
+      "bit_equal_rows": 512,
+      "startup_ms": 218.496,
+      "prefill_ms": 19616.386,
+      "decode_ms": 31719.015,
+      "metrics_ms": 1184.683,
+      "name": "native-after",
+      "prompt_mean_delta_nll": 0.0,
+      "prompt_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "worst_prompt_delta_nll": 0.0,
+      "kl_p99": 0.0,
+      "kl_max": 0.0,
+      "per_prompt": {
+        "case_001": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_007": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_013": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_019": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_025": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_031": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_037": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_043": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_049": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_055": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_061": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_067": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_073": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_079": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_085": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        },
+        "case_091": {
+          "tokens": 32,
+          "delta_nll": 0.0,
+          "kl": 0.0
+        }
+      },
+      "candidate_record_layout": {
+        "magic": 1146310961,
+        "vocab": 129280,
+        "cases": 16,
+        "token_limit": 32,
+        "header_bytes": 16,
+        "row_metadata_bytes": 24,
+        "float_bytes": 4,
+        "row_bytes": 517144,
+        "rows": 512,
+        "bytes": 264777744,
+        "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+      },
+      "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "candidate_record": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-late-study/speed-bench/ideas/artifacts/resident-late-prepared-20261002/run/native-after-raw.bin",
+      "io": {
+        "demand": {
+          "enabled": 1,
+          "pread_calls": 67908,
+          "requested_bytes": 225302446080,
+          "returned_bytes": 225302446080,
+          "cache_loader_bytes": 225302446080,
+          "cache_hits": 191684,
+          "cache_misses": 22636,
+          "cache_evictions": 16500
+        },
+        "stage": null,
+        "total_requested_logical_bytes": 225302446080,
+        "total_returned_logical_bytes": 225302446080
+      },
+      "route": null,
+      "late": null,
+      "logical_bytes_delta_vs_native": 0,
+      "logical_bytes_percent_vs_native": 0.0,
+      "logical_bytes_delta_vs_bf0": 28635586560,
+      "logical_bytes_percent_vs_bf0": 14.56045346424415
+    }
+  ],
+  "checks": {
+    "native_reference_exact": true,
+    "positive_gap_mode_native_reference_exact": true,
+    "default_off_native_reference_exact": true,
+    "native_demand_io_equal": true,
+    "late_repeat_raw_equal": false,
+    "late_repeat_demand_io_equal": false,
+    "late_repeat_stage_useful_io_equal": false,
+    "late_repeat_footer_equal": false,
+    "reference_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "earlier_async_raw_equality_required": false,
+    "approximate_repeat_equality_required": false,
+    "scope": "Whole-engine prefill+decode explicit logical I/O and fullraw quality; instrumented, no latency/physical-SSD claim; positive-gap MODE/native and env-default off controls; same-token late path one-slot only"
+  },
+  "pressure": {
+    "samples": 311,
+    "levels": [
+      1
+    ],
+    "max_consecutive_bad": 0,
+    "swap_min_gib": 0.025576171875,
+    "swap_max_gib": 0.025576171875,
+    "free_min_gib": 0.119903564453125,
+    "wired_max_gib": 70.47421264648438,
+    "compressor_max_gib": 7.6013641357421875,
+    "first_time": 1790976881.292567,
+    "last_time": 1790977201.5146828,
+    "guard": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "main_lock_reacquired_and_released_after_exit": true,
+    "exec_session": 26715,
+    "exec_exit": 0
+  },
+  "scope": "WholeP+D requested/returned logical syscalls+raw quality; instrumented, no latency/physical-SSD claim; approximate repeats not exact"
+}

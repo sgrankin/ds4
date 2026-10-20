@@ -1,0 +1,32 @@
+{
+  "parents": [
+    "bfcde97a7758a135b39f18e0ec3691547cb8d832",
+    "7008afd6"
+  ],
+  "merge": "c1e4724c",
+  "model_opened": false,
+  "gpu_work": false,
+  "focused_build": "make -j2 ds4-agent ds4_agent_test tests/test_resident_route; make -j2 tests/test_session_suffix_exports",
+  "agent_source_matches_frozen7008": true,
+  "export_test": {
+    "rc": 0,
+    "scope": "real opaque-session provenance guards; no model/GPU; payload sentinel and snapshot contents preserved"
+  },
+  "sha256": {
+    "ds4.c": "72168cb5b468da0232286bb03cbe833f77dc43d81d8d73efa0b5a31cf944afdf",
+    "ds4.h": "5e5b11b77d86a0ba104f776b27827dcb0d3d1ee048977a1f72630f6b126485b6",
+    "ds4_gpu.h": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "ds4_metal.m": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+    "ds4_resident_route.h": "a21dbe771153513a5625cfa14940164978cf5574b1a14c5d313ceaf5cec9f37c",
+    "ds4_agent.c": "ba2b66e8fea4b663cb9a3e01d6cdc8a62b6c43350e32342b6ec32c5fb6f902f3",
+    "Makefile": "b31a31fc919067815509fa9b639701c6d30bacbb80cd52f2f3cd534398b4ed56",
+    "tests/test_session_suffix_exports.c": "95eecddbf21c776db944c4d697a7eb57f4ade3ea06e742e323949803965cf176",
+    "ds4-agent": "63f6c9819c2849ee051a3bcf34f602ed39335141cb7643d46293803b6be4d4fc",
+    "ds4_agent_test": "7830e18e94318fc15e7db28db7df36c41118ea4f31daac07fe4bea74e2acf362",
+    "tests/test_resident_route": "5607ff92a7ad130118bde1b7074fa58b7cea9fa8d3973471cd007c9bcf352d45",
+    "tests/test_session_suffix_exports": "5b7c76e93dd9ffcbc5df22cc46d7de11fda52715fd297975a2f8f39ef6ea12ac",
+    "ds4.o": "2b4646d3247c2feb895ee1ea0f93bd39d0d52cee63f4fa47d521757fdab9f33f",
+    "ds4_metal.o": "f5141234557a907c0b70ab380ec95a1dd561c9a00059a1cc92e70c1c662f09df",
+    "ds4_agent.o": "4a0836525e996f5fc212dc6c29c4104fc66cb6100c503eada17f06935e7a5cc1"
+  }
+}

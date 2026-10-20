@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160-archive/speed-bench/ideas/archive_agent_suffix_pair_memory160_failure.py"
+  ],
+  "returncode": 1,
+  "time": 1791002438.62944,
+  "duration": 0.06616902351379395,
+  "model_or_native_execution": false
+}

@@ -1,0 +1,55 @@
+{
+  "start_utc": "2026-10-04 18:35:00",
+  "deadline_utc": "2026-10-04 19:25:00",
+  "budget_note": "10 minutes earlier source audit/launcher/candidate preparation charged",
+  "compiled_runtime_revision": "00da420b1995663540d3b617537e87b18abda402",
+  "server_sha256": "dd60127812a282a0e3a63a87c0d2db8da17344efa3ccfc73cb4009259c5ee1d2",
+  "build_command": "make -j2 ds4-server ds4_test",
+  "build_returncode": 0,
+  "check_command": "./ds4_test --server; cc -std=c99 -O2 -Wall -Wextra tests/test_suffix_match.c -o .workspaces/server-agent-day-20261004/item24-suffix-match; .workspaces/server-agent-day-20261004/item24-suffix-match",
+  "check_returncodes": [
+    0,
+    0,
+    0
+  ],
+  "build_log": ".workspaces/server-agent-day-20261004/item24-build.log",
+  "check_log": ".workspaces/server-agent-day-20261004/item24-server-tests.log",
+  "driver": "../concurrent-sessions-hour19-20261004/run.py",
+  "primary_arms": [
+    "existing-before",
+    "padded",
+    "existing-after"
+  ],
+  "fixed": "suffix64/canonical0/hot0/SSD4096/Q2/cache64/ctx8192/chunk512/batch2/GAP0/noeffort/temp0/samepaths/newcacheperarm",
+  "one_change": "PAD0/1/0; one validatednewlineafterfirsthistoricalUSER onlyifstrictlylonger even graft thaneveryplaincandidate, plaintiespreferred",
+  "approximation": "one actualmodelinputtoken; public replay unchanged; latestUSER allfresh; immutablepreRoPe/nativeexactcacheexcludesapprox",
+  "optional_followup": "canonical1/PAD1 separatelyqualifiedonlyif primaryoutcome/timepermit",
+  "metrics": "actualreads/strictgrades/caps; warm/edited/wholewall; paddingselection/graftgeometry/cachelogicalreadstats/pressure",
+  "followup_decided_utc": "2026-10-04 18:47:20",
+  "followup_reason": "primary all8pass actualA/Cpad527+B/Dplain527 and lower edited group wall; same-hour canonical1/PAD1 separatepoint",
+  "measured_order": [
+    "existing-before",
+    "padded",
+    "canonical-padded",
+    "existing-after"
+  ],
+  "measurement_finished_utc": "2026-10-04 18:59:57",
+  "guard": {
+    "existing-before": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "padded": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "canonical-padded": {
+      "status": "complete",
+      "child_returncode": 3
+    },
+    "existing-after": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  }
+}

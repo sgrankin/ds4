@@ -1,0 +1,602 @@
+{
+  "status": "RETAINED_NATIVE_ODD65_VERIFIED",
+  "source_revision": "532a89c307f80a34949769ecfe12d5b3d03aed96",
+  "prepared_directory": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3",
+  "prepared_manifest_sha256": "c15a61031e9d418e550f1617cd7234d6377b03d1dd9cdf19ec4c97c7f777cffc",
+  "command_sha256": "098148bf8e7b132b9aae3d1eae69bbac4ab1157f369a4ac2a419c6616a16fb99",
+  "native_control_identity": {
+    "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+    "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+    "state": {
+      ".source.state.bin": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2",
+      ".fresh.state.bin": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+    }
+  },
+  "arms": [
+    {
+      "arm": "old-native-before",
+      "summary": {
+        "mode": "native",
+        "prefix": 1409,
+        "shift": 65,
+        "span": 512,
+        "tail": 128,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 88214059,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 13534.042,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-before.raw.bin",
+        "bytes": 9308256,
+        "sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+        "candidate_sha256": null,
+        "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+        "teacher_ids": [
+          31375,
+          15248,
+          14,
+          399,
+          688,
+          110634,
+          1298,
+          16549,
+          3937,
+          302,
+          64937,
+          14908,
+          85190,
+          603,
+          48,
+          2666
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-before.source.state.bin",
+          "bytes": 24540988,
+          "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-before.fresh.state.bin",
+          "bytes": 24133176,
+          "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+        }
+      }
+    },
+    {
+      "arm": "new-native",
+      "summary": {
+        "mode": "native",
+        "prefix": 1409,
+        "shift": 65,
+        "span": 512,
+        "tail": 128,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 88214059,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 13571.668,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-native.raw.bin",
+        "bytes": 9308256,
+        "sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+        "candidate_sha256": null,
+        "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+        "teacher_ids": [
+          31375,
+          15248,
+          14,
+          399,
+          688,
+          110634,
+          1298,
+          16549,
+          3937,
+          302,
+          64937,
+          14908,
+          85190,
+          603,
+          48,
+          2666
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-native.source.state.bin",
+          "bytes": 24540988,
+          "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-native.fresh.state.bin",
+          "bytes": 24133176,
+          "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+        }
+      }
+    },
+    {
+      "arm": "new-tape-native",
+      "summary": {
+        "mode": "tape-native",
+        "prefix": 1409,
+        "shift": 65,
+        "span": 512,
+        "tail": 128,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 113379963,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 14823.908,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-tape-native.raw.bin",
+        "bytes": 9308256,
+        "sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+        "candidate_sha256": null,
+        "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+        "teacher_ids": [
+          31375,
+          15248,
+          14,
+          399,
+          688,
+          110634,
+          1298,
+          16549,
+          3937,
+          302,
+          64937,
+          14908,
+          85190,
+          603,
+          48,
+          2666
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-tape-native.source.state.bin",
+          "bytes": 24540988,
+          "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-tape-native.fresh.state.bin",
+          "bytes": 24133176,
+          "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+        }
+      }
+    },
+    {
+      "arm": "odd65-reuse",
+      "summary": {
+        "mode": "reuse",
+        "prefix": 1409,
+        "shift": 65,
+        "span": 512,
+        "tail": 128,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 17,
+        "tape_buffer_and_metadata_bytes": 12582992,
+        "immutable_tape_bytes": 12582912,
+        "peak_staging_bytes_including_reserve": 113379963,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": true,
+        "precancel_preserves_state": true,
+        "partial_cancel_invalidates": true,
+        "approximate_export_blocked": true,
+        "pair_inputs_reused": 1536,
+        "pair_rows_rebuilt": 768,
+        "pair_boundary_rows": 3,
+        "reused_tokens": 512,
+        "fresh_tail_tokens": 128,
+        "fresh_ms_diagnostic": 14566.561,
+        "reuse_ms_diagnostic": 2878.524,
+        "mean_kl": 0.0166751053384,
+        "mean_tv": 0.0394207231609,
+        "sum_delta_nll": -0.67287138326,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.raw.bin",
+        "bytes": 18099296,
+        "sha256": "dbe5746e1b7f78e682962d42d87224ffdb8e0f819255c3bbc7437e9e9be4c59a",
+        "reference_rows": 18,
+        "candidate_rows": 17,
+        "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+        "candidate_sha256": "c7efa63197fdc5825e2e24761e37b74a679db5bc3f3cfd5bec6d4613791c9aa5",
+        "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+        "teacher_ids": [
+          31375,
+          15248,
+          14,
+          399,
+          688,
+          110634,
+          1298,
+          16549,
+          3937,
+          302,
+          64937,
+          14908,
+          85190,
+          603,
+          48,
+          2666
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.source.state.bin",
+          "bytes": 24540988,
+          "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.fresh.state.bin",
+          "bytes": 24133176,
+          "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+        },
+        ".private.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.private.state.bin",
+          "bytes": 24133176,
+          "sha256": "4c88ca3fddbf7e5a21c4ea2ba0a7011e197a57d83a69026d7db45d5f873279c5"
+        }
+      }
+    },
+    {
+      "arm": "old-native-after",
+      "summary": {
+        "mode": "native",
+        "prefix": 1409,
+        "shift": 65,
+        "span": 512,
+        "tail": 128,
+        "decode": 16,
+        "raw_reference_rows": 18,
+        "raw_candidate_rows": 0,
+        "tape_buffer_and_metadata_bytes": 0,
+        "immutable_tape_bytes": 0,
+        "peak_staging_bytes_including_reserve": 88214059,
+        "staging_budget_bytes": 134217728,
+        "coverage_rejections_preserve_state": false,
+        "precancel_preserves_state": false,
+        "partial_cancel_invalidates": false,
+        "approximate_export_blocked": false,
+        "pair_inputs_reused": 0,
+        "pair_rows_rebuilt": 0,
+        "pair_boundary_rows": 0,
+        "reused_tokens": 0,
+        "fresh_tail_tokens": 0,
+        "fresh_ms_diagnostic": 14607.114,
+        "reuse_ms_diagnostic": 0.0,
+        "mean_kl": 0,
+        "mean_tv": 0,
+        "sum_delta_nll": 0,
+        "argmax_flips": 0,
+        "bit_equal_rows": 0
+      },
+      "native_reference_parity": true,
+      "raw": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-after.raw.bin",
+        "bytes": 9308256,
+        "sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+        "reference_rows": 18,
+        "candidate_rows": 0,
+        "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+        "candidate_sha256": null,
+        "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+        "teacher_ids": [
+          31375,
+          15248,
+          14,
+          399,
+          688,
+          110634,
+          1298,
+          16549,
+          3937,
+          302,
+          64937,
+          14908,
+          85190,
+          603,
+          48,
+          2666
+        ]
+      },
+      "state": {
+        ".source.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-after.source.state.bin",
+          "bytes": 24540988,
+          "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+        },
+        ".fresh.state.bin": {
+          "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-after.fresh.state.bin",
+          "bytes": 24133176,
+          "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+        }
+      }
+    }
+  ],
+  "private_state": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.private.state.bin",
+    "bytes": 24133176,
+    "sha256": "4c88ca3fddbf7e5a21c4ea2ba0a7011e197a57d83a69026d7db45d5f873279c5"
+  },
+  "independent_math": {
+    "method": "Streamed FP32 rows; FP64 math.fsum/logsumexp, independent log-ratio arithmetic",
+    "rows": [
+      {
+        "step": 0,
+        "target": 31375,
+        "delta_nll": 0.05194536820742357,
+        "kl": 0.09053462713923703,
+        "tv": 0.1638433723559293,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 1,
+        "target": 15248,
+        "delta_nll": 0.04537181034076809,
+        "kl": 0.013491645879785831,
+        "tv": 0.042365100194564215,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 2,
+        "target": 14,
+        "delta_nll": 0.005857401779877591,
+        "kl": 0.0012540291558660588,
+        "tv": 0.00603051804854826,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 3,
+        "target": 399,
+        "delta_nll": 0.04552296158145097,
+        "kl": 0.028099365741962153,
+        "tv": 0.07121930063148324,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 4,
+        "target": 688,
+        "delta_nll": -0.2791803144976619,
+        "kl": 0.00046943199704383234,
+        "tv": 0.0017636920753408246,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 5,
+        "target": 110634,
+        "delta_nll": -0.00031752425976350196,
+        "kl": 8.090425520263597e-06,
+        "tv": 0.000322179814140254,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 6,
+        "target": 1298,
+        "delta_nll": 0.0025607568301779793,
+        "kl": 0.00023949178666070892,
+        "tv": 0.002542325614069306,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 7,
+        "target": 16549,
+        "delta_nll": 0.1372047314794571,
+        "kl": 0.013580991465024428,
+        "tv": 0.033631073918895936,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 8,
+        "target": 3937,
+        "delta_nll": -1.684207902030721e-06,
+        "kl": 6.7614038352285e-07,
+        "tv": 2.2478803536464592e-06,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 9,
+        "target": 302,
+        "delta_nll": 0.0029177040851280367,
+        "kl": 0.0021616499657689204,
+        "tv": 0.002912304769411678,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 10,
+        "target": 64937,
+        "delta_nll": 0.0011286922673079403,
+        "kl": 0.00045428145774355515,
+        "tv": 0.0011293534210775934,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 11,
+        "target": 14908,
+        "delta_nll": -0.11480256632654218,
+        "kl": 0.00011198913715669197,
+        "tv": 0.00033267325905134544,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 12,
+        "target": 85190,
+        "delta_nll": -5.805770086908524e-08,
+        "kl": 8.455622923461293e-09,
+        "tv": 5.82139148241148e-08,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 13,
+        "target": 603,
+        "delta_nll": -0.5972406134372257,
+        "kl": 0.0659534532838348,
+        "tv": 0.16470494289605603,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 14,
+        "target": 48,
+        "delta_nll": 0.025150124382307126,
+        "kl": 0.012667271242607792,
+        "tv": 0.045195576703215945,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 15,
+        "target": 2666,
+        "delta_nll": 0.0010118265731051679,
+        "kl": 0.0010142513487522552,
+        "tv": 0.0019002039567114306,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      },
+      {
+        "step": 16,
+        "target": -1,
+        "delta_nll": 0,
+        "kl": 0.05343553612903162,
+        "tv": 0.13225736998278664,
+        "argmax_flip": 0,
+        "bit_equal": 0
+      }
+    ],
+    "summary": {
+      "mean_kl": 0.01667510533835308,
+      "mean_tv": 0.03942072316091474,
+      "sum_delta_nll": -0.6728713832597926,
+      "argmax_flips": 0,
+      "bit_equal_rows": 0
+    }
+  },
+  "pressure": {
+    "samples": 341,
+    "normal_samples": 341,
+    "bad_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_plus_compressor_gib": 81.72300720214844
+  },
+  "historical_release_proof": {
+    "time": 1790987331.980504,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "lock_reacquired": true,
+    "live_model_processes": [],
+    "normal_pressure_samples": 341,
+    "bad_pressure_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gib": 81.72300720214844
+  },
+  "preserved_prior_failure_release": {
+    "time": 1790986745.234869,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 1
+    },
+    "lock_reacquired": true,
+    "live_model_processes": [],
+    "normal_pressure_samples": 1,
+    "bad_pressure_samples": 0,
+    "swap_growth_gb": 0.0,
+    "peak_wired_compressor_gib": 10.305984497070312,
+    "failure": "Prepared baseline execute bit absent; PermissionError before any baseline process",
+    "model_metadata_verified_only_under_guard": true
+  },
+  "timing_diagnostic": true,
+  "accuracy_claim": false,
+  "forgetting_claim": false,
+  "default_promotion": false,
+  "archive_model_assets_accessed": false
+}

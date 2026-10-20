@@ -1,0 +1,107 @@
+[
+  {
+    "job": "pressure",
+    "samples": 104,
+    "levels": [
+      1
+    ],
+    "swap_growth_GiB": 0.0,
+    "peak_wired_compressed_GiB": 79.0450439453125,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  },
+  {
+    "job": "pressure-24",
+    "samples": 655,
+    "levels": [
+      1
+    ],
+    "swap_growth_GiB": 0.0,
+    "peak_wired_compressed_GiB": 78.72174072265625,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  },
+  {
+    "job": "pressure-confirm",
+    "samples": 241,
+    "levels": [
+      1
+    ],
+    "swap_growth_GiB": 0.0,
+    "peak_wired_compressed_GiB": 79.08018493652344,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  },
+  {
+    "job": "pressure-generation",
+    "samples": 392,
+    "levels": [
+      1
+    ],
+    "swap_growth_GiB": 0.0,
+    "peak_wired_compressed_GiB": 78.06329345703125,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  },
+  {
+    "job": "pressure-generation-engine-path",
+    "samples": 128,
+    "levels": [
+      1
+    ],
+    "swap_growth_GiB": 0.0,
+    "peak_wired_compressed_GiB": 77.90925598144531,
+    "result": {
+      "status": "interrupted",
+      "signal": 15,
+      "child_returncode": -15
+    }
+  },
+  {
+    "job": "pressure-native-late",
+    "samples": 129,
+    "levels": [
+      1
+    ],
+    "swap_growth_GiB": 0.0,
+    "peak_wired_compressed_GiB": 79.03330993652344,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  },
+  {
+    "job": "pressure-refine",
+    "samples": 154,
+    "levels": [
+      1
+    ],
+    "swap_growth_GiB": 0.0,
+    "peak_wired_compressed_GiB": 78.0994873046875,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  },
+  {
+    "job": "pressure-sweep",
+    "samples": 127,
+    "levels": [
+      1
+    ],
+    "swap_growth_GiB": 0.0,
+    "peak_wired_compressed_GiB": 78.69212341308594,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  }
+]

@@ -1,0 +1,9 @@
+# Integrated DSSD physical-wrap native validation: PASS
+
+Frozen helper `08fd1d3d`/binary `737e3d70…` links the source-proven integrated `ec1caaa0` core and seven auxiliary objects. The root helper-only pre-cancel correction is retained at parent`0b20e1b4`: canonical-to-canonical comparisons use full byte equality, while diagnostic-to-canonical identity asserts distinct magic and compares every remaining byte.
+
+Actual native DSSD snapshots were rejected by the public snapshot loader without altering the approximate graph or full-vocabulary logits. A known-valid exact suffix source was rejected after changing only its magic toDSSD, with canonical prefix bytes unchanged. Identity graph/logit parity, retained fresh-prefix raw27rows/layer plus1210compressed/index rows, branch endpoint parity, invalid-candidate/pre-cancel preservation, post-graft cancellation invalidation, and canonical-export blocking all passed.
+
+Thedelta66 move again crossed bothphysical wraps, reused100tokens and copied8,832,000bytes; repairs were4000raw/250compressed/250index keys. Fresh/reuse bothgreedily answered3141. **Every stored raw full-vocabulary float, token sequence, prompt byte and metric CSV is byte-identical to the previous frozen5c run**, including meanKL4.25932664549e−6 and totalΔNLL−1.57038708544e−5. This case's query is partly cached; it does not claim a fullyfresh query or forgetting.
+
+Guard completed0 with72normal level1samples,0adverse samples and0swapgrowth. MAIN lock was independently reacquired/released afterwards and neither guard7467 nor a suffix-oracle child remained alive. Diagnostic edited-prefix+suffix times were8.258s fresh/5.463s reuse; these are unpaired and support no balanced latency claim. Original3MiBraw output remains in the persistent artifact directory, pinned in the manifest.

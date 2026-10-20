@@ -1,0 +1,55 @@
+{
+  "source_commit": "73414bb7",
+  "production_source_commit": "7008afd6",
+  "core_source_commit": "5c8ef1f3",
+  "binary_sha256": "5942e2f928f703af288919e7c130c5677c6e094b0568bbf069e4f8a91f5663ad",
+  "native_result_pass": true,
+  "guard_returncode": 0,
+  "actual_save_invariants": {
+    "pass": true,
+    "save_called": true,
+    "approximate_before": true,
+    "approximate_after": true,
+    "canonical_blocked_before": true,
+    "canonical_blocked_after": true,
+    "checkpoint_byte_equal": true,
+    "logits_byte_equal": true,
+    "private_graph_byte_equal": true,
+    "suffix_source_rejected": true,
+    "saved_zero_kv": true,
+    "save_ms": 0.609,
+    "optional_reopen_requested": false,
+    "reopened": false,
+    "reload_exact": false,
+    "reload_query_correct": false,
+    "reload_ms": 0.0,
+    "error": ""
+  },
+  "save_trace_has_no_prefill_or_sync": true,
+  "optional_reopen_performed": false,
+  "pressure": {
+    "samples": 202,
+    "levels": [
+      1
+    ],
+    "bad_samples": 0,
+    "swap_growth_gb": 0.0,
+    "max_wired_gb": 73.71339416503906,
+    "max_compressor_gb": 8.72967529296875,
+    "min_free_gb": 0.1229095458984375
+  },
+  "persistent_raw_artifact_directory": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary",
+  "saved_session": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary/cache/e2597c652b01e8050f3a5ce32ba4f9f2968f4fcc.kv",
+    "sha256": "dca7a692f759441f714fe09b818a5405a754eec8a517f28d693c9a5f61333f6c",
+    "bytes": 13243,
+    "payload_bytes": 0,
+    "tokens": 3142
+  },
+  "raw_file_sha256": {
+    "agent.trace": "37fa94bc8d888e5dab29aefd65a7ad26db9b5602b664dc993751b35661d4a25b",
+    "context.txt": "a44cba4552b527e9921ff2d59b105726c93ef296d3ac38613c0bdef873fa0b60",
+    "result.json": "a03917a49813c812eec28d1f6403ff6d8878bdcd65b9503981499b6b4895fa20",
+    "native-persistence.json": "4bc1f853a53c66f1279ddb937f9338145828ce470112de8d1364c68515e0f33d"
+  }
+}

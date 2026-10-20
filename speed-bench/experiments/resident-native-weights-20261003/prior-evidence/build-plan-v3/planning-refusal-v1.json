@@ -1,0 +1,7 @@
+{
+  "tool_chunk": "81f2d4",
+  "returncode": 1,
+  "error": "expected the unchanged sixteen-row manifest: calibration16",
+  "cause": "preparer counted two comment lines as data; helper ignores initial # lines",
+  "build_or_model_executed": false
+}

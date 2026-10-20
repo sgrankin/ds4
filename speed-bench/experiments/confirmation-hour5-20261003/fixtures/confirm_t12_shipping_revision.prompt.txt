@@ -1,0 +1,1 @@
+These are fictional shipping notes. Draft: nine red crates go to Dock A. Approved revision: three blue crates go to Dock C; this replaces every draft detail. A later comment says the courier likes red, but makes no revision. Report current crates, color, and dock in JSON, then explain which statement is authoritative.

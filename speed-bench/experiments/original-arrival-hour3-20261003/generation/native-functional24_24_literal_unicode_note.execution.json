@@ -1,0 +1,53 @@
+{
+  "argv": [
+    "/Volumes/Models/ds4/.workspaces/idea-resident-original-deadline-native/speed-bench/ideas/artifacts/original-deadline-admitted-direct-v1/ds4-original-deadline",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--prompt-file",
+    "/Volumes/Models/ds4/speed-bench/experiments/resident-functional-hour2-20261003/fixtures/functional24_24_literal_unicode_note.prompt.txt",
+    "--ctx",
+    "8192",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--prefill-chunk",
+    "512",
+    "--tokens",
+    "256",
+    "--temp",
+    "0",
+    "--seed",
+    "20261003",
+    "--nothink"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-resident-original-deadline-native",
+  "compiled_join_policy": "only admitted original requests",
+  "environment": {
+    "DS4_CLI_FORCE_SESSION": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace",
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+    "DS4_METAL_STREAMING_EXPERT_IO_METRICS": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_PROFILE": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MODE": "native",
+    "DS4_METAL_V41_ORIGINAL_DEADLINE": "0"
+  },
+  "inherited_prefixes_cleared": [
+    "DS4",
+    "PT"
+  ],
+  "model_bytes": 365713686528,
+  "model_mtime_ns": 1789237692837653163,
+  "returncode": 0,
+  "seconds": 20.747067499993136,
+  "activation_error": null,
+  "generation_footer": [
+    "GENERATION_SUMMARY tokens=199 cap=256 stop=stop_token prefill_ms=7532.243000 decode_ms=11825.259000"
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "budget": {
+    "actual_tensor_payloads": "backend ds4_gpu_tensor_bytes, included in query",
+    "bytes_per_token": 12288,
+    "immutable_copy": "separate caller-owned cache pair_tape capacity, not charged as tape query",
+    "maximum_capacity": 4096,
+    "maximum_tensor_payload_bytes": 50331648,
+    "metadata": "sizeof(ds41_suffix_pair_tape), included in query",
+    "minimum_capacity": 64,
+    "opaque_gpu_tensor_wrapper_and_driver_metadata": "separate, excluded from query"
+  },
+  "call_sites": {
+    "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/call-sites.txt",
+    "sha256": "e73e06ebd395647be02a0edb703f14654ccb0fe7b8d1d5002e0b56dbe6296d15",
+    "size": 696
+  },
+  "capture_source": {
+    "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/capture-source.c",
+    "sha256": "9e2c7a2ad97eda07fc390aac558a54984b0b77c37d3de2d10bb451f1f1bf5a92",
+    "size": 1761
+  },
+  "first_failure": {
+    "cause": "Unconditionally clipping first to p=start discarded prior contiguous rows; corrected only for count>capacity then end-cap clipping",
+    "diff": {
+      "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/coverage-fix.diff",
+      "sha256": "ba4cdcd3b71c019a36407b951183f9b86c75cc75ada9ee6e3883598e2e00ed0a",
+      "size": 171
+    },
+    "exit_code": 1,
+    "header": {
+      "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/first-failed-header.h",
+      "sha256": "019286903b9a209269c150545e97aec6f67b813950edcd160a16974036b7f302",
+      "size": 7116
+    },
+    "log": {
+      "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/first-failure-contiguous-coverage.log",
+      "sha256": "2247e0d053d76236fa2c1ffd8e58e3738f0a929b0f3f30883497334dc0b49f07",
+      "size": 45
+    },
+    "test_source_unchanged": true
+  },
+  "limitations": [
+    "Fake callbacks exercise byte ownership, ranges and failure semantics, not native command completion or GPU lifetime.",
+    "No model used either prototype; ROOT retains the old unrun compiled object and will rebuild corrected production core separately."
+  ],
+  "production": {
+    "binary": {
+      "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape",
+      "sha256": "20a85c0bfc39416dbef5488e3d4b027dd07e8c1607694fd6478e458c6ecd1d58",
+      "size": 69560
+    },
+    "compile_command": "cc -O3 -Wall -Wextra -Werror -std=c11 -I. tests/test_suffix_pair_tape.c -o speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape",
+    "compile_rc": 0,
+    "log": {
+      "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/production-fixed.log",
+      "sha256": "87d1eda428de7a5215e2536e3eb937cadc181443689a21bbd06299e71923ad14",
+      "size": 168
+    },
+    "run_command": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape",
+    "run_rc": 0
+  },
+  "results": {
+    "allocations": 299656,
+    "capacities": 4033,
+    "checked_words": 2755129344,
+    "copies": 303090,
+    "frees": 299656,
+    "live_bytes": 0,
+    "schedules": 2200,
+    "trials": 6243
+  },
+  "sanitizers": {
+    "binary": {
+      "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape_san",
+      "sha256": "7f3f04f53752c3a835f29ecf162b5d9db29ca49b76af39176633de1b2471872d",
+      "size": 97272
+    },
+    "compile_command": "cc -O1 -g -Wall -Wextra -Werror -std=c11 -fsanitize=address,undefined -fno-omit-frame-pointer -I. tests/test_suffix_pair_tape.c -o speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape_san",
+    "compile_rc": 0,
+    "first_run_command": "ASAN_OPTIONS=detect_leaks=1 speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape_san",
+    "first_run_limitation": "macOS AddressSanitizer refuses detect_leaks=1 before tests",
+    "first_run_log": {
+      "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/asan-ubsan.log",
+      "sha256": "98ad709d1780271908f3b0fdc68a0a53ee46c82b0b7894d6a3599bfc8f129266",
+      "size": 75
+    },
+    "first_run_rc": 134,
+    "log": {
+      "path": "speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/asan-ubsan-supported.log",
+      "sha256": "87d1eda428de7a5215e2536e3eb937cadc181443689a21bbd06299e71923ad14",
+      "size": 168
+    },
+    "supported_run_command": "ASAN_OPTIONS=detect_leaks=0 speed-bench/ideas/artifacts/suffix-pair-tape-header-cpu-v1/test_suffix_pair_tape_san",
+    "supported_run_rc": 0
+  },
+  "scope": "Production internal tape header with fake GPU tensors; no model/device, no core build, no jj snapshot",
+  "source": {
+    "Makefile": {
+      "path": "Makefile",
+      "sha256": "3cd1680abef19c903c53fa95c4baa428b851455f38cd018f9ca4382194f7f88f",
+      "size": 55008
+    },
+    "ds4_suffix_pair_tape.h": {
+      "path": "ds4_suffix_pair_tape.h",
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0",
+      "size": 7139
+    },
+    "tests/test_suffix_pair_tape.c": {
+      "path": "tests/test_suffix_pair_tape.c",
+      "sha256": "8c68d7c31717c963f422e187dbadda18a43b35971785d7c95b736d0b3598a941",
+      "size": 18031
+    }
+  },
+  "status": "PASS"
+}

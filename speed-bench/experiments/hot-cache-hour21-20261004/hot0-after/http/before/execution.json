@@ -1,0 +1,48 @@
+{
+  "phase": "before",
+  "mode": "reuse",
+  "base_url": "http://127.0.0.1:52499",
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "max_workers": 2,
+  "groups": [
+    "warm-AB",
+    "warm-CD",
+    "edited-AB"
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "name": "read",
+      "description": "Read one advertised JSON file in full.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "whole": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "whole",
+          "raw"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "instructions": "Follow the newest request. Use the read tool for advertised files. Never guess a file's current content from an earlier answer. Active inventory tool results remain authoritative after obsolete dispatch notes are removed.",
+  "server_started_by_driver": false,
+  "request_style": "full input, store:false, temperature:0, effort:none, stable tools/instructions",
+  "keys": {
+    "A": "ds4-hour17-confirmation-A",
+    "B": "ds4-hour17-confirmation-B",
+    "C": "ds4-hour17-confirmation-C",
+    "D": "ds4-hour17-confirmation-D"
+  }
+}

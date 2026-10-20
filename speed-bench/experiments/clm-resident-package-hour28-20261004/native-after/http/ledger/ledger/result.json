@@ -1,0 +1,130 @@
+{
+  "case": "ledger",
+  "arm": "native-after",
+  "protocol": "full-input-clm",
+  "write_budget": 128,
+  "final_policy": "budget1",
+  "global_cap": 2048,
+  "wall_seconds": 113.40748499997426,
+  "http_output_tokens": 755,
+  "http_reasoning_tokens": 205,
+  "actual_read_count": 1,
+  "actual_write_count": 1,
+  "calls": [
+    {
+      "role": "READ",
+      "name": "read",
+      "call_id": "call_23981627b5783ca09b23b7e7f46e7f18",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/config.json\",\"whole\":true,\"raw\":true}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/config.json",
+      "output": "{\n  \"include_deleted\": true,\n  \"sample\": [\n    {\n      \"key\": \"x\",\n      \"revision\": 2,\n      \"op\": \"put\",\n      \"value\": \"new\"\n    },\n    {\n      \"key\": \"x\",\n      \"revision\": 1,\n      \"op\": \"delete\"\n    },\n    {\n      \"key\": \"y\",\n      \"revision\": 3,\n      \"op\": \"put\",\n      \"value\": false\n    },\n    {\n      \"key\": \"y\",\n      \"revision\": 3,\n      \"op\": \"delete\"\n    },\n    {\n      \"key\": \"\",\n      \"revision\": 0,\n      \"op\": \"put\",\n      \"value\": null\n    }\n  ]\n}\n",
+      "tool_ms": 0.3849579952657223
+    },
+    {
+      "role": "WRITE",
+      "name": "write",
+      "call_id": "call_98afbbe4a6fc46fa6c8ec04384b614c9",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py\",\"content\":\"def solve(payload, config):\\n    winners = {}\\n    order = []\\n    for index in range(len(payload)):\\n        event = payload[index]\\n        key = event[\\\"key\\\"]\\n        revision = event[\\\"revision\\\"]\\n        if key not in winners:\\n            winners[key] = index\\n            order.append(key)\\n        else:\\n            current = winners[key]\\n            current_event = payload[current]\\n            if revision > current_event[\\\"revision\\\"]:\\n                winners[key] = index\\n            elif revision == current_event[\\\"revision\\\"]:\\n                winners[key] = index\\n    live = []\\n    deleted = []\\n    include_deleted = False\\n    if config is not None:\\n        include_deleted = config.get(\\\"include_deleted\\\", False)\\n    for key in order:\\n        event = payload[winners[key]]\\n        if event[\\\"op\\\"] == \\\"put\\\":\\n            live.append({\\\"key\\\": key, \\\"revision\\\": event[\\\"revision\\\"], \\\"value\\\": event[\\\"value\\\"]})\\n        else:\\n            if include_deleted:\\n                deleted.append({\\\"key\\\": key, \\\"revision\\\": event[\\\"revision\\\"]})\\n    live.sort(key=lambda item: item[\\\"key\\\"])\\n    deleted.sort(key=lambda item: item[\\\"key\\\"])\\n    return {\\\"live\\\": live, \\\"deleted\\\": deleted}\\n\"}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py",
+      "output": "Successfully wrote /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py",
+      "tool_ms": 0.6152919959276915
+    }
+  ],
+  "replies": [
+    {
+      "role": "READ",
+      "budget": 0,
+      "effort": "high",
+      "seconds": 52.12291295899195,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1591,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1591
+        },
+        "output_tokens": 172,
+        "output_tokens_details": {
+          "reasoning_tokens": 76
+        },
+        "total_tokens": 1763
+      },
+      "requested_max_output_tokens": 2048,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "WRITE",
+      "budget": 128,
+      "effort": "high",
+      "seconds": 52.733705999999074,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1208,
+        "input_tokens_details": {
+          "cached_tokens": 473,
+          "cache_write_tokens": 735
+        },
+        "output_tokens": 471,
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        },
+        "total_tokens": 1679
+      },
+      "requested_max_output_tokens": 1876,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "FINAL",
+      "budget": 1,
+      "effort": "high",
+      "seconds": 8.54833058299846,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1722,
+        "input_tokens_details": {
+          "cached_tokens": 1679,
+          "cache_write_tokens": 43
+        },
+        "output_tokens": 112,
+        "output_tokens_details": {
+          "reasoning_tokens": 1
+        },
+        "total_tokens": 1834
+      },
+      "requested_max_output_tokens": 1405,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    }
+  ],
+  "first_code_path": "speed-bench/experiments/clm-resident-package-hour28-20261004/native-after/http/ledger/ledger/first-solution.py",
+  "grade": {
+    "correct": true,
+    "tests": 161,
+    "returncode": 0
+  },
+  "complete": true,
+  "cap": false,
+  "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the winning event per exact key by highest revision, breaking ties by the last payload occurrence, emits winning puts in `live`, emits winning deletes in `deleted` only when `include_deleted` is true, sorts both lists by key using normal Python string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+  "final_text_length": 484,
+  "final_text_bytes": 484,
+  "first_code_bytes": 1159,
+  "errors": [],
+  "config_unchanged": true,
+  "context_edit": {
+    "removed_blocks": 2,
+    "before_bytes": 5718,
+    "after_bytes": 2200,
+    "seconds": 0.00022191699827089906
+  },
+  "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+  "reasoning_history": "Actual response items and tool outputs are replayed in full input; stable task.system/tools, no previous_response_id. Public reasoning is preserved as returned.",
+  "timing_scope": "Whole READ/CLM-edit/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+  "pass": true
+}

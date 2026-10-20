@@ -1,0 +1,11 @@
+arm,case,wall_seconds,complete,cap,correct,tests,passed,failed,read_count,write_count,config_unchanged,errors,grading_error,first_failure
+code-native-before,dependency_layers,130.88702737505082,True,False,True,161,161,0,1,1,True,[],null,null
+code-native-before,interval_groups,132.3343686669832,True,False,True,161,161,0,1,1,True,[],null,null
+code-combined,dependency_layers,98.14644454099471,True,False,True,161,161,0,1,1,True,[],null,null
+code-combined,interval_groups,98.20637908403296,True,False,True,161,161,0,1,1,True,[],null,null
+code-suffix-only,dependency_layers,111.12316762498813,True,False,True,161,161,0,1,1,True,[],null,null
+code-suffix-only,interval_groups,112.63246979104588,True,False,True,161,161,0,1,1,True,[],null,null
+code-combined-repeat,dependency_layers,98.29257370805135,True,False,True,161,161,0,1,1,True,[],null,null
+code-combined-repeat,interval_groups,98.13558270898648,True,False,True,161,161,0,1,1,True,[],null,null
+code-native-after,dependency_layers,125.8964434590307,True,False,True,161,161,0,1,1,True,[],null,null
+code-native-after,interval_groups,124.35804920899682,True,False,True,161,161,0,1,1,True,[],null,null

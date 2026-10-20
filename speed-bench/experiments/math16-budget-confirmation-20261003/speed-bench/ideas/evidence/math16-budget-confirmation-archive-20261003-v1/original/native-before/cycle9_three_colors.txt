@@ -1,0 +1,1 @@
+We need answer integer. Need compute proper colorings of labeled C9 with 3 labeled colors. Chromatic polynomial cycle n q: (q-1)^n + (-1)^n (q-1). For n=9 q=3: (2)^9 + (-1)^9*(2) = 512 -2 =510. Need final only integer.</think>510

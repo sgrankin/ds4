@@ -1,0 +1,187 @@
+{
+  "status": "ALL_SIX_COMMANDS_PASS",
+  "results": [
+    {
+      "label": "ds4-agent-pair-compile",
+      "returncode": 0,
+      "elapsed_seconds": 1.350290207999933,
+      "command": {
+        "label": "ds4-agent-pair-compile",
+        "argv": [
+          "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "-isysroot",
+          "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+          "-O3",
+          "-g",
+          "-mcpu=native",
+          "-Wall",
+          "-Wextra",
+          "-I.",
+          "-Wno-unused-function",
+          "-ffast-math",
+          "-std=c99",
+          "-c",
+          "ds4_agent.c",
+          "-o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/ds4-agent-pair.o"
+        ],
+        "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair"
+      }
+    },
+    {
+      "label": "ds4-agent-pair-link",
+      "returncode": 0,
+      "elapsed_seconds": 0.09866700000566198,
+      "command": {
+        "label": "ds4-agent-pair-link",
+        "argv": [
+          "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "-isysroot",
+          "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+          "-O3",
+          "-g",
+          "-mcpu=native",
+          "-Wall",
+          "-Wextra",
+          "-I.",
+          "-Wno-unused-function",
+          "-ffast-math",
+          "-std=c99",
+          "-o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/ds4-agent-pair",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/ds4-agent-pair.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_help.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_prompt_prefix.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_web.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_kvstore.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/linenoise.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_image.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_distributed.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_tp.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_ssd.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_metal.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_layer_pack.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_engram.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-build-plan-v1/objects/ds4_gpu_args.o",
+          "-lm",
+          "-pthread",
+          "-framework",
+          "Foundation",
+          "-framework",
+          "Metal"
+        ],
+        "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair"
+      }
+    },
+    {
+      "label": "agent_suffix_pair_native_fixture-compile",
+      "returncode": 0,
+      "elapsed_seconds": 0.29810345800069626,
+      "command": {
+        "label": "agent_suffix_pair_native_fixture-compile",
+        "argv": [
+          "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "-isysroot",
+          "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+          "-O3",
+          "-g",
+          "-mcpu=native",
+          "-Wall",
+          "-Wextra",
+          "-I.",
+          "-Wno-unused-function",
+          "-std=c11",
+          "-c",
+          "speed-bench/agent_suffix_pair_native_fixture.c",
+          "-o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/agent_suffix_pair_native_fixture.o"
+        ],
+        "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair"
+      }
+    },
+    {
+      "label": "agent_suffix_pair_native_fixture-link",
+      "returncode": 0,
+      "elapsed_seconds": 0.0675128329967265,
+      "command": {
+        "label": "agent_suffix_pair_native_fixture-link",
+        "argv": [
+          "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "-isysroot",
+          "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+          "-O3",
+          "-g",
+          "-mcpu=native",
+          "-Wall",
+          "-Wextra",
+          "-I.",
+          "-Wno-unused-function",
+          "-std=c11",
+          "-o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/agent_suffix_pair_native_fixture",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/agent_suffix_pair_native_fixture.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_help.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_prompt_prefix.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_web.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_kvstore.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/linenoise.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_image.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_distributed.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_tp.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_ssd.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_metal.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_layer_pack.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_engram.o",
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-build-plan-v1/objects/ds4_gpu_args.o",
+          "-lm",
+          "-pthread",
+          "-framework",
+          "Foundation",
+          "-framework",
+          "Metal"
+        ],
+        "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair"
+      }
+    },
+    {
+      "label": "fixture-selftest",
+      "returncode": 0,
+      "elapsed_seconds": 0.03957758400065359,
+      "command": {
+        "label": "fixture-selftest",
+        "argv": [
+          "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/agent_suffix_pair_native_fixture",
+          "--self-test"
+        ],
+        "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair",
+        "model_free": true
+      }
+    },
+    {
+      "label": "driver-tests",
+      "returncode": 0,
+      "elapsed_seconds": 0.11725929100066423,
+      "command": {
+        "label": "driver-tests",
+        "argv": [
+          "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_agent_suffix_pair_native_driver.py",
+          "-v"
+        ],
+        "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair",
+        "model_free": true
+      }
+    }
+  ],
+  "model_metadata_accessed": false,
+  "core_metal_rebuilt": false,
+  "max_concurrent_compilers": 1
+}

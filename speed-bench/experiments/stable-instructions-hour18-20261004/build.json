@@ -1,0 +1,25 @@
+{
+  "compiled_runtime_revision": "bc6896aeee2aceba4b4b64e9e8330986da8a60b0",
+  "server_sha256": "4a3f735999412e6150f77ea61012812c55430f6808cb8062a5597ca6d1b6ed6d",
+  "runtime_change": "none; reuse item16 compiled server and focused CPU tests",
+  "start_utc": "2026-10-04 16:23:00",
+  "deadline_utc": "2026-10-04 17:13:00",
+  "budget_note": "10 minutes of earlier source inspection and method planning charged",
+  "one_change": "staged versus stable natural task instructions; request budget128, tools and private grader fixed",
+  "tasks": "item17 ledger/LRU, same advertised config/solution paths and private oracle fixtures",
+  "arms": [
+    "staged-before",
+    "natural",
+    "staged-after"
+  ],
+  "scope": "Compare completed pipelines, first code, caps, whole task and cached/fresh prompt costs; no paired NLL for divergent sampled histories",
+  "caller_revision": "e566d8d5e9fc51caea4d29336af41f43a08f4bb7",
+  "measurement_finished_utc": "2026-10-04 16:40:23",
+  "guard": {
+    "samples": 744,
+    "all_pressure_level": 1,
+    "swap_growth_gib": 0,
+    "peak_wired_plus_compressor_gib": 84.71832275390625,
+    "child_returncode": 0
+  }
+}

@@ -1,0 +1,9 @@
+arm,case,hot_bytes,ssd_bytes,metadata_bytes,endpoints,chunks,pinned_endpoints,hot_reads,disk_reads,endpoint_evictions
+native-before,dedupe,0,60061540,27217,3,165,0,0,0,0
+native-before,bucket,0,120735436,53284,6,324,0,0,0,0
+context-fast,dedupe,0,106395039,77236,7,406,0,0,85,0
+context-fast,bucket,0,213603968,151755,14,801,0,0,79,0
+persistent-fast,dedupe,0,106395039,77239,7,406,0,0,85,0
+persistent-fast,bucket,0,213603968,151758,14,801,0,0,79,0
+native-after,dedupe,0,60061540,27216,3,165,0,0,0,0
+native-after,bucket,0,120735436,53283,6,324,0,0,0,0

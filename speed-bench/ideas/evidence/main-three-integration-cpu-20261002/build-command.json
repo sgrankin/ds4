@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "make",
+    "-j2",
+    "ds4-agent",
+    "ds4_agent_test",
+    "tests/test_resident_route"
+  ],
+  "returncode": 0
+}

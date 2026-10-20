@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/suffix-resident-package-hour26-20261004/launch.py",
+    "--arm",
+    "subs3",
+    "--canonical",
+    "1",
+    "--pad",
+    "1",
+    "--output",
+    "speed-bench/experiments/suffix-resident-package-hour26-20261004/subs3",
+    "--cache",
+    ".workspaces/server-agent-day-20261004/package26-cache-subs3",
+    "--store",
+    ".workspaces/server-agent-day-20261004/package26-store-subs3",
+    "--shared",
+    ".workspaces/server-agent-day-20261004/concurrent-visible"
+  ],
+  "initial": {
+    "time": 1791142475.0828311,
+    "level": 1,
+    "swap_gb": 0.012998046875,
+    "physical_gb": 128.0,
+    "free_gb": 58.411651611328125,
+    "file_backed_gb": 53.94877624511719,
+    "wired_gb": 3.5824432373046875,
+    "compressor_gb": 9.496566772460938
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

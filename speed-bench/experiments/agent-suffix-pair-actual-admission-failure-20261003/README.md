@@ -1,0 +1,5 @@
+The first corrected protocol run failed the fixed 128 MiB selector reservation before any candidate splice, selection, third-turn model evaluation, or semantic grading. Both control turns passed. The exact delivered LF mismatch was corrected separately from this retained failure.
+
+The forecast was 137150794 bytes against 134217728 bytes, exceeding the cap by 2933066 bytes. It includes a 30140128-byte canonical undo reservation which the selector did not allocate. This is not a measured global peak. Guard release: 118 normal samples, zero bad samples or swap growth, 85.590759 GiB peak wired plus compressor, no remaining model process and lock reacquired.
+
+The separately planned fixed 160 MiB memory-admission experiment was chosen before any third-turn semantics. This archive's task/settings/outcomes remain unchanged. Native system-prompt caches are retained by exact external reference; named persistence or reload was not exercised. No quality, forgetting, speed or default-promotion claim.

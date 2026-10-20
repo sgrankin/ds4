@@ -1,0 +1,109 @@
+{
+  "status": "CPU_HELPER_ONLY_BUILD_COMPLETE_MODEL_UNRUN",
+  "parent_source_revision": "41c9e357e0562d614fef9dd3fa0e3d109a05f581",
+  "source_files": {
+    "ds4.c": {
+      "bytes": 3926808,
+      "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05"
+    },
+    "ds4.h": {
+      "bytes": 37885,
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631"
+    },
+    "ds4_suffix_pair_tape.h": {
+      "bytes": 7139,
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0"
+    },
+    "speed-bench/suffix_pair_tape_followup_bench.c": {
+      "bytes": 18917,
+      "sha256": "c799e3acae5fbca324aa76b3e45352b40c7a96580fb0fbaa0ae7b9d8c33599e5"
+    },
+    "speed-bench/ideas/run_suffix_pair_tape_followup.py": {
+      "bytes": 22140,
+      "sha256": "c5870ad13c17adef1c7875974f2cf78b780bc2395ac1cc07e7baa655e6794649"
+    },
+    "tests/test_suffix_pair_tape_followup.py": {
+      "bytes": 11638,
+      "sha256": "6c67ad9827e952b9d29ab55427df5b8febe5d16b434810e898a2a51b62d85e38"
+    },
+    "tests/test_suffix_pair_tape_followup_state.c": {
+      "bytes": 2201,
+      "sha256": "b0d338fdc46dbd2b199a3f6ccfe50e9f5d881306fe11cea04a06f225d7e5ce6d"
+    }
+  },
+  "objects": {
+    "baseline-frontend.o": {
+      "bytes": 50816,
+      "sha256": "61e6d577e0cb90e174ef2949ffac41fae699b40060586de56dbd0909bf1a2209"
+    },
+    "ds4.o": {
+      "bytes": 5672616,
+      "sha256": "c24c30d24ac774339377f9b3995c6ae132e3025bd8f1e78ad363875bbe6ce803"
+    },
+    "ds4_distributed.o": {
+      "bytes": 427104,
+      "sha256": "5e8a183b83abed129a7ab0ea1b6ce298ce3c1483d246829dafab98aacc5d8635"
+    },
+    "ds4_engram.o": {
+      "bytes": 30064,
+      "sha256": "41eefb68d54c36192c579379d9f9f9b7f35b3df619be97caed967ecb8b568982"
+    },
+    "ds4_image.o": {
+      "bytes": 165664,
+      "sha256": "ebdae98d494de74fd560daed53aad2bd934ff7012499fc2cde82e7e994278f60"
+    },
+    "ds4_layer_pack.o": {
+      "bytes": 11264,
+      "sha256": "efa53eacf5c197bd0ee5c6c140e70fd5924673f788e6876cac3656deea3b694d"
+    },
+    "ds4_metal.o": {
+      "bytes": 2803056,
+      "sha256": "813ff15ec709934f97bd41c018e5cab3cf796d4921b3adff46203efbe7ce80b7"
+    },
+    "ds4_ssd.o": {
+      "bytes": 13736,
+      "sha256": "aa2a18d7cc4b805af138691fd8208042837a045e30b6ed02def90c4b07d37434"
+    },
+    "ds4_tp.o": {
+      "bytes": 207432,
+      "sha256": "6efa29f9f0235e49502596cd04be4c3440bacb1a1b4f365ec78b9d7012e3320c"
+    },
+    "native-baseline-core.o": {
+      "bytes": 5650520,
+      "sha256": "45da7d4af7fbb2b2ae298408a3cd87c266e41c5fcf0fcfaecb7ba3b155af02cf"
+    },
+    "new-frontend.o": {
+      "bytes": 67784,
+      "sha256": "d3f5202b6734a0f58b7377fad7e8a6214151da47e0760357f5e37f5240072953"
+    }
+  },
+  "binaries": {
+    "new-probe": {
+      "bytes": 2710072,
+      "sha256": "8c3585fb8cd57d39bb91a87fc37807b54d20637789f373ac37688f6b8b68ce31"
+    },
+    "baseline-probe": {
+      "bytes": 2692080,
+      "sha256": "6ee762d846890d850af362198f2ab9cfb0023294b7050dabd8d8ba72d57d6f5a"
+    },
+    "state-fixture-test": {
+      "bytes": 2710208,
+      "sha256": "a121fa01ef5205e4687640e6356ba2400e0786bab72ac67dc37e61d3a2744338"
+    }
+  },
+  "native_baseline_core": {
+    "bytes": 5650520,
+    "sha256": "45da7d4af7fbb2b2ae298408a3cd87c266e41c5fcf0fcfaecb7ba3b155af02cf"
+  },
+  "frozen_object_reuse_proof": {
+    "bytes": 2497,
+    "sha256": "15a62aee8ea5b003889037bf62c1f429fd0dd072cc35084d69efdbf8790a1561"
+  },
+  "final_link_cpu_proof": {
+    "bytes": 9973,
+    "sha256": "1f1846c95a2edc65dd51fc5cd3a36d56a70dfa12a3956212d6bd5146b9a433d0"
+  },
+  "model_assets_accessed": false,
+  "core_metal_compiled": false,
+  "default_changed": false
+}

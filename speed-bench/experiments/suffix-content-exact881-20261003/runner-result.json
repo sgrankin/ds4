@@ -1,0 +1,391 @@
+{
+  "status": "ALL_FOUR_NATIVE_CONTROLS_EXACT",
+  "arms": [
+    {
+      "name": "old0-native-before",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/probe-old",
+        "--run",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before",
+        "0",
+        "-",
+        "1"
+      ],
+      "returncode": 0,
+      "pid": 26851,
+      "controls": {
+        "full_native_raw_and_serialized_parity": false,
+        "source_old2988_exact": true,
+        "teacher_ids": [
+          83552,
+          31,
+          18321,
+          19
+        ],
+        "teacher_rows": 4,
+        "terminal_rows": 1,
+        "public_guard_conservative": false,
+        "known_owned_plus_reserve_peak": 9570560,
+        "forecast_peak": 9570304,
+        "io": [
+          {
+            "stage": "engine_ready",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "0",
+            "pread_requested": "0",
+            "pread_returned": "0",
+            "cache_loader_returned": "0",
+            "hits": "0",
+            "misses": "0",
+            "evictions": "0",
+            "process_disk_read": "4698112"
+          },
+          {
+            "stage": "source_exact",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "40458",
+            "pread_requested": "134229934080",
+            "pread_returned": "134229934080",
+            "cache_loader_returned": "134229934080",
+            "hits": "220994",
+            "misses": "13486",
+            "evictions": "7350",
+            "process_disk_read": "95807164416"
+          },
+          {
+            "stage": "before_content",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "46578",
+            "pread_requested": "154534625280",
+            "pread_returned": "154534625280",
+            "cache_loader_returned": "154534625280",
+            "hits": "239354",
+            "misses": "15526",
+            "evictions": "9390",
+            "process_disk_read": "109752840192"
+          },
+          {
+            "stage": "content_exact_frontier",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "62445",
+            "pread_requested": "207177523200",
+            "pread_returned": "207177523200",
+            "cache_loader_returned": "207177523200",
+            "hits": "445505",
+            "misses": "20815",
+            "evictions": "14679",
+            "process_disk_read": "133831860224"
+          },
+          {
+            "stage": "teacher4_exact",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "76725",
+            "pread_requested": "254555136000",
+            "pread_returned": "254555136000",
+            "cache_loader_returned": "254555136000",
+            "hits": "540345",
+            "misses": "25575",
+            "evictions": "19439",
+            "process_disk_read": "151395831808"
+          }
+        ],
+        "semantic_speed_or_heldout_claim": false
+      }
+    },
+    {
+      "name": "new0-fullshort",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/probe-new",
+        "--run",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new0-fullshort",
+        "1",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before",
+        "1"
+      ],
+      "returncode": 0,
+      "pid": 27256,
+      "controls": {
+        "full_native_raw_and_serialized_parity": true,
+        "source_old2988_exact": true,
+        "teacher_ids": [
+          83552,
+          31,
+          18321,
+          19
+        ],
+        "teacher_rows": 4,
+        "terminal_rows": 1,
+        "public_guard_conservative": false,
+        "known_owned_plus_reserve_peak": 9570560,
+        "forecast_peak": 9570304,
+        "io": [
+          {
+            "stage": "engine_ready",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "0",
+            "pread_requested": "0",
+            "pread_returned": "0",
+            "cache_loader_returned": "0",
+            "hits": "0",
+            "misses": "0",
+            "evictions": "0",
+            "process_disk_read": "10342400"
+          },
+          {
+            "stage": "source_exact",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "40458",
+            "pread_requested": "134229934080",
+            "pread_returned": "134229934080",
+            "cache_loader_returned": "134229934080",
+            "hits": "220994",
+            "misses": "13486",
+            "evictions": "7350",
+            "process_disk_read": "103319769088"
+          },
+          {
+            "stage": "before_content",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "46578",
+            "pread_requested": "154534625280",
+            "pread_returned": "154534625280",
+            "cache_loader_returned": "154534625280",
+            "hits": "239354",
+            "misses": "15526",
+            "evictions": "9390",
+            "process_disk_read": "117141114880"
+          },
+          {
+            "stage": "content_exact_frontier",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "59550",
+            "pread_requested": "197572608000",
+            "pread_returned": "197572608000",
+            "cache_loader_returned": "197572608000",
+            "hits": "446470",
+            "misses": "19850",
+            "evictions": "13714",
+            "process_disk_read": "136760389632"
+          },
+          {
+            "stage": "teacher4_exact",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "73953",
+            "pread_requested": "245358305280",
+            "pread_returned": "245358305280",
+            "cache_loader_returned": "245358305280",
+            "hits": "541269",
+            "misses": "24651",
+            "evictions": "18515",
+            "process_disk_read": "154913345536"
+          }
+        ],
+        "semantic_speed_or_heldout_claim": false
+      }
+    },
+    {
+      "name": "new1-clippedcone",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/probe-new",
+        "--run",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/new1-clippedcone",
+        "2",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before",
+        "1"
+      ],
+      "returncode": 0,
+      "pid": 27890,
+      "controls": {
+        "full_native_raw_and_serialized_parity": true,
+        "source_old2988_exact": true,
+        "teacher_ids": [
+          83552,
+          31,
+          18321,
+          19
+        ],
+        "teacher_rows": 4,
+        "terminal_rows": 1,
+        "public_guard_conservative": true,
+        "known_owned_plus_reserve_peak": 42295861,
+        "forecast_peak": 42295861,
+        "io": [
+          {
+            "stage": "engine_ready",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "0",
+            "pread_requested": "0",
+            "pread_returned": "0",
+            "cache_loader_returned": "0",
+            "hits": "0",
+            "misses": "0",
+            "evictions": "0",
+            "process_disk_read": "5152768"
+          },
+          {
+            "stage": "source_exact",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "40458",
+            "pread_requested": "134229934080",
+            "pread_returned": "134229934080",
+            "cache_loader_returned": "134229934080",
+            "hits": "220994",
+            "misses": "13486",
+            "evictions": "7350",
+            "process_disk_read": "100575428608"
+          },
+          {
+            "stage": "before_content",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "46578",
+            "pread_requested": "154534625280",
+            "pread_returned": "154534625280",
+            "cache_loader_returned": "154534625280",
+            "hits": "239354",
+            "misses": "15526",
+            "evictions": "9390",
+            "process_disk_read": "114535051264"
+          },
+          {
+            "stage": "content_exact_frontier",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "58317",
+            "pread_requested": "193481809920",
+            "pread_returned": "193481809920",
+            "cache_loader_returned": "193481809920",
+            "hits": "428065",
+            "misses": "19439",
+            "evictions": "13303",
+            "process_disk_read": "132134346752"
+          },
+          {
+            "stage": "teacher4_exact",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "72459",
+            "pread_requested": "240401571840",
+            "pread_returned": "240401571840",
+            "cache_loader_returned": "240401571840",
+            "hits": "522951",
+            "misses": "24153",
+            "evictions": "18017",
+            "process_disk_read": "148682690560"
+          }
+        ],
+        "semantic_speed_or_heldout_claim": false
+      }
+    },
+    {
+      "name": "old0-native-after",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/probe-old",
+        "--run",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-after",
+        "0",
+        "/Volumes/Models/ds4/.workspaces/idea-suffix-content-materialization-v3/speed-bench/ideas/artifacts/suffix-content-native-prepared-v3/run/old0-native-before",
+        "0"
+      ],
+      "returncode": 0,
+      "pid": 28230,
+      "controls": {
+        "full_native_raw_and_serialized_parity": true,
+        "source_old2988_exact": true,
+        "teacher_ids": [
+          83552,
+          31,
+          18321,
+          19
+        ],
+        "teacher_rows": 4,
+        "terminal_rows": 1,
+        "public_guard_conservative": false,
+        "known_owned_plus_reserve_peak": 9570560,
+        "forecast_peak": 9570304,
+        "io": [
+          {
+            "stage": "engine_ready",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "0",
+            "pread_requested": "0",
+            "pread_returned": "0",
+            "cache_loader_returned": "0",
+            "hits": "0",
+            "misses": "0",
+            "evictions": "0",
+            "process_disk_read": "5169152"
+          },
+          {
+            "stage": "source_exact",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "98139",
+            "pread_requested": "325601648640",
+            "pread_returned": "325601648640",
+            "cache_loader_returned": "325601648640",
+            "hits": "450392",
+            "misses": "45171",
+            "evictions": "39035",
+            "process_disk_read": "683194454016"
+          },
+          {
+            "stage": "before_content",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "145857",
+            "pread_requested": "483918520320",
+            "pread_returned": "483918520320",
+            "cache_loader_returned": "483918520320",
+            "hits": "709466",
+            "misses": "67580",
+            "evictions": "61444",
+            "process_disk_read": "1348055318528"
+          },
+          {
+            "stage": "content_exact_frontier",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "188529",
+            "pread_requested": "625493975040",
+            "pread_returned": "625493975040",
+            "cache_loader_returned": "625493975040",
+            "hits": "906682",
+            "misses": "81804",
+            "evictions": "75668",
+            "process_disk_read": "1371222687744"
+          },
+          {
+            "stage": "teacher4_exact",
+            "explicit_syscalls_enabled": "1",
+            "process_io_valid": "1",
+            "pread_calls": "209547",
+            "pread_requested": "695226654720",
+            "pread_returned": "695226654720",
+            "cache_loader_returned": "695226654720",
+            "hits": "999276",
+            "misses": "88810",
+            "evictions": "82674",
+            "process_disk_read": "1382925066240"
+          }
+        ],
+        "semantic_speed_or_heldout_claim": false
+      }
+    }
+  ],
+  "no_retry": true,
+  "wall_seconds_diagnostic": 443.3995928749937
+}

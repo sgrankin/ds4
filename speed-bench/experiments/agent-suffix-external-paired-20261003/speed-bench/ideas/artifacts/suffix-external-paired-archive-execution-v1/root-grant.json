@@ -1,0 +1,31 @@
+{
+  "status": "GRANTED_EXACT_ONE_MODEL_FREE_ARCHIVE_COMMAND",
+  "time": 1791008645.2096782,
+  "plan_sha256": "5659c2973e759e47c77902e2196ae904e9930dfacf93c3e694e61bb3f5f05354",
+  "source_freeze": "d590b44bdc91c1b42aaed90152fc017bbb89cae0",
+  "qualified_source_CPU_freeze": "afe6ead16b39c185c8723f4734463fc65f2e5b71",
+  "source_sha256": "4ee40bfb03c3c585274ef920bb7d8832547b3ac666f61a2364bc50d2f7b81da4",
+  "CPU_cases": 19,
+  "ROOT_full_source_read": true,
+  "ROOT_fresh12_source_and7_required_authorities": true,
+  "command_authority_sha256": "dddab8e27061ac816a6e61edc9af71c907274a4e9e4fcde8fdbba20b3126645c",
+  "execution": {
+    "status": "PREPARED_MODEL_FREE_ARCHIVE_UNRUN_ROOT_GRANT_REQUIRED",
+    "command": [
+      "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+      "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/archive_agent_suffix_external_pair.py",
+      "--plan",
+      "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive/speed-bench/ideas/agent_suffix_external_pair_archive_v1/execution-plan.json",
+      "--plan-sha256",
+      "5659c2973e759e47c77902e2196ae904e9930dfacf93c3e694e61bb3f5f05354",
+      "--execute"
+    ],
+    "cwd": "/Volumes/Models/ds4/.workspaces/idea-suffix-external-paired-archive",
+    "env": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "plan_sha256": "5659c2973e759e47c77902e2196ae904e9930dfacf93c3e694e61bb3f5f05354",
+    "no_GGUF_stat_model_helper_guard_compiler_grader_execution": true
+  },
+  "scope": "Exactlyone read/hash/copy/analysis of priorreleased A/Bfirstattempts, no helper/grader/subprocess/model/stat/guard/native compiler/retry or writes to original sources/shared. Currentpractical40 modelgrant remains sole. Preservefailed outcomes and incomparison limits."
+}

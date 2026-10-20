@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "manifest_sha256": "a8fd08c721e8ff7f657f4297cc65e112c376c90ec31d7073d2e9369e547049f8",
+  "command_sha256": "93646f869a1e42475375de3e93647672246c64984995da60694190f23fb68501",
+  "verified_assets": 37,
+  "model_opened": false,
+  "model_metadata_touched": false,
+  "guard_called": false,
+  "cpu_timing_frozen": false,
+  "sole_model_grant": false
+}

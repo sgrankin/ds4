@@ -1,0 +1,163 @@
+{
+  "conversation": "conv_0f817f9536e70545da02f023",
+  "other_conversation": "conv_aea4e786fd81a3a92c454eb7",
+  "pending": {
+    "id": "resp_84eae6ce9ccf11dba5e13348",
+    "object": "response",
+    "created_at": 1791122592,
+    "status": "completed",
+    "model": "deepseek-v4.1-flash",
+    "store": false,
+    "previous_response_id": null,
+    "conversation": {
+      "id": "conv_0f817f9536e70545da02f023"
+    },
+    "output": [
+      {
+        "id": "fc_4fb10a9cabdb2648299a7fc2",
+        "type": "function_call",
+        "status": "completed",
+        "name": "lookup_count",
+        "call_id": "call_df0c935285fa070583b4acea24527521",
+        "arguments": "{\"key\":\"subject\"}"
+      }
+    ],
+    "usage": {
+      "input_tokens": 831,
+      "input_tokens_details": {
+        "cached_tokens": 188,
+        "cache_write_tokens": 643
+      },
+      "output_tokens": 38,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 869
+    }
+  },
+  "stored_response": {
+    "id": "resp_4f584123037a8481e5c645ab",
+    "object": "response",
+    "created_at": 1791122571,
+    "status": "completed",
+    "model": "deepseek-v4.1-flash",
+    "store": true,
+    "previous_response_id": null,
+    "conversation": {
+      "id": "conv_0f817f9536e70545da02f023"
+    },
+    "output": [
+      {
+        "id": "msg_c6fbcae884932911f50acce6",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 568,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 568
+      },
+      "output_tokens": 13,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 581
+    }
+  },
+  "pending_items": [
+    {
+      "id": "fc_4fb10a9cabdb2648299a7fc2",
+      "type": "function_call",
+      "status": "completed",
+      "name": "lookup_count",
+      "call_id": "call_df0c935285fa070583b4acea24527521",
+      "arguments": "{\"key\":\"subject\"}"
+    },
+    {
+      "id": "msg_d67b301bc2289e2152f5cd44",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Call lookup_count with key \"subject\" now. After its result, return JSON with site, total and count."
+        }
+      ]
+    },
+    {
+      "id": "msg_c6fbcae884932911f50acce6",
+      "type": "message",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "msg_f7f50acf3c4523c6bee783ec",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Report the active site and net usable units again as JSON with site and total."
+        }
+      ]
+    },
+    {
+      "id": "msg_01fd1ea9008064f83084528b",
+      "type": "message",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "msg_9553c693a651fb7b8303df7f",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+        }
+      ]
+    },
+    {
+      "id": "msg_b6098f6dece9fbb14ae23a5b",
+      "type": "message",
+      "role": "user",
+      "status": "completed",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+        }
+      ]
+    }
+  ],
+  "store_dir": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/conversations-store",
+  "model": "deepseek-v4.1-flash"
+}

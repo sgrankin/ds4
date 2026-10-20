@@ -1,0 +1,67 @@
+{
+  "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-prepared-20261003-v2/native-effort-holdout": {
+    "sha256": "a03bff186ded7251164154edb4c5e319447222f3a5d9faaf8cbe60e93f67ae35",
+    "bytes": 2672936,
+    "mode": 493
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4.o": {
+    "sha256": "d77958a390840f3a555f01df64d52964a656c72e6449c2a1cd8c19f497eb8aca",
+    "bytes": 5606328,
+    "mode": 420
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_distributed.o": {
+    "sha256": "3b09b4b252fd1b06894421b88bc62eeaca24869b839cc17cd22effde1d50dc1a",
+    "bytes": 427168,
+    "mode": 420
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_engram.o": {
+    "sha256": "d94530e0a20a2c196ef24ea839175152dabbdb9ad8245626f01bd81a97f34a4b",
+    "bytes": 30120,
+    "mode": 420
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_image.o": {
+    "sha256": "752eace0ab62636538b225d4c80011739354649ee395b6648924928079572528",
+    "bytes": 165728,
+    "mode": 420
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_layer_pack.o": {
+    "sha256": "174b07bfca784e04cb938ae3803e3b97696afcdb886ccd518117ffa3400135c8",
+    "bytes": 11320,
+    "mode": 420
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_metal.o": {
+    "sha256": "ec94b88a9a3da8742c77899e370c1b64869d456ce97d9c8fdba4fae1752bd5ff",
+    "bytes": 2798776,
+    "mode": 420
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_ssd.o": {
+    "sha256": "a1fbc20ad4102f4a6f126cde822f2995dd4421153c6256dace554ebca26c2b71",
+    "bytes": 13800,
+    "mode": 420
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-quant-effort/ds4_tp.o": {
+    "sha256": "d2f2f5ce0b8bfc7ebcfb0fd80f3eb4e434e89dc4518253cc43a7d253a0b2c2a1",
+    "bytes": 207496,
+    "mode": 420
+  },
+  "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python": {
+    "sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d",
+    "bytes": 33568,
+    "mode": 493
+  },
+  "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/bin/python3.14": {
+    "sha256": "7ebde552773a4045532637b114d645a313e045ac07b26f5e520bf039f1e34063",
+    "bytes": 34640,
+    "mode": 493
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/ideas/artifacts/native-effort-holdout-prepared-20261003-v1/native-effort-holdout": {
+    "sha256": "a03bff186ded7251164154edb4c5e319447222f3a5d9faaf8cbe60e93f67ae35",
+    "bytes": 2672936,
+    "mode": 493
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout/speed-bench/ideas/artifacts/native-effort-holdout-helper-build-v1/native-effort-holdout": {
+    "sha256": "a03bff186ded7251164154edb4c5e319447222f3a5d9faaf8cbe60e93f67ae35",
+    "bytes": 2672936,
+    "mode": 493
+  }
+}

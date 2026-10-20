@@ -1,0 +1,59 @@
+{
+  "all48_full_text_token_prompt_hashes_verified": true,
+  "copied_original_files_verified": 335,
+  "counts": [
+    {
+      "budget": 0,
+      "cap_hits": 7,
+      "capped_correct": 0,
+      "cases": 16,
+      "completed_correct": 9,
+      "forced_cases": 0,
+      "generated_tokens": 18826,
+      "incorrect": 0,
+      "invalid": 7,
+      "producer_returncode": 3,
+      "reasoning_tokens": 18817
+    },
+    {
+      "budget": 1024,
+      "cap_hits": 3,
+      "capped_correct": 0,
+      "cases": 16,
+      "completed_correct": 10,
+      "forced_cases": 8,
+      "generated_tokens": 17062,
+      "incorrect": 2,
+      "invalid": 4,
+      "producer_returncode": 3,
+      "reasoning_tokens": 11303
+    },
+    {
+      "budget": 0,
+      "cap_hits": 7,
+      "capped_correct": 0,
+      "cases": 16,
+      "completed_correct": 9,
+      "forced_cases": 0,
+      "generated_tokens": 18826,
+      "incorrect": 0,
+      "invalid": 7,
+      "producer_returncode": 3,
+      "reasoning_tokens": 18817
+    }
+  ],
+  "external_payloads_original_sha_size_mode_verified": 5,
+  "generated_token_delta": -1764,
+  "generated_token_percent": -9.370020184850736,
+  "main_runtime100_unchanged": true,
+  "model_or_helper_or_guard_executed": false,
+  "native_correct_budget_failed": 1,
+  "native_failed_budget_correct": 2,
+  "new_scoring_performed": false,
+  "original_model_job_returncode": 3,
+  "original_static_assets_reverified": 147,
+  "physical_files_excluding_only_top_manifest": 337,
+  "schema": "math16-archive-independent-copy-and-arithmetic-review-v1",
+  "status": "PASS",
+  "tool_manifest_sha256": "d94265779dc9098e1b845e0b1645392881c250f664387fb25e1bb24ecaeb5f45"
+}

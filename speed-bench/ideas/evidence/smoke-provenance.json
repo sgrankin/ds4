@@ -1,0 +1,7 @@
+{
+  "date": "2026-10-02",
+  "purpose": "smoke metrics; timings not balanced performance evidence",
+  "disabled_mode_distribution_parity": true,
+  "disabled_mode_raw_bit_parity": "not measured by initial probe; later screen measures it",
+  "source_probe_sha256": "45998ef4cec52717ed09cb00a6b0e1ada78970bee9f2c4c9563ca93e5a954c18"
+}

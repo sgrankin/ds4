@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "native_arms": 2,
+  "phase_end_full_raw_and_canonical_graph_hashes_exact": true,
+  "frozen_source": "ec1caaa0",
+  "prepared_source": "e42932b6",
+  "scope": "parity only; timingsdiagnostic"
+}

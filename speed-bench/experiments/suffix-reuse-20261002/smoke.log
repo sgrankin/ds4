@@ -1,0 +1,19 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.02 GiB (raw 0.01 + compressed 0.01) + buffers 0.29 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 73.68 GiB planned
+ds4: memory detail: ctx=2048 prefill_cap=256 raw_kv_rows=128 compressed_kv_rows=2049 backend=metal
+ds4: V4.1 static context buffers 318.56 MiB (ctx=2048), Engram disk-only
+SUFFIX prefix=256 edit=32 reused=127 fresh_tail=1 snapshot=13669040 copied=11225088 identity_logits=1 identity_state=1 fresh_ms=3966.902 approximate_ms=791.725 mean_kl=0.03950265 mean_tv=0.0471860532 delta_nll=1.96735783
+step,target,base_nll,reuse_nll,delta_nll,kl,tv,argmax_flip,bit_equal,max_abs
+0,64456,7.87777922619,9.81153955813,1.93376033195,0.112764859444,0.0896275971427,0,0,6.21503377
+1,1789,0.204895574707,0.167244355916,-0.0376512187906,0.00612073619503,0.0334359173261,0,0,4.75858021
+2,81,9.4101277206e-06,2.49860948216e-05,1.5575967101e-05,1.18830968277e-05,1.71874450949e-05,0,0,4.64654064
+3,1543,0.016965095252,0.0881982367488,0.0712331414968,0.0482018932325,0.0683330440938,0,0,5.81678581
+4,-1,nan,nan,0,0.0304138778655,0.0445165200575,0,0,4.20362377
+{"status": "complete", "child_returncode": 0}

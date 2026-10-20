@@ -1,0 +1,22 @@
+{
+  "verification": {
+    "argv": [
+      "python3",
+      "speed-bench/ideas/evidence/suffix-pair-tape-odd65-native-20261003-v3/verify_and_archive.py"
+    ],
+    "tool_session_id": 70263,
+    "exit_code": 0,
+    "results": "verified-results.json"
+  },
+  "historical_verification": {
+    "argv": [
+      "python3",
+      "speed-bench/ideas/evidence/suffix-pair-tape-odd65-native-20261003-v3/verify_history.py"
+    ],
+    "exit_code": 0,
+    "results": "historical-preparations.json"
+  },
+  "model_assets_accessed": false,
+  "core_rebuild": false,
+  "archive_only": true
+}

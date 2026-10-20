@@ -1,0 +1,24 @@
+{
+  "label": "standalone-compile",
+  "command": [
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "-isysroot",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-std=c99",
+    "-pthread",
+    "-I/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/agent_suffix_pair_actual_protocol_fixture.c",
+    "-o",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2/production-protocol-fixture"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 0.0838158130645752,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "warning": false,
+  "tests": null
+}

@@ -1,0 +1,65 @@
+{
+  "mode": "native",
+  "arm": "native-after",
+  "route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 0,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "prefill_route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 0,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "server_identity": {
+    "sha256": "97e94d3d47a3e9b1c2db14e048e17eef8628b4672725893d1879dda666c40325",
+    "size_bytes": 3251016,
+    "source_revision": "8586646bceccc9bdd26d6f41484e5fcc2e1b4bc7",
+    "reported_version": null,
+    "version_note": "The server has no version flag; SHA256 identifies the measured binary."
+  },
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/combined-fresh-hour40-20261008/run.py",
+  "right_shift_enabled": false,
+  "seconds": 254.76189637498464,
+  "phases": [
+    {
+      "phase": "interval_groups",
+      "returncode": 0,
+      "seconds": 126.61730366601842,
+      "startup_seconds": 0.41050366597482935,
+      "client_seconds": 124.53157220798312,
+      "shutdown_seconds": 1.6748497090302408,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "dependency_layers",
+      "returncode": 0,
+      "seconds": 128.14094341598684,
+      "startup_seconds": 0.42306075000669807,
+      "client_seconds": 126.10090091702295,
+      "shutdown_seconds": 1.616575040970929,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/cache-native-after",
+  "store": "/Volumes/Models/ds4/.workspaces/combined-fresh-20261008/store-native-after",
+  "timeout_seconds": 600
+}

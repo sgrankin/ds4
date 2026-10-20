@@ -1,0 +1,7 @@
+At a fixed 64-GiB cache, tile64/limit1024 reduced mean model turn time from 40.775377 to 32.524953 seconds (-20.233838%). Mean append prefill changed -36.111419%, decode -0.804635% and startup prefill -16.817848%. This is one fixed evolving replay in ABBA order; phase timings exclude tools, sampling and raw/state/hash work.
+
+Both A repetitions match prior native64 recorded full seven-phase vocabulary-vector and final-state hashes. Both B repetitions match each other and prior native80 recorded full boundary-vector/state hashes. Every phase reports 6136 configured and resident experts. The runner removes binary dumps after hashing; recorded values/byte sizes are retained and pinned here. This audit validates recorded parity and retained assets without rehashing removed dumps or claiming raw343-row identity.
+
+A model-turn repeat range divided by its mean was 0.143834%; B was 0.205264%. Startup/append/decode variations and all four phase records are in audit.json/summary.json.
+
+The linked separate quality screen verified 343-row exact native controls and identical printed non-timing candidate metrics to native80. It does not establish exported raw candidate identity or generated-task correctness. The guard completed rc0; 380 pressure samples had zero swap growth (absolute swap stayed 0.025576171875 GiB), maximum wired 73.772339 GiB, maximum compressor 8.740524 GiB, pressure level 1 and no adverse samples. No defaults changed.

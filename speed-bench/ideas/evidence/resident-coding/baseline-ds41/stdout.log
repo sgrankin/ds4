@@ -1,0 +1,251 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
++DWARFSTAR_WAITING
+Let me start by exploring the project.
+
+🛠️ list  path=.
+🛠️ Reading README.md 1:120...
+
+Let me look at the source and tests.
+
+🛠️ list  path=ledger
+🛠️ list  path=tests
+
+
+🛠️ Reading ledger/report.py 1:120...
+🛠️ Reading ledger/money.py 1:120...
+🛠️ Reading ledger/io.py 1:120...
+🛠️ Reading ledger/__init__.py 1:120...
+🛠️ Reading ledger/cli.py 1:120...
+
+Now let me read the tests.
+
+🛠️ Reading tests/test_report.py 1:120...
+
+Now let me run the tests to observe failures.
+
+🛠️ $ cd . && python3 -m unittest discover -s tests -v 2>&1
+
+[38;5;208mtest_charge_and_refund (test_report.ReportTests.test_charge_and_refund) ... FAIL
+test_decimal_money (test_report.ReportTests.test_decimal_money) ... FAIL
+test_retry (test_report.ReportTests.test_retry) ... FAIL
+test_void (test_report.ReportTests.test_void) ... FAIL
+test_zero_balance (test_report.ReportTests.test_zero_balance) ... FAIL
+
+======================================================================
+FAIL: test_charge_and_refund (test_report.ReportTests.test_charge_and_refund)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/baseline-ds41/project/tests/test_report.py", line 19, in test_charge_and_refund
+    self.assertEqual(summarize(rows), {'north': 950})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'north': 1450} != {'north': 950}
+- {'north': 1450}
+?           ^^
+
++ {'north': 950}
+?           ^
+
+
+======================================================================
+FAIL: test_decimal_money (test_report.ReportTests.test_decimal_money)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/baseline-ds41/project/tests/test_report.py", line 13, in test_decimal_money
+    self.assertEqual(cents('0.29'), 29)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 28 != 29
+
+======================================================================
+FAIL: test_retry (test_report.ReportTests.test_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/baseline-ds41/project/tests/test_report.py", line 23, in test_retry
+    self.assertEqual(summarize([row, dict(row)]), {'north': 400})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'north': 800} != {'north': 400}
+- {'north': 800}
+?           ^
+
++ {'north': 400}
+?           ^
+
+
+======================================================================
+FAIL: test_void (test_report.ReportTests.test_void)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/baseline-ds41/project/tests/test_report.py", line 26, in test_void
+    self.assertEqual(summarize([event('v', 'west', 'void', '9.00')]), {})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'west': 900} != {}
+- {'west': 900}
++ {}
+
+======================================================================
+FAIL: test_zero_balance (test_report.ReportTests.test_zero_balance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-coding-pair-20261002T1705/baseline-ds41/project/tests/test_report.py", line 29, in test_zero_balance
+    self.assertEqual(summarize([event('a', 'east', 'charge', '1.00'),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                event('b', 'east', 'refund', '1.00')]), {'east': 0})
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'east': 200} != {'east': 0}
+- {'east': 200}
+?          --
+
++ {'east': 0}
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+FAILED (failures=5)
+[0mNow I understand the bugs:
+
+1. `cents` uses float multiplication which has rounding issues (0.29 -> 28). Need exact decimal parsing.
+2. `summarize` ignores `kind` (refund should subtract, void should have no effect).
+3. `summarize` doesn't dedupe by event_id (retries counted twice).
+4. Accounts with only void events should be omitted; accounts netting to zero should be included.
+
+Let me fix money.py to parse decimal exactly. And report.py to handle kind, dedupe, and omit void-only accounts.
+
+For money: parse string like "12.00" into cents exactly. Handle at most two fractional digits. Let me write a robust parser.
+
+```python
+def cents(text):
+    """Convert a dollar amount to integer cents."""
+    text = str(text).strip()
+    if '.' in text:
+        whole, frac = text.split('.', 1)
+    else:
+        whole, frac = text, ''
+    frac = (frac + '00')[:2]
+    return int(whole) * 100 + int(frac)
+```
+
+But need to handle sign? Amount is nonnegative per README. But could be robust. Let's keep simple but handle possible leading '+'? Probably fine. Let me handle negative too maybe. Actually amounts are nonnegative. Keep it simple but correct.
+
+Edge: whole could be empty? Not likely. Let's handle.
+
+For report:
+
+```python
+def summarize(rows):
+    totals = {}
+    seen = set()
+    for row in rows:
+        event_id = row['event_id']
+        if event_id in seen:
+            continue
+        seen.add(event_id)
+        kind = row['kind']
+        account = row['account']
+        if kind == 'void':
+            totals.setdefault(account, 0)
+            continue
+        amount = cents(row['amount'])
+        if kind == 'refund':
+            amount = -amount
+        totals[account] = totals.get(account, 0) + amount
+    return totals
+```
+
+Wait, but void-only accounts should be omitted. If we setdefault for void, then an account with only void events would appear with 0. That's wrong. But an account with void + charge should appear. So we need to track accounts that have financial events.
+
+Approach: track totals only for charge/refund. For void, do nothing. But then account with void + charge: charge creates entry. Account with only void: no entry. Good. But what about account with charge netting to zero — included because charge/refund create entries. Good.
+
+But wait: what if account has void events and charge events? The charge creates entry. Fine.
+
+So simply ignore void entirely. But careful: dedupe applies to void too — a void event_id repeated should count once, but since void has no effect, dedupe doesn't matter for totals. However, dedupe by event_id across kinds: if same event_id appears as charge then void? "count each event exactly once, using its first occurrence." So first occurrence wins. So dedupe must happen before kind handling. Yes my code does that.
+
+Let me verify test_zero_balance: charge 1.00 -> 100, refund 1.00 -> -100, total 0, entry exists -> {'east': 0}. Good.
+
+test_void: void only -> no entry -> {}. Good.
+
+test_retry: same event_id twice -> dedupe -> 400. Good.
+
+test_charge_and_refund: charge 12.00=1200, refund 2.50=-250 -> 950. Good.
+
+Now money parser. Let me write it carefully.
+
+```python
+def cents(text):
+    """Convert a dollar amount to integer cents."""
+    text = str(text).strip()
+    sign = 1
+    if text.startswith('-'):
+        sign = -1
+        text = text[1:]
+    elif text.startswith('+'):
+        text = text[1:]
+    if '.' in text:
+        whole, frac = text.split('.', 1)
+    else:
+        whole, frac = text, ''
+    frac = (frac + '00')[:2]
+    return sign * (int(whole or '0') * 100 + int(frac or '0'))
+```
+
+Hmm, but if frac has more than 2 digits, truncating is wrong-ish but README says at most two. Fine.
+
+Actually simpler: use Decimal? Standard library. But the manual approach is fine and avoids float. Let me use it.
+
+Let me make the edits.
+
+Now I understand the bugs. Let me fix `money.py` (float rounding) and `report.py` (kind handling, retry dedupe, void-only omission).
+
+🛠️ edit  path=ledger/money.py
+- def cents(text):
+-     """Convert a dollar amount to integer cents."""
+-     return int(float(text) * 100)
++ def cents(text):
++     """Convert a dollar amount to integer cents."""
++     text = str(text).strip()
++     sign = 1
++     if text.startswith('-'):
++         sign = -1
++         text = text[1:]
++     elif text.startswith('+'):
++         text = text[1:]
++     if '.' in text:
++         whole, frac = text.split('.', 1)
++     else:
++         whole, frac = text, ''
++     frac = (frac + '00')[:2]
++     return sign * (int(whole or '0') * 100 + int(frac or '0'))
+🛠️ edit  path=ledger/report.py
+- def summarize(rows):
+-     totals = {}
+-     for row in rows:
+-         account = row['account']
+-         amount = cents(row['amount'])
+-         totals[account] = totals.get(account, 0) + amount
+-     return totals
++ def summarize(rows):
++     totals = {}
++     seen = set()
++     for row in rows:
++         event_id = row['event_id']
++         if event_id in seen:
++             continue
++         seen.add(event_id)
++         kind = row['kind']
++         if kind == 'void':
++             continue
++         account = row['account']
++         amount = cents(row['amount'])
++         if kind == 'refund':
++             amount = -amount
++         totals[account] = totals.get(account, 0) + amount
++     return totals
+

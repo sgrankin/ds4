@@ -1,0 +1,160 @@
+{
+  "status": "RELEASED",
+  "time": 1791020719.897768,
+  "plan_sha256": "8726291f392ca7a564ae40659cd891828e6c3ac368bb0d30302e919cb6b304b6",
+  "launch_sha256": "e0faf62d3804ab88d03979440bf201bdb5e12fcb718acb0cbe46c3bab5b93f24",
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 3
+  },
+  "guard_result_sha256": "b930e7a8282c48851750f8438ef0243df5697004738bb1efd66bc0da0d490c85",
+  "pressure_ledger_sha256": "0944b84d84d9277793595dcf3577b08c4da81e5e26e7deb1c9c832ae4e5905ca",
+  "normal_samples": 3647,
+  "bad_samples": 0,
+  "initial_swap_gib": 0.01892578125,
+  "final_swap_gib": 0.020810546875,
+  "min_swap_gib": 0.01892578125,
+  "max_swap_gib": 0.020810546875,
+  "swapgrowth_gib": 0.0018847656249999997,
+  "peak_wired_compressor_gib": 79.64096069335938,
+  "live_model_processes": [],
+  "lock_reacquired": true,
+  "all_ancestor_pids_excluded": [
+    25759,
+    2072,
+    2064,
+    1244,
+    1213,
+    759,
+    1
+  ],
+  "fresh_ps_args_sha256": "11cbe6a1d1750c266a35d1d9b0f8666a5b76d668bf32a7305524d2f499bd8ab1",
+  "fresh_ps_comm_sha256": "c4f24c4b41102698baea8cb12b83588fb12b0711d1a371851c842046edf4567e",
+  "fresh_ps_probe_timeout_seconds": 2,
+  "completed_attempts": 30,
+  "owned_helper_results": [
+    {
+      "case": "first-run/protected-weights1/literal_rewrite",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/protected-weights1/glob_full",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/protected-weights1/shortest_counts",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/protected-weights1/lru_trace",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/protected-weights1/transactions",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/protected-weights1/chunk_frames",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/protected-weights1/postfix",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/protected-weights1/csv_records",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/protected-weights1/bracket_scan",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/protected-weights1/lexical_path",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-after/literal_rewrite",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-after/glob_full",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-after/shortest_counts",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-after/lru_trace",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-after/transactions",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-after/chunk_frames",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-after/postfix",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-after/csv_records",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-after/bracket_scan",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-after/lexical_path",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-before/literal_rewrite",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-before/glob_full",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-before/shortest_counts",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-before/lru_trace",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-before/transactions",
+      "returncode": 0
+    },
+    {
+      "case": "first-run/native-before/chunk_frames",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-before/postfix",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-before/csv_records",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-before/bracket_scan",
+      "returncode": 3
+    },
+    {
+      "case": "first-run/native-before/lexical_path",
+      "returncode": 0
+    }
+  ],
+  "free_disk_gib": 166.4950408935547,
+  "no_retry": true,
+  "claim": "Completed normal-pressure campaign only; quality and native controls require independent outcome audit"
+}

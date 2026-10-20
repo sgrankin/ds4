@@ -1,0 +1,22 @@
+[
+  {
+    "phase": "interval_groups",
+    "returncode": 0,
+    "seconds": 100.14946099999361,
+    "startup_seconds": 0.41697191703133285,
+    "client_seconds": 98.30923745798646,
+    "shutdown_seconds": 1.4228544589714147,
+    "server_returncode": 0,
+    "error": null
+  },
+  {
+    "phase": "dependency_layers",
+    "returncode": 0,
+    "seconds": 100.71215416694758,
+    "startup_seconds": 0.4157944999751635,
+    "client_seconds": 98.44942770898342,
+    "shutdown_seconds": 1.8465947919758037,
+    "server_returncode": 0,
+    "error": null
+  }
+]

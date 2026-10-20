@@ -1,0 +1,18 @@
+FUNCTIONAL_MAP eligible=0 planned=0 committed=1 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=2 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+{"status":"PASS","cases":9,"assertions":48,"six_coefficient_bits_unchanged":true,"actual_private_functions":true,"native_GPU_model_map_file":false}
+FUNCTIONAL_MAP eligible=0 planned=0 committed=1 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=2 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+FUNCTIONAL_MAP eligible=0 planned=0 committed=0 declined=0 cpu_rank_ms=0.000000 owned=0 page_charge=0 failed=0
+{"status":"PASS","cases":9,"assertions":48,"six_coefficient_bits_unchanged":true,"actual_private_functions":true,"native_GPU_model_map_file":false}

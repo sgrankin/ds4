@@ -1,0 +1,36 @@
+{
+  "mode": "reuse",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "arm": "existing-before",
+  "canonical_suffix_requested": 0,
+  "padding_suffix_requested": 0,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/concurrent-sessions-hour19-20261004/run.py",
+  "seconds": 329.37375304200395,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 0,
+      "seconds": 254.759762665999,
+      "startup_seconds": 0.21398829099780414,
+      "client_seconds": 253.1549462920084,
+      "shutdown_seconds": 1.390542542008916,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 74.61065129199415,
+      "startup_seconds": 0.42301874999247957,
+      "client_seconds": 72.46159004198853,
+      "shutdown_seconds": 1.725589540990768,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/parity24-cache-before",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/parity24-store-before",
+  "timeout_seconds": 600
+}

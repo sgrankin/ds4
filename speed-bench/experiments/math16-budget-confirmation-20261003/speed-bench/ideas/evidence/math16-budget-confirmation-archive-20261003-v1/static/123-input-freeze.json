@@ -1,0 +1,81 @@
+{
+  "role": "UNUSED16 fixed math-budget confirmation; source-only",
+  "suite": "math-budget-confirmation16-v1",
+  "ordered_cases": [
+    "circular14_five",
+    "linear12_four_gap2",
+    "permutations9_two_forbidden",
+    "deranged8_first_two_odd",
+    "dyck7_three_interior_returns",
+    "bounded10x8_avoid5x4",
+    "subset15_seven_mod5",
+    "subset16_six_nonconsecutive_threeodd",
+    "tiles2x8_domino_square",
+    "composition18_five_max6",
+    "balls9_four_bins_max4",
+    "cycle9_three_colors",
+    "ladder2x5_three_colors",
+    "words_A3B4C3_noAB",
+    "BANANA_no_adjacent_A",
+    "digits8_sum12_no_equal_neighbors"
+  ],
+  "arms": [
+    {
+      "name": "native-before",
+      "budget": 0
+    },
+    {
+      "name": "budget1024",
+      "budget": 1024
+    },
+    {
+      "name": "native-after",
+      "budget": 0
+    }
+  ],
+  "settings": {
+    "effort": 25,
+    "cap": 2048,
+    "seed": 20261002,
+    "temperature_float_value": 0.6000000238418579,
+    "top_p_float_value": 0.949999988079071,
+    "top_k": 0,
+    "min_p": 0,
+    "cache_gib": 64,
+    "context_size": 8192,
+    "prefill_chunk": 512,
+    "threads": 2,
+    "mtp_draft": 1,
+    "native_penalty": 0
+  },
+  "scorer": "literal strict signed64 final-v2 wrapper order; independent libc cross-check before study",
+  "all_first_attempts": 48,
+  "maximum_generated_tokens": 98304,
+  "estimated_minutes": [
+    75,
+    110
+  ],
+  "native_before_after_full_token_RNG_piece_prompt_raw_exact_required": true,
+  "pre_force_same_prompt_state_and_native_trace_required": true,
+  "only_forced_close_token128822_no_RNG_advance_then_native_outside_thinking": true,
+  "all_wrong_cap_INVALID_attempts_retained": true,
+  "primary": "completed strict exact answers; capped correct answers reported separately",
+  "discordance": "report both native-correct/budget-failed and native-failed/budget-correct across all16 fixed cases",
+  "no_cross_prefix_KL_NLL": true,
+  "no_quantization_causality_claim": true,
+  "no_default_promotion": true,
+  "existing_four_calibration_cases_remain_distinct": true,
+  "mixed24_remains_distinct": true,
+  "automatic_model_or_tokenization_run": false,
+  "model_or_tokenizer_metadata_opened": false,
+  "model_grant_required_after_source_and_build_qualification": true,
+  "files": {
+    "build-plan.json": "8e1cbd7f9b72e14767394bc2235380fd612d42ba37ae4de4890476cb9adf1cc5",
+    "cpu-proof.json": "2a37950447052abc232be2af035da83522bffd65432350b0352b53d608a84a6c",
+    "fixture-source.py": "c34e4f5902e547b3e4351a827c01199c388efbc77eb2260c373bf5866e304b46",
+    "fixture.json": "f0eeb1effe60fb75af9572d6e81b7a102f1eb83cfe995a2e919109e7b2ed8703",
+    "gold-proof.json": "f03be386f51017e58c947a492b75886a3c894b9ef5f4b489d15ab111b0894615",
+    "reasoning_budget_confirmation_cases.h": "1884857da9e1a9202c7fb938253f4585385d4a7693b2c8f3b4a4e6682cfc53ef",
+    "reasoning_budget_confirmation_probe.c": "dd05bfa3967bc211e9533e4f3108aee2b4bec9b7f44da7bd63a9d6d5b277ea1a"
+  }
+}

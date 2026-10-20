@@ -1,0 +1,64 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: SSD streaming auto cache budget
+ds4:   metal recommends 112.00 GiB working set
+ds4:   using 86% total for model + cached experts: 96.00 GiB
+ds4:   non-routed weights: 9.37 GiB
+ds4:   routed expert size: 9.49 MiB
+ds4:   expert budget before prefill reserve: 9345 (86.63 GiB)
+ds4: metal SSD streaming cache target 86.63 GiB; effective 86.63 GiB = 7.12 GiB prefill headroom + 79.51 GiB dynamic cache (8577 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.02 GiB (raw 0.01 + compressed 0.01) + buffers 1.54 GiB + resident model 9.37 GiB + expert cache 79.51 GiB + prefill expert reserve 7.12 GiB = 97.56 GiB planned
+ds4: memory detail: ctx=2053 prefill_cap=2048 raw_kv_rows=128 compressed_kv_rows=2054 backend=metal
+ds4-bench: context buffers 1599.45 MiB (ctx=2053, backend=metal, prefill_chunk=2048, raw_kv_rows=128, compressed_kv_rows=2054)
+ds4: V4.1 static context buffers 1599.45 MiB (ctx=2053), Engram disk-only
+ds4: V4.1 prefill layer=0 pos=0 rows=2048 encoder_resident=0 map=302.981 engram=0.000 encode=7.132 drain=127.558 seed=133.747 ms
+ds4: V4.1 prefill layer=1 pos=0 rows=2048 encoder_resident=0 map=12.196 engram=355.168 encode=1.179 drain=129.595 seed=36.774 ms
+ds4: V4.1 prefill layer=2 pos=0 rows=2048 encoder_resident=0 map=0.381 engram=0.000 encode=5.319 drain=170.833 seed=126.269 ms
+ds4: V4.1 prefill layer=3 pos=0 rows=2048 encoder_resident=0 map=14.735 engram=0.001 encode=0.404 drain=103.342 seed=39.450 ms
+ds4: V4.1 prefill layer=4 pos=0 rows=2048 encoder_resident=0 map=165.602 engram=0.000 encode=0.404 drain=104.127 seed=116.124 ms
+ds4: V4.1 prefill layer=5 pos=0 rows=2048 encoder_resident=0 map=91.753 engram=0.000 encode=0.328 drain=99.798 seed=40.225 ms
+ds4: V4.1 prefill layer=6 pos=0 rows=2048 encoder_resident=0 map=164.220 engram=0.000 encode=0.324 drain=98.855 seed=136.975 ms
+ds4: V4.1 prefill layer=7 pos=0 rows=2048 encoder_resident=0 map=63.776 engram=0.000 encode=0.180 drain=102.403 seed=39.369 ms
+ds4: V4.1 prefill layer=8 pos=0 rows=2048 encoder_resident=0 map=159.287 engram=0.000 encode=1.418 drain=171.881 seed=108.340 ms
+ds4: V4.1 prefill layer=9 pos=0 rows=2048 encoder_resident=0 map=20.715 engram=0.000 encode=0.251 drain=96.623 seed=38.529 ms
+ds4: V4.1 prefill layer=10 pos=0 rows=2048 encoder_resident=0 map=162.100 engram=0.000 encode=0.255 drain=101.307 seed=114.303 ms
+ds4: V4.1 prefill layer=11 pos=0 rows=2048 encoder_resident=0 map=83.508 engram=0.000 encode=0.248 drain=99.567 seed=38.274 ms
+ds4: V4.1 prefill layer=12 pos=0 rows=2048 encoder_resident=0 map=159.498 engram=0.000 encode=0.263 drain=97.781 seed=121.314 ms
+ds4: V4.1 prefill layer=13 pos=0 rows=2048 encoder_resident=0 map=81.869 engram=0.001 encode=0.258 drain=110.166 seed=52.411 ms
+ds4: V4.1 prefill layer=14 pos=0 rows=2048 encoder_resident=0 map=458.018 engram=0.000 encode=1.593 drain=283.918 seed=203.880 ms
+ds4: V4.1 prefill layer=15 pos=0 rows=2048 encoder_resident=0 map=14.853 engram=0.000 encode=0.278 drain=165.556 seed=50.540 ms
+ds4: V4.1 prefill layer=16 pos=0 rows=2048 encoder_resident=0 map=138.603 engram=0.000 encode=0.322 drain=150.068 seed=192.617 ms
+ds4: V4.1 prefill layer=17 pos=0 rows=2048 encoder_resident=0 map=40.719 engram=0.000 encode=0.241 drain=141.245 seed=41.708 ms
+ds4: V4.1 prefill layer=18 pos=0 rows=2048 encoder_resident=0 map=169.914 engram=0.001 encode=0.239 drain=121.410 seed=166.135 ms
+ds4: V4.1 prefill layer=19 pos=0 rows=2048 encoder_resident=0 map=69.520 engram=0.000 encode=0.181 drain=129.346 seed=43.599 ms
+ds4: V4.1 prefill layer=20 pos=0 rows=2048 encoder_resident=0 map=156.183 engram=0.000 encode=125.646 drain=322.862 seed=129.292 ms
+ds4: gpu busy accum 2927.6 ms over 64 cbs
+ds4: V4.1 prefill layer=21 pos=0 rows=2048 encoder_resident=0 map=0.315 engram=0.000 encode=0.376 drain=212.944 seed=40.632 ms
+ds4: V4.1 prefill layer=22 pos=0 rows=2048 encoder_resident=0 map=127.529 engram=0.001 encode=0.282 drain=122.486 seed=178.142 ms
+ds4: V4.1 prefill layer=23 pos=0 rows=2048 encoder_resident=0 map=77.164 engram=0.000 encode=0.375 drain=123.891 seed=44.121 ms
+ds4: V4.1 prefill layer=24 pos=0 rows=2048 encoder_resident=0 map=168.833 engram=0.000 encode=2.661 drain=156.351 seed=164.977 ms
+ds4: V4.1 prefill layer=25 pos=0 rows=2048 encoder_resident=0 map=45.250 engram=0.000 encode=0.377 drain=123.730 seed=56.577 ms
+ds4: V4.1 prefill layer=26 pos=0 rows=2048 encoder_resident=0 map=166.040 engram=0.001 encode=0.243 drain=163.613 seed=251.088 ms
+ds4: V4.1 prefill layer=27 pos=0 rows=2048 encoder_resident=0 map=1.457 engram=0.001 encode=0.263 drain=179.954 seed=48.906 ms
+ds4: V4.1 prefill layer=28 pos=0 rows=2048 encoder_resident=0 map=134.800 engram=0.000 encode=2.204 drain=182.022 seed=193.607 ms
+ds4: V4.1 prefill layer=29 pos=0 rows=2048 encoder_resident=0 map=20.460 engram=0.001 encode=0.380 drain=157.337 seed=45.862 ms
+ds4: V4.1 prefill layer=30 pos=0 rows=2048 encoder_resident=0 map=150.891 engram=0.000 encode=0.315 drain=175.584 seed=152.934 ms
+ds4: V4.1 prefill layer=31 pos=0 rows=2048 encoder_resident=0 map=75.518 engram=0.000 encode=0.241 drain=121.180 seed=42.393 ms
+ds4: V4.1 prefill layer=32 pos=0 rows=2048 encoder_resident=0 map=179.176 engram=0.000 encode=2.380 drain=158.168 seed=200.851 ms
+ds4: V4.1 prefill layer=33 pos=0 rows=2048 encoder_resident=0 map=40.168 engram=0.001 encode=0.273 drain=148.497 seed=47.478 ms
+ds4: V4.1 prefill layer=34 pos=0 rows=2048 encoder_resident=0 map=151.663 engram=0.000 encode=0.231 drain=170.620 seed=235.626 ms
+ds4: V4.1 prefill layer=35 pos=0 rows=2048 encoder_resident=0 map=20.551 engram=0.000 encode=0.654 drain=187.321 seed=48.589 ms
+ds4: V4.1 prefill layer=36 pos=0 rows=2048 encoder_resident=0 map=176.177 engram=0.000 encode=2.415 drain=171.316 seed=220.388 ms
+ds4: V4.1 prefill layer=37 pos=0 rows=2048 encoder_resident=0 map=39.293 engram=0.000 encode=0.385 drain=717.218 seed=47.777 ms
+ds4: V4.1 prefill layer=38 pos=0 rows=2048 encoder_resident=0 map=0.392 engram=0.000 encode=0.517 drain=146.058 seed=264.683 ms
+ds4: V4.1 prefill layer=39 pos=0 rows=2048 encoder_resident=0 map=64.764 engram=0.000 encode=0.332 drain=201.351 seed=48.835 ms
+ds4: gpu busy accum 6480.1 ms over 128 cbs
+ds4: gpu busy accum 6540.4 ms over 192 cbs
+ds4: gpu busy accum 6584.4 ms over 256 cbs
+ds4: gpu busy accum 6610.8 ms over 320 cbs
+ds4: gpu busy accum 6636.8 ms over 384 cbs

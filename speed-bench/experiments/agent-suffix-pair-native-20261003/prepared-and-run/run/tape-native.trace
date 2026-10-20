@@ -1,0 +1,9 @@
+2026-10-02 22:41:56.219 prefill sync done prompt=1409 cached=0 suffix=1409 rc=0 35396.152 ms
+2026-10-02 22:41:56.224 context frontier captured tokens=1409 bytes=32623165 retained=1 retained_bytes=32623165 pair_tape=385:1409 tape_bytes=12582912 ring_bytes=12582992 4.807 ms
+2026-10-02 22:41:57.651 prefill sync done prompt=1474 cached=1409 suffix=65 rc=0 1425.345 ms
+2026-10-02 22:42:08.793 prefill sync done prompt=1986 cached=1474 suffix=512 rc=0 11142.319 ms
+2026-10-02 22:42:08.796 context frontier captured tokens=1986 bytes=36312133 retained=2 retained_bytes=68935298 pair_tape=962:1986 tape_bytes=12582912 ring_bytes=12582992 3.260 ms
+2026-10-02 22:42:11.662 prefill sync done prompt=2114 cached=1986 suffix=128 rc=0 2863.402 ms
+2026-10-02 22:42:11.669 context frontier restore hit tokens=1409 2.139 ms
+2026-10-02 22:42:22.449 prefill sync done prompt=1921 cached=1409 suffix=512 rc=0 10779.597 ms
+2026-10-02 22:42:25.157 prefill sync done prompt=2049 cached=1921 suffix=128 rc=0 2699.988 ms

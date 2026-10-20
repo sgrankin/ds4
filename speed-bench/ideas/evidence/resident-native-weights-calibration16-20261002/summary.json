@@ -1,0 +1,617 @@
+[
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.43839403273,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 512,
+    "startup_ms": 2597.173,
+    "prefill_ms": 19541.217,
+    "decode_ms": 31264.931,
+    "metrics_ms": 1101.846,
+    "name": "native-before",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-native-weights-calibration16-20261002/native-before-raw.bin",
+    "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "candidate_record_bytes": 264777744
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.452254338293,
+    "delta_nll": 0.0138603055631,
+    "policy_delta_nll": 0.0138603055631,
+    "kl_base_to_raw": 0.0126513775484,
+    "kl_base_to_policy": 0.0126513775484,
+    "tv": 0.02788055789,
+    "argmax_flips": 20,
+    "bit_equal_rows": 16,
+    "startup_ms": 215.425,
+    "prefill_ms": 18936.078,
+    "decode_ms": 27172.417,
+    "metrics_ms": 1025.648,
+    "name": "affinity",
+    "prompt_mean_delta_nll": 0.013860305563065237,
+    "prompt_bootstrap_95": [
+      -0.004004996281954927,
+      0.03404970389070628
+    ],
+    "worst_prompt_delta_nll": 0.11324364087467889,
+    "kl_p99": 0.124990498398,
+    "kl_max": 0.616082237206,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": 0.00423874978380933,
+        "kl": 0.005157905577161004
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": -0.010102567622683472,
+        "kl": 0.01408431766221654
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.013891238268257122,
+        "kl": 0.004859453295327696
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": -0.022189708294804218,
+        "kl": 0.008468710911913497
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.03011782627988562,
+        "kl": 0.007363717546642618
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.05135477984031076,
+        "kl": 0.008856215202122493
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.0024455101125992087,
+        "kl": 0.004142346864842575
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.006404821920646117,
+        "kl": 0.01479278241268424
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.0379077973034421,
+        "kl": 0.008963064487172942
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.024269633928331577,
+        "kl": 0.011032992608538
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.11324364087467889,
+        "kl": 0.039521182776346704
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": -0.004867335361419058,
+        "kl": 0.0024425375037017702
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.00911720780032498,
+        "kl": 0.001593236274034746
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.041892052084336266,
+        "kl": 0.03218252685745706
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": -0.08046716764877568,
+        "kl": 0.02048250059836276
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.004508409740104238,
+        "kl": 0.018478550196090817
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-native-weights-calibration16-20261002/affinity-raw.bin",
+    "candidate_record_sha256": "3cc8f88de88258e79f89cfb211ce49372af3b5ea9956e365e07d158573947eb1",
+    "candidate_record_bytes": 264777744
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.452125542682,
+    "delta_nll": 0.0137315099516,
+    "policy_delta_nll": 0.0137315099516,
+    "kl_base_to_raw": 0.013791135174,
+    "kl_base_to_policy": 0.013791135174,
+    "tv": 0.0281013091624,
+    "argmax_flips": 19,
+    "bit_equal_rows": 16,
+    "startup_ms": 224.405,
+    "prefill_ms": 19052.227,
+    "decode_ms": 27182.03,
+    "metrics_ms": 1112.563,
+    "name": "native-weights",
+    "prompt_mean_delta_nll": 0.013731509951611577,
+    "prompt_bootstrap_95": [
+      -0.0029033250325611335,
+      0.031957792596831784
+    ],
+    "worst_prompt_delta_nll": 0.09538353529965515,
+    "kl_p99": 0.15495822772,
+    "kl_max": 1.13317450174,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": 0.0041795347180770305,
+        "kl": 0.006755291522281138
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": -0.0131459126828418,
+        "kl": 0.013599280191985367
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.012246714171574998,
+        "kl": 0.00686447993488833
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": -0.01852613451247176,
+        "kl": 0.007701320332375676
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.018844620092697696,
+        "kl": 0.009064712946301318
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.03860168824872368,
+        "kl": 0.008478274535621068
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.003903010072152917,
+        "kl": 0.004959811642216573
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.02491386876141494,
+        "kl": 0.016359622035129216
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.03015874251675312,
+        "kl": 0.011833663028237369
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": -0.011386189189045708,
+        "kl": 0.0084149332472118
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.05418985233899755,
+        "kl": 0.03906290192332869
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": -0.0014446638892361033,
+        "kl": 0.003028765925755382
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.04991336981473311,
+        "kl": 0.0024224733110585366
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.09538353529965515,
+        "kl": 0.04796361231768221
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": -0.07547805179458582,
+        "kl": 0.018448500239583675
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.0073501752591862155,
+        "kl": 0.01570051965015226
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-native-weights-calibration16-20261002/native-weights-raw.bin",
+    "candidate_record_sha256": "36a5e06df8d9a68673d0aa58be486fe6b8aec0ba5fcc861062e013948f09396c",
+    "candidate_record_bytes": 264777744
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.43839403273,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 512,
+    "startup_ms": 218.647,
+    "prefill_ms": 19192.832,
+    "decode_ms": 31666.021,
+    "metrics_ms": 1024.791,
+    "name": "native-weight-noop",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-native-weights-calibration16-20261002/native-weight-noop-raw.bin",
+    "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "candidate_record_bytes": 264777744
+  },
+  {
+    "cases": 16,
+    "tokens": 512,
+    "avg_nll": 0.43839403273,
+    "delta_nll": 0,
+    "policy_delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "kl_base_to_policy": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 512,
+    "startup_ms": 216.089,
+    "prefill_ms": 19289.412,
+    "decode_ms": 31631.393,
+    "metrics_ms": 1036.844,
+    "name": "native-after",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "case_001": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_007": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_013": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_019": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_025": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_031": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_037": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_043": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_049": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_055": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_061": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_067": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_073": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_079": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_085": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "case_091": {
+        "tokens": 32,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    },
+    "candidate_record_layout": {
+      "magic": 1146310961,
+      "vocab": 129280,
+      "cases": 16,
+      "token_limit": 32,
+      "header_bytes": 16,
+      "row_metadata_bytes": 24,
+      "float_bytes": 4,
+      "row_bytes": 517144,
+      "rows": 512,
+      "bytes": 264777744,
+      "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+    },
+    "candidate_record": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/resident-native-weights-calibration16-20261002/native-after-raw.bin",
+    "candidate_record_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+    "candidate_record_bytes": 264777744
+  }
+]

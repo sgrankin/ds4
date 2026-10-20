@@ -1,0 +1,7 @@
+arm,phase,hot_bytes,ssd_bytes,metadata_bytes,endpoints,chunks,pinned_endpoints,hot_reads,disk_reads,endpoint_evictions
+native-before,before,0,177767824,67527,8,408,0,0,0,0
+native-before,after,0,352628008,138319,16,840,0,0,0,0
+reuse,before,0,309621773,205867,20,1027,0,0,232,0
+reuse,after,0,589687556,367735,32,2023,0,0,370,0
+native-after,before,0,177767824,67526,8,408,0,0,0,0
+native-after,after,0,352628008,138318,16,840,0,0,0,0

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-archive/speed-bench/archive_completed_native_effort_holdout.py", line 257, in <module>
+    run()
+    ~~~^^
+  File "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-archive/speed-bench/archive_completed_native_effort_holdout.py", line 92, in run
+    require(monitor['argv'] == prepared_command['command'][4:], 'actual pressure child command exact')
+                               ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'command'

@@ -1,0 +1,1 @@
+We need answer only number. Need compute: 100 *1.2 =120, then *0.8=96. Final answer only number.</think>96

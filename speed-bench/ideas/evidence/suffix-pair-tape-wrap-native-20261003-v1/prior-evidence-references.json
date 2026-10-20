@@ -1,0 +1,24 @@
+{
+  "schema": "immutable-prerequisite-references-v1",
+  "references": [
+    {
+      "commit": "afb277ac648dbb0b6a17c7a589be4a171f941499",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-odd65-archive/speed-bench/ideas/evidence/suffix-pair-tape-odd65-native-20261003-v3",
+      "manifest_sha256": "7587aa5b1948c59319195cb7602bae8c223b850e00c1abfa7c5d7d4ba656d3e5",
+      "includes_original_failed_attempts": true
+    },
+    {
+      "commit": "b62b05107f1d22e214c4db7781bbbfbf3a28f16d",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-inverse-archive/speed-bench/ideas/evidence/suffix-pair-tape-zero-identity-native-20261003-v1",
+      "manifest_sha256": "fc5d874dea7429e3ecf2e29db90d311e2f743857f5229c35c97990353e65c5a0",
+      "includes_original_failed_attempts": false
+    },
+    {
+      "commit": "b62b05107f1d22e214c4db7781bbbfbf3a28f16d",
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-inverse-archive/speed-bench/ideas/evidence/suffix-pair-tape-inverse-native-20261003-v1",
+      "manifest_sha256": "8ecca2ffd34bcee5226677a328f54120404471ab2ecd963d3abfd673e118ca61",
+      "includes_original_failed_attempts": false
+    }
+  ],
+  "no_large_binary_vector_state_copies": true
+}

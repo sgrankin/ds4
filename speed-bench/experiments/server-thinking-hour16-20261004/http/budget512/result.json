@@ -1,0 +1,24 @@
+{
+  "arm": "budget512",
+  "write_budget": 512,
+  "returncode": 0,
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:61429",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-thinking-hour16-20261004/http/budget512/checks",
+    "--visible",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/thinking-visible",
+    "--arm",
+    "budget512",
+    "--budget",
+    "512",
+    "--global-cap",
+    "2048"
+  ],
+  "seconds": 309.35853416699683,
+  "server_returncode_after_shutdown": 0
+}

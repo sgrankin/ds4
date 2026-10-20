@@ -1,0 +1,10 @@
+Earlier coding instructions:
+Write the function as straightforward Python. Keep control flow explicit enough to inspect. The interface is solve(payload, config). Use Python builtins only, and plain function definitions at module level. Do not introduce imports, classes, decorators, annotations, default arguments, I/O, or dynamic execution. Preserve the input and configuration. Compare values as stated by the current algorithm contract rather than by a guessed interpretation. A concise name should reflect the meaning of its local value. Use exact integer arithmetic. Return data rather than printing it. The current contract and current configuration are authoritative. The earlier operational instructions are a verbose description of this same coding policy.
+Debug prints are unnecessary in the final implementation. The surrounding agent records tool outcomes and test results, so the function should return data rather than emit commentary.
+The earlier discussion of deployment, packaging, and command line options has been archived. None of it changes the algorithm requested in the current retained contract.
+We kept numerical values as integers throughout. Converting them to floating point would add an avoidable representation issue for large values.
+When a local variable has a narrow meaning, its name should say so. We chose event, key, balance, and index rather than a generic collection of temporary names.
+An example with only one record does not establish behavior for an empty list. The initial state should yield the empty result naturally through the same loop.
+The prior code review distinguished a useful comment from a restatement of syntax. Comments should explain a boundary or invariant, not narrate every append operation.
+There is no request to run a shell command from this function. Execution and grading are external activities owned by the surrounding harness.
+We discussed whether a comprehension would be shorter. The transition depends on earlier entries, so a direct loop communicates the evolving state more honestly.

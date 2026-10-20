@@ -1,0 +1,59 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "instructions": "Follow the newest request. Use the read tool for advertised files. Never guess a file's current content from an earlier answer. Active inventory tool results remain authoritative when obsolete audit prose is deleted.",
+  "input": [
+    {
+      "role": "user",
+      "content": "These two marked audit spans are obsolete prose; their useful code will be archived.\n[DISPOSABLE_OLD_BEGIN]\nOld audit code: CEDAR-91.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\n[DISPOSABLE_OLD_END]\n[DISPOSABLE_OLD_BEGIN]\nOld audit code: CEDAR-91.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\nold audit log unchanged.\n[DISPOSABLE_OLD_END]\nRead /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/active.json once using read with whole=true and raw=true. Retain the inventory numbers and complete unchanged tool result. Then reply READY only."
+    },
+    {
+      "id": "fc_dcbd4edb62e658c5534747fe",
+      "type": "function_call",
+      "status": "completed",
+      "name": "read",
+      "call_id": "call_deb9819464b5b4f59e83a3669f9dbec7",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/active.json\",\"whole\":true,\"raw\":true}"
+    },
+    {
+      "type": "function_call_output",
+      "call_id": "call_deb9819464b5b4f59e83a3669f9dbec7",
+      "output": "{\n  \"batches\": 19,\n  \"items_per_batch\": 11,\n  \"reserved_items\": 7,\n  \"notes\": [\n    \"Active note 00: retain current inventory; older audit prose is disposable.\",\n    \"Active note 01: retain current inventory; older audit prose is disposable.\",\n    \"Active note 02: retain current inventory; older audit prose is disposable.\",\n    \"Active note 03: retain current inventory; older audit prose is disposable.\",\n    \"Active note 04: retain current inventory; older audit prose is disposable.\",\n    \"Active note 05: retain current inventory; older audit prose is disposable.\",\n    \"Active note 06: retain current inventory; older audit prose is disposable.\",\n    \"Active note 07: retain current inventory; older audit prose is disposable.\",\n    \"Active note 08: retain current inventory; older audit prose is disposable.\",\n    \"Active note 09: retain current inventory; older audit prose is disposable.\",\n    \"Active note 10: retain current inventory; older audit prose is disposable.\",\n    \"Active note 11: retain current inventory; older audit prose is disposable.\",\n    \"Active note 12: retain current inventory; older audit prose is disposable.\",\n    \"Active note 13: retain current inventory; older audit prose is disposable.\",\n    \"Active note 14: retain current inventory; older audit prose is disposable.\",\n    \"Active note 15: retain current inventory; older audit prose is disposable.\",\n    \"Active note 16: retain current inventory; older audit prose is disposable.\",\n    \"Active note 17: retain current inventory; older audit prose is disposable.\",\n    \"Active note 18: retain current inventory; older audit prose is disposable.\",\n    \"Active note 19: retain current inventory; older audit prose is disposable.\",\n    \"Active note 20: retain current inventory; older audit prose is disposable.\",\n    \"Active note 21: retain current inventory; older audit prose is disposable.\",\n    \"Active note 22: retain current inventory; older audit prose is disposable.\",\n    \"Active note 23: retain current inventory; older audit prose is disposable.\",\n    \"Active note 24: retain current inventory; older audit prose is disposable.\",\n    \"Active note 25: retain current inventory; older audit prose is disposable.\",\n    \"Active note 26: retain current inventory; older audit prose is disposable.\",\n    \"Active note 27: retain current inventory; older audit prose is disposable.\",\n    \"Active note 28: retain current inventory; older audit prose is disposable.\",\n    \"Active note 29: retain current inventory; older audit prose is disposable.\",\n    \"Active note 30: retain current inventory; older audit prose is disposable.\",\n    \"Active note 31: retain current inventory; older audit prose is disposable.\"\n  ]\n}\n"
+    }
+  ],
+  "prompt_cache_key": "ds4-hour12-B",
+  "store": false,
+  "stream": false,
+  "temperature": 0,
+  "seed": 20261004,
+  "max_output_tokens": 64,
+  "reasoning": {
+    "effort": "none"
+  },
+  "tools": [
+    {
+      "type": "function",
+      "name": "read",
+      "description": "Read one advertised JSON file in full.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "whole": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "whole",
+          "raw"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

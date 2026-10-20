@@ -1,0 +1,21 @@
+{
+  "status": "FIRST_WORKSPACE_CREATION_REFUSED",
+  "argv": [
+    "jj",
+    "--ignore-working-copy",
+    "--color",
+    "never",
+    "workspace",
+    "add",
+    "--name",
+    "idea-math16-budget-archive",
+    "-r",
+    "448caaa8f864533559635817469c8b46f0a15cf8",
+    "/Volumes/Models/ds4/.workspaces/idea-math16-budget-archive"
+  ],
+  "jj_returncode": 1,
+  "tool_chunk": "15b8a9",
+  "stderr": "Created workspace in \".workspaces/idea-math16-budget-archive\"\nError: This command must be able to update the working copy.\nHint: Don\u2019t use --ignore-working-copy.\n",
+  "source_or_CPU_or_outcome_or_native_model_work": false,
+  "time": 1791006026.279517
+}

@@ -1,0 +1,69 @@
+We need answer count permutations of 8 with forbidden positions: derangement (no fixed points) plus additional restrictions p(1)!=2, p(2)!=1. Need count. Need compute. Let's reason carefully. Need final only integer.
+
+We can use inclusion-exclusion. Total permutations 8!. Forbidden events: F_i: p(i)=i for i=1..8. Plus A: p(1)=2. Plus B: p(2)=1. Need count avoiding all 10 forbidden assignments? Note A and B distinct. Need count permutations avoiding events E_i for i=1..8, E_9: p(1)=2, E_10: p(2)=1. These are positions/values constraints. Use rook polynomial / inclusion-exclusion over forbidden positions in 8x8 board: cells (row i, col i) diagonal 8, plus (1,2), (2,1). Count permutations with no forbidden cells = sum (-1)^k r_k (8-k)! where r_k number ways to place k nonattacking rooks on forbidden board. Need compute rook numbers for board consisting of diagonal cells (1,1)...(8,8) plus off-diagonal (1,2),(2,1). Need r_k for k=0..8 maybe. Board size 8 rows/cols. Need count matchings of size k in forbidden graph.
+
+Let's compute rook polynomial. Board has diagonal all rows/cols plus two extra cells involving rows 1,2 cols1,2. Need r_k.
+
+We can derive via inclusion-exclusion maybe easier. Count permutations avoiding diagonal and two off-diagonal. Let's compute directly.
+
+Let N = number permutations of 8 with p(i)!=i all i, p1!=2, p2!=1.
+
+Start with derangements D_8. Subtract those with p1=2 or p2=1 among derangements. Need count.
+
+D_8 = 8! sum (-1)^k/k! = 40320 - 40320? Let's compute: 40320 - 8!?? formula D_n = n! Σ_{k=0}^n (-1)^k/k!.
+n=8:
+8! =40320
+8!/1=40320
+8!/2=20160
+8!/6=6720
+8!/24=1680
+8!/120=336
+8!/720=56
+8!/5040=8
+8!/40320=1
+Sum: 40320 -40320 +20160 -6720 +1680 -336 +56 -8 +1 =?
+40320-40320=0
++20160=20160
+-6720=13440
++1680=15120
+-336=14784
++56=14840
+-8=14832
++1=14833. D8=14833.
+
+Need exclude p1=2 or p2=1. Since derangement already no fixed. Count derangements with p1=2. If p1=2, then p2 cannot be 2 (fixed) and p2 cannot? p2=1 is separate. For derangement, p2 !=2. Also p1=2 doesn't conflict with p1!=1. Need count permutations of remaining positions {2..8} to values {1,3,4,5,6,7,8} with p_i != i for i=2..8, and additionally p2 !=1? Wait derangement condition p2!=2 only. p1=2 means value 2 used. Remaining rows 2..8, remaining values {1,3,4,5,6,7,8}. For row i=3..8, forbid value i. Row2 forbids value2 but value2 unavailable, so no additional fixed restriction? Actually p2 cannot be2, but value2 not in remaining. So row2 has no forbidden among remaining? It also if we count derangements only, p2!=2 irrelevant. So number of bijections from rows 2..8 to values {1,3,4,5,6,7,8} with p_i != i for i=3..8. This is permutations of 7 items with forbidden positions for rows 3..8 matching values 3..8, row2 has value1 allowed. Need count.
+
+Could compute inclusion-exclusion. Let's call C = count derangements with p1=2. Since p1=2, row1 ok. Remaining 7 rows: row2 maps to set S={1,3,4,5,6,7,8}. For rows 3..8, forbid their own value. Row2 no fixed? value2 absent, so no forbidden. Count permutations avoiding 6 forbidden cells (i,i) for i=3..8. Total 7! minus... Since forbidden rows 3..8 values 3..8, row2 value1. This is equivalent to permutations of 7 where 6 specified rows cannot map to 6 specified values. But row2 is unrestricted. Count = number of permutations of 7 with no fixed points among rows 3..8. Inclusion-exclusion: Σ_{k=0}^6 (-1)^k C(6,k) (7-k)! ? Because choose k of those rows to be fixed at their own values, remaining 7-k arbitrary. Since forbidden cells among rows3..8 are independent? If choose k rows fixed, yes remove those rows/values, remaining 7-k rows (including row2 and others) arbitrary. Number = (7-k)! regardless? Need check if chosen rows fixed at own values, remaining rows include row2 and unchosen rows, remaining values include value1 and unchosen values. Any bijection arbitrary. Yes (7-k)!. So C = Σ_{k=0}^6 (-1)^k C(6,k)(7-k)!.
+
+Compute: k0 7! =5040
+k1 -6*6! = -6*720=-4320 ->720
+k2 +15*5! =15*120=1800 ->2520
+k3 -20*4! = -20*24=-480 ->2040
+k4 +15*3! =15*6=90 ->2130
+k5 -6*2! = -12 ->2118
+k6 +1*1! =1 ->2119. C=2119? Let's verify. For 7 permutations with 6 forbidden diagonal and one unrestricted row/col. Formula maybe. Let's test small n=2? rows 3..8 analog n=6 forbidden plus extra row. Count for m=6? C = Σ (-1)^k C(6,k)(7-k)! =2119. Seems plausible.
+
+Similarly count derangements with p2=1. Symmetric? p2=1 uses row2 value1. Remaining rows {1,3,4,5,6,7,8}, values {2,3,4,5,6,7,8}. Row1 forbids value1 absent, so unrestricted. Rows3..8 forbid own. Count same 2119. Let D_A = D_B =2119.
+
+Need intersection: derangements with p1=2 and p2=1. Then rows1,2 fixed to values 2,1 respectively. Remaining rows 3..8 values 3..8. Derangement condition for rows3..8: p_i != i. Count derangements of 6 = D_6. D6 = 720 -720 +360 -120 +30 -6 +1? Let's compute: 6! =720; Σ:
+720 -720=0
++360=360
+-120=240
++30=270
+-6=264
++1=265. D6=265. Intersection=265.
+
+Then count desired = D8 - C - C + intersection = 14833 - 2119 -2119 +265 =?
+14833 -4238 =10595? 14833-2119=12714; -2119=10595; +265=10860. Wait 12714-2119=10595, +265=10860. So answer 10860.
+
+Need ensure no other interactions? Let's verify via rook polynomial maybe. Desired count = total avoiding diagonal + (1,2),(2,1). Inclusion-exclusion over 10 events. Let's compute to confirm.
+
+Events E_i diagonal i=1..8, A=(1,2), B=(2,1). Count = Σ (-1)^k r_k (8-k)! where r_k rook placements on forbidden board. Need r_k. Let's compute to verify 10860.
+
+Board: diagonal D8 plus two off-diagonal cells at (1,2),(2,1). Need rook numbers. Could derive from inclusion-exclusion over diagonal and extras.
+
+Alternative count by cases p1,p2.
+
+Let's compute directly maybe. We need permutations with p1 not1,2; p2 not1,2? Wait p2 not2 and not1. For i=3..8 p_i != i. p1 cannot 1 or2. p2 cannot 1 or2. Other rows cannot own. Count.
+
+Let's count by values assigned to rows 1,2. Rows1,2 cannot values1,2? Actually p1 not1,2; p2 not1,2. So rows1,2 must map to values from {3..8}, two distinct values. Remaining rows3..8 map to remaining 6 values including 1,2 and other four from {3..8}, with row i

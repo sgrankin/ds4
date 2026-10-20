@@ -1,0 +1,7 @@
+test_exact_accepted_selftest_before_engine (__main__.BuildContract.test_exact_accepted_selftest_before_engine) ... ok
+test_only_SDK_output_changes_and_unchanged_inputs (__main__.BuildContract.test_only_SDK_output_changes_and_unchanged_inputs) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+OK

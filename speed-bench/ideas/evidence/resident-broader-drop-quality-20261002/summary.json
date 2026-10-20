@@ -1,0 +1,172 @@
+[
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0190480241346,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 89758.236,
+    "decode_ms": 18625.761,
+    "name": "native-before",
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "phase_mean_delta_nll": 0.0,
+    "worst_phase_delta_nll": 0.0,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0187491761379,
+    "delta_nll": -0.000298847996701,
+    "kl_base_to_raw": 0.000412702611469,
+    "tv": 0.00222891561529,
+    "argmax_flips": 1,
+    "bit_equal_rows": 1,
+    "prefill_ms": 88811.642,
+    "decode_ms": 17193.763,
+    "name": "balanced",
+    "kl_p99": 0.00834287116782,
+    "kl_max": 0.0387141598352,
+    "phase_mean_delta_nll": -0.00033687203965397997,
+    "worst_phase_delta_nll": 0.0003521065285743113,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": -0.0011191649246590763,
+        "kl": 0.0003799187107762759
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0003521065285743113,
+        "kl": 0.0001393269939469362
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": -0.00024355772287717496,
+        "kl": 0.0005273738629741268
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0195025370854,
+    "delta_nll": 0.000454512950833,
+    "kl_base_to_raw": 0.000253542382457,
+    "tv": 0.00169883403199,
+    "argmax_flips": 1,
+    "bit_equal_rows": 1,
+    "prefill_ms": 89145.161,
+    "decode_ms": 16896.324,
+    "name": "broader",
+    "kl_p99": 0.00801123640237,
+    "kl_max": 0.0139272066085,
+    "phase_mean_delta_nll": 0.00037872495596713975,
+    "worst_phase_delta_nll": 0.0014561298616115072,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": -0.0008894037291027607,
+        "kl": 0.0002808567161710015
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0014561298616115072,
+        "kl": 0.0004608756901988423
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0005694487353926727,
+        "kl": 0.00016567793169396883
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0191391161961,
+    "delta_nll": 9.10920614656e-05,
+    "kl_base_to_raw": 0.000255279452873,
+    "tv": 0.0017251577801,
+    "argmax_flips": 2,
+    "bit_equal_rows": 1,
+    "prefill_ms": 89342.868,
+    "decode_ms": 18487.382,
+    "name": "drop",
+    "kl_p99": 0.00891597432214,
+    "kl_max": 0.0170287682566,
+    "phase_mean_delta_nll": 0.0002923820428598106,
+    "worst_phase_delta_nll": 0.0007048092008284225,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.000438893428360803,
+        "kl": 9.303060600090296e-05
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0007048092008284225,
+        "kl": 0.0003849659552129078
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": -0.0002665565006097937,
+        "kl": 0.0002658637970436401
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0190480241346,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 89229.059,
+    "decode_ms": 18676.081,
+    "name": "native-after",
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "phase_mean_delta_nll": 0.0,
+    "worst_phase_delta_nll": 0.0,
+    "per_phase": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "label": "three-build",
+    "argv": [
+      "cc",
+      "-O3",
+      "-ffast-math",
+      "-g",
+      "-mcpu=native",
+      "-Wall",
+      "-Wextra",
+      "-std=c99",
+      "-I.",
+      "tests/test_resident_three.c",
+      "-o",
+      "speed-bench/ideas/artifacts/main-three-integration-cpu-20261002/test-three",
+      "-lm"
+    ],
+    "returncode": 0
+  },
+  {
+    "label": "three-test",
+    "argv": [
+      "speed-bench/ideas/artifacts/main-three-integration-cpu-20261002/test-three"
+    ],
+    "returncode": 0
+  },
+  {
+    "label": "resident-route",
+    "argv": [
+      "./tests/test_resident_route"
+    ],
+    "returncode": 0
+  },
+  {
+    "label": "agent-test",
+    "argv": [
+      "./ds4_agent_test"
+    ],
+    "returncode": 0
+  }
+]

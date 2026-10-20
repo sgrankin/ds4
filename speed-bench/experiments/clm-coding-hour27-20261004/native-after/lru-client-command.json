@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/clm-coding-hour27-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:59840",
+    "--arm",
+    "native",
+    "--case",
+    "lru",
+    "--output",
+    "speed-bench/experiments/clm-coding-hour27-20261004/native-after/http/lru",
+    "--visible",
+    ".workspaces/server-agent-day-20261004/confirmation-visible",
+    "--global-cap",
+    "2048"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

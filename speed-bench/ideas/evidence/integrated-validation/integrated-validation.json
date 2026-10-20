@@ -1,0 +1,19 @@
+{
+  "root_binary": {
+    "path": "ds4-agent",
+    "sha256": "8b4b611d3964e48f07c6afa167e60a274b8c86af2b5bc4c5484389e8550772f5"
+  },
+  "pressure_guard_sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+  "focused_checks": {
+    "sampling": "passed",
+    "resident_route": "passed",
+    "agent_unit": "passed",
+    "build_warnings": false,
+    "live_context_native": "passed",
+    "recent_frontier_native": "passed"
+  },
+  "native_evidence": {
+    "context": "speed-bench/experiments/context-frontiers-20261002/native-result.json",
+    "literal": "speed-bench/experiments/clm-live-context-20261002/literal-result.json"
+  }
+}

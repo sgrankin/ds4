@@ -1,0 +1,9 @@
+test_changed_authority_digest_rejected_before_resolve (__main__.AliasAuthority.test_changed_authority_digest_rejected_before_resolve) ... ok
+test_exact_four_known_compiler_authorities (__main__.AliasAuthority.test_exact_four_known_compiler_authorities) ... ok
+test_foreign_alias_and_model_refuse_before_stat_or_resolve (__main__.AliasAuthority.test_foreign_alias_and_model_refuse_before_stat_or_resolve) ... ok
+test_payload_alias_remains_forbidden (__main__.AliasAuthority.test_payload_alias_remains_forbidden) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.207s
+
+OK

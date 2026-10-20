@@ -1,0 +1,6 @@
+{
+  "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-evidence/speed-bench/ideas/evidence/native-prefill64-tile64-limit1024-quality-completed-20261002-v1",
+  "curated_summary_sha256": "43ceb2e3cf488d584d5e134a492990d4b7cc19b3cdb33b79eb6a849f2d305912",
+  "metric_comparison_sha256": "98bfd3d3eaefa183756cc3deaca2cce81ef7ef12185858ad4426334dd9aae007",
+  "scope": "All343 printed per-row non-timing metrics match native80; candidate raw rows were not exported. Native controls343all byteexact. One fixed trajectory with3decode phases; no inferential prompt CI."
+}

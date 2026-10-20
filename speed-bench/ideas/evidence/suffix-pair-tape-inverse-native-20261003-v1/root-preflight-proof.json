@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "case": "inverse-parity-pending",
+  "manifest_sha256": "9781896e85d6ae9eee030f034a9fab0a0e0f3e2290c2c3930be20a5a36e32ca2",
+  "command_sha256": "0db865613cf9b96b8e96ba469f9b1e4990d8f0ef8bc2ccbe33b9e3d0f16d9111",
+  "verified_nonmodel_assets": 38,
+  "model_metadata_touched": false,
+  "model_opened": false,
+  "guard_called": false,
+  "sole_model_grant": false
+}

@@ -1,0 +1,13 @@
+{
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "start_utc": "2026-10-04 22:56 UTC",
+  "deadline_utc": "2026-10-04 22:59:30 UTC",
+  "budget_note": "45seconds source preparation charged; client/lifecycle bounded120seconds, tinyreport before19Eastern",
+  "driver": "unchanged server-confirmation-hour17-20261004/client-smoke.mjs",
+  "scope": "Actual persistent-fast installedSDK/Piprovider compatibility; no timing comparison or suffixgraftclaim",
+  "output": ".workspaces/server-agent-day-20261004/sdk36-first",
+  "measurement_finish_utc": "2026-10-04 22:57:14 UTC",
+  "finish_utc": "2026-10-04 22:58:30 UTC",
+  "independent_audit": "Unchanged SDK/Pi realtool outputs,parentGET exactstoredoutput,Conversations CRUD/wire,preset/profile/nativeweights,guard pass; no blocker."
+}

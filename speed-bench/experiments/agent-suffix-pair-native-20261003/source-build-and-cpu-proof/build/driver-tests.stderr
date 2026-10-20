@@ -1,0 +1,18 @@
+test_complete_literal_input (test_agent_suffix_pair_native_driver.DriverFixtures.test_complete_literal_input) ... ok
+test_csv_order_completeness_numeric_and_summary (test_agent_suffix_pair_native_driver.DriverFixtures.test_csv_order_completeness_numeric_and_summary) ... ok
+test_guard_actual_framework_exact_suffix_and_held_lock (test_agent_suffix_pair_native_driver.DriverFixtures.test_guard_actual_framework_exact_suffix_and_held_lock) ... ok
+test_guard_ps_absolute_and_bounded (test_agent_suffix_pair_native_driver.DriverFixtures.test_guard_ps_absolute_and_bounded) ... ok
+test_input_missing_trailing_wrong_marker_wrong_splice (test_agent_suffix_pair_native_driver.DriverFixtures.test_input_missing_trailing_wrong_marker_wrong_splice) ... ok
+test_model_hash_rejected_before_open (test_agent_suffix_pair_native_driver.DriverFixtures.test_model_hash_rejected_before_open) ... ok
+test_native_failure_kept_and_no_second_arm (test_agent_suffix_pair_native_driver.DriverFixtures.test_native_failure_kept_and_no_second_arm) ... ok
+test_native_full_record_identity (test_agent_suffix_pair_native_driver.DriverFixtures.test_native_full_record_identity) ... ok
+test_preflight_explicit_authority_assets_and_execute_mode (test_agent_suffix_pair_native_driver.DriverFixtures.test_preflight_explicit_authority_assets_and_execute_mode) ... ok
+test_raw_mode_and_teacher_mismatch (test_agent_suffix_pair_native_driver.DriverFixtures.test_raw_mode_and_teacher_mismatch) ... ok
+test_raw_stream_shape_identity_finite (test_agent_suffix_pair_native_driver.DriverFixtures.test_raw_stream_shape_identity_finite) ... ok
+test_run_guard_precedes_model_metadata (test_agent_suffix_pair_native_driver.DriverFixtures.test_run_guard_precedes_model_metadata) ... ok
+test_summary_literal_flags_and_finite_bounds (test_agent_suffix_pair_native_driver.DriverFixtures.test_summary_literal_flags_and_finite_bounds) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.027s
+
+OK

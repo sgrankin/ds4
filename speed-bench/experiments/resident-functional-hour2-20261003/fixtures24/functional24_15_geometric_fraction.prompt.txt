@@ -1,0 +1,3 @@
+Compute sum_{k=0}^{5} (3/4)^k exactly. Include k=0. Report numerator and denominator in lowest terms, without decimal rounding.
+Literal input JSON: {"first_exponent": 0, "last_exponent": 5, "ratio_denominator": 4, "ratio_numerator": 3}
+Return the requested JSON first, then explain the specific reasoning.

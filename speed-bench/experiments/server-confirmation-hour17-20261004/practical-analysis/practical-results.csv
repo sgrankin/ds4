@@ -1,0 +1,7 @@
+case,arm,write_budget,wall_seconds,complete,cap,pass,actual_read_count,actual_write_count,http_output_tokens,http_reasoning_tokens,code_correct,tests_passed,tests_expected,errors,read_seconds,read_thinking_tokens,read_status,write_seconds,write_thinking_tokens,write_status,final_seconds,final_thinking_tokens,final_status
+ledger,budget128,128,165.1087237920001,True,False,True,1,1,1041,577,True,161,161,,32.20695766698918,19,completed,58.50809558299079,128,completed,74.39175133300887,430,completed
+lru,budget128,128,130.4726249170053,True,False,True,1,1,607,148,True,161,161,,31.69305204100965,20,completed,53.5414064170036,128,completed,45.23640012500982,0,completed
+ledger,budget256,256,218.96251437500177,False,True,False,1,1,2048,1637,True,161,161,FINAL request did not complete,31.895626666999306,19,completed,64.92833533299563,256,completed,122.13676166599907,1362,incomplete
+lru,budget256,256,141.96554550000292,True,False,True,1,1,698,276,True,161,161,,31.67215650000435,20,completed,60.00220387500303,256,completed,50.289338417002,0,completed
+ledger,native,0,168.1197583339963,False,True,False,1,0,2048,1952,False,,161,WRITE request did not complete,32.47241804101213,19,completed,135.6464449579944,1933,incomplete,,0,
+lru,native,0,169.1899139159941,True,False,True,1,1,1062,620,True,161,161,,31.44959016700159,20,completed,78.52433316700626,600,completed,59.21436275000451,0,completed

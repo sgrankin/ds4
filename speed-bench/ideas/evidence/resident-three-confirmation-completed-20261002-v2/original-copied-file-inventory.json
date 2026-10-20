@@ -1,0 +1,412 @@
+{
+  "run/broader3-command.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/broader3-command.json",
+    "sha256": "54a89767536eb0ff0bc042a75f27fa545d7e999b7c8d709babf029569460fb23",
+    "bytes": 6903
+  },
+  "run/broader3-exit.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/broader3-exit.json",
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "bytes": 22
+  },
+  "run/broader3.csv": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/broader3.csv",
+    "sha256": "c91a923cd8c9fca1d999e1c15aa92bc0059d068fd8f1e941eaf1dcc97b620995",
+    "bytes": 92300
+  },
+  "run/broader3.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/broader3.json",
+    "sha256": "9f2aa2c4c14f2f2e1ad14a4ad06b937e842e292ae5d25c40dbd63a02ae3e03f6",
+    "bytes": 332
+  },
+  "run/broader3.log": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/broader3.log",
+    "sha256": "31f524a21b417a8f4bbc92b8978502cfc8ae6218d6b7d4fd02d94ba28f82b332",
+    "bytes": 4256
+  },
+  "run/checks.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/checks.json",
+    "sha256": "4c29b6ac8407aa60cae5fc5fb73bb6d0ff18f0158f40c5942ed7b560d6aa7ec7",
+    "bytes": 850
+  },
+  "run/manifest.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/manifest.json",
+    "sha256": "ec3c420d74dc4fa8b86b42137af91ac40200852a203fb2f14e544ebaf1fbc03d",
+    "bytes": 14026
+  },
+  "run/native-after-command.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-after-command.json",
+    "sha256": "2119fd2adc3ac5704fd948ffafb67925930140b66fee511bd2e35ad459102346",
+    "bytes": 6645
+  },
+  "run/native-after-exit.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-after-exit.json",
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "bytes": 22
+  },
+  "run/native-after.csv": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-after.csv",
+    "sha256": "89e4ac67058f3165aa0416198a4ce63e54dd0cbeca6b70662fd2f32f583f09a4",
+    "bytes": 47409
+  },
+  "run/native-after.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-after.json",
+    "sha256": "2743d299fbd9a135b71bb85b1cd3c0fac248170447c88a30db5e0c0ce50f570e",
+    "bytes": 260
+  },
+  "run/native-after.log": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-after.log",
+    "sha256": "4000435e26b06326e7c36eb2d54d621f8183076d1e480d61179f13af8ea425a9",
+    "bytes": 3822
+  },
+  "run/native-before-command.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-before-command.json",
+    "sha256": "ff7f4c37f8a01f65c74a4126e212c303fcb2e05650d96f1ddb7a1eeb27374a36",
+    "bytes": 6646
+  },
+  "run/native-before-exit.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-before-exit.json",
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "bytes": 22
+  },
+  "run/native-before.csv": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-before.csv",
+    "sha256": "77a7033171c58a4d2c0871565713fb7f6bd1b33671b9c2eb53bcad19007aeb68",
+    "bytes": 47409
+  },
+  "run/native-before.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-before.json",
+    "sha256": "ba6814a69860ea17e1f91e1e45f6f0af50ec5bae38f2ba342a41c0bbc56d8dd4",
+    "bytes": 261
+  },
+  "run/native-before.log": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/native-before.log",
+    "sha256": "3e754d9c078e55eafaac6decd469e649fb8818c36ed715b82b395a33a5070a41",
+    "bytes": 3823
+  },
+  "run/reference-proof.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/reference-proof.json",
+    "sha256": "8cc376de8b01ccb52dea70b366bafe25e9d9bc9cba4e16c3decca5440b13d462",
+    "bytes": 720
+  },
+  "run/summary.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run/summary.json",
+    "sha256": "0ebaebc6c3d56ad8d78b07c4d8159ec5575c102aa97f9e62d9c19319e185f422",
+    "bytes": 9625
+  },
+  "prepared/manifest.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/manifest.json",
+    "sha256": "b80ecd4abdee67976e4b3824892ff34514a7214fa58687dd3746e692e4657df9",
+    "bytes": 13745
+  },
+  "prepared/prepared-command.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/prepared-command.json",
+    "sha256": "009da3bdbc763311e7e5d83b055e5cdb9450cb8bbda6ca022b7ed2dd1e4af7c1",
+    "bytes": 1097
+  },
+  "prepared/input-freeze.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/input-freeze.json",
+    "sha256": "f46b45e17bc110d6b66fdf125b53935e8b16849f437d8c04bf9fa910c9b3c5de",
+    "bytes": 4134
+  },
+  "prepared/fixtures.tsv": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/fixtures.tsv",
+    "sha256": "5111a3c677abb0f98fd9c04c04e8940c07ac678313161e5d80d995c7343e0608",
+    "bytes": 5680
+  },
+  "prepared/binary-manifest.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/binary-manifest.json",
+    "sha256": "4ef05d5c09c9f20d1ea5fcf47b103d4b1f7a8fbcbdbf2f0b14f6ec7a86a8255b",
+    "bytes": 7095
+  },
+  "prepared/cpu-proof.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/cpu-proof.json",
+    "sha256": "d925964fe636a8fefb9cfcb4d803cddd9ec45a28b9880d0068d829a228f02552",
+    "bytes": 1070
+  },
+  "prepared/cpu-test.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/cpu-test.json",
+    "sha256": "ae68ca0d4f6c42a3259c69211730b33b39bcbb27e419528314d67b7db247623a",
+    "bytes": 190
+  },
+  "prepared/root-launch-proof.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/root-launch-proof.json",
+    "sha256": "a994d03b89c5fea50f457dff0516f545cae7f1db6027742736ae910044cf7ab6",
+    "bytes": 513
+  },
+  "prepared/root-release-proof.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/root-release-proof.json",
+    "sha256": "ebfb56c0d10d6921e93913342aee83564096f187a9db47ca5ac448bd89bf89ce",
+    "bytes": 309
+  },
+  "guard/command.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/pressure/command.json",
+    "sha256": "535e412261c9748d2ada93c9a86a2b4b1ce1bd28a353e6d6339e5108061094f0",
+    "bytes": 981
+  },
+  "guard/pressure.jsonl": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/pressure/pressure.jsonl",
+    "sha256": "06206d2d9caf89849f66d72877c2c414038ddbf7f2e8195d14a02c154ad21105",
+    "bytes": 36579
+  },
+  "guard/result.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/pressure/result.json",
+    "sha256": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+    "bytes": 52
+  },
+  "source/run_resident_confirmation.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run_resident_confirmation.py",
+    "sha256": "0d7f2b62875fe2517911b9bd06303bc97a92b3f6198dc2132bcfe99ce726e156",
+    "bytes": 17187
+  },
+  "source/raw_helpers.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/raw_helpers.py",
+    "sha256": "dbeae546e41e6443bff714265b5be64bc2ec4b15b78c0ca8e71afb044a5eb132",
+    "bytes": 15137
+  },
+  "source/test_resident_confirmation.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/tests/test_resident_confirmation.py",
+    "sha256": "b1ccef6fcecc518849a25ccc6585567bbed8b3bf4b8e9085eb2d5179b4e83084",
+    "bytes": 9125
+  },
+  "source/pressure_run.py": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+    "bytes": 9066
+  },
+  "inputs/000-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/000-continuation.txt",
+    "sha256": "a433abcf92003278cb15f05590eda5f52a54653e4222b335a870d30ef264845e",
+    "bytes": 256
+  },
+  "inputs/000-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/000-prompt.txt",
+    "sha256": "d8e1e8643286f089a9d077d13b956b508cc9b0f8ddbfbaa822b9ee5bfcfbf42d",
+    "bytes": 114
+  },
+  "inputs/001-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/001-continuation.txt",
+    "sha256": "fa8e18d33656767f826b8ef3d748a7746e3c434e5690d259435e32c6149a6a63",
+    "bytes": 258
+  },
+  "inputs/001-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/001-prompt.txt",
+    "sha256": "b2a0fb5191b3eaa8ddc5dc0179d1855f2e70026939244b64a9ff53e8e20b7e57",
+    "bytes": 88
+  },
+  "inputs/002-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/002-continuation.txt",
+    "sha256": "70a5d6f7ff04be14f84385cda6aa0391e645795fd2a37be1a20279dab5cda727",
+    "bytes": 321
+  },
+  "inputs/002-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/002-prompt.txt",
+    "sha256": "cc9c5221fd202db38651897123fe8a016b751171ad55ef2c3c069055369f9e10",
+    "bytes": 77
+  },
+  "inputs/003-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/003-continuation.txt",
+    "sha256": "adb79f1316ddbb6e6fedec3b2c14beffb4137ef67e4f59b3fbec0a2594eede7a",
+    "bytes": 283
+  },
+  "inputs/003-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/003-prompt.txt",
+    "sha256": "16d00e1834936ced31054c0c7b45afbe70d95fe84a50c0b53097ae74cf6503e8",
+    "bytes": 94
+  },
+  "inputs/004-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/004-continuation.txt",
+    "sha256": "8edf56cfb1c2490cf7f30d6c8a293ed0c15c461df1fe61e04a8af3e6b7199878",
+    "bytes": 310
+  },
+  "inputs/004-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/004-prompt.txt",
+    "sha256": "9552b1e51d0858bfc4f85dc826845fe7676787fadd3bd87a0639cab7b64d789d",
+    "bytes": 92
+  },
+  "inputs/005-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/005-continuation.txt",
+    "sha256": "5754f2017a97cbb191251084c2903ddeff2650a5a1aa758a8e3bdc21731c22f5",
+    "bytes": 246
+  },
+  "inputs/005-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/005-prompt.txt",
+    "sha256": "8e2d282cca4757754f6ca4377e10560752c17061f778cf42bb019e6aefa03755",
+    "bytes": 92
+  },
+  "inputs/006-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/006-continuation.txt",
+    "sha256": "a1a04a70beea32f0d761a842a75d560049701ee9e462bcc4533df38e6141a0f7",
+    "bytes": 216
+  },
+  "inputs/006-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/006-prompt.txt",
+    "sha256": "3bc771633e8b72decbff33c2c22f6f832cfa19a9429d21ba086a0efb1ba53980",
+    "bytes": 129
+  },
+  "inputs/007-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/007-continuation.txt",
+    "sha256": "fc260f52161e80a6ea7ad5fcc85993f596aeb900f1bf667148d0e8662dfe5c4b",
+    "bytes": 213
+  },
+  "inputs/007-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/007-prompt.txt",
+    "sha256": "069980ebef0283567728c418687e91cf86580cb0892783d09bf1d41226827efc",
+    "bytes": 114
+  },
+  "inputs/008-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/008-continuation.txt",
+    "sha256": "f87ad7bad38526ee8dda21c2f9021145ac8add8660078c302965411b1d044ba4",
+    "bytes": 221
+  },
+  "inputs/008-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/008-prompt.txt",
+    "sha256": "1d98ea7c819f2a1ce198fc4ff3ec9de24962441bc1964753e821348b54f6f7de",
+    "bytes": 117
+  },
+  "inputs/009-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/009-continuation.txt",
+    "sha256": "5433d0e4f8601e543b29a6ee0235a8b88ec1dc4117e97db89e4de166ee0d4b75",
+    "bytes": 340
+  },
+  "inputs/009-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/009-prompt.txt",
+    "sha256": "ba4dde22d1a48306c3b521ceca74365dbdef3503c97fe96abe3efc4de5932043",
+    "bytes": 104
+  },
+  "inputs/010-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/010-continuation.txt",
+    "sha256": "b2a6da8a3620ba2c1d62b78c1be6c22aacd70913487b7e43e43878fd50d5e9aa",
+    "bytes": 323
+  },
+  "inputs/010-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/010-prompt.txt",
+    "sha256": "c8171bff3b73571c59afa0a421de252a000322410d2979ffe5799ef2037fdd0a",
+    "bytes": 81
+  },
+  "inputs/011-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/011-continuation.txt",
+    "sha256": "5f3a3adc488dd0cfed33e0c9f898eaa6e688bdd9499d8cdb6d820557c6a9be63",
+    "bytes": 244
+  },
+  "inputs/011-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/011-prompt.txt",
+    "sha256": "16693a5f52a371bcc30281dfc2da58a7f5b0d405223e2f3b0b2297565512a5d8",
+    "bytes": 98
+  },
+  "inputs/012-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/012-continuation.txt",
+    "sha256": "9663bd270f197779864032912db99c244b6e33ad95a3a899ad7f8108436d0317",
+    "bytes": 219
+  },
+  "inputs/012-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/012-prompt.txt",
+    "sha256": "7e9f0b27ebc7bdadc0a9b1eb6562d063ba99d99b7aaf610ebe0c736984386728",
+    "bytes": 85
+  },
+  "inputs/013-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/013-continuation.txt",
+    "sha256": "0094e8b87646075f27d9cd0b14864892a18c645d6ea625adf618b912d3634165",
+    "bytes": 325
+  },
+  "inputs/013-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/013-prompt.txt",
+    "sha256": "56aee7c107e6c8ff1358759e0981c38a37c7fa63a8f2d0c3159302acfc3c20b2",
+    "bytes": 117
+  },
+  "inputs/014-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/014-continuation.txt",
+    "sha256": "6f1ea2b7249a8853bc8f1b2360e8022643349789433aa67099e87778bbc2fd24",
+    "bytes": 297
+  },
+  "inputs/014-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/014-prompt.txt",
+    "sha256": "2eaa5a9b09939897bf22bc9ebd9059642eb3afe1acc1cc137c7a47211acf7393",
+    "bytes": 94
+  },
+  "inputs/015-continuation.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/015-continuation.txt",
+    "sha256": "5f25121e650375b8da80d7a483186518c87bd8e59deb38e57db72febba277ca2",
+    "bytes": 298
+  },
+  "inputs/015-prompt.txt": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/inputs/015-prompt.txt",
+    "sha256": "df704f5ad622440c36f79b410bd695d50d54c1e2b4997cc4a57966aa185f73f6",
+    "bytes": 102
+  },
+  "build-proof/source/quality_probe_io.c": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation/speed-bench/ideas/artifacts/resident-three-confirmation-build/source/quality_probe_io.c",
+    "sha256": "065f4b6aa8588279649523efacd2a0a5f3f44d79671d8b4e6ea92271fc6a4e0c",
+    "bytes": 16428
+  },
+  "build-proof/source/ds4_resident_route.h": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation/speed-bench/ideas/artifacts/resident-three-confirmation-build/source/ds4_resident_route.h",
+    "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+    "bytes": 14647
+  },
+  "build-proof/source/resident_route_bfcde97a.h": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation/speed-bench/ideas/artifacts/resident-three-confirmation-build/source/resident_route_bfcde97a.h",
+    "sha256": "a21dbe771153513a5625cfa14940164978cf5574b1a14c5d313ceaf5cec9f37c",
+    "bytes": 10692
+  },
+  "build-proof/source/test_resident_three.c": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation/speed-bench/ideas/artifacts/resident-three-confirmation-build/source/test_resident_three.c",
+    "sha256": "fb84edef33c8cc16c1376408a0becd174f43374bb948b9b512c1e2e62eea2c06",
+    "bytes": 9634
+  },
+  "build-proof/parent-runtime-manifest.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation/speed-bench/ideas/artifacts/resident-three-confirmation-build/parent-runtime-manifest.json",
+    "sha256": "954f5219a1d0a4f087bfad695e6a78faea275d0a3da5e920225cd2a569cdf631",
+    "bytes": 7041
+  },
+  "build-proof/compile.log": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation/speed-bench/ideas/artifacts/resident-three-confirmation-build/compile.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "build-proof/self-test.log": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation/speed-bench/ideas/artifacts/resident-three-confirmation-build/self-test.log",
+    "sha256": "e2e97046f4dec5deeb73bd8cc4398c92f427cadacfd2dc2694504ef1812c06d7",
+    "bytes": 28
+  },
+  "root-launch.log": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/confirmation16-three-root-launch-20261002.log",
+    "sha256": "ed7bc7e467db35ac30f08586f4e7a4d73a6acd3bf675ade45ab1bfdcafddbf0d",
+    "bytes": 4149
+  },
+  "root-preflight.json": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/confirmation16-three-root-preflight-20261002.json",
+    "sha256": "37c5f5bdbc0b91db77dc1cfeb2e1a10d549995e7cc5b1b23c20cb277b4760f01",
+    "bytes": 381
+  },
+  "source/archive_resident_confirmation.py": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive/speed-bench/ideas/archive_resident_confirmation.py",
+    "sha256": "a286bc3acba575a9aa89ec776bde2c6b459810c15148fdcc317d21293e64c4c0",
+    "bytes": 18641
+  },
+  "cpu-independent/archiver-first-refusal.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive/speed-bench/ideas/evidence/confirmation-archive-cpu-checks-20261002/archiver-first-refusal.json",
+    "sha256": "cdce1db3781badf4dde386ea8aba7d90a883ce877f5a426a3a3581b2ec561d22",
+    "bytes": 686
+  },
+  "cpu-independent/focused-cpu-proof-after-tempdir.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive/speed-bench/ideas/evidence/confirmation-archive-cpu-checks-20261002/focused-cpu-proof-after-tempdir.json",
+    "sha256": "68a208633bcde6d700551fac37a0d16c5b4691121ef4a7c927ee87dd1bed2571",
+    "bytes": 897
+  },
+  "cpu-independent/focused-cpu-proof.json": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive/speed-bench/ideas/evidence/confirmation-archive-cpu-checks-20261002/focused-cpu-proof.json",
+    "sha256": "30fab463eecd78c374e6d44a98a18d193661c6930a8fe18321b5e133da59ca27",
+    "bytes": 699
+  },
+  "cpu-independent/focused-cpu-test-after-tempdir.log": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive/speed-bench/ideas/evidence/confirmation-archive-cpu-checks-20261002/focused-cpu-test-after-tempdir.log",
+    "sha256": "ae68ca0d4f6c42a3259c69211730b33b39bcbb27e419528314d67b7db247623a",
+    "bytes": 190
+  },
+  "cpu-independent/focused-cpu-test.log": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-archive/speed-bench/ideas/evidence/confirmation-archive-cpu-checks-20261002/focused-cpu-test.log",
+    "sha256": "43a8dbd2039c63b82dcc07aec37f4a6b4b5d9a82f7d6314021421b64fc629ef5",
+    "bytes": 936
+  }
+}

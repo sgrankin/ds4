@@ -1,0 +1,47 @@
+{
+  "mode": "reuse",
+  "arm": "native-before",
+  "route_settings": {
+    "enabled": false,
+    "gap": 0,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 0,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": false
+  },
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/clm-resident-package-hour28-20261004/run.py",
+  "seconds": 214.38055845801136,
+  "phases": [
+    {
+      "phase": "ledger",
+      "returncode": 0,
+      "seconds": 111.40036608299124,
+      "startup_seconds": 0.416278541990323,
+      "client_seconds": 109.21257904201047,
+      "shutdown_seconds": 1.7707867499848362,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "lru",
+      "returncode": 0,
+      "seconds": 102.97665749999578,
+      "startup_seconds": 0.4188580419868231,
+      "client_seconds": 101.13188358300249,
+      "shutdown_seconds": 1.4256092080031522,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/coding28-cache-before",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/coding28-store-before",
+  "timeout_seconds": 900.0
+}

@@ -1,0 +1,189 @@
+{
+  "status": "COMPLETE_FIRST_ATTEMPTS",
+  "root_release_sha256": "a95b2d2b37d0a03077fab9e9c5646d45f6f4c5c62c2e9168f66fa57b561720cc",
+  "original_guard_rc": 3,
+  "independent_analyzer_matches_original": true,
+  "independent_two_method_golds": {
+    "circular10": [
+      123,
+      123
+    ],
+    "restricted_derangements8": [
+      10860,
+      10860
+    ],
+    "lattice8x6": [
+      2002,
+      2002
+    ],
+    "subset_mod7": [
+      132,
+      132
+    ]
+  },
+  "independent_libc_scores": [
+    {
+      "arm": "native-before",
+      "case": "circular10",
+      "status": "CORRECT",
+      "parsed_answer": "123",
+      "expected": 123,
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 209,
+      "reasoning_tokens": 208,
+      "forced_steps": []
+    },
+    {
+      "arm": "native-before",
+      "case": "restricted_derangements8",
+      "status": "CORRECT",
+      "parsed_answer": "10860",
+      "expected": 10860,
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 1680,
+      "reasoning_tokens": 1678,
+      "forced_steps": []
+    },
+    {
+      "arm": "native-before",
+      "case": "lattice8x6",
+      "status": "INVALID",
+      "parsed_answer": null,
+      "expected": 2002,
+      "cap_hit": true,
+      "stopped": false,
+      "generated_tokens": 2048,
+      "reasoning_tokens": 2048,
+      "forced_steps": []
+    },
+    {
+      "arm": "native-before",
+      "case": "subset_mod7",
+      "status": "INVALID",
+      "parsed_answer": null,
+      "expected": 132,
+      "cap_hit": true,
+      "stopped": false,
+      "generated_tokens": 2048,
+      "reasoning_tokens": 2048,
+      "forced_steps": []
+    },
+    {
+      "arm": "budget1024",
+      "case": "circular10",
+      "status": "CORRECT",
+      "parsed_answer": "123",
+      "expected": 123,
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 209,
+      "reasoning_tokens": 208,
+      "forced_steps": []
+    },
+    {
+      "arm": "budget1024",
+      "case": "restricted_derangements8",
+      "status": "CORRECT",
+      "parsed_answer": "10860",
+      "expected": 10860,
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 1027,
+      "reasoning_tokens": 1025,
+      "forced_steps": [
+        1024
+      ]
+    },
+    {
+      "arm": "budget1024",
+      "case": "lattice8x6",
+      "status": "INCORRECT",
+      "parsed_answer": "42",
+      "expected": 2002,
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 1026,
+      "reasoning_tokens": 1025,
+      "forced_steps": [
+        1024
+      ]
+    },
+    {
+      "arm": "budget1024",
+      "case": "subset_mod7",
+      "status": "INVALID",
+      "parsed_answer": null,
+      "expected": 132,
+      "cap_hit": true,
+      "stopped": false,
+      "generated_tokens": 2048,
+      "reasoning_tokens": 1025,
+      "forced_steps": [
+        1024
+      ]
+    },
+    {
+      "arm": "native-after",
+      "case": "circular10",
+      "status": "CORRECT",
+      "parsed_answer": "123",
+      "expected": 123,
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 209,
+      "reasoning_tokens": 208,
+      "forced_steps": []
+    },
+    {
+      "arm": "native-after",
+      "case": "restricted_derangements8",
+      "status": "CORRECT",
+      "parsed_answer": "10860",
+      "expected": 10860,
+      "cap_hit": false,
+      "stopped": true,
+      "generated_tokens": 1680,
+      "reasoning_tokens": 1678,
+      "forced_steps": []
+    },
+    {
+      "arm": "native-after",
+      "case": "lattice8x6",
+      "status": "INVALID",
+      "parsed_answer": null,
+      "expected": 2002,
+      "cap_hit": true,
+      "stopped": false,
+      "generated_tokens": 2048,
+      "reasoning_tokens": 2048,
+      "forced_steps": []
+    },
+    {
+      "arm": "native-after",
+      "case": "subset_mod7",
+      "status": "INVALID",
+      "parsed_answer": null,
+      "expected": 132,
+      "cap_hit": true,
+      "stopped": false,
+      "generated_tokens": 2048,
+      "reasoning_tokens": 2048,
+      "forced_steps": []
+    }
+  ],
+  "native_generated_tokens": 5985,
+  "budget_generated_tokens": 4310,
+  "token_reduction_fraction": 0.2798663324979115,
+  "native_completed_correct": 2,
+  "budget_completed_correct": 2,
+  "native_caps": 2,
+  "budget_caps": 1,
+  "wrong_completed_lattice_retained": true,
+  "subset_capped_outside_thinking_retained": true,
+  "raw_trace_meaning": "UTF8 generated text reconstructed from token pieces, not full-vocabulary logit arrays",
+  "limitations": "One fixed original calibration set, one seed. Wrong/capped/INVALID attempts retained. No holdout generalization, KL/NLL, equal-quality, quantization-causality or speed claim.",
+  "model_or_metadata_opened": false,
+  "native_or_helper_build": false
+}

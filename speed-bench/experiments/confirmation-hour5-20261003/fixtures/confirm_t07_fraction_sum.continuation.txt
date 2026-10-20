@@ -1,0 +1,2 @@
+{"numerator":25,"denominator":36}
+A common denominator is thirty-six. The three terms become fifteen thirty-sixths, fourteen thirty-sixths, and four thirty-sixths. Combining them gives twenty-five thirty-sixths. Twenty-five and thirty-six have no common factor greater than one, so this fraction is already reduced. Decimal rounding is unnecessary for this calculation.

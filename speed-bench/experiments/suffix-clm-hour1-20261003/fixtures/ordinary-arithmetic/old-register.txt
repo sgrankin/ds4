@@ -1,0 +1,7 @@
+CURRENT CALCULATION RECORD
+a = 17
+b = 25
+The operation is addition: a + b.
+
+Earlier administrative notes: a clerk copied the shelf labels into a notebook, checked the envelope tray, and sorted spare folders alphabetically. The notebook cover was blue. These inventory details do not change the stored integers or the operation and can be removed when shortening the record.
+END CURRENT CALCULATION RECORD

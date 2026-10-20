@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-mixed24-analysis/speed-bench/ideas/analyze_resident_mixed24.py",
+    "--output",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-mixed24-analysis/speed-bench/ideas/artifacts/mixed24-offline-run-20261003-v1/analysis"
+  ],
+  "source_sha256": "c86e9dee2730d0eea68d235fcc64b1c31ba2f33a7c72de930ded8ab36710786e",
+  "cpu_proof_sha256": "e14976a7bb03865ad98ef081c978e6c61dda69144830f061dc61d8a55c351419",
+  "root_grant": "released model-free mixed24 raw validation only"
+}

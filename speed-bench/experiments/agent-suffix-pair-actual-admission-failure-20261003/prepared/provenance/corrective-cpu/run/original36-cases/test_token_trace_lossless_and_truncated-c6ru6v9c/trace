@@ -1,0 +1,4 @@
+trace user="x"
+prefill sync done tool_round=0
+ token index=1 id=3 bytes=1 text="x" hex=ff
+generation finished tool_round=0 generated=1

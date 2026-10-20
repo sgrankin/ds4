@@ -1,0 +1,1 @@
+In Python, xs=[11,22,33,44,55,66,77]. Evaluate xs[1:6:2] and xs[::-3]. Return a JSON object with forward and backward, then explain the index choices.

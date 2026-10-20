@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/recipe-prefill-hour37-20261008/run_quality.py",
+    ".workspaces/recipe-20261008/quality-subs3",
+    "--baseline",
+    ".workspaces/recipe-20261008/native-replay",
+    "--candidate",
+    ".workspaces/recipe-20261008/prefill-replay",
+    "--gap",
+    "0",
+    "--mass",
+    ".25",
+    "--candidate-env",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP=.90",
+    "--candidate-env",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK=64",
+    "--candidate-env",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=3",
+    "--candidate-env",
+    "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS=.50",
+    "--candidate-env",
+    "DS4_METAL_V41_RESIDENT_ROUTE_POLICY=replace"
+  ],
+  "initial": {
+    "time": 1791475140.311084,
+    "level": 1,
+    "swap_gb": 0.014462890625,
+    "physical_gb": 128.0,
+    "free_gb": 58.12730407714844,
+    "file_backed_gb": 49.22804260253906,
+    "wired_gb": 4.684234619140625,
+    "compressor_gb": 12.743637084960938
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

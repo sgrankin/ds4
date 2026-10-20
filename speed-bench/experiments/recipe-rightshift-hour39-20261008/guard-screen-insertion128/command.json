@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/recipe-rightshift-hour39-20261008/screen.py",
+    "--oracle",
+    ".workspaces/recipe-20261008/rightshift-oracle",
+    "--case",
+    "pure-insertion",
+    "--fresh-tail",
+    "128",
+    "--output",
+    "speed-bench/experiments/recipe-rightshift-hour39-20261008/screen-insertion128",
+    "--runtime-revision",
+    "4cfff6cb"
+  ],
+  "initial": {
+    "time": 1791481815.573,
+    "level": 1,
+    "swap_gb": 0.020205078125,
+    "physical_gb": 128.0,
+    "free_gb": 57.403778076171875,
+    "file_backed_gb": 49.52252197265625,
+    "wired_gb": 4.56634521484375,
+    "compressor_gb": 12.654067993164062
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

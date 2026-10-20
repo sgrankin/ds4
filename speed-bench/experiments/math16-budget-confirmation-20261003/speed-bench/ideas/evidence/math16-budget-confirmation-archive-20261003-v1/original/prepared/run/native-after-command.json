@@ -1,0 +1,42 @@
+{
+  "argv": [
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation/speed-bench/ideas/artifacts/reasoning-budget-confirmation-build-prepared-20261003-v2/reasoning-budget-confirmation-probe",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "math16-budget-confirmation-prepared-20261003-v2-native-after",
+    "25",
+    "0"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner",
+  "ds4_environment": {
+    "DS4_OVERTHINK_PENALTY": "0",
+    "DS4_OVERTHINK_SCOPE": "think",
+    "DS4_OVERTHINK_AFTER": "0",
+    "DS4_OVERTHINK_MARKERS": "hesitation",
+    "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/argsort.metal",
+    "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/bin.metal",
+    "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/concat.metal",
+    "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/cpy.metal",
+    "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/deepseek4_vision.metal",
+    "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dense.metal",
+    "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv41.metal",
+    "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv4_hc.metal",
+    "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv4_kv.metal",
+    "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv4_misc.metal",
+    "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/dsv4_rope.metal",
+    "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/flash_attn.metal",
+    "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/get_rows.metal",
+    "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/glm53_bf16.metal",
+    "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/glm53_kda.metal",
+    "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/glm53_vision.metal",
+    "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/glu.metal",
+    "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/moe.metal",
+    "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/norm.metal",
+    "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/qwen4.metal",
+    "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/qwen4_vision.metal",
+    "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/repeat.metal",
+    "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/set_rows.metal",
+    "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/softmax.metal",
+    "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/sum_rows.metal",
+    "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/metal/unary.metal"
+  }
+}

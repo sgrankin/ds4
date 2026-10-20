@@ -1,0 +1,17 @@
+{
+  "status": "native literal-markup regression and recent-frontier regression passed under main pressure guard",
+  "base": "6364d225080f6e77307fbdc7c8fdd35dbe02d404",
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "ssd_cache_gib": 64,
+  "files": {
+    "ds4_agent.c": "3daa599a6af81389620e7c01aa1c56c88c3be68a090e1da6197f25ae40393296",
+    "tests/test_agent_live_context.c": "5204d5455dc17496147c394aff1cc5269704ee27c506e3dc52ce8e9724e824d6",
+    "tests/test_agent_context_frontiers.c": "6533fc5ea2aa17575e6b30035fe986a9462d8f5f9088c4a2c6c7a8b4c968ba1c",
+    "tests/test_agent_live_context": "7296395e96b336685e013bbf06127918856210da184bff5052f09f28c5252475",
+    "tests/test_agent_context_frontiers": "ace21bd729c8d53787958cde3f78689560c2472c66bd625f264e486eddf3c8e7",
+    "speed-bench/experiments/clm-live-context-20261002/literal-build.log": "c5f5a55284d08c639d7c3d29a2c2c26f60e0c7c99b2328109d487107f37260f4"
+  },
+  "root_ds4_object_sha256": "3d7a3471cedef672166888f36f46617514a2c77edbd9cef027aeffb129b65995",
+  "root_build_completed_utc": "2026-10-02 16:57:35",
+  "native_completed_utc": "2026-10-02 17:06:48"
+}

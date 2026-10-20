@@ -1,0 +1,1 @@
+Current approved shipping policy, retrieved from permanent policy.json: compute net units as batches * units_per_batch - reserved_units, then round net down to a whole multiple of 8. Status: current.

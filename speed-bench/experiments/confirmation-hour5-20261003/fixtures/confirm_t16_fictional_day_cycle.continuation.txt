@@ -1,0 +1,2 @@
+{"day":"white","complete_cycles":2,"remainder":5}
+Seventeen days contain two complete cycles of six days, with five days remaining. Starting at amber, five forward steps reach bronze, cobalt, jade, violet, and white. The answer is therefore white. This calendar has its own six-day cycle, so weekdays and real-world date rules are irrelevant.

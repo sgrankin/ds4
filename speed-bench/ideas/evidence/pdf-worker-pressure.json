@@ -1,0 +1,17 @@
+{
+  "observed_utc": "2026-10-02 16:42:59 UTC",
+  "process": "CGPDFService",
+  "pid": 12612,
+  "rss_kib": 102614192,
+  "rss_gib": 97.86051940917969,
+  "cpu_percent": 100,
+  "pdf": "Time Machine backup of ESLII_print4.pdf",
+  "original_worker_gone_before_signal": true,
+  "replacement_pid": 13724,
+  "replacement_rss_kib_before_forced_exit": 44365088,
+  "replacement_ignored_sigterm": true,
+  "replacement_sigkill_sent": true,
+  "modified_pdf_or_backup": false,
+  "relationship_to_original_panic": "not established",
+  "source": "local ps/lsof observations; no full unrelated-process dump retained"
+}

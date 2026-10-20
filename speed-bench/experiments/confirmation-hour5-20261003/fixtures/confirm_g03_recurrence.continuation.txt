@@ -1,0 +1,2 @@
+{"a6":20,"first_difference":3}
+Values are 2,5,8,11,14,17,20; each adjacent difference is three.

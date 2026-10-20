@@ -1,0 +1,11 @@
+{
+  "gold": {
+    "remainder": 7
+  },
+  "oracle_input": {
+    "question": "Compute 7^13 modulo 19. Report remainder as a nonnegative integer in JSON, then give a short modular-arithmetic derivation without expanding the full power."
+  },
+  "explanation": "The cube of seven is 343, which is one modulo nineteen because 343 equals eighteen times nineteen plus one. Write thirteen as four times three plus one. Four copies of the cube contribute one modulo nineteen, leaving one additional factor of seven. The nonnegative remainder is therefore seven.",
+  "category": "math",
+  "scope": "New authored content, fixed before any model outcome."
+}

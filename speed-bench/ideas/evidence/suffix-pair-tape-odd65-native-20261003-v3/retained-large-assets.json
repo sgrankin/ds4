@@ -1,0 +1,498 @@
+{
+  "prepared_binaries": {
+    "baseline-probe": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/baseline-probe",
+      "bytes": 2691456,
+      "sha256": "03a7d301c9c53eab32bfe1cc8288c0f7df256fd39383b6f2fe3449e9fc9d15a4"
+    },
+    "new-probe": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/new-probe",
+      "bytes": 2709384,
+      "sha256": "dbbf2747e0dc423322b5f5b15b999cbdb03fe07980acfefa2409a2703da2ffc5"
+    }
+  },
+  "raw_vectors": {
+    "old-native-before": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-before.raw.bin",
+      "bytes": 9308256,
+      "sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+      "reference_rows": 18,
+      "candidate_rows": 0,
+      "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+      "candidate_sha256": null,
+      "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+      "teacher_ids": [
+        31375,
+        15248,
+        14,
+        399,
+        688,
+        110634,
+        1298,
+        16549,
+        3937,
+        302,
+        64937,
+        14908,
+        85190,
+        603,
+        48,
+        2666
+      ]
+    },
+    "new-native": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-native.raw.bin",
+      "bytes": 9308256,
+      "sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+      "reference_rows": 18,
+      "candidate_rows": 0,
+      "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+      "candidate_sha256": null,
+      "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+      "teacher_ids": [
+        31375,
+        15248,
+        14,
+        399,
+        688,
+        110634,
+        1298,
+        16549,
+        3937,
+        302,
+        64937,
+        14908,
+        85190,
+        603,
+        48,
+        2666
+      ]
+    },
+    "new-tape-native": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-tape-native.raw.bin",
+      "bytes": 9308256,
+      "sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+      "reference_rows": 18,
+      "candidate_rows": 0,
+      "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+      "candidate_sha256": null,
+      "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+      "teacher_ids": [
+        31375,
+        15248,
+        14,
+        399,
+        688,
+        110634,
+        1298,
+        16549,
+        3937,
+        302,
+        64937,
+        14908,
+        85190,
+        603,
+        48,
+        2666
+      ]
+    },
+    "odd65-reuse": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.raw.bin",
+      "bytes": 18099296,
+      "sha256": "dbe5746e1b7f78e682962d42d87224ffdb8e0f819255c3bbc7437e9e9be4c59a",
+      "reference_rows": 18,
+      "candidate_rows": 17,
+      "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+      "candidate_sha256": "c7efa63197fdc5825e2e24761e37b74a679db5bc3f3cfd5bec6d4613791c9aa5",
+      "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+      "teacher_ids": [
+        31375,
+        15248,
+        14,
+        399,
+        688,
+        110634,
+        1298,
+        16549,
+        3937,
+        302,
+        64937,
+        14908,
+        85190,
+        603,
+        48,
+        2666
+      ]
+    },
+    "old-native-after": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-after.raw.bin",
+      "bytes": 9308256,
+      "sha256": "cc05401675c4d12b0de9aadd955af4d76c27a9c8ab340193e5e4dc8030aef62e",
+      "reference_rows": 18,
+      "candidate_rows": 0,
+      "reference_sha256": "24e19b9f8d056498a7c74617d9e27c23ff99d78dccc0ee177885c1ec0918609c",
+      "candidate_sha256": null,
+      "teacher_token_hex": "8f7a0000903b00000e0000008f010000b00200002ab0010012050000a5400000610f00002e010000a9fd00003c3a0000c64c01005b020000300000006a0a0000",
+      "teacher_ids": [
+        31375,
+        15248,
+        14,
+        399,
+        688,
+        110634,
+        1298,
+        16549,
+        3937,
+        302,
+        64937,
+        14908,
+        85190,
+        603,
+        48,
+        2666
+      ]
+    }
+  },
+  "native_and_diagnostic_states": {
+    "old-native-before": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-before.source.state.bin",
+        "bytes": 24540988,
+        "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-before.fresh.state.bin",
+        "bytes": 24133176,
+        "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+      }
+    },
+    "new-native": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-native.source.state.bin",
+        "bytes": 24540988,
+        "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-native.fresh.state.bin",
+        "bytes": 24133176,
+        "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+      }
+    },
+    "new-tape-native": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-tape-native.source.state.bin",
+        "bytes": 24540988,
+        "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/new-tape-native.fresh.state.bin",
+        "bytes": 24133176,
+        "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+      }
+    },
+    "odd65-reuse": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.source.state.bin",
+        "bytes": 24540988,
+        "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.fresh.state.bin",
+        "bytes": 24133176,
+        "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+      },
+      ".private.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/odd65-reuse.private.state.bin",
+        "bytes": 24133176,
+        "sha256": "4c88ca3fddbf7e5a21c4ea2ba0a7011e197a57d83a69026d7db45d5f873279c5"
+      }
+    },
+    "old-native-after": {
+      ".source.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-after.source.state.bin",
+        "bytes": 24540988,
+        "sha256": "30076ebe0cd587b4b2f62c89cd5a9899c253ab6974b3137d80fd026dc3cc6ee2"
+      },
+      ".fresh.state.bin": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run/old-native-after.fresh.state.bin",
+        "bytes": 24133176,
+        "sha256": "33fbc9c20843e313b13ffd44cf24a50ef35cbdea8f67ea663be91092e2cee0df"
+      }
+    }
+  },
+  "frozen_inventory": {
+    "auxiliary-object-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/auxiliary-object-proof.json",
+      "bytes": 1240,
+      "sha256": "685cb308a501fb81867d806d00a8e3d60e69a3e7f855a9d3cc3cc5233a65e6bf"
+    },
+    "baseline-core-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/baseline-core-proof.json",
+      "bytes": 1351,
+      "sha256": "9fc7a478ede2feb21d1a15a71e09dc5aa6eb829463feb6acba51cb3e2ae24d3c"
+    },
+    "baseline-probe": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/baseline-probe",
+      "bytes": 2691456,
+      "sha256": "03a7d301c9c53eab32bfe1cc8288c0f7df256fd39383b6f2fe3449e9fc9d15a4"
+    },
+    "build-manifest.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/build-manifest.json",
+      "bytes": 3838,
+      "sha256": "5b0cc3d604ddbcce5af3b4b0f18a8cd1f9c5811cdf04c74e13f62a0d3a61afaa"
+    },
+    "corpus.txt": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/corpus.txt",
+      "bytes": 1329139,
+      "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f"
+    },
+    "final-link-cpu-proof.json": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/final-link-cpu-proof.json",
+      "bytes": 3755,
+      "sha256": "8f1851ce571267e9056e9673aa32d22c33b13cd7f3c39a4d1d5ea37b1305f0db"
+    },
+    "metal/argsort.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/argsort.metal",
+      "bytes": 11174,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "metal/bin.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/bin.metal",
+      "bytes": 6580,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "metal/concat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/concat.metal",
+      "bytes": 1932,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "metal/cpy.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/cpy.metal",
+      "bytes": 10154,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "metal/deepseek4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/deepseek4_vision.metal",
+      "bytes": 7815,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "metal/dense.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/dense.metal",
+      "bytes": 113439,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "metal/dsv41.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/dsv41.metal",
+      "bytes": 12508,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "metal/dsv4_hc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/dsv4_hc.metal",
+      "bytes": 63069,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "metal/dsv4_kv.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/dsv4_kv.metal",
+      "bytes": 22218,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "metal/dsv4_misc.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/dsv4_misc.metal",
+      "bytes": 282139,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "metal/dsv4_rope.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/dsv4_rope.metal",
+      "bytes": 35980,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "metal/flash_attn.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/flash_attn.metal",
+      "bytes": 61784,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "metal/get_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/get_rows.metal",
+      "bytes": 6976,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "metal/glm53_bf16.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/glm53_bf16.metal",
+      "bytes": 5466,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "metal/glm53_kda.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/glm53_kda.metal",
+      "bytes": 13116,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "metal/glm53_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/glm53_vision.metal",
+      "bytes": 11295,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "metal/glu.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/glu.metal",
+      "bytes": 2129,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "metal/moe.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/moe.metal",
+      "bytes": 423032,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "metal/norm.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/norm.metal",
+      "bytes": 14766,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "metal/qwen4.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/qwen4.metal",
+      "bytes": 232464,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "metal/qwen4_vision.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/qwen4_vision.metal",
+      "bytes": 7402,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "metal/repeat.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/repeat.metal",
+      "bytes": 1640,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "metal/set_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/set_rows.metal",
+      "bytes": 1909,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "metal/softmax.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/softmax.metal",
+      "bytes": 7679,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "metal/sum_rows.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/sum_rows.metal",
+      "bytes": 2737,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "metal/unary.metal": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/metal/unary.metal",
+      "bytes": 10104,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "new-probe": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/new-probe",
+      "bytes": 2709384,
+      "sha256": "dbbf2747e0dc423322b5f5b15b999cbdb03fe07980acfefa2409a2703da2ffc5"
+    },
+    "run_suffix_pair_tape_pilot.py": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/run_suffix_pair_tape_pilot.py",
+      "bytes": 16884,
+      "sha256": "46e85f153cd82e1dcab05699a5cb2dabfcc08f0eb0bde14557488450011f3a4a"
+    },
+    "source/ds4.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/source/ds4.c",
+      "bytes": 3926808,
+      "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05"
+    },
+    "source/ds4.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/source/ds4.h",
+      "bytes": 37885,
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631"
+    },
+    "source/ds4_suffix_pair_tape.h": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/source/ds4_suffix_pair_tape.h",
+      "bytes": 7139,
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0"
+    },
+    "source/speed-bench/suffix_pair_tape_bench.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/artifacts/suffix-pair-tape-odd65-prepared-20261003-v3/source/speed-bench/suffix_pair_tape_bench.c",
+      "bytes": 16455,
+      "sha256": "d1251e287d673a69b21585f0c72b84a5541afa465f8638aa471f1e7d9795e2b7"
+    }
+  },
+  "historical_untouched_inventory": {
+    "speed-bench/ideas/evidence/suffix-pair-tape-preparation-cpu-20261002-v2": {
+      "build-manifest-source-v2-unrun.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-preparation-cpu-20261002-v2/build-manifest-source-v2-unrun.json",
+        "bytes": 3421,
+        "sha256": "538f9bcd8341763b207a7bd2e91a16d17ab292da33df7fa7068c02c38db71b96"
+      },
+      "build-manifest.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-preparation-cpu-20261002-v2/build-manifest.json",
+        "bytes": 3838,
+        "sha256": "94b113ec1a01bde2f1ed79eff71e97b4927a0195ac00690ae60c11c82c623736"
+      },
+      "fixed-test.log": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-preparation-cpu-20261002-v2/fixed-test.log",
+        "bytes": 3885,
+        "sha256": "ae8c16a1fa9d6a39873d6471664b1f92b3102c47ee53fcce0b9d32c6be6c6329"
+      },
+      "index.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-preparation-cpu-20261002-v2/index.json",
+        "bytes": 532,
+        "sha256": "cfcde08c3feea24e44d5f152a3ac8af186c1518fdbf4e03a2e1205201972b16e"
+      },
+      "proof.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-preparation-cpu-20261002-v2/proof.json",
+        "bytes": 524,
+        "sha256": "c755967fc9749ff8e2d5b1fa2c2966e06b56df2c0e66f7ccd92e36981544d66b"
+      }
+    },
+    "speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3": {
+      "build-manifest-pre-executable-fix-unrun.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/build-manifest-pre-executable-fix-unrun.json",
+        "bytes": 3838,
+        "sha256": "94b113ec1a01bde2f1ed79eff71e97b4927a0195ac00690ae60c11c82c623736"
+      },
+      "build-manifest.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/build-manifest.json",
+        "bytes": 3838,
+        "sha256": "5b0cc3d604ddbcce5af3b4b0f18a8cd1f9c5811cdf04c74e13f62a0d3a61afaa"
+      },
+      "failed-v2-guard-result.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/failed-v2-guard-result.json",
+        "bytes": 52,
+        "sha256": "b076022cc211be498dbeb1a7498f758f025e2ecd2a3f5da6a7e1618ac31fc0e1"
+      },
+      "failed-v2-guarded-metadata-proof.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/failed-v2-guarded-metadata-proof.json",
+        "bytes": 344,
+        "sha256": "985aeeb9ae3a623351762a16eaaa5673245d38dcdd28832bc48303ca0258edae"
+      },
+      "failed-v2-launch.log": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/failed-v2-launch.log",
+        "bytes": 1912,
+        "sha256": "744ab15455078eef9935f5ae35c5e2bee6011e8797d0ca4e1780df1a805825cc"
+      },
+      "failed-v2-prepared-manifest.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/failed-v2-prepared-manifest.json",
+        "bytes": 6861,
+        "sha256": "fb1b0a842ba418be6aa04802ee445e589ea05fd5b7b542df46f1a5675e1b2a10"
+      },
+      "failed-v2-release.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/failed-v2-release.json",
+        "bytes": 453,
+        "sha256": "34315939d431debd0bcf61f558559fdd863f965b8f9082599329993548b6774b"
+      },
+      "fixed-test.log": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/fixed-test.log",
+        "bytes": 3977,
+        "sha256": "0b339285bbb47a2f2cacdcca8ea1a9aa59a1ab9703c0ae406c8296f529b6c75a"
+      },
+      "index.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/index.json",
+        "bytes": 541,
+        "sha256": "c4b8433d0970341bcfe1aad9c6148e4ec06e79a8b02b0503dadc0b067860722c"
+      },
+      "proof.json": {
+        "path": "/Volumes/Models/ds4/.workspaces/idea-suffix-pair-tape/speed-bench/ideas/evidence/suffix-pair-tape-executable-fix-20261003-v3/proof.json",
+        "bytes": 696,
+        "sha256": "4a4c610beecec000aa1118279c166d1504e361ddd97abae325f4477144bda746"
+      }
+    }
+  },
+  "all_large_files_retained_original": true,
+  "no_large_state_vector_binary_copies": true
+}

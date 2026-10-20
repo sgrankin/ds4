@@ -1,0 +1,47 @@
+[
+  {
+    "argv": [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "-isysroot",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+      "-O3",
+      "-g",
+      "-mcpu=native",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-function",
+      "-I/Volumes/Models/ds4/.workspaces/idea-thinking-hour4/source/source",
+      "-std=c11",
+      "-o",
+      "/Volumes/Models/ds4/.workspaces/idea-thinking-hour5-combined/build/practical-write-agent",
+      "/Volumes/Models/ds4/.workspaces/idea-thinking-hour4/build/practical_write_agent.o",
+      "/Volumes/Models/ds4/.workspaces/idea-resident-practical-tools/speed-bench/ideas/artifacts/practical-tools-source-prepared-20261003-v2/future-native-build/ds4_help.o",
+      "/Volumes/Models/ds4/.workspaces/idea-resident-practical-tools/speed-bench/ideas/artifacts/practical-tools-source-prepared-20261003-v2/future-native-build/ds4_prompt_prefix.o",
+      "/Volumes/Models/ds4/.workspaces/idea-resident-practical-tools/speed-bench/ideas/artifacts/practical-tools-source-prepared-20261003-v2/future-native-build/ds4_web.o",
+      "/Volumes/Models/ds4/.workspaces/idea-resident-practical-tools/speed-bench/ideas/artifacts/practical-tools-source-prepared-20261003-v2/future-native-build/ds4_kvstore.o",
+      "/Volumes/Models/ds4/.workspaces/idea-resident-practical-tools/speed-bench/ideas/artifacts/practical-tools-source-prepared-20261003-v2/future-native-build/linenoise.o",
+      "/Volumes/Models/ds4/.workspaces/idea-resident-practical-tools/speed-bench/ideas/artifacts/practical-tools-source-prepared-20261003-v2/future-native-build/ds4_gpu_args.o",
+      "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/new8a47.o",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o",
+      "/Volumes/Models/ds4/.workspaces/idea-resident-original-deadline-native/speed-bench/ideas/artifacts/original-deadline-admitted-direct-v1/ds4-metal-original-deadline-age8.o",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o",
+      "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o",
+      "-lm",
+      "-pthread",
+      "-framework",
+      "Foundation",
+      "-framework",
+      "Metal"
+    ],
+    "cwd": "/Volumes/Models/ds4/.workspaces/idea-thinking-hour5-combined",
+    "returncode": 0,
+    "seconds": 0.08802579199254978
+  },
+  {
+    "binary": "/Volumes/Models/ds4/.workspaces/idea-thinking-hour5-combined/build/practical-write-agent",
+    "sha256": "3c2c6cb731822cd020acf221bf18ada9b69c3c88324610635b122cccd7005b7d"
+  }
+]

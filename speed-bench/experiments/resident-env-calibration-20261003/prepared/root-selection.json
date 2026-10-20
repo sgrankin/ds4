@@ -1,0 +1,11 @@
+{
+  "status": "ROOT_FIXED_CALIBRATION_SELECTION",
+  "root_explicit_selection": true,
+  "calibration_manifest_sha256": "1b537cb53a217d25fd13ee5957b405955a9a0ae63da9e372dde23092ccfe7fcd",
+  "calibration_driver_sha256": "7184efeb16794d88f59f7f6fef5507d09c750189be708b8187d55895a5a0e8ff",
+  "calibration_summary_sha256": "8cc7abe5432263a42722a99bb5c33888de2ace6c1e9c6c28fefcdd1a7027002e",
+  "calibration_decision_sha256": "0d23bd126c9391d53ac9d05f65bfa6b10ddbef8fc3ba6179b6becb23e0c7eb5d",
+  "calibration_release_sha256": "01822321357fef03caed40f8f187984164299ed17f7017839b8529f3fb45698f",
+  "selected_policy": "anchor-affinity3",
+  "time": 1790999100.4516969
+}

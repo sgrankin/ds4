@@ -1,0 +1,52 @@
+{
+  "start_utc": "2026-10-04 21:19:00 UTC",
+  "deadline_utc": "2026-10-04 22:14:00 UTC",
+  "budget_note": "5 minutes earlier source fixture/range preparation charged",
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "arms": [
+    "native-before",
+    "reuse",
+    "native-after if budget permits"
+  ],
+  "one_change": "Conversations suffix reuse off/on/off across eight actual public item deletions in one Conversation",
+  "fixed": "B inventory231/archive57..64; GAP0/hot0/SSD4096/Q2cache64/batch2/ctx8192/chunk512/tile64limit1024/temp0/noeffort/cap128; PAD1; canonical1 excludes Conversation references",
+  "qualification": "9 actual reads/replies, 8 deletions, current code each round, restart after edit4; no second Conversation warm cache; source approximation only credited from actual logs",
+  "measurement_finished_utc": "2026-10-04 21:54:11 UTC",
+  "guards": {
+    "native-before": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 812,
+      "bad_samples": 0,
+      "swap_first_gib": 0.018125,
+      "swap_last_gib": 0.021787109375,
+      "peak_wired_compressor_gib": 87.47348022460938
+    },
+    "reuse": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 340,
+      "bad_samples": 0,
+      "swap_first_gib": 0.021787109375,
+      "swap_last_gib": 0.021787109375,
+      "peak_wired_compressor_gib": 84.83479309082031
+    },
+    "native-after": {
+      "result": {
+        "status": "complete",
+        "child_returncode": 0
+      },
+      "samples": 811,
+      "bad_samples": 0,
+      "swap_first_gib": 0.021787109375,
+      "swap_last_gib": 0.021787109375,
+      "peak_wired_compressor_gib": 87.79121398925781
+    }
+  },
+  "report_finished_utc": "2026-10-04 21:58:00 UTC"
+}

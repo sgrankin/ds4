@@ -1,0 +1,19 @@
+{
+  "returncode": 1,
+  "error": null,
+  "seconds": 36.64100449997932,
+  "checks": {
+    "four_turns_complete": false,
+    "original_obsolete_turn_removed": false,
+    "audit_log_not_copied_back": true,
+    "retained_ids_stable": false,
+    "verbatim_archive_present": false,
+    "fresh_archive_answer": false,
+    "one_context_edit": false,
+    "no_pressure_compaction": true,
+    "no_edit_rejection": true
+  },
+  "answer": null,
+  "first_attempt": true,
+  "pass": false
+}

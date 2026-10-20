@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-workflow-hour12-20261004/launch.py",
+    "--mode",
+    "reuse",
+    "--fresh",
+    "256",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/http/tail256",
+    "--cache",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-http-cache-tail256",
+    "--shared",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "mode": "reuse",
+  "fresh_tail_lower_bound": 256
+}

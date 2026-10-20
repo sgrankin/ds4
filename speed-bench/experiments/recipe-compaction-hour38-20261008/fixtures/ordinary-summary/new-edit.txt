@@ -1,0 +1,1 @@
+Summary of earlier discussion: keep a small pure function, preserve caller inputs and original order, use exact arithmetic, and follow the retained current contract. Sorting, normalization, extra state, I/O, and sample-answer special cases were rejected. Archived source retains the detailed discussion.

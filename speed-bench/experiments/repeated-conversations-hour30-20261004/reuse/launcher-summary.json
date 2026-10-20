@@ -1,0 +1,38 @@
+{
+  "mode": "reuse",
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "ssd_mb": 4096,
+  "arm": "reuse",
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/repeated-conversations-hour30-20261004/run.py",
+  "seconds": 278.5585144580109,
+  "phases": [
+    {
+      "phase": "before",
+      "returncode": 0,
+      "seconds": 158.81507941702148,
+      "startup_seconds": 0.4263159580004867,
+      "client_seconds": 156.944914666994,
+      "shutdown_seconds": 1.4429440000094473,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "after",
+      "returncode": 0,
+      "seconds": 119.73943091600086,
+      "startup_seconds": 0.4244662500277627,
+      "client_seconds": 117.83570520902867,
+      "shutdown_seconds": 1.4788385000138078,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "shared": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-cache-reuse",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat30-store-reuse",
+  "timeout_seconds": 1200.0
+}

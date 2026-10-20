@@ -1,0 +1,41 @@
+{
+  "argv": [
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-build-20261002/suffix_fact_oracle",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "--fixtures",
+    "/Volumes/Models/ds4/.workspaces/idea-context/speed-bench/experiments/suffix-reuse-20261002/semantic-fixtures",
+    "--case",
+    "secret",
+    "--out",
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-semantic-secret-c512-t64",
+    "--prefix",
+    "1024",
+    "--edit",
+    "256",
+    "--unchanged",
+    "512",
+    "--fresh-tail",
+    "64",
+    "--greedy",
+    "16",
+    "--ctx",
+    "4096",
+    "--chunk",
+    "256",
+    "--cache-gb",
+    "64"
+  ],
+  "initial": {
+    "time": 1790971959.8899698,
+    "level": 1,
+    "swap_gb": 0.024599609375,
+    "physical_gb": 128.0,
+    "free_gb": 57.649200439453125,
+    "file_backed_gb": 53.95587158203125,
+    "wired_gb": 4.0898895263671875,
+    "compressor_gb": 6.638641357421875
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

@@ -1,0 +1,3 @@
+List every pair of nonnegative integers [a,b] satisfying 7a+11b=119. Sort pairs by a ascending. Report solutions rather than only a count.
+Literal input JSON: {"a_coefficient": 7, "b_coefficient": 11, "total": 119}
+Return the requested JSON first, then explain the specific reasoning.

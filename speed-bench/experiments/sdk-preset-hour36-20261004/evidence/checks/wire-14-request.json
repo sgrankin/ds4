@@ -1,0 +1,69 @@
+{
+  "url": "http://127.0.0.1:58475/v1/responses",
+  "method": "POST",
+  "body": {
+    "model": "deepseek-v4.1-flash",
+    "input": [
+      {
+        "role": "developer",
+        "content": "Use the read tool for the requested file. After receiving the result, output only the answer field."
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_text",
+            "text": "Read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/sdk36-first/checks/pi-config.json with read(path, whole=true, raw=true). After the read result, reply with only the answer field, without quotes or commentary."
+          }
+        ]
+      },
+      {
+        "type": "function_call",
+        "id": "fc_fb9b1c219f094e1a52dd26c7",
+        "call_id": "call_b23d3477c67c916faddd9eaf252b12c5",
+        "name": "read",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/sdk36-first/checks/pi-config.json\",\"whole\":true,\"raw\":true}"
+      },
+      {
+        "type": "function_call_output",
+        "call_id": "call_b23d3477c67c916faddd9eaf252b12c5",
+        "output": "{\"answer\":\"COVE-42\"}\n"
+      }
+    ],
+    "stream": true,
+    "prompt_cache_key": "hour17-pi-read",
+    "store": false,
+    "max_output_tokens": 256,
+    "temperature": 0,
+    "tools": [
+      {
+        "type": "function",
+        "name": "read",
+        "description": "Read the complete owned configuration file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "whole": {
+              "type": "boolean"
+            },
+            "raw": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "path",
+            "whole",
+            "raw"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "reasoning": {
+      "effort": "none"
+    }
+  }
+}

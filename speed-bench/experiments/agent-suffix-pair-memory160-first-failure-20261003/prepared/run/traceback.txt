@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/run_agent_suffix_pair_actual_memory160.py", line 278, in drive
+    else:checked=checker(records,work_deadline)
+                 ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/run_agent_suffix_pair_actual_memory160.py", line 319, in checker
+    selection=validate_selection(private,task);audit=audit_calls(records,project);structural=structural_trace(trace,selection['selection']);updated=json.loads((private/'update-result.json').read_text())
+                                                     ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/run_agent_suffix_pair_actual_memory160.py", line 213, in audit_calls
+    if len(third[0]['calls'])!=1 or first['name']!='bash' or shlex.split(args.get('command','')) not in allowed:raise ControlFailure('First tool was not the single frozen updater invocation')
+                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ControlFailure: First tool was not the single frozen updater invocation

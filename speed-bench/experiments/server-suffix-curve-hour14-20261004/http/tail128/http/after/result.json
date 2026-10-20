@@ -1,0 +1,179 @@
+{
+  "phase": "after",
+  "mode": "reuse",
+  "steps": [
+    {
+      "step": "A-edit2",
+      "session": "A",
+      "seconds": 28.740609540996957,
+      "text": "{\"active_total\":416,\"archived_code\":\"RIVER-74\"}",
+      "answer": {
+        "active_total": 416,
+        "archived_code": "RIVER-74"
+      },
+      "gold": {
+        "active_total": 416,
+        "archived_code": "RIVER-74"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_b800efa532d9e30da8508230e7850025",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+          "text": "{\n  \"archived_code\": \"RIVER-74\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+      "replies": [
+        {
+          "seconds": 27.176536583996494,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1382,
+            "input_tokens_details": {
+              "cached_tokens": 841,
+              "cache_write_tokens": 541
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1475
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.5628179580089636,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1500,
+            "input_tokens_details": {
+              "cached_tokens": 1475,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 15,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1515
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1004 10:35:44 ds4-server: suffix APPROXIMATE slot=0 reused=841 fresh=231 graft_fresh=103 source=812:1653 destination=310:1151 latest_user_start=1286 pre_rope=1 source_ssd=1 source_approximate=1 18648.722 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 28.741137332996004,
+      "edit_seconds": 0.00017708299856167287
+    },
+    {
+      "step": "B-edit2",
+      "session": "B",
+      "seconds": 43.238328999999794,
+      "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}",
+      "answer": {
+        "active_total": 202,
+        "archived_code": "CEDAR-92"
+      },
+      "gold": {
+        "active_total": 202,
+        "archived_code": "CEDAR-92"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_f317e5d1ed06fa401599c4babcf8e361",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+          "text": "{\n  \"archived_code\": \"CEDAR-92\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+      "replies": [
+        {
+          "seconds": 41.56237170800159,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1385,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1385
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1478
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.6749032500083558,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1503,
+            "input_tokens_details": {
+              "cached_tokens": 1478,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1521
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1004 10:35:54 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 43.23907708300976,
+      "edit_seconds": 0.0001871249987743795
+    }
+  ],
+  "edits": [
+    {
+      "removed_bytes": 2469,
+      "remaining_blocks": 0,
+      "session": "A",
+      "seconds": 0.00017708299856167287
+    },
+    {
+      "removed_bytes": 2469,
+      "remaining_blocks": 0,
+      "session": "B",
+      "seconds": 0.0001871249987743795
+    }
+  ],
+  "seconds": 71.98118512499786,
+  "source_warmup_seconds": 0,
+  "edited_seconds": 71.98021441600577,
+  "suffix_grafts_observed": 1,
+  "approximate_ssd_sources_observed": 1,
+  "pass": true,
+  "restart_owned_by_ROOT": true
+}

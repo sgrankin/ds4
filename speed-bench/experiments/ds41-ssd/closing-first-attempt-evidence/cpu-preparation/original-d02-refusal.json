@@ -1,0 +1,14 @@
+{
+  "preserved_source_commit": "d02ab023a7eab835d404c3ef5e0bfc684787e94e",
+  "attempted_command": [
+    "python3",
+    "speed-bench/ideas/analyze_closing_first_attempt.py",
+    "--archive",
+    "speed-bench/ideas/artifacts/closing-first-attempt-completed-20261003-v1"
+  ],
+  "returncode": 1,
+  "gate_error": "ValueError: Original guard returncode differs",
+  "pilot_outcome_read": false,
+  "output_directory_created": false,
+  "actual_metadata_fixture_sha256": "be83bdbdb1f01072b33a2242e3a2c146a1e01c98ee3f9d684162618d53a160d2"
+}

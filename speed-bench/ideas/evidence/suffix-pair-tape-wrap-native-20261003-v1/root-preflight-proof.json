@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "case": "wrap-odd-chunk",
+  "manifest_sha256": "c61e486365a4feadd97dac67518a6e1f5eff4cc29cb331d31c8b8c058b427342",
+  "command_sha256": "5d7d6cee669d9ed8d51f2ac5f8bd4bca575e169dfae63344866ee770b9cac735",
+  "verified_nonmodel_assets": 38,
+  "model_metadata_touched": false,
+  "model_opened": false,
+  "guard_called": false,
+  "sole_model_grant": false
+}

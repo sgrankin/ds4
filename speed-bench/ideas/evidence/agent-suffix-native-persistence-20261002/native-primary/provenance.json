@@ -1,0 +1,13 @@
+{
+  "binary_sha256": "5942e2f928f703af288919e7c130c5677c6e094b0568bbf069e4f8a91f5663ad",
+  "updater_sha256": "40c099cf48ba4dee4caeb103949754a305390955bf951dec7df1709cf6a8b335",
+  "turns_sha256": "efb76b410a1cf59c502edda543beef527a010ea58f1aede536ca1c2f38b7d5bd",
+  "model_stat": {
+    "bytes": 365713686528,
+    "mtime_ns": 1789237692837653163
+  },
+  "private_frontend_source_sha256": "2a47a3e1b8b3dabcd742a2d3e1357b6cdc057007892fe7f6ce68c3c43ae15e3a",
+  "private_runner_sha256": "12b4ea7f4abf965cb3b328c2e01810a11c6f95324eb62a41f55a9723ff665406",
+  "production_runner_sha256": "5a325c7390ec7b2d22cee5a01e77ade9b48a43dbca9ef0340a6ccf82f0fd6407",
+  "optional_reopen": false
+}

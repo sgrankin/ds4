@@ -1,0 +1,19 @@
+We need answer count paths from (0,0) to (7,7) with steps R,U, never y>x (i.e., stay below/on diagonal y=x? Starting (0,0) y=x. Condition never y>x means y <= x at all points. Since steps right increases x, up increases y. Paths from (0,0) to (7,7) staying y<=x. This is Catalan number? Number of paths from (0,0) to (n,n) with y<=x is Catalan C_n = 1/(n+1) binom(2n,n). For n=7 C_7=429. Need exclude paths passing through (2,2) or (4,4). Since y<=x, points (2,2) and (4,4) lie on diagonal. Need count paths avoiding both.
+
+We can use inclusion-exclusion. Total valid = C_7 = 429.
+
+Let A = paths through (2,2). B = paths through (4,4). Need count total - |A ∪ B| = total - |A| - |B| + |A∩B|.
+
+Need compute for paths staying y<=x from (0,0) to (7,7), passing through (k,k). Since (k,k) on diagonal, path must stay y<=x. It can be decomposed into from (0,0) to (k,k) staying y<=x, and from (k,k) to (7,7) staying y<=x? Need check condition globally. If at (k,k), then for first segment y<=x. For second segment, starting at (k,k), need y<=x for remaining. Translate coordinates: let x'=x-k, y'=y-k. Condition y<=x becomes y'+k <= x'+k => y'<=x'. So second segment is also a path from (0,0) to (7-k,7-k) staying y<=x. Thus number through (k,k) = C_k * C_{7-k}. Because independent? Yes, any concatenation of two valid paths remains valid: at intermediate (k,k) on diagonal, no violation. So |A| = C_2 * C_5. C_2=2, C_5=42. Product=84. |B| = C_4 * C_3. C_4=14, C_3=5. Product=70.
+
+|A∩B| = paths through both (2,2) and (4,4). Since (2,2) before (4,4) along path? Need go from (0,0) to (7,7), if passes both, must pass (2,2) then (4,4) because x,y increase. Decompose into three segments: (0,0)->(2,2): C_2=2. (2,2)->(4,4): difference (2,2), staying y<=x relative: C_2=2. (4,4)->(7,7): difference (3,3), C_3=5. Product=2*2*5=20. Check if any path through (4,4) then (2,2) impossible due monotonic. So intersection=20.
+
+Thus valid avoiding both = 429 - 84 - 70 + 20 = 295. Need ensure no other constraints? "never have y>x" means y <= x. Starting (0,0) okay. Ending (7,7) okay. Yes.
+
+But let's double-check Catalan values: C_0=1, C_1=1, C_2=2, C_3=5, C_4=14, C_5=42, C_6=132, C_7=429. Products: C_2*C_5=2*42=84. C_4*C_3=14*5=70. Intersection C_2*C_2*C_3=2*2*5=20. Total=429-84-70+20=295.
+
+Need final only integer. But let's consider if "do not pass through either (2,2) or (4,4)" means not pass through both? "either" usually means neither. So exclude both. Yes.
+
+Let's also consider if paths that pass through (2,2) but not (4,4) etc. Inclusion-exclusion correct.
+
+Let's test via alternative DP maybe. Total valid 429. Paths through (2,2) = C_2*C_5=84. Paths through (4,4)=C_4*C_3=70. Paths through both= C_2*C_2*C_3=20. So avoiding both = 429 -

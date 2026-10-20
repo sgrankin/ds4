@@ -1,0 +1,7 @@
+{
+  "status": "ROOT_INSPECTION_REFUSAL_RETAINED",
+  "error": "ROOT initially interpreted selected IDs word0 as count; actual immutable caller/controller format has16-byte magic/version/count/user header",
+  "all_archive_and_shared_bytes_checks_before_refusal_passed": true,
+  "no_archive_attestation_or_model_grant_issued_on_refusal": true,
+  "correction": "Independent parse now checks literal0x41535031/version1/count/user128803/all opaque IDs and exact extent; no producer/source/output edits"
+}

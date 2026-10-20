@@ -1,0 +1,8 @@
+{
+  "observed_grafts": 2,
+  "grafts": [
+    "1004 10:05:50 ds4-server: suffix APPROXIMATE slot=0 reused=531 fresh=200 graft_fresh=72 source=286:817 destination=268:799 latest_user_start=984 pre_rope=1 source_ssd=1 source_approximate=1 16963.588 ms",
+    "1004 10:05:59 ds4-server: suffix APPROXIMATE slot=1 reused=549 fresh=222 graft_fresh=94 source=268:817 destination=54:603 latest_user_start=796 pre_rope=1 source_ssd=1 source_approximate=1 4063.864 ms"
+  ],
+  "interpretation": "Activation is separate from protocol and task results; fallback is retained."
+}

@@ -1,0 +1,1 @@
+Implement the retained contract now. Return only plain Python code, without markdown, explanation, or tools.

@@ -1,0 +1,19 @@
+{
+  "scope": "Diagnostic extraction of one enclosing Markdown fence; original first output and raw format failure retained; no model retry",
+  "command": [
+    "/opt/homebrew/bin/python3",
+    "-B",
+    "speed-bench/experiments/fresh-clm-coding-hour32-20261004/practical/grade.py",
+    "dedupe",
+    "/Volumes/Models/ds4/speed-bench/experiments/recipe-rightshift-hour39-20261008/screen-insertion64/reuse-code-unfenced.py"
+  ],
+  "returncode": 0,
+  "grade": {
+    "correct": true,
+    "tests": 161,
+    "passed": 161,
+    "failed": 0,
+    "first_failure": null
+  },
+  "stderr": ""
+}

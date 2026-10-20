@@ -1,0 +1,66 @@
+{
+  "start_utc": "2026-10-04 20:04:00 UTC",
+  "budget_note": "10 minutes prior fixed-caller/launcher/method preparation charged",
+  "runtime_revision": "91c9cf212d2e6a35ae558d1c96f37607becbde3f",
+  "server_sha256": "3164ce823a9bcbef6ca19209cf27f7cf992aa0e8954c943c73d134e571dcd6c9",
+  "caller": "byte-identical to repaired Item27 run.py; existing161 first-write grader",
+  "arms": [
+    "native-before",
+    "subs3",
+    "subs1",
+    "native-after"
+  ],
+  "fixed": "suffix64/canonical1/PAD1/hot0SSD4096/full-input/storefalse/stable instructions+tools/high READ0 WRITE128 FINAL1/global2048/temp0/Q2cache64/batch2/ctx8192/chunk512/tile64limit1024",
+  "one_change": "native GAP0/nativeweights0 versus strong GAP.90 mass.25 rank64 subs3 totalmass.50 replace/nativeweights1",
+  "source_profile": "own cold cache/store per arm; same actual routing profile through ledger warm/CLM edit and restart then LRU warm/CLM edit",
+  "restart_scope": "between completed tasks, not pending-source SSD recovery",
+  "deadline_utc": "2026-10-04 20:54:00 UTC",
+  "bounded_subs1_decision_utc": "2026-10-04 20:13:00 UTC",
+  "grader_iter_fix": {
+    "reason": "normal builtin iter absent from execution scope despite permitted builtins-only task",
+    "change": "append iter to existing SAFE_NAMES execution scope only",
+    "gold_fixtures_checks_and_code_unchanged": true,
+    "original_failures_retained": true,
+    "saved_regrades": {
+      "native-before-ledger": {
+        "returncode": 0,
+        "correct": true,
+        "tests": 161
+      },
+      "native-before-lru": {
+        "returncode": 0,
+        "correct": true,
+        "tests": 161
+      },
+      "subs3-ledger": {
+        "returncode": 0,
+        "correct": true,
+        "tests": 161
+      },
+      "subs3-lru": {
+        "returncode": 0,
+        "correct": true,
+        "tests": 161
+      }
+    }
+  },
+  "measurement_finished_utc": "2026-10-04 20:22:34 UTC",
+  "guards": {
+    "native-before": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "subs3": {
+      "status": "complete",
+      "child_returncode": 3
+    },
+    "subs1": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "native-after": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  }
+}

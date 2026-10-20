@@ -1,0 +1,28 @@
+{
+  "source_commit": "7008afd6449a",
+  "binary_sha256": "287d38cc23f72211707e916557f4285a09df2a4831107367529cff03113444df",
+  "runner_sha256": "5a325c7390ec7b2d22cee5a01e77ade9b48a43dbca9ef0340a6ccf82f0fd6407",
+  "native_agent_semantic_and_reuse_checks_pass": true,
+  "frozen_runner_returncode": 3,
+  "frozen_runner_pass": false,
+  "native_persistence": "not exercised: non-interactive EOF does not request a save; runner expected an unrequested save",
+  "persistence_cpu_validation": "sanitizer/mock save/reopen verified zero-KV format and fresh exact reload",
+  "root_artifact_directory": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-native",
+  "root_guard_directory": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-native-guard",
+  "pressure": {
+    "samples": 208,
+    "levels": [
+      1
+    ],
+    "bad_samples": 0,
+    "swap_growth_gb": 0.0,
+    "max_wired_gb": 73.75285339355469,
+    "max_compressor_gb": 8.647491455078125,
+    "min_free_gb": 0.1116485595703125
+  },
+  "raw_file_sha256": {
+    "agent.trace": "8acf59b747f65c7d534dd8eb0a5881029cbe22b4604acc39eab7947acc880f12",
+    "context.txt": "64a48573e9815bfb8700cb88882383abb2b4e747ba85fc4421030e29920f82de",
+    "result.json": "b9b09756ebdaf24d3de111272d1ddf026bb2dc4158eec3b650e10f1b77cf4d2c"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status": "REFUSED_BEFORE_FREEZE",
+  "kind": "administrative_verifier_symlink_type",
+  "message": "is_file follows the deliberately rejected CPU foreign-symlink; jj file show is for regular files and refused that path. Runtime/source/prepared plan unchanged. Corrected verifier must pin symlink literal link text/mode separately.",
+  "path": "speed-bench/ideas/artifacts/math16-budget-cpu-fixtures-1790999127527003000/foreign-symlink",
+  "prior_regular_files_checked_approximately": 2500,
+  "model_or_metadata_or_helper_or_guard_or_build_executed": false
+}

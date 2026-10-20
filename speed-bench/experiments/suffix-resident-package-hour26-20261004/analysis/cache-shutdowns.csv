@@ -1,0 +1,7 @@
+hot_bytes,ssd_bytes,metadata_bytes,endpoints,chunks,pinned_endpoints,hot_reads,disk_reads,endpoint_evictions,arm,phase,configured_hot_mb,configured_hot_bytes,hot_bytes_within_configured_cap
+0,508137840,396067,42,1847,0,0,165,0,native-before,before,0,0,True
+0,639806856,475465,48,2333,0,0,165,0,native-before,after,0,0,True
+0,508151985,396162,42,1848,0,0,165,0,subs3,before,0,0,True
+0,639821001,475560,48,2334,0,0,165,0,subs3,after,0,0,True
+0,508151985,396162,42,1848,0,0,165,0,native-after,before,0,0,True
+0,639821001,475560,48,2334,0,0,165,0,native-after,after,0,0,True

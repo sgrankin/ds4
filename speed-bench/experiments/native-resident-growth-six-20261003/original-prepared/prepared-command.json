@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/prepare_native_resident_growth_six.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1",
+    "--root-granted",
+    "--cpu-timing-frozen"
+  ],
+  "launch_authorized": false,
+  "manifest_sha256": "a8fd08c721e8ff7f657f4297cc65e112c376c90ec31d7073d2e9369e547049f8",
+  "requires_root_grant_and_explicit_cpu_freeze": true
+}

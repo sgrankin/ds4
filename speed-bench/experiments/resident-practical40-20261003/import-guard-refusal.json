@@ -1,0 +1,10 @@
+{
+  "status": "FIRST_EXACT_FILE_IMPORT_GUARD_REFUSAL_PRESERVED",
+  "returncode": 1,
+  "tool_chunk": "c449fc",
+  "reason": "Normal snapshot included intentional ROOT PythonOSdiagnostic alongside five compact files; exact-only guard refused before describe/new.",
+  "ROOT_authorized_correction": "Split only five compact files before existing @, preserving ROOT diagnostic bytes and change identity; then split only own publication proofs.",
+  "unrelated_ROOT_file_not_committed_in_Practical40": "speed-bench/ideas/evidence/python-framework-os-identity-diagnostic-20261003-v1.json",
+  "production_runtime_unchanged": true,
+  "auditor_or_grader_or_native_execution": false
+}

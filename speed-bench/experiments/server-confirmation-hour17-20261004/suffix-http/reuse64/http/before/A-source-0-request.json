@@ -1,0 +1,46 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "instructions": "Follow the newest request. Use the read tool for advertised files. Never guess a file's current content from an earlier answer. Active inventory tool results remain authoritative after obsolete dispatch notes are removed.",
+  "input": [
+    {
+      "role": "user",
+      "content": "These two marked dispatch spans are obsolete notes; their labels will move to the archive file.\n[OBSOLETE_DISPATCH_NOTE_BEGIN]\nObsolete dispatch label: BEACON-46.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n[OBSOLETE_DISPATCH_NOTE_END]\n[OBSOLETE_DISPATCH_NOTE_BEGIN]\nObsolete dispatch label: BEACON-46.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\nold shipment note checked.\n[OBSOLETE_DISPATCH_NOTE_END]\nRead /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared/A/active.json once using read with whole=true and raw=true. Retain the inventory numbers and complete unchanged tool result. Then reply READY only."
+    }
+  ],
+  "prompt_cache_key": "ds4-hour17-confirmation-A",
+  "store": false,
+  "stream": false,
+  "temperature": 0,
+  "seed": 20261004,
+  "max_output_tokens": 128,
+  "reasoning": {
+    "effort": "none"
+  },
+  "tools": [
+    {
+      "type": "function",
+      "name": "read",
+      "description": "Read one advertised JSON file in full.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "whole": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "whole",
+          "raw"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

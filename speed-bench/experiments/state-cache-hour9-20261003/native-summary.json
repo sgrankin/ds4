@@ -1,0 +1,39 @@
+{
+  "rows": 12,
+  "all_invariants_pass": true,
+  "full_blob_bytes": 66666373,
+  "shared_ssd_bytes": 53564181,
+  "dedup_percent": 19.65337457311499,
+  "points": [
+    {
+      "hot_limit_mib": 0.0,
+      "cold_mean_ms": 81.446,
+      "warm_mean_ms": 79.446,
+      "hot_bytes": 0,
+      "ssd_bytes": 53564181,
+      "put_ms": 199.039,
+      "hot_reads": 0,
+      "disk_reads": 404
+    },
+    {
+      "hot_limit_mib": 1.0,
+      "cold_mean_ms": 78.648,
+      "warm_mean_ms": 77.495,
+      "hot_bytes": 1038149,
+      "ssd_bytes": 53564181,
+      "put_ms": 191.786,
+      "hot_reads": 3,
+      "disk_reads": 401
+    },
+    {
+      "hot_limit_mib": 64.0,
+      "cold_mean_ms": 64.358,
+      "warm_mean_ms": 0.6000000000000001,
+      "hot_bytes": 53550981,
+      "ssd_bytes": 53564181,
+      "put_ms": 191.692,
+      "hot_reads": 211,
+      "disk_reads": 193
+    }
+  ]
+}

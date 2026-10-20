@@ -1,0 +1,542 @@
+[
+  {
+    "variant": "A",
+    "process_wall_ms": 109744.25658400105,
+    "logits_sha256": "2fc84e4de8d80d2b11d78d4a666d881adf277082dedf69b84106369bac134608",
+    "snapshot_sha256": "a5258dce8d307c58b9580687b5849c1a5c9e3c92b45ef26c6c6dfe037bd8cfab",
+    "logits_bytes": 3619840,
+    "snapshot_bytes": 28078040,
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 64713.238,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3627.149,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4373.588,
+        "first_decode_ms": 60.714
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 16233.215,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4409.845,
+        "first_decode_ms": 135.644
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2627.258,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9655.287,
+        "first_decode_ms": 53.475
+      }
+    ],
+    "profiles": {
+      "cache": [
+        {
+          "budget": 6136,
+          "entries": 6136,
+          "expert": 9.49,
+          "target": 56.88,
+          "live": 56.88,
+          "hits": 127486,
+          "misses": 24314,
+          "hit_rate": 0.84,
+          "wraps": 72942,
+          "evictions": 18178,
+          "buffer_allocs": 15,
+          "buffer_reuses": 18178,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 83.98,
+          "pread_ms": 4132.239
+        }
+      ],
+      "pending": [],
+      "timing": [],
+      "resident_route": [],
+      "route_phase": [],
+      "io_phase": [],
+      "cache_phase": [
+        {
+          "phase": 0,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 1,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 2,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 3,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 4,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 5,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 6,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        }
+      ]
+    },
+    "startup_prefill_ms": 64713.238,
+    "append_prefill_ms": 22487.622,
+    "decode_ms": 18438.72,
+    "model_ms": 105639.58,
+    "turn_model_ms": 40926.342000000004
+  },
+  {
+    "variant": "B",
+    "process_wall_ms": 87167.81258400079,
+    "logits_sha256": "f91a39503f60233d633b08586229fb1b2e18958e60632efaec9d742ab977e652",
+    "snapshot_sha256": "f71f06ea4d72e4329eb7c67a4ba462b284d21352756f8ec50022ec8c9276f2b0",
+    "logits_bytes": 3619840,
+    "snapshot_bytes": 28078040,
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 53314.93,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 2263.131,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3914.585,
+        "first_decode_ms": 73.984
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9104.971,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 3848.654,
+        "first_decode_ms": 63.203
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2220.492,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9794.782,
+        "first_decode_ms": 67.934
+      }
+    ],
+    "profiles": {
+      "cache": [
+        {
+          "budget": 7862,
+          "entries": 7862,
+          "expert": 9.49,
+          "target": 72.88,
+          "live": 72.88,
+          "hits": 384160,
+          "misses": 25344,
+          "hit_rate": 0.938,
+          "wraps": 76032,
+          "evictions": 17482,
+          "buffer_allocs": 19,
+          "buffer_reuses": 17482,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 138.99,
+          "pread_ms": 7551.888
+        }
+      ],
+      "pending": [],
+      "timing": [],
+      "resident_route": [],
+      "route_phase": [],
+      "io_phase": [],
+      "cache_phase": [
+        {
+          "phase": 0,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 1,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 2,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 3,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 4,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 5,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 6,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        }
+      ]
+    },
+    "startup_prefill_ms": 53314.93,
+    "append_prefill_ms": 13588.594,
+    "decode_ms": 17558.021,
+    "model_ms": 84461.545,
+    "turn_model_ms": 31146.614999999998
+  },
+  {
+    "variant": "B",
+    "process_wall_ms": 86127.38999999965,
+    "logits_sha256": "f91a39503f60233d633b08586229fb1b2e18958e60632efaec9d742ab977e652",
+    "snapshot_sha256": "f71f06ea4d72e4329eb7c67a4ba462b284d21352756f8ec50022ec8c9276f2b0",
+    "logits_bytes": 3619840,
+    "snapshot_bytes": 28078040,
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 52609.198,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 2489.004,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3909.166,
+        "first_decode_ms": 76.201
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 8924.283,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 3816.026,
+        "first_decode_ms": 58.243
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2195.032,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9662.573,
+        "first_decode_ms": 69.174
+      }
+    ],
+    "profiles": {
+      "cache": [
+        {
+          "budget": 7862,
+          "entries": 7862,
+          "expert": 9.49,
+          "target": 72.88,
+          "live": 72.88,
+          "hits": 384160,
+          "misses": 25344,
+          "hit_rate": 0.938,
+          "wraps": 76032,
+          "evictions": 17482,
+          "buffer_allocs": 19,
+          "buffer_reuses": 17482,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 138.99,
+          "pread_ms": 7586.74
+        }
+      ],
+      "pending": [],
+      "timing": [],
+      "resident_route": [],
+      "route_phase": [],
+      "io_phase": [],
+      "cache_phase": [
+        {
+          "phase": 0,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 1,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 2,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 3,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 4,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 5,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        },
+        {
+          "phase": 6,
+          "configured_slots": 7862,
+          "resident_entries": 7862
+        }
+      ]
+    },
+    "startup_prefill_ms": 52609.198,
+    "append_prefill_ms": 13608.319,
+    "decode_ms": 17387.765,
+    "model_ms": 83605.28199999999,
+    "turn_model_ms": 30996.084
+  },
+  {
+    "variant": "A",
+    "process_wall_ms": 104169.63879099967,
+    "logits_sha256": "2fc84e4de8d80d2b11d78d4a666d881adf277082dedf69b84106369bac134608",
+    "snapshot_sha256": "a5258dce8d307c58b9580687b5849c1a5c9e3c92b45ef26c6c6dfe037bd8cfab",
+    "logits_bytes": 3619840,
+    "snapshot_bytes": 28078040,
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 61397.656,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3599.764,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4365.919,
+        "first_decode_ms": 62.516
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 16034.187,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4417.73,
+        "first_decode_ms": 152.531
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2657.704,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 9797.761,
+        "first_decode_ms": 56.429
+      }
+    ],
+    "profiles": {
+      "cache": [
+        {
+          "budget": 6136,
+          "entries": 6136,
+          "expert": 9.49,
+          "target": 56.88,
+          "live": 56.88,
+          "hits": 127486,
+          "misses": 24314,
+          "hit_rate": 0.84,
+          "wraps": 72942,
+          "evictions": 18178,
+          "buffer_allocs": 15,
+          "buffer_reuses": 18178,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 83.98,
+          "pread_ms": 4130.32
+        }
+      ],
+      "pending": [],
+      "timing": [],
+      "resident_route": [],
+      "route_phase": [],
+      "io_phase": [],
+      "cache_phase": [
+        {
+          "phase": 0,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 1,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 2,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 3,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 4,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 5,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        },
+        {
+          "phase": 6,
+          "configured_slots": 6136,
+          "resident_entries": 6136
+        }
+      ]
+    },
+    "startup_prefill_ms": 61397.656,
+    "append_prefill_ms": 22291.655,
+    "decode_ms": 18581.41,
+    "model_ms": 102270.721,
+    "turn_model_ms": 40873.065
+  }
+]

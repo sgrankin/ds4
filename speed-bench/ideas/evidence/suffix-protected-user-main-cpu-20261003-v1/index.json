@@ -1,0 +1,14 @@
+{
+  "build.log": {
+    "sha256": "1fb053c2e2aaaac6327b13a2245a29f76552003a6b1c795408f12a5392ef54d8",
+    "bytes": 836
+  },
+  "proof.json": {
+    "sha256": "324d1d3218a917085898d65d37b11e23bc8f62e97e0604998dc29cdaede2e846",
+    "bytes": 1327
+  },
+  "tests.log": {
+    "sha256": "8a0fed9414c15a3c17d48b2508e09995242239c3040fc4dbcbdc389f84911b63",
+    "bytes": 22
+  }
+}

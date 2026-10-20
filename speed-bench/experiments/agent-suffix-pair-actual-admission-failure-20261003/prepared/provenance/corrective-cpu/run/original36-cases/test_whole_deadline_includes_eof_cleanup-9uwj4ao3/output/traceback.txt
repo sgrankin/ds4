@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 266, in drive
+    for key,_ in sel.select(min(.2,remaining(work_deadline))):
+                                   ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 93, in remaining
+    if v<=0:raise TimeoutError('Whole-task work deadline including cleanup reserve')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: Whole-task work deadline including cleanup reserve

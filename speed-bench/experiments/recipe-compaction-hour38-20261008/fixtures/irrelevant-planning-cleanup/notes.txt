@@ -1,0 +1,38 @@
+Current retained task contract:
+Task: Time-window deduplication.
+Create solution.py containing def solve(payload, config). payload is a list of events with nonnegative integer t timestamps in nondecreasing order and string key values. config ttl is a nonnegative integer. Start with no accepted events. Accept the first occurrence of each exact key. For later occurrences, reject only if t minus that key's LAST ACCEPTED timestamp is less than ttl. Rejected duplicates do not refresh or change that timestamp. Equality expires: t minus the stored accepted timestamp >= ttl is accepted and replaces it. ttl0 accepts every event, including equal timestamps. Return {accepted, rejected}, both lists of zero-based payload indices in their original order. Compare string keys exactly without Unicode normalization, preserve empty keys, and do not mutate payload or config.
+
+Coding constraints:
+Implement the requested function using Python builtins only. At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports. No I/O, dynamic execution, or names/attributes beginning with underscore. Follow the task tool contract exactly. Do not search for or read private grading files.
+
+Actual retained configuration read:
+{
+  "ttl": 5,
+  "sample": [
+    {
+      "t": 0,
+      "key": "a"
+    },
+    {
+      "t": 4,
+      "key": "a"
+    },
+    {
+      "t": 5,
+      "key": "a"
+    },
+    {
+      "t": 5,
+      "key": "b"
+    },
+    {
+      "t": 9,
+      "key": "a"
+    },
+    {
+      "t": 10,
+      "key": "a"
+    }
+  ]
+}
+The config read is complete. All relevant current requirements above remain unchanged by the context edit.

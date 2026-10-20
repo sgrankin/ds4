@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/recipe-rightshift-hour39-20261008/launch.py",
+    "--arm",
+    "context-right",
+    "--output",
+    "speed-bench/experiments/recipe-rightshift-hour39-20261008/code-right64",
+    "--cache",
+    ".workspaces/recipe-20261008/right64-cache",
+    "--store",
+    ".workspaces/recipe-20261008/right64-store",
+    "--visible",
+    ".workspaces/recipe-20261008/right-visible",
+    "--fresh-tail",
+    "64"
+  ],
+  "initial": {
+    "time": 1791480603.339869,
+    "level": 1,
+    "swap_gb": 0.020205078125,
+    "physical_gb": 128.0,
+    "free_gb": 55.69819641113281,
+    "file_backed_gb": 50.822540283203125,
+    "wired_gb": 4.75775146484375,
+    "compressor_gb": 12.627700805664062
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

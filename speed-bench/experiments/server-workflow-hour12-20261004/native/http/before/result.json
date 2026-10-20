@@ -1,0 +1,351 @@
+{
+  "phase": "before",
+  "mode": "native",
+  "steps": [
+    {
+      "step": "A-source",
+      "session": "A",
+      "seconds": 52.96757616600371,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_88acf9ac1e61a70fcd694aef277afcb7",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/active.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/active.json",
+          "text": "{\n  \"batches\": 17,\n  \"items_per_batch\": 25,\n  \"reserved_items\": 9,\n  \"notes\": [\n    \"Active note 00: retain current inventory; older audit prose is disposable.\",\n    \"Active note 01: retain current inventory; older audit prose is disposable.\",\n    \"Active note 02: retain current inventory; older audit prose is disposable.\",\n    \"Active note 03: retain current inventory; older audit prose is disposable.\",\n    \"Active note 04: retain current inventory; older audit prose is disposable.\",\n    \"Active note 05: retain current inventory; older audit prose is disposable.\",\n    \"Active note 06: retain current inventory; older audit prose is disposable.\",\n    \"Active note 07: retain current inventory; older audit prose is disposable.\",\n    \"Active note 08: retain current inventory; older audit prose is disposable.\",\n    \"Active note 09: retain current inventory; older audit prose is disposable.\",\n    \"Active note 10: retain current inventory; older audit prose is disposable.\",\n    \"Active note 11: retain current inventory; older audit prose is disposable.\",\n    \"Active note 12: retain current inventory; older audit prose is disposable.\",\n    \"Active note 13: retain current inventory; older audit prose is disposable.\",\n    \"Active note 14: retain current inventory; older audit prose is disposable.\",\n    \"Active note 15: retain current inventory; older audit prose is disposable.\",\n    \"Active note 16: retain current inventory; older audit prose is disposable.\",\n    \"Active note 17: retain current inventory; older audit prose is disposable.\",\n    \"Active note 18: retain current inventory; older audit prose is disposable.\",\n    \"Active note 19: retain current inventory; older audit prose is disposable.\",\n    \"Active note 20: retain current inventory; older audit prose is disposable.\",\n    \"Active note 21: retain current inventory; older audit prose is disposable.\",\n    \"Active note 22: retain current inventory; older audit prose is disposable.\",\n    \"Active note 23: retain current inventory; older audit prose is disposable.\",\n    \"Active note 24: retain current inventory; older audit prose is disposable.\",\n    \"Active note 25: retain current inventory; older audit prose is disposable.\",\n    \"Active note 26: retain current inventory; older audit prose is disposable.\",\n    \"Active note 27: retain current inventory; older audit prose is disposable.\",\n    \"Active note 28: retain current inventory; older audit prose is disposable.\",\n    \"Active note 29: retain current inventory; older audit prose is disposable.\",\n    \"Active note 30: retain current inventory; older audit prose is disposable.\",\n    \"Active note 31: retain current inventory; older audit prose is disposable.\"\n  ]\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/active.json",
+      "replies": [
+        {
+          "seconds": 39.05680004200258,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1371,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1371
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1464
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 13.909684208003455,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 2055,
+            "input_tokens_details": {
+              "cached_tokens": 1464,
+              "cache_write_tokens": 591
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2057
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true
+    },
+    {
+      "step": "B-source",
+      "session": "B",
+      "seconds": 52.35670575000404,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_9e8b3bbc75622501f9f353c93baa364f",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/active.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/active.json",
+          "text": "{\n  \"batches\": 19,\n  \"items_per_batch\": 11,\n  \"reserved_items\": 7,\n  \"notes\": [\n    \"Active note 00: retain current inventory; older audit prose is disposable.\",\n    \"Active note 01: retain current inventory; older audit prose is disposable.\",\n    \"Active note 02: retain current inventory; older audit prose is disposable.\",\n    \"Active note 03: retain current inventory; older audit prose is disposable.\",\n    \"Active note 04: retain current inventory; older audit prose is disposable.\",\n    \"Active note 05: retain current inventory; older audit prose is disposable.\",\n    \"Active note 06: retain current inventory; older audit prose is disposable.\",\n    \"Active note 07: retain current inventory; older audit prose is disposable.\",\n    \"Active note 08: retain current inventory; older audit prose is disposable.\",\n    \"Active note 09: retain current inventory; older audit prose is disposable.\",\n    \"Active note 10: retain current inventory; older audit prose is disposable.\",\n    \"Active note 11: retain current inventory; older audit prose is disposable.\",\n    \"Active note 12: retain current inventory; older audit prose is disposable.\",\n    \"Active note 13: retain current inventory; older audit prose is disposable.\",\n    \"Active note 14: retain current inventory; older audit prose is disposable.\",\n    \"Active note 15: retain current inventory; older audit prose is disposable.\",\n    \"Active note 16: retain current inventory; older audit prose is disposable.\",\n    \"Active note 17: retain current inventory; older audit prose is disposable.\",\n    \"Active note 18: retain current inventory; older audit prose is disposable.\",\n    \"Active note 19: retain current inventory; older audit prose is disposable.\",\n    \"Active note 20: retain current inventory; older audit prose is disposable.\",\n    \"Active note 21: retain current inventory; older audit prose is disposable.\",\n    \"Active note 22: retain current inventory; older audit prose is disposable.\",\n    \"Active note 23: retain current inventory; older audit prose is disposable.\",\n    \"Active note 24: retain current inventory; older audit prose is disposable.\",\n    \"Active note 25: retain current inventory; older audit prose is disposable.\",\n    \"Active note 26: retain current inventory; older audit prose is disposable.\",\n    \"Active note 27: retain current inventory; older audit prose is disposable.\",\n    \"Active note 28: retain current inventory; older audit prose is disposable.\",\n    \"Active note 29: retain current inventory; older audit prose is disposable.\",\n    \"Active note 30: retain current inventory; older audit prose is disposable.\",\n    \"Active note 31: retain current inventory; older audit prose is disposable.\"\n  ]\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/active.json",
+      "replies": [
+        {
+          "seconds": 38.29752258399094,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1373,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1373
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1466
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 14.05808045899903,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 2057,
+            "input_tokens_details": {
+              "cached_tokens": 1466,
+              "cache_write_tokens": 591
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2059
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true
+    },
+    {
+      "step": "A-edit1",
+      "session": "A",
+      "seconds": 52.61454787501134,
+      "text": "{\"active_total\":416,\"archived_code\":\"RIVER-73\"}",
+      "answer": {
+        "active_total": 416,
+        "archived_code": "RIVER-73"
+      },
+      "gold": {
+        "active_total": 416,
+        "archived_code": "RIVER-73"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_8a05f75e70a6f31ef3090844adb9ae9c",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+          "text": "{\n  \"archived_code\": \"RIVER-73\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/A/archive.json",
+      "replies": [
+        {
+          "seconds": 50.94936937499733,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1653,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1653
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1746
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.6639352079946548,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1771,
+            "input_tokens_details": {
+              "cached_tokens": 1746,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 15,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1786
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1004 09:41:25 slot 0: request reuses nothing; evicting checkpoint (2057 tokens, idle 52 s, protected)"
+      ],
+      "pass": true,
+      "seconds_including_edit": 52.61500362500374,
+      "edit_seconds": 0.00020283300545997918
+    },
+    {
+      "step": "B-edit1",
+      "session": "B",
+      "seconds": 53.57007991599676,
+      "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-91\"}",
+      "answer": {
+        "active_total": 202,
+        "archived_code": "CEDAR-91"
+      },
+      "gold": {
+        "active_total": 202,
+        "archived_code": "CEDAR-91"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_f5d3af63edb83af1440ad338de43f3d3",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+          "text": "{\n  \"archived_code\": \"CEDAR-91\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared/B/archive.json",
+      "replies": [
+        {
+          "seconds": 51.72104462499556,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1654,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 1654
+            },
+            "output_tokens": 93,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1747
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.8479170000064187,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1772,
+            "input_tokens_details": {
+              "cached_tokens": 1747,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1790
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1004 09:42:18 slot 0: request reuses nothing; evicting checkpoint (1786 tokens, idle 0 s, protected)"
+      ],
+      "pass": true,
+      "seconds_including_edit": 53.570518540989724,
+      "edit_seconds": 0.00017820799257606268
+    },
+    {
+      "step": "C-turnover",
+      "session": "C",
+      "seconds": 2.282120167001267,
+      "text": "READY",
+      "answer": null,
+      "gold": "READY",
+      "correct": true,
+      "fresh_read": false,
+      "complete": true,
+      "calls": [],
+      "required_read": null,
+      "replies": [
+        {
+          "seconds": 2.281880959009868,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 48,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 48
+            },
+            "output_tokens": 2,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 50
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1004 09:43:11 slot 0: request reuses nothing; evicting checkpoint (1790 tokens, idle 0 s, protected)"
+      ],
+      "pass": true
+    }
+  ],
+  "edits": [
+    {
+      "removed_bytes": 2469,
+      "remaining_blocks": 1,
+      "session": "A",
+      "seconds": 0.00020283300545997918
+    },
+    {
+      "removed_bytes": 2469,
+      "remaining_blocks": 1,
+      "session": "B",
+      "seconds": 0.00017820799257606268
+    }
+  ],
+  "seconds": 213.79423258300812,
+  "source_warmup_seconds": 105.32428191600775,
+  "edited_seconds": 106.18552216599346,
+  "suffix_grafts_observed": 0,
+  "approximate_ssd_sources_observed": 0,
+  "pass": true,
+  "restart_owned_by_ROOT": true
+}

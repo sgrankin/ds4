@@ -1,0 +1,29 @@
+{
+  "status": "ACTUAL_FUNCTIONAL_MAP_AND_COMPANION_PUBLICATION_INDEPENDENT_BYTE_AUDIT_PASS",
+  "map": {
+    "bytes": 21140879,
+    "mode": 292,
+    "sha256": "c9328addaeac914f666c618a5564b87cd8533b75531f8430572fc2cbfabda17e"
+  },
+  "qualification": {
+    "bytes": 17638,
+    "mode": 292,
+    "sha256": "da87dd4f73aa80eb2e029e9ab1c05f6005abb644f76eb8516ebb476a0a33a82e"
+  },
+  "authority": {
+    "bytes": 13407,
+    "mode": 420,
+    "sha256": "763d9826581676892a2eb5554f216771e5dcd20a513b4c587793bbf1714f8500"
+  },
+  "all640_capture_records_and_120_tensor_roles_exact": true,
+  "all3276800_FP32_probes_and3932160_FP16_signatures_finite": true,
+  "full_payloads_equal_accepted_capture_and_signature": true,
+  "independent_5832_native_binding_reconstructed": true,
+  "complete_source_kernel_identity_sha256": "dc18081bd6b5e2804c66a0df35029643ba23db6386633377a982723ab212accf",
+  "all_accepted_ROOT_proof_identities_exact": true,
+  "no_current_model_FD_metadata_helper_guard_GPU_tokenizer": true,
+  "no_native_runtime_or_coefficient_bits_or_quality_proof": true,
+  "no_retry": true,
+  "wall_seconds_diagnostic": 1.6352543749962933,
+  "ROOT_grant_sha256": "fafc8f58c420059a60be8756bbc93f8d3b36329b7a37dba053fd33ec5620e7f4"
+}

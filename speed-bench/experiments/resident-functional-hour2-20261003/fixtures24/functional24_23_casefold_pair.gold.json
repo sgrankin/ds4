@@ -1,0 +1,17 @@
+{
+  "gold": {
+    "equal": true,
+    "folded": [
+      "strasse",
+      "strasse"
+    ]
+  },
+  "oracle_input": {
+    "strings": [
+      "Straße",
+      "STRASSE"
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Casefold expansion versus original equality; not NFC composition, UTF-8 truncation, byte collation or codepoint listing."
+}

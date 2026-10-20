@@ -1,0 +1,53 @@
+{
+  "status": "PRESPECIFIED_BEFORE_NEW_CALIBRATION_OUTCOMES",
+  "input_freeze": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-unused-mixed24-input-freeze-20261003-v1/input-freeze.json",
+    "sha256": "3295e9bd9b5361c2cb870233f8038b6377e4dca91d778b467092cead2cdec7a4"
+  },
+  "calibration": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-env-calibration-next/speed-bench/ideas/artifacts/resident-env-calibration-prepared-20261003-v2",
+    "manifest_sha256": "1b537cb53a217d25fd13ee5957b405955a9a0ae63da9e372dde23092ccfe7fcd",
+    "driver_sha256": "7184efeb16794d88f59f7f6fef5507d09c750189be708b8187d55895a5a0e8ff"
+  },
+  "cases": 24,
+  "teacher_tokens_per_case": 32,
+  "full_vocabulary_rows": 768,
+  "settings": {
+    "context": 4096,
+    "chunk": 512,
+    "cache_gib": 64,
+    "selected_tile": 64,
+    "selected_limit": 1024,
+    "thinking": "NONE",
+    "sampler": "teacher forced; no RNG or generation"
+  },
+  "arms": "native-before; anchor-affinity3; selected calibration policy if distinct from anchor; native-after",
+  "selection": "ROOT explicit policy must be the frozen calibration decision selected policy; if calibration reports no advance, confirm anchor-affinity3. Never select from confirmation outcomes.",
+  "native_controls": "Both full raw arrays/ordered teacher targets and logical preclose IO/cache must be exact; all full-vocabulary FP32 vectors finite.",
+  "screen": {
+    "mean_delta_nll_max": 0.0096013288621,
+    "mean_kl_max": 0.0182143927637,
+    "p99_kl_max": 0.179189521279,
+    "max_kl_max": 1.64426740744,
+    "argmax_flips_max": 24,
+    "argmax_flip_rate_basis": "16/512 calibration rate, same 24/768 confirmation rate",
+    "worst_prompt_delta_nll_max": 0.10611760921684572,
+    "paired_candidate_minus_anchor_nll_ci_upper_max": 0.005,
+    "minimum_native_requested_byte_reduction": 0.2
+  },
+  "statistics": {
+    "paired_case_count": 24,
+    "bootstrap_draws": 2000,
+    "bootstrap_seed": 20261002,
+    "bootstrap_units": "whole prompts",
+    "category_count": 6,
+    "cases_per_category": 4,
+    "all_categories_reported": true
+  },
+  "all_first_attempts_retained": true,
+  "all_quality_IO_tradeoffs_reported": true,
+  "automatic_models": false,
+  "root_model_grant_required": true,
+  "model_or_tokenizer_or_metadata_opened": false,
+  "scope": "Unused mixed teacher distributions and authored-gold checks; no generated task completion, physical SSD, speed, quantization causality or default promotion claim."
+}

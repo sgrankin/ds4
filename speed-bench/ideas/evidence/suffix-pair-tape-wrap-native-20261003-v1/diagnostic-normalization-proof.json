@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "method": "Validate diagnostic DSSD and canonical DSV4 tags plus identical remaining52byte header; stream exact diagnostic body SHA with ONLY four-byte magic normalization",
+  "private_state_sha256": "0d1fd95e99b59bcd63dd667d736a90ac6b7824324a23e38ba2cb7c50afbde7e6",
+  "normalized_diagnostic_sha256": "1edb2b392c9b73444d45ebabdafea6aa5c3c08ad9040fa5009545cc4db815da1",
+  "fresh_state_sha256": "9bd0ad38f3c1f5d89c348390bd6bec85a428e9ec9fe8636d764ed2b079f997ca",
+  "normalized_body_equal_fresh": false,
+  "state_body_identity_expected": false,
+  "nonzero_shift_approximate": true,
+  "model_access": false
+}

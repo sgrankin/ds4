@@ -1,0 +1,8 @@
+trace user="literal"
+prefill sync done tool_round=0
+ token index=1 id=3 bytes=9 text="literal" hex=434f44453d32373138
+generation finished tool_round=0 generated=1
+trace user="literal"
+prefill sync done tool_round=0
+ token index=1 id=3 bytes=5 text="literal" hex=5245414459
+generation finished tool_round=0 generated=1

@@ -1,0 +1,23 @@
+{
+  "source_sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+  "tests_sha256": "a2973266c8a43d6f10ae8ca57c8810197cfe567b1603c617982f7439a3047cde",
+  "test_log_sha256": "ab0cb6bb0266a844c4dce6a837090ee83c01e754e718c00413b51677f52e9692",
+  "cpu_tests": 16,
+  "cpu_returncode": 0,
+  "manifest_sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+  "command_sha256": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+  "driver_sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+  "preflight_assets": 304,
+  "copied_inventory_files": 97,
+  "preflight_all_hashes_exact": true,
+  "state_history_tokens": 2665,
+  "canonical_snapshot_bytes": 28078040,
+  "full_raw_fp32_finite_validation": true,
+  "full_state_phase_fp32_finite_validation": true,
+  "snapshot_internal_sentinels_allowed": true,
+  "model_stat_or_open": false,
+  "model_grant_required": true,
+  "first_refusal_source": "c19088e5",
+  "prepared": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2",
+  "status": "prepared-unrun"
+}

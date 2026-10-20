@@ -1,0 +1,27 @@
+{
+  "A": {
+    "startup_prefill_ms": 63055.447,
+    "append_prefill_ms": 22389.6385,
+    "decode_ms": 18510.065000000002,
+    "model_ms": 103955.1505,
+    "turn_model_ms": 40899.7035,
+    "runs": 2
+  },
+  "B": {
+    "startup_prefill_ms": 52962.064,
+    "append_prefill_ms": 13598.4565,
+    "decode_ms": 17472.893,
+    "model_ms": 84033.4135,
+    "turn_model_ms": 31071.349499999997,
+    "runs": 2
+  },
+  "candidate_change_percent": {
+    "startup_prefill_ms": -16.00715478236163,
+    "append_prefill_ms": -39.26451067979503,
+    "decode_ms": -5.603286644320282,
+    "model_ms": -19.16378063441888,
+    "turn_model_ms": -24.03037958453661
+  },
+  "quality_validation": "separate teacher-forced and held-out evaluations required",
+  "state_hashes_are_diagnostic": true
+}

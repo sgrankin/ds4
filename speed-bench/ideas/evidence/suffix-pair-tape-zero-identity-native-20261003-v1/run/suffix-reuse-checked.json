@@ -1,0 +1,160 @@
+{
+  "arm": "suffix-reuse",
+  "summary": {
+    "mode": "reuse",
+    "endpoint_partition_aligned": true,
+    "identity_native_checked": true,
+    "identity_native_state_equal": true,
+    "identity_native_logits_equal": true,
+    "identity_reuse_state_equal": true,
+    "prefix": 2017,
+    "shift": 0,
+    "span": 65,
+    "tail": 1,
+    "decode": 16,
+    "raw_reference_rows": 18,
+    "raw_candidate_rows": 17,
+    "tape_buffer_and_metadata_bytes": 12582992,
+    "immutable_tape_bytes": 12582912,
+    "peak_staging_bytes_including_reserve": 117722879,
+    "staging_budget_bytes": 134217728,
+    "coverage_rejections_preserve_state": true,
+    "precancel_preserves_state": true,
+    "partial_cancel_invalidates": true,
+    "approximate_export_blocked": true,
+    "pair_inputs_reused": 195,
+    "pair_rows_rebuilt": 99,
+    "pair_boundary_rows": 3,
+    "reused_tokens": 65,
+    "fresh_tail_tokens": 1,
+    "fresh_ms_diagnostic": 1774.899,
+    "reuse_ms_diagnostic": 48.558,
+    "mean_kl": 2.9271283851e-26,
+    "mean_tv": 0,
+    "sum_delta_nll": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 17
+  },
+  "raw": {
+    "reference_rows": 18,
+    "reference_sha256": "d04828d7157f1e9cbedb425104cddb72bc5ff61802c0880e4da311d4e5216f9e",
+    "teacher_token_hex": "04010000ed5e0000112000000e000000ebd90100310100005a1a00000e000000cc020000c900000056000000e8ac0000a50d00008d55000007060000d9d50000",
+    "full_sha256": "7d23620a10454549041463ff7e76ca14f67d58e2b82e0e554f8a3dc497bc127c",
+    "bytes": 18099296
+  },
+  "state": {
+    ".source.state.bin": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199",
+    ".fresh.state.bin": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199"
+  },
+  "csv_checks": {
+    "rows": 17,
+    "teacher_rows": 16,
+    "quality_rows": [
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 1.81237367413e-25,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 1.75358310119e-25,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 1.41016147934e-25,
+        "tv": 0.0
+      },
+      {
+        "delta_nll": 0.0,
+        "kl": 0.0,
+        "tv": 0.0
+      }
+    ],
+    "checked_summary": {
+      "mean_kl": 2.9271283850941177e-26,
+      "mean_tv": 0.0,
+      "sum_delta_nll": 0.0
+    }
+  },
+  "private_state": {
+    "sha256": "50d9c6f51d60e8052636451ab763c2904af9aed6d2a735dada92e99cc32fe0ef",
+    "bytes": 24350912,
+    "diagnostic_magic": "DSSD",
+    "canonical_export": false
+  },
+  "identity_checks": {
+    "source_fresh_native_state_exact": true,
+    "source_fresh_native_vector_exact": true,
+    "repaired_full_vectors_exact": true,
+    "repaired_normalized_state_sha256": "eb519e7ad78c47b701a90a9d47dbc01d73b2c7bc176710e2d48c60a8d6f9d199",
+    "canonical_normalization": "Validated4-byte DSSD\u2192DSV4 magic only",
+    "retained_raw_sha256": "7d23620a10454549041463ff7e76ca14f67d58e2b82e0e554f8a3dc497bc127c"
+  },
+  "native_parity": true
+}

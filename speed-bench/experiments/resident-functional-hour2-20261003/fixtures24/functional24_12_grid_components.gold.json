@@ -1,0 +1,20 @@
+{
+  "gold": {
+    "component_sizes": [
+      2,
+      3,
+      3
+    ],
+    "count": 3
+  },
+  "oracle_input": {
+    "grid": [
+      "11000",
+      "01011",
+      "00101",
+      "00100"
+    ]
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Four-neighbor grid components; not dependency graphs, interval unions, or grid-coloring counts."
+}

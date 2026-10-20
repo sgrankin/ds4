@@ -1,0 +1,1 @@
+What is a + b in the current calculation record? Reply with only the integer.

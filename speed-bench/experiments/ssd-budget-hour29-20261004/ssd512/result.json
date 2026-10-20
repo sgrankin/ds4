@@ -1,0 +1,22 @@
+[
+  {
+    "phase": "before",
+    "returncode": 0,
+    "seconds": 241.71382170901052,
+    "startup_seconds": 0.4332445840118453,
+    "client_seconds": 239.5670585000189,
+    "shutdown_seconds": 1.7130319160060026,
+    "server_returncode": 0,
+    "error": null
+  },
+  {
+    "phase": "after",
+    "returncode": 0,
+    "seconds": 53.613726957992185,
+    "startup_seconds": 0.4473677920177579,
+    "client_seconds": 51.5731862919929,
+    "shutdown_seconds": 1.5928729999868665,
+    "server_returncode": 0,
+    "error": null
+  }
+]

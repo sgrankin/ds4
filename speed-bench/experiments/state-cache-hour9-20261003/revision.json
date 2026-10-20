@@ -1,0 +1,29 @@
+{
+  "runtime_revision": "584dd8d4dcff387a84d01776f52eecb23feedd9a",
+  "pre_rope_revision": "52278b7b50111dde99cd888e55f288feacc9e5a3",
+  "preparation_minutes_charged": 30,
+  "qualification_start_utc": "2026-10-04 00:26:37",
+  "deadline_utc": "2026-10-04 00:56:37",
+  "build_command": "make -j1 ds4-agent ds4-server ds4_agent_test ds4_test speed-bench/state_cache_bench",
+  "build_rc": 0,
+  "cpu_frontend_checks": [
+    "./ds4_agent_test: rc0",
+    "./ds4_test --server: rc0"
+  ],
+  "cpu_cache_check": "Focused standalone tests/test_state_cache.c: rc0; logs retained in pre-rope-hour8-20261003/cache-cpu.*",
+  "selector_fix_revision": "bf0d20cb613cf7acfaeb17eb742c374ad7d61496",
+  "fix_checks": [
+    "make -j1 ds4-agent ds4_agent_test: rc0",
+    "./ds4_agent_test: rc0",
+    "model-free suffix mock including exact-prefix-vs-graft regression: rc0"
+  ],
+  "completed_utc": "2026-10-04 00:48:16",
+  "final_qualifications": {
+    "native": 12,
+    "concurrent_server_answers": 4,
+    "server_restart_exact_hits": 2,
+    "ssd_agent_grafts": 3,
+    "ssd_agent_prior_approximate_grafts": 2,
+    "ssd_agent_answers": 3
+  }
+}

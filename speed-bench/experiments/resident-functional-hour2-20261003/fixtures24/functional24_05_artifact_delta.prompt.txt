@@ -1,0 +1,3 @@
+The synthetic digest tags below are equality labels, not real computed hashes. Compare before and after by artifact name. Report changed names sorted lexically, and unexpected_changes for changes outside declared_touched. No authentication claim is requested.
+Literal input JSON: {"after": {"alpha": "tag-101", "beta": "tag-909", "gamma": "tag-303"}, "before": {"alpha": "tag-101", "beta": "tag-202", "gamma": "tag-303"}, "declared_touched": ["beta"]}
+Return the requested JSON first, then explain the specific reasoning.

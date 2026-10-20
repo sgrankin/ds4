@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "unit_tests": 6,
+  "mocked_abba_trials": 12,
+  "guard_cases": "busy lock+matching direct parent pass; free lock, wrong parent, changed guard and missing grant/freeze reject before model metadata",
+  "faults": [
+    "native vector drift",
+    "candidate repeat drift",
+    "configured slot drift",
+    "unexpected profile output",
+    "missing candidate footer",
+    "binary tamper",
+    "shader tamper",
+    "session tamper",
+    "plan tamper",
+    "model metadata drift (mock only)",
+    "helper nonzero exit"
+  ],
+  "arity_exit_code": 2,
+  "plain_frontend_route_io_strings_absent": true,
+  "source_sha256": "5ef9f36cdbe299388360dafa1e7933dbdb2f20b7627f66443d2ceabc844fcd68",
+  "test_sha256": "5c65f7517a433d1ee057f70dc7a2d5d5254d76a6d6ea207cf960687d0cfcc684",
+  "manifest_sha256": "d040bf9633590b807444daad392229af1dd21a104a6d15b57420010377c865f3",
+  "prepared_command_sha256": "78ecee8fe47f70067c4d1ac12580764aa44525329b1a8919e98b13be0666f084",
+  "build_manifest_sha256": "17942b2386aff9be0f0dace1500bc17cbf24452e27c75ceac15f2bfb785b6175",
+  "binary_sha256": "93e337256975bc177e0f03b76baa9d041164e974250f7e7491b186081c3b9fd7",
+  "wall_seconds": 0.34671562500079744,
+  "model_metadata_read": false,
+  "tokenizer_or_model_opened": false,
+  "gpu_initialized": false,
+  "launch_authorized": false
+}

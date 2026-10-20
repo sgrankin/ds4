@@ -1,0 +1,9 @@
+{
+  "removed_blocks": 0,
+  "summarized_blocks": 1,
+  "source_kind": "authored ordinary design discussion",
+  "summary": "Settled design: use exact integers and one pass in supplied nondecreasing event order, without sorting or mutating payload/config. Begin at time0 with tokens=capacity. At EVERY event refill min(capacity, tokens+(t-previous_t)*rate), then advance previous_t even on rejection or oversized costs. Accept cost<=tokens and subtract; reject otherwise without spending. cost0 accepts even at capacity0. Return only {accepted, rejected, remaining, tokens}: original zero-based index lists, balance AFTER each event, final balance; empty payload leaves tokens=capacity. Capacity/rate come from the actual config. Fractional credits, rounding, separate queues, real clocks/timers, logging, reason fields and service wrappers were rejected or deferred. Make the required actual read and first write, then finish briefly under the unchanged coding contract.",
+  "before_bytes": 5797,
+  "after_bytes": 3071,
+  "seconds": 0.0003886659978888929
+}

@@ -1,0 +1,11 @@
+
+[1;95mCOMPACTING[0m qualification of cached retained turns: summarizing durable task state
+[38;5;245mTask-state summary:
+
+- User goal: prepare the Ember release. The authoritative release code is EMBER-7319, a literal identifier, not a number to calculate.
+- Constraints: preserve the exact release code and the complete current turn. No code changes or external actions are required. This is a local inference qualification only; do not call tools, run commands, create files, contact people, or invent additional release requirements.
+- Settled decisions: EMBER-7319 is authoritative and must be preserved verbatim. No required code changes. No external actions.
+- Pending: the user will ask about the release identifier after compaction. The pending action is to preserve the exact identifier and the fact that there are no required code changes.
+- Earlier planning and repeated review notes: routine ownership and checkpoint review notes can be summarized collectively. They covered router.c, cache.c, session.c, and api.c at various checkpoints; ownership was clear, state bounded, and the next review was to check the saved request boundary. These notes are reloadable and need not remain verbatim.
+- Files inspected: router.c, cache.c, session.c, api.c (review checkpoints only; no edits). No commands run. No known bugs or rejected approaches recorded.[0m
+[1;95mCOMPACTING[0m rebuilding context: old=3537 summary+tail=3021 tail=883

@@ -1,0 +1,10 @@
+{
+  "model_currently_verified": {
+    "path": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "bytes": 365713686528,
+    "mtime_ns": 1789237692837653163
+  },
+  "manifest_sha256": "c15a61031e9d418e550f1617cd7234d6377b03d1dd9cdf19ec4c97c7f777cffc",
+  "source_revision": "532a89c307f80a34949769ecfe12d5b3d03aed96",
+  "guarded": true
+}

@@ -1,0 +1,52 @@
+{
+  "revision": "81b3c3af5958dbf3443d4d6c7c8269161bb82758",
+  "commands": [
+    [
+      "cc",
+      "-O3",
+      "-g",
+      "-mcpu=native",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-I.",
+      "-c",
+      "/Volumes/Models/ds4/speed-bench/experiments/server-suffix-curve-hour14-20261004/oracle.c",
+      "-o",
+      "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-build/oracle.o"
+    ],
+    [
+      "cc",
+      "-O3",
+      "-g",
+      "-mcpu=native",
+      "-o",
+      "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-build/oracle",
+      "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/curve-build/oracle.o",
+      "ds4.o",
+      "ds4_image.o",
+      "ds4_distributed.o",
+      "ds4_tp.o",
+      "ds4_ssd.o",
+      "ds4_metal.o",
+      "ds4_layer_pack.o",
+      "ds4_engram.o",
+      "-lm",
+      "-pthread",
+      "-framework",
+      "Foundation",
+      "-framework",
+      "Metal"
+    ]
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "sha256": {
+    "speed-bench/experiments/server-suffix-curve-hour14-20261004/oracle.c": "7faa00e89618fe1152a213b17a5f3df11278c6bbed32c7cebc1ffc79f722d8b6",
+    "speed-bench/experiments/server-suffix-curve-hour14-20261004/run.py": "07c45e9ad0cdf6479d888b8bf9ee932c9166ad100766468297576040c04964aa",
+    ".workspaces/server-agent-day-20261004/curve-build/oracle": "84aa5c3b1847b745122b4cf26ff0343a750c40d82b87261bd9280e509ecc3886",
+    "ds4.c": "0a1518cb23d2775f0395a6309fabb110af7798fe5b346f55d0a790eb6c3bec6e",
+    "ds4.h": "28dc0081962452a6e27732c22a541c4aad4160a74c3e0baf746e9fc562fa1bc3"
+  },
+  "core_objects": "Linked existing current MAIN objects; no frozen Oct2 core.",
+  "cpu_self_test": "PASS; no model opened"
+}

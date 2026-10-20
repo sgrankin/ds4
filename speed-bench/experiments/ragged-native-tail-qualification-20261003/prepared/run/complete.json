@@ -1,0 +1,14 @@
+{
+  "status": "COMPLETE",
+  "arms": [
+    "old0-default",
+    "new0-default",
+    "new1-default",
+    "old0-fast",
+    "new0-fast",
+    "new1-fast"
+  ],
+  "returncode": 0,
+  "quiet_grant": false,
+  "interpretation": "Offline final diagnostic analysis requires separately pinned actual ROOT release; no automatic timing."
+}

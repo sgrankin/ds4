@@ -1,0 +1,21 @@
+{
+  "A": {
+    "startup_prefill_ms": 15017.1235,
+    "append_prefill_ms": 93206.963,
+    "decode_ms": 196885.4315,
+    "model_ms": 305109.518,
+    "turn_model_ms": 290092.3945
+  },
+  "B": {
+    "startup_prefill_ms": 15000.033,
+    "append_prefill_ms": 89816.4235,
+    "decode_ms": 188510.19650000002,
+    "model_ms": 293326.653,
+    "turn_model_ms": 278326.62
+  },
+  "candidate_change_percent": {
+    "append_prefill_ms": -3.6376461488182965,
+    "decode_ms": -4.253862226469507,
+    "turn_model_ms": -4.055871413064571
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-mixed24-analysis/tests/test_resident_mixed24_analysis.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "seconds": 0.0939493179321289,
+  "source_sha256": "c86e9dee2730d0eea68d235fcc64b1c31ba2f33a7c72de930ded8ab36710786e",
+  "test_sha256": "d5cccb1af9a603428ea36cae91047e46d91947510a1bac81c0adf85f0b95a2ae",
+  "log_sha256": "025deffdd19e8a607859397ed2859782d648fecd8b7731105a93d27cd9bf9e75",
+  "model_or_tokenizer_or_guard_or_helper_run": false,
+  "current_outcomes_read": false,
+  "release_fixture_only": true
+}

@@ -1,0 +1,9 @@
+{
+  "label": "ownership-test",
+  "argv": [
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock"
+  ],
+  "returncode": 0,
+  "started": 1790997230.8804328,
+  "completed": 1790997230.8914618
+}

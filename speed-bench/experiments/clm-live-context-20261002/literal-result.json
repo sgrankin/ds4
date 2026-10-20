@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "samples": 4,
+  "elapsed_to_last_sample_s": 2.0975141525268555,
+  "min_free_gb": 57.68402099609375,
+  "max_wired_gb": 5.277618408203125,
+  "max_compressor_gb": 6.1346893310546875,
+  "max_swap_gb": 0.03015625,
+  "swap_growth_gb": 0.0,
+  "pressure_levels": [
+    1
+  ],
+  "adverse_samples": 0
+}

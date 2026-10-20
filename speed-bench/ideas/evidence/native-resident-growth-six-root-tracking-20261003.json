@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "time": 1790991922.4049978,
+  "initial_tracked_files": 104,
+  "final_tracked_files": 114,
+  "initial_ignored_omission_count": 10,
+  "corrected": "Eight frozen evidence objects and two bytecode files explicitly tracked with jj file track --include-ignored and squashed into the same experiment.",
+  "first_post_track_assertion_failed_before_proof_written": true,
+  "subsequent_squash_warned_missing_unwritten_proof": true,
+  "original_copy_proof_retained": true,
+  "all_physical_archive_files_tracked": true,
+  "runtime_files_changed": false
+}

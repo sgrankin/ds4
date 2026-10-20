@@ -1,0 +1,13 @@
+CODE=2718
+
+READY
+
+
+
+🛠️ $ python3 /Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-persistence-primary/update_context.py
+
+Updated exactly one earlier record; all other context bytes preserved.
+[0mCODE=3141
+
+Saved approximate-context transcript without KV; reopening evaluates the saved text.
+saved session e2597c65 (3142 tokens)

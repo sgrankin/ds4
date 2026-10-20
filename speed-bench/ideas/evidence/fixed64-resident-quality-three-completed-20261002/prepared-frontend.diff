@@ -1,0 +1,111 @@
+--- frozen6bc/replay_quality.c
++++ private/replay_raw_io_quality.c
+@@ -2,25 +2,62 @@
+ #define main unused_manifest_probe_main
+ #include "quality_probe.c"
+ #undef main
++#include <inttypes.h>
+ 
++static void write_raw_row(FILE *output, const uint32_t key[4], uint64_t hash,
++                          const float *raw, int vocab) {
++    if (fwrite(key, sizeof(uint32_t), 4, output) != 4 ||
++        fwrite(&hash, sizeof(hash), 1, output) != 1 ||
++        fwrite(raw, sizeof(float), (size_t)vocab, output) != (size_t)vocab)
++        fail("private raw export write failed");
++}
++
++static uint64_t checked_delta(uint64_t after, uint64_t before) {
++    if (after < before) fail("private phase I/O counter decreased");
++    return after - before;
++}
++
++static void write_phase_io(FILE *output, int phase, char kind,
++        const ds4_gpu_stream_expert_io_metrics *before,
++        const ds4_gpu_stream_expert_io_metrics *after) {
++    if (!before->explicit_io_metrics_enabled || !after->explicit_io_metrics_enabled)
++        fail("private exact demand I/O metrics disabled");
++    uint32_t slots = ds4_gpu_stream_expert_cache_configured_count();
++    if (slots != 6136) fail("private configured expert slots differ from6136");
++    fprintf(output,"{\"phase\":%d,\"kind\":\"%c\",\"configured_slots\":%u,\"resident_entries\":%u",
++            phase,kind,slots,ds4_gpu_stream_expert_cache_current_count());
++#define IO_DELTA(field) fprintf(output,",\"" #field "\":%" PRIu64,checked_delta(after->field,before->field))
++    IO_DELTA(pread_calls); IO_DELTA(pread_requested_bytes); IO_DELTA(pread_returned_bytes);
++    IO_DELTA(cache_loader_returned_bytes); IO_DELTA(cache_hits); IO_DELTA(cache_misses); IO_DELTA(cache_evictions);
++#undef IO_DELTA
++    fprintf(output,"}\n");
++    if (fflush(output)) fail("private phase I/O flush failed");
++}
++
++#ifndef DS4_REPLAY_EXPORT_SELFTEST
+ int main(int argc, char **argv) {
+     if (argc < 6 || (argc - 6) % 2) {
+-        fprintf(stderr, "usage: %s MODEL REPLAY SCORES.csv REFERENCE.bin record|compare [--ctx N] [--cache-gb N] [--chunk N]\n", argv[0]);
++        fprintf(stderr, "usage: %s MODEL REPLAY SCORES.csv REFERENCE.bin record|compare [--ctx N] [--cache-gb N] [--chunk N] --raw-output PATH --io-output PATH\n", argv[0]);
+         return 2;
+     }
+     uint32_t ctx=8192, cache_gb=64, chunk=512;
++    const char *raw_path=NULL,*io_path=NULL;
+     for (int i=6;i<argc;i+=2) {
++        if (!strcmp(argv[i],"--raw-output")) { if(raw_path)fail("duplicate raw output");raw_path=argv[i+1];continue; }
++        if (!strcmp(argv[i],"--io-output")) { if(io_path)fail("duplicate I/O output");io_path=argv[i+1];continue; }
+         long value=positive(argv[i+1]);
+         if (!strcmp(argv[i],"--ctx") && value<=131072) ctx=(uint32_t)value;
+         else if (!strcmp(argv[i],"--cache-gb") && value<=96) cache_gb=(uint32_t)value;
+         else if (!strcmp(argv[i],"--chunk") && value<=8192) chunk=(uint32_t)value;
+         else fail("unknown or out-of-range replay option");
+     }
++    if (!raw_path || !io_path) fail("private raw and I/O paths required");
+     int record = !strcmp(argv[5], "record");
+     if (!record && strcmp(argv[5], "compare")) fail("record or compare required");
+     FILE *input = fopen(argv[2], "r"), *out = fopen(argv[3], "wx"),
+-         *ref = fopen(argv[4], record ? "wbx" : "rb");
+-    if (!input || !out || !ref) { perror("open replay probe"); return 1; }
++         *ref = fopen(argv[4], record ? "wbx" : "rb"),
++         *export = fopen(raw_path,"wbx"), *io = fopen(io_path,"wx");
++    if (!input || !out || !ref || !export || !io) { perror("open replay probe"); return 1; }
+     ds4_engine_options opt = {.model_path=argv[1], .backend=DS4_BACKEND_METAL,
+         .context_size=ctx, .ssd_streaming=true, .power_percent=100,
+         .ssd_streaming_cache_bytes=(uint64_t)cache_gb<<30, .prefill_chunk=chunk};
+@@ -29,6 +66,7 @@
+         fail("replay engine/session initialization failed");
+     const int vocab=ds4_engine_vocab_size(engine);
+     uint32_t header[2]={UINT32_C(0x44535231),(uint32_t)vocab};
++    if(fwrite(header,sizeof(header),1,export)!=1)fail("private raw header write failed");
+     if (record) { if (fwrite(header,sizeof(header),1,ref)!=1) fail("write header"); }
+     else { uint32_t got[2]; if(fread(got,sizeof(got),1,ref)!=1 || memcmp(header,got,sizeof(got))) fail("reference header mismatch"); }
+     float *raw=malloc((size_t)vocab*sizeof(float)), *base=malloc((size_t)vocab*sizeof(float));
+@@ -41,6 +79,8 @@
+         if(fscanf(input," %d %d",&cached,&n)!=2 || n<0 || (kind=='D' && !n) || (uint32_t)n>ctx || cached<0 || (kind!='P' && kind!='D')) fail("bad replay phase");
+         target.len=0;
+         for(int i=0;i<n;i++){int tok; if(fscanf(input," %d",&tok)!=1 || tok<0 || tok>=vocab)fail("bad replay token");ds4_tokens_push(&target,tok);}
++        ds4_gpu_stream_expert_io_metrics io_before,io_after;
++        if(!ds4_gpu_stream_expert_io_metrics_read(&io_before))fail("private pre-phase I/O snapshot");
+         if(kind=='P') {
+             if(cached>history.len || (uint64_t)cached+(uint32_t)n>=ctx)fail("bad replay prefix");
+             history.len=cached;
+@@ -56,6 +96,7 @@
+                 if(ds4_session_copy_logits(session,raw,vocab)!=vocab)fail("replay logits copy");
+                 uint32_t key[4]={(uint32_t)phase,(uint32_t)i,(uint32_t)target.v[i],(uint32_t)history.len};
+                 uint64_t hash=token_hash(&history,&target);
++                write_raw_row(export,key,hash,raw,vocab);
+                 if(record) {
+                     if(fwrite(key,sizeof(key),1,ref)!=1 || fwrite(&hash,sizeof(hash),1,ref)!=1 || fwrite(raw,sizeof(float),vocab,ref)!=(size_t)vocab)fail("write replay record");
+                     memcpy(base,raw,(size_t)vocab*sizeof(float));
+@@ -74,12 +115,15 @@
+             }
+             fprintf(stderr,"REPLAY_QUALITY phase=%d kind=D tokens=%d nll=%.6f delta=%.6f kl=%.6g ms=%.3f\n",phase,n,phase_nll/n,phase_delta/n,phase_kl/n,phase_ms);
+         }
+-        phase++;fflush(out);fflush(ref);
++        if(!ds4_gpu_stream_expert_io_metrics_read(&io_after))fail("private post-phase I/O snapshot");
++        write_phase_io(io,phase,kind,&io_before,&io_after);
++        phase++;fflush(out);fflush(ref);if(fflush(export))fail("private raw flush failed");
+     }
+     if(!feof(input) || !count || (!record && fgetc(ref)!=EOF))fail("incomplete or mismatched replay");
+     printf("{\"phases\":%d,\"tokens\":%d,\"avg_nll\":%.12g,\"delta_nll\":%.12g,\"kl_base_to_raw\":%.12g,\"tv\":%.12g,\"argmax_flips\":%d,\"bit_equal_rows\":%d,\"prefill_ms\":%.3f,\"decode_ms\":%.3f}\n",phase,count,nll/count,delta/count,kl_total/count,tv_total/count,flips,equal,prefill_ms,decode_ms);
+     ds4_gpu_print_memory_report("replay quality final");
+     free(raw);free(base);ds4_tokens_free(&history);ds4_tokens_free(&target);
+     ds4_session_free(session);ds4_engine_close(engine);
+-    if(fclose(input)||fclose(out)||fclose(ref))fail("close replay outputs");return 0;
++    if(fclose(input)||fclose(out)||fclose(ref)||fclose(export)||fclose(io))fail("close replay outputs");return 0;
+ }
++#endif

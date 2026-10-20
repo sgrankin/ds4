@@ -1,0 +1,294 @@
+{
+  "status": "SOURCE_FROZEN_BEFORE_CPU_LEDGER_ATTEMPT",
+  "sources": {
+    "speed-bench/agent_suffix_pair_actual.c": {
+      "bytes": 593957,
+      "sha256": "b6ec1a2f58cd88f605ff3b0a52600b70139a049b69b35c67842b319b615af481"
+    },
+    "speed-bench/agent_suffix_pair_actual_hook.inc": {
+      "bytes": 10366,
+      "sha256": "cf9406ab4b6ad77f6cb024216791a6609d7c8e3baa15e06c440859626250b35d"
+    },
+    "speed-bench/agent_suffix_pair_actual_ownership.h": {
+      "bytes": 2295,
+      "sha256": "cd6f259b1bed287ef2cce67597a6bf5082a3c83bd0a5c036e4335e1846969982"
+    },
+    "speed-bench/agent_suffix_pair_actual_literals.h": {
+      "bytes": 11465,
+      "sha256": "db17f12d77827b3eea174cbb637f639896979fd363122d346fdaef514014d6b0"
+    },
+    "speed-bench/ideas/run_agent_suffix_pair_actual.py": {
+      "bytes": 28896,
+      "sha256": "5bebda8ea489b30b5e17663e7ac106a6cb2e857e26cdb3aac1fc2307fed7d778"
+    },
+    "speed-bench/ideas/test_agent_suffix_pair_actual.py": {
+      "bytes": 22647,
+      "sha256": "4c59033bcb9bfd71e6be5125563e0773d2e4b14a1bb9c29a7a9be5abbe7274f8"
+    },
+    "tests/test_agent_suffix_pair_actual_ownership.c": {
+      "bytes": 5730,
+      "sha256": "4fc76d6265d8fb50fc1fd3a7958c9c26e3bbb61323e5c96b451cc0e94f558b92"
+    },
+    "tests/test_agent_suffix_pair_actual_authority.py": {
+      "bytes": 4388,
+      "sha256": "935914a1843b4365a79d4e5cf1891ef6954aabfbe1f9d3d380bafe36b644cf34"
+    },
+    "ds4.h": {
+      "bytes": 37885,
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/README.md": {
+      "bytes": 3660,
+      "sha256": "11ba5a42a5406a8f44961020c94989693be03ae9340d499604c94576f6e2b79a"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/first.txt": {
+      "bytes": 1395,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/grader.py": {
+      "bytes": 2461,
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/native-build-plan.json": {
+      "bytes": 23457,
+      "sha256": "da9023be6665eb333e42c9719ef4c3df41f5361e497dfe9213e01e6520258f33"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/private-caller.diff": {
+      "bytes": 1256,
+      "sha256": "b7d086c788c68b7d0fdabdee97ebad46a9949a11ffae8b7d87d1bf1a915d5f38"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/review-findings-v2.json": {
+      "bytes": 1467,
+      "sha256": "bedea1666536fbd8648afae36ec54edb127f1f947ab37129776b6e44c6ae0c79"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/run_grader.py": {
+      "bytes": 1732,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/second.txt": {
+      "bytes": 2681,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/task.json": {
+      "bytes": 24521,
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/third.txt": {
+      "bytes": 1798,
+      "sha256": "6e279a665d5389ed95bb59580f1366e8d1dafc4df25b627557772191aac987d0"
+    },
+    "speed-bench/ideas/agent_suffix_pair_actual_v1/update_context.py": {
+      "bytes": 3048,
+      "sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93"
+    }
+  },
+  "objects": {
+    "ds4_help.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_help.o",
+      "source_path": "/Volumes/Models/ds4/ds4_help.o",
+      "sha256": "5f21d0a292a83eef20d60075ff8deb4f99d7558a595e11b3c91b5269acde4a6d",
+      "bytes": 104464
+    },
+    "ds4_prompt_prefix.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_prompt_prefix.o",
+      "source_path": "/Volumes/Models/ds4/ds4_prompt_prefix.o",
+      "sha256": "5f2622d747eb78c92b1f5ca497d9fc76a17b1c7d0382bf7357754d00a141e7c3",
+      "bytes": 17032
+    },
+    "ds4_web.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_web.o",
+      "source_path": "/Volumes/Models/ds4/ds4_web.o",
+      "sha256": "9177a3aeedbe40a76bcc1c5c3926e8ab546c86df9e276f19d99e7d92d442a70b",
+      "bytes": 145592
+    },
+    "ds4_kvstore.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_kvstore.o",
+      "source_path": "/Volumes/Models/ds4/ds4_kvstore.o",
+      "sha256": "b691bcb29940c71568ed5fb8e6c5cdb568c83a9fa108cf755c52512a0ee5192e",
+      "bytes": 97360
+    },
+    "linenoise.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/linenoise.o",
+      "source_path": "/Volumes/Models/ds4/linenoise.o",
+      "sha256": "6a8a0f16ab289e069cfd8ec4ecff66ad0d0d2d71a8d1b30bdb8a73bd9ffaaca6",
+      "bytes": 130824
+    },
+    "ds4.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4.o",
+      "source_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4.o",
+      "bytes": 5672616,
+      "sha256": "c24c30d24ac774339377f9b3995c6ae132e3025bd8f1e78ad363875bbe6ce803"
+    },
+    "ds4_image.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_image.o",
+      "source_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_image.o",
+      "bytes": 165664,
+      "sha256": "ebdae98d494de74fd560daed53aad2bd934ff7012499fc2cde82e7e994278f60"
+    },
+    "ds4_distributed.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_distributed.o",
+      "source_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_distributed.o",
+      "bytes": 427104,
+      "sha256": "5e8a183b83abed129a7ab0ea1b6ce298ce3c1483d246829dafab98aacc5d8635"
+    },
+    "ds4_tp.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_tp.o",
+      "source_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_tp.o",
+      "bytes": 207432,
+      "sha256": "6efa29f9f0235e49502596cd04be4c3440bacb1a1b4f365ec78b9d7012e3320c"
+    },
+    "ds4_ssd.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_ssd.o",
+      "source_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_ssd.o",
+      "bytes": 13736,
+      "sha256": "aa2a18d7cc4b805af138691fd8208042837a045e30b6ed02def90c4b07d37434"
+    },
+    "ds4_metal.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_metal.o",
+      "source_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_metal.o",
+      "bytes": 2803056,
+      "sha256": "813ff15ec709934f97bd41c018e5cab3cf796d4921b3adff46203efbe7ce80b7"
+    },
+    "ds4_layer_pack.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_layer_pack.o",
+      "source_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_layer_pack.o",
+      "bytes": 11264,
+      "sha256": "efa53eacf5c197bd0ee5c6c140e70fd5924673f788e6876cac3656deea3b694d"
+    },
+    "ds4_engram.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_engram.o",
+      "source_path": "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-pair-tape-followup-build-v1/ds4_engram.o",
+      "bytes": 30064,
+      "sha256": "41eefb68d54c36192c579379d9f9f9b7f35b3df619be97caed967ecb8b568982"
+    },
+    "ds4_gpu_args.o": {
+      "path": "speed-bench/ideas/artifacts/agent-suffix-pair-native-build-plan-v1/objects/ds4_gpu_args.o",
+      "source_path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-build-20261002/ds4_gpu_args.o",
+      "sha256": "03fa37f90867d2d4dabf4cbde699408d61aa78dff605c58e6f63161c52906121",
+      "bytes": 14248
+    }
+  },
+  "compiler_sdk_proof": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/evidence/agent-suffix-pair-native-source-prepared-20261003-v1/compiler-sdk-proof.json",
+    "sha256": "0fe26c4757dcc4eee736bfb2cbc6efb1a20d69ec9f15a1bb88b8863c41d29b16"
+  },
+  "compiler_sdk": {
+    "selected_wrapper": {
+      "path": "/usr/bin/cc",
+      "bytes": 200560,
+      "sha256": "34129c71a01a74f7f3b2443521519b2e5447553fa187f5fcafaaf8c42cc192e2"
+    },
+    "actual_clang": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "bytes": 124676976,
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+    },
+    "sdk_path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+    "sdk_settings": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/SDKSettings.json",
+      "bytes": 7948,
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+    },
+    "libSystem_stub": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd",
+      "bytes": 347931,
+      "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+    },
+    "selection_commands": [
+      [
+        "/usr/bin/xcrun",
+        "--find",
+        "clang"
+      ],
+      [
+        "/usr/bin/xcrun",
+        "--sdk",
+        "macosx",
+        "--show-sdk-path"
+      ],
+      [
+        "/usr/bin/cc",
+        "--version"
+      ]
+    ],
+    "observed_version": "Apple clang version 21.0.0 (clang-2100.3.34.2); Target arm64-apple-darwin27.0.0",
+    "compiler_invoked": false,
+    "model_accessed": false
+  },
+  "commands": [
+    {
+      "label": "ownership-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-I.",
+        "-O1",
+        "-g",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-pthread",
+        "tests/test_agent_suffix_pair_actual_ownership.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock"
+      ]
+    },
+    {
+      "label": "ownership-test",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock"
+      ]
+    },
+    {
+      "label": "ownership-asan-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-I.",
+        "-O1",
+        "-g",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-pthread",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "tests/test_agent_suffix_pair_actual_ownership.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock-asan"
+      ]
+    },
+    {
+      "label": "ownership-asan-test",
+      "argv": [
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock-asan"
+      ],
+      "environment": {
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      }
+    },
+    {
+      "label": "authority-test",
+      "argv": [
+        "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_agent_suffix_pair_actual_authority.py",
+        "-v"
+      ]
+    }
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair",
+  "single_compiler": true,
+  "links": "Only libc/pthread+sanitizer runtime for standalone minimal mocked worker; no native14objects or engine/Core/Metal.",
+  "model_or_metadata_or_nativecaller_compile": false,
+  "original36tests_unchanged": true,
+  "original36_prior_pass_not_rerun": true
+}

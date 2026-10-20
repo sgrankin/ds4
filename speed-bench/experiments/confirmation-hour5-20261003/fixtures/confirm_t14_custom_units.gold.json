@@ -1,0 +1,12 @@
+{
+  "gold": {
+    "meters": 8400,
+    "kilometers": 8.4
+  },
+  "oracle_input": {
+    "question": "For this fictional race only, one league equals 240 rods and one rod equals 5 meters. The route is seven leagues. Report meters and kilometers as numbers in JSON, then explain. Use these supplied definitions rather than historical unit conventions."
+  },
+  "explanation": "Each league contains 240 rods, with five meters per rod, so a league is 1200 meters under the supplied definition. Seven leagues therefore cover 8400 meters. Dividing by one thousand converts that distance to 8.4 kilometers. Historical meanings of a league or rod do not change this fictional exercise.",
+  "category": "facts",
+  "scope": "New authored content, fixed before any model outcome."
+}

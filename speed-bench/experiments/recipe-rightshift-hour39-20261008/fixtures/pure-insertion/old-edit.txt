@@ -1,0 +1,1 @@
+Archived implementation policy: preserve caller inputs and original order, use exact arithmetic, and follow the current retained contract and configuration. Earlier unrelated operational planning can be recorded without changing this policy.

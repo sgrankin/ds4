@@ -1,0 +1,21 @@
+{
+  "status": "PREPARED_UNEXECUTED",
+  "plan": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1-build/plan.json",
+  "plan_sha256": "851ffa9623b568d94459372e705d2e09703a78e94e86810b3f34619919f432d2",
+  "binary_sha256": "70f7cec5c2f502e9a59e1e9a84bc343b1a3d39817ab3f0b9df205c99bc93619f",
+  "driver_sha256": "00d5e9a9fc34eb63da333f9808902f9c6c422cc73240baf6cd80a72f6190e159",
+  "guard_sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1-pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1-build/run_native_prefill_coding.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1-build/plan.json",
+    "851ffa9623b568d94459372e705d2e09703a78e94e86810b3f34619919f432d2",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1"
+  ],
+  "output": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1",
+  "pressure_output": "/Volumes/Models/ds4/.workspaces/idea-resident-three-coding/speed-bench/ideas/artifacts/resident-three-coding-medium-20261002-v1-pressure"
+}

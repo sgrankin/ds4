@@ -1,0 +1,1 @@
+A fictional calendar repeats these six day names in order: amber, bronze, cobalt, jade, violet, white. Today is amber. Advance exactly seventeen days, where tomorrow is one day ahead. Report day and complete_cycles plus remainder in JSON, then explain without using the real calendar.

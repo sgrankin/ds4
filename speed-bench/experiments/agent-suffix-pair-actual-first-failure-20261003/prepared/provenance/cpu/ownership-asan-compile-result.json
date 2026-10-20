@@ -1,0 +1,23 @@
+{
+  "label": "ownership-asan-compile",
+  "argv": [
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "-isysroot",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+    "-I.",
+    "-O1",
+    "-g",
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-pthread",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "tests/test_agent_suffix_pair_actual_ownership.c",
+    "-o",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-cpu-v3/ownership-mock-asan"
+  ],
+  "returncode": 0,
+  "started": 1790997230.891815,
+  "completed": 1790997231.02209
+}

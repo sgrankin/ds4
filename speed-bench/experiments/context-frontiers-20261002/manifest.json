@@ -1,0 +1,19 @@
+{
+  "base": "72ebbc1c3cc5d859ed27574f1bf4f53dfe1e2839",
+  "status": "native recent-frontier regression passed under main pressure guard",
+  "files": {
+    "ds4_agent.c": "3daa599a6af81389620e7c01aa1c56c88c3be68a090e1da6197f25ae40393296",
+    "tests/test_agent_context_frontiers.c": "3f933b0a119e377fb1037ec91b299da55e21e2eeef8a8c44e3d27b4360157518",
+    "Makefile": "d0dafdb7209b2c3e3528b97fa9971309cefa5fb690d90f13798eccfac25f223d",
+    "speed-bench/experiments/context-frontiers-20261002/README.md": "ac4c864dd31b5ccf62814f416d1ee916f3c0902fe96b4d1eea3c3273b3023927",
+    "tests/test_agent_context_frontiers": "ace21bd729c8d53787958cde3f78689560c2472c66bd625f264e486eddf3c8e7"
+  },
+  "linked_root_ds4_object_sha256": "3d7a3471cedef672166888f36f46617514a2c77edbd9cef027aeffb129b65995",
+  "native_completed_utc": "2026-10-02 17:06:48",
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "ssd_cache_gib": 64,
+  "root_build_completed_utc": "2026-10-02 16:57:35",
+  "compiled_test_source_sha256": "6533fc5ea2aa17575e6b30035fe986a9462d8f5f9088c4a2c6c7a8b4c968ba1c",
+  "post_validation_source_change": "test header comment only; no executable code changed",
+  "root_agent_unit_test": "passed ./ds4_agent_test; success log retained"
+}

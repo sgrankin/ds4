@@ -1,0 +1,92 @@
+{
+  "analysis_integrity": "PASS",
+  "analysis_returncode": 0,
+  "both_arms_cases": 4,
+  "both_arms_completed_correct": 1,
+  "both_arms_invalid_and_caps": 3,
+  "both_solved_case_token_change_percent": -24.394785847299815,
+  "both_solved_cases": 1,
+  "candidate_reasoning_tokens": 6549,
+  "candidate_tokens": 6550,
+  "capped_correct_both_arms": 0,
+  "cases": [
+    {
+      "candidate_cap": false,
+      "candidate_parsed": "123",
+      "candidate_status": "CORRECT",
+      "candidate_tokens": 406,
+      "case": "circular10",
+      "common_sampling_prefix": 224,
+      "gold": "123",
+      "native_cap": false,
+      "native_parsed": "123",
+      "native_status": "CORRECT",
+      "native_tokens": 537
+    },
+    {
+      "candidate_cap": true,
+      "candidate_parsed": "",
+      "candidate_status": "INVALID",
+      "candidate_tokens": 2048,
+      "case": "restricted_derangements8",
+      "common_sampling_prefix": 273,
+      "gold": "10860",
+      "native_cap": true,
+      "native_parsed": "",
+      "native_status": "INVALID",
+      "native_tokens": 2048
+    },
+    {
+      "candidate_cap": true,
+      "candidate_parsed": "",
+      "candidate_status": "INVALID",
+      "candidate_tokens": 2048,
+      "case": "lattice8x6",
+      "common_sampling_prefix": 389,
+      "gold": "2002",
+      "native_cap": true,
+      "native_parsed": "",
+      "native_status": "INVALID",
+      "native_tokens": 2048
+    },
+    {
+      "candidate_cap": true,
+      "candidate_parsed": "",
+      "candidate_status": "INVALID",
+      "candidate_tokens": 2048,
+      "case": "subset_mod7",
+      "common_sampling_prefix": 202,
+      "gold": "132",
+      "native_cap": true,
+      "native_parsed": "",
+      "native_status": "INVALID",
+      "native_tokens": 2048
+    }
+  ],
+  "execution_returncode": 3,
+  "interpretation": "No strict accuracy gain; all observed total token reduction is on one solved case. This does not identify quantization as the cause of overthinking.",
+  "native_reasoning_tokens": 6680,
+  "native_tokens": 6681,
+  "pressure": {
+    "adverse_samples": 0,
+    "final_swap_gb": 0.017763671875,
+    "first_utc": "2026-10-02T22:34:01.148378+00:00",
+    "initial_swap_gb": 0.017763671875,
+    "kernel_levels": [
+      1
+    ],
+    "last_utc": "2026-10-02T22:45:18.661809+00:00",
+    "max_consecutive_bad": 0,
+    "maximum_compressor_gb": 7.9367828369140625,
+    "maximum_simultaneous_wired_compressor_gb": 79.59146118164062,
+    "maximum_wired_gb": 72.44877624511719,
+    "minimum_free_gb": 0.0975799560546875,
+    "samples": 656,
+    "swap_growth_gb": 0.0
+  },
+  "producer_status": "INVALID_PRESENT",
+  "reasoning_token_change_percent": -1.9610778443113763,
+  "timing_scope": "Exploratory generation timings only; cache reuse/order/diagnostics preclude a latency promotion.",
+  "token_change_percent": -1.9607843137254943,
+  "token_delta": -131
+}

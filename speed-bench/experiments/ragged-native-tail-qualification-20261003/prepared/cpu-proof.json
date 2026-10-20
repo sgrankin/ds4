@@ -1,0 +1,17 @@
+{
+  "source_revision": "48b12ec774c519893375eebe4ee9c231fbbd6759",
+  "sources": {
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/run_ragged_native_tail_qualification.py": "01d62a5df245fedbc8cac1e797594b446c54f2b164acf210456936cb7be73c5b",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/analyze_ragged_native_tail_qualification.py": "fb17ceb2a25125e3ac2354696001f4551479881ec4cdc31e7971037d147da228",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/ragged_native_tail_validation.py": "44c9b424b48bf400c19e6da9d0a12ed1a1b9fb3a67eb57a30d85ddfe07b563fd",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/tests/test_ragged_native_tail_qualification.py": "94266de5d61610deae81f83e81cf745695bf5bc6cabf518e050744a36f487ac9"
+  },
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "tests/test_ragged_native_tail_qualification.py"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification",
+  "returncode": 0,
+  "elapsed": 0.4739820957183838,
+  "native_build_helper_guard_model_metadata_executed": false
+}

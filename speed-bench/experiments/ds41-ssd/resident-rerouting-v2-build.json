@@ -1,0 +1,25 @@
+{
+  "experiment": "resident-rerouting-v2",
+  "base_commit": "67696070",
+  "parent_v1_commit": "4448f4626222",
+  "gpu_runs_by_implementation_agent": 0,
+  "selector_test": "passed",
+  "metal_build": "warning-free",
+  "changed_runtime": [
+    "ds41_resident_route_configure",
+    "ds41_resident_route_apply"
+  ],
+  "guards": [
+    "two-sided unbiased affinity ratio",
+    "maximum original mixture mass"
+  ],
+  "sha256": {
+    "ds4.c": "32166c631b2d1988992fb4905c7ef33123c1cf7d2d089895ab89111e26f1c8a0",
+    "ds4_resident_route.h": "14e3be659056ef978071f5365c55a253a976248e2d189e5049d46c0ae2fe9f0c",
+    "ds4.o": "3ea634a4c7893955035dc2f411f9a972368f678806afd25f1d4066682b2bc315",
+    "libds4_resident.dylib": "c2c08efe12db13893cf3a63ea439b82049e2db15d11b7e50793b17f02007c31f",
+    "ds4": "67f576fd4ab27a9e79ece616e0c4c96c0e47ac684fbbdb35b3d1e24177a7021a",
+    "ds4-agent": "8e502d3c66113d69826c87b2de879f804c15449b38b85eabcbdf1493a64b1a46",
+    "speed-bench/agent-session/replay": "309493a043cd205ff0df6dfef8c8986eca88e083367f720a3f8f9f5dcd77624b"
+  }
+}

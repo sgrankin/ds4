@@ -1,0 +1,67 @@
+{
+  "arms": {
+    "A": {
+      "startup_prefill_ms": 68778.87349999999,
+      "append_prefill_ms": 82800.47649999999,
+      "decode_ms": 6436.8125,
+      "model_ms": 158016.16249999998,
+      "turn_model_ms": 89237.28899999999,
+      "runs": 2
+    },
+    "B": {
+      "startup_prefill_ms": 54999.249500000005,
+      "append_prefill_ms": 82008.9985,
+      "decode_ms": 6296.464,
+      "model_ms": 143304.712,
+      "turn_model_ms": 88305.4625,
+      "runs": 2
+    },
+    "C": {
+      "startup_prefill_ms": 55151.858,
+      "append_prefill_ms": 81014.145,
+      "decode_ms": 5444.9235,
+      "model_ms": 141610.9265,
+      "turn_model_ms": 86459.0685,
+      "runs": 2
+    }
+  },
+  "pairs": {
+    "native_fast_vs_default": {
+      "baseline": "A",
+      "candidate": "B",
+      "change_percent": {
+        "startup_prefill_ms": -20.034675328027852,
+        "append_prefill_ms": -0.9558858033866358,
+        "decode_ms": -2.1804037324374415,
+        "model_ms": -9.310092250848056,
+        "turn_model_ms": -1.0442120221738183
+      }
+    },
+    "resident_three_vs_native_fast": {
+      "baseline": "B",
+      "candidate": "C",
+      "change_percent": {
+        "startup_prefill_ms": 0.2774737862559329,
+        "append_prefill_ms": -1.213102852365644,
+        "decode_ms": -13.52410654615035,
+        "model_ms": -1.1819468294943403,
+        "turn_model_ms": -2.090917082281296
+      }
+    },
+    "resident_three_vs_native_default": {
+      "baseline": "A",
+      "candidate": "C",
+      "change_percent": {
+        "startup_prefill_ms": -19.81279251396868,
+        "append_prefill_ms": -2.157392777806033,
+        "decode_ms": -15.409630154676712,
+        "model_ms": -10.381998740160503,
+        "turn_model_ms": -3.1132954969082416
+      }
+    }
+  },
+  "primary": "native_fast_vs_default",
+  "secondary": "resident_three_vs_native_fast",
+  "cross_variant_state_hashes_are_diagnostic": true,
+  "qualification": "One original-ID teacher-forced growth input, two fresh runs per variant; no correctness, significance or default-promotion claim."
+}

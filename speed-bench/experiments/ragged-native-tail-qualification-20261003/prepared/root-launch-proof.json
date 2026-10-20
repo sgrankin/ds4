@@ -1,0 +1,25 @@
+{
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "time": 1791002047.9991071,
+  "manifest_sha256": "ad7cf0569eff888aae3ba3871a08b1e7c74a55b780a7e7eb9652552a408c1c1e",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run_ragged_native_tail_qualification.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/plan.json",
+    "--plan-sha256",
+    "ad7cf0569eff888aae3ba3871a08b1e7c74a55b780a7e7eb9652552a408c1c1e",
+    "--root-granted"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "preceding_release_sha256": "0147aede0d8e4a0076760efc68fdccd9bf5832bbd5cbec251cc9cd442d431397",
+  "root_static_review_sha256": "1ac2f47cebf1f7589a0c698f26a5fe3b7d03d673492dbbb64d14fd3d874f68d3",
+  "fresh_processes": [],
+  "fresh_lock_reacquired": true,
+  "scope": "Six fixed diagnostic ragged qualification arms, no quiet timing or defaults"
+}

@@ -1,0 +1,1 @@
+{"phases":7,"tokens":343,"avg_nll":0.0194016036302,"delta_nll":0.000130948327253,"kl_base_to_raw":0.000292227107702,"tv":0.00180054832544,"argmax_flips":2,"bit_equal_rows":1,"prefill_ms":67347.547,"decode_ms":16088.660}

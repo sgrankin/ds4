@@ -1,0 +1,81 @@
+{
+  "commands": [
+    [
+      "python3",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-queue-launcher/speed-bench/run_overthink_queue.py",
+      "--job",
+      "narrow-half-effort75-pair",
+      "--execute"
+    ],
+    [
+      "python3",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-queue-launcher/speed-bench/run_overthink_queue.py",
+      "--job",
+      "native-effort25",
+      "--execute"
+    ],
+    [
+      "python3",
+      "/Volumes/Models/ds4/.workspaces/idea-quant-queue-launcher/speed-bench/run_overthink_queue.py",
+      "--job",
+      "native-effort50",
+      "--execute"
+    ]
+  ],
+  "core_proof_path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/experiments/ds41-ssd/overthink-provenance/counting-study/native-effort-prepared-v1/core-objects.json",
+  "core_proof_sha256": "1b52970c2928122f79591befd59545b82aa314de461793384836b8bb448a3fe9",
+  "cpu_test_log_sha256": "f47a62e6b3e3851294d215a7cf7c58813a84029530f465d3f1d7afe6ae4fc3bb",
+  "cpu_test_returncode": 0,
+  "cpu_test_source_sha256": "4015779045f5e7f3aedb6a36d1961c3576b9d590403cb5d288c16aca02f2b698",
+  "cpu_tests": 13,
+  "duration_estimate": {
+    "historical_native_decode_seconds": 69.86407,
+    "historical_native_tokens": 1356,
+    "historical_tokens_per_second": 19.40911830644851,
+    "max_decode_seconds_native_job": 422.0696618289085,
+    "max_decode_seconds_pair_job": 844.139323657817,
+    "qualification": "Planning extrapolation from prior two-case hard calibration, not a new timing or throughput claim; add model initialization/prefill/guard cleanup; early finals reduce time."
+  },
+  "execution_requires_separate_root_grant_per_job": true,
+  "launcher_path": "/Volumes/Models/ds4/.workspaces/idea-quant-queue-launcher/speed-bench/run_overthink_queue.py",
+  "launcher_sha256": "98204b286e48ab100c6f5cfa1fa4565530f7a74f32ae5931fe351c230262640d",
+  "model_metadata_refreshed": false,
+  "model_or_tokenizer_execution": false,
+  "model_payload_hashed": false,
+  "no_chained_jobs": true,
+  "optional_effort75_supported": false,
+  "parent_revision": "685ff0ba8864d66e7ca7ef60107536ac00fd2cb2",
+  "plans": [
+    {
+      "dry_plan": "speed-bench/experiments/overthink-queue-launcher-20261002/narrow-half-effort75-pair-preflight.json",
+      "dry_plan_sha256": "1606516552d6bcb02fcdc0c87fd06cf4d292f0b2c0f48d5cb80f505af5737915",
+      "expected_records": 8,
+      "job": "narrow-half-effort75-pair",
+      "output_dir": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1",
+      "pressure_dir": "/Volumes/Models/ds4/.workspaces/idea-quant-counting/speed-bench/ideas/artifacts/narrow-half-counting-four-20261002-v1-pressure",
+      "verified_files": 98
+    },
+    {
+      "dry_plan": "speed-bench/experiments/overthink-queue-launcher-20261002/native-effort25-preflight.json",
+      "dry_plan_sha256": "4921892957f3a5656e9511565e0a7b32a8a3a11d0e224f45b4a12a6c9810ba89",
+      "expected_records": 4,
+      "job": "native-effort25",
+      "output_dir": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1",
+      "pressure_dir": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort25-counting-four-20261002-v1-pressure",
+      "verified_files": 98
+    },
+    {
+      "dry_plan": "speed-bench/experiments/overthink-queue-launcher-20261002/native-effort50-preflight.json",
+      "dry_plan_sha256": "96dc4466ecb70c3699a0b0d4b3d3f3abc4fe6b37e8e370820a2ae5d7342ec9f2",
+      "expected_records": 4,
+      "job": "native-effort50",
+      "output_dir": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort50-counting-four-20261002-v1",
+      "pressure_dir": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/ideas/artifacts/native-effort50-counting-four-20261002-v1-pressure",
+      "verified_files": 98
+    }
+  ],
+  "queue_path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/experiments/ds41-ssd/overthink-provenance/counting-study/generation-queue-v1.json",
+  "queue_sha256": "2af91c43a8c701cdcec392ef9041607cbf068180ea32528521b9afc01cc495b6",
+  "source_proof_scope": "Frozen manifest source hashes and existing explicit core object hashes; historical runtime_sources_equal count is not newly rederived.",
+  "status": "FROZEN_CPU_PREPARED_NO_MODEL_OPEN"
+}

@@ -1,0 +1,7 @@
+arm,mode,tail,case,wall_seconds,complete,cap,correct,passed,failed,unresolved,read_count,write_count,config_unchanged,errors,grading_error,first_failure
+code-native-after,native,64,dedupe,121.54430729203159,True,False,True,161,0,0,1,1,True,[],null,null
+code-native-after,native,64,bucket,133.45559016702464,True,False,True,161,0,0,1,1,True,[],null,null
+code-native-before,native,64,dedupe,123.25843991700094,True,False,True,161,0,0,1,1,True,[],null,null
+code-native-before,native,64,bucket,127.59016416600207,True,False,True,161,0,0,1,1,True,[],null,null
+code-right64,reuse,64,dedupe,101.11062620801385,True,False,True,161,0,0,1,1,True,[],null,null
+code-right64,reuse,64,bucket,102.58202654198976,True,False,True,161,0,0,1,1,True,[],null,null

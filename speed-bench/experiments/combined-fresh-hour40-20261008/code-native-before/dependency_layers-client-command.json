@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/combined-fresh-hour40-20261008/run.py",
+    "--base-url",
+    "http://127.0.0.1:55178",
+    "--arm",
+    "native-before",
+    "--case",
+    "dependency_layers",
+    "--output",
+    "speed-bench/experiments/combined-fresh-hour40-20261008/code-native-before/http/dependency_layers",
+    "--visible",
+    ".workspaces/combined-fresh-20261008/visible",
+    "--global-cap",
+    "2048"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

@@ -1,0 +1,1 @@
+Compute (0xB6 & 0x3F) ^ 0x12 using integer bitwise AND then XOR. Return only JSON with decimal and a two-character uppercase hexadecimal string hex, without a 0x prefix.

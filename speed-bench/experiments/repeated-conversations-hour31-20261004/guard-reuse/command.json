@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/repeated-conversations-hour31-20261004/launch.py",
+    "--arm",
+    "reuse",
+    "--output",
+    "speed-bench/experiments/repeated-conversations-hour31-20261004/reuse",
+    "--cache",
+    ".workspaces/server-agent-day-20261004/repeat31-cache-reuse",
+    "--store",
+    ".workspaces/server-agent-day-20261004/repeat31-store-reuse",
+    "--shared",
+    ".workspaces/server-agent-day-20261004/repeat31-visible",
+    "--timeout",
+    "1200"
+  ],
+  "initial": {
+    "time": 1791149641.653802,
+    "level": 1,
+    "swap_gb": 0.021787109375,
+    "physical_gb": 128.0,
+    "free_gb": 58.01258850097656,
+    "file_backed_gb": 53.772430419921875,
+    "wired_gb": 4.028289794921875,
+    "compressor_gb": 9.133087158203125
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

@@ -1,0 +1,1661 @@
+{
+  "schema": "ROOT_RAGGED_NATIVE_TAIL_COMPLETED_INDEX_V1",
+  "time": 1791003518.690861,
+  "prepared_plan_sha256": "ad7cf0569eff888aae3ba3871a08b1e7c74a55b780a7e7eb9652552a408c1c1e",
+  "release_sha256": "86a39683081648e9ea0471654187cebb9735518b064814a7829070e2953671d6",
+  "producer_summary_sha256": "6baa3e40a2713a0377c620dbf1dfddfa9eac0bd59673163b1f078d4bb565c4fb",
+  "root_independent_audit_sha256": "6d0bd6cf0a832bd822a478dbe5cdb0d34f78c492f36f8300f14abd93264d34ed",
+  "source_freeze": "48b12ec774c519893375eebe4ee9c231fbbd6759",
+  "producer_evidence_freeze": "31b79f57f586f89fdd98171ca1ce20492db2e4c3",
+  "local_files": {
+    "prepared/analyze_ragged_native_tail_qualification.py": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/analyze_ragged_native_tail_qualification.py",
+      "bytes": 17643,
+      "mode": 420,
+      "sha256": "fb17ceb2a25125e3ac2354696001f4551479881ec4cdc31e7971037d147da228"
+    },
+    "prepared/branch-targets.txt": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/branch-targets.txt",
+      "bytes": 300,
+      "mode": 420,
+      "sha256": "27c86007454415311764368cdf0acecaad68bf47fa57797997584082de47cdd1"
+    },
+    "prepared/cpu-proof.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/cpu-proof.json",
+      "bytes": 1203,
+      "mode": 420,
+      "sha256": "bbee3b322362c24bca20382beb60b1a3a7bacfb02a842777a32ab3f69ab38059"
+    },
+    "prepared/cpu-tests.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/cpu-tests.log",
+      "bytes": 2955,
+      "mode": 420,
+      "sha256": "f78422c01fc59f447b7ca9b080f7dbd07cb61c19eb34d9146d58ad455bfc3ad1"
+    },
+    "prepared/metal/argsort.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/argsort.metal",
+      "bytes": 11174,
+      "mode": 420,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "prepared/metal/bin.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/bin.metal",
+      "bytes": 6580,
+      "mode": 420,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "prepared/metal/concat.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/concat.metal",
+      "bytes": 1932,
+      "mode": 420,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "prepared/metal/cpy.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/cpy.metal",
+      "bytes": 10154,
+      "mode": 420,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "prepared/metal/deepseek4_vision.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/deepseek4_vision.metal",
+      "bytes": 7815,
+      "mode": 420,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "prepared/metal/dense.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/dense.metal",
+      "bytes": 113439,
+      "mode": 420,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "prepared/metal/dsv41.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/dsv41.metal",
+      "bytes": 12508,
+      "mode": 420,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "prepared/metal/dsv4_hc.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/dsv4_hc.metal",
+      "bytes": 63069,
+      "mode": 420,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "prepared/metal/dsv4_kv.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/dsv4_kv.metal",
+      "bytes": 22218,
+      "mode": 420,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "prepared/metal/dsv4_misc.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/dsv4_misc.metal",
+      "bytes": 282139,
+      "mode": 420,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "prepared/metal/dsv4_rope.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/dsv4_rope.metal",
+      "bytes": 35980,
+      "mode": 420,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "prepared/metal/flash_attn.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/flash_attn.metal",
+      "bytes": 61784,
+      "mode": 420,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "prepared/metal/get_rows.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/get_rows.metal",
+      "bytes": 6976,
+      "mode": 420,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "prepared/metal/glm53_bf16.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/glm53_bf16.metal",
+      "bytes": 5466,
+      "mode": 420,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "prepared/metal/glm53_kda.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/glm53_kda.metal",
+      "bytes": 13116,
+      "mode": 420,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "prepared/metal/glm53_vision.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/glm53_vision.metal",
+      "bytes": 11295,
+      "mode": 420,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "prepared/metal/glu.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/glu.metal",
+      "bytes": 2129,
+      "mode": 420,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "prepared/metal/moe.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/moe.metal",
+      "bytes": 423032,
+      "mode": 420,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "prepared/metal/norm.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/norm.metal",
+      "bytes": 14766,
+      "mode": 420,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "prepared/metal/qwen4.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/qwen4.metal",
+      "bytes": 232464,
+      "mode": 420,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "prepared/metal/qwen4_vision.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/qwen4_vision.metal",
+      "bytes": 7402,
+      "mode": 420,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "prepared/metal/repeat.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/repeat.metal",
+      "bytes": 1640,
+      "mode": 420,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "prepared/metal/set_rows.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/set_rows.metal",
+      "bytes": 1909,
+      "mode": 420,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "prepared/metal/softmax.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/softmax.metal",
+      "bytes": 7679,
+      "mode": 420,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "prepared/metal/sum_rows.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/sum_rows.metal",
+      "bytes": 2737,
+      "mode": 420,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "prepared/metal/unary.metal": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/metal/unary.metal",
+      "bytes": 10104,
+      "mode": 420,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "prepared/original-growth.txt": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/original-growth.txt",
+      "bytes": 122688,
+      "mode": 420,
+      "sha256": "a859a10f9d74987789aa982a6d061db3991be11cec884e277fc5da4ce9f92adb"
+    },
+    "prepared/plan.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/plan.json",
+      "bytes": 72180,
+      "mode": 420,
+      "sha256": "ad7cf0569eff888aae3ba3871a08b1e7c74a55b780a7e7eb9652552a408c1c1e"
+    },
+    "prepared/prepared-command.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/prepared-command.json",
+      "bytes": 1008,
+      "mode": 420,
+      "sha256": "d77032b8c063828dd6deea63333a2ae27fa397271665106a3bf462874a87b72d"
+    },
+    "prepared/pressure/command.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/pressure/command.json",
+      "bytes": 948,
+      "mode": 420,
+      "sha256": "4d85b138d7031e4455de949a76ca9c7619b6ea368a8cd871a010fad4bb103264"
+    },
+    "prepared/pressure/pressure.jsonl": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/pressure/pressure.jsonl",
+      "bytes": 269920,
+      "mode": 420,
+      "sha256": "4d9900f3a509590b5cde00c9dad57cf2282c2896e0d556fc9c8dccc04c5e8eb3"
+    },
+    "prepared/pressure/result.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/pressure/result.json",
+      "bytes": 52,
+      "mode": 420,
+      "sha256": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a"
+    },
+    "prepared/producer-summary.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/producer-summary.json",
+      "bytes": 60491,
+      "mode": 420,
+      "sha256": "6baa3e40a2713a0377c620dbf1dfddfa9eac0bd59673163b1f078d4bb565c4fb"
+    },
+    "prepared/qualification-spec.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/qualification-spec.json",
+      "bytes": 5230,
+      "mode": 420,
+      "sha256": "84362b3e15bbbe99e9593aee382a4169cf6974a4d180c520a5dffd105e334f97"
+    },
+    "prepared/ragged-growth.txt": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/ragged-growth.txt",
+      "bytes": 125574,
+      "mode": 420,
+      "sha256": "059d281d116ac8a8df5979443565e1eed95370dbfa232917de6c396073218613"
+    },
+    "prepared/ragged_native_tail_validation.py": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/ragged_native_tail_validation.py",
+      "bytes": 7556,
+      "mode": 420,
+      "sha256": "44c9b424b48bf400c19e6da9d0a12ed1a1b9fb3a67eb57a30d85ddfe07b563fd"
+    },
+    "prepared/root-independent-raw-audit.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/root-independent-raw-audit.json",
+      "bytes": 14015,
+      "mode": 420,
+      "sha256": "6d0bd6cf0a832bd822a478dbe5cdb0d34f78c492f36f8300f14abd93264d34ed"
+    },
+    "prepared/root-launch-proof.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/root-launch-proof.json",
+      "bytes": 1408,
+      "mode": 420,
+      "sha256": "f8642be8fd4c85faa78b4ac3b9fbe3fba3c50b92bece3da8081ce4ac97d99c6e"
+    },
+    "prepared/root-release-proof.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/root-release-proof.json",
+      "bytes": 378,
+      "mode": 420,
+      "sha256": "86a39683081648e9ea0471654187cebb9735518b064814a7829070e2953671d6"
+    },
+    "prepared/root-static-review.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/root-static-review.json",
+      "bytes": 866,
+      "mode": 420,
+      "sha256": "1ac2f47cebf1f7589a0c698f26a5fe3b7d03d673492dbbb64d14fd3d874f68d3"
+    },
+    "prepared/run/complete.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/complete.json",
+      "bytes": 323,
+      "mode": 420,
+      "sha256": "08c9aa2fec55fad37d5f11c5a4ecd8efb86339fecce634ba2e0459ae642b1c1e"
+    },
+    "prepared/run/launch.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/launch.json",
+      "bytes": 119,
+      "mode": 420,
+      "sha256": "07743f260055c1d29ce07cd5e3acef54ab968806c5bf50b4461dce0cac27173a"
+    },
+    "prepared/run/model-identity.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/model-identity.json",
+      "bytes": 129,
+      "mode": 420,
+      "sha256": "82085185f0dc8bc751624a954a11b4861533295f49a5e9a6d3824c54b82d982d"
+    },
+    "prepared/run/new0-default/branch-io.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/branch-io.csv",
+      "bytes": 155,
+      "mode": 420,
+      "sha256": "03dbb71ccd3b5efeeb65585943b9f5b4517ed68a5cd94c1faa56c5124e5fc7a7"
+    },
+    "prepared/run/new0-default/branch-targets.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/branch-targets.csv",
+      "bytes": 992,
+      "mode": 420,
+      "sha256": "e11bc5d60176d171e3cc89d221c640d82430f698dd78c69e6e2396c717841dd0"
+    },
+    "prepared/run/new0-default/dispatch.jsonl": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/dispatch.jsonl",
+      "bytes": 2443,
+      "mode": 420,
+      "sha256": "f2b1357ea6dd7aed71d3bcec82a51a3da9e907232d2bda994585a3b007b850bf"
+    },
+    "prepared/run/new0-default/main.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/main.csv",
+      "bytes": 303,
+      "mode": 420,
+      "sha256": "fcacfcd434af13c5e18d9897fbef0c8c9dbcbc0eb69e8df99a7ee7bf31d29f19"
+    },
+    "prepared/run/new0-default/phase-3.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-3.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3"
+    },
+    "prepared/run/new0-default/phase-3.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-3.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3"
+    },
+    "prepared/run/new0-default/phase-5.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-5.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b"
+    },
+    "prepared/run/new0-default/phase-5.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-5.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b"
+    },
+    "prepared/run/new0-default-checked.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default-checked.json",
+      "bytes": 5745,
+      "mode": 420,
+      "sha256": "71b67fc5c1377020118eeff08a56a4416fec60132b2804082ad4673e9d5ab66d"
+    },
+    "prepared/run/new0-default-command.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default-command.json",
+      "bytes": 6442,
+      "mode": 420,
+      "sha256": "329148abfac74d484e1a3a92d68b60aa9a0b9c6770f13518d7e54552ae50f094"
+    },
+    "prepared/run/new0-default-process.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default-process.json",
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+    },
+    "prepared/run/new0-default-started.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default-started.json",
+      "bytes": 19,
+      "mode": 420,
+      "sha256": "cb5142492e461bd2907a974e1cdf3e8b8f57d989a1fa34cbb38ccb1f7b75dea0"
+    },
+    "prepared/run/new0-default-stderr.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default-stderr.log",
+      "bytes": 3469,
+      "mode": 420,
+      "sha256": "d8901f1b848c9af22aa712601e1c43b1d65c20b38e178498cdbac569f2069596"
+    },
+    "prepared/run/new0-default-stdout.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default-stdout.log",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepared/run/new0-fast/branch-io.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/branch-io.csv",
+      "bytes": 155,
+      "mode": 420,
+      "sha256": "9e7ef0c4ec2b8c69906f4893b9e19d62ed40b910bdedda89468dfc5f1a81c37c"
+    },
+    "prepared/run/new0-fast/branch-targets.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/branch-targets.csv",
+      "bytes": 992,
+      "mode": 420,
+      "sha256": "e11bc5d60176d171e3cc89d221c640d82430f698dd78c69e6e2396c717841dd0"
+    },
+    "prepared/run/new0-fast/dispatch.jsonl": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/dispatch.jsonl",
+      "bytes": 1899,
+      "mode": 420,
+      "sha256": "69240ff0b77dfc319159b7ac5ed4b81ee7164cadda804846459e0fd2f0c4057d"
+    },
+    "prepared/run/new0-fast/main.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/main.csv",
+      "bytes": 303,
+      "mode": 420,
+      "sha256": "237c75fb06d3b5d41f4aeebedf6cb0071cc387acaa1e3a635bd5fafea2f1fd11"
+    },
+    "prepared/run/new0-fast/phase-3.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-3.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196"
+    },
+    "prepared/run/new0-fast/phase-3.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-3.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196"
+    },
+    "prepared/run/new0-fast/phase-5.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-5.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5c22ffdbec071c0b8efbe60d4b8c87f314a4b604a379bb2616b2c1a51f1acb63"
+    },
+    "prepared/run/new0-fast/phase-5.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-5.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5c22ffdbec071c0b8efbe60d4b8c87f314a4b604a379bb2616b2c1a51f1acb63"
+    },
+    "prepared/run/new0-fast-checked.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast-checked.json",
+      "bytes": 5680,
+      "mode": 420,
+      "sha256": "b18b5690e27aded57937a3407508baac39f7386525ac0095da006bf4a95ddaea"
+    },
+    "prepared/run/new0-fast-command.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast-command.json",
+      "bytes": 6524,
+      "mode": 420,
+      "sha256": "ae3f3b26d342b7df40ad1c4228fae485d83dfe9a76796f0a0a42ef54838687ad"
+    },
+    "prepared/run/new0-fast-process.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast-process.json",
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+    },
+    "prepared/run/new0-fast-started.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast-started.json",
+      "bytes": 19,
+      "mode": 420,
+      "sha256": "b7428350ab9f4341cc402df3bd5c09cd2afc12a4a7ff69a282554f1c75ea224a"
+    },
+    "prepared/run/new0-fast-stderr.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast-stderr.log",
+      "bytes": 3470,
+      "mode": 420,
+      "sha256": "3c313c0a383d44b90bb473e0438089a3cafb197385e642682199cab2bfee32c8"
+    },
+    "prepared/run/new0-fast-stdout.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast-stdout.log",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepared/run/new1-default/branch-io.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/branch-io.csv",
+      "bytes": 155,
+      "mode": 420,
+      "sha256": "03dbb71ccd3b5efeeb65585943b9f5b4517ed68a5cd94c1faa56c5124e5fc7a7"
+    },
+    "prepared/run/new1-default/branch-targets.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/branch-targets.csv",
+      "bytes": 992,
+      "mode": 420,
+      "sha256": "e11bc5d60176d171e3cc89d221c640d82430f698dd78c69e6e2396c717841dd0"
+    },
+    "prepared/run/new1-default/dispatch.jsonl": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/dispatch.jsonl",
+      "bytes": 2443,
+      "mode": 420,
+      "sha256": "f2b1357ea6dd7aed71d3bcec82a51a3da9e907232d2bda994585a3b007b850bf"
+    },
+    "prepared/run/new1-default/main.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/main.csv",
+      "bytes": 303,
+      "mode": 420,
+      "sha256": "5175e1f2d8b9f2eaa40971526265b0a2306717190771fb5e284fcb9134280fae"
+    },
+    "prepared/run/new1-default/phase-3.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-3.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3"
+    },
+    "prepared/run/new1-default/phase-3.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-3.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3"
+    },
+    "prepared/run/new1-default/phase-5.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-5.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b"
+    },
+    "prepared/run/new1-default/phase-5.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-5.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b"
+    },
+    "prepared/run/new1-default-checked.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default-checked.json",
+      "bytes": 5743,
+      "mode": 420,
+      "sha256": "c6603a74b332689eafa9ef7f67072b6138c3edadd4209972d59df5e6888edc2a"
+    },
+    "prepared/run/new1-default-command.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default-command.json",
+      "bytes": 6442,
+      "mode": 420,
+      "sha256": "bc4f8d1d26fb8040dc444d01da19a920ec79ee556bca64ed2e101b982f4c8806"
+    },
+    "prepared/run/new1-default-process.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default-process.json",
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+    },
+    "prepared/run/new1-default-started.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default-started.json",
+      "bytes": 19,
+      "mode": 420,
+      "sha256": "2b47419842be3a6916aa51d3518f8292d98546c398c597c751016ca70d776fd3"
+    },
+    "prepared/run/new1-default-stderr.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default-stderr.log",
+      "bytes": 3469,
+      "mode": 420,
+      "sha256": "a0194c7638daaa21c32dc9cef5da151054c94da6382b09f2b7bd188cd7c25e22"
+    },
+    "prepared/run/new1-default-stdout.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default-stdout.log",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepared/run/new1-fast/branch-io.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/branch-io.csv",
+      "bytes": 155,
+      "mode": 420,
+      "sha256": "69d7fbba250cfd8a2f9cf91f68099944c5644076ba5fd4049d9638cb539f304f"
+    },
+    "prepared/run/new1-fast/branch-targets.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/branch-targets.csv",
+      "bytes": 992,
+      "mode": 420,
+      "sha256": "e11bc5d60176d171e3cc89d221c640d82430f698dd78c69e6e2396c717841dd0"
+    },
+    "prepared/run/new1-fast/dispatch.jsonl": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/dispatch.jsonl",
+      "bytes": 2325,
+      "mode": 420,
+      "sha256": "b856386dd9e63bdb62e4ebe897aa2056b1b6423aa0c267a5cc51415141360fe6"
+    },
+    "prepared/run/new1-fast/main.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/main.csv",
+      "bytes": 303,
+      "mode": 420,
+      "sha256": "c95e9cbff260b493518a55e97bc452fc82ac7bc2f485e7809b430c2b2633ce37"
+    },
+    "prepared/run/new1-fast/phase-3.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-3.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196"
+    },
+    "prepared/run/new1-fast/phase-3.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-3.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196"
+    },
+    "prepared/run/new1-fast/phase-5.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-5.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "7df9b0892d0cb47539cd17ba281d195f444adc115c8dcde3a4f31ad8c235ff9a"
+    },
+    "prepared/run/new1-fast/phase-5.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-5.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "7df9b0892d0cb47539cd17ba281d195f444adc115c8dcde3a4f31ad8c235ff9a"
+    },
+    "prepared/run/new1-fast-checked.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast-checked.json",
+      "bytes": 5737,
+      "mode": 420,
+      "sha256": "8d27281746a80a1e1274da6483b34173d75d2fd8eee9c94b69b822f989a5a066"
+    },
+    "prepared/run/new1-fast-command.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast-command.json",
+      "bytes": 6524,
+      "mode": 420,
+      "sha256": "3686d12853a1cdf6ffb4661c558d6b2be28a640a2708ab92108bbfbd5c0883f9"
+    },
+    "prepared/run/new1-fast-process.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast-process.json",
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+    },
+    "prepared/run/new1-fast-started.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast-started.json",
+      "bytes": 19,
+      "mode": 420,
+      "sha256": "be2c0dfbc937e43be4756652d1c6e555c5c70a6264eeb9047bd44dbbe169533e"
+    },
+    "prepared/run/new1-fast-stderr.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast-stderr.log",
+      "bytes": 3471,
+      "mode": 420,
+      "sha256": "d085e7e4a854ce760c431b79367da857bcd98bb7b2113d03d29f81a87d3d0fef"
+    },
+    "prepared/run/new1-fast-stdout.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast-stdout.log",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepared/run/old0-default/branch-io.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/branch-io.csv",
+      "bytes": 155,
+      "mode": 420,
+      "sha256": "03dbb71ccd3b5efeeb65585943b9f5b4517ed68a5cd94c1faa56c5124e5fc7a7"
+    },
+    "prepared/run/old0-default/branch-targets.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/branch-targets.csv",
+      "bytes": 992,
+      "mode": 420,
+      "sha256": "e11bc5d60176d171e3cc89d221c640d82430f698dd78c69e6e2396c717841dd0"
+    },
+    "prepared/run/old0-default/dispatch.jsonl": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/dispatch.jsonl",
+      "bytes": 2443,
+      "mode": 420,
+      "sha256": "f2b1357ea6dd7aed71d3bcec82a51a3da9e907232d2bda994585a3b007b850bf"
+    },
+    "prepared/run/old0-default/main.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/main.csv",
+      "bytes": 303,
+      "mode": 420,
+      "sha256": "945ad3c0ed9c191a0de7f7366c71f14cf5a3e79870c322176112b8c33095b503"
+    },
+    "prepared/run/old0-default/phase-3.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-3.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3"
+    },
+    "prepared/run/old0-default/phase-3.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-3.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3"
+    },
+    "prepared/run/old0-default/phase-5.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-5.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b"
+    },
+    "prepared/run/old0-default/phase-5.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-5.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b"
+    },
+    "prepared/run/old0-default-checked.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default-checked.json",
+      "bytes": 5745,
+      "mode": 420,
+      "sha256": "cbbf81a6732479c851cf3c7ae7227678bc7d68787e1806191b94ff55f28aa6af"
+    },
+    "prepared/run/old0-default-command.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default-command.json",
+      "bytes": 6442,
+      "mode": 420,
+      "sha256": "64f6946ffff334492453d7153cedf0d3975fb4e00f4283aa722ba4f04f3a94ee"
+    },
+    "prepared/run/old0-default-process.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default-process.json",
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+    },
+    "prepared/run/old0-default-started.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default-started.json",
+      "bytes": 19,
+      "mode": 420,
+      "sha256": "5735575721674f10db3c17ecf15b4ed61eb0467832f46a9f40f4088c63f0fe48"
+    },
+    "prepared/run/old0-default-stderr.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default-stderr.log",
+      "bytes": 3469,
+      "mode": 420,
+      "sha256": "3474a837bf32d8aacad3c552150eeb1323eb4e1dce6f54f5273b0cfc57bdf261"
+    },
+    "prepared/run/old0-default-stdout.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default-stdout.log",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepared/run/old0-fast/branch-io.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/branch-io.csv",
+      "bytes": 155,
+      "mode": 420,
+      "sha256": "9e7ef0c4ec2b8c69906f4893b9e19d62ed40b910bdedda89468dfc5f1a81c37c"
+    },
+    "prepared/run/old0-fast/branch-targets.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/branch-targets.csv",
+      "bytes": 992,
+      "mode": 420,
+      "sha256": "e11bc5d60176d171e3cc89d221c640d82430f698dd78c69e6e2396c717841dd0"
+    },
+    "prepared/run/old0-fast/dispatch.jsonl": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/dispatch.jsonl",
+      "bytes": 1899,
+      "mode": 420,
+      "sha256": "69240ff0b77dfc319159b7ac5ed4b81ee7164cadda804846459e0fd2f0c4057d"
+    },
+    "prepared/run/old0-fast/main.csv": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/main.csv",
+      "bytes": 304,
+      "mode": 420,
+      "sha256": "974d29d70c9f6ce189a20a8402209377233bcee3aeca855c240da4fe0a210114"
+    },
+    "prepared/run/old0-fast/phase-3.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-3.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196"
+    },
+    "prepared/run/old0-fast/phase-3.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-3.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196"
+    },
+    "prepared/run/old0-fast/phase-5.anchor.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-5.anchor.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5c22ffdbec071c0b8efbe60d4b8c87f314a4b604a379bb2616b2c1a51f1acb63"
+    },
+    "prepared/run/old0-fast/phase-5.restored.logits.f32": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-5.restored.logits.f32",
+      "bytes": 517120,
+      "mode": 420,
+      "sha256": "5c22ffdbec071c0b8efbe60d4b8c87f314a4b604a379bb2616b2c1a51f1acb63"
+    },
+    "prepared/run/old0-fast-checked.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast-checked.json",
+      "bytes": 5686,
+      "mode": 420,
+      "sha256": "a22dd536a8acf2fd76b53c67471ef0b359aacbf7bb7e96f4a56095bdecd77639"
+    },
+    "prepared/run/old0-fast-command.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast-command.json",
+      "bytes": 6524,
+      "mode": 420,
+      "sha256": "8da919f019e134bfa644b0472e75b42962691417b8d7d29356896a7c0d1037d9"
+    },
+    "prepared/run/old0-fast-process.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast-process.json",
+      "bytes": 22,
+      "mode": 420,
+      "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+    },
+    "prepared/run/old0-fast-started.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast-started.json",
+      "bytes": 19,
+      "mode": 420,
+      "sha256": "1a66ac708face9511a8aa80897a88b8ce2b832520e43da53a6f8bc1ffb41d545"
+    },
+    "prepared/run/old0-fast-stderr.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast-stderr.log",
+      "bytes": 3470,
+      "mode": 420,
+      "sha256": "c950e4c135af9d0e1d8e91eacc393e2f82ff5ce51b2b16aed5cf3eab8bdd6f35"
+    },
+    "prepared/run/old0-fast-stdout.log": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast-stdout.log",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepared/run/parent-proof.json": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/parent-proof.json",
+      "bytes": 1038,
+      "mode": 420,
+      "sha256": "26d7b906c47d2af8a7aae988ccc95e9477e40ae453fdc062621a42183bfa4313"
+    },
+    "prepared/run_ragged_native_tail_qualification.py": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run_ragged_native_tail_qualification.py",
+      "bytes": 27072,
+      "mode": 420,
+      "sha256": "01d62a5df245fedbc8cac1e797594b446c54f2b164acf210456936cb7be73c5b"
+    },
+    "prepared/runner-tests.py": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/runner-tests.py",
+      "bytes": 29400,
+      "mode": 420,
+      "sha256": "94266de5d61610deae81f83e81cf745695bf5bc6cabf518e050744a36f487ac9"
+    },
+    "source/root_raw_audit_v1.py": {
+      "source": "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/ragged_root_raw_audit_v1.py",
+      "bytes": 5811,
+      "mode": 420,
+      "sha256": "5982b3c1ad688be552a2d002cedd20f280e9f83f7e29c977b94828b33e2e1a9d"
+    },
+    "root-launch.log": {
+      "source": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/ragged-native-tail-qualification-root-launch-20261003-v1.log",
+      "bytes": 283,
+      "mode": 420,
+      "sha256": "96145d68751d6d236a78932a3b58efc7d4c5763e8e45c4decd2b7525e0c14b10"
+    },
+    "compact-summary.json": {
+      "source": "ROOT composed from released producer/independent audit",
+      "bytes": 18647,
+      "mode": 420,
+      "sha256": "0f0bd2e109251d90c1bb49b9bf3ce4bd8819f514a1e6d0098932a12f9d3a337c"
+    }
+  },
+  "external_retained_files": {
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/main.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 4654080,
+      "mode": 420,
+      "sha256": "e3c4d3718e353301da81018f82900bd74093ddaaf1b46f0cc873fbf0ddff7176"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/main.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185819324,
+      "mode": 420,
+      "sha256": "531082edbb9b6628a265088e2e2280da7b5cc273ae766afa2784ea420f36a9f1"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-3.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-3.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77440072,
+      "mode": 420,
+      "sha256": "7c9ea28c6b9904f8ec23f239b477e4de46aea7210ce5b49dfc575403e3f5f2bb"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-3.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "3a22d2f250fbbdb1ce9ddfe98a16e5068a2330ebb7aa5f78192fc7950a404679"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-3.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-5.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-5.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185678436,
+      "mode": 420,
+      "sha256": "d01ae21cdc3e18f9fb1584218e94ece91884e71e514122ab4f02cacd9a3e3247"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-5.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "0f2251aa4e6356c5db73b6937e4b3e6f1c56712a8ae8252b0135d2430ebbef6e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-default/phase-5.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/main.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 4654080,
+      "mode": 420,
+      "sha256": "6e2772c3cd57b6c5c0085253faa8f23e61a21c99565de3b4d83325e732f9b553"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/main.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185819324,
+      "mode": 420,
+      "sha256": "80d0bef0357cf0d6792e15c2f2ef3671002a5291533547abaee185538983944e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-3.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-3.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77440072,
+      "mode": 420,
+      "sha256": "ede70ec07a885916a2c18ff9a2964ed0c9a5c1d280a87f09fc4820fe68091044"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-3.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "58693cdaeedb265b7a57a62c4abbe037d434291683d72dc5a160ffe9dfabd86f"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-3.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-5.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "d35a0800fb169a877c9493e03a2d121c9f017d0e1ced0084f88081d4466152c9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-5.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185678436,
+      "mode": 420,
+      "sha256": "042a161005672006e94e1c6ff96cc9095580943237721227e3f15662372a768f"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-5.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "94ce9c2a6bcfeb0d2e589635d4ae4b9c314a8ac525a92ff37b6e0ed306c45159"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new0-fast/phase-5.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "d35a0800fb169a877c9493e03a2d121c9f017d0e1ced0084f88081d4466152c9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/main.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 4654080,
+      "mode": 420,
+      "sha256": "e3c4d3718e353301da81018f82900bd74093ddaaf1b46f0cc873fbf0ddff7176"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/main.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185819324,
+      "mode": 420,
+      "sha256": "531082edbb9b6628a265088e2e2280da7b5cc273ae766afa2784ea420f36a9f1"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-3.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-3.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77440072,
+      "mode": 420,
+      "sha256": "7c9ea28c6b9904f8ec23f239b477e4de46aea7210ce5b49dfc575403e3f5f2bb"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-3.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "3a22d2f250fbbdb1ce9ddfe98a16e5068a2330ebb7aa5f78192fc7950a404679"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-3.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-5.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-5.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185678436,
+      "mode": 420,
+      "sha256": "d01ae21cdc3e18f9fb1584218e94ece91884e71e514122ab4f02cacd9a3e3247"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-5.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "0f2251aa4e6356c5db73b6937e4b3e6f1c56712a8ae8252b0135d2430ebbef6e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-default/phase-5.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/main.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 4654080,
+      "mode": 420,
+      "sha256": "efdf7b96d3888706ed2cd3da13ece99b28caedebb28e34aa4493e921a7d36ac3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/main.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185819324,
+      "mode": 420,
+      "sha256": "8c873a80391b77c6d380476fea969ff6b7c2ff0026d2bec7452ce80028a9ebd3"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-3.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-3.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77440072,
+      "mode": 420,
+      "sha256": "ede70ec07a885916a2c18ff9a2964ed0c9a5c1d280a87f09fc4820fe68091044"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-3.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "58693cdaeedb265b7a57a62c4abbe037d434291683d72dc5a160ffe9dfabd86f"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-3.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-5.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "4f24f12130f29958a87ed4a3b8bfb98d676190abbe0addbb9c40506c181dffda"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-5.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185678436,
+      "mode": 420,
+      "sha256": "0586c03d57f56ec23dfbaa3864237351d45109ac6d8038e8931c0072c7b32b0a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-5.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "5e8891aa28f87df7c35f622ea8cf50fc16ca45b28f0f1e8b5342b5a292b1272c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/new1-fast/phase-5.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "4f24f12130f29958a87ed4a3b8bfb98d676190abbe0addbb9c40506c181dffda"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/main.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 4654080,
+      "mode": 420,
+      "sha256": "e3c4d3718e353301da81018f82900bd74093ddaaf1b46f0cc873fbf0ddff7176"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/main.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185819324,
+      "mode": 420,
+      "sha256": "531082edbb9b6628a265088e2e2280da7b5cc273ae766afa2784ea420f36a9f1"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-3.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-3.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77440072,
+      "mode": 420,
+      "sha256": "7c9ea28c6b9904f8ec23f239b477e4de46aea7210ce5b49dfc575403e3f5f2bb"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-3.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "3a22d2f250fbbdb1ce9ddfe98a16e5068a2330ebb7aa5f78192fc7950a404679"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-3.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-5.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-5.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185678436,
+      "mode": 420,
+      "sha256": "d01ae21cdc3e18f9fb1584218e94ece91884e71e514122ab4f02cacd9a3e3247"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-5.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "0f2251aa4e6356c5db73b6937e4b3e6f1c56712a8ae8252b0135d2430ebbef6e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-default/phase-5.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/main.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 4654080,
+      "mode": 420,
+      "sha256": "6e2772c3cd57b6c5c0085253faa8f23e61a21c99565de3b4d83325e732f9b553"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/main.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185819324,
+      "mode": 420,
+      "sha256": "80d0bef0357cf0d6792e15c2f2ef3671002a5291533547abaee185538983944e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-3.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-3.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77440072,
+      "mode": 420,
+      "sha256": "ede70ec07a885916a2c18ff9a2964ed0c9a5c1d280a87f09fc4820fe68091044"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-3.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "58693cdaeedb265b7a57a62c4abbe037d434291683d72dc5a160ffe9dfabd86f"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-3.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 77235144,
+      "mode": 420,
+      "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-5.anchor.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "d35a0800fb169a877c9493e03a2d121c9f017d0e1ced0084f88081d4466152c9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-5.branch-final.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185678436,
+      "mode": 420,
+      "sha256": "042a161005672006e94e1c6ff96cc9095580943237721227e3f15662372a768f"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-5.branch.logits.f32": {
+      "kind": "retained_native_outcome",
+      "bytes": 16547840,
+      "mode": 420,
+      "sha256": "94ce9c2a6bcfeb0d2e589635d4ae4b9c314a8ac525a92ff37b6e0ed306c45159"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-ragged-native-tail-qualification/speed-bench/ideas/artifacts/ragged-native-tail-qualification-prepared-20261003-v1/run/old0-fast/phase-5.restored.state.bin": {
+      "kind": "retained_native_outcome",
+      "bytes": 185473508,
+      "mode": 420,
+      "sha256": "d35a0800fb169a877c9493e03a2d121c9f017d0e1ced0084f88081d4466152c9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/build-manifest.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 6767,
+      "mode": 420,
+      "sha256": "3d77d22dc1d3da7bfab067911eea7542775e87d93d476c3939ec3b0d3fc22e75"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/frontend-compile.stderr": {
+      "kind": "qualified_input_asset",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/frontend-compile.stdout": {
+      "kind": "qualified_input_asset",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/new-link.stderr": {
+      "kind": "qualified_input_asset",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/new-link.stdout": {
+      "kind": "qualified_input_asset",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/old-link.stderr": {
+      "kind": "qualified_input_asset",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/old-link.stdout": {
+      "kind": "qualified_input_asset",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/ragged-frontend.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 52200,
+      "mode": 420,
+      "sha256": "2259b909c4614b2307a36cfe343e76b73878e9cd656ae74d10a1839f7acd9568"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/ragged-new": {
+      "kind": "qualified_input_asset",
+      "bytes": 2692856,
+      "mode": 493,
+      "sha256": "b2cafdd13c5d505be1ded878ec75afd290d1c3551af815a694574de79e5e89ed"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/ragged-old": {
+      "kind": "qualified_input_asset",
+      "bytes": 2692616,
+      "mode": 493,
+      "sha256": "fe50bd40e61f9bda1d84f78387b2ce14921f61b5811f63861eebd4ae886cff6c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/artifacts/ragged-native-tail-build-v2/root-build-grant.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 5367,
+      "mode": 420,
+      "sha256": "afcd0e1e394af183d906853f7a32319667d38347f3f0a3138a9e10713e17b063"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/evidence/ragged-native-tail-header-correction-20261003-v2/README.md": {
+      "kind": "qualified_input_asset",
+      "bytes": 823,
+      "mode": 420,
+      "sha256": "057a9888c55fe8ed26264ac3bacd231337ddd9f69d8cb4bb93c50ec3d985545a"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/evidence/ragged-native-tail-header-correction-20261003-v2/manifest.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 5055,
+      "mode": 420,
+      "sha256": "c472f83bb300add16806f98f5f4cdbf358d73344e8076e81db7e3a1762736842"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/evidence/ragged-native-tail-header-correction-20261003-v2/proof.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 8230,
+      "mode": 420,
+      "sha256": "e89b4f81e640cac7c114c10b85fa6a732f2bd651fed51ab0ab328b1c5dd14cca"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/evidence/ragged-native-tail-source-cpu-20261003-v1/README.md": {
+      "kind": "qualified_input_asset",
+      "bytes": 1625,
+      "mode": 420,
+      "sha256": "d03ae4f7c8bb38036f21617b0974d1f06ba99ad0c1911751442cfe5ca3255d43"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/evidence/ragged-native-tail-source-cpu-20261003-v1/manifest.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 8045,
+      "mode": 420,
+      "sha256": "396b855c2664feca09d1fccee3efd91170905bd2ed994d917e05c06e489fc0f7"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/evidence/ragged-native-tail-source-cpu-20261003-v1/original-no-tail-evidence-refs.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 3010,
+      "mode": 420,
+      "sha256": "60f67dd4f8380858de80e4562e64f07c24147b90f4ff96fdbbce52d9bdf0f240"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/evidence/ragged-native-tail-source-cpu-20261003-v1/proof.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 2363,
+      "mode": 420,
+      "sha256": "b5ef7b16d0cba69bc70b2aadf6f1ac0128680e32204886adb5bcf10391835098"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/branch-targets.txt": {
+      "kind": "qualified_input_asset",
+      "bytes": 300,
+      "mode": 420,
+      "sha256": "27c86007454415311764368cdf0acecaad68bf47fa57797997584082de47cdd1"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/native-tail-decision.c.txt": {
+      "kind": "qualified_input_asset",
+      "bytes": 4172,
+      "mode": 420,
+      "sha256": "236f5547d2654417c1b6b088e91f2f1d9dfe087594d3300fc75a4b09698372bf"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/original-growth.txt": {
+      "kind": "qualified_input_asset",
+      "bytes": 122688,
+      "mode": 420,
+      "sha256": "a859a10f9d74987789aa982a6d061db3991be11cec884e277fc5da4ce9f92adb"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/qualification-spec.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 5230,
+      "mode": 420,
+      "sha256": "84362b3e15bbbe99e9593aee382a4169cf6974a4d180c520a5dffd105e334f97"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/quiet-proposal.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 1279,
+      "mode": 420,
+      "sha256": "f85056d2b1b9c8919ee033e5f3d007152a41bbb5f6037a7ae99289662140dfce"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/ragged-growth.txt": {
+      "kind": "qualified_input_asset",
+      "bytes": 125574,
+      "mode": 420,
+      "sha256": "059d281d116ac8a8df5979443565e1eed95370dbfa232917de6c396073218613"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/short-path-reachability.c.txt": {
+      "kind": "qualified_input_asset",
+      "bytes": 1317,
+      "mode": 420,
+      "sha256": "70ae671197b95b226f4cd42daff1a4640a0a7697e7f3c57779a9d50296428b7c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v1/validation.py": {
+      "kind": "qualified_input_asset",
+      "bytes": 7556,
+      "mode": 420,
+      "sha256": "44c9b424b48bf400c19e6da9d0a12ed1a1b9fb3a67eb57a30d85ddfe07b563fd"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/build-plan.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 23980,
+      "mode": 420,
+      "sha256": "89ea8c5693e434ece7d5f51da9a935843acfb925299ef02fd97ef27eb2e3f2b6"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/check_build_headers.py": {
+      "kind": "qualified_input_asset",
+      "bytes": 5569,
+      "mode": 420,
+      "sha256": "37f6db9b16f311b3ce52e35743eb988339e1402f1794e1ec9d43b1c869b870d6"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/header-identity-proof.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 2769,
+      "mode": 420,
+      "sha256": "53017310f6a718158b9ca671d086924c5a71792a8aa3f21c5c653a229fbb276e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/include/ds4.h": {
+      "kind": "qualified_input_asset",
+      "bytes": 35802,
+      "mode": 420,
+      "sha256": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/include/ds4_deepseek41_gpu.h": {
+      "kind": "qualified_input_asset",
+      "bytes": 7317,
+      "mode": 420,
+      "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/include/ds4_gpu.h": {
+      "kind": "qualified_input_asset",
+      "bytes": 152618,
+      "mode": 420,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/include/ds4_gpu_tp.h": {
+      "kind": "qualified_input_asset",
+      "bytes": 2678,
+      "mode": 420,
+      "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/include/ds4_qwen4_vision.h": {
+      "kind": "qualified_input_asset",
+      "bytes": 666,
+      "mode": 420,
+      "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/include/ds4_ssd.h": {
+      "kind": "qualified_input_asset",
+      "bytes": 1349,
+      "mode": 420,
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/refused-build-v1/first-build-refusal.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 1477,
+      "mode": 420,
+      "sha256": "8db6cda19c6c30b25bcda3076486ef9c8ae1044e8df134343debc0a95f235d86"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/refused-build-v1/frontend-compile.stderr": {
+      "kind": "qualified_input_asset",
+      "bytes": 363,
+      "mode": 420,
+      "sha256": "aa3482c0cadcb24abde4ba59b053a386e001d8ecdb863f23fdb9c8f21cdc959e"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/refused-build-v1/frontend-compile.stdout": {
+      "kind": "qualified_input_asset",
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/refused-build-v1/root-build-grant.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 5372,
+      "mode": 420,
+      "sha256": "718047f5fb1cdc13acccc87d66102b407ee6fccb915967249a613f7bf08fc604"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ideas/ragged_native_tail_v2/source-before-cpu.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 340,
+      "mode": 420,
+      "sha256": "8f1bbd797ff2aa7b39fa87f071e6942b855310a2639fb84af299efdd2070b862"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ragged_native_tail_contract.h": {
+      "kind": "qualified_input_asset",
+      "bytes": 1676,
+      "mode": 420,
+      "sha256": "cc84eb66d44c94c76edcd18a8f5f1d2575e36b12657ddff2a9750ef06a0b56e5"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/speed-bench/ragged_native_tail_probe.c": {
+      "kind": "qualified_input_asset",
+      "bytes": 12795,
+      "mode": 420,
+      "sha256": "113a476e1dcd6c85857973ec41d957c30e3a7e6e36c68bd1a1a0fd55b8702c5c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/tests/test_ragged_native_tail_contract.c": {
+      "kind": "qualified_input_asset",
+      "bytes": 2727,
+      "mode": 420,
+      "sha256": "4292ca7a719569cff18ed36ae89d353d04e92c0dec9315e0002415da4fe5e152"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-long-append-tail-ragged/tests/test_ragged_native_tail_validation.py": {
+      "kind": "qualified_input_asset",
+      "bytes": 5632,
+      "mode": 420,
+      "sha256": "85974c765edf6668cead3c1e23d0bf3558e4a34943f09c7a8727b607cd439cfb"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/manifest.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 9137,
+      "mode": 420,
+      "sha256": "a8fd08c721e8ff7f657f4297cc65e112c376c90ec31d7073d2e9369e547049f8"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-native-selected-tail/speed-bench/ideas/artifacts/long-append-tail-native-build-20261003-v2/build-manifest.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 50698,
+      "mode": 420,
+      "sha256": "3ccafd1363e1c9fa18384055aa4d45e03bbef24b531f040fdb24cddb20ed6a5f"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-native-selected-tail/speed-bench/ideas/artifacts/long-append-tail-native-build-20261003-v2/ds4.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 5654144,
+      "mode": 420,
+      "sha256": "012b874417b29872bc246d6003e2480be3897d4344ef3ac94bfb471b06974d88"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/build-manifest.json": {
+      "kind": "qualified_input_asset",
+      "bytes": 70382,
+      "mode": 420,
+      "sha256": "e2cfda6426c8ec7c371ec18a12dff60932c1c2f5b166a7ba5b5ccafdc06aa91f"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-next-build-plan-v5/old7c6e.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 5651024,
+      "mode": 420,
+      "sha256": "8a8d7e10eff13587e35011754ac907b8a015cf6e7970a42cc19a6bfebb810ccd"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_distributed.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 427168,
+      "mode": 420,
+      "sha256": "c1c362737fc39bc8dd5b40ff3f4d03f99c6f35ac381923a7316947437bb34b27"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_engram.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 30128,
+      "mode": 420,
+      "sha256": "177b20ea91d0483862a65534a48ade524526362689b654433cf234eeee4fad71"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_image.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 165728,
+      "mode": 420,
+      "sha256": "955a7d909bf5e9a792777960dceb3d809e3779f46e68f99d120aef8a3d712eed"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_layer_pack.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 11320,
+      "mode": 420,
+      "sha256": "dd072b50b2ba9983f3f5ef37127cec23b4d807265cfe0bffda1764ce0b217cba"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_metal.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 2803120,
+      "mode": 420,
+      "sha256": "f32bf8251fe2619c795e74ad634fdd43e76cebde0b555177aa9f4be57b3c380b"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_ssd.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 13800,
+      "mode": 420,
+      "sha256": "2e418c6f60f1cdc3abdd4473eabbaaf8b9ed29b535d211149c44463cab50a408"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-build-20261002/ds4_tp.o": {
+      "kind": "qualified_input_asset",
+      "bytes": 207496,
+      "mode": 420,
+      "sha256": "9d97e0d9c7e3d78928ba9d911daf96fcf85178352ac567fdcdf78a68f9b2b7a1"
+    },
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py": {
+      "kind": "qualified_input_asset",
+      "bytes": 9066,
+      "mode": 420,
+      "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c"
+    },
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python": {
+      "kind": "qualified_input_asset",
+      "bytes": 33568,
+      "mode": 493,
+      "sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d"
+    },
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/bin/python3.14": {
+      "kind": "qualified_input_asset",
+      "bytes": 34640,
+      "mode": 493,
+      "sha256": "7ebde552773a4045532637b114d645a313e045ac07b26f5e520bf039f1e34063"
+    },
+    "/opt/homebrew/opt/python@3.14/bin/python3.14": {
+      "kind": "qualified_input_asset",
+      "bytes": 34640,
+      "mode": 493,
+      "sha256": "7ebde552773a4045532637b114d645a313e045ac07b26f5e520bf039f1e34063",
+      "literal_link_text": "../Frameworks/Python.framework/Versions/3.14/bin/python3.14"
+    }
+  },
+  "exclusion": "Only generated __pycache__ entries. All native outcomes retained; files above2MiB stay at literal original paths and are pinned here.",
+  "runtime_and_shaders_unchanged": {
+    "Makefile": "b31a31fc919067815509fa9b639701c6d30bacbb80cd52f2f3cd534398b4ed56",
+    "ds4": "dc0d2a28e7d05c668b21abcd9533885ec557444e3a0162c369bc25236bcc6505",
+    "ds4-agent": "5a9e24a8c7d235650bdd97d69b0321192df1ad8b0be6da8cff4e39c40c8e64b2",
+    "ds4.c": "fa2f155d8051b3885da59a325031cc811144a150d1f0ae27e84b65f4c1b974c5",
+    "ds4.h": "a4606b5e74bc1f39c8e566de6c6a7bb6f5d281d41b282f0b0e3f475f8d74c0f8",
+    "ds4.o": "45da7d4af7fbb2b2ae298408a3cd87c266e41c5fcf0fcfaecb7ba3b155af02cf",
+    "ds4_agent.c": "21cd291630316336b5b3ea07a97331c1cbd4cebfa46a433242d42133323fcfce",
+    "ds4_agent.o": "8dad6f89f93b589f4fe8c381a8294f23c03cf45ad03142376877fb1b109da97b",
+    "ds4_agent_test.o": "34744b820f35abbfb9873581c9e1ddc8c3e1235e64478395bb792f39cbbe0a11",
+    "ds4_bench.c": "a35ca8b9995c6cda914df961fa0261cea766317a002085eb6d47cd12f85cb17c",
+    "ds4_bench.o": "6ebd671838a4584b68d8dcc9b5d597df5bdbd90c1410e4c7ed6ff8ff0ed46a43",
+    "ds4_cli.c": "ddf0871860c1d6e58946ada50055482fe26724ed64fbe0706c112b6bceddc81e",
+    "ds4_cli.o": "efd58fee58273f6b4be182a3d88367bd190cc2ae1157ffb269d50f29a5d009d5",
+    "ds4_cpu_test_hooks.o": "4eab95d903b934a7e27a12160bf38b3bca4d63195e7ed7261e089e0c2e03d579",
+    "ds4_deepseek41_gpu.h": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+    "ds4_distributed.c": "08ff11e22f2c5791de72cc910d94a6817c7a8310bde4b9cee57379f3be75e0f2",
+    "ds4_distributed.h": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+    "ds4_distributed.o": "5e8a183b83abed129a7ab0ea1b6ce298ce3c1483d246829dafab98aacc5d8635",
+    "ds4_engram.c": "1e82b031fd19b3d0861780d44da2506677c36ad2b4e85349f2ac8e5d53eb9c92",
+    "ds4_engram.h": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+    "ds4_engram.o": "41eefb68d54c36192c579379d9f9f9b7f35b3df619be97caed967ecb8b568982",
+    "ds4_eval.c": "4092ce91692e99b6cbb846401f075969362de5d2ea62662513979e18480f9a60",
+    "ds4_eval.o": "2714bcb238bc5c1ff1c905f481fb5e0ec5964ef40de7ec3cb6d1c3e99c8ef64e",
+    "ds4_eval_cases.c": "9e61d65d5c4db4fd312955b9ce4aed487b0487748b2cb8f91cf6b80b9b5cc764",
+    "ds4_eval_cases.h": "39bc494d1a95ec095a16a0ed8c52326e6cb67cb11c20613aeccfc2108fa545a2",
+    "ds4_eval_cases.o": "3018e29dfaca42ecb6ed95e0e4d4dfdfe24034c9313d617bbe18251ca3ee4fdd",
+    "ds4_gpu.h": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "ds4_gpu_args.c": "8df9f52e84ce55e55e87e6558d10e7b3380d416cdddbd82c11dd82def1acf890",
+    "ds4_gpu_args.h": "bb9398a37f0e5f346641aee6d556c4703a41ed2c09442693e48dab591a50d993",
+    "ds4_gpu_args.o": "03fa37f90867d2d4dabf4cbde699408d61aa78dff605c58e6f63161c52906121",
+    "ds4_gpu_mgpu.h": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+    "ds4_gpu_tp.h": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+    "ds4_help.c": "15d71ea67e1a356bd3d905cd5f28024972374942aea7ef6f221e20f5b892e4f4",
+    "ds4_help.h": "0b4af2be3ec7278a3f56489c945b88a56a744c0743c6f63fbbe70c0d9498ec0c",
+    "ds4_help.o": "5f21d0a292a83eef20d60075ff8deb4f99d7558a595e11b3c91b5269acde4a6d",
+    "ds4_image.c": "6da84ab6ec63e0fe5351781c358798b2f5c6085aea77e8293c6f7b9569cb470c",
+    "ds4_image.h": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+    "ds4_image.o": "ebdae98d494de74fd560daed53aad2bd934ff7012499fc2cde82e7e994278f60",
+    "ds4_kvstore.c": "e8d9849f979470d500c5f3370a59bd5b10283eb694cae042f6103e8d1bebe2dc",
+    "ds4_kvstore.h": "e6d0e2836385285718436d89292d1052099b7cc9a2c8a1c79d3d59e214d81c3b",
+    "ds4_kvstore.o": "b691bcb29940c71568ed5fb8e6c5cdb568c83a9fa108cf755c52512a0ee5192e",
+    "ds4_layer_pack.c": "ed93c59f8f7579e03ee74ffda8e4677653d408b6f2fc53db54270825909f23ce",
+    "ds4_layer_pack.h": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+    "ds4_layer_pack.o": "efa53eacf5c197bd0ee5c6c140e70fd5924673f788e6876cac3656deea3b694d",
+    "ds4_linux_memory.h": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+    "ds4_metal.m": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+    "ds4_metal.o": "813ff15ec709934f97bd41c018e5cab3cf796d4921b3adff46203efbe7ce80b7",
+    "ds4_prompt_prefix.c": "61826ac373e18fe8e8876d3661a014975cf17629baeedf3084ed5f4a1aff0e48",
+    "ds4_prompt_prefix.h": "3c5806bf5ed3e451adbf5487ac7105ca32a549c4e1e17d7c61883b52e570b7b1",
+    "ds4_prompt_prefix.o": "5f2622d747eb78c92b1f5ca497d9fc76a17b1c7d0382bf7357754d00a141e7c3",
+    "ds4_qwen4_vision.h": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+    "ds4_resident_route.h": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+    "ds4_rocm.h": "f6a80e4c221004cdaaa08829c8930c9db2b9b21d009db829aca46c012365e3ed",
+    "ds4_rocm_memory.h": "e3c4b2d4bf4b854f98940bc44ba73140c72f99e999ba141f8210e41841ea7dd0",
+    "ds4_server.c": "9324cd8bd87b52abd8fe2848ba029a207e4e3371f43f07c8d04a26fcc8977071",
+    "ds4_server.o": "1279f93ffe753785d4bb083fe8c10b60ca1f8a99c2d85272d81ae28617b2247e",
+    "ds4_ssd.c": "6f093186ee5cde476f08f808a993f46665ab25ac0c1b8c207cb404c7b94cd999",
+    "ds4_ssd.h": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+    "ds4_ssd.o": "aa2a18d7cc4b805af138691fd8208042837a045e30b6ed02def90c4b07d37434",
+    "ds4_suffix_layout.h": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b",
+    "ds4_tool_text.h": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+    "ds4_tp.c": "3f9277262ac26ae11ed55c60e369aea84ac335b174ef5ba3fb92e431495eda0c",
+    "ds4_tp.h": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+    "ds4_tp.o": "6efa29f9f0235e49502596cd04be4c3440bacb1a1b4f365ec78b9d7012e3320c",
+    "ds4_web.c": "89625148524c2bcfecf72ead19be7189adced08df5bb8d1b558d5ecfc73aaf14",
+    "ds4_web.h": "e43748a12480a31186961c8f2b67510441e139d3b9b82d35b6ba8017a65849a8",
+    "ds4_web.o": "9177a3aeedbe40a76bcc1c5c3926e8ab546c86df9e276f19d99e7d92d442a70b",
+    "linenoise.c": "3918505d526f7c2b8e30fd646995030b255cae16738d85c8d16f699ae316979d",
+    "linenoise.h": "24425a1fd617dc9f05c8820ff936c1a82fd08ab540358fb02ae871678de60ef8",
+    "linenoise.o": "6a8a0f16ab289e069cfd8ec4ecff66ad0d0d2d71a8d1b30bdb8a73bd9ffaaca6",
+    "metal/argsort.metal": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de",
+    "metal/bin.metal": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a",
+    "metal/concat.metal": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7",
+    "metal/cpy.metal": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4",
+    "metal/deepseek4_vision.metal": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea",
+    "metal/dense.metal": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627",
+    "metal/dsv41.metal": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c",
+    "metal/dsv4_hc.metal": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3",
+    "metal/dsv4_kv.metal": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6",
+    "metal/dsv4_misc.metal": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c",
+    "metal/dsv4_rope.metal": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518",
+    "metal/flash_attn.metal": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc",
+    "metal/get_rows.metal": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a",
+    "metal/glm53_bf16.metal": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5",
+    "metal/glm53_kda.metal": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818",
+    "metal/glm53_vision.metal": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b",
+    "metal/glu.metal": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627",
+    "metal/moe.metal": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+    "metal/norm.metal": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de",
+    "metal/qwen4.metal": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28",
+    "metal/qwen4_vision.metal": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b",
+    "metal/repeat.metal": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd",
+    "metal/set_rows.metal": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029",
+    "metal/softmax.metal": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664",
+    "metal/sum_rows.metal": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc",
+    "metal/unary.metal": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf",
+    "rax.c": "6bfc4ff704560b4f9dcc76c3f51b6680597b66206b3c206b634eb3a22ba0f343",
+    "rax.h": "e9281e1a444c0cd090b187d2271d200fcc02106062d9f827a7f2d590594cdce4",
+    "rax.o": "6affe413f15f8958a3ca436604ac181b8f2e2928f365314652b67df5f6343b71",
+    "rax_malloc.h": "5ab2fa4a8bbf94401cf15f7dde1b0050f0b5ea9f60ccb81f0dcb1e7b392e5d93"
+  },
+  "model_metadata_accessed": false
+}

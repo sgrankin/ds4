@@ -1,0 +1,12 @@
+{
+  "original_helper_source_commit": "d0ef498706cca16443f2e180f28cb18076325f9b",
+  "original_analyzer_source_commit": "d02ab023a7eab835d404c3ef5e0bfc684787e94e",
+  "executed_analyzer_source_commit": "bb9336921b50081d1f642a2e644297481aa71fad",
+  "executed_analyzer_sha256": "79881a996fc6b536f4ba8d0a851010319e23aea93f0f9dd90bffd494afd8f7a4",
+  "completed_artifact": "/Volumes/Models/ds4/.workspaces/idea-quant-closing-analysis/speed-bench/ideas/artifacts/closing-first-attempt-completed-20261003-v2",
+  "completed_artifact_index_sha256": "00bca61b2c448d63bd56032e82f3db86d18b7dc4c9a4e01f642a0998b7b0e9a4",
+  "status": "FIRST_ATTEMPT_CLOSING_INTEGRITY_PASS",
+  "original_guard_returncode": 3,
+  "original_attempts_retained": true,
+  "no_runtime_or_model_changes": true
+}

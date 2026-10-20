@@ -1,0 +1,358 @@
+{
+  "by_arm": {
+    "native-before": {
+      "task_wall_seconds": 226.85892770800274,
+      "launcher_wall_seconds": 231.6298324589734,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1142,
+      "thinking_tokens": 321,
+      "role_seconds": {
+        "READ": 107.3784417079878,
+        "WRITE": 105.6419029989629,
+        "FINAL": 13.83445100003155
+      },
+      "role_thinking": {
+        "READ": 65,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 0,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 2300,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 0,
+      "approximate_visible_continuations": 0,
+      "logical_disk_read_ops": 0
+    },
+    "context-fast": {
+      "task_wall_seconds": 198.78588687398587,
+      "launcher_wall_seconds": 203.2810004170169,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1155,
+      "thinking_tokens": 295,
+      "role_seconds": {
+        "READ": 94.59592083399184,
+        "WRITE": 88.26514704199508,
+        "FINAL": 15.920621416997164
+      },
+      "role_thinking": {
+        "READ": 39,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "persistent-fast": {
+      "task_wall_seconds": 185.87847225001315,
+      "launcher_wall_seconds": 190.6219754999911,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1162,
+      "thinking_tokens": 327,
+      "role_seconds": {
+        "READ": 94.05174154200358,
+        "WRITE": 80.03711887600366,
+        "FINAL": 11.78559420799138
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "native-after": {
+      "task_wall_seconds": 222.70877279198612,
+      "launcher_wall_seconds": 227.1419732089853,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1142,
+      "thinking_tokens": 321,
+      "role_seconds": {
+        "READ": 104.10058112500701,
+        "WRITE": 104.83904137497302,
+        "FINAL": 13.765041542006657
+      },
+      "role_thinking": {
+        "READ": 65,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 0,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 2300,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 0,
+      "approximate_visible_continuations": 0,
+      "logical_disk_read_ops": 0
+    }
+  },
+  "change_vs_native_mean_percent": {
+    "native-before": {
+      "task_wall_seconds": 0.9231434801479255,
+      "launcher_wall_seconds": 0.9782334473352972
+    },
+    "context-fast": {
+      "task_wall_seconds": -11.565761217763104,
+      "launcher_wall_seconds": -11.380342948039035
+    },
+    "persistent-fast": {
+      "task_wall_seconds": -17.30790622044799,
+      "launcher_wall_seconds": -16.899001575543238
+    },
+    "native-after": {
+      "task_wall_seconds": -0.9231434801479255,
+      "launcher_wall_seconds": -0.9782334473353083
+    }
+  },
+  "native_after_vs_before_percent": {
+    "task_wall_seconds": -1.829398982859698,
+    "launcher_wall_seconds": -1.9375134896680413
+  },
+  "controls_vs_native_before": {
+    "native-before": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "context-fast": {
+      "dedupe": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "persistent-fast": {
+      "dedupe": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "native-after": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    }
+  },
+  "guard_summaries": [
+    {
+      "arm": "native-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 224,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 85.74114990234375,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "context-fast",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 197,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 85.13346862792969,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "persistent-fast",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 185,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.7642822265625,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "native-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 220,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.61827087402344,
+      "max_consecutive_bad": 0
+    }
+  ]
+}

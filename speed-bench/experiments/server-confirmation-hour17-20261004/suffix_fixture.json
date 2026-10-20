@@ -1,0 +1,17 @@
+{
+  "scope": "New facts and log wording in the existing storage-backed HTTP workflow family, not a new globally unused task family.",
+  "sessions": {
+    "A": {"batches": 23, "items_per_batch": 14, "reserved_items": 9, "active_total": 313, "archive_before": "BEACON-46", "archive_after_restart": "BEACON-47"},
+    "B": {"batches": 31, "items_per_batch": 8, "reserved_items": 17, "active_total": 231, "archive_before": "ORBIT-57", "archive_after_restart": "ORBIT-58"}
+  },
+  "independent_gold": "A: 23*14-9=313. B: 31*8-17=231. Archive labels are exact current filesystem strings, never inferred from native output.",
+  "obsolete_blocks_per_session": 2,
+  "log_lines_per_block": 64,
+  "active_notes": 24,
+  "order": ["reuse64", "native"],
+  "steps_per_arm": ["A-source", "B-source", "A-edit1", "B-edit1", "C-turnover", "A-edit2", "B-edit2"],
+  "fresh_reads_per_arm": 6,
+  "settings": {"reasoning_effort": "none", "temperature": 0, "store": false, "resident_gap": 0, "context": 8192, "cache_experts": "64GB", "prefill_chunk": 512, "selected_tile": 64, "selected_limit": 1024, "state_cache_hot_mb": 0, "state_cache_ssd_mb": 1024, "session_slots": 2, "tool_cap": 128, "answer_cap": 64},
+  "seed_note": "Responses ignores the sent seed; no RNG repeat claim.",
+  "interpretation": "Keep cold source time, ordinary edits, changed-file post-restart stress, turnover and total separate. Retain fallback/errors/caps. Observe actual SSD approximate source and graft coverage; neither is required for task pass. No generated-history paired NLL."
+}

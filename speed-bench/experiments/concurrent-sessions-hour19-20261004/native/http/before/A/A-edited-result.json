@@ -1,0 +1,76 @@
+{
+  "step": "A-edited",
+  "session": "A",
+  "seconds": 86.73264737499994,
+  "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+  "answer": {
+    "active_total": 313,
+    "archived_code": "BEACON-46"
+  },
+  "gold": {
+    "active_total": 313,
+    "archived_code": "BEACON-46"
+  },
+  "correct": true,
+  "fresh_read": true,
+  "complete": true,
+  "calls": [
+    {
+      "name": "read",
+      "call_id": "call_da0fbfdf4a007950a5918bee09247bf7",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/archive.json\",\"whole\":true,\"raw\":true}",
+      "read": true,
+      "error": null,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/archive.json",
+      "text": "{\n  \"archived_code\": \"BEACON-46\"\n}\n"
+    }
+  ],
+  "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/A/archive.json",
+  "replies": [
+    {
+      "seconds": 83.49304008300533,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1437,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1437
+        },
+        "output_tokens": 93,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1530
+      },
+      "incomplete_details": null
+    },
+    {
+      "seconds": 3.2388402910000877,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1556,
+        "input_tokens_details": {
+          "cached_tokens": 1530,
+          "cache_write_tokens": 26
+        },
+        "output_tokens": 16,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1572
+      },
+      "incomplete_details": null
+    }
+  ],
+  "errors": [],
+  "suffix_log_lines": [],
+  "exact_hit_log_lines": [],
+  "slot_eviction_log_lines": [],
+  "pass": true,
+  "group": "edited-AB",
+  "queue_inclusive_seconds": 86.73355258299853,
+  "seconds_including_edit": 86.73355258299853,
+  "edit_seconds": 0.0005465419963002205
+}

@@ -1,0 +1,14 @@
+{
+  "V1_preserved_unrun": true,
+  "no_build_or_model_was_run": true,
+  "V1_selftest_argument_incorrect": true,
+  "V2_argument": "--helper-self-test",
+  "immutable_input_directory_has_no_new_build_outputs": true,
+  "ceiling2_choice": "Proposal called the path bounded without spelling out the bound. ROOT explicitly accepted the literal y<=x+2 fixture before any build/outcome; it was not claimed fully specified in the original concise proposal.",
+  "ROOT_reflection_check": {
+    "allowed_total": 35190,
+    "prefix_to_5_4": 117,
+    "suffix_from_5_4": 125,
+    "avoiding": 20565
+  }
+}

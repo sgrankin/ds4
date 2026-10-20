@@ -1,0 +1,13 @@
+arm,phase,group,match,ids,cached,prompt,fresh,approximate,raw_log
+control-before,before,edited-AB,visible-prefix,1,1530,1555,25,1,1004 16:32:45 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1
+control-before,before,edited-AB,visible-prefix,1,1530,1556,26,1,1004 16:32:46 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1
+control-before,after,edited-CD,visible-prefix,1,1530,1555,25,1,1004 16:33:39 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1
+control-before,after,edited-CD,visible-prefix,1,1530,1555,25,1,1004 16:33:40 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1
+ssd512,before,edited-AB,visible-prefix,1,1530,1556,26,1,1004 16:37:53 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1
+ssd512,before,edited-AB,visible-prefix,1,1530,1555,25,1,1004 16:37:54 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1
+ssd512,after,edited-CD,visible-prefix,1,1530,1555,25,1,1004 16:38:47 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1
+ssd512,after,edited-CD,visible-prefix,1,1530,1555,25,1,1004 16:38:48 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1
+control-after,before,edited-AB,visible-prefix,1,1530,1555,25,1,1004 16:49:02 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1
+control-after,before,edited-AB,visible-prefix,1,1530,1556,26,1,1004 16:49:03 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1
+control-after,after,edited-CD,visible-prefix,1,1530,1555,25,1,1004 16:49:55 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1
+control-after,after,edited-CD,visible-prefix,1,1530,1555,25,1,1004 16:49:56 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1

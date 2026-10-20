@@ -1,0 +1,12 @@
+{
+  "time": 1790988960.452078,
+  "archive_source_revision": "b62b05107f1d22e214c4db7781bbbfbf3a28f16d",
+  "archive_manifest_sha256": "8ecca2ffd34bcee5226677a328f54120404471ab2ecd963d3abfd673e118ca61",
+  "source": "/Volumes/Models/ds4/.workspaces/idea-suffix-inverse-archive/speed-bench/ideas/evidence/suffix-pair-tape-inverse-native-20261003-v1",
+  "destination": "/Volumes/Models/ds4/speed-bench/ideas/evidence/suffix-pair-tape-inverse-native-20261003-v1",
+  "verified_files": 99,
+  "copied_files": 100,
+  "complete_archive_inventory": true,
+  "model_metadata_touched": false,
+  "runtime_merged": false
+}

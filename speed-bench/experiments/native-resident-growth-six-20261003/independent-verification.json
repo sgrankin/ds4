@@ -1,0 +1,168 @@
+{
+  "status": "PASS",
+  "model_or_tokenizer_opened": false,
+  "gpu_used": false,
+  "helper_executed": false,
+  "runtime_or_cpu_build_run": false,
+  "timing_repeated": false,
+  "archive_parent": "7c6e7b32a2560e032decea88b7877e330a27c52b",
+  "source_commit": "aaa62c6bb9024f8ccb41293369963d7a104a9ddc",
+  "runtime_commit": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "manifest_sha256": "a8fd08c721e8ff7f657f4297cc65e112c376c90ec31d7073d2e9369e547049f8",
+  "command_sha256": "93646f869a1e42475375de3e93647672246c64984995da60694190f23fb68501",
+  "prepared_assets_verified": 37,
+  "objects_verified": 8,
+  "runtime_sources_revision_equal": [
+    "ds4.c",
+    "ds4.h",
+    "ds4_resident_route.h",
+    "ds4_gpu.h",
+    "ds4_metal.m"
+  ],
+  "raw_state_files_rehashed": 12,
+  "phase_full_vectors_verified": 54,
+  "all_full_vectors_finite": true,
+  "within_variant_full_vector_state_byte_identities_exact": true,
+  "cache_observations_verified": 54,
+  "configured_and_resident_slots_every_phase": 6136,
+  "artifacts": {
+    "0-A": {
+      "logits_sha256": "a13138076343f7d5431d60305354cc1fda48e004149a86d042fd30dac256aa64",
+      "snapshot_sha256": "a162e94f03d8ce298d7440f306af3c5c4f6d624c0583ccac1fb0f48e20ee2f39",
+      "phase_vector_sha256": [
+        "e2596f477faacdd278457e256a00a715e28733c95caf3bb7b7e585c8df1c5889",
+        "7e1bf37f94949fa9618e3ada66a41697bc27924cb0d473e3305a00a37853e303",
+        "281c3b9912af2b73a08099fd5f69955ce6884d0a131a8842cdd278d067068ac5",
+        "a9fa3a4675884037943f02a451fb383ce45721476dbb033705b402d9823f857b",
+        "8578f615fcaaf0487d22163fe49c86c1e9c16a6aad8bf991dafe15a850666442",
+        "8bc9c0a3dbb7f02bcac0dfb092b6961881f0b8beb6151b8fc9957d60fe71fa90",
+        "1eaf9877a67325808550e008c961f3b5e2726b96755525a8c1b15ce79146b4e3",
+        "c6500afe295229619cd49ca91596ee9771d89ab0804486f17cf9ebe001a6a17a",
+        "13aead46b7055d1ab59b37fc619e174c09aea2f09c03174ce255eed7ebd0c364"
+      ],
+      "state_header_hex": "445356340200000000800000010000008000000080000000018000002368000028000000000200008000000000f9010031344100",
+      "canonical_context": 32768,
+      "canonical_position": 26659,
+      "selected_coefficients": "native"
+    },
+    "1-B": {
+      "logits_sha256": "4ba907a895b53e90e869f1bb03015f1ebad3243ab9d4a479962a5613908a47b7",
+      "snapshot_sha256": "69e3183545cd0163c08468201817c470f1baa77ccd5a724f2e0c3fa4f4645a29",
+      "phase_vector_sha256": [
+        "4076451c76522df2030db473179dc75b225771a5ba90b07e5758ef4b83093eb1",
+        "2bab5f7bfb740d7e7f8b72b2d5bf0aedb0b2d07638039468b3ca0d420ecff229",
+        "82f24d6ee24da80d7c3f8d88142f4a8f8c4011450871d68746372c4c869c7d41",
+        "11e7d0ef9a436a3744dbc15628350abeea8efb1a2fdfc53631113dfa2a86e93f",
+        "5f3a0c4cdf7bdc008b260419360192fcb64df38c839be6a3d20f51b41083ac17",
+        "ef20890303196daf0db9a487787b118f489028129b9cfad4b71e3eebf249f818",
+        "7a4bd72ec39af30f6f2230604431936defbde66b45208617a8e86c3798b06ac1",
+        "d81fdd7f723de2c2355335582c2e85258f258fe72a8970a290e837f74e315e38",
+        "a4378b57ae296f6792858b4c0a93fe871f2ba02bb6c19cee7bf7cb4e61d60589"
+      ],
+      "state_header_hex": "445356340200000000800000010000008000000080000000018000002368000028000000000200008000000000f9010031344100",
+      "canonical_context": 32768,
+      "canonical_position": 26659,
+      "selected_coefficients": "native"
+    },
+    "2-C": {
+      "logits_sha256": "d51f59ff21e2355094167daef4125abc226f87252ba0ae3482ef4d1712a3460c",
+      "snapshot_sha256": "5b73fae655420f378a1839138f494a8e0b4a418827af0391131f3865df2bfb3d",
+      "phase_vector_sha256": [
+        "4076451c76522df2030db473179dc75b225771a5ba90b07e5758ef4b83093eb1",
+        "2bab5f7bfb740d7e7f8b72b2d5bf0aedb0b2d07638039468b3ca0d420ecff229",
+        "4be25fe7cc3ee92d4fb29ad77e5c31f4edcbe74daf99ccb9714ded04d52cf450",
+        "f65be4e60c12240cb82f057e32bcb0f1ca8b8fc79bbdeaae64821b32c17e0138",
+        "d63bb8cd9397476964d67458408f97d7a123d80609ce0e215adf26615d713f49",
+        "8879b347c512862db9ee5aa489ec7b70e86a0b6b35b9a966b8f15a1cca2cb3e9",
+        "4b20a7a792179785f376ad809a7949d4e9831d265f11757cf3a7c574c20354b8",
+        "4e272a876e0244ee5ffe8c5a0404327ae31e005291949e682ff3c21936e3ca92",
+        "6941f25e823fcc53fa1be68ce5adada06007d5539571a247d1e11c458817d33e"
+      ],
+      "state_header_hex": "445356340200000000800000010000008000000080000000018000002368000028000000000200008000000000f9010031344100",
+      "canonical_context": 32768,
+      "canonical_position": 26659,
+      "selected_coefficients": "existing final-affinity normalization"
+    },
+    "3-C": {
+      "logits_sha256": "d51f59ff21e2355094167daef4125abc226f87252ba0ae3482ef4d1712a3460c",
+      "snapshot_sha256": "5b73fae655420f378a1839138f494a8e0b4a418827af0391131f3865df2bfb3d",
+      "phase_vector_sha256": [
+        "4076451c76522df2030db473179dc75b225771a5ba90b07e5758ef4b83093eb1",
+        "2bab5f7bfb740d7e7f8b72b2d5bf0aedb0b2d07638039468b3ca0d420ecff229",
+        "4be25fe7cc3ee92d4fb29ad77e5c31f4edcbe74daf99ccb9714ded04d52cf450",
+        "f65be4e60c12240cb82f057e32bcb0f1ca8b8fc79bbdeaae64821b32c17e0138",
+        "d63bb8cd9397476964d67458408f97d7a123d80609ce0e215adf26615d713f49",
+        "8879b347c512862db9ee5aa489ec7b70e86a0b6b35b9a966b8f15a1cca2cb3e9",
+        "4b20a7a792179785f376ad809a7949d4e9831d265f11757cf3a7c574c20354b8",
+        "4e272a876e0244ee5ffe8c5a0404327ae31e005291949e682ff3c21936e3ca92",
+        "6941f25e823fcc53fa1be68ce5adada06007d5539571a247d1e11c458817d33e"
+      ],
+      "state_header_hex": "445356340200000000800000010000008000000080000000018000002368000028000000000200008000000000f9010031344100",
+      "canonical_context": 32768,
+      "canonical_position": 26659,
+      "selected_coefficients": "existing final-affinity normalization"
+    },
+    "4-B": {
+      "logits_sha256": "4ba907a895b53e90e869f1bb03015f1ebad3243ab9d4a479962a5613908a47b7",
+      "snapshot_sha256": "69e3183545cd0163c08468201817c470f1baa77ccd5a724f2e0c3fa4f4645a29",
+      "phase_vector_sha256": [
+        "4076451c76522df2030db473179dc75b225771a5ba90b07e5758ef4b83093eb1",
+        "2bab5f7bfb740d7e7f8b72b2d5bf0aedb0b2d07638039468b3ca0d420ecff229",
+        "82f24d6ee24da80d7c3f8d88142f4a8f8c4011450871d68746372c4c869c7d41",
+        "11e7d0ef9a436a3744dbc15628350abeea8efb1a2fdfc53631113dfa2a86e93f",
+        "5f3a0c4cdf7bdc008b260419360192fcb64df38c839be6a3d20f51b41083ac17",
+        "ef20890303196daf0db9a487787b118f489028129b9cfad4b71e3eebf249f818",
+        "7a4bd72ec39af30f6f2230604431936defbde66b45208617a8e86c3798b06ac1",
+        "d81fdd7f723de2c2355335582c2e85258f258fe72a8970a290e837f74e315e38",
+        "a4378b57ae296f6792858b4c0a93fe871f2ba02bb6c19cee7bf7cb4e61d60589"
+      ],
+      "state_header_hex": "445356340200000000800000010000008000000080000000018000002368000028000000000200008000000000f9010031344100",
+      "canonical_context": 32768,
+      "canonical_position": 26659,
+      "selected_coefficients": "native"
+    },
+    "5-A": {
+      "logits_sha256": "a13138076343f7d5431d60305354cc1fda48e004149a86d042fd30dac256aa64",
+      "snapshot_sha256": "a162e94f03d8ce298d7440f306af3c5c4f6d624c0583ccac1fb0f48e20ee2f39",
+      "phase_vector_sha256": [
+        "e2596f477faacdd278457e256a00a715e28733c95caf3bb7b7e585c8df1c5889",
+        "7e1bf37f94949fa9618e3ada66a41697bc27924cb0d473e3305a00a37853e303",
+        "281c3b9912af2b73a08099fd5f69955ce6884d0a131a8842cdd278d067068ac5",
+        "a9fa3a4675884037943f02a451fb383ce45721476dbb033705b402d9823f857b",
+        "8578f615fcaaf0487d22163fe49c86c1e9c16a6aad8bf991dafe15a850666442",
+        "8bc9c0a3dbb7f02bcac0dfb092b6961881f0b8beb6151b8fc9957d60fe71fa90",
+        "1eaf9877a67325808550e008c961f3b5e2726b96755525a8c1b15ce79146b4e3",
+        "c6500afe295229619cd49ca91596ee9771d89ab0804486f17cf9ebe001a6a17a",
+        "13aead46b7055d1ab59b37fc619e174c09aea2f09c03174ce255eed7ebd0c364"
+      ],
+      "state_header_hex": "445356340200000000800000010000008000000080000000018000002368000028000000000200008000000000f9010031344100",
+      "canonical_context": 32768,
+      "canonical_position": 26659,
+      "selected_coefficients": "native"
+    }
+  },
+  "original_replay_token_ids_exact": true,
+  "prefill_tokens": 26563,
+  "decode_tokens": 96,
+  "preserved_launch_pause_acknowledgements": {
+    "clm_design": "No running command/build/test/hash/copy/analysis/model; fully paused until ROOT thaw",
+    "resident_experts": "No owned CPU/test/build/model/analysis; no rerun until ROOT thaw",
+    "checkout_recap": "No CPU job/tool cell/build/test/model; no further reads/hash/analysis until ROOT thaw"
+  },
+  "cpu_quiet_evidence": "ROOT recorded explicit three-agent acknowledgements; no independent OS-wide CPU monitor claim",
+  "guard_child_returncode": 0,
+  "pressure_samples": 869,
+  "bad_pressure_samples": 0,
+  "swap_growth_gb": 0.0,
+  "peak_wired_compressor_gib": 89.81425476074219,
+  "cross_variant_state_identity_required": false,
+  "cross_variant_hashes_diagnostic_only": true,
+  "no_generated_task_correctness_or_equal_quality_claim": true,
+  "default_promoted": false,
+  "initial_setup_refusals": [
+    "sandbox jj workspace add could not write .git/objects",
+    "retry original path existed after incomplete initialization",
+    "fresh workspace add with --ignore-working-copy created root checkout but refused update; explicitly initialized from immutable base"
+  ],
+  "no_run_artifacts_mutated": true
+}

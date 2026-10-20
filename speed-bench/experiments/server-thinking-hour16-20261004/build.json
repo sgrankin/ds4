@@ -1,0 +1,17 @@
+{
+  "revision": "bc6896aeee2aceba4b4b64e9e8330986da8a60b0",
+  "server_sha256": "4a3f735999412e6150f77ea61012812c55430f6808cb8062a5597ca6d1b6ed6d",
+  "build": [
+    "make",
+    "-j2",
+    "ds4-server",
+    "ds4_test"
+  ],
+  "focused_cpu_test": [
+    "./ds4_test",
+    "--server"
+  ],
+  "test_result": "passed",
+  "first_build": "caught token-array field mismatch; corrected ids to v",
+  "first_cpu_run": "caught fixture fragment not from actual DS41 marker; corrected to actual partial marker"
+}

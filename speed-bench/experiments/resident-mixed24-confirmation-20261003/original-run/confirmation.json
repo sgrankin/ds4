@@ -1,0 +1,75 @@
+{
+  "fixed_selected_policy": "anchor-affinity3",
+  "selected_confirmation_pass": false,
+  "reports": {
+    "anchor-affinity3": {
+      "screen_pass": false,
+      "failures": [
+        "mean_delta_nll",
+        "mean_kl",
+        "p99_kl",
+        "argmax_flips",
+        "worst_prompt_delta_nll"
+      ],
+      "paired_candidate_minus_anchor_nll": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "paired_prompts": 24,
+        "draws": 2000,
+        "seed": 20261002
+      },
+      "native_requested_byte_reduction": 0.23096660030966598,
+      "categories": {
+        "agent": {
+          "prompts": 4,
+          "tokens": 128,
+          "mean_delta_nll": -0.00421295443021098,
+          "mean_kl": 0.015119680591643845,
+          "paired_candidate_minus_anchor_mean": 0.0
+        },
+        "tool": {
+          "prompts": 4,
+          "tokens": 128,
+          "mean_delta_nll": -0.042054419488893185,
+          "mean_kl": 0.02555237260060401,
+          "paired_candidate_minus_anchor_mean": 0.0
+        },
+        "code": {
+          "prompts": 4,
+          "tokens": 128,
+          "mean_delta_nll": 0.030178650125933747,
+          "mean_kl": 0.020266031730391692,
+          "paired_candidate_minus_anchor_mean": 0.0
+        },
+        "math": {
+          "prompts": 4,
+          "tokens": 128,
+          "mean_delta_nll": 0.08602776486571834,
+          "mean_kl": 0.031631341341829176,
+          "paired_candidate_minus_anchor_mean": 0.0
+        },
+        "string": {
+          "prompts": 4,
+          "tokens": 128,
+          "mean_delta_nll": 0.03921738697636257,
+          "mean_kl": 0.022971071286602054,
+          "paired_candidate_minus_anchor_mean": 0.0
+        },
+        "rare": {
+          "prompts": 4,
+          "tokens": 128,
+          "mean_delta_nll": -0.03536024260064492,
+          "mean_kl": 0.02794691161467447,
+          "paired_candidate_minus_anchor_mean": 0.0
+        }
+      }
+    }
+  },
+  "no_policy_selection_from_confirmation": true,
+  "no_automatic_models": true,
+  "timing_claim": false,
+  "scope": "Unused mixed teacher distributions and authored-gold checks; no generated task completion, physical SSD, speed, quantization causality or default promotion claim."
+}

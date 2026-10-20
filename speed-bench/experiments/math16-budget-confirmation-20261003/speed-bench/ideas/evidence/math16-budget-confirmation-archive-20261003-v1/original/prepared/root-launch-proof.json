@@ -1,0 +1,26 @@
+{
+  "status": "GRANTED",
+  "sole_model_grant": true,
+  "time": 1791003409.462024,
+  "manifest_sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/pressure",
+    "--",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/run_reasoning_budget_confirmation.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/artifacts/math16-budget-confirmation-prepared-20261003-v2/plan.json",
+    "--plan-sha256",
+    "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+    "--root-granted"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "preceding_release_sha256": "86a39683081648e9ea0471654187cebb9735518b064814a7829070e2953671d6",
+  "root_static_review_sha256": "10d486c7baf9c7abb038daa7c5cf8a4e5bdb6c90131050dba46e221eb1a42dd4",
+  "root_static_review_freeze": "d05457ae2504848784b63e03074bab0be6ce142c",
+  "fresh_processes": [],
+  "fresh_lock_reacquired": true,
+  "scope": "48 fixed first-attempt generations on16 frozen tasks, native0/budget1024/native0, no retries, diagnostic work and outcome only"
+}

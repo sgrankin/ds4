@@ -1,0 +1,1915 @@
+{
+  "rows": [
+    {
+      "arm": "count0-reference",
+      "case": "dedupe",
+      "wall_seconds": 99.10787920799339,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 540,
+      "output_tokens": 566,
+      "thinking_tokens": 148,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/solution.py`.\n\nIt tracks the last accepted timestamp per exact key, accepts first occurrences, accepts later occurrences only when `t - last_accepted >= ttl` (so `ttl == 0` accepts everything), rejects otherwise without refreshing the stored timestamp, and returns `{\"accepted\": [...], \"rejected\": [...]}` as zero-based payload indices in original order.",
+      "read_seconds": 47.224021583999274,
+      "read_thinking": 20,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 116,
+      "write_seconds": 43.44356270800927,
+      "write_thinking": 128,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 337,
+      "final_seconds": 8.438000041991472,
+      "final_thinking": 0,
+      "final_cached": 1478,
+      "final_fresh": 43,
+      "final_input_tokens": 1521,
+      "final_output_tokens": 113
+    },
+    {
+      "arm": "count0-reference",
+      "case": "bucket",
+      "wall_seconds": 99.67800766599248,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 589,
+      "thinking_tokens": 147,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt tracks tokens starting at `capacity`, refills by elapsed time \u00d7 rate capped at capacity before each event, advances the previous timestamp, accepts costs that fit (including zero cost), rejects oversized costs without spending tokens, records accepted/rejected indices and post-event balances, and returns the final token count.",
+      "read_seconds": 47.371899249992566,
+      "read_thinking": 19,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 114,
+      "write_seconds": 44.82158433398581,
+      "write_thinking": 128,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 376,
+      "final_seconds": 7.482621375005692,
+      "final_thinking": 0,
+      "final_cached": 1535,
+      "final_fresh": 42,
+      "final_input_tokens": 1577,
+      "final_output_tokens": 99
+    },
+    {
+      "arm": "subs3-before",
+      "case": "dedupe",
+      "wall_seconds": 90.59207316598622,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 540,
+      "output_tokens": 534,
+      "thinking_tokens": 166,
+      "final_text": "Implemented `solve(payload, config)` in the specified solution file. It tracks each key\u2019s last accepted timestamp, accepts first occurrences and expired duplicates (`t - last >= ttl`), rejects only unexpired duplicates, and returns accepted/rejected zero-based indices in original order without mutating inputs.",
+      "read_seconds": 46.77929566701641,
+      "read_thinking": 38,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 134,
+      "write_seconds": 39.27184166701045,
+      "write_thinking": 128,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 337,
+      "final_seconds": 4.538867625000421,
+      "final_thinking": 0,
+      "final_cached": 1478,
+      "final_fresh": 43,
+      "final_input_tokens": 1521,
+      "final_output_tokens": 63
+    },
+    {
+      "arm": "subs3-before",
+      "case": "bucket",
+      "wall_seconds": 95.28639908402693,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 628,
+      "thinking_tokens": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, starts with `tokens = capacity` at time 0, refills before every event using the elapsed time since the previous event timestamp, caps at capacity, advances the timestamp, accepts zero-cost events even at zero tokens, rejects oversized costs without spending tokens, and returns the required `accepted`, `rejected`, `remaining`, and `tokens` fields without mutating the inputs.",
+      "read_seconds": 47.27244587498717,
+      "read_thinking": 33,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 128,
+      "write_seconds": 40.76527720899321,
+      "write_thinking": 128,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 376,
+      "final_seconds": 7.246726582990959,
+      "final_thinking": 0,
+      "final_cached": 1535,
+      "final_fresh": 42,
+      "final_input_tokens": 1577,
+      "final_output_tokens": 124
+    },
+    {
+      "arm": "subs1",
+      "case": "dedupe",
+      "wall_seconds": 94.0575879579992,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 545,
+      "output_tokens": 543,
+      "thinking_tokens": 160,
+      "final_text": "Implemented `solve(payload, config)` in `dedupe/solution.py`. It tracks the last accepted timestamp per exact key, accepts first occurrences, accepts later occurrences only when `t - last_accepted >= ttl`, rejects otherwise without refreshing, and returns zero-based indices in original order for `accepted` and `rejected`.",
+      "read_seconds": 47.13124287498067,
+      "read_thinking": 32,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 128,
+      "write_seconds": 41.352706582983956,
+      "write_thinking": 128,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 345,
+      "final_seconds": 5.571746125002392,
+      "final_thinking": 0,
+      "final_cached": 1486,
+      "final_fresh": 43,
+      "final_input_tokens": 1529,
+      "final_output_tokens": 70
+    },
+    {
+      "arm": "subs1",
+      "case": "bucket",
+      "wall_seconds": 99.11670087501989,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 601,
+      "thinking_tokens": 146,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, starts with `tokens = capacity` at time 0, refills before each event based on elapsed time since the previous event timestamp, caps at capacity, advances the timestamp, accepts costs within the balance, rejects oversized costs without spending, records zero-based indices and post-event balances, and returns the required dictionary without mutating inputs.",
+      "read_seconds": 47.154048583004624,
+      "read_thinking": 18,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 113,
+      "write_seconds": 43.960257500002626,
+      "write_thinking": 128,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 376,
+      "final_seconds": 8.00026779100881,
+      "final_thinking": 0,
+      "final_cached": 1535,
+      "final_fresh": 42,
+      "final_input_tokens": 1577,
+      "final_output_tokens": 112
+    },
+    {
+      "arm": "subs2",
+      "case": "dedupe",
+      "wall_seconds": 96.69034841601388,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 545,
+      "output_tokens": 596,
+      "thinking_tokens": 169,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/dedupe/solution.py`.\n\nIt tracks the last accepted timestamp per exact key, accepts first occurrences, accepts later occurrences only when `t - last_accepted >= ttl`, rejects otherwise without refreshing the stored timestamp, and returns `{\"accepted\": [...], \"rejected\": [...]}` as zero-based payload indices in original order. With `ttl = 0`, every event is accepted.",
+      "read_seconds": 49.394545291987015,
+      "read_thinking": 41,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 137,
+      "write_seconds": 40.060236834018724,
+      "write_thinking": 128,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 345,
+      "final_seconds": 7.233629834023304,
+      "final_thinking": 0,
+      "final_cached": 1486,
+      "final_fresh": 43,
+      "final_input_tokens": 1529,
+      "final_output_tokens": 114
+    },
+    {
+      "arm": "subs2",
+      "case": "bucket",
+      "wall_seconds": 97.53701629198622,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 593,
+      "thinking_tokens": 155,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt tracks tokens starting at `capacity`, refills by elapsed time \u00d7 rate capped at capacity before each event, advances the timestamp, accepts costs that fit (including zero cost), rejects oversized costs without spending, records per-event balances, and returns the required result without mutating inputs.",
+      "read_seconds": 49.03655887502828,
+      "read_thinking": 27,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 122,
+      "write_seconds": 41.9761903329927,
+      "write_thinking": 128,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 376,
+      "final_seconds": 6.522353915992426,
+      "final_thinking": 0,
+      "final_cached": 1535,
+      "final_fresh": 42,
+      "final_input_tokens": 1577,
+      "final_output_tokens": 95
+    },
+    {
+      "arm": "subs3-after",
+      "case": "dedupe",
+      "wall_seconds": 92.0048349580029,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 540,
+      "output_tokens": 534,
+      "thinking_tokens": 166,
+      "final_text": "Implemented `solve(payload, config)` in the specified solution file. It tracks each key\u2019s last accepted timestamp, accepts first occurrences and expired duplicates (`t - last >= ttl`), rejects only unexpired duplicates, and returns accepted/rejected zero-based indices in original order without mutating inputs.",
+      "read_seconds": 48.243246541009285,
+      "read_thinking": 38,
+      "read_cached": 0,
+      "read_fresh": 1563,
+      "read_input_tokens": 1563,
+      "read_output_tokens": 134,
+      "write_seconds": 39.06193266599439,
+      "write_thinking": 128,
+      "write_cached": 445,
+      "write_fresh": 696,
+      "write_input_tokens": 1141,
+      "write_output_tokens": 337,
+      "final_seconds": 4.697602041007485,
+      "final_thinking": 0,
+      "final_cached": 1478,
+      "final_fresh": 43,
+      "final_input_tokens": 1521,
+      "final_output_tokens": 63
+    },
+    {
+      "arm": "subs3-after",
+      "case": "bucket",
+      "wall_seconds": 96.79491079199943,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "grade_expected_checks": 161,
+      "grade_passed_checks": 161,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 772,
+      "output_tokens": 628,
+      "thinking_tokens": 161,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible/bucket/solution.py`.\n\nIt uses exact integer arithmetic, starts with `tokens = capacity` at time 0, refills before every event using the elapsed time since the previous event timestamp, caps at capacity, advances the timestamp, accepts zero-cost events even at zero tokens, rejects oversized costs without spending tokens, and returns the required `accepted`, `rejected`, `remaining`, and `tokens` fields without mutating the inputs.",
+      "read_seconds": 48.74046770797577,
+      "read_thinking": 33,
+      "read_cached": 0,
+      "read_fresh": 1576,
+      "read_input_tokens": 1576,
+      "read_output_tokens": 128,
+      "write_seconds": 40.73742466699332,
+      "write_thinking": 128,
+      "write_cached": 458,
+      "write_fresh": 701,
+      "write_input_tokens": 1159,
+      "write_output_tokens": 376,
+      "final_seconds": 7.315071749995695,
+      "final_thinking": 0,
+      "final_cached": 1535,
+      "final_fresh": 42,
+      "final_input_tokens": 1577,
+      "final_output_tokens": 124
+    }
+  ],
+  "by_arm": {
+    "count0-reference": {
+      "task_wall_seconds": 198.78588687398587,
+      "launcher_wall_seconds": 203.2810004170169,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1155,
+      "thinking_tokens": 295,
+      "role_seconds": {
+        "READ": 94.59592083399184,
+        "WRITE": 88.26514704199508,
+        "FINAL": 15.920621416997164
+      },
+      "role_thinking": {
+        "READ": 39,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "subs3-before": {
+      "task_wall_seconds": 185.87847225001315,
+      "launcher_wall_seconds": 190.6219754999911,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1162,
+      "thinking_tokens": 327,
+      "role_seconds": {
+        "READ": 94.05174154200358,
+        "WRITE": 80.03711887600366,
+        "FINAL": 11.78559420799138
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "subs1": {
+      "task_wall_seconds": 193.1742888330191,
+      "launcher_wall_seconds": 197.57601904097828,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1144,
+      "thinking_tokens": 306,
+      "role_seconds": {
+        "READ": 94.2852914579853,
+        "WRITE": 85.31296408298658,
+        "FINAL": 13.572013916011201
+      },
+      "role_thinking": {
+        "READ": 50,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3021
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "subs2": {
+      "task_wall_seconds": 194.2273647080001,
+      "launcher_wall_seconds": 198.158341708011,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1189,
+      "thinking_tokens": 324,
+      "role_seconds": {
+        "READ": 98.43110416701529,
+        "WRITE": 82.03642716701142,
+        "FINAL": 13.75598375001573
+      },
+      "role_thinking": {
+        "READ": 68,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3021
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    },
+    "subs3-after": {
+      "task_wall_seconds": 188.79974575000233,
+      "launcher_wall_seconds": 193.39327000000048,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "pipeline_completions": 2,
+      "grade_passed_checks": 322,
+      "grade_failed_checks": 0,
+      "grade_unresolved_checks": 0,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1162,
+      "thinking_tokens": 327,
+      "role_seconds": {
+        "READ": 96.98371424898505,
+        "WRITE": 79.79935733298771,
+        "FINAL": 12.01267379100318
+      },
+      "role_thinking": {
+        "READ": 71,
+        "WRITE": 256,
+        "FINAL": 0
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 903,
+        "FINAL": 3013
+      },
+      "role_fresh": {
+        "READ": 3139,
+        "WRITE": 1397,
+        "FINAL": 85
+      },
+      "forced": 2,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 164
+    }
+  },
+  "controls_vs_opening3": {
+    "count0-reference": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          true,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          true,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "subs3-before": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "subs1": {
+      "dedupe": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "subs2": {
+      "dedupe": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          true,
+          false
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "subs3-after": {
+      "dedupe": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "bucket": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "reply_count_equal": true,
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    }
+  },
+  "grafts": [
+    {
+      "arm": "count0-reference",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 22.061373,
+      "raw_log": "1004 18:11:12 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 22061.373 ms"
+    },
+    {
+      "arm": "count0-reference",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.571317999999998,
+      "raw_log": "1004 18:12:53 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21571.318 ms"
+    },
+    {
+      "arm": "subs3-before",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.798312999999997,
+      "raw_log": "1004 18:14:45 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21798.313 ms"
+    },
+    {
+      "arm": "subs3-before",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.650487000000002,
+      "raw_log": "1004 18:16:18 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21650.487 ms"
+    },
+    {
+      "arm": "subs1",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.325546,
+      "raw_log": "1004 18:25:12 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21325.546 ms"
+    },
+    {
+      "arm": "subs1",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.752039,
+      "raw_log": "1004 18:26:49 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21752.039 ms"
+    },
+    {
+      "arm": "subs2",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.25725,
+      "raw_log": "1004 18:28:43 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21257.250 ms"
+    },
+    {
+      "arm": "subs2",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.732048,
+      "raw_log": "1004 18:30:22 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21732.048 ms"
+    },
+    {
+      "arm": "subs3-after",
+      "case": "dedupe",
+      "slot": 1,
+      "reused": 445,
+      "fresh": 260,
+      "graft_fresh": 196,
+      "source": "1118:1563",
+      "destination": "436:881",
+      "latest_user_start": 978,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.588163,
+      "raw_log": "1004 18:32:16 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21588.163 ms"
+    },
+    {
+      "arm": "subs3-after",
+      "case": "bucket",
+      "slot": 1,
+      "reused": 458,
+      "fresh": 265,
+      "graft_fresh": 201,
+      "source": "1118:1576",
+      "destination": "436:894",
+      "latest_user_start": 990,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 21.554848000000003,
+      "raw_log": "1004 18:33:51 ds4-server: suffix APPROXIMATE slot=1 reused=458 fresh=265 graft_fresh=201 source=1118:1576 destination=436:894 latest_user_start=990 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21554.848 ms"
+    }
+  ],
+  "visible_continuations": [
+    {
+      "arm": "count0-reference",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1478,
+      "prompt": 1521,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:11:34 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1478 prompt=1521 approximate=1"
+    },
+    {
+      "arm": "count0-reference",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1535,
+      "prompt": 1577,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:13:17 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1"
+    },
+    {
+      "arm": "subs3-before",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1478,
+      "prompt": 1521,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:15:02 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1478 prompt=1521 approximate=1"
+    },
+    {
+      "arm": "subs3-before",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1535,
+      "prompt": 1577,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:16:37 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1"
+    },
+    {
+      "arm": "subs1",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1486,
+      "prompt": 1529,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:25:32 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1486 prompt=1529 approximate=1"
+    },
+    {
+      "arm": "subs1",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1535,
+      "prompt": 1577,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:27:11 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1"
+    },
+    {
+      "arm": "subs2",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1486,
+      "prompt": 1529,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:29:02 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1486 prompt=1529 approximate=1"
+    },
+    {
+      "arm": "subs2",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1535,
+      "prompt": 1577,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:30:42 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1"
+    },
+    {
+      "arm": "subs3-after",
+      "case": "dedupe",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1478,
+      "prompt": 1521,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 18:32:34 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1478 prompt=1521 approximate=1"
+    },
+    {
+      "arm": "subs3-after",
+      "case": "bucket",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1535,
+      "prompt": 1577,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 18:34:10 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1535 prompt=1577 approximate=1"
+    }
+  ],
+  "reasoning_summaries": [
+    {
+      "arm": "count0-reference",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 20,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "count0-reference",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "count0-reference",
+      "case": "dedupe",
+      "context": "1478..1521:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "count0-reference",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 19,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "count0-reference",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "count0-reference",
+      "case": "bucket",
+      "context": "1535..1577:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-before",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 38,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-before",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-before",
+      "case": "dedupe",
+      "context": "1478..1521:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-before",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 33,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-before",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-before",
+      "case": "bucket",
+      "context": "1535..1577:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 32,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "dedupe",
+      "context": "1486..1529:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 18,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "bucket",
+      "context": "1535..1577:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs2",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 41,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs2",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs2",
+      "case": "dedupe",
+      "context": "1486..1529:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs2",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 27,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs2",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs2",
+      "case": "bucket",
+      "context": "1535..1577:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-after",
+      "case": "dedupe",
+      "context": "0..1563:1563",
+      "budget": 0,
+      "thinking": 38,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-after",
+      "case": "dedupe",
+      "context": "445..1141:696",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-after",
+      "case": "dedupe",
+      "context": "1478..1521:43",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-after",
+      "case": "bucket",
+      "context": "0..1576:1576",
+      "budget": 0,
+      "thinking": 33,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-after",
+      "case": "bucket",
+      "context": "458..1159:701",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "subs3-after",
+      "case": "bucket",
+      "context": "1535..1577:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    }
+  ],
+  "cache_shutdowns": [
+    {
+      "arm": "count0-reference",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 106395039,
+      "metadata_bytes": 77236,
+      "endpoints": 7,
+      "chunks": 406,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "count0-reference",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 213603968,
+      "metadata_bytes": 151755,
+      "endpoints": 14,
+      "chunks": 801,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs3-before",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 106395039,
+      "metadata_bytes": 77239,
+      "endpoints": 7,
+      "chunks": 406,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs3-before",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 213603968,
+      "metadata_bytes": 151758,
+      "endpoints": 14,
+      "chunks": 801,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 106451411,
+      "metadata_bytes": 77229,
+      "endpoints": 7,
+      "chunks": 406,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs1",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 213660340,
+      "metadata_bytes": 151748,
+      "endpoints": 14,
+      "chunks": 801,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs2",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 106451411,
+      "metadata_bytes": 77229,
+      "endpoints": 7,
+      "chunks": 406,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs2",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 213660340,
+      "metadata_bytes": 151748,
+      "endpoints": 14,
+      "chunks": 801,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs3-after",
+      "case": "dedupe",
+      "hot_bytes": 0,
+      "ssd_bytes": 106395039,
+      "metadata_bytes": 77235,
+      "endpoints": 7,
+      "chunks": 406,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "subs3-after",
+      "case": "bucket",
+      "hot_bytes": 0,
+      "ssd_bytes": 213603968,
+      "metadata_bytes": 151754,
+      "endpoints": 14,
+      "chunks": 801,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 79,
+      "endpoint_evictions": 0
+    }
+  ],
+  "guard_summaries": [
+    {
+      "arm": "count0-reference",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 197,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 85.13346862792969,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "subs3-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 185,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.7642822265625,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "subs1",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 191,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.91780090332031,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "subs2",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 192,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.58604431152344,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "subs3-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 187,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.021787109375,
+      "swap_last_gb": 0.021787109375,
+      "peak_wired_compressor_gb": 84.51518249511719,
+      "max_consecutive_bad": 0
+    }
+  ],
+  "route_summaries": [
+    {
+      "arm": "subs3-before",
+      "case": "dedupe",
+      "layers": 21360,
+      "substitutions": 10319,
+      "native_misses": 15045,
+      "skipped_loads": 10319,
+      "skipped_bytes": 102707896320,
+      "mean_mass": 0.12054024,
+      "mean_score_gap": 0.11078908,
+      "mean_affinity_ratio": 0.8912101,
+      "mean_rank": 7.722,
+      "full_snapshots": 8487,
+      "double_layers": 1560,
+      "planned_substitutions": 10319,
+      "drops": 0,
+      "triple_layers": 137,
+      "raw_log": "ds4: resident-route layers=21360 substitutions=10319 native_misses=15045 skipped_loads=10319 skipped_bytes=102707896320 mean_mass=0.12054024 mean_score_gap=0.11078908 mean_affinity_ratio=0.89121010 mean_rank=7.722 full_snapshots=8487 double_layers=1560 planned_substitutions=10319 drops=0 triple_layers=137",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=10319"
+      ]
+    },
+    {
+      "arm": "subs3-before",
+      "case": "bucket",
+      "layers": 25120,
+      "substitutions": 11700,
+      "native_misses": 16805,
+      "skipped_loads": 11700,
+      "skipped_bytes": 116453376000,
+      "mean_mass": 0.12132308,
+      "mean_score_gap": 0.11305714,
+      "mean_affinity_ratio": 0.88806224,
+      "mean_rank": 7.704,
+      "full_snapshots": 9645,
+      "double_layers": 1747,
+      "planned_substitutions": 11700,
+      "drops": 0,
+      "triple_layers": 154,
+      "raw_log": "ds4: resident-route layers=25120 substitutions=11700 native_misses=16805 skipped_loads=11700 skipped_bytes=116453376000 mean_mass=0.12132308 mean_score_gap=0.11305714 mean_affinity_ratio=0.88806224 mean_rank=7.704 full_snapshots=9645 double_layers=1747 planned_substitutions=11700 drops=0 triple_layers=154",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=11700"
+      ]
+    },
+    {
+      "arm": "subs1",
+      "case": "dedupe",
+      "layers": 21720,
+      "substitutions": 3288,
+      "native_misses": 12258,
+      "skipped_loads": 3288,
+      "skipped_bytes": 32726384640,
+      "mean_mass": 0.1117438,
+      "mean_score_gap": 0.05988552,
+      "mean_affinity_ratio": 0.95012737,
+      "mean_rank": 7.35,
+      "full_snapshots": 3288,
+      "double_layers": 0,
+      "planned_substitutions": 3288,
+      "drops": 0,
+      "triple_layers": 0,
+      "raw_log": "ds4: resident-route layers=21720 substitutions=3288 native_misses=12258 skipped_loads=3288 skipped_bytes=32726384640 mean_mass=0.11174380 mean_score_gap=0.05988552 mean_affinity_ratio=0.95012737 mean_rank=7.350 full_snapshots=3288 double_layers=0 planned_substitutions=3288 drops=0 triple_layers=0",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=3288"
+      ]
+    },
+    {
+      "arm": "subs1",
+      "case": "bucket",
+      "layers": 24040,
+      "substitutions": 3690,
+      "native_misses": 13528,
+      "skipped_loads": 3690,
+      "skipped_bytes": 36727603200,
+      "mean_mass": 0.11368204,
+      "mean_score_gap": 0.05658819,
+      "mean_affinity_ratio": 0.9533506,
+      "mean_rank": 7.329,
+      "full_snapshots": 3691,
+      "double_layers": 0,
+      "planned_substitutions": 3690,
+      "drops": 0,
+      "triple_layers": 0,
+      "raw_log": "ds4: resident-route layers=24040 substitutions=3690 native_misses=13528 skipped_loads=3690 skipped_bytes=36727603200 mean_mass=0.11368204 mean_score_gap=0.05658819 mean_affinity_ratio=0.95335060 mean_rank=7.329 full_snapshots=3691 double_layers=0 planned_substitutions=3690 drops=0 triple_layers=0",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=3690"
+      ]
+    },
+    {
+      "arm": "subs2",
+      "case": "dedupe",
+      "layers": 23840,
+      "substitutions": 7355,
+      "native_misses": 14535,
+      "skipped_loads": 7355,
+      "skipped_bytes": 73206374400,
+      "mean_mass": 0.1165423,
+      "mean_score_gap": 0.08326694,
+      "mean_affinity_ratio": 0.92400459,
+      "mean_rank": 7.505,
+      "full_snapshots": 6684,
+      "double_layers": 671,
+      "planned_substitutions": 7355,
+      "drops": 0,
+      "triple_layers": 0,
+      "raw_log": "ds4: resident-route layers=23840 substitutions=7355 native_misses=14535 skipped_loads=7355 skipped_bytes=73206374400 mean_mass=0.11654230 mean_score_gap=0.08326694 mean_affinity_ratio=0.92400459 mean_rank=7.505 full_snapshots=6684 double_layers=671 planned_substitutions=7355 drops=0 triple_layers=0",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=7355"
+      ]
+    },
+    {
+      "arm": "subs2",
+      "case": "bucket",
+      "layers": 23720,
+      "substitutions": 7272,
+      "native_misses": 14352,
+      "skipped_loads": 7272,
+      "skipped_bytes": 72380252160,
+      "mean_mass": 0.11704445,
+      "mean_score_gap": 0.08511729,
+      "mean_affinity_ratio": 0.92068881,
+      "mean_rank": 7.489,
+      "full_snapshots": 6609,
+      "double_layers": 664,
+      "planned_substitutions": 7272,
+      "drops": 0,
+      "triple_layers": 0,
+      "raw_log": "ds4: resident-route layers=23720 substitutions=7272 native_misses=14352 skipped_loads=7272 skipped_bytes=72380252160 mean_mass=0.11704445 mean_score_gap=0.08511729 mean_affinity_ratio=0.92068881 mean_rank=7.489 full_snapshots=6609 double_layers=664 planned_substitutions=7272 drops=0 triple_layers=0",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=7272"
+      ]
+    },
+    {
+      "arm": "subs3-after",
+      "case": "dedupe",
+      "layers": 21360,
+      "substitutions": 10319,
+      "native_misses": 15045,
+      "skipped_loads": 10319,
+      "skipped_bytes": 102707896320,
+      "mean_mass": 0.12054024,
+      "mean_score_gap": 0.11078908,
+      "mean_affinity_ratio": 0.8912101,
+      "mean_rank": 7.722,
+      "full_snapshots": 8487,
+      "double_layers": 1560,
+      "planned_substitutions": 10319,
+      "drops": 0,
+      "triple_layers": 137,
+      "raw_log": "ds4: resident-route layers=21360 substitutions=10319 native_misses=15045 skipped_loads=10319 skipped_bytes=102707896320 mean_mass=0.12054024 mean_score_gap=0.11078908 mean_affinity_ratio=0.89121010 mean_rank=7.722 full_snapshots=8487 double_layers=1560 planned_substitutions=10319 drops=0 triple_layers=137",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=10319"
+      ]
+    },
+    {
+      "arm": "subs3-after",
+      "case": "bucket",
+      "layers": 25120,
+      "substitutions": 11700,
+      "native_misses": 16805,
+      "skipped_loads": 11700,
+      "skipped_bytes": 116453376000,
+      "mean_mass": 0.12132308,
+      "mean_score_gap": 0.11305714,
+      "mean_affinity_ratio": 0.88806224,
+      "mean_rank": 7.704,
+      "full_snapshots": 9645,
+      "double_layers": 1747,
+      "planned_substitutions": 11700,
+      "drops": 0,
+      "triple_layers": 154,
+      "raw_log": "ds4: resident-route layers=25120 substitutions=11700 native_misses=16805 skipped_loads=11700 skipped_bytes=116453376000 mean_mass=0.12132308 mean_score_gap=0.11305714 mean_affinity_ratio=0.88806224 mean_rank=7.704 full_snapshots=9645 double_layers=1747 planned_substitutions=11700 drops=0 triple_layers=154",
+      "native_weight_lines": [
+        "ds4: resident-route-native-weights requested=1 substitutions=11700"
+      ]
+    }
+  ],
+  "route_totals": {
+    "count0-reference": {
+      "layers": 0,
+      "substitutions": 0,
+      "native_misses": 0,
+      "skipped_loads": 0,
+      "skipped_bytes": 0,
+      "double_layers": 0,
+      "triple_layers": 0,
+      "drops": 0
+    },
+    "subs3-before": {
+      "layers": 46480,
+      "substitutions": 22019,
+      "native_misses": 31850,
+      "skipped_loads": 22019,
+      "skipped_bytes": 219161272320,
+      "double_layers": 3307,
+      "triple_layers": 291,
+      "drops": 0
+    },
+    "subs1": {
+      "layers": 45760,
+      "substitutions": 6978,
+      "native_misses": 25786,
+      "skipped_loads": 6978,
+      "skipped_bytes": 69453987840,
+      "double_layers": 0,
+      "triple_layers": 0,
+      "drops": 0
+    },
+    "subs2": {
+      "layers": 47560,
+      "substitutions": 14627,
+      "native_misses": 28887,
+      "skipped_loads": 14627,
+      "skipped_bytes": 145586626560,
+      "double_layers": 1335,
+      "triple_layers": 0,
+      "drops": 0
+    },
+    "subs3-after": {
+      "layers": 46480,
+      "substitutions": 22019,
+      "native_misses": 31850,
+      "skipped_loads": 22019,
+      "skipped_bytes": 219161272320,
+      "double_layers": 3307,
+      "triple_layers": 291,
+      "drops": 0
+    }
+  },
+  "source_profiles": {
+    "count0-reference": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-cache-context-fast",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "44f656302d6a106059a893439add7bfdf814706e",
+        "44f656302d6a106059a893439add7bfdf814706e"
+      ]
+    },
+    "subs3-before": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-cache-persistent-fast",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b",
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b"
+      ]
+    },
+    "subs1": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh33-cache-subs1",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "413c59a1ce28b4fbfb4d8f210c8591b1486e1d6a",
+        "413c59a1ce28b4fbfb4d8f210c8591b1486e1d6a"
+      ]
+    },
+    "subs2": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh33-cache-subs2",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "2",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "c5943ee6ec647347efe157db00f84689670bfe13",
+        "c5943ee6ec647347efe157db00f84689670bfe13"
+      ]
+    },
+    "subs3-after": {
+      "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh33-cache-subs3-after",
+      "route_environment": {
+        "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".90",
+        "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "1",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".25",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK": "64",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "3",
+        "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".50",
+        "DS4_METAL_V41_RESIDENT_ROUTE_POLICY": "replace"
+      },
+      "route_profile_same_after_restart": true,
+      "logged_cache_profile_hashes": [
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b",
+        "a5344dab32c9490536d1ca5ecf1859d13982c11b"
+      ]
+    }
+  },
+  "count3_bracket_mean": {
+    "task_wall_seconds": 187.33910900000774,
+    "launcher_wall_seconds": 192.0076227499958
+  },
+  "change_vs_count3_bracket_mean_percent": {
+    "count0-reference": {
+      "task_wall_seconds": 6.110191264963083,
+      "launcher_wall_seconds": 5.871317766222051
+    },
+    "subs3-before": {
+      "task_wall_seconds": -0.7796752945988028,
+      "launcher_wall_seconds": -0.7216626247223967
+    },
+    "subs1": {
+      "task_wall_seconds": 3.114768648233035,
+      "launcher_wall_seconds": 2.9000912626437003
+    },
+    "subs2": {
+      "task_wall_seconds": 3.6768914642334893,
+      "launcher_wall_seconds": 3.2033722775807627
+    },
+    "subs3-after": {
+      "task_wall_seconds": 0.7796752945988139,
+      "launcher_wall_seconds": 0.7216626247223967
+    }
+  },
+  "closing3_vs_opening3_percent": {
+    "task_wall_seconds": 1.571603997293436,
+    "launcher_wall_seconds": 1.4538169026632186
+  },
+  "scope": "Resident count curve on frozen dedupe/bucket tasks, suffix64 and READ0/WRITE128/FINAL1 fixed. Count0 and opening count3 come from completed Item32; closing count3 brackets new count1/2. Original artifacts remain in place. Generated histories can differ; no paired NLL, additive gain, general quality or new independent count0 control claim.",
+  "change_vs_faster_count3_percent": {
+    "count0-reference": {
+      "task_wall_seconds": 6.9440072686910215,
+      "launcher_wall_seconds": 6.640905322600865
+    },
+    "subs3-before": {
+      "task_wall_seconds": 0.0,
+      "launcher_wall_seconds": 0.0
+    },
+    "subs1": {
+      "task_wall_seconds": 3.9250465611707863,
+      "launcher_wall_seconds": 3.64808072245979
+    },
+    "subs2": {
+      "task_wall_seconds": 4.49158654949422,
+      "launcher_wall_seconds": 3.953566312725698
+    },
+    "subs3-after": {
+      "task_wall_seconds": 1.571603997293436,
+      "launcher_wall_seconds": 1.4538169026632186
+    }
+  },
+  "case_change_vs_count3_bracket_mean_percent": {
+    "count0-reference": {
+      "dedupe": 8.553732071625198,
+      "bucket": 3.787305209785319
+    },
+    "subs3-before": {
+      "dedupe": -0.77370521030804,
+      "bucket": -0.7853505939469763
+    },
+    "subs1": {
+      "dedupe": 3.0221036318217376,
+      "bucket": 3.202858142723053
+    },
+    "subs2": {
+      "dedupe": 5.90578932514898,
+      "bucket": 1.5580499268136316
+    },
+    "subs3-after": {
+      "dedupe": 0.77370521030804,
+      "bucket": 0.7853505939469763
+    }
+  }
+}

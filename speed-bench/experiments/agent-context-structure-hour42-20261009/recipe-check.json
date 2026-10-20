@@ -1,0 +1,13 @@
+{
+  "exact_prompt_recipe_executed": true,
+  "kept_ids": [
+    8,
+    10
+  ],
+  "removed_ids": [
+    7,
+    9
+  ],
+  "protected_prefix_preserved": true,
+  "printed_bytes": 0
+}

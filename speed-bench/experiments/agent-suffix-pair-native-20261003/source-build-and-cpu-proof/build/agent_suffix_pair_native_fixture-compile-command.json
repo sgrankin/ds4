@@ -1,0 +1,21 @@
+{
+  "label": "agent_suffix_pair_native_fixture-compile",
+  "argv": [
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "-isysroot",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+    "-O3",
+    "-g",
+    "-mcpu=native",
+    "-Wall",
+    "-Wextra",
+    "-I.",
+    "-Wno-unused-function",
+    "-std=c11",
+    "-c",
+    "speed-bench/agent_suffix_pair_native_fixture.c",
+    "-o",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/agent_suffix_pair_native_fixture.o"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair"
+}

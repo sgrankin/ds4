@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 278, in drive
+    phase='completed_turn_validation';immutable_project(project,inputs)
+                                      ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 247, in immutable_project
+    if not f.is_file() or sha(f)!=pin:raise ControlFailure('Fixture mutation: '+name)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+actual_controller.ControlFailure: Fixture mutation: run_grader.py

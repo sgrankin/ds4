@@ -1,0 +1,20 @@
+{
+  "source_commit": "1c8c560d409a2f19fe12abfe24667c3c2554f207",
+  "source_sha256": "06059d1332a0a513e1187727c66e6cfbd3c15bb1480d81c1b2ffbc6152498fce",
+  "test_sha256": "fe39b5b9740c794afe27d3a8e9ca9502c5b9a08e158ec133dab6380ebaafc5d4",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/tests/test_resident_mixed24_confirmation.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "model_opened": false,
+  "model_metadata_accessed": false,
+  "tests": 24,
+  "started": 1790999185.500569,
+  "ended": 1790999186.1789,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "10a740990654a7f34d3499c28119c625b47a6f4e01635e042f88025073ffbeb9",
+  "first_attempt_failure_preserved": "speed-bench/ideas/artifacts/resident-mixed24-confirmation-cpu-v1",
+  "first_attempt_report_correction": "Original v1 proof tests=24 was a planned count; retained unittest log actually ran23;22passed/1error."
+}

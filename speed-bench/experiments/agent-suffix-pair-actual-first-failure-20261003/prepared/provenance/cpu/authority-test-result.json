@@ -1,0 +1,17 @@
+{
+  "label": "authority-test",
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_agent_suffix_pair_actual_authority.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "started": 1790997231.904748,
+  "completed": 1790997232.046932
+}

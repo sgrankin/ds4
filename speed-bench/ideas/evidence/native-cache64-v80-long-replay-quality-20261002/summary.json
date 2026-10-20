@@ -1,0 +1,162 @@
+[
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.0190480241346,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 84064.266,
+    "decode_ms": 18516.586,
+    "name": "native64-old",
+    "cache_gb": 64,
+    "reference": "old",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.019270655303,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 65587.206,
+    "decode_ms": 17388.872,
+    "name": "native80-record",
+    "cache_gb": 80,
+    "reference": "new",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.019270655303,
+    "delta_nll": 0.000222631168395,
+    "kl_base_to_raw": 0.000303373941736,
+    "tv": 0.00187026403935,
+    "argmax_flips": 2,
+    "bit_equal_rows": 0,
+    "prefill_ms": 66345.872,
+    "decode_ms": 17048.012,
+    "name": "native80-old",
+    "cache_gb": 80,
+    "reference": "old",
+    "prompt_mean_delta_nll": -0.00014892710788047848,
+    "prompt_bootstrap_95": [
+      -0.0039462909739586315,
+      0.0025681230262430787
+    ],
+    "worst_prompt_delta_nll": 0.0025681230262430787,
+    "kl_p99": 0.00948186833591,
+    "kl_max": 0.0171782658638,
+    "per_prompt": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0025681230262430787,
+        "kl": 0.0005533088498236276
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": -0.0039462909739586315,
+        "kl": 0.00040694910507522666
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0009313866240741173,
+        "kl": 0.00017312076676409208
+      }
+    }
+  },
+  {
+    "phases": 7,
+    "tokens": 343,
+    "avg_nll": 0.019270655303,
+    "delta_nll": 0,
+    "kl_base_to_raw": 0,
+    "tv": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 343,
+    "prefill_ms": 65619.758,
+    "decode_ms": 17122.55,
+    "name": "native80-new",
+    "cache_gb": 80,
+    "reference": "new",
+    "prompt_mean_delta_nll": 0.0,
+    "prompt_bootstrap_95": [
+      0.0,
+      0.0
+    ],
+    "worst_prompt_delta_nll": 0.0,
+    "kl_p99": 0.0,
+    "kl_max": 0.0,
+    "per_prompt": {
+      "phase_002": {
+        "tokens": 72,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_004": {
+        "tokens": 74,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      },
+      "phase_006": {
+        "tokens": 197,
+        "delta_nll": 0.0,
+        "kl": 0.0
+      }
+    }
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "speed-bench/experiments/server-suffix-curve-hour14-20261004/http_sweep.py"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "runtime_revision": "3fb450f7",
+  "launcher": "/Volumes/Models/ds4/speed-bench/experiments/server-workflow-hour12-20261004/launch.py",
+  "shared_visible_paths": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/workflow-shared",
+  "order": [
+    "tail64",
+    "tail256",
+    "tail128",
+    "native"
+  ],
+  "omitted_tail128": false,
+  "interpretation": "HTTP task curve; histories may differ. Separate from core NLL curve.",
+  "guard": "One external ROOT pressure guard; no nested guards."
+}

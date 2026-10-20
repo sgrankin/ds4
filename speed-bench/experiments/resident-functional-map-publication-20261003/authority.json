@@ -1,0 +1,259 @@
+{
+  "schema": "DS4_FUNCTIONAL_MAP_QUALIFICATION_AUTHORITY_V1",
+  "map_sha256": "c9328addaeac914f666c618a5564b87cd8533b75531f8430572fc2cbfabda17e",
+  "map_bytes": 21140879,
+  "complete_binding_sha256": "2d9b8dba9ac16240c7fc2b421fca906d52d4de6781c7a0eda1d213278e80f80e",
+  "capture_sha256": "026a756224c83f51a9c06086eeebe81bca6dfdcc387e5e4c52c8853ceae07023",
+  "native_binding_sha256": "263e96309732523f360e3bb6fcff7d46713b944542c4fc1f6df79ff8d2c74b4f",
+  "source_kernel_identity_sha256": "dc18081bd6b5e2804c66a0df35029643ba23db6386633377a982723ab212accf",
+  "descriptor_identity": {
+    "ctime_ns": 1789237692849632458,
+    "device": 16777230,
+    "inode": 360468,
+    "mtime_ns": 1789237692837653163,
+    "whole_bytes": 365713686528
+  },
+  "fixed_policy": {
+    "weakest_original_missing_slot": true,
+    "max_substitutions": 1,
+    "protect_native_slots": 5,
+    "affinity_gap": "0.30",
+    "maximum_original_mass": "0.12",
+    "global_candidate_rank": 24,
+    "original_GPU_coefficient_bits_preserved": true,
+    "probe_choice": "maximum_input_cosine",
+    "expert_choice": "minimum_projected_output_squared_distance",
+    "tie": "lowest_probe_then_expert_ID"
+  },
+  "fullscan_plan_sha256": "85e604c2625e3f9243be463154b153dd92b1c9bf1f93da67f619eeda87829449",
+  "fullscan_execution_sha256": "d8ab86ae63d3b36bdb7602b783ad1066d1c4d93adb9ec7946e68395a69adf907",
+  "fullscan_release_sha256": "c1069a299eef609ae744b185565d87d8e2b5bdbd6dd3487baa0e638f7ad4ac13",
+  "fullscan_independent_audit_sha256": "a6abe18b13a56a3c1fa762b94a93246a9ca97c1e3a2656027b6b21e8cd8ace83",
+  "raw_signature_sha256": "e3d03efbf384ec16c6a54d36624efcbee37ee2912031297e32967c9fcf9efcad",
+  "native_build_proof_sha256": "c41000526e0709eb910ec16397f2d88a54972326afb4e196945e02599acddc49",
+  "publisher_source_sha256": "51f18e5c28482aba5185dd4ebac702be0087a8c11159cd015bc1dd96a6e8fca8",
+  "qualification_source_sha256": "29af5499473d2be14239fff185f39b144eda2ce59e3b3e146b484e7d7dc9c2f7",
+  "reference_source_sha256": "2adea314f58f0d977a35de9b104a48452e9cb980b036137cfdca32374d920ccc",
+  "source_kernel_identity": {
+    "constructor_binary_sha256": "07cacc32ca6ac3c13ef2d28f716b9bc3020ce25294a868e0bf601aba581041b3",
+    "constructor_build_plan_sha256": "668cf34751e9c32eb1c0387c2bb18ceb845d32c7bd7e6ce3b165df88b2067feb",
+    "constructor_build_proof_sha256": "c41000526e0709eb910ec16397f2d88a54972326afb4e196945e02599acddc49",
+    "fused_norm": 0,
+    "gpu_header_sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "native_Metal_parent_source_sha256": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+    "native_core_source_sha256": "e2626fa0661728037c5752d1730754f6bcc039c92b339a047bc78435b07b41d0",
+    "projection_source_sha256": "f9088878b75329709c0b935a9fd8129ef9cf811b8fb73a6296bfb178eb068b7f",
+    "ranker_source_sha256": "418ef353bbf2d23e31418255851a5d36d2bddf7568324da186463f55acc51cb3",
+    "scanner_Metal_object_sha256": "27f3af47ade36aaca74d0a3d04975f234d59aa1f104733b81d2beb4ae0ce4da0",
+    "schema": "DS4_FUNCTIONAL_NATIVE_KERNEL_IDENTITY_V1",
+    "settings": {
+      "accumulate": 0,
+      "active_mask": 1,
+      "cache_requested_bytes": 68719476736,
+      "clamp_bits": 1092616192,
+      "coefficient_fp32_bits": 1065353216,
+      "configured_cache_slots": 6136,
+      "context": 8192,
+      "down_row_bytes": 756,
+      "down_type": 10,
+      "effective_cache_bytes": 61073326080,
+      "experts": 384,
+      "gate_up_row_bytes": 1320,
+      "gate_up_type": 16,
+      "input": 5120,
+      "input_norm": "RMS_BF16",
+      "layers": 40,
+      "mixture_slots": 6,
+      "prefill_chunk": 512,
+      "rms_eps_bits": 507307272,
+      "routed_mid": "F32",
+      "routed_width": 2304,
+      "selected_limit": 1024,
+      "selected_tile": 64
+    },
+    "source_shaders": [
+      {
+        "bytes": 11174,
+        "environment": "DS4_METAL_ARGSORT_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/argsort.metal",
+        "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+      },
+      {
+        "bytes": 6580,
+        "environment": "DS4_METAL_BIN_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/bin.metal",
+        "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+      },
+      {
+        "bytes": 1932,
+        "environment": "DS4_METAL_CONCAT_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/concat.metal",
+        "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+      },
+      {
+        "bytes": 10154,
+        "environment": "DS4_METAL_CPY_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/cpy.metal",
+        "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+      },
+      {
+        "bytes": 7815,
+        "environment": "DS4_METAL_DEEPSEEK4_VISION_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/deepseek4_vision.metal",
+        "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+      },
+      {
+        "bytes": 113439,
+        "environment": "DS4_METAL_DENSE_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/dense.metal",
+        "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+      },
+      {
+        "bytes": 12508,
+        "environment": "DS4_METAL_DSV41_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/dsv41.metal",
+        "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+      },
+      {
+        "bytes": 63069,
+        "environment": "DS4_METAL_DSV4_HC_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/dsv4_hc.metal",
+        "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+      },
+      {
+        "bytes": 22218,
+        "environment": "DS4_METAL_DSV4_KV_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/dsv4_kv.metal",
+        "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+      },
+      {
+        "bytes": 282139,
+        "environment": "DS4_METAL_DSV4_MISC_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/dsv4_misc.metal",
+        "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+      },
+      {
+        "bytes": 35980,
+        "environment": "DS4_METAL_DSV4_ROPE_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/dsv4_rope.metal",
+        "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+      },
+      {
+        "bytes": 61784,
+        "environment": "DS4_METAL_FLASH_ATTN_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/flash_attn.metal",
+        "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+      },
+      {
+        "bytes": 6976,
+        "environment": "DS4_METAL_GET_ROWS_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/get_rows.metal",
+        "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+      },
+      {
+        "bytes": 5466,
+        "environment": "DS4_METAL_GLM53_BF16_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/glm53_bf16.metal",
+        "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+      },
+      {
+        "bytes": 13116,
+        "environment": "DS4_METAL_GLM53_KDA_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/glm53_kda.metal",
+        "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+      },
+      {
+        "bytes": 11295,
+        "environment": "DS4_METAL_GLM53_VISION_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/glm53_vision.metal",
+        "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+      },
+      {
+        "bytes": 2129,
+        "environment": "DS4_METAL_GLU_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/glu.metal",
+        "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+      },
+      {
+        "bytes": 423032,
+        "environment": "DS4_METAL_MOE_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/moe.metal",
+        "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+      },
+      {
+        "bytes": 14766,
+        "environment": "DS4_METAL_NORM_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/norm.metal",
+        "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+      },
+      {
+        "bytes": 232464,
+        "environment": "DS4_METAL_QWEN4_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/qwen4.metal",
+        "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+      },
+      {
+        "bytes": 7402,
+        "environment": "DS4_METAL_QWEN4_VISION_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/qwen4_vision.metal",
+        "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+      },
+      {
+        "bytes": 1640,
+        "environment": "DS4_METAL_REPEAT_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/repeat.metal",
+        "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+      },
+      {
+        "bytes": 1909,
+        "environment": "DS4_METAL_SET_ROWS_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/set_rows.metal",
+        "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+      },
+      {
+        "bytes": 7679,
+        "environment": "DS4_METAL_SOFTMAX_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/softmax.metal",
+        "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+      },
+      {
+        "bytes": 2737,
+        "environment": "DS4_METAL_SUM_ROWS_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/sum_rows.metal",
+        "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+      },
+      {
+        "bytes": 10104,
+        "environment": "DS4_METAL_UNARY_SOURCE",
+        "mode": 420,
+        "path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-scan-safe/speed-bench/ideas/resident_functional_scanner_native_prepared_v2/metal/unary.metal",
+        "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_resident_native_weights.py",
+    "-v"
+  ],
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "returncode": 1,
+  "source_commit": "f2c8d08408bb89ec0a7d76eddf039f6dbdf8e5f2",
+  "scope": "actual production config/apply compiled against model-free mocks, -O3 -ffast-math; no core or model build"
+}

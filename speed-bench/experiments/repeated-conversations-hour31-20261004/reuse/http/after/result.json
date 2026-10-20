@@ -1,0 +1,643 @@
+{
+  "phase": "after",
+  "mode": "reuse",
+  "steps": [
+    {
+      "step": "B-edit5",
+      "session": "B",
+      "conversation": "conv_d75fc9a7c0e8132a4371cb93",
+      "seconds": 29.580801000003703,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-61\"}",
+      "answer": {
+        "active_total": 231,
+        "archived_code": "ORBIT-61"
+      },
+      "gold": {
+        "active_total": 231,
+        "archived_code": "ORBIT-61"
+      },
+      "correct": true,
+      "complete": true,
+      "cap": false,
+      "fresh_read": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_219265ef129e95421da23a7f63789205",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat31-visible/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat31-visible/B/archive.json",
+          "text": "{\n  \"archived_code\": \"ORBIT-61\"\n}\n"
+        }
+      ],
+      "replies": [
+        {
+          "seconds": 27.829857333999826,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 3046,
+            "input_tokens_details": {
+              "cached_tokens": 2526,
+              "cache_write_tokens": 520
+            },
+            "output_tokens": 94,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3140
+          },
+          "id": "resp_c8a67e0c74df8df26ff583a9",
+          "conversation": {
+            "id": "conv_d75fc9a7c0e8132a4371cb93"
+          },
+          "incomplete_details": null,
+          "requested_max_output_tokens": 128
+        },
+        {
+          "seconds": 1.7439214589830954,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 3165,
+            "input_tokens_details": {
+              "cached_tokens": 3140,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3183
+          },
+          "id": "resp_f3f9ceaf933b3949783ee497",
+          "conversation": {
+            "id": "conv_d75fc9a7c0e8132a4371cb93"
+          },
+          "incomplete_details": null,
+          "requested_max_output_tokens": 128
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1004 17:38:13 ds4-server: suffix APPROXIMATE slot=0 reused=2526 fresh=234 graft_fresh=170 source=616:3142 destination=286:2812 latest_user_start=2951 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=1 21054.626 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 29.594380208000075,
+      "edit_seconds": 0.013382375007495284,
+      "round": 5
+    },
+    {
+      "step": "B-edit6",
+      "session": "B",
+      "conversation": "conv_d75fc9a7c0e8132a4371cb93",
+      "seconds": 30.061156624986324,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-62\"}",
+      "answer": {
+        "active_total": 231,
+        "archived_code": "ORBIT-62"
+      },
+      "gold": {
+        "active_total": 231,
+        "archived_code": "ORBIT-62"
+      },
+      "correct": true,
+      "complete": true,
+      "cap": false,
+      "fresh_read": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_c82e62d1bb77eea5fc29d053fcb3bc69",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat31-visible/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat31-visible/B/archive.json",
+          "text": "{\n  \"archived_code\": \"ORBIT-62\"\n}\n"
+        }
+      ],
+      "replies": [
+        {
+          "seconds": 28.258164750004653,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 2948,
+            "input_tokens_details": {
+              "cached_tokens": 2428,
+              "cache_write_tokens": 520
+            },
+            "output_tokens": 94,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3042
+          },
+          "id": "resp_aa7af168f7626627e85562a9",
+          "conversation": {
+            "id": "conv_d75fc9a7c0e8132a4371cb93"
+          },
+          "incomplete_details": null,
+          "requested_max_output_tokens": 128
+        },
+        {
+          "seconds": 1.7894602919986937,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 3067,
+            "input_tokens_details": {
+              "cached_tokens": 3042,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3085
+          },
+          "id": "resp_eb79109ac6feededf5b778f7",
+          "conversation": {
+            "id": "conv_d75fc9a7c0e8132a4371cb93"
+          },
+          "incomplete_details": null,
+          "requested_max_output_tokens": 128
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1004 17:38:43 ds4-server: suffix APPROXIMATE slot=1 reused=2428 fresh=234 graft_fresh=170 source=618:3046 destination=286:2714 latest_user_start=2853 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=0 21543.009 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 30.064743583003292,
+      "edit_seconds": 0.0034004159970209002,
+      "round": 6
+    },
+    {
+      "step": "B-edit7",
+      "session": "B",
+      "conversation": "conv_d75fc9a7c0e8132a4371cb93",
+      "seconds": 30.0532200410089,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-63\"}",
+      "answer": {
+        "active_total": 231,
+        "archived_code": "ORBIT-63"
+      },
+      "gold": {
+        "active_total": 231,
+        "archived_code": "ORBIT-63"
+      },
+      "correct": true,
+      "complete": true,
+      "cap": false,
+      "fresh_read": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_186c146f83f175264d8aab6661f5df32",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat31-visible/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat31-visible/B/archive.json",
+          "text": "{\n  \"archived_code\": \"ORBIT-63\"\n}\n"
+        }
+      ],
+      "replies": [
+        {
+          "seconds": 28.284352417016635,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 2852,
+            "input_tokens_details": {
+              "cached_tokens": 2332,
+              "cache_write_tokens": 520
+            },
+            "output_tokens": 94,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2946
+          },
+          "id": "resp_dabf2e6d1e86eaceb21e42fd",
+          "conversation": {
+            "id": "conv_d75fc9a7c0e8132a4371cb93"
+          },
+          "incomplete_details": null,
+          "requested_max_output_tokens": 128
+        },
+        {
+          "seconds": 1.7618603330047335,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 2971,
+            "input_tokens_details": {
+              "cached_tokens": 2946,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2989
+          },
+          "id": "resp_74819261d002cbeae16fa568",
+          "conversation": {
+            "id": "conv_d75fc9a7c0e8132a4371cb93"
+          },
+          "incomplete_details": null,
+          "requested_max_output_tokens": 128
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1004 17:39:13 ds4-server: suffix APPROXIMATE slot=1 reused=2332 fresh=234 graft_fresh=170 source=616:2948 destination=286:2618 latest_user_start=2757 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=1 21592.125 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 30.05685804199311,
+      "edit_seconds": 0.003435291990172118,
+      "round": 7
+    },
+    {
+      "step": "B-edit8",
+      "session": "B",
+      "conversation": "conv_d75fc9a7c0e8132a4371cb93",
+      "seconds": 29.7895920840092,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-64\"}",
+      "answer": {
+        "active_total": 231,
+        "archived_code": "ORBIT-64"
+      },
+      "gold": {
+        "active_total": 231,
+        "archived_code": "ORBIT-64"
+      },
+      "correct": true,
+      "complete": true,
+      "cap": false,
+      "fresh_read": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_84badba6e859c6cc889ac0b878ad4280",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat31-visible/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/repeat31-visible/B/archive.json",
+          "text": "{\n  \"archived_code\": \"ORBIT-64\"\n}\n"
+        }
+      ],
+      "replies": [
+        {
+          "seconds": 28.031456374999834,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 2754,
+            "input_tokens_details": {
+              "cached_tokens": 2234,
+              "cache_write_tokens": 520
+            },
+            "output_tokens": 94,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2848
+          },
+          "id": "resp_745bccad6b00b365bf650cc1",
+          "conversation": {
+            "id": "conv_d75fc9a7c0e8132a4371cb93"
+          },
+          "incomplete_details": null,
+          "requested_max_output_tokens": 128
+        },
+        {
+          "seconds": 1.7427604169934057,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 2873,
+            "input_tokens_details": {
+              "cached_tokens": 2848,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 2891
+          },
+          "id": "resp_24e14fab440b1d499610bd17",
+          "conversation": {
+            "id": "conv_d75fc9a7c0e8132a4371cb93"
+          },
+          "incomplete_details": null,
+          "requested_max_output_tokens": 128
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1004 17:39:43 ds4-server: suffix APPROXIMATE slot=1 reused=2234 fresh=234 graft_fresh=170 source=618:2852 destination=286:2520 latest_user_start=2659 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=0 21357.892 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 29.79390383401187,
+      "edit_seconds": 0.004082416999153793,
+      "round": 8
+    }
+  ],
+  "edits": [
+    {
+      "session": "B",
+      "round": 5,
+      "item_id": "msg_3d7bb08c971e935415e31453",
+      "before_version": 15,
+      "after_version": 16,
+      "before_item_ids": [
+        "msg_3d7bb08c971e935415e31453",
+        "msg_98cca4c3435af4a767f55518",
+        "msg_7c095227464c92216f0be2b4",
+        "msg_8d72cbe78e331d7d3ac72214",
+        "msg_ac1c34b638053bca18f6a298",
+        "msg_86fce049526780d6cc1d7e03",
+        "msg_b902c64e40836b4b774d2caa",
+        "fc_ca235d8e0de97c988d8a3831",
+        "fco_fdeda5dc312d268c6444fa08",
+        "msg_5859d9f94fc55f16306505f3",
+        "msg_98cb97792f56a81608482b28",
+        "fc_49ecc774d12084963511adcd",
+        "fco_475cd4922dd273be51ff0a66",
+        "msg_607e562eee9e1d09e2aa0706",
+        "msg_8aaa9b9fab81c3f26b1d0eb4",
+        "fc_81f7f10dd21d7924698da620",
+        "fco_0272dd567d8d0fc573e300e6",
+        "msg_166565655da062006d62661f",
+        "msg_f168d6e4111fa7d3576be19a",
+        "fc_bc94b3e7b12a95e70439be36",
+        "fco_d3473f8502555702d9cff1df",
+        "msg_713f3e992d97438aa7e59eb4",
+        "msg_a7672428e46f8f6bf7a20a29",
+        "fc_34270faf7d07d93a10093bba",
+        "fco_102d2fead53d4be04e15d01f",
+        "msg_f04eca74fdca66db4678f739"
+      ],
+      "after_item_ids": [
+        "msg_98cca4c3435af4a767f55518",
+        "msg_7c095227464c92216f0be2b4",
+        "msg_8d72cbe78e331d7d3ac72214",
+        "msg_ac1c34b638053bca18f6a298",
+        "msg_86fce049526780d6cc1d7e03",
+        "msg_b902c64e40836b4b774d2caa",
+        "fc_ca235d8e0de97c988d8a3831",
+        "fco_fdeda5dc312d268c6444fa08",
+        "msg_5859d9f94fc55f16306505f3",
+        "msg_98cb97792f56a81608482b28",
+        "fc_49ecc774d12084963511adcd",
+        "fco_475cd4922dd273be51ff0a66",
+        "msg_607e562eee9e1d09e2aa0706",
+        "msg_8aaa9b9fab81c3f26b1d0eb4",
+        "fc_81f7f10dd21d7924698da620",
+        "fco_0272dd567d8d0fc573e300e6",
+        "msg_166565655da062006d62661f",
+        "msg_f168d6e4111fa7d3576be19a",
+        "fc_bc94b3e7b12a95e70439be36",
+        "fco_d3473f8502555702d9cff1df",
+        "msg_713f3e992d97438aa7e59eb4",
+        "msg_a7672428e46f8f6bf7a20a29",
+        "fc_34270faf7d07d93a10093bba",
+        "fco_102d2fead53d4be04e15d01f",
+        "msg_f04eca74fdca66db4678f739"
+      ],
+      "seconds": 0.013382375007495284,
+      "archive_code": "ORBIT-61"
+    },
+    {
+      "session": "B",
+      "round": 6,
+      "item_id": "msg_98cca4c3435af4a767f55518",
+      "before_version": 18,
+      "after_version": 19,
+      "before_item_ids": [
+        "msg_98cca4c3435af4a767f55518",
+        "msg_7c095227464c92216f0be2b4",
+        "msg_8d72cbe78e331d7d3ac72214",
+        "msg_ac1c34b638053bca18f6a298",
+        "msg_86fce049526780d6cc1d7e03",
+        "msg_b902c64e40836b4b774d2caa",
+        "fc_ca235d8e0de97c988d8a3831",
+        "fco_fdeda5dc312d268c6444fa08",
+        "msg_5859d9f94fc55f16306505f3",
+        "msg_98cb97792f56a81608482b28",
+        "fc_49ecc774d12084963511adcd",
+        "fco_475cd4922dd273be51ff0a66",
+        "msg_607e562eee9e1d09e2aa0706",
+        "msg_8aaa9b9fab81c3f26b1d0eb4",
+        "fc_81f7f10dd21d7924698da620",
+        "fco_0272dd567d8d0fc573e300e6",
+        "msg_166565655da062006d62661f",
+        "msg_f168d6e4111fa7d3576be19a",
+        "fc_bc94b3e7b12a95e70439be36",
+        "fco_d3473f8502555702d9cff1df",
+        "msg_713f3e992d97438aa7e59eb4",
+        "msg_a7672428e46f8f6bf7a20a29",
+        "fc_34270faf7d07d93a10093bba",
+        "fco_102d2fead53d4be04e15d01f",
+        "msg_f04eca74fdca66db4678f739",
+        "msg_3e72cb9ebde81ca569d52995",
+        "fc_1d5c9fc394c6e2ca3695b678",
+        "fco_4b7b159a50ac5fdd6ac5f15c",
+        "msg_a555a9b004f26836ee146955"
+      ],
+      "after_item_ids": [
+        "msg_7c095227464c92216f0be2b4",
+        "msg_8d72cbe78e331d7d3ac72214",
+        "msg_ac1c34b638053bca18f6a298",
+        "msg_86fce049526780d6cc1d7e03",
+        "msg_b902c64e40836b4b774d2caa",
+        "fc_ca235d8e0de97c988d8a3831",
+        "fco_fdeda5dc312d268c6444fa08",
+        "msg_5859d9f94fc55f16306505f3",
+        "msg_98cb97792f56a81608482b28",
+        "fc_49ecc774d12084963511adcd",
+        "fco_475cd4922dd273be51ff0a66",
+        "msg_607e562eee9e1d09e2aa0706",
+        "msg_8aaa9b9fab81c3f26b1d0eb4",
+        "fc_81f7f10dd21d7924698da620",
+        "fco_0272dd567d8d0fc573e300e6",
+        "msg_166565655da062006d62661f",
+        "msg_f168d6e4111fa7d3576be19a",
+        "fc_bc94b3e7b12a95e70439be36",
+        "fco_d3473f8502555702d9cff1df",
+        "msg_713f3e992d97438aa7e59eb4",
+        "msg_a7672428e46f8f6bf7a20a29",
+        "fc_34270faf7d07d93a10093bba",
+        "fco_102d2fead53d4be04e15d01f",
+        "msg_f04eca74fdca66db4678f739",
+        "msg_3e72cb9ebde81ca569d52995",
+        "fc_1d5c9fc394c6e2ca3695b678",
+        "fco_4b7b159a50ac5fdd6ac5f15c",
+        "msg_a555a9b004f26836ee146955"
+      ],
+      "seconds": 0.0034004159970209002,
+      "archive_code": "ORBIT-62"
+    },
+    {
+      "session": "B",
+      "round": 7,
+      "item_id": "msg_7c095227464c92216f0be2b4",
+      "before_version": 21,
+      "after_version": 22,
+      "before_item_ids": [
+        "msg_7c095227464c92216f0be2b4",
+        "msg_8d72cbe78e331d7d3ac72214",
+        "msg_ac1c34b638053bca18f6a298",
+        "msg_86fce049526780d6cc1d7e03",
+        "msg_b902c64e40836b4b774d2caa",
+        "fc_ca235d8e0de97c988d8a3831",
+        "fco_fdeda5dc312d268c6444fa08",
+        "msg_5859d9f94fc55f16306505f3",
+        "msg_98cb97792f56a81608482b28",
+        "fc_49ecc774d12084963511adcd",
+        "fco_475cd4922dd273be51ff0a66",
+        "msg_607e562eee9e1d09e2aa0706",
+        "msg_8aaa9b9fab81c3f26b1d0eb4",
+        "fc_81f7f10dd21d7924698da620",
+        "fco_0272dd567d8d0fc573e300e6",
+        "msg_166565655da062006d62661f",
+        "msg_f168d6e4111fa7d3576be19a",
+        "fc_bc94b3e7b12a95e70439be36",
+        "fco_d3473f8502555702d9cff1df",
+        "msg_713f3e992d97438aa7e59eb4",
+        "msg_a7672428e46f8f6bf7a20a29",
+        "fc_34270faf7d07d93a10093bba",
+        "fco_102d2fead53d4be04e15d01f",
+        "msg_f04eca74fdca66db4678f739",
+        "msg_3e72cb9ebde81ca569d52995",
+        "fc_1d5c9fc394c6e2ca3695b678",
+        "fco_4b7b159a50ac5fdd6ac5f15c",
+        "msg_a555a9b004f26836ee146955",
+        "msg_4ee0a08109cdf1fcc043c47b",
+        "fc_4364223070b0b1bbde77ade6",
+        "fco_4d2f024887a18e9bfe27f827",
+        "msg_bfd4367782fa950a0325654b"
+      ],
+      "after_item_ids": [
+        "msg_8d72cbe78e331d7d3ac72214",
+        "msg_ac1c34b638053bca18f6a298",
+        "msg_86fce049526780d6cc1d7e03",
+        "msg_b902c64e40836b4b774d2caa",
+        "fc_ca235d8e0de97c988d8a3831",
+        "fco_fdeda5dc312d268c6444fa08",
+        "msg_5859d9f94fc55f16306505f3",
+        "msg_98cb97792f56a81608482b28",
+        "fc_49ecc774d12084963511adcd",
+        "fco_475cd4922dd273be51ff0a66",
+        "msg_607e562eee9e1d09e2aa0706",
+        "msg_8aaa9b9fab81c3f26b1d0eb4",
+        "fc_81f7f10dd21d7924698da620",
+        "fco_0272dd567d8d0fc573e300e6",
+        "msg_166565655da062006d62661f",
+        "msg_f168d6e4111fa7d3576be19a",
+        "fc_bc94b3e7b12a95e70439be36",
+        "fco_d3473f8502555702d9cff1df",
+        "msg_713f3e992d97438aa7e59eb4",
+        "msg_a7672428e46f8f6bf7a20a29",
+        "fc_34270faf7d07d93a10093bba",
+        "fco_102d2fead53d4be04e15d01f",
+        "msg_f04eca74fdca66db4678f739",
+        "msg_3e72cb9ebde81ca569d52995",
+        "fc_1d5c9fc394c6e2ca3695b678",
+        "fco_4b7b159a50ac5fdd6ac5f15c",
+        "msg_a555a9b004f26836ee146955",
+        "msg_4ee0a08109cdf1fcc043c47b",
+        "fc_4364223070b0b1bbde77ade6",
+        "fco_4d2f024887a18e9bfe27f827",
+        "msg_bfd4367782fa950a0325654b"
+      ],
+      "seconds": 0.003435291990172118,
+      "archive_code": "ORBIT-63"
+    },
+    {
+      "session": "B",
+      "round": 8,
+      "item_id": "msg_8d72cbe78e331d7d3ac72214",
+      "before_version": 24,
+      "after_version": 25,
+      "before_item_ids": [
+        "msg_8d72cbe78e331d7d3ac72214",
+        "msg_ac1c34b638053bca18f6a298",
+        "msg_86fce049526780d6cc1d7e03",
+        "msg_b902c64e40836b4b774d2caa",
+        "fc_ca235d8e0de97c988d8a3831",
+        "fco_fdeda5dc312d268c6444fa08",
+        "msg_5859d9f94fc55f16306505f3",
+        "msg_98cb97792f56a81608482b28",
+        "fc_49ecc774d12084963511adcd",
+        "fco_475cd4922dd273be51ff0a66",
+        "msg_607e562eee9e1d09e2aa0706",
+        "msg_8aaa9b9fab81c3f26b1d0eb4",
+        "fc_81f7f10dd21d7924698da620",
+        "fco_0272dd567d8d0fc573e300e6",
+        "msg_166565655da062006d62661f",
+        "msg_f168d6e4111fa7d3576be19a",
+        "fc_bc94b3e7b12a95e70439be36",
+        "fco_d3473f8502555702d9cff1df",
+        "msg_713f3e992d97438aa7e59eb4",
+        "msg_a7672428e46f8f6bf7a20a29",
+        "fc_34270faf7d07d93a10093bba",
+        "fco_102d2fead53d4be04e15d01f",
+        "msg_f04eca74fdca66db4678f739",
+        "msg_3e72cb9ebde81ca569d52995",
+        "fc_1d5c9fc394c6e2ca3695b678",
+        "fco_4b7b159a50ac5fdd6ac5f15c",
+        "msg_a555a9b004f26836ee146955",
+        "msg_4ee0a08109cdf1fcc043c47b",
+        "fc_4364223070b0b1bbde77ade6",
+        "fco_4d2f024887a18e9bfe27f827",
+        "msg_bfd4367782fa950a0325654b",
+        "msg_1b5078897a64a9362fb59c2c",
+        "fc_076792118f7cf1fa46cd442a",
+        "fco_162dbb9cad1dd800e912fc65",
+        "msg_29b2288b130c944bdfc1b04b"
+      ],
+      "after_item_ids": [
+        "msg_ac1c34b638053bca18f6a298",
+        "msg_86fce049526780d6cc1d7e03",
+        "msg_b902c64e40836b4b774d2caa",
+        "fc_ca235d8e0de97c988d8a3831",
+        "fco_fdeda5dc312d268c6444fa08",
+        "msg_5859d9f94fc55f16306505f3",
+        "msg_98cb97792f56a81608482b28",
+        "fc_49ecc774d12084963511adcd",
+        "fco_475cd4922dd273be51ff0a66",
+        "msg_607e562eee9e1d09e2aa0706",
+        "msg_8aaa9b9fab81c3f26b1d0eb4",
+        "fc_81f7f10dd21d7924698da620",
+        "fco_0272dd567d8d0fc573e300e6",
+        "msg_166565655da062006d62661f",
+        "msg_f168d6e4111fa7d3576be19a",
+        "fc_bc94b3e7b12a95e70439be36",
+        "fco_d3473f8502555702d9cff1df",
+        "msg_713f3e992d97438aa7e59eb4",
+        "msg_a7672428e46f8f6bf7a20a29",
+        "fc_34270faf7d07d93a10093bba",
+        "fco_102d2fead53d4be04e15d01f",
+        "msg_f04eca74fdca66db4678f739",
+        "msg_3e72cb9ebde81ca569d52995",
+        "fc_1d5c9fc394c6e2ca3695b678",
+        "fco_4b7b159a50ac5fdd6ac5f15c",
+        "msg_a555a9b004f26836ee146955",
+        "msg_4ee0a08109cdf1fcc043c47b",
+        "fc_4364223070b0b1bbde77ade6",
+        "fco_4d2f024887a18e9bfe27f827",
+        "msg_bfd4367782fa950a0325654b",
+        "msg_1b5078897a64a9362fb59c2c",
+        "fc_076792118f7cf1fa46cd442a",
+        "fco_162dbb9cad1dd800e912fc65",
+        "msg_29b2288b130c944bdfc1b04b"
+      ],
+      "seconds": 0.004082416999153793,
+      "archive_code": "ORBIT-64"
+    }
+  ],
+  "seconds": 119.5115574579977,
+  "pass": true,
+  "fresh_reads": 4,
+  "suffix_grafts_observed": 4,
+  "approximate_ssd_sources_observed": 4,
+  "restart_owned_by_launcher": true,
+  "client_concurrency": 1
+}

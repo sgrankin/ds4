@@ -1,0 +1,150 @@
+{
+  "status": "DESIGN_ONLY_NOT_IMPLEMENTED_NOT_BUILDABLE_NOT_GRANTED",
+  "new_experiment": "EXTERNAL_PRE_FORWARD_CONTEXT_EDIT_PAIRED_SEMANTICS_V1",
+  "parent_failure_archive": {
+    "commit": "5cb83ce680fe0ee79edb5ef7bdf13c3a1a554023",
+    "index_sha256": "ae4e3cab9e4979d50d5033531e1b51dee4ca17a38020e816c866fc4d3060e5a5",
+    "classification": "first160self_edit_tool_failure_no_cache_reuse; never reclassified or repaired"
+  },
+  "baseline_source_refusal": {
+    "commit": "2f46d9f0c3235742133767fbda9deb2c45b1d821",
+    "chosen_edit_sha256": "480057204ff830e9a5428f1af75f398377f1055354fc80a85adc720ae1b2e32a",
+    "unrun": true,
+    "reuse_choice_for_new_experiment": false,
+    "reason": "protected system Live context file path differs in oldbaseline; strict sourceID equality retained"
+  },
+  "implementation_scope_if_ROOT_approves": {
+    "private_caller_copy": true,
+    "new_private_hook_controller_graderwrapper": true,
+    "production_agent_core_header_Metal_unchanged": true,
+    "no_sampler_extra_forward": true,
+    "two_command_caller_compile_link_requires_new_ROOT_grant": true
+  },
+  "fixed_geometry_policy": {
+    "ctx": 8192,
+    "prefill_chunk": 256,
+    "cache_GiB": 64,
+    "frontier_slots": 2,
+    "frontier_MB": 160,
+    "pair_capacity": 1024,
+    "fresh_tail_minimum": 128,
+    "whole_latest_native_User_region_fresh": true,
+    "resident_route_gap": 0,
+    "selected_tile": 64,
+    "selected_limit": 1024,
+    "T": 0,
+    "seed": 41,
+    "think": "none",
+    "generation_cap_each_round": 512,
+    "wall_deadline_seconds_including_grader_EOF_cleanup": 900,
+    "test_time": "1789319891"
+  },
+  "new_prompts_frozen_now_before_new_outputs": {
+    "first.txt": {
+      "bytes": 1395,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2"
+    },
+    "second.txt": {
+      "bytes": 2681,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153"
+    },
+    "third.txt": {
+      "bytes": 1906,
+      "sha256": "acb5e79e7d5991099be0788b252b09d0ee6c147e02266f69e1ec5848486f149f"
+    }
+  },
+  "prompt_delivery": "Exactly one controller write of literal prompt bytes plus exactly one production protocol LF; NUL forbidden; existing libc productionprotocol proof reused and new exactthirdbytes fixture required.",
+  "task_gold_and_edit_policy": {
+    "source_task_sha256": "11a9e6c778dcc79ebd4e6f3dbfcc6b30c57ac20f544db30a982f57431a5961aa",
+    "first_two_prompts_control_golds_unchanged": true,
+    "fact_requirement_16_deletions_order_grader_logic_unchanged": true,
+    "third_prompt_new_external_manager_task": true,
+    "third_prompt_contains_no_updated_code": true,
+    "first_structurally_eligible_positive_odd_shift_only": true,
+    "no_candidate_or_budget_changes_after_outcomes": true,
+    "no_eligible_is_retained_FAILURE_before_third_forward": true,
+    "family_scope": "single modified existing task, not an independent heldout"
+  },
+  "shared_projection": {
+    "live_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run/live-context.txt",
+    "project_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/shared/run/project",
+    "purpose": "Both literal sysadvertisement and bashcwd are exactly identical acrossA/B; newownedpath never touches old160/128failedlivefile.",
+    "arm_private_outputs_cache_trace": "Distinct immutable arm paths outsideproject; allmodel-visible path values identical.",
+    "reset_rules": [
+      "fresh exclusive owned shared root for firstarm",
+      "before reset nextarm require completed prior archive+typed ROOTrelease+new ROOTgrant",
+      "copy immutable final project/live text and hashes toarm evidence before reset",
+      "reset only recorded ownedshared project/livefiles; fail on unexpected source/symlink or foreign files",
+      "recreate samefresh wrapper-only project; no formerarm code/tasks/cache contamination",
+      "allarm staticinputs/golds remain separately immutable"
+    ]
+  },
+  "arm_order_and_binding": {
+    "A": "approximate reuse1/pair1; choose frozen edit before third RNG/eval, then commit immediately",
+    "B": "native exact reuse0/pair0, samechosen edit; separately granted afterbinding prethirdArecord only evenifAsemanticwrong",
+    "no_automatic_chain_or_retry": true,
+    "B_choice_input": "NewAselection/source/manifest/build/caller authorities only; neverold480057 orgrading outcomes.",
+    "B_preedit_gates": [
+      "exact whole sourceopaqueIDs and renderedtext equalnewApreedit",
+      "firsttwo literal answers pass",
+      "same native checkpoint position, canonical snapshot body and fullvocab rawlogits before edit matchnewA; observe only, no extra eval",
+      "exact frozenchosenindex/replacements/deletion; refuse mismatch without alternateindex"
+    ]
+  },
+  "worker_hook_location": {
+    "existing_private_after_append_user": "agent_suffix_pair_actual_memory160.c11271, before RNG11283 and allthirdprefill/toolgeneration",
+    "production_seams": "ds4_agent.c11068 append_user;5717 export_live;6209 import_live;5970 pair transaction;5389 sync.",
+    "sequence": [
+      "append actualthirdUser byunchanged productionroutine",
+      "freeze fullold/edited IDs/text and firsteligible positiveodd plan withlatestUser endpoint+immutable source tape coverage andindependent forecast admission; no graphchanges",
+      "capture optional canonical/native rawpreedit controls in separately admitted shortlived buffers; serialize+free before transaction",
+      "free selector scratch and duplicate editedvector before import; chargeall liveactual capacities/workerownedbuffers/reserves",
+      "export CURRENT thirdUser transcript viaexistingexport; atomically compare-and-replace livefile withselectededited bytes",
+      "call actual agent_worker_import_live_context immediately before RNG/assistantprefix; retainsource frontier by preventing any generatedtool/generationcapture betweenselection andcommit",
+      "A requires return2+approximate actualMOVE/repaired trace; return0/1/negative isretained eligibility/reuse FAILURE and stops beforethirdsampling",
+      "B requires return1 and exact nonapproximate native state; noapproximate call/trace",
+      "assert postimport transcriptopaqueIDs exactlyselectededited andprojection matches",
+      "normal workerloop appends assistantprefix then evaluates/samples/executes generatedtools unmodified"
+    ],
+    "cache_ownership": "Use actual existing agent_worker_try_context_pair_suffix: saveundo, actualcap recheck, source MOVE beforeprefixrestore, neverloadsource/reset its tape or newcapture.",
+    "admission_scope": "Fixed160MiB unique worker-owned allocations plusring, retained/moved source, actualundo/destination, selector/importscratch, nativeIO/tokenreserve andopaque64KiB. StageFORECAST explicitly distinct fromallocatedobserved transactionpeak; excludesUItransferredbuffers/globalhostpeak.",
+    "failure_cancel": "No new fallback/widening. Existing graphundo/cancel/rollback andcanonical/DSSD restrictions remain; files/phase/rc/attempt retained."
+  },
+  "semantic_scoring_and_audit": {
+    "one_first_grader_attempt": true,
+    "grader_gold_source_outside_agent_project": "Frozen immutable grader; project wrapper only prints genericPASS/FAIL.",
+    "no_model_forced_updater_tool": "Trusted controller edit completed beforefirstthirdforward; model only solves resultingcoding task.",
+    "forbidden_reads": [
+      "live-context.txt",
+      "private grader/source/expected answer",
+      "task/selection/old-editedIDs/manifests/controller/hook",
+      "environment paths or substitutions that reveal these inputs"
+    ],
+    "actual_parsed_tool_audit": "Recordallcalls andreadattempts; no hardOSsandbox claim; reads invalidate independent ofgrade.",
+    "strict_success": "All3 orderedWAITING completions, controlgolds, actual reuse/exact arm gate, one unmodified grader PASS, firstsourcefile/code captured, no forbiddenreads/mutation/malformedtool/roundcap/contextlimit/timeout; partialgrade neveroverallsuccess.",
+    "modelstop": "Typed actual worker stopped/at_limit/context_limit/generated/tool/interrupted observations; WAITING neverimplies EOS.",
+    "persistence": "NOT_EXERCISED",
+    "quality_scope": "NativeB and approximateA firstattempt code/gold plus source/native structuralcontrols; cannot imply forgetting or reconstructed hiddenstate equality.",
+    "timing_scope": "Diagnostic only; no runtime default promotion or general speed claim."
+  },
+  "guard_and_authority": [
+    "Frozen source/test/CPU/build/task/prompt/26 explicitrecognized shader assets indexed beforeROOTgrant",
+    "Strict duplicate-freeJSON andexactROOTGRANTED soletrue/manifest/actualcommand/finitepositive-time beforeGGUFstat/child",
+    "MAINguard actualframeworkSHA/samefile parent/heldflock andallDS4 cleared thenonlyfrozenvariables",
+    "separate root modelgrant forA andB, no chain",
+    "trace parse bytes orlosslesssurrogateescape, rawlogs retained unchanged"
+  ],
+  "CPU_tests_before_compile": [
+    "protocol exactnewliteral+LF, multiline,NUL, additionalLF failure",
+    "commonlivepath identicalsystem advertisement/protectedprefix; differentpath source refusal",
+    "actual beforeforward sequence forbids evaluation/RNG/tool/frontiercapture until successfulimport",
+    "actual selectedsource currentretainedowner andmovecancel/rollback cases withindependent ledger",
+    "free selector buffers before actualimport; exact bounded scratch forecast vsallocatedpeak",
+    "nativebaseline chosenID/text control equality cannot be weakened or outcome-selected",
+    "firstgraderwrong/readattempt/cap/timeout preserved; genericno-goldmessages",
+    "strictROOTauthority/missing26shader/bogusgrant-beforemodelidentity",
+    "lossless nonUTF8 trace samples andunchanged rawlogs",
+    "ownedsharedreset onlyafterfirstarm archive/release/newgrant; nooldfailedpath touch"
+  ],
+  "authorization": "Design/artifacts only at present; ROOT review required before sourceimplementation, focusedcaller build, guarded model."
+}

@@ -1,0 +1,97 @@
+{
+  "status": "CALLER_COMPILE_LINK_PASS",
+  "source_freeze": "d3647e3d1c3df4e54ec3d7d17a27c7eec40d45b5",
+  "cpu_evidence": "90bb01c1e4d1083b539ad25457b182a90453acd0",
+  "plan_sha256": "315a52cd24636391c1dcdce3245a186124b12d9053b554400076e7b9293ac335",
+  "all_pins_unchanged": true,
+  "serial_compilers": 1,
+  "native_core_Metal_built": false,
+  "model_stat_open_or_executable_run": false,
+  "results": [
+    {
+      "label": "ds4-agent-pair-external-compile",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-I.",
+        "-Wno-unused-function",
+        "-ffast-math",
+        "-std=c99",
+        "-c",
+        "speed-bench/agent_suffix_pair_external.c",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-caller-build-v1/ds4-agent-pair-external.o"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "returncode": 0,
+      "elapsed_seconds": 1.457934165999177,
+      "warning": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ds4-agent-pair-external-link",
+      "argv": [
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-isysroot",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-O3",
+        "-g",
+        "-mcpu=native",
+        "-Wall",
+        "-Wextra",
+        "-I.",
+        "-Wno-unused-function",
+        "-ffast-math",
+        "-std=c99",
+        "-o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-caller-build-v1/ds4-agent-pair-external",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-caller-build-v1/ds4-agent-pair-external.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_help.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_prompt_prefix.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_web.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_kvstore.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/linenoise.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_image.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_distributed.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_tp.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_ssd.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_metal.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_layer_pack.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-mock-v1/objects/ds4_engram.o",
+        "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-build-plan-v1/objects/ds4_gpu_args.o",
+        "-lm",
+        "-pthread",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "Metal"
+      ],
+      "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+      "returncode": 0,
+      "elapsed_seconds": 0.08014962499873945,
+      "warning": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "outputs": {
+    "ds4-agent-pair-external": {
+      "sha256": "06f7d1af350e1bc86739b113e0f659153df6879e11473108fb42e3b9726077fc",
+      "bytes": 3087832,
+      "mode": 493
+    },
+    "ds4-agent-pair-external.o": {
+      "sha256": "ebcdc1b4888106c4ae6f9eca777dbdba00c64fb54babf8990fc7cdd635914d8b",
+      "bytes": 1057144,
+      "mode": 420
+    }
+  }
+}

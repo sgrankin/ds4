@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/clm-resident-package-hour28-20261004/launch.py",
+    "--arm",
+    "native-after",
+    "--output",
+    "speed-bench/experiments/clm-resident-package-hour28-20261004/native-after",
+    "--cache",
+    ".workspaces/server-agent-day-20261004/coding28-cache-after",
+    "--store",
+    ".workspaces/server-agent-day-20261004/coding28-store-after",
+    "--visible",
+    ".workspaces/server-agent-day-20261004/confirmation-visible",
+    "--timeout",
+    "900"
+  ],
+  "initial": {
+    "time": 1791145113.094413,
+    "level": 1,
+    "swap_gb": 0.018125,
+    "physical_gb": 128.0,
+    "free_gb": 58.14088439941406,
+    "file_backed_gb": 51.45271301269531,
+    "wired_gb": 4.8827362060546875,
+    "compressor_gb": 8.930984497070312
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

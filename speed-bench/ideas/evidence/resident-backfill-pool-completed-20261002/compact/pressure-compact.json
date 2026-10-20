@@ -1,0 +1,11 @@
+{
+  "samples": 362,
+  "all_level1": true,
+  "bad_samples": 0,
+  "swap_first_gb": 0.017763671875,
+  "swap_last_gb": 0.017763671875,
+  "swap_max_gb": 0.017763671875,
+  "min_free_gb": 0.12628173828125,
+  "max_wired_gb": 71.89682006835938,
+  "max_compressor_gb": 6.6876373291015625
+}

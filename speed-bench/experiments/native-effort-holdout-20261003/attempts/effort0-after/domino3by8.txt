@@ -1,0 +1,201 @@
+Alright, let's work through the problem carefully.
+
+We have a 3×8 grid, and we want to tile it completely with twelve 1×2 dominoes (since area = 3×8 = 24, and each domino covers 2 squares, so 12 dominoes). Dominoes can be horizontal or vertical, and tilings that differ by position are counted separately.
+
+---
+
+## Step 1 – Understanding the constraints
+
+The height is 3 (rows), width is 8 (columns).  
+A vertical domino covers 1 column × 2 rows,  
+a horizontal domino covers 2 columns × 1 row.
+
+We need to count all possible tilings.
+
+---
+
+## Step 2 – Approach
+
+This is a classic domino tiling problem, solvable by transfer matrix / state DP because the height is small (3).
+
+We can represent each column’s “profile” of occupancy by dominoes that stick out into the next column.
+
+Since height = 3, possible states for a column are determined by which cells are already filled from the previous column's horizontal dominoes sticking out.
+
+---
+
+### Step 3 – Define states
+
+Let’s label rows 1, 2, 3 (top to bottom).
+
+For a given column, we consider the “mask” of cells already filled from the previous column (due to horizontal domino from previous column extending into this column). This mask can be represented as a subset of {1,2,3}.
+
+We process column by column, filling empty cells with either vertical dominoes (within the same column) or horizontal dominoes starting in this column and extending to the next.
+
+---
+
+Possible masks (incoming from previous column):
+
+- 000: no cells filled from left.
+- 001 (row 3 filled): possible if previous column had horizontal domino in bottom row.
+- 010 (row 2 filled).
+- 100 (row 1 filled).
+- 011 (rows 2,3 filled) — but can this occur? A horizontal domino covers only 1 row, so from previous column you could have at most one horizontal domino per row. But multiple rows can have outgoing horizontals. Yes, so mask 011 means both row 2 and row 3 have an incoming horizontal from previous column.
+- 110 (rows 1,2 filled).
+- 101 (rows 1,3 filled).
+- 111 (all filled) — but can all three be filled from previous? That would require 3 horizontal dominoes from previous column, one in each row. But each horizontal domino covers 2 adjacent cells in the same row, so from a single previous column, you could indeed start up to 3 horizontals (one in each row) if the previous column had those cells free. So yes, 111 possible.
+
+But we must be careful: can a mask have adjacent filled cells in same column from previous? Yes, because they're in different rows, that's fine. The restriction is only within a row: a horizontal domino covers 2 adjacent cells in the same row, so if a cell is filled from previous column's horizontal, the adjacent cell in the same row in this column is NOT filled from that domino (it's in previous column). So that's fine.
+
+So all 8 masks possible in principle, but some may be unreachable due to parity or geometry constraints. We'll check reachability as we build transitions.
+
+---
+
+### Step 4 – Transition rules
+
+Given an incoming mask for current column, we fill the remaining cells in this column using:
+
+- vertical dominoes (occupy 2 cells in same column, stacked vertically),
+- horizontal dominoes starting here (occupy this cell + next column's same row cell).
+
+We must ensure no overlaps and all cells in current column get filled.
+
+We then produce an outgoing mask for the next column (cells filled in next column by horizontals from current column).
+
+---
+
+Let’s define for each incoming mask the possible outgoing masks.
+
+We can think recursively: fill the topmost unfilled cell in current column.
+
+---
+
+#### Example: incoming mask = 000 (empty column)
+
+We can fill row 1:
+
+Option 1: place vertical domino covering rows 1 & 2. Then row 3 remains.
+
+- After vertical in rows 1–2: row 3 empty. Fill row 3 with horizontal domino starting here → outgoing mask has row 3 filled (001 in terms of next column's mask, but careful: outgoing mask bits correspond to which rows have horizontal from current column into next). So outgoing = 001 (only row 3). That’s one possibility.
+
+Option 2: place horizontal domino in row 1 → outgoing mask has row 1 filled. Now rows 2 & 3 remain.
+
+- Fill row 2: could place vertical domino covering rows 2 & 3. Then done, outgoing mask = 100 (row 1 only).
+- Or place horizontal in row 2 → outgoing mask rows 1 & 2 filled. Then row 3 remains → must place horizontal in row 3 → outgoing mask rows 1,2,3 = 111.
+- Or place horizontal in row 3? Wait, row 2 is empty; we must fill topmost first. So after row 1 horizontal, topmost empty is row 2. So choices for row 2: vertical (2&3) or horizontal (row 2). Then if horizontal in row 2, row 3 empty → horizontal in row 3.
+
+So from 000, possible outgoing:
+- 001 (vertical 1-2, horiz row 3)
+- 100 (horiz row 1, vertical 2-3)
+- 111 (horiz row 1, horiz row 2, horiz row 3)
+
+Also could we do: horiz row 1, then horiz row 2, then vertical? No, row 3 alone can't be vertical. So that's it for 000.
+
+Check if vertical 2-3 first? Can't, topmost empty is row 1, must fill it first. So no.
+
+So transitions from 000: {001, 100, 111}.
+
+---
+
+#### Incoming mask = 001 (row 3 filled from left)
+
+Remaining empty: rows 1, 2.
+
+Topmost empty = row 1.
+
+Option: vertical domino rows 1–2. Then done. Outgoing mask = 000 (no horizontals to next).
+
+Option: horizontal row 1 → outgoing has row 1 filled. Remaining empty: row 2 (row 3 already filled). Fill row 2: can only be horizontal (since vertical needs 2 consecutive rows, but row 3 is filled). So horizontal row 2 → outgoing mask rows 1 & 2 filled = 110.
+
+So from 001: {000, 110}.
+
+---
+
+#### Incoming mask = 010 (row 2 filled from left)
+
+Remaining empty: rows 1, 3.
+
+Topmost empty = row 1.
+
+Fill row 1:
+
+- Horizontal row 1 → outgoing row 1 filled. Remaining empty: row 3 (row 2 filled). Fill row 3: horizontal row 3 → outgoing mask rows 1 & 3 filled = 101.
+- Vertical? Can't vertical rows 1–2 because row 2 filled. Vertical rows 2–3? Not possible because topmost empty is row 1, must fill it first. So only horizontal possible for row 1? Wait, could we fill row 1 with vertical 1–? No, vertical requires adjacent empty below. Row 2 filled, so no vertical starting at row 1. So only horizontal row 1.
+
+Then after horiz row 1, remaining empty: row 3. Fill row 3: horizontal → outgoing 101. Or could we do vertical? No, only row 3 empty, can't vertical. So only horizontal.
+
+Thus from 010: {101}.
+
+---
+
+#### Incoming mask = 100 (row 1 filled from left)
+
+Remaining empty: rows 2, 3.
+
+Topmost empty = row 2.
+
+Fill row 2:
+
+- Vertical rows 2–3 → done, outgoing 000.
+- Horizontal row 2 → outgoing row 2 filled. Remaining empty: row 3. Fill row 3: horizontal → outgoing rows 2 & 3 = 011.
+
+So from 100: {000, 011}.
+
+---
+
+#### Incoming mask = 011 (rows 2,3 filled from left)
+
+Remaining empty: row 1.
+
+Topmost empty = row 1.
+
+Fill row 1:
+
+- Horizontal row 1 → outgoing row 1 filled, done. Outgoing = 100.
+- Vertical? Can't vertical because row 2 filled. So only horizontal.
+
+Thus from 011: {100}.
+
+---
+
+#### Incoming mask = 110 (rows 1,2 filled from left)
+
+Remaining empty: row 3.
+
+Fill row 3:
+
+- Horizontal row 3 → outgoing row 3 filled, done. Outgoing = 001.
+- Vertical? Can't vertical because only one empty row. So only horizontal.
+
+Thus from 110: {001}.
+
+---
+
+#### Incoming mask = 101 (rows 1,3 filled from left)
+
+Remaining empty: row 2.
+
+Fill row 2:
+
+- Horizontal row 2 → outgoing row 2 filled, done. Outgoing = 010.
+- Vertical? Can't vertical because only one empty row. So only horizontal.
+
+Thus from 101: {010}.
+
+---
+
+#### Incoming mask = 111 (all filled from left)
+
+Remaining empty: none.
+
+Outgoing mask = 000 (nothing to next column).
+
+So from 111: {000}.
+
+---
+
+### Step 5 – Summary of transitions
+
+Let’s list them clearly:
+
+- 000

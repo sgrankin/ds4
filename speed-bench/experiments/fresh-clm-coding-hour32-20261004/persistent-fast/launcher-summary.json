@@ -1,0 +1,47 @@
+{
+  "mode": "reuse",
+  "arm": "persistent-fast",
+  "route_settings": {
+    "enabled": true,
+    "gap": 0.9,
+    "max_mass": 0.25,
+    "max_rank": 64,
+    "max_substitutions": 3,
+    "max_total_mass": 0.5,
+    "policy": "replace",
+    "native_weights": true
+  },
+  "fresh_tail": 64,
+  "hot_mb": 0,
+  "server": "/Volumes/Models/ds4/ds4-server",
+  "canonical_suffix_requested": 1,
+  "padding_suffix_requested": 1,
+  "driver": "/Volumes/Models/ds4/speed-bench/experiments/fresh-clm-coding-hour32-20261004/run.py",
+  "seconds": 190.6219754999911,
+  "phases": [
+    {
+      "phase": "dedupe",
+      "returncode": 0,
+      "seconds": 92.93902437499491,
+      "startup_seconds": 0.41569233301561326,
+      "client_seconds": 90.79667287500342,
+      "shutdown_seconds": 1.7262569999729749,
+      "server_returncode": 0,
+      "error": null
+    },
+    {
+      "phase": "bucket",
+      "returncode": 0,
+      "seconds": 97.67894037498627,
+      "startup_seconds": 0.4093814170046244,
+      "client_seconds": 95.4859075420245,
+      "shutdown_seconds": 1.7830542080046143,
+      "server_returncode": 0,
+      "error": null
+    }
+  ],
+  "visible": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-visible",
+  "cache": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-cache-persistent-fast",
+  "store": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh32-store-persistent-fast",
+  "timeout_seconds": 600.0
+}

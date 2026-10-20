@@ -1,0 +1,54 @@
+{
+  "compiled_runtime_revision": "bc6896aeee2aceba4b4b64e9e8330986da8a60b0",
+  "server_sha256": "4a3f735999412e6150f77ea61012812c55430f6808cb8062a5597ca6d1b6ed6d",
+  "runtime_change": "none; current server and request-scoped budget",
+  "budget_note": "10 minutes of earlier caller preparation and method inspection charged; actual start/deadline recorded when item19 closes",
+  "one_change": "FINAL policy: high unlimited, high budget64, or effortnone; READ high/unlimited and WRITE high/128 fixed",
+  "arms": [
+    "high0-before",
+    "budget64",
+    "none",
+    "high0-after"
+  ],
+  "tasks": "item17 frozen ledger/LRU, actual read/first write independently graded161/task",
+  "scope": "whole task and FINAL wall, code/usage repeat, caps and actual final text; no paired NLL on divergent histories",
+  "preparation_checks": [
+    "Python AST runner+launcher pass",
+    "root small diff inspection"
+  ],
+  "start_utc": "2026-10-04 17:05:00",
+  "deadline_utc": "2026-10-04 17:55:00",
+  "caller_revision": "6ec88a210e87284cf0bf4cb95833a81a403cd314",
+  "primary_measurement_finished_utc": "2026-10-04 17:17:12",
+  "bounded_followup": {
+    "policy": "FINAL high/budget1",
+    "reason": "effortnone lost prefix reuse; test lower positive thinking count preserving high rendered prompt",
+    "namespace": "http-lowpoint",
+    "same_deadline_utc": "2026-10-04 17:55:00",
+    "first_code": "frozen before final request, independently graded as before",
+    "caller_revision": "1f009883a1d7a2930c536b2516cbf04e2c07ea0c"
+  },
+  "measurement_finished_utc": "2026-10-04 17:21:05",
+  "guard": {
+    "guard": {
+      "samples": 678,
+      "pressure_levels": [
+        1
+      ],
+      "swap_growth_gib": 0.0,
+      "peak_wired_plus_compressor_gib": 84.26048278808594,
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "guard-lowpoint": {
+      "samples": 130,
+      "pressure_levels": [
+        1
+      ],
+      "swap_growth_gib": 0.0,
+      "peak_wired_plus_compressor_gib": 84.23591613769531,
+      "status": "complete",
+      "child_returncode": 0
+    }
+  }
+}

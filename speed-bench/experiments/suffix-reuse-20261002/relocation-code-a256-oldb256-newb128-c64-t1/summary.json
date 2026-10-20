@@ -1,0 +1,17 @@
+{
+  "case":"code",
+  "fresh_prefix_bytes_equal":true,"fresh_prefix_raw_rows_per_layer":64,"fresh_prefix_compressed_rows":960,"fresh_prefix_index_rows":960,
+  "prefix_tokens":256,"edit_tokens":128,"source_edit_tokens":256,"unchanged_tokens":64,"fresh_tail_tokens":1,
+  "source_start":512,"destination_start":384,"source_end":575,"destination_end":447,
+  "raw_keys_repaired":2520,"compressed_keys_repaired":156,"index_keys_repaired":156,
+  "reused_tokens":63,"copied_bytes":5572608,"pending_pairs":3,
+  "identity_logit_bytes_equal":true,"identity_graph_bytes_equal":true,"canonical_export_blocked":true,
+  "invalid_candidates_unchanged":true,"precancel_unchanged":true,"postgraft_cancel_invalidated":true,
+  "setup_ms":31229.342000,"identity_ms":49.127000,"rows":3,"gold_tokens_including_eos":3,"stale_tokens_including_eos":3,
+  "mean_kl":1.13211453888e-05,"mean_tv":1.35751960933e-05,"sum_delta_nll":-3.85656567659e-05,"argmax_flips":0,"byte_equal_rows":0,
+  "greedy_encoding":"JSON byte escapes for non-ASCII",
+  "results":[
+    {"mode":"fresh","edit_ms":4625.565000,"gold_logprob":-7.25318119876e-05,"stale_logprob":-20.5283960427,"gold_minus_stale_logprob":20.5283235109,"greedy":"3141","correct_answer":true,"stale_answer":false,"stopped":true,"greedy_tokens":[18321,19,1]},
+    {"mode":"reuse","edit_ms":3104.604000,"gold_logprob":-3.39661552218e-05,"stale_logprob":-17.2610485289,"gold_minus_stale_logprob":17.2610145627,"greedy":"3141","correct_answer":true,"stale_answer":false,"stopped":true,"greedy_tokens":[18321,19,1]}
+  ]
+}

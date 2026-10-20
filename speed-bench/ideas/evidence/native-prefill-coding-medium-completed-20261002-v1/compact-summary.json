@@ -1,0 +1,340 @@
+{
+  "status": "PASS",
+  "source": "3d297a61",
+  "prepared": "48421591",
+  "launcher": "8d709124",
+  "runtime": "bfcde97a",
+  "arms": [
+    {
+      "arm": "native64",
+      "correct": 4,
+      "gold_checks_passed": 34,
+      "gold_checks_total": 34,
+      "generated_tokens": 574,
+      "cap_hits": 0
+    },
+    {
+      "arm": "selected64",
+      "correct": 4,
+      "gold_checks_passed": 34,
+      "gold_checks_total": 34,
+      "generated_tokens": 569,
+      "cap_hits": 0
+    },
+    {
+      "arm": "native80",
+      "correct": 4,
+      "gold_checks_passed": 34,
+      "gold_checks_total": 34,
+      "generated_tokens": 569,
+      "cap_hits": 0
+    }
+  ],
+  "selected64_native80_byte_equality": [
+    {
+      "task": "round_cents",
+      "selected64_native80_equal": {
+        "warm-logits.bin": true,
+        "initial-logits.bin": true,
+        "txt": true,
+        "tokens.jsonl": true
+      }
+    },
+    {
+      "task": "merge_intervals",
+      "selected64_native80_equal": {
+        "warm-logits.bin": true,
+        "initial-logits.bin": true,
+        "txt": true,
+        "tokens.jsonl": true
+      }
+    },
+    {
+      "task": "topological_order",
+      "selected64_native80_equal": {
+        "warm-logits.bin": true,
+        "initial-logits.bin": true,
+        "txt": true,
+        "tokens.jsonl": true
+      }
+    },
+    {
+      "task": "split_escaped",
+      "selected64_native80_equal": {
+        "warm-logits.bin": true,
+        "initial-logits.bin": true,
+        "txt": true,
+        "tokens.jsonl": true
+      }
+    }
+  ],
+  "all_native_prompt_ids_equal": true,
+  "selected64_native64_warm_raw_bytes_equal": true,
+  "warm_positions": [
+    47,
+    47,
+    47,
+    47
+  ],
+  "append_counts": [
+    393,
+    414,
+    412,
+    411
+  ],
+  "pressure": {
+    "samples": 319,
+    "all_normal": true,
+    "peak_wired_gib": 89.29364013671875,
+    "peak_compressor_gib": 9.2288818359375,
+    "max_swap_growth_gib": 0.0
+  },
+  "release": {
+    "guard_returncode": 0,
+    "MAIN_lock_reacquired_and_released": true,
+    "native_helper_processes": []
+  },
+  "retained_artifacts": [
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/round_cents.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/round_cents.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/round_cents.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/round_cents.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "9142b394870de7bf85ec2e0b05ec50de6ec607d9f32ff9774733ee73e8cda397"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/round_cents.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "e469060cdbe0629f448dec60932865c7f63a988bd20acf3685924538510b74f7"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/round_cents.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "e469060cdbe0629f448dec60932865c7f63a988bd20acf3685924538510b74f7"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/round_cents.txt",
+      "bytes": 227,
+      "sha256": "067048c8286a34a38bdf99a620c0b0a074d04d7cc71c525c86fa05f310e3bfd5"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/round_cents.txt",
+      "bytes": 227,
+      "sha256": "067048c8286a34a38bdf99a620c0b0a074d04d7cc71c525c86fa05f310e3bfd5"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/round_cents.txt",
+      "bytes": 227,
+      "sha256": "067048c8286a34a38bdf99a620c0b0a074d04d7cc71c525c86fa05f310e3bfd5"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/round_cents.tokens.jsonl",
+      "bytes": 5295,
+      "sha256": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/round_cents.tokens.jsonl",
+      "bytes": 5295,
+      "sha256": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/round_cents.tokens.jsonl",
+      "bytes": 5295,
+      "sha256": "331c1f882fb0fb66d3ca81503267bb183468aff947ff7e0188ebfa80063dfb93"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/merge_intervals.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/merge_intervals.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/merge_intervals.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/merge_intervals.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "e563c94476059336f4a36eb318d5740722da91d420bcc9a6261ac79584a55ddb"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/merge_intervals.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "0b5ab6b870265f7550bd15afba573b849198f11610d95d60e9dc1a056773b031"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/merge_intervals.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "0b5ab6b870265f7550bd15afba573b849198f11610d95d60e9dc1a056773b031"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/merge_intervals.txt",
+      "bytes": 604,
+      "sha256": "9d98703c51293597b1f2f0560a8f4fe1c932dfe7e459eb6cfca08a048665b003"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/merge_intervals.txt",
+      "bytes": 560,
+      "sha256": "017011112d780811806b3d51ce3d31caf1746714e4ce7c3313e1e22fefa946b7"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/merge_intervals.txt",
+      "bytes": 560,
+      "sha256": "017011112d780811806b3d51ce3d31caf1746714e4ce7c3313e1e22fefa946b7"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/merge_intervals.tokens.jsonl",
+      "bytes": 11324,
+      "sha256": "d748d3e8b1d40ea69afcf438c310a6f12bd32ac65448eb0a0c614373aa8610f7"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/merge_intervals.tokens.jsonl",
+      "bytes": 11236,
+      "sha256": "ec7fb3492a93dfcab0015ca1c6685ee0d58963cc56c0744a30590bdd0e3cd732"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/merge_intervals.tokens.jsonl",
+      "bytes": 11236,
+      "sha256": "ec7fb3492a93dfcab0015ca1c6685ee0d58963cc56c0744a30590bdd0e3cd732"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/topological_order.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/topological_order.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/topological_order.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/topological_order.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "42bc638f82c251b4db606ff23af2954f73eae730d132e8f7d2b1e04b06e1095c"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/topological_order.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "c963ce2867c1ed1ac732d693cb9b0fe400e600cbb83ac979a3c5853182be557b"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/topological_order.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "c963ce2867c1ed1ac732d693cb9b0fe400e600cbb83ac979a3c5853182be557b"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/topological_order.txt",
+      "bytes": 712,
+      "sha256": "b455b9d555981933ea4002570f80e1b22a81ac8eef4cca06c3faa474a74ae1e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/topological_order.txt",
+      "bytes": 682,
+      "sha256": "c33d11a77551d809fd39f1ebd2d7b76c3c74817ba9205da3b3cda827a74ef37b"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/topological_order.txt",
+      "bytes": 682,
+      "sha256": "c33d11a77551d809fd39f1ebd2d7b76c3c74817ba9205da3b3cda827a74ef37b"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/topological_order.tokens.jsonl",
+      "bytes": 15699,
+      "sha256": "78fc55a5938a1a7237d91e5615543c8b514e1ca304052aea2f17b98185c62378"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/topological_order.tokens.jsonl",
+      "bytes": 15293,
+      "sha256": "4abb7407c9b3baeffe1061936fbcfa0f553104892b5178342a6e7240e89fcb36"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/topological_order.tokens.jsonl",
+      "bytes": 15293,
+      "sha256": "4abb7407c9b3baeffe1061936fbcfa0f553104892b5178342a6e7240e89fcb36"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/split_escaped.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/split_escaped.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/split_escaped.warm-logits.bin",
+      "bytes": 517120,
+      "sha256": "24ae8f3413191b2176631dff843c3c01c492cc05d164d594e05472f2f604f5e6"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/split_escaped.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "711668470c131a4eb958bc77ab25aa72bc956d3132cd1d432a4976915db746bf"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/split_escaped.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "c5ca7e757f9bd828853ca32a7ce659febfb34630dc6ed5b9729b3216d16d19b1"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/split_escaped.initial-logits.bin",
+      "bytes": 517120,
+      "sha256": "c5ca7e757f9bd828853ca32a7ce659febfb34630dc6ed5b9729b3216d16d19b1"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/split_escaped.txt",
+      "bytes": 601,
+      "sha256": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/split_escaped.txt",
+      "bytes": 601,
+      "sha256": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/split_escaped.txt",
+      "bytes": 601,
+      "sha256": "2d03471e9bff8de21d5da09534f97e1c37800c90cfbe5a1a7c40b2b78efd3cea"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native64/split_escaped.tokens.jsonl",
+      "bytes": 11444,
+      "sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/selected64/split_escaped.tokens.jsonl",
+      "bytes": 11444,
+      "sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3"
+    },
+    {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-native-prefill-coding/speed-bench/ideas/artifacts/native-prefill-coding-medium-20261002-v1/native80/split_escaped.tokens.jsonl",
+      "bytes": 11444,
+      "sha256": "7c82e08651519404c2fb1a825f4ef2442462fac5c86d856b619832510ccca9f3"
+    }
+  ],
+  "scope": "Four frozen first completions, 34 unchanged checks per arm, no repair/best-of. Initial post-append full-vocabulary vectors only, not every generated-token vector. Token trace equality compares all recorded fields except per-step timing. Timings diagnostic; no latency claim."
+}

@@ -1,0 +1,17 @@
+source,trial,variant,calls,fallbacks,frozen_residents,row_layers,native_misses,planned_substitutions,substitutions,skipped_bytes,double_layers,triple_layers,mean_mass,native_weights,case
+warm-subs3,0,control,,,,,,,,,,,,,
+warm-subs3,1,candidate,16,3,98176,40960,25516,17994,17994,179099320320,2696,293,0.12016761,1,
+warm-subs3,2,candidate,16,3,98176,40960,25516,17994,17994,179099320320,2696,293,0.12016761,1,
+warm-subs3,3,control,,,,,,,,,,,,,
+warm-subs1,0,control,,,,,,,,,,,,,
+warm-subs1,1,candidate,16,3,98176,40960,24014,7057,7057,70240296960,0,0,0.11154076,1,
+warm-subs1,2,candidate,16,3,98176,40960,24014,7057,7057,70240296960,0,0,0.11154076,1,
+warm-subs1,3,control,,,,,,,,,,,,,
+code-native-before,,,,,,,,,,,,,,,dedupe
+code-native-before,,,,,,,,,,,,,,,bucket
+code-prefill3,,,20,3,122720,47480,44582,26673,26673,265483837440,4694,666,0.12240196,1,dedupe
+code-prefill3,,,20,3,122720,48680,48874,28847,28847,287122268160,5256,753,0.12243337,1,bucket
+code-prefill1,,,20,3,122720,47480,42053,9327,9327,92834242560,0,0,0.1121518,1,dedupe
+code-prefill1,,,20,3,122720,48680,45998,10123,10123,100757053440,0,0,0.11258794,1,bucket
+code-native-after,,,,,,,,,,,,,,,dedupe
+code-native-after,,,,,,,,,,,,,,,bucket

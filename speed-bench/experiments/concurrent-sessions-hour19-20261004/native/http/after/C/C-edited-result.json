@@ -1,0 +1,76 @@
+{
+  "step": "C-edited",
+  "session": "C",
+  "seconds": 86.69806399999652,
+  "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+  "answer": {
+    "active_total": 267,
+    "archived_code": "CEDAR-70"
+  },
+  "gold": {
+    "active_total": 267,
+    "archived_code": "CEDAR-70"
+  },
+  "correct": true,
+  "fresh_read": true,
+  "complete": true,
+  "calls": [
+    {
+      "name": "read",
+      "call_id": "call_14708e3ab12b675947ebd7525bac189d",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/archive.json\",\"whole\":true,\"raw\":true}",
+      "read": true,
+      "error": null,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/archive.json",
+      "text": "{\n  \"archived_code\": \"CEDAR-70\"\n}\n"
+    }
+  ],
+  "required_read": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/concurrent-visible/C/archive.json",
+  "replies": [
+    {
+      "seconds": 83.66545908300031,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1437,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1437
+        },
+        "output_tokens": 93,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1530
+      },
+      "incomplete_details": null
+    },
+    {
+      "seconds": 3.0316667500010226,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 1555,
+        "input_tokens_details": {
+          "cached_tokens": 1530,
+          "cache_write_tokens": 25
+        },
+        "output_tokens": 15,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1570
+      },
+      "incomplete_details": null
+    }
+  ],
+  "errors": [],
+  "suffix_log_lines": [],
+  "exact_hit_log_lines": [],
+  "slot_eviction_log_lines": [],
+  "pass": true,
+  "group": "edited-CD",
+  "queue_inclusive_seconds": 86.69903333300317,
+  "seconds_including_edit": 86.69903333300317,
+  "edit_seconds": 0.0006183329969644547
+}

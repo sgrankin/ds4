@@ -1,0 +1,44 @@
+{
+  "status": "ROOT_INDEPENDENT48_FINAL_SCORE_TOKEN_WORK_AND_PAIRED_AUDIT_PASS",
+  "plan_sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+  "release_sha256": "d35de4e3bef0f0c678395509042087d93d6a98358744acbf0adec095d1d32f72",
+  "producer_summary_sha256": "c79c5d113189f552f4cbb4a15274dae1f245a1cbe9c1bf309935a19aa996325e",
+  "source_sha256": "8a6a1947792743a12c86f81ea467325d5832e5d853ccb026923e7bb4f6d04a8f",
+  "all48_attempts": true,
+  "counts": [
+    {
+      "completed_correct": 9,
+      "incorrect": 0,
+      "invalid": 7,
+      "capped_correct": 0,
+      "cap_hits": 7,
+      "generated_tokens": 18826,
+      "reasoning_tokens": 18817,
+      "forced_cases": 0
+    },
+    {
+      "completed_correct": 10,
+      "incorrect": 2,
+      "invalid": 4,
+      "capped_correct": 0,
+      "cap_hits": 3,
+      "generated_tokens": 17062,
+      "reasoning_tokens": 11303,
+      "forced_cases": 8
+    },
+    {
+      "completed_correct": 9,
+      "incorrect": 0,
+      "invalid": 7,
+      "capped_correct": 0,
+      "cap_hits": 7,
+      "generated_tokens": 18826,
+      "reasoning_tokens": 18817,
+      "forced_cases": 0
+    }
+  ],
+  "native_correct_budget_failed": 1,
+  "native_failed_budget_correct": 2,
+  "scope": "Final answers, full token/RNG/piece traces and work. Raw artifacts here are text bytes, not full-vocabulary logits. No cross-prefix KL/NLL or speed/quantization-causality claim.",
+  "model_or_helper_or_guard_executed": false
+}

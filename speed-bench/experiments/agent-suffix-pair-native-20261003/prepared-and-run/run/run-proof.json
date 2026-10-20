@@ -1,0 +1,9 @@
+{
+  "manifest_sha256": "7f9b80a35e67b9caefe959193555cbce084e9983b9ef695d4e42ebb910653cb6",
+  "model_identity": {
+    "path": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "bytes": 365713686528,
+    "mtime_ns": 1789237692837653163
+  },
+  "guarded": true
+}

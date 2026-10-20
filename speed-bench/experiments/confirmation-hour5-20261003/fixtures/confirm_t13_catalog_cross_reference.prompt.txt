@@ -1,0 +1,1 @@
+A fictional catalog defines Kestrel as a copper lamp, Mica as a linen bag, and Alder as a glass bowl. Order O17 contains Mica and Alder; its owner is Theo. Order O18 contains Kestrel; its owner is Hazel. Report owner and materials for O17, preserving order of its items. Return JSON first, then explain the cross-reference.

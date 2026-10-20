@@ -1,0 +1,21 @@
+arm,case,pass,fields_correct,failure_reason,seconds,returncode,generated_tokens,token_cap,cap_status,completion_status,stop_reason,prefill_ms,decode_ms,prefill_tps,generation_tps
+affinity-gap0.10,functional24_01_cursor_pages,True,True,,18.53276966699923,0,157,256,not_reached,complete,stop_token,8781.711,8405.972,14.8,18.68
+affinity-gap0.10,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,20.73556583399477,0,256,256,reached,incomplete,cap,5792.227,13570.844,12.09,18.86
+affinity-gap0.10,functional24_16_weighted_median,False,False,generation cap reached; required factual fields differ from gold,22.66391991599812,0,256,256,reached,incomplete,cap,8085.515,13212.551,13.98,19.38
+affinity-gap0.10,functional24_24_literal_unicode_note,True,True,,18.899039291005465,0,179,256,not_reached,complete,stop_token,7131.888,10421.608,12.34,17.18
+affinity-wide3,functional24_01_cursor_pages,True,True,,17.896827917007613,0,166,256,not_reached,complete,stop_token,8919.875,7584.426,14.57,21.89
+affinity-wide3,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,19.052469540998572,0,256,256,reached,incomplete,cap,5540.414,12065.703,12.63,21.22
+affinity-wide3,functional24_16_weighted_median,False,True,generation cap reached,20.542046499991557,0,256,256,reached,incomplete,cap,7372.032,11714.119,15.33,21.85
+affinity-wide3,functional24_24_literal_unicode_note,True,True,,17.905889083995135,0,194,256,not_reached,complete,stop_token,7065.101,9454.842,12.46,20.52
+functional-band0.025,functional24_01_cursor_pages,True,True,,18.780526542002917,0,159,256,not_reached,complete,stop_token,8820.499,8583.532,14.74,18.52
+functional-band0.025,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,20.840328417005367,0,256,256,reached,incomplete,cap,5821.176,13604.891,12.03,18.82
+functional-band0.025,functional24_16_weighted_median,False,False,generation cap reached; required factual fields differ from gold,22.629498833004618,0,256,256,reached,incomplete,cap,8061.977,13263.32,14.02,19.3
+functional-band0.025,functional24_24_literal_unicode_note,True,True,,19.846198915998684,0,197,256,not_reached,complete,stop_token,7177.503,11289.156,12.26,17.45
+functional,functional24_01_cursor_pages,True,True,,19.0970298750035,0,164,256,not_reached,complete,stop_token,8947.992,8754.946,14.53,18.73
+functional,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,20.652073916993686,0,256,256,reached,incomplete,cap,5812.152,13508.146,12.04,18.95
+functional,functional24_16_weighted_median,False,False,generation cap reached; required factual fields differ from gold,22.654747249995125,0,256,256,reached,incomplete,cap,8102.325,13201.141,13.95,19.39
+functional,functional24_24_literal_unicode_note,True,True,,21.077040917007253,0,224,256,not_reached,complete,stop_token,7215.45,12527.608,12.2,17.88
+native-before,functional24_01_cursor_pages,True,True,,17.961239166994346,0,159,256,not_reached,complete,stop_token,7980.794,8682.648,16.29,18.31
+native-before,functional24_07_little_endian_words,False,False,generation cap reached; required factual fields differ from gold,21.329759999993257,0,256,256,reached,incomplete,cap,5730.524,13745.838,12.22,18.62
+native-before,functional24_16_weighted_median,False,False,generation cap reached; required factual fields differ from gold,23.036671459005447,0,256,256,reached,incomplete,cap,8096.643,13593.877,13.96,18.83
+native-before,functional24_24_literal_unicode_note,True,True,,20.32959700000356,0,199,256,not_reached,complete,stop_token,7129.906,11860.342,12.34,16.78

@@ -1,0 +1,10 @@
+{
+  "start_utc": "2026-10-03T11:57:42Z",
+  "deadline_utc": "2026-10-03T12:57:42Z",
+  "source_revision": "a93fdd43017aa843bcf54dfaf10aa3312c370cbe",
+  "plan_revision": "4e0deb7278995c947afadb1861023d5d1b773091",
+  "status": "measured",
+  "model_measurements_finished_utc": "2026-10-03T12:27:41Z",
+  "measurements": 15,
+  "ordinary_clm_probes": 2
+}

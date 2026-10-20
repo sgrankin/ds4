@@ -1,0 +1,1 @@
+A bag contains four red and three blue distinguishable balls. Draw two balls in order without replacement. Count ordered outcomes with exactly one of each color. Report favorable, total, and the reduced probability numerator/denominator in JSON, then explain.

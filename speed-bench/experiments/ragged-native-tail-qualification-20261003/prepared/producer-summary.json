@@ -1,0 +1,2554 @@
+{
+  "status": "COMPLETE_SIX_NATIVE_CONTROLS_AND_RAGGED_DIAGNOSTICS",
+  "plan_sha256": "ad7cf0569eff888aae3ba3871a08b1e7c74a55b780a7e7eb9652552a408c1c1e",
+  "release_sha256": "86a39683081648e9ea0471654187cebb9735518b064814a7829070e2953671d6",
+  "all_six_first_attempts_retained": true,
+  "controls_exact": true,
+  "actual_both_long_phase_dispatch_differences": true,
+  "arms": {
+    "old0-default": {
+      "phases": [
+        {
+          "phase": 0,
+          "kind": "P",
+          "context": 1859,
+          "tokens": 1859,
+          "ms": 64802.622,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 1,
+          "kind": "P",
+          "context": 1949,
+          "tokens": 90,
+          "ms": 3619.139,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 2,
+          "kind": "D",
+          "context": 2021,
+          "tokens": 72,
+          "ms": 4380.982,
+          "first_decode_ms": 63.594
+        },
+        {
+          "phase": 3,
+          "kind": "P",
+          "context": 10341,
+          "tokens": 8320,
+          "ms": 28995.201,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 4,
+          "kind": "D",
+          "context": 10349,
+          "tokens": 8,
+          "ms": 630.277,
+          "first_decode_ms": 93.417
+        },
+        {
+          "phase": 5,
+          "kind": "P",
+          "context": 27244,
+          "tokens": 16895,
+          "ms": 71473.716,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 6,
+          "kind": "D",
+          "context": 27252,
+          "tokens": 8,
+          "ms": 738.699,
+          "first_decode_ms": 127.026
+        },
+        {
+          "phase": 7,
+          "kind": "P",
+          "context": 27290,
+          "tokens": 38,
+          "ms": 1432.182,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 8,
+          "kind": "D",
+          "context": 27298,
+          "tokens": 8,
+          "ms": 531.042,
+          "first_decode_ms": 68.634
+        }
+      ],
+      "artifacts": {
+        "main.logits.f32": {
+          "sha256": "e3c4d3718e353301da81018f82900bd74093ddaaf1b46f0cc873fbf0ddff7176",
+          "bytes": 4654080
+        },
+        "main.state.bin": {
+          "sha256": "531082edbb9b6628a265088e2e2280da7b5cc273ae766afa2784ea420f36a9f1",
+          "bytes": 185819324
+        },
+        "phase-3.anchor.logits.f32": {
+          "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3",
+          "bytes": 517120
+        },
+        "phase-3.restored.logits.f32": {
+          "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3",
+          "bytes": 517120
+        },
+        "phase-3.branch.logits.f32": {
+          "sha256": "3a22d2f250fbbdb1ce9ddfe98a16e5068a2330ebb7aa5f78192fc7950a404679",
+          "bytes": 16547840
+        },
+        "phase-3.anchor.state.bin": {
+          "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a",
+          "bytes": 77235144
+        },
+        "phase-3.restored.state.bin": {
+          "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a",
+          "bytes": 77235144
+        },
+        "phase-3.branch-final.state.bin": {
+          "sha256": "7c9ea28c6b9904f8ec23f239b477e4de46aea7210ce5b49dfc575403e3f5f2bb",
+          "bytes": 77440072
+        },
+        "phase-5.anchor.logits.f32": {
+          "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b",
+          "bytes": 517120
+        },
+        "phase-5.restored.logits.f32": {
+          "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b",
+          "bytes": 517120
+        },
+        "phase-5.branch.logits.f32": {
+          "sha256": "0f2251aa4e6356c5db73b6937e4b3e6f1c56712a8ae8252b0135d2430ebbef6e",
+          "bytes": 16547840
+        },
+        "phase-5.anchor.state.bin": {
+          "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034",
+          "bytes": 185473508
+        },
+        "phase-5.restored.state.bin": {
+          "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034",
+          "bytes": 185473508
+        },
+        "phase-5.branch-final.state.bin": {
+          "sha256": "d01ae21cdc3e18f9fb1584218e94ece91884e71e514122ab4f02cacd9a3e3247",
+          "bytes": 185678436
+        }
+      },
+      "cache": {
+        "main": [
+          [
+            0,
+            6136,
+            6136
+          ],
+          [
+            1,
+            6136,
+            6136
+          ],
+          [
+            2,
+            6136,
+            6136
+          ],
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            4,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ],
+          [
+            6,
+            6136,
+            6136
+          ],
+          [
+            7,
+            6136,
+            6136
+          ],
+          [
+            8,
+            6136,
+            6136
+          ]
+        ],
+        "branches": [
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ]
+        ],
+        "main_footer": {
+          "budget": 6136,
+          "entries": 6136,
+          "hits": 98947,
+          "misses": 27690,
+          "wraps": 83070,
+          "evictions": 21554,
+          "buffer_allocs": 15,
+          "buffer_reuses": 21554
+        },
+        "rounded_attribution": {
+          "expert": 9.49,
+          "target": 56.88,
+          "live": 56.88,
+          "hit_rate": 0.781,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 89.47,
+          "pread_ms": 4196.762
+        },
+        "exact_main_IO_available": false
+      },
+      "branch_IO": [
+        {
+          "phase": 3,
+          "pread_calls": 2457,
+          "requested_bytes": 8151736320,
+          "returned_bytes": 8151736320,
+          "hits": 6861,
+          "misses": 819,
+          "evictions": 819
+        },
+        {
+          "phase": 5,
+          "pread_calls": 1569,
+          "requested_bytes": 5205565440,
+          "returned_bytes": 5205565440,
+          "hits": 7157,
+          "misses": 523,
+          "evictions": 523
+        }
+      ],
+      "dispatch": {
+        "0": [
+          512,
+          512,
+          512,
+          323
+        ],
+        "1": [
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          2
+        ],
+        "3": [
+          8192,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "5": [
+          16384,
+          511
+        ],
+        "7": [
+          8,
+          8,
+          8,
+          8,
+          6
+        ]
+      },
+      "nine_phase_vectors": 9,
+      "score_before_target_vectors": 64,
+      "teacher_forced": true,
+      "interpretation": "Diagnostic timings; branch restoration/evaluation excluded from main. Main rounded IO attribution is not exact demanded bytes."
+    },
+    "new0-default": {
+      "phases": [
+        {
+          "phase": 0,
+          "kind": "P",
+          "context": 1859,
+          "tokens": 1859,
+          "ms": 66948.901,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 1,
+          "kind": "P",
+          "context": 1949,
+          "tokens": 90,
+          "ms": 3745.676,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 2,
+          "kind": "D",
+          "context": 2021,
+          "tokens": 72,
+          "ms": 4335.167,
+          "first_decode_ms": 59.892
+        },
+        {
+          "phase": 3,
+          "kind": "P",
+          "context": 10341,
+          "tokens": 8320,
+          "ms": 30179.674,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 4,
+          "kind": "D",
+          "context": 10349,
+          "tokens": 8,
+          "ms": 624.975,
+          "first_decode_ms": 92.121
+        },
+        {
+          "phase": 5,
+          "kind": "P",
+          "context": 27244,
+          "tokens": 16895,
+          "ms": 68152.915,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 6,
+          "kind": "D",
+          "context": 27252,
+          "tokens": 8,
+          "ms": 717.531,
+          "first_decode_ms": 143.881
+        },
+        {
+          "phase": 7,
+          "kind": "P",
+          "context": 27290,
+          "tokens": 38,
+          "ms": 1459.537,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 8,
+          "kind": "D",
+          "context": 27298,
+          "tokens": 8,
+          "ms": 526.622,
+          "first_decode_ms": 68.049
+        }
+      ],
+      "artifacts": {
+        "main.logits.f32": {
+          "sha256": "e3c4d3718e353301da81018f82900bd74093ddaaf1b46f0cc873fbf0ddff7176",
+          "bytes": 4654080
+        },
+        "main.state.bin": {
+          "sha256": "531082edbb9b6628a265088e2e2280da7b5cc273ae766afa2784ea420f36a9f1",
+          "bytes": 185819324
+        },
+        "phase-3.anchor.logits.f32": {
+          "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3",
+          "bytes": 517120
+        },
+        "phase-3.restored.logits.f32": {
+          "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3",
+          "bytes": 517120
+        },
+        "phase-3.branch.logits.f32": {
+          "sha256": "3a22d2f250fbbdb1ce9ddfe98a16e5068a2330ebb7aa5f78192fc7950a404679",
+          "bytes": 16547840
+        },
+        "phase-3.anchor.state.bin": {
+          "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a",
+          "bytes": 77235144
+        },
+        "phase-3.restored.state.bin": {
+          "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a",
+          "bytes": 77235144
+        },
+        "phase-3.branch-final.state.bin": {
+          "sha256": "7c9ea28c6b9904f8ec23f239b477e4de46aea7210ce5b49dfc575403e3f5f2bb",
+          "bytes": 77440072
+        },
+        "phase-5.anchor.logits.f32": {
+          "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b",
+          "bytes": 517120
+        },
+        "phase-5.restored.logits.f32": {
+          "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b",
+          "bytes": 517120
+        },
+        "phase-5.branch.logits.f32": {
+          "sha256": "0f2251aa4e6356c5db73b6937e4b3e6f1c56712a8ae8252b0135d2430ebbef6e",
+          "bytes": 16547840
+        },
+        "phase-5.anchor.state.bin": {
+          "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034",
+          "bytes": 185473508
+        },
+        "phase-5.restored.state.bin": {
+          "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034",
+          "bytes": 185473508
+        },
+        "phase-5.branch-final.state.bin": {
+          "sha256": "d01ae21cdc3e18f9fb1584218e94ece91884e71e514122ab4f02cacd9a3e3247",
+          "bytes": 185678436
+        }
+      },
+      "cache": {
+        "main": [
+          [
+            0,
+            6136,
+            6136
+          ],
+          [
+            1,
+            6136,
+            6136
+          ],
+          [
+            2,
+            6136,
+            6136
+          ],
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            4,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ],
+          [
+            6,
+            6136,
+            6136
+          ],
+          [
+            7,
+            6136,
+            6136
+          ],
+          [
+            8,
+            6136,
+            6136
+          ]
+        ],
+        "branches": [
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ]
+        ],
+        "main_footer": {
+          "budget": 6136,
+          "entries": 6136,
+          "hits": 98947,
+          "misses": 27690,
+          "wraps": 83070,
+          "evictions": 21554,
+          "buffer_allocs": 15,
+          "buffer_reuses": 21554
+        },
+        "rounded_attribution": {
+          "expert": 9.49,
+          "target": 56.88,
+          "live": 56.88,
+          "hit_rate": 0.781,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 89.47,
+          "pread_ms": 4300.809
+        },
+        "exact_main_IO_available": false
+      },
+      "branch_IO": [
+        {
+          "phase": 3,
+          "pread_calls": 2457,
+          "requested_bytes": 8151736320,
+          "returned_bytes": 8151736320,
+          "hits": 6861,
+          "misses": 819,
+          "evictions": 819
+        },
+        {
+          "phase": 5,
+          "pread_calls": 1569,
+          "requested_bytes": 5205565440,
+          "returned_bytes": 5205565440,
+          "hits": 7157,
+          "misses": 523,
+          "evictions": 523
+        }
+      ],
+      "dispatch": {
+        "0": [
+          512,
+          512,
+          512,
+          323
+        ],
+        "1": [
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          2
+        ],
+        "3": [
+          8192,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "5": [
+          16384,
+          511
+        ],
+        "7": [
+          8,
+          8,
+          8,
+          8,
+          6
+        ]
+      },
+      "nine_phase_vectors": 9,
+      "score_before_target_vectors": 64,
+      "teacher_forced": true,
+      "interpretation": "Diagnostic timings; branch restoration/evaluation excluded from main. Main rounded IO attribution is not exact demanded bytes."
+    },
+    "new1-default": {
+      "phases": [
+        {
+          "phase": 0,
+          "kind": "P",
+          "context": 1859,
+          "tokens": 1859,
+          "ms": 66263.169,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 1,
+          "kind": "P",
+          "context": 1949,
+          "tokens": 90,
+          "ms": 3911.662,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 2,
+          "kind": "D",
+          "context": 2021,
+          "tokens": 72,
+          "ms": 4334.989,
+          "first_decode_ms": 64.661
+        },
+        {
+          "phase": 3,
+          "kind": "P",
+          "context": 10341,
+          "tokens": 8320,
+          "ms": 28434.284,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 4,
+          "kind": "D",
+          "context": 10349,
+          "tokens": 8,
+          "ms": 624.464,
+          "first_decode_ms": 92.756
+        },
+        {
+          "phase": 5,
+          "kind": "P",
+          "context": 27244,
+          "tokens": 16895,
+          "ms": 70134.773,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 6,
+          "kind": "D",
+          "context": 27252,
+          "tokens": 8,
+          "ms": 737.212,
+          "first_decode_ms": 144.552
+        },
+        {
+          "phase": 7,
+          "kind": "P",
+          "context": 27290,
+          "tokens": 38,
+          "ms": 1483.78,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 8,
+          "kind": "D",
+          "context": 27298,
+          "tokens": 8,
+          "ms": 548.77,
+          "first_decode_ms": 69.772
+        }
+      ],
+      "artifacts": {
+        "main.logits.f32": {
+          "sha256": "e3c4d3718e353301da81018f82900bd74093ddaaf1b46f0cc873fbf0ddff7176",
+          "bytes": 4654080
+        },
+        "main.state.bin": {
+          "sha256": "531082edbb9b6628a265088e2e2280da7b5cc273ae766afa2784ea420f36a9f1",
+          "bytes": 185819324
+        },
+        "phase-3.anchor.logits.f32": {
+          "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3",
+          "bytes": 517120
+        },
+        "phase-3.restored.logits.f32": {
+          "sha256": "ff3a8d13de3f85eea7f4e2ff440286f16ea6623adc4007756e7d5600e18d6fb3",
+          "bytes": 517120
+        },
+        "phase-3.branch.logits.f32": {
+          "sha256": "3a22d2f250fbbdb1ce9ddfe98a16e5068a2330ebb7aa5f78192fc7950a404679",
+          "bytes": 16547840
+        },
+        "phase-3.anchor.state.bin": {
+          "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a",
+          "bytes": 77235144
+        },
+        "phase-3.restored.state.bin": {
+          "sha256": "4cc96b40327723ade3d135b1f62aba1672d36f6d111db0c40ef2563b06e3e24a",
+          "bytes": 77235144
+        },
+        "phase-3.branch-final.state.bin": {
+          "sha256": "7c9ea28c6b9904f8ec23f239b477e4de46aea7210ce5b49dfc575403e3f5f2bb",
+          "bytes": 77440072
+        },
+        "phase-5.anchor.logits.f32": {
+          "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b",
+          "bytes": 517120
+        },
+        "phase-5.restored.logits.f32": {
+          "sha256": "006263f5405674aa1ffb4170edc9b2a7561923f4106b9fbfaa06aedf812ce52b",
+          "bytes": 517120
+        },
+        "phase-5.branch.logits.f32": {
+          "sha256": "0f2251aa4e6356c5db73b6937e4b3e6f1c56712a8ae8252b0135d2430ebbef6e",
+          "bytes": 16547840
+        },
+        "phase-5.anchor.state.bin": {
+          "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034",
+          "bytes": 185473508
+        },
+        "phase-5.restored.state.bin": {
+          "sha256": "9baff20e1d28ec3785027c44b887c640496bb7a0dce0dfbe5f81b4c535599034",
+          "bytes": 185473508
+        },
+        "phase-5.branch-final.state.bin": {
+          "sha256": "d01ae21cdc3e18f9fb1584218e94ece91884e71e514122ab4f02cacd9a3e3247",
+          "bytes": 185678436
+        }
+      },
+      "cache": {
+        "main": [
+          [
+            0,
+            6136,
+            6136
+          ],
+          [
+            1,
+            6136,
+            6136
+          ],
+          [
+            2,
+            6136,
+            6136
+          ],
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            4,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ],
+          [
+            6,
+            6136,
+            6136
+          ],
+          [
+            7,
+            6136,
+            6136
+          ],
+          [
+            8,
+            6136,
+            6136
+          ]
+        ],
+        "branches": [
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ]
+        ],
+        "main_footer": {
+          "budget": 6136,
+          "entries": 6136,
+          "hits": 98947,
+          "misses": 27690,
+          "wraps": 83070,
+          "evictions": 21554,
+          "buffer_allocs": 15,
+          "buffer_reuses": 21554
+        },
+        "rounded_attribution": {
+          "expert": 9.49,
+          "target": 56.88,
+          "live": 56.88,
+          "hit_rate": 0.781,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 89.47,
+          "pread_ms": 4195.847
+        },
+        "exact_main_IO_available": false
+      },
+      "branch_IO": [
+        {
+          "phase": 3,
+          "pread_calls": 2457,
+          "requested_bytes": 8151736320,
+          "returned_bytes": 8151736320,
+          "hits": 6861,
+          "misses": 819,
+          "evictions": 819
+        },
+        {
+          "phase": 5,
+          "pread_calls": 1569,
+          "requested_bytes": 5205565440,
+          "returned_bytes": 5205565440,
+          "hits": 7157,
+          "misses": 523,
+          "evictions": 523
+        }
+      ],
+      "dispatch": {
+        "0": [
+          512,
+          512,
+          512,
+          323
+        ],
+        "1": [
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          2
+        ],
+        "3": [
+          8192,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "5": [
+          16384,
+          511
+        ],
+        "7": [
+          8,
+          8,
+          8,
+          8,
+          6
+        ]
+      },
+      "nine_phase_vectors": 9,
+      "score_before_target_vectors": 64,
+      "teacher_forced": true,
+      "interpretation": "Diagnostic timings; branch restoration/evaluation excluded from main. Main rounded IO attribution is not exact demanded bytes."
+    },
+    "old0-fast": {
+      "phases": [
+        {
+          "phase": 0,
+          "kind": "P",
+          "context": 1859,
+          "tokens": 1859,
+          "ms": 56041.208,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 1,
+          "kind": "P",
+          "context": 1949,
+          "tokens": 90,
+          "ms": 2777.204,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 2,
+          "kind": "D",
+          "context": 2021,
+          "tokens": 72,
+          "ms": 4268.686,
+          "first_decode_ms": 67.629
+        },
+        {
+          "phase": 3,
+          "kind": "P",
+          "context": 10341,
+          "tokens": 8320,
+          "ms": 32554.382,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 4,
+          "kind": "D",
+          "context": 10349,
+          "tokens": 8,
+          "ms": 644.891,
+          "first_decode_ms": 103.683
+        },
+        {
+          "phase": 5,
+          "kind": "P",
+          "context": 27244,
+          "tokens": 16895,
+          "ms": 67684.796,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 6,
+          "kind": "D",
+          "context": 27252,
+          "tokens": 8,
+          "ms": 626.972,
+          "first_decode_ms": 103.868
+        },
+        {
+          "phase": 7,
+          "kind": "P",
+          "context": 27290,
+          "tokens": 38,
+          "ms": 1102.815,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 8,
+          "kind": "D",
+          "context": 27298,
+          "tokens": 8,
+          "ms": 513.443,
+          "first_decode_ms": 68.063
+        }
+      ],
+      "artifacts": {
+        "main.logits.f32": {
+          "sha256": "6e2772c3cd57b6c5c0085253faa8f23e61a21c99565de3b4d83325e732f9b553",
+          "bytes": 4654080
+        },
+        "main.state.bin": {
+          "sha256": "80d0bef0357cf0d6792e15c2f2ef3671002a5291533547abaee185538983944e",
+          "bytes": 185819324
+        },
+        "phase-3.anchor.logits.f32": {
+          "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196",
+          "bytes": 517120
+        },
+        "phase-3.restored.logits.f32": {
+          "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196",
+          "bytes": 517120
+        },
+        "phase-3.branch.logits.f32": {
+          "sha256": "58693cdaeedb265b7a57a62c4abbe037d434291683d72dc5a160ffe9dfabd86f",
+          "bytes": 16547840
+        },
+        "phase-3.anchor.state.bin": {
+          "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9",
+          "bytes": 77235144
+        },
+        "phase-3.restored.state.bin": {
+          "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9",
+          "bytes": 77235144
+        },
+        "phase-3.branch-final.state.bin": {
+          "sha256": "ede70ec07a885916a2c18ff9a2964ed0c9a5c1d280a87f09fc4820fe68091044",
+          "bytes": 77440072
+        },
+        "phase-5.anchor.logits.f32": {
+          "sha256": "5c22ffdbec071c0b8efbe60d4b8c87f314a4b604a379bb2616b2c1a51f1acb63",
+          "bytes": 517120
+        },
+        "phase-5.restored.logits.f32": {
+          "sha256": "5c22ffdbec071c0b8efbe60d4b8c87f314a4b604a379bb2616b2c1a51f1acb63",
+          "bytes": 517120
+        },
+        "phase-5.branch.logits.f32": {
+          "sha256": "94ce9c2a6bcfeb0d2e589635d4ae4b9c314a8ac525a92ff37b6e0ed306c45159",
+          "bytes": 16547840
+        },
+        "phase-5.anchor.state.bin": {
+          "sha256": "d35a0800fb169a877c9493e03a2d121c9f017d0e1ced0084f88081d4466152c9",
+          "bytes": 185473508
+        },
+        "phase-5.restored.state.bin": {
+          "sha256": "d35a0800fb169a877c9493e03a2d121c9f017d0e1ced0084f88081d4466152c9",
+          "bytes": 185473508
+        },
+        "phase-5.branch-final.state.bin": {
+          "sha256": "042a161005672006e94e1c6ff96cc9095580943237721227e3f15662372a768f",
+          "bytes": 185678436
+        }
+      },
+      "cache": {
+        "main": [
+          [
+            0,
+            6136,
+            6136
+          ],
+          [
+            1,
+            6136,
+            6136
+          ],
+          [
+            2,
+            6136,
+            6136
+          ],
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            4,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ],
+          [
+            6,
+            6136,
+            6136
+          ],
+          [
+            7,
+            6136,
+            6136
+          ],
+          [
+            8,
+            6136,
+            6136
+          ]
+        ],
+        "branches": [
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ]
+        ],
+        "main_footer": {
+          "budget": 6136,
+          "entries": 6136,
+          "hits": 392369,
+          "misses": 38931,
+          "wraps": 116793,
+          "evictions": 32795,
+          "buffer_allocs": 15,
+          "buffer_reuses": 32795
+        },
+        "rounded_attribution": {
+          "expert": 9.49,
+          "target": 56.88,
+          "live": 56.88,
+          "hit_rate": 0.91,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 241.2,
+          "pread_ms": 9980.204
+        },
+        "exact_main_IO_available": false
+      },
+      "branch_IO": [
+        {
+          "phase": 3,
+          "pread_calls": 2232,
+          "requested_bytes": 7405240320,
+          "returned_bytes": 7405240320,
+          "hits": 6936,
+          "misses": 744,
+          "evictions": 744
+        },
+        {
+          "phase": 5,
+          "pread_calls": 1452,
+          "requested_bytes": 4817387520,
+          "returned_bytes": 4817387520,
+          "hits": 7196,
+          "misses": 484,
+          "evictions": 484
+        }
+      ],
+      "dispatch": {
+        "0": [
+          512,
+          512,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          3
+        ],
+        "1": [
+          64,
+          26
+        ],
+        "3": [
+          8192,
+          64,
+          64
+        ],
+        "5": [
+          16384,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          63
+        ],
+        "7": [
+          38
+        ]
+      },
+      "nine_phase_vectors": 9,
+      "score_before_target_vectors": 64,
+      "teacher_forced": true,
+      "interpretation": "Diagnostic timings; branch restoration/evaluation excluded from main. Main rounded IO attribution is not exact demanded bytes."
+    },
+    "new0-fast": {
+      "phases": [
+        {
+          "phase": 0,
+          "kind": "P",
+          "context": 1859,
+          "tokens": 1859,
+          "ms": 55986.116,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 1,
+          "kind": "P",
+          "context": 1949,
+          "tokens": 90,
+          "ms": 2732.244,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 2,
+          "kind": "D",
+          "context": 2021,
+          "tokens": 72,
+          "ms": 4260.477,
+          "first_decode_ms": 68.87
+        },
+        {
+          "phase": 3,
+          "kind": "P",
+          "context": 10341,
+          "tokens": 8320,
+          "ms": 31292.829,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 4,
+          "kind": "D",
+          "context": 10349,
+          "tokens": 8,
+          "ms": 646.22,
+          "first_decode_ms": 106.955
+        },
+        {
+          "phase": 5,
+          "kind": "P",
+          "context": 27244,
+          "tokens": 16895,
+          "ms": 67153.562,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 6,
+          "kind": "D",
+          "context": 27252,
+          "tokens": 8,
+          "ms": 619.822,
+          "first_decode_ms": 99.583
+        },
+        {
+          "phase": 7,
+          "kind": "P",
+          "context": 27290,
+          "tokens": 38,
+          "ms": 1067.114,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 8,
+          "kind": "D",
+          "context": 27298,
+          "tokens": 8,
+          "ms": 513.3,
+          "first_decode_ms": 67.045
+        }
+      ],
+      "artifacts": {
+        "main.logits.f32": {
+          "sha256": "6e2772c3cd57b6c5c0085253faa8f23e61a21c99565de3b4d83325e732f9b553",
+          "bytes": 4654080
+        },
+        "main.state.bin": {
+          "sha256": "80d0bef0357cf0d6792e15c2f2ef3671002a5291533547abaee185538983944e",
+          "bytes": 185819324
+        },
+        "phase-3.anchor.logits.f32": {
+          "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196",
+          "bytes": 517120
+        },
+        "phase-3.restored.logits.f32": {
+          "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196",
+          "bytes": 517120
+        },
+        "phase-3.branch.logits.f32": {
+          "sha256": "58693cdaeedb265b7a57a62c4abbe037d434291683d72dc5a160ffe9dfabd86f",
+          "bytes": 16547840
+        },
+        "phase-3.anchor.state.bin": {
+          "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9",
+          "bytes": 77235144
+        },
+        "phase-3.restored.state.bin": {
+          "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9",
+          "bytes": 77235144
+        },
+        "phase-3.branch-final.state.bin": {
+          "sha256": "ede70ec07a885916a2c18ff9a2964ed0c9a5c1d280a87f09fc4820fe68091044",
+          "bytes": 77440072
+        },
+        "phase-5.anchor.logits.f32": {
+          "sha256": "5c22ffdbec071c0b8efbe60d4b8c87f314a4b604a379bb2616b2c1a51f1acb63",
+          "bytes": 517120
+        },
+        "phase-5.restored.logits.f32": {
+          "sha256": "5c22ffdbec071c0b8efbe60d4b8c87f314a4b604a379bb2616b2c1a51f1acb63",
+          "bytes": 517120
+        },
+        "phase-5.branch.logits.f32": {
+          "sha256": "94ce9c2a6bcfeb0d2e589635d4ae4b9c314a8ac525a92ff37b6e0ed306c45159",
+          "bytes": 16547840
+        },
+        "phase-5.anchor.state.bin": {
+          "sha256": "d35a0800fb169a877c9493e03a2d121c9f017d0e1ced0084f88081d4466152c9",
+          "bytes": 185473508
+        },
+        "phase-5.restored.state.bin": {
+          "sha256": "d35a0800fb169a877c9493e03a2d121c9f017d0e1ced0084f88081d4466152c9",
+          "bytes": 185473508
+        },
+        "phase-5.branch-final.state.bin": {
+          "sha256": "042a161005672006e94e1c6ff96cc9095580943237721227e3f15662372a768f",
+          "bytes": 185678436
+        }
+      },
+      "cache": {
+        "main": [
+          [
+            0,
+            6136,
+            6136
+          ],
+          [
+            1,
+            6136,
+            6136
+          ],
+          [
+            2,
+            6136,
+            6136
+          ],
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            4,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ],
+          [
+            6,
+            6136,
+            6136
+          ],
+          [
+            7,
+            6136,
+            6136
+          ],
+          [
+            8,
+            6136,
+            6136
+          ]
+        ],
+        "branches": [
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ]
+        ],
+        "main_footer": {
+          "budget": 6136,
+          "entries": 6136,
+          "hits": 392369,
+          "misses": 38931,
+          "wraps": 116793,
+          "evictions": 32795,
+          "buffer_allocs": 15,
+          "buffer_reuses": 32795
+        },
+        "rounded_attribution": {
+          "expert": 9.49,
+          "target": 56.88,
+          "live": 56.88,
+          "hit_rate": 0.91,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 241.2,
+          "pread_ms": 9868.77
+        },
+        "exact_main_IO_available": false
+      },
+      "branch_IO": [
+        {
+          "phase": 3,
+          "pread_calls": 2232,
+          "requested_bytes": 7405240320,
+          "returned_bytes": 7405240320,
+          "hits": 6936,
+          "misses": 744,
+          "evictions": 744
+        },
+        {
+          "phase": 5,
+          "pread_calls": 1452,
+          "requested_bytes": 4817387520,
+          "returned_bytes": 4817387520,
+          "hits": 7196,
+          "misses": 484,
+          "evictions": 484
+        }
+      ],
+      "dispatch": {
+        "0": [
+          512,
+          512,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          3
+        ],
+        "1": [
+          64,
+          26
+        ],
+        "3": [
+          8192,
+          64,
+          64
+        ],
+        "5": [
+          16384,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          63
+        ],
+        "7": [
+          38
+        ]
+      },
+      "nine_phase_vectors": 9,
+      "score_before_target_vectors": 64,
+      "teacher_forced": true,
+      "interpretation": "Diagnostic timings; branch restoration/evaluation excluded from main. Main rounded IO attribution is not exact demanded bytes."
+    },
+    "new1-fast": {
+      "phases": [
+        {
+          "phase": 0,
+          "kind": "P",
+          "context": 1859,
+          "tokens": 1859,
+          "ms": 55054.619,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 1,
+          "kind": "P",
+          "context": 1949,
+          "tokens": 90,
+          "ms": 2725.723,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 2,
+          "kind": "D",
+          "context": 2021,
+          "tokens": 72,
+          "ms": 4247.29,
+          "first_decode_ms": 65.745
+        },
+        {
+          "phase": 3,
+          "kind": "P",
+          "context": 10341,
+          "tokens": 8320,
+          "ms": 32745.426,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 4,
+          "kind": "D",
+          "context": 10349,
+          "tokens": 8,
+          "ms": 636.847,
+          "first_decode_ms": 93.019
+        },
+        {
+          "phase": 5,
+          "kind": "P",
+          "context": 27244,
+          "tokens": 16895,
+          "ms": 69771.17,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 6,
+          "kind": "D",
+          "context": 27252,
+          "tokens": 8,
+          "ms": 751.817,
+          "first_decode_ms": 149.251
+        },
+        {
+          "phase": 7,
+          "kind": "P",
+          "context": 27290,
+          "tokens": 38,
+          "ms": 1226.604,
+          "first_decode_ms": 0.0
+        },
+        {
+          "phase": 8,
+          "kind": "D",
+          "context": 27298,
+          "tokens": 8,
+          "ms": 525.21,
+          "first_decode_ms": 68.9
+        }
+      ],
+      "artifacts": {
+        "main.logits.f32": {
+          "sha256": "efdf7b96d3888706ed2cd3da13ece99b28caedebb28e34aa4493e921a7d36ac3",
+          "bytes": 4654080
+        },
+        "main.state.bin": {
+          "sha256": "8c873a80391b77c6d380476fea969ff6b7c2ff0026d2bec7452ce80028a9ebd3",
+          "bytes": 185819324
+        },
+        "phase-3.anchor.logits.f32": {
+          "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196",
+          "bytes": 517120
+        },
+        "phase-3.restored.logits.f32": {
+          "sha256": "5575477a1c9f5b5eeaab94deb44e9126359e23ea61e2dfc18b44da6d2cb00196",
+          "bytes": 517120
+        },
+        "phase-3.branch.logits.f32": {
+          "sha256": "58693cdaeedb265b7a57a62c4abbe037d434291683d72dc5a160ffe9dfabd86f",
+          "bytes": 16547840
+        },
+        "phase-3.anchor.state.bin": {
+          "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9",
+          "bytes": 77235144
+        },
+        "phase-3.restored.state.bin": {
+          "sha256": "8178daeaf615251929ba6166170fb8e756b74092298bea2a95b113430f03bce9",
+          "bytes": 77235144
+        },
+        "phase-3.branch-final.state.bin": {
+          "sha256": "ede70ec07a885916a2c18ff9a2964ed0c9a5c1d280a87f09fc4820fe68091044",
+          "bytes": 77440072
+        },
+        "phase-5.anchor.logits.f32": {
+          "sha256": "7df9b0892d0cb47539cd17ba281d195f444adc115c8dcde3a4f31ad8c235ff9a",
+          "bytes": 517120
+        },
+        "phase-5.restored.logits.f32": {
+          "sha256": "7df9b0892d0cb47539cd17ba281d195f444adc115c8dcde3a4f31ad8c235ff9a",
+          "bytes": 517120
+        },
+        "phase-5.branch.logits.f32": {
+          "sha256": "5e8891aa28f87df7c35f622ea8cf50fc16ca45b28f0f1e8b5342b5a292b1272c",
+          "bytes": 16547840
+        },
+        "phase-5.anchor.state.bin": {
+          "sha256": "4f24f12130f29958a87ed4a3b8bfb98d676190abbe0addbb9c40506c181dffda",
+          "bytes": 185473508
+        },
+        "phase-5.restored.state.bin": {
+          "sha256": "4f24f12130f29958a87ed4a3b8bfb98d676190abbe0addbb9c40506c181dffda",
+          "bytes": 185473508
+        },
+        "phase-5.branch-final.state.bin": {
+          "sha256": "0586c03d57f56ec23dfbaa3864237351d45109ac6d8038e8931c0072c7b32b0a",
+          "bytes": 185678436
+        }
+      },
+      "cache": {
+        "main": [
+          [
+            0,
+            6136,
+            6136
+          ],
+          [
+            1,
+            6136,
+            6136
+          ],
+          [
+            2,
+            6136,
+            6136
+          ],
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            4,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ],
+          [
+            6,
+            6136,
+            6136
+          ],
+          [
+            7,
+            6136,
+            6136
+          ],
+          [
+            8,
+            6136,
+            6136
+          ]
+        ],
+        "branches": [
+          [
+            3,
+            6136,
+            6136
+          ],
+          [
+            5,
+            6136,
+            6136
+          ]
+        ],
+        "main_footer": {
+          "budget": 6136,
+          "entries": 6136,
+          "hits": 280625,
+          "misses": 34155,
+          "wraps": 102465,
+          "evictions": 28019,
+          "buffer_allocs": 15,
+          "buffer_reuses": 28019
+        },
+        "rounded_attribution": {
+          "expert": 9.49,
+          "target": 56.88,
+          "live": 56.88,
+          "hit_rate": 0.891,
+          "evict_dontneed": 0.0,
+          "miss_willneed": 0.0,
+          "miss_pread": 184.45,
+          "pread_ms": 7491.354
+        },
+        "exact_main_IO_available": false
+      },
+      "branch_IO": [
+        {
+          "phase": 3,
+          "pread_calls": 2544,
+          "requested_bytes": 8440381440,
+          "returned_bytes": 8440381440,
+          "hits": 6832,
+          "misses": 848,
+          "evictions": 848
+        },
+        {
+          "phase": 5,
+          "pread_calls": 1578,
+          "requested_bytes": 5235425280,
+          "returned_bytes": 5235425280,
+          "hits": 7154,
+          "misses": 526,
+          "evictions": 526
+        }
+      ],
+      "dispatch": {
+        "0": [
+          512,
+          512,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          3
+        ],
+        "1": [
+          64,
+          26
+        ],
+        "3": [
+          8192,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "5": [
+          16384,
+          511
+        ],
+        "7": [
+          38
+        ]
+      },
+      "nine_phase_vectors": 9,
+      "score_before_target_vectors": 64,
+      "teacher_forced": true,
+      "interpretation": "Diagnostic timings; branch restoration/evaluation excluded from main. Main rounded IO attribution is not exact demanded bytes."
+    }
+  },
+  "teacher_diagnostics": {
+    "rows": [
+      {
+        "phase": 3,
+        "step": 0,
+        "pos": 10341,
+        "target": 5718,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 1,
+        "pos": 10342,
+        "target": 678,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 2,
+        "pos": 10343,
+        "target": 1904,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 3,
+        "pos": 10344,
+        "target": 513,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 4,
+        "pos": 10345,
+        "target": 18040,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 5,
+        "pos": 10346,
+        "target": 270,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 6,
+        "pos": 10347,
+        "target": 2775,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 7,
+        "pos": 10348,
+        "target": 16,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 8,
+        "pos": 10349,
+        "target": 1,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 9,
+        "pos": 10350,
+        "target": 128803,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 10,
+        "pos": 10351,
+        "target": 30,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 11,
+        "pos": 10352,
+        "target": 72461,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 12,
+        "pos": 10353,
+        "target": 46148,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 13,
+        "pos": 10354,
+        "target": 32,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 14,
+        "pos": 10355,
+        "target": 42639,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 15,
+        "pos": 10356,
+        "target": 1529,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 16,
+        "pos": 10357,
+        "target": 223,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 17,
+        "pos": 10358,
+        "target": 19,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 18,
+        "pos": 10359,
+        "target": 343,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 19,
+        "pos": 10360,
+        "target": 1795,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 20,
+        "pos": 10361,
+        "target": 3395,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 21,
+        "pos": 10362,
+        "target": 1610,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 22,
+        "pos": 10363,
+        "target": 2599,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 23,
+        "pos": 10364,
+        "target": 26432,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 24,
+        "pos": 10365,
+        "target": 698,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 25,
+        "pos": 10366,
+        "target": 23042,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 26,
+        "pos": 10367,
+        "target": 28,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 27,
+        "pos": 10368,
+        "target": 6243,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 28,
+        "pos": 10369,
+        "target": 223,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 29,
+        "pos": 10370,
+        "target": 19,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 30,
+        "pos": 10371,
+        "target": 15,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "step": 31,
+        "pos": 10372,
+        "target": 553,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 0,
+        "pos": 27244,
+        "target": 5718,
+        "delta_nll": 1.98529672383021,
+        "kl": 1.7657675771549515e-05,
+        "tv": 4.161037342394729e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 1,
+        "pos": 27245,
+        "target": 678,
+        "delta_nll": 0.000373953895341117,
+        "kl": 9.958456966608267e-05,
+        "tv": 0.00039802822975693513,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 2,
+        "pos": 27246,
+        "target": 1904,
+        "delta_nll": 0.02572833985286138,
+        "kl": 0.010814057474105339,
+        "tv": 0.04453303918487611,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 3,
+        "pos": 27247,
+        "target": 513,
+        "delta_nll": 0.0038431829410754403,
+        "kl": 0.0013462998548895012,
+        "tv": 0.0042460358225272984,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 4,
+        "pos": 27248,
+        "target": 18040,
+        "delta_nll": 0.02427656893956609,
+        "kl": 0.005507126483783625,
+        "tv": 0.02538439313225546,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 5,
+        "pos": 27249,
+        "target": 270,
+        "delta_nll": 0.00027690092242238507,
+        "kl": 0.00043338915629719937,
+        "tv": 0.0007877170430838537,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 6,
+        "pos": 27250,
+        "target": 2775,
+        "delta_nll": 0.0003421346775418499,
+        "kl": 0.000553748355273798,
+        "tv": 0.0010525172786831473,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 7,
+        "pos": 27251,
+        "target": 16,
+        "delta_nll": 0.04151816086146454,
+        "kl": 0.016907922954412017,
+        "tv": 0.049957120724321784,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 8,
+        "pos": 27252,
+        "target": 1,
+        "delta_nll": 0.16398432485537384,
+        "kl": 0.011736352628362836,
+        "tv": 0.03889493259063013,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 9,
+        "pos": 27253,
+        "target": 128803,
+        "delta_nll": 1.228850706865714,
+        "kl": 0.1894208557108794,
+        "tv": 0.15772981254801394,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 10,
+        "pos": 27254,
+        "target": 30,
+        "delta_nll": -0.09694242983244195,
+        "kl": 0.06123165960633238,
+        "tv": 0.08862332183415546,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 11,
+        "pos": 27255,
+        "target": 72461,
+        "delta_nll": -0.014418694176040248,
+        "kl": 0.020352536203708995,
+        "tv": 0.02605872419956572,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 12,
+        "pos": 27256,
+        "target": 46148,
+        "delta_nll": 0.0006842231975845436,
+        "kl": 0.00030327731941053184,
+        "tv": 0.0007425981866659606,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 13,
+        "pos": 27257,
+        "target": 32,
+        "delta_nll": 0.008099523969487876,
+        "kl": 0.011134314381283277,
+        "tv": 0.014765191715799406,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 14,
+        "pos": 27258,
+        "target": 42639,
+        "delta_nll": -0.0005674031728304385,
+        "kl": 0.0004602312764135998,
+        "tv": 0.000605051605225734,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 15,
+        "pos": 27259,
+        "target": 1529,
+        "delta_nll": -6.535255424466868e-05,
+        "kl": 2.6467447451993784e-05,
+        "tv": 6.821151355634369e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 16,
+        "pos": 27260,
+        "target": 223,
+        "delta_nll": -0.00011855195497645354,
+        "kl": 0.00012098933408388178,
+        "tv": 0.00022698995101459024,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 17,
+        "pos": 27261,
+        "target": 19,
+        "delta_nll": 0.00032535716194459496,
+        "kl": 5.060238744085711e-05,
+        "tv": 0.00033390622202338326,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 18,
+        "pos": 27262,
+        "target": 343,
+        "delta_nll": 8.159835933696513e-05,
+        "kl": 2.4689905379956523e-05,
+        "tv": 0.00012718655713804102,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 19,
+        "pos": 27263,
+        "target": 1795,
+        "delta_nll": 3.4160763135560046e-05,
+        "kl": 6.559500360766314e-05,
+        "tv": 0.00012776090115708427,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 20,
+        "pos": 27264,
+        "target": 3395,
+        "delta_nll": 0.004183288044483646,
+        "kl": 0.0009242396851769385,
+        "tv": 0.004149376354039488,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 21,
+        "pos": 27265,
+        "target": 1610,
+        "delta_nll": -6.864486432434092e-05,
+        "kl": 0.00010695996264645282,
+        "tv": 0.00027809915466870267,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 22,
+        "pos": 27266,
+        "target": 2599,
+        "delta_nll": 1.424693649809683e-05,
+        "kl": 1.380627742859955e-05,
+        "tv": 2.785298990891333e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 23,
+        "pos": 27267,
+        "target": 26432,
+        "delta_nll": -2.2761746649280212e-05,
+        "kl": 1.8410889896528853e-05,
+        "tv": 5.877569762748984e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 24,
+        "pos": 27268,
+        "target": 698,
+        "delta_nll": 1.135247469363776e-06,
+        "kl": 4.7304851005885266e-07,
+        "tv": 1.4678450097406973e-06,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 25,
+        "pos": 27269,
+        "target": 23042,
+        "delta_nll": -1.2145814341835148e-05,
+        "kl": 7.980781329486622e-06,
+        "tv": 2.007947367754658e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 26,
+        "pos": 27270,
+        "target": 28,
+        "delta_nll": 0.0001445412686003067,
+        "kl": 3.709573844808172e-05,
+        "tv": 0.00016461980475924174,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 27,
+        "pos": 27271,
+        "target": 6243,
+        "delta_nll": 5.736531519318078e-05,
+        "kl": 1.840515743446628e-05,
+        "tv": 6.312250162720714e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 28,
+        "pos": 27272,
+        "target": 223,
+        "delta_nll": 9.440862587695165e-06,
+        "kl": 7.341399508038194e-06,
+        "tv": 1.421645505492891e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 29,
+        "pos": 27273,
+        "target": 19,
+        "delta_nll": -1.165327221386292e-05,
+        "kl": 1.3886060544036538e-05,
+        "tv": 1.559942653885173e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 30,
+        "pos": 27274,
+        "target": 15,
+        "delta_nll": -1.240600672147707e-05,
+        "kl": 5.816421119864262e-06,
+        "tv": 1.5231433158297254e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "step": 31,
+        "pos": 27275,
+        "target": 553,
+        "delta_nll": -4.279458719835816e-05,
+        "kl": 2.7379227662522047e-05,
+        "tv": 5.9923278021777836e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      }
+    ],
+    "phase_end_rows": [
+      {
+        "phase": 0,
+        "pos": 1859,
+        "target": 16856,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 1,
+        "pos": 1949,
+        "target": 5718,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 2,
+        "pos": 2021,
+        "target": 1,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 3,
+        "pos": 10341,
+        "target": 5718,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 4,
+        "pos": 10349,
+        "target": 1,
+        "delta_nll": 0.0,
+        "kl": 0,
+        "tv": 0.0,
+        "bit_equal": true,
+        "argmax_flip": false
+      },
+      {
+        "phase": 5,
+        "pos": 27244,
+        "target": 5718,
+        "delta_nll": 1.98529672383021,
+        "kl": 1.7657675771549515e-05,
+        "tv": 4.161037342394729e-05,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 6,
+        "pos": 27252,
+        "target": 1,
+        "delta_nll": 0.16398432485537384,
+        "kl": 0.011736352628362836,
+        "tv": 0.03889493259063013,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 7,
+        "pos": 27290,
+        "target": 5718,
+        "delta_nll": -1.1161173173859957,
+        "kl": 8.068816074449107e-05,
+        "tv": 0.00010706974725898544,
+        "bit_equal": false,
+        "argmax_flip": false
+      },
+      {
+        "phase": 8,
+        "pos": 27298,
+        "target": null,
+        "kl": 0.04507268667348279,
+        "tv": 0.10560250326152919,
+        "bit_equal": false,
+        "argmax_flip": false
+      }
+    ],
+    "predictions": 64,
+    "mean_delta_nll": 0.052747547512279835,
+    "max_delta_nll": 1.98529672383021,
+    "min_delta_nll": -0.09694242983244195,
+    "mean_KL": 0.005184205505910306,
+    "max_KL": 0.1894208557108794,
+    "mean_TV": 0.007180820531686977,
+    "bit_equal_vectors": 32,
+    "argmax_flips": 0,
+    "scope": "Two fixed artificial ID-extended contexts, 32 original next-D/next-P teacher targets each. No generated semantic or broad equal-quality claim."
+  },
+  "quiet_timing_grant": false,
+  "default_promotion": false,
+  "limitations": "Nine phase-end and64 fixed teacher vectors on one synthetic extension. Diagnostic/profiled timings and rounded main IO attribution; no SSD, semantic correctness, general equal-quality, speed or default claim. Original no-tail controls remain separate."
+}

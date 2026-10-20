@@ -1,0 +1,470 @@
+{
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-3d7lxa_7/root-launch-proof.json": {
+    "bytes": 959,
+    "sha256": "a39bc202542a79d44dc19a55ab145c22ced6848252ab80daee378436c2156cb6"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-47v0e0_h/manifest.json": {
+    "bytes": 13,
+    "sha256": "5255f41b733f3017f0315c63f120e7623ddd28df2e639544580e540fa0b73994"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/agent": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/caller-build-manifest.json": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/first.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/grader.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/manifest.json": {
+    "bytes": 8883,
+    "sha256": "fe8a72fcbb4d6aab14611843c1203a49a84a1c646e4afb1f2c68c67ed8f9e3c0"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/argsort.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/bin.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/concat.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/cpy.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/deepseek4_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/dense.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/dsv41.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/dsv4_hc.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/dsv4_kv.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/dsv4_misc.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/dsv4_rope.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/flash_attn.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/get_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/glm53_bf16.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/glm53_kda.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/glm53_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/glu.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/moe.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/norm.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/qwen4.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/qwen4_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/repeat.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/set_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/softmax.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/sum_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/metal/unary.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/prepared-command.json": {
+    "bytes": 924,
+    "sha256": "05f578dc0990d89a9b16fbb93e967b3790ddd77f2376c32f1990cb2640048c79"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/run_agent_suffix_pair_actual.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/run_grader.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/second.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/task.json": {
+    "bytes": 24521,
+    "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/third.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-epnhxdnn/update_context.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/agent": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/caller-build-manifest.json": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/first.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/grader.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/manifest.json": {
+    "bytes": 8997,
+    "sha256": "71e41d7f44c7f8d0f9e51ef401bc8e3e1e3685345c49b18495861850fde7ac5e"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/argsort.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/bin.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/concat.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/cpy.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/deepseek4_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/dense.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/dsv41.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/dsv4_hc.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/dsv4_kv.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/dsv4_misc.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/dsv4_rope.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/flash_attn.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/get_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/glm53_bf16.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/glm53_kda.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/glm53_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/glu.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/moe.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/norm.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/qwen4.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/qwen4_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/repeat.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/set_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/softmax.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/sum_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/metal/unary.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/prepared-command.json": {
+    "bytes": 27,
+    "sha256": "bca808afa7d9fe27929975808ab16bb0591103c326bffb89520a4be289ffc2b0"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/run_agent_suffix_pair_actual.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/run_grader.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/second.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/task.json": {
+    "bytes": 24521,
+    "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/third.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-ff6j258s/update_context.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-masq7bhj/root-launch-proof.json": {
+    "bytes": 1034,
+    "sha256": "0ff7c43c422ceac7ad0169935a5c0a2c53b43bef73089e604f00de13f4bd585a"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/agent": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/caller-build-manifest.json": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/first.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/grader.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/manifest.json": {
+    "bytes": 8997,
+    "sha256": "fe101c86796c13fbfe4aca30a18b268bd738baff4d87d5aa817ac1b8379c8dc7"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/argsort.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/bin.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/concat.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/cpy.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/deepseek4_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/dense.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/dsv41.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/dsv4_hc.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/dsv4_kv.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/dsv4_misc.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/dsv4_rope.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/flash_attn.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/get_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/glm53_bf16.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/glm53_kda.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/glm53_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/glu.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/moe.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/norm.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/qwen4.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/qwen4_vision.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/repeat.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/set_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/softmax.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/sum_rows.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/metal/unary.metal": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/prepared-command.json": {
+    "bytes": 924,
+    "sha256": "e4013b24c794aadf5796034c4b60d915db7b29700d09dd70167e1f4c1b72fcc2"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/run_agent_suffix_pair_actual.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/run_grader.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/second.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/task.json": {
+    "bytes": 24521,
+    "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/third.txt": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  },
+  "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/actual-authority-wiry34mw/update_context.py": {
+    "bytes": 33,
+    "sha256": "ce9aedd9b9365182d2a6375703eca00006199a77c87810f51c201f382c33cecb"
+  }
+}

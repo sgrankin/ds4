@@ -1,0 +1,27 @@
+[
+  {
+    "arm": "budget1",
+    "write_budget": 128,
+    "final_policy": "budget1",
+    "returncode": 0,
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Volumes/Models/ds4/speed-bench/experiments/final-thinking-hour20-20261004/run.py",
+      "--base-url",
+      "http://127.0.0.1:51026",
+      "--output",
+      "/Volumes/Models/ds4/speed-bench/experiments/final-thinking-hour20-20261004/http-lowpoint/budget1/checks",
+      "--visible",
+      "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible",
+      "--arm",
+      "budget1",
+      "--final-policy",
+      "budget1",
+      "--global-cap",
+      "2048"
+    ],
+    "seconds": 132.53035124999587,
+    "server_returncode_after_shutdown": 0
+  }
+]

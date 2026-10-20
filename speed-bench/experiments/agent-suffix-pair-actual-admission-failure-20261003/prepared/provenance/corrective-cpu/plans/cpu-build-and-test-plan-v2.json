@@ -1,0 +1,116 @@
+{
+  "status": "AUTHORIZED_CPU_ONLY_SOURCE_FROZEN_BEFORE_COMPILE",
+  "output": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2",
+  "source": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/agent_suffix_pair_actual_protocol_fixture.c",
+    "bytes": 8243,
+    "sha256": "1f3b5e72c503a9158dbfcd81d6bc8b903da2d42831d77b0a13c7e5b536e940b4"
+  },
+  "header": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/agent_suffix_pair_actual_literals.h",
+    "bytes": 11616,
+    "sha256": "2e94cb78004fe4eb423cd14a3e854da4bbbe636a5322b85f2e9049bf963090e1"
+  },
+  "controller": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py",
+    "bytes": 29964,
+    "sha256": "ddb9d605b70c6d9259b19c489337a0c2173946174bc688eaee519e2fcd0ec590"
+  },
+  "test_sources": {
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/tests/test_agent_suffix_pair_actual_delivery.py": {
+      "bytes": 9761,
+      "sha256": "41d97269d5ec743cb17299491964b2562db4570a9efbbf0d5e5947c9661d0f4c"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/tests/test_agent_suffix_pair_actual_delivery_authority.py": {
+      "bytes": 5138,
+      "sha256": "ac6466237dd194472df588d14e355fed77b874e0433f9e2d12427680ca768090"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/test_agent_suffix_pair_actual.py": {
+      "bytes": 22647,
+      "sha256": "4c59033bcb9bfd71e6be5125563e0773d2e4b14a1bb9c29a7a9be5abbe7274f8"
+    }
+  },
+  "production_sources": {
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/ds4_agent.c": {
+      "bytes": 593557,
+      "sha256": "3c0dc3d9141f33cea40878c3724f9893d23c229b492434ea9455bdcac7464806"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/agent_suffix_pair_actual_hook.inc": {
+      "bytes": 10798,
+      "sha256": "c6e0645784f7d4e14bd6c709a3b898bfc9137e5b7b6f9f8d9d0e5b83b13d28d9"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/agent_suffix_pair_actual_ownership.h": {
+      "bytes": 2295,
+      "sha256": "cd6f259b1bed287ef2cce67597a6bf5082a3c83bd0a5c036e4335e1846969982"
+    },
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/agent_suffix_pair_actual_admission.h": {
+      "bytes": 1849,
+      "sha256": "a92300e30416e1a6a5cb6fd3cbfd7466cb9dfa3de3a3ab807f95c283f9c755f8"
+    }
+  },
+  "compiler_sdk_proof": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/evidence/agent-suffix-pair-native-source-prepared-20261003-v1/compiler-sdk-proof.json",
+    "bytes": 1438,
+    "sha256": "0fe26c4757dcc4eee736bfb2cbc6efb1a20d69ec9f15a1bb88b8863c41d29b16"
+  },
+  "compiler_files": {
+    "selected_wrapper": {
+      "path": "/usr/bin/cc",
+      "bytes": 200560,
+      "sha256": "34129c71a01a74f7f3b2443521519b2e5447553fa187f5fcafaaf8c42cc192e2"
+    },
+    "actual_clang": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "bytes": 124676976,
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+    },
+    "sdk_settings": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/SDKSettings.json",
+      "bytes": 7948,
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+    },
+    "libSystem_stub": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd",
+      "bytes": 347931,
+      "sha256": "01089e97e7372fdda64ef480f2c99d483daf0c7fc99298a137425ee3230588ab"
+    }
+  },
+  "compile_command": [
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "-isysroot",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-std=c99",
+    "-pthread",
+    "-I/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/agent_suffix_pair_actual_protocol_fixture.c",
+    "-o",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2/production-protocol-fixture"
+  ],
+  "test_commands": [
+    [
+      "python3",
+      "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/tests/test_agent_suffix_pair_actual_delivery.py"
+    ],
+    [
+      "python3",
+      "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/tests/test_agent_suffix_pair_actual_delivery_authority.py"
+    ],
+    [
+      "python3",
+      "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/test_agent_suffix_pair_actual.py"
+    ]
+  ],
+  "test_environment": {
+    "PAIR_ACTUAL_DELIVERY_PROBE": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2/production-protocol-fixture",
+    "PAIR_ACTUAL_DELIVERY_CASES": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2/delivery-cases",
+    "PAIR_ACTUAL_CPU_CASES": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/artifacts/agent-suffix-pair-actual-delivery-cpu-v2/original36-cases"
+  },
+  "serial_compilers": 1,
+  "borrowed_native_objects": [],
+  "native_caller_compile_link_authorized": false,
+  "model_or_engine_or_tokenizer_or_guard_access": false
+}

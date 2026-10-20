@@ -1,0 +1,9 @@
+hot_bytes,ssd_bytes,metadata_bytes,endpoints,chunks,pinned_endpoints,hot_reads,disk_reads,endpoint_evictions,arm,phase,configured_ssd_mb,configured_ssd_bytes,ssd_bytes_within_configured_cap,admission_warning_lines
+0,487345286,379165,40,1774,0,0,164,0,control-before,before,4096,4294967296,True,[]
+0,619014302,458563,46,2260,0,0,165,0,control-before,after,4096,4294967296,True,[]
+0,508137840,396060,42,1847,0,0,165,0,ssd512,before,512,536870912,True,[]
+0,517476117,307850,24,1884,0,0,164,24,ssd512,after,512,536870912,True,[]
+0,123814437,103437,11,469,0,0,128,55,ssd128,before,128,134217728,True,[]
+0,124332310,100749,11,457,0,0,128,12,ssd128,after,128,134217728,True,[]
+0,508137840,396062,42,1847,0,0,165,0,control-after,before,4096,4294967296,True,[]
+0,639806856,475460,48,2333,0,0,165,0,control-after,after,4096,4294967296,True,[]

@@ -1,0 +1,46 @@
+test_abba_and_inherited_flags (__main__.TimingTests.test_abba_and_inherited_flags) ... ok
+test_actual_main_guarded_cpu_probe (__main__.TimingTests.test_actual_main_guarded_cpu_probe) ... FAIL
+test_failures (__main__.TimingTests.test_failures) ... ok
+test_guard_refusal_precedes_model_metadata (__main__.TimingTests.test_guard_refusal_precedes_model_metadata) ... ok
+test_missing_assertions_precede_any_metadata_or_subprocess (__main__.TimingTests.test_missing_assertions_precede_any_metadata_or_subprocess) ... ok
+test_parent_and_lock (__main__.TimingTests.test_parent_and_lock) ... ok
+test_pinned_interpreter_alias_and_rejections (__main__.TimingTests.test_pinned_interpreter_alias_and_rejections) ... ok
+test_plan_tamper_and_missing_candidate_footer (__main__.TimingTests.test_plan_tamper_and_missing_candidate_footer) ... ok
+
+======================================================================
+FAIL: test_actual_main_guarded_cpu_probe (__main__.TimingTests.test_actual_main_guarded_cpu_probe)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/tests/test_resident_three_timing.py", line 232, in test_actual_main_guarded_cpu_probe
+    self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : sysctl: sysctl fmt -1 1024 1: Operation not permitted
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py", line 249, in <module>
+    main()
+    ~~~~^^
+  File "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py", line 245, in main
+    raise SystemExit(run(a.output.resolve(), command))
+                     ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py", line 166, in run
+    initial = read()
+  File "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py", line 33, in sample
+    swap = probe(['sysctl', '-n', 'vm.swapusage'])
+  File "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py", line 20, in probe
+    return subprocess.check_output(argv, text=True, timeout=PROBE_TIMEOUT)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 473, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['sysctl', '-n', 'vm.swapusage']' returned non-zero exit status 1.
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.119s
+
+FAILED (failures=1)

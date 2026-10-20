@@ -1,0 +1,5 @@
+{
+  "status": "ROOT_ARCHIVE_COPY_REFUSED_BEFORE_INDEX",
+  "reason": "Initial assumption all prepared files below20MB was false: incidental native sysprompt.kv is larger. Partial copies verified unchanged; fullnativecache retained as streaming-hashed durable external reference.",
+  "experimental_source_or_outcomes_rewritten": false
+}

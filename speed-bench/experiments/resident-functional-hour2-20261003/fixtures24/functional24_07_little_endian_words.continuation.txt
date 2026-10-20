@@ -1,0 +1,2 @@
+{"sum":10767,"words":[513,254,10000]}
+Split the six bytes into pairs 01 02, fe 00, and 10 27. In each pair the first byte has place value one and the second has place value 256. The first word is 1 plus 512, giving 513. The second is 254 plus zero, giving 254. The third is 16 plus 39 times 256, giving 10000. Their sum is 10767. Treating the bytes as big-endian would reverse the place values and produce different integers. The input has an even number of bytes, so every word is complete and no padding or truncation is necessary.

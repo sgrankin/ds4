@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 280, in drive
+    records=rounds(private/'rounds.jsonl');validate_rounds(records,submitted)
+                                           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/speed-bench/ideas/run_agent_suffix_pair_actual.py", line 151, in validate_rounds
+    if not rows or rows[-1]['got_tool'] or not rows[-1]['model_stopped']:raise ControlFailure('Completed native turn lacks observed stop')
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+actual_controller.ControlFailure: Completed native turn lacks observed stop

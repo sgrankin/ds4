@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1/run_agent_suffix_pair_actual.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-actual-prepared-20261003-v1",
+    "--manifest-sha256",
+    "1719ce2a865edcd3e8a711353b1226fc61f090a8aa2ef577ab6a1878b45791bb"
+  ],
+  "initial": {
+    "time": 1790999032.604395,
+    "level": 1,
+    "swap_gb": 0.017763671875,
+    "physical_gb": 128.0,
+    "free_gb": 55.6912841796875,
+    "file_backed_gb": 50.524200439453125,
+    "wired_gb": 4.8895111083984375,
+    "compressor_gb": 6.187042236328125
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

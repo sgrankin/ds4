@@ -1,0 +1,38 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.03 GiB (raw 0.01 + compressed 0.02) + buffers 0.83 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.23 GiB planned
+ds4: memory detail: ctx=4096 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=4097 backend=metal
+ds4: V4.1 static context buffers 880.04 MiB (ctx=4096), Engram disk-only
+PROBE case=case_000 tokens=32 nll=0.443864 kl=0 prefill_ms=3096.799 decode_ms=2785.344
+PROBE case=case_006 tokens=32 nll=0.382454 kl=0 prefill_ms=1085.721 decode_ms=2265.385
+PROBE case=case_012 tokens=32 nll=0.490807 kl=0 prefill_ms=818.525 decode_ms=1783.719
+PROBE case=case_018 tokens=32 nll=0.202675 kl=0 prefill_ms=843.471 decode_ms=1956.339
+PROBE case=case_024 tokens=32 nll=0.426552 kl=0 prefill_ms=968.855 decode_ms=2019.517
+PROBE case=case_030 tokens=32 nll=0.302427 kl=0 prefill_ms=713.206 decode_ms=1898.740
+PROBE case=case_036 tokens=32 nll=0.439852 kl=0 prefill_ms=1347.843 decode_ms=1782.583
+PROBE case=case_042 tokens=32 nll=0.386543 kl=0 prefill_ms=1223.450 decode_ms=1681.762
+PROBE case=case_048 tokens=32 nll=0.486260 kl=0 prefill_ms=1106.361 decode_ms=1555.977
+PROBE case=case_054 tokens=32 nll=1.082065 kl=0 prefill_ms=1221.614 decode_ms=1963.064
+PROBE case=case_060 tokens=32 nll=0.470227 kl=0 prefill_ms=713.334 decode_ms=1958.775
+PROBE case=case_066 tokens=32 nll=0.310896 kl=0 prefill_ms=1440.820 decode_ms=1817.926
+PROBE case=case_072 tokens=12 nll=0.018319 kl=0 prefill_ms=1351.382 decode_ms=651.227
+PROBE case=case_078 tokens=32 nll=0.195869 kl=0 prefill_ms=1082.851 decode_ms=1767.162
+PROBE case=case_084 tokens=32 nll=0.083147 kl=0 prefill_ms=1075.008 decode_ms=2013.348
+PROBE case=case_090 tokens=32 nll=0.538578 kl=0 prefill_ms=1053.162 decode_ms=1900.362
+ds4: Metal memory quality probe final: runtime 0.61 GiB + streaming experts 56.88 GiB = 57.49 GiB tracked live
+ds4:   runtime tensors live 620.84 MiB peak 620.84 MiB
+ds4:   macOS task memory footprint 57.58 GiB, resident 66.37 GiB, virtual 732.37 GiB
+ds4:   mmap model wrapper creations 569 buffers 9.38 GiB cumulative, 1.23 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6136 expert=9.49 MiB target=56.88 GiB live=56.88 GiB, hits=190632 misses=21768 hit_rate=0.898 wraps=65304 evictions=15632 buffer_allocs=15 buffer_reuses=15632 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=201.78 GiB pread_ms=12657.584
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1026.469 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 4.25 MiB (flash mask 0.02, pad 0.06, tmp 4.02, blk 0.00, ring 0.00, kv 0.13, compressor 0.02, router 0.01, indexer 0.00, moe 0.00, f16 0.00, raw-store 0.00)

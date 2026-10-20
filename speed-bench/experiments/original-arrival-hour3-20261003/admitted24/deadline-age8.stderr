@@ -1,0 +1,73 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+PROBE case=functional24_01_cursor_pages tokens=32 nll=0.793936 kl=0.0245935 prefill_ms=9216.670 decode_ms=1941.978
+ds4: ORIGINAL_DEADLINE generation=1 requests=6 started=6 completed=6 failed=0 promoted=0 future=2 expired=3 deadline_tries=6 deadline_misses=6 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_02_call_correlation tokens=32 nll=2.276243 kl=0.0226616 prefill_ms=4511.805 decode_ms=1473.927
+ds4: ORIGINAL_DEADLINE generation=2 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_03_fixed_offset tokens=32 nll=1.693393 kl=0.015159 prefill_ms=3423.026 decode_ms=1527.647
+ds4: ORIGINAL_DEADLINE generation=3 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_04_stream_events tokens=32 nll=1.637912 kl=0.00573695 prefill_ms=4066.636 decode_ms=1539.734
+ds4: ORIGINAL_DEADLINE generation=4 requests=5 started=5 completed=5 failed=0 promoted=0 future=1 expired=3 deadline_tries=5 deadline_misses=5 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_05_artifact_delta tokens=32 nll=2.122145 kl=0.0533747 prefill_ms=4304.523 decode_ms=1544.636
+ds4: ORIGINAL_DEADLINE generation=5 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_06_three_way_fields tokens=32 nll=1.466918 kl=0.0189561 prefill_ms=4099.552 decode_ms=1525.326
+ds4: ORIGINAL_DEADLINE generation=6 requests=5 started=5 completed=5 failed=0 promoted=0 future=1 expired=3 deadline_tries=5 deadline_misses=5 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_07_little_endian_words tokens=32 nll=2.073270 kl=0.0188938 prefill_ms=2026.016 decode_ms=1477.726
+ds4: ORIGINAL_DEADLINE generation=7 requests=6 started=6 completed=6 failed=0 promoted=0 future=2 expired=3 deadline_tries=6 deadline_misses=6 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_08_matrix_product tokens=32 nll=0.911532 kl=0.0151164 prefill_ms=2736.953 decode_ms=1441.895
+ds4: ORIGINAL_DEADLINE generation=8 requests=5 started=5 completed=5 failed=0 promoted=1 future=0 expired=3 deadline_tries=5 deadline_misses=4 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_09_left_join_null tokens=32 nll=0.373820 kl=0.00755158 prefill_ms=5376.130 decode_ms=1414.127
+ds4: ORIGINAL_DEADLINE generation=9 requests=6 started=6 completed=6 failed=0 promoted=0 future=2 expired=3 deadline_tries=6 deadline_misses=6 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_10_form_query tokens=32 nll=0.218007 kl=0.00299366 prefill_ms=3641.003 decode_ms=1405.939
+ds4: ORIGINAL_DEADLINE generation=10 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_11_crc8 tokens=32 nll=2.103595 kl=0.0221432 prefill_ms=3947.543 decode_ms=1477.772
+ds4: ORIGINAL_DEADLINE generation=11 requests=5 started=5 completed=5 failed=0 promoted=1 future=0 expired=3 deadline_tries=5 deadline_misses=4 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_12_grid_components tokens=32 nll=1.037887 kl=0.0282866 prefill_ms=2766.539 decode_ms=1521.720
+ds4: ORIGINAL_DEADLINE generation=12 requests=5 started=5 completed=5 failed=0 promoted=0 future=1 expired=3 deadline_tries=5 deadline_misses=5 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_13_absolute_integral tokens=32 nll=1.517177 kl=0.0161071 prefill_ms=2359.595 decode_ms=1436.731
+ds4: ORIGINAL_DEADLINE generation=13 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_14_polygon_area tokens=32 nll=2.290128 kl=0.0281735 prefill_ms=2228.551 decode_ms=1451.506
+ds4: ORIGINAL_DEADLINE generation=14 requests=6 started=6 completed=6 failed=0 promoted=1 future=1 expired=3 deadline_tries=6 deadline_misses=5 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_15_geometric_fraction tokens=32 nll=2.322699 kl=0.0176411 prefill_ms=2329.729 decode_ms=1441.951
+ds4: ORIGINAL_DEADLINE generation=15 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_16_weighted_median tokens=32 nll=1.643069 kl=0.00658606 prefill_ms=3143.140 decode_ms=1407.876
+ds4: ORIGINAL_DEADLINE generation=16 requests=6 started=6 completed=6 failed=0 promoted=0 future=2 expired=3 deadline_tries=6 deadline_misses=6 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_17_diophantine_list tokens=32 nll=2.231432 kl=0.0194575 prefill_ms=2160.435 decode_ms=1419.512
+ds4: ORIGINAL_DEADLINE generation=17 requests=6 started=6 completed=6 failed=0 promoted=0 future=2 expired=3 deadline_tries=6 deadline_misses=6 logical_requested=59719680 pread_calls=18 pread_requested=59719680 pread_returned=59719680 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_18_polynomial_remainder tokens=32 nll=2.758006 kl=0.0324501 prefill_ms=2933.143 decode_ms=1384.557
+ds4: ORIGINAL_DEADLINE generation=18 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_19_french_route tokens=32 nll=0.620084 kl=0.0111691 prefill_ms=3748.664 decode_ms=1502.650
+ds4: ORIGINAL_DEADLINE generation=19 requests=7 started=7 completed=7 failed=0 promoted=0 future=4 expired=2 deadline_tries=7 deadline_misses=7 logical_requested=69672960 pread_calls=21 pread_requested=69672960 pread_returned=69672960 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_20_japanese_notice tokens=32 nll=0.980286 kl=0.0218202 prefill_ms=2963.236 decode_ms=1482.831
+ds4: ORIGINAL_DEADLINE generation=20 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_21_ceramic_sequence tokens=32 nll=1.684997 kl=0.0325986 prefill_ms=2809.800 decode_ms=1535.967
+ds4: ORIGINAL_DEADLINE generation=21 requests=5 started=5 completed=5 failed=0 promoted=0 future=1 expired=3 deadline_tries=5 deadline_misses=5 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_22_invented_game tokens=32 nll=2.789083 kl=0.017659 prefill_ms=4415.564 decode_ms=1510.943
+ds4: ORIGINAL_DEADLINE generation=22 requests=5 started=5 completed=5 failed=0 promoted=0 future=1 expired=3 deadline_tries=5 deadline_misses=5 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_23_casefold_pair tokens=32 nll=1.822351 kl=0.0347801 prefill_ms=2637.867 decode_ms=1459.477
+ds4: ORIGINAL_DEADLINE generation=23 requests=4 started=4 completed=4 failed=0 promoted=0 future=0 expired=3 deadline_tries=4 deadline_misses=4 logical_requested=39813120 pread_calls=12 pread_requested=39813120 pread_returned=39813120 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+PROBE case=functional24_24_literal_unicode_note tokens=32 nll=0.755961 kl=0.00925028 prefill_ms=2857.931 decode_ms=1488.192
+ds4: Metal memory quality probe final: runtime 0.89 GiB + streaming experts 56.87 GiB = 57.76 GiB tracked live
+ds4:   runtime tensors live 913.53 MiB peak 913.53 MiB
+ds4:   macOS task memory footprint 57.64 GiB, resident 66.41 GiB, virtual 732.85 GiB
+ds4:   mmap model wrapper creations 569 buffers 9.38 GiB cumulative, 1.23 GiB max (not copied)
+ds4:   streaming expert cache budget=6136 experts entries=6135 expert=9.49 MiB target=56.88 GiB live=56.87 GiB, hits=720953 misses=58375 hit_rate=0.925 wraps=175125 evictions=52240 buffer_allocs=15 buffer_reuses=52240 evict_dontneed=0.00 GiB miss_willneed=0.00 GiB miss_pread=540.90 GiB pread_ms=34600.387
+ds4:   streaming expert buffer mlock locked=56.93 GiB failed=0.00 GiB failures=0 time=1037.587 ms
+ds4:   model residency requests 0 (ssd-streaming)
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   accelerated Metal path enabled
+ds4:   device Apple M5 Max, Metal 4 runtime yes, family yes, MTL4 queue yes, tensor API enabled, M5 neural accelerators likely
+ds4:   scratch 4.53 MiB (flash mask 0.02, pad 0.06, tmp 4.02, blk 0.00, ring 0.00, kv 0.33, compressor 0.02, router 0.09, indexer 0.00, moe 0.00, f16 0.00, raw-store 0.00)
+PROBE_IO enabled=1 pread_calls=175053 requested_bytes=580783841280 returned_bytes=580783841280 cache_loader_bytes=580783841280 cache_hits=720953 cache_misses=58375 cache_evictions=52240
+ds4: ORIGINAL_DEADLINE generation=24 requests=5 started=5 completed=5 failed=0 promoted=1 future=0 expired=3 deadline_tries=5 deadline_misses=4 logical_requested=49766400 pread_calls=15 pread_requested=49766400 pread_returned=49766400 reader_host=279448 adapter_reserve=65536 payload_peak=9961472 overflow=0
+ds4: resident-route layers=30720 substitutions=11440 native_misses=16028 skipped_loads=11440 skipped_bytes=113865523200 mean_mass=0.11467151 mean_score_gap=0.12535944 mean_affinity_ratio=0.87491496 mean_rank=7.563 full_snapshots=9836 double_layers=1424 planned_substitutions=11440 drops=0 triple_layers=90
+ds4: resident-route-native-weights requested=1 substitutions=11440

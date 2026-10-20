@@ -1,0 +1,40 @@
+{
+  "step": "C-turnover",
+  "session": "C",
+  "seconds": 2.3715819169883616,
+  "text": "READY",
+  "answer": null,
+  "gold": "READY",
+  "correct": true,
+  "fresh_read": false,
+  "complete": true,
+  "calls": [],
+  "required_read": null,
+  "replies": [
+    {
+      "seconds": 2.371333124989178,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 48,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 48
+        },
+        "output_tokens": 2,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 50
+      },
+      "incomplete_details": null
+    }
+  ],
+  "errors": [],
+  "suffix_log_lines": [],
+  "exact_hit_log_lines": [],
+  "slot_eviction_log_lines": [
+    "1004 10:26:22 slot 0: request reuses nothing; evicting checkpoint (1790 tokens, idle 0 s, protected)"
+  ],
+  "pass": true
+}

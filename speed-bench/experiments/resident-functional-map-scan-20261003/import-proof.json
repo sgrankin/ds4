@@ -1,0 +1,44 @@
+{
+  "status": "ROOT_FULLSCAN_EVIDENCE_ONLY_MAIN_IMPORT",
+  "time": 1791025123.004213,
+  "prepared_source_freeze": "e0f2df78d07f201ed901dc6fd9ba5547b7ef799d",
+  "plan_sha256": "85e604c2625e3f9243be463154b153dd92b1c9bf1f93da67f619eeda87829449",
+  "signature_path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-constructor-run/speed-bench/ideas/artifacts/resident-functional-fullscan-v3/signatures.fp16le",
+  "signature_sha256": "e3d03efbf384ec16c6a54d36624efcbee37ee2912031297e32967c9fcf9efcad",
+  "source_proofs": {
+    "execution.json": "d8ab86ae63d3b36bdb7602b783ad1066d1c4d93adb9ec7946e68395a69adf907",
+    "independent-audit.json": "a6abe18b13a56a3c1fa762b94a93246a9ca97c1e3a2656027b6b21e8cd8ace83",
+    "release.json": "c1069a299eef609ae744b185565d87d8e2b5bdbd6dd3487baa0e638f7ad4ac13",
+    "signature-diagnostics.json": "2ab63ed2e8dea22e2944bbaf3f6e868747cf0b2bc7634ca82e0f2bdbba566f59"
+  },
+  "all100_MAIN_runtime_and_shaders_before_after_unchanged": true,
+  "no_model_or_signature_payload_read": true,
+  "no_runtime_default_change": true,
+  "imported_files": {
+    "signature-diagnostics.json": {
+      "bytes": 10199,
+      "mode": 420,
+      "sha256": "2ab63ed2e8dea22e2944bbaf3f6e868747cf0b2bc7634ca82e0f2bdbba566f59"
+    },
+    "README.md": {
+      "bytes": 2672,
+      "mode": 420,
+      "sha256": "3d4aec871916600c0f7ac1198b9b8d7cad945e4a886308d35bd960732b1b4fc8"
+    },
+    "release.json": {
+      "bytes": 1006,
+      "mode": 420,
+      "sha256": "c1069a299eef609ae744b185565d87d8e2b5bdbd6dd3487baa0e638f7ad4ac13"
+    },
+    "independent-audit.json": {
+      "bytes": 1222,
+      "mode": 420,
+      "sha256": "a6abe18b13a56a3c1fa762b94a93246a9ca97c1e3a2656027b6b21e8cd8ace83"
+    },
+    "execution.json": {
+      "bytes": 724,
+      "mode": 420,
+      "sha256": "d8ab86ae63d3b36bdb7602b783ad1066d1c4d93adb9ec7946e68395a69adf907"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "source": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/ds4_agent.c",
+    "bytes": 593557,
+    "sha256": "3c0dc3d9141f33cea40878c3724f9893d23c229b492434ea9455bdcac7464806",
+    "mode": 420
+  },
+  "system_livepath": {
+    "function": "agent_worker_build_system_tokens",
+    "lines": [
+      5210,
+      5220,
+      5223,
+      5224
+    ],
+    "fact": "Literal configured live_context_path is appended to protected system tokens."
+  },
+  "cwd": {
+    "CLI_parse_lines": [
+      937,
+      938
+    ],
+    "main_chdir_line": 14594,
+    "bash_spawn_lines": [
+      9883,
+      9905
+    ],
+    "fact": "CLI chdir uses run/project; tool sh -c inherits process cwd. Frozen updater existed there. Only live file under run is system-advertised.",
+    "motivation_inference_not_claimed": true
+  },
+  "eviction": {
+    "capture_function_line": 5593,
+    "oldest_drop_lines": [
+      5630,
+      5631,
+      5632
+    ],
+    "capture_before_tool_lines": [
+      11659,
+      11661,
+      11662
+    ],
+    "fact": "Two new generation-end frontiers remove original2987 frontier from two-slot FIFO before updater imports edit."
+  },
+  "original_refusal_preserved": "choice-refusal/source-refusal.json",
+  "repair_or_retry": false
+}

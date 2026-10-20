@@ -1,0 +1,53 @@
+{
+  "status": "PREREGISTERED_SOURCE_ONLY_POST_RELEASE_PROCEDURE_NO_RUN",
+  "A_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse",
+  "A_manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+  "A_command_sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5",
+  "task_sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c",
+  "immutable_archive_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1",
+  "ROOT_owns_release_archive_proof_and_each_model_grant": true,
+  "steps": [
+    "After A completes, ROOT records typed complete guard/child rc, no model processes, reacquired MAIN flock, pressure summary and finite positive release time. Preserve wrong/capped/failed outcomes; no rerun.",
+    "Verify literal A114 plan/assets against7dfdb authority. Require new A pre-forward commit2/approximate proof plus first structural selection/IDs/text/candidate-order and full preedit native state/raw. Missing structure precludes B; grading never chooses or changes the edit.",
+    "Call existing frozen controller bind_reference(A_path, immutable_archive_path/reference, A_manifest_sha256) once into nonexistent destination. It reads only the new A structural records/controls and manifest; no grading or generated results. It has no choice-index override.",
+    "Copy A run/shared-snapshot.json and ONLY its recorded run/shared-final files (safe relative names, regular nonsymlink, exact bytes/SHA/mode). Verify root identity and mutable shared inventory match the snapshot before any reset. Copy exact A root-release-proof.json. Preserve the literal archive before B.",
+    "Index EVERY archive physical file except only the actual top index. Large native canonical preedit-state may stay a separately retained exact path+SHA/bytes/mode external declaration rather than implicit jj omission. Never overwrite its original A file.",
+    "ROOT verifies all archived snapshot files literal equal, then publishes exact ROOT_SHARED_SNAPSHOT_ARCHIVED proof below. Extra archive path/index-SHA authority fields may be recorded, without changing selection.",
+    "ROOT separately authorizes static native preparation from the identical reviewed caller/build/source/CPU and new A structural binding. Prepared native policy changes ONLY suffix reuse/pair flags to0. No automatic model chain.",
+    "Only a later separate ROOT sole-model grant runs native B. initialize_shared verifies the exact archived/released A proof + birth identity + all current recorded file hashes BEFORE deleting ONLY owned recorded files. Any foreign/changed/symlink file is retained refusal; no cleanup retry."
+  ],
+  "root_archive_proof_required": {
+    "status": "ROOT_SHARED_SNAPSHOT_ARCHIVED",
+    "archived_files_equal": true,
+    "A_manifest_sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+    "snapshot_sha256": "SHA256_OF_EXACT_A_run/shared-snapshot.json",
+    "release_sha256": "SHA256_OF_EXACT_A_root-release-proof.json"
+  },
+  "binding_entry_point": "run_agent_suffix_pair_external.bind_reference(actual, dest, digest)",
+  "native_prepare_argv": [
+    "python3",
+    "speed-bench/ideas/prepare_agent_suffix_pair_external_v2.py",
+    "--arm",
+    "native",
+    "--native-plan-sha256",
+    "315a52cd24636391c1dcdce3245a186124b12d9053b554400076e7b9293ac335",
+    "--source-freeze",
+    "d3647e3d1c3df4e54ec3d7d17a27c7eec40d45b5",
+    "--cpu-evidence-freeze",
+    "90bb01c1e4d1083b539ad25457b182a90453acd0",
+    "--cpu-proof-sha256",
+    "affad2f25779d48328bd6c83ff6bc811a8fa76f308acc020444ee41e2fe50792",
+    "--build-manifest-sha256",
+    "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64",
+    "--actual",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse",
+    "--actual-manifest-sha256",
+    "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a",
+    "--root-archive-proof",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/root-shared-archive-proof.json"
+  ],
+  "runtime_proof_enforcement_scope": "ROOT archive attestation is explicit authority; controller verifies required fields/hash bindings and current snapshot inventory, not a hard filesystem sandbox or independent proof of ROOT external archive contents.",
+  "primary_persistence": "NOT_EXERCISED",
+  "no_outcomes_read_before_freeze": true,
+  "no_model_stat_open_or_guard_or_helper_executed": true
+}

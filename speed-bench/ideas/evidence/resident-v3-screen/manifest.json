@@ -1,0 +1,21 @@
+{
+  "baseline_sha256": "9332b55740f22afaf4b2f60b79ae2189245ae00d31aea3240d7f215c5cfee4c1",
+  "candidate_sha256": "cfdfe0c1a22c6bc799625ec7a4c98c6a39503349453fd848a3bb8f2d29df2b1e",
+  "model_path": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "model_size": 365713686528,
+  "model_header_sha256": "bcada2bf96d9a5127370a6e226136ae9f07cc162e28c38efc5e39112ef88652f",
+  "manifest_sha256": "6fc9dcf0d5c71cfa65c8fdb504bb312787b382527504b446859a498c5b318b03",
+  "settings": {
+    "cases": 16,
+    "tokens": 32,
+    "ctx": 4096,
+    "cache_gb": 64,
+    "chunk": 512,
+    "gaps": "0.02,0.05,0.10",
+    "mass": "0.12"
+  },
+  "baseline_source": "/private/tmp/ds4-quality-probe-base-v2",
+  "candidate_source": "/private/tmp/ds4-quality-probe-resident-v3",
+  "timing_scope": "Inference calls exclude logit copying, KL arithmetic and reference I/O; screening timings are exploratory.",
+  "reused_reference_sha256": "2879137d763190f0fef61cf47519f32f02e9526945df841abd7a5ff35d3d3adc"
+}

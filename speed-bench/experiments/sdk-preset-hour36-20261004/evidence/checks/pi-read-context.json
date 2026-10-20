@@ -1,0 +1,36 @@
+{
+  "systemPrompt": "Use the read tool for the requested file. After receiving the result, output only the answer field.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Read /Volumes/Models/ds4/.workspaces/server-agent-day-20261004/sdk36-first/checks/pi-config.json with read(path, whole=true, raw=true). After the read result, reply with only the answer field, without quotes or commentary.",
+      "timestamp": 1791154618505
+    }
+  ],
+  "tools": [
+    {
+      "name": "read",
+      "description": "Read the complete owned configuration file.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "whole": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "whole",
+          "raw"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

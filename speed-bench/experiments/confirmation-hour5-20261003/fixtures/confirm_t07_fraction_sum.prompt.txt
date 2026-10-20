@@ -1,0 +1,1 @@
+Calculate 5/12 + 7/18 - 1/9 exactly. Report numerator and denominator of the reduced fraction as integers in JSON, then explain.

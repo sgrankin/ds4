@@ -1,0 +1,53 @@
+{
+  "arm": "old-native-before",
+  "summary": {
+    "mode": "native",
+    "endpoint_partition_aligned": true,
+    "identity_native_checked": false,
+    "identity_native_state_equal": false,
+    "identity_native_logits_equal": false,
+    "identity_reuse_state_equal": false,
+    "prefix": 1408,
+    "shift": 65,
+    "span": 65,
+    "tail": 1,
+    "decode": 16,
+    "raw_reference_rows": 18,
+    "raw_candidate_rows": 0,
+    "tape_buffer_and_metadata_bytes": 0,
+    "immutable_tape_bytes": 0,
+    "peak_staging_bytes_including_reserve": 81648171,
+    "staging_budget_bytes": 134217728,
+    "coverage_rejections_preserve_state": false,
+    "precancel_preserves_state": false,
+    "partial_cancel_invalidates": false,
+    "approximate_export_blocked": false,
+    "pair_inputs_reused": 0,
+    "pair_rows_rebuilt": 0,
+    "pair_boundary_rows": 0,
+    "reused_tokens": 0,
+    "fresh_tail_tokens": 0,
+    "fresh_ms_diagnostic": 1404.621,
+    "reuse_ms_diagnostic": 0.0,
+    "mean_kl": 0,
+    "mean_tv": 0,
+    "sum_delta_nll": 0,
+    "argmax_flips": 0,
+    "bit_equal_rows": 0
+  },
+  "raw": {
+    "reference_rows": 18,
+    "reference_sha256": "fab1ace9ec151b58a7a18117c4bd0e38dd9126a36068c7b97b0f793158197f5f",
+    "teacher_token_hex": "ff1f0100670600004f0f00002ed7000093c0000023010000b9110000e6d300007a3900003480000014010000d2c301008ccc01008a8800000d010000d9020000",
+    "full_sha256": "553d7736beb7bbf87896ac75fa9816b150054b08be4df3fe133c12747d198fef",
+    "bytes": 9308256
+  },
+  "state": {
+    ".source.state.bin": "f841b8cd20fed2a14ce8482154dbe274af67c2fd4935aed143ad62aab6267e47",
+    ".fresh.state.bin": "a4d9d89d5bd1bf632c71d2d14a218fb04c0a16347690fd819cb9120f17f86a6d"
+  },
+  "csv_checks": null,
+  "private_state": null,
+  "identity_checks": null,
+  "native_parity": true
+}

@@ -1,0 +1,12 @@
+{
+  "source_revision": "13529bc647a3c04aebf7a4ff75a3d696bfcec7a3",
+  "index_sha256": "06b8928f05463c11917143f0ef9194cf1c87c767b288684543794bd971550651",
+  "listed_files": 17,
+  "listed_bytes": 1060127,
+  "all_source_and_copied_files_match": true,
+  "original_artifacts_mutated": false,
+  "original_guard_rc": 3,
+  "all_producer_rc": 3,
+  "original_caps_preserved": true,
+  "document_sha256": "d9db1c4d5417f133e821390341b858e7840f81fbd797370e42839bb38707f29f"
+}

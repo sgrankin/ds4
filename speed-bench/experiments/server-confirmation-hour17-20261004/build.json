@@ -1,0 +1,15 @@
+{
+  "compiled_runtime_revision": "bc6896aeee2aceba4b4b64e9e8330986da8a60b0",
+  "server_sha256": "4a3f735999412e6150f77ea61012812c55430f6808cb8062a5597ca6d1b6ed6d",
+  "runtime_change": "none; reuse item16 server binary and focused CPU tests",
+  "start_utc": "2026-10-04 15:46:30",
+  "deadline_utc": "2026-10-04 16:36:30",
+  "budget_note": "10 minutes of earlier SDK/Pi source inspection charged; all new preparation/run/analysis/commit within remaining50minutes",
+  "screen_scope": "Separate actual client, new coding and new-fact suffix screens; no combined feature attribution",
+  "screen_driver_revisions": {
+    "clients": "681e2bec9c27602c789f10577dd263413a21b783",
+    "practical": "104aa7675a6bb635fd4bdf7bff5b1144f606111d",
+    "suffix": "7a363a9b30ce9bd02f24e7aecf8645f58653cc6d"
+  },
+  "measurements_finished_utc": "2026-10-04 16:18:47"
+}

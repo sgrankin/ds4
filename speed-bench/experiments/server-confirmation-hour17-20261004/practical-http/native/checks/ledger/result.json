@@ -1,0 +1,87 @@
+{
+  "case": "ledger",
+  "arm": "native",
+  "write_budget": 0,
+  "global_cap": 2048,
+  "wall_seconds": 168.1197583339963,
+  "http_output_tokens": 2048,
+  "http_reasoning_tokens": 1952,
+  "actual_read_count": 1,
+  "actual_write_count": 0,
+  "calls": [
+    {
+      "role": "READ",
+      "name": "read",
+      "call_id": "call_89b9c6579783f354efb89c7ec0fdfd92",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/config.json\",\"whole\":true,\"raw\":true}",
+      "executed": true,
+      "path": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/config.json",
+      "output": "{\n  \"include_deleted\": true,\n  \"sample\": [\n    {\n      \"key\": \"x\",\n      \"revision\": 2,\n      \"op\": \"put\",\n      \"value\": \"new\"\n    },\n    {\n      \"key\": \"x\",\n      \"revision\": 1,\n      \"op\": \"delete\"\n    },\n    {\n      \"key\": \"y\",\n      \"revision\": 3,\n      \"op\": \"put\",\n      \"value\": false\n    },\n    {\n      \"key\": \"y\",\n      \"revision\": 3,\n      \"op\": \"delete\"\n    },\n    {\n      \"key\": \"\",\n      \"revision\": 0,\n      \"op\": \"put\",\n      \"value\": null\n    }\n  ]\n}\n",
+      "tool_ms": 0.27991700335405767
+    }
+  ],
+  "replies": [
+    {
+      "role": "READ",
+      "budget": 0,
+      "seconds": 32.47241804101213,
+      "http_status": 200,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 904,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 904
+        },
+        "output_tokens": 115,
+        "output_tokens_details": {
+          "reasoning_tokens": 19
+        },
+        "total_tokens": 1019
+      },
+      "requested_max_output_tokens": 2048,
+      "incomplete_details": null,
+      "stop_token_observed": null
+    },
+    {
+      "role": "WRITE",
+      "budget": 0,
+      "seconds": 135.6464449579944,
+      "http_status": 200,
+      "response_status": "incomplete",
+      "usage": {
+        "input_tokens": 1201,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1201
+        },
+        "output_tokens": 1933,
+        "output_tokens_details": {
+          "reasoning_tokens": 1933
+        },
+        "total_tokens": 3134
+      },
+      "requested_max_output_tokens": 1933,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "stop_token_observed": null
+    }
+  ],
+  "first_code_path": null,
+  "grade": {
+    "correct": false,
+    "reason": "no first write"
+  },
+  "complete": false,
+  "cap": true,
+  "final_text": "",
+  "errors": [
+    "WRITE request did not complete"
+  ],
+  "config_unchanged": true,
+  "seed_note": "No seed field: this server ignores seed; temperature0 requests native greedy.",
+  "reasoning_history": "Stored previous_response_id preserves private reasoning; current stage instructions replace prior instructions.",
+  "timing_scope": "Whole READ/WRITE/FINAL task including actual read/write; excludes startup and external code grading.",
+  "pass": false
+}

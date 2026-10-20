@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1/driver.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-unused-mixed24/speed-bench/ideas/artifacts/resident-mixed24-confirmation-prepared-20261003-v1",
+    "--manifest-sha256",
+    "b30ff4ebd43adbd030506f605a241bbcd897730a082e472767793f5982d604e3"
+  ],
+  "manifest_sha256": "b30ff4ebd43adbd030506f605a241bbcd897730a082e472767793f5982d604e3",
+  "launch_requires_root_grant": true,
+  "automatic_holdout_run": false
+}

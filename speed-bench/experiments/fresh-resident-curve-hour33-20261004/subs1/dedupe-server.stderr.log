@@ -1,0 +1,79 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.06 GiB (raw 0.01 + compressed 0.05) + buffers 1.09 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 74.51 GiB planned
+ds4: memory detail: ctx=8192 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=8193 backend=metal
+1004 18:24:03 ds4-server: context buffers 1174.48 MiB (ctx=8192, backend=metal, prefill_chunk=512, raw_kv_rows=128, compressed_kv_rows=8193)
+1004 18:24:03 ds4-server: 2 resident sessions request at least 2.29 GiB of context buffers, or 1.21 GiB when the model shares one prefill workspace
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+ds4: V4.1 static context buffers 1174.48 MiB (ctx=8192), Engram disk-only
+1004 18:24:03 ds4-server: state cache enabled dir=/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh33-cache-subs1 profile=413c59a1ce28b4fbfb4d8f210c8591b1486e1d6a
+1004 18:24:03 ds4-server: durable text/tool responses enabled dir=/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/fresh33-store-subs1
+1004 18:24:03 ds4-server: experimental suffix reuse enabled fresh_tail=64 canonical_full_input=1 prefix_pad=1 requires=prompt_cache_key
+1004 18:24:03 ds4-server: batched mode enabled resident_sessions=2 prefill_quantum=2048 mixed_prefill_quantum=128 decode_coalesce_us=2000
+1004 18:24:03 ds4-server: listening on http://127.0.0.1:55657
+1004 18:24:03 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prompt start
+1004 18:24:03 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source
+1004 18:24:17 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 512/1563 (32.8%) chunk=0.00 t/s avg=36.27 t/s 14.118s
+1004 18:24:20 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 576/1563 (36.9%) chunk=24.09 t/s avg=34.34 t/s 16.775s
+1004 18:24:21 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 640/1563 (40.9%) chunk=47.12 t/s avg=35.29 t/s 18.133s
+1004 18:24:23 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 704/1563 (45.0%) chunk=48.06 t/s avg=36.17 t/s 19.465s
+1004 18:24:24 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 768/1563 (49.1%) chunk=45.30 t/s avg=36.79 t/s 20.878s
+1004 18:24:26 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 832/1563 (53.2%) chunk=41.21 t/s avg=37.09 t/s 22.431s
+1004 18:24:27 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 896/1563 (57.3%) chunk=47.88 t/s avg=37.70 t/s 23.768s
+1004 18:24:28 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 960/1563 (61.4%) chunk=48.81 t/s avg=38.28 t/s 25.079s
+1004 18:24:30 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1024/1563 (65.5%) chunk=48.42 t/s avg=38.79 t/s 26.401s
+1004 18:24:31 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1088/1563 (69.6%) chunk=50.29 t/s avg=39.32 t/s 27.673s
+1004 18:24:33 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1152/1563 (73.7%) chunk=34.81 t/s avg=39.03 t/s 29.512s
+1004 18:24:35 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1216/1563 (77.8%) chunk=33.26 t/s avg=38.68 t/s 31.436s
+1004 18:24:37 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1280/1563 (81.9%) chunk=34.09 t/s avg=38.42 t/s 33.314s
+1004 18:24:38 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1344/1563 (86.0%) chunk=39.04 t/s avg=38.45 t/s 34.953s
+1004 18:24:40 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1408/1563 (90.1%) chunk=39.14 t/s avg=38.48 t/s 36.588s
+1004 18:24:41 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1472/1563 (94.2%) chunk=40.61 t/s avg=38.57 t/s 38.164s
+1004 18:24:42 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1499/1563 (95.9%) chunk=37.67 t/s avg=38.55 t/s 38.881s
+1004 18:24:44 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prefill chunk 1563/1563 (100.0%) chunk=37.49 t/s avg=38.51 t/s 40.588s
+1004 18:24:44 ds4-server: chat ctx=0..1563:1563 RESPPROTO TOOLS prompt done 40.712s
+1004 18:24:47 ds4-server: chat ctx=1563..1613:50 gen=50 RESPPROTO TOOLS DSML_START decoding chunk=19.00 t/s avg=19.00 t/s 2.631s
+1004 18:24:49 ds4-server: chat ctx=1613..1663:50 gen=100 RESPPROTO TOOLS DSML_START decoding chunk=20.16 t/s avg=19.57 t/s 5.111s
+1004 18:24:50 ds4-server: chat ctx=1663..1691:28 gen=128 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=21.59 t/s avg=19.98 t/s 6.408s
+1004 18:24:50 ds4-server: tool calls ctx=0..1563:1563 RESPPROTO n=1 raw_tool_text=1 ids=[call_0f1d0c80f7951172e81fef70701becf7] names=[read]
+1004 18:24:50 ds4-server: reasoning_summary id=chatcmpl-7ab396ec448b990c5f3f5969 ctx=0..1563:1563 budget=0 thinking_tokens=32 forced=0 deferred=0
+1004 18:24:50 ds4-server: chat ctx=0..1563:1563 gen=128 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 47.121s
+1004 18:24:50 ds4-server: responses replay RESPPROTO missing reasoning state; continuing from visible history source=none cached=0 prompt=1141
+1004 18:24:50 ds4-server: chat ctx=0..1141:1141 RESPPROTO TOOLS prompt start
+1004 18:25:06 ds4-server: chat ctx=0..1141:1141 RESPPROTO TOOLS prefill chunk 436/1141 (38.2%) chunk=0.00 t/s avg=28.57 t/s 15.259s
+1004 18:25:08 ds4-server: chat ctx=0..1141:1141 RESPPROTO TOOLS prefill chunk 945/1141 (82.8%) chunk=227.82 t/s avg=54.02 t/s 17.494s
+1004 18:25:10 ds4-server: chat ctx=0..1141:1141 RESPPROTO TOOLS prefill chunk 1009/1141 (88.4%) chunk=34.11 t/s avg=52.09 t/s 19.370s
+1004 18:25:12 ds4-server: chat ctx=0..1141:1141 RESPPROTO TOOLS prefill chunk 1073/1141 (94.0%) chunk=37.17 t/s avg=50.87 t/s 21.092s
+1004 18:25:12 ds4-server: chat ctx=0..1141:1141 RESPPROTO TOOLS prefill chunk 1077/1141 (94.4%) chunk=23.25 t/s avg=50.65 t/s 21.264s
+1004 18:25:12 ds4-server: suffix APPROXIMATE slot=1 reused=445 fresh=260 graft_fresh=196 source=1118:1563 destination=436:881 latest_user_start=978 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 21325.546 ms
+1004 18:25:14 ds4-server: chat ctx=445..1141:696 RESPPROTO TOOLS prefill chunk 696/696 (100.0%) chunk=36.09 t/s avg=30.21 t/s 23.037s
+1004 18:25:14 ds4-server: chat ctx=445..1141:696 RESPPROTO TOOLS prompt done 23.110s
+1004 18:25:16 ds4-server: chat ctx=1141..1191:50 gen=50 RESPPROTO TOOLS THINKING decoding chunk=17.72 t/s avg=17.72 t/s 2.822s
+1004 18:25:19 ds4-server: chat ctx=1191..1241:50 gen=100 RESPPROTO TOOLS THINKING decoding chunk=19.43 t/s avg=18.54 t/s 5.395s
+1004 18:25:20 ds4-server: reasoning budget=128 forced_close generated_thinking=128 pos=1269
+1004 18:25:22 ds4-server: chat ctx=1241..1291:50 gen=150 RESPPROTO TOOLS DSML_START decoding chunk=19.06 t/s avg=18.71 t/s 8.018s
+1004 18:25:24 ds4-server: chat ctx=1291..1341:50 gen=200 RESPPROTO TOOLS DSML_START decoding chunk=18.06 t/s avg=18.54 t/s 10.786s
+1004 18:25:27 ds4-server: chat ctx=1341..1391:50 gen=250 RESPPROTO TOOLS DSML_START decoding chunk=19.18 t/s avg=18.67 t/s 13.393s
+1004 18:25:30 ds4-server: chat ctx=1391..1441:50 gen=300 RESPPROTO TOOLS DSML_START decoding chunk=19.68 t/s avg=18.83 t/s 15.934s
+1004 18:25:32 ds4-server: chat ctx=1441..1486:45 gen=345 RESPPROTO TOOLS DSML_START DSML_END decoding chunk=19.59 t/s avg=18.92 t/s 18.232s
+1004 18:25:32 ds4-server: tool calls ctx=445..1141:696 RESPPROTO n=1 raw_tool_text=1 ids=[call_c84c825dfa23f49a6ae92efddcf84b7c] names=[write]
+1004 18:25:32 ds4-server: reasoning_summary id=chatcmpl-0d41cf2320bc1102359a7dee ctx=445..1141:696 budget=128 thinking_tokens=128 forced=1 deferred=0
+1004 18:25:32 ds4-server: chat ctx=445..1141:696 gen=345 RESPPROTO TOOLS DSML_START DSML_END finish=tool_calls 41.342s
+1004 18:25:32 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1486 prompt=1529 approximate=1
+1004 18:25:32 ds4-server: chat ctx=1486..1529:43 RESPPROTO TOOLS prompt start
+1004 18:25:33 ds4-server: chat ctx=1486..1529:43 RESPPROTO TOOLS prefill chunk 43/43 (100.0%) chunk=0.00 t/s avg=33.58 t/s 1.281s
+1004 18:25:33 ds4-server: chat ctx=1486..1529:43 RESPPROTO TOOLS prompt done 1.365s
+1004 18:25:36 ds4-server: chat ctx=1529..1579:50 gen=50 RESPPROTO TOOLS decoding chunk=16.08 t/s avg=16.08 t/s 3.109s
+1004 18:25:37 ds4-server: chat ctx=1579..1599:20 gen=70 RESPPROTO TOOLS decoding chunk=18.36 t/s avg=16.67 t/s 4.198s
+1004 18:25:37 ds4-server: reasoning_summary id=chatcmpl-2847cea2cc42f6faf67c3f7b ctx=1486..1529:43 budget=1 thinking_tokens=0 forced=0 deferred=0
+1004 18:25:37 ds4-server: chat ctx=1486..1529:43 gen=70 RESPPROTO TOOLS finish=stop 5.563s
+1004 18:25:38 ds4-server: shutdown requested, draining requests
+1004 18:25:38 ds4-server: state_cache_summary {"hot_bytes":0,"ssd_bytes":106451411,"metadata_bytes":77229,"endpoints":7,"chunks":406,"pinned_endpoints":0,"hot_reads":0,"disk_reads":85,"endpoint_evictions":0}
+ds4: resident-route layers=21720 substitutions=3288 native_misses=12258 skipped_loads=3288 skipped_bytes=32726384640 mean_mass=0.11174380 mean_score_gap=0.05988552 mean_affinity_ratio=0.95012737 mean_rank=7.350 full_snapshots=3288 double_layers=0 planned_substitutions=3288 drops=0 triple_layers=0
+ds4: resident-route-native-weights requested=1 substitutions=3288

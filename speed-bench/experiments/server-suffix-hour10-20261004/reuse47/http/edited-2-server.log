@@ -1,0 +1,12 @@
+1004 09:20:08 slot 1: request reuses nothing; evicting checkpoint (2361 tokens, idle 0 s, protected)
+1004 09:20:08 ds4-server: live kv cache miss RESPPROTO live=2361 prompt=1949 common=53 vision=match reason=token-mismatch
+1004 09:20:08 ds4-server: chat ctx=0..1949:1949 RESPPROTO prompt start
+1004 09:20:08 ds4-server: chat ctx=0..1949:1949 RESPPROTO prefill chunk 1/1949 (0.1%) chunk=0.00 t/s avg=5.66 t/s 0.177s
+1004 09:20:10 ds4-server: chat ctx=0..1949:1949 RESPPROTO prefill chunk 52/1949 (2.7%) chunk=30.59 t/s avg=28.20 t/s 1.844s
+1004 09:20:10 ds4-server: chat ctx=0..1949:1949 RESPPROTO prefill chunk 1821/1949 (93.4%) chunk=2129.73 t/s avg=680.86 t/s 2.675s
+1004 09:20:11 ds4-server: suffix APPROXIMATE slot=1 reused=1732 fresh=165 graft_fresh=37 source=496:2228 destination=52:1784 latest_user_start=1918 pre_rope=1 source_ssd=1 source_approximate=1 2747.777 ms
+1004 09:20:12 ds4-server: chat ctx=0..1949:1949 RESPPROTO prefill chunk 153/217 (70.5%) chunk=43.18 t/s avg=36.81 t/s 4.157s
+1004 09:20:14 ds4-server: chat ctx=0..1949:1949 RESPPROTO prefill chunk 217/217 (100.0%) chunk=37.21 t/s avg=36.92 t/s 5.877s
+1004 09:20:14 ds4-server: chat ctx=0..1949:1949 RESPPROTO prompt done 5.966s
+1004 09:20:15 ds4-server: chat ctx=1949..1962:13 gen=13 RESPPROTO decoding chunk=16.12 t/s avg=16.12 t/s 0.807s
+1004 09:20:15 ds4-server: chat ctx=0..1949:1949 gen=13 RESPPROTO finish=stop 6.773s

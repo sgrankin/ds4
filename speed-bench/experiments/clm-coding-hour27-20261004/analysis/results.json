@@ -1,0 +1,837 @@
+{
+  "rows": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "wall_seconds": 119.26724533300148,
+      "raw_driver_pass": false,
+      "raw_grade_correct": false,
+      "raw_grade_reason": "FileNotFoundError",
+      "grade_source": "saved regrade.stdout",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 1090,
+      "output_tokens": 688,
+      "thinking_tokens": 155,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects, per exact key, the event with the greatest revision (last event wins on ties), emits winning puts as `{key, revision, value}`, emits winning deletes as `{key, revision}` only when `config[\"include_deleted\"]` is true, sorts both lists by key using normal string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+      "read_seconds": 52.435359042006894,
+      "read_thinking": 26,
+      "read_cached": 0,
+      "read_fresh": 1591,
+      "read_input_tokens": 1591,
+      "read_output_tokens": 122,
+      "write_seconds": 57.93359149999742,
+      "write_thinking": 128,
+      "write_cached": 0,
+      "write_fresh": 1208,
+      "write_input_tokens": 1208,
+      "write_output_tokens": 444,
+      "final_seconds": 8.895370041995193,
+      "final_thinking": 1,
+      "final_cached": 1652,
+      "final_fresh": 43,
+      "final_input_tokens": 1695,
+      "final_output_tokens": 122
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "wall_seconds": 116.47295799999847,
+      "raw_driver_pass": false,
+      "raw_grade_correct": false,
+      "raw_grade_reason": "FileNotFoundError",
+      "grade_source": "saved regrade.stdout",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 988,
+      "output_tokens": 715,
+      "thinking_tokens": 190,
+      "final_text": "Implemented `solve(payload, config)` in `solution.py`. It reads capacity from the config dict (falling back to treating config as an integer), tracks hits/misses with an LRU list, moves hits to most-recently-used, evicts the least-recently-used key on overflow while recording evictions in order, and returns `{cache, hits, misses, evictions}`. Non-positive capacity yields all misses with empty cache and evictions. Payload and config are not mutated.",
+      "read_seconds": 53.21404620898829,
+      "read_thinking": 62,
+      "read_cached": 0,
+      "read_fresh": 1573,
+      "read_input_tokens": 1573,
+      "read_output_tokens": 157,
+      "write_seconds": 55.2592118330067,
+      "write_thinking": 128,
+      "write_cached": 0,
+      "write_fresh": 1065,
+      "write_input_tokens": 1065,
+      "write_output_tokens": 453,
+      "final_seconds": 7.996993709006347,
+      "final_thinking": 0,
+      "final_cached": 1518,
+      "final_fresh": 42,
+      "final_input_tokens": 1560,
+      "final_output_tokens": 105
+    },
+    {
+      "arm": "reuse",
+      "case": "ledger",
+      "wall_seconds": 108.35863504100416,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 1159,
+      "output_tokens": 755,
+      "thinking_tokens": 205,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects the winning event per exact key by highest revision, breaking ties by the last payload occurrence, emits winning puts in `live`, emits winning deletes in `deleted` only when `include_deleted` is true, sorts both lists by key using normal Python string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+      "read_seconds": 50.35840479200124,
+      "read_thinking": 76,
+      "read_cached": 0,
+      "read_fresh": 1591,
+      "read_input_tokens": 1591,
+      "read_output_tokens": 172,
+      "write_seconds": 49.73746870899049,
+      "write_thinking": 128,
+      "write_cached": 473,
+      "write_fresh": 735,
+      "write_input_tokens": 1208,
+      "write_output_tokens": 471,
+      "final_seconds": 8.25988979099202,
+      "final_thinking": 1,
+      "final_cached": 1679,
+      "final_fresh": 43,
+      "final_input_tokens": 1722,
+      "final_output_tokens": 112
+    },
+    {
+      "arm": "reuse",
+      "case": "lru",
+      "wall_seconds": 99.43461299999035,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 806,
+      "output_tokens": 630,
+      "thinking_tokens": 168,
+      "final_text": "Implemented `solve(payload, config)` in `solution.py`. It tracks hits/misses with an LRU list, moves hit keys to most-recently-used, evicts the least-recently-used key on overflow (recording evictions in order), and returns `{cache, hits, misses, evictions}`. Non-positive capacity yields all misses with empty cache/evictions and zero hits. Inputs are not mutated.",
+      "read_seconds": 48.18308395901113,
+      "read_thinking": 40,
+      "read_cached": 0,
+      "read_fresh": 1573,
+      "read_input_tokens": 1573,
+      "read_output_tokens": 135,
+      "write_seconds": 44.061866167001426,
+      "write_thinking": 128,
+      "write_cached": 455,
+      "write_fresh": 610,
+      "write_input_tokens": 1065,
+      "write_output_tokens": 404,
+      "final_seconds": 7.18694429101015,
+      "final_thinking": 0,
+      "final_cached": 1469,
+      "final_fresh": 42,
+      "final_input_tokens": 1511,
+      "final_output_tokens": 91
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "wall_seconds": 118.49835795900435,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 1090,
+      "output_tokens": 688,
+      "thinking_tokens": 155,
+      "final_text": "Implemented `solve(payload, config)` in `/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-visible/ledger/solution.py`.\n\nIt selects, per exact key, the event with the greatest revision (last event wins on ties), emits winning puts as `{key, revision, value}`, emits winning deletes as `{key, revision}` only when `config[\"include_deleted\"]` is true, sorts both lists by key using normal string ordering, preserves empty keys and JSON values, and does not mutate the inputs.",
+      "read_seconds": 51.60494312499941,
+      "read_thinking": 26,
+      "read_cached": 0,
+      "read_fresh": 1591,
+      "read_input_tokens": 1591,
+      "read_output_tokens": 122,
+      "write_seconds": 58.06988754199119,
+      "write_thinking": 128,
+      "write_cached": 0,
+      "write_fresh": 1208,
+      "write_input_tokens": 1208,
+      "write_output_tokens": 444,
+      "final_seconds": 8.820566333000897,
+      "final_thinking": 1,
+      "final_cached": 1652,
+      "final_fresh": 43,
+      "final_input_tokens": 1695,
+      "final_output_tokens": 122
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "wall_seconds": 117.02536050000344,
+      "raw_driver_pass": true,
+      "raw_grade_correct": true,
+      "raw_grade_reason": null,
+      "grade_source": "original driver grade",
+      "saved_code_correct": true,
+      "saved_code_tests": 161,
+      "pipeline_complete": true,
+      "qualified_pass": true,
+      "cap": false,
+      "reads": 1,
+      "writes": 1,
+      "first_code_bytes": 988,
+      "output_tokens": 715,
+      "thinking_tokens": 190,
+      "final_text": "Implemented `solve(payload, config)` in `solution.py`. It reads capacity from the config dict (falling back to treating config as an integer), tracks hits/misses with an LRU list, moves hits to most-recently-used, evicts the least-recently-used key on overflow while recording evictions in order, and returns `{cache, hits, misses, evictions}`. Non-positive capacity yields all misses with empty cache and evictions. Payload and config are not mutated.",
+      "read_seconds": 53.44632941701275,
+      "read_thinking": 62,
+      "read_cached": 0,
+      "read_fresh": 1573,
+      "read_input_tokens": 1573,
+      "read_output_tokens": 157,
+      "write_seconds": 55.53809045800881,
+      "write_thinking": 128,
+      "write_cached": 0,
+      "write_fresh": 1065,
+      "write_input_tokens": 1065,
+      "write_output_tokens": 453,
+      "final_seconds": 8.038128625004902,
+      "final_thinking": 0,
+      "final_cached": 1518,
+      "final_fresh": 42,
+      "final_input_tokens": 1560,
+      "final_output_tokens": 105
+    }
+  ],
+  "by_arm": {
+    "native-before": {
+      "task_wall_seconds": 235.74020333299995,
+      "launcher_wall_seconds": 240.17130141599046,
+      "raw_driver_passes": 0,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1403,
+      "thinking_tokens": 345,
+      "role_seconds": {
+        "READ": 105.64940525099519,
+        "WRITE": 113.19280333300412,
+        "FINAL": 16.89236375100154
+      },
+      "role_thinking": {
+        "READ": 88,
+        "WRITE": 256,
+        "FINAL": 1
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 0,
+        "FINAL": 3170
+      },
+      "role_fresh": {
+        "READ": 3164,
+        "WRITE": 2273,
+        "FINAL": 85
+      },
+      "forced": 3,
+      "deferred": 0,
+      "grafts": 0,
+      "approximate_visible_continuations": 0,
+      "logical_disk_read_ops": 0
+    },
+    "reuse": {
+      "task_wall_seconds": 207.7932480409945,
+      "launcher_wall_seconds": 212.45593366699177,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1385,
+      "thinking_tokens": 373,
+      "role_seconds": {
+        "READ": 98.54148875101237,
+        "WRITE": 93.79933487599192,
+        "FINAL": 15.44683408200217
+      },
+      "role_thinking": {
+        "READ": 116,
+        "WRITE": 256,
+        "FINAL": 1
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 928,
+        "FINAL": 3148
+      },
+      "role_fresh": {
+        "READ": 3164,
+        "WRITE": 1345,
+        "FINAL": 85
+      },
+      "forced": 3,
+      "deferred": 0,
+      "grafts": 2,
+      "approximate_visible_continuations": 2,
+      "logical_disk_read_ops": 170
+    },
+    "native-after": {
+      "task_wall_seconds": 235.5237184590078,
+      "launcher_wall_seconds": 240.3777656250022,
+      "raw_driver_passes": 2,
+      "saved_code_passes": 2,
+      "qualified_passes": 2,
+      "caps": 0,
+      "reads": 2,
+      "writes": 2,
+      "output_tokens": 1403,
+      "thinking_tokens": 345,
+      "role_seconds": {
+        "READ": 105.05127254201216,
+        "WRITE": 113.607978,
+        "FINAL": 16.8586949580058
+      },
+      "role_thinking": {
+        "READ": 88,
+        "WRITE": 256,
+        "FINAL": 1
+      },
+      "role_cached": {
+        "READ": 0,
+        "WRITE": 0,
+        "FINAL": 3170
+      },
+      "role_fresh": {
+        "READ": 3164,
+        "WRITE": 2273,
+        "FINAL": 85
+      },
+      "forced": 3,
+      "deferred": 0,
+      "grafts": 0,
+      "approximate_visible_continuations": 0,
+      "logical_disk_read_ops": 0
+    }
+  },
+  "controls_vs_native_before": {
+    "native-before": {
+      "ledger": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "lru": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "reuse": {
+      "ledger": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "lru": {
+        "first_code_bytes_equal": false,
+        "final_text_equal": false,
+        "role_usage_equal": false,
+        "public_output_equal": [
+          true,
+          false,
+          false
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    },
+    "native-after": {
+      "ledger": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      },
+      "lru": {
+        "first_code_bytes_equal": true,
+        "final_text_equal": true,
+        "role_usage_equal": true,
+        "public_output_equal": [
+          true,
+          true,
+          true
+        ],
+        "read_request_equal": true,
+        "source_and_edited_context_equal": true
+      }
+    }
+  },
+  "grafts": [
+    {
+      "arm": "reuse",
+      "case": "ledger",
+      "slot": 1,
+      "reused": 473,
+      "fresh": 299,
+      "graft_fresh": 235,
+      "source": "1118:1591",
+      "destination": "436:909",
+      "latest_user_start": 1006,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 22.139808000000002,
+      "raw_log": "1004 15:53:34 ds4-server: suffix APPROXIMATE slot=1 reused=473 fresh=299 graft_fresh=235 source=1118:1591 destination=436:909 latest_user_start=1006 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 22139.808 ms"
+    },
+    {
+      "arm": "reuse",
+      "case": "lru",
+      "slot": 1,
+      "reused": 455,
+      "fresh": 174,
+      "graft_fresh": 110,
+      "source": "1118:1573",
+      "destination": "436:891",
+      "latest_user_start": 987,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 19.367580999999998,
+      "raw_log": "1004 15:55:19 ds4-server: suffix APPROXIMATE slot=1 reused=455 fresh=174 graft_fresh=110 source=1118:1573 destination=436:891 latest_user_start=987 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 19367.581 ms"
+    }
+  ],
+  "visible_continuations": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1652,
+      "prompt": 1695,
+      "fresh": 43,
+      "approximate": 0,
+      "raw_log": "1004 15:49:46 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1652 prompt=1695 approximate=0"
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1518,
+      "prompt": 1560,
+      "fresh": 42,
+      "approximate": 0,
+      "raw_log": "1004 15:51:45 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1518 prompt=1560 approximate=0"
+    },
+    {
+      "arm": "reuse",
+      "case": "ledger",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1679,
+      "prompt": 1722,
+      "fresh": 43,
+      "approximate": 1,
+      "raw_log": "1004 15:54:01 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1679 prompt=1722 approximate=1"
+    },
+    {
+      "arm": "reuse",
+      "case": "lru",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1469,
+      "prompt": 1511,
+      "fresh": 42,
+      "approximate": 1,
+      "raw_log": "1004 15:55:44 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1469 prompt=1511 approximate=1"
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1652,
+      "prompt": 1695,
+      "fresh": 43,
+      "approximate": 0,
+      "raw_log": "1004 15:57:54 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1652 prompt=1695 approximate=0"
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1518,
+      "prompt": 1560,
+      "fresh": 42,
+      "approximate": 0,
+      "raw_log": "1004 15:59:54 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1518 prompt=1560 approximate=0"
+    }
+  ],
+  "reasoning_summaries": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "context": "0..1591:1591",
+      "budget": 0,
+      "thinking": 26,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "context": "0..1208:1208",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "context": "1652..1695:43",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "context": "0..1573:1573",
+      "budget": 0,
+      "thinking": 62,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "context": "0..1065:1065",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "context": "1518..1560:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "reuse",
+      "case": "ledger",
+      "context": "0..1591:1591",
+      "budget": 0,
+      "thinking": 76,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "reuse",
+      "case": "ledger",
+      "context": "473..1208:735",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "reuse",
+      "case": "ledger",
+      "context": "1679..1722:43",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "reuse",
+      "case": "lru",
+      "context": "0..1573:1573",
+      "budget": 0,
+      "thinking": 40,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "reuse",
+      "case": "lru",
+      "context": "455..1065:610",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "reuse",
+      "case": "lru",
+      "context": "1469..1511:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "context": "0..1591:1591",
+      "budget": 0,
+      "thinking": 26,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "context": "0..1208:1208",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "context": "1652..1695:43",
+      "budget": 1,
+      "thinking": 1,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "context": "0..1573:1573",
+      "budget": 0,
+      "thinking": 62,
+      "forced": 0,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "context": "0..1065:1065",
+      "budget": 128,
+      "thinking": 128,
+      "forced": 1,
+      "deferred": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "context": "1518..1560:42",
+      "budget": 1,
+      "thinking": 0,
+      "forced": 0,
+      "deferred": 0
+    }
+  ],
+  "cache_shutdowns": [
+    {
+      "arm": "native-before",
+      "case": "ledger",
+      "hot_bytes": 0,
+      "ssd_bytes": 61816236,
+      "metadata_bytes": 27211,
+      "endpoints": 3,
+      "chunks": 165,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 0,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-before",
+      "case": "lru",
+      "hot_bytes": 0,
+      "ssd_bytes": 121736888,
+      "metadata_bytes": 54238,
+      "endpoints": 6,
+      "chunks": 330,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 0,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "reuse",
+      "case": "ledger",
+      "hot_bytes": 0,
+      "ssd_bytes": 109125137,
+      "metadata_bytes": 74990,
+      "endpoints": 7,
+      "chunks": 392,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "reuse",
+      "case": "lru",
+      "hot_bytes": 0,
+      "ssd_bytes": 214519509,
+      "metadata_bytes": 151877,
+      "endpoints": 14,
+      "chunks": 797,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 85,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "ledger",
+      "hot_bytes": 0,
+      "ssd_bytes": 61816236,
+      "metadata_bytes": 27210,
+      "endpoints": 3,
+      "chunks": 165,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 0,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-after",
+      "case": "lru",
+      "hot_bytes": 0,
+      "ssd_bytes": 121736888,
+      "metadata_bytes": 54237,
+      "endpoints": 6,
+      "chunks": 330,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 0,
+      "endpoint_evictions": 0
+    }
+  ],
+  "guard_summaries": [
+    {
+      "arm": "native-before",
+      "status": "complete",
+      "child_returncode": 3,
+      "samples": 232,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.012998046875,
+      "swap_last_gb": 0.012998046875,
+      "peak_wired_compressor_gb": 84.42710876464844,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "reuse",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 206,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.012998046875,
+      "swap_last_gb": 0.012998046875,
+      "peak_wired_compressor_gb": 84.18922424316406,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "native-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 232,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.012998046875,
+      "swap_last_gb": 0.01763671875,
+      "peak_wired_compressor_gb": 84.30802917480469,
+      "max_consecutive_bad": 0
+    }
+  ],
+  "native_mean": {
+    "task_wall_seconds": 235.63196089600387,
+    "launcher_wall_seconds": 240.27453352049633
+  },
+  "change_vs_native_mean_percent": {
+    "native-before": {
+      "task_wall_seconds": 0.04593707771411992,
+      "launcher_wall_seconds": -0.042964230538011794
+    },
+    "reuse": {
+      "task_wall_seconds": -11.814489320188603,
+      "launcher_wall_seconds": -11.577839501301757
+    },
+    "native-after": {
+      "task_wall_seconds": -0.04593707771410882,
+      "launcher_wall_seconds": 0.04296423053800069
+    }
+  },
+  "native_after_vs_before_percent": {
+    "task_wall_seconds": -0.09183197050456338,
+    "launcher_wall_seconds": 0.08596539544669657
+  },
+  "scope": "Raw path-grader failures retained; saved first attempts regraded without model retries. READ histories already diverge before graft. Public and code checks do not establish private identity. Full-input suffix0 vs64, one authored edit, no paired NLL or pending-source restart claim."
+}

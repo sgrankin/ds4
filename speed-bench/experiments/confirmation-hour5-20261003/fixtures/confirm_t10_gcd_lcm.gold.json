@@ -1,0 +1,12 @@
+{
+  "gold": {
+    "gcd": 6,
+    "lcm": 420
+  },
+  "oracle_input": {
+    "question": "For the positive integers 84 and 30, report gcd and lcm in JSON. Explain using Euclidean division and the product identity."
+  },
+  "explanation": "Dividing eighty-four by thirty leaves twenty-four. Dividing thirty by twenty-four leaves six, and twenty-four is divisible by six. Thus the greatest common divisor is six. The product eighty-four times thirty is 2520, and dividing it by six gives the least common multiple, 420.",
+  "category": "math",
+  "scope": "New authored content, fixed before any model outcome."
+}

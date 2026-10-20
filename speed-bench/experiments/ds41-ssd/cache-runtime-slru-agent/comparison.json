@@ -1,0 +1,36 @@
+{
+  "fresh": {
+    "control": {
+      "samples_ms": [
+        8886.0,
+        8720.0
+      ],
+      "mean_ms": 8803.0
+    },
+    "candidate": {
+      "samples_ms": [
+        9430.0,
+        9312.0
+      ],
+      "mean_ms": 9371.0
+    },
+    "change_percent": 6.452345791207548
+  },
+  "restored": {
+    "control": {
+      "samples_ms": [
+        12910.0,
+        12725.0
+      ],
+      "mean_ms": 12817.5
+    },
+    "candidate": {
+      "samples_ms": [
+        13122.0,
+        12968.0
+      ],
+      "mean_ms": 13045.0
+    },
+    "change_percent": 1.774917105519802
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "gold": {
+    "denominator": 1024,
+    "numerator": 3367
+  },
+  "oracle_input": {
+    "first_exponent": 0,
+    "last_exponent": 5,
+    "ratio_denominator": 4,
+    "ratio_numerator": 3
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Exact finite rational series; not sequential price percentages or bounded-composition counting."
+}

@@ -1,0 +1,13 @@
+{
+  "time": 1790983221.075436,
+  "root_session": 39064,
+  "guard_returncode": 3,
+  "root_lock_reacquired": true,
+  "matching_live_model_processes": [],
+  "samples": 294,
+  "pressure_levels": [
+    1
+  ],
+  "adverse_samples": 0,
+  "swap_growth_gib": 0.0
+}

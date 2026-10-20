@@ -1,0 +1,84 @@
+We need read config.json whole raw. Then write solution.py. Only one read call and one write call. Let's read config.json.
+
+🛠️ Reading config.json (whole file)...
+
+We need implement solve(payload, config). Payload list of integer [start,end] intervals. Ignore empty or reversed intervals. Return sorted nonoverlapping [start,end] intervals covering input union; obey merge_touching in config.
+
+Need understand semantics. Half-open interval coalescing. Intervals [start,end) presumably. Empty if start >= end? Reversed if start > end? "Ignore empty or reversed intervals." Empty interval maybe start == end. Reversed start > end. So valid start < end. merge_touching true means merge intervals that touch, i.e., [1,4) and [4,6) merge to [1,6). If false, touching intervals remain separate? But "sorted nonoverlapping intervals covering input union" — if merge_touching false, [1,4) and [4,6) are nonoverlapping half-open (they share endpoint but no overlap), so keep separate. If true, merge into [1,6). Also overlapping intervals merge regardless.
+
+Config may be dict or maybe config.json contents passed as config. Need robust. Only plain function definitions, no imports, no decorators, annotations, default args, classes. Module-level only def solve. No underscore names. No
+
+🛠️ write  path=solution.py
+def solve(payload, config):
+    intervals = []
+    for item in payload:
+        if type(item) is not list and type(item) is not tuple:
+            continue
+        if len(item) != 2:
+            continue
+        start = item[0]
+        end = item[1]
+        if type(start) is not int or type(end) is not int:
+            continue
+        if start >= end:
+            continue
+        intervals.append([start, end])
+    intervals.sort()
+    merge_touching = False
+    if type(config) is dict:
+        value = config.get("merge_touching")
+        if value is True:
+            merge_touching = True
+        elif value is False:
+            merge_touching = False
+    elif type(config) is bool:
+        merge_touching = config
+    result = []
+    for interval in intervals:
+        if result:
+            last = result[-1]
+            if interval[0] < last[1] or (merge_touching and interval[0] == last[1]):
+                if interval[1] > last[1]:
+                    last[1] = interval[1]
+                continue
+        result.append([interval[0], interval[1]])
+    return result
+
+We wrote. But need consider config may be dict with merge_touching false; our default false. Fine. But what if config is not dict and not bool? default false. Good.
+
+Potential issue: "Ignore empty or reversed intervals." Empty could mean [] (empty list) or [x,x]? We handle both. Reversed start>end. Good.
+
+Potential issue: payload items may be tuples? We accept list/tuple. Good.
+
+Potential issue: type(item) is not list and not tuple — if payload contains something else skip. Good.
+
+Potential issue: bool is subclass of int; type(start) is not int excludes bool. Fine.
+
+Potential issue: sorting intervals.sort() sorts by start then end. Fine.
+
+Potential issue: merge_touching true and interval[0] == last[1] merges. But what about interval[0] < last[1] always merges. Good.
+
+Potential issue: if interval[0] == last[1] and merge_touching false, we append separate. Good.
+
+Potential issue: if interval[0] > last[1], append. Good.
+
+Potential issue: if interval[0] < last[1] but interval[1] <= last[1], we continue (covered). Good.
+
+Potential issue: result[-1] mutation okay.
+
+Potential issue: no imports, no decorators, annotations, default args, classes. We have only def solve. No underscore names. We use type() builtin. Good.
+
+But "At module level use only plain function definitions" — our module only has def solve. Good.
+
+One concern: config might be dict with merge_touching absent; default false. Fine.
+
+Another concern: "Half-open interval coalescing" maybe empty interval defined as start == end, reversed start > end. We handle.
+
+Another concern: "Return sorted nonoverlapping [start,end] intervals covering the input union" — if merge_touching false, intervals that touch are nonoverlapping in half-open sense, so separate. Good.
+
+Could there be config as JSON object with key "merge_touching": false. Good.
+
+Need finish brief plain answer.
+
+Implemented `solve` in `solution.py`: it filters invalid intervals, sorts them, and coalesces overlapping intervals (and touching intervals when `merge_touching` is true).
+

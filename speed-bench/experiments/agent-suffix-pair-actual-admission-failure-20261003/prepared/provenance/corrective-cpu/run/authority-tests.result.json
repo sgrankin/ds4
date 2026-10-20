@@ -1,0 +1,13 @@
+{
+  "label": "authority-tests",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-delivery/tests/test_agent_suffix_pair_actual_delivery_authority.py"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 0.09064912796020508,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "5ddc1eb9968188b6ed8542fbefd82b9d656c3f8397865b1b05839d4da96186d6",
+  "warning": false,
+  "tests": 8
+}

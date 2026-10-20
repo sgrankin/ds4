@@ -1,0 +1,18 @@
+{
+  "status": "RETAINED_IMPORT_SCOPE_ASSERTION_AFTER_TRACK",
+  "time": 1791026575.259063,
+  "reason": "seven authored ROOT executors were already tracked in protected MAIN child",
+  "ROOT_first_import_executor_sha256": "8637bc4ce61ec5b44a110fe9f278cc86a8c4b624e010e4f3f80b566f33217ebe",
+  "additional_tracked_ROOT_executors": {
+    "speed-bench/ideas/root-clm-oracle-launch-v1.py": "788aa2d73399b7e44e0087e3d729fa788c17cb258315657f2c2dd2db2fdfc980",
+    "speed-bench/ideas/root-clm-oracle-materialization-v1.py": "eaafab55d11515897df0d898ffa179ac8118164e9f29926095a79abcda361990",
+    "speed-bench/ideas/root-functional-map-publication-cpu-v1.py": "b7b18b3fac3cc5902a52c0c55c597793e1a59c8e9e28724a61fb2bd8be4fdb8a",
+    "speed-bench/ideas/root-functional-map-publication-v1.py": "973da1ad68efde65a2cffbdc0b29b27f63a8890c5533d2c8aa92142d8adf7a59",
+    "speed-bench/ideas/root-functional-map-publication-v2.py": "47b5cfaea36135a917d5f69ad5ebde1c7d1c12e0bc8556094bb0f00c5f9fe4fa",
+    "speed-bench/ideas/root-write-control-cpu-v4.py": "5d60059b86f31e113a9be8bfc86468768296f4348395e38ede93c08c57a186cc",
+    "speed-bench/ideas/root-write-materialize-v4.py": "67bb1424a4223327f2286f78cb7547db09376d85e26ec85c93a87726ea6becd7"
+  },
+  "correction": "split literal ROOT executors into prior commit, then freeze compact map evidence",
+  "all100_runtime_shaders_unchanged": true,
+  "no_model_or_map_payload_read_no_rescan": true
+}

@@ -1,0 +1,123 @@
+{
+  "base_commit": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "previous_frontend_commit": "26254a41bfdd77f599d30c9a38b2f2a8a025d6e8",
+  "core_command": [
+    "cc",
+    "-O3",
+    "-ffast-math",
+    "-g",
+    "-mcpu=native",
+    "-Wall",
+    "-Wextra",
+    "-std=c99",
+    "-c",
+    "ds4.c",
+    "-o",
+    "ds4.o"
+  ],
+  "prior_manifest_path": "/Volumes/Models/ds4/.workspaces/idea-resident-three/speed-bench/ideas/artifacts/three-build/manifest.json",
+  "prior_manifest_sha256": "954f5219a1d0a4f087bfad695e6a78faea275d0a3da5e920225cd2a569cdf631",
+  "objects": [
+    {
+      "object": "ds4.o",
+      "sha256": "4a502d3e9adaa57bd72f9259778620910774ce214245f79953192e14545d5b9c",
+      "bytes": 5623456,
+      "origin": "fresh three-slot core",
+      "retained_path": "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-build-20261002/objects/ds4.o"
+    },
+    {
+      "object": "ds4_image.o",
+      "sha256": "5b3e219c380c7d2002967c365449e1f1c82509808a296f1b19aab19c4be10a33",
+      "bytes": 165736,
+      "origin": "unchanged bfcde97a",
+      "retained_path": "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-build-20261002/objects/ds4_image.o"
+    },
+    {
+      "object": "ds4_distributed.o",
+      "sha256": "c47be1cf4fb974b5a775824feba31dd77c592789da402d0c97e18f6524d62e5a",
+      "bytes": 427104,
+      "origin": "unchanged bfcde97a",
+      "retained_path": "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-build-20261002/objects/ds4_distributed.o"
+    },
+    {
+      "object": "ds4_tp.o",
+      "sha256": "a1352f1f806c71e148fb1f21f090ff8e5aebbe93a51c452acd13741ce748729b",
+      "bytes": 207432,
+      "origin": "unchanged bfcde97a",
+      "retained_path": "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-build-20261002/objects/ds4_tp.o"
+    },
+    {
+      "object": "ds4_ssd.o",
+      "sha256": "aa2a18d7cc4b805af138691fd8208042837a045e30b6ed02def90c4b07d37434",
+      "bytes": 13736,
+      "origin": "unchanged bfcde97a",
+      "retained_path": "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-build-20261002/objects/ds4_ssd.o"
+    },
+    {
+      "object": "ds4_metal.o",
+      "sha256": "f4f78de4d475b19119ae1ad910e46d29aef991ad592c3a3d9185edff3776c901",
+      "bytes": 2803120,
+      "origin": "unchanged bfcde97a",
+      "retained_path": "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-build-20261002/objects/ds4_metal.o"
+    },
+    {
+      "object": "ds4_layer_pack.o",
+      "sha256": "efa53eacf5c197bd0ee5c6c140e70fd5924673f788e6876cac3656deea3b694d",
+      "bytes": 11264,
+      "origin": "unchanged bfcde97a",
+      "retained_path": "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-build-20261002/objects/ds4_layer_pack.o"
+    },
+    {
+      "object": "ds4_engram.o",
+      "sha256": "41eefb68d54c36192c579379d9f9f9b7f35b3df619be97caed967ecb8b568982",
+      "bytes": 30064,
+      "origin": "unchanged bfcde97a",
+      "retained_path": "/Volumes/Models/ds4/.workspaces/idea-fixed64-resident-quality-three/speed-bench/ideas/artifacts/fixed64-resident-quality-three-build-20261002/objects/ds4_engram.o"
+    }
+  ],
+  "source_header_hashes": {
+    "baseline-quality_probe.c": "dd6adc5b1c3822039dc1d3466a81318c0a14e7345b4266833010418e66309e50",
+    "baseline-replay_quality.c": "1c6b40a98209dbe828dfeb2d7664288b6911f7f2cd7fb4a5f6eed329d70783a4",
+    "ds4.c": "f97b769c78583a913fed940160eacd2ef2e0b3f474dd295ee3e973c7eb85d713",
+    "ds4.h": "045d4f597ac463ce6e34e1c9402ad8b29fcfc05a1cd9f029a12285abb5223ad7",
+    "ds4_deepseek41_gpu.h": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb",
+    "ds4_distributed.h": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e",
+    "ds4_engram.h": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c",
+    "ds4_eval_cases.h": "39bc494d1a95ec095a16a0ed8c52326e6cb67cb11c20613aeccfc2108fa545a2",
+    "ds4_gpu.h": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58",
+    "ds4_gpu_args.h": "bb9398a37f0e5f346641aee6d556c4703a41ed2c09442693e48dab591a50d993",
+    "ds4_gpu_mgpu.h": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87",
+    "ds4_gpu_tp.h": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc",
+    "ds4_help.h": "0b4af2be3ec7278a3f56489c945b88a56a744c0743c6f63fbbe70c0d9498ec0c",
+    "ds4_image.h": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63",
+    "ds4_kvstore.h": "e6d0e2836385285718436d89292d1052099b7cc9a2c8a1c79d3d59e214d81c3b",
+    "ds4_layer_pack.h": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf",
+    "ds4_linux_memory.h": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676",
+    "ds4_metal.m": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+    "ds4_prompt_prefix.h": "3c5806bf5ed3e451adbf5487ac7105ca32a549c4e1e17d7c61883b52e570b7b1",
+    "ds4_qwen4_vision.h": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e",
+    "ds4_resident_route.h": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e",
+    "ds4_rocm.h": "f6a80e4c221004cdaaa08829c8930c9db2b9b21d009db829aca46c012365e3ed",
+    "ds4_rocm_memory.h": "e3c4b2d4bf4b854f98940bc44ba73140c72f99e999ba141f8210e41841ea7dd0",
+    "ds4_ssd.h": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348",
+    "ds4_tool_text.h": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159",
+    "ds4_tp.h": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a",
+    "ds4_web.h": "e43748a12480a31186961c8f2b67510441e139d3b9b82d35b6ba8017a65849a8",
+    "linenoise.h": "24425a1fd617dc9f05c8820ff936c1a82fd08ab540358fb02ae871678de60ef8",
+    "quality_probe.c": "dd6adc5b1c3822039dc1d3466a81318c0a14e7345b4266833010418e66309e50",
+    "rax.h": "e9281e1a444c0cd090b187d2271d200fcc02106062d9f827a7f2d590594cdce4",
+    "rax_malloc.h": "5ab2fa4a8bbf94401cf15f7dde1b0050f0b5ea9f60ccb81f0dcb1e7b392e5d93",
+    "replay.c": "ca24a6f3dd1daac70eda57413b412205436d9ea5a2f5eb018e6a951f7730fcb2",
+    "resident_route_bfcde97a.h": "a21dbe771153513a5625cfa14940164978cf5574b1a14c5d313ceaf5cec9f37c",
+    "test_resident_three.c": "fb84edef33c8cc16c1376408a0becd174f43374bb948b9b512c1e2e62eea2c06"
+  },
+  "cpu_native_one_two_parity": {
+    "production_differential": "PASS:100000 one/two plans+coefficient bits;50000 triple invariant trials;210 triples,5046 third-only first changes",
+    "address_undefined_sanitizers": "PASS same deterministic cases",
+    "existing_selector": "PASS",
+    "existing_drop": "PASS50000",
+    "quality_helper_self_test": "PASS before identical frozen-driver relink"
+  },
+  "inference_change": "No new inference changes: existing frozenb940 three-slot runtime, all seven auxiliary objects unchangedbfcde; new private raw/I-O replay frontend only.",
+  "existing_io_api": "ds4_gpu_stream_expert_io_metrics_read; header and Metal source/object identities match. No GPU wait/cache mutation."
+}

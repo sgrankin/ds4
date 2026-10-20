@@ -1,0 +1,18 @@
+{
+  "manifest_sha256": "75f0a2112be005b863f1ca19cdc12f17d2172e7f6713fca2709109816de86b31",
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1/run_suffix_pair_tape_followup.py",
+    "--case",
+    "zero-odd-identity-wrap",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-suffix-followup/speed-bench/ideas/artifacts/suffix-followup-zero-odd-identity-wrap-prepared-20261003-v1",
+    "--manifest-sha256",
+    "75f0a2112be005b863f1ca19cdc12f17d2172e7f6713fca2709109816de86b31"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

@@ -1,0 +1,188 @@
+[
+  {
+    "variant": "A",
+    "logits_sha256": "5ef042a2e1790b14a94126b9aae19958908569c9d8e8ea098ab4a3176b1c8c3b",
+    "snapshot_sha256": "960b2916f215cad320c5c5b9741dbcfd598d02cdad34288da844debd8e8e12c1",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14178.034,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3653.927,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3790.959,
+        "first_decode_ms": 74.743
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 10213,
+        "tokens": 8192,
+        "ms": 23485.931,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 10221,
+        "tokens": 8,
+        "ms": 703.424,
+        "first_decode_ms": 216.751
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 26605,
+        "tokens": 16384,
+        "ms": 31694.079,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 26613,
+        "tokens": 8,
+        "ms": 771.862,
+        "first_decode_ms": 244.965
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 26651,
+        "tokens": 38,
+        "ms": 1091.889,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 26659,
+        "tokens": 8,
+        "ms": 427.083,
+        "first_decode_ms": 59.33
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "60406",
+        "misses": "15813",
+        "evictions": "7991",
+        "miss_pread": "30.23",
+        "pread_ms": "1884.138"
+      }
+    ],
+    "io_reports": {},
+    "startup_prefill_ms": 14178.034,
+    "append_prefill_ms": 59925.826,
+    "decode_ms": 5693.3279999999995,
+    "model_ms": 79797.188
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "5ef042a2e1790b14a94126b9aae19958908569c9d8e8ea098ab4a3176b1c8c3b",
+    "snapshot_sha256": "960b2916f215cad320c5c5b9741dbcfd598d02cdad34288da844debd8e8e12c1",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 15161.622,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3950.731,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 3958.209,
+        "first_decode_ms": 72.423
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 10213,
+        "tokens": 8192,
+        "ms": 24198.903,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 10221,
+        "tokens": 8,
+        "ms": 661.374,
+        "first_decode_ms": 188.536
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 26605,
+        "tokens": 16384,
+        "ms": 46255.465,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 26613,
+        "tokens": 8,
+        "ms": 1274.26,
+        "first_decode_ms": 278.72
+      },
+      {
+        "phase": 7,
+        "kind": "P",
+        "context": 26651,
+        "tokens": 38,
+        "ms": 1389.661,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 8,
+        "kind": "D",
+        "context": 26659,
+        "tokens": 8,
+        "ms": 486.568,
+        "first_decode_ms": 68.396
+      }
+    ],
+    "cache_reports": [
+      {
+        "hits": "60132",
+        "misses": "16718",
+        "evictions": "8924",
+        "miss_pread": "30.45",
+        "pread_ms": "1820.611"
+      }
+    ],
+    "io_reports": {},
+    "startup_prefill_ms": 15161.622,
+    "append_prefill_ms": 75794.76,
+    "decode_ms": 6380.411,
+    "model_ms": 97336.79299999999
+  }
+]

@@ -1,0 +1,59 @@
+Let's go step-by-step.
+
+We want the number of **onto** functions from a set of size 7 (domain: {1,2,3,4,5,6,7}) to a set of size 4 (codomain: {A,B,C,D}).
+
+---
+
+### Step 1 – Total functions without restrictions
+Each of the 7 elements can map to any of the 4 elements, so:
+
+\[
+4^7 = 16384
+\]
+
+---
+
+### Step 2 – Use inclusion-exclusion for onto functions
+For a function from a set of size \(n\) to a set of size \(k\) to be onto, we use:
+
+\[
+k! \, S(n,k)
+\]
+where \(S(n,k)\) is the Stirling number of the second kind (number of ways to partition \(n\) elements into \(k\) non-empty unlabeled subsets), or directly:
+
+\[
+\text{Onto}(n,k) = \sum_{j=0}^k (-1)^j \binom{k}{j} (k-j)^n
+\]
+
+Here \(n=7\), \(k=4\):
+
+\[
+\sum_{j=0}^4 (-1)^j \binom{4}{j} (4-j)^7
+\]
+
+---
+
+### Step 3 – Compute each term
+- \(j=0\): \(\binom{4}{0} \cdot 4^7 = 1 \cdot 16384 = 16384\)
+- \(j=1\): \(-\binom{4}{1} \cdot 3^7 = -4 \cdot 2187 = -8748\)
+- \(j=2\): \(+\binom{4}{2} \cdot 2^7 = 6 \cdot 128 = 768\)
+- \(j=3\): \(-\binom{4}{3} \cdot 1^7 = -4 \cdot 1 = -4\)
+- \(j=4\): \(+\binom{4}{4} \cdot 0^7 = 1 \cdot 0 = 0\)
+
+---
+
+### Step 4 – Sum them
+\[
+16384 - 8748 + 768 - 4 + 0
+\]
+First: \(16384 - 8748 = 7636\)  
+Then: \(7636 + 768 = 8404\)  
+Then: \(8404 - 4 = 8400\)
+
+---
+
+**Final integer count**: 8400
+
+---
+
+8400

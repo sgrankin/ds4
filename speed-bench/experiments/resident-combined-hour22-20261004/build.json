@@ -1,0 +1,25 @@
+{
+  "start_utc": "2026-10-04 17:59:00",
+  "deadline_utc": "2026-10-04 18:49:00",
+  "budget_note": "10 minutes prior source/launcher preparation charged",
+  "compiled_runtime_revision": "fe5d6e2670e7d154bf97234df01d1ee8db4a51e8",
+  "server_sha256": "430e6c2671739d5e60a3c583324e55ce32ed5d1989d78394c7c77ebb305d93b2",
+  "build": "Reuse Item21 compiled runtime; no runtime change or rebuild",
+  "checks": "launch.py and unchanged Item20 run.py ast.parse; Item21 ./ds4_test --server passed",
+  "driver": "../final-thinking-hour20-20261004/run.py",
+  "arms": [
+    "native-before",
+    "subs3",
+    "subs1",
+    "native-after"
+  ],
+  "fixed": "READ high/0 WRITE high/128 FINAL high/1; stable natural instructions/tools; temp0; cap2048; suffixOFF hot0 SSD1024 batch1 Q2/cache64/ctx8192/chunk512",
+  "one_change": "resident routing GAP.90 maxsubs3/1 vs GAP0; requested mass.25 rank64 totalmass.50 replace nativeweights1",
+  "measurement_scope": "actual first-write 161-check coding tasks; all caps and failures retained; generated histories may differ, no paired NLL/KL",
+  "caller_revision": "f2976c6780787e8bb89b0ec5edc255bd90874f53",
+  "measurement_finished_utc": "2026-10-04 18:07:17",
+  "guard": {
+    "status": "complete",
+    "child_returncode": 0
+  }
+}

@@ -1,0 +1,15 @@
+test_all16_correct_wrong_invalid_caps_and_both_discordances (__main__.Study.test_all16_correct_wrong_invalid_caps_and_both_discordances) ... ok
+test_complete_order_extent_and_strict_scoring (__main__.Study.test_complete_order_extent_and_strict_scoring) ... ok
+test_exact_parent_framework_lock_and_explicit_grant (__main__.Study.test_exact_parent_framework_lock_and_explicit_grant) ... ok
+test_fail_first_before_candidates (__main__.Study.test_fail_first_before_candidates) ... ok
+test_force_source_rng_phase_and_no_reopening (__main__.Study.test_force_source_rng_phase_and_no_reopening) ... ok
+test_native_and_preforce_exact_identity (__main__.Study.test_native_and_preforce_exact_identity) ... ok
+test_real_CPU_subprocesses_all48_no_auto_retry_and_environment (__main__.Study.test_real_CPU_subprocesses_all48_no_auto_retry_and_environment) ... ok
+test_release_and_pressure_gate_before_outcomes (__main__.Study.test_release_and_pressure_gate_before_outcomes) ... ok
+test_source_qualified_fixed_input_and_completed_build (__main__.Study.test_source_qualified_fixed_input_and_completed_build) ... ok
+test_tokens_raw_and_prompt_fail_closed (__main__.Study.test_tokens_raw_and_prompt_fail_closed) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 2.282s
+
+OK

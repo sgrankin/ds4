@@ -1,0 +1,110 @@
+[
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/0-A/logits.bin",
+    "sha256": "a13138076343f7d5431d60305354cc1fda48e004149a86d042fd30dac256aa64",
+    "bytes": 4654080,
+    "mode": "0o644",
+    "arm": "0-A",
+    "kind": "logits",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/0-A/snapshot.bin",
+    "sha256": "a162e94f03d8ce298d7440f306af3c5c4f6d624c0583ccac1fb0f48e20ee2f39",
+    "bytes": 181735616,
+    "mode": "0o644",
+    "arm": "0-A",
+    "kind": "snapshot",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/1-B/logits.bin",
+    "sha256": "4ba907a895b53e90e869f1bb03015f1ebad3243ab9d4a479962a5613908a47b7",
+    "bytes": 4654080,
+    "mode": "0o644",
+    "arm": "1-B",
+    "kind": "logits",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/1-B/snapshot.bin",
+    "sha256": "69e3183545cd0163c08468201817c470f1baa77ccd5a724f2e0c3fa4f4645a29",
+    "bytes": 181735616,
+    "mode": "0o644",
+    "arm": "1-B",
+    "kind": "snapshot",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/2-C/logits.bin",
+    "sha256": "d51f59ff21e2355094167daef4125abc226f87252ba0ae3482ef4d1712a3460c",
+    "bytes": 4654080,
+    "mode": "0o644",
+    "arm": "2-C",
+    "kind": "logits",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/2-C/snapshot.bin",
+    "sha256": "5b73fae655420f378a1839138f494a8e0b4a418827af0391131f3865df2bfb3d",
+    "bytes": 181735616,
+    "mode": "0o644",
+    "arm": "2-C",
+    "kind": "snapshot",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/3-C/logits.bin",
+    "sha256": "d51f59ff21e2355094167daef4125abc226f87252ba0ae3482ef4d1712a3460c",
+    "bytes": 4654080,
+    "mode": "0o644",
+    "arm": "3-C",
+    "kind": "logits",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/3-C/snapshot.bin",
+    "sha256": "5b73fae655420f378a1839138f494a8e0b4a418827af0391131f3865df2bfb3d",
+    "bytes": 181735616,
+    "mode": "0o644",
+    "arm": "3-C",
+    "kind": "snapshot",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/4-B/logits.bin",
+    "sha256": "4ba907a895b53e90e869f1bb03015f1ebad3243ab9d4a479962a5613908a47b7",
+    "bytes": 4654080,
+    "mode": "0o644",
+    "arm": "4-B",
+    "kind": "logits",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/4-B/snapshot.bin",
+    "sha256": "69e3183545cd0163c08468201817c470f1baa77ccd5a724f2e0c3fa4f4645a29",
+    "bytes": 181735616,
+    "mode": "0o644",
+    "arm": "4-B",
+    "kind": "snapshot",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/5-A/logits.bin",
+    "sha256": "a13138076343f7d5431d60305354cc1fda48e004149a86d042fd30dac256aa64",
+    "bytes": 4654080,
+    "mode": "0o644",
+    "arm": "5-A",
+    "kind": "logits",
+    "retention": "original path, not duplicated in compact archive"
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-native-resident-growth-six/speed-bench/ideas/artifacts/native-resident-growth-six-plan-20261002-v1/run/5-A/snapshot.bin",
+    "sha256": "a162e94f03d8ce298d7440f306af3c5c4f6d624c0583ccac1fb0f48e20ee2f39",
+    "bytes": 181735616,
+    "mode": "0o644",
+    "arm": "5-A",
+    "kind": "snapshot",
+    "retention": "original path, not duplicated in compact archive"
+  }
+]

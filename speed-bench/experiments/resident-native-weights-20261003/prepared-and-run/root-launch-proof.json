@@ -1,0 +1,30 @@
+{
+  "time": 1790994018.063046,
+  "status": "ROOT_EXPLICIT_MODEL_GRANT",
+  "source_revision": "6d970cb0374733f109ef4e210861ab5248f1f7b9",
+  "manifest_sha256": "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1",
+  "command_sha256": "dc930fe3d9c601cbfcf0e119eb9f9a50b320f5df166da54fb142db059128cae1",
+  "driver_sha256": "5e0b20bd28b39ac94eed5e40a73aac20a7552628d6c3572d71ec287453e8505d",
+  "assets_verified": 304,
+  "arms": 19,
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/driver.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2",
+    "--manifest-sha256",
+    "6199c1d5b5f2aa71a13c915a16c8b4b16e198207966b79a50fb83b6753c406e1"
+  ],
+  "prior_release_proof": "/Volumes/Models/ds4/.workspaces/idea-native-effort-holdout-signed64/speed-bench/ideas/artifacts/native-effort-holdout-prepared-20261003-v2/root-release-proof.json",
+  "prior_release_sha256": "38adb23b3c8c96e42a226ab4b2e477b504940230afbd5103010dfd3ee0038ff8",
+  "lock_reacquired": true,
+  "live_model_processes": [],
+  "independent_source_review": "checkout_recap PASS at6d970cb; frozen16CPU tests reviewed, no concrete blocker",
+  "model_stat_or_open_before_guard": false,
+  "cpu_parallel_allowed": true,
+  "timing_claim": false
+}

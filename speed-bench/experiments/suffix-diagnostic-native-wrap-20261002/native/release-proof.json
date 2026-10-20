@@ -1,0 +1,7 @@
+{
+  "guard_returncode": 0,
+  "all_native_controls_pass": true,
+  "MAIN_lock_reacquired_and_released": true,
+  "guard_pid7467_alive": false,
+  "suffix_oracle_processes": []
+}

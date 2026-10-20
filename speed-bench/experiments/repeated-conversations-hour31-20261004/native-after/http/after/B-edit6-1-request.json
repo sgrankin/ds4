@@ -1,0 +1,51 @@
+{
+  "method": "POST",
+  "route": "/responses",
+  "body": {
+    "model": "deepseek-v4.1-flash",
+    "conversation": "conv_897b7d04e6574a3dcee39dce",
+    "input": [
+      {
+        "type": "function_call_output",
+        "call_id": "call_fd5aedc5681e336f9b1dc02fd55284bf",
+        "output": "{\n  \"archived_code\": \"ORBIT-62\"\n}\n"
+      }
+    ],
+    "instructions": "Follow the newest request. Use the read tool for advertised files. Never guess a file's current content from an earlier answer. Active inventory tool results remain authoritative after obsolete dispatch notes are removed.",
+    "tools": [
+      {
+        "type": "function",
+        "name": "read",
+        "description": "Read one advertised JSON file in full.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "whole": {
+              "type": "boolean"
+            },
+            "raw": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "path",
+            "whole",
+            "raw"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "tool_choice": "auto",
+    "store": false,
+    "stream": false,
+    "temperature": 0,
+    "reasoning": {
+      "effort": "none"
+    },
+    "max_output_tokens": 128
+  }
+}

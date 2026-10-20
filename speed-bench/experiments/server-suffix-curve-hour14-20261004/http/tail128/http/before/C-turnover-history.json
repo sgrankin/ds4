@@ -1,0 +1,19 @@
+[
+  {
+    "role": "user",
+    "content": "Reply READY only."
+  },
+  {
+    "id": "msg_90d9c4d96e78fe90f57d247e",
+    "type": "message",
+    "status": "completed",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "output_text",
+        "text": "READY",
+        "annotations": []
+      }
+    ]
+  }
+]

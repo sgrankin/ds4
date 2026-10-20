@@ -1,0 +1,12 @@
+{
+  "files": {
+    "input-identity-proof.json": "0839fb8a7d4fd61cccbe6d65a3ded0fb2b4abe0b7e3104466ea5a2ede54aff71",
+    "planning-refusal-v1.json": "eb2063c2377b04095ef70c0cfbd52c7823f18b65673004d94203be98119c34f1",
+    "build-plan.json": "cd0bc3bc3cfcead432a3479835f32bffa5aba0b2909eeb21b0bef69106094df9",
+    "proof.json": "7a2e1f22f1e4df4ad83a8a931af3ce25695eb478e37ca70951a4769f4a9187c1"
+  },
+  "preparer_sha256": "6e93d08820c726262ebeea538e5c9f35edad093126558ba60158bb855e7b31a8",
+  "document_sha256": "8e80c880e864b61bbc2fc99d3d6db6ccaa5df5fd33f70eaa535f19ab85603d6d",
+  "source_revision": "8a47faf344c2b4eb7b716d25a83c518a03711836",
+  "cpu_evidence_revision": "b1738c1ee1c77ddb41d4364e40d54e85e2693091"
+}

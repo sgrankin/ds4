@@ -1,0 +1,25 @@
+```python
+def split_escaped(text: str, delimiter: str) -> list[str]:
+    fields = []
+    current = []
+    i = 0
+    n = len(text)
+    while i < n:
+        ch = text[i]
+        if ch == '\\':
+            if i + 1 < n:
+                current.append(text[i + 1])
+                i += 2
+            else:
+                current.append('\\')
+                i += 1
+        elif ch == delimiter:
+            fields.append(''.join(current))
+            current = []
+            i += 1
+        else:
+            current.append(ch)
+            i += 1
+    fields.append(''.join(current))
+    return fields
+```

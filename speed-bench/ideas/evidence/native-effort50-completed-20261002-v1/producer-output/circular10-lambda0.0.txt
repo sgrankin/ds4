@@ -1,0 +1,7 @@
+We need answer. Need solve. Binary strings length 10 circular no adjacent 1s including 10-1. Count labeled. Need integer only final.
+
+We need count independent sets on cycle C10. Number binary strings length n with no adjacent ones on cycle. For n=10. Formula Lucas? Count = F_{n-1}+F_{n+1}? For cycle C_n independent sets = F_{n-1}+F_{n+1}. For n=10 Fibonacci F9=34, F11=89 sum 123. Check. Let's verify. Cycle length 10 no adjacent 1. Count independent sets in C10. Yes 123.
+
+Need final only integer. But ensure no issue "no two adjacent 1s, including adjacency between positions 10 and 1" means circular. Count all subsets of vertices of cycle no adjacent. 123.
+
+Let's craft final only integer.</think>123

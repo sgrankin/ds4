@@ -1,0 +1,58 @@
+[
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/0-A/logits.bin",
+    "bytes": 3619840,
+    "sha256": "f91a39503f60233d633b08586229fb1b2e18958e60632efaec9d742ab977e652",
+    "hash_source": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/0-A/result.json",
+    "rehashed_during_archive": false
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/0-A/snapshot.bin",
+    "bytes": 28078040,
+    "sha256": "f71f06ea4d72e4329eb7c67a4ba462b284d21352756f8ec50022ec8c9276f2b0",
+    "hash_source": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/0-A/result.json",
+    "rehashed_during_archive": false
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/1-B/logits.bin",
+    "bytes": 3619840,
+    "sha256": "9dad42085c983e76f53920bb99940969e5fd8ccaf673450efe66893d38b76e9d",
+    "hash_source": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/1-B/result.json",
+    "rehashed_during_archive": false
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/1-B/snapshot.bin",
+    "bytes": 28078040,
+    "sha256": "f29474b71b36f2557a787bdffa901c8ad7fe047737ac898fb57163063d272f9f",
+    "hash_source": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/1-B/result.json",
+    "rehashed_during_archive": false
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/2-B/logits.bin",
+    "bytes": 3619840,
+    "sha256": "9dad42085c983e76f53920bb99940969e5fd8ccaf673450efe66893d38b76e9d",
+    "hash_source": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/2-B/result.json",
+    "rehashed_during_archive": false
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/2-B/snapshot.bin",
+    "bytes": 28078040,
+    "sha256": "f29474b71b36f2557a787bdffa901c8ad7fe047737ac898fb57163063d272f9f",
+    "hash_source": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/2-B/result.json",
+    "rehashed_during_archive": false
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/3-A/logits.bin",
+    "bytes": 3619840,
+    "sha256": "f91a39503f60233d633b08586229fb1b2e18958e60632efaec9d742ab977e652",
+    "hash_source": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/3-A/result.json",
+    "rehashed_during_archive": false
+  },
+  {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/3-A/snapshot.bin",
+    "bytes": 28078040,
+    "sha256": "f71f06ea4d72e4329eb7c67a4ba462b284d21352756f8ec50022ec8c9276f2b0",
+    "hash_source": "/Volumes/Models/ds4/.workspaces/idea-resident-three-timing/speed-bench/ideas/artifacts/resident-three-fast64-abba-plan-20261002-v2/run/3-A/result.json",
+    "rehashed_during_archive": false
+  }
+]

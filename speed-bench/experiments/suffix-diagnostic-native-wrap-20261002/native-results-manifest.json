@@ -1,0 +1,65 @@
+{
+  "source_commit": "08fd1d3d",
+  "parent_correction_commit": "0b20e1b4",
+  "integrated_core_source_commit": "ec1caaa0",
+  "binary_sha256": "737e3d70725c4892260deea8d4284a5f725f875270170c0a58bc59f5a6845bcd",
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "native_diagnostic_control_pass": true,
+  "all_identity_prefix_branch_cancel_export_controls_pass": true,
+  "both_greedy_correct": true,
+  "query_fully_fresh": false,
+  "raw_logit_retention": {
+    "path": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-diagnostic-native-wrap-d66-c101-t1/logits.bin",
+    "sha256": "c307c5c61a2a7af557f9dede893daa2a414d470b2663dcf75416f335bea140ec",
+    "bytes": 3102748
+  },
+  "byte_identity_with_original5c": {
+    "logits.bin": {
+      "current_sha256": "c307c5c61a2a7af557f9dede893daa2a414d470b2663dcf75416f335bea140ec",
+      "original5c_sha256": "c307c5c61a2a7af557f9dede893daa2a414d470b2663dcf75416f335bea140ec",
+      "byte_equal": true
+    },
+    "tokens.json": {
+      "current_sha256": "c1a6a94b3825303abb2e829c1add22b9be59b8deb5476461bec0f5b479fb6269",
+      "original5c_sha256": "c1a6a94b3825303abb2e829c1add22b9be59b8deb5476461bec0f5b479fb6269",
+      "byte_equal": true
+    },
+    "old-prompt.txt": {
+      "current_sha256": "7bf95a709fbc3a433b2295c561190549c65f775ba2ac7f6ef8a96c7b9ffaaff9",
+      "original5c_sha256": "7bf95a709fbc3a433b2295c561190549c65f775ba2ac7f6ef8a96c7b9ffaaff9",
+      "byte_equal": true
+    },
+    "new-prompt.txt": {
+      "current_sha256": "2786693703e20d2ff829f852afe27dd3a00452ba0ccf1c61cd5811edd4d70dfd",
+      "original5c_sha256": "2786693703e20d2ff829f852afe27dd3a00452ba0ccf1c61cd5811edd4d70dfd",
+      "byte_equal": true
+    },
+    "rows.csv": {
+      "current_sha256": "cfe0246f95730e6d565f31552562ec8400d923f016783705743d64f959ad5c8b",
+      "original5c_sha256": "cfe0246f95730e6d565f31552562ec8400d923f016783705743d64f959ad5c8b",
+      "byte_equal": true
+    }
+  },
+  "pressure": {
+    "samples": 72,
+    "levels": [
+      1
+    ],
+    "bad_samples": 0,
+    "swap_growth_gb": 0.0,
+    "max_wired_gb": 75.93772888183594,
+    "max_compressor_gb": 10.776748657226562,
+    "min_free_gb": 0.0909881591796875
+  },
+  "release_proof": {
+    "guard_returncode": 0,
+    "all_native_controls_pass": true,
+    "MAIN_lock_reacquired_and_released": true,
+    "guard_pid7467_alive": false,
+    "suffix_oracle_processes": []
+  },
+  "timing_scope": "unpaired diagnostic only"
+}

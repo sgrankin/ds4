@@ -1,0 +1,27 @@
+{
+  "label": "ds4-agent-pair-external-compile",
+  "argv": [
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "-isysroot",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+    "-O3",
+    "-g",
+    "-mcpu=native",
+    "-Wall",
+    "-Wextra",
+    "-I.",
+    "-Wno-unused-function",
+    "-ffast-math",
+    "-std=c99",
+    "-c",
+    "speed-bench/agent_suffix_pair_external.c",
+    "-o",
+    "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-caller-build-v1/ds4-agent-pair-external.o"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external",
+  "returncode": 0,
+  "elapsed_seconds": 1.457934165999177,
+  "warning": false,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

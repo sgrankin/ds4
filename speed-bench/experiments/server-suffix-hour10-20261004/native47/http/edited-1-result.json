@@ -1,0 +1,31 @@
+{
+  "mode": "native",
+  "phase": "edited-1",
+  "seconds": 66.04536324999935,
+  "http_status": 200,
+  "response_status": "completed",
+  "text": "{\"total\":416}",
+  "gold": {
+    "total": 416
+  },
+  "correct": true,
+  "complete": true,
+  "error": null,
+  "input_tokens": 2356,
+  "output_tokens": 5,
+  "usage": {
+    "input_tokens": 2356,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 2356
+    },
+    "output_tokens": 5,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 2361
+  },
+  "incomplete_details": null,
+  "suffix_log_lines": [],
+  "pass": true
+}

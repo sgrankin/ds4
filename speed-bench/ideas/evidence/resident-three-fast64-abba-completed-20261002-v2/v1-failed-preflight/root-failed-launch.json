@@ -1,0 +1,11 @@
+{
+  "failed_session": 1602,
+  "guard_child_returncode": 1,
+  "stage": "exact parent argv validation before model metadata/helper launch",
+  "model_helper_started": false,
+  "run_directory_exists": false,
+  "frozen_plan_preserved": true,
+  "probe": "/Volumes/Models/ds4/speed-bench/ideas/artifacts/abba-parent-probe-20261002.json",
+  "cause": "macOS Python framework executable differs from bin shim; exact argv0 string and samefile to launcher both fail",
+  "no_timing_measurement": true
+}

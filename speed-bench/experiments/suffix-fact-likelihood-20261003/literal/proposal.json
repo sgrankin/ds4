@@ -1,0 +1,144 @@
+{
+  "status": "SOURCE_DESIGN_AND_CALLER_DRAFT_UNCOMPILED_UNRUN",
+  "experiment": "archived-external-context-fact-likelihood-v1",
+  "future_root_model_grant_required": true,
+  "no_native_future_binary_path_prepared": true,
+  "fixture_facts_sha256": "049d6a0917dc4a20688a5d313fa8b8f15d0010988b69805797f3ed9ea635861c",
+  "teacher": {
+    "path": "inputs/teacher.txt",
+    "sha256": "5aa5376bdf7259403fc5e1f5a1cc4e94dd1860bb0b6fd01682f1018c7e411b1c",
+    "bytes": 9,
+    "literal": "CODE=3141",
+    "native_token_ids_not_yet_resolved": true,
+    "future_resolution": "Under a separately granted guard, resolve the whole exact literal once before source evaluation or quality output. Require lossless piece roundtrip, 1..32 IDs, no control tokens, freeze IDs/hash and use them verbatim in every branch. No truncation or alternate wording.",
+    "semantic_scope": "A correct current-record fragment; it is not a valid complete tool workflow and does not demonstrate task success or forgetting."
+  },
+  "model_profile": {
+    "model_path_literal": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "model_identity_authority": "Actual A manifest only; future stat/open only under ROOT guard",
+    "ctx": 8192,
+    "prefill_chunk": 256,
+    "ssd_cache": "64GB",
+    "selected_tile": 64,
+    "selected_limit": 1024,
+    "resident_gap": 0,
+    "resident_mode": "native",
+    "mtp_dspark_steering_tp_multimodal": false,
+    "sampling_rng": false,
+    "teacher_probability_temperature": 1.0,
+    "pair_capacity": 1024,
+    "common_environment": "Clear all inherited DS4 keys; pin the actual A core/header/7 native auxiliaries, recognized26 shader sources and exact native policy. Add explicit expert syscall I/O counters only if the pinned API/object proof supports them; this observation must not alter native source byte gates."
+  },
+  "source_preflight": {
+    "order": "Before any edited teacher likelihood",
+    "bootstrap_mode": "Validate pinned whole KVC SHA/extent/ABI/Q2/model4/context/token/text authority; native stream-load exact2011 canonical. Enable1024 ring after restore and before replay; never synthesize old pre-pool inputs.",
+    "replay_fact_key": "source_native_replay",
+    "required_gates": [
+      "Outer KVC and inner DSV4 dimensions/length/prefix tokens match pinned fixture; exact payload extent/no trailing data.",
+      "At2988 save native full canonical and raw129280; both byte-equal archived A and B controls.",
+      "Session exact and native profile; capture_suffix_pair_cache owned state and tape, correct engine/context, tape covers2107:2988.",
+      "If a gate fails retain the first failure and stop; no from-zero retry or alternate partition."
+    ],
+    "held_source_owner": "Own the original pair cache until changed reuse finishes; canonical snapshot alone supplies no tape."
+  },
+  "edited_native_partitions": [
+    2011,
+    2096,
+    2977,
+    3386,
+    3388
+  ],
+  "assistant_prefix_ids": [
+    128804,
+    128822
+  ],
+  "arms": [
+    {
+      "name": "fresh-native-before",
+      "tape": true,
+      "steps": [
+        "New native session; stream-load exact archived2011 bootstrap; enable1024 tape before freshly evaluating the edited remainder.",
+        "Sync edited IDs0:2096; stream canonical destination prefix to file.",
+        "Sync edited IDs0:2977; capture separate edited pair cache for identity only.",
+        "Sync edited IDs0:3386, then sync appended exact Assistant/close-think IDs to3388.",
+        "Stream canonical prompt and final states, all teacher raw rows, IDs and metrics."
+      ]
+    },
+    {
+      "name": "identity-suffix",
+      "tape": true,
+      "steps": [
+        "New session same engine/context; enable1024 ring, stream-load the2096 canonical prefix.",
+        "Use edited pair cache with source_start2096, source_end2977, displacement0, same edited3386 prompt. Require881 reused/409 fresh and full checkpoint IDs.",
+        "Free edited pair cache immediately after successful graft; sync same Assistant/close-think IDs.",
+        "All teacher raw rows and full DSSD state body after only validated4-byte magic normalization must equal fresh-native-before; report byte parity independently of KL roundoff."
+      ]
+    },
+    {
+      "name": "repaired-old-suffix",
+      "tape": true,
+      "steps": [
+        "New session same engine/context; enable1024 ring, stream-load same2096 prefix.",
+        "Use preflight owned original pair cache with source2107:2988\u21922096:2977, displacement11, edited3386 prompt. Require881 reuse,409 fresh,1320 rebuilt ratio-two rows,0 prefix-boundary rows and exact new token history.",
+        "Free old pair cache after successful graft; sync same Assistant/close-think IDs.",
+        "Approximate flag required; canonical export/source capture reject; save DSSD diagnostic with explicit tag, score the same fixed teacher IDs."
+      ]
+    },
+    {
+      "name": "fresh-native-after",
+      "tape": false,
+      "steps": [
+        "New native session from zero, tape OFF. Sync exact common2011 IDs, stream full canonical and compare byte-for-byte with the pinned original bootstrap payload. Then identical2096\u21922977\u21923386\u21923388 edited boundaries and teacher IDs.",
+        "All full raw rows and native prompt/final canonical files byte-equal fresh-native-before; this gates the tape observation and intervening restores. No expert-cache cold-reset or IO-count equality is assumed."
+      ]
+    }
+  ],
+  "scoring": {
+    "raw_vocab": 129280,
+    "positions": "Row k copied before eval(teacher[k]); context is edited3386 + two prefix IDs + teacher[:k]. Terminal row after last target is recorded separately.",
+    "primary_rows": "N teacher targets only;1<=N<=32",
+    "terminal_row": "Finite/bit identity control and separately labelled KL/TV; no target/NLL",
+    "metrics": "FP64 full-vocabulary logsumexp, target NLL, deltaNLL=NLL_reuse-NLL_fresh, KL(P_fresh||P_reuse), TV, argmax flips, full-vector byte identity. No top-k/filtering/temperature sampling or generated transcript rescoring.",
+    "identity_gates": "Fresh brackets full-byte exact; unchanged identity full-byte exact after only tag normalization; source preflight full-byte exact. Do not assert numerical KL==0 when byte identity has already established exactness.",
+    "summary_scope": "One correlated archived context and short authored fact fragment, not heldout tasks or independent samples; no accuracy/forgetting/speed/default promotion.",
+    "partition_scope": "Both edited references use identical explicit2011/2096/2977/3386/3388 boundaries. Native-before uses an exact stored system prefix; native-after computes it from zero and verifies its full canonical bytes. The controlled edited partition is not a replay of original A/B third-turn forward partitions; no original generated-output probability is rescored."
+  },
+  "memory": {
+    "staging_cap_bytes": 134217728,
+    "one_engine_and_one_live_session": true,
+    "stream_canonical_and_vectors": true,
+    "live_terms": [
+      "Actual ring query",
+      "Both owned caches only until identity graft; count state.cap and pair_tape.cap once each",
+      "Diagnostic snapshot.cap only after edited identity cache freed; after changed graft original cache freed",
+      "Caller token buffers and two full129280 FP32 row buffers",
+      "8MiB serialization scratch",
+      "Token-load scratch bounded by8192 IDs",
+      "64KiB explicit opaque/stack/backend-wrapper reserve"
+    ],
+    "admission": "Pre-allocation forecast using exact payload lengths then actual caps, overflow safe. Check every transient serialization/capture/diagnostic stage; never add an undo snapshot or hidden clone. Serialize/load canonical prefix via FILE APIs to avoid a resident prefix snapshot. Stop retained budget failure, no automatic expansion.",
+    "excluded": "Base engine/model graph/expert cache and unmeasured driver/global process allocations; guard monitors real memory pressure. This is an explicit known-owned staging cap, not a global128MiB peak claim."
+  },
+  "io_and_timing": {
+    "io": "Use only source-proven ds4_gpu_stream_expert_io_metrics_read: actual explicit pread requested/returned bytes, cache-loader returned bytes/hit/miss/eviction, and separately process disk bytes. Record validity flags. Canonical/tape/control file bytes separate; do not infer demand bytes from route counts or call old counters an all-source demand accounting oracle.",
+    "cache": "Same single engine warms across branches; no unsafe owner reset. IO differences are observational and order-dependent.",
+    "timing": "Diagnostic only. Include source replay/capture, prefix IO and every branch stage separately; no latency promotion or omission of reconstruction cost."
+  },
+  "failure_policy": "First source/native/identity/finite/history/budget/API gate failure retained, no retry/adaptation/case replacement; ordinary quality drift is reported rather than treated as infrastructure success/failure.",
+  "source_build_scope": {
+    "caller_only": true,
+    "runtime_core_or_Metal_changes": false,
+    "runtime_authority": "Exact eight CORE objects + recursively included headers from actual A/B315a plan and completed5a45 build. New private frontend must be compiled against that pair-layout header; no MAIN/new-profile substitute.",
+    "future_grant_contract": "Before any model stat/open/tokenizer, a separate reviewed runner must check strict source/build/assets, exact ROOT GRANTED/soletrue/manifestSHA/command/finitepositive time, literal MAIN guard/framework parent and held MAIN flock. This source draft creates no prepared runtime command or qualified binary path."
+  },
+  "private_sources": [
+    "archived_fact_probe.c",
+    "fact_format.h",
+    "fact_input_pins.h",
+    "run_archived_fact_probe.py",
+    "test_fact_format.c",
+    "test_runner_contract.py"
+  ],
+  "source_cpu_status": "NOT_EXECUTED; exact proposed portable CPU plan requires ROOT review/grant",
+  "native_status": "NOT_COMPILED; proposed caller-only2-command plan requires ROOT review/grant; no prepared runtime paths"
+}

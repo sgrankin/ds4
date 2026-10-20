@@ -1,0 +1,8 @@
+We need answer only integer. Need solve. Count binary strings length 12 exactly four 1s and at least two 0s between consecutive 1s. Linear, no circular adjacency. Need count.
+
+We need place 4 ones among 12 positions such that between any consecutive ones at least two zeros. Equiv gaps between ones: x1 zeros before first, x2 between 1st-2nd, x3, x4, x5 after last. Need x2,x3,x4 >=2. Total zeros=8. Sum xi=8, xi>=0, middle >=2. Let yi = xi for ends, middle yi=xi-2. Sum y1+y2+y3+y4+y5 = 8 - 6 = 2. Number nonnegative solutions 5 variables sum 2 = C(2+5-1,5-1)=C(6,4)=15. Is that count? Need ensure length 12 exactly four ones and 8 zeros. Yes.
+
+Let's verify maybe positions. Count 15.
+
+Final only integer. 
+</think>15

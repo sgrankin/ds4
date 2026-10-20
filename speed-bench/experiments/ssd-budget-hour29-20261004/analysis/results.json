@@ -1,0 +1,3142 @@
+{
+  "by_arm": {
+    "control-before": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 285.9735369590053,
+      "launcher_wall_seconds": 290.3962603749824,
+      "all_group_makespan_seconds": 285.9689607079781,
+      "edited_group_makespan_seconds": 102.83994233296835,
+      "sum_queue_inclusive_seconds": 571.6299136249872,
+      "approximate_hits": 4,
+      "ssd_approximate_hits": 4,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 4,
+      "hot_read_ops": 0,
+      "disk_read_ops": 329,
+      "endpoint_evictions": 0,
+      "primary_grafts": 4,
+      "completion_grafts": 0,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 4,
+      "phase_log_graft_count": 4,
+      "edited_passes": 4
+    },
+    "ssd512": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 290.89538070902927,
+      "launcher_wall_seconds": 295.33116891700774,
+      "all_group_makespan_seconds": 290.8917059590167,
+      "edited_group_makespan_seconds": 103.89151220899657,
+      "sum_queue_inclusive_seconds": 581.3816251649987,
+      "approximate_hits": 4,
+      "ssd_approximate_hits": 4,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 4,
+      "hot_read_ops": 0,
+      "disk_read_ops": 329,
+      "endpoint_evictions": 24,
+      "primary_grafts": 4,
+      "completion_grafts": 0,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 4,
+      "phase_log_graft_count": 4,
+      "edited_passes": 4
+    },
+    "ssd128": {
+      "steps": 8,
+      "passes": 7,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 348.0483101249847,
+      "launcher_wall_seconds": 352.08772404099,
+      "all_group_makespan_seconds": 348.04432029201416,
+      "edited_group_makespan_seconds": 157.6647862920072,
+      "sum_queue_inclusive_seconds": 680.6922342930338,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "exact_fallbacks": 8,
+      "slot_eviction_log_count": 4,
+      "hot_read_ops": 0,
+      "disk_read_ops": 256,
+      "endpoint_evictions": 67,
+      "primary_grafts": 0,
+      "completion_grafts": 0,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 0,
+      "phase_log_graft_count": 0,
+      "edited_passes": 4
+    },
+    "control-after": {
+      "steps": 8,
+      "passes": 8,
+      "caps": 0,
+      "actual_reads": 8,
+      "grades_agree": true,
+      "client_phase_wall_seconds": 288.5666453749873,
+      "launcher_wall_seconds": 293.06586875001085,
+      "all_group_makespan_seconds": 288.5623952089809,
+      "edited_group_makespan_seconds": 102.0752582080022,
+      "sum_queue_inclusive_seconds": 576.8182364990062,
+      "approximate_hits": 4,
+      "ssd_approximate_hits": 4,
+      "exact_fallbacks": 4,
+      "slot_eviction_log_count": 4,
+      "hot_read_ops": 0,
+      "disk_read_ops": 330,
+      "endpoint_evictions": 0,
+      "primary_grafts": 4,
+      "completion_grafts": 0,
+      "approximate_source_grafts": 0,
+      "approximate_visible_continuations": 4,
+      "phase_log_graft_count": 4,
+      "edited_passes": 4
+    }
+  },
+  "steps": [
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 92.10754608298885,
+      "http_task_seconds": 92.10718083300162,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 91.99822233401937,
+      "http_task_seconds": 91.99780474998988,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 91.0211856669921,
+      "http_task_seconds": 91.02081645900034,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 90.91075995800202,
+      "http_task_seconds": 90.9104508330056,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 51.811342500004685,
+      "http_task_seconds": 51.810634166991804,
+      "edit_seconds": 0.00030212500132620335,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 51.857680540997535,
+      "http_task_seconds": 51.85713249997934,
+      "edit_seconds": 0.00027637500897981226,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "control-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 50.94119799998589,
+      "http_task_seconds": 50.940559499984374,
+      "edit_seconds": 0.00025483398349024355,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "control-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 50.981978541996796,
+      "http_task_seconds": 50.98145658301655,
+      "edit_seconds": 0.0002781249932013452,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "errors": ""
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 91.02624025000841,
+      "http_task_seconds": 91.02589725001599,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 90.9177484580141,
+      "http_task_seconds": 90.91734658399946,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 95.97365691600135,
+      "http_task_seconds": 95.9733563750051,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 95.86472379197949,
+      "http_task_seconds": 95.86436791697633,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 52.32371770800091,
+      "http_task_seconds": 52.32304062502226,
+      "edit_seconds": 0.0003054579719901085,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 52.46568104199832,
+      "http_task_seconds": 52.465019750001375,
+      "edit_seconds": 0.0003382090071681887,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "ssd512",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 51.384300833015004,
+      "http_task_seconds": 51.383594707993325,
+      "edit_seconds": 0.00032020799699239433,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "ssd512",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 51.42555616598111,
+      "http_task_seconds": 51.42492299998412,
+      "edit_seconds": 0.0003458330174908042,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "errors": ""
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 94.20621125001344,
+      "http_task_seconds": 94.20583687498583,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 94.310085916979,
+      "http_task_seconds": 94.30973558401456,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 96.06911554199178,
+      "http_task_seconds": 96.06881420800346,
+      "edit_seconds": 0,
+      "correct": false,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": false,
+      "stored_pass": false,
+      "grade_agrees": true,
+      "output_tokens": 134,
+      "input_tokens": 2776,
+      "cached_tokens": 1175,
+      "text": "Inventory numbers retained from the active file:\n\n- batches: 19\n- items_per_batch: 15\n- reserved_items: 18\n\nREADY",
+      "errors": ""
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 80.96011641601217,
+      "http_task_seconds": 80.95976887497818,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 79.13616429199465,
+      "http_task_seconds": 79.1354568329989,
+      "edit_seconds": 0.00035429198760539293,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 112,
+      "input_tokens": 2994,
+      "cached_tokens": 1530,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 79.04597066700808,
+      "http_task_seconds": 79.04531645899988,
+      "edit_seconds": 0.0003090420213993639,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2991,
+      "cached_tokens": 1529,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "ssd128",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 78.52834662501118,
+      "http_task_seconds": 78.52774104199489,
+      "edit_seconds": 0.0002705839870031923,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 3071,
+      "cached_tokens": 1569,
+      "text": "{\"active_total\": 267, \"archived_code\": \"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "ssd128",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 78.43622358402354,
+      "http_task_seconds": 78.43556395801716,
+      "edit_seconds": 0.00030312497983686626,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2991,
+      "cached_tokens": 1529,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "errors": ""
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "A-warm",
+      "session": "A",
+      "queue_inclusive_seconds": 92.61629649999668,
+      "http_task_seconds": 92.61595345800743,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "warm-AB",
+      "step": "B-warm",
+      "session": "B",
+      "queue_inclusive_seconds": 92.50722612501704,
+      "http_task_seconds": 92.50689695801702,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "C-warm",
+      "session": "C",
+      "queue_inclusive_seconds": 93.87054733300465,
+      "http_task_seconds": 93.87025129201356,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2767,
+      "cached_tokens": 1166,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "warm-CD",
+      "step": "D-warm",
+      "session": "D",
+      "queue_inclusive_seconds": 93.76175637499546,
+      "http_task_seconds": 93.76143570800195,
+      "edit_seconds": 0,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 95,
+      "input_tokens": 2763,
+      "cached_tokens": 1164,
+      "text": "READY",
+      "errors": ""
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "A-edited",
+      "session": "A",
+      "queue_inclusive_seconds": 51.44523745900369,
+      "http_task_seconds": 51.444547082995996,
+      "edit_seconds": 0.00035854100133292377,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 109,
+      "input_tokens": 2993,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":313,\"archived_code\":\"BEACON-46\"}",
+      "errors": ""
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "step": "B-edited",
+      "session": "B",
+      "queue_inclusive_seconds": 51.48900204099482,
+      "http_task_seconds": 51.48832862501149,
+      "edit_seconds": 0.0003690830199047923,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 111,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "errors": ""
+    },
+    {
+      "arm": "control-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "C-edited",
+      "session": "C",
+      "queue_inclusive_seconds": 50.58598870798596,
+      "http_task_seconds": 50.58539504199871,
+      "edit_seconds": 0.0002647500077728182,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":267,\"archived_code\":\"CEDAR-70\"}",
+      "errors": ""
+    },
+    {
+      "arm": "control-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "step": "D-edited",
+      "session": "D",
+      "queue_inclusive_seconds": 50.54218195800786,
+      "http_task_seconds": 50.54152333398815,
+      "edit_seconds": 0.00028866701177321374,
+      "correct": true,
+      "read_isolated": true,
+      "actual_reads": 1,
+      "complete": true,
+      "cap": false,
+      "pass": true,
+      "stored_pass": true,
+      "grade_agrees": true,
+      "output_tokens": 108,
+      "input_tokens": 2992,
+      "cached_tokens": 2564,
+      "text": "{\"active_total\":197,\"archived_code\":\"DELTA-83\"}",
+      "errors": ""
+    }
+  ],
+  "groups": [
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 92.1076869170065,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 92.05288420850411,
+      "max_queue_inclusive_seconds": 92.10754608298885,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 16:28:54 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 16:28:54 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 91.02133145800326,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 90.96597281249706,
+      "max_queue_inclusive_seconds": 91.0211856669921,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 16:30:26 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 16:30:54 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 16:30:26 slot 0: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 16:30:26 slot 1: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 51.85780512497877,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 51.83451152050111,
+      "max_queue_inclusive_seconds": 51.857680540997535,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 16:32:14 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17406.142 ms",
+        "1004 16:32:34 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17439.164 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 16:31:57 slot 0: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 16:31:57 slot 1: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "control-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 50.98213720798958,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 50.96158827099134,
+      "max_queue_inclusive_seconds": 50.981978541996796,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 16:33:08 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16926.294 ms",
+        "1004 16:33:25 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17656.922 ms"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 91.02639483401435,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 90.97199435401126,
+      "max_queue_inclusive_seconds": 91.02624025000841,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 16:33:57 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 16:34:25 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 95.97379891600576,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 95.91919035399042,
+      "max_queue_inclusive_seconds": 95.97365691600135,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 16:35:28 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 16:35:57 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 16:35:28 slot 0: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 16:35:28 slot 1: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 52.465799166995566,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 52.39469937499962,
+      "max_queue_inclusive_seconds": 52.46568104199832,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 16:37:21 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17106.547 ms",
+        "1004 16:37:41 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17821.406 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 16:37:04 slot 0: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 16:37:04 slot 1: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "ssd512",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 51.42571304200101,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 51.404928499498055,
+      "max_queue_inclusive_seconds": 51.42555616598111,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 16:38:16 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16785.756 ms",
+        "1004 16:38:35 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17490.409 ms"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 94.31026779100648,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 94.25814858349622,
+      "max_queue_inclusive_seconds": 94.310085916979,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 16:39:04 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 16:39:31 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 96.06926620900049,
+      "passes": 1,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 88.51461597900197,
+      "max_queue_inclusive_seconds": 96.06911554199178,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 16:40:38 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 16:41:08 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 16:40:38 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 16:40:38 slot 0: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "ssd128",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 79.13630529199145,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 79.09106747950136,
+      "max_queue_inclusive_seconds": 79.13616429199465,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 2,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 16:42:14 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source",
+        "1004 16:42:45 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 16:42:14 slot 1: request reuses nothing; evicting checkpoint (1694 tokens, idle 15 s, protected)",
+        "1004 16:42:14 slot 0: request reuses nothing; evicting checkpoint (1735 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "ssd128",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 78.52848100001574,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 78.48228510451736,
+      "max_queue_inclusive_seconds": 78.52834662501118,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 2,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 16:43:35 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 16:43:35 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "warm-AB",
+      "makespan_seconds": 92.61643829199602,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 92.56176131250686,
+      "max_queue_inclusive_seconds": 92.61629649999668,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 16:45:08 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 16:45:35 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": []
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "warm-CD",
+      "makespan_seconds": 93.87069870898267,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 93.81615185400005,
+      "max_queue_inclusive_seconds": 93.87054733300465,
+      "approximate_hits": 0,
+      "ssd_approximate_hits": 0,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 2,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 16:46:40 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source",
+        "1004 16:47:09 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 16:46:40 slot 0: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 16:46:40 slot 1: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "makespan_seconds": 51.4891223750019,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 51.467119749999256,
+      "max_queue_inclusive_seconds": 51.48900204099482,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 2,
+      "route_log_lines": [
+        "1004 16:48:31 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17221.590 ms",
+        "1004 16:48:51 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17260.800 ms"
+      ],
+      "slot_eviction_log_lines": [
+        "1004 16:48:14 slot 0: request reuses nothing; evicting checkpoint (1694 tokens, idle 0 s, protected)",
+        "1004 16:48:14 slot 1: request reuses nothing; evicting checkpoint (1696 tokens, idle 0 s, protected)"
+      ]
+    },
+    {
+      "arm": "control-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "makespan_seconds": 50.5861358330003,
+      "passes": 2,
+      "steps": 2,
+      "mean_queue_inclusive_seconds": 50.56408533299691,
+      "max_queue_inclusive_seconds": 50.58598870798596,
+      "approximate_hits": 2,
+      "ssd_approximate_hits": 2,
+      "approximate_source_hits": 0,
+      "exact_fallbacks": 0,
+      "exact_hit_log_count": 0,
+      "slot_eviction_log_count": 0,
+      "route_log_lines": [
+        "1004 16:49:25 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 16766.710 ms",
+        "1004 16:49:42 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17452.879 ms"
+      ],
+      "slot_eviction_log_lines": []
+    }
+  ],
+  "cache_shutdowns": [
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 487345286,
+      "metadata_bytes": 379165,
+      "endpoints": 40,
+      "chunks": 1774,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 164,
+      "endpoint_evictions": 0,
+      "arm": "control-before",
+      "phase": "before",
+      "configured_ssd_mb": 4096,
+      "configured_ssd_bytes": 4294967296,
+      "ssd_bytes_within_configured_cap": true,
+      "admission_warning_lines": []
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 619014302,
+      "metadata_bytes": 458563,
+      "endpoints": 46,
+      "chunks": 2260,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "control-before",
+      "phase": "after",
+      "configured_ssd_mb": 4096,
+      "configured_ssd_bytes": 4294967296,
+      "ssd_bytes_within_configured_cap": true,
+      "admission_warning_lines": []
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 508137840,
+      "metadata_bytes": 396060,
+      "endpoints": 42,
+      "chunks": 1847,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "ssd512",
+      "phase": "before",
+      "configured_ssd_mb": 512,
+      "configured_ssd_bytes": 536870912,
+      "ssd_bytes_within_configured_cap": true,
+      "admission_warning_lines": []
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 517476117,
+      "metadata_bytes": 307850,
+      "endpoints": 24,
+      "chunks": 1884,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 164,
+      "endpoint_evictions": 24,
+      "arm": "ssd512",
+      "phase": "after",
+      "configured_ssd_mb": 512,
+      "configured_ssd_bytes": 536870912,
+      "ssd_bytes_within_configured_cap": true,
+      "admission_warning_lines": []
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 123814437,
+      "metadata_bytes": 103437,
+      "endpoints": 11,
+      "chunks": 469,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 128,
+      "endpoint_evictions": 55,
+      "arm": "ssd128",
+      "phase": "before",
+      "configured_ssd_mb": 128,
+      "configured_ssd_bytes": 134217728,
+      "ssd_bytes_within_configured_cap": true,
+      "admission_warning_lines": []
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 124332310,
+      "metadata_bytes": 100749,
+      "endpoints": 11,
+      "chunks": 457,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 128,
+      "endpoint_evictions": 12,
+      "arm": "ssd128",
+      "phase": "after",
+      "configured_ssd_mb": 128,
+      "configured_ssd_bytes": 134217728,
+      "ssd_bytes_within_configured_cap": true,
+      "admission_warning_lines": []
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 508137840,
+      "metadata_bytes": 396062,
+      "endpoints": 42,
+      "chunks": 1847,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "control-after",
+      "phase": "before",
+      "configured_ssd_mb": 4096,
+      "configured_ssd_bytes": 4294967296,
+      "ssd_bytes_within_configured_cap": true,
+      "admission_warning_lines": []
+    },
+    {
+      "hot_bytes": 0,
+      "ssd_bytes": 639806856,
+      "metadata_bytes": 475460,
+      "endpoints": 48,
+      "chunks": 2333,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 165,
+      "endpoint_evictions": 0,
+      "arm": "control-after",
+      "phase": "after",
+      "configured_ssd_mb": 4096,
+      "configured_ssd_bytes": 4294967296,
+      "ssd_bytes_within_configured_cap": true,
+      "admission_warning_lines": []
+    }
+  ],
+  "scope": "Only SSD cache capacity changes:4096/512/128/4096MiB. Canonical1/PAD1/hot0/suffix64/GAP0 fixed. Preserve128warmformatfailure and source-coverage loss. Logical chunk reads are not physical SSD traffic. No paired generated-history NLL or additive claim.",
+  "change_vs_control_before_percent": {
+    "control-before": {
+      "launcher_wall_seconds": 0.0,
+      "client_phase_wall_seconds": 0.0,
+      "edited_group_makespan_seconds": 0.0
+    },
+    "ssd512": {
+      "launcher_wall_seconds": 1.6993705551349159,
+      "client_phase_wall_seconds": 1.7210836367455684,
+      "edited_group_makespan_seconds": 1.0225305967437537
+    },
+    "ssd128": {
+      "launcher_wall_seconds": 21.243890533007125,
+      "client_phase_wall_seconds": 21.706474601136925,
+      "edited_group_makespan_seconds": 53.310846656769414
+    },
+    "control-after": {
+      "launcher_wall_seconds": 0.9192984687823591,
+      "client_phase_wall_seconds": 0.9067651656012199,
+      "edited_group_makespan_seconds": -0.7435672440288865
+    }
+  },
+  "group_change_vs_control_before_percent": {
+    "warm-AB": {
+      "control-before": 0.0,
+      "ssd512": -1.1739433690984402,
+      "ssd128": 2.3913105927680256,
+      "control-after": 0.5523441007132535
+    },
+    "warm-CD": {
+      "control-before": 0.0,
+      "ssd512": 5.440996499032247,
+      "ssd128": 5.545881026060706,
+      "control-after": 3.1304389919786013
+    },
+    "edited-AB": {
+      "control-before": 0.0,
+      "ssd512": 1.1724253283599495,
+      "ssd128": 52.602496579388045,
+      "control-after": -0.7109493914914666
+    },
+    "edited-CD": {
+      "control-before": 0.0,
+      "ssd512": 0.8700612769562577,
+      "ssd128": 54.03136333741083,
+      "control-after": -0.7767453399878721
+    }
+  },
+  "change_vs_control_after_percent": {
+    "control-before": {
+      "launcher_wall_seconds": -0.9109243551338575,
+      "client_phase_wall_seconds": -0.8986168212934964,
+      "edited_group_makespan_seconds": 0.7491375857290761
+    },
+    "ssd512": {
+      "launcher_wall_seconds": 0.7729662197303533,
+      "client_phase_wall_seconds": 0.8070008683837449,
+      "edited_group_makespan_seconds": 1.7793283434986096
+    },
+    "ssd128": {
+      "launcher_wall_seconds": 20.139450405030136,
+      "client_phase_wall_seconds": 20.612799747767816,
+      "edited_group_makespan_seconds": 54.45935583207475
+    },
+    "control-after": {
+      "launcher_wall_seconds": 0.0,
+      "client_phase_wall_seconds": 0.0,
+      "edited_group_makespan_seconds": 0.0
+    }
+  },
+  "group_change_vs_control_after_percent": {
+    "warm-AB": {
+      "control-before": -0.5493100192274225,
+      "ssd512": -1.7168047997793479,
+      "ssd128": 1.8288648648636663,
+      "control-after": 0.0
+    },
+    "warm-CD": {
+      "control-before": -3.035417111161598,
+      "ssd512": 2.2404224491213265,
+      "ssd128": 2.3421232932693936,
+      "control-after": 0.0
+    },
+    "edited-AB": {
+      "control-before": 0.7160400740406914,
+      "ssd512": 1.89686043758992,
+      "ssd128": 53.69519160888305,
+      "control-after": 0.0
+    },
+    "edited-CD": {
+      "control-before": 0.7828259037151897,
+      "ssd512": 1.6596982457256715,
+      "ssd128": 55.237160749461744,
+      "control-after": 0.0
+    }
+  },
+  "control_bracket_after_vs_before_percent": {
+    "launcher_wall_seconds": 0.9192984687823591,
+    "client_phase_wall_seconds": 0.9067651656012199,
+    "edited_group_makespan_seconds": -0.7435672440288865
+  },
+  "change_vs_control_mean_percent": {
+    "control-before": {
+      "launcher_wall_seconds": -0.45754612712088916,
+      "client_phase_wall_seconds": -0.45133630261470215,
+      "edited_group_makespan_seconds": 0.3731710107143904
+    },
+    "ssd512": {
+      "launcher_wall_seconds": 1.2340490238535784,
+      "client_phase_wall_seconds": 1.2619794588798694,
+      "edited_group_makespan_seconds": 1.3995173952208617
+    },
+    "ssd128": {
+      "launcher_wall_seconds": 20.689143807502663,
+      "client_phase_wall_seconds": 21.15716909862946,
+      "edited_group_makespan_seconds": 53.88295829277325
+    },
+    "control-after": {
+      "launcher_wall_seconds": 0.45754612712087805,
+      "client_phase_wall_seconds": 0.45133630261469104,
+      "edited_group_makespan_seconds": -0.3731710107143904
+    }
+  },
+  "text_and_usage_vs_control_before": {
+    "control-before": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      }
+    },
+    "ssd512": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      }
+    },
+    "ssd128": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": false,
+        "grade_equal": false,
+        "token_totals_equal": false
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": false,
+        "grade_equal": true,
+        "token_totals_equal": false
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": false
+      },
+      "C-edited": {
+        "text_byte_equal": false,
+        "grade_equal": true,
+        "token_totals_equal": false
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": false
+      }
+    },
+    "control-after": {
+      "A-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-warm": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "A-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "B-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "C-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      },
+      "D-edited": {
+        "text_byte_equal": true,
+        "grade_equal": true,
+        "token_totals_equal": true
+      }
+    }
+  },
+  "grafts": [
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.406142,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:32:14 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17406.142 ms"
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.439164,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:32:34 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17439.164 ms"
+    },
+    {
+      "arm": "control-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 16.926294000000002,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:33:08 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16926.294 ms"
+    },
+    {
+      "arm": "control-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.656921999999998,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:33:25 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17656.922 ms"
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.106547,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:37:21 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17106.547 ms"
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.821406,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:37:41 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17821.406 ms"
+    },
+    {
+      "arm": "ssd512",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 16.785756000000003,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:38:16 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 16785.756 ms"
+    },
+    {
+      "arm": "ssd512",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.490409,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:38:35 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17490.409 ms"
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 17.22159,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:48:31 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 17221.590 ms"
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.2608,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:48:51 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17260.800 ms"
+    },
+    {
+      "arm": "control-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 0,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "658:1692",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 16.76671,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:49:25 ds4-server: suffix APPROXIMATE slot=0 reused=1034 fresh=95 graft_fresh=31 source=658:1692 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 16766.710 ms"
+    },
+    {
+      "arm": "control-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "slot": 1,
+      "reused": 1034,
+      "fresh": 95,
+      "graft_fresh": 31,
+      "source": "660:1694",
+      "destination": "308:1342",
+      "latest_user_start": 1345,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 0,
+      "graft_seconds": 17.452879,
+      "request_part": "edited primary",
+      "raw_log": "1004 16:49:42 ds4-server: suffix APPROXIMATE slot=1 reused=1034 fresh=95 graft_fresh=31 source=660:1694 destination=308:1342 latest_user_start=1345 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=0 17452.879 ms"
+    }
+  ],
+  "visible_continuations": [
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:32:45 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "control-before",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1556,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 16:32:46 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1"
+    },
+    {
+      "arm": "control-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:33:39 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "control-before",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:33:40 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1556,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 16:37:53 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1"
+    },
+    {
+      "arm": "ssd512",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:37:54 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "ssd512",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:38:47 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "ssd512",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:38:48 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:49:02 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "control-after",
+      "phase": "before",
+      "group": "edited-AB",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1556,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 16:49:03 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1556 approximate=1"
+    },
+    {
+      "arm": "control-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:49:55 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    },
+    {
+      "arm": "control-after",
+      "phase": "after",
+      "group": "edited-CD",
+      "match": "visible-prefix",
+      "ids": 1,
+      "cached": 1530,
+      "prompt": 1555,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 16:49:56 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=1 cached=1530 prompt=1555 approximate=1"
+    }
+  ],
+  "actual_reply_usage": {
+    "control-before": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1572
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ]
+    },
+    "ssd512": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1572
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ]
+    },
+    "ssd128": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 102,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1175
+        },
+        {
+          "input_tokens": 1703,
+          "input_tokens_details": {
+            "cached_tokens": 1175,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 32,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1735
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1437
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1557,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 27
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1576
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1436,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1436
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1529
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1529,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1476,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1476
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1569
+        },
+        {
+          "input_tokens": 1595,
+          "input_tokens_details": {
+            "cached_tokens": 1569,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1613
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1436,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1436
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1529
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1529,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ]
+    },
+    "control-after": {
+      "A-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "B-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "C-warm": [
+        {
+          "input_tokens": 1073,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1073
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1166
+        },
+        {
+          "input_tokens": 1694,
+          "input_tokens_details": {
+            "cached_tokens": 1166,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1696
+        }
+      ],
+      "D-warm": [
+        {
+          "input_tokens": 1071,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1071
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1164
+        },
+        {
+          "input_tokens": 1692,
+          "input_tokens_details": {
+            "cached_tokens": 1164,
+            "cache_write_tokens": 528
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1694
+        }
+      ],
+      "A-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1556,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 16,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1572
+        }
+      ],
+      "B-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1573
+        }
+      ],
+      "C-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ],
+      "D-edited": [
+        {
+          "input_tokens": 1437,
+          "input_tokens_details": {
+            "cached_tokens": 1034,
+            "cache_write_tokens": 403
+          },
+          "output_tokens": 93,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1530
+        },
+        {
+          "input_tokens": 1555,
+          "input_tokens_details": {
+            "cached_tokens": 1530,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 15,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1570
+        }
+      ]
+    }
+  },
+  "public_reply_controls_vs_control_before": {
+    "control-before": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      }
+    },
+    "ssd512": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      }
+    },
+    "ssd128": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          false,
+          false
+        ],
+        "reply_usage_equal": false
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          false
+        ],
+        "reply_usage_equal": false
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": false
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          false
+        ],
+        "reply_usage_equal": false
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": false
+      }
+    },
+    "control-after": {
+      "A-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-warm": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "A-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "B-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "C-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      },
+      "D-edited": {
+        "reply_output_equal": [
+          true,
+          true
+        ],
+        "reply_usage_equal": true
+      }
+    }
+  },
+  "guard_summaries": [
+    {
+      "arm": "control-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 280,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.018125,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 86.81196594238281,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "ssd512",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 285,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.018125,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 85.32675170898438,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "ssd128",
+      "status": "complete",
+      "child_returncode": 3,
+      "samples": 340,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.018125,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 84.96397399902344,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "control-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 283,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.018125,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 84.69169616699219,
+      "max_consecutive_bad": 0
+    }
+  ]
+}

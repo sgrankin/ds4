@@ -1,0 +1,29 @@
+{
+  "mode": "native",
+  "phase": "source",
+  "seconds": 85.10078570900077,
+  "http_status": 200,
+  "response_status": "completed",
+  "text": "READY",
+  "gold": "READY",
+  "correct": true,
+  "complete": true,
+  "error": null,
+  "input_tokens": 3114,
+  "output_tokens": 2,
+  "usage": {
+    "input_tokens": 3114,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 3114
+    },
+    "output_tokens": 2,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 3116
+  },
+  "incomplete_details": null,
+  "suffix_log_lines": [],
+  "pass": true
+}

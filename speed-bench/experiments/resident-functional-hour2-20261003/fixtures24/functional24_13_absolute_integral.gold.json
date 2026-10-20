@@ -1,0 +1,14 @@
+{
+  "gold": {
+    "denominator": 2,
+    "numerator": 17
+  },
+  "oracle_input": {
+    "intercept": -3,
+    "lower": 0,
+    "slope": 2,
+    "upper": 4
+  },
+  "scope": "Authored teacher gold, not a generated-task score.",
+  "semantic_distinction": "Exact piecewise integral and geometric areas; not train distances, rectangle perimeter or fraction equality."
+}

@@ -1,0 +1,9 @@
+{
+  "binary_sha256": "9d5ae2f3fa3c9a0b7b24cb43f5990555f5b3e0816fc694dd773c95a4855bd215",
+  "candidate": [
+    "DS4_METAL_V41_DEMAND_WORKSPACE=1",
+    "DS4_METAL_STREAM_CACHE_DECAY_TOKENS=256"
+  ],
+  "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+  "order": "ABBA"
+}

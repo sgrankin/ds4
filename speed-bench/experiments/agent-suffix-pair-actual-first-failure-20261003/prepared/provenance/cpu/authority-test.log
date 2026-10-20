@@ -1,0 +1,12 @@
+test_all26_shader_payloads_mandatory_before_model_identity (test_agent_suffix_pair_actual_authority.Authority.test_all26_shader_payloads_mandatory_before_model_identity) ... ok
+test_complete_nonmodel_manifest_accepted (test_agent_suffix_pair_actual_authority.Authority.test_complete_nonmodel_manifest_accepted) ... ok
+test_exact_typed_finite_grant (test_agent_suffix_pair_actual_authority.Authority.test_exact_typed_finite_grant) ... ok
+test_manifest_duplicate_and_nonfinite_fields_rejected (test_agent_suffix_pair_actual_authority.Authority.test_manifest_duplicate_and_nonfinite_fields_rejected) ... ok
+test_missing_or_forged_grant_before_first_model_identity (test_agent_suffix_pair_actual_authority.Authority.test_missing_or_forged_grant_before_first_model_identity) ... ok
+test_prepared_command_duplicate_field_rejected (test_agent_suffix_pair_actual_authority.Authority.test_prepared_command_duplicate_field_rejected) ... ok
+test_single_child_prelaunch_guard_and_grant_recheck (test_agent_suffix_pair_actual_authority.Authority.test_single_child_prelaunch_guard_and_grant_recheck) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.015s
+
+OK

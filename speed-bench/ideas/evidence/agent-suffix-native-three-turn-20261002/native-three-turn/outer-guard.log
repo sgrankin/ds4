@@ -1,0 +1,27 @@
+SUBMITTED native suffix-agent turn 1
+SUBMITTED native suffix-agent turn 2
+SUBMITTED native suffix-agent turn 3
+{
+  "pass": false,
+  "suffix_mode": "on",
+  "turns_sent": 3,
+  "agent_returncode": 0,
+  "seconds": 216.10372483399988,
+  "old_control_correct": true,
+  "final_answer_correct": true,
+  "final_assistant_text": "</think>CODE=3141<\uff5cend\u2581of\u2581sentence\uff5c>",
+  "approximate_reuses": [
+    {
+      "reused": 556,
+      "fresh": 476
+    }
+  ],
+  "fully_fresh_latest_query": true,
+  "protected_and_other_bytes_preserved": true,
+  "updated_fact_retained": true,
+  "rejected_edits": 0,
+  "named_session_files": [],
+  "text_only_named_save": false,
+  "approximate_save_notice": false
+}
+{"status": "complete", "child_returncode": 3}

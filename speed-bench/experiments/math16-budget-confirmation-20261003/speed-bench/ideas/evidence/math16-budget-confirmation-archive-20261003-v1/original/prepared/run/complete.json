@@ -1,0 +1,10 @@
+{
+  "status": "COMPLETE",
+  "arms": [
+    "native-before",
+    "budget1024",
+    "native-after"
+  ],
+  "returncode": 3,
+  "interpretation": "All48 first attempts retained. Offline final analysis separately requires actual ROOT release proof. No retries/speed/cross-prefix KL claim."
+}

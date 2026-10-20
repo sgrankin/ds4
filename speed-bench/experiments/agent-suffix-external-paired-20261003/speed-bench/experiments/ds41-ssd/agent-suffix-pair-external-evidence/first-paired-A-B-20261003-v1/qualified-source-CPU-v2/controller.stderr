@@ -1,0 +1,53 @@
+test_correct_new_reference_requires_every_candidate_and_copied_A (__main__.ExplicitAuthority.test_correct_new_reference_requires_every_candidate_and_copied_A) ... ok
+test_missing_or_malformed_build_refused (__main__.ExplicitAuthority.test_missing_or_malformed_build_refused) ... ok
+test_native_build_plan_cwd_source_headers_and_object_scope (__main__.ExplicitAuthority.test_native_build_plan_cwd_source_headers_and_object_scope) ... ok
+test_actual_fresh_count_must_equal_selection (__main__.ExternalSpecific.test_actual_fresh_count_must_equal_selection) ... ok
+test_arm_policy_changes_only_two_reuse_flags (__main__.ExternalSpecific.test_arm_policy_changes_only_two_reuse_flags) ... ok
+test_commit_strict_mode_no_exact_fallback_success (__main__.ExternalSpecific.test_commit_strict_mode_no_exact_fallback_success) ... ok
+test_control_serial_free_and_commit_before_any_sampling (__main__.ExternalSpecific.test_control_serial_free_and_commit_before_any_sampling) ... ok
+test_first_wrong_grading_code_never_repaired (__main__.ExternalSpecific.test_first_wrong_grading_code_never_repaired) ... ok
+test_frozen_new_delivery_exact_literal_and_one_protocol_LF (__main__.ExternalSpecific.test_frozen_new_delivery_exact_literal_and_one_protocol_LF) ... ok
+test_grant_missing_forged_or_bool_before_model_identity (__main__.ExternalSpecific.test_grant_missing_forged_or_bool_before_model_identity) ... ok
+test_nonutf8_ordinary_piece_trace_is_lossless (__main__.ExternalSpecific.test_nonutf8_ordinary_piece_trace_is_lossless) ... ok
+test_private_caller_restore_three_seams_to_immutable_production (__main__.ExternalSpecific.test_private_caller_restore_three_seams_to_immutable_production) ... ok
+test_raw_control_strict_full_finite_extent (__main__.ExternalSpecific.test_raw_control_strict_full_finite_extent) ... ok
+test_task_old_facts_candidates_and_first_two_unchanged (__main__.ExternalSpecific.test_task_old_facts_candidates_and_first_two_unchanged) ... ok
+test_tool_audit_single_generic_execution_only (__main__.ExternalSpecific.test_tool_audit_single_generic_execution_only) ... ok
+test_jsonl_truncation_duplicate_fields (__main__.NativeObservations.test_jsonl_truncation_duplicate_fields) ... ok
+test_round_order_and_stop (__main__.NativeObservations.test_round_order_and_stop) ... ok
+test_token_trace_lossless_and_truncated (__main__.NativeObservations.test_token_trace_lossless_and_truncated) ... ok
+test_typed_limit_and_tool_flags (__main__.NativeObservations.test_typed_limit_and_tool_flags) ... ok
+test_already_reaped_leader_never_signaled (__main__.OwnershipAndAuthority.test_already_reaped_leader_never_signaled) ... ok
+test_guard_rejection_precedes_model_access (__main__.OwnershipAndAuthority.test_guard_rejection_precedes_model_access) ... ok
+test_parent_inspection_absolute_bounded (__main__.OwnershipAndAuthority.test_parent_inspection_absolute_bounded) ... ok
+test_signals_all_before_first_reap (__main__.OwnershipAndAuthority.test_signals_all_before_first_reap) ... ok
+test_timeout_pipe_holder_keeps_birth_anchor_and_closes_handles (__main__.OwnershipAndAuthority.test_timeout_pipe_holder_keeps_birth_anchor_and_closes_handles) ... ok
+test_archived_released_owned_namespace_resets_only_records (__main__.SharedOwnership.test_archived_released_owned_namespace_resets_only_records) ... ok
+test_changed_record_refuses_before_any_unlink (__main__.SharedOwnership.test_changed_record_refuses_before_any_unlink) ... ok
+test_new_A_exclusive_and_shared_paths_constant (__main__.SharedOwnership.test_new_A_exclusive_and_shared_paths_constant) ... ok
+test_release_archive_birth_and_symlink_refusal (__main__.SharedOwnership.test_release_archive_birth_and_symlink_refusal) ... ok
+test_snapshot_deadline_and_fixed_size_bound (__main__.SharedOwnership.test_snapshot_deadline_and_fixed_size_bound) ... ok
+test_unknown_arm_no_shared_creation (__main__.SharedOwnership.test_unknown_arm_no_shared_creation) ... ok
+test_unrecorded_file_refuses_before_any_unlink (__main__.SharedOwnership.test_unrecorded_file_refuses_before_any_unlink) ... ok
+test_duplicate_completed_marker (__main__.TinyProtocol.test_duplicate_completed_marker) ... ok
+test_eligibility_failure_is_retained (__main__.TinyProtocol.test_eligibility_failure_is_retained) ... ok
+test_fixture_mutation_is_separate_overall_failure (__main__.TinyProtocol.test_fixture_mutation_is_separate_overall_failure) ... ok
+test_infrastructure_exit_not_semantic_failure (__main__.TinyProtocol.test_infrastructure_exit_not_semantic_failure) ... ok
+test_missing_round_and_selection_failure (__main__.TinyProtocol.test_missing_round_and_selection_failure) ... ok
+test_observed_round_limit (__main__.TinyProtocol.test_observed_round_limit) ... ok
+test_three_ordered_completions_single_multiline_write (__main__.TinyProtocol.test_three_ordered_completions_single_multiline_write) ... ok
+test_truncated_trace (__main__.TinyProtocol.test_truncated_trace) ... ok
+test_whole_deadline_includes_eof_cleanup (__main__.TinyProtocol.test_whole_deadline_includes_eof_cleanup) ... ok
+test_whole_deadline_includes_external_checker (__main__.TinyProtocol.test_whole_deadline_includes_external_checker) ... ok
+test_wrong_control_first_failure_not_repaired (__main__.TinyProtocol.test_wrong_control_first_failure_not_repaired) ... ok
+test_actual_commit_geometry_bound (__main__.TypedGeometry.test_actual_commit_geometry_bound) ... ok
+test_candidate_order_cannot_skip_or_fake_splice (__main__.TypedGeometry.test_candidate_order_cannot_skip_or_fake_splice) ... ok
+test_malformed_geometry_and_budget (__main__.TypedGeometry.test_malformed_geometry_and_budget) ... ok
+test_opaque_id_bounds_and_duplicate_json (__main__.TypedGeometry.test_opaque_id_bounds_and_duplicate_json) ... ok
+test_truncated_ids_and_literal_corruption (__main__.TypedGeometry.test_truncated_ids_and_literal_corruption) ... ok
+test_valid_odd_full_user_and_first_eligible (__main__.TypedGeometry.test_valid_odd_full_user_and_first_eligible) ... ok
+
+----------------------------------------------------------------------
+Ran 48 tests in 7.256s
+
+OK

@@ -1,0 +1,41 @@
+{
+  "status": "CPU_ONLY_PASS_NO_MODEL_OR_HELPER_EXECUTION",
+  "tests": 8,
+  "mocked_abba_trials": 12,
+  "actual_main_guard_probe": true,
+  "actual_guard_returncode": 0,
+  "interpreter_identity": {
+    "path": "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "sha256": "b80d260a48404da13a32dd44d7283aadc80f6a6e56ed6e03ed5597ec6f46d48d",
+    "provenance": "actual model-free MAIN guard ps probe; launcher shim is a distinct file"
+  },
+  "exact_remaining_parent_arguments": true,
+  "guard_hash_and_held_lock_required": true,
+  "clears_all_inherited_ds4_prefix": true,
+  "binary_shader_session_control_assets_equal_v1": true,
+  "no_core_or_metal_rebuild": true,
+  "no_model_metadata_or_tokenizer": true,
+  "no_gpu": true,
+  "first_sandbox_suite": {
+    "returncode": 1,
+    "reason": "sysctl vm.swapusage denied before probe child launch",
+    "log_sha256": "bfcc3a0418c1a60a0fd92def21c621767442dca1c3ff08658d9adcb250eff83b"
+  },
+  "successful_unsandboxed_suite": {
+    "returncode": 0,
+    "log_sha256": "70bc9a8be8816f99e6c53c102962ac750da1c7e50aecadba68234a36d734f7e9"
+  },
+  "preserved_v1": {
+    "manifest_sha256": "d040bf9633590b807444daad392229af1dd21a104a6d15b57420010377c865f3",
+    "prepared_command_sha256": "78ecee8fe47f70067c4d1ac12580764aa44525329b1a8919e98b13be0666f084",
+    "wrapper_sha256": "5ef9f36cdbe299388360dafa1e7933dbdb2f20b7627f66443d2ceabc844fcd68",
+    "pressure_result": {
+      "status": "complete",
+      "child_returncode": 1
+    },
+    "pressure_result_sha256": "b076022cc211be498dbeb1a7498f758f025e2ecd2a3f5da6a7e1618ac31fc0e1",
+    "run_directory_present": false
+  },
+  "unchanged_binary_sha256": "93e337256975bc177e0f03b76baa9d041164e974250f7e7491b186081c3b9fd7",
+  "unchanged_build_manifest_sha256": "17942b2386aff9be0f0dace1500bc17cbf24452e27c75ceac15f2bfb785b6175"
+}

@@ -1,0 +1,78 @@
+{
+  "time": 1790972686.659847,
+  "largest_rss": [
+    {
+      "pid": 2072,
+      "ppid": 2064,
+      "rss_mib": 189.4375,
+      "cpu_percent": 2.3,
+      "program": "codex"
+    },
+    {
+      "pid": 735,
+      "ppid": 1,
+      "rss_mib": 144.109375,
+      "cpu_percent": 0.1,
+      "program": "ChatGPT"
+    },
+    {
+      "pid": 2329,
+      "ppid": 735,
+      "rss_mib": 139.1875,
+      "cpu_percent": 0.0,
+      "program": "Codex (Renderer)"
+    },
+    {
+      "pid": 2343,
+      "ppid": 735,
+      "rss_mib": 91.90625,
+      "cpu_percent": 0.0,
+      "program": "codex"
+    },
+    {
+      "pid": 778,
+      "ppid": 1,
+      "rss_mib": 69.296875,
+      "cpu_percent": 0.0,
+      "program": "zed"
+    },
+    {
+      "pid": 2483,
+      "ppid": 735,
+      "rss_mib": 62.703125,
+      "cpu_percent": 0.0,
+      "program": "Codex (Renderer)"
+    },
+    {
+      "pid": 2064,
+      "ppid": 1244,
+      "rss_mib": 48.296875,
+      "cpu_percent": 6.1,
+      "program": "codex"
+    },
+    {
+      "pid": 1581,
+      "ppid": 1,
+      "rss_mib": 43.90625,
+      "cpu_percent": 0.2,
+      "program": "io.tailscale.ipn.macsys.network-extension"
+    },
+    {
+      "pid": 693,
+      "ppid": 1,
+      "rss_mib": 42.25,
+      "cpu_percent": 0.6,
+      "program": "AppleCentauriAlpha"
+    },
+    {
+      "pid": 1798,
+      "ppid": 735,
+      "rss_mib": 36.78125,
+      "cpu_percent": 0.0,
+      "program": "Codex (Service)"
+    }
+  ],
+  "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "binary_sha256": "f4bafb8ff0e37fcb2cb5766362617a2a7fc8e34868a3711f738054b40a9cbbb0",
+  "CPU_build_test_hash_copy_freeze": true
+}

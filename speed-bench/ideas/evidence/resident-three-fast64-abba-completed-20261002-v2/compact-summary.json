@@ -1,0 +1,75 @@
+{
+  "status": "COMPLETED_SINGLE_REPLAY_ABBA",
+  "order": "ABBA",
+  "runtime_commit": "b9408c3b8e3ec5b22ad7efff3e365fd81818c317",
+  "preparation_commit": "0e7533c2d73318df3fbb52e10ea113c7dc62fa8f",
+  "comparison": {
+    "A": {
+      "startup_prefill_ms": 52767.8685,
+      "append_prefill_ms": 13839.537,
+      "decode_ms": 17644.486,
+      "model_ms": 84251.8915,
+      "turn_model_ms": 31484.023,
+      "runs": 2
+    },
+    "B": {
+      "startup_prefill_ms": 52985.057499999995,
+      "append_prefill_ms": 13904.681,
+      "decode_ms": 15967.674,
+      "model_ms": 82857.4125,
+      "turn_model_ms": 29872.355,
+      "runs": 2
+    },
+    "candidate_change_percent": {
+      "startup_prefill_ms": 0.41159327858770745,
+      "append_prefill_ms": 0.47070938861610845,
+      "decode_ms": -9.503320187394515,
+      "model_ms": -1.6551307931169656,
+      "turn_model_ms": -5.119002739897638
+    },
+    "quality_validation": "separate teacher-forced and held-out evaluations required",
+    "state_hashes_are_diagnostic": true
+  },
+  "checks": {
+    "passed": true,
+    "order": "ABBA",
+    "native_fast64_prior_hashes_exact": true,
+    "both_arms_repeated_hashes_exact": true,
+    "configured_slots_every_phase": 6136,
+    "profile_off": true,
+    "timings_are_single_workload_only": true,
+    "default_promoted": false
+  },
+  "candidate_opt_in": true,
+  "default_promoted": false,
+  "native_prior_exact": true,
+  "same_arm_repeats_exact": true,
+  "cross_arm_outputs_differ": true,
+  "sampled_or_generated_task_quality": false,
+  "correctness_claim": false,
+  "qualification": "One fixed teacher-forced replay with two fresh processes per arm; no statistical significance, task quality or default-promotion claim.",
+  "timing_scope": "C phase wall times exclude sampling, tools, subsequent vector/state export and hashing. Fresh process per arm; one fixed teacher-forced replay.",
+  "hash_scope": "Seven complete phase-end vocabulary vectors concatenated plus final full snapshot; raw343 scored rows and task quality are separate.",
+  "pressure": {
+    "samples": 332,
+    "all_normal": true,
+    "adverse_samples": 0,
+    "initial_swap_gib": 0.017763671875,
+    "min_free_gib": 0.1088104248046875,
+    "max_wired_gib": 74.4176025390625,
+    "max_compressor_gib": 8.709609985351562,
+    "max_swap_gib": 0.017763671875,
+    "result": {
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "release": {
+      "time": 1790981967.6549602,
+      "root_session": 3445,
+      "guard_returncode": 0,
+      "lock_reacquired": true,
+      "matching_live_model_processes": [],
+      "cpu_timing_freeze_released": true
+    }
+  }
+}

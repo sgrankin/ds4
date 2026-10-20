@@ -1,0 +1,11 @@
+ds4: memory detail: ctx=100000 prefill_cap=8192 raw_kv_rows=128 compressed_kv_rows=100001 backend=metal
+PASS: tail=2 plus 8 decoded tokens, full snapshot bit-identical; scalar 1.143s, batch 0.162s
+PASS: tail=3 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.140s, batch 0.101s
+PASS: tail=4 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.190s, batch 0.123s
+PASS: tail=5 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.233s, batch 0.142s
+PASS: tail=6 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.285s, batch 0.161s
+PASS: tail=7 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.330s, batch 0.209s
+PASS: tail=8 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.374s, batch 0.200s
+PASS: tail=9 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.425s, batch 0.258s
+PASS: tail=17 plus 8 decoded tokens, full snapshot bit-identical; scalar 0.803s, batch 0.366s
+PASS: tail=40 plus 8 decoded tokens, full snapshot bit-identical; scalar 2.023s, batch 0.808s

@@ -1,0 +1,278 @@
+[
+  {
+    "variant": "A",
+    "logits_sha256": "5747236d4492fc64415648e836f112a6ab759b69b7b5e4e660ba7bf1eca00e83",
+    "snapshot_sha256": "c35ff76685d423900d091ce0d959250ccc995c62b6747b90f32ce2d01d8ccc0b",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 15222.161,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3796.353,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4075.361,
+        "first_decode_ms": 76.529
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9506.46,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4130.445,
+        "first_decode_ms": 65.22
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2027.392,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10052.175,
+        "first_decode_ms": 70.13
+      }
+    ],
+    "cache_reports": [],
+    "io_reports": {},
+    "startup_prefill_ms": 15222.161,
+    "append_prefill_ms": 15330.205,
+    "decode_ms": 18257.981,
+    "model_ms": 48810.347
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "5747236d4492fc64415648e836f112a6ab759b69b7b5e4e660ba7bf1eca00e83",
+    "snapshot_sha256": "c35ff76685d423900d091ce0d959250ccc995c62b6747b90f32ce2d01d8ccc0b",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14475.139,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3703.11,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4652.918,
+        "first_decode_ms": 82.246
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9334.291,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4794.658,
+        "first_decode_ms": 81.977
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2039.972,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 11059.707,
+        "first_decode_ms": 86.017
+      }
+    ],
+    "cache_reports": [],
+    "io_reports": {},
+    "startup_prefill_ms": 14475.139,
+    "append_prefill_ms": 15077.373,
+    "decode_ms": 20507.283,
+    "model_ms": 50059.795
+  },
+  {
+    "variant": "B",
+    "logits_sha256": "5747236d4492fc64415648e836f112a6ab759b69b7b5e4e660ba7bf1eca00e83",
+    "snapshot_sha256": "c35ff76685d423900d091ce0d959250ccc995c62b6747b90f32ce2d01d8ccc0b",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14604.722,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3749.485,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4639.35,
+        "first_decode_ms": 85.981
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9448.563,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4769.044,
+        "first_decode_ms": 77.841
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2032.796,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10928.967,
+        "first_decode_ms": 73.176
+      }
+    ],
+    "cache_reports": [],
+    "io_reports": {},
+    "startup_prefill_ms": 14604.722,
+    "append_prefill_ms": 15230.844000000001,
+    "decode_ms": 20337.361,
+    "model_ms": 50172.927
+  },
+  {
+    "variant": "A",
+    "logits_sha256": "5747236d4492fc64415648e836f112a6ab759b69b7b5e4e660ba7bf1eca00e83",
+    "snapshot_sha256": "c35ff76685d423900d091ce0d959250ccc995c62b6747b90f32ce2d01d8ccc0b",
+    "phases": [
+      {
+        "phase": 0,
+        "kind": "P",
+        "context": 1859,
+        "tokens": 1859,
+        "ms": 14459.417,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 1,
+        "kind": "P",
+        "context": 1949,
+        "tokens": 90,
+        "ms": 3693.668,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 2,
+        "kind": "D",
+        "context": 2021,
+        "tokens": 72,
+        "ms": 4100.837,
+        "first_decode_ms": 78.629
+      },
+      {
+        "phase": 3,
+        "kind": "P",
+        "context": 2322,
+        "tokens": 301,
+        "ms": 9474.205,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 4,
+        "kind": "D",
+        "context": 2396,
+        "tokens": 74,
+        "ms": 4151.793,
+        "first_decode_ms": 68.309
+      },
+      {
+        "phase": 5,
+        "kind": "P",
+        "context": 2468,
+        "tokens": 72,
+        "ms": 2025.179,
+        "first_decode_ms": 0.0
+      },
+      {
+        "phase": 6,
+        "kind": "D",
+        "context": 2665,
+        "tokens": 197,
+        "ms": 10052.491,
+        "first_decode_ms": 64.49
+      }
+    ],
+    "cache_reports": [],
+    "io_reports": {},
+    "startup_prefill_ms": 14459.417,
+    "append_prefill_ms": 15193.052,
+    "decode_ms": 18305.121,
+    "model_ms": 47957.59
+  }
+]

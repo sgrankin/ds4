@@ -1,0 +1,2 @@
+{"quotient":-4,"remainder":3,"reconstructed":-17}
+Floor division rounds the quotient down to negative four rather than truncating it toward zero. Multiplying negative four by five gives negative twenty, leaving a positive remainder of three. The identity negative twenty plus three equals negative seventeen reconstructs the dividend. A truncation-based quotient would instead be negative three.

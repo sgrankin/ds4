@@ -1,0 +1,418 @@
+{
+  "order": [
+    "reuse64",
+    "native"
+  ],
+  "family": "Fresh facts in existing storage-backed HTTP workflow family",
+  "gold": {
+    "A": 313,
+    "B": 231
+  },
+  "metrics": {
+    "source_warmup": {
+      "native_seconds": 99.83740970800864,
+      "reuse64_seconds": 92.49815108400071,
+      "saving_percent": 7.351210979404243
+    },
+    "ordinary": {
+      "native_seconds": 96.99156995800149,
+      "reuse64_seconds": 75.70376324999961,
+      "saving_percent": 21.948099940252284
+    },
+    "stress": {
+      "native_seconds": 90.2512957079889,
+      "reuse64_seconds": 76.94494054198731,
+      "saving_percent": 14.743672167383338
+    },
+    "all_edited": {
+      "native_seconds": 187.2428656659904,
+      "reuse64_seconds": 152.64870379198692,
+      "saving_percent": 18.475556732673393
+    },
+    "all_task": {
+      "native_seconds": 289.38451349899697,
+      "reuse64_seconds": 247.643559041986,
+      "saving_percent": 14.42404569350102
+    },
+    "excluding_source": {
+      "native_seconds": 189.54710379098833,
+      "reuse64_seconds": 155.1454079579853,
+      "saving_percent": 18.149417820141124
+    },
+    "turnover": {
+      "native_seconds": 2.304238124997937,
+      "reuse64_seconds": 2.4967041659983806,
+      "saving_percent": -8.35269753210146
+    },
+    "startup_restart": {
+      "native_seconds": 0.8384696239954792,
+      "reuse64_seconds": 0.8448373330029426,
+      "saving_percent": -0.7594442094538856
+    },
+    "launcher_wall": {
+      "native_seconds": 293.47967179099214,
+      "reuse64_seconds": 251.8392902080086,
+      "saving_percent": 14.188506252875543
+    }
+  },
+  "arms": {
+    "reuse64": {
+      "correct": 7,
+      "passed": 7,
+      "fresh_reads": 6,
+      "grafts": 3,
+      "approximate_source_grafts": 1,
+      "steps": [
+        {
+          "step": "A-source",
+          "seconds": 46.19979549999698,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 12:09:42 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-source",
+          "seconds": 46.29835558400373,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 12:10:28 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "A-edit1",
+          "seconds": 40.30626516700431,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 313,
+            "archived_code": "BEACON-46"
+          },
+          "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+          "gold": {
+            "active_total": 313,
+            "archived_code": "BEACON-46"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 1,
+              "reused": 416,
+              "fresh": 726,
+              "graft_fresh": 662,
+              "source_ssd": 1,
+              "source_approximate": 0,
+              "line": "1004 12:11:46 ds4-server: suffix APPROXIMATE slot=1 reused=416 fresh=726 graft_fresh=662 source=660:1076 destination=308:724 latest_user_start=1351 pre_rope=1 source_ssd=1 source_approximate=0 31433.388 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 12:11:46 ds4-server: suffix APPROXIMATE slot=1 reused=416 fresh=726 graft_fresh=662 source=660:1076 destination=308:724 latest_user_start=1351 pre_rope=1 source_ssd=1 source_approximate=0 31433.388 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 12:11:14 slot 1: request reuses nothing; evicting checkpoint (1699 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "B-edit1",
+          "seconds": 35.3974980829953,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 231,
+            "archived_code": "ORBIT-57"
+          },
+          "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+          "gold": {
+            "active_total": 231,
+            "archived_code": "ORBIT-57"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 1,
+              "reused": 527,
+              "fresh": 102,
+              "graft_fresh": 38,
+              "source_ssd": 1,
+              "source_approximate": 0,
+              "line": "1004 12:12:20 ds4-server: suffix APPROXIMATE slot=1 reused=527 fresh=102 graft_fresh=38 source=1170:1697 destination=820:1347 latest_user_start=1350 pre_rope=1 source_ssd=1 source_approximate=0 25928.270 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 12:12:20 ds4-server: suffix APPROXIMATE slot=1 reused=527 fresh=102 graft_fresh=38 source=1170:1697 destination=820:1347 latest_user_start=1350 pre_rope=1 source_ssd=1 source_approximate=0 25928.270 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 12:11:55 slot 1: request reuses nothing; evicting checkpoint (1591 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "C-turnover",
+          "seconds": 2.4967041659983806,
+          "correct": true,
+          "pass": true,
+          "fresh_read": false,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 12:12:30 slot 1: request reuses nothing; evicting checkpoint (1588 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "A-edit2",
+          "seconds": 30.90384387499944,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 313,
+            "archived_code": "BEACON-47"
+          },
+          "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-47\"}",
+          "gold": {
+            "active_total": 313,
+            "archived_code": "BEACON-47"
+          },
+          "errors": [],
+          "grafts": [
+            {
+              "slot": 0,
+              "reused": 786,
+              "fresh": 242,
+              "graft_fresh": 178,
+              "source_ssd": 1,
+              "source_approximate": 1,
+              "line": "1004 12:12:56 ds4-server: suffix APPROXIMATE slot=0 reused=786 fresh=242 graft_fresh=178 source=664:1450 destination=312:1098 latest_user_start=1241 pre_rope=1 source_ssd=1 source_approximate=1 21559.315 ms"
+            }
+          ],
+          "suffix_log_lines": [
+            "1004 12:12:56 ds4-server: suffix APPROXIMATE slot=0 reused=786 fresh=242 graft_fresh=178 source=664:1450 destination=312:1098 latest_user_start=1241 pre_rope=1 source_ssd=1 source_approximate=1 21559.315 ms"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-edit2",
+          "seconds": 46.04109666698787,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 231,
+            "archived_code": "ORBIT-58"
+          },
+          "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-58\"}",
+          "gold": {
+            "active_total": 231,
+            "archived_code": "ORBIT-58"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [
+            "1004 12:13:05 ds4-server: suffix exact fallback slot=1 reason=no-aligned-source"
+          ],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        }
+      ]
+    },
+    "native": {
+      "correct": 7,
+      "passed": 7,
+      "fresh_reads": 6,
+      "grafts": 0,
+      "approximate_source_grafts": 0,
+      "steps": [
+        {
+          "step": "A-source",
+          "seconds": 49.995903625007486,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-source",
+          "seconds": 49.84150608300115,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "A-edit1",
+          "seconds": 48.36962570800097,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 313,
+            "archived_code": "BEACON-46"
+          },
+          "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+          "gold": {
+            "active_total": 313,
+            "archived_code": "BEACON-46"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 12:15:33 slot 1: request reuses nothing; evicting checkpoint (1699 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "B-edit1",
+          "seconds": 48.621944250000524,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 231,
+            "archived_code": "ORBIT-57"
+          },
+          "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+          "gold": {
+            "active_total": 231,
+            "archived_code": "ORBIT-57"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 12:16:22 slot 1: request reuses nothing; evicting checkpoint (1591 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "C-turnover",
+          "seconds": 2.304238124997937,
+          "correct": true,
+          "pass": true,
+          "fresh_read": false,
+          "complete": true,
+          "answer": null,
+          "text": "READY",
+          "gold": "READY",
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": [
+            "1004 12:17:10 slot 1: request reuses nothing; evicting checkpoint (1588 tokens, idle 0 s, protected)"
+          ]
+        },
+        {
+          "step": "A-edit2",
+          "seconds": 45.0813140829996,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 313,
+            "archived_code": "BEACON-47"
+          },
+          "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-47\"}",
+          "gold": {
+            "active_total": 313,
+            "archived_code": "BEACON-47"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        },
+        {
+          "step": "B-edit2",
+          "seconds": 45.169981624989305,
+          "correct": true,
+          "pass": true,
+          "fresh_read": true,
+          "complete": true,
+          "answer": {
+            "active_total": 231,
+            "archived_code": "ORBIT-58"
+          },
+          "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-58\"}",
+          "gold": {
+            "active_total": 231,
+            "archived_code": "ORBIT-58"
+          },
+          "errors": [],
+          "grafts": [],
+          "suffix_log_lines": [],
+          "exact_hit_log_lines": [],
+          "slot_eviction_log_lines": []
+        }
+      ]
+    }
+  },
+  "pressure": {
+    "samples": 527,
+    "normal_samples": 527,
+    "bad_samples": 0,
+    "initial_swap_gib": 0.012998046875,
+    "final_swap_gib": 0.012998046875,
+    "max_swap_growth_gib": 0.0,
+    "peak_wired_compressor_gib": 84.20414733886719,
+    "guard_result": {
+      "status": "complete",
+      "child_returncode": 0
+    }
+  },
+  "scope": "One reverse-order pair, generated histories may differ; no paired NLL, physical SSD read or broad accuracy claim. Edited sums include file/context edits; full launcher includes startup/restart."
+}

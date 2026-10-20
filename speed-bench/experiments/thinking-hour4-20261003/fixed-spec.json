@@ -1,0 +1,200 @@
+{
+  "tasks": [
+    {
+      "key": "intervals",
+      "prompt": "Task: Half-open interval coalescing.\nCreate solution.py containing def solve(payload, config). payload is a list of integer [start,end] intervals. Ignore empty or reversed intervals. Return sorted nonoverlapping [start,end] intervals covering the input union; obey merge_touching in config.\nThe project contains config.json with the configuration and one sample INPUT (no expected output). You must first make exactly one read tool call for path config.json, with whole=true and raw=true, and consume its result. Then make exactly one write tool call for path solution.py containing your complete implementation. These are the only allowed tools and paths. Do not call bash, list, edit, more, web, search, or any other tool. Do not read solution.py or any other file. No second write or correction is permitted. After the write, finish with a brief plain answer. External tests will run once after your first attempt; do not try to run them.\n",
+      "system": "Implement the requested function using Python builtins only. At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports. No I/O, dynamic execution, or names/attributes beginning with underscore. Follow the task tool contract exactly. Do not search for or read private grading files.",
+      "config": {
+        "merge_touching": true,
+        "sample": [
+          [
+            8,
+            11
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "key": "ledger",
+      "prompt": "Task: Event ledger idempotency.\nCreate solution.py containing def solve(payload, config). payload is a list of objects with id, account and integer delta. Only the first event with an id counts, even if a later duplicate differs. Start with initial balances in config; unseen accounts start at zero. Return a balances object, including initial accounts.\nThe project contains config.json with the configuration and one sample INPUT (no expected output). You must first make exactly one read tool call for path config.json, with whole=true and raw=true, and consume its result. Then make exactly one write tool call for path solution.py containing your complete implementation. These are the only allowed tools and paths. Do not call bash, list, edit, more, web, search, or any other tool. Do not read solution.py or any other file. No second write or correction is permitted. After the write, finish with a brief plain answer. External tests will run once after your first attempt; do not try to run them.\n",
+      "system": "Implement the requested function using Python builtins only. At module level use only plain function definitions: no decorators, annotations, default argument values, classes, or imports. No I/O, dynamic execution, or names/attributes beginning with underscore. Follow the task tool contract exactly. Do not search for or read private grading files.",
+      "config": {
+        "initial": {
+          "cash": 17,
+          "reserve": -2
+        },
+        "sample": [
+          {
+            "id": "e1",
+            "account": "cash",
+            "delta": 4
+          },
+          {
+            "id": "e1",
+            "account": "reserve",
+            "delta": 99
+          },
+          {
+            "id": "e2",
+            "account": "new",
+            "delta": -3
+          }
+        ]
+      }
+    }
+  ],
+  "task_order": [
+    "intervals",
+    "ledger"
+  ],
+  "settings": {
+    "ctx": 8192,
+    "cache_gb": 64,
+    "configured_slots": 6136,
+    "chunk": 512,
+    "tile": 64,
+    "limit": 1024,
+    "effort": 25,
+    "temperature": "0.6",
+    "top_p": "0.95",
+    "min_p": "0",
+    "seed": 20261002,
+    "sampler_step_cap": 2048,
+    "max_rounds": 3
+  },
+  "helper_argv_tail": [
+    "--metal",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--ctx",
+    "8192",
+    "--prefill-chunk",
+    "512",
+    "--tokens",
+    "2048",
+    "--think-level",
+    "25",
+    "--temp",
+    "0.6",
+    "--top-p",
+    "0.95",
+    "--min-p",
+    "0",
+    "--seed",
+    "20261002",
+    "--non-interactive"
+  ],
+  "shader_env": {
+    "DS4_METAL_ARGSORT_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/argsort.metal",
+    "DS4_METAL_BIN_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/bin.metal",
+    "DS4_METAL_CONCAT_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/concat.metal",
+    "DS4_METAL_CPY_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/cpy.metal",
+    "DS4_METAL_DEEPSEEK4_VISION_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/deepseek4_vision.metal",
+    "DS4_METAL_DENSE_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dense.metal",
+    "DS4_METAL_DSV41_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv41.metal",
+    "DS4_METAL_DSV4_HC_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_hc.metal",
+    "DS4_METAL_DSV4_KV_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_kv.metal",
+    "DS4_METAL_DSV4_MISC_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_misc.metal",
+    "DS4_METAL_DSV4_ROPE_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/dsv4_rope.metal",
+    "DS4_METAL_FLASH_ATTN_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/flash_attn.metal",
+    "DS4_METAL_GET_ROWS_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/get_rows.metal",
+    "DS4_METAL_GLM53_BF16_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_bf16.metal",
+    "DS4_METAL_GLM53_KDA_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_kda.metal",
+    "DS4_METAL_GLM53_VISION_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glm53_vision.metal",
+    "DS4_METAL_GLU_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/glu.metal",
+    "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/moe.metal",
+    "DS4_METAL_NORM_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/norm.metal",
+    "DS4_METAL_QWEN4_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/qwen4.metal",
+    "DS4_METAL_QWEN4_VISION_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/qwen4_vision.metal",
+    "DS4_METAL_REPEAT_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/repeat.metal",
+    "DS4_METAL_SET_ROWS_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/set_rows.metal",
+    "DS4_METAL_SOFTMAX_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/softmax.metal",
+    "DS4_METAL_SUM_ROWS_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/sum_rows.metal",
+    "DS4_METAL_UNARY_SOURCE": "/Volumes/Models/ds4/.workspaces/idea-resident-native-weights-next/speed-bench/ideas/artifacts/resident-native-weights-study-prepared-v2/metal/unary.metal"
+  },
+  "window_utc": [
+    "2026-10-03 14:10:23",
+    "2026-10-03 15:10:23"
+  ],
+  "arm_order": [
+    "native-before",
+    "budget256",
+    "budget512",
+    "budget1024",
+    "penalty05",
+    "penalty1",
+    "native-after",
+    "nothink",
+    "penalty01"
+  ],
+  "policy": {
+    "native-before": {
+      "PT_WRITE_REASONING_BUDGET": "0"
+    },
+    "native-after": {
+      "PT_WRITE_REASONING_BUDGET": "0"
+    },
+    "budget256": {
+      "PT_WRITE_REASONING_BUDGET": "256"
+    },
+    "budget512": {
+      "PT_WRITE_REASONING_BUDGET": "512"
+    },
+    "budget1024": {
+      "PT_WRITE_REASONING_BUDGET": "1024"
+    },
+    "penalty05": {
+      "PT_WRITE_REASONING_BUDGET": "0",
+      "DS4_OVERTHINK_PENALTY": ".5",
+      "DS4_OVERTHINK_SCOPE": "all",
+      "DS4_OVERTHINK_AFTER": "0"
+    },
+    "penalty1": {
+      "PT_WRITE_REASONING_BUDGET": "0",
+      "DS4_OVERTHINK_PENALTY": "1",
+      "DS4_OVERTHINK_SCOPE": "all",
+      "DS4_OVERTHINK_AFTER": "0"
+    },
+    "nothink": {
+      "PT_WRITE_REASONING_BUDGET": "0",
+      "helper_argv_extra": [
+        "--nothink"
+      ]
+    },
+    "penalty01": {
+      "PT_WRITE_REASONING_BUDGET": "0",
+      "DS4_OVERTHINK_PENALTY": ".1",
+      "DS4_OVERTHINK_SCOPE": "all",
+      "DS4_OVERTHINK_AFTER": "0"
+    }
+  },
+  "source_plan": "/Volumes/Models/ds4/.workspaces/idea-practical-write-observation-v4/speed-bench/ideas/artifacts/practical-write-native-controls-prepared-v4/plan.json",
+  "raw_vector_policy": "PT_LIGHT_AUDIT=1 for every arm; no full raw-vector identity claim",
+  "appended_arm_note": "nothink and penalty01 were appended to the initial seven-arm campaign; penalty01 is exploratory after the initial results, with tasks and seed unchanged.",
+  "completion": {
+    "arms_completed": 9,
+    "attempts": 18,
+    "pressure_sample_window_utc": [
+      "2026-10-03 14:19:00",
+      "2026-10-03 14:44:15"
+    ],
+    "guard_results": [
+      "pressure-screen/result.json",
+      "pressure-extra/result.json"
+    ],
+    "individual_cap_failures_retained": true
+  }
+}

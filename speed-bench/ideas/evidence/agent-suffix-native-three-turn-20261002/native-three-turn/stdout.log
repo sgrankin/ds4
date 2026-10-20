@@ -1,0 +1,11 @@
+CODE=2718
+
+READY
+
+
+
+🛠️ $ python3 /Volumes/Models/ds4/speed-bench/ideas/artifacts/suffix-agent-native/update_context.py
+
+Updated exactly one earlier record; all other context bytes preserved.
+[0mCODE=3141
+

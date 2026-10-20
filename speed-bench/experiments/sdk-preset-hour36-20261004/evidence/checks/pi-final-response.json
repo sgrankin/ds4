@@ -1,0 +1,32 @@
+{
+  "role": "assistant",
+  "content": [
+    {
+      "type": "text",
+      "text": "COVE-42",
+      "textSignature": "{\"v\":1,\"id\":\"msg_815260c1fb5f025c7770da02\"}"
+    }
+  ],
+  "api": "openai-responses",
+  "provider": "local-ds4",
+  "model": "deepseek-v4.1-flash",
+  "usage": {
+    "input": 0,
+    "output": 4,
+    "cacheRead": 402,
+    "cacheWrite": 20,
+    "reasoning": 0,
+    "totalTokens": 426,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "total": 0
+    }
+  },
+  "stopReason": "stop",
+  "timestamp": 1791154631706,
+  "responseId": "resp_93be08be5c7352cb97b8c5e1",
+  "rawStopReason": "completed"
+}

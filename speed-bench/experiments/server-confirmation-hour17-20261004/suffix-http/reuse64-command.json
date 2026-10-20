@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/suffix_launch.py",
+    "--mode",
+    "reuse",
+    "--fresh",
+    "64",
+    "--output",
+    "/Volumes/Models/ds4/speed-bench/experiments/server-confirmation-hour17-20261004/suffix-http/reuse64",
+    "--cache",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-cache-reuse64",
+    "--store",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-store-reuse64",
+    "--shared",
+    "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/confirmation-suffix-shared",
+    "--timeout",
+    "594.9998851670098"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "mode": "reuse",
+  "fresh_tail_lower_bound": 64
+}

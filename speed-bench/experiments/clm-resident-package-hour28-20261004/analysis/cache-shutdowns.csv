@@ -1,0 +1,9 @@
+arm,case,hot_bytes,ssd_bytes,metadata_bytes,endpoints,chunks,pinned_endpoints,hot_reads,disk_reads,endpoint_evictions
+native-before,ledger,0,109125137,74991,7,392,0,0,85,0
+native-before,lru,0,214519509,151878,14,797,0,0,85,0
+subs3,ledger,0,109125137,74990,7,392,0,0,85,0
+subs3,lru,0,214391208,150757,14,790,0,0,85,0
+subs1,ledger,0,108872799,75790,7,397,0,0,85,0
+subs1,lru,0,214168456,152517,14,801,0,0,85,0
+native-after,ledger,0,109125137,74990,7,392,0,0,85,0
+native-after,lru,0,214519509,151877,14,797,0,0,85,0

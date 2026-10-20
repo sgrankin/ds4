@@ -1,0 +1,21 @@
+{
+  "samples": 311,
+  "levels": [
+    1
+  ],
+  "max_consecutive_bad": 0,
+  "swap_min_gib": 0.025576171875,
+  "swap_max_gib": 0.025576171875,
+  "free_min_gib": 0.119903564453125,
+  "wired_max_gib": 70.47421264648438,
+  "compressor_max_gib": 7.6013641357421875,
+  "first_time": 1790976881.292567,
+  "last_time": 1790977201.5146828,
+  "guard": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "main_lock_reacquired_and_released_after_exit": true,
+  "exec_session": 26715,
+  "exec_exit": 0
+}

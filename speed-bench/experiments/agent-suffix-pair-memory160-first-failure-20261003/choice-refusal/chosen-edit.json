@@ -1,0 +1,53 @@
+{
+  "status": "FIXED_FIRST_ATTEMPT_PRETHIRD_STRUCTURAL_CHOICE",
+  "candidate": 0,
+  "actual_prepared_manifest_sha256": "d13eaf4e51b10d9dc0849b26e7648ea790173a96f90e6d234256df63742e4d63",
+  "actual_caller_sha256": "7f98e773809b6847c41d5eb4d798f7855b97a905b9f59d9e92dffc80fbdc495c",
+  "actual_controller_sha256": "e4e02e3518121b73792cd6083a265c5e7d155604251d66a906ee403f90497cd6",
+  "task_sha256": "11a9e6c778dcc79ebd4e6f3dbfcc6b30c57ac20f544db30a982f57431a5961aa",
+  "actual_source_freeze": "86f834866f81ae8cb33c9c9f00e4df86a3b7a95c",
+  "actual_build_manifest_sha256": "7f9ccec8bb95fed6448a2a885ad59de3b0cbe4591c61b7e14930b425d3480dd3",
+  "actual_preparer_sha256": "55e9448c225328a01f54b52725dcfedca65f5a108c35ca0e07924e0880320636",
+  "actual_delivery_header_sha256": "2e94cb78004fe4eb423cd14a3e854da4bbbe636a5322b85f2e9049bf963090e1",
+  "memory_admission_experiment": {
+    "status": "MEMORY_ADMISSION_EXPERIMENT",
+    "fixed_budget_bytes": 167772160,
+    "fixed_frontier_mb": 160,
+    "preregistered_before_any_third_semantic_evaluation": true,
+    "prior_fixed128_prepared_manifest_sha256": "53a3326e3c6a8b46d15c86302f2008c06f82d953bb817509f9610847d6ef4b88",
+    "prior_fixed128_child_returncode": 3,
+    "prior_fixed128_structural_selection_created": false,
+    "prior_fixed128_forecast_bytes": 137150794,
+    "prior_fixed128_budget_bytes": 134217728,
+    "prior_fixed128_admission_ledger_sha256": "00212e25cac46fbe647f07e750c276a09bfb7609f009f8b55d11dc031dac02e6",
+    "scope": "Separate fixed160MiB admission experiment; only frontier memory and explicit budget criteria change. All prompts/facts/edits/order/tape/fresh128/model/sampler/tools/golds unchanged. Prior128 failure retained; no adaptive expansion or repair."
+  },
+  "original_structural_path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-memory160/speed-bench/ideas/artifacts/agent-suffix-pair-memory160-prepared-20261003-v1/run/private",
+  "reference_files": {
+    "candidate-00.json": {
+      "bytes": 81,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c"
+    },
+    "selected-after.txt": {
+      "bytes": 14498,
+      "sha256": "f3f1e72c4dcb3dac9c2bff040466bb1195323b2832dfc78c3f725779516555dd"
+    },
+    "selected-before.txt": {
+      "bytes": 14542,
+      "sha256": "55ce742df351f02de09df16190a9daccd2fab78c1171c350bd9464e71444a2a3"
+    },
+    "selected-edited.ids": {
+      "bytes": 13468,
+      "sha256": "7fdcf080f4b79807c8f62d7a3cf05ad6d6040b7b88e3c51fb8ba31aa6ef783a0"
+    },
+    "selected-old.ids": {
+      "bytes": 13512,
+      "sha256": "e2ca1f3b9499d0cda274e378f9951a66bcb8434d47d3e61ff01915e2564c150b"
+    },
+    "selection.json": {
+      "bytes": 453,
+      "sha256": "0556584a02e4ffbacdb99186e9d8f882188c5c33965d0a4f2b33b34adda726b9"
+    }
+  },
+  "no_generated_or_gold_outcomes_read": true
+}

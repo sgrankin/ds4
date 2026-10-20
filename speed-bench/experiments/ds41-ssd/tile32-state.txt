@@ -1,0 +1,1 @@
+PASS: tail=40 plus 8 decoded tokens, full snapshot bit-identical; scalar 3.068s, batch 0.959s

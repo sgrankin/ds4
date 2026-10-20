@@ -1,0 +1,17 @@
+{
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  },
+  "samples": 292,
+  "swap_first_gib": 0.025576171875,
+  "swap_last_gib": 0.025576171875,
+  "swap_min_gib": 0.025576171875,
+  "swap_max_gib": 0.025576171875,
+  "max_wired_gib": 74.30270385742188,
+  "max_compressor_gib": 8.712448120117188,
+  "max_pressure_level": 1,
+  "bad_samples": 0,
+  "first_pressure_utc": "2026-10-02T21:09:39.098569+00:00",
+  "last_pressure_utc": "2026-10-02T21:14:40.807644+00:00"
+}

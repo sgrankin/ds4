@@ -1,0 +1,21 @@
+{
+  "status": "ROOT_MATH16_FULL_STATIC_SOURCE_REVIEW_PASS_NOT_GRANTED_NOT_RUN",
+  "time": 1791001565.9560058,
+  "source_freeze": "542fcb86866578d528d6168bd9299de5d7f90cd8",
+  "prepared_evidence_freeze": "448caaa8f864533559635817469c8b46f0a15cf8",
+  "plan_sha256": "ff58665939d71087cfda54be09f995378339881faef24b590db232584edb1eed",
+  "command_sha256": "042bccda630cccc02df9dd8a6f8ce9f19efd35bc1d74e276718ebee9c82a42b5",
+  "assets_verified": 104,
+  "driver_verify_returncode": 0,
+  "cpu_tests_original": 12,
+  "fixed_cases": 16,
+  "first_attempts": 48,
+  "native_brackets": [
+    0,
+    1024,
+    0
+  ],
+  "review": "Full driver guard/grant-beforestat flow, all104boundassets/input/build/core/shaders, full strictsigned64 scoring and native prompt/RNG/token/raw parity, complete force-prefix identity/forcedtoken unchangedRNG and actualnative outside-phase check, all wrong/cap/INVALID and both discordances retained. No broadquality/speed/quantcausality or cross-prefixKL claim. Rootactual MAINlaunchcwd must berecorded later.",
+  "model_or_helper_or_guard_executed": false,
+  "model_metadata_accessed": false
+}

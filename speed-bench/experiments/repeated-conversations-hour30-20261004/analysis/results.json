@@ -1,0 +1,2504 @@
+{
+  "rows": [
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "step": "A-warm",
+      "session": "A",
+      "round": 0,
+      "seconds": 53.22381916700397,
+      "seconds_including_deletion": 53.22381916700397,
+      "edit_seconds": 0,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "READY",
+      "usage": [
+        {
+          "input_tokens": 1380,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1380
+          },
+          "output_tokens": 103,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1483
+        },
+        {
+          "input_tokens": 2010,
+          "input_tokens_details": {
+            "cached_tokens": 1483,
+            "cache_write_tokens": 527
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2012
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "step": "B-warm",
+      "session": "B",
+      "round": 0,
+      "seconds": 52.77013220801018,
+      "seconds_including_deletion": 52.77013220801018,
+      "edit_seconds": 0,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "READY",
+      "usage": [
+        {
+          "input_tokens": 1380,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1380
+          },
+          "output_tokens": 103,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1483
+        },
+        {
+          "input_tokens": 2010,
+          "input_tokens_details": {
+            "cached_tokens": 1483,
+            "cache_write_tokens": 527
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2012
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "step": "A-edit1",
+      "session": "A",
+      "round": 1,
+      "seconds": 56.96561325000948,
+      "seconds_including_deletion": 56.96934033400612,
+      "edit_seconds": 0.0033819999953266233,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1778,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1778
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1872
+        },
+        {
+          "input_tokens": 1898,
+          "input_tokens_details": {
+            "cached_tokens": 1872,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1917
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "step": "B-edit1",
+      "session": "B",
+      "round": 1,
+      "seconds": 57.30340508298832,
+      "seconds_including_deletion": 57.30762979100109,
+      "edit_seconds": 0.00399445800576359,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "usage": [
+        {
+          "input_tokens": 1778,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1778
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1872
+        },
+        {
+          "input_tokens": 1897,
+          "input_tokens_details": {
+            "cached_tokens": 1872,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1915
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "step": "A-edit2",
+      "session": "A",
+      "round": 2,
+      "seconds": 53.143923875002656,
+      "seconds_including_deletion": 53.15804662500159,
+      "edit_seconds": 0.013922832993557677,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1683,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1683
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1777
+        },
+        {
+          "input_tokens": 1803,
+          "input_tokens_details": {
+            "cached_tokens": 1777,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1822
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "step": "B-edit2",
+      "session": "B",
+      "round": 2,
+      "seconds": 53.670460541994544,
+      "seconds_including_deletion": 53.67442133300938,
+      "edit_seconds": 0.0037689160089939833,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-58\"}",
+      "usage": [
+        {
+          "input_tokens": 1681,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1681
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1775
+        },
+        {
+          "input_tokens": 1800,
+          "input_tokens_details": {
+            "cached_tokens": 1775,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1818
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "step": "A-edit3",
+      "session": "A",
+      "round": 3,
+      "seconds": 52.63236070898711,
+      "seconds_including_deletion": 52.63656420799089,
+      "edit_seconds": 0.0040010419907048345,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1588,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1588
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1682
+        },
+        {
+          "input_tokens": 1708,
+          "input_tokens_details": {
+            "cached_tokens": 1682,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1727
+        }
+      ]
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "step": "B-edit3",
+      "session": "B",
+      "round": 3,
+      "seconds": 51.88679416599916,
+      "seconds_including_deletion": 51.8905618750141,
+      "edit_seconds": 0.003564083017408848,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-59\"}",
+      "usage": [
+        {
+          "input_tokens": 1584,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1584
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1678
+        },
+        {
+          "input_tokens": 1703,
+          "input_tokens_details": {
+            "cached_tokens": 1678,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1721
+        }
+      ]
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "A-warm",
+      "session": "A",
+      "round": 0,
+      "seconds": 53.82287970799371,
+      "seconds_including_deletion": 53.82287970799371,
+      "edit_seconds": 0,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "READY",
+      "usage": [
+        {
+          "input_tokens": 1380,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1380
+          },
+          "output_tokens": 103,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1483
+        },
+        {
+          "input_tokens": 2010,
+          "input_tokens_details": {
+            "cached_tokens": 1483,
+            "cache_write_tokens": 527
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2012
+        }
+      ]
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "B-warm",
+      "session": "B",
+      "round": 0,
+      "seconds": 21.473491832992295,
+      "seconds_including_deletion": 21.473491832992295,
+      "edit_seconds": 0,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "READY",
+      "usage": [
+        {
+          "input_tokens": 1380,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1380
+          },
+          "output_tokens": 103,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1483
+        },
+        {
+          "input_tokens": 2010,
+          "input_tokens_details": {
+            "cached_tokens": 1483,
+            "cache_write_tokens": 527
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2012
+        }
+      ]
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "A-edit1",
+      "session": "A",
+      "round": 1,
+      "seconds": 40.25295433399151,
+      "seconds_including_deletion": 40.2568857500155,
+      "edit_seconds": 0.0037341249990276992,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1779,
+          "input_tokens_details": {
+            "cached_tokens": 764,
+            "cache_write_tokens": 1015
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1873
+        },
+        {
+          "input_tokens": 1899,
+          "input_tokens_details": {
+            "cached_tokens": 1873,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1918
+        }
+      ]
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "B-edit1",
+      "session": "B",
+      "round": 1,
+      "seconds": 41.2693602090003,
+      "seconds_including_deletion": 41.273202000011224,
+      "edit_seconds": 0.003624500008299947,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "usage": [
+        {
+          "input_tokens": 1779,
+          "input_tokens_details": {
+            "cached_tokens": 764,
+            "cache_write_tokens": 1015
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1873
+        },
+        {
+          "input_tokens": 1898,
+          "input_tokens_details": {
+            "cached_tokens": 1873,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1916
+        }
+      ]
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "A-edit2",
+      "session": "A",
+      "round": 2,
+      "seconds": 29.134776375023648,
+      "seconds_including_deletion": 29.14850454198313,
+      "edit_seconds": 0.013500208006007597,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1683,
+          "input_tokens_details": {
+            "cached_tokens": 1161,
+            "cache_write_tokens": 522
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1777
+        },
+        {
+          "input_tokens": 1803,
+          "input_tokens_details": {
+            "cached_tokens": 1777,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1822
+        }
+      ]
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "B-edit2",
+      "session": "B",
+      "round": 2,
+      "seconds": 29.511221875000047,
+      "seconds_including_deletion": 29.514971791999415,
+      "edit_seconds": 0.003536291973432526,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-58\"}",
+      "usage": [
+        {
+          "input_tokens": 1681,
+          "input_tokens_details": {
+            "cached_tokens": 1161,
+            "cache_write_tokens": 520
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1775
+        },
+        {
+          "input_tokens": 1800,
+          "input_tokens_details": {
+            "cached_tokens": 1775,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1818
+        }
+      ]
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "A-edit3",
+      "session": "A",
+      "round": 3,
+      "seconds": 29.32274899998447,
+      "seconds_including_deletion": 29.32652316702297,
+      "edit_seconds": 0.003526292013702914,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1589,
+          "input_tokens_details": {
+            "cached_tokens": 1067,
+            "cache_write_tokens": 522
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1683
+        },
+        {
+          "input_tokens": 1709,
+          "input_tokens_details": {
+            "cached_tokens": 1683,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1728
+        }
+      ]
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "B-edit3",
+      "session": "B",
+      "round": 3,
+      "seconds": 29.687819917016895,
+      "seconds_including_deletion": 29.69165495899506,
+      "edit_seconds": 0.0036427919985726476,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-59\"}",
+      "usage": [
+        {
+          "input_tokens": 1585,
+          "input_tokens_details": {
+            "cached_tokens": 1065,
+            "cache_write_tokens": 520
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1679
+        },
+        {
+          "input_tokens": 1704,
+          "input_tokens_details": {
+            "cached_tokens": 1679,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1722
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "step": "A-warm",
+      "session": "A",
+      "round": 0,
+      "seconds": 53.406224375008605,
+      "seconds_including_deletion": 53.406224375008605,
+      "edit_seconds": 0,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "READY",
+      "usage": [
+        {
+          "input_tokens": 1380,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1380
+          },
+          "output_tokens": 103,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1483
+        },
+        {
+          "input_tokens": 2010,
+          "input_tokens_details": {
+            "cached_tokens": 1483,
+            "cache_write_tokens": 527
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2012
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "step": "B-warm",
+      "session": "B",
+      "round": 0,
+      "seconds": 52.789829999994254,
+      "seconds_including_deletion": 52.789829999994254,
+      "edit_seconds": 0,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "READY",
+      "usage": [
+        {
+          "input_tokens": 1380,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1380
+          },
+          "output_tokens": 103,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1483
+        },
+        {
+          "input_tokens": 2010,
+          "input_tokens_details": {
+            "cached_tokens": 1483,
+            "cache_write_tokens": 527
+          },
+          "output_tokens": 2,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2012
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "step": "A-edit1",
+      "session": "A",
+      "round": 1,
+      "seconds": 58.610269833006896,
+      "seconds_including_deletion": 58.61400516598951,
+      "edit_seconds": 0.0035210000060033053,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1778,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1778
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1872
+        },
+        {
+          "input_tokens": 1898,
+          "input_tokens_details": {
+            "cached_tokens": 1872,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1917
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "step": "B-edit1",
+      "session": "B",
+      "round": 1,
+      "seconds": 59.11639191699214,
+      "seconds_including_deletion": 59.122634833998745,
+      "edit_seconds": 0.0060189589858055115,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-57\"}",
+      "usage": [
+        {
+          "input_tokens": 1778,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1778
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1872
+        },
+        {
+          "input_tokens": 1897,
+          "input_tokens_details": {
+            "cached_tokens": 1872,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1915
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "step": "A-edit2",
+      "session": "A",
+      "round": 2,
+      "seconds": 54.46762729200418,
+      "seconds_including_deletion": 54.48204525001347,
+      "edit_seconds": 0.014214082999387756,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1683,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1683
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1777
+        },
+        {
+          "input_tokens": 1803,
+          "input_tokens_details": {
+            "cached_tokens": 1777,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1822
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "step": "B-edit2",
+      "session": "B",
+      "round": 2,
+      "seconds": 54.762410707975505,
+      "seconds_including_deletion": 54.76634583302075,
+      "edit_seconds": 0.0037447920185513794,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-58\"}",
+      "usage": [
+        {
+          "input_tokens": 1681,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1681
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1775
+        },
+        {
+          "input_tokens": 1800,
+          "input_tokens_details": {
+            "cached_tokens": 1775,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1818
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "step": "A-edit3",
+      "session": "A",
+      "round": 3,
+      "seconds": 53.51959858398186,
+      "seconds_including_deletion": 53.52378200000385,
+      "edit_seconds": 0.003976624982897192,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 313, \"archived_code\": \"BEACON-46\"}",
+      "usage": [
+        {
+          "input_tokens": 1588,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1588
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1682
+        },
+        {
+          "input_tokens": 1708,
+          "input_tokens_details": {
+            "cached_tokens": 1682,
+            "cache_write_tokens": 26
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1727
+        }
+      ]
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "step": "B-edit3",
+      "session": "B",
+      "round": 3,
+      "seconds": 53.023127833992476,
+      "seconds_including_deletion": 53.02729187501245,
+      "edit_seconds": 0.00395391701022163,
+      "pass_": true,
+      "correct": true,
+      "read_isolated": true,
+      "fresh_read": true,
+      "cap": false,
+      "text": "{\"active_total\": 231, \"archived_code\": \"ORBIT-59\"}",
+      "usage": [
+        {
+          "input_tokens": 1584,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1584
+          },
+          "output_tokens": 94,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1678
+        },
+        {
+          "input_tokens": 1703,
+          "input_tokens_details": {
+            "cached_tokens": 1678,
+            "cache_write_tokens": 25
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1721
+        }
+      ]
+    }
+  ],
+  "by_arm": {
+    "native-before": {
+      "passes": 8,
+      "reads": 8,
+      "caps": 0,
+      "deletions": 6,
+      "warm_seconds": 105.99395137501415,
+      "edited_seconds_including_deletion": 325.63656416602316,
+      "launcher_seconds": 435.6706359159725,
+      "phase_seconds": {
+        "before": 220.2859378749854,
+        "after": 211.36201679101214
+      },
+      "round_seconds": {
+        "1": 114.27697012500721,
+        "2": 106.83246795801097,
+        "3": 104.52712608300499
+      },
+      "round_passes": {
+        "1": 2,
+        "2": 2,
+        "3": 2
+      },
+      "client_phase_seconds": 431.64795466599753,
+      "grafts": 0,
+      "approximate_sources": 0,
+      "approximate_continuations": 0,
+      "logical_disk_read_ops": 0,
+      "phase_log_grafts": 0
+    },
+    "reuse": {
+      "passes": 8,
+      "reads": 8,
+      "caps": 0,
+      "deletions": 6,
+      "warm_seconds": 75.296371540986,
+      "edited_seconds_including_deletion": 199.2117422100273,
+      "launcher_seconds": 278.5585144580109,
+      "phase_seconds": {
+        "before": 156.84213791700313,
+        "after": 117.68342595899594
+      },
+      "round_seconds": {
+        "1": 81.53008775002672,
+        "2": 58.663476333982544,
+        "3": 59.01817812601803
+      },
+      "round_passes": {
+        "1": 2,
+        "2": 2,
+        "3": 2
+      },
+      "client_phase_seconds": 274.52556387599907,
+      "grafts": 6,
+      "approximate_sources": 4,
+      "approximate_continuations": 6,
+      "logical_disk_read_ops": 602,
+      "phase_log_grafts": 6
+    },
+    "native-after": {
+      "passes": 8,
+      "reads": 8,
+      "caps": 0,
+      "deletions": 6,
+      "warm_seconds": 106.19605437500286,
+      "edited_seconds_including_deletion": 333.5361049580388,
+      "launcher_seconds": 443.8889187910245,
+      "phase_seconds": {
+        "before": 223.94913858300424,
+        "after": 215.80259320800542
+      },
+      "round_seconds": {
+        "1": 117.73663999998826,
+        "2": 109.24839108303422,
+        "3": 106.5510738750163
+      },
+      "round_passes": {
+        "1": 2,
+        "2": 2,
+        "3": 2
+      },
+      "client_phase_seconds": 439.75173179100966,
+      "grafts": 0,
+      "approximate_sources": 0,
+      "approximate_continuations": 0,
+      "logical_disk_read_ops": 0,
+      "phase_log_grafts": 0
+    }
+  },
+  "edits": [
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "session": "A",
+      "round": 1,
+      "item_id": "msg_c02c38e3936e2bd5449746b5",
+      "before_version": 3,
+      "after_version": 4,
+      "before_item_ids": [
+        "msg_c02c38e3936e2bd5449746b5",
+        "msg_3759000687839d454cc8e716",
+        "msg_45b5a52682d7a16dcb6a2079",
+        "msg_3b834f2b3d4ee7b636087189",
+        "msg_1407f92c3d6de51c11df9b36",
+        "msg_259cfcb1be9f34cb32e2f1a9",
+        "fc_adb9c73c1514266466f6e523",
+        "fco_80a7ffdc8639e7b31e5dac3e",
+        "msg_be2025b5bfcb1911576708de"
+      ],
+      "after_item_ids": [
+        "msg_3759000687839d454cc8e716",
+        "msg_45b5a52682d7a16dcb6a2079",
+        "msg_3b834f2b3d4ee7b636087189",
+        "msg_1407f92c3d6de51c11df9b36",
+        "msg_259cfcb1be9f34cb32e2f1a9",
+        "fc_adb9c73c1514266466f6e523",
+        "fco_80a7ffdc8639e7b31e5dac3e",
+        "msg_be2025b5bfcb1911576708de"
+      ],
+      "seconds": 0.0033819999953266233,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "session": "B",
+      "round": 1,
+      "item_id": "msg_3660e265bcef07417c7090ee",
+      "before_version": 3,
+      "after_version": 4,
+      "before_item_ids": [
+        "msg_3660e265bcef07417c7090ee",
+        "msg_3e7b921632c4b0dc83c2a298",
+        "msg_0b73fa68cbac4ab356bc3f4e",
+        "msg_f9de9023fea6a901d1517583",
+        "msg_88e2b6e18f8ad1ba1c52cf33",
+        "msg_c94b2d2f831cd0222f208095",
+        "fc_6454634a0306d8382532c92d",
+        "fco_068e7d5cec1d60d2a551bdd0",
+        "msg_b131fc3b1bd8c3aa858f41ad"
+      ],
+      "after_item_ids": [
+        "msg_3e7b921632c4b0dc83c2a298",
+        "msg_0b73fa68cbac4ab356bc3f4e",
+        "msg_f9de9023fea6a901d1517583",
+        "msg_88e2b6e18f8ad1ba1c52cf33",
+        "msg_c94b2d2f831cd0222f208095",
+        "fc_6454634a0306d8382532c92d",
+        "fco_068e7d5cec1d60d2a551bdd0",
+        "msg_b131fc3b1bd8c3aa858f41ad"
+      ],
+      "seconds": 0.00399445800576359,
+      "archive_code": "ORBIT-57"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "session": "A",
+      "round": 2,
+      "item_id": "msg_3759000687839d454cc8e716",
+      "before_version": 6,
+      "after_version": 7,
+      "before_item_ids": [
+        "msg_3759000687839d454cc8e716",
+        "msg_45b5a52682d7a16dcb6a2079",
+        "msg_3b834f2b3d4ee7b636087189",
+        "msg_1407f92c3d6de51c11df9b36",
+        "msg_259cfcb1be9f34cb32e2f1a9",
+        "fc_adb9c73c1514266466f6e523",
+        "fco_80a7ffdc8639e7b31e5dac3e",
+        "msg_be2025b5bfcb1911576708de",
+        "msg_4f278977778645780f05baca",
+        "fc_8536c07c68068c78067f5be6",
+        "fco_5fede62338c7e143d558cf46",
+        "msg_415595dc3f33539f1df488ad"
+      ],
+      "after_item_ids": [
+        "msg_45b5a52682d7a16dcb6a2079",
+        "msg_3b834f2b3d4ee7b636087189",
+        "msg_1407f92c3d6de51c11df9b36",
+        "msg_259cfcb1be9f34cb32e2f1a9",
+        "fc_adb9c73c1514266466f6e523",
+        "fco_80a7ffdc8639e7b31e5dac3e",
+        "msg_be2025b5bfcb1911576708de",
+        "msg_4f278977778645780f05baca",
+        "fc_8536c07c68068c78067f5be6",
+        "fco_5fede62338c7e143d558cf46",
+        "msg_415595dc3f33539f1df488ad"
+      ],
+      "seconds": 0.013922832993557677,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "session": "B",
+      "round": 2,
+      "item_id": "msg_3e7b921632c4b0dc83c2a298",
+      "before_version": 6,
+      "after_version": 7,
+      "before_item_ids": [
+        "msg_3e7b921632c4b0dc83c2a298",
+        "msg_0b73fa68cbac4ab356bc3f4e",
+        "msg_f9de9023fea6a901d1517583",
+        "msg_88e2b6e18f8ad1ba1c52cf33",
+        "msg_c94b2d2f831cd0222f208095",
+        "fc_6454634a0306d8382532c92d",
+        "fco_068e7d5cec1d60d2a551bdd0",
+        "msg_b131fc3b1bd8c3aa858f41ad",
+        "msg_2fa8809607cfca1ac75676b1",
+        "fc_1f368d33aee909b32657fefc",
+        "fco_82f41263de9ba37a0cf11b94",
+        "msg_b2c75cf8f0efa729062b71db"
+      ],
+      "after_item_ids": [
+        "msg_0b73fa68cbac4ab356bc3f4e",
+        "msg_f9de9023fea6a901d1517583",
+        "msg_88e2b6e18f8ad1ba1c52cf33",
+        "msg_c94b2d2f831cd0222f208095",
+        "fc_6454634a0306d8382532c92d",
+        "fco_068e7d5cec1d60d2a551bdd0",
+        "msg_b131fc3b1bd8c3aa858f41ad",
+        "msg_2fa8809607cfca1ac75676b1",
+        "fc_1f368d33aee909b32657fefc",
+        "fco_82f41263de9ba37a0cf11b94",
+        "msg_b2c75cf8f0efa729062b71db"
+      ],
+      "seconds": 0.0037689160089939833,
+      "archive_code": "ORBIT-58"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "session": "A",
+      "round": 3,
+      "item_id": "msg_45b5a52682d7a16dcb6a2079",
+      "before_version": 9,
+      "after_version": 10,
+      "before_item_ids": [
+        "msg_45b5a52682d7a16dcb6a2079",
+        "msg_3b834f2b3d4ee7b636087189",
+        "msg_1407f92c3d6de51c11df9b36",
+        "msg_259cfcb1be9f34cb32e2f1a9",
+        "fc_adb9c73c1514266466f6e523",
+        "fco_80a7ffdc8639e7b31e5dac3e",
+        "msg_be2025b5bfcb1911576708de",
+        "msg_4f278977778645780f05baca",
+        "fc_8536c07c68068c78067f5be6",
+        "fco_5fede62338c7e143d558cf46",
+        "msg_415595dc3f33539f1df488ad",
+        "msg_31aa2b3290c7f5712d6637e4",
+        "fc_af0ab5151bdcb0324df95cef",
+        "fco_3502eea42aef3b76afc26ecb",
+        "msg_a68b788fb6e475d8c4c9f946"
+      ],
+      "after_item_ids": [
+        "msg_3b834f2b3d4ee7b636087189",
+        "msg_1407f92c3d6de51c11df9b36",
+        "msg_259cfcb1be9f34cb32e2f1a9",
+        "fc_adb9c73c1514266466f6e523",
+        "fco_80a7ffdc8639e7b31e5dac3e",
+        "msg_be2025b5bfcb1911576708de",
+        "msg_4f278977778645780f05baca",
+        "fc_8536c07c68068c78067f5be6",
+        "fco_5fede62338c7e143d558cf46",
+        "msg_415595dc3f33539f1df488ad",
+        "msg_31aa2b3290c7f5712d6637e4",
+        "fc_af0ab5151bdcb0324df95cef",
+        "fco_3502eea42aef3b76afc26ecb",
+        "msg_a68b788fb6e475d8c4c9f946"
+      ],
+      "seconds": 0.0040010419907048345,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "session": "B",
+      "round": 3,
+      "item_id": "msg_0b73fa68cbac4ab356bc3f4e",
+      "before_version": 9,
+      "after_version": 10,
+      "before_item_ids": [
+        "msg_0b73fa68cbac4ab356bc3f4e",
+        "msg_f9de9023fea6a901d1517583",
+        "msg_88e2b6e18f8ad1ba1c52cf33",
+        "msg_c94b2d2f831cd0222f208095",
+        "fc_6454634a0306d8382532c92d",
+        "fco_068e7d5cec1d60d2a551bdd0",
+        "msg_b131fc3b1bd8c3aa858f41ad",
+        "msg_2fa8809607cfca1ac75676b1",
+        "fc_1f368d33aee909b32657fefc",
+        "fco_82f41263de9ba37a0cf11b94",
+        "msg_b2c75cf8f0efa729062b71db",
+        "msg_f2e639dc7289f677956923cc",
+        "fc_2d784a58434747734247df77",
+        "fco_21dd77fb9cffde26dd086cd5",
+        "msg_203ccd30a26b02f0c605a9e9"
+      ],
+      "after_item_ids": [
+        "msg_f9de9023fea6a901d1517583",
+        "msg_88e2b6e18f8ad1ba1c52cf33",
+        "msg_c94b2d2f831cd0222f208095",
+        "fc_6454634a0306d8382532c92d",
+        "fco_068e7d5cec1d60d2a551bdd0",
+        "msg_b131fc3b1bd8c3aa858f41ad",
+        "msg_2fa8809607cfca1ac75676b1",
+        "fc_1f368d33aee909b32657fefc",
+        "fco_82f41263de9ba37a0cf11b94",
+        "msg_b2c75cf8f0efa729062b71db",
+        "msg_f2e639dc7289f677956923cc",
+        "fc_2d784a58434747734247df77",
+        "fco_21dd77fb9cffde26dd086cd5",
+        "msg_203ccd30a26b02f0c605a9e9"
+      ],
+      "seconds": 0.003564083017408848,
+      "archive_code": "ORBIT-59"
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "session": "A",
+      "round": 1,
+      "item_id": "msg_eba3d1f25d7831a55af632df",
+      "before_version": 3,
+      "after_version": 4,
+      "before_item_ids": [
+        "msg_eba3d1f25d7831a55af632df",
+        "msg_c5fea176969c8b371a410b05",
+        "msg_a1758b7ff93cad7e6f3b4a0e",
+        "msg_3ebeeef9bc57252f69c72b4b",
+        "msg_4b62fe118526fc88c6ce0ef8",
+        "msg_70332a2941dfa02930cb2eaf",
+        "fc_d0030db872be4fb7882ee544",
+        "fco_55b07cf83198750a3ffc2638",
+        "msg_d18fa8d2b763b9559e31df36"
+      ],
+      "after_item_ids": [
+        "msg_c5fea176969c8b371a410b05",
+        "msg_a1758b7ff93cad7e6f3b4a0e",
+        "msg_3ebeeef9bc57252f69c72b4b",
+        "msg_4b62fe118526fc88c6ce0ef8",
+        "msg_70332a2941dfa02930cb2eaf",
+        "fc_d0030db872be4fb7882ee544",
+        "fco_55b07cf83198750a3ffc2638",
+        "msg_d18fa8d2b763b9559e31df36"
+      ],
+      "seconds": 0.0037341249990276992,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "session": "B",
+      "round": 1,
+      "item_id": "msg_5d7b5396238a30fe36e0d10f",
+      "before_version": 3,
+      "after_version": 4,
+      "before_item_ids": [
+        "msg_5d7b5396238a30fe36e0d10f",
+        "msg_0f5eefeb539e7d512ab76965",
+        "msg_09f86a9dd66fb6a9ecceeb94",
+        "msg_958281c35913d5daaf01e886",
+        "msg_9fdc6798ddf9e55044264ef4",
+        "msg_2bb3387355725b0e4857758b",
+        "fc_49d6df5b9b41e41a2a431193",
+        "fco_6ea058be6a127037d10a900c",
+        "msg_d3b0d3402144525f154dba1d"
+      ],
+      "after_item_ids": [
+        "msg_0f5eefeb539e7d512ab76965",
+        "msg_09f86a9dd66fb6a9ecceeb94",
+        "msg_958281c35913d5daaf01e886",
+        "msg_9fdc6798ddf9e55044264ef4",
+        "msg_2bb3387355725b0e4857758b",
+        "fc_49d6df5b9b41e41a2a431193",
+        "fco_6ea058be6a127037d10a900c",
+        "msg_d3b0d3402144525f154dba1d"
+      ],
+      "seconds": 0.003624500008299947,
+      "archive_code": "ORBIT-57"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "session": "A",
+      "round": 2,
+      "item_id": "msg_c5fea176969c8b371a410b05",
+      "before_version": 6,
+      "after_version": 7,
+      "before_item_ids": [
+        "msg_c5fea176969c8b371a410b05",
+        "msg_a1758b7ff93cad7e6f3b4a0e",
+        "msg_3ebeeef9bc57252f69c72b4b",
+        "msg_4b62fe118526fc88c6ce0ef8",
+        "msg_70332a2941dfa02930cb2eaf",
+        "fc_d0030db872be4fb7882ee544",
+        "fco_55b07cf83198750a3ffc2638",
+        "msg_d18fa8d2b763b9559e31df36",
+        "msg_a2e3fefdf8a72350c281d14e",
+        "fc_6031e21e8ac97394e31d1a29",
+        "fco_6cc30d97fe96bd555d9d2a1a",
+        "msg_cdff56e21b80084b9a1e7166"
+      ],
+      "after_item_ids": [
+        "msg_a1758b7ff93cad7e6f3b4a0e",
+        "msg_3ebeeef9bc57252f69c72b4b",
+        "msg_4b62fe118526fc88c6ce0ef8",
+        "msg_70332a2941dfa02930cb2eaf",
+        "fc_d0030db872be4fb7882ee544",
+        "fco_55b07cf83198750a3ffc2638",
+        "msg_d18fa8d2b763b9559e31df36",
+        "msg_a2e3fefdf8a72350c281d14e",
+        "fc_6031e21e8ac97394e31d1a29",
+        "fco_6cc30d97fe96bd555d9d2a1a",
+        "msg_cdff56e21b80084b9a1e7166"
+      ],
+      "seconds": 0.013500208006007597,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "session": "B",
+      "round": 2,
+      "item_id": "msg_0f5eefeb539e7d512ab76965",
+      "before_version": 6,
+      "after_version": 7,
+      "before_item_ids": [
+        "msg_0f5eefeb539e7d512ab76965",
+        "msg_09f86a9dd66fb6a9ecceeb94",
+        "msg_958281c35913d5daaf01e886",
+        "msg_9fdc6798ddf9e55044264ef4",
+        "msg_2bb3387355725b0e4857758b",
+        "fc_49d6df5b9b41e41a2a431193",
+        "fco_6ea058be6a127037d10a900c",
+        "msg_d3b0d3402144525f154dba1d",
+        "msg_789365fa2e202bf5721f4506",
+        "fc_f9250599c1c5cb70ca3c7002",
+        "fco_f7a0bd33ff38ed2ee7a82968",
+        "msg_6b0cc5ec188ae04d48b54985"
+      ],
+      "after_item_ids": [
+        "msg_09f86a9dd66fb6a9ecceeb94",
+        "msg_958281c35913d5daaf01e886",
+        "msg_9fdc6798ddf9e55044264ef4",
+        "msg_2bb3387355725b0e4857758b",
+        "fc_49d6df5b9b41e41a2a431193",
+        "fco_6ea058be6a127037d10a900c",
+        "msg_d3b0d3402144525f154dba1d",
+        "msg_789365fa2e202bf5721f4506",
+        "fc_f9250599c1c5cb70ca3c7002",
+        "fco_f7a0bd33ff38ed2ee7a82968",
+        "msg_6b0cc5ec188ae04d48b54985"
+      ],
+      "seconds": 0.003536291973432526,
+      "archive_code": "ORBIT-58"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "session": "A",
+      "round": 3,
+      "item_id": "msg_a1758b7ff93cad7e6f3b4a0e",
+      "before_version": 9,
+      "after_version": 10,
+      "before_item_ids": [
+        "msg_a1758b7ff93cad7e6f3b4a0e",
+        "msg_3ebeeef9bc57252f69c72b4b",
+        "msg_4b62fe118526fc88c6ce0ef8",
+        "msg_70332a2941dfa02930cb2eaf",
+        "fc_d0030db872be4fb7882ee544",
+        "fco_55b07cf83198750a3ffc2638",
+        "msg_d18fa8d2b763b9559e31df36",
+        "msg_a2e3fefdf8a72350c281d14e",
+        "fc_6031e21e8ac97394e31d1a29",
+        "fco_6cc30d97fe96bd555d9d2a1a",
+        "msg_cdff56e21b80084b9a1e7166",
+        "msg_a5a5c7479bfb57fe892afe2d",
+        "fc_ea7366de6b89a914a5e1b899",
+        "fco_887fc5ad8ded37ef74cb58af",
+        "msg_f061fa2b323277a36eebbe86"
+      ],
+      "after_item_ids": [
+        "msg_3ebeeef9bc57252f69c72b4b",
+        "msg_4b62fe118526fc88c6ce0ef8",
+        "msg_70332a2941dfa02930cb2eaf",
+        "fc_d0030db872be4fb7882ee544",
+        "fco_55b07cf83198750a3ffc2638",
+        "msg_d18fa8d2b763b9559e31df36",
+        "msg_a2e3fefdf8a72350c281d14e",
+        "fc_6031e21e8ac97394e31d1a29",
+        "fco_6cc30d97fe96bd555d9d2a1a",
+        "msg_cdff56e21b80084b9a1e7166",
+        "msg_a5a5c7479bfb57fe892afe2d",
+        "fc_ea7366de6b89a914a5e1b899",
+        "fco_887fc5ad8ded37ef74cb58af",
+        "msg_f061fa2b323277a36eebbe86"
+      ],
+      "seconds": 0.003526292013702914,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "session": "B",
+      "round": 3,
+      "item_id": "msg_09f86a9dd66fb6a9ecceeb94",
+      "before_version": 9,
+      "after_version": 10,
+      "before_item_ids": [
+        "msg_09f86a9dd66fb6a9ecceeb94",
+        "msg_958281c35913d5daaf01e886",
+        "msg_9fdc6798ddf9e55044264ef4",
+        "msg_2bb3387355725b0e4857758b",
+        "fc_49d6df5b9b41e41a2a431193",
+        "fco_6ea058be6a127037d10a900c",
+        "msg_d3b0d3402144525f154dba1d",
+        "msg_789365fa2e202bf5721f4506",
+        "fc_f9250599c1c5cb70ca3c7002",
+        "fco_f7a0bd33ff38ed2ee7a82968",
+        "msg_6b0cc5ec188ae04d48b54985",
+        "msg_b3a2baf02e058b043d4ac0d1",
+        "fc_e7cd0e4a898a0d3e85090ba2",
+        "fco_bd0ba8a4e88256108dead3f8",
+        "msg_817f4b2086350f9fbf07e76e"
+      ],
+      "after_item_ids": [
+        "msg_958281c35913d5daaf01e886",
+        "msg_9fdc6798ddf9e55044264ef4",
+        "msg_2bb3387355725b0e4857758b",
+        "fc_49d6df5b9b41e41a2a431193",
+        "fco_6ea058be6a127037d10a900c",
+        "msg_d3b0d3402144525f154dba1d",
+        "msg_789365fa2e202bf5721f4506",
+        "fc_f9250599c1c5cb70ca3c7002",
+        "fco_f7a0bd33ff38ed2ee7a82968",
+        "msg_6b0cc5ec188ae04d48b54985",
+        "msg_b3a2baf02e058b043d4ac0d1",
+        "fc_e7cd0e4a898a0d3e85090ba2",
+        "fco_bd0ba8a4e88256108dead3f8",
+        "msg_817f4b2086350f9fbf07e76e"
+      ],
+      "seconds": 0.0036427919985726476,
+      "archive_code": "ORBIT-59"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "session": "A",
+      "round": 1,
+      "item_id": "msg_846243c457d4ab3939ebb4c6",
+      "before_version": 3,
+      "after_version": 4,
+      "before_item_ids": [
+        "msg_846243c457d4ab3939ebb4c6",
+        "msg_279e784b213382f3599fbe0b",
+        "msg_c48fca58ef5b9a6238872181",
+        "msg_ecf096ed13769894f745b01c",
+        "msg_07e7fb7e9f4d123a559e1cfc",
+        "msg_77990d5377426460d73d3d26",
+        "fc_e5eab32c3704b2d0739fe24a",
+        "fco_7cccf27191d435e51266a9b2",
+        "msg_f42b243ef88b8ab19a1a9db7"
+      ],
+      "after_item_ids": [
+        "msg_279e784b213382f3599fbe0b",
+        "msg_c48fca58ef5b9a6238872181",
+        "msg_ecf096ed13769894f745b01c",
+        "msg_07e7fb7e9f4d123a559e1cfc",
+        "msg_77990d5377426460d73d3d26",
+        "fc_e5eab32c3704b2d0739fe24a",
+        "fco_7cccf27191d435e51266a9b2",
+        "msg_f42b243ef88b8ab19a1a9db7"
+      ],
+      "seconds": 0.0035210000060033053,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "session": "B",
+      "round": 1,
+      "item_id": "msg_4d233a1a40cdcf6740bcf624",
+      "before_version": 3,
+      "after_version": 4,
+      "before_item_ids": [
+        "msg_4d233a1a40cdcf6740bcf624",
+        "msg_598742026d25217c19c249d5",
+        "msg_950c91a2131ef724fc3ab585",
+        "msg_2758bd81a2c6b65937f7038e",
+        "msg_54f83d8ac4d3814a09a7f635",
+        "msg_85d145a623392ebd5f2abc4d",
+        "fc_0f68a0a7d9ad4c0cf88fd782",
+        "fco_0756256dd6bcf096e1690641",
+        "msg_980c8572d0c49018655e3f6e"
+      ],
+      "after_item_ids": [
+        "msg_598742026d25217c19c249d5",
+        "msg_950c91a2131ef724fc3ab585",
+        "msg_2758bd81a2c6b65937f7038e",
+        "msg_54f83d8ac4d3814a09a7f635",
+        "msg_85d145a623392ebd5f2abc4d",
+        "fc_0f68a0a7d9ad4c0cf88fd782",
+        "fco_0756256dd6bcf096e1690641",
+        "msg_980c8572d0c49018655e3f6e"
+      ],
+      "seconds": 0.0060189589858055115,
+      "archive_code": "ORBIT-57"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "session": "A",
+      "round": 2,
+      "item_id": "msg_279e784b213382f3599fbe0b",
+      "before_version": 6,
+      "after_version": 7,
+      "before_item_ids": [
+        "msg_279e784b213382f3599fbe0b",
+        "msg_c48fca58ef5b9a6238872181",
+        "msg_ecf096ed13769894f745b01c",
+        "msg_07e7fb7e9f4d123a559e1cfc",
+        "msg_77990d5377426460d73d3d26",
+        "fc_e5eab32c3704b2d0739fe24a",
+        "fco_7cccf27191d435e51266a9b2",
+        "msg_f42b243ef88b8ab19a1a9db7",
+        "msg_55ed1b8339d7b9bb3d882708",
+        "fc_8a99d3e80c78d79d5b2f07ff",
+        "fco_aa828ee74d4378b0fd03b09b",
+        "msg_d3ac64fb920630a567e183cd"
+      ],
+      "after_item_ids": [
+        "msg_c48fca58ef5b9a6238872181",
+        "msg_ecf096ed13769894f745b01c",
+        "msg_07e7fb7e9f4d123a559e1cfc",
+        "msg_77990d5377426460d73d3d26",
+        "fc_e5eab32c3704b2d0739fe24a",
+        "fco_7cccf27191d435e51266a9b2",
+        "msg_f42b243ef88b8ab19a1a9db7",
+        "msg_55ed1b8339d7b9bb3d882708",
+        "fc_8a99d3e80c78d79d5b2f07ff",
+        "fco_aa828ee74d4378b0fd03b09b",
+        "msg_d3ac64fb920630a567e183cd"
+      ],
+      "seconds": 0.014214082999387756,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "session": "B",
+      "round": 2,
+      "item_id": "msg_598742026d25217c19c249d5",
+      "before_version": 6,
+      "after_version": 7,
+      "before_item_ids": [
+        "msg_598742026d25217c19c249d5",
+        "msg_950c91a2131ef724fc3ab585",
+        "msg_2758bd81a2c6b65937f7038e",
+        "msg_54f83d8ac4d3814a09a7f635",
+        "msg_85d145a623392ebd5f2abc4d",
+        "fc_0f68a0a7d9ad4c0cf88fd782",
+        "fco_0756256dd6bcf096e1690641",
+        "msg_980c8572d0c49018655e3f6e",
+        "msg_ac9365c66a420c87d790aeac",
+        "fc_9d63ef5cb399ac4fd9592394",
+        "fco_16b46f9d7ce869e4a7623d13",
+        "msg_68cfe3e1ec996732b60b23ad"
+      ],
+      "after_item_ids": [
+        "msg_950c91a2131ef724fc3ab585",
+        "msg_2758bd81a2c6b65937f7038e",
+        "msg_54f83d8ac4d3814a09a7f635",
+        "msg_85d145a623392ebd5f2abc4d",
+        "fc_0f68a0a7d9ad4c0cf88fd782",
+        "fco_0756256dd6bcf096e1690641",
+        "msg_980c8572d0c49018655e3f6e",
+        "msg_ac9365c66a420c87d790aeac",
+        "fc_9d63ef5cb399ac4fd9592394",
+        "fco_16b46f9d7ce869e4a7623d13",
+        "msg_68cfe3e1ec996732b60b23ad"
+      ],
+      "seconds": 0.0037447920185513794,
+      "archive_code": "ORBIT-58"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "session": "A",
+      "round": 3,
+      "item_id": "msg_c48fca58ef5b9a6238872181",
+      "before_version": 9,
+      "after_version": 10,
+      "before_item_ids": [
+        "msg_c48fca58ef5b9a6238872181",
+        "msg_ecf096ed13769894f745b01c",
+        "msg_07e7fb7e9f4d123a559e1cfc",
+        "msg_77990d5377426460d73d3d26",
+        "fc_e5eab32c3704b2d0739fe24a",
+        "fco_7cccf27191d435e51266a9b2",
+        "msg_f42b243ef88b8ab19a1a9db7",
+        "msg_55ed1b8339d7b9bb3d882708",
+        "fc_8a99d3e80c78d79d5b2f07ff",
+        "fco_aa828ee74d4378b0fd03b09b",
+        "msg_d3ac64fb920630a567e183cd",
+        "msg_33e4ffcc531ed37abea411d6",
+        "fc_a565f9fca54e949c0342517d",
+        "fco_c2f4253d826438ddb37686fe",
+        "msg_ce0d250ce7bbcc8bc970d9c1"
+      ],
+      "after_item_ids": [
+        "msg_ecf096ed13769894f745b01c",
+        "msg_07e7fb7e9f4d123a559e1cfc",
+        "msg_77990d5377426460d73d3d26",
+        "fc_e5eab32c3704b2d0739fe24a",
+        "fco_7cccf27191d435e51266a9b2",
+        "msg_f42b243ef88b8ab19a1a9db7",
+        "msg_55ed1b8339d7b9bb3d882708",
+        "fc_8a99d3e80c78d79d5b2f07ff",
+        "fco_aa828ee74d4378b0fd03b09b",
+        "msg_d3ac64fb920630a567e183cd",
+        "msg_33e4ffcc531ed37abea411d6",
+        "fc_a565f9fca54e949c0342517d",
+        "fco_c2f4253d826438ddb37686fe",
+        "msg_ce0d250ce7bbcc8bc970d9c1"
+      ],
+      "seconds": 0.003976624982897192,
+      "archive_code": "BEACON-46"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "session": "B",
+      "round": 3,
+      "item_id": "msg_950c91a2131ef724fc3ab585",
+      "before_version": 9,
+      "after_version": 10,
+      "before_item_ids": [
+        "msg_950c91a2131ef724fc3ab585",
+        "msg_2758bd81a2c6b65937f7038e",
+        "msg_54f83d8ac4d3814a09a7f635",
+        "msg_85d145a623392ebd5f2abc4d",
+        "fc_0f68a0a7d9ad4c0cf88fd782",
+        "fco_0756256dd6bcf096e1690641",
+        "msg_980c8572d0c49018655e3f6e",
+        "msg_ac9365c66a420c87d790aeac",
+        "fc_9d63ef5cb399ac4fd9592394",
+        "fco_16b46f9d7ce869e4a7623d13",
+        "msg_68cfe3e1ec996732b60b23ad",
+        "msg_8947891576b2a704abebfc90",
+        "fc_5f2d75ddb60e6fed9a0efa49",
+        "fco_31370115410c4b87765692e9",
+        "msg_840ee2b13318cd1ed19329ea"
+      ],
+      "after_item_ids": [
+        "msg_2758bd81a2c6b65937f7038e",
+        "msg_54f83d8ac4d3814a09a7f635",
+        "msg_85d145a623392ebd5f2abc4d",
+        "fc_0f68a0a7d9ad4c0cf88fd782",
+        "fco_0756256dd6bcf096e1690641",
+        "msg_980c8572d0c49018655e3f6e",
+        "msg_ac9365c66a420c87d790aeac",
+        "fc_9d63ef5cb399ac4fd9592394",
+        "fco_16b46f9d7ce869e4a7623d13",
+        "msg_68cfe3e1ec996732b60b23ad",
+        "msg_8947891576b2a704abebfc90",
+        "fc_5f2d75ddb60e6fed9a0efa49",
+        "fco_31370115410c4b87765692e9",
+        "msg_840ee2b13318cd1ed19329ea"
+      ],
+      "seconds": 0.00395391701022163,
+      "archive_code": "ORBIT-59"
+    }
+  ],
+  "grafts": [
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "A-edit1",
+      "round": 1,
+      "slot": 0,
+      "reused": 764,
+      "fresh": 729,
+      "graft_fresh": 665,
+      "source": "616:1380",
+      "destination": "286:1050",
+      "latest_user_start": 1684,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 31.533738,
+      "raw_log": "1004 17:03:42 ds4-server: suffix APPROXIMATE slot=0 reused=764 fresh=729 graft_fresh=665 source=616:1380 destination=286:1050 latest_user_start=1684 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 31533.738 ms"
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "B-edit1",
+      "round": 1,
+      "slot": 0,
+      "reused": 764,
+      "fresh": 729,
+      "graft_fresh": 665,
+      "source": "616:1380",
+      "destination": "286:1050",
+      "latest_user_start": 1684,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 0,
+      "prefix_pad": 1,
+      "graft_seconds": 32.617394,
+      "raw_log": "1004 17:04:23 ds4-server: suffix APPROXIMATE slot=0 reused=764 fresh=729 graft_fresh=665 source=616:1380 destination=286:1050 latest_user_start=1684 pre_rope=1 source_ssd=1 source_approximate=0 prefix_pad=1 32617.394 ms"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "A-edit2",
+      "round": 2,
+      "slot": 0,
+      "reused": 1161,
+      "fresh": 236,
+      "graft_fresh": 172,
+      "source": "618:1779",
+      "destination": "286:1447",
+      "latest_user_start": 1588,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 1,
+      "prefix_pad": 0,
+      "graft_seconds": 20.685767,
+      "raw_log": "1004 17:04:54 ds4-server: suffix APPROXIMATE slot=0 reused=1161 fresh=236 graft_fresh=172 source=618:1779 destination=286:1447 latest_user_start=1588 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=0 20685.767 ms"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "B-edit2",
+      "round": 2,
+      "slot": 1,
+      "reused": 1161,
+      "fresh": 234,
+      "graft_fresh": 170,
+      "source": "618:1779",
+      "destination": "286:1447",
+      "latest_user_start": 1586,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 1,
+      "prefix_pad": 0,
+      "graft_seconds": 21.129982,
+      "raw_log": "1004 17:05:24 ds4-server: suffix APPROXIMATE slot=1 reused=1161 fresh=234 graft_fresh=170 source=618:1779 destination=286:1447 latest_user_start=1586 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=0 21129.982 ms"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "A-edit3",
+      "round": 3,
+      "slot": 1,
+      "reused": 1067,
+      "fresh": 236,
+      "graft_fresh": 172,
+      "source": "616:1683",
+      "destination": "286:1353",
+      "latest_user_start": 1494,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 1,
+      "prefix_pad": 1,
+      "graft_seconds": 21.021296999999997,
+      "raw_log": "1004 17:05:53 ds4-server: suffix APPROXIMATE slot=1 reused=1067 fresh=236 graft_fresh=172 source=616:1683 destination=286:1353 latest_user_start=1494 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=1 21021.297 ms"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "B-edit3",
+      "round": 3,
+      "slot": 1,
+      "reused": 1065,
+      "fresh": 234,
+      "graft_fresh": 170,
+      "source": "616:1681",
+      "destination": "286:1351",
+      "latest_user_start": 1490,
+      "pre_rope": 1,
+      "source_ssd": 1,
+      "source_approximate": 1,
+      "prefix_pad": 1,
+      "graft_seconds": 21.24525,
+      "raw_log": "1004 17:06:23 ds4-server: suffix APPROXIMATE slot=1 reused=1065 fresh=234 graft_fresh=170 source=616:1681 destination=286:1351 latest_user_start=1490 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=1 21245.250 ms"
+    }
+  ],
+  "visible_continuations": [
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "step": "A-warm",
+      "round": 0,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1483,
+      "prompt": 2010,
+      "fresh": 527,
+      "approximate": 0,
+      "raw_log": "1004 16:55:07 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0"
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "step": "B-warm",
+      "round": 0,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1483,
+      "prompt": 2010,
+      "fresh": 527,
+      "approximate": 0,
+      "raw_log": "1004 16:56:00 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0"
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "step": "A-edit1",
+      "round": 1,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1872,
+      "prompt": 1898,
+      "fresh": 26,
+      "approximate": 0,
+      "raw_log": "1004 16:57:08 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1872 prompt=1898 approximate=0"
+    },
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "step": "B-edit1",
+      "round": 1,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1872,
+      "prompt": 1897,
+      "fresh": 25,
+      "approximate": 0,
+      "raw_log": "1004 16:58:06 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1872 prompt=1897 approximate=0"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "step": "A-edit2",
+      "round": 2,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1777,
+      "prompt": 1803,
+      "fresh": 26,
+      "approximate": 0,
+      "raw_log": "1004 16:59:01 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1777 prompt=1803 approximate=0"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "step": "B-edit2",
+      "round": 2,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1775,
+      "prompt": 1800,
+      "fresh": 25,
+      "approximate": 0,
+      "raw_log": "1004 16:59:55 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1775 prompt=1800 approximate=0"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "step": "A-edit3",
+      "round": 3,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1682,
+      "prompt": 1708,
+      "fresh": 26,
+      "approximate": 0,
+      "raw_log": "1004 17:00:48 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1682 prompt=1708 approximate=0"
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "step": "B-edit3",
+      "round": 3,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1678,
+      "prompt": 1703,
+      "fresh": 25,
+      "approximate": 0,
+      "raw_log": "1004 17:01:39 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1678 prompt=1703 approximate=0"
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "A-warm",
+      "round": 0,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1483,
+      "prompt": 2010,
+      "fresh": 527,
+      "approximate": 0,
+      "raw_log": "1004 17:02:36 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0"
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "B-warm",
+      "round": 0,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1483,
+      "prompt": 2010,
+      "fresh": 527,
+      "approximate": 0,
+      "raw_log": "1004 17:02:57 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0"
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "A-edit1",
+      "round": 1,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1873,
+      "prompt": 1899,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 17:03:49 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1873 prompt=1899 approximate=1"
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "step": "B-edit1",
+      "round": 1,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1873,
+      "prompt": 1898,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 17:04:30 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1873 prompt=1898 approximate=1"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "A-edit2",
+      "round": 2,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1777,
+      "prompt": 1803,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 17:05:01 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1777 prompt=1803 approximate=1"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "B-edit2",
+      "round": 2,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1775,
+      "prompt": 1800,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 17:05:31 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1775 prompt=1800 approximate=1"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "A-edit3",
+      "round": 3,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1683,
+      "prompt": 1709,
+      "fresh": 26,
+      "approximate": 1,
+      "raw_log": "1004 17:06:00 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1683 prompt=1709 approximate=1"
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "step": "B-edit3",
+      "round": 3,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1679,
+      "prompt": 1704,
+      "fresh": 25,
+      "approximate": 1,
+      "raw_log": "1004 17:06:30 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1679 prompt=1704 approximate=1"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "step": "A-warm",
+      "round": 0,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1483,
+      "prompt": 2010,
+      "fresh": 527,
+      "approximate": 0,
+      "raw_log": "1004 17:07:29 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "step": "B-warm",
+      "round": 0,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1483,
+      "prompt": 2010,
+      "fresh": 527,
+      "approximate": 0,
+      "raw_log": "1004 17:08:22 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1483 prompt=2010 approximate=0"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "step": "A-edit1",
+      "round": 1,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1872,
+      "prompt": 1898,
+      "fresh": 26,
+      "approximate": 0,
+      "raw_log": "1004 17:09:31 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1872 prompt=1898 approximate=0"
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "step": "B-edit1",
+      "round": 1,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1872,
+      "prompt": 1897,
+      "fresh": 25,
+      "approximate": 0,
+      "raw_log": "1004 17:10:30 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1872 prompt=1897 approximate=0"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "step": "A-edit2",
+      "round": 2,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1777,
+      "prompt": 1803,
+      "fresh": 26,
+      "approximate": 0,
+      "raw_log": "1004 17:11:27 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1777 prompt=1803 approximate=0"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "step": "B-edit2",
+      "round": 2,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1775,
+      "prompt": 1800,
+      "fresh": 25,
+      "approximate": 0,
+      "raw_log": "1004 17:12:22 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1775 prompt=1800 approximate=0"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "step": "A-edit3",
+      "round": 3,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1682,
+      "prompt": 1708,
+      "fresh": 26,
+      "approximate": 0,
+      "raw_log": "1004 17:13:15 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1682 prompt=1708 approximate=0"
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "step": "B-edit3",
+      "round": 3,
+      "match": "visible-prefix",
+      "ids": 0,
+      "cached": 1678,
+      "prompt": 1703,
+      "fresh": 25,
+      "approximate": 0,
+      "raw_log": "1004 17:14:08 ds4-server: responses live continuation RESPPROTO match=visible-prefix ids=0 cached=1678 prompt=1703 approximate=0"
+    }
+  ],
+  "cache_shutdowns": [
+    {
+      "arm": "native-before",
+      "phase": "before",
+      "hot_bytes": 0,
+      "ssd_bytes": 177767824,
+      "metadata_bytes": 67527,
+      "endpoints": 8,
+      "chunks": 408,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 0,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-before",
+      "phase": "after",
+      "hot_bytes": 0,
+      "ssd_bytes": 352628008,
+      "metadata_bytes": 138319,
+      "endpoints": 16,
+      "chunks": 840,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 0,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "reuse",
+      "phase": "before",
+      "hot_bytes": 0,
+      "ssd_bytes": 309621773,
+      "metadata_bytes": 205867,
+      "endpoints": 20,
+      "chunks": 1027,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 232,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "reuse",
+      "phase": "after",
+      "hot_bytes": 0,
+      "ssd_bytes": 589687556,
+      "metadata_bytes": 367735,
+      "endpoints": 32,
+      "chunks": 2023,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 370,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-after",
+      "phase": "before",
+      "hot_bytes": 0,
+      "ssd_bytes": 177767824,
+      "metadata_bytes": 67526,
+      "endpoints": 8,
+      "chunks": 408,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 0,
+      "endpoint_evictions": 0
+    },
+    {
+      "arm": "native-after",
+      "phase": "after",
+      "hot_bytes": 0,
+      "ssd_bytes": 352628008,
+      "metadata_bytes": 138318,
+      "endpoints": 16,
+      "chunks": 840,
+      "pinned_endpoints": 0,
+      "hot_reads": 0,
+      "disk_reads": 0,
+      "endpoint_evictions": 0
+    }
+  ],
+  "guard_summaries": [
+    {
+      "arm": "native-before",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 420,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.018125,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 84.4635009765625,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "reuse",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 269,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.018125,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 84.11965942382812,
+      "max_consecutive_bad": 0
+    },
+    {
+      "arm": "native-after",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 427,
+      "levels": [
+        1
+      ],
+      "swap_first_gb": 0.018125,
+      "swap_last_gb": 0.018125,
+      "peak_wired_compressor_gb": 84.42869567871094,
+      "max_consecutive_bad": 0
+    }
+  ],
+  "controls_vs_native_before": {
+    "native-before": {
+      "A-warm": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-warm": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "A-edit1": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-edit1": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "A-edit2": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-edit2": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "A-edit3": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-edit3": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      }
+    },
+    "reuse": {
+      "A-warm": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-warm": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "A-edit1": {
+        "final_text_equal": true,
+        "usage_equal": false,
+        "public_outputs_equal": true
+      },
+      "B-edit1": {
+        "final_text_equal": true,
+        "usage_equal": false,
+        "public_outputs_equal": true
+      },
+      "A-edit2": {
+        "final_text_equal": true,
+        "usage_equal": false,
+        "public_outputs_equal": true
+      },
+      "B-edit2": {
+        "final_text_equal": true,
+        "usage_equal": false,
+        "public_outputs_equal": true
+      },
+      "A-edit3": {
+        "final_text_equal": true,
+        "usage_equal": false,
+        "public_outputs_equal": true
+      },
+      "B-edit3": {
+        "final_text_equal": true,
+        "usage_equal": false,
+        "public_outputs_equal": true
+      }
+    },
+    "native-after": {
+      "A-warm": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-warm": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "A-edit1": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-edit1": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "A-edit2": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-edit2": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "A-edit3": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      },
+      "B-edit3": {
+        "final_text_equal": true,
+        "usage_equal": true,
+        "public_outputs_equal": true
+      }
+    }
+  },
+  "native_mean": {
+    "launcher_seconds": 439.7797773534985,
+    "client_phase_seconds": 435.6998432285036,
+    "edited_seconds_including_deletion": 329.58633456203097,
+    "warm_seconds": 106.0950028750085
+  },
+  "change_vs_native_mean_percent": {
+    "native-before": {
+      "launcher_seconds": -0.9343634357754982,
+      "client_phase_seconds": -0.929972462804185,
+      "edited_seconds_including_deletion": -1.1984023552603973,
+      "warm_seconds": -0.09524623898959916
+    },
+    "reuse": {
+      "launcher_seconds": -36.659544435099534,
+      "client_phase_seconds": -36.99204437582879,
+      "edited_seconds_including_deletion": -39.5570382264942,
+      "warm_seconds": -29.029294970948495
+    },
+    "native-after": {
+      "launcher_seconds": 0.9343634357754871,
+      "client_phase_seconds": 0.9299724628041739,
+      "edited_seconds_including_deletion": 1.1984023552604084,
+      "warm_seconds": 0.09524623898959916
+    }
+  },
+  "native_after_vs_before_percent": {
+    "launcher_seconds": 1.8863522573132618,
+    "client_phase_seconds": 1.8774042683192382,
+    "edited_seconds_including_deletion": 2.425876471288424,
+    "warm_seconds": 0.19067408787662998
+  },
+  "round_change_vs_native_mean_percent": {
+    "1": -29.719564549594267,
+    "2": -45.702292563693256,
+    "3": -44.07932402516658
+  },
+  "scope": "Two sequential Conversations, three real item deletions each. Restart after edit1, later source_approximate1 only if logged. Warm exact-cache benefit included; no isolated relocation/additive/physicalSSD/private-identity/NLL claim."
+}

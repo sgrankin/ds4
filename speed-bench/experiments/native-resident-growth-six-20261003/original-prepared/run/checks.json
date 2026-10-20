@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "order": "ABCCBA",
+  "no_historical_growth_reference_used": true,
+  "native_default_repeated_hashes_exact": true,
+  "native_fast_repeated_hashes_exact": true,
+  "resident_three_repeated_hashes_exact": true,
+  "all_variants_repeated_hashes_exact": true,
+  "cross_variant_hashes_diagnostic": true,
+  "configured_slots_every_phase": 6136,
+  "profile_off": true,
+  "timings_are_single_workload_only": true,
+  "default_promoted": false
+}

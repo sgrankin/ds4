@@ -1,0 +1,13 @@
+{
+  "runtime_revision": "52278b7b50111dde99cd888e55f288feacc9e5a3",
+  "runtime_parent": "f24e2272c6fc934c1de289b8858d1624d8fb29b8",
+  "budget_start_utc": "2026-10-03 23:43:58",
+  "budget_end_utc": "2026-10-04 00:43:58",
+  "agent_binary": "/Volumes/Models/ds4/.workspaces/pre-rope-hour8/build/ds4-agent",
+  "system_prefix_warmup": "Copied item6 sysprompt image mismatched the live-context path; initial native rebuilt 1987 system tokens, suffix then hit. Added matching warmed native control.",
+  "core_build_note": "Core8 screen predates exact-prefix original-tape import API and invalid-graph enable-gate fixes. No numerical publication/relocation code changed after its build.",
+  "agent_binary_sha256": "431b227e026eb45f2ab43b982b62340facfda6ee8fbb29d137b94770f0ad1fa4",
+  "first_screen_end_utc": "2026-10-04 00:26:37",
+  "completed_utc": "2026-10-04 00:37:34",
+  "matched_warm_control": "agent-native-warm: confirmed sysprompt hit1987, rc0"
+}

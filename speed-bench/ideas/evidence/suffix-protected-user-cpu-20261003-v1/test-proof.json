@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "name": "production",
+      "returncode": 0,
+      "log_sha256": "7af93375885bb22a604d15bf15aaced9c2d96ae9d25954b3ac70af1bab866c94"
+    },
+    {
+      "name": "asan-ubsan",
+      "returncode": 0,
+      "log_sha256": "7af93375885bb22a604d15bf15aaced9c2d96ae9d25954b3ac70af1bab866c94"
+    }
+  ],
+  "source": {
+    "ds4_agent.c": "21cd291630316336b5b3ea07a97331c1cbd4cebfa46a433242d42133323fcfce",
+    "tests/test_agent_context_suffix_mock.c": "13cf7fe54ec610c434d6a7a439bd8c743a8fd555230d765317f01983cd5c5f1b"
+  },
+  "model_opened": false,
+  "gpu_calls": false,
+  "asan_scope": "Private agent/helper compiled with ASan/UBSan; existing core/auxiliary objects unsanitized",
+  "darwin_leak_detection": false
+}

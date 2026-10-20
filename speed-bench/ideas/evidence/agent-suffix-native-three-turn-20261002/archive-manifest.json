@@ -1,0 +1,29 @@
+{
+  "source_commit": "e33f21e3",
+  "runtime_source": "7008afd6",
+  "scope": "real production3turn semantics/reuse passed; rawrunner3 fromunrequested persistence; notagentlatencyresult",
+  "copied_sha256": {
+    "native-three-turn-manifest.json": "9313010ed524dd1ed2d0a8deb2788083306100149b05b4042dec98073bfc023f",
+    "NATIVE_THREE_TURN_RESULTS.md": "ef55c2fba932501029c5d152ff4148d06b2da98cc7b4f060603fae4c0f8565f0",
+    "prepared-command.json": "494b99869de0df6521db8fa5aa7ee5ddf440a91797c8e5f941dd22433407788b",
+    "native-three-turn/before-turn3.txt": "c945795c4bfc7725462cbc54e4ce1d687663897697769674eb1ca89992cd74b4",
+    "native-three-turn/stderr.log": "88eaee05271d3ecb49e3872efe8d0dce7df90660d52a8fab74791234bc358acd",
+    "native-three-turn/turns.json": "91e7aa7cc908d6bd954d5641841c078b83fcf5d7f32d763adb965fc82d66d1c2",
+    "native-three-turn/before-tool-edit.txt": "76eca4853f5849ce2de6a68087a5e8fcfcf0cda4f68c5e17181fabe1864aa1c2",
+    "native-three-turn/provenance.json": "6f12ea6e94993258bfaa9eabd87a01bcaa7d054c78c1285e19c3b1e7a16330b4",
+    "native-three-turn/result.json": "b9b09756ebdaf24d3de111272d1ddf026bb2dc4158eec3b650e10f1b77cf4d2c",
+    "native-three-turn/pressure-summary.json": "b82d9bd2ea92358e497e14755d2efbb6b45970f3e6e6652ffb9c5a93de879792",
+    "native-three-turn/after-tool-edit.txt": "60f2a49bc9b885cf2c2f0989d9364b02a25cb6eac722573ee780f421e1f01d5e",
+    "native-three-turn/stdout.log": "9d1a27ff5cdf594497e4ff0a92cb393722863d712796ca569a635853f67e6fa0",
+    "native-three-turn/guard-result.json": "b930e7a8282c48851750f8438ef0243df5697004738bb1efd66bc0da0d490c85",
+    "native-three-turn/command.json": "cdfc34e228582043c5802c8f90c9e1fccd9b8e50d10dfcb75dc45067bd1d01c7",
+    "native-three-turn/update_context.py": "c7e9b9289278b944e5dc53f7d8cc381ec3f0211bf2d865d9a13660ee11dac9ca",
+    "native-three-turn/guard-command.json": "afe58dae793a18bcd1002ee7e8205d40857d6a41c9a3a977ffc3c1f261b7a38c",
+    "native-three-turn/guard-pressure.jsonl": "cb7ce7ec06438e3d2d8990ca4376b8510278afbe48065722cafdbec3653d3a13",
+    "native-three-turn/turn1-context.txt": "dc49cb8d986b0453d9c59b498c3a797bb5588cbbd82c68f4219a83f0ecf72b1c",
+    "native-three-turn/outer-guard.log": "7a347db5ddf2bea086ea4b684a4fb0703ddfdcc58351cf0632a14148987c5a91",
+    "native-three-turn/context.txt": "64a48573e9815bfb8700cb88882383abb2b4e747ba85fc4421030e29920f82de",
+    "native-three-turn/agent.trace": "8acf59b747f65c7d534dd8eb0a5881029cbe22b4604acc39eab7947acc880f12",
+    "native-three-turn/prelaunch-frozen-provenance.json": "6619bdc79fbfbec3fd122226d039afe2a7b1c084d7f13ce721d90e459282166a"
+  }
+}

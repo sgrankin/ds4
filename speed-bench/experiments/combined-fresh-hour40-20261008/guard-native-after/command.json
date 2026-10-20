@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "-B",
+    "speed-bench/experiments/combined-fresh-hour40-20261008/launch.py",
+    "--arm",
+    "native-after",
+    "--output",
+    "speed-bench/experiments/combined-fresh-hour40-20261008/code-native-after",
+    "--cache",
+    ".workspaces/combined-fresh-20261008/cache-native-after",
+    "--store",
+    ".workspaces/combined-fresh-20261008/store-native-after",
+    "--visible",
+    ".workspaces/combined-fresh-20261008/visible"
+  ],
+  "initial": {
+    "time": 1791497046.534952,
+    "level": 1,
+    "swap_gb": 0.020205078125,
+    "physical_gb": 128.0,
+    "free_gb": 58.0421142578125,
+    "file_backed_gb": 49.756561279296875,
+    "wired_gb": 3.812957763671875,
+    "compressor_gb": 13.200302124023438
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

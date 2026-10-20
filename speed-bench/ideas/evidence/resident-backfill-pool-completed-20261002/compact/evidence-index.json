@@ -1,0 +1,83 @@
+{
+  "full_artifact_path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002",
+  "full_raw_csv_logs_retained": true,
+  "source_frozen_paths": [
+    "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool/speed-bench/ideas/artifacts/resident-pool-corrected-build",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002"
+  ],
+  "raw_files": {
+    "native-before": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/native-before-raw.bin",
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "bytes": 264777744
+    },
+    "native-positive": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/native-positive-raw.bin",
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "bytes": 264777744
+    },
+    "bf0": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/bf0-raw.bin",
+      "sha256": "ceb6df37c311a1b294353c58865510581e41cc086c5f89c826ac0460a8647b86",
+      "bytes": 264777744
+    },
+    "bf1-global-late1": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/bf1-global-late1-raw.bin",
+      "sha256": "5c0aa48c4d07fa6d68bc04a5805333ba3df7c1063d4d5ae3d78db5a1f264612c",
+      "bytes": 264777744
+    },
+    "bf1-pool-late1": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/bf1-pool-late1-raw.bin",
+      "sha256": "de4a6170e27c551b94d54bf99eab5405d5c79c3745c41bbf8dd41eca78c41ae1",
+      "bytes": 264777744
+    },
+    "bf1-pool-late1-repeat": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/bf1-pool-late1-repeat-raw.bin",
+      "sha256": "76a43dcbb8df6fd1fcb3d917d2c72998719240ed02652c02f075e75dceeff3bb",
+      "bytes": 264777744
+    },
+    "native-after": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-resident-backfill-pool-study/speed-bench/ideas/artifacts/resident-pool-prepared-20261002/run/native-after-raw.bin",
+      "sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+      "bytes": 264777744
+    }
+  },
+  "compact_files": {
+    "actual-counter-balance.test.log": "75555deffe59dbfce6b7129b777e78c924ec11bbaa59b4f5da44eeac882d0219",
+    "bf0-command.json": "c06bbc57122bc50f3578ae398a472aced0b35625c16c77741394d90d573962c8",
+    "bf0-footers.log": "a596d7a26cde9c8d8869bb54aac1621b71522c38be234ddac8f5f5ae4e36584f",
+    "bf1-global-late1-command.json": "f7d346a7cdfa74c28979b8eb0658c18d2cac992d7fe5f0e4ef414e24a25ae12b",
+    "bf1-global-late1-footers.log": "e1accbf93e589bebab68725d9c1503a2b88a92208ddfd4bb7b7d31e006f63161",
+    "bf1-pool-late1-command.json": "c4f48369d2ed80e24119b14b1d582db784fdd73176f4c155518cdf58ebb70d54",
+    "bf1-pool-late1-footers.log": "a41d913f91099b3cbf2f7312489cc92dbbaf7c01c935755029c11da1c8ebba00",
+    "bf1-pool-late1-repeat-command.json": "613152e34a9bf86cabc98e2316f311e4aa7ce7733fde6cc93dc1af4c5c97e15e",
+    "bf1-pool-late1-repeat-footers.log": "b929a1a663218dbd4ccaeb30597d23cac81e406e730285ec51de8bb2ca4be82b",
+    "checks.json": "f43aeb0d249a8d58f8b04c2365202d80f00412e4a2f6e3ebc908c8094a80eaa9",
+    "compact-result.json": "badab0b83e72c5c98275b528615e1b63166003e3f0c5c3d2c626726a5d6c0235",
+    "cpu-build-manifest.json": "1bc2c023b71c84edb528d4b28a2cddd7c6daae100c4525ff0379ecb903b6fcb4",
+    "installer-asan.test.log": "00aa19897127474d5a0dc6de82252ea8b3df20cf22689df30e5dbfffe1eafdfe",
+    "installer-prod.test.log": "00aa19897127474d5a0dc6de82252ea8b3df20cf22689df30e5dbfffe1eafdfe",
+    "native-after-command.json": "880fdbe955b3479ac3ad3745dfdc13e7bf39b952c57fbda2e3b3defb29c1a211",
+    "native-after-footers.log": "ed8ddf3efcf71158906ba14b1dbbe782ae9f80642f5c942b68d032eccfbda052",
+    "native-before-command.json": "eed8ede994c8c69ecbe6afdd85899ead40fb2d06dc38153c8546d26b70c13a77",
+    "native-before-footers.log": "ed8ddf3efcf71158906ba14b1dbbe782ae9f80642f5c942b68d032eccfbda052",
+    "native-positive-command.json": "167c7a507cdcb0f81d983bae627313f27eac5b987e9e5d63322bd2b9ec67f9aa",
+    "native-positive-footers.log": "91374e364892bfbc4ce97074d107077dacb0cf2e462612dbb9e2fb41ad7fa0e4",
+    "original-d75-api-failure.log": "7afdd55cc6daa312958710d73190933f5db7a3f3c4c73a714a78f3f18b79ae36",
+    "parser-test.json": "dd5a14f4d41a25b1d7efc7722821b4a91e0d5adc158a597542a12ff85a35e0cc",
+    "pool-api.test.log": "a248400eba2a3b80141be1349edd7b45d2de940c0b4ab06f7522b8b493bd8b80",
+    "pool-asan.test.log": "75555deffe59dbfce6b7129b777e78c924ec11bbaa59b4f5da44eeac882d0219",
+    "pool-prod.test.log": "75555deffe59dbfce6b7129b777e78c924ec11bbaa59b4f5da44eeac882d0219",
+    "pool-tsan.test.log": "75555deffe59dbfce6b7129b777e78c924ec11bbaa59b4f5da44eeac882d0219",
+    "preflight.json": "56875a2ab2d59c471dd927381afb73455205bcd2cf66d0cef763ed320318b458",
+    "prepared-command.json": "bb3bedf3a6f44ca2605032277b71fcd8d9a5ff401a123f9ec795a86f4e40233e",
+    "prepared-manifest.json": "321632a8417bd2c74fa84c67f748046b74e7430129bc39ccb7b11e38d91b6848",
+    "pressure-command.json": "6312c0e21219e25a5209af525d70eae859b30b1d458ad0edbb42c413dc380840",
+    "pressure-compact.json": "515bc8086b7b7e9ad862b1dff6a4106a18230918c86e4c19ba65ac94eff1da90",
+    "pressure-result.json": "f4d794ef669ff8a95a60f28aaaf283cc6ac026c7cbc4d7a248adbc26168bdf3a",
+    "release-proof.json": "b3ed5ccc1a982fd9b6e4898dbb6ebe0f8f08356f3df6667372f78fc37fd92ecd",
+    "run-manifest.json": "2a90e6062a6f8c5f6399708442d6c2d9c990c4b0d8156951106c0859e2a4894c",
+    "source-parity.json": "eff1a865243de48d49ced66ca75dfc9c272ca53a730288e6e0dd964544752458",
+    "summary.json": "3abdbd927ebb22350e3b308784cb133fab107aa77547c1bf780d54f604843578"
+  }
+}

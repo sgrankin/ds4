@@ -1,0 +1,78 @@
+{
+  "scope": "first reconciliation task only; later since/CLI prompts untested",
+  "generated_fix_passes": {
+    "baseline-ds41": true,
+    "resident-ds41-full275": true
+  },
+  "unit_tests": {
+    "baseline-ds41": 5,
+    "resident-ds41-full275": 5
+  },
+  "completed_model_turn": {
+    "baseline-ds41": false,
+    "resident-ds41-full275": false
+  },
+  "complete_harness_success": {
+    "baseline-ds41": false,
+    "resident-ds41-full275": false
+  },
+  "budget_sec_each": 275,
+  "binary_sha256": "8b4b611d3964e48f07c6afa167e60a274b8c86af2b5bc4c5484389e8550772f5",
+  "candidate_eligibility": {
+    "model": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-Q2.gguf",
+    "ssd_streaming": true,
+    "v41_recognized": true,
+    "ctx": "8192",
+    "cache": "64GB",
+    "chunk": "512",
+    "resident_env": {
+      "DS4_METAL_V41_RESIDENT_ROUTE_GAP": ".05",
+      "DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS": ".12",
+      "DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS": "1",
+      "DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS": ".20"
+    },
+    "incompatible_cli_flags": [],
+    "incompatible_env_found": {},
+    "binary_sha256": "8b4b611d3964e48f07c6afa167e60a274b8c86af2b5bc4c5484389e8550772f5",
+    "scalar_decode_evidence": "ordinary agent generation, no speculative CLI modes; actual generation/tool tokens in trace; configured resident path rejects incompatible modes at scalar decode setup",
+    "counter_report_present": false,
+    "counter_report_limitation": "SIGTERM at timeout bypassed atexit report; actual substitution count is unavailable"
+  },
+  "pressure": {
+    "guard-ds41": {
+      "samples": 386,
+      "levels": [
+        1
+      ],
+      "initial_swap_gib": 0.03015625,
+      "max_swap_gib": 0.03015625,
+      "max_wired_gib": 77.04527282714844,
+      "max_compressor_gib": 7.8575897216796875,
+      "adverse_samples": 0,
+      "guard_result": {
+        "status": "complete",
+        "child_returncode": 1
+      }
+    },
+    "guard-ds41-full275": {
+      "samples": 267,
+      "levels": [
+        1
+      ],
+      "initial_swap_gib": 0.03015625,
+      "max_swap_gib": 0.03185546875,
+      "max_wired_gib": 76.02749633789062,
+      "max_compressor_gib": 9.10479736328125,
+      "adverse_samples": 0,
+      "guard_result": {
+        "status": "complete",
+        "child_returncode": 1
+      }
+    }
+  },
+  "excluded_attempts": [
+    "baseline/resident: Qwen symlink rejected SSD startup",
+    "resident-ds41: inherited shortened candidate timeout"
+  ],
+  "speed_conclusion": "No valid completed-turn timing comparison; no speed promotion"
+}

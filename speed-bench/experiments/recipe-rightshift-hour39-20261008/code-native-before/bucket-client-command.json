@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Volumes/Models/ds4/speed-bench/experiments/recipe-rightshift-hour39-20261008/run.py",
+    "--base-url",
+    "http://127.0.0.1:59450",
+    "--arm",
+    "native-before",
+    "--case",
+    "bucket",
+    "--output",
+    "speed-bench/experiments/recipe-rightshift-hour39-20261008/code-native-before/http/bucket",
+    "--visible",
+    ".workspaces/recipe-20261008/right-visible",
+    "--global-cap",
+    "2048"
+  ],
+  "cwd": "/Volumes/Models/ds4"
+}

@@ -1,0 +1,52 @@
+{
+  "status": "ROOT_QUALIFIED_MAP_EVIDENCE_ONLY_MAIN_IMPORT",
+  "time": 1791026515.513452,
+  "map_path": "/Volumes/Models/ds4/.workspaces/idea-resident-functional-map-publication/speed-bench/ideas/artifacts/resident-functional-map-publication-v2/functional.ds4fmap1",
+  "map_pin": {
+    "bytes": 21140879,
+    "mode": 292,
+    "sha256": "c9328addaeac914f666c618a5564b87cd8533b75531f8430572fc2cbfabda17e"
+  },
+  "qualification_pin": {
+    "bytes": 17638,
+    "mode": 292,
+    "sha256": "da87dd4f73aa80eb2e029e9ab1c05f6005abb644f76eb8516ebb476a0a33a82e"
+  },
+  "publication_proof_sha256": "27893c2a84563395d430dfd325c6a3cb6c05410b4bab98193fad72055f6270d7",
+  "CPU16_proof_sha256": "4528b2a2969252ed8b5076ea840849597cc5a06f0d9444143fa66b0396c7df43",
+  "all100_MAIN_runtime_and_shaders_before_after_unchanged": true,
+  "no_model_or_map_payload_read": true,
+  "no_runtime_default_change": true,
+  "files": {
+    "root-proof.json": {
+      "bytes": 1220,
+      "mode": 420,
+      "sha256": "27893c2a84563395d430dfd325c6a3cb6c05410b4bab98193fad72055f6270d7"
+    },
+    "CPU16-proof.json": {
+      "bytes": 1454,
+      "mode": 420,
+      "sha256": "4528b2a2969252ed8b5076ea840849597cc5a06f0d9444143fa66b0396c7df43"
+    },
+    "authority.json": {
+      "bytes": 13407,
+      "mode": 420,
+      "sha256": "763d9826581676892a2eb5554f216771e5dcd20a513b4c587793bbf1714f8500"
+    },
+    "README.md": {
+      "bytes": 2269,
+      "mode": 420,
+      "sha256": "905a3bc139991f8974035475cc2ea459620fd2fb8048d159ced9d43660a2a49a"
+    },
+    "root-grant.json": {
+      "bytes": 3130,
+      "mode": 420,
+      "sha256": "fafc8f58c420059a60be8756bbc93f8d3b36329b7a37dba053fd33ec5620e7f4"
+    },
+    "qualification.ds4fqal1": {
+      "bytes": 17638,
+      "mode": 292,
+      "sha256": "da87dd4f73aa80eb2e029e9ab1c05f6005abb644f76eb8516ebb476a0a33a82e"
+    }
+  }
+}

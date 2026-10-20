@@ -1,0 +1,13 @@
+{
+  "status": "ROOT_STATIC_PREPARED_AND_VERIFIED_NO_MODEL_GRANT",
+  "source_freeze": "74f59004c35778e19c6630a7696936d576f54d8f",
+  "cpu_evidence": "bfa387877cc41dd329ad6f88c7931330be96b5e2",
+  "build_plan_freeze": "11d2a49ecbf7f6ad70ade0bc1de7c79938fe9cf9",
+  "build_manifest_sha256": "dfc5bd52da8bb86b574c56b6e9effa2997c5f8baaf044995db73fc69e424be99",
+  "prepared_manifest_sha256": "bc63e581d14dc9cc6d1a528c5b17462345e5a73d69b998e74566021ff6dab0d5",
+  "command_sha256": "d05d8246994ed6fe00b554f17d9b7711b3f68a0ec9dfb6f991004e2899c99e03",
+  "copied_payload_files": 35,
+  "external_nonmodel_pins": 53,
+  "model_stat_tokenizer_native_probe_guard": false,
+  "all_native_controls_before_quality_mandatory": true
+}

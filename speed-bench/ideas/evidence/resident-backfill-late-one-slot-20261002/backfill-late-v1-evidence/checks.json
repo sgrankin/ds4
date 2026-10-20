@@ -1,0 +1,14 @@
+{
+  "native_reference_exact": true,
+  "positive_gap_mode_native_reference_exact": true,
+  "default_off_native_reference_exact": true,
+  "native_demand_io_equal": true,
+  "late_repeat_raw_equal": false,
+  "late_repeat_demand_io_equal": false,
+  "late_repeat_stage_useful_io_equal": false,
+  "late_repeat_footer_equal": false,
+  "reference_sha256": "1993aa5ff886b3f51401c1d1015e3882550120777809c31ea263936e9d63dda8",
+  "earlier_async_raw_equality_required": false,
+  "approximate_repeat_equality_required": false,
+  "scope": "Whole-engine prefill+decode explicit logical I/O and fullraw quality; instrumented, no latency/physical-SSD claim; positive-gap MODE/native and env-default off controls; same-token late path one-slot only"
+}

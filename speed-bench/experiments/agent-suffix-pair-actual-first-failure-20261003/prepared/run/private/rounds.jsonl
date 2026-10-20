@@ -1,0 +1,2 @@
+{"turn":1,"tool_round":0,"generated":4,"carried":0,"limit":512,"configured_limit":512,"context_limited":false,"model_stopped":true,"got_tool":false,"malformed_tool":false,"early_tool_error":false,"interrupted":false,"at_limit":false,"calls":[]}
+{"turn":2,"tool_round":0,"generated":2,"carried":0,"limit":512,"configured_limit":512,"context_limited":false,"model_stopped":true,"got_tool":false,"malformed_tool":false,"early_tool_error":false,"interrupted":false,"at_limit":false,"calls":[]}

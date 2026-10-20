@@ -1,0 +1,42 @@
+{
+  "source_commit": "7040eef1359deeb802ae1f1686707fd43ac80a7e",
+  "source_files_sha256": {
+    "speed-bench/ideas/run_resident_pool_recheck_study.py": "1ff7d11572750c8bd8999cd4327fb576df52c50ad0d329fc0a1de76ad05a5246",
+    "tests/test_resident_pool_recheck_study.py": "bb074ee8f228b2d6f95edf5d5c137f63d2428c8909c3ae30cefc6e67831dd20d",
+    "speed-bench/experiments/ds41-ssd/BACKFILL_POOL_NATIVE_RECHECK_STUDY.md": "cf0a025e5b625686afb0af6a363c1bfc627ad16060266ac15a8b66305279da07"
+  },
+  "jj_blob_disk_equal": true,
+  "copied_wrapper_equal": true,
+  "cpu_test_source_sha256": "bb074ee8f228b2d6f95edf5d5c137f63d2428c8909c3ae30cefc6e67831dd20d",
+  "cpu_test_result_json_sha256": "8840ded5a0e220ab0fc744c70147a3c3d5047bc7a8dc2bfb5b2b663abbb06343",
+  "cpu_tests": {
+    "pass": true,
+    "parser_failure_and_balance_trials": 122,
+    "guard_rejected_before_model_stat": true,
+    "model_opened": false,
+    "gpu_initialized": false
+  },
+  "manifest_sha256": "04ea5a8c9b599d958fc1635019a610143d39e2bc1fad64b6ef8dcc4af78b8bc7",
+  "command_sha256": "a33f2c4f148666dc0dcb4b60b897327a012e98df33e871bfa508970ae5b2062b",
+  "wrapper_sha256": "1ff7d11572750c8bd8999cd4327fb576df52c50ad0d329fc0a1de76ad05a5246",
+  "mandatory_assets_verified": 64,
+  "runtime_helper_policies_inputs_shaders_unchanged": true,
+  "actual_existing_csv_metadata_validation": {
+    "rows": 512,
+    "cases": 16,
+    "steps_per_case": 32,
+    "raw_row_keys_exact": true,
+    "csv_sha256": "8fcfb307f5247c84f1ef7c07d3964ad28fca8c59d63a0b9ca0a234267d7589b5",
+    "case_names_frozen": true,
+    "all_quality_fields_finite": true,
+    "metadata_sha256": "8e249149d61d7e3d9d6825e83a3d5373ceda1a6455eb46d2e35bb6fac80abcb3"
+  },
+  "model_opened": false,
+  "model_current_metadata_checked": false,
+  "full_reference_hashed": false,
+  "gpu_initialized": false,
+  "initial_cpu_failures": [
+    "Fresh isolated artifacts directory absent; test now creates its own bounded test directory.",
+    "One proposed target tamper matched original value6; corrected test to7, parser had correctly accepted unchanged row."
+  ]
+}

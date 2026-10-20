@@ -1,0 +1,2656 @@
+{
+  "phase": "before",
+  "utc": "2026-10-04T14:05:31.124308+00:00",
+  "argv": [
+    "/Volumes/Models/ds4/speed-bench/experiments/conversations-hour13-20261004/run.py",
+    "--base-url",
+    "http://127.0.0.1:57179",
+    "--phase",
+    "before",
+    "--output-dir",
+    "speed-bench/experiments/conversations-hour13-20261004/qualified/http",
+    "--store-dir",
+    ".workspaces/server-agent-day-20261004/conversations-qualified-store"
+  ],
+  "base_url": "http://127.0.0.1:57179/v1",
+  "store_dir": "/Volumes/Models/ds4/.workspaces/server-agent-day-20261004/conversations-qualified-store",
+  "model": "deepseek-v4.1-flash",
+  "total_seconds": 54.403857874989626,
+  "rows": [
+    {
+      "name": "routes-create",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations",
+      "request": {
+        "metadata": {
+          "label": "routes"
+        },
+        "items": [
+          {
+            "role": "user",
+            "content": "Route note 00."
+          },
+          {
+            "role": "user",
+            "content": "Route note 01."
+          },
+          {
+            "role": "user",
+            "content": "Route note 02."
+          },
+          {
+            "role": "user",
+            "content": "Route note 03."
+          },
+          {
+            "role": "user",
+            "content": "Route note 04."
+          },
+          {
+            "role": "user",
+            "content": "Route note 05."
+          },
+          {
+            "role": "user",
+            "content": "Route note 06."
+          },
+          {
+            "role": "user",
+            "content": "Route note 07."
+          },
+          {
+            "role": "user",
+            "content": "Route note 08."
+          },
+          {
+            "role": "user",
+            "content": "Route note 09."
+          },
+          {
+            "role": "user",
+            "content": "Route note 10."
+          },
+          {
+            "role": "user",
+            "content": "Route note 11."
+          },
+          {
+            "role": "user",
+            "content": "Route note 12."
+          },
+          {
+            "role": "user",
+            "content": "Route note 13."
+          },
+          {
+            "role": "user",
+            "content": "Route note 14."
+          },
+          {
+            "role": "user",
+            "content": "Route note 15."
+          },
+          {
+            "role": "user",
+            "content": "Route note 16."
+          },
+          {
+            "role": "user",
+            "content": "Route note 17."
+          },
+          {
+            "role": "user",
+            "content": "Route note 18."
+          },
+          {
+            "role": "user",
+            "content": "Route note 19."
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.009096207999391481,
+      "body": {
+        "id": "conv_7a5ec59cea4fd6422dc0e45d",
+        "object": "conversation",
+        "created_at": 1791122676,
+        "metadata": {
+          "label": "routes"
+        }
+      },
+      "wire": "{\"id\":\"conv_7a5ec59cea4fd6422dc0e45d\",\"object\":\"conversation\",\"created_at\":1791122676,\"metadata\":{\"label\": \"routes\"}}",
+      "error": null,
+      "response_id": "conv_7a5ec59cea4fd6422dc0e45d",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-add-four",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items",
+      "request": {
+        "items": [
+          {
+            "role": "user",
+            "content": "Route note 20."
+          },
+          {
+            "role": "user",
+            "content": "Route note 21."
+          },
+          {
+            "role": "user",
+            "content": "Route note 22."
+          },
+          {
+            "role": "user",
+            "content": "Route note 23."
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.0005989580095047131,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_d63d383f17caf5b3482881b2",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 20."
+              }
+            ]
+          },
+          {
+            "id": "msg_f15e3e9dec5e4bc8a173ad2a",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 21."
+              }
+            ]
+          },
+          {
+            "id": "msg_4939d4f66f4af94f7c1d45aa",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 22."
+              }
+            ]
+          },
+          {
+            "id": "msg_8a4ba494ddcea98cdf2d1220",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 23."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_d63d383f17caf5b3482881b2",
+        "last_id": "msg_8a4ba494ddcea98cdf2d1220",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_d63d383f17caf5b3482881b2\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 20.\"}]},{\"id\":\"msg_f15e3e9dec5e4bc8a173ad2a\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 21.\"}]},{\"id\":\"msg_4939d4f66f4af94f7c1d45aa\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 22.\"}]},{\"id\":\"msg_8a4ba494ddcea98cdf2d1220\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 23.\"}]}],\"first_id\":\"msg_d63d383f17caf5b3482881b2\",\"last_id\":\"msg_8a4ba494ddcea98cdf2d1220\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-get",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00022970799182076007,
+      "body": {
+        "id": "conv_7a5ec59cea4fd6422dc0e45d",
+        "object": "conversation",
+        "created_at": 1791122676,
+        "metadata": {
+          "label": "routes"
+        }
+      },
+      "wire": "{\"id\":\"conv_7a5ec59cea4fd6422dc0e45d\",\"object\":\"conversation\",\"created_at\":1791122676,\"metadata\":{\"label\": \"routes\"}}",
+      "error": null,
+      "response_id": "conv_7a5ec59cea4fd6422dc0e45d",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-all-asc",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00024329200095962733,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_b0c59a36416da97842ba0787",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 00."
+              }
+            ]
+          },
+          {
+            "id": "msg_3ce4c53ce7416348e2598d73",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 01."
+              }
+            ]
+          },
+          {
+            "id": "msg_77bee4501edfebb8f74f7959",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 02."
+              }
+            ]
+          },
+          {
+            "id": "msg_4bd18a7fc1eb705560dfbce5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 03."
+              }
+            ]
+          },
+          {
+            "id": "msg_232002563ff11eef5e1e9cba",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 04."
+              }
+            ]
+          },
+          {
+            "id": "msg_8fcc0a7c17e4cac1db840590",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 05."
+              }
+            ]
+          },
+          {
+            "id": "msg_b8d55d8ef4410e7452ec6c25",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 06."
+              }
+            ]
+          },
+          {
+            "id": "msg_89c15155be9acdaa75529c90",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 07."
+              }
+            ]
+          },
+          {
+            "id": "msg_1de199e68d2ebc53fe30c0a0",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 08."
+              }
+            ]
+          },
+          {
+            "id": "msg_69391431f380fb794505bc4e",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 09."
+              }
+            ]
+          },
+          {
+            "id": "msg_6659b498ba13fb16a20d7c40",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 10."
+              }
+            ]
+          },
+          {
+            "id": "msg_5c151affce90ab4f2017dfab",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 11."
+              }
+            ]
+          },
+          {
+            "id": "msg_eb16fdbfd80ae1382ab77031",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 12."
+              }
+            ]
+          },
+          {
+            "id": "msg_d312c726ba4511c280c46f1e",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 13."
+              }
+            ]
+          },
+          {
+            "id": "msg_17d8c279138a94ec2d1fb604",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 14."
+              }
+            ]
+          },
+          {
+            "id": "msg_5fccc7145acba6173154ca9b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 15."
+              }
+            ]
+          },
+          {
+            "id": "msg_b4f2fe66412eafd10856a990",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 16."
+              }
+            ]
+          },
+          {
+            "id": "msg_4f4ed6521cb91441e92b90e5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 17."
+              }
+            ]
+          },
+          {
+            "id": "msg_d03830ae5fad325211bbc9d6",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 18."
+              }
+            ]
+          },
+          {
+            "id": "msg_3fdd6d6d7ce0912e4be618ab",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 19."
+              }
+            ]
+          },
+          {
+            "id": "msg_d63d383f17caf5b3482881b2",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 20."
+              }
+            ]
+          },
+          {
+            "id": "msg_f15e3e9dec5e4bc8a173ad2a",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 21."
+              }
+            ]
+          },
+          {
+            "id": "msg_4939d4f66f4af94f7c1d45aa",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 22."
+              }
+            ]
+          },
+          {
+            "id": "msg_8a4ba494ddcea98cdf2d1220",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 23."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_b0c59a36416da97842ba0787",
+        "last_id": "msg_8a4ba494ddcea98cdf2d1220",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_b0c59a36416da97842ba0787\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 00.\"}]},{\"id\":\"msg_3ce4c53ce7416348e2598d73\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 01.\"}]},{\"id\":\"msg_77bee4501edfebb8f74f7959\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 02.\"}]},{\"id\":\"msg_4bd18a7fc1eb705560dfbce5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 03.\"}]},{\"id\":\"msg_232002563ff11eef5e1e9cba\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 04.\"}]},{\"id\":\"msg_8fcc0a7c17e4cac1db840590\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 05.\"}]},{\"id\":\"msg_b8d55d8ef4410e7452ec6c25\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 06.\"}]},{\"id\":\"msg_89c15155be9acdaa75529c90\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 07.\"}]},{\"id\":\"msg_1de199e68d2ebc53fe30c0a0\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 08.\"}]},{\"id\":\"msg_69391431f380fb794505bc4e\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 09.\"}]},{\"id\":\"msg_6659b498ba13fb16a20d7c40\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 10.\"}]},{\"id\":\"msg_5c151affce90ab4f2017dfab\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 11.\"}]},{\"id\":\"msg_eb16fdbfd80ae1382ab77031\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 12.\"}]},{\"id\":\"msg_d312c726ba4511c280c46f1e\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 13.\"}]},{\"id\":\"msg_17d8c279138a94ec2d1fb604\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 14.\"}]},{\"id\":\"msg_5fccc7145acba6173154ca9b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 15.\"}]},{\"id\":\"msg_b4f2fe66412eafd10856a990\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 16.\"}]},{\"id\":\"msg_4f4ed6521cb91441e92b90e5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 17.\"}]},{\"id\":\"msg_d03830ae5fad325211bbc9d6\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 18.\"}]},{\"id\":\"msg_3fdd6d6d7ce0912e4be618ab\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 19.\"}]},{\"id\":\"msg_d63d383f17caf5b3482881b2\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 20.\"}]},{\"id\":\"msg_f15e3e9dec5e4bc8a173ad2a\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 21.\"}]},{\"id\":\"msg_4939d4f66f4af94f7c1d45aa\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 22.\"}]},{\"id\":\"msg_8a4ba494ddcea98cdf2d1220\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 23.\"}]}],\"first_id\":\"msg_b0c59a36416da97842ba0787\",\"last_id\":\"msg_8a4ba494ddcea98cdf2d1220\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-default-desc20",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00023633299861103296,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_8a4ba494ddcea98cdf2d1220",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 23."
+              }
+            ]
+          },
+          {
+            "id": "msg_4939d4f66f4af94f7c1d45aa",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 22."
+              }
+            ]
+          },
+          {
+            "id": "msg_f15e3e9dec5e4bc8a173ad2a",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 21."
+              }
+            ]
+          },
+          {
+            "id": "msg_d63d383f17caf5b3482881b2",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 20."
+              }
+            ]
+          },
+          {
+            "id": "msg_3fdd6d6d7ce0912e4be618ab",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 19."
+              }
+            ]
+          },
+          {
+            "id": "msg_d03830ae5fad325211bbc9d6",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 18."
+              }
+            ]
+          },
+          {
+            "id": "msg_4f4ed6521cb91441e92b90e5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 17."
+              }
+            ]
+          },
+          {
+            "id": "msg_b4f2fe66412eafd10856a990",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 16."
+              }
+            ]
+          },
+          {
+            "id": "msg_5fccc7145acba6173154ca9b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 15."
+              }
+            ]
+          },
+          {
+            "id": "msg_17d8c279138a94ec2d1fb604",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 14."
+              }
+            ]
+          },
+          {
+            "id": "msg_d312c726ba4511c280c46f1e",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 13."
+              }
+            ]
+          },
+          {
+            "id": "msg_eb16fdbfd80ae1382ab77031",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 12."
+              }
+            ]
+          },
+          {
+            "id": "msg_5c151affce90ab4f2017dfab",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 11."
+              }
+            ]
+          },
+          {
+            "id": "msg_6659b498ba13fb16a20d7c40",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 10."
+              }
+            ]
+          },
+          {
+            "id": "msg_69391431f380fb794505bc4e",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 09."
+              }
+            ]
+          },
+          {
+            "id": "msg_1de199e68d2ebc53fe30c0a0",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 08."
+              }
+            ]
+          },
+          {
+            "id": "msg_89c15155be9acdaa75529c90",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 07."
+              }
+            ]
+          },
+          {
+            "id": "msg_b8d55d8ef4410e7452ec6c25",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 06."
+              }
+            ]
+          },
+          {
+            "id": "msg_8fcc0a7c17e4cac1db840590",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 05."
+              }
+            ]
+          },
+          {
+            "id": "msg_232002563ff11eef5e1e9cba",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 04."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_8a4ba494ddcea98cdf2d1220",
+        "last_id": "msg_232002563ff11eef5e1e9cba",
+        "has_more": true
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_8a4ba494ddcea98cdf2d1220\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 23.\"}]},{\"id\":\"msg_4939d4f66f4af94f7c1d45aa\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 22.\"}]},{\"id\":\"msg_f15e3e9dec5e4bc8a173ad2a\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 21.\"}]},{\"id\":\"msg_d63d383f17caf5b3482881b2\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 20.\"}]},{\"id\":\"msg_3fdd6d6d7ce0912e4be618ab\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 19.\"}]},{\"id\":\"msg_d03830ae5fad325211bbc9d6\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 18.\"}]},{\"id\":\"msg_4f4ed6521cb91441e92b90e5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 17.\"}]},{\"id\":\"msg_b4f2fe66412eafd10856a990\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 16.\"}]},{\"id\":\"msg_5fccc7145acba6173154ca9b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 15.\"}]},{\"id\":\"msg_17d8c279138a94ec2d1fb604\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 14.\"}]},{\"id\":\"msg_d312c726ba4511c280c46f1e\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 13.\"}]},{\"id\":\"msg_eb16fdbfd80ae1382ab77031\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 12.\"}]},{\"id\":\"msg_5c151affce90ab4f2017dfab\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 11.\"}]},{\"id\":\"msg_6659b498ba13fb16a20d7c40\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 10.\"}]},{\"id\":\"msg_69391431f380fb794505bc4e\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 09.\"}]},{\"id\":\"msg_1de199e68d2ebc53fe30c0a0\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 08.\"}]},{\"id\":\"msg_89c15155be9acdaa75529c90\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 07.\"}]},{\"id\":\"msg_b8d55d8ef4410e7452ec6c25\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 06.\"}]},{\"id\":\"msg_8fcc0a7c17e4cac1db840590\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 05.\"}]},{\"id\":\"msg_232002563ff11eef5e1e9cba\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 04.\"}]}],\"first_id\":\"msg_8a4ba494ddcea98cdf2d1220\",\"last_id\":\"msg_232002563ff11eef5e1e9cba\",\"has_more\":true}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-page-after",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items?order=asc&limit=3&after=msg_77bee4501edfebb8f74f7959",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00023141699784900993,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_4bd18a7fc1eb705560dfbce5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 03."
+              }
+            ]
+          },
+          {
+            "id": "msg_232002563ff11eef5e1e9cba",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 04."
+              }
+            ]
+          },
+          {
+            "id": "msg_8fcc0a7c17e4cac1db840590",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 05."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_4bd18a7fc1eb705560dfbce5",
+        "last_id": "msg_8fcc0a7c17e4cac1db840590",
+        "has_more": true
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_4bd18a7fc1eb705560dfbce5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 03.\"}]},{\"id\":\"msg_232002563ff11eef5e1e9cba\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 04.\"}]},{\"id\":\"msg_8fcc0a7c17e4cac1db840590\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 05.\"}]}],\"first_id\":\"msg_4bd18a7fc1eb705560dfbce5\",\"last_id\":\"msg_8fcc0a7c17e4cac1db840590\",\"has_more\":true}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-item-get",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items/msg_8fcc0a7c17e4cac1db840590",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0002181670133722946,
+      "body": {
+        "id": "msg_8fcc0a7c17e4cac1db840590",
+        "type": "message",
+        "role": "user",
+        "status": "completed",
+        "content": [
+          {
+            "type": "input_text",
+            "text": "Route note 05."
+          }
+        ]
+      },
+      "wire": "{\"id\":\"msg_8fcc0a7c17e4cac1db840590\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 05.\"}]}",
+      "error": null,
+      "response_id": "msg_8fcc0a7c17e4cac1db840590",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-item-delete",
+      "result": "PASS",
+      "method": "DELETE",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items/msg_8fcc0a7c17e4cac1db840590",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00040466598875354975,
+      "body": {
+        "id": "conv_7a5ec59cea4fd6422dc0e45d",
+        "object": "conversation",
+        "created_at": 1791122676,
+        "metadata": {
+          "label": "routes"
+        }
+      },
+      "wire": "{\"id\":\"conv_7a5ec59cea4fd6422dc0e45d\",\"object\":\"conversation\",\"created_at\":1791122676,\"metadata\":{\"label\": \"routes\"}}",
+      "error": null,
+      "response_id": "conv_7a5ec59cea4fd6422dc0e45d",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-deleted-item404",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items/msg_8fcc0a7c17e4cac1db840590",
+      "request": null,
+      "http_status": 404,
+      "seconds": 0.0002472919877618551,
+      "body": {
+        "error": {
+          "message": "",
+          "type": "invalid_request_error"
+        }
+      },
+      "wire": "{\"error\":{\"message\":\"\",\"type\":\"invalid_request_error\"}}\n",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-items-post",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items",
+      "request": {
+        "items": [
+          {
+            "role": "user",
+            "content": "Manual route note."
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.00044254200474824756,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_135e9060b98acb45b38da5da",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Manual route note."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_135e9060b98acb45b38da5da",
+        "last_id": "msg_135e9060b98acb45b38da5da",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_135e9060b98acb45b38da5da\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Manual route note.\"}]}],\"first_id\":\"msg_135e9060b98acb45b38da5da\",\"last_id\":\"msg_135e9060b98acb45b38da5da\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-edit-list",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00020650000078603625,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_b0c59a36416da97842ba0787",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 00."
+              }
+            ]
+          },
+          {
+            "id": "msg_3ce4c53ce7416348e2598d73",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 01."
+              }
+            ]
+          },
+          {
+            "id": "msg_77bee4501edfebb8f74f7959",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 02."
+              }
+            ]
+          },
+          {
+            "id": "msg_4bd18a7fc1eb705560dfbce5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 03."
+              }
+            ]
+          },
+          {
+            "id": "msg_232002563ff11eef5e1e9cba",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 04."
+              }
+            ]
+          },
+          {
+            "id": "msg_b8d55d8ef4410e7452ec6c25",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 06."
+              }
+            ]
+          },
+          {
+            "id": "msg_89c15155be9acdaa75529c90",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 07."
+              }
+            ]
+          },
+          {
+            "id": "msg_1de199e68d2ebc53fe30c0a0",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 08."
+              }
+            ]
+          },
+          {
+            "id": "msg_69391431f380fb794505bc4e",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 09."
+              }
+            ]
+          },
+          {
+            "id": "msg_6659b498ba13fb16a20d7c40",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 10."
+              }
+            ]
+          },
+          {
+            "id": "msg_5c151affce90ab4f2017dfab",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 11."
+              }
+            ]
+          },
+          {
+            "id": "msg_eb16fdbfd80ae1382ab77031",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 12."
+              }
+            ]
+          },
+          {
+            "id": "msg_d312c726ba4511c280c46f1e",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 13."
+              }
+            ]
+          },
+          {
+            "id": "msg_17d8c279138a94ec2d1fb604",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 14."
+              }
+            ]
+          },
+          {
+            "id": "msg_5fccc7145acba6173154ca9b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 15."
+              }
+            ]
+          },
+          {
+            "id": "msg_b4f2fe66412eafd10856a990",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 16."
+              }
+            ]
+          },
+          {
+            "id": "msg_4f4ed6521cb91441e92b90e5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 17."
+              }
+            ]
+          },
+          {
+            "id": "msg_d03830ae5fad325211bbc9d6",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 18."
+              }
+            ]
+          },
+          {
+            "id": "msg_3fdd6d6d7ce0912e4be618ab",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 19."
+              }
+            ]
+          },
+          {
+            "id": "msg_d63d383f17caf5b3482881b2",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 20."
+              }
+            ]
+          },
+          {
+            "id": "msg_f15e3e9dec5e4bc8a173ad2a",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 21."
+              }
+            ]
+          },
+          {
+            "id": "msg_4939d4f66f4af94f7c1d45aa",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 22."
+              }
+            ]
+          },
+          {
+            "id": "msg_8a4ba494ddcea98cdf2d1220",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 23."
+              }
+            ]
+          },
+          {
+            "id": "msg_135e9060b98acb45b38da5da",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Manual route note."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_b0c59a36416da97842ba0787",
+        "last_id": "msg_135e9060b98acb45b38da5da",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_b0c59a36416da97842ba0787\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 00.\"}]},{\"id\":\"msg_3ce4c53ce7416348e2598d73\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 01.\"}]},{\"id\":\"msg_77bee4501edfebb8f74f7959\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 02.\"}]},{\"id\":\"msg_4bd18a7fc1eb705560dfbce5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 03.\"}]},{\"id\":\"msg_232002563ff11eef5e1e9cba\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 04.\"}]},{\"id\":\"msg_b8d55d8ef4410e7452ec6c25\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 06.\"}]},{\"id\":\"msg_89c15155be9acdaa75529c90\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 07.\"}]},{\"id\":\"msg_1de199e68d2ebc53fe30c0a0\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 08.\"}]},{\"id\":\"msg_69391431f380fb794505bc4e\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 09.\"}]},{\"id\":\"msg_6659b498ba13fb16a20d7c40\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 10.\"}]},{\"id\":\"msg_5c151affce90ab4f2017dfab\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 11.\"}]},{\"id\":\"msg_eb16fdbfd80ae1382ab77031\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 12.\"}]},{\"id\":\"msg_d312c726ba4511c280c46f1e\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 13.\"}]},{\"id\":\"msg_17d8c279138a94ec2d1fb604\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 14.\"}]},{\"id\":\"msg_5fccc7145acba6173154ca9b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 15.\"}]},{\"id\":\"msg_b4f2fe66412eafd10856a990\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 16.\"}]},{\"id\":\"msg_4f4ed6521cb91441e92b90e5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 17.\"}]},{\"id\":\"msg_d03830ae5fad325211bbc9d6\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 18.\"}]},{\"id\":\"msg_3fdd6d6d7ce0912e4be618ab\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 19.\"}]},{\"id\":\"msg_d63d383f17caf5b3482881b2\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 20.\"}]},{\"id\":\"msg_f15e3e9dec5e4bc8a173ad2a\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 21.\"}]},{\"id\":\"msg_4939d4f66f4af94f7c1d45aa\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 22.\"}]},{\"id\":\"msg_8a4ba494ddcea98cdf2d1220\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 23.\"}]},{\"id\":\"msg_135e9060b98acb45b38da5da\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Manual route note.\"}]}],\"first_id\":\"msg_b0c59a36416da97842ba0787\",\"last_id\":\"msg_135e9060b98acb45b38da5da\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-delete-tombstone",
+      "result": "PASS",
+      "method": "DELETE",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0003361249982845038,
+      "body": {
+        "id": "conv_7a5ec59cea4fd6422dc0e45d",
+        "object": "conversation.deleted",
+        "deleted": true
+      },
+      "wire": "{\"id\":\"conv_7a5ec59cea4fd6422dc0e45d\",\"object\":\"conversation.deleted\",\"deleted\":true}",
+      "error": null,
+      "response_id": "conv_7a5ec59cea4fd6422dc0e45d",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-tombstone-get404",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d",
+      "request": null,
+      "http_status": 404,
+      "seconds": 0.00020324999059084803,
+      "body": {
+        "error": {
+          "message": "conversation was deleted",
+          "type": "invalid_request_error"
+        }
+      },
+      "wire": "{\"error\":{\"message\":\"conversation was deleted\",\"type\":\"invalid_request_error\"}}\n",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "routes-tombstone-items-retained",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_7a5ec59cea4fd6422dc0e45d/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00021762499818578362,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_b0c59a36416da97842ba0787",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 00."
+              }
+            ]
+          },
+          {
+            "id": "msg_3ce4c53ce7416348e2598d73",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 01."
+              }
+            ]
+          },
+          {
+            "id": "msg_77bee4501edfebb8f74f7959",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 02."
+              }
+            ]
+          },
+          {
+            "id": "msg_4bd18a7fc1eb705560dfbce5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 03."
+              }
+            ]
+          },
+          {
+            "id": "msg_232002563ff11eef5e1e9cba",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 04."
+              }
+            ]
+          },
+          {
+            "id": "msg_b8d55d8ef4410e7452ec6c25",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 06."
+              }
+            ]
+          },
+          {
+            "id": "msg_89c15155be9acdaa75529c90",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 07."
+              }
+            ]
+          },
+          {
+            "id": "msg_1de199e68d2ebc53fe30c0a0",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 08."
+              }
+            ]
+          },
+          {
+            "id": "msg_69391431f380fb794505bc4e",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 09."
+              }
+            ]
+          },
+          {
+            "id": "msg_6659b498ba13fb16a20d7c40",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 10."
+              }
+            ]
+          },
+          {
+            "id": "msg_5c151affce90ab4f2017dfab",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 11."
+              }
+            ]
+          },
+          {
+            "id": "msg_eb16fdbfd80ae1382ab77031",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 12."
+              }
+            ]
+          },
+          {
+            "id": "msg_d312c726ba4511c280c46f1e",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 13."
+              }
+            ]
+          },
+          {
+            "id": "msg_17d8c279138a94ec2d1fb604",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 14."
+              }
+            ]
+          },
+          {
+            "id": "msg_5fccc7145acba6173154ca9b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 15."
+              }
+            ]
+          },
+          {
+            "id": "msg_b4f2fe66412eafd10856a990",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 16."
+              }
+            ]
+          },
+          {
+            "id": "msg_4f4ed6521cb91441e92b90e5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 17."
+              }
+            ]
+          },
+          {
+            "id": "msg_d03830ae5fad325211bbc9d6",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 18."
+              }
+            ]
+          },
+          {
+            "id": "msg_3fdd6d6d7ce0912e4be618ab",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 19."
+              }
+            ]
+          },
+          {
+            "id": "msg_d63d383f17caf5b3482881b2",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 20."
+              }
+            ]
+          },
+          {
+            "id": "msg_f15e3e9dec5e4bc8a173ad2a",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 21."
+              }
+            ]
+          },
+          {
+            "id": "msg_4939d4f66f4af94f7c1d45aa",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 22."
+              }
+            ]
+          },
+          {
+            "id": "msg_8a4ba494ddcea98cdf2d1220",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Route note 23."
+              }
+            ]
+          },
+          {
+            "id": "msg_135e9060b98acb45b38da5da",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Manual route note."
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_b0c59a36416da97842ba0787",
+        "last_id": "msg_135e9060b98acb45b38da5da",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_b0c59a36416da97842ba0787\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 00.\"}]},{\"id\":\"msg_3ce4c53ce7416348e2598d73\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 01.\"}]},{\"id\":\"msg_77bee4501edfebb8f74f7959\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 02.\"}]},{\"id\":\"msg_4bd18a7fc1eb705560dfbce5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 03.\"}]},{\"id\":\"msg_232002563ff11eef5e1e9cba\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 04.\"}]},{\"id\":\"msg_b8d55d8ef4410e7452ec6c25\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 06.\"}]},{\"id\":\"msg_89c15155be9acdaa75529c90\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 07.\"}]},{\"id\":\"msg_1de199e68d2ebc53fe30c0a0\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 08.\"}]},{\"id\":\"msg_69391431f380fb794505bc4e\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 09.\"}]},{\"id\":\"msg_6659b498ba13fb16a20d7c40\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 10.\"}]},{\"id\":\"msg_5c151affce90ab4f2017dfab\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 11.\"}]},{\"id\":\"msg_eb16fdbfd80ae1382ab77031\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 12.\"}]},{\"id\":\"msg_d312c726ba4511c280c46f1e\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 13.\"}]},{\"id\":\"msg_17d8c279138a94ec2d1fb604\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 14.\"}]},{\"id\":\"msg_5fccc7145acba6173154ca9b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 15.\"}]},{\"id\":\"msg_b4f2fe66412eafd10856a990\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 16.\"}]},{\"id\":\"msg_4f4ed6521cb91441e92b90e5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 17.\"}]},{\"id\":\"msg_d03830ae5fad325211bbc9d6\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 18.\"}]},{\"id\":\"msg_3fdd6d6d7ce0912e4be618ab\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 19.\"}]},{\"id\":\"msg_d63d383f17caf5b3482881b2\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 20.\"}]},{\"id\":\"msg_f15e3e9dec5e4bc8a173ad2a\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 21.\"}]},{\"id\":\"msg_4939d4f66f4af94f7c1d45aa\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 22.\"}]},{\"id\":\"msg_8a4ba494ddcea98cdf2d1220\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Route note 23.\"}]},{\"id\":\"msg_135e9060b98acb45b38da5da\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Manual route note.\"}]}],\"first_id\":\"msg_b0c59a36416da97842ba0787\",\"last_id\":\"msg_135e9060b98acb45b38da5da\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "active-create",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations",
+      "request": {
+        "metadata": {
+          "label": "active"
+        },
+        "items": [
+          {
+            "role": "user",
+            "content": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+          },
+          {
+            "role": "user",
+            "content": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.00041533300827722996,
+      "body": {
+        "id": "conv_b6af6680a58eac0ba193c007",
+        "object": "conversation",
+        "created_at": 1791122676,
+        "metadata": {
+          "label": "active"
+        }
+      },
+      "wire": "{\"id\":\"conv_b6af6680a58eac0ba193c007\",\"object\":\"conversation\",\"created_at\":1791122676,\"metadata\":{\"label\": \"active\"}}",
+      "error": null,
+      "response_id": "conv_b6af6680a58eac0ba193c007",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "active-initial-items",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_b6af6680a58eac0ba193c007/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00019504099327605218,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_65a75c1f3895c7f8beb44f3c",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+              }
+            ]
+          },
+          {
+            "id": "msg_4700609d20c2aa5bf9b5e661",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_65a75c1f3895c7f8beb44f3c",
+        "last_id": "msg_4700609d20c2aa5bf9b5e661",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_65a75c1f3895c7f8beb44f3c\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Obsolete audit log.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\n\"}]},{\"id\":\"msg_4700609d20c2aa5bf9b5e661\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\n\"}]}],\"first_id\":\"msg_65a75c1f3895c7f8beb44f3c\",\"last_id\":\"msg_4700609d20c2aa5bf9b5e661\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "source-storefalse",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "max_output_tokens": 64,
+        "reasoning": {
+          "effort": "none"
+        },
+        "conversation": "conv_b6af6680a58eac0ba193c007",
+        "input": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.",
+        "store": false,
+        "temperature": 0,
+        "instructions": "Use the conversation's active facts. Answer the newest question directly, with only the requested JSON."
+      },
+      "http_status": 200,
+      "seconds": 32.11008516700531,
+      "body": {
+        "id": "resp_9db041078514d3debb91920a",
+        "object": "response",
+        "created_at": 1791122708,
+        "status": "completed",
+        "model": "deepseek-v4.1-flash",
+        "store": false,
+        "previous_response_id": null,
+        "conversation": {
+          "id": "conv_b6af6680a58eac0ba193c007"
+        },
+        "output": [
+          {
+            "id": "msg_5abaeb15c7d4ad93ebffac44",
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input_tokens": 1134,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 1134
+          },
+          "output_tokens": 13,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1147
+        }
+      },
+      "wire": "{\"id\":\"resp_9db041078514d3debb91920a\",\"object\":\"response\",\"created_at\":1791122708,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"conversation\":{\"id\":\"conv_b6af6680a58eac0ba193c007\"},\"output\":[{\"id\":\"msg_5abaeb15c7d4ad93ebffac44\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":1134,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":1134},\"output_tokens\":13,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":1147}}",
+      "error": null,
+      "independent_gold": {
+        "site": "MAPLE",
+        "total": 416
+      },
+      "expects_function_call": false,
+      "response_id": "resp_9db041078514d3debb91920a",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "{\"site\": \"MAPLE\", \"total\": 416}",
+      "usage": {
+        "input_tokens": 1134,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 1134
+        },
+        "output_tokens": 13,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1147
+      },
+      "store": false,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "conversation_echo_correct": true
+    },
+    {
+      "name": "source-appended-once",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_b6af6680a58eac0ba193c007/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0004885410016868263,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_65a75c1f3895c7f8beb44f3c",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Obsolete audit log.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\nOld audit log unchanged.\n"
+              }
+            ]
+          },
+          {
+            "id": "msg_4700609d20c2aa5bf9b5e661",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+              }
+            ]
+          },
+          {
+            "id": "msg_0ac015805d658d7818521a3b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_5abaeb15c7d4ad93ebffac44",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_65a75c1f3895c7f8beb44f3c",
+        "last_id": "msg_5abaeb15c7d4ad93ebffac44",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_65a75c1f3895c7f8beb44f3c\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Obsolete audit log.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\nOld audit log unchanged.\\n\"}]},{\"id\":\"msg_4700609d20c2aa5bf9b5e661\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\n\"}]},{\"id\":\"msg_0ac015805d658d7818521a3b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.\"}]},{\"id\":\"msg_5abaeb15c7d4ad93ebffac44\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]}],\"first_id\":\"msg_65a75c1f3895c7f8beb44f3c\",\"last_id\":\"msg_5abaeb15c7d4ad93ebffac44\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "append_once_correct": true
+    },
+    {
+      "name": "storefalse-response404",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/responses/resp_9db041078514d3debb91920a",
+      "request": null,
+      "http_status": 404,
+      "seconds": 0.0003014170069945976,
+      "body": {
+        "error": {
+          "message": "response was not found",
+          "type": "invalid_request_error"
+        }
+      },
+      "wire": "{\"error\":{\"message\":\"response was not found\",\"type\":\"invalid_request_error\"}}\n",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "delete-obsolete-log",
+      "result": "PASS",
+      "method": "DELETE",
+      "route": "/conversations/conv_b6af6680a58eac0ba193c007/items/msg_65a75c1f3895c7f8beb44f3c",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0004438749892869964,
+      "body": {
+        "id": "conv_b6af6680a58eac0ba193c007",
+        "object": "conversation",
+        "created_at": 1791122676,
+        "metadata": {
+          "label": "active"
+        }
+      },
+      "wire": "{\"id\":\"conv_b6af6680a58eac0ba193c007\",\"object\":\"conversation\",\"created_at\":1791122676,\"metadata\":{\"label\": \"active\"}}",
+      "error": null,
+      "response_id": "conv_b6af6680a58eac0ba193c007",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "edited-public-items",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_b6af6680a58eac0ba193c007/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.00022354199609253556,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_4700609d20c2aa5bf9b5e661",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+              }
+            ]
+          },
+          {
+            "id": "msg_0ac015805d658d7818521a3b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_5abaeb15c7d4ad93ebffac44",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_4700609d20c2aa5bf9b5e661",
+        "last_id": "msg_5abaeb15c7d4ad93ebffac44",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_4700609d20c2aa5bf9b5e661\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\n\"}]},{\"id\":\"msg_0ac015805d658d7818521a3b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.\"}]},{\"id\":\"msg_5abaeb15c7d4ad93ebffac44\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]}],\"first_id\":\"msg_4700609d20c2aa5bf9b5e661\",\"last_id\":\"msg_5abaeb15c7d4ad93ebffac44\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "after-item-delete-memory",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "max_output_tokens": 64,
+        "reasoning": {
+          "effort": "none"
+        },
+        "conversation": {
+          "id": "conv_b6af6680a58eac0ba193c007"
+        },
+        "input": "Report the active site and net usable units again as JSON with site and total.",
+        "store": true,
+        "temperature": 0,
+        "instructions": "Use the conversation's active facts. Answer the newest question directly, with only the requested JSON."
+      },
+      "http_status": 200,
+      "seconds": 6.096623292003642,
+      "body": {
+        "id": "resp_e3e358be0237eb86afabaedf",
+        "object": "response",
+        "created_at": 1791122714,
+        "status": "completed",
+        "model": "deepseek-v4.1-flash",
+        "store": true,
+        "previous_response_id": null,
+        "conversation": {
+          "id": "conv_b6af6680a58eac0ba193c007"
+        },
+        "output": [
+          {
+            "id": "msg_367031b51bbdddc37516bb00",
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input_tokens": 682,
+          "input_tokens_details": {
+            "cached_tokens": 476,
+            "cache_write_tokens": 206
+          },
+          "output_tokens": 13,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 695
+        }
+      },
+      "wire": "{\"id\":\"resp_e3e358be0237eb86afabaedf\",\"object\":\"response\",\"created_at\":1791122714,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":true,\"previous_response_id\":null,\"conversation\":{\"id\":\"conv_b6af6680a58eac0ba193c007\"},\"output\":[{\"id\":\"msg_367031b51bbdddc37516bb00\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":682,\"input_tokens_details\":{\"cached_tokens\":476,\"cache_write_tokens\":206},\"output_tokens\":13,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":695}}",
+      "error": null,
+      "independent_gold": {
+        "site": "MAPLE",
+        "total": 416
+      },
+      "expects_function_call": false,
+      "response_id": "resp_e3e358be0237eb86afabaedf",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "{\"site\": \"MAPLE\", \"total\": 416}",
+      "usage": {
+        "input_tokens": 682,
+        "input_tokens_details": {
+          "cached_tokens": 476,
+          "cache_write_tokens": 206
+        },
+        "output_tokens": 13,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 695
+      },
+      "store": true,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "conversation_echo_correct": true
+    },
+    {
+      "name": "edited-appended-once",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_b6af6680a58eac0ba193c007/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0003319999959785491,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_4700609d20c2aa5bf9b5e661",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+              }
+            ]
+          },
+          {
+            "id": "msg_0ac015805d658d7818521a3b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_5abaeb15c7d4ad93ebffac44",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_9b64eead33a8f94f7491dcd5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Report the active site and net usable units again as JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_367031b51bbdddc37516bb00",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "first_id": "msg_4700609d20c2aa5bf9b5e661",
+        "last_id": "msg_367031b51bbdddc37516bb00",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_4700609d20c2aa5bf9b5e661\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\n\"}]},{\"id\":\"msg_0ac015805d658d7818521a3b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.\"}]},{\"id\":\"msg_5abaeb15c7d4ad93ebffac44\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_9b64eead33a8f94f7491dcd5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Report the active site and net usable units again as JSON with site and total.\"}]},{\"id\":\"msg_367031b51bbdddc37516bb00\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]}],\"first_id\":\"msg_4700609d20c2aa5bf9b5e661\",\"last_id\":\"msg_367031b51bbdddc37516bb00\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "append_once_correct": true
+    },
+    {
+      "name": "isolated-create",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/conversations",
+      "request": {
+        "metadata": {
+          "label": "isolated"
+        },
+        "items": [
+          {
+            "role": "user",
+            "content": "Active facts: site=CEDAR, packages=19, units_per_package=11, damaged=7."
+          }
+        ]
+      },
+      "http_status": 200,
+      "seconds": 0.00036995799746364355,
+      "body": {
+        "id": "conv_106c96e8cc4ab25b241eef65",
+        "object": "conversation",
+        "created_at": 1791122714,
+        "metadata": {
+          "label": "isolated"
+        }
+      },
+      "wire": "{\"id\":\"conv_106c96e8cc4ab25b241eef65\",\"object\":\"conversation\",\"created_at\":1791122714,\"metadata\":{\"label\": \"isolated\"}}",
+      "error": null,
+      "response_id": "conv_106c96e8cc4ab25b241eef65",
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "second-conversation-isolated",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "max_output_tokens": 64,
+        "reasoning": {
+          "effort": "none"
+        },
+        "conversation": "conv_106c96e8cc4ab25b241eef65",
+        "input": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.",
+        "store": false,
+        "temperature": 0,
+        "instructions": "Use the conversation's active facts. Answer the newest question directly, with only the requested JSON."
+      },
+      "http_status": 200,
+      "seconds": 2.377069959009532,
+      "body": {
+        "id": "resp_b848fe06bf3c6eedaca7a799",
+        "object": "response",
+        "created_at": 1791122717,
+        "status": "completed",
+        "model": "deepseek-v4.1-flash",
+        "store": false,
+        "previous_response_id": null,
+        "conversation": {
+          "id": "conv_106c96e8cc4ab25b241eef65"
+        },
+        "output": [
+          {
+            "id": "msg_cfe73aa4b2d077b01a42b51e",
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\":\"CEDAR\",\"total\":202}",
+                "annotations": []
+              }
+            ]
+          }
+        ],
+        "usage": {
+          "input_tokens": 73,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 73
+          },
+          "output_tokens": 10,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 83
+        }
+      },
+      "wire": "{\"id\":\"resp_b848fe06bf3c6eedaca7a799\",\"object\":\"response\",\"created_at\":1791122717,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"conversation\":{\"id\":\"conv_106c96e8cc4ab25b241eef65\"},\"output\":[{\"id\":\"msg_cfe73aa4b2d077b01a42b51e\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\":\\\"CEDAR\\\",\\\"total\\\":202}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":73,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":73},\"output_tokens\":10,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":83}}",
+      "error": null,
+      "independent_gold": {
+        "site": "CEDAR",
+        "total": 202
+      },
+      "expects_function_call": false,
+      "response_id": "resp_b848fe06bf3c6eedaca7a799",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "{\"site\":\"CEDAR\",\"total\":202}",
+      "usage": {
+        "input_tokens": 73,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 73
+        },
+        "output_tokens": 10,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 83
+      },
+      "store": false,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "conversation_echo_correct": true
+    },
+    {
+      "name": "conversation-previous-exclusive",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "conversation": "conv_b6af6680a58eac0ba193c007",
+        "previous_response_id": "resp_e3e358be0237eb86afabaedf",
+        "input": "Continue."
+      },
+      "http_status": 400,
+      "seconds": 0.00022491600248031318,
+      "body": {
+        "error": {
+          "message": "conversation and previous_response_id are mutually exclusive",
+          "type": "invalid_request_error"
+        }
+      },
+      "wire": "{\"error\":{\"message\":\"conversation and previous_response_id are mutually exclusive\",\"type\":\"invalid_request_error\"}}\n",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    },
+    {
+      "name": "pending-tool",
+      "result": "PASS",
+      "method": "POST",
+      "route": "/responses",
+      "request": {
+        "model": "deepseek-v4.1-flash",
+        "max_output_tokens": 128,
+        "reasoning": {
+          "effort": "none"
+        },
+        "conversation": "conv_b6af6680a58eac0ba193c007",
+        "input": "Call lookup_count with key \"subject\" now. After its result, return JSON with site, total and count.",
+        "store": false,
+        "temperature": 0,
+        "instructions": "Use the conversation's active facts. Answer the newest question directly, with only the requested JSON.",
+        "tools": [
+          {
+            "type": "function",
+            "name": "lookup_count",
+            "description": "Get the current count for a named record.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "http_status": 200,
+      "seconds": 13.801517084008083,
+      "body": {
+        "id": "resp_acc3d67002472967b253c2ad",
+        "object": "response",
+        "created_at": 1791122731,
+        "status": "completed",
+        "model": "deepseek-v4.1-flash",
+        "store": false,
+        "previous_response_id": null,
+        "conversation": {
+          "id": "conv_b6af6680a58eac0ba193c007"
+        },
+        "output": [
+          {
+            "id": "fc_97374f4e26013f622fc46ac0",
+            "type": "function_call",
+            "status": "completed",
+            "name": "lookup_count",
+            "call_id": "call_91a2b77d0435e09148d60c953f25d72f",
+            "arguments": "{\"key\":\"subject\"}"
+          }
+        ],
+        "usage": {
+          "input_tokens": 945,
+          "input_tokens_details": {
+            "cached_tokens": 498,
+            "cache_write_tokens": 447
+          },
+          "output_tokens": 38,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 983
+        }
+      },
+      "wire": "{\"id\":\"resp_acc3d67002472967b253c2ad\",\"object\":\"response\",\"created_at\":1791122731,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"conversation\":{\"id\":\"conv_b6af6680a58eac0ba193c007\"},\"output\":[{\"id\":\"fc_97374f4e26013f622fc46ac0\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"lookup_count\",\"call_id\":\"call_91a2b77d0435e09148d60c953f25d72f\",\"arguments\":\"{\\\"key\\\":\\\"subject\\\"}\"}],\"usage\":{\"input_tokens\":945,\"input_tokens_details\":{\"cached_tokens\":498,\"cache_write_tokens\":447},\"output_tokens\":38,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":983}}",
+      "error": null,
+      "independent_gold": null,
+      "expects_function_call": true,
+      "response_id": "resp_acc3d67002472967b253c2ad",
+      "response_status": "completed",
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": {
+        "input_tokens": 945,
+        "input_tokens_details": {
+          "cached_tokens": 498,
+          "cache_write_tokens": 447
+        },
+        "output_tokens": 38,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 983
+      },
+      "store": false,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "conversation_echo_correct": true
+    },
+    {
+      "name": "pending-appended-once",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/conversations/conv_b6af6680a58eac0ba193c007/items?order=asc&limit=100",
+      "request": null,
+      "http_status": 200,
+      "seconds": 0.0003256250056438148,
+      "body": {
+        "object": "list",
+        "data": [
+          {
+            "id": "msg_4700609d20c2aa5bf9b5e661",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\nCurrent handbook: retain the active inventory facts.\n"
+              }
+            ]
+          },
+          {
+            "id": "msg_0ac015805d658d7818521a3b",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_5abaeb15c7d4ad93ebffac44",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_9b64eead33a8f94f7491dcd5",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Report the active site and net usable units again as JSON with site and total."
+              }
+            ]
+          },
+          {
+            "id": "msg_367031b51bbdddc37516bb00",
+            "type": "message",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"site\": \"MAPLE\", \"total\": 416}",
+                "annotations": []
+              }
+            ]
+          },
+          {
+            "id": "msg_c58f2e8813f5611fa3920545",
+            "type": "message",
+            "role": "user",
+            "status": "completed",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Call lookup_count with key \"subject\" now. After its result, return JSON with site, total and count."
+              }
+            ]
+          },
+          {
+            "id": "fc_97374f4e26013f622fc46ac0",
+            "type": "function_call",
+            "status": "completed",
+            "name": "lookup_count",
+            "call_id": "call_91a2b77d0435e09148d60c953f25d72f",
+            "arguments": "{\"key\":\"subject\"}"
+          }
+        ],
+        "first_id": "msg_4700609d20c2aa5bf9b5e661",
+        "last_id": "fc_97374f4e26013f622fc46ac0",
+        "has_more": false
+      },
+      "wire": "{\"object\":\"list\",\"data\":[{\"id\":\"msg_4700609d20c2aa5bf9b5e661\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Active facts: site=MAPLE, packages=17, units_per_package=25, damaged=9.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\nCurrent handbook: retain the active inventory facts.\\n\"}]},{\"id\":\"msg_0ac015805d658d7818521a3b\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"What are the site and net usable units (packages times units_per_package minus damaged)? Reply JSON with site and total.\"}]},{\"id\":\"msg_5abaeb15c7d4ad93ebffac44\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_9b64eead33a8f94f7491dcd5\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Report the active site and net usable units again as JSON with site and total.\"}]},{\"id\":\"msg_367031b51bbdddc37516bb00\",\"type\":\"message\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"site\\\": \\\"MAPLE\\\", \\\"total\\\": 416}\",\"annotations\":[]}]},{\"id\":\"msg_c58f2e8813f5611fa3920545\",\"type\":\"message\",\"role\":\"user\",\"status\":\"completed\",\"content\":[{\"type\":\"input_text\",\"text\":\"Call lookup_count with key \\\"subject\\\" now. After its result, return JSON with site, total and count.\"}]},{\"id\":\"fc_97374f4e26013f622fc46ac0\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"lookup_count\",\"call_id\":\"call_91a2b77d0435e09148d60c953f25d72f\",\"arguments\":\"{\\\"key\\\":\\\"subject\\\"}\"}],\"first_id\":\"msg_4700609d20c2aa5bf9b5e661\",\"last_id\":\"fc_97374f4e26013f622fc46ac0\",\"has_more\":false}",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false,
+      "append_once_correct": true
+    },
+    {
+      "name": "pending-storefalse-response404",
+      "result": "PASS",
+      "method": "GET",
+      "route": "/responses/resp_acc3d67002472967b253c2ad",
+      "request": null,
+      "http_status": 404,
+      "seconds": 0.00019937499018851668,
+      "body": {
+        "error": {
+          "message": "response was not found",
+          "type": "invalid_request_error"
+        }
+      },
+      "wire": "{\"error\":{\"message\":\"response was not found\",\"type\":\"invalid_request_error\"}}\n",
+      "error": null,
+      "response_id": null,
+      "response_status": null,
+      "incomplete_details": null,
+      "actual_text": "",
+      "usage": null,
+      "store": null,
+      "previous_response_id": null,
+      "cap_hit": false
+    }
+  ],
+  "counts": {
+    "PASS": 29,
+    "FAIL": 0,
+    "ERROR": 0,
+    "SKIP": 0
+  },
+  "store_files": [
+    {
+      "name": "resp_e3e358be0237eb86afabaedf.json",
+      "bytes": 4598
+    }
+  ],
+  "interpretation": "First actual HTTP attempts; no retries/repairs. Server startup/restart time is owned by the outer launcher and excluded here."
+}

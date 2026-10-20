@@ -1,0 +1,40 @@
+{
+  "compiled_runtime_revision": "bc6896aeee2aceba4b4b64e9e8330986da8a60b0",
+  "server_sha256": "4a3f735999412e6150f77ea61012812c55430f6808cb8062a5597ca6d1b6ed6d",
+  "runtime_change": "none; current compiled server and focused CPU checks",
+  "start_utc": "2026-10-04 16:48:00",
+  "deadline_utc": "2026-10-04 17:38:00",
+  "budget_note": "10 minutes of prior concurrency outline and method planning charged",
+  "one_change": "server suffix reuse64 versus native; four full-input sessions, two simultaneous clients, two server slots",
+  "arms": [
+    "reuse64",
+    "native"
+  ],
+  "state_cache_hot_mb": 0,
+  "state_cache_ssd_mb": 4096,
+  "scope": "8 fact checks and fresh reads per arm, group makespan and queue-inclusive session latency; observe actual slot turnover/restart/SSD/fallback",
+  "caller_revision": "656b0f6c64d9104f8e5181e39a967a484f75e359",
+  "measurement_finished_utc": "2026-10-04 17:00:21",
+  "guard": {
+    "native": {
+      "samples": 343,
+      "pressure_levels": [
+        1
+      ],
+      "swap_growth_gib": 0.0,
+      "peak_wired_plus_compressor_gib": 84.19525146484375,
+      "status": "complete",
+      "child_returncode": 0
+    },
+    "reuse64": {
+      "samples": 284,
+      "pressure_levels": [
+        1
+      ],
+      "swap_growth_gib": 0.0,
+      "peak_wired_plus_compressor_gib": 84.32756042480469,
+      "status": "complete",
+      "child_returncode": 3
+    }
+  }
+}

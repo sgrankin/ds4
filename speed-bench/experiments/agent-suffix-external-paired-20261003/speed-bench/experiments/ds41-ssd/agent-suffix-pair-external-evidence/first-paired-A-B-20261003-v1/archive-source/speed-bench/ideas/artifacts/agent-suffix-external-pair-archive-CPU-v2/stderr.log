@@ -1,0 +1,24 @@
+test_archive_nested_manifest_complete_and_large_reference (__main__.Case.test_archive_nested_manifest_complete_and_large_reference) ... ok
+test_cap_preserved_not_success_or_stop (__main__.Case.test_cap_preserved_not_success_or_stop) ... ok
+test_controller_partial_success_and_strict_three (__main__.Case.test_controller_partial_success_and_strict_three) ... ok
+test_duplicate_first_grader_rejected (__main__.Case.test_duplicate_first_grader_rejected) ... ok
+test_explicit_old_archive_authority_before_outcomes (__main__.Case.test_explicit_old_archive_authority_before_outcomes) ... ok
+test_failed_first_grader_preserved_without_rescore (__main__.Case.test_failed_first_grader_preserved_without_rescore) ... ok
+test_forged_grant_or_guard_command_rejected (__main__.Case.test_forged_grant_or_guard_command_rejected) ... ok
+test_json_duplicate_nonfinite_and_truncation (__main__.Case.test_json_duplicate_nonfinite_and_truncation) ... ok
+test_lossless_nonUTF8_trace_and_actual_count (__main__.Case.test_lossless_nonUTF8_trace_and_actual_count) ... ok
+test_missing_grader_stays_unavailable_and_no_grade (__main__.Case.test_missing_grader_stays_unavailable_and_no_grade) ... ok
+test_mutation_during_copy_retained_refusal (__main__.Case.test_mutation_during_copy_retained_refusal) ... ok
+test_parsed_call_audit_keeps_forbidden_and_wrapper (__main__.Case.test_parsed_call_audit_keeps_forbidden_and_wrapper) ... ok
+test_pressure_failure_nonfinite_or_counts_not_hidden (__main__.Case.test_pressure_failure_nonfinite_or_counts_not_hidden) ... ok
+test_release_exact_and_healthy_reclaimable_memory (__main__.Case.test_release_exact_and_healthy_reclaimable_memory) ... ok
+test_round_and_trace_order_bound (__main__.Case.test_round_and_trace_order_bound) ... ok
+test_snapshot_exact_bytes_modes_and_inventory (__main__.Case.test_snapshot_exact_bytes_modes_and_inventory) ... ok
+test_symlink_file_ancestor_and_model_forbidden (__main__.Case.test_symlink_file_ancestor_and_model_forbidden) ... ok
+test_typed_round_order_bounds_and_calls (__main__.Case.test_typed_round_order_bounds_and_calls) ... ok
+test_wrapper_path_not_gold_read_false_positive (__main__.Case.test_wrapper_path_not_gold_read_false_positive) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.010s
+
+OK

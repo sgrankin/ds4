@@ -1,0 +1,9 @@
+{
+  "status": "UPDATED",
+  "candidate": 0,
+  "before_sha256": "52e43abc91cf0168a5b7818eae239a71c8ec4e459297fa1f05c19a418b42d6e3",
+  "after_sha256": "84637d41f359ab7fee9189af9c64943c331f58ee5d11c2b55eb0dd2a1c5e8a64",
+  "before_bytes": 1421,
+  "after_bytes": 1377,
+  "appended_history_preserved": true
+}

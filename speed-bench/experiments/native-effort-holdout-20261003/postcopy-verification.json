@@ -1,0 +1,10 @@
+{
+  "original_copy_files_verified": 245,
+  "all_original_bytes_sizes_modes_unchanged": true,
+  "ROOT_grant_source_command_launcher_pins_verified": true,
+  "exact_actual_parent_framework_and_suffix_proof_retained": true,
+  "launch_pressure_release_time_order_verified": true,
+  "pressure_samples_time_order_verified": true,
+  "new_model_metadata_helper_guard_or_build_executed": false,
+  "verification": "Independent read/hash of every copied original and explicit ROOT grant/command/launcher/source/time fields; no rescoring."
+}

@@ -1,0 +1,43 @@
+{
+  "guards": [
+    {
+      "guard": "pressure-pilot-v2",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 162,
+      "bad": 0,
+      "peak_wired_plus_compressor_gib": 86.0128173828125,
+      "swap_growth_gib": 0.0
+    },
+    {
+      "guard": "pressure-measured",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 788,
+      "bad": 0,
+      "peak_wired_plus_compressor_gib": 86.42886352539062,
+      "swap_growth_gib": 0.0
+    },
+    {
+      "guard": "pressure-repeat",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 358,
+      "bad": 0,
+      "peak_wired_plus_compressor_gib": 85.05374145507812,
+      "swap_growth_gib": 0.0
+    },
+    {
+      "guard": "pressure-repeat-long",
+      "status": "complete",
+      "child_returncode": 0,
+      "samples": 454,
+      "bad": 0,
+      "peak_wired_plus_compressor_gib": 84.93559265136719,
+      "swap_growth_gib": 0.0008496093749999975
+    }
+  ],
+  "total_samples": 1762,
+  "bad_samples": 0,
+  "max_swap_growth_gib": 0.0008496093749999975
+}

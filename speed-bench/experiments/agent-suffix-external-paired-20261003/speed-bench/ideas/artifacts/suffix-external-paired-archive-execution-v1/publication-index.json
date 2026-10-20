@@ -1,0 +1,2182 @@
+{
+  "status": "COMPLETE_LITERAL_PAIRED_ARCHIVE_PUBLICATION",
+  "archive_index_sha256": "a8bba9b646654ecf954ed2809faf4c995b98fe8ba19037d1a566acf232700313",
+  "files": {
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/ROOT/A-launch.log": {
+      "bytes": 46,
+      "mode": 420,
+      "sha256": "da84674be2a46b008027838cd00d0e76c2fa42c80268a898b09ea280270743fa"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/ROOT/B-launch.log": {
+      "bytes": 46,
+      "mode": 420,
+      "sha256": "da84674be2a46b008027838cd00d0e76c2fa42c80268a898b09ea280270743fa"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-index.json": {
+      "bytes": 169860,
+      "mode": 420,
+      "sha256": "a8bba9b646654ecf954ed2809faf4c995b98fe8ba19037d1a566acf232700313"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/agent_suffix_external_pair_archive_v1/cpu-plan-v2.json": {
+      "bytes": 1625,
+      "mode": 420,
+      "sha256": "184c6ef13c1da92448b19fc2903f01349f8471207be2a1915c456a6175a20802"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/agent_suffix_external_pair_archive_v1/cpu-plan.json": {
+      "bytes": 1499,
+      "mode": 420,
+      "sha256": "2fd5374244826a6df452cd751ad32526c6354db0f0c5189f912ca846aa8aa62b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration-v2.json": {
+      "bytes": 5437,
+      "mode": 420,
+      "sha256": "9458b192b8c03aaf6b180f558095fecbe3d1f16e46e793ff6dbfb071a2bbfb33"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/agent_suffix_external_pair_archive_v1/preregistration.json": {
+      "bytes": 3761,
+      "mode": 420,
+      "sha256": "846c6046fa993dca39c4f9d2f0938b6773822a4d8f9e92a46f4dafd3c4428da3"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/archive_agent_suffix_external_pair.py": {
+      "bytes": 24965,
+      "mode": 420,
+      "sha256": "4ee40bfb03c3c585274ef920bb7d8832547b3ac666f61a2364bc50d2f7b81da4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/cpu-proof.json": {
+      "bytes": 1912,
+      "mode": 420,
+      "sha256": "ff5c22ea5d91daff1f87580d67984c1546389877669b8deda7a69253a7672e05"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/stderr.log": {
+      "bytes": 2171,
+      "mode": 420,
+      "sha256": "a7a9faf44fb86cba59a6436742c197bfad47affbb63ccf1b39daa83c6474ac8c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v1/stdout.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/cpu-proof.json": {
+      "bytes": 1988,
+      "mode": 420,
+      "sha256": "140f9b92cb17958bd508cb0202eeccbfeb653d971647bef37b72243f423fa1c7"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/stderr.log": {
+      "bytes": 2298,
+      "mode": 420,
+      "sha256": "0983cdc0c8ffac252afca20069d85171aae6c5a3eb324738dbb263ab247e770d"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/speed-bench/ideas/artifacts/agent-suffix-external-pair-archive-CPU-v2/stdout.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/archive-source/tests/test_archive_agent_suffix_external_pair.py": {
+      "bytes": 11538,
+      "mode": 420,
+      "sha256": "14f27614d6f7d426aa1c5cc160421825aa2d6814133c166192e11d23d24b4f58"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/execution-plan.json": {
+      "bytes": 13931,
+      "mode": 420,
+      "sha256": "5659c2973e759e47c77902e2196ae904e9930dfacf93c3e694e61bb3f5f05354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/caller-build-manifest.json": {
+      "bytes": 5177,
+      "mode": 420,
+      "sha256": "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/cpu-proof.json": {
+      "bytes": 3921,
+      "mode": 420,
+      "sha256": "affad2f25779d48328bd6c83ff6bc811a8fa76f308acc020444ee41e2fe50792"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/first.txt": {
+      "bytes": 1395,
+      "mode": 420,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/grader.py": {
+      "bytes": 2461,
+      "mode": 420,
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/manifest.json": {
+      "bytes": 31335,
+      "mode": 420,
+      "sha256": "1143a7812d739c9215bed24e186b83eaed8ba5406ef1c67d229b66d2795e8a57"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/argsort.metal": {
+      "bytes": 11174,
+      "mode": 420,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/bin.metal": {
+      "bytes": 6580,
+      "mode": 420,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/concat.metal": {
+      "bytes": 1932,
+      "mode": 420,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/cpy.metal": {
+      "bytes": 10154,
+      "mode": 420,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/deepseek4_vision.metal": {
+      "bytes": 7815,
+      "mode": 420,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/dense.metal": {
+      "bytes": 113439,
+      "mode": 420,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/dsv41.metal": {
+      "bytes": 12508,
+      "mode": 420,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/dsv4_hc.metal": {
+      "bytes": 63069,
+      "mode": 420,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/dsv4_kv.metal": {
+      "bytes": 22218,
+      "mode": 420,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/dsv4_misc.metal": {
+      "bytes": 282139,
+      "mode": 420,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/dsv4_rope.metal": {
+      "bytes": 35980,
+      "mode": 420,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/flash_attn.metal": {
+      "bytes": 61784,
+      "mode": 420,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/get_rows.metal": {
+      "bytes": 6976,
+      "mode": 420,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/glm53_bf16.metal": {
+      "bytes": 5466,
+      "mode": 420,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/glm53_kda.metal": {
+      "bytes": 13116,
+      "mode": 420,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/glm53_vision.metal": {
+      "bytes": 11295,
+      "mode": 420,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/glu.metal": {
+      "bytes": 2129,
+      "mode": 420,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/moe.metal": {
+      "bytes": 423032,
+      "mode": 420,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/norm.metal": {
+      "bytes": 14766,
+      "mode": 420,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/qwen4.metal": {
+      "bytes": 232464,
+      "mode": 420,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/qwen4_vision.metal": {
+      "bytes": 7402,
+      "mode": 420,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/repeat.metal": {
+      "bytes": 1640,
+      "mode": 420,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/set_rows.metal": {
+      "bytes": 1909,
+      "mode": 420,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/softmax.metal": {
+      "bytes": 7679,
+      "mode": 420,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/sum_rows.metal": {
+      "bytes": 2737,
+      "mode": 420,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/metal/unary.metal": {
+      "bytes": 10104,
+      "mode": 420,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/native-build-plan.json": {
+      "bytes": 40888,
+      "mode": 420,
+      "sha256": "315a52cd24636391c1dcdce3245a186124b12d9053b554400076e7b9293ac335"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/nonmodel-preflight.json": {
+      "bytes": 287,
+      "mode": 420,
+      "sha256": "20776fcaa0feff271fd2a083fa7dbc1365dce52d310883c9ae7d70b3ff7c8691"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/prepared-command.json": {
+      "bytes": 1087,
+      "mode": 420,
+      "sha256": "5afa400cb3315011ea33b3c39645fcbc55ab0e9a7feeb63f4a46d006c8d064fa"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/pressure/command.json": {
+      "bytes": 976,
+      "mode": 420,
+      "sha256": "3bb36a3edbc9ad21d6effd81b60ffafe5b7350f78913bcb2687725041c927957"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/pressure/pressure.jsonl": {
+      "bytes": 113644,
+      "mode": 420,
+      "sha256": "1dce6cbec24597955fa91c4b5b6fe19a9a704366aae839da19a80d59eca51ee0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/pressure/result.json": {
+      "bytes": 52,
+      "mode": 420,
+      "sha256": "b930e7a8282c48851750f8438ef0243df5697004738bb1efd66bc0da0d490c85"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/compiler-alias-proof.json": {
+      "bytes": 1908,
+      "mode": 420,
+      "sha256": "6c1326b0ba46651d9f55c8556e89efbb6f195c4b23651fd60462f67717362f12"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/prepare_agent_suffix_pair_external_v2.py": {
+      "bytes": 10327,
+      "mode": 420,
+      "sha256": "455d89136847e30cdc7012f8fa4ae9765c278da45dd5c0b9cb0acbc5b2a376c2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/Makefile": {
+      "bytes": 55008,
+      "mode": 420,
+      "sha256": "3cd1680abef19c903c53fa95c4baa428b851455f38cd018f9ca4382194f7f88f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4.h": {
+      "bytes": 37885,
+      "mode": 420,
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_agent.c": {
+      "bytes": 593557,
+      "mode": 420,
+      "sha256": "3c0dc3d9141f33cea40878c3724f9893d23c229b492434ea9455bdcac7464806"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_deepseek41_gpu.h": {
+      "bytes": 7317,
+      "mode": 420,
+      "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_distributed.h": {
+      "bytes": 3782,
+      "mode": 420,
+      "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_engram.h": {
+      "bytes": 2496,
+      "mode": 420,
+      "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_eval_cases.h": {
+      "bytes": 1101,
+      "mode": 420,
+      "sha256": "39bc494d1a95ec095a16a0ed8c52326e6cb67cb11c20613aeccfc2108fa545a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_gpu.h": {
+      "bytes": 152618,
+      "mode": 420,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_gpu_args.h": {
+      "bytes": 3030,
+      "mode": 420,
+      "sha256": "bb9398a37f0e5f346641aee6d556c4703a41ed2c09442693e48dab591a50d993"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_gpu_mgpu.h": {
+      "bytes": 10742,
+      "mode": 420,
+      "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_gpu_tp.h": {
+      "bytes": 2678,
+      "mode": 420,
+      "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_help.h": {
+      "bytes": 268,
+      "mode": 420,
+      "sha256": "0b4af2be3ec7278a3f56489c945b88a56a744c0743c6f63fbbe70c0d9498ec0c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_image.h": {
+      "bytes": 4504,
+      "mode": 420,
+      "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_kvstore.h": {
+      "bytes": 9067,
+      "mode": 420,
+      "sha256": "e6d0e2836385285718436d89292d1052099b7cc9a2c8a1c79d3d59e214d81c3b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_layer_pack.h": {
+      "bytes": 2838,
+      "mode": 420,
+      "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_linux_memory.h": {
+      "bytes": 1168,
+      "mode": 420,
+      "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_prompt_prefix.h": {
+      "bytes": 1568,
+      "mode": 420,
+      "sha256": "3c5806bf5ed3e451adbf5487ac7105ca32a549c4e1e17d7c61883b52e570b7b1"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_qwen4_vision.h": {
+      "bytes": 666,
+      "mode": 420,
+      "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_resident_route.h": {
+      "bytes": 14647,
+      "mode": 420,
+      "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_rocm.h": {
+      "bytes": 6143,
+      "mode": 420,
+      "sha256": "f6a80e4c221004cdaaa08829c8930c9db2b9b21d009db829aca46c012365e3ed"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_rocm_memory.h": {
+      "bytes": 2350,
+      "mode": 420,
+      "sha256": "e3c4b2d4bf4b854f98940bc44ba73140c72f99e999ba141f8210e41841ea7dd0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_ssd.h": {
+      "bytes": 1349,
+      "mode": 420,
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_suffix_layout.h": {
+      "bytes": 1251,
+      "mode": 420,
+      "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_suffix_pair_tape.h": {
+      "bytes": 7139,
+      "mode": 420,
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_tool_text.h": {
+      "bytes": 1755,
+      "mode": 420,
+      "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_tp.h": {
+      "bytes": 11344,
+      "mode": 420,
+      "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/ds4_web.h": {
+      "bytes": 927,
+      "mode": 420,
+      "sha256": "e43748a12480a31186961c8f2b67510441e139d3b9b82d35b6ba8017a65849a8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/linenoise.h": {
+      "bytes": 7350,
+      "mode": 420,
+      "sha256": "24425a1fd617dc9f05c8820ff936c1a82fd08ab540358fb02ae871678de60ef8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/rax.h": {
+      "bytes": 14251,
+      "mode": 420,
+      "sha256": "e9281e1a444c0cd090b187d2271d200fcc02106062d9f827a7f2d590594cdce4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/rax_malloc.h": {
+      "bytes": 2058,
+      "mode": 420,
+      "sha256": "5ab2fa4a8bbf94401cf15f7dde1b0050f0b5ea9f60ccb81f0dcb1e7b392e5d93"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_actual_admission.h": {
+      "bytes": 1849,
+      "mode": 420,
+      "sha256": "a92300e30416e1a6a5cb6fd3cbfd7466cb9dfa3de3a3ab807f95c283f9c755f8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_actual_literals.h": {
+      "bytes": 11616,
+      "mode": 420,
+      "sha256": "2e94cb78004fe4eb423cd14a3e854da4bbbe636a5322b85f2e9049bf963090e1"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_actual_memory160.c": {
+      "bytes": 593967,
+      "mode": 420,
+      "sha256": "998335cd702cad8886a32733de66fe8ce034c85a48c0a98ddd9cf563bcb3a75c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_actual_memory160_hook.inc": {
+      "bytes": 10798,
+      "mode": 420,
+      "sha256": "e0e7d82b8d09aacf22350d61075bf73c165c5a085085e8bdb8538a88af32a49c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_actual_ownership.h": {
+      "bytes": 2295,
+      "mode": 420,
+      "sha256": "cd6f259b1bed287ef2cce67597a6bf5082a3c83bd0a5c036e4335e1846969982"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_actual_protocol_fixture.c": {
+      "bytes": 8243,
+      "mode": 420,
+      "sha256": "1f3b5e72c503a9158dbfcd81d6bc8b903da2d42831d77b0a13c7e5b536e940b4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_external.c": {
+      "bytes": 593959,
+      "mode": 420,
+      "sha256": "1a2b89f1e0b8325f4e34aaebad4aaa2d64da376caff9eb44c69cb73520205f74"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_external_controls.inc": {
+      "bytes": 10311,
+      "mode": 420,
+      "sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_external_hook.inc": {
+      "bytes": 11703,
+      "mode": 420,
+      "sha256": "765eed11409029b711c91e9b5dfd1400996d388e55209f658f5621f0be7fe792"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_external_literals.h": {
+      "bytes": 11924,
+      "mode": 420,
+      "sha256": "a6b56fc04f7ff0cf2d76cf84aa8855dc92b4dbbd8655880c4ffeaf3426fba7d9"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_memory160_protocol_fixture.c": {
+      "bytes": 9126,
+      "mode": 420,
+      "sha256": "eb264747c6878c93c061ed63547401a8be7d3b9144a7bfea11d622a4871e87bd"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/agent_suffix_pair_native_fixture.c": {
+      "bytes": 29552,
+      "mode": 420,
+      "sha256": "2858c4e308f94fb8eb0d5e4e9e31329a1ed475c18158198d1c92d76f99c16f1c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_actual_task_v1.json": {
+      "bytes": 24521,
+      "mode": 420,
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_actual_v1/private-caller.diff": {
+      "bytes": 1256,
+      "mode": 420,
+      "sha256": "b7d086c788c68b7d0fdabdee97ebad46a9949a11ffae8b7d87d1bf1a915d5f38"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/approved-design.json": {
+      "bytes": 10137,
+      "mode": 420,
+      "sha256": "5b84d01b414655fabf2645114638b4e97848f8810930a4a44473a7880d51085f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/first.txt": {
+      "bytes": 1395,
+      "mode": 420,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/grader.py": {
+      "bytes": 2461,
+      "mode": 420,
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/run_grader.py": {
+      "bytes": 1732,
+      "mode": 420,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/second.txt": {
+      "bytes": 2681,
+      "mode": 420,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/source-provenance.json": {
+      "bytes": 4096,
+      "mode": 420,
+      "sha256": "64b29971d6a0bc466927bb72fe5f4bc35d5b582e88a336527a37d014d4d9399e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/task.json": {
+      "bytes": 24752,
+      "mode": 420,
+      "sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/third.txt": {
+      "bytes": 1906,
+      "mode": 420,
+      "sha256": "acb5e79e7d5991099be0788b252b09d0ee6c147e02266f69e1ec5848486f149f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/first.txt": {
+      "bytes": 1395,
+      "mode": 420,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/grader.py": {
+      "bytes": 2461,
+      "mode": 420,
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/run_grader.py": {
+      "bytes": 1732,
+      "mode": 420,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/second.txt": {
+      "bytes": 2681,
+      "mode": 420,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/task.json": {
+      "bytes": 25417,
+      "mode": 420,
+      "sha256": "11a9e6c778dcc79ebd4e6f3dbfcc6b30c57ac20f544db30a982f57431a5961aa"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/third.txt": {
+      "bytes": 1798,
+      "mode": 420,
+      "sha256": "6e279a665d5389ed95bb59580f1366e8d1dafc4df25b627557772191aac987d0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/update_context.py": {
+      "bytes": 3048,
+      "mode": 420,
+      "sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/prepare_agent_suffix_pair_external.py": {
+      "bytes": 8716,
+      "mode": 420,
+      "sha256": "6166355111b88664baf674a23e5da59ac0da7081e20a76248627757353597eff"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/run_agent_suffix_pair_actual_memory160.py": {
+      "bytes": 30334,
+      "mode": 493,
+      "sha256": "e4e02e3518121b73792cd6083a265c5e7d155604251d66a906ee403f90497cd6"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/run_agent_suffix_pair_external.py": {
+      "bytes": 45121,
+      "mode": 420,
+      "sha256": "2b72efaa8ab4a81d22769ad04a02316defc234e977a40be4fb19dbeb31443153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/run_agent_suffix_pair_native.py": {
+      "bytes": 21675,
+      "mode": 420,
+      "sha256": "f91286d98c4901cb6a6ef349cdc3942307b05116df88b2f10e95731ebe14d620"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/test_agent_suffix_pair_actual_memory160.py": {
+      "bytes": 22660,
+      "mode": 420,
+      "sha256": "fdac5915b5cafd629000127f8c6f7c9e58f7b3c41bb5a6e224cd4a8ce5b584b4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/ideas/test_agent_suffix_pair_external.py": {
+      "bytes": 32137,
+      "mode": 420,
+      "sha256": "f14e216d932f5cfacd8a55d7aadb2ad9f75f1ed7ec4b36841a0e4757c8f31a2c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/speed-bench/promessi_sposi.txt": {
+      "bytes": 1329139,
+      "mode": 420,
+      "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/tests/test_agent_suffix_pair_actual_authority.py": {
+      "bytes": 4388,
+      "mode": 420,
+      "sha256": "935914a1843b4365a79d4e5cf1891ef6954aabfbe1f9d3d380bafe36b644cf34"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/tests/test_agent_suffix_pair_actual_delivery.py": {
+      "bytes": 9761,
+      "mode": 420,
+      "sha256": "41d97269d5ec743cb17299491964b2562db4570a9efbbf0d5e5947c9661d0f4c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/tests/test_agent_suffix_pair_actual_delivery_authority.py": {
+      "bytes": 5138,
+      "mode": 420,
+      "sha256": "ac6466237dd194472df588d14e355fed77b874e0433f9e2d12427680ca768090"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/tests/test_agent_suffix_pair_actual_ownership.c": {
+      "bytes": 5730,
+      "mode": 420,
+      "sha256": "4fc76d6265d8fb50fc1fd3a7958c9c26e3bbb61323e5c96b451cc0e94f558b92"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/tests/test_agent_suffix_pair_memory160.py": {
+      "bytes": 11932,
+      "mode": 420,
+      "sha256": "00838c0be09fbcf720d3d36f297a7fbf3d27c73fb5ce295f014604a53593c3ee"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/provenance/source/tests/test_agent_suffix_pair_native_driver.py": {
+      "bytes": 10458,
+      "mode": 420,
+      "sha256": "10ce917eebc1f649d300cf5373d259ccebe707a23fc037f398254abb4a0926f5"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/A-manifest.json": {
+      "bytes": 28567,
+      "mode": 420,
+      "sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/A-prepared-command.json": {
+      "bytes": 1084,
+      "mode": 420,
+      "sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/binding.json": {
+      "bytes": 2268,
+      "mode": 420,
+      "sha256": "bc0a6189aaf90ef0fb75a1731983abeb0de0f233ae5a9f5ceaa2c7c19278cdfe"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/candidate-00.json": {
+      "bytes": 81,
+      "mode": 420,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/choice.bin": {
+      "bytes": 16,
+      "mode": 420,
+      "sha256": "3d30dd104d057b865bdc80df7c53dfec31513f4673d1d8b0c14078ce87ee30d3"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/commit.json": {
+      "bytes": 238,
+      "mode": 420,
+      "sha256": "92b641bf7eff5a6586ca1b8d5eb610fc57c2615c376c94f24537d79738529438"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/preedit-logits.bin": {
+      "bytes": 517136,
+      "mode": 420,
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/root-archive-proof.json": {
+      "bytes": 1243,
+      "mode": 420,
+      "sha256": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/root-release-proof.json": {
+      "bytes": 379,
+      "mode": 420,
+      "sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/selected-after.txt": {
+      "bytes": 14609,
+      "mode": 420,
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/selected-before.txt": {
+      "bytes": 14653,
+      "mode": 420,
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/selected-edited.ids": {
+      "bytes": 13560,
+      "mode": 420,
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/selected-old.ids": {
+      "bytes": 13604,
+      "mode": 420,
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/selection.json": {
+      "bytes": 453,
+      "mode": 420,
+      "sha256": "0526d4cd3da60e3fde4a0596b6590464e9a1dfe107beabb77e3855e1485838ea"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/reference/shared-snapshot.json": {
+      "bytes": 1306,
+      "mode": 420,
+      "sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/root-launch-proof.json": {
+      "bytes": 2020,
+      "mode": 420,
+      "sha256": "8bc5d752b2c72c20cb260d059d5ee7e4d34a9c52744548d651a0f25d58bfecac"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/root-release-proof.json": {
+      "bytes": 378,
+      "mode": 420,
+      "sha256": "7834ec1da8cbb652b3cedc34f3fef6aab28cc26d6a0fd0779eea310ab56545f8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/command.json": {
+      "bytes": 8265,
+      "mode": 420,
+      "sha256": "f95617f8fc4f447400e057bdabf2716aed8f1cfe56598f53e9d2e8b58f605d7e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/controller-model-phase-outcome.json": {
+      "bytes": 1164,
+      "mode": 420,
+      "sha256": "96fba48b4947b0263d369853e835313bf13479b5ac14924ea90ad99c3ea3b73b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/controller-outcome.json": {
+      "bytes": 1303,
+      "mode": 420,
+      "sha256": "814cc717a3edc7830d7d5a7c3820ca745b9bc4f667e0b4cc4db3c1302c03c357"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/immutable-inputs.json": {
+      "bytes": 90,
+      "mode": 420,
+      "sha256": "1d69f76ec9eac04180187d332e226f20db9df367bd2efba308d2dd0546ab4410"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/admission-ledger.jsonl": {
+      "bytes": 957,
+      "mode": 420,
+      "sha256": "3384e7bc62cdc83923990c32c07b809ca20586c09b4a348521627dc8fb11c5d4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/commit.json": {
+      "bytes": 240,
+      "mode": 420,
+      "sha256": "1646d701ae54db3af7c9431a52789e61bf7fe9002b46475f3cf3eb4e9b5fc77b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/control-admission-ledger.jsonl": {
+      "bytes": 1012,
+      "mode": 420,
+      "sha256": "486c106a12d11474dd76e28de1902946651b95c385f10e0c726e166c436719c6"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/preedit-logits.bin": {
+      "bytes": 517136,
+      "mode": 420,
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/rounds.jsonl": {
+      "bytes": 1586,
+      "mode": 420,
+      "sha256": "4f474637fcf23a74dd47b8363eb32d0e44834bde293505d60c90bfecb3d5b5a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/selected-after.txt": {
+      "bytes": 14609,
+      "mode": 420,
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/selected-before.txt": {
+      "bytes": 14653,
+      "mode": 420,
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/selected-edited.ids": {
+      "bytes": 13560,
+      "mode": 420,
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/private/selected-old.ids": {
+      "bytes": 13604,
+      "mode": 420,
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/shared-final/.owner.json": {
+      "bytes": 154,
+      "mode": 420,
+      "sha256": "7a5459ad0c33eb37e5b453f28cb86b4bc9a4a551fda7a23ec68ca15667e4863a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/shared-final/live-context.txt": {
+      "bytes": 24231,
+      "mode": 420,
+      "sha256": "74f5d2758aadd45576a3ed806bbf60cc940cdffd957abc7c93209a4990669ff6"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/shared-final/project/run_grader.py": {
+      "bytes": 1732,
+      "mode": 493,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/shared-snapshot.json": {
+      "bytes": 1102,
+      "mode": 420,
+      "sha256": "9aa12c14c83b04c7d1e801e985bb28c361be8006e7f96063d3a0fadbebd75f81"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/stdout.log": {
+      "bytes": 5312,
+      "mode": 420,
+      "sha256": "bdeeef8867fbfb039c6a1807b47e29c640b0c3fcb64ccc293346bac3f0c48a03"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/trace.log": {
+      "bytes": 774735,
+      "mode": 420,
+      "sha256": "3fdeb120156d31a7e99962abab4a2754b0b21c857f240445b68496dc3ee3c954"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/traceback.txt": {
+      "bytes": 1052,
+      "mode": 420,
+      "sha256": "1e0ab755b054b7a8974d9577fc700a763a28e5c66dc2c9f5376c861a50104daf"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/turn-1-check.json": {
+      "bytes": 59,
+      "mode": 420,
+      "sha256": "425e8b71cafbb57823eae0fe0abb2b8fed02e5d289901f16b03fe2dd7ad4499d"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run/turn-2-check.json": {
+      "bytes": 55,
+      "mode": 420,
+      "sha256": "04d7d64a2a50d2a9c5548c5e51c53dc1b03b6193de6fc10cb5e225ae990fed5c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run_agent_suffix_pair_external.py": {
+      "bytes": 45121,
+      "mode": 420,
+      "sha256": "2b72efaa8ab4a81d22769ad04a02316defc234e977a40be4fb19dbeb31443153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/run_grader.py": {
+      "bytes": 1732,
+      "mode": 420,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/second.txt": {
+      "bytes": 2681,
+      "mode": 420,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/source-provenance.json": {
+      "bytes": 4096,
+      "mode": 420,
+      "sha256": "64b29971d6a0bc466927bb72fe5f4bc35d5b582e88a336527a37d014d4d9399e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/task.json": {
+      "bytes": 24752,
+      "mode": 420,
+      "sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/native/third.txt": {
+      "bytes": 1906,
+      "mode": 420,
+      "sha256": "acb5e79e7d5991099be0788b252b09d0ee6c147e02266f69e1ec5848486f149f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/paired-analysis.json": {
+      "bytes": 23489,
+      "mode": 420,
+      "sha256": "75eb2c3346cc54956c43c2f05bcb3a638ec03050c0e3a4a4c36fd3d2ba054a07"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/post-release-procedure/committed-byte-proof.json": {
+      "bytes": 218,
+      "mode": 420,
+      "sha256": "abe277a9a4e2f6a01a11a9568dd66d467c0c40d912326e5eb6dcd235652e1498"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/post-release-procedure/procedure.json": {
+      "bytes": 4835,
+      "mode": 420,
+      "sha256": "b621660cf82e426c3b5057a6207ce96ce0268307ccc3119c03c25659198d6f2a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/README.md": {
+      "bytes": 1153,
+      "mode": 420,
+      "sha256": "9a0240103f698e44d8086b9d174bcf9604a13f0c7d029e43a01af5ed607e2e93"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/archive-index.json": {
+      "bytes": 6519,
+      "mode": 420,
+      "sha256": "88c88f5f148e7a87d6178a23a096c4ddbd436d69b223ffedaf9d26bbb5ca8d26"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/attestation-extension-provenance.json": {
+      "bytes": 609,
+      "mode": 420,
+      "sha256": "7038b952275c7515d91767b35191634a8eb2c5ea346b997bafa5cb9ebbf57265"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/original-shared-preservation.json": {
+      "bytes": 1461,
+      "mode": 420,
+      "sha256": "b0c4d07191eb8d51c409c877980f92e34cfe20397cdfa15e75afd87ede6e4a2a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/pre-attestation-archive-index.json": {
+      "bytes": 5517,
+      "mode": 420,
+      "sha256": "b7d7617b242e3e76c0ac47bf3999f232b1c93c0843fd1fc3f96fff3cbe402de7"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/prepared-assets-verified.json": {
+      "bytes": 44499,
+      "mode": 420,
+      "sha256": "63e7739b52257c6edba64061d8e9bb58d61ae3ec268291bd6f21b5b72d3957bf"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/procedure.json": {
+      "bytes": 4835,
+      "mode": 420,
+      "sha256": "b621660cf82e426c3b5057a6207ce96ce0268307ccc3119c03c25659198d6f2a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/A-manifest.json": {
+      "bytes": 28567,
+      "mode": 420,
+      "sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/A-prepared-command.json": {
+      "bytes": 1084,
+      "mode": 420,
+      "sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/binding.json": {
+      "bytes": 2268,
+      "mode": 420,
+      "sha256": "bc0a6189aaf90ef0fb75a1731983abeb0de0f233ae5a9f5ceaa2c7c19278cdfe"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/candidate-00.json": {
+      "bytes": 81,
+      "mode": 420,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/choice.bin": {
+      "bytes": 16,
+      "mode": 420,
+      "sha256": "3d30dd104d057b865bdc80df7c53dfec31513f4673d1d8b0c14078ce87ee30d3"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/commit.json": {
+      "bytes": 238,
+      "mode": 420,
+      "sha256": "92b641bf7eff5a6586ca1b8d5eb610fc57c2615c376c94f24537d79738529438"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/preedit-logits.bin": {
+      "bytes": 517136,
+      "mode": 420,
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/selected-after.txt": {
+      "bytes": 14609,
+      "mode": 420,
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/selected-before.txt": {
+      "bytes": 14653,
+      "mode": 420,
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/selected-edited.ids": {
+      "bytes": 13560,
+      "mode": 420,
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/selected-old.ids": {
+      "bytes": 13604,
+      "mode": 420,
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/reference/selection.json": {
+      "bytes": 453,
+      "mode": 420,
+      "sha256": "0526d4cd3da60e3fde4a0596b6590464e9a1dfe107beabb77e3855e1485838ea"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/root-archive-verification-first-refusal-v1.json": {
+      "bytes": 499,
+      "mode": 420,
+      "sha256": "fade0557b5187afe16c52c9514371031413ffa40eb59b84507fbb21cdc11c142"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/root-release-proof.json": {
+      "bytes": 379,
+      "mode": 420,
+      "sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/root-shared-archive-proof.json": {
+      "bytes": 1243,
+      "mode": 420,
+      "sha256": "5efa33fa9d5d5630f3f54461de868a9a6c7a6b450a121a803e4c266ee9bf970c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/run_agent_suffix_pair_external.py": {
+      "bytes": 45121,
+      "mode": 420,
+      "sha256": "2b72efaa8ab4a81d22769ad04a02316defc234e977a40be4fb19dbeb31443153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/shared-final/.owner.json": {
+      "bytes": 153,
+      "mode": 420,
+      "sha256": "8a07a476e0fd2d4b40b8eed00b5c8f7a3ac13af1489af290bffef076667d749e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/shared-final/live-context.txt": {
+      "bytes": 15751,
+      "mode": 420,
+      "sha256": "cade13f041fa79197de609ea3201d2d45180d99de1199db72af7a423c80e3916"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/shared-final/project/access.py": {
+      "bytes": 50,
+      "mode": 420,
+      "sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/shared-final/project/run_grader.py": {
+      "bytes": 1732,
+      "mode": 493,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/shared-snapshot.json": {
+      "bytes": 1306,
+      "mode": 420,
+      "sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/structural-verification.json": {
+      "bytes": 3049,
+      "mode": 420,
+      "sha256": "2192c373b3b692d9341ef6d544455a7855b65d3bb496a77a0eca4435f6f3d3f0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-A-structural-archive/task.json": {
+      "bytes": 24752,
+      "mode": 420,
+      "sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-B-static-prepare/B-reference-verification.json": {
+      "bytes": 11951,
+      "mode": 420,
+      "sha256": "07299a64833856691bbf1c963c09fb21e70dc374b839b899801bae3e59312cf1"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-B-static-prepare/attempt.json": {
+      "bytes": 1864,
+      "mode": 420,
+      "sha256": "4a940f4dc25f972387771f6c8de8ef4e77f94df1335e69b8c3337abe1e6d74d3"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-B-static-prepare/prepared-physical-file-index.json": {
+      "bytes": 51622,
+      "mode": 420,
+      "sha256": "8f1a8af53563e8cde60e68ff9df30e8416a7e2f5a62994ff0c56bff527e589ab"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-B-static-prepare/stderr.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-B-static-prepare/stdout.log": {
+      "bytes": 348,
+      "mode": 420,
+      "sha256": "eaccebdffcf47d7a9bfa5a6480d78a0eeb64fd3c55aee58268347bfe10beed1d"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-diagnosis-correction/correction.json": {
+      "bytes": 1112,
+      "mode": 420,
+      "sha256": "3cf4a6df2b0e5296bb85119f4ebe3203c2835c7b8f60793be66924e1fab47a08"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-diagnosis-correction/immutable-controls.inc": {
+      "bytes": 10311,
+      "mode": 420,
+      "sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v1/attempt.json": {
+      "bytes": 1576,
+      "mode": 420,
+      "sha256": "8d13c85deb554e5a4981f4dedd5d33d5a13163a7e96899e729d963f1d1661e0d"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v1/controls-normal": {
+      "bytes": 60592,
+      "mode": 493,
+      "sha256": "4dd24f358cc70e1a48d72193fe97dbbd8deb3e229b41658afd97ea04863761ca"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v1/libc-control-mock-compile.stderr": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v1/libc-control-mock-compile.stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v1/libc-control-mock-selftest.stderr": {
+      "bytes": 137,
+      "mode": 420,
+      "sha256": "919e41b0ba6210c7012887c0c90a93938ec823ca35d2d3b5c8cccffcc127b2e1"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v1/libc-control-mock-selftest.stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/attempt.json": {
+      "bytes": 3170,
+      "mode": 420,
+      "sha256": "3158951d4843569b16b3858cf7360b0d227c4dcaacf73a38aaa4841606fdd541"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/controls-asan-ubsan": {
+      "bytes": 89264,
+      "mode": 493,
+      "sha256": "9d885dca686bbca1a0c0fc7d007a91a52c3f398a71eec8a2c46d5f79ee2e9555"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/controls-normal": {
+      "bytes": 60480,
+      "mode": 493,
+      "sha256": "4ea0040e66f1b926768fed390614c8716174b40bccca7ee547f7e9d99b44e05b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/libc-control-mock-asan-ubsan-compile.stderr": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/libc-control-mock-asan-ubsan-compile.stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/libc-control-mock-asan-ubsan-selftest.stderr": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/libc-control-mock-asan-ubsan-selftest.stdout": {
+      "bytes": 92,
+      "mode": 420,
+      "sha256": "527dd1e8d374214419deea319e963e8dbbe65bf7b25c56498bb3b03021bdca0a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/libc-control-mock-compile.stderr": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/libc-control-mock-compile.stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/libc-control-mock-selftest.stderr": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/libc-control-mock-selftest.stdout": {
+      "bytes": 92,
+      "mode": 420,
+      "sha256": "527dd1e8d374214419deea319e963e8dbbe65bf7b25c56498bb3b03021bdca0a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-controls-mock-v2/proof.json": {
+      "bytes": 3725,
+      "mode": 420,
+      "sha256": "603b639dd045fbb38681d1fa9db0de890b48cb5d3bac5dc863c9a4038ed6e072"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-preparer-v1-refusal/failure.json": {
+      "bytes": 638,
+      "mode": 420,
+      "sha256": "ecc5fcc0f01d1b7829c20c24634df1e95cc958f68aa50c8428dae453409174eb"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-preparer-v2-cpu/proof.json": {
+      "bytes": 730,
+      "mode": 420,
+      "sha256": "dcf3311fc58e778656490115cfc783baef7a8959e40ab9dfb5c94fb416caa196"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-preparer-v2-cpu/stderr": {
+      "bytes": 616,
+      "mode": 420,
+      "sha256": "1554ab99d0f668fde1709ace8c3e8e8870f45f7952f0bfcfb499fd33f9442398"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/agent-suffix-pair-external-preparer-v2-cpu/stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/earlier-claim-retracted.json": {
+      "bytes": 556,
+      "mode": 420,
+      "sha256": "826b405dc8f04aeeed799341d71936bc29d3977ab1b79e829ff8b5f5ae614e5f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/manifest.json": {
+      "bytes": 8624,
+      "mode": 420,
+      "sha256": "cf35cd8eaf58251c03977b1fbaaca9ba871510037a0f17a24a899bba4ffbd208"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/original-bool-mock.c": {
+      "bytes": 11020,
+      "mode": 420,
+      "sha256": "2fe6ebb6b0ba707b95abdb3f1e289704c3c5dc7aebc124c71719c4ca07e7bb05"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/prepared/manifest.json": {
+      "bytes": 28567,
+      "mode": 420,
+      "sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/prepared/nonmodel-preflight.json": {
+      "bytes": 287,
+      "mode": 420,
+      "sha256": "9a234f951891023c93f04684402ae2fcc74023fc45c29dc9b6eb8fc6bdb1a8ed"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/prepared/prepared-command.json": {
+      "bytes": 1084,
+      "mode": 420,
+      "sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/source/speed-bench/agent_suffix_pair_external_controls.inc": {
+      "bytes": 10311,
+      "mode": 420,
+      "sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/source/speed-bench/ideas/agent_suffix_pair_external_controls_mock_v1/plan.json": {
+      "bytes": 6160,
+      "mode": 420,
+      "sha256": "3bfe1f496e8cbcd0314acbbf93db38bce34bd40b421caede629e61821b3e2570"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/source/speed-bench/ideas/agent_suffix_pair_external_controls_mock_v2/plan.json": {
+      "bytes": 6470,
+      "mode": 420,
+      "sha256": "4957c369583ba4edc8d30b399597df079a1b67d79dc4877316b7b688647d42c8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/source/speed-bench/ideas/agent_suffix_pair_external_v1/compiler-alias-proof.json": {
+      "bytes": 1908,
+      "mode": 420,
+      "sha256": "6c1326b0ba46651d9f55c8556e89efbb6f195c4b23651fd60462f67717362f12"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/source/speed-bench/ideas/prepare_agent_suffix_pair_external_v2.py": {
+      "bytes": 10327,
+      "mode": 420,
+      "sha256": "455d89136847e30cdc7012f8fa4ae9765c278da45dd5c0b9cb0acbc5b2a376c2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/source/tests/test_agent_suffix_pair_external_controls.c": {
+      "bytes": 11215,
+      "mode": 420,
+      "sha256": "ecc909a2322e74ddac9656d3bb4dd2f538a8e25671c437c9f6205fe29afafbb8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/prior-controls-and-refusals/source/tests/test_agent_suffix_pair_external_preparer_v2.py": {
+      "bytes": 2113,
+      "mode": 420,
+      "sha256": "a01d06abf91f40434e3e88a60fcd4f2a0626466662eb2748f76f2bdf6fc53e02"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/build-manifest.json": {
+      "bytes": 5177,
+      "mode": 420,
+      "sha256": "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/ds4-agent-pair-external-compile.result.json": {
+      "bytes": 996,
+      "mode": 420,
+      "sha256": "a04775ea17b099e99e31687de1f1524a2a2855e67802684f09354d6230362946"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/ds4-agent-pair-external-compile.stderr": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/ds4-agent-pair-external-compile.stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/ds4-agent-pair-external-link.result.json": {
+      "bytes": 3125,
+      "mode": 420,
+      "sha256": "0f494955ef17ea327354d00ae69d2e2dd3a310cbee9cd7afbbea8c46d7232b03"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/ds4-agent-pair-external-link.stderr": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/ds4-agent-pair-external-link.stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/ds4-agent-pair-external.o": {
+      "bytes": 1057144,
+      "mode": 420,
+      "sha256": "ebcdc1b4888106c4ae6f9eca777dbdba00c64fb54babf8990fc7cdd635914d8b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-caller-build/root-build-grant.json": {
+      "bytes": 4829,
+      "mode": 420,
+      "sha256": "1a7694b69fa812ad226331a70948564f613b0a4d4a8c75f5a1c74def47701f54"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-source-CPU-v1/controller.stderr": {
+      "bytes": 8000,
+      "mode": 420,
+      "sha256": "780e425386ef7f6da1a30ed46712f489b70bacb398b4f8006d31a727403f065f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-source-CPU-v1/controller.stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-source-CPU-v1/proof.json": {
+      "bytes": 3843,
+      "mode": 420,
+      "sha256": "fbf2e292cbd253af4723673018785838562899ab01a7c8dcc14f64bf684f4e4d"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-source-CPU-v2/controller.stderr": {
+      "bytes": 6034,
+      "mode": 420,
+      "sha256": "2cee0db511452707178fe67b575505bca8c1ae8146e8224fb487d8926a2b4e03"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-source-CPU-v2/controller.stdout": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/qualified-source-CPU-v2/proof.json": {
+      "bytes": 3921,
+      "mode": 420,
+      "sha256": "affad2f25779d48328bd6c83ff6bc811a8fa76f308acc020444ee41e2fe50792"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/caller-build-manifest.json": {
+      "bytes": 5177,
+      "mode": 420,
+      "sha256": "5a45b51272dc06efdf9eaf04a9a13726486415c6cc7ea5d0c262def2cbd64e64"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/cpu-proof.json": {
+      "bytes": 3921,
+      "mode": 420,
+      "sha256": "affad2f25779d48328bd6c83ff6bc811a8fa76f308acc020444ee41e2fe50792"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/first.txt": {
+      "bytes": 1395,
+      "mode": 420,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/grader.py": {
+      "bytes": 2461,
+      "mode": 420,
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/manifest.json": {
+      "bytes": 28567,
+      "mode": 420,
+      "sha256": "7dfdb77aacee8bb2f08b61403629d116c0579ec801bb0d7e466e4d1c624fd59a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/argsort.metal": {
+      "bytes": 11174,
+      "mode": 420,
+      "sha256": "a36f9e1ca3a2d8272cb52cece7d3d0624cd45de4b2887446f525e9ec64abd5de"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/bin.metal": {
+      "bytes": 6580,
+      "mode": 420,
+      "sha256": "4b537679fe874fa4dea079bbb10634b3feeb2cce9b737bdb602fe6926fbb175a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/concat.metal": {
+      "bytes": 1932,
+      "mode": 420,
+      "sha256": "04fb0fc2a3b51015444e330290b979a56e4cac82aee523afa2b42e361ab23da7"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/cpy.metal": {
+      "bytes": 10154,
+      "mode": 420,
+      "sha256": "df8cabe88c33076c16a54cfb88a00133b68ea5cbfc1742ac79608c84d4456cd4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/deepseek4_vision.metal": {
+      "bytes": 7815,
+      "mode": 420,
+      "sha256": "e0908e53ab5b33903408e5723434a59b28fb90a998123a32a794570fdf5a27ea"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/dense.metal": {
+      "bytes": 113439,
+      "mode": 420,
+      "sha256": "c31f807e5d84316f7d633fd1a84749a922a3c7b96c63290a4a01f63284083627"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/dsv41.metal": {
+      "bytes": 12508,
+      "mode": 420,
+      "sha256": "2000ee67dc2983f931103659ee7596e3619b34db5d7d971db42616a2bcee847c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/dsv4_hc.metal": {
+      "bytes": 63069,
+      "mode": 420,
+      "sha256": "5d1988269671c9cfa9ad09024dd1c04b77559ea3894628e9bfddab44005b80d3"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/dsv4_kv.metal": {
+      "bytes": 22218,
+      "mode": 420,
+      "sha256": "65e6e12ac3266fdf72b1e9c69bfbd07ea7324e930a8117b63b651b5016b1b5f6"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/dsv4_misc.metal": {
+      "bytes": 282139,
+      "mode": 420,
+      "sha256": "a978211b6f274d863f7ea2bbee9db52d5d3ecf64c1c7642d4c2f353f96249c1c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/dsv4_rope.metal": {
+      "bytes": 35980,
+      "mode": 420,
+      "sha256": "f56cb24a381c27435953d120448bc22c1b2314b151280445246bd28920b4d518"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/flash_attn.metal": {
+      "bytes": 61784,
+      "mode": 420,
+      "sha256": "c9ec79daf2063cd9e8c4e8874c123fbf2642c3fb6247b16aa21e1e0e6db92fcc"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/get_rows.metal": {
+      "bytes": 6976,
+      "mode": 420,
+      "sha256": "bd3b352a6ffb138ae5e391db97b211f8386d417365eac2caa3730f55a075aa3a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/glm53_bf16.metal": {
+      "bytes": 5466,
+      "mode": 420,
+      "sha256": "27d93dcfe81b09f93ed65cd986aaa0b9c1ca1df7fc43e58c15da533284d50db5"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/glm53_kda.metal": {
+      "bytes": 13116,
+      "mode": 420,
+      "sha256": "a695c313e36b76fa260164c6f5a2f3203748cbcff9becc6707e71aa703ed0818"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/glm53_vision.metal": {
+      "bytes": 11295,
+      "mode": 420,
+      "sha256": "d20bdf039f9bd9d7b0cab8c6a4fc10bcb3097571a81246dbde1c278e0e9bec7b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/glu.metal": {
+      "bytes": 2129,
+      "mode": 420,
+      "sha256": "59281e30a27cc2eb618800b6e53a57e234f65f1a1e680d6267d9139e1a06b627"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/moe.metal": {
+      "bytes": 423032,
+      "mode": 420,
+      "sha256": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/norm.metal": {
+      "bytes": 14766,
+      "mode": 420,
+      "sha256": "08dd088415ecde557ffb1a36756226fc94b45512a64f6c93a1489837eb1859de"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/qwen4.metal": {
+      "bytes": 232464,
+      "mode": 420,
+      "sha256": "13224aeae23802defef678877146ae8047a45c2d1be824361efa2f4f5aa25b28"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/qwen4_vision.metal": {
+      "bytes": 7402,
+      "mode": 420,
+      "sha256": "b37c7fc2c66131bf5817621920a6b5b30271af21160e7da33edc71e2d5c7fb4b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/repeat.metal": {
+      "bytes": 1640,
+      "mode": 420,
+      "sha256": "2c6142b47a2007d246f5eb6e7395047627bb6dfa02c649311d16620da35007cd"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/set_rows.metal": {
+      "bytes": 1909,
+      "mode": 420,
+      "sha256": "25f597bf5f5fb5a3791efc68e3182539727609f09c45750ef9376ed430d7a029"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/softmax.metal": {
+      "bytes": 7679,
+      "mode": 420,
+      "sha256": "6eaa6ce78c4b221b3c7fe45647d6eb42f165201992a243d77d04cf2668fb7664"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/sum_rows.metal": {
+      "bytes": 2737,
+      "mode": 420,
+      "sha256": "7e1f3ad3f945b1f6f59aa2d8ee5bf464052d989a632c33ea95ce50d3c4fbf0fc"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/metal/unary.metal": {
+      "bytes": 10104,
+      "mode": 420,
+      "sha256": "4607dbea21501230a193f8a333b1bd543d566f405568a094d6faf2c17cb0c5cf"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/native-build-plan.json": {
+      "bytes": 40888,
+      "mode": 420,
+      "sha256": "315a52cd24636391c1dcdce3245a186124b12d9053b554400076e7b9293ac335"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/nonmodel-preflight.json": {
+      "bytes": 287,
+      "mode": 420,
+      "sha256": "9a234f951891023c93f04684402ae2fcc74023fc45c29dc9b6eb8fc6bdb1a8ed"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/prepared-command.json": {
+      "bytes": 1084,
+      "mode": 420,
+      "sha256": "9a517cd78c60a2d1d0eae781833cc7eca0c05e221a5f0f3ead2023fc9031f8f5"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/pressure/command.json": {
+      "bytes": 977,
+      "mode": 420,
+      "sha256": "0845422021968a31e071514246e32485203bd4803e52978acfdf3e83b43d3cb7"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/pressure/pressure.jsonl": {
+      "bytes": 62711,
+      "mode": 420,
+      "sha256": "25baa757c9d2c584294fcd97ae7fc3d1855f8aeae57c55b8b30e3b6f07d9a80c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/pressure/result.json": {
+      "bytes": 52,
+      "mode": 420,
+      "sha256": "b930e7a8282c48851750f8438ef0243df5697004738bb1efd66bc0da0d490c85"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/compiler-alias-proof.json": {
+      "bytes": 1908,
+      "mode": 420,
+      "sha256": "6c1326b0ba46651d9f55c8556e89efbb6f195c4b23651fd60462f67717362f12"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/prepare_agent_suffix_pair_external_v2.py": {
+      "bytes": 10327,
+      "mode": 420,
+      "sha256": "455d89136847e30cdc7012f8fa4ae9765c278da45dd5c0b9cb0acbc5b2a376c2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/Makefile": {
+      "bytes": 55008,
+      "mode": 420,
+      "sha256": "3cd1680abef19c903c53fa95c4baa428b851455f38cd018f9ca4382194f7f88f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4.h": {
+      "bytes": 37885,
+      "mode": 420,
+      "sha256": "ae71bf564e842335a5323867f0b71e115354a24a05e1124f4908fe86ba00a631"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_agent.c": {
+      "bytes": 593557,
+      "mode": 420,
+      "sha256": "3c0dc3d9141f33cea40878c3724f9893d23c229b492434ea9455bdcac7464806"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_deepseek41_gpu.h": {
+      "bytes": 7317,
+      "mode": 420,
+      "sha256": "85b5660b38ff752ab6cbe88eeb68706f90de9a7084cbd5fff63b45a0d156d9bb"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_distributed.h": {
+      "bytes": 3782,
+      "mode": 420,
+      "sha256": "cf2f60eb677e0eb8aeb3f8d2966636ae075893ae2198beb5e446e483af537f9e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_engram.h": {
+      "bytes": 2496,
+      "mode": 420,
+      "sha256": "f84a264e0fe199d23a6f0c56fbbd19e222adc7009eed13c185af6403f68f7f5c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_eval_cases.h": {
+      "bytes": 1101,
+      "mode": 420,
+      "sha256": "39bc494d1a95ec095a16a0ed8c52326e6cb67cb11c20613aeccfc2108fa545a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_gpu.h": {
+      "bytes": 152618,
+      "mode": 420,
+      "sha256": "1a57e09f3690a5e47094040cf6a3442a627dbf534b75fc7b3f86a06f24b1da58"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_gpu_args.h": {
+      "bytes": 3030,
+      "mode": 420,
+      "sha256": "bb9398a37f0e5f346641aee6d556c4703a41ed2c09442693e48dab591a50d993"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_gpu_mgpu.h": {
+      "bytes": 10742,
+      "mode": 420,
+      "sha256": "57d3977180a391d7ac50ab063ba157047578fb0004551bff16a48225a6389f87"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_gpu_tp.h": {
+      "bytes": 2678,
+      "mode": 420,
+      "sha256": "9f6784a588ae01c46555ea7324e7809c260b6cbc62050bdbc6b5027efe28fabc"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_help.h": {
+      "bytes": 268,
+      "mode": 420,
+      "sha256": "0b4af2be3ec7278a3f56489c945b88a56a744c0743c6f63fbbe70c0d9498ec0c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_image.h": {
+      "bytes": 4504,
+      "mode": 420,
+      "sha256": "519ee87d7edd4cba3f443bb855cb4e6f712e9f63569265292ef13596e2152a63"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_kvstore.h": {
+      "bytes": 9067,
+      "mode": 420,
+      "sha256": "e6d0e2836385285718436d89292d1052099b7cc9a2c8a1c79d3d59e214d81c3b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_layer_pack.h": {
+      "bytes": 2838,
+      "mode": 420,
+      "sha256": "cbe111519a7a1035f934f890d3512e42d068c8d683295ee077a984cc5ae32bcf"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_linux_memory.h": {
+      "bytes": 1168,
+      "mode": 420,
+      "sha256": "c669cfcd931dd665e3f0bd52620f153b933c78906e38b00fc66302a5c89a8676"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_prompt_prefix.h": {
+      "bytes": 1568,
+      "mode": 420,
+      "sha256": "3c5806bf5ed3e451adbf5487ac7105ca32a549c4e1e17d7c61883b52e570b7b1"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_qwen4_vision.h": {
+      "bytes": 666,
+      "mode": 420,
+      "sha256": "f10c16d3b3ccb50ab3e4542bdef87b6b84d3c401290ff6f78530c328dd07ff6e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_resident_route.h": {
+      "bytes": 14647,
+      "mode": 420,
+      "sha256": "64fe1bb55d629cf988edb6b256d597c911ce4472464ff66836224577ee8a5c1e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_rocm.h": {
+      "bytes": 6143,
+      "mode": 420,
+      "sha256": "f6a80e4c221004cdaaa08829c8930c9db2b9b21d009db829aca46c012365e3ed"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_rocm_memory.h": {
+      "bytes": 2350,
+      "mode": 420,
+      "sha256": "e3c4b2d4bf4b854f98940bc44ba73140c72f99e999ba141f8210e41841ea7dd0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_ssd.h": {
+      "bytes": 1349,
+      "mode": 420,
+      "sha256": "61f4312a8b3686d5f5591f52365e6cb6301fd44d63775d5f490bbc2dd5c8e348"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_suffix_layout.h": {
+      "bytes": 1251,
+      "mode": 420,
+      "sha256": "fa5028f12723a3733f3a46cd404eb3098edce4b8a0baeb86c6f2b88fbf3fe43b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_suffix_pair_tape.h": {
+      "bytes": 7139,
+      "mode": 420,
+      "sha256": "33110b376949c57d285e74b09bfee62c5b0310035cbb09110d9a60324ae721b0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_tool_text.h": {
+      "bytes": 1755,
+      "mode": 420,
+      "sha256": "a9c09f4a4d1cf2a3260d9c539de222cd949b5cd7710c7bf17ec9be5bc58bd159"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_tp.h": {
+      "bytes": 11344,
+      "mode": 420,
+      "sha256": "ff7c0bf738cb54cb14f9b7202f5003c5fc98ac76a44e5512c5b01080649b5f4a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/ds4_web.h": {
+      "bytes": 927,
+      "mode": 420,
+      "sha256": "e43748a12480a31186961c8f2b67510441e139d3b9b82d35b6ba8017a65849a8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/linenoise.h": {
+      "bytes": 7350,
+      "mode": 420,
+      "sha256": "24425a1fd617dc9f05c8820ff936c1a82fd08ab540358fb02ae871678de60ef8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/rax.h": {
+      "bytes": 14251,
+      "mode": 420,
+      "sha256": "e9281e1a444c0cd090b187d2271d200fcc02106062d9f827a7f2d590594cdce4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/rax_malloc.h": {
+      "bytes": 2058,
+      "mode": 420,
+      "sha256": "5ab2fa4a8bbf94401cf15f7dde1b0050f0b5ea9f60ccb81f0dcb1e7b392e5d93"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_actual_admission.h": {
+      "bytes": 1849,
+      "mode": 420,
+      "sha256": "a92300e30416e1a6a5cb6fd3cbfd7466cb9dfa3de3a3ab807f95c283f9c755f8"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_actual_literals.h": {
+      "bytes": 11616,
+      "mode": 420,
+      "sha256": "2e94cb78004fe4eb423cd14a3e854da4bbbe636a5322b85f2e9049bf963090e1"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_actual_memory160.c": {
+      "bytes": 593967,
+      "mode": 420,
+      "sha256": "998335cd702cad8886a32733de66fe8ce034c85a48c0a98ddd9cf563bcb3a75c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_actual_memory160_hook.inc": {
+      "bytes": 10798,
+      "mode": 420,
+      "sha256": "e0e7d82b8d09aacf22350d61075bf73c165c5a085085e8bdb8538a88af32a49c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_actual_ownership.h": {
+      "bytes": 2295,
+      "mode": 420,
+      "sha256": "cd6f259b1bed287ef2cce67597a6bf5082a3c83bd0a5c036e4335e1846969982"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_actual_protocol_fixture.c": {
+      "bytes": 8243,
+      "mode": 420,
+      "sha256": "1f3b5e72c503a9158dbfcd81d6bc8b903da2d42831d77b0a13c7e5b536e940b4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_external.c": {
+      "bytes": 593959,
+      "mode": 420,
+      "sha256": "1a2b89f1e0b8325f4e34aaebad4aaa2d64da376caff9eb44c69cb73520205f74"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_external_controls.inc": {
+      "bytes": 10311,
+      "mode": 420,
+      "sha256": "24c4d59f3f7ce24a7ba6ce09015ece103190cc12c375f3627aab64f9e1627960"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_external_hook.inc": {
+      "bytes": 11703,
+      "mode": 420,
+      "sha256": "765eed11409029b711c91e9b5dfd1400996d388e55209f658f5621f0be7fe792"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_external_literals.h": {
+      "bytes": 11924,
+      "mode": 420,
+      "sha256": "a6b56fc04f7ff0cf2d76cf84aa8855dc92b4dbbd8655880c4ffeaf3426fba7d9"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_memory160_protocol_fixture.c": {
+      "bytes": 9126,
+      "mode": 420,
+      "sha256": "eb264747c6878c93c061ed63547401a8be7d3b9144a7bfea11d622a4871e87bd"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/agent_suffix_pair_native_fixture.c": {
+      "bytes": 29552,
+      "mode": 420,
+      "sha256": "2858c4e308f94fb8eb0d5e4e9e31329a1ed475c18158198d1c92d76f99c16f1c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_actual_task_v1.json": {
+      "bytes": 24521,
+      "mode": 420,
+      "sha256": "eb5ff21a8d620e22d67c37d438690e1e8c37b69c7592999d4cf399fc7607e283"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_actual_v1/private-caller.diff": {
+      "bytes": 1256,
+      "mode": 420,
+      "sha256": "b7d086c788c68b7d0fdabdee97ebad46a9949a11ffae8b7d87d1bf1a915d5f38"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/approved-design.json": {
+      "bytes": 10137,
+      "mode": 420,
+      "sha256": "5b84d01b414655fabf2645114638b4e97848f8810930a4a44473a7880d51085f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/first.txt": {
+      "bytes": 1395,
+      "mode": 420,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/grader.py": {
+      "bytes": 2461,
+      "mode": 420,
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/run_grader.py": {
+      "bytes": 1732,
+      "mode": 420,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/second.txt": {
+      "bytes": 2681,
+      "mode": 420,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/source-provenance.json": {
+      "bytes": 4096,
+      "mode": 420,
+      "sha256": "64b29971d6a0bc466927bb72fe5f4bc35d5b582e88a336527a37d014d4d9399e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/task.json": {
+      "bytes": 24752,
+      "mode": 420,
+      "sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_external_v1/third.txt": {
+      "bytes": 1906,
+      "mode": 420,
+      "sha256": "acb5e79e7d5991099be0788b252b09d0ee6c147e02266f69e1ec5848486f149f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/first.txt": {
+      "bytes": 1395,
+      "mode": 420,
+      "sha256": "f0f0624486bf3660f545908528aab20364bba2bf28c661ce806feefcdda6a2a2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/grader.py": {
+      "bytes": 2461,
+      "mode": 420,
+      "sha256": "997080cc8988e809a7b1b0149d3cdc8db0533031e32b8e51a9be502f56cab2a0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/run_grader.py": {
+      "bytes": 1732,
+      "mode": 420,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/second.txt": {
+      "bytes": 2681,
+      "mode": 420,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/task.json": {
+      "bytes": 25417,
+      "mode": 420,
+      "sha256": "11a9e6c778dcc79ebd4e6f3dbfcc6b30c57ac20f544db30a982f57431a5961aa"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/third.txt": {
+      "bytes": 1798,
+      "mode": 420,
+      "sha256": "6e279a665d5389ed95bb59580f1366e8d1dafc4df25b627557772191aac987d0"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/agent_suffix_pair_memory160_v1/update_context.py": {
+      "bytes": 3048,
+      "mode": 420,
+      "sha256": "1ab5fb1b4da40e707d85fc6ae1b3a83cecf0489de86eee395c2c2fe92f928d93"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/prepare_agent_suffix_pair_external.py": {
+      "bytes": 8716,
+      "mode": 420,
+      "sha256": "6166355111b88664baf674a23e5da59ac0da7081e20a76248627757353597eff"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/run_agent_suffix_pair_actual_memory160.py": {
+      "bytes": 30334,
+      "mode": 493,
+      "sha256": "e4e02e3518121b73792cd6083a265c5e7d155604251d66a906ee403f90497cd6"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/run_agent_suffix_pair_external.py": {
+      "bytes": 45121,
+      "mode": 420,
+      "sha256": "2b72efaa8ab4a81d22769ad04a02316defc234e977a40be4fb19dbeb31443153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/run_agent_suffix_pair_native.py": {
+      "bytes": 21675,
+      "mode": 420,
+      "sha256": "f91286d98c4901cb6a6ef349cdc3942307b05116df88b2f10e95731ebe14d620"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/test_agent_suffix_pair_actual_memory160.py": {
+      "bytes": 22660,
+      "mode": 420,
+      "sha256": "fdac5915b5cafd629000127f8c6f7c9e58f7b3c41bb5a6e224cd4a8ce5b584b4"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/ideas/test_agent_suffix_pair_external.py": {
+      "bytes": 32137,
+      "mode": 420,
+      "sha256": "f14e216d932f5cfacd8a55d7aadb2ad9f75f1ed7ec4b36841a0e4757c8f31a2c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/speed-bench/promessi_sposi.txt": {
+      "bytes": 1329139,
+      "mode": 420,
+      "sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/tests/test_agent_suffix_pair_actual_authority.py": {
+      "bytes": 4388,
+      "mode": 420,
+      "sha256": "935914a1843b4365a79d4e5cf1891ef6954aabfbe1f9d3d380bafe36b644cf34"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/tests/test_agent_suffix_pair_actual_delivery.py": {
+      "bytes": 9761,
+      "mode": 420,
+      "sha256": "41d97269d5ec743cb17299491964b2562db4570a9efbbf0d5e5947c9661d0f4c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/tests/test_agent_suffix_pair_actual_delivery_authority.py": {
+      "bytes": 5138,
+      "mode": 420,
+      "sha256": "ac6466237dd194472df588d14e355fed77b874e0433f9e2d12427680ca768090"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/tests/test_agent_suffix_pair_actual_ownership.c": {
+      "bytes": 5730,
+      "mode": 420,
+      "sha256": "4fc76d6265d8fb50fc1fd3a7958c9c26e3bbb61323e5c96b451cc0e94f558b92"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/tests/test_agent_suffix_pair_memory160.py": {
+      "bytes": 11932,
+      "mode": 420,
+      "sha256": "00838c0be09fbcf720d3d36f297a7fbf3d27c73fb5ce295f014604a53593c3ee"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/provenance/source/tests/test_agent_suffix_pair_native_driver.py": {
+      "bytes": 10458,
+      "mode": 420,
+      "sha256": "10ce917eebc1f649d300cf5373d259ccebe707a23fc037f398254abb4a0926f5"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/root-launch-proof.json": {
+      "bytes": 1793,
+      "mode": 420,
+      "sha256": "b85b3dfe555041c503ae661a3f12923374bac4cade327752fc4f98553ec7551a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/root-release-proof.json": {
+      "bytes": 379,
+      "mode": 420,
+      "sha256": "86528d00ffa86ba87373bbae15367983b495fd73ab844f5a74ceb1779a28debd"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/command.json": {
+      "bytes": 8033,
+      "mode": 420,
+      "sha256": "849272ad1d1bde804228a66c8f92e3a370478d0620948f0a3ef6aa28f3c1f31b"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/controller-model-phase-outcome.json": {
+      "bytes": 1164,
+      "mode": 420,
+      "sha256": "bd5bc117aad31d1a36dbe6075aa5c9be00e462f341228d1692b42ea57ec31c78"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/controller-outcome.json": {
+      "bytes": 1303,
+      "mode": 420,
+      "sha256": "758d6542745f271926bd1cb1409e98f0bbf1c98997e056f00e3c67544cd19e58"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/immutable-inputs.json": {
+      "bytes": 90,
+      "mode": 420,
+      "sha256": "1d69f76ec9eac04180187d332e226f20db9df367bd2efba308d2dd0546ab4410"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/admission-ledger.jsonl": {
+      "bytes": 957,
+      "mode": 420,
+      "sha256": "77af9ea6321ebc8b6ff7b4eb0be5ee2d02bc1d8acb7f5421f44f6eae59023f52"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/candidate-00.json": {
+      "bytes": 81,
+      "mode": 420,
+      "sha256": "d630b4136c015b055607cd8fd1c12803365305a3855002baee73a420b6e52b3c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/commit.json": {
+      "bytes": 238,
+      "mode": 420,
+      "sha256": "92b641bf7eff5a6586ca1b8d5eb610fc57c2615c376c94f24537d79738529438"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/control-admission-ledger.jsonl": {
+      "bytes": 1012,
+      "mode": 420,
+      "sha256": "8363cf4f57e011b4a149377d66cc322fef34733e85b2febd59da088594f36a62"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/first-graded-access.py": {
+      "bytes": 50,
+      "mode": 420,
+      "sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/grader-attempts.jsonl": {
+      "bytes": 249,
+      "mode": 420,
+      "sha256": "224c0c1c805cec93cec8f21c81073579f62d08776de60850d74da55586429529"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/grader-command-result.json": {
+      "bytes": 69,
+      "mode": 420,
+      "sha256": "0ac76719241e935a4b86c6c0f842963b6e5103009ab4f10a7ecf9aa184a50119"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/grader-started.json": {
+      "bytes": 119,
+      "mode": 420,
+      "sha256": "66f052fa5da712852486e461a3b16e79b5f272ce47fd180b6f95b33516ea3dcf"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/preedit-logits.bin": {
+      "bytes": 517136,
+      "mode": 420,
+      "sha256": "fe3f6b1b330f9348aff37d280c89aca6b08231e1de34927b90f664a5d26f870e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/rounds.jsonl": {
+      "bytes": 1507,
+      "mode": 420,
+      "sha256": "6085f78f64f067ff1f754ed1e724a2eb5b011ca461a5a6c6c1b9ac9bef520f04"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/selected-after.txt": {
+      "bytes": 14609,
+      "mode": 420,
+      "sha256": "559de0db33f7009aeb600b46c2a001ea8b48cbb7bee3cf099ecce50f2347062a"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/selected-before.txt": {
+      "bytes": 14653,
+      "mode": 420,
+      "sha256": "6a1c370c1510826d0717075038e5656bc0c1691597fcf813539d74f4314ee133"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/selected-edited.ids": {
+      "bytes": 13560,
+      "mode": 420,
+      "sha256": "1a390d275ce3b543271a50507a49b7e916342959741147dee43c9934ce0d78bb"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/selected-old.ids": {
+      "bytes": 13604,
+      "mode": 420,
+      "sha256": "4d62d1c892bf806d15abd1ece48083192bb6ae87b42d3a6f08b9107c05aeac7f"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/private/selection.json": {
+      "bytes": 453,
+      "mode": 420,
+      "sha256": "0526d4cd3da60e3fde4a0596b6590464e9a1dfe107beabb77e3855e1485838ea"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/shared-final/.owner.json": {
+      "bytes": 153,
+      "mode": 420,
+      "sha256": "8a07a476e0fd2d4b40b8eed00b5c8f7a3ac13af1489af290bffef076667d749e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/shared-final/live-context.txt": {
+      "bytes": 15751,
+      "mode": 420,
+      "sha256": "cade13f041fa79197de609ea3201d2d45180d99de1199db72af7a423c80e3916"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/shared-final/project/access.py": {
+      "bytes": 50,
+      "mode": 420,
+      "sha256": "cd518508ffa83d266e1b13562225d5c3e767cc95c25df5b4f84e0547e9d9dd26"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/shared-final/project/run_grader.py": {
+      "bytes": 1732,
+      "mode": 493,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/shared-snapshot.json": {
+      "bytes": 1306,
+      "mode": 420,
+      "sha256": "2a9761b93d8e224e4bf3387dba3e7ef39880052715f46faaedadf72167850064"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/stdout.log": {
+      "bytes": 1868,
+      "mode": 420,
+      "sha256": "ec5e4561cc89f9be01fea4f5b0d2ce16405d4d978050eab7a65d9aa8072da411"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/trace.log": {
+      "bytes": 277560,
+      "mode": 420,
+      "sha256": "a0bc4364521ba3c8a37d0b0d65c81553439fa1d46fc3a8a53486feecec338b29"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/traceback.txt": {
+      "bytes": 1614,
+      "mode": 420,
+      "sha256": "48887c17015dbcdf0567b64d04248a58ced2e6794ae2f90cc5aeb09c373747e2"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/turn-1-check.json": {
+      "bytes": 59,
+      "mode": 420,
+      "sha256": "425e8b71cafbb57823eae0fe0abb2b8fed02e5d289901f16b03fe2dd7ad4499d"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run/turn-2-check.json": {
+      "bytes": 55,
+      "mode": 420,
+      "sha256": "04d7d64a2a50d2a9c5548c5e51c53dc1b03b6193de6fc10cb5e225ae990fed5c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run_agent_suffix_pair_external.py": {
+      "bytes": 45121,
+      "mode": 420,
+      "sha256": "2b72efaa8ab4a81d22769ad04a02316defc234e977a40be4fb19dbeb31443153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/run_grader.py": {
+      "bytes": 1732,
+      "mode": 420,
+      "sha256": "c1450e18f603d47991c59f68bdc97d74b986e5ef96367335fcc62901abbfc354"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/second.txt": {
+      "bytes": 2681,
+      "mode": 420,
+      "sha256": "09197d7da3e86c193ba70c16d4574e4fb35cfc3e4140f93d438502608da50153"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/source-provenance.json": {
+      "bytes": 4096,
+      "mode": 420,
+      "sha256": "64b29971d6a0bc466927bb72fe5f4bc35d5b582e88a336527a37d014d4d9399e"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/task.json": {
+      "bytes": 24752,
+      "mode": 420,
+      "sha256": "4180e90ad05f71df5b0e6afc0b8183609b1b0bca6d3cd8c1a1f6798a5b3ba96c"
+    },
+    "speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-paired-A-B-20261003-v1/reuse/third.txt": {
+      "bytes": 1906,
+      "mode": 420,
+      "sha256": "acb5e79e7d5991099be0788b252b09d0ee6c147e02266f69e1ec5848486f149f"
+    },
+    "speed-bench/ideas/artifacts/suffix-external-paired-archive-execution-v1/README.md": {
+      "bytes": 1525,
+      "mode": 420,
+      "sha256": "9c101d329d1665bcd7d7461a230098bbe07f6a349c6a82e83ec6083f4fd52989"
+    },
+    "speed-bench/ideas/artifacts/suffix-external-paired-archive-execution-v1/execution-proof.json": {
+      "bytes": 1169,
+      "mode": 420,
+      "sha256": "1d707e22a95afa2fe1544f371092cf1e8f6833ac694c8feea363fb89ae29d003"
+    },
+    "speed-bench/ideas/artifacts/suffix-external-paired-archive-execution-v1/independent-verification.json": {
+      "bytes": 6876,
+      "mode": 420,
+      "sha256": "78aa1eede1b5716d291460774c5673e59fb02b7930af06d2f8875ca71635d22d"
+    },
+    "speed-bench/ideas/artifacts/suffix-external-paired-archive-execution-v1/root-grant.json": {
+      "bytes": 1858,
+      "mode": 420,
+      "sha256": "88fbb19f600d1187ae3294bd6d5ff473997b4d97face8e7e8086085525e7f22f"
+    },
+    "speed-bench/ideas/artifacts/suffix-external-paired-archive-execution-v1/stderr.log": {
+      "bytes": 0,
+      "mode": 420,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "speed-bench/ideas/artifacts/suffix-external-paired-archive-execution-v1/stdout.log": {
+      "bytes": 340,
+      "mode": 420,
+      "sha256": "1b3d927dbdfd7bd20a54520dcf65287a17bf8b0ae0c7fc1a92103c3f0bfab26f"
+    }
+  },
+  "protected_original_references": {
+    "reuse/agent": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/agent",
+      "bytes": 3087832,
+      "mode": 493,
+      "sha256": "06f7d1af350e1bc86739b113e0f659153df6879e11473108fb42e3b9726077fc",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "reuse/provenance/source/ds4.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/provenance/source/ds4.c",
+      "bytes": 3926808,
+      "mode": 420,
+      "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "reuse/provenance/source/ds4_metal.m": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/provenance/source/ds4_metal.m",
+      "bytes": 2360348,
+      "mode": 420,
+      "sha256": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "reuse/run/cache/sysprompt.kv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/cache/sysprompt.kv",
+      "bytes": 23898279,
+      "mode": 384,
+      "sha256": "0aef55f8fccd9af79398512979a52668a0eb827158df401edced3062b9e3072b",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "reuse/run/private/preedit-state.bin": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/reuse/run/private/preedit-state.bin",
+      "bytes": 30138084,
+      "mode": 420,
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "native/agent": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/agent",
+      "bytes": 3087832,
+      "mode": 493,
+      "sha256": "06f7d1af350e1bc86739b113e0f659153df6879e11473108fb42e3b9726077fc",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "native/provenance/source/ds4.c": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/provenance/source/ds4.c",
+      "bytes": 3926808,
+      "mode": 420,
+      "sha256": "5603e9b23ba8460ead1b43cc8628ddec80f9110f47f4e3207fea5b7b0c675e05",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "native/provenance/source/ds4_metal.m": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/provenance/source/ds4_metal.m",
+      "bytes": 2360348,
+      "mode": 420,
+      "sha256": "8da833afdc53b035de80ab1e1519bf2f4fa3060ed1bf61940bee0d76a51796fb",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "native/reference/preedit-state.bin": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/reference/preedit-state.bin",
+      "bytes": 30138084,
+      "mode": 420,
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "native/run/cache/sysprompt.kv": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/run/cache/sysprompt.kv",
+      "bytes": 23898279,
+      "mode": 384,
+      "sha256": "29fb3da3663648de4b446c223eba0d45b62256f038ab6a8d071eb3bf4e50dbe6",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "native/run/private/preedit-state.bin": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-paired-20261003-v1/native/run/private/preedit-state.bin",
+      "bytes": 30138084,
+      "mode": 420,
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "prior-A-structural-archive/reference/preedit-state.bin": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/experiments/ds41-ssd/agent-suffix-pair-external-evidence/first-A-structural-shared-archive-20261003-v1/reference/preedit-state.bin",
+      "bytes": 30138084,
+      "mode": 420,
+      "sha256": "f283a34b05577da55912ab1b1136323e6f1698b1d5fe6596388177b00f5cca9f",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    },
+    "qualified-caller-build/ds4-agent-pair-external": {
+      "path": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair-external/speed-bench/ideas/artifacts/agent-suffix-pair-external-caller-build-v1/ds4-agent-pair-external",
+      "bytes": 3087832,
+      "mode": 493,
+      "sha256": "06f7d1af350e1bc86739b113e0f659153df6879e11473108fb42e3b9726077fc",
+      "reason": "retained original exceeds fixed compact-copy threshold"
+    }
+  },
+  "exclude_only_this_actual_top_publication_index": true,
+  "originals_unchanged": true,
+  "model_helper_guard_grader_compiler_execution": false
+}

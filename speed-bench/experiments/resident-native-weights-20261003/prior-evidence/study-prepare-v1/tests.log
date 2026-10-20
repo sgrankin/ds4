@@ -1,0 +1,21 @@
+test_cache_selected_regime (test_resident_native_weights_study.Records.test_cache_selected_regime) ... ok
+test_canonical_state_snapshot_and_sentinels (test_resident_native_weights_study.Records.test_canonical_state_snapshot_and_sentinels) ... ok
+test_csv_coverage_order_types_finite (test_resident_native_weights_study.Records.test_csv_coverage_order_types_finite) ... ok
+test_csv_duplicate_header_and_extra_column (test_resident_native_weights_study.Records.test_csv_duplicate_header_and_extra_column) ... ok
+test_exact_io_schema_and_balance (test_resident_native_weights_study.Records.test_exact_io_schema_and_balance) ... ok
+test_exact_parent_suffix_framework_and_lock (test_resident_native_weights_study.Records.test_exact_parent_suffix_framework_and_lock) ... ok
+test_fixed_order_and_policy_before_apply (test_resident_native_weights_study.Records.test_fixed_order_and_policy_before_apply) ... ok
+test_full_raw_finite_and_signed_subnormals (test_resident_native_weights_study.Records.test_full_raw_finite_and_signed_subnormals) ... ok
+test_guard_refuses_before_any_model_stat (test_resident_native_weights_study.Records.test_guard_refuses_before_any_model_stat) ... ok
+test_manifest_authority_and_exact_order (test_resident_native_weights_study.Records.test_manifest_authority_and_exact_order) ... ok
+test_original_case_hash_mapping (test_resident_native_weights_study.Records.test_original_case_hash_mapping) ... ok
+test_quality_csv_and_arithmetic (test_resident_native_weights_study.Records.test_quality_csv_and_arithmetic) ... ok
+test_quality_json_typed_schema_duplicate_aggregate (test_resident_native_weights_study.Records.test_quality_json_typed_schema_duplicate_aggregate) ... ok
+test_raw_truncation_header_metadata_extent (test_resident_native_weights_study.Records.test_raw_truncation_header_metadata_extent) ... ok
+test_state_csv_typed_phases_schema (test_resident_native_weights_study.Records.test_state_csv_typed_phases_schema) ... ok
+test_state_header_history_truncation_nonfinite (test_resident_native_weights_study.Records.test_state_header_history_truncation_nonfinite) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.091s
+
+OK

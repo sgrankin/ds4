@@ -1,0 +1,146 @@
+[
+  {
+    "case": "helpful-history",
+    "gold": 456,
+    "answer": null,
+    "text": "Net units: 18 × 26 − 9 = 468 − 9 = 459.\n\nPolicy: round_net_down with rounding_multiple ",
+    "correct": false,
+    "complete": false,
+    "required_file": "/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/helpful-history/policy.json",
+    "actual_read_count": 1,
+    "calls": [
+      {
+        "name": "read",
+        "call_id": "call_41ca77bb6b04c12dceb8d449204e6d07",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/helpful-history/policy.json\",\"whole\":true,\"raw\":true}",
+        "read": true,
+        "error": null,
+        "path": "/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/helpful-history/policy.json",
+        "text": "{\"policy\":\"round_net_down\",\"formula\":\"batches * units_per_batch - reserved_units\",\"rounding_multiple\":8,\"status\":\"current\"}\n",
+        "read_ms": 0.2987500047311187
+      }
+    ],
+    "replies": [
+      {
+        "seconds": 21.110074417010765,
+        "http_status": 200,
+        "max_output_tokens": 128,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 360,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 360
+          },
+          "output_tokens": 108,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 468
+        },
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "seconds": 3.5312232909927843,
+        "http_status": 200,
+        "max_output_tokens": 32,
+        "response_status": "incomplete",
+        "usage": {
+          "input_tokens": 513,
+          "input_tokens_details": {
+            "cached_tokens": 468,
+            "cache_write_tokens": 45
+          },
+          "output_tokens": 32,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 545
+        },
+        "incomplete_details": {
+          "reason": "max_output_tokens"
+        },
+        "stop_token_observed": null
+      }
+    ],
+    "seconds": 24.642509917001007,
+    "errors": [],
+    "source_warmup": false,
+    "context": "fresh question plus actual policy tool result",
+    "scope": "Retrieval correctness; independent of core fresh/reuse contexts and timings.",
+    "pass": false
+  },
+  {
+    "case": "obsolete-history",
+    "gold": 450,
+    "answer": null,
+    "text": "Net units = 18 × 26 − 9 = 468 − 9 = 459. Rounding policy: round_net_down with multiple ",
+    "correct": false,
+    "complete": false,
+    "required_file": "/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/obsolete-history/policy.json",
+    "actual_read_count": 1,
+    "calls": [
+      {
+        "name": "read",
+        "call_id": "call_f04c51fcc292eca41cc4a47684ec9549",
+        "arguments": "{\"path\":\"/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/obsolete-history/policy.json\",\"whole\":true,\"raw\":true}",
+        "read": true,
+        "error": null,
+        "path": "/Volumes/Models/ds4/speed-bench/experiments/suffix-history-hour15-20261004/fixtures/obsolete-history/policy.json",
+        "text": "{\"policy\":\"round_net_down\",\"formula\":\"batches * units_per_batch - reserved_units\",\"rounding_multiple\":10,\"status\":\"current\"}\n",
+        "read_ms": 0.21100000594742596
+      }
+    ],
+    "replies": [
+      {
+        "seconds": 21.363112040999113,
+        "http_status": 200,
+        "max_output_tokens": 128,
+        "response_status": "completed",
+        "usage": {
+          "input_tokens": 360,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 360
+          },
+          "output_tokens": 108,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 468
+        },
+        "incomplete_details": null,
+        "stop_token_observed": null
+      },
+      {
+        "seconds": 3.680217040993739,
+        "http_status": 200,
+        "max_output_tokens": 32,
+        "response_status": "incomplete",
+        "usage": {
+          "input_tokens": 513,
+          "input_tokens_details": {
+            "cached_tokens": 468,
+            "cache_write_tokens": 45
+          },
+          "output_tokens": 32,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 545
+        },
+        "incomplete_details": {
+          "reason": "max_output_tokens"
+        },
+        "stop_token_observed": null
+      }
+    ],
+    "seconds": 25.044335833008518,
+    "errors": [],
+    "source_warmup": false,
+    "context": "fresh question plus actual policy tool result",
+    "scope": "Retrieval correctness; independent of core fresh/reuse contexts and timings.",
+    "pass": false
+  }
+]

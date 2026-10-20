@@ -1,0 +1,4 @@
+speed-bench/agent_suffix_pair_native_fixture.c:236:60: warning: variable 'identity' is uninitialized when passed as a const pointer argument here [-Wuninitialized-const-pointer]
+  236 |         allocation_n=0;int identity;ok=ok&&allocation_add(&identity,17)&&allocation_add(&identity,17)&&allocation_sum()==17&&!allocation_add(&identity,18);if(!ok)return 1;
+      |                                                            ^~~~~~~~
+1 warning generated.

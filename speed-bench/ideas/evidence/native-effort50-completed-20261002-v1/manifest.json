@@ -1,0 +1,183 @@
+{
+  "status": "ARCHIVED_COMPLETE_RC3_INVALID_PRESENT",
+  "files": {
+    "producer-output/circular10-lambda0.0.tokens.jsonl": {
+      "sha256": "5b3c75570137e5bcbd3b801eabd16c685a7a47cac1729e47e70889555a0e1e49",
+      "bytes": 44956
+    },
+    "producer-output/circular10-lambda0.0.txt": {
+      "sha256": "cc3899a5c74eea039731856cbea2f66965a2642a4e076c9802afdb06dd58ae53",
+      "bytes": 707
+    },
+    "producer-output/lattice8x6-lambda0.0.tokens.jsonl": {
+      "sha256": "e9d83d73e6d7b35bed022c00d78eaf4a9d88721b802d993032cd5d80adba2489",
+      "bytes": 478994
+    },
+    "producer-output/lattice8x6-lambda0.0.txt": {
+      "sha256": "0c2806756da4ef5f7a691f220e0446d102e68f6f01ba5f7fca58b511a9b8262c",
+      "bytes": 6817
+    },
+    "producer-output/marker-map.json": {
+      "sha256": "3f931e0f8494346caec8b7d6262919133ec44068fad86cca9ced158ca14c6d67",
+      "bytes": 246
+    },
+    "producer-output/restricted_derangements8-lambda0.0.tokens.jsonl": {
+      "sha256": "2f71cf2053d4724d8ebef152229c557977d1f1cf4ff5bcf44c37d16933fde3b3",
+      "bytes": 477358
+    },
+    "producer-output/restricted_derangements8-lambda0.0.txt": {
+      "sha256": "ea0c05a24ca0c5e8face256b053ff2f63943fa11c686a1925839722ac0799ed9",
+      "bytes": 6109
+    },
+    "producer-output/results.jsonl": {
+      "sha256": "90a1d08b9a351f16e8c4b63f8e6e5254ca2647357b29648b24e340b41c5afa9a",
+      "bytes": 5424
+    },
+    "producer-output/root-release-proof.json": {
+      "sha256": "b149b3275f3e4cea51655fbc96d88b4ae4c22d7aca2158708b05e1388018237b",
+      "bytes": 255
+    },
+    "producer-output/subset_mod7-lambda0.0.tokens.jsonl": {
+      "sha256": "4af57089530ac8f3db5df26afde96907d0c9948004d41aeb2f7dddf5cfcb8e23",
+      "bytes": 476840
+    },
+    "producer-output/subset_mod7-lambda0.0.txt": {
+      "sha256": "7b07492ba9e72b5a7841a8b64bb9c0fa6df632d37282b11ebd404bcac87553ae",
+      "bytes": 5900
+    },
+    "guard/command.json": {
+      "sha256": "fe520cfdf00f22677252f9e56518750d49c7b962be15ed05882b6a026e98fdcf",
+      "bytes": 772
+    },
+    "guard/pressure.jsonl": {
+      "sha256": "e6b3811c602b3f20f58ccdcf32ddffa44bfcb180362d2b3a97eb13b936a33947",
+      "bytes": 78453
+    },
+    "guard/result.json": {
+      "sha256": "b930e7a8282c48851750f8438ef0243df5697004738bb1efd66bc0da0d490c85",
+      "bytes": 52
+    },
+    "analysis/checked-summary.json": {
+      "sha256": "2eba56b1f26b823a145c83359c801699ce15de682b149b278c19e5dc9bd49ff5",
+      "bytes": 10173
+    },
+    "analysis/analysis-run.json": {
+      "sha256": "60f43c5164397e43bd14b4f8f727351665d32e687c125a6719ca78ff48a7e3a2",
+      "bytes": 606
+    },
+    "analysis/analysis.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "frozen-producer-manifest.json": {
+      "sha256": "0fa9d14061a5146051f8de1be7bed62729afe9875d9df989d086c5f9cc9772c4",
+      "bytes": 3991
+    },
+    "frozen-generation-queue.json": {
+      "sha256": "2af91c43a8c701cdcec392ef9041607cbf068180ea32528521b9afc01cc495b6",
+      "bytes": 16433
+    },
+    "native50-98-file-preflight.json": {
+      "sha256": "96dc4466ecb70c3699a0b0d4b3d3f3abc4fe6b37e8e370820a2ae5d7342ec9f2",
+      "bytes": 21495
+    },
+    "launcher-frozen-manifest.json": {
+      "sha256": "b4f1dec87b03e29ff8f01f65ba40805e0c69047e1310d5399825fcd3c8bd523c",
+      "bytes": 4396
+    },
+    "source/run_overthink_queue.py": {
+      "sha256": "98204b286e48ab100c6f5cfa1fa4565530f7a74f32ae5931fe351c230262640d",
+      "bytes": 9694
+    },
+    "source/summarize_overthink_checked.py": {
+      "sha256": "7830f64402b9972bac164b06dde1e3a6aa4a251cae3187fc29086c0cc9cefcf5",
+      "bytes": 17458
+    },
+    "source/pressure_run.py": {
+      "sha256": "461e8c517e82a687b4579fc450c1e7128b1510192d088bab719682b33c946c3c",
+      "bytes": 9066
+    },
+    "source/speed-bench/overthink_pilot.c": {
+      "sha256": "e4c7463b9ab7798ceab39ceada06c870060e3be22111a162f92bed69a07bc0da",
+      "bytes": 32639
+    },
+    "source/speed-bench/prepare_overthink_run.py": {
+      "sha256": "7a9c99ec743eafcbef452e4a5062536814370bcd65406fa6351dfd9f06420536",
+      "bytes": 8219
+    },
+    "source/speed-bench/overthink_diagnostics.h": {
+      "sha256": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e",
+      "bytes": 2104
+    },
+    "source/speed-bench/overthink_counting_cases.h": {
+      "sha256": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173",
+      "bytes": 1295
+    },
+    "source/speed-bench/overthink_counting_gold.py": {
+      "sha256": "9787d185cb5166e50cb54a94da0593214ba3e78d0d5967786b70336b343ac1fc",
+      "bytes": 3196
+    },
+    "source/speed-bench/overthink_gold.py": {
+      "sha256": "7b10aa3f7f3fd16fde421bb28565bdcc45844b908f02f7f88c15c9f05b235057",
+      "bytes": 1961
+    },
+    "source/ds4_overthink_markers.h": {
+      "sha256": "0e869906f35c80e49d5363cadf25306c97f044c5c0d44ab473b8c51a55d9c863",
+      "bytes": 1517
+    },
+    "cases-v1.json": {
+      "sha256": "0e4b4eff5154cf199984829019e03678686deef50e6abb5fff02eeeff854b5e1",
+      "bytes": 2464
+    },
+    "existing-core-object-proof.json": {
+      "sha256": "1b52970c2928122f79591befd59545b82aa314de461793384836b8bb448a3fe9",
+      "bytes": 1197
+    },
+    "source/archive_native_effort50.py": {
+      "sha256": "c8e365139cd6a0f3b6363db352b90faaacaba9e24058f4e27dd3c65c0c636523",
+      "bytes": 13548
+    },
+    "record-options-and-completion.json": {
+      "sha256": "b917da05a5f141d9a21c2c68842084ddb0488b716e913f53e9dc75287634df77",
+      "bytes": 4504
+    },
+    "descriptive-native-effort-comparison.json": {
+      "sha256": "a6a300bd05383d839451a85d36be2d575f35d152eec0515be4840fcff7e3ce97",
+      "bytes": 1538
+    },
+    "result.json": {
+      "sha256": "74be13ec50202e05b6c88914a554a1cbb62823bc013cb048a1b1202cb1698552",
+      "bytes": 1991
+    },
+    "README.md": {
+      "sha256": "6e79731cdcb10abe2f3ba7de793f0fffb485d2c9499ac643e2d2e5b7cad25e16",
+      "bytes": 2142
+    },
+    "original-file-inventory.json": {
+      "sha256": "1a43ad3aa175ee183d75a257e356e1b52872c329380edf6d6c15603b47b9e03e",
+      "bytes": 9842
+    }
+  },
+  "total_file_bytes_excluding_manifest": 1764352,
+  "originals_preserved": true,
+  "binary_identity": {
+    "path": "/Volumes/Models/ds4/.workspaces/idea-quant-effort/speed-bench/overthink_pilot",
+    "sha256": "f0596bf4fb3035871c4bd7b1393161b005377fca2bc0a6e28b868b852cd3f571",
+    "bytes": 2690144
+  },
+  "source_identity": {
+    "ds4.c": "efb1af06ab8f262b6aabf201da1aeb5052fcd2699b3c26e889d24fc39eead798",
+    "ds4.h": "5f569084ab718b358e3779b50cc0fafacfce1b698fcde4fd13bec4292ae8521b",
+    "ds4_overthink_markers.h": "0e869906f35c80e49d5363cadf25306c97f044c5c0d44ab473b8c51a55d9c863",
+    "Makefile": "be532f9a58b60a736e147120238e574bef0cdc06ec1e4bde2d986697d617a5d2",
+    "speed-bench/overthink_pilot.c": "e4c7463b9ab7798ceab39ceada06c870060e3be22111a162f92bed69a07bc0da",
+    "speed-bench/prepare_overthink_run.py": "7a9c99ec743eafcbef452e4a5062536814370bcd65406fa6351dfd9f06420536",
+    "speed-bench/overthink_diagnostics.h": "1a4c26f98423cebdbd2268cf354bdcb35b7f9cfe07d2632c58888c7735427a4e",
+    "speed-bench/overthink_gold.py": "7b10aa3f7f3fd16fde421bb28565bdcc45844b908f02f7f88c15c9f05b235057",
+    "speed-bench/overthink_counting_cases.h": "b78fdb2e2e95839962e165d0451bfa52f1f72eb5d455669c6dabe9f4e672b173",
+    "speed-bench/overthink_counting_gold.py": "9787d185cb5166e50cb54a94da0593214ba3e78d0d5967786b70336b343ac1fc",
+    "speed-bench/experiments/ds41-ssd/overthink-provenance/counting-study/cases-v1.json": "0e4b4eff5154cf199984829019e03678686deef50e6abb5fff02eeeff854b5e1"
+  },
+  "model_accessed": false,
+  "accepted_analysis_revision": "f27b7d5a942d4ea5e23849f9209e47ed4dc5a3a7"
+}

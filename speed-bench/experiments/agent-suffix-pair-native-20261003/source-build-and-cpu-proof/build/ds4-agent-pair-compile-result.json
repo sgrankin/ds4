@@ -1,0 +1,27 @@
+{
+  "label": "ds4-agent-pair-compile",
+  "returncode": 0,
+  "elapsed_seconds": 1.350290207999933,
+  "command": {
+    "label": "ds4-agent-pair-compile",
+    "argv": [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "-isysroot",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+      "-O3",
+      "-g",
+      "-mcpu=native",
+      "-Wall",
+      "-Wextra",
+      "-I.",
+      "-Wno-unused-function",
+      "-ffast-math",
+      "-std=c99",
+      "-c",
+      "ds4_agent.c",
+      "-o",
+      "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair/speed-bench/ideas/artifacts/agent-suffix-pair-native-callers-build-v1/ds4-agent-pair.o"
+    ],
+    "cwd": "/Volumes/Models/ds4/.workspaces/idea-agent-suffix-pair"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "identity_logit_bytes_equal": true,
+  "identity_graph_bytes_equal": true,
+  "canonical_export_blocked": true,
+  "prefix_tokens": 256, "edit_tokens": 32, "unchanged_tokens": 128,
+  "reused_tokens": 127, "fresh_tail_tokens": 1, "continuation_tokens": 4,
+  "copied_bytes": 11225088, "pending_pairs": 3,
+  "old_setup_ms": 20783.757000, "identity_reuse_ms": 41.904000,
+  "fresh_edit_ms": 3966.902000, "approx_edit_ms": 791.725000,
+  "mean_kl": 0.0395026499667, "mean_tv": 0.0471860532131, "sum_delta_nll": 1.96735783062,
+  "argmax_flips": 0, "bit_equal_rows": 0, "rows": 5
+}

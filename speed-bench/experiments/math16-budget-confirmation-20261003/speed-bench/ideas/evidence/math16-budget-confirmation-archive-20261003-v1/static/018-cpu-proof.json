@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/tests/test_reasoning_budget_confirmation_runner.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "source_revision": "24f38781",
+  "sources": {
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/run_reasoning_budget_confirmation.py": "08d0689008dd2e95e4bd505b2fb16ab839beef7b3c7891f12b1bd4ea9e860b98",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/analyze_reasoning_budget_confirmation.py": "55ec3271731b75ace8a466cec622eadb13c98cef4ed7df13088eef07634ee3b6",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/speed-bench/ideas/reasoning_budget_signed64.py": "73a2263294f2d2257fb3e3c20848c8aa5da99ebcccfc4ec4a6a80aff8bb92d5e",
+    "/Volumes/Models/ds4/.workspaces/idea-reasoning-budget-confirmation-runner/tests/test_reasoning_budget_confirmation_runner.py": "771c9a149ac8e890afe916fd9924d9b0b90b44a22b22054d7b6521f4d04f28cd"
+  },
+  "log_sha256": "91e93fdd6d6f0d72b50d08b40becb40a1f414a61e259dbeab073b3aeb954d8ca",
+  "model_or_metadata_opened": false,
+  "real_helper_or_guard_executed": false,
+  "native_build_executed": false,
+  "CPU_fake_subprocesses_only": true
+}

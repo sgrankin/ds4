@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/pressure",
+    "--",
+    "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2/run_resident_confirmation.py",
+    "--run",
+    "/Volumes/Models/ds4/.workspaces/idea-resident-three-confirmation-fixed/speed-bench/ideas/artifacts/resident-three-confirmation-prepared-20261002-v2",
+    "--manifest-sha256",
+    "b80ecd4abdee67976e4b3824892ff34514a7214fa58687dd3746e692e4657df9"
+  ],
+  "manifest_sha256": "b80ecd4abdee67976e4b3824892ff34514a7214fa58687dd3746e692e4657df9",
+  "launch_requires_root_grant": true
+}
