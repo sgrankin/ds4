@@ -12,6 +12,8 @@ DS41_REPO="antirez/deepseek-v4.1-flash-gguf"
 DS41_Q2_FILE="DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf"
 DS41_Q4_FILE="DeepSeek-V4.1-Flash-Q4.gguf"
 DS41_VISION_FILE="DeepSeek-V4.1-Flash-Vision.gguf"
+DS41_1017_VISION_REPO="kyuz0/deepseek-v4.1-flash-gguf"
+DS41_1017_VISION_FILE="DeepSeek-V4.1-Flash-1017-vision-BF16.gguf"
 DS4F_Q2_FILE="DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf"
 DS4F_Q4_FILE="DeepSeek-V4-Flash-Q4KExperts-F16HC-F16Compressor-F16Indexer-Q8Attn-Q8Shared-Q8Out-chat-v2-imatrix-0731.gguf"
 DS4F_MXFP4_FILE="DeepSeek-V4-Flash-MXFP4Experts-F16HC-F16Compressor-F16Indexer-Q8Attn-Q8Shared-Q8Out-chat-v2-mxfp4-0731.gguf"
@@ -66,6 +68,7 @@ Usage:
   ./download_model.sh ds41f-q2 [--token TOKEN]
   ./download_model.sh ds41f-q4 [--token TOKEN]
   ./download_model.sh ds41f-vision [--token TOKEN]
+  ./download_model.sh ds41f-1017-vision [--token TOKEN]
   ./download_model.sh pro-q2-imatrix [--token TOKEN]
   ./download_model.sh pro-q4-layers00-30 [--token TOKEN]
   ./download_model.sh pro-q4-layers31-output [--token TOKEN]
@@ -129,13 +132,19 @@ Targets:
        about 5.6 GiB. It is not compatible with the 0731 language checkpoint.
 
   ds41f-q2
-       DeepSeek V4.1 Flash calibrated Q2, about 341 GiB on disk. Main weights
+       DeepSeek V4.1 Flash 1017 calibrated Q2, about 341 GiB on disk. Main weights
        occupy 152 GiB; Engram tables stay on disk. Metal only: use SSD streaming
        on one 128 GB Mac, tensor parallelism on two, or a larger resident Mac.
 
   ds41f-vision
-       Matching V4.1 Flash vision encoder, about 0.9 GiB. Add --vision FILE
-       to the language-model command. Does not update ./ds4flash.gguf.
+       September V4.1 Flash vision encoder, about 0.9 GiB, matching ds41f-q4.
+       For the current 1017 Q2, use ds41f-1017-vision instead.
+       Does not update ./ds4flash.gguf.
+
+  ds41f-1017-vision
+       Matching 1017 BF16 vision encoder from kyuz0, about 0.9 GiB.
+       Add --vision FILE to the language-model command. Does not update
+       ./ds4flash.gguf.
 
   ds41f-q4
        DeepSeek V4.1 Flash calibrated Q4, about 483 GiB on disk. Main weights
@@ -302,6 +311,12 @@ case "$MODEL" in
         FORCE_HF_DOWNLOAD=1
         LINK_MODEL=0
         ;;
+    ds41f-1017-vision)
+        REPO=$DS41_1017_VISION_REPO
+        MODEL_FILE=$DS41_1017_VISION_FILE
+        FORCE_HF_DOWNLOAD=1
+        LINK_MODEL=0
+        ;;
     pro-q2-imatrix) MODEL_FILE=$PRO_Q2_IMATRIX_FILE ;;
     pro-q4-layers00-30) MODEL_FILE=$PRO_Q4_LAYERS00_30_FILE; LINK_MODEL=0 ;;
     pro-q4-layers31-output) MODEL_FILE=$PRO_Q4_LAYERS31_OUTPUT_FILE; LINK_MODEL=0 ;;
@@ -459,7 +474,7 @@ artifact_identity() {
             ;;
         "$DS41_Q2_FILE")
             expected_bytes=365713686528
-            expected_sha=1ce6a8f8806205c13330d7ca287bd198331dc5ca35ccc5d8a9a92a188a6f6f42
+            expected_sha=5296e85ff64b42ecb62c8d0c0c54e1caa07e3df8e93112f2365ebbaed62ce93a
             ;;
         "$DS41_Q4_FILE")
             expected_bytes=518596067328
@@ -476,6 +491,10 @@ artifact_identity() {
         "$DS41_VISION_FILE")
             expected_bytes=970555552
             expected_sha=cc283f032b3e8b8d78aeb5fccaa14e97b859b0c53aae3cd6bffa690ddf0e9e15
+            ;;
+        "$DS41_1017_VISION_FILE")
+            expected_bytes=970555552
+            expected_sha=861f1097e8686111fa23dc4a6bf139fd0c4cc114db2f1b4090a267f7683c0dbf
             ;;
         *) return 1 ;;
     esac

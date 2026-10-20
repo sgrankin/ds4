@@ -141,6 +141,8 @@ speed-bench/ideas/artifacts/
 /speed-bench/overthink_pilot
 /tests/test_resident_route
 /tests/test_session_suffix_exports
+/tests/test_suffix_match
+/tests/test_state_cache
 /libds4_resident.dylib
 /speed-bench/state_cache_bench
 /speed-bench/experiments/**/ds4sc-*
