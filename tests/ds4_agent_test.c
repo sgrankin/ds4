@@ -1017,6 +1017,12 @@ int main(int argc, char **argv) {
     agent_config cfg = parse_options((int)(sizeof(options) / sizeof(options[0])), options);
     AGENT_TEST_ASSERT(cfg.engine.vision_path && !strcmp(cfg.engine.vision_path, "mmproj.gguf"));
     AGENT_TEST_ASSERT(cfg.engine.model_path && !strcmp(cfg.engine.model_path, "qwen.gguf"));
+    char *context_options[] = {"ds4-agent", "--model", "ds4.gguf",
+                              "--live-context-file", "context.txt"};
+    agent_config context_cfg = parse_options(
+        (int)(sizeof(context_options) / sizeof(context_options[0])), context_options);
+    AGENT_TEST_ASSERT(context_cfg.gen.live_context_path &&
+                      !strcmp(context_cfg.gen.live_context_path, "context.txt"));
     ds4_agent_unit_tests_run();
     test_v41_tool_syntax();
     test_qwen_tool_syntax();

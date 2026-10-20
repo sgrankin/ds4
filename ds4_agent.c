@@ -4,6 +4,8 @@
 #include "ds4_gpu_args.h"
 #include "ds4_help.h"
 #include "ds4_kvstore.h"
+#include "ds4_state_cache_runtime.h"
+#include "ds4_suffix_match.h"
 #include "ds4_prompt_prefix.h"
 #include "ds4_tp.h"
 #include "ds4_web.h"
@@ -29,6 +31,7 @@
 #include <string.h>
 #include <strings.h>
 #include <sys/ioctl.h>
+#include <sys/random.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
@@ -48,6 +51,29 @@ int linenoiseEditInsert(struct linenoiseState *l, const char *c, size_t clen);
 
 static int set_nonblock(int fd, bool on, int *old_flags);
 static bool agent_parse_bool_default(const char *s, bool def);
+static int agent_parse_int_default(const char *s, int def, int min, int max);
+static bool agent_context_suffix_requested(void) {
+    return agent_parse_bool_default(getenv("DS4_AGENT_CONTEXT_SUFFIX_REUSE"), false);
+}
+
+static bool agent_context_prerope_requested(void) {
+    return agent_context_suffix_requested() &&
+           agent_parse_bool_default(getenv("DS4_AGENT_CONTEXT_SUFFIX_PREROPE"), false);
+}
+
+static bool agent_context_suffix_right_requested(void) {
+    return agent_context_prerope_requested() &&
+           agent_parse_bool_default(getenv("DS4_AGENT_CONTEXT_SUFFIX_RIGHT"), false);
+}
+
+static bool agent_context_suffix_resident_conflict(void) {
+    if (agent_context_prerope_requested()) return false;
+    const char *s = getenv("DS4_METAL_V41_RESIDENT_ROUTE_GAP");
+    if (!s || !s[0]) return false;
+    char *end = NULL;
+    double gap = strtod(s, &end);
+    return !end || *end || !isfinite(gap) || gap != 0;
+}
 static int agent_read_file_bytes(const char *path, char **data, size_t *len,
                                  char *err, size_t errlen);
 static int agent_replace_file(const char *path, const char *data, size_t len,
@@ -70,6 +96,7 @@ typedef struct {
     const char *system;
     ds4_prompt_prefix prefix;
     const char *trace_path;
+    const char *live_context_path;
     bool raw_prompt;
     int n_predict;
     int ctx_size;
@@ -134,15 +161,39 @@ typedef struct {
 } agent_hints;
 
 typedef struct {
+    ds4_suffix_cache cache;
+    ds4_tokens prefix;
+    ds4_engine *engine;
+    int ctx;
+    char disk_key[41];
+    uint64_t disk_state_bytes, disk_prerope_bytes;
+    bool disk_approximate;
+} agent_context_frontier;
+
+typedef struct {
+    uint64_t id;
+    int start, end, role_token;
+} agent_live_context_turn;
+
+typedef struct {
     ds4_engine *engine;
     agent_config *cfg;
     ds4_session *session;
+    ds4_state_cache *state_cache;
+    char state_cache_profile[41];
+    uint64_t state_cache_staged_bytes;
     ds4_tokens transcript;
+    ds4_tokens live_context_snapshot;
+    agent_live_context_turn *live_context_turns;
+    size_t live_context_turn_count;
     ds4_vision_span *images;
     size_t image_count;
     size_t image_cap;
     char *cache_dir;
     char *sysprompt_path;
+    agent_context_frontier context_frontiers[4];
+    int context_frontier_count;
+    uint64_t context_frontier_bytes;
     char session_sha[41];
     char *session_title;
     uint64_t session_created_at;
@@ -406,6 +457,9 @@ static bool agent_preflight_edit_old(agent_worker *w, const agent_tool_call *cal
 static int agent_worker_sync_tokens(agent_worker *w, const ds4_tokens *tokens,
                                     bool publish_progress,
                                     char *err, size_t err_len);
+static bool agent_text_only_control_safe(agent_worker *w, const ds4_tokens *tokens,
+                                         const char *text, size_t text_len,
+                                         char *err, size_t err_len);
 static int agent_read_default_lines(agent_worker *w);
 static int agent_compact_reserve_tokens(agent_worker *w);
 
@@ -820,6 +874,12 @@ static agent_config parse_options(int argc, char **argv) {
             c.gen.system = need_arg(&i, argc, argv, arg);
         } else if (!strcmp(arg, "--trace")) {
             c.gen.trace_path = need_arg(&i, argc, argv, arg);
+        } else if (!strcmp(arg, "--live-context-file")) {
+            c.gen.live_context_path = need_arg(&i, argc, argv, arg);
+            if (!c.gen.live_context_path[0]) {
+                fprintf(stderr, "ds4-agent: --live-context-file requires a nonempty path\n");
+                exit(2);
+            }
         } else if (!strcmp(arg, "-m") || !strcmp(arg, "--model")) {
             c.engine.model_path = need_arg(&i, argc, argv, arg);
         } else if (!strcmp(arg, "--vision")) {
@@ -998,6 +1058,19 @@ static agent_config parse_options(int argc, char **argv) {
     if (c.gen.raw_prompt && c.gen.prefix.count != 0) {
         fprintf(stderr,
                 "ds4-agent: --prefix-file cannot be combined with --raw-prompt\n");
+        exit(2);
+    }
+    if (c.gen.live_context_path && (c.gen.raw_prompt || c.engine.vision_path)) {
+        fprintf(stderr,
+                "ds4-agent: --live-context-file requires text-only agent chat (no --raw-prompt or --vision)\n");
+        exit(2);
+    }
+    if (agent_context_suffix_requested() && !agent_context_prerope_requested() &&
+        (!c.gen.live_context_path || agent_context_suffix_resident_conflict())) {
+        fprintf(stderr,
+                "ds4-agent: legacy DS4_AGENT_CONTEXT_SUFFIX_REUSE requires --live-context-file "
+                "and resident routing disabled; enable DS4_AGENT_CONTEXT_SUFFIX_PREROPE=1 "
+                "for built-in compaction and resident routing\n");
         exit(2);
     }
     return c;
@@ -1579,6 +1652,19 @@ static void agent_worker_maybe_append_datetime_context(agent_worker *w) {
     if (w->datetime_context_injected) return;
 
     time_t now = time(NULL);
+    /* Reproducible non-interactive performance probes must route identical
+     * datetime tokens. This does not alter trace timestamps or session IDs. */
+    const char *fixed_time = getenv("DS4_AGENT_TEST_TIME");
+    if (w->cfg->non_interactive && fixed_time && fixed_time[0]) {
+        char *end = NULL;
+        errno = 0;
+        long long value = strtoll(fixed_time, &end, 10);
+        time_t candidate = (time_t)value;
+        struct tm candidate_tm;
+        if (!errno && end != fixed_time && !*end && value > 0 &&
+            (long long)candidate == value && localtime_r(&candidate, &candidate_tm))
+            now = candidate;
+    }
     struct tm tm;
     localtime_r(&now, &tm);
 
@@ -4697,6 +4783,8 @@ static bool agent_mkdir_p(const char *path) {
 }
 
 static char *agent_default_cache_dir(void) {
+    const char *override = getenv("DS4_AGENT_CACHE_DIR");
+    if (override && override[0]) return xstrdup(override);
     const char *home = getenv("HOME");
     if (!home || !home[0]) home = ".";
     agent_buf b = {0};
@@ -4955,6 +5043,10 @@ static bool agent_kv_load_path(agent_worker *w, const char *path,
         ds4_tokens rebuilt = {0};
         ds4_tokenize_rendered_chat(w->engine, text, &rebuilt);
         expected_tokens = (uint32_t)rebuilt.len;
+        /* A text-only save of private approximate state must reopen through
+         * fresh evaluation, even when its token text matches the live state. */
+        if (ds4_session_is_approximate(w->session))
+            ds4_session_invalidate(w->session);
         if (agent_worker_sync_tokens(w, &rebuilt, true, err, err_len) != 0) {
             ds4_session_invalidate(w->session);
             ok = false;
@@ -4998,6 +5090,11 @@ static bool agent_kv_load_path(agent_worker *w, const char *path,
 
 /* Save the current live KV under the rendered transcript identity.  The caller
  * decides the policy: fixed sysprompt path or SHA-named session path. */
+static bool agent_worker_text_only_session(agent_worker *w, const ds4_tokens *tokens) {
+    return tokens->len >= agent_worker_effective_ctx_size(w) ||
+           ds4_session_is_approximate(w->session);
+}
+
 static bool agent_kv_save_path(agent_worker *w, const char *path,
                                const ds4_tokens *tokens,
                                const char *reason,
@@ -5007,8 +5104,8 @@ static bool agent_kv_save_path(agent_worker *w, const char *path,
                                char *err, size_t err_len) {
     /* A full transcript cannot be synced: the backend needs generation room.
      * Named sessions can still use the existing text-only stripped format. */
-    const bool text_only = session_title != NULL &&
-        tokens->len >= agent_worker_effective_ctx_size(w);
+    const bool approximate = ds4_session_is_approximate(w->session);
+    const bool text_only = session_title != NULL && agent_worker_text_only_session(w, tokens);
     const ds4_tokens *live = ds4_session_tokens(w->session);
     if (!text_only && !agent_tokens_equal(live, tokens)) {
         snprintf(err, err_len, "live KV state does not match session transcript");
@@ -5029,6 +5126,11 @@ static bool agent_kv_save_path(agent_worker *w, const char *path,
     }
     if (text_len > UINT32_MAX) {
         snprintf(err, err_len, "rendered KV text key is too large");
+        free(text);
+        return false;
+    }
+    if (approximate && text_only &&
+        !agent_text_only_control_safe(w, tokens, text, text_len, err, err_len)) {
         free(text);
         return false;
     }
@@ -5132,6 +5234,48 @@ static void agent_worker_build_system_tokens(agent_worker *w, ds4_tokens *out) {
     agent_append_system_prompt(w->engine, out, w->cfg->gen.system,
                                w->cfg->edit_upto);
     ds4_prompt_prefix_append(w->engine, out, &w->cfg->gen.prefix);
+    if (w->cfg->gen.live_context_path) {
+        agent_buf b = {0};
+        agent_buf_puts(&b,
+            "Live context file: ");
+        agent_buf_puts(&b, w->cfg->gen.live_context_path);
+        agent_buf_puts(&b,
+            "\nThis file mirrors the conversation you ALREADY SEE, including reasoning, and is "
+            "refreshed before tools run. Do not read/cat the complete mirror or paste old text into "
+            "edit arguments: that copies it back into your context and can cause a cleanup loop. "
+            "Use bash/Python to locate and edit text inside the file without printing it. "
+            "If you need boundaries, print only turn headers or a small search/range result.\n"
+            "Turns have [[DS4_TURN a3c91e704b82d6f0 role=assistant]] headers with random, stable IDs. "
+            "Keep each ID with its turn when editing or moving it; file order determines "
+            "conversation order. New turns get fresh IDs. These labels are file "
+            "metadata, not conversation text. The raw chat delimiters inside each block must be "
+            "preserved for any turn you keep. Leave the initial protected system/tool/prefix section "
+            "unchanged; retain task requirements, useful evidence, and the latest user request.\n"
+            "Target specific older turn IDs once. Do not repeatedly search for every mention of a "
+            "topic: your cleanup request, commands, and search results can mention it too. Batch "
+            "related edits; after the edit receipt reports success, continue the task.\n"
+            "Recipe: delete complete obsolete turns (replace PATH_ABOVE and choose older IDs):\n"
+            "python3 - <<'PY'\n"
+            "from pathlib import Path\n"
+            "import re\n"
+            "p = Path(\"PATH_ABOVE\"); s = p.read_text()\n"
+            "parts = re.split(r\"(\\n\\[\\[DS4_TURN ([0-9a-f]{16}) role=\\w+\\]\\]\\n)\", s)\n"
+            "drop = {\"a3c91e704b82d6f0\"}; out = [parts[0]]\n"
+            "for i in range(1, len(parts), 3):\n"
+            "    if parts[i+1] not in drop: out += [parts[i], parts[i+2]]\n"
+            "p.write_text(''.join(out))\n"
+            "PY\n"
+            "Recipe: archive before deleting needed evidence. In the loop, for each dropped ID, "
+            "write parts[i+2] to a separate file under p.parent / 'context-archive' before omitting "
+            "the block. Later retrieve only the needed lines from that archive.\n"
+            "Recipe: shorten an old turn. Locate its block by ID; replace its content with a "
+            "specific summary while preserving its header and native chat delimiters. Do not "
+            "retype the removed content. Print nothing or only a small count, never the old/new "
+            "transcript. Accepted edits replace your context before tool results are appended.");
+        char *instruction = agent_buf_take(&b);
+        ds4_chat_append_message(w->engine, out, "system", instruction);
+        free(instruction);
+    }
 }
 
 static void agent_publish_system_status(agent_worker *w, const char *msg) {
@@ -5283,9 +5427,101 @@ static void worker_answer_queued_user_drain(agent_worker *w, char *text) {
  * cache-saving operation: if the requested transcript extends the live session,
  * only the suffix is prefetched; otherwise the DS4 session rebuilds from the
  * longest common prefix it can retain. */
+static bool agent_state_cache_allowed(agent_worker *w) {
+    return w->state_cache && !w->image_count &&
+           ds4_engine_is_deepseek41(w->engine) && !ds4_session_is_distributed(w->session);
+}
+
+static bool agent_state_cache_materialize(agent_worker *w, ds4_state_cache_ref *ref,
+                                         ds4_suffix_cache *out, char *err, size_t errlen) {
+    ds4_state_cache_blob blob = {0};
+    if (ds4_state_cache_materialize(ref, &blob, err, errlen)) return false;
+    if (blob.ctx_size != (uint32_t)agent_worker_effective_ctx_size(w)) {
+        ds4_state_cache_blob_free(&blob); return false;
+    }
+    *out = (ds4_suffix_cache){.state = {.ptr = blob.state, .len = blob.state_bytes,
+                                      .cap = blob.state_bytes},
+        .prerope = blob.prerope, .prerope_bytes = blob.prerope_bytes,
+        .engine = w->engine, .ctx_size = (int)blob.ctx_size,
+        .approximate = blob.approximate};
+    return true; /* Ownership moves into out. */
+}
+
+static bool agent_state_cache_put_source(agent_worker *w, const ds4_suffix_cache *source,
+                                         char key[41]) {
+    if (!agent_state_cache_allowed(w)) return false;
+    char err[160] = {0};
+    int rc = ds4_state_cache_put(w->state_cache, w->state_cache_profile,
+        source->state.ptr, source->state.len, source->prerope, source->prerope_bytes,
+        source->approximate, key, err, sizeof(err));
+    agent_trace(w, "state cache store %s tokens=%d approximate=%d%s%s",
+        rc ? "miss" : "ok", ds4_session_pos(w->session), source->approximate,
+        err[0] ? " error=" : "", err);
+    return rc == 0;
+}
+
+static void agent_state_cache_store_endpoint(agent_worker *w) {
+    if (!agent_state_cache_allowed(w) || worker_cancel_session_cb(w) ||
+        (ds4_session_is_approximate(w->session) && !agent_context_prerope_requested())) return;
+    uint64_t bytes = agent_context_prerope_requested()
+        ? ds4_session_suffix_cache_bytes(w->session) : ds4_session_payload_bytes(w->session);
+    uint64_t budget = (uint64_t)agent_parse_int_default(
+        getenv("DS4_AGENT_CONTEXT_FRONTIER_MB"), 128, 1, 1024) << 20;
+    uint64_t staged = bytes + 1u + (w->state_cache_staged_bytes ? 0u : (UINT64_C(8) << 20));
+    if (!bytes || staged > budget || w->state_cache_staged_bytes > budget - staged ||
+        w->context_frontier_bytes > budget - staged - w->state_cache_staged_bytes) {
+        agent_trace(w, "state cache endpoint skipped: staging budget tokens=%d", ds4_session_pos(w->session));
+        return;
+    }
+    ds4_suffix_cache source = {0}; char err[160] = {0}, key[41];
+    int rc = agent_context_prerope_requested()
+        ? ds4_session_capture_suffix_cache(w->session, &source, err, sizeof(err))
+        : ds4_session_save_snapshot(w->session, &source.state, err, sizeof(err));
+    if (!rc) (void)agent_state_cache_put_source(w, &source, key);
+    else agent_trace(w, "state cache capture failed error=%s", err);
+    ds4_suffix_cache_free(&source);
+}
+
+static bool agent_state_cache_restore_prefix(agent_worker *w, const ds4_tokens *tokens) {
+    if (!agent_state_cache_allowed(w) || ds4_session_is_approximate(w->session) ||
+        worker_cancel_session_cb(w)) return false;
+    int old = ds4_session_pos(w->session);
+    int common = ds4_session_common_prefix(w->session, tokens);
+    uint32_t have = common == old && tokens->len >= old ? (uint32_t)common : 0;
+    uint32_t matched = 0;
+    ds4_state_cache_ref *ref = ds4_state_cache_find_prefix(w->state_cache,
+        w->state_cache_profile, (uint32_t)agent_worker_effective_ctx_size(w),
+        tokens->v, (uint32_t)tokens->len, &matched);
+    if (!ref) return false;
+    ds4_suffix_cache source = {0}; char err[160] = {0}; bool ok = false;
+    uint64_t state_bytes, pre_bytes;
+    ds4_state_cache_ref_sizes(ref, &state_bytes, &pre_bytes);
+    uint64_t budget = (uint64_t)agent_parse_int_default(
+        getenv("DS4_AGENT_CONTEXT_FRONTIER_MB"), 128, 1, 1024) << 20;
+    uint64_t staged = state_bytes + pre_bytes +
+        (w->state_cache_staged_bytes ? 0u : (UINT64_C(8) << 20));
+    if (matched > have && staged <= budget && w->state_cache_staged_bytes <= budget - staged &&
+        w->context_frontier_bytes <= budget - staged - w->state_cache_staged_bytes &&
+        agent_state_cache_materialize(w, ref, &source, err, sizeof(err)) && !source.approximate) {
+        ds4_session_set_cancel(w->session, worker_cancel_session_cb, w);
+        ok = (agent_context_prerope_requested()
+            ? ds4_session_load_suffix_prefix(w->session, &source, err, sizeof(err))
+            : ds4_session_load_snapshot(w->session, &source.state, err, sizeof(err))) == 0;
+        ds4_session_set_cancel(w->session, NULL, NULL);
+        const ds4_tokens *live = ds4_session_tokens(w->session);
+        ok = ok && live && live->len == (int)matched &&
+             !memcmp(live->v, tokens->v, (size_t)matched * sizeof(int));
+        if (!ok) ds4_session_invalidate(w->session);
+        agent_trace(w, "state cache exact prefix %s tokens=%u%s%s", ok ? "hit" : "miss",
+                    matched, err[0] ? " error=" : "", err);
+    }
+    ds4_suffix_cache_free(&source); ds4_state_cache_release(ref); return ok;
+}
+
 static int agent_worker_sync_tokens(agent_worker *w, const ds4_tokens *tokens,
                                     bool publish_progress,
                                     char *err, size_t err_len) {
+    (void)agent_state_cache_restore_prefix(w, tokens);
     int old_pos = ds4_session_pos(w->session);
     int common = ds4_session_common_prefix(w->session, tokens);
     int cached = common == old_pos && tokens->len >= old_pos ? common : 0;
@@ -5336,7 +5572,1012 @@ static int agent_worker_sync_tokens(agent_worker *w, const ds4_tokens *tokens,
     ds4_session_set_display_progress(w->session, NULL, NULL);
     agent_trace(w, "prefill sync done prompt=%d cached=%d suffix=%d rc=%d %.3f ms",
                 tokens->len, cached, suffix, rc, (t_sync1 - t_sync0) * 1000.0);
+    if (rc == 0) agent_state_cache_store_endpoint(w);
     return rc;
+}
+
+/* Experimental exact-prefix restoration for compaction. Reuse the existing
+ * validated bootstrap payload instead of replaying the system/tool prefix.
+ * The suffix still runs normally; no stale states survive from the discarded
+ * conversation. Cold replay can choose different floating-point partitions,
+ * so this stays opt-in until task-level validation covers that difference. */
+static bool agent_worker_restore_compact_prefix(agent_worker *w,
+                                                const ds4_tokens *sys) {
+    if (!agent_parse_bool_default(getenv("DS4_AGENT_COMPACT_PREFIX_CACHE"), false) ||
+        !w->sysprompt_path || w->image_count ||
+        !ds4_engine_is_deepseek41(w->engine) ||
+        ds4_tp_enabled(&w->cfg->engine.tp) ||
+        ds4_session_is_distributed(w->session) ||
+        w->cfg->engine.directional_steering_file)
+        return false;
+    size_t text_len = 0;
+    char *text = ds4_kvstore_render_tokens_text(w->engine, sys, &text_len);
+    if (!text) return false;
+    char err[160] = {0};
+    double t0 = now_sec();
+    bool loaded = agent_kv_load_path(w, w->sysprompt_path, NULL,
+                                      text, text_len, NULL, NULL,
+                                      err, sizeof(err));
+    free(text);
+    if (loaded && !agent_tokens_equal(ds4_session_tokens(w->session), sys)) {
+        ds4_session_invalidate(w->session);
+        loaded = false;
+        snprintf(err, sizeof(err), "system payload tokens do not match prefix");
+    }
+    agent_trace(w, "compaction prefix cache %s tokens=%d %.3f ms%s%s",
+                loaded ? "hit" : "miss", sys->len, (now_sec() - t0) * 1000.0,
+                err[0] ? " error=" : "", err);
+    return loaded;
+}
+
+static void agent_context_frontier_drop(agent_worker *w, int i) {
+    agent_context_frontier *f = &w->context_frontiers[i];
+    w->context_frontier_bytes -= f->cache.state.cap + f->cache.prerope_bytes +
+        (uint64_t)f->prefix.cap * sizeof(f->prefix.v[0]);
+    ds4_suffix_cache_free(&f->cache);
+    ds4_tokens_free(&f->prefix);
+    memmove(f, f + 1, (size_t)(w->context_frontier_count - i - 1) * sizeof(*f));
+    w->context_frontier_count--;
+    memset(&w->context_frontiers[w->context_frontier_count], 0, sizeof(*f));
+}
+
+static void agent_context_frontiers_clear(agent_worker *w) {
+    while (w->context_frontier_count) agent_context_frontier_drop(w, 0);
+}
+
+static int agent_context_frontier_slots(agent_worker *w, uint64_t *budget) {
+    int slots = agent_parse_int_default(getenv("DS4_AGENT_CONTEXT_FRONTIERS"),
+                                         agent_context_suffix_requested() ? 2 : 0, 0, 4);
+    int mb = agent_parse_int_default(getenv("DS4_AGENT_CONTEXT_FRONTIER_MB"), 128, 1, 1024);
+    *budget = (uint64_t)mb << 20;
+    if (!slots || (!w->cfg->gen.live_context_path && !agent_context_prerope_requested()) || w->image_count ||
+        !ds4_engine_is_deepseek41(w->engine) ||
+        ds4_tp_enabled(&w->cfg->engine.tp) ||
+        ds4_session_is_distributed(w->session) ||
+        w->cfg->engine.directional_steering_file) {
+        agent_context_frontiers_clear(w);
+        return 0;
+    }
+    for (int i = 0; i < w->context_frontier_count;) {
+        if (w->context_frontiers[i].engine != w->engine ||
+            w->context_frontiers[i].ctx != agent_worker_effective_ctx_size(w))
+            agent_context_frontier_drop(w, i);
+        else i++;
+    }
+    while (w->context_frontier_count > slots || w->context_frontier_bytes > *budget)
+        agent_context_frontier_drop(w, 0);
+    return slots;
+}
+
+/* Save a fully evaluated prefix of the live transcript. With pre-RoPE
+ * originals, approximate checkpoints are private relocation sources only. The serialized
+ * byte count is known before allocation, including the snapshot's final NUL,
+ * so staged captures and retained entries both obey the configured RAM cap. */
+static bool agent_worker_capture_context_frontier(agent_worker *w) {
+    /* Only private pre-RoPE sources may capture approximate history. */
+    if (ds4_session_is_approximate(w->session) && !agent_context_prerope_requested()) return false;
+    uint64_t budget;
+    int slots = agent_context_frontier_slots(w, &budget);
+    if (!slots) { agent_state_cache_store_endpoint(w); return false; }
+    const ds4_tokens *live = ds4_session_tokens(w->session);
+    int pos = ds4_session_pos(w->session);
+    if (!live || live->len != pos || pos <= 0 ||
+        !ds4_tokens_starts_with(&w->transcript, live)) return false;
+    for (int i = 0; i < w->context_frontier_count; i++) {
+        if (!agent_tokens_equal(&w->context_frontiers[i].prefix, live)) continue;
+        if (!w->state_cache) return true;
+        agent_context_frontier_drop(w, i); break;
+    }
+    uint64_t payload = agent_context_prerope_requested()
+        ? ds4_session_suffix_cache_bytes(w->session)
+        : ds4_session_payload_bytes(w->session);
+    uint64_t bytes = payload + 1 + (uint64_t)pos * sizeof(live->v[0]);
+    uint64_t staged = bytes + (w->state_cache ? (UINT64_C(8) << 20) : 0u);
+    if (!payload || staged > budget) {
+        agent_trace(w, "context frontier skipped tokens=%d bytes=%llu budget=%llu",
+                    pos, (unsigned long long)bytes, (unsigned long long)budget);
+        return false;
+    }
+    while (w->context_frontier_count >= slots ||
+           w->context_frontier_bytes + staged > budget)
+        agent_context_frontier_drop(w, 0);
+    agent_context_frontier *f = &w->context_frontiers[w->context_frontier_count];
+    f->prefix.v = malloc((size_t)pos * sizeof(live->v[0]));
+    if (!f->prefix.v) return false;
+    memcpy(f->prefix.v, live->v, (size_t)pos * sizeof(live->v[0]));
+    f->prefix.len = f->prefix.cap = pos;
+    char err[160] = {0};
+    double t0 = now_sec();
+    int rc = agent_context_prerope_requested()
+        ? ds4_session_capture_suffix_cache(w->session, &f->cache, err, sizeof(err))
+        : ds4_session_save_snapshot(w->session, &f->cache.state, err, sizeof(err));
+    if (rc != 0) {
+        ds4_suffix_cache_free(&f->cache); ds4_tokens_free(&f->prefix);
+        agent_trace(w, "context frontier capture failed error=%s", err);
+        return false;
+    }
+    f->cache.engine = w->engine;
+    f->cache.ctx_size = agent_worker_effective_ctx_size(w);
+    f->engine = w->engine;
+    f->ctx = agent_worker_effective_ctx_size(w);
+    if (agent_state_cache_put_source(w, &f->cache, f->disk_key)) {
+        f->disk_state_bytes = f->cache.state.len;
+        f->disk_prerope_bytes = f->cache.prerope_bytes;
+        f->disk_approximate = f->cache.approximate;
+        ds4_suffix_cache_free(&f->cache);
+        bytes = (uint64_t)f->prefix.cap * sizeof(f->prefix.v[0]);
+    }
+    w->context_frontier_count++;
+    w->context_frontier_bytes += bytes;
+    agent_trace(w, "context frontier captured tokens=%d bytes=%llu retained=%d retained_bytes=%llu %.3f ms",
+                pos, (unsigned long long)bytes, w->context_frontier_count,
+                (unsigned long long)w->context_frontier_bytes, (now_sec() - t0) * 1000);
+    return true;
+}
+
+static bool agent_worker_restore_context_frontier(agent_worker *w,
+                                                  const ds4_tokens *edited) {
+    uint64_t budget;
+    if (!agent_context_frontier_slots(w, &budget)) return false;
+    for (;;) {
+        int best = -1;
+        for (int i = 0; i < w->context_frontier_count; i++) {
+            const agent_context_frontier *f = &w->context_frontiers[i];
+            if (!f->cache.approximate && !f->disk_approximate &&
+                f->engine == w->engine && f->ctx == agent_worker_effective_ctx_size(w) &&
+                ds4_tokens_starts_with(edited, &f->prefix) &&
+                (best < 0 || f->prefix.len > w->context_frontiers[best].prefix.len))
+                best = i;
+        }
+        if (best < 0) return false;
+        agent_context_frontier *f = &w->context_frontiers[best];
+        char err[160] = {0};
+        double t0 = now_sec();
+        ds4_suffix_cache disk_source = {0};
+        ds4_state_cache_ref *ref = f->disk_key[0] && w->state_cache
+            ? ds4_state_cache_get(w->state_cache, f->disk_key) : NULL;
+        const ds4_suffix_cache *source = &f->cache;
+        int rc = 1;
+        uint64_t staged = f->disk_state_bytes + f->disk_prerope_bytes +
+            (w->state_cache_staged_bytes ? 0u : (UINT64_C(8) << 20));
+        if (!f->disk_key[0] || (ref && staged <= budget &&
+            w->state_cache_staged_bytes <= budget - staged &&
+            w->context_frontier_bytes <= budget - staged - w->state_cache_staged_bytes &&
+            agent_state_cache_materialize(w, ref, &disk_source, err, sizeof(err)))) {
+            if (f->disk_key[0]) source = &disk_source;
+            if (!source->approximate)
+                rc = agent_context_prerope_requested()
+                    ? ds4_session_load_suffix_prefix(w->session, source, err, sizeof(err))
+                    : ds4_session_load_snapshot(w->session, &source->state, err, sizeof(err));
+        }
+        ds4_suffix_cache_free(&disk_source);
+        ds4_state_cache_release(ref);
+        bool ok = rc == 0 &&
+                  agent_tokens_equal(ds4_session_tokens(w->session), &f->prefix);
+        agent_trace(w, "context frontier restore %s tokens=%d %.3f ms%s%s",
+                    ok ? "hit" : "miss", f->prefix.len, (now_sec() - t0) * 1000,
+                    err[0] ? " error=" : "", err);
+        if (ok) return true;
+        ds4_session_invalidate(w->session);
+        agent_context_frontier_drop(w, best);
+    }
+}
+
+static void agent_live_context_clear(agent_worker *w) {
+    free(w->live_context_turns);
+    w->live_context_turns = NULL;
+    w->live_context_turn_count = 0;
+    ds4_tokens_free(&w->live_context_snapshot);
+}
+
+static void agent_live_context_set_turns(agent_worker *w,
+                                        agent_live_context_turn *turns,
+                                        size_t count) {
+    agent_live_context_clear(w);
+    w->live_context_turns = turns;
+    w->live_context_turn_count = count;
+    ds4_tokens_copy(&w->live_context_snapshot, &w->transcript);
+}
+
+/* Quote only lines that could be mistaken for display metadata. One extra
+ * backslash also makes an already quoted literal line reversible. */
+static char *agent_live_context_body_text(const char *text, size_t len,
+                                          bool quote) {
+    static const char marker[] = "[[DS4_TURN ";
+    agent_buf out = {0};
+    for (size_t at = 0; at < len;) {
+        size_t end = at;
+        while (end < len && text[end] != '\n') end++;
+        size_t p = at;
+        while (p < end && text[p] == '\\') p++;
+        bool reserved = end - p >= sizeof(marker) - 1 &&
+            !memcmp(text + p, marker, sizeof(marker) - 1);
+        if (quote && reserved) agent_buf_puts(&out, "\\");
+        size_t start = at + (!quote && reserved && p > at);
+        agent_buf_append(&out, text + start, end - start);
+        if (end < len) agent_buf_puts(&out, "\n");
+        at = end + (end < len);
+    }
+    return agent_buf_take(&out);
+}
+
+/* Display labels identify real role tokens, never literal role spellings in
+ * a message body. Retained complete turns keep IDs across edits/compaction;
+ * appending to the last open turn also keeps its ID. IDs live in this worker. */
+static char *agent_live_context_render(agent_worker *w, size_t *out_len) {
+    ds4_tokens sys = {0};
+    agent_worker_build_system_tokens(w, &sys);
+    if (!ds4_tokens_starts_with(&w->transcript, &sys)) {
+        ds4_tokens_free(&sys);
+        return NULL;
+    }
+    int user = ds4_token_user(w->engine), assistant = ds4_token_assistant(w->engine);
+    size_t count = 0;
+    for (int i = sys.len; i < w->transcript.len; i++)
+        if (w->transcript.v[i] == user || w->transcript.v[i] == assistant) count++;
+    agent_live_context_turn *turns = count ? xmalloc(count * sizeof(*turns)) : NULL;
+    bool *used = w->live_context_turn_count ?
+        calloc(w->live_context_turn_count, sizeof(*used)) : NULL;
+    if (w->live_context_turn_count && !used) {
+        fprintf(stderr, "cannot allocate live context turn map\n"); exit(1);
+    }
+    size_t at = 0;
+    for (int i = sys.len; i < w->transcript.len; i++) {
+        int role = w->transcript.v[i];
+        if (role != user && role != assistant) continue;
+        if (at) turns[at - 1].end = i;
+        turns[at++] = (agent_live_context_turn){.start = i,
+            .end = w->transcript.len, .role_token = role};
+    }
+    int common = 0, tail = 0;
+    while (common < w->live_context_snapshot.len && common < w->transcript.len &&
+           w->live_context_snapshot.v[common] == w->transcript.v[common]) common++;
+    while (tail < w->live_context_snapshot.len - common &&
+           tail < w->transcript.len - common &&
+           w->live_context_snapshot.v[w->live_context_snapshot.len - tail - 1] ==
+           w->transcript.v[w->transcript.len - tail - 1]) tail++;
+    for (size_t i = 0; i < count; i++) {
+        agent_live_context_turn *t = &turns[i];
+        int preferred = t->end <= common ? t->start :
+            t->start >= w->transcript.len - tail ?
+                t->start + w->live_context_snapshot.len - w->transcript.len : -1;
+        /* Positional matches first: repeated identical turns in a retained
+         * prefix/tail should keep their own IDs, not a discarded twin's. */
+        for (int pass = 0; pass < 2 && !t->id; pass++) {
+          for (size_t j = 0; j < w->live_context_turn_count; j++) {
+            const agent_live_context_turn *old = &w->live_context_turns[j];
+            int n = old->end - old->start;
+            if ((!pass && old->start != preferred) ||
+                used[j] || old->role_token != t->role_token ||
+                old->end > w->live_context_snapshot.len || n != t->end - t->start ||
+                memcmp(w->live_context_snapshot.v + old->start,
+                       w->transcript.v + t->start, (size_t)n * sizeof(int))) continue;
+            t->id = old->id; used[j] = true; break;
+          }
+        }
+        if (!t->id && i + 1 == count && w->live_context_turn_count) {
+            size_t j = w->live_context_turn_count - 1;
+            const agent_live_context_turn *old = &w->live_context_turns[j];
+            int n = old->end - old->start;
+            if (!used[j] && old->role_token == t->role_token && old->start == t->start &&
+                old->end <= w->live_context_snapshot.len && n <= t->end - t->start &&
+                !memcmp(w->live_context_snapshot.v + old->start,
+                        w->transcript.v + t->start, (size_t)n * sizeof(int))) {
+                t->id = old->id; used[j] = true;
+            }
+        }
+        if (!t->id) {
+            bool duplicate;
+            do {
+                if (getentropy(&t->id, sizeof(t->id)) != 0) {
+                    perror("cannot generate live context turn ID"); exit(1);
+                }
+                duplicate = !t->id;
+                for (size_t j = 0; j < w->live_context_turn_count; j++)
+                    if (w->live_context_turns[j].id == t->id) duplicate = true;
+                for (size_t j = 0; j < i; j++)
+                    if (turns[j].id == t->id) duplicate = true;
+            } while (duplicate);
+        }
+    }
+    free(used);
+    agent_buf rendered = {0};
+    ds4_tokens prefix = w->transcript;
+    prefix.len = count ? turns[0].start : w->transcript.len;
+    size_t len = 0;
+    char *piece = ds4_kvstore_render_tokens_text(w->engine, &prefix, &len);
+    agent_buf_append(&rendered, piece, len); free(piece);
+    for (size_t i = 0; i < count; i++) {
+        char header[128];
+        snprintf(header, sizeof(header), "\n[[DS4_TURN %016llx role=%s]]\n",
+                 (unsigned long long)turns[i].id,
+                 turns[i].role_token == user ? "user" : "assistant");
+        agent_buf_puts(&rendered, header);
+        ds4_tokens body = {.v = w->transcript.v + turns[i].start,
+            .len = turns[i].end - turns[i].start};
+        piece = ds4_kvstore_render_tokens_text(w->engine, &body, &len);
+        char *quoted = agent_live_context_body_text(piece, len, true);
+        agent_buf_puts(&rendered, quoted);
+        free(quoted); free(piece);
+    }
+    ds4_tokens_free(&sys);
+    if (out_len) *out_len = rendered.len;
+    agent_live_context_set_turns(w, turns, count);
+    return agent_buf_take(&rendered);
+}
+
+/* Mirroring is text-only. With suffix reuse disabled, context-file edits
+ * restore an exact frontier and the next sync evaluates the changed suffix. */
+static bool agent_worker_export_live_context(agent_worker *w,
+                                              char *err, size_t err_len) {
+    if (!w->cfg->gen.live_context_path) return true;
+    if (w->image_count) {
+        snprintf(err, err_len, "live context files do not support image-bearing contexts");
+        return false;
+    }
+    size_t len = 0;
+    char *text = agent_live_context_render(w, &len);
+    if (!text) {
+        snprintf(err, err_len, "failed to render live context");
+        return false;
+    }
+    int rc = agent_replace_file(w->cfg->gen.live_context_path, text, len,
+                               NULL, 0, err, err_len);
+    free(text);
+    return rc == 0;
+}
+
+/* Literal control spellings cannot be reconstructed from rendered bytes
+ * alone. Keep their original token identity when accepting context edits. */
+static bool agent_live_context_ambiguous_middle(agent_worker *w,
+                                                const char *old,
+                                                const size_t *offset,
+                                                int prefix, int tail,
+                                                const char *middle) {
+    /* Match the rendered-chat parser's control spellings. A spelling made
+     * from ordinary BPE tokens is ambiguous in this text representation. If
+     * it survives anywhere in a reparsed middle, reject conservatively. This
+     * covers unchanged examples between several separated edits as well. */
+    static const char *markers[] = {
+        "<｜begin▁of▁sentence｜>", "<｜end▁of▁sentence｜>", "[gMASK]", "<sop>",
+        "<|system|>", "<｜System｜>", "<｜User｜>", "<｜Assistant｜>",
+        "<|user|>", "<|assistant|>", "<|observation|>", "<think>", "</think>",
+        "<tool_call>", "</tool_call>", "<tool_response>", "</tool_response>",
+        "<arg_key>", "</arg_key>", "<arg_value>", "</arg_value>", "｜DSML｜",
+        "<|im_start|>", "<|im_end|>", "<|endoftext|>"
+    };
+    for (size_t m = 0; m < sizeof(markers) / sizeof(*markers); m++) {
+        const char *marker = markers[m];
+        if (!strstr(middle, marker)) continue;
+        ds4_tokens one = {0};
+        ds4_tokenize_rendered_chat(w->engine, marker, &one);
+        int id = one.len == 1 ? one.v[0] : -1;
+        ds4_tokens_free(&one);
+        if (id < 0) continue; /* Not a control spelling for this model. */
+        size_t marker_len = strlen(marker);
+        const char *p = old + offset[prefix];
+        int i = prefix;
+        while ((p = strstr(p, marker)) && (size_t)(p - old) < offset[tail]) {
+            size_t at = (size_t)(p - old);
+            if (marker_len > offset[tail] - at) break;
+            while (i < tail && offset[i] < at) i++;
+            bool actual = i < tail && offset[i] == at &&
+                          offset[i + 1] == at + marker_len &&
+                          w->transcript.v[i] == id;
+            if (!actual) return true;
+            p += marker_len;
+        }
+    }
+    return false;
+}
+
+/* The existing zero-KV format stores rendered text. Refuse an approximate
+ * save when that text would reinterpret ordinary tokens as chat controls. */
+static bool agent_text_only_control_safe(agent_worker *w, const ds4_tokens *tokens,
+                                         const char *text, size_t text_len,
+                                         char *err, size_t err_len) {
+    size_t *offset = calloc((size_t)tokens->len + 1, sizeof(*offset));
+    if (!offset) {
+        snprintf(err, err_len, "cannot validate text-only session controls");
+        return false;
+    }
+    bool ok = true;
+    for (int i = 0; i < tokens->len; i++) {
+        size_t n = 0;
+        char *piece = ds4_token_text(w->engine, tokens->v[i], &n);
+        ok = piece && offset[i] <= text_len && n <= text_len - offset[i] &&
+             !memcmp(text + offset[i], piece, n);
+        free(piece);
+        if (!ok) break;
+        offset[i + 1] = offset[i] + n;
+    }
+    agent_worker view = {.engine = w->engine, .transcript = *tokens};
+    ok = ok && offset[tokens->len] == text_len &&
+         !agent_live_context_ambiguous_middle(&view, text, offset, 0, tokens->len, text);
+    free(offset);
+    if (!ok)
+        snprintf(err, err_len, "text-only approximate session cannot preserve literal control markup");
+    return ok;
+}
+
+static bool agent_live_context_splice_tokens(agent_worker *w,
+                                              const char *old, size_t old_len,
+                                              const char *text, size_t len,
+                                              int protected_tokens,
+                                              ds4_tokens *edited,
+                                              char *err, size_t err_len) {
+    size_t common = 0, suffix = 0;
+    while (common < old_len && common < len && old[common] == text[common]) common++;
+    while (suffix < old_len - common && suffix < len - common &&
+           old[old_len - suffix - 1] == text[len - suffix - 1]) suffix++;
+
+    /* Rendering is not an injective token encoding: ordinary BPE tokens can
+     * spell the same bytes as a chat/control token. Keep the original tokens
+     * on both sides of the edit rather than reparsing their rendered bytes. */
+    int n = w->transcript.len;
+    size_t *offset = calloc((size_t)n + 1, sizeof(*offset));
+    if (!offset) {
+        snprintf(err, err_len, "failed to allocate live context token offsets");
+        return false;
+    }
+    for (int i = 0; i < n; i++) {
+        size_t piece_len = 0;
+        char *piece = ds4_token_text(w->engine, w->transcript.v[i], &piece_len);
+        bool valid = piece && offset[i] <= old_len && piece_len <= old_len - offset[i] &&
+                     !memcmp(old + offset[i], piece, piece_len);
+        free(piece);
+        if (!valid) {
+            free(offset);
+            snprintf(err, err_len, "live context token rendering changed");
+            return false;
+        }
+        offset[i + 1] = offset[i] + piece_len;
+    }
+    if (offset[n] != old_len || protected_tokens > n ||
+        offset[protected_tokens] > common) {
+        free(offset);
+        snprintf(err, err_len, "live context protected token boundary changed");
+        return false;
+    }
+    int prefix = protected_tokens;
+    while (prefix < n && offset[prefix + 1] <= common) prefix++;
+    /* Byte-level BPE pieces may end inside a UTF-8 character. Include that
+     * whole character in the edited span so the tokenizer sees valid text. */
+    while (prefix > protected_tokens && offset[prefix] < old_len &&
+           ((unsigned char)old[offset[prefix]] & 0xc0) == 0x80) prefix--;
+    int tail = prefix;
+    while (tail < n && offset[tail] < old_len - suffix) tail++;
+    while (tail < n && offset[tail] < old_len &&
+           ((unsigned char)old[offset[tail]] & 0xc0) == 0x80) tail++;
+    size_t middle_start = offset[prefix];
+    size_t middle_end = len - (old_len - offset[tail]);
+    size_t middle_len = middle_end - middle_start;
+    char *middle = malloc(middle_len + 1);
+    if (!middle) {
+        free(offset);
+        snprintf(err, err_len, "failed to allocate live context edit");
+        return false;
+    }
+    memcpy(middle, text + middle_start, middle_len);
+    middle[middle_len] = '\0';
+    if (agent_live_context_ambiguous_middle(w, old, offset, prefix, tail, middle)) {
+        free(middle); free(offset);
+        snprintf(err, err_len, "live context edit has ambiguous literal control markup inside the changed span; edit smaller spans");
+        return false;
+    }
+    for (int i = 0; i < prefix; i++) ds4_tokens_push(edited, w->transcript.v[i]);
+    ds4_tokenize_rendered_chat(w->engine, middle, edited);
+    for (int i = tail; i < n; i++) ds4_tokens_push(edited, w->transcript.v[i]);
+    free(middle); free(offset);
+
+    size_t check_len = 0;
+    char *check = ds4_kvstore_render_tokens_text(w->engine, edited, &check_len);
+    bool exact = check && check_len == len && !memcmp(check, text, len);
+    free(check);
+    if (!exact) snprintf(err, err_len, "live context edit did not round-trip exactly");
+    return exact;
+}
+
+/* Labelled mirrors are edited one retained turn at a time. Unchanged bodies
+ * retain their original token IDs even when another turn contains an edit;
+ * a literal control spelling in such a body must not become a chat boundary. */
+static int agent_live_context_splice_turns(agent_worker *w, const char *text,
+                                          size_t len, const ds4_tokens *sys,
+                                          size_t sys_bytes, ds4_tokens *edited,
+                                          agent_live_context_turn **out_turns,
+                                          size_t *out_count,
+                                          char *err, size_t err_len) {
+    static const char delimiter[] = "\n[[DS4_TURN ";
+    const char *header = strstr(text + sys_bytes, delimiter);
+    if (!header) return 0; /* Existing raw mirrors still use the original path. */
+    /* Plain session metadata, such as the date, can follow the static system
+     * prefix before the first role token. Keep this complete unlabelled span. */
+    ds4_tokens prefix = *sys;
+    if (w->live_context_turn_count) {
+        prefix = w->live_context_snapshot;
+        prefix.len = w->live_context_turns[0].start;
+    }
+    size_t prefix_bytes = 0;
+    char *prefix_text = ds4_kvstore_render_tokens_text(w->engine, &prefix, &prefix_bytes);
+    bool prefix_ok = prefix_text && (size_t)(header - text) == prefix_bytes &&
+        !memcmp(text, prefix_text, prefix_bytes);
+    free(prefix_text);
+    if (!prefix_ok) {
+        snprintf(err, err_len, "keep the protected prefix and complete labelled turn boundaries");
+        return -1;
+    }
+    size_t capacity = w->live_context_turn_count;
+    agent_live_context_turn *turns = capacity ? xmalloc(capacity * sizeof(*turns)) : NULL;
+    bool *used = capacity ? calloc(capacity, sizeof(*used)) : NULL;
+    if (capacity && !used) {
+        fprintf(stderr, "cannot allocate live context turn map\n"); exit(1);
+    }
+    ds4_tokens_copy(edited, &prefix);
+    size_t count = 0;
+    int user = ds4_token_user(w->engine), assistant = ds4_token_assistant(w->engine);
+    while (header) {
+        unsigned long long id = 0;
+        char role[16] = {0}; int consumed = 0;
+        if (sscanf(header + 1, "[[DS4_TURN %16llx role=%15[a-z]]]%n", &id, role, &consumed) != 2 ||
+            !consumed || header[1 + consumed] != '\n') {
+            snprintf(err, err_len, "invalid turn header; keep its ID and role unchanged");
+            goto failed;
+        }
+        size_t old_index = 0;
+        while (old_index < capacity && w->live_context_turns[old_index].id != (uint64_t)id)
+            old_index++;
+        if (old_index == capacity || used[old_index]) {
+            snprintf(err, err_len, "turn ID is unknown or repeated");
+            goto failed;
+        }
+        const agent_live_context_turn *old_turn = &w->live_context_turns[old_index];
+        const char *expected_role = old_turn->role_token == user ? "user" : "assistant";
+        if (strcmp(role, expected_role)) {
+            snprintf(err, err_len, "turn role changed");
+            goto failed;
+        }
+        const char *body = header + 2 + consumed;
+        const char *next = strstr(body, delimiter);
+        size_t body_len = next ? (size_t)(next - body) : len - (size_t)(body - text);
+        size_t role_len = 0;
+        char *role_text = ds4_token_text(w->engine, old_turn->role_token, &role_len);
+        bool has_role = body_len >= role_len && role_len && !memcmp(body, role_text, role_len);
+        free(role_text);
+        if (!has_role) {
+            snprintf(err, err_len, "keep the native opening role marker beneath each turn header");
+            goto failed;
+        }
+        char *body_text = agent_live_context_body_text(body, body_len, false);
+        body_len = strlen(body_text);
+        agent_worker view = *w;
+        view.transcript = (ds4_tokens){.v = w->live_context_snapshot.v + old_turn->start,
+            .len = old_turn->end - old_turn->start, .cap = old_turn->end - old_turn->start};
+        size_t old_len = 0;
+        char *old_text = ds4_kvstore_render_tokens_text(w->engine, &view.transcript, &old_len);
+        ds4_tokens part = {0};
+        bool ok = old_text && agent_live_context_splice_tokens(&view, old_text, old_len,
+            body_text, body_len, 0, &part, err, err_len);
+        free(body_text); free(old_text);
+        if (!ok) { ds4_tokens_free(&part); goto failed; }
+        if (!part.len || part.v[0] != old_turn->role_token) {
+            snprintf(err, err_len, "turn lost its opening role token");
+            ds4_tokens_free(&part); goto failed;
+        }
+        for (int i = 1; i < part.len; i++) {
+            if (part.v[i] == user || part.v[i] == assistant) {
+                snprintf(err, err_len, "keep one complete role span beneath each turn header");
+                ds4_tokens_free(&part); goto failed;
+            }
+        }
+        turns[count] = (agent_live_context_turn){.id = (uint64_t)id,
+            .start = edited->len, .role_token = old_turn->role_token};
+        for (int i = 0; i < part.len; i++) ds4_tokens_push(edited, part.v[i]);
+        turns[count++].end = edited->len;
+        ds4_tokens_free(&part); used[old_index] = true;
+        header = next;
+    }
+    free(used);
+    *out_turns = turns; *out_count = count;
+    return 1;
+failed:
+    free(used); free(turns); ds4_tokens_free(edited);
+    return -1;
+}
+
+typedef struct {
+    int source_frontier;
+    ds4_state_cache_ref *disk_ref;
+    uint64_t disk_state_bytes, disk_prerope_bytes;
+    uint32_t source_start, destination_start, source_end, destination_end;
+    uint32_t reused_tokens, fresh_tokens;
+} agent_context_suffix_plan;
+
+static bool agent_context_suffix_select_disk(agent_worker *w, const ds4_tokens *edited,
+                                             int fresh_needed, agent_context_suffix_plan *plan) {
+    if (!agent_state_cache_allowed(w)) return false;
+    char cursor[41] = {0}; const int *ids; uint32_t n; bool approximate;
+    ds4_state_cache_ref *ref;
+    bool prerope = agent_context_prerope_requested();
+    int displacement = w->transcript.len - edited->len;
+    int common = 0, tail = 0, legacy_src = 0, legacy_dst = 0;
+    if (!prerope) {
+        while (common < w->transcript.len && common < edited->len &&
+               w->transcript.v[common] == edited->v[common]) common++;
+        while (tail < w->transcript.len - common && tail < edited->len - common &&
+               w->transcript.v[w->transcript.len - tail - 1] == edited->v[edited->len - tail - 1]) tail++;
+        legacy_src = w->transcript.len - tail; legacy_dst = edited->len - tail;
+        if (legacy_src & 1) { legacy_src++; legacy_dst++; }
+        if (legacy_dst & 1) return false;
+    }
+    while ((ref = ds4_state_cache_next_candidate(w->state_cache, w->state_cache_profile,
+             (uint32_t)agent_worker_effective_ctx_size(w), cursor, &ids, &n, &approximate))) {
+        uint64_t state_bytes, pre_bytes;
+        ds4_state_cache_ref_sizes(ref, &state_bytes, &pre_bytes);
+        bool chose = false;
+        if (n >= 64 && (!prerope ? !approximate : pre_bytes != 0)) {
+            if (prerope) {
+                ds4_suffix_match_plan match;
+                if (ds4_suffix_match_shift(ids, n, edited->v, (uint32_t)edited->len,
+                        (uint32_t)(edited->len - fresh_needed),
+                        agent_context_suffix_right_requested(), &match) &&
+                    match.reused_tokens > plan->reused_tokens) {
+                    plan->source_start = match.source_start;
+                    plan->destination_start = match.destination_start;
+                    plan->source_end = match.source_end;
+                    plan->destination_end = match.destination_end;
+                    plan->reused_tokens = match.reused_tokens;
+                    plan->fresh_tokens = match.fresh_tokens;
+                    chose = true;
+                }
+            } else {
+                int end = (int)n - displacement;
+                if (legacy_dst > 0 && n <= (uint32_t)w->transcript.len &&
+                    !memcmp(ids, w->transcript.v, (size_t)n * sizeof(int)) &&
+                    (int)n - legacy_src >= 64 && end >= legacy_dst &&
+                    edited->len - end >= fresh_needed && n > plan->source_end) {
+                    plan->source_start = (uint32_t)legacy_src;
+                    plan->destination_start = (uint32_t)legacy_dst;
+                    plan->source_end = n; plan->destination_end = (uint32_t)end;
+                    plan->reused_tokens = n - (uint32_t)legacy_src;
+                    plan->fresh_tokens = (uint32_t)(edited->len - end); chose = true;
+                }
+            }
+        }
+        if (chose) {
+            ds4_state_cache_release(plan->disk_ref); plan->disk_ref = ref;
+            plan->disk_state_bytes = state_bytes; plan->disk_prerope_bytes = pre_bytes;
+        } else ds4_state_cache_release(ref);
+    }
+    return plan->disk_ref != NULL;
+}
+
+/* Select an immutable historical source that ends inside the unchanged
+ * tail. A serialized endpoint cannot be truncated: tokens after the selected
+ * endpoint are all freshly evaluated, including at least fresh_needed and
+ * the latest user role marker plus its complete following message/history.
+ * Pre-RoPE originals allow private approximate sources; canonical prefix
+ * restoration still excludes them. An unknown role layout rebuilds. */
+static bool agent_context_suffix_select(agent_worker *w, const ds4_tokens *edited,
+                                         int fresh_needed,
+                                         agent_context_suffix_plan *plan) {
+    *plan = (agent_context_suffix_plan){.source_frontier = -1};
+    const ds4_tokens *old = &w->transcript;
+    int displacement = old->len - edited->len;
+    if (fresh_needed < 1 || (!agent_context_prerope_requested() &&
+        (displacement < 0 || (displacement & 1)))) return false;
+    int user_id = ds4_token_user(w->engine), latest_user = -1;
+    if (user_id < 0) return false;
+    for (int i = edited->len - 1; i >= 0; i--) {
+        if (edited->v[i] == user_id) { latest_user = i; break; }
+    }
+    if (latest_user < 0) return false;
+    if (fresh_needed < edited->len - latest_user)
+        fresh_needed = edited->len - latest_user;
+    if (fresh_needed >= edited->len) return false;
+    if (agent_context_suffix_select_disk(w, edited, fresh_needed, plan)) return true;
+    if (agent_context_prerope_requested()) {
+        /* Match each immutable source directly to this edited transcript.
+         * Its original prefix need not still prefix the current conversation. */
+        for (int i = 0; i < w->context_frontier_count; i++) {
+            const agent_context_frontier *f = &w->context_frontiers[i];
+            int source_end = f->prefix.len;
+            if (f->engine != w->engine || f->ctx != agent_worker_effective_ctx_size(w) ||
+                !f->cache.state.ptr || !f->cache.prerope || source_end < 64) continue;
+            ds4_suffix_match_plan match;
+            if (ds4_suffix_match_shift(f->prefix.v, (uint32_t)source_end,
+                    edited->v, (uint32_t)edited->len,
+                    (uint32_t)(edited->len - fresh_needed),
+                    agent_context_suffix_right_requested(), &match) &&
+                match.reused_tokens > plan->reused_tokens) {
+                *plan = (agent_context_suffix_plan){.source_frontier = i,
+                    .source_start = match.source_start,
+                    .destination_start = match.destination_start,
+                    .source_end = match.source_end,
+                    .destination_end = match.destination_end,
+                    .reused_tokens = match.reused_tokens,
+                    .fresh_tokens = match.fresh_tokens};
+            }
+        }
+        return plan->source_frontier >= 0;
+    }
+    int common = 0, tail = 0;
+    while (common < old->len && common < edited->len &&
+           old->v[common] == edited->v[common]) common++;
+    while (tail < old->len - common && tail < edited->len - common &&
+           old->v[old->len - tail - 1] == edited->v[edited->len - tail - 1]) tail++;
+    int source_start = old->len - tail;
+    int destination_start = edited->len - tail;
+    if (source_start & 1) { source_start++; destination_start++; }
+    if (destination_start & 1) return false;
+    for (int i = 0; i < w->context_frontier_count; i++) {
+        const agent_context_frontier *f = &w->context_frontiers[i];
+        int destination_end = f->prefix.len - displacement;
+        if (f->engine != w->engine || f->ctx != agent_worker_effective_ctx_size(w) ||
+            !f->cache.state.ptr || !f->cache.state.len || f->cache.state.len > f->cache.state.cap ||
+            !ds4_tokens_starts_with(old, &f->prefix) ||
+            f->prefix.len - source_start < 64 || destination_end < destination_start ||
+            edited->len - destination_end < fresh_needed ||
+            (plan->source_frontier >= 0 && f->prefix.len <= (int)plan->source_end))
+            continue;
+        *plan = (agent_context_suffix_plan){.source_frontier = i,
+            .source_start = (uint32_t)source_start,
+            .destination_start = (uint32_t)destination_start,
+            .source_end = (uint32_t)f->prefix.len,
+            .destination_end = (uint32_t)destination_end,
+            .reused_tokens = (uint32_t)(f->prefix.len - source_start),
+            .fresh_tokens = (uint32_t)(edited->len - destination_end)};
+    }
+    return plan->source_frontier >= 0;
+}
+
+/* Restoring a prefix may discard another frontier. Own source bytes first. */
+static bool agent_context_suffix_clone(ds4_suffix_cache *out, const ds4_suffix_cache *src) {
+    *out = (ds4_suffix_cache){.engine = src->engine, .ctx_size = src->ctx_size,
+                              .approximate = src->approximate};
+    out->state.ptr = malloc((size_t)src->state.len + 1);
+    if (!out->state.ptr) return false;
+    out->state.len = src->state.len;
+    out->state.cap = src->state.len + 1;
+    memcpy(out->state.ptr, src->state.ptr, (size_t)src->state.len);
+    if (src->prerope_bytes) {
+        out->prerope = malloc((size_t)src->prerope_bytes);
+        if (!out->prerope) { ds4_suffix_cache_free(out); return false; }
+        out->prerope_bytes = src->prerope_bytes;
+        memcpy(out->prerope, src->prerope, (size_t)src->prerope_bytes);
+    }
+    return true;
+}
+
+/* Return 1 for a committed private approximate graph, 0 for exact fallback,
+ * and -1 for interruption/failed rollback. The transcript stays untouched.
+ * Owned source and any exact undo count against the same RAM cap. A prior
+ * approximate graph has no canonical undo; failure invalidates for rebuild. */
+static int agent_worker_try_context_suffix(agent_worker *w, const ds4_tokens *edited,
+                                            const ds4_tokens *sys,
+                                            char *err, size_t err_len) {
+    if (!agent_context_suffix_requested() || agent_context_suffix_resident_conflict() ||
+        (ds4_session_is_approximate(w->session) && !agent_context_prerope_requested()) || w->image_count ||
+        w->cfg->gen.raw_prompt || !ds4_engine_is_deepseek41(w->engine) ||
+        ds4_tp_enabled(&w->cfg->engine.tp) || ds4_session_is_distributed(w->session) ||
+        w->cfg->engine.directional_steering_file)
+        return 0;
+    uint64_t budget;
+    if (!agent_context_frontier_slots(w, &budget)) return 0;
+    int fresh_needed = agent_parse_int_default(getenv("DS4_AGENT_CONTEXT_SUFFIX_FRESH_TAIL"),
+                                               128, 64, 4096);
+    agent_context_suffix_plan plan;
+    if (!agent_context_suffix_select(w, edited, fresh_needed, &plan)) return 0;
+    const agent_context_frontier *source = plan.disk_ref ? NULL : &w->context_frontiers[plan.source_frontier];
+    uint64_t source_bytes = plan.disk_ref ? plan.disk_state_bytes : source->cache.state.len;
+    uint64_t source_pre_bytes = plan.disk_ref ? plan.disk_prerope_bytes : source->cache.prerope_bytes;
+    bool was_approximate = ds4_session_is_approximate(w->session);
+    uint64_t undo_bytes = was_approximate ? 0 : ds4_session_payload_bytes(w->session);
+    /* Native payload I/O stages an 8 MiB tensor chunk. Loading a snapshot
+     * also builds a temporary token vector; reserve twice the context's token
+     * bytes plus stdio/struct overhead before staging either owned snapshot. */
+    uint64_t scratch = (UINT64_C(8) << 20) + (UINT64_C(64) << 10) +
+                       (uint64_t)agent_worker_effective_ctx_size(w) * 2u * sizeof(int) +
+                       sizeof(ds4_tokens) + sizeof(ds4_session_snapshot) +
+                       sizeof(ds4_suffix_cache) + sizeof(plan) +
+                       sizeof(ds4_suffix_relocation_stats);
+    uint64_t staged_bytes = undo_bytes + 1 + source_bytes + 1 +
+                            source_pre_bytes +
+                            (uint64_t)plan.destination_start * sizeof(int) + scratch;
+    if ((!undo_bytes && !was_approximate) || staged_bytes > budget ||
+        w->context_frontier_bytes > budget - staged_bytes) {
+        agent_trace(w, "context suffix exact fallback: staged_bytes=%llu retained_bytes=%llu budget=%llu",
+                    (unsigned long long)staged_bytes,
+                    (unsigned long long)w->context_frontier_bytes,
+                    (unsigned long long)budget);
+        ds4_state_cache_release(plan.disk_ref);
+        return 0;
+    }
+    if (worker_cancel_session_cb(w)) {
+        snprintf(err, err_len, "interrupted");
+        ds4_state_cache_release(plan.disk_ref);
+        return -1;
+    }
+    ds4_tokens prefix = {0};
+    ds4_session_snapshot undo = {0};
+    ds4_suffix_cache cache = {0};
+    ds4_suffix_relocation_stats stats = {0};
+    char attempt_err[160] = {0};
+    bool changed = false, interrupted = false;
+    int result = 0;
+    double t0 = now_sec();
+    prefix.v = malloc((size_t)plan.destination_start * sizeof(int));
+    if (!prefix.v) goto done;
+    memcpy(prefix.v, edited->v, (size_t)plan.destination_start * sizeof(int));
+    prefix.len = prefix.cap = (int)plan.destination_start;
+    if (!was_approximate &&
+        ds4_session_save_snapshot(w->session, &undo, attempt_err, sizeof(attempt_err)) != 0)
+        goto done;
+    if (plan.disk_ref) {
+        if (!agent_state_cache_materialize(w, plan.disk_ref, &cache, attempt_err, sizeof(attempt_err))) goto done;
+        if (!agent_context_prerope_requested()) {
+            free(cache.prerope); cache.prerope = NULL; cache.prerope_bytes = 0;
+        }
+        changed = true;
+    } else if (agent_context_prerope_requested()) {
+        if (!agent_context_suffix_clone(&cache, &source->cache)) goto done;
+        changed = true;
+    } else {
+        changed = true;
+        /* Legacy post-RoPE capture still requires an exact source graph. */
+        if (ds4_session_load_snapshot(w->session, &source->cache.state,
+                                       attempt_err, sizeof(attempt_err)) != 0 ||
+            !agent_tokens_equal(ds4_session_tokens(w->session), &source->prefix) ||
+            worker_cancel_session_cb(w) ||
+            ds4_session_capture_suffix_cache(w->session, &cache,
+                                              attempt_err, sizeof(attempt_err)) != 0)
+            goto rollback;
+    }
+    uint64_t actual_owned = undo.cap + cache.state.cap + cache.prerope_bytes +
+                            (uint64_t)prefix.cap * sizeof(int) + scratch;
+    if (actual_owned > budget || w->context_frontier_bytes > budget - actual_owned) {
+        snprintf(attempt_err, sizeof(attempt_err), "owned suffix state exceeds its staging budget");
+        goto rollback;
+    }
+    if (w->state_cache) w->state_cache_staged_bytes = actual_owned;
+    if (!agent_worker_restore_context_frontier(w, &prefix)) {
+        ds4_session_invalidate(w->session);
+        (void)agent_worker_restore_compact_prefix(w, sys);
+    }
+    if (worker_cancel_session_cb(w) ||
+        agent_worker_sync_tokens(w, &prefix, true, attempt_err, sizeof(attempt_err)) != 0)
+        goto rollback;
+    ds4_session_set_cancel(w->session, worker_cancel_session_cb, w);
+    int rc = ds4_session_reuse_suffix_relocated(w->session, &cache, edited,
+                                                plan.source_start, &stats,
+                                                attempt_err, sizeof(attempt_err));
+    ds4_session_set_cancel(w->session, NULL, NULL);
+    if (rc != 0 || worker_cancel_session_cb(w)) goto rollback;
+    int latest_user = -1, user_id = ds4_token_user(w->engine);
+    for (int i = edited->len - 1; i >= 0; i--)
+        if (edited->v[i] == user_id) { latest_user = i; break; }
+    agent_trace(w, "context suffix APPROXIMATE reused=%u fresh=%u source=%u:%u destination=%u:%u copied_bytes=%llu latest_user_start=%d latest_user_fresh=%d pre_rope=%d prior_approximate=%d source_ssd=%d right_shift=%d source_approximate=%d %.3f ms",
+                stats.reuse.reused_tokens, stats.reuse.fresh_tail_tokens,
+                stats.source_start, stats.source_end, stats.destination_start, stats.destination_end,
+                (unsigned long long)stats.reuse.copied_bytes, latest_user,
+                latest_user >= 0 && stats.destination_end <= (uint32_t)latest_user,
+                cache.prerope != NULL, was_approximate, plan.disk_ref != NULL,
+                stats.destination_start > stats.source_start, cache.approximate,
+                (now_sec() - t0) * 1000);
+    result = 1;
+    goto done;
+rollback:
+    interrupted = worker_cancel_session_cb(w);
+    ds4_session_set_cancel(w->session, NULL, NULL);
+    char restore_err[160] = {0};
+    if (changed && was_approximate) ds4_session_invalidate(w->session);
+    if (changed && !was_approximate && ds4_session_load_snapshot(w->session, &undo,
+                                             restore_err, sizeof(restore_err)) != 0) {
+        ds4_session_invalidate(w->session);
+        snprintf(err, err_len, "context suffix rollback failed: %.120s", restore_err);
+        result = -1;
+    } else if (interrupted) {
+        snprintf(err, err_len, "interrupted");
+        result = -1;
+    }
+    agent_trace(w, "context suffix exact fallback rollback=%s interrupted=%d error=%s",
+                restore_err[0] ? "failed" : was_approximate ? "fresh-rebuild" : "ok", interrupted,
+                attempt_err[0] ? attempt_err : "source capture/sync was interrupted");
+done:
+    w->state_cache_staged_bytes = 0;
+    if (!result && worker_cancel_session_cb(w)) {
+        snprintf(err, err_len, "interrupted");
+        result = -1;
+    }
+    ds4_tokens_free(&prefix);
+    ds4_session_snapshot_free(&undo);
+    ds4_suffix_cache_free(&cache);
+    ds4_state_cache_release(plan.disk_ref);
+    return result;
+}
+
+/* Return 2 for an approximate edit, 1 for an exact-path edit, 0 unchanged,
+ * or -1 rejected/interrupted. The token edit is committed only after a
+ * successful graft. Failure restores an exact undo or invalidates a prior
+ * approximate graph so the ordinary path rebuilds it. */
+static int agent_worker_import_live_context(agent_worker *w,
+                                             char *err, size_t err_len) {
+    if (!w->cfg->gen.live_context_path) return 0;
+    char *text = NULL;
+    size_t len = 0, old_len = 0;
+    if (agent_read_file_bytes(w->cfg->gen.live_context_path, &text, &len,
+                             err, err_len) != 0)
+        return -1;
+    char *old = ds4_kvstore_render_tokens_text(w->engine, &w->transcript, &old_len);
+    if (!old) {
+        free(text);
+        snprintf(err, err_len, "failed to render live context");
+        return -1;
+    }
+    bool unchanged = old_len == len && !memcmp(old, text, len);
+    if (unchanged) { free(old); free(text); return 0; }
+    if (w->image_count || memchr(text, '\0', len)) {
+        free(old); free(text);
+        snprintf(err, err_len, "live context edit must be text-only and contain no NUL bytes");
+        return -1;
+    }
+    ds4_tokens edited = {0}, sys = {0};
+    agent_worker_build_system_tokens(w, &sys);
+    size_t sys_len = 0;
+    char *sys_text = ds4_kvstore_render_tokens_text(w->engine, &sys, &sys_len);
+    if (!sys_text || len < sys_len || memcmp(text, sys_text, sys_len)) {
+        snprintf(err, err_len, "live context edit changed the protected system/tool/prefix section");
+        free(old); free(text); free(sys_text);
+        ds4_tokens_free(&edited); ds4_tokens_free(&sys);
+        return -1;
+    }
+    agent_live_context_turn *turns = NULL;
+    size_t turn_count = 0;
+    int structured = agent_live_context_splice_turns(w, text, len, &sys, sys_len,
+        &edited, &turns, &turn_count, err, err_len);
+    bool tokenized = structured > 0 || (structured == 0 &&
+        agent_live_context_splice_tokens(w, old, old_len, text, len,
+                                         sys.len, &edited, err, err_len));
+    free(old); free(text); free(sys_text);
+    if (!tokenized) {
+        free(turns);
+        ds4_tokens_free(&edited); ds4_tokens_free(&sys);
+        return -1;
+    }
+    if (agent_tokens_equal(&w->transcript, &edited)) {
+        if (structured > 0) agent_live_context_set_turns(w, turns, turn_count);
+        ds4_tokens_free(&edited); ds4_tokens_free(&sys);
+        return 0;
+    }
+    /* Leave room for a tool acknowledgement and the next assistant prefix. */
+    int ctx = agent_worker_effective_ctx_size(w);
+    if (edited.len > ctx - 256) {
+        snprintf(err, err_len, "live context edit exceeds context budget (%d tokens, limit %d)",
+                 edited.len, ctx - 256);
+        free(turns);
+        ds4_tokens_free(&edited); ds4_tokens_free(&sys);
+        return -1;
+    }
+    int before = w->transcript.len;
+    bool was_approximate = ds4_session_is_approximate(w->session);
+    int reused = agent_worker_try_context_suffix(w, &edited, &sys, err, err_len);
+    if (reused < 0) {
+        free(turns);
+        ds4_tokens_free(&edited); ds4_tokens_free(&sys);
+        return -1;
+    }
+    ds4_tokens_free(&w->transcript);
+    w->transcript = edited;
+    if (structured > 0) agent_live_context_set_turns(w, turns, turn_count);
+    if (!reused && was_approximate) ds4_session_invalidate(w->session);
+    if (!reused && (was_approximate ||
+        ds4_session_common_prefix(w->session, &w->transcript) !=
+            ds4_session_pos(w->session)) &&
+        !agent_worker_restore_context_frontier(w, &w->transcript))
+        (void)agent_worker_restore_compact_prefix(w, &sys);
+    ds4_tokens_free(&sys);
+    agent_trace(w, "live context edit committed tokens=%d->%d file=%s",
+                before, w->transcript.len, w->cfg->gen.live_context_path);
+    return reused ? 2 : 1;
 }
 
 /* Start a new session at the system/tool prompt.  A fixed sysprompt.kv
@@ -5345,6 +6586,8 @@ static int agent_worker_sync_tokens(agent_worker *w, const ds4_tokens *tokens,
  * by Flash and Pro; agent_kv_load_path() checks the model id, so switching
  * model families rebuilds this cache instead of restoring incompatible KV. */
 static bool agent_worker_reset_to_sysprompt(agent_worker *w, char *err, size_t err_len) {
+    agent_live_context_clear(w);
+    agent_context_frontiers_clear(w);
     agent_worker_images_clear(w);
     ds4_tokens sys = {0};
     agent_worker_build_system_tokens(w, &sys);
@@ -5427,7 +6670,9 @@ static bool agent_worker_reset_to_sysprompt(agent_worker *w, char *err, size_t e
     agent_worker_clear_session_identity(w);
     free(text);
     ds4_tokens_free(&sys);
-    return true;
+    bool mirrored = agent_worker_export_live_context(w, err, err_len);
+    if (mirrored) (void)agent_worker_capture_context_frontier(w);
+    return mirrored;
 }
 
 static bool agent_worker_should_stop(agent_worker *w) {
@@ -5509,7 +6754,8 @@ static bool agent_worker_save_session_now(agent_worker *w, char sha_out[41],
         return false;
     }
 
-    const bool text_only = w->transcript.len >= agent_worker_effective_ctx_size(w);
+    const bool approximate = ds4_session_is_approximate(w->session);
+    const bool text_only = agent_worker_text_only_session(w, &w->transcript);
     if (!text_only &&
         agent_worker_sync_tokens(w, &w->transcript, false, err, err_len) != 0)
         return false;
@@ -5541,7 +6787,9 @@ static bool agent_worker_save_session_now(agent_worker *w, char sha_out[41],
                                  err, err_len);
     if (ok) {
         memcpy(w->session_sha, sha, sizeof(w->session_sha));
-        if (text_only)
+        if (approximate)
+            agent_publishf(w, "Saved approximate-context transcript without KV; reopening evaluates the saved text.\n");
+        else if (text_only)
             agent_publishf(w, "Saved full transcript without KV; restart with a larger --ctx, then /switch %.8s and /compact.\n", sha);
         if (w->legacy_session_path_to_delete &&
             strcmp(w->legacy_session_path_to_delete, path) != 0)
@@ -8094,6 +9342,7 @@ static void test_agent_steering_command(void) {
 }
 
 static void test_agent_terminal_wrap_output_is_deferred(void);
+static void test_agent_idle_context_rejection_precedes_user_append(void);
 
 static void test_agent_hints_state(void) {
     bool enabled = false;
@@ -8181,6 +9430,7 @@ static void ds4_agent_unit_tests_run(void) {
     test_agent_dsml_stream_tool_call_chunked();
     test_agent_glm_tool_parser_rejects_missing_value();
     test_agent_terminal_wrap_output_is_deferred();
+    test_agent_idle_context_rejection_precedes_user_append();
 }
 #endif
 
@@ -9728,6 +10978,17 @@ static int agent_compact_tail_start(agent_worker *w, int bottom, int sys_len) {
     if (tail_budget < 1) tail_budget = 1;
     int user_id = agent_special_token_id(w->engine,
         ds4_engine_is_glm_dsa(w->engine) ? "<|user|>" : "<｜User｜>");
+    if (agent_context_prerope_requested() && user_id >= 0) {
+        /* Keep an earlier complete turn near the ordinary tail budget when
+         * possible. It can contain a cached span before the latest user,
+         * whose entire following history must still be evaluated freshly. */
+        int target = bottom - tail_budget;
+        int earliest = bottom - 2 * tail_budget;
+        if (target < sys_len) target = sys_len;
+        if (earliest < sys_len) earliest = sys_len;
+        for (int i = target; i >= earliest; i--)
+            if (w->transcript.v[i] == user_id) return i;
+    }
     return agent_compact_tail_boundary(&w->transcript, bottom, sys_len, tail_budget, user_id);
 }
 
@@ -9814,6 +11075,12 @@ static bool agent_worker_compact_transcript(agent_worker *w, const char *reason,
         ds4_tokens_free(&sys);
         return true;
     }
+
+    /* The private summary exchange changes live KV. Preserve its original
+     * endpoint first; historical endpoints in RAM/SSD remain immutable and
+     * may end before the latest user in the retained conversation. */
+    if (agent_context_prerope_requested())
+        (void)agent_worker_capture_context_frontier(w);
 
     agent_publishf(w,
         "\n\x1b[1;95mCOMPACTING\x1b[0m %s: summarizing durable task state\n\x1b[38;5;245m",
@@ -10058,6 +11325,18 @@ static bool agent_worker_compact_transcript(agent_worker *w, const char *reason,
         }
     }
 
+    int reused = 0;
+    if (agent_context_prerope_requested() && !old_image_count)
+        reused = agent_worker_try_context_suffix(w, &compacted, &sys, err, err_len);
+    if (reused < 0) {
+        ds4_session_invalidate(w->session);
+        ds4_tokens_free(&compacted);
+        ds4_tokens_free(&sys);
+        free(new_images);
+        free(kept_images);
+        return false;
+    }
+
     agent_publishf(w,
         "\x1b[1;95mCOMPACTING\x1b[0m rebuilding context: old=%d summary+tail=%d tail=%d\n",
         bottom, compacted.len, bottom - tail_start);
@@ -10069,6 +11348,10 @@ static bool agent_worker_compact_transcript(agent_worker *w, const char *reason,
     w->images = new_images;
     w->image_count = new_image_count;
     w->image_cap = old_image_count;
+    if (agent_context_prerope_requested() && !reused)
+        ds4_session_invalidate(w->session);
+    if (!reused && !old_image_count)
+        (void)agent_worker_restore_compact_prefix(w, &sys);
     if (agent_worker_sync_tokens(w, &w->transcript, true, err, err_len) != 0) {
         ds4_session_invalidate(w->session);
         ds4_tokens_free(&w->transcript);
@@ -10103,16 +11386,17 @@ static bool agent_worker_compact_transcript(agent_worker *w, const char *reason,
                       strlen("\x1b[90mCOMPACTING added bash job update after rebuild\x1b[0m\n"));
         free(bash_update);
     }
-    agent_trace(w, "compacted reason=\"%s\" old=%d new=%d tail_start=%d tail=%d",
+    agent_trace(w, "compacted reason=\"%s\" old=%d new=%d tail_start=%d tail=%d suffix_reused=%d",
                 reason ? reason : "", bottom, w->transcript.len,
-                tail_start, bottom - tail_start);
+                tail_start, bottom - tail_start, reused > 0);
     if (open_assistant) *open_assistant = resumed_start;
     return true;
 }
 
 static bool agent_worker_compact(agent_worker *w, const char *reason,
                                   char *err, size_t err_len) {
-    return agent_worker_compact_transcript(w, reason, NULL, err, err_len);
+    return agent_worker_compact_transcript(w, reason, NULL, err, err_len) &&
+           agent_worker_export_live_context(w, err, err_len);
 }
 
 static bool agent_worker_compact_if_needed(agent_worker *w, const char *reason,
@@ -10298,6 +11582,29 @@ static int worker_run_turn(agent_worker *w, const char *user_text) {
     pthread_mutex_unlock(&w->mu);
 
     char compact_err[160] = {0};
+    if (agent_context_prerope_requested() &&
+        ds4_session_enable_suffix_prerope(w->session, compact_err, sizeof(compact_err)) != 0) {
+        agent_set_error(w, compact_err);
+        return 1;
+    }
+    /* Accept edits made while idle before compaction or mirroring can replace
+     * the file, and before appending the newly submitted user message. */
+    if (cfg->gen.live_context_path) {
+        char context_err[160] = {0};
+        int imported = agent_worker_import_live_context(w, context_err,
+                                                        sizeof(context_err));
+        if (imported < 0) {
+            if (agent_err_is_interrupted(context_err)) {
+                worker_clear_interrupt(w);
+                agent_set_status(w, AGENT_WORKER_IDLE);
+                return 0;
+            }
+            snprintf(compact_err, sizeof(compact_err),
+                     "live context edit rejected: %.120s", context_err);
+            agent_set_error(w, compact_err);
+            return 1;
+        }
+    }
     if (!agent_worker_compact_if_needed(w, "soft limit before user turn",
                                         compact_err, sizeof(compact_err)))
     {
@@ -10363,6 +11670,10 @@ static int worker_run_turn(agent_worker *w, const char *user_text) {
         if (!resume_assistant) {
             agent_worker_maybe_append_system_prompt_reminder(w);
             agent_worker_append_hints_context(w);
+        }
+        if (!agent_worker_export_live_context(w, compact_err, sizeof(compact_err))) {
+            agent_set_error(w, compact_err);
+            return 1;
         }
         const int assistant_start = resume_assistant ? resume_start : w->transcript.len;
         if (!resume_assistant)
@@ -10710,6 +12021,13 @@ static int worker_run_turn(agent_worker *w, const char *user_text) {
 
         agent_worker_append_assistant_turn_end(w);
 
+        (void)agent_worker_capture_context_frontier(w);
+        if (!agent_worker_export_live_context(w, compact_err, sizeof(compact_err))) {
+            agent_dsml_parser_free(&dsml);
+            agent_set_error(w, compact_err);
+            return 1;
+        }
+
         if (!got_tool && !malformed_tool && !early_tool_error) {
             agent_dsml_parser_free(&dsml);
             agent_set_status(w, AGENT_WORKER_IDLE);
@@ -10742,6 +12060,32 @@ static int worker_run_turn(agent_worker *w, const char *user_text) {
         } else {
             agent_tool_observation_free(&observation);
             observation = agent_execute_tool_observation(w, &dsml.calls);
+            if (cfg->gen.live_context_path) {
+                char context_err[160] = {0};
+                int context_before = w->transcript.len;
+                int imported = agent_worker_import_live_context(w, context_err,
+                                                                sizeof(context_err));
+                if (imported < 0 && agent_err_is_interrupted(context_err)) {
+                    agent_tool_observation_free(&observation);
+                    agent_dsml_parser_free(&dsml);
+                    worker_clear_interrupt(w);
+                    agent_set_status(w, AGENT_WORKER_IDLE);
+                    return 0;
+                }
+                if (imported) {
+                    if (imported > 0) {
+                        char receipt[192];
+                        snprintf(receipt, sizeof(receipt),
+                            "Live context edit accepted: %d -> %d tokens; suffix reuse=%s.\n",
+                            context_before, w->transcript.len, imported == 2 ? "approximate" : "none");
+                        agent_tool_observation_puts(&observation, receipt);
+                    } else {
+                        agent_tool_observation_puts(&observation, "Live context edit rejected: ");
+                        agent_tool_observation_puts(&observation, context_err);
+                        agent_tool_observation_puts(&observation, "\n");
+                    }
+                }
+            }
         }
         int projected_tokens = 0;
         int result_reserve = agent_tool_result_reserve_tokens(w);
@@ -10793,6 +12137,8 @@ static int worker_run_turn(agent_worker *w, const char *user_text) {
         if (!agent_tool_observation_commit(w, &observation,
                                            append_err, sizeof(append_err)))
             goto observation_error;
+        if (!agent_worker_export_live_context(w, append_err, sizeof(append_err)))
+            goto observation_error;
         agent_tool_observation_free(&observation);
         agent_dsml_parser_free(&dsml);
         carried_generation = 0;
@@ -10826,6 +12172,26 @@ observation_error:
         return 1;
     }
 }
+
+#ifdef DS4_AGENT_TEST
+static void test_agent_idle_context_rejection_precedes_user_append(void) {
+    agent_config cfg = {.gen = {.live_context_path = "/dev/null/ds4-agent-idle-context",
+                                .ctx_size = 4096, .think_mode = DS4_THINK_NONE}};
+    int original[] = {11, 22, 33};
+    agent_worker w = {.cfg = &cfg, .wake_pending = true,
+                      .transcript = {.v = original, .len = 3, .cap = 3}};
+    AGENT_TEST_ASSERT(pthread_mutex_init(&w.mu, NULL) == 0);
+    /* No engine/session is provided: rejection must precede any token/model
+     * work as well as appending the incoming user or replacing the mirror. */
+    AGENT_TEST_ASSERT(worker_run_turn(&w, "incoming user") == 1);
+    AGENT_TEST_ASSERT(w.status.state == AGENT_WORKER_ERROR);
+    AGENT_TEST_ASSERT(strstr(w.status.error, "live context edit rejected:") != NULL);
+    AGENT_TEST_ASSERT(w.transcript.v == original && w.transcript.len == 3);
+    AGENT_TEST_ASSERT(original[0] == 11 && original[1] == 22 && original[2] == 33);
+    AGENT_TEST_ASSERT(!w.user_activity && !w.session_dirty && w.out == NULL);
+    AGENT_TEST_ASSERT(pthread_mutex_destroy(&w.mu) == 0);
+}
+#endif
 
 static int worker_run_raw_prompt(agent_worker *w, const char *user_text) {
     agent_config *cfg = w->cfg;
@@ -11038,6 +12404,7 @@ static void worker_apply_requested_think(agent_worker *w) {
         ds4_session_invalidate(w->session);
     }
     ds4_tokens_free(&next);
+    agent_context_frontiers_clear(w);
     pthread_mutex_lock(&w->mu);
     w->cfg->gen.think_mode = mode;
     w->session_dirty |= changed;
@@ -12707,7 +14074,16 @@ static int agent_worker_init(agent_worker *w, ds4_engine *engine, agent_config *
             return -1;
         }
     }
-    if (pthread_create(&w->thread, NULL, worker_main, w) != 0) return -1;
+    char state_cache_err[160] = {0};
+    w->state_cache = ds4_state_cache_runtime_open(engine, &cfg->engine,
+        agent_worker_effective_ctx_size(w), w->state_cache_profile,
+        state_cache_err, sizeof(state_cache_err));
+    if (state_cache_err[0])
+        fprintf(stderr, "ds4-agent: state cache disabled: %s\n", state_cache_err);
+    if (pthread_create(&w->thread, NULL, worker_main, w) != 0) {
+        ds4_state_cache_close(w->state_cache, NULL, 0); w->state_cache = NULL;
+        return -1;
+    }
     return 0;
 }
 
@@ -12718,7 +14094,10 @@ static void agent_worker_free(agent_worker *w) {
     if (w->thread) pthread_join(w->thread, NULL);
     agent_bash_jobs_free(w);
     ds4_web_free(w->web);
+    agent_context_frontiers_clear(w);
+    ds4_state_cache_close(w->state_cache, NULL, 0); w->state_cache = NULL;
     ds4_session_free(w->session);
+    agent_live_context_clear(w);
     ds4_tokens_free(&w->transcript);
     agent_worker_images_clear(w);
     free(w->cache_dir);
