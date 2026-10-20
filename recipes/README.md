@@ -30,6 +30,7 @@ result blocks, not relabelled historical measurements.
 | [2026-10-20 upgrade](09-upgrade-20261020.md) | Compact feature stack, checkpoint pairing and checksum-verified downloads | 16 first-attempt checks pass; three relocations save 30.27% edit time; scheduler latency separate |
 | [Q2 kernel epilogue](10-q2-kernel-epilogue.md) | Keep paired gate/up activation in registers; measure before adopting | No useful ABBA gain; patch retained for replication, defaults unchanged |
 | [Incremental tool schemas](11-incremental-tool-schemas.md) | Announce discovered schemas at their history position; preserve reusable prefixes | Opt-in; favorable parent workflow 46.30% faster, ordinary full-input 8.17% slower |
+| [Bounded decoder replay](12-bounded-decoder-replay.md) | Replay a fixed decoder tail while retaining complete compressed/index state | Opt-in 128/selected1; 7.03% unbatched HTTP workflow saving includes shorter search output; separate direct fixtures save 34.32–38.17%; presets unchanged |
 
 [Not-adopted summary](not-adopted/README.md) collects short reasons and links
 for rejected policies and candidates that still lack serving evidence. The

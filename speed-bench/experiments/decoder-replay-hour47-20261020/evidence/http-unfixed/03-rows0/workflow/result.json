@@ -1,0 +1,79 @@
+{
+  "case": "http-replay",
+  "history_mode": "full",
+  "pass": true,
+  "error": null,
+  "requests": [
+    {
+      "step": 1,
+      "seconds": 42.61238862504251,
+      "usage": {
+        "input_tokens": 8623,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 8623
+        },
+        "output_tokens": 57,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 8680
+      },
+      "status": "completed",
+      "output_types": [
+        "message",
+        "tool_search_call"
+      ]
+    },
+    {
+      "step": 2,
+      "seconds": 9.487137833144516,
+      "usage": {
+        "input_tokens": 8832,
+        "input_tokens_details": {
+          "cached_tokens": 8680,
+          "cache_write_tokens": 152
+        },
+        "output_tokens": 69,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 8901
+      },
+      "status": "completed",
+      "output_types": [
+        "function_call"
+      ]
+    },
+    {
+      "step": 3,
+      "seconds": 2.6542042910587043,
+      "usage": {
+        "input_tokens": 8932,
+        "input_tokens_details": {
+          "cached_tokens": 8901,
+          "cache_write_tokens": 31
+        },
+        "output_tokens": 26,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 8958
+      },
+      "status": "completed",
+      "output_types": [
+        "message"
+      ]
+    }
+  ],
+  "first_search_arguments": {
+    "query": "read_note"
+  },
+  "tool_seconds": 0.00016820896416902542,
+  "actual_file_read": true,
+  "read_sha256": "21640f24dc8ed2cd53143bbf12463fc4747f3ebe660ce1c98b8bd0f7eba00407",
+  "parent_id_after_read_call": "resp_de06db72e855eae8a474596f",
+  "answer": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ47\",\"current_key\":\"SABLE-1937\"}",
+  "workflow_seconds": 54.75790241593495,
+  "total_seconds": 54.75790258287452
+}

@@ -617,3 +617,24 @@ used the same binary with flag0/1/1/0, and650 guard samples stayed normal with
 zero swap growth. A narrow post-measure metadata precedence fix passed the
 rebuilt server suite without changing measured prompts.
 [Recipe and retained first outputs](../../recipes/11-incremental-tool-schemas.md).
+
+Item47 starts **22:24 UTC**, deadline **23:21 UTC**, including3 minutes
+prior source/driver review. Sourcebase61bee1df. Add opt-in fixed decoder replay
+to the existing wide-prefill branch only; retain full encoder/compressed/index
+state and explicit raw replay visibility. Compare native,128,256 and a closing
+native bracket on ordinary/favorable fixed histories with shared teacher rows
+and actual first answers. Record direct-sync speed and approximate-state/cache
+boundaries; no claim of HTTP2048-chunk savings. One heavy job under guard.
+
+Item47 finished **23:04 UTC** (finalHTTPbracket22:59:17). Replay alone
+was1.55–2.00% slower; profiling exposed unchanged whole decoder-layer reads.
+Using existing selected-expert batches with128-row replay saved38.17% on the
+three direct8192-token fixtures (256 saved34.32%), all12 first answers pass;
+128 shared-teacher meanΔNLL+0.00003250/KL0.000004469, noargmaxflips.
+Actualunbatched8625-token search/read/answer saved7.03% vsnativebrackets
+with0.267% drift, all3firstworkflows/realreads pass. HTTPgainincludes9fewer
+searchtokens. Preserved the below-thresholdfixture and initialHTTP+105%
+regression caused by discarding approximate live state; a narrow profile fix
+now permits verified matching live continuations while canonicalexports and
+suffixcapture stay blocked. Existingbatched2k presets unchanged.
+[Portable recipe, curves and all first outputs](../../recipes/12-bounded-decoder-replay.md).

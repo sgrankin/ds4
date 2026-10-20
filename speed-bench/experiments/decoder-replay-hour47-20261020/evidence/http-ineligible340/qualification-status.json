@@ -1,0 +1,9 @@
+{
+  "status": "ineligible_fixture_controlled_stop",
+  "audit_lines": 340,
+  "first_input_tokens": 8162,
+  "minimum_replay_sweep_tokens": 8192,
+  "timing_used": false,
+  "quality_claim": false,
+  "correction": "Use360auditlines and explicitly check actual usage>=8192 plus replay activation logs in the new http360 bracket. First outputs retained; no generation retry is used to choose an answer."
+}

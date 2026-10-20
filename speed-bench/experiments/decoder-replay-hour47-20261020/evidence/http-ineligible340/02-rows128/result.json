@@ -1,0 +1,18 @@
+{
+  "arm": 2,
+  "rows": 128,
+  "pass": false,
+  "error": null,
+  "startup_seconds": 0.4177864580415189,
+  "workflow": {
+    "case": "http-replay",
+    "history_mode": "full",
+    "pass": false,
+    "error": "InterruptedError: signal 15",
+    "requests": [],
+    "total_seconds": 9.982024875003844
+  },
+  "server_returncode": 130,
+  "arm_seconds": 11.536497500026599,
+  "runtime_replay_lines": []
+}

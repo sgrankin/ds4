@@ -1,0 +1,32 @@
+[
+  {
+    "arm": "01-rows0",
+    "sweeps": 2,
+    "layer_records": 126,
+    "decoder_records": 46,
+    "decoder_profile_ms_two_sweeps": {
+      "map": 6471.54,
+      "engram": 0.006,
+      "encode": 254.108,
+      "drain": 6607.4,
+      "seed": 1890.77
+    },
+    "decoder_full_pread_records": 40,
+    "decoder_rows_two_sweeps": 48300
+  },
+  {
+    "arm": "02-rows128",
+    "sweeps": 2,
+    "layer_records": 120,
+    "decoder_records": 40,
+    "decoder_profile_ms_two_sweeps": {
+      "map": 7569.0779999999995,
+      "engram": 0.009000000000000001,
+      "encode": 62.3,
+      "drain": 6106.186,
+      "seed": 1815.536
+    },
+    "decoder_full_pread_records": 40,
+    "decoder_rows_two_sweeps": 5120
+  }
+]

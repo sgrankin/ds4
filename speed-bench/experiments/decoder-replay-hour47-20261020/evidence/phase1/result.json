@@ -1,0 +1,26 @@
+[
+  {
+    "rows": 0,
+    "directory": "01-rows0",
+    "seconds": 143.97112808306701,
+    "returncode": 0
+  },
+  {
+    "rows": 128,
+    "directory": "02-rows128",
+    "seconds": 140.8052323749289,
+    "returncode": 0
+  },
+  {
+    "rows": 256,
+    "directory": "03-rows256",
+    "seconds": 140.34812866686843,
+    "returncode": 0
+  },
+  {
+    "rows": 0,
+    "directory": "04-rows0",
+    "seconds": 140.79613020899706,
+    "returncode": 0
+  }
+]

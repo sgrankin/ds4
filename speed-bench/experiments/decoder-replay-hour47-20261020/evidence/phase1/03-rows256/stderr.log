@@ -1,0 +1,23 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.11 GiB (raw 0.01 + compressed 0.10) + buffers 6.56 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 80.03 GiB planned
+ds4: memory detail: ctx=16384 prefill_cap=8192 raw_kv_rows=128 compressed_kv_rows=16385 backend=metal
+ds4: V4.1 static context buffers 6826.77 MiB (ctx=16384), Engram disk-only
+CASE ordinary rows=256 prompt=8192 teacher=7 record_start=4096 query_start=8170
+ds4: V4.1 decoder replay rows=256 floor=7936 end=8192 approximate=1
+ds4: V4.1 decoder replay rows=256 floor=7936 end=8192 approximate=1
+RESULT ordinary rows=256 sync_ms=20210.918 teacher_ms=1581.856 greedy_sync_ms=20654.686 greedy_ms=1605.472 generated=6 stopped=1 exact=1 answer=CODE=EMBER-7319
+CASE favorable rows=256 prompt=8192 teacher=8 record_start=8110 query_start=8170
+ds4: V4.1 decoder replay rows=256 floor=7936 end=8192 approximate=1
+ds4: V4.1 decoder replay rows=256 floor=7936 end=8192 approximate=1
+RESULT favorable rows=256 sync_ms=21318.324 teacher_ms=645.932 greedy_sync_ms=23129.671 greedy_ms=963.536 generated=7 stopped=1 exact=1 answer=CODE=CEDAR-4826
+CASE changed rows=256 prompt=8192 teacher=7 record_start=7680 query_start=8170
+ds4: V4.1 decoder replay rows=256 floor=7936 end=8192 approximate=1
+ds4: V4.1 decoder replay rows=256 floor=7936 end=8192 approximate=1
+RESULT changed rows=256 sync_ms=23263.325 teacher_ms=623.370 greedy_sync_ms=23089.095 greedy_ms=948.245 generated=6 stopped=1 exact=1 answer=CODE=LARCH-9062

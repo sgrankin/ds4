@@ -1,0 +1,47 @@
+{
+  "id": "resp_fbc5defbaa75bfe6eb6a4c2a",
+  "object": "response",
+  "created_at": 1792537145,
+  "status": "completed",
+  "model": "deepseek-v4.1-flash",
+  "store": false,
+  "previous_response_id": null,
+  "conversation": null,
+  "output": [
+    {
+      "id": "msg_ff24b1b602de2e1532a3ee55",
+      "type": "message",
+      "status": "completed",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "I'll first discover the read_note tool, then use it to read the specified file.",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "id": "fc_96731170b2a49cb56a1a409d",
+      "type": "tool_search_call",
+      "status": "completed",
+      "call_id": "call_a0edaae35dfa09cb27974a8420542905",
+      "execution": "client",
+      "arguments": {
+        "query": "read_note"
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 8625,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 8625
+    },
+    "output_tokens": 57,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 8682
+  }
+}

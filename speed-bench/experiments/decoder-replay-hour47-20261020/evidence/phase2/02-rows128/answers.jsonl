@@ -1,0 +1,3 @@
+{"case":"ordinary","expected":"CODE=EMBER-7319","text":"CODE=EMBER-7319","tokens":[83552,31,72048,15,29107,27],"stopped":true,"exact":true}
+{"case":"favorable","expected":"CODE=CEDAR-4826","text":"CODE=CEDAR-4826","tokens":[83552,62534,3316,2271,15,24980,24],"stopped":true,"exact":true}
+{"case":"changed","expected":"CODE=LARCH-9062","text":"CODE=LARCH-9062","tokens":[83552,108097,24606,15,30598,20],"stopped":true,"exact":true}

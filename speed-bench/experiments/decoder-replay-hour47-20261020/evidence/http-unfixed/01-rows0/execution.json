@@ -1,0 +1,35 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/ds4-server",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "64071",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--ctx",
+    "16384",
+    "--prefill-chunk",
+    "8192",
+    "--mtp-draft",
+    "1"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_V41_DECODER_REPLAY_ROWS": "0",
+    "DS4_V41_DECODER_REPLAY_SELECTED": "1",
+    "DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS": "1",
+    "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "0",
+    "DS4_SERVER_RESPONSE_STORE_DIR": "/Volumes/Models/ds4/.workspaces/deepinfer-followups-20261020/item47/http360/01-rows0/responses",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0"
+  },
+  "server_sha256": "8fcd99db7018a40f016411349cd9c46683edaf887402967ef2e6777c77dac4ca",
+  "batched_sessions": 0,
+  "application_ssd_kv_cache": "disabled",
+  "timing": "workflow includes three HTTP requests and actual note read; startup separate"
+}

@@ -1,0 +1,15 @@
+{
+  "sweeps": 2,
+  "encoder_full_pread_records": 40,
+  "decoder_full_pread_records": 0,
+  "selected_layer_reports": [
+    [
+      "20",
+      "0"
+    ],
+    [
+      "20",
+      "0"
+    ]
+  ]
+}

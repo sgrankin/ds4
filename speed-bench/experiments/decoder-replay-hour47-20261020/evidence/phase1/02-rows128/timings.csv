@@ -1,0 +1,4 @@
+case,rows,prompt_tokens,teacher_tokens,sync_ms,teacher_ms,greedy_sync_ms,greedy_ms,generated_tokens,stopped,exact,approximate,payload_bytes,suffix_cache_bytes
+ordinary,128,8192,7,19090.402000,1632.514000,20158.546000,1429.083000,6,1,1,1,0,0
+favorable,128,8192,8,21706.307000,733.318000,23499.282000,1354.851000,7,1,1,1,0,0
+changed,128,8192,7,23898.775000,776.261000,23408.302000,846.911000,6,1,1,1,0,0

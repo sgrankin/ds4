@@ -1,0 +1,8 @@
+{
+  "case": "http-replay",
+  "history_mode": "full",
+  "pass": false,
+  "error": "InterruptedError: signal 15",
+  "requests": [],
+  "total_seconds": 9.982024875003844
+}

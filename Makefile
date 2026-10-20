@@ -149,6 +149,12 @@ speed-bench/metal_prefill_variant_bench: speed-bench/metal_prefill_variant_bench
 
 metal-prefill-variant-bench: speed-bench/metal_prefill_variant_bench
 
+speed-bench/decoder_replay_bench.o: speed-bench/decoder_replay_bench.c ds4.h
+	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -I. -c -o $@ $<
+
+speed-bench/decoder_replay_bench: speed-bench/decoder_replay_bench.o $(CORE_OBJS)
+	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -o $@ $^ $(METAL_LDLIBS)
+
 speed-bench/session_concurrency_bench.o: speed-bench/session_concurrency_bench.c ds4.h
 	$(CC) $(CFLAGS) -I. -c -o $@ $<
 
@@ -1405,6 +1411,7 @@ ds4_agent.o ds4_agent_cpu.o ds4_agent_test.o tests/test_agent_compact_prefix.o \
 tests/test_agent_live_context.o tests/test_agent_context_frontiers.o: ds4_suffix_match.h
 
 clean:
+	rm -f speed-bench/decoder_replay_bench
 	rm -f tests/test_mmvq_cuda tests/test_mmvq_rocm
 	rm -f speed-bench/state_cache_bench
 	rm -f speed-bench/overthink_pilot

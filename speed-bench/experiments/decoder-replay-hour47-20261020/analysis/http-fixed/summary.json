@@ -1,0 +1,100 @@
+{
+  "native_mean_seconds": 52.375275478931144,
+  "candidate_seconds": 48.691598374862224,
+  "saving": 0.07033236714049829,
+  "saving_vs_faster_native": 0.06908985042263616,
+  "native_drift": 0.002673034262880014,
+  "scope": "Unbatched whole three-request workflow with real file read; late schemas fixed on; first tool calls may differ",
+  "arms": [
+    {
+      "rows": 0,
+      "pass": true,
+      "eligible_prompt": true,
+      "replay_executed": false,
+      "workflow_seconds": 52.30536845792085,
+      "actual_file_read": true,
+      "input_tokens": [
+        8625,
+        8834,
+        8936
+      ],
+      "output_tokens": [
+        57,
+        71,
+        26
+      ],
+      "cached_tokens": [
+        0,
+        8682,
+        8905
+      ],
+      "request_seconds": [
+        40.23415204207413,
+        9.406951624900103,
+        2.661465625045821
+      ],
+      "approximate_live_matches": []
+    },
+    {
+      "rows": 128,
+      "pass": true,
+      "eligible_prompt": true,
+      "replay_executed": true,
+      "workflow_seconds": 48.691598374862224,
+      "actual_file_read": true,
+      "input_tokens": [
+        8625,
+        8825,
+        8927
+      ],
+      "output_tokens": [
+        48,
+        71,
+        26
+      ],
+      "cached_tokens": [
+        0,
+        8673,
+        8896
+      ],
+      "request_seconds": [
+        36.65472700004466,
+        9.41720537492074,
+        2.616380917141214
+      ],
+      "approximate_live_matches": [
+        "responses live continuation RESPPROTO match=visible-prefix ids=1 cached=8673 prompt=8825 approximate=1",
+        "responses live continuation RESPPROTO match=visible-prefix ids=1 cached=8896 prompt=8927 approximate=1"
+      ]
+    },
+    {
+      "rows": 0,
+      "pass": true,
+      "eligible_prompt": true,
+      "replay_executed": false,
+      "workflow_seconds": 52.44518249994144,
+      "actual_file_read": true,
+      "input_tokens": [
+        8625,
+        8834,
+        8936
+      ],
+      "output_tokens": [
+        57,
+        71,
+        26
+      ],
+      "cached_tokens": [
+        0,
+        8682,
+        8905
+      ],
+      "request_seconds": [
+        40.22263533389196,
+        9.526064916048199,
+        2.6931110839359462
+      ],
+      "approximate_live_matches": []
+    }
+  ]
+}

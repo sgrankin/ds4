@@ -1,0 +1,215 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.11 GiB (raw 0.01 + compressed 0.10) + buffers 6.56 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 80.03 GiB planned
+ds4: memory detail: ctx=16384 prefill_cap=8192 raw_kv_rows=128 compressed_kv_rows=16385 backend=metal
+ds4: V4.1 static context buffers 6826.77 MiB (ctx=16384), Engram disk-only
+CASE ordinary rows=128 prompt=8192 teacher=7 record_start=4096 query_start=8170
+ds4: Metal streaming prefill layer pread layer=0 tokens=4096 threads=8 ranges=104 bytes=4.96 GiB wait=312.186 ms thread=312.161 ms read=4.96 GiB ok=1
+ds4: V4.1 prefill layer=0 pos=0 rows=4096 encoder_resident=0 map=314.626 engram=0.000 encode=11.912 drain=269.918 seed=-0.000 ms
+ds4: V4.1 prefill layer=0 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=2.296 drain=133.600 seed=116.978 ms
+ds4: Metal streaming prefill layer pread layer=1 tokens=4096 threads=8 ranges=96 bytes=4.02 GiB wait=0.028 ms thread=307.402 ms read=4.02 GiB ok=1
+ds4: V4.1 prefill layer=1 pos=0 rows=4096 encoder_resident=0 map=0.307 engram=0.000 encode=2.774 drain=231.271 seed=-0.000 ms
+ds4: V4.1 prefill layer=1 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=2.042 drain=169.009 seed=30.176 ms
+ds4: Metal streaming prefill layer pread layer=2 tokens=4096 threads=8 ranges=112 bytes=3.75 GiB wait=0.020 ms thread=331.253 ms read=3.75 GiB ok=1
+ds4: V4.1 prefill layer=2 pos=0 rows=4096 encoder_resident=0 map=0.345 engram=0.000 encode=5.676 drain=316.113 seed=0.000 ms
+ds4: V4.1 prefill layer=2 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.719 drain=286.426 seed=101.135 ms
+ds4: Metal streaming prefill layer pread layer=3 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.028 ms thread=330.246 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=3 pos=0 rows=4096 encoder_resident=0 map=0.309 engram=0.000 encode=0.454 drain=180.031 seed=0.000 ms
+ds4: V4.1 prefill layer=3 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.169 drain=176.389 seed=28.839 ms
+ds4: Metal streaming prefill layer pread layer=4 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.026 ms thread=307.685 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=4 pos=0 rows=4096 encoder_resident=0 map=0.344 engram=0.001 encode=0.328 drain=181.234 seed=-0.000 ms
+ds4: V4.1 prefill layer=4 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.196 drain=181.241 seed=29.810 ms
+ds4: Metal streaming prefill layer pread layer=5 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.026 ms thread=307.787 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=5 pos=0 rows=4096 encoder_resident=0 map=0.361 engram=0.001 encode=0.326 drain=205.786 seed=0.000 ms
+ds4: V4.1 prefill layer=5 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.217 drain=206.565 seed=106.300 ms
+ds4: Metal streaming prefill layer pread layer=6 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.026 ms thread=306.916 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=6 pos=0 rows=4096 encoder_resident=0 map=0.373 engram=0.000 encode=0.274 drain=183.630 seed=0.000 ms
+ds4: V4.1 prefill layer=6 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.179 drain=178.244 seed=30.299 ms
+ds4: Metal streaming prefill layer pread layer=7 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.026 ms thread=312.024 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=7 pos=0 rows=4096 encoder_resident=0 map=0.350 engram=0.000 encode=0.419 drain=197.111 seed=0.000 ms
+ds4: V4.1 prefill layer=7 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.202 drain=195.031 seed=32.819 ms
+ds4: Metal streaming prefill layer pread layer=8 tokens=4096 threads=8 ranges=112 bytes=3.75 GiB wait=0.029 ms thread=309.428 ms read=3.75 GiB ok=1
+ds4: V4.1 prefill layer=8 pos=0 rows=4096 encoder_resident=0 map=0.428 engram=0.000 encode=1.509 drain=316.585 seed=0.001 ms
+ds4: V4.1 prefill layer=8 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.461 drain=286.281 seed=107.099 ms
+ds4: Metal streaming prefill layer pread layer=9 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.027 ms thread=308.700 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=9 pos=0 rows=4096 encoder_resident=0 map=0.343 engram=0.000 encode=0.301 drain=186.705 seed=-0.000 ms
+ds4: V4.1 prefill layer=9 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.182 drain=180.095 seed=30.955 ms
+ds4: Metal streaming prefill layer pread layer=10 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.028 ms thread=307.391 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=10 pos=0 rows=4096 encoder_resident=0 map=0.353 engram=0.000 encode=0.335 drain=185.192 seed=0.000 ms
+ds4: V4.1 prefill layer=10 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.247 drain=178.177 seed=41.694 ms
+ds4: Metal streaming prefill layer pread layer=11 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=248.583 ms thread=657.333 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=11 pos=0 rows=4096 encoder_resident=0 map=251.670 engram=0.000 encode=0.463 drain=218.196 seed=0.000 ms
+ds4: V4.1 prefill layer=11 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.233 drain=177.832 seed=256.380 ms
+ds4: Metal streaming prefill layer pread layer=12 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.218 ms thread=361.447 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=12 pos=0 rows=4096 encoder_resident=0 map=0.917 engram=0.000 encode=0.282 drain=223.580 seed=-0.000 ms
+ds4: V4.1 prefill layer=12 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.412 drain=178.492 seed=35.922 ms
+ds4: Metal streaming prefill layer pread layer=13 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.026 ms thread=419.789 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=13 pos=0 rows=4096 encoder_resident=0 map=0.351 engram=0.000 encode=0.338 drain=249.819 seed=-0.000 ms
+ds4: V4.1 prefill layer=13 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.200 drain=180.976 seed=34.662 ms
+ds4: Metal streaming prefill layer pread layer=14 tokens=4096 threads=8 ranges=112 bytes=4.04 GiB wait=0.032 ms thread=415.100 ms read=4.04 GiB ok=1
+ds4: V4.1 prefill layer=14 pos=0 rows=4096 encoder_resident=0 map=0.373 engram=0.000 encode=1.849 drain=541.769 seed=0.000 ms
+ds4: V4.1 prefill layer=14 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.647 drain=318.821 seed=227.961 ms
+ds4: Metal streaming prefill layer pread layer=15 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.051 ms thread=390.430 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=15 pos=0 rows=4096 encoder_resident=0 map=0.378 engram=0.001 encode=0.674 drain=256.510 seed=0.000 ms
+ds4: V4.1 prefill layer=15 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.470 drain=179.063 seed=36.910 ms
+ds4: Metal streaming prefill layer pread layer=16 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.051 ms thread=408.438 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=16 pos=0 rows=4096 encoder_resident=0 map=0.392 engram=0.000 encode=0.336 drain=235.681 seed=0.002 ms
+ds4: V4.1 prefill layer=16 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.340 drain=176.225 seed=170.973 ms
+ds4: Metal streaming prefill layer pread layer=17 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.027 ms thread=398.564 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=17 pos=0 rows=4096 encoder_resident=0 map=0.340 engram=0.000 encode=0.350 drain=317.374 seed=-0.000 ms
+ds4: V4.1 prefill layer=17 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.199 drain=177.637 seed=33.297 ms
+ds4: Metal streaming prefill layer pread layer=18 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.030 ms thread=416.556 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=18 pos=0 rows=4096 encoder_resident=0 map=0.380 engram=0.000 encode=0.346 drain=211.465 seed=0.000 ms
+ds4: V4.1 prefill layer=18 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.206 drain=177.400 seed=29.872 ms
+ds4: Metal streaming prefill layer pread layer=19 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.058 ms thread=366.985 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=19 pos=0 rows=4096 encoder_resident=0 map=0.527 engram=0.000 encode=0.279 drain=217.898 seed=0.001 ms
+ds4: V4.1 prefill layer=19 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.218 drain=180.874 seed=133.137 ms
+ds4: Metal streaming prefill layer pread layer=20 tokens=4096 threads=8 ranges=112 bytes=3.74 GiB wait=0.026 ms thread=346.411 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=20 pos=8064 rows=128 encoder_resident=0 map=0.344 engram=0.000 encode=42.244 drain=81.002 seed=21.154 ms
+ds4: Metal streaming prefill layer pread layer=21 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=180.813 ms thread=391.238 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=21 pos=8064 rows=128 encoder_resident=0 map=181.169 engram=0.000 encode=0.241 drain=119.189 seed=21.067 ms
+ds4: Metal streaming prefill layer pread layer=22 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=206.392 ms thread=347.865 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=22 pos=8064 rows=128 encoder_resident=0 map=206.731 engram=0.000 encode=0.399 drain=97.025 seed=23.196 ms
+ds4: Metal streaming prefill layer pread layer=23 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=223.207 ms thread=344.615 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=23 pos=8064 rows=128 encoder_resident=0 map=223.591 engram=0.000 encode=0.349 drain=99.403 seed=182.235 ms
+ds4: Metal streaming prefill layer pread layer=24 tokens=4096 threads=8 ranges=96 bytes=3.74 GiB wait=124.475 ms thread=407.294 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=24 pos=8064 rows=128 encoder_resident=0 map=124.815 engram=0.000 encode=1.007 drain=116.301 seed=24.785 ms
+ds4: Metal streaming prefill layer pread layer=25 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=214.047 ms thread=356.869 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=25 pos=8064 rows=128 encoder_resident=0 map=214.408 engram=0.000 encode=0.257 drain=142.598 seed=34.066 ms
+ds4: Metal streaming prefill layer pread layer=26 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=218.915 ms thread=396.543 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=26 pos=8064 rows=128 encoder_resident=0 map=219.242 engram=0.000 encode=0.226 drain=147.705 seed=28.589 ms
+ds4: Metal streaming prefill layer pread layer=27 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=226.087 ms thread=403.325 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=27 pos=8064 rows=128 encoder_resident=0 map=226.455 engram=0.000 encode=0.241 drain=171.800 seed=255.202 ms
+ds4: Metal streaming prefill layer pread layer=28 tokens=4096 threads=8 ranges=96 bytes=3.74 GiB wait=7.395 ms thread=435.400 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=28 pos=8064 rows=128 encoder_resident=0 map=7.709 engram=0.000 encode=0.429 drain=157.437 seed=34.778 ms
+ds4: Metal streaming prefill layer pread layer=29 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=194.256 ms thread=387.667 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=29 pos=8064 rows=128 encoder_resident=0 map=194.602 engram=0.000 encode=0.232 drain=159.142 seed=41.641 ms
+ds4: Metal streaming prefill layer pread layer=30 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=212.794 ms thread=414.590 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=30 pos=8064 rows=128 encoder_resident=0 map=213.135 engram=0.000 encode=0.284 drain=155.231 seed=195.059 ms
+ds4: Metal streaming prefill layer pread layer=31 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=73.073 ms thread=424.567 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=31 pos=8064 rows=128 encoder_resident=0 map=73.451 engram=0.000 encode=0.277 drain=221.838 seed=29.765 ms
+ds4: Metal streaming prefill layer pread layer=32 tokens=4096 threads=8 ranges=96 bytes=3.74 GiB wait=163.193 ms thread=415.815 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=32 pos=8064 rows=128 encoder_resident=0 map=163.557 engram=0.000 encode=0.678 drain=104.425 seed=29.031 ms
+ds4: Metal streaming prefill layer pread layer=33 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=228.090 ms thread=363.094 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=33 pos=8064 rows=128 encoder_resident=0 map=228.440 engram=0.000 encode=0.429 drain=105.792 seed=195.361 ms
+ds4: Metal streaming prefill layer pread layer=34 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=71.869 ms thread=374.247 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=34 pos=8064 rows=128 encoder_resident=0 map=72.170 engram=0.001 encode=0.184 drain=123.596 seed=32.377 ms
+ds4: Metal streaming prefill layer pread layer=35 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=212.242 ms thread=369.117 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=35 pos=8064 rows=128 encoder_resident=0 map=212.655 engram=0.000 encode=0.234 drain=169.469 seed=281.835 ms
+ds4: Metal streaming prefill layer pread layer=36 tokens=4096 threads=8 ranges=96 bytes=3.74 GiB wait=39.913 ms thread=492.805 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=36 pos=8064 rows=128 encoder_resident=0 map=40.317 engram=0.001 encode=0.748 drain=144.832 seed=34.016 ms
+ds4: Metal streaming prefill layer pread layer=37 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=208.601 ms thread=389.049 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=37 pos=8064 rows=128 encoder_resident=0 map=209.045 engram=0.001 encode=0.300 drain=185.567 seed=38.668 ms
+ds4: Metal streaming prefill layer pread layer=38 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=160.094 ms thread=385.433 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=38 pos=8064 rows=128 encoder_resident=0 map=160.443 engram=0.000 encode=0.263 drain=174.365 seed=274.789 ms
+ds4: Metal streaming prefill layer pread layer=39 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=50.214 ms thread=500.438 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=39 pos=8064 rows=128 encoder_resident=0 map=50.587 engram=0.000 encode=0.164 drain=152.991 seed=34.254 ms
+ds4: V4.1 decoder replay rows=128 floor=8064 end=8192 approximate=1
+ds4: Metal streaming prefill layer pread layer=0 tokens=4096 threads=8 ranges=104 bytes=4.96 GiB wait=325.806 ms thread=325.742 ms read=4.96 GiB ok=1
+ds4: V4.1 prefill layer=0 pos=0 rows=4096 encoder_resident=0 map=365.527 engram=0.000 encode=2.669 drain=532.680 seed=-0.000 ms
+ds4: V4.1 prefill layer=0 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=3.221 drain=141.717 seed=0.170 ms
+ds4: Metal streaming prefill layer pread layer=1 tokens=4096 threads=8 ranges=96 bytes=4.02 GiB wait=0.033 ms thread=332.441 ms read=4.02 GiB ok=1
+ds4: V4.1 prefill layer=1 pos=0 rows=4096 encoder_resident=0 map=85.206 engram=0.001 encode=2.828 drain=298.327 seed=0.001 ms
+ds4: V4.1 prefill layer=1 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=2.359 drain=169.116 seed=0.182 ms
+ds4: Metal streaming prefill layer pread layer=2 tokens=4096 threads=8 ranges=112 bytes=3.75 GiB wait=0.046 ms thread=407.413 ms read=3.75 GiB ok=1
+ds4: V4.1 prefill layer=2 pos=0 rows=4096 encoder_resident=0 map=0.365 engram=0.000 encode=2.095 drain=349.678 seed=0.001 ms
+ds4: V4.1 prefill layer=2 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.883 drain=363.882 seed=0.175 ms
+ds4: Metal streaming prefill layer pread layer=3 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.032 ms thread=418.290 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=3 pos=0 rows=4096 encoder_resident=0 map=0.338 engram=0.000 encode=0.452 drain=264.414 seed=0.002 ms
+ds4: V4.1 prefill layer=3 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.303 drain=230.802 seed=0.175 ms
+ds4: Metal streaming prefill layer pread layer=4 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.044 ms thread=419.839 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=4 pos=0 rows=4096 encoder_resident=0 map=0.394 engram=0.000 encode=0.444 drain=248.704 seed=0.000 ms
+ds4: V4.1 prefill layer=4 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.308 drain=222.316 seed=0.160 ms
+ds4: Metal streaming prefill layer pread layer=5 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.030 ms thread=458.935 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=5 pos=0 rows=4096 encoder_resident=0 map=0.379 engram=0.000 encode=0.323 drain=263.200 seed=-0.000 ms
+ds4: V4.1 prefill layer=5 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.306 drain=212.655 seed=0.204 ms
+ds4: Metal streaming prefill layer pread layer=6 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.037 ms thread=423.278 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=6 pos=0 rows=4096 encoder_resident=0 map=0.364 engram=0.000 encode=0.324 drain=278.909 seed=-0.000 ms
+ds4: V4.1 prefill layer=6 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.235 drain=207.813 seed=0.210 ms
+ds4: Metal streaming prefill layer pread layer=7 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.038 ms thread=401.531 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=7 pos=0 rows=4096 encoder_resident=0 map=0.413 engram=0.000 encode=0.309 drain=274.038 seed=-0.000 ms
+ds4: V4.1 prefill layer=7 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.416 drain=208.157 seed=0.191 ms
+ds4: Metal streaming prefill layer pread layer=8 tokens=4096 threads=8 ranges=112 bytes=3.75 GiB wait=0.076 ms thread=448.566 ms read=3.75 GiB ok=1
+ds4: V4.1 prefill layer=8 pos=0 rows=4096 encoder_resident=0 map=0.476 engram=0.000 encode=2.574 drain=387.680 seed=0.000 ms
+ds4: V4.1 prefill layer=8 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.544 drain=327.914 seed=0.170 ms
+ds4: Metal streaming prefill layer pread layer=9 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.071 ms thread=399.732 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=9 pos=0 rows=4096 encoder_resident=0 map=0.418 engram=0.001 encode=0.439 drain=246.537 seed=0.000 ms
+ds4: V4.1 prefill layer=9 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.197 drain=206.517 seed=0.202 ms
+ds4: Metal streaming prefill layer pread layer=10 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.080 ms thread=411.351 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=10 pos=0 rows=4096 encoder_resident=0 map=0.694 engram=0.000 encode=0.497 drain=248.921 seed=-0.000 ms
+ds4: V4.1 prefill layer=10 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.367 drain=206.347 seed=0.206 ms
+ds4: Metal streaming prefill layer pread layer=11 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.061 ms thread=388.919 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=11 pos=0 rows=4096 encoder_resident=0 map=0.412 engram=0.001 encode=0.277 drain=253.723 seed=0.000 ms
+ds4: V4.1 prefill layer=11 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.291 drain=208.912 seed=0.166 ms
+ds4: Metal streaming prefill layer pread layer=12 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.032 ms thread=448.879 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=12 pos=0 rows=4096 encoder_resident=0 map=0.399 engram=0.000 encode=0.330 drain=239.805 seed=0.000 ms
+ds4: V4.1 prefill layer=12 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.280 drain=210.093 seed=0.196 ms
+ds4: Metal streaming prefill layer pread layer=13 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.035 ms thread=403.824 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=13 pos=0 rows=4096 encoder_resident=0 map=0.383 engram=0.000 encode=0.317 drain=258.021 seed=-0.000 ms
+ds4: V4.1 prefill layer=13 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.203 drain=211.771 seed=0.187 ms
+ds4: Metal streaming prefill layer pread layer=14 tokens=4096 threads=8 ranges=112 bytes=4.04 GiB wait=0.032 ms thread=403.742 ms read=4.04 GiB ok=1
+ds4: V4.1 prefill layer=14 pos=0 rows=4096 encoder_resident=0 map=0.424 engram=0.000 encode=2.186 drain=533.757 seed=-0.000 ms
+ds4: V4.1 prefill layer=14 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.831 drain=356.190 seed=0.194 ms
+ds4: Metal streaming prefill layer pread layer=15 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.024 ms thread=432.404 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=15 pos=0 rows=4096 encoder_resident=0 map=0.337 engram=0.000 encode=0.324 drain=275.962 seed=-0.000 ms
+ds4: V4.1 prefill layer=15 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.375 drain=206.946 seed=0.187 ms
+ds4: Metal streaming prefill layer pread layer=16 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.048 ms thread=434.873 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=16 pos=0 rows=4096 encoder_resident=0 map=0.387 engram=0.000 encode=0.344 drain=267.525 seed=-0.000 ms
+ds4: V4.1 prefill layer=16 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.001 encode=0.190 drain=200.384 seed=0.203 ms
+ds4: Metal streaming prefill layer pread layer=17 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.029 ms thread=400.190 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=17 pos=0 rows=4096 encoder_resident=0 map=0.403 engram=0.000 encode=0.287 drain=247.511 seed=-0.000 ms
+ds4: V4.1 prefill layer=17 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.180 drain=209.855 seed=0.197 ms
+ds4: Metal streaming prefill layer pread layer=18 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.050 ms thread=407.204 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=18 pos=0 rows=4096 encoder_resident=0 map=0.428 engram=0.001 encode=0.420 drain=260.471 seed=0.002 ms
+ds4: V4.1 prefill layer=18 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.281 drain=205.512 seed=0.169 ms
+ds4: Metal streaming prefill layer pread layer=19 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=0.029 ms thread=461.813 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=19 pos=0 rows=4096 encoder_resident=0 map=0.415 engram=0.000 encode=0.319 drain=257.679 seed=0.001 ms
+ds4: V4.1 prefill layer=19 pos=4096 rows=4096 encoder_resident=0 map=0.000 engram=0.000 encode=0.328 drain=214.019 seed=0.196 ms
+ds4: Metal streaming prefill layer pread layer=20 tokens=4096 threads=8 ranges=112 bytes=3.74 GiB wait=0.042 ms thread=416.767 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=20 pos=8064 rows=128 encoder_resident=0 map=0.423 engram=0.000 encode=5.913 drain=116.715 seed=0.138 ms
+ds4: Metal streaming prefill layer pread layer=21 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=181.115 ms thread=384.855 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=21 pos=8064 rows=128 encoder_resident=0 map=181.444 engram=0.000 encode=0.179 drain=138.076 seed=0.195 ms
+ds4: Metal streaming prefill layer pread layer=22 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=266.041 ms thread=404.941 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=22 pos=8064 rows=128 encoder_resident=0 map=266.422 engram=0.000 encode=0.426 drain=148.087 seed=0.174 ms
+ds4: Metal streaming prefill layer pread layer=23 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=254.395 ms thread=404.080 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=23 pos=8064 rows=128 encoder_resident=0 map=254.753 engram=0.000 encode=0.318 drain=165.108 seed=0.177 ms
+ds4: Metal streaming prefill layer pread layer=24 tokens=4096 threads=8 ranges=96 bytes=3.74 GiB wait=252.514 ms thread=419.051 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=24 pos=8064 rows=128 encoder_resident=0 map=252.867 engram=0.000 encode=0.782 drain=198.312 seed=0.155 ms
+ds4: Metal streaming prefill layer pread layer=25 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=202.452 ms thread=402.549 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=25 pos=8064 rows=128 encoder_resident=0 map=202.777 engram=0.001 encode=0.256 drain=177.191 seed=0.132 ms
+ds4: Metal streaming prefill layer pread layer=26 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=271.986 ms thread=450.356 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=26 pos=8064 rows=128 encoder_resident=0 map=272.413 engram=0.001 encode=0.364 drain=143.290 seed=0.197 ms
+ds4: Metal streaming prefill layer pread layer=27 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=256.496 ms thread=401.523 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=27 pos=8064 rows=128 encoder_resident=0 map=256.842 engram=0.000 encode=0.217 drain=160.097 seed=0.172 ms
+ds4: Metal streaming prefill layer pread layer=28 tokens=4096 threads=8 ranges=96 bytes=3.74 GiB wait=230.867 ms thread=393.390 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=28 pos=8064 rows=128 encoder_resident=0 map=231.267 engram=0.000 encode=0.619 drain=178.210 seed=0.165 ms
+ds4: Metal streaming prefill layer pread layer=29 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=237.712 ms thread=417.682 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=29 pos=8064 rows=128 encoder_resident=0 map=238.084 engram=0.001 encode=0.404 drain=186.548 seed=0.238 ms
+ds4: Metal streaming prefill layer pread layer=30 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=204.597 ms thread=392.757 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=30 pos=8064 rows=128 encoder_resident=0 map=204.949 engram=0.000 encode=0.219 drain=156.654 seed=0.188 ms
+ds4: Metal streaming prefill layer pread layer=31 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=258.081 ms thread=416.095 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=31 pos=8064 rows=128 encoder_resident=0 map=258.434 engram=0.000 encode=0.249 drain=161.727 seed=0.155 ms
+ds4: Metal streaming prefill layer pread layer=32 tokens=4096 threads=8 ranges=96 bytes=3.74 GiB wait=248.743 ms thread=411.871 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=32 pos=8064 rows=128 encoder_resident=0 map=249.095 engram=0.000 encode=0.583 drain=166.400 seed=0.167 ms
+ds4: Metal streaming prefill layer pread layer=33 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=302.282 ms thread=470.415 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=33 pos=8064 rows=128 encoder_resident=0 map=302.724 engram=0.001 encode=0.385 drain=230.987 seed=0.228 ms
+ds4: Metal streaming prefill layer pread layer=34 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=173.431 ms thread=405.974 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=34 pos=8064 rows=128 encoder_resident=0 map=173.814 engram=0.001 encode=0.222 drain=149.631 seed=0.160 ms
+ds4: Metal streaming prefill layer pread layer=35 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=241.019 ms thread=391.806 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=35 pos=8064 rows=128 encoder_resident=0 map=241.338 engram=0.000 encode=0.225 drain=181.856 seed=0.174 ms
+ds4: Metal streaming prefill layer pread layer=36 tokens=4096 threads=8 ranges=96 bytes=3.74 GiB wait=233.892 ms thread=416.857 ms read=3.74 GiB ok=1
+ds4: V4.1 prefill layer=36 pos=8064 rows=128 encoder_resident=0 map=234.356 engram=0.000 encode=0.763 drain=135.992 seed=0.159 ms
+ds4: Metal streaming prefill layer pread layer=37 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=251.788 ms thread=389.527 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=37 pos=8064 rows=128 encoder_resident=0 map=252.127 engram=0.001 encode=0.270 drain=164.873 seed=0.281 ms
+ds4: Metal streaming prefill layer pread layer=38 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=228.208 ms thread=394.461 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=38 pos=8064 rows=128 encoder_resident=0 map=228.642 engram=0.000 encode=0.469 drain=164.769 seed=0.198 ms
+ds4: Metal streaming prefill layer pread layer=39 tokens=4096 threads=8 ranges=96 bytes=3.73 GiB wait=243.098 ms thread=409.323 ms read=3.73 GiB ok=1
+ds4: V4.1 prefill layer=39 pos=8064 rows=128 encoder_resident=0 map=243.441 engram=0.000 encode=0.251 drain=151.955 seed=0.215 ms
+ds4: V4.1 decoder replay rows=128 floor=8064 end=8192 approximate=1
+RESULT ordinary rows=128 sync_ms=19079.268 teacher_ms=1463.967 greedy_sync_ms=19156.441 greedy_ms=1370.632 generated=6 stopped=1 exact=1 answer=CODE=EMBER-7319

@@ -1,0 +1,35 @@
+{
+  "status": "all_first_workflows_pass_but_live_continuation_policy_bug",
+  "source": "../../evidence/http-unfixed/result.json",
+  "all_first_workflows_pass": true,
+  "workflow_seconds": [
+    55.80992987495847,
+    113.32833591708913,
+    54.75790241593495
+  ],
+  "native_mean_seconds": 55.28391614544671,
+  "candidate_seconds": 113.32833591708913,
+  "saving_fraction": -1.04993321419078,
+  "regression_fraction": 1.04993321419078,
+  "native_bracket_drift_fraction": -0.01885018421238971,
+  "cached_tokens": [
+    [
+      0,
+      8680,
+      8901
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      8680,
+      8901
+    ]
+  ],
+  "first_input_tokens": 8623,
+  "selected_replay_executed": true,
+  "scope": "Eligible360-line fixture, unbatched server, three-request tool workflow plus actual file read. All first answers pass; candidate recomputed R2/R3 because old suffix-only live profile policy rejected its replay approximate state. Fixed-policy HTTP qualification is separate and pending."
+}

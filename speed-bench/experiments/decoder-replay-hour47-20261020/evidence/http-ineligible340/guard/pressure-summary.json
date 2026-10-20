@@ -1,0 +1,37 @@
+{
+  "samples": 67,
+  "level_counts": {
+    "1": 67
+  },
+  "first": {
+    "time": 1792536568.5015192,
+    "level": 1,
+    "swap_gb": 0.76806640625,
+    "physical_gb": 128.0,
+    "free_gb": 62.91172790527344,
+    "file_backed_gb": 41.27891540527344,
+    "wired_gb": 4.28277587890625,
+    "compressor_gb": 17.158065795898438,
+    "reason": null,
+    "consecutive_bad": 0
+  },
+  "last": {
+    "time": 1792536637.8291059,
+    "level": 1,
+    "swap_gb": 0.76806640625,
+    "physical_gb": 128.0,
+    "free_gb": 0.12139892578125,
+    "file_backed_gb": 57.420074462890625,
+    "wired_gb": 50.90574645996094,
+    "compressor_gb": 17.618759155273438,
+    "reason": null,
+    "consecutive_bad": 0
+  },
+  "swap_growth_gb": 0.0,
+  "guard_result": {
+    "status": "interrupted",
+    "signal": 15,
+    "child_returncode": 3
+  },
+  "stop_reason": "Root intentionally stopped the owned guard after identifying the 340-line fixture as ineligible: first request rendered8162tokens below8192 replay activation threshold."
+}

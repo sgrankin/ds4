@@ -1,0 +1,112 @@
+diff --git i/ds4_server.c w/ds4_server.c
+index 815331b3..77b30301 100644
+--- i/ds4_server.c
++++ w/ds4_server.c
+@@ -10645,19 +10645,37 @@ static void server_inference_lock(server *s) {
+     pthread_mutex_lock(&s->inference_mu);
+ }
+ 
+-/* Scope approximate sources by a client hint, but still match token history.
+- * Exact native prefixes retain the shared model/forward-profile namespace. */
++/* Scope suffix sources by client hint and private decoder replay by its
++ * settings. Both still require matching token history at the live frontier. */
+ static void server_context_cache_profile(const server *s, const request *req,
+                                           char profile[41]) {
+     memset(profile, 0, 41);
+-    if (!s || !s->context_suffix_reuse || !req || req->kind != REQ_CHAT ||
+-        req->image_count || !req->prompt_cache_key || !req->prompt_cache_key[0])
+-        return;
++    if (!s || !req || req->kind != REQ_CHAT || req->image_count) return;
++    const char *replay_rows = NULL;
++    if (s->context_suffix_reuse) {
++        if (!req->prompt_cache_key || !req->prompt_cache_key[0]) return;
++    } else {
++        replay_rows = getenv("DS4_V41_DECODER_REPLAY_ROWS");
++        if (!replay_rows || (strcmp(replay_rows, "128") && strcmp(replay_rows, "256"))) return;
++    }
+     buf identity = {0};
+     buf_puts(&identity, s->state_cache_profile);
+-    if (s->context_suffix_right) buf_puts(&identity, ":right-v1");
+-    buf_puts(&identity, ":suffix:");
+-    buf_puts(&identity, req->prompt_cache_key);
++    if (s->context_suffix_reuse) {
++        if (s->context_suffix_right) buf_puts(&identity, ":right-v1");
++        buf_puts(&identity, ":suffix:");
++        buf_puts(&identity, req->prompt_cache_key);
++    } else {
++        /* Replay keeps only a private live graph; suffix capture/export stays
++         * disabled. Retain it across matching continuations of this profile. */
++        const char *selected = getenv("DS4_V41_DECODER_REPLAY_SELECTED");
++        buf_puts(&identity, ":decoder-replay-v1:");
++        buf_puts(&identity, replay_rows);
++        buf_puts(&identity, selected && !strcmp(selected, "1") ? ":selected1" : ":selected0");
++        if (req->prompt_cache_key && req->prompt_cache_key[0]) {
++            buf_puts(&identity, ":hint:");
++            buf_puts(&identity, req->prompt_cache_key);
++        }
++    }
+     ds4_kvstore_sha1_bytes_hex(identity.ptr, identity.len, profile);
+     buf_free(&identity);
+ }
+@@ -19356,6 +19374,12 @@ static void test_http_conversation_query(void) {
+ }
+ 
+ static void test_server_context_cache_profile_scope(void) {
++    const char *env = getenv("DS4_V41_DECODER_REPLAY_ROWS");
++    char *saved_rows = env ? xstrdup(env) : NULL;
++    env = getenv("DS4_V41_DECODER_REPLAY_SELECTED");
++    char *saved_selected = env ? xstrdup(env) : NULL;
++    unsetenv("DS4_V41_DECODER_REPLAY_ROWS");
++    unsetenv("DS4_V41_DECODER_REPLAY_SELECTED");
+     server s = {0};
+     strcpy(s.state_cache_profile, "0123456789012345678901234567890123456789");
+     request r = {.kind = REQ_CHAT, .prompt_cache_key = "session-A"};
+@@ -19406,6 +19430,48 @@ static void test_server_context_cache_profile_scope(void) {
+     r.kind = REQ_COMPLETION;
+     server_context_cache_profile(&s, &r, repeated);
+     TEST_ASSERT(!repeated[0]);
++
++    r.kind = REQ_CHAT;
++    r.prompt_cache_key = "session-A";
++    setenv("DS4_V41_DECODER_REPLAY_ROWS", "128", 1);
++    setenv("DS4_V41_DECODER_REPLAY_SELECTED", "1", 1);
++    server_context_cache_profile(&s, &r, repeated);
++    TEST_ASSERT(!strcmp(profile, repeated)); /* Existing suffix namespace is unchanged. */
++    unsetenv("DS4_V41_DECODER_REPLAY_SELECTED");
++    s.context_suffix_reuse = false;
++    r.prompt_cache_key = NULL;
++    setenv("DS4_V41_DECODER_REPLAY_ROWS", "128", 1);
++    server_context_cache_profile(&s, &r, profile);
++    server_context_cache_profile(&s, &r, repeated);
++    TEST_ASSERT(strlen(profile) == 40 && !strcmp(profile, repeated));
++    r.prompt_cache_key = "session-A";
++    server_context_cache_profile(&s, &r, repeated);
++    TEST_ASSERT(strlen(repeated) == 40 && strcmp(profile, repeated));
++    r.prompt_cache_key = NULL;
++    setenv("DS4_V41_DECODER_REPLAY_ROWS", "256", 1);
++    server_context_cache_profile(&s, &r, repeated);
++    TEST_ASSERT(strlen(repeated) == 40 && strcmp(profile, repeated));
++    setenv("DS4_V41_DECODER_REPLAY_ROWS", "128", 1);
++    setenv("DS4_V41_DECODER_REPLAY_SELECTED", "1", 1);
++    server_context_cache_profile(&s, &r, repeated);
++    TEST_ASSERT(strlen(repeated) == 40 && strcmp(profile, repeated));
++    r.image_count = 1;
++    server_context_cache_profile(&s, &r, repeated);
++    TEST_ASSERT(!repeated[0]);
++    r.image_count = 0;
++    r.kind = REQ_COMPLETION;
++    server_context_cache_profile(&s, &r, repeated);
++    TEST_ASSERT(!repeated[0]);
++    r.kind = REQ_CHAT;
++    setenv("DS4_V41_DECODER_REPLAY_ROWS", "0", 1);
++    server_context_cache_profile(&s, &r, repeated);
++    TEST_ASSERT(!repeated[0]);
++
++    if (saved_rows) setenv("DS4_V41_DECODER_REPLAY_ROWS", saved_rows, 1);
++    else unsetenv("DS4_V41_DECODER_REPLAY_ROWS");
++    if (saved_selected) setenv("DS4_V41_DECODER_REPLAY_SELECTED", saved_selected, 1);
++    else unsetenv("DS4_V41_DECODER_REPLAY_SELECTED");
++    free(saved_rows); free(saved_selected);
+ }
+ 
+ static void test_chat_ignore_eos_contract(void) {
