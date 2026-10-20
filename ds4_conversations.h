@@ -224,7 +224,7 @@ static bool ds4_conversation_input_items(const char *raw, char **normalized,
     if (!ds4_conversation_array(raw, &items, &n)) { free(easy); goto fail; }
     chat_msgs msgs = {0};
     p = raw;
-    bool ok = parse_responses_input(&p, &msgs, NULL, NULL);
+    bool ok = parse_responses_input(&p, &msgs, NULL, NULL, false);
     json_ws(&p);
     ok = ok && !*p;
     for (int i = 0; i < msgs.len; i++) if (msgs.v[i].images.len) ok = false;

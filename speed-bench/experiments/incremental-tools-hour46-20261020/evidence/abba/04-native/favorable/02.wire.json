@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "seconds": 72.40081849996932,
+  "wire": "{\"id\":\"resp_8f0c08b1dc97aff6fc7207f1\",\"object\":\"response\",\"created_at\":1792534554,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":true,\"previous_response_id\":\"resp_101991c7e13cc45b9b9f2414\",\"conversation\":null,\"output\":[{\"id\":\"fc_58f06911da0955378885dc54\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"read_note\",\"namespace\":\"archive__\",\"call_id\":\"call_0c14924d819d9f87286bd3a3debc4305\",\"arguments\":\"{\\\"path\\\":\\\"/Volumes/Models/ds4/.workspaces/deepinfer-followups-20261020/item46/abba/fixtures/favorable/note.json\\\"}\"}],\"usage\":{\"input_tokens\":6880,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":6880},\"output_tokens\":74,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":6954}}"
+}

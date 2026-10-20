@@ -1,0 +1,38 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "temperature": 0,
+  "reasoning": {
+    "effort": "none"
+  },
+  "max_output_tokens": 128,
+  "store": true,
+  "tools": [
+    {
+      "type": "tool_search",
+      "execution": "client",
+      "description": "Discover a tool by capability or name. Return the matching tool definitions.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    }
+  ],
+  "input": [
+    {
+      "role": "system",
+      "content": "Follow the requested tool workflow. Use only defined tools, and do not invent tool results."
+    },
+    {
+      "role": "user",
+      "content": "Historical context only:\n<log>\nhistorical audit 0000: module=0 count=000 state=reviewed immutable=true; no current decisions.\nhistorical audit 0001: module=1 count=037 state=reviewed immutable=true; no current decisions.\nhistorical audit 0002: module=2 count=074 state=reviewed immutable=true; no current decisions.\nhistorical audit 0003: module=3 count=111 state=reviewed immutable=true; no current decisions.\nhistorical audit 0004: module=4 count=148 state=reviewed immutable=true; no current decisions.\nhistorical audit 0005: module=5 count=185 state=reviewed immutable=true; no current decisions.\nhistorical audit 0006: module=6 count=222 state=reviewed immutable=true; no current decisions.\nhistorical audit 0007: module=7 count=259 state=reviewed immutable=true; no current decisions.\nhistorical audit 0008: module=0 count=296 state=reviewed immutable=true; no current decisions.\nhistorical audit 0009: module=1 count=333 state=reviewed immutable=true; no current decisions.\nhistorical audit 0010: module=2 count=370 state=reviewed immutable=true; no current decisions.\nhistorical audit 0011: module=3 count=407 state=reviewed immutable=true; no current decisions.\n</log>\nCurrent key: SABLE-1937.\nTask: use tool_search to discover read_note, then use that tool to read /Volumes/Models/ds4/.workspaces/deepinfer-followups-20261020/item46/baseline-qualification/fixtures/ordinary/note.json. After actually reading it, reply with exactly one JSON object with archived_code and receipt from the file, and current_key from this request. Do not answer before the read. No prose or Markdown."
+    }
+  ],
+  "prompt_cache_key": "ordinary"
+}

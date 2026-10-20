@@ -1,0 +1,169 @@
+{
+  "arm": 3,
+  "enabled": true,
+  "cases": [
+    {
+      "case": "ordinary",
+      "history_mode": "full",
+      "pass": true,
+      "error": null,
+      "requests": [
+        {
+          "step": 1,
+          "seconds": 19.728790541179478,
+          "usage": {
+            "input_tokens": 623,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 623
+            },
+            "output_tokens": 54,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 677
+          },
+          "status": "completed",
+          "output_types": [
+            "message",
+            "tool_search_call"
+          ]
+        },
+        {
+          "step": 2,
+          "seconds": 9.008231749990955,
+          "usage": {
+            "input_tokens": 829,
+            "input_tokens_details": {
+              "cached_tokens": 677,
+              "cache_write_tokens": 152
+            },
+            "output_tokens": 72,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 901
+          },
+          "status": "completed",
+          "output_types": [
+            "function_call"
+          ]
+        },
+        {
+          "step": 3,
+          "seconds": 2.879305958049372,
+          "usage": {
+            "input_tokens": 935,
+            "input_tokens_details": {
+              "cached_tokens": 901,
+              "cache_write_tokens": 34
+            },
+            "output_tokens": 29,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 964
+          },
+          "status": "completed",
+          "output_types": [
+            "message"
+          ]
+        }
+      ],
+      "first_search_arguments": {
+        "query": "read_note"
+      },
+      "tool_seconds": 0.00018700002692639828,
+      "actual_file_read": true,
+      "read_sha256": "d95114f08842385a27d27edd3de93402becb0c7e622d2d7bc533aca25915bc19",
+      "parent_id_after_read_call": "resp_f18cd5a16cd85480f1fbf7e0",
+      "answer": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ-46-ordinary\",\"current_key\":\"SABLE-1937\"}",
+      "workflow_seconds": 31.619633625028655,
+      "total_seconds": 31.619633791968226
+    },
+    {
+      "case": "favorable",
+      "history_mode": "parent",
+      "pass": true,
+      "error": null,
+      "requests": [
+        {
+          "step": 1,
+          "seconds": 53.845829374855384,
+          "usage": {
+            "input_tokens": 4487,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 4487
+            },
+            "output_tokens": 54,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4541
+          },
+          "status": "completed",
+          "output_types": [
+            "message",
+            "tool_search_call"
+          ]
+        },
+        {
+          "step": 2,
+          "seconds": 39.091041166102514,
+          "usage": {
+            "input_tokens": 6887,
+            "input_tokens_details": {
+              "cached_tokens": 4541,
+              "cache_write_tokens": 2346
+            },
+            "output_tokens": 74,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 6961
+          },
+          "status": "completed",
+          "output_types": [
+            "function_call"
+          ]
+        },
+        {
+          "step": 3,
+          "seconds": 3.0207475828938186,
+          "usage": {
+            "input_tokens": 6995,
+            "input_tokens_details": {
+              "cached_tokens": 6961,
+              "cache_write_tokens": 34
+            },
+            "output_tokens": 29,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 7024
+          },
+          "status": "completed",
+          "output_types": [
+            "message"
+          ]
+        }
+      ],
+      "first_search_arguments": {
+        "query": "read_note"
+      },
+      "tool_seconds": 0.0002590420190244913,
+      "actual_file_read": true,
+      "read_sha256": "c955c1fa68ac501e443220d383ef5de6e263a80c6edaa7b6f2c962f69ffa44d3",
+      "parent_id_after_read_call": "resp_373f182a8046c2c33fe99a40",
+      "answer": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ-46-favorable\",\"current_key\":\"SABLE-1937\"}",
+      "workflow_seconds": 95.96141679189168,
+      "total_seconds": 95.96141700004227
+    }
+  ],
+  "error": null,
+  "startup_seconds": 0.4205234160181135,
+  "server_returncode": 0,
+  "arm_seconds": 129.78975845803507,
+  "pass": true
+}

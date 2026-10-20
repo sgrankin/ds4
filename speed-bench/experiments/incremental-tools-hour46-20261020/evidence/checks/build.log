@@ -1,0 +1,34 @@
+cc -O3 -ffast-math -g -mcpu=native -Wall -Wextra -std=c99 -c -o ds4_server.o ds4_server.c
+cc -O3 -ffast-math -g -mcpu=native -Wall -Wextra -std=c99 -Wno-unused-function -c -o ds4_test.o tests/ds4_test.c
+In file included from ds4_server.c:5506:
+./ds4_conversations.h:227:58: error: too few arguments to function call, expected 5, have 4
+In file included from tests/ds4_test.c:4:
+In file included from tests/../ds4_server.c:5506:
+tests/../ds4_conversations.h:227:58: error: too few arguments to function call, expected 5, have 4
+  227 |     bool ok = parse_responses_input(&p, &msgs, NULL,  227 |     bool ok = parse_responses_input(&p, &msgs, NULL, NULL);
+      |               ~~~~~~~~~~~~~~~~~~~~~                      ^ NULL);
+      |               ~~~~~~~~~~~~~~~~~~~~~                      ^
+
+ds4_server.c:4896:13: note: 'parse_responses_input' declared here
+tests/../ds4_server.c:4896:13: note: 'parse_responses_input' declared here
+ 4896 | static bool parse_responses_input(const char **p, chat_msgs *msgs, 4896 | s
+tatic bool parse_resp      |             ^                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~o
+nses_input(c 4897 |                     onst ch   ar **p, chat_m     sg      buf *loaded_toos *msgsl_s,
+chemas,
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |             ^                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 4898 |                      4897 |                         tool_schema_orders *orders,
+      |                         buf *loaded                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+_tool_schemas,
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+ 4899 |                                   bool incremental_ 4898 |                     tool_schemas) {
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              tool_schema_orders *orders,
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 4899 |                                   bool incremental_tool_schemas) {
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make: *** [ds4_server.o] Error 1
+make: *** Waiting for unfinished jobs....
+1 error generated.
+make: *** [ds4_test.o] Error 1

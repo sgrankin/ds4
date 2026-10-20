@@ -29,6 +29,7 @@ result blocks, not relabelled historical measurements.
 | [Official inference lessons](08-official-inference-lessons.md) | Replay, rendering and scheduling boundaries from pinned DeepInfer/official recipe | Measured mixed-quantum tradeoff; no replay feature adopted |
 | [2026-10-20 upgrade](09-upgrade-20261020.md) | Compact feature stack, checkpoint pairing and checksum-verified downloads | 16 first-attempt checks pass; three relocations save 30.27% edit time; scheduler latency separate |
 | [Q2 kernel epilogue](10-q2-kernel-epilogue.md) | Keep paired gate/up activation in registers; measure before adopting | No useful ABBA gain; patch retained for replication, defaults unchanged |
+| [Incremental tool schemas](11-incremental-tool-schemas.md) | Announce discovered schemas at their history position; preserve reusable prefixes | Opt-in; favorable parent workflow 46.30% faster, ordinary full-input 8.17% slower |
 
 [Not-adopted summary](not-adopted/README.md) collects short reasons and links
 for rejected policies and candidates that still lack serving evidence. The

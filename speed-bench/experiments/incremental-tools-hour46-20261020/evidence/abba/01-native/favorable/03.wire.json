@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "seconds": 52.82541195908561,
+  "wire": "{\"id\":\"resp_2b48b8cf8648d27123d9534e\",\"object\":\"response\",\"created_at\":1792534136,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":true,\"previous_response_id\":\"resp_60eb00ff0677bcf083f048de\",\"conversation\":null,\"output\":[{\"id\":\"msg_6219048da650534089f66cca\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"{\\\"archived_code\\\":\\\"MAPLE-4826\\\",\\\"receipt\\\":\\\"READ-46-favorable\\\",\\\"current_key\\\":\\\"SABLE-1937\\\"}\",\"annotations\":[]}]}],\"usage\":{\"input_tokens\":5899,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":5899},\"output_tokens\":29,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":5928}}"
+}

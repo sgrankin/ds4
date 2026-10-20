@@ -1,0 +1,166 @@
+{
+  "item": 46,
+  "source_base": "2639960c",
+  "flag": "DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS",
+  "order": [
+    0,
+    1,
+    1,
+    0
+  ],
+  "same_candidate_binary": true,
+  "server_sha256": "2a09f9022d81ca9d5ea0a67ff55f49e0776db18073fdab2af897a6fe0056b7ea",
+  "all_arms_pass": true,
+  "all_cases_pass": true,
+  "cases": {
+    "ordinary": {
+      "history_mode": "full",
+      "actual_file_reads": 4,
+      "request_output_tokens": [
+        [
+          54,
+          72,
+          29
+        ],
+        [
+          54,
+          72,
+          29
+        ],
+        [
+          54,
+          72,
+          29
+        ],
+        [
+          54,
+          72,
+          29
+        ]
+      ],
+      "cached_tokens": [
+        [
+          0,
+          677,
+          828
+        ],
+        [
+          0,
+          677,
+          901
+        ],
+        [
+          0,
+          677,
+          901
+        ],
+        [
+          0,
+          677,
+          828
+        ]
+      ],
+      "workflow": {
+        "arm_seconds": [
+          29.209796500159428,
+          32.13626016583294,
+          31.619633625028655,
+          29.729752417188138
+        ],
+        "native_mean_seconds": 29.469774458673783,
+        "incremental_mean_seconds": 31.877946895430796,
+        "saving_fraction": -0.08171669043935359,
+        "saving_vs_faster_control_fraction": -0.09134436781361366,
+        "native_bracket_drift_fraction": 0.017800737400750943
+      },
+      "post_discovery_r2_r3": {
+        "arm_seconds": [
+          9.91259124991484,
+          11.842412374913692,
+          11.887537708040327,
+          9.783412874909118
+        ],
+        "native_mean_seconds": 9.848002062411979,
+        "incremental_mean_seconds": 11.86497504147701,
+        "saving_fraction": -0.20481037334094876,
+        "saving_vs_faster_control_fraction": -0.2127644200630987,
+        "native_bracket_drift_fraction": -0.013031746366706232
+      }
+    },
+    "favorable": {
+      "history_mode": "parent",
+      "actual_file_reads": 4,
+      "request_output_tokens": [
+        [
+          54,
+          74,
+          29
+        ],
+        [
+          54,
+          74,
+          29
+        ],
+        [
+          54,
+          74,
+          29
+        ],
+        [
+          54,
+          74,
+          29
+        ]
+      ],
+      "cached_tokens": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4541,
+          6961
+        ],
+        [
+          0,
+          4541,
+          6961
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "workflow": {
+        "arm_seconds": [
+          178.92250829190016,
+          96.12766308290884,
+          95.96141679189168,
+          178.75416054110974
+        ],
+        "native_mean_seconds": 178.83833441650495,
+        "incremental_mean_seconds": 96.04453993740026,
+        "saving_fraction": 0.4629532854308649,
+        "saving_vs_faster_control_fraction": 0.46270039451578515,
+        "native_bracket_drift_fraction": -0.0009408975561406852
+      },
+      "post_discovery_r2_r3": {
+        "arm_seconds": [
+          125.40096679213457,
+          42.1224449579604,
+          42.11178874899633,
+          124.87115316605195
+        ],
+        "native_mean_seconds": 125.13605997909326,
+        "incremental_mean_seconds": 42.117116853478365,
+        "saving_fraction": 0.6634294154657342,
+        "saving_vs_faster_control_fraction": 0.6627154007501508,
+        "native_bracket_drift_fraction": -0.004224956470717189
+      }
+    }
+  },
+  "scope": "Ordered single ordinary and favorable fixtures, temperature0/no thinking, native routing, suffix reuse/application SSD KV cache off. Workflow includes three requests and actual file read; startup excluded. Post-discovery is R2+R3 request time only."
+}

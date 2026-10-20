@@ -592,3 +592,28 @@ long-request wall but increases the worst content gap to2.78×; quantum512 is
 dominated by128. Keep interactive128 default, document2048 as the throughput
 tradeoff. This is one fixture, not general task throughput or a DeepInfer
 asynchronous-scheduler port. [Report and curve](../../recipes/08-official-inference-lessons.md).
+
+Item46 starts **2026-10-20 21:57:33 UTC**, deadline **22:57:33 UTC**.
+Following the approved DeepSeek-inspired sequence, add opt-in incremental tool
+schemas: newly discovered Responses tools arrive as late V4.1 system messages,
+preserving the initial tool catalog and useful exact prefix cache. Reuse current
+parsers, tool ordering and request history. Compare the frozen server with the
+candidate on ordinary and favorable tool-search/retrieval workflows; retain first
+outputs, protocol failures, cached/fresh input tokens and complete request wall.
+Keep routing, suffix approximation, KV disk cache and sampling fixed. Run one
+heavy model job under the existing guard. Stop parser/harness work when the
+cache/prompt invariant and actual first tool use can be measured.
+
+Queued after Item46: one hour for opt-in approximate decoder replay, then one
+hour for a narrowly scoped packed runtime KV prototype. Charge preparation,
+builds, measurements and analysis to each item's budget. Keep practical quality
+and continuation delta-NLL/KL visible; numerical disagreement alone is not a
+rejection criterion for the replay approximation.
+
+Item46 finished **22:23 UTC** (ABBA complete22:16:52). Incremental schemas
+remain opt-in: favorable durable-parent workflow saved46.30%, ordinary live
+workflow regressed8.17%; all8 first workflows/actual reads passed. Four arms
+used the same binary with flag0/1/1/0, and650 guard samples stayed normal with
+zero swap growth. A narrow post-measure metadata precedence fix passed the
+rebuilt server suite without changing measured prompts.
+[Recipe and retained first outputs](../../recipes/11-incremental-tool-schemas.md).

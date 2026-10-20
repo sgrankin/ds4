@@ -773,6 +773,8 @@ typedef struct {
 typedef struct {
     char *role;
     char *content;
+    /* Original Responses declarations, kept privately for durable replay. */
+    char *discovered_tools;
     server_image_inputs images;
     char *reasoning;
     char *tool_call_id;
@@ -924,6 +926,7 @@ static void chat_msg_add_tool_call_id(chat_msg *m, const char *id) {
 static void chat_msg_free(chat_msg *m) {
     free(m->role);
     free(m->content);
+    free(m->discovered_tools);
     server_image_inputs_free(&m->images);
     free(m->reasoning);
     free(m->tool_call_id);
@@ -2154,6 +2157,11 @@ static bool parse_messages_ex(const char **p, chat_msgs *msgs, bool trusted_stor
                     free(key);
                     goto fail;
                 }
+            } else if (trusted_store && !strcmp(key, "ds4_discovered_tools")) {
+                if (!json_raw_value_replace(p, &msg.discovered_tools)) {
+                    free(key);
+                    goto fail;
+                }
             } else if (!json_skip_value(p)) {
                 free(key);
                 goto fail;
@@ -2220,6 +2228,10 @@ static void responses_replay_message(buf *b, const chat_msg *m) {
     if (m->calls.raw_tool_text) {
         buf_puts(b, ",\"raw_tool_text\":");
         json_escape(b, m->calls.raw_tool_text);
+    }
+    if (m->discovered_tools) {
+        buf_puts(b, ",\"ds4_discovered_tools\":");
+        buf_puts(b, m->discovered_tools);
     }
     buf_putc(b, '}');
 }
@@ -4120,13 +4132,15 @@ static void responses_prepare_live_continuation(server *s, request *r,
                                                 const chat_msgs *msgs) {
     if (!r || r->api != API_RESPONSES || !msgs || msgs->len == 0) return;
 
-    int tail_start = msgs->len;
+    int tail_end = msgs->len;
+    while (tail_end > 0 && msgs->v[tail_end - 1].discovered_tools) tail_end--;
+    int tail_start = tail_end;
     while (tail_start > 0) {
         const chat_msg *m = &msgs->v[tail_start - 1];
         if (strcmp(m->role, "tool") && strcmp(m->role, "function")) break;
         tail_start--;
     }
-    if (tail_start == msgs->len) return;
+    if (tail_start == tail_end) return;
 
     stop_list_clear(&r->responses_live_call_ids);
     if (tail_start > 0) {
@@ -4866,9 +4880,23 @@ static bool parse_responses_content_array_multimodal(
  *
  * Reasoning items are merged into the next assistant message so
  * render_chat_prompt_text can wrap them in <think>. */
+/* Keep schema announcements after the complete result group. A parallel tool
+ * that finishes later still belongs before the group's system update. */
+static void responses_push_tool_result(chat_msgs *msgs, chat_msg msg) {
+    int at = msgs->len;
+    while (at > 0 && msgs->v[at - 1].discovered_tools) at--;
+    chat_msgs_push(msgs, msg);
+    if (at < msgs->len - 1) {
+        memmove(msgs->v + at + 1, msgs->v + at,
+                (size_t)(msgs->len - at - 1) * sizeof(msgs->v[0]));
+        msgs->v[at] = msg;
+    }
+}
+
 static bool parse_responses_input(const char **p, chat_msgs *msgs,
                                   buf *loaded_tool_schemas,
-                                  tool_schema_orders *orders) {
+                                  tool_schema_orders *orders,
+                                  bool incremental_tool_schemas) {
     json_ws(p);
     if (**p != '[') return false;
     (*p)++;
@@ -5202,7 +5230,7 @@ item_fail:
             if (call_id || item_id) {
                 chat_msg_add_tool_call_id(&msg, call_id ? call_id : item_id);
             }
-            chat_msgs_push(msgs, msg);
+            responses_push_tool_result(msgs, msg);
         } else if (!strcmp(t, "reasoning")) {
             /* Stash so it merges into the next assistant message. summary is the
              * short-form list, content is the verbose chain. Either can be empty. */
@@ -5255,6 +5283,7 @@ item_fail:
                    !strcmp(t, "tool_search_call_output") ||
                    !strcmp(t, "image_generation_call_output"))
         {
+            char *announcement = NULL;
             if (!strcmp(t, "tool_search_output") && tools_json &&
                 loaded_tool_schemas && orders)
             {
@@ -5283,8 +5312,15 @@ item_fail:
                     return false;
                 }
                 if (schemas && schemas[0]) {
-                    if (loaded_tool_schemas->len) buf_putc(loaded_tool_schemas, '\n');
-                    buf_puts(loaded_tool_schemas, schemas);
+                    if (incremental_tool_schemas) {
+                        buf update = {0};
+                        buf_puts(&update, "\n\n### Updated Tool Schemas\n\n");
+                        buf_puts(&update, schemas);
+                        announcement = buf_take(&update);
+                    } else {
+                        if (loaded_tool_schemas->len) buf_putc(loaded_tool_schemas, '\n');
+                        buf_puts(loaded_tool_schemas, schemas);
+                    }
                 }
                 free(schemas);
             }
@@ -5297,7 +5333,12 @@ item_fail:
             if (call_id || item_id) {
                 chat_msg_add_tool_call_id(&msg, call_id ? call_id : item_id);
             }
-            chat_msgs_push(msgs, msg);
+            responses_push_tool_result(msgs, msg);
+            if (announcement) {
+                chat_msg update = {.role = xstrdup("system"),
+                    .content = announcement, .discovered_tools = xstrdup(tools_json)};
+                chat_msgs_push(msgs, update);
+            }
         } else if (!is_bookkeeping) {
             /* Anything we don't have an explicit branch for would silently
              * drop replay context. Fail the parse instead so the client sees
@@ -5364,6 +5405,40 @@ item_fail:
 fail:
     buf_free(&pending_reasoning);
     return false;
+}
+
+/* Rehydrate private replay metadata without relocating model-visible schemas.
+ * Return -1 for invalid history, otherwise whether declarations were found. */
+static int responses_restore_discovered_tools(chat_msgs *msgs,
+                                               tool_schema_orders *orders,
+                                               bool tool_choice_none,
+                                               const char *explicit_tools) {
+    int found = 0;
+    for (int i = 0; i < msgs->len; i++) {
+        if (!msgs->v[i].discovered_tools) continue;
+        if (tool_choice_none) {
+            chat_msg_free(&msgs->v[i]);
+            memmove(msgs->v + i, msgs->v + i + 1,
+                    (size_t)(msgs->len - i - 1) * sizeof(msgs->v[0]));
+            msgs->len--; i--;
+            continue;
+        }
+        const char *saved = msgs->v[i].discovered_tools;
+        char *schemas = NULL;
+        bool ok = parse_tools_value(&saved, &schemas, orders);
+        if (ok && schemas && schemas[0]) found = 1;
+        free(schemas);
+        if (!ok) return -1;
+    }
+    /* Current declarations override replayed definitions regardless of the
+     * request's JSON key order. Their prompt text was already rendered once. */
+    if (explicit_tools) {
+        char *schemas = NULL;
+        bool ok = parse_tools_value(&explicit_tools, &schemas, orders);
+        free(schemas);
+        if (!ok) return -1;
+    }
+    return found;
 }
 
 /* Responses API has `reasoning: {"effort": "...", "summary": "..."}`. effort
@@ -5445,6 +5520,10 @@ static bool parse_responses_request(ds4_engine *e, server *s, const char *body, 
     request_init(r, REQ_CHAT, def_tokens);
     r->api = API_RESPONSES;
     r->model_syntax = server_model_syntax_for_engine(e);
+    const char *incremental_env = getenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS");
+    const bool incremental_tool_schemas =
+        r->model_syntax == SERVER_MODEL_SYNTAX_DEEPSEEK41 &&
+        incremental_env && strcmp(incremental_env, "0");
     r->responses_store_dir = server_response_store_dir(s);
     r->responses_store = r->responses_store_dir != NULL;
     const char *p = body;
@@ -5457,6 +5536,7 @@ static bool parse_responses_request(ds4_engine *e, server *s, const char *body, 
     buf loaded_tool_schemas = {0};
     char *instructions = NULL;
     char *tool_schemas = NULL;
+    const char *explicit_tools = NULL;
 
     json_ws(&p);
     if (*p != '{') goto bad;
@@ -5488,7 +5568,7 @@ static bool parse_responses_request(ds4_engine *e, server *s, const char *body, 
                 msg.content = plain;
                 chat_msgs_push(&msgs, msg);
             } else if (!parse_responses_input(&p, &msgs, &loaded_tool_schemas,
-                                              &r->tool_orders)) {
+                                              &r->tool_orders, incremental_tool_schemas)) {
                 free(key);
                 goto bad;
             }
@@ -5508,6 +5588,7 @@ static bool parse_responses_request(ds4_engine *e, server *s, const char *body, 
         } else if (!strcmp(key, "tools")) {
             free(tool_schemas);
             tool_schemas = NULL;
+            explicit_tools = p;
             if (!parse_tools_value(&p, &tool_schemas, &r->tool_orders)) {
                 free(key);
                 goto bad;
@@ -5675,7 +5756,8 @@ static bool parse_responses_request(ds4_engine *e, server *s, const char *body, 
         const char *saved = conversation.replay ? conversation.replay : conversation.items;
         bool parsed = !conversation.deleted && normalized &&
             (conversation.replay ? parse_messages_ex(&saved, &history, true) :
-             parse_responses_input(&saved, &history, &loaded_tool_schemas, &r->tool_orders));
+             parse_responses_input(&saved, &history, &loaded_tool_schemas,
+                                   &r->tool_orders, incremental_tool_schemas));
         json_ws(&saved);
         parsed = parsed && !*saved;
         r->conversation_version = conversation.version;
@@ -5746,6 +5828,12 @@ static bool parse_responses_request(ds4_engine *e, server *s, const char *body, 
             msgs.v[0] = tmp;
         }
     }
+    int has_discovered_tools = responses_restore_discovered_tools(
+        &msgs, &r->tool_orders, tool_choice_none, explicit_tools);
+    if (has_discovered_tools < 0) {
+        snprintf(err, errlen, "invalid discovered tools in response history");
+        goto fail_request;
+    }
     buf combined_tool_schemas = {0};
     if (tool_schemas && tool_schemas[0]) buf_puts(&combined_tool_schemas, tool_schemas);
     if (loaded_tool_schemas.len) {
@@ -5756,7 +5844,8 @@ static bool parse_responses_request(ds4_engine *e, server *s, const char *body, 
     const char *active_tool_schemas =
         (!tool_choice_none && combined_tool_schemas.len) ?
         combined_tool_schemas.ptr : NULL;
-    r->has_tools = active_tool_schemas && active_tool_schemas[0];
+    r->has_tools = !tool_choice_none &&
+        ((active_tool_schemas && active_tool_schemas[0]) || has_discovered_tools);
     if (!got_thinking && model_alias_disables_thinking(r->model)) thinking_enabled = false;
     if (!got_thinking && model_alias_enables_thinking(r->model)) thinking_enabled = true;
     r->think_mode = ds4_think_mode_for_context(
@@ -17925,7 +18014,7 @@ static void test_responses_input_tool_search_output_loads_tools(void) {
     chat_msgs msgs = {0};
     buf loaded = {0};
     tool_schema_orders orders = {0};
-    TEST_ASSERT(parse_responses_input(&p, &msgs, &loaded, &orders));
+    TEST_ASSERT(parse_responses_input(&p, &msgs, &loaded, &orders, false));
     TEST_ASSERT(loaded.ptr && strstr(loaded.ptr, "\"name\":\"mcp__perplexity__perplexity_search\""));
     const tool_schema_order *order =
         tool_schema_orders_find(&orders, "mcp__perplexity__perplexity_search");
@@ -17950,7 +18039,102 @@ static void test_responses_input_tool_search_output_rejects_bad_tools(void) {
     chat_msgs msgs = {0};
     buf loaded = {0};
     tool_schema_orders orders = {0};
-    TEST_ASSERT(!parse_responses_input(&p, &msgs, &loaded, &orders));
+    TEST_ASSERT(!parse_responses_input(&p, &msgs, &loaded, &orders, false));
+    buf_free(&loaded);
+    tool_schema_orders_free(&orders);
+    chat_msgs_free(&msgs);
+}
+
+static void test_responses_incremental_tool_schemas(void) {
+    const char *input =
+        "[{\"role\":\"user\",\"content\":\"Read the note\"},"
+        "{\"type\":\"function_call\",\"call_id\":\"b\",\"name\":\"probe\",\"arguments\":\"{}\"},"
+        "{\"type\":\"tool_search_call\",\"call_id\":\"a\",\"arguments\":{\"query\":\"notes\"}},"
+        "{\"type\":\"tool_search_output\",\"call_id\":\"a\",\"tools\":["
+        "{\"type\":\"namespace\",\"name\":\"notes__\",\"tools\":["
+        "{\"type\":\"function\",\"name\":\"read_note\",\"parameters\":{\"type\":\"object\","
+        "\"properties\":{\"path\":{\"type\":\"string\"},\"limit\":{\"type\":\"number\"}}}}]},"
+        "{\"type\":\"custom\",\"name\":\"apply_patch\",\"description\":\"Apply a patch\"}]},"
+        "{\"type\":\"function_call_output\",\"call_id\":\"b\",\"output\":\"PROBE OK\"}]";
+    const char *initial_tools = "{\"name\":\"tool_search\",\"parameters\":{}}";
+    chat_msgs msgs = {0};
+    tool_schema_orders orders = {0};
+    buf loaded = {0};
+    const char *p = input;
+    TEST_ASSERT(parse_responses_input(&p, &msgs, &loaded, &orders, true));
+    TEST_ASSERT(!loaded.len && msgs.len == 5);
+    if (msgs.len != 5) goto done;
+    TEST_ASSERT(!strcmp(msgs.v[2].role, "tool") && !strcmp(msgs.v[3].role, "tool"));
+    TEST_ASSERT(!strcmp(msgs.v[3].content, "PROBE OK"));
+    TEST_ASSERT(!strcmp(msgs.v[4].role, "system") && msgs.v[4].discovered_tools);
+    TEST_ASSERT(strstr(msgs.v[4].content, "### Updated Tool Schemas\n\n"));
+    chat_msgs first = {.v = msgs.v, .len = 1};
+    char *before = render_deepseek41_chat(&first, 0, initial_tools, DS4_THINK_NONE, false);
+    char *after = render_deepseek41_chat(&msgs, 0, initial_tools, DS4_THINK_NONE, false);
+    TEST_ASSERT(!strncmp(before, after, strlen(before)));
+    const char *result = strstr(after, "PROBE OK</tool_result>");
+    const char *search_result = strstr(after, "<tool_result>[{");
+    const char *update = strstr(after, "<｜System｜>\n\n### Updated Tool Schemas");
+    TEST_ASSERT(result && search_result && update && result < search_result && search_result < update);
+
+    request r;
+    request_init(&r, REQ_CHAT, 128);
+    r.api = API_RESPONSES;
+    r.model_syntax = SERVER_MODEL_SYNTAX_DEEPSEEK41;
+    r.think_mode = DS4_THINK_NONE;
+    responses_prepare_live_continuation(NULL, &r, &msgs);
+    TEST_ASSERT(r.responses_live_call_ids.len == 2 && r.responses_live_suffix_text);
+    TEST_ASSERT(r.responses_live_suffix_text && strstr(r.responses_live_suffix_text,
+        "PROBE OK</tool_result>\n\n<tool_result>[{"));
+    TEST_ASSERT(r.responses_live_suffix_text && strstr(r.responses_live_suffix_text,
+        "<｜System｜>\n\n### Updated Tool Schemas"));
+    request_free(&r);
+
+    /* previous_response_id and Conversations use this same trusted replay. */
+    char *replay = responses_replay_history(&msgs, 0);
+    chat_msgs restored = {0};
+    tool_schema_orders restored_orders = {0};
+    p = replay;
+    TEST_ASSERT(parse_messages_ex(&p, &restored, true));
+    TEST_ASSERT(responses_restore_discovered_tools(&restored, &restored_orders, false, NULL) == 1);
+    const tool_schema_order *order = tool_schema_orders_find(&restored_orders, "notes__read_note");
+    TEST_ASSERT(order && order->namespace && !strcmp(order->namespace, "notes__"));
+    TEST_ASSERT(order && order->wire_name && !strcmp(order->wire_name, "read_note"));
+    TEST_ASSERT(order && order->len == 2 && !strcmp(order->prop[0], "path") &&
+                !strcmp(order->prop[1], "limit"));
+    TEST_ASSERT(tool_schema_orders_find(&restored_orders, "apply_patch"));
+    const char *current = "[{\"type\":\"function\",\"name\":\"notes__read_note\","
+        "\"parameters\":{\"type\":\"object\",\"properties\":{"
+        "\"limit\":{\"type\":\"number\"},\"path\":{\"type\":\"string\"}}}}]";
+    TEST_ASSERT(responses_restore_discovered_tools(&restored, &restored_orders, false, current) == 1);
+    order = tool_schema_orders_find(&restored_orders, "notes__read_note");
+    TEST_ASSERT(order && !order->namespace && !order->wire_name);
+    TEST_ASSERT(order && order->len == 2 && !strcmp(order->prop[0], "limit") &&
+                !strcmp(order->prop[1], "path"));
+    char *restored_prompt = render_deepseek41_chat(&restored, 0, initial_tools, DS4_THINK_NONE, false);
+    TEST_ASSERT(!strcmp(after, restored_prompt));
+    TEST_ASSERT(responses_restore_discovered_tools(&restored, &restored_orders, true, NULL) == 0);
+    TEST_ASSERT(restored.len == 4);
+    free(restored_prompt); free(replay);
+    tool_schema_orders_free(&restored_orders);
+    chat_msgs_free(&restored);
+
+    /* The unchanged path still puts discoveries in the initial tools. */
+    chat_msgs legacy = {0};
+    tool_schema_orders legacy_orders = {0};
+    buf legacy_loaded = {0}, all_tools = {0};
+    p = input;
+    TEST_ASSERT(parse_responses_input(&p, &legacy, &legacy_loaded, &legacy_orders, false));
+    TEST_ASSERT(legacy.len == 4 && legacy_loaded.len);
+    buf_puts(&all_tools, initial_tools); buf_putc(&all_tools, '\n');
+    buf_puts(&all_tools, legacy_loaded.ptr);
+    char *legacy_prompt = render_deepseek41_chat(&legacy, 0, all_tools.ptr, DS4_THINK_NONE, false);
+    TEST_ASSERT(strncmp(before, legacy_prompt, strlen(before)) != 0);
+    TEST_ASSERT(!strstr(legacy_prompt, "### Updated Tool Schemas"));
+    free(legacy_prompt); free(before); free(after);
+    buf_free(&all_tools); buf_free(&legacy_loaded);
+    tool_schema_orders_free(&legacy_orders); chat_msgs_free(&legacy);
+done:
     buf_free(&loaded);
     tool_schema_orders_free(&orders);
     chat_msgs_free(&msgs);
@@ -17973,7 +18157,7 @@ static void test_responses_input_function_call_namespace_round_trips_to_dsml(voi
         "\"arguments\":{\"query\":\"deepseek\"}}]";
     const char *input_p = input_json;
     chat_msgs msgs = {0};
-    TEST_ASSERT(parse_responses_input(&input_p, &msgs, NULL, NULL));
+    TEST_ASSERT(parse_responses_input(&input_p, &msgs, NULL, NULL, false));
     TEST_ASSERT(msgs.len == 1);
     TEST_ASSERT(msgs.v[0].calls.len == 1);
     TEST_ASSERT(!strcmp(msgs.v[0].calls.v[0].name,
@@ -21950,7 +22134,7 @@ static void test_request_parsers_reject_malformed_duplicate_owned_fields(void) {
         "\"content\":[{\"type\":\"input_text\",\"text\":\"hello\"}],"
         "\"content\":[{\"type\":\"input_text\",\"text\":\"bad\\q\"}]}]";
     msgs = (chat_msgs){0};
-    TEST_ASSERT(!parse_responses_input(&p, &msgs, NULL, NULL));
+    TEST_ASSERT(!parse_responses_input(&p, &msgs, NULL, NULL, false));
     chat_msgs_free(&msgs);
 
     tool_schema_orders orders = {0};
@@ -23812,7 +23996,7 @@ static void test_responses_tool_image_output(void) {
         buf_puts(&json, "\"}]}]");
         const char *p = json.ptr;
         chat_msgs msgs = {0};
-        bool ok = parse_responses_input(&p, &msgs, NULL, NULL);
+        bool ok = parse_responses_input(&p, &msgs, NULL, NULL, false);
         TEST_ASSERT(ok == (i < 2));
         if (ok) {
             TEST_ASSERT(msgs.len == 1 && !strcmp(msgs.v[0].role, "tool"));
@@ -24116,6 +24300,7 @@ static void ds4_server_unit_tests_run(void) {
     test_responses_namespace_tool_schemas_restore_wire_namespace();
     test_responses_input_tool_search_output_loads_tools();
     test_responses_input_tool_search_output_rejects_bad_tools();
+    test_responses_incremental_tool_schemas();
     test_responses_input_function_call_namespace_round_trips_to_dsml();
     test_responses_output_sends_tool_search_call_item();
     test_dsml_tool_args_preserve_call_order();

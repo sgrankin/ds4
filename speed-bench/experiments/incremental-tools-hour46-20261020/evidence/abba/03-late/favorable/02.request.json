@@ -1,0 +1,255 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "temperature": 0,
+  "reasoning": {
+    "effort": "none"
+  },
+  "max_output_tokens": 128,
+  "store": true,
+  "tools": [
+    {
+      "type": "tool_search",
+      "execution": "client",
+      "description": "Discover a tool by capability or name. Return the matching tool definitions.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    }
+  ],
+  "input": [
+    {
+      "type": "tool_search_output",
+      "call_id": "call_696df5d5cefded10407ddba7db52151b",
+      "execution": "client",
+      "status": "completed",
+      "tools": [
+        {
+          "type": "namespace",
+          "name": "archive__",
+          "description": "Archived note functions and historical metrics.",
+          "tools": [
+            {
+              "type": "function",
+              "name": "read_note",
+              "description": "Read the exact local note file at path; returns its JSON contents.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "path"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_0",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_1",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_2",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_3",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_4",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_5",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_6",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_7",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_8",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_9",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_10",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": "catalog_metric_11",
+              "description": "Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. Return a historical catalog metric. This is unrelated to reading note files. ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ticket"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "prompt_cache_key": "favorable",
+  "previous_response_id": "resp_666da6849d4e539b6e7d7367"
+}

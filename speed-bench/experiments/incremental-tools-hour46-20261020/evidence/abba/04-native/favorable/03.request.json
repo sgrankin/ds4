@@ -1,0 +1,36 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "temperature": 0,
+  "reasoning": {
+    "effort": "none"
+  },
+  "max_output_tokens": 128,
+  "store": true,
+  "tools": [
+    {
+      "type": "tool_search",
+      "execution": "client",
+      "description": "Discover a tool by capability or name. Return the matching tool definitions.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    }
+  ],
+  "input": [
+    {
+      "type": "function_call_output",
+      "call_id": "call_0c14924d819d9f87286bd3a3debc4305",
+      "output": "{\"archived_code\": \"MAPLE-4826\", \"receipt\": \"READ-46-favorable\"}\n"
+    }
+  ],
+  "prompt_cache_key": "favorable",
+  "previous_response_id": "resp_8f0c08b1dc97aff6fc7207f1"
+}

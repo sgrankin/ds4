@@ -1,0 +1,34 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/.workspaces/deepinfer-followups-20261020/item46/ds4-server.baseline",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "59617",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--ctx",
+    "16384",
+    "--prefill-chunk",
+    "2048",
+    "--batched-session",
+    "1",
+    "--mtp-draft",
+    "1"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS": "0",
+    "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "0",
+    "DS4_SERVER_RESPONSE_STORE_DIR": "/Volumes/Models/ds4/.workspaces/deepinfer-followups-20261020/item46/baseline-qualification/01-native/responses",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0"
+  },
+  "server_sha256": "7aa5e17378894caba0a79c5e2fdb608eebc0ade4edd79ae8e28bd1eae5f20679",
+  "application_ssd_kv_cache": "disabled",
+  "timing": "workflow includes requests and actual file read; startup separate"
+}

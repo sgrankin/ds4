@@ -1,0 +1,32 @@
+{
+  "id": "resp_db2bab38d6bd5cf6716acfda",
+  "object": "response",
+  "created_at": 1792533798,
+  "status": "completed",
+  "model": "deepseek-v4.1-flash",
+  "store": true,
+  "previous_response_id": null,
+  "conversation": null,
+  "output": [
+    {
+      "id": "fc_f7506ab16406168a58ec138a",
+      "type": "function_call",
+      "status": "completed",
+      "name": "read_note",
+      "call_id": "call_bb79f856d0e4d040722079ca7a0a29d5",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/deepinfer-followups-20261020/item46/baseline-qualification/fixtures/ordinary/note.json\"}"
+    }
+  ],
+  "usage": {
+    "input_tokens": 753,
+    "input_tokens_details": {
+      "cached_tokens": 674,
+      "cache_write_tokens": 79
+    },
+    "output_tokens": 75,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 828
+  }
+}

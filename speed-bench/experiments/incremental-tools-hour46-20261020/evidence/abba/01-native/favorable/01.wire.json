@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "seconds": 53.518924166914076,
+  "wire": "{\"id\":\"resp_80f7ce28590a10e837940d4f\",\"object\":\"response\",\"created_at\":1792534010,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":true,\"previous_response_id\":null,\"conversation\":null,\"output\":[{\"id\":\"msg_5f39abd23afe203419ac255c\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"I'll discover the read_note tool first, then read the specified file.\",\"annotations\":[]}]},{\"id\":\"fc_021d7157b3eb9e037197b8de\",\"type\":\"tool_search_call\",\"status\":\"completed\",\"call_id\":\"call_592f4763eacb9826626ae9d8a8d20f67\",\"execution\":\"client\",\"arguments\":{\"query\":\"read_note\"}}],\"usage\":{\"input_tokens\":4487,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":4487},\"output_tokens\":54,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":4541}}"
+}
