@@ -427,6 +427,19 @@ int ds4_gpu_stream_expert_cache_seed_selected(
         const ds4_gpu_stream_expert_table *table,
         const int32_t                     *selected_ids,
         uint32_t                           n_selected);
+/* Exact Q8 projections, projection BF16 rounding, SwiGLU and output BF16. */
+int ds4_gpu_dsv41_shared_gate_up_bf16_rows(ds4_gpu_tensor *gate,
+        ds4_gpu_tensor *up, ds4_gpu_tensor *mid, const void *model_map,
+        uint64_t model_size, uint64_t gate_offset, uint64_t up_offset,
+        uint64_t in_dim, uint64_t out_dim, const ds4_gpu_tensor *x,
+        uint32_t rows, float clamp);
+/* Whether a selected-only batch can run without binding full expert tensors. */
+int ds4_gpu_stream_expert_batch_supported(uint32_t rows, uint32_t total,
+        uint32_t used, uint32_t gate_type, uint32_t down_type);
+/* Scope a completed router tensor to the next routed batch. The caller must
+ * finish its router commands first and clear this hint on every exit. This
+ * permits SSD binding to overlap subsequently queued shared-expert work. */
+void ds4_gpu_stream_expert_batch_set_ready(const ds4_gpu_tensor *selected);
 int ds4_gpu_stream_expert_cache_begin_selected_load(
         const ds4_gpu_stream_expert_table *table,
         const int32_t                     *selected_ids,
@@ -436,6 +449,23 @@ int ds4_gpu_glm_stream_expert_cache_begin_selected_load_tensor(
         const ds4_gpu_tensor              *selected,
         uint32_t                           n_selected);
 #ifdef __APPLE__
+typedef struct {
+    bool explicit_io_metrics_enabled, process_io_valid;
+    uint64_t pread_calls, pread_requested_bytes, pread_returned_bytes;
+    uint64_t cache_loader_returned_bytes, cache_hits, cache_misses, cache_evictions;
+    uint64_t process_disk_read_bytes;
+} ds4_gpu_stream_expert_io_metrics;
+/* Phase-boundary CPU snapshot: no GPU wait or cache mutation. Explicit syscall
+ * counters require DS4_METAL_STREAMING_EXPERT_IO_METRICS; disk bytes cover ALL
+ * I/O attributed to this process, including mapped weights and Engram rows. */
+int ds4_gpu_stream_expert_io_metrics_read(ds4_gpu_stream_expert_io_metrics *out);
+/* Diagnostic snapshot only: no hit counters, aging, installation or waits.
+ * Caller owns the cache thread and supplies n_total_expert output bytes. */
+int ds4_gpu_stream_expert_cache_snapshot(const ds4_gpu_stream_expert_table *table,
+        uint8_t *resident);
+/* Same read-only identity check, with n_selected outputs in selected-ID order. */
+int ds4_gpu_stream_expert_cache_snapshot_selected(const ds4_gpu_stream_expert_table *table,
+        const int32_t *selected, uint32_t n_selected, uint8_t *resident);
 /* The async selected-load worker registers itself so Metal cache paths never
  * wait on command buffers from that thread (they fail the load instead and
  * the caller retries synchronously). */
@@ -844,6 +874,10 @@ int ds4_gpu_matmul_q4_K_pair_decode_tensor(
         const ds4_gpu_tensor *x);
 
 /* Multi-row decode projections that preserve the one-row reduction order. */
+/* Scalar reduction order, with explicit BF16 output rounding. */
+int ds4_gpu_dsv41_matmul_q8_0_bf16_rows(ds4_gpu_tensor *out,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint64_t in_dim, uint64_t out_dim, const ds4_gpu_tensor *x, uint32_t rows);
 int ds4_gpu_matmul_q8_0_decode_rows_exact_tensor(
         ds4_gpu_tensor       *out,
         const void           *model_map,
@@ -1193,6 +1227,11 @@ int ds4_gpu_rms_norm_weight_rows_tensor(
         uint32_t                n,
         uint32_t                rows,
         float                   eps);
+
+/* Weighted RMSNorm followed by the exact DS4.1 BF16 boundary in one dispatch. */
+int ds4_gpu_dsv41_rms_norm_weight_bf16_rows(ds4_gpu_tensor *out, const ds4_gpu_tensor *x,
+        const void *model_map, uint64_t model_size, uint64_t weight_offset,
+        uint32_t n, uint32_t rows, float eps);
 
 int ds4_gpu_add_rms_norm_weight_tensor(
         ds4_gpu_tensor       *norm_out,

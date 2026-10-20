@@ -103,7 +103,10 @@ bool ds4_engram_table_open(ds4_engram_table *t, const char *path,
         goto fail;
     }
 #ifdef __APPLE__
-    if (fcntl(fd, F_NOCACHE, 1) != 0 || fcntl(fd, F_RDAHEAD, 0) != 0) goto fail;
+    /* Diagnostic: permit reclaimable OS file-cache pages for repeated sparse
+     * rows. Keep automatic read-ahead off even in this mode. */
+    if (fcntl(fd, F_NOCACHE, getenv("DS4_ENGRAM_FILE_CACHE") ? 0 : 1) != 0 ||
+        fcntl(fd, F_RDAHEAD, 0) != 0) goto fail;
 #elif defined(POSIX_FADV_RANDOM)
     /* Hashed rows are scattered across the table. Read-ahead fetches unused
      * pages and competes with the model's limited memory headroom. */
@@ -168,6 +171,26 @@ static void init_engram_bf16(void) {
     }
 }
 
+/* The on-disk element has only 16 bits of input: FP8 code and shared scale.
+ * Cache the original F32 scaling and BF16 rounding, including invalid values. */
+static float engram_decode_lut[256][256];
+static pthread_once_t engram_decode_once = PTHREAD_ONCE_INIT;
+static void engram_decode_init(void) {
+    for (unsigned scale = 0; scale < 256; scale++) {
+        for (unsigned code = 0; code < 256; code++) {
+            float value = NAN;
+            if ((code & 127u) != 127u && scale != 255u) {
+                value = ldexpf(e4m3((uint8_t)code), (int)scale - 127);
+                uint32_t bits;
+                memcpy(&bits, &value, sizeof(bits));
+                bits = (bits + 0x7fffu + ((bits >> 16) & 1u)) & 0xffff0000u;
+                memcpy(&value, &bits, sizeof(value));
+            }
+            engram_decode_lut[scale][code] = value;
+        }
+    }
+}
+
 bool ds4_engram_read(const ds4_engram_table *t, const uint32_t *rows,
                      size_t count, float *out) {
     if (!t || t->fd < 0 || (count && (!rows || !out)) ||
@@ -183,9 +206,17 @@ bool ds4_engram_read(const ds4_engram_table *t, const uint32_t *rows,
     }
     pthread_once(&engram_bf16_once, init_engram_bf16);
     uint8_t raw[DS4_ENGRAM_ROW_BYTES];
+    const bool lookup = getenv("DS4_ENGRAM_DECODE_LUT") != NULL;
+    if (lookup) pthread_once(&engram_decode_once, engram_decode_init);
     for (size_t i = 0; i < count; i++) {
         if (!read_row(t->fd, t->offset + (uint64_t)rows[i] * sizeof(raw), raw)) return false;
         for (int j = 0; j < DS4_ENGRAM_DIM; j++) {
+            if (lookup) {
+                float value = engram_decode_lut[raw[DS4_ENGRAM_DIM + j / 32]][raw[j]];
+                if (!isfinite(value)) { errno = EDOM; return false; }
+                out[i * DS4_ENGRAM_DIM + j] = value;
+                continue;
+            }
             const uint16_t value = engram_bf16[raw[DS4_ENGRAM_DIM + j / 32]][raw[j]];
             if (value == UINT16_MAX) {
                 errno = EDOM;
@@ -292,7 +323,9 @@ bool ds4_engram_read_batch(const ds4_engram_table *t, const uint32_t *rows,
             .out = out + start * DS4_ENGRAM_COLS * DS4_ENGRAM_DIM, .readers = 1};
         /* Fixed concurrency hides random-read latency without caching the table.
          * Each worker owns disjoint output rows; all finish before GPU use. */
-        if (count >= ENGRAM_PARALLEL_MIN_ROWS) {
+        const size_t parallel_min = getenv("DS4_ENGRAM_SMALL_BATCH_PARALLEL") ?
+            DS4_ENGRAM_COLS * 2u : ENGRAM_PARALLEL_MIN_ROWS;
+        if (count >= parallel_min) {
             batch.readers = ENGRAM_READERS;
 #ifdef __APPLE__
             dispatch_apply_f(batch.readers,

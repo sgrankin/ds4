@@ -147,7 +147,8 @@ static void print_model_runtime(FILE *fp, const help_colors *c,
                                 ds4_help_tool tool, bool full) {
     title(fp, c, "Model And Runtime");
     opt(fp, c, "-m, --model FILE", "GGUF model path. Default: ds4flash.gguf");
-    if (tool == DS4_HELP_DS4 || tool == DS4_HELP_AGENT || tool == DS4_HELP_SERVER) {
+    if (tool == DS4_HELP_DS4 || tool == DS4_HELP_AGENT || tool == DS4_HELP_SERVER ||
+        tool == DS4_HELP_BENCH) {
         opt(fp, c, "--vision FILE", "Vision encoder GGUF for the selected model.");
     }
 #ifdef DS4_ROCM_BUILD
@@ -321,6 +322,7 @@ static void print_agent_specific(FILE *fp, const help_colors *c) {
     opt(fp, c, "--edit-upto", "Enable anchored [upto] edits and automatic marker insertion.");
     opt(fp, c, "-sys, --system TEXT", "Extra system prompt. Empty disables extra text.");
     opt(fp, c, "--trace FILE", "Write prompt, token, and DSML debug trace.");
+    opt(fp, c, "--live-context-file FILE", "Experiment: mirror text chat into FILE; import edits after tools finish.");
     opt(fp, c, "--chdir DIR", "Change working directory before loading runtime assets.");
     fputc('\n', fp);
 }

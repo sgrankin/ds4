@@ -83,6 +83,30 @@ kernel void kernel_dsv41_quantize(
     if (valid) x[index] = dsv41_bf16(result);
 }
 
+kernel void kernel_dsv41_prerope_quantize(
+        constant ds4_metal_args_dsv41_quantize &args,
+        device float *x,
+        uint2 group [[threadgroup_position_in_grid]],
+        uint lane [[thread_index_in_simdgroup]]) {
+    const uint block = args.mode == 3u ? 16u : 32u;
+    const uint column = group.x * block + lane;
+    const bool valid = lane < block && column < 64u;
+    const ulong index = (ulong)group.y * args.width + args.width - 64u + column;
+    const float value = valid ? dsv41_bf16(x[index]) : 0.0f;
+    const float amax = simd_max(abs(value));
+    float result = value;
+    if (args.mode == 1u) {
+        const float scale = dsv41_pow2_ceil(max(amax, 1.0e-4f) * (1.0f / 448.0f));
+        result = copysign(dsv4_e4m3fn_dequant(abs(value) / scale), value) * scale;
+    } else if (args.mode == 2u || args.mode == 3u) {
+        const float scale = args.mode == 3u
+            ? dsv4_e4m3fn_dequant(max(amax, 0.01171875f) / 6.0f)
+            : dsv41_pow2_ceil(max(amax, 7.052966104933725e-38f) * (1.0f / 6.0f));
+        result = copysign(dsv4_e2m1fn_dequant(abs(value) / scale), value) * scale;
+    }
+    if (valid) x[index] = dsv41_bf16(result);
+}
+
 struct ds4_metal_args_dsv41_engram {
     uint width;
     uint rows;
@@ -213,6 +237,18 @@ kernel void kernel_dsv41_carry_copy(
             plain[row * args.width + col] = bits & (1u << lane) ? 0.0f : -INFINITY;
         }
     }
+}
+
+struct ds4_metal_args_dsv41_prerope { uint width, rows, pack; };
+
+kernel void kernel_dsv41_prerope_copy(
+        constant ds4_metal_args_dsv41_prerope &args, device ushort *packed, device float *plain,
+        uint2 index [[thread_position_in_grid]]) {
+    if (index.x >= 64u || index.y >= args.rows) return;
+    const ulong p = (ulong)index.y * 64u + index.x;
+    const ulong x = (ulong)index.y * args.width + args.width - 64u + index.x;
+    if (args.pack) packed[p] = ushort(as_type<uint>(plain[x]) >> 16);
+    else plain[x] = as_type<float>(uint(packed[p]) << 16);
 }
 
 #ifdef DS4_METAL_HAS_TENSOR

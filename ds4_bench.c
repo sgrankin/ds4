@@ -36,6 +36,7 @@ extern int cudaProfilerStop(void) __attribute__((weak));
 
 typedef struct {
     const char *model_path;
+    const char *vision_path;
     const char *mtp_path;
     const char *prompt_path;
     const char *chat_prompt_path;
@@ -283,6 +284,8 @@ static bench_config parse_options(int argc, char **argv) {
             c.dspark_confidence_threshold_set = true;
         } else if (!strcmp(arg, "--prompt-file")) {
             c.prompt_path = need_arg(&i, argc, argv, arg);
+        } else if (!strcmp(arg, "--vision")) {
+            c.vision_path = need_arg(&i, argc, argv, arg);
         } else if (!strcmp(arg, "--chat-prompt-file")) {
             c.chat_prompt_path = need_arg(&i, argc, argv, arg);
         } else if (!strcmp(arg, "-sys") || !strcmp(arg, "--system")) {
@@ -647,6 +650,7 @@ int main(int argc, char **argv) {
 
     ds4_engine_options opt = {
         .model_path = cfg.model_path,
+        .vision_path = cfg.vision_path,
         .mtp_path = cfg.mtp_path,
         .backend = cfg.backend,
         .n_threads = cfg.threads,

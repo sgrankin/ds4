@@ -135,6 +135,14 @@ enum { DS4_V41_CARRY_BF16, DS4_V41_CARRY_MASK, DS4_V41_CARRY_F32 };
 int ds4_gpu_dsv41_carry_copy(ds4_gpu_tensor *packed, uint32_t row_offset,
                             ds4_gpu_tensor *plain, uint32_t width, uint32_t rows,
                             uint32_t format, bool pack);
+/* Lossless pack/unpack of the already-BF16 last 64 rotary lanes. Plain rows
+ * are F32; the archive is 64 uint16_t values per row. No inverse RoPE. */
+int ds4_gpu_dsv41_prerope_copy(ds4_gpu_tensor *packed, uint32_t row_offset,
+                              ds4_gpu_tensor *plain, uint32_t width,
+                              uint32_t rows, bool pack);
+/* Requantize only the rotary 64-lane blocks; leave other cache bytes intact. */
+int ds4_gpu_dsv41_prerope_quantize(ds4_gpu_tensor *x, uint32_t width,
+                                  uint32_t rows, ds4_v41_activation_format format);
 /* Batched F16 projections with the same arithmetic as individual matvecs. */
 int ds4_gpu_dsv41_projection_rows(ds4_gpu_tensor *out,
                                  const void *model_map, uint64_t model_size,

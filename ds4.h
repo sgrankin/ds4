@@ -261,6 +261,8 @@ uint32_t ds4_engine_layer_compress_ratio(ds4_engine *e, uint32_t layer);
 uint64_t ds4_engine_hidden_f32_values(ds4_engine *e);
 int ds4_engine_embd_dim(ds4_engine *e);
 uint64_t ds4_engine_model_bytes(ds4_engine *e);
+/* Borrowed resolved DS4.1 GGUF path, valid until engine close. */
+const char *ds4_engine_model_path(ds4_engine *e);
 bool ds4_engine_has_vision(ds4_engine *e);
 int ds4_engine_vision_encode_file(ds4_engine *e,
                                   const char *path,
@@ -308,6 +310,11 @@ int ds4_engine_model_id(ds4_engine *e);
 bool ds4_engine_is_glm_dsa(ds4_engine *e);
 bool ds4_engine_is_glm53(ds4_engine *e);
 bool ds4_engine_is_qwen4(ds4_engine *e);
+/* Opt-in DS4_OVERTHINK_PENALTY, configured once at engine startup. */
+bool ds4_engine_overthinking_penalty_enabled(ds4_engine *e);
+/* For serial experiment runners: change the sampling policy between cases.
+ * Do not call concurrently with sampling on any session of this engine. */
+bool ds4_engine_set_overthinking_penalty(ds4_engine *e, float penalty, bool think_only);
 /* Qwen3.8 reasoning-effort system instruction for a think mode (NULL when none) */
 const char *ds4_qwen4_reasoning_effort_text(ds4_think_mode mode);
 const char *ds4_backend_name(ds4_backend backend);
@@ -503,6 +510,15 @@ int ds4_test_sample_logits(const float *logits, uint32_t n_vocab,
 int ds4_test_sampling_probabilities(const float *logits, uint32_t n_vocab,
                                     float temperature, int top_k,
                                     float top_p, float min_p, float *probs);
+int ds4_test_sample_logits_penalized(const float *raw, uint32_t n_vocab,
+                                    const int *ids, int count, float penalty,
+                                    float temperature, int top_k,
+                                    float top_p, float min_p, uint64_t *rng,
+                                    float *adjusted, float *prob_scratch);
+bool ds4_test_tokens_inside_thinking(const int *tokens, int n,
+                                     int start_id, int end_id);
+int ds4_test_tokens_generated_thinking(const int *tokens, int n, int prompt_len,
+                                       int assistant_id, int start_id, int end_id);
 int ds4_test_speculative_sample(const float *target_logits,
                                 const float *draft_logits,
                                 uint32_t n_vocab,
@@ -530,6 +546,9 @@ uint64_t ds4_test_ds41_batch_count(void);
 int ds4_session_top_logprobs(ds4_session *s, ds4_token_score *out, int k);
 int ds4_session_token_logprob(ds4_session *s, int token, ds4_token_score *out);
 int ds4_session_copy_logits(ds4_session *s, float *out, int cap);
+/* Raw-logit units after the sampling policy, before temperature/filtering.
+ * copy_logits and token_logprob continue to expose untouched model logits. */
+int ds4_session_copy_sampling_logits(ds4_session *s, float *out, int cap);
 int ds4_session_set_logits(ds4_session *s, const float *logits, int n);
 /* Pay the one-time first-submission GPU cost outside any measured window;
  * used by the TP worker right after session create (no-op on CPU/GLM). */
@@ -644,6 +663,7 @@ int ds4_session_eval_output_head_from_hc(ds4_session *s,
 #define DS4_SESSION_PAYLOAD_MAGIC UINT32_C(0x34565344) /* "DSV4" */
 #define DS4_SESSION_PAYLOAD_VERSION UINT32_C(2)
 #define DS4_SESSION_PAYLOAD_U32_FIELDS 13u
+#define DS4_SESSION_SUFFIX_DIAGNOSTIC_MAGIC UINT32_C(0x44535344) /* "DSSD" */
 #define DS4_SESSION_LAYER_PAYLOAD_MAGIC UINT32_C(0x4c565344) /* "DSVL" */
 #define DS4_SESSION_LAYER_PAYLOAD_VERSION UINT32_C(1)
 #define DS4_SESSION_LAYER_PAYLOAD_U32_FIELDS 14u
@@ -659,6 +679,86 @@ int ds4_session_load_payload(ds4_session *s, FILE *fp, uint64_t payload_bytes, c
 int ds4_session_save_snapshot(ds4_session *s, ds4_session_snapshot *snap, char *err, size_t errlen);
 int ds4_session_load_snapshot(ds4_session *s, const ds4_session_snapshot *snap, char *err, size_t errlen);
 void ds4_session_snapshot_free(ds4_session_snapshot *snap);
+
+/* Experimental session-private stale suffix cache. Explicit calls opt in;
+ * ordinary sync never uses this path. Without pre-RoPE originals capture a
+ * freshly evaluated text-only DS4.1 checkpoint with no prior suffix graft,
+ * from this engine and context. Original-backed approximate captures retain
+ * diagnostic payload magic and remain private suffix sources only.
+ * This source check does not track expert rerouting or other forward-policy
+ * history. Native-fresh comparisons require the caller to keep both forward
+ * profiles native and fixed. The same-position entry point reuses one suffix
+ * starting on an even compression boundary; relocation is declared below. */
+typedef struct {
+    ds4_session_snapshot state;
+    ds4_engine *engine;
+    int ctx_size;
+    /* Owned pointer-free packed BF16 rotary originals, separate from canonical
+     * payload format. Persist prerope_bytes bytes; engine remains runtime-only. */
+    void *prerope;
+    uint64_t prerope_bytes;
+    bool approximate;
+} ds4_suffix_cache;
+typedef struct {
+    uint32_t reused_tokens, raw_rows_per_layer, compressed_rows, index_rows;
+    uint32_t pending_pairs, fresh_tail_tokens;
+    uint64_t copied_bytes; /* Canonical KV/index/pending bytes; excludes originals tape. */
+} ds4_suffix_reuse_stats;
+typedef struct {
+    ds4_suffix_reuse_stats reuse;
+    uint32_t source_start, destination_start, source_end, destination_end;
+    uint32_t raw_keys_repaired, compressed_keys_repaired, index_keys_repaired;
+} ds4_suffix_relocation_stats;
+/* Opt-in Metal DS4.1 archive of normalized pre-RoPE last-64 lanes. Enable
+ * before evaluating the reusable region. Canonical loads clear coverage;
+ * missing originals reject a relocation before mutation. Allocation is RAM. */
+int ds4_session_enable_suffix_prerope(ds4_session *s, char *err, size_t errlen);
+uint64_t ds4_session_suffix_prerope_bytes(const ds4_session *s);
+/* Preallocation estimate: serialized graph state plus owned originals blob. */
+uint64_t ds4_session_suffix_cache_bytes(ds4_session *s);
+/* With this archive enabled, private approximate sources can be recaptured;
+ * their state retains diagnostic magic and cannot become canonical prefixes. */
+int ds4_session_capture_suffix_cache(ds4_session *s, ds4_suffix_cache *cache,
+                                     char *err, size_t errlen);
+/* Restore an exact canonical prefix and its saved original rotary coverage.
+ * Approximate sources are rejected. Missing tape stays uncovered; a partial
+ * restore invalidates the session. This does not evaluate any new tokens. */
+int ds4_session_load_suffix_prefix(ds4_session *s, const ds4_suffix_cache *cache,
+                                    char *err, size_t errlen);
+void ds4_suffix_cache_free(ds4_suffix_cache *cache);
+/* The live checkpoint must equal prompt[0:start]. The cached endpoint must
+ * equal prompt[start:end] over the reused suffix; earlier tokens may differ.
+ * Require end < prompt->len: at least one fresh tail token is computed before
+ * returning, so endpoint logits are never merely relabeled. Validation
+ * failures leave state unchanged; errors after grafting invalidate it. */
+int ds4_session_reuse_suffix(ds4_session *s, const ds4_suffix_cache *cache,
+                              const ds4_tokens *prompt, uint32_t start,
+                              ds4_suffix_reuse_stats *stats,
+                              char *err, size_t errlen);
+/* Aligned-relocation experiment: move cache[source_start:source_end]
+ * to prompt[checkpoint_len:destination_end], with even source and destination
+ * compression boundaries. Right shifts require immutable pre-RoPE originals;
+ * left shifts also support legacy inverse-old/forward-new native RoPE when
+ * originals are absent. Repairs raw, compressed and index keys, then performs
+ * native cache requantization. Zero displacement skips every repair
+ * and retains identity byte parity. At least one fresh tail is required.
+ * Re-rotation/requantization and old prefix conditioning are approximate. */
+int ds4_session_reuse_suffix_relocated(ds4_session *s,
+                                       const ds4_suffix_cache *cache,
+                                       const ds4_tokens *prompt,
+                                       uint32_t source_start,
+                                       ds4_suffix_relocation_stats *stats,
+                                       char *err, size_t errlen);
+/* Reports prior suffix grafting, not every optional forward-policy history. */
+bool ds4_session_is_approximate(const ds4_session *s);
+/* Diagnostic only: permits inspecting private approximate graph bytes.
+ * The distinct DSSD magic prevents ordinary payload/snapshot loading and
+ * unarchived suffix-source parsing. Only explicit original-backed private
+ * suffix capture may retain these bytes. Never publish them as canonical
+ * token-keyed KV. Canonical export rejects approximate state. */
+int ds4_session_suffix_diagnostic_snapshot(ds4_session *s,
+                                           ds4_session_snapshot *snap,
+                                           char *err, size_t errlen);
 
 uint64_t ds4_session_layer_payload_bytes(ds4_session *s,
                                          uint32_t layer_start,

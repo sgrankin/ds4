@@ -97,8 +97,8 @@ help:
 ds4: ds4_cli.o ds4_help.o ds4_prompt_prefix.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
 	$(CC) $(CFLAGS) -o $@ ds4_cli.o ds4_help.o ds4_prompt_prefix.o linenoise.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
 
-ds4-server: ds4_server.o ds4_help.o ds4_kvstore.o rax.o ds4_gpu_args.o $(CORE_OBJS)
-	$(CC) $(CFLAGS) -o $@ ds4_server.o ds4_help.o ds4_kvstore.o rax.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
+ds4-server: ds4_server.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gpu_args.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ ds4_server.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
 
 ds4-bench: ds4_bench.o ds4_help.o ds4_gpu_args.o $(CORE_OBJS)
 	$(CC) $(CFLAGS) -o $@ ds4_bench.o ds4_help.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
@@ -106,8 +106,11 @@ ds4-bench: ds4_bench.o ds4_help.o ds4_gpu_args.o $(CORE_OBJS)
 ds4-eval: ds4_eval.o ds4_eval_cases.o ds4_help.o $(CORE_OBJS)
 	$(CC) $(CFLAGS) -o $@ ds4_eval.o ds4_eval_cases.o ds4_help.o $(CORE_OBJS) $(METAL_LDLIBS)
 
-ds4-agent: ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
-	$(CC) $(CFLAGS) -o $@ ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
+ds4-agent: ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
+
+speed-bench/overthink_pilot: speed-bench/overthink_pilot.c ds4.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
 
 gguf-tools/quality-testing/score_official: gguf-tools/quality-testing/score_official.c ds4.h ds4_distributed.h ds4_tp.h $(CORE_OBJS) rax.o ds4_gpu_args.o
 	$(CC) $(QUALITY_CFLAGS) -I. -o $@ gguf-tools/quality-testing/score_official.c $(CORE_OBJS) rax.o ds4_gpu_args.o $(METAL_LDLIBS)
@@ -153,6 +156,48 @@ speed-bench/session_concurrency_bench: speed-bench/session_concurrency_bench.o $
 	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
 
 session-concurrency-bench: speed-bench/session_concurrency_bench
+
+speed-bench/suffix_reuse_bench.o: speed-bench/suffix_reuse_bench.c ds4.h
+	$(CC) $(QUALITY_CFLAGS) -I. -c -o $@ $<
+
+speed-bench/suffix_reuse_bench: speed-bench/suffix_reuse_bench.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
+
+speed-bench/suffix_fact_oracle.o: speed-bench/suffix_fact_oracle.c ds4.h
+	$(CC) $(QUALITY_CFLAGS) -I. -c -o $@ $<
+
+speed-bench/suffix_fact_oracle: speed-bench/suffix_fact_oracle.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
+
+speed-bench/context_frontier_bench.o: speed-bench/context_frontier_bench.c ds4.h
+	$(CC) $(CFLAGS) -I. -c -o $@ $<
+
+speed-bench/context_frontier_bench: speed-bench/context_frontier_bench.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
+
+speed-bench/state_cache_bench.o: speed-bench/state_cache_bench.c ds4.h ds4_state_cache.h
+	$(CC) $(CFLAGS) -I. -c -o $@ $<
+
+speed-bench/state_cache_bench: speed-bench/state_cache_bench.o ds4_state_cache.o ds4_kvstore.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
+
+tests/test_agent_compact_prefix.o: tests/test_agent_compact_prefix.c ds4_agent.c ds4.h ds4_kvstore.h
+	$(CC) $(CFLAGS) -Wno-unused-function -I. -c -o $@ $<
+
+tests/test_agent_compact_prefix: tests/test_agent_compact_prefix.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
+
+tests/test_agent_live_context.o: tests/test_agent_live_context.c ds4_agent.c ds4.h ds4_kvstore.h
+	$(CC) $(CFLAGS) -Wno-unused-function -I. -c -o $@ $<
+
+tests/test_agent_live_context: tests/test_agent_live_context.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
+
+tests/test_agent_context_frontiers.o: tests/test_agent_context_frontiers.c ds4_agent.c ds4.h ds4_kvstore.h
+	$(CC) $(CFLAGS) -Wno-unused-function -I. -c -o $@ $<
+
+tests/test_agent_context_frontiers: tests/test_agent_context_frontiers.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
 
 tests/test_mxfp4_metal.o: tests/test_mxfp4_metal.c ds4_gpu.h
 	$(CC) $(CFLAGS) -I. -c -o $@ $<
@@ -275,12 +320,12 @@ tests/test_metal_dense_mpp: tests/test_metal_dense_mpp.o $(CORE_OBJS)
 test-metal-dense-mpp: tests/test_metal_dense_mpp
 	./tests/test_metal_dense_mpp
 
-cpu: ds4_cli_cpu.o ds4_server_cpu.o ds4_bench_cpu.o ds4_eval_cpu.o ds4_eval_cases.o ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS)
+cpu: ds4_cli_cpu.o ds4_server_cpu.o ds4_bench_cpu.o ds4_eval_cpu.o ds4_eval_cases.o ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS)
 	$(CC) $(CFLAGS) -o ds4 ds4_cli_cpu.o ds4_help.o ds4_prompt_prefix.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
-	$(CC) $(CFLAGS) -o ds4-server ds4_server_cpu.o ds4_help.o ds4_kvstore.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o ds4-server ds4_server_cpu.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 	$(CC) $(CFLAGS) -o ds4-bench ds4_bench_cpu.o ds4_help.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 	$(CC) $(CFLAGS) -o ds4-eval ds4_eval_cpu.o ds4_eval_cases.o ds4_help.o $(CPU_CORE_OBJS) $(LDLIBS)
-	$(CC) $(CFLAGS) -o ds4-agent ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o ds4-agent ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 
 cuda-regression:
 	@echo "cuda-regression requires a CUDA build"
@@ -350,7 +395,7 @@ test-rocm:
 ds4: ds4_cli.o ds4_help.o ds4_prompt_prefix.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 
-ds4-server: ds4_server.o ds4_help.o ds4_kvstore.o rax.o ds4_gpu_args.o $(CORE_OBJS)
+ds4-server: ds4_server.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gpu_args.o $(CORE_OBJS)
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 
 ds4-bench: ds4_bench.o ds4_help.o ds4_gpu_args.o $(CORE_OBJS)
@@ -359,7 +404,7 @@ ds4-bench: ds4_bench.o ds4_help.o ds4_gpu_args.o $(CORE_OBJS)
 ds4-eval: ds4_eval.o ds4_eval_cases.o ds4_help.o $(CORE_OBJS)
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 
-ds4-agent: ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+ds4-agent: ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 
 gguf-tools/quality-testing/score_official.o: gguf-tools/quality-testing/score_official.c ds4.h
@@ -685,12 +730,12 @@ tests/test_cuda_dspark_moe: tests/test_cuda_dspark_moe.o $(CORE_OBJS)
 test-cuda-dspark-moe: tests/test_cuda_dspark_moe
 	./tests/test_cuda_dspark_moe
 
-cpu: ds4_cli_cpu.o ds4_server_cpu.o ds4_bench_cpu.o ds4_eval_cpu.o ds4_eval_cases.o ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS)
+cpu: ds4_cli_cpu.o ds4_server_cpu.o ds4_bench_cpu.o ds4_eval_cpu.o ds4_eval_cases.o ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS)
 	$(CC) $(CFLAGS) -o ds4 ds4_cli_cpu.o ds4_help.o ds4_prompt_prefix.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
-	$(CC) $(CFLAGS) -o ds4-server ds4_server_cpu.o ds4_help.o ds4_kvstore.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o ds4-server ds4_server_cpu.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 	$(CC) $(CFLAGS) -o ds4-bench ds4_bench_cpu.o ds4_help.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 	$(CC) $(CFLAGS) -o ds4-eval ds4_eval_cpu.o ds4_eval_cases.o ds4_help.o $(CPU_CORE_OBJS) $(LDLIBS)
-	$(CC) $(CFLAGS) -o ds4-agent ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o ds4-agent ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 
 cuda-regression: tests/cuda_long_context_smoke
 	./tests/cuda_long_context_smoke
@@ -745,7 +790,7 @@ test-qwen4-cuda: tests/test_qwen4_cuda
 	./tests/test_qwen4_cuda
 endif
 
-ds4.o: ds4.c ds4.h ds4_ssd.h ds4_distributed.h ds4_gpu.h ds4_gpu_copy.h ds4_gpu_tp.h ds4_deepseek41_gpu.h ds4_deepseek41_dspark.h ds4_linux_memory.h ds4_engram.h
+ds4.o: ds4.c ds4.h ds4_ssd.h ds4_distributed.h ds4_gpu.h ds4_gpu_copy.h ds4_gpu_tp.h ds4_deepseek41_gpu.h ds4_deepseek41_dspark.h ds4_linux_memory.h ds4_engram.h ds4_resident_route.h ds4_resident_native_weights.h ds4_suffix_layout.h
 	$(CC) $(CFLAGS) -c -o $@ ds4.c
 
 ds4_image.o: ds4_image.c ds4_image.h third_party/iris/jpeg.h third_party/iris/png.h
@@ -796,6 +841,9 @@ ds4_web.o: ds4_web.c ds4_web.h
 ds4_kvstore.o: ds4_kvstore.c ds4_kvstore.h ds4.h ds4_ssd.h
 	$(CC) $(CFLAGS) -c -o $@ ds4_kvstore.c
 
+ds4_state_cache.o: ds4_state_cache.c ds4_state_cache.h ds4_kvstore.h ds4.h ds4_ssd.h
+	$(CC) $(CFLAGS) -c -o $@ ds4_state_cache.c
+
 ds4_test.o: tests/ds4_test.c ds4_server.c ds4.h ds4_image.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_kvstore.h rax.h
 	$(CC) $(CFLAGS) -Wno-unused-function -c -o $@ tests/ds4_test.c
 
@@ -811,7 +859,7 @@ rax.o: rax.c rax.h rax_malloc.h
 linenoise.o: linenoise.c linenoise.h
 	$(CC) $(CFLAGS) -c -o $@ linenoise.c
 
-ds4_cpu.o: ds4.c ds4.h ds4_ssd.h ds4_distributed.h ds4_gpu.h ds4_gpu_tp.h
+ds4_cpu.o: ds4.c ds4.h ds4_ssd.h ds4_distributed.h ds4_gpu.h ds4_gpu_tp.h ds4_resident_route.h
 	$(CC) $(CFLAGS) -Wno-unused-function -DDS4_NO_GPU -c -o $@ ds4.c
 
 ds4_cli_cpu.o: ds4_cli.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_prompt_prefix.h linenoise.h
@@ -1249,18 +1297,18 @@ test-cuda-mixed-batch: tests/test_cuda_mixed_batch
 	DS4_TEST_MODEL="$(DS4_TEST_MODEL)" ./tests/test_cuda_mixed_batch
 endif
 
-ds4_test: ds4_test.o ds4_help.o ds4_kvstore.o rax.o $(CORE_OBJS)
+ds4_test: ds4_test.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o $(CORE_OBJS)
 ifeq ($(UNAME_S),Darwin)
-	$(CC) $(CFLAGS) -o $@ ds4_test.o ds4_help.o ds4_kvstore.o rax.o $(CORE_OBJS) $(METAL_LDLIBS)
+	$(CC) $(CFLAGS) -o $@ ds4_test.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o $(CORE_OBJS) $(METAL_LDLIBS)
 else
-	$(DS4_LINK) -o $@ ds4_test.o ds4_help.o ds4_kvstore.o rax.o $(CORE_OBJS) $(DS4_LINK_LIBS)
+	$(DS4_LINK) -o $@ ds4_test.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o $(CORE_OBJS) $(DS4_LINK_LIBS)
 endif
 
-ds4_agent_test: ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o $(CORE_OBJS)
+ds4_agent_test: ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS)
 ifeq ($(UNAME_S),Darwin)
-	$(CC) $(CFLAGS) -o $@ ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o $(CORE_OBJS) $(METAL_LDLIBS)
+	$(CC) $(CFLAGS) -o $@ ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS) $(METAL_LDLIBS)
 else
-	$(DS4_LINK) -o $@ ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o linenoise.o $(CORE_OBJS) $(DS4_LINK_LIBS)
+	$(DS4_LINK) -o $@ ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS) $(DS4_LINK_LIBS)
 endif
 
 tests/test_prompt_prefix.o: tests/test_prompt_prefix.c ds4_prompt_prefix.h
@@ -1346,11 +1394,25 @@ ds4_test.o ds4_agent_test.o \
 ds4_cpu_test_hooks.o ds4_cuda_test_hooks.o tests/test_session_state.o \
 tests/test_session_state_gpu.o: ds4_tool_text.h
 
+ds4_agent.o ds4_agent_cpu.o ds4_server.o ds4_server_cpu.o \
+ds4_test.o ds4_agent_test.o tests/test_agent_compact_prefix.o \
+tests/test_agent_live_context.o tests/test_agent_context_frontiers.o: \
+ds4_state_cache.h ds4_state_cache_runtime.h ds4_tp.h
+
+ds4_server.o ds4_server_cpu.o ds4_test.o: ds4_suffix_match.h ds4_suffix_layout.h ds4_response_store.h ds4_conversations.h
+
+ds4_agent.o ds4_agent_cpu.o ds4_agent_test.o tests/test_agent_compact_prefix.o \
+tests/test_agent_live_context.o tests/test_agent_context_frontiers.o: ds4_suffix_match.h
+
 clean:
 	rm -f tests/test_mmvq_cuda tests/test_mmvq_rocm
+	rm -f speed-bench/state_cache_bench
+	rm -f speed-bench/overthink_pilot
 	rm -f tests/test_qwen4_ngrams
 	rm -f tests/test_qwen4_ngram_state
 	rm -f tests/test_web_recovery
+	rm -f tests/test_deepseek41_ablation tests/test_metal_norm_bf16 tests/test_metal_q8_bf16
+	rm -f speed-bench/agent-session/replay tests/test_metal_shared_bf16 tests/test_deepseek41_selected_small tests/test_deepseek41_scalar_queue tests/test_deepseek41_exact_tail tests/trace_deepseek41_prefill
 	rm -f tests/test_metal_ssd_experts
 	rm -f tests/test_metal_command_memory
 	rm -f tests/test_deepseek41_metal
@@ -1397,7 +1459,7 @@ clean:
 	rm -f tests/test_quality_api
 	rm -f tests/test_linux_memory tests/test_rocm_memory
 	rm -f tests/test_glm_attention tests/test_glm_attention_rocm tests/test_cuda_tokentile
-	rm -f tests/test_ssd_cache tests/test_engram
+	rm -f tests/test_ssd_cache tests/test_engram tests/test_engram_lut
 	rm -f tests/test_session_state tests/test_session_state_gpu tests/test_tp_commands
 	rm -f tests/test_deepseek_indexer
 	rm -f tests/test_tp_rdma tests/test_tp_link tests/test_tp_tcp tests/test_cuda_tp_link
@@ -1419,3 +1481,42 @@ gguf-tools/quality-testing/score_official_verify.o: gguf-tools/quality-testing/s
 
 gguf-tools/quality-testing/score_official_verify: gguf-tools/quality-testing/score_official_verify.o ds4_verify_test_hooks.o $(filter-out ds4.o,$(CORE_OBJS)) rax.o ds4_gpu_args.o
 	$(if $(filter Darwin,$(UNAME_S)),$(CC) $(CFLAGS),$(DS4_LINK)) -o $@ $^ $(if $(filter Darwin,$(UNAME_S)),$(METAL_LDLIBS),$(DS4_LINK_LIBS))
+
+# Explicit model-dependent DS4.1 scalar scheduling regression.
+tests/test_deepseek41_scalar_queue: tests/test_deepseek41_scalar_queue.c ds4.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/trace_deepseek41_prefill: tests/trace_deepseek41_prefill.c ds4.c ds4.h $(filter-out ds4.o,$(CORE_OBJS))
+	$(CC) $(CFLAGS) -I. -o $@ $< $(filter-out ds4.o,$(CORE_OBJS)) $(METAL_LDLIBS)
+
+tests/test_deepseek41_exact_tail: tests/test_deepseek41_exact_tail.c ds4.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+# Explicit short-turn arithmetic regression and fused-kernel checks.
+tests/test_deepseek41_ablation: tests/test_deepseek41_ablation.c ds4.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+tests/test_metal_norm_bf16: tests/test_metal_norm_bf16.c ds4_gpu.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/test_metal_q8_bf16: tests/test_metal_q8_bf16.c ds4_gpu.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/test_engram_lut: tests/test_engram_lut.c ds4_engram.c ds4_engram.h
+	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -I. -o $@ $< -lm -pthread
+
+tests/test_deepseek41_selected_small: tests/test_deepseek41_selected_small.c ds4.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/test_metal_shared_bf16: tests/test_metal_shared_bf16.c ds4_gpu.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+speed-bench/agent-session/replay: speed-bench/agent-session/replay.c ds4.h ds4_gpu.h $(CORE_OBJS)
+	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
+
+tests/test_resident_route: tests/test_resident_route.c ds4_resident_route.h
+	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -I. -o $@ $< -lm
+
+ifeq ($(UNAME_S),Darwin)
+tests/test_session_suffix_exports: tests/test_session_suffix_exports.c ds4.c ds4.h $(filter-out ds4.o,$(CORE_OBJS))
+	$(CC) $(CFLAGS) -I. -o $@ $< $(filter-out ds4.o,$(CORE_OBJS)) $(METAL_LDLIBS)
+endif

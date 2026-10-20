@@ -354,7 +354,96 @@ static void check_speculative_distribution(void) {
            (double)counts[2] / trials);
 }
 
+static void check_overthinking_penalty(void) {
+    const float raw[] = {2.0f, 1.6f, 0.0f, -2.0f, NAN, -INFINITY};
+    const float expected[] = {1.5f, 1.6f, -0.5f, -2.0f, NAN, -INFINITY};
+    const int ids[] = {0, 2, -1, 99};
+    float adjusted[6], scratch[6], probs[6];
+    uint64_t rng = 42;
+    int selected = ds4_test_sample_logits_penalized(
+        raw, 6, ids, 4, 0.5f, 0.0f, 0, 1.0f, 0.0f, &rng, adjusted, scratch);
+    CHECK(selected == 1, "positive penalty must suppress marker before greedy argmax");
+    CHECK(adjusted[0] == 1.5f && adjusted[2] == -0.5f &&
+          adjusted[1] == raw[1] && isnan(adjusted[4]) && isinf(adjusted[5]),
+          "penalty must preserve untargeted/nonfinite logits and ignore invalid IDs");
+    CHECK(ds4_test_sampling_probabilities(adjusted, 6, 0.6f, 0, 1.0f, 0.0f, probs),
+          "penalized probability construction");
+    CHECK(fabsf(probs[0] / probs[1] - expf(-0.1f / 0.6f)) < 1e-5f,
+          "penalty must be in raw-logit units before temperature");
+    const float temperatures[] = {0.0f, 0.6f, 1.0f};
+    const int topks[] = {0, 1, 3};
+    for (size_t ti = 0; ti < 3; ti++) {
+        for (size_t ki = 0; ki < 3; ki++) {
+            for (int filtered = 0; filtered < 2; filtered++) {
+                const float top_p = filtered ? 0.95f : 1.0f;
+                const float min_p = filtered ? 0.05f : 0.0f;
+                for (uint64_t seed = 1; seed <= 256; seed++) {
+                    uint64_t reference_rng = seed, actual_rng = seed;
+                    const int reference = reference_sample(expected, 6,
+                        temperatures[ti], topks[ki], top_p, min_p, &reference_rng);
+                    const int actual = ds4_test_sample_logits_penalized(raw, 6,
+                        ids, 4, 0.5f, temperatures[ti], topks[ki], top_p, min_p,
+                        &actual_rng, adjusted, scratch);
+                    CHECK(actual == reference && actual_rng == reference_rng,
+                          "penalized selection/RNG disagrees with independent sampler");
+                }
+            }
+        }
+    }
+    const float original[] = {2.0f, 1.6f, 0.0f, -2.0f, NAN, -INFINITY};
+    CHECK(!memcmp(raw, original, sizeof(raw)), "sampling policy changed raw logits");
+    uint64_t base_rng = 91, zero_rng = 91;
+    const int base = reference_sample(raw, 6, 1.0f, 0, 1.0f, 0.05f, &base_rng);
+    const int zero = ds4_test_sample_logits_penalized(raw, 6, ids, 4, 0.0f,
+        1.0f, 0, 1.0f, 0.05f, &zero_rng, adjusted, scratch);
+    CHECK(base == zero && base_rng == zero_rng, "zero penalty changed sampling");
+
+    const int transcript[] = {7, 8, 100, 9, 10, 101, 11, 100, 12};
+    CHECK(!ds4_test_tokens_inside_thinking(transcript, 0, 100, 101), "empty think gate");
+    CHECK(!ds4_test_tokens_inside_thinking(transcript, 2, 100, 101), "missing think gate");
+    CHECK(ds4_test_tokens_inside_thinking(transcript, 5, 100, 101), "opened think gate");
+    CHECK(!ds4_test_tokens_inside_thinking(transcript, 7, 100, 101), "closed think gate");
+    CHECK(ds4_test_tokens_inside_thinking(transcript, 9, 100, 101), "reopened think gate");
+    CHECK(!ds4_test_tokens_inside_thinking(transcript, 9, -1, -1), "missing control IDs");
+
+    /* A long system/history prefix and prefilled current thoughts must not
+     * spend the late-only threshold; only evaluated generated thoughts count. */
+    int turn[1024];
+    int used = 0;
+    turn[used++] = 100;
+    for (int i = 0; i < 500; i++) turn[used++] = 9;
+    turn[used++] = 101;
+    turn[used++] = 102;
+    turn[used++] = 100;
+    for (int i = 0; i < 50; i++) turn[used++] = 9;
+    const int prompt_len = used;
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, prompt_len, 102, 100, 101) == 0,
+          "prompt/history consumed generated thinking threshold");
+    for (int i = 0; i < 255; i++) turn[used++] = 9;
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, prompt_len, 102, 100, 101) == 255,
+          "late gate count before boundary");
+    turn[used++] = 9;
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, prompt_len, 102, 100, 101) == 256,
+          "late gate threshold off by one");
+    turn[used++] = 101; turn[used++] = 9;
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, prompt_len, 102, 100, 101) == 256,
+          "final answer/control tokens consumed reasoning threshold");
+    turn[used++] = 100; turn[used++] = 9;
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, prompt_len, 102, 100, 101) == 257,
+          "reopened reasoning forgot current assistant turn");
+    turn[used++] = 101; turn[used++] = 102; turn[used++] = 100; turn[used++] = 9;
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, prompt_len, 102, 100, 101) == 1,
+          "new assistant turn failed to reset late gate");
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, used, 102, 100, 101) == 0,
+          "restored/prefilled checkpoint counted as newly generated");
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, prompt_len, -1, 100, 101) == 258,
+          "families without a dedicated assistant ID lost generated reasoning");
+    CHECK(ds4_test_tokens_generated_thinking(turn, used, prompt_len, 102, -1, -1) == 0,
+          "missing controls created generated reasoning");
+}
+
 int main(void) {
+    check_overthinking_penalty();
     check_speculative_distribution();
     const uint32_t semantic_n = 4096;
     float *logits = malloc((size_t)semantic_n * sizeof(*logits));
