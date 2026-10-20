@@ -3,6 +3,13 @@
 /ds4-bench
 /ds4-eval
 /ds4-agent
+/speed-bench/context_frontier_bench
+/speed-bench/suffix_reuse_bench
+/speed-bench/suffix_fact_oracle
+/tests/test_agent_compact_prefix
+/tests/test_agent_live_context
+/tests/test_agent_context_frontiers
+/speed-bench/experiments/clm-live-context-20261002/*/cache/
 /ds4_native
 /ds4_agent_test
 /ds4_server_test
@@ -100,6 +107,7 @@
 /tests/test_qwen4_ngram_state
 /tests/test_deepseek41_graph
 /tests/test_deepseek41_prefill
+/tests/test_deepseek41_scalar_queue
 /tests/test_deepseek41_cli
 /tests/test_engram
 *.o
@@ -114,3 +122,30 @@ __pycache__/
 
 /tests/test_qwen4_conv_parallel
 /tests/test_q8_prefill_variants
+
+/tests/trace_deepseek41_prefill
+/tests/test_deepseek41_exact_tail
+
+/tests/test_deepseek41_ablation
+/tests/test_metal_norm_bf16
+/tests/test_metal_q8_bf16
+/tests/test_engram_lut
+/tests/test_deepseek41_selected_small
+
+/tests/test_metal_shared_bf16
+
+/speed-bench/agent-session/replay
+# Persistent local experiment workspaces and large benchmark records.
+.workspaces/
+speed-bench/ideas/artifacts/
+/speed-bench/overthink_pilot
+/tests/test_resident_route
+/tests/test_session_suffix_exports
+/libds4_resident.dylib
+/speed-bench/state_cache_bench
+/speed-bench/experiments/**/ds4sc-*
+/speed-bench/experiments/**/sysprompt.kv
+/speed-bench/experiments/**/agent-suffix-mock
+/speed-bench/experiments/**/suffix-repeat-bench
+/speed-bench/experiments/**/test-state-cache
+/speed-bench/experiments/**/.ds4sc.lock

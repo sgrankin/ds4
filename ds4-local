@@ -1,0 +1,88 @@
+#!/bin/sh
+# Opt-in local profiles. Arguments after the profile override CLI defaults.
+set -eu
+root=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+server=0
+if [ "${1-}" = "--server" ]; then server=1; shift; fi
+if [ "${1-}" = "--preset" ]; then shift; fi
+preset=${1-}
+case "$preset" in
+    context-fast|resident-fast|persistent-fast) shift ;;
+    --help|-h)
+        echo 'Usage: ds4-local [--server] [--preset] context-fast|resident-fast|persistent-fast [binary arguments]'
+        echo 'persistent-fast combines left/right suffix reuse with decode and prefill resident substitutions for ds4-agent or ds4-server.'
+        exit 0 ;;
+    *)
+        echo 'Usage: ds4-local [--server] [--preset] context-fast|resident-fast|persistent-fast [binary arguments]' >&2
+        exit 2 ;;
+esac
+# These are the measured common prefill settings.
+export DS4_METAL_V41_SELECTED_TILE=64
+export DS4_METAL_V41_SELECTED_LIMIT=1024
+case "$preset" in
+    context-fast|persistent-fast)
+        export DS4_METAL_V41_RESIDENT_ROUTE_GAP=0
+        export DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS=0
+        if [ "$server" = 1 ]; then
+            export DS4_SERVER_CONTEXT_SUFFIX_REUSE=1
+            export DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL=${DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL:-64}
+            export DS4_SERVER_CONTEXT_SUFFIX_CANONICAL=${DS4_SERVER_CONTEXT_SUFFIX_CANONICAL:-1}
+            export DS4_SERVER_CONTEXT_SUFFIX_PAD=${DS4_SERVER_CONTEXT_SUFFIX_PAD:-1}
+        else
+            export DS4_AGENT_COMPACT_PREFIX_CACHE=1
+            export DS4_AGENT_CONTEXT_FRONTIERS=4
+            export DS4_AGENT_CONTEXT_FRONTIER_MB=512
+            export DS4_AGENT_CONTEXT_SUFFIX_REUSE=1
+            export DS4_AGENT_CONTEXT_SUFFIX_PREROPE=${DS4_AGENT_CONTEXT_SUFFIX_PREROPE:-1}
+            export DS4_AGENT_CONTEXT_SUFFIX_FRESH_TAIL=128
+        fi
+        ;;
+    resident-fast)
+        export DS4_AGENT_CONTEXT_SUFFIX_REUSE=0
+        if [ "$server" = 1 ]; then export DS4_SERVER_CONTEXT_SUFFIX_REUSE=0; fi
+        ;;
+esac
+if [ "$preset" != context-fast ]; then
+        export DS4_METAL_V41_RESIDENT_ROUTE_GAP=.90
+        export DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS=.25
+        export DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK=64
+        export DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS=3
+        export DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS=.50
+        export DS4_METAL_V41_RESIDENT_ROUTE_POLICY=replace
+        export DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS=1
+fi
+if [ "$preset" = persistent-fast ]; then
+        export DS4_METAL_V41_RESIDENT_PREFILL_GAP=${DS4_METAL_V41_RESIDENT_PREFILL_GAP:-.90}
+        if [ "$server" = 1 ]; then
+            export DS4_SERVER_CONTEXT_SUFFIX_RIGHT=${DS4_SERVER_CONTEXT_SUFFIX_RIGHT:-1}
+        else
+            export DS4_AGENT_CONTEXT_SUFFIX_RIGHT=${DS4_AGENT_CONTEXT_SUFFIX_RIGHT:-1}
+        fi
+fi
+
+# Immutable context checkpoints: bounded host RAM plus restartable SSD storage.
+export DS4_STATE_CACHE_DIR=${DS4_STATE_CACHE_DIR:-$root/.workspaces/context-cache}
+if [ "$server" = 1 ]; then
+    export DS4_STATE_CACHE_HOT_MB=${DS4_STATE_CACHE_HOT_MB:-0}
+    export DS4_STATE_CACHE_SSD_MB=${DS4_STATE_CACHE_SSD_MB:-4096}
+else
+    export DS4_STATE_CACHE_HOT_MB=${DS4_STATE_CACHE_HOT_MB:-512}
+    export DS4_STATE_CACHE_SSD_MB=${DS4_STATE_CACHE_SSD_MB:-8192}
+fi
+mkdir -p -- "$(dirname -- "$DS4_STATE_CACHE_DIR")"
+
+# Keep shader paths usable with --chdir; retain explicit source overrides.
+for source in "$root"/metal/*.metal; do
+    name=$(basename "$source" .metal | tr '[:lower:]' '[:upper:]')
+    key="DS4_METAL_${name}_SOURCE"
+    if [ -z "$(printenv "$key" || :)" ]; then export "$key=$source"; fi
+done
+if [ "$server" = 1 ]; then
+    export DS4_SERVER_RESPONSE_STORE_DIR=${DS4_SERVER_RESPONSE_STORE_DIR:-$root/.workspaces/response-store}
+    mkdir -p -- "$(dirname -- "$DS4_SERVER_RESPONSE_STORE_DIR")"
+    exec "$root/ds4-server" --host 127.0.0.1 --batched-session 2 \
+        --ssd-streaming --ssd-streaming-cache-experts 64GB \
+        --ctx 8192 --prefill-chunk 512 "$@"
+fi
+exec "$root/ds4-agent" --ssd-streaming --ssd-streaming-cache-experts 64GB \
+    --ctx 8192 --prefill-chunk 512 "$@"
