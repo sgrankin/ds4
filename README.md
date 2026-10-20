@@ -134,15 +134,18 @@ Run each binary with `--help` for its full options.
 the token history and live model state together, shows prefill progress, and
 uses the model's native tool format. DeepSeek and GLM have their own templates.
 
+Our [recipe journal](recipes/README.md) describes the local improvements, measurements,
+tradeoffs and unsuccessful experiments, with steps for adapting them to other runtimes.
+
 Local V4.1 opt-ins can be enabled with the small `ds4-local` wrapper:
 
 ```sh
-./ds4-local persistent-fast --model gguf/DeepSeek-V4.1-Flash-Q2.gguf
-./ds4-local persistent-fast --model gguf/DeepSeek-V4.1-Flash-Q2.gguf --live-context-file .workspaces/agent-context.txt
-./ds4-local resident-fast --model gguf/DeepSeek-V4.1-Flash-Q2.gguf
-./ds4-local --server context-fast --model gguf/DeepSeek-V4.1-Flash-Q2.gguf
-./ds4-local --server persistent-fast --model gguf/DeepSeek-V4.1-Flash-Q2.gguf
-./ds4-local --server resident-fast --model gguf/DeepSeek-V4.1-Flash-Q2.gguf
+./ds4-local persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
+./ds4-local persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf --live-context-file .workspaces/agent-context.txt
+./ds4-local resident-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
+./ds4-local --server context-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
+./ds4-local --server persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
+./ds4-local --server resident-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
 ```
 
 `persistent-fast` combines approximate suffix reuse with resident-expert
@@ -230,7 +233,7 @@ For example:
 
 ```sh
 DS4_SERVER_CONTEXT_SUFFIX_RIGHT=1 ./ds4-local --server context-fast \
-  --model gguf/DeepSeek-V4.1-Flash-Q2.gguf
+  --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
 ```
 
 The [faithful-compaction measurements](speed-bench/experiments/recipe-compaction-hour38-20261008/README.md)

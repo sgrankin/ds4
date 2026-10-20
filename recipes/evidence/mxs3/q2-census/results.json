@@ -1,0 +1,450 @@
+{
+  "revision": "9dcee51692e6540f697141fc98b097e3c96492a3",
+  "file": "DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+  "http_bytes_total": 7520256,
+  "maximum_http_bytes": 8388608,
+  "samples": [
+    {
+      "tensor": {
+        "name": "blk.0.ffn_gate_exps.weight",
+        "shape": [
+          5120,
+          2304,
+          384
+        ],
+        "type": 16,
+        "relative_offset": 2184249344,
+        "absolute_offset": 2190082048,
+        "extent_until_next_tensor": 1167851520
+      },
+      "expert": 0,
+      "blocks": 4096,
+      "bytes": 270336,
+      "fields": {
+        "d_f16_bits": {
+          "values": 4096,
+          "unique": 863,
+          "unique_per_4096_values": [
+            863
+          ],
+          "top8": [
+            [
+              3480,
+              20
+            ],
+            [
+              3560,
+              20
+            ],
+            [
+              3413,
+              18
+            ],
+            [
+              3484,
+              17
+            ],
+            [
+              3599,
+              17
+            ],
+            [
+              3522,
+              17
+            ],
+            [
+              3583,
+              16
+            ],
+            [
+              3464,
+              16
+            ]
+          ],
+          "all_4096_groups_fit_3bit_dictionary": false
+        }
+      }
+    },
+    {
+      "tensor": {
+        "name": "blk.0.ffn_down_exps.weight",
+        "shape": [
+          2304,
+          5120,
+          384
+        ],
+        "type": 10,
+        "relative_offset": 4545019904,
+        "absolute_offset": 4550852608,
+        "extent_until_next_tensor": 1486356480
+      },
+      "expert": 0,
+      "blocks": 4096,
+      "bytes": 344064,
+      "fields": {
+        "d_f16_bits": {
+          "values": 4096,
+          "unique": 1104,
+          "unique_per_4096_values": [
+            1104
+          ],
+          "top8": [
+            [
+              6485,
+              16
+            ],
+            [
+              6218,
+              15
+            ],
+            [
+              6344,
+              15
+            ],
+            [
+              6356,
+              14
+            ],
+            [
+              6482,
+              14
+            ],
+            [
+              6436,
+              14
+            ],
+            [
+              6457,
+              14
+            ],
+            [
+              6272,
+              14
+            ]
+          ],
+          "all_4096_groups_fit_3bit_dictionary": false
+        },
+        "dmin_f16_bits": {
+          "values": 4096,
+          "unique": 920,
+          "unique_per_4096_values": [
+            920
+          ],
+          "top8": [
+            [
+              7174,
+              29
+            ],
+            [
+              7178,
+              27
+            ],
+            [
+              7171,
+              26
+            ],
+            [
+              7175,
+              25
+            ],
+            [
+              7245,
+              22
+            ],
+            [
+              7241,
+              22
+            ],
+            [
+              7185,
+              22
+            ],
+            [
+              7186,
+              21
+            ]
+          ],
+          "all_4096_groups_fit_3bit_dictionary": false
+        },
+        "packed_scale_min_bytes": {
+          "values": 65536,
+          "unique": 209,
+          "unique_per_4096_values": [
+            184,
+            183,
+            189,
+            188,
+            184,
+            184,
+            178,
+            191,
+            185,
+            181,
+            188,
+            187,
+            191,
+            192,
+            190,
+            190
+          ],
+          "top8": [
+            [
+              255,
+              1467
+            ],
+            [
+              119,
+              1288
+            ],
+            [
+              136,
+              1236
+            ],
+            [
+              120,
+              1159
+            ],
+            [
+              103,
+              1104
+            ],
+            [
+              137,
+              1079
+            ],
+            [
+              118,
+              1040
+            ],
+            [
+              135,
+              1033
+            ]
+          ],
+          "all_4096_groups_fit_3bit_dictionary": false
+        }
+      }
+    },
+    {
+      "tensor": {
+        "name": "blk.20.ffn_gate_exps.weight",
+        "shape": [
+          5120,
+          2304,
+          384
+        ],
+        "type": 16,
+        "relative_offset": 82978996224,
+        "absolute_offset": 82984828928,
+        "extent_until_next_tensor": 1167851520
+      },
+      "expert": 0,
+      "blocks": 4096,
+      "bytes": 270336,
+      "fields": {
+        "d_f16_bits": {
+          "values": 4096,
+          "unique": 884,
+          "unique_per_4096_values": [
+            884
+          ],
+          "top8": [
+            [
+              3583,
+              17
+            ],
+            [
+              3460,
+              17
+            ],
+            [
+              3520,
+              16
+            ],
+            [
+              3597,
+              16
+            ],
+            [
+              3547,
+              16
+            ],
+            [
+              3580,
+              15
+            ],
+            [
+              3619,
+              15
+            ],
+            [
+              3543,
+              15
+            ]
+          ],
+          "all_4096_groups_fit_3bit_dictionary": false
+        }
+      }
+    },
+    {
+      "tensor": {
+        "name": "blk.20.ffn_down_exps.weight",
+        "shape": [
+          2304,
+          5120,
+          384
+        ],
+        "type": 10,
+        "relative_offset": 85339766784,
+        "absolute_offset": 85345599488,
+        "extent_until_next_tensor": 1486356480
+      },
+      "expert": 0,
+      "blocks": 4096,
+      "bytes": 344064,
+      "fields": {
+        "d_f16_bits": {
+          "values": 4096,
+          "unique": 986,
+          "unique_per_4096_values": [
+            986
+          ],
+          "top8": [
+            [
+              6359,
+              19
+            ],
+            [
+              6327,
+              15
+            ],
+            [
+              6356,
+              15
+            ],
+            [
+              6172,
+              15
+            ],
+            [
+              6273,
+              15
+            ],
+            [
+              6358,
+              14
+            ],
+            [
+              6267,
+              14
+            ],
+            [
+              6235,
+              14
+            ]
+          ],
+          "all_4096_groups_fit_3bit_dictionary": false
+        },
+        "dmin_f16_bits": {
+          "values": 4096,
+          "unique": 910,
+          "unique_per_4096_values": [
+            910
+          ],
+          "top8": [
+            [
+              7235,
+              25
+            ],
+            [
+              7188,
+              23
+            ],
+            [
+              7179,
+              23
+            ],
+            [
+              7182,
+              22
+            ],
+            [
+              7191,
+              22
+            ],
+            [
+              7240,
+              22
+            ],
+            [
+              7223,
+              21
+            ],
+            [
+              7171,
+              21
+            ]
+          ],
+          "all_4096_groups_fit_3bit_dictionary": false
+        },
+        "packed_scale_min_bytes": {
+          "values": 65536,
+          "unique": 206,
+          "unique_per_4096_values": [
+            176,
+            179,
+            170,
+            177,
+            173,
+            180,
+            178,
+            181,
+            171,
+            174,
+            168,
+            181,
+            184,
+            177,
+            174,
+            181
+          ],
+          "top8": [
+            [
+              255,
+              1595
+            ],
+            [
+              120,
+              1442
+            ],
+            [
+              136,
+              1278
+            ],
+            [
+              119,
+              1274
+            ],
+            [
+              103,
+              1247
+            ],
+            [
+              137,
+              1246
+            ],
+            [
+              121,
+              1235
+            ],
+            [
+              104,
+              1118
+            ]
+          ],
+          "all_4096_groups_fit_3bit_dictionary": false
+        }
+      }
+    }
+  ]
+}

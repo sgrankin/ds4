@@ -1,0 +1,23 @@
+{
+  "status": "C_CODEC_FIRST_ATTEMPT_PASS",
+  "samples": 6,
+  "iterations_per_sample": 128,
+  "all_roundtrips_exact": true,
+  "all_python_packets_exact": true,
+  "total_original_sample_bytes": 37601280,
+  "total_packed_sample_bytes": 36221161,
+  "timed_input_bytes_per_operation": 4812963840,
+  "boundary_fallback_checks": 3,
+  "encode_seconds": 0.414802,
+  "encode_MiB_per_second": 11065.520416970025,
+  "encode_GB_per_second": 11.60303913674476,
+  "decode_seconds": 0.161271,
+  "decode_MiB_per_second": 28461.40967687929,
+  "decode_GB_per_second": 29.84395111334338,
+  "memcpy_seconds": 0.05933,
+  "memcpy_MiB_per_second": 77363.89684813753,
+  "memcpy_GB_per_second": 81.12192550143267,
+  "net_saved_percent": 3.670404305385344,
+  "serial_decompression_break_even_SSD_GB_per_second": 1.0953936665612527,
+  "decode_fraction_of_memcpy_throughput": 0.36789007323077305
+}

@@ -1,0 +1,11 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal model views created in 0.022 ms, residency requested in 0.712 ms, warmup 3.035 ms (mapped 27.17 MiB from offset 0.00 MiB)
+ds4: Metal mapped mmaped model as 1 overlapping shared buffers
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+SSD IQ2/Q2 batch versus split batches, rows=169: PASS
+SSD IQ2/Q2 batch versus split batches, rows=170: PASS
+SSD IQ2/Q2 batch versus split batches, rows=171: PASS
+SSD IQ2/Q2 batch versus split batches, rows=257: PASS
+SSD IQ2/Q2 batch versus split batches, rows=512: PASS

@@ -1,0 +1,80 @@
+{
+  "scope": "Fixed before any Engram payload inspection; only these eight windows. No serving timing or full-model scan.",
+  "model_path": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+  "model_bytes": 365713686528,
+  "root_verified_model_sha256": "5296e85ff64b42ecb62c8d0c0c54e1caa07e3df8e93112f2365ebbaed62ce93a",
+  "directory_path": ".workspaces/upgrade-20261020/mxs3/q2-census/directory.json",
+  "directory_sha256": "1f78ce656344e9fe706129e944b42869be6fd7c8c48fe25868887a03731bc166",
+  "row_bytes": 264,
+  "code_bytes_per_row": 256,
+  "scales_per_row": 8,
+  "windows": [
+    {
+      "tensor": "blk.1.engram_embd.weight",
+      "label": "start",
+      "row_start": 0,
+      "rows": 512,
+      "offset": 162955640832,
+      "bytes": 135168
+    },
+    {
+      "tensor": "blk.1.engram_embd.weight",
+      "label": "one-third",
+      "row_start": 128002056,
+      "rows": 512,
+      "offset": 196748183616,
+      "bytes": 135168
+    },
+    {
+      "tensor": "blk.1.engram_embd.weight",
+      "label": "two-thirds",
+      "row_start": 256004112,
+      "rows": 512,
+      "offset": 230540726400,
+      "bytes": 135168
+    },
+    {
+      "tensor": "blk.1.engram_embd.weight",
+      "label": "end",
+      "row_start": 384005656,
+      "rows": 512,
+      "offset": 264333134016,
+      "bytes": 135168
+    },
+    {
+      "tensor": "blk.14.engram_embd.weight",
+      "label": "start",
+      "row_start": 0,
+      "rows": 512,
+      "offset": 264333279232,
+      "bytes": 135168
+    },
+    {
+      "tensor": "blk.14.engram_embd.weight",
+      "label": "one-third",
+      "row_start": 128005560,
+      "rows": 512,
+      "offset": 298126747072,
+      "bytes": 135168
+    },
+    {
+      "tensor": "blk.14.engram_embd.weight",
+      "label": "two-thirds",
+      "row_start": 256011121,
+      "rows": 512,
+      "offset": 331920215176,
+      "bytes": 135168
+    },
+    {
+      "tensor": "blk.14.engram_embd.weight",
+      "label": "end",
+      "row_start": 384016170,
+      "rows": 512,
+      "offset": 365713548112,
+      "bytes": 135168
+    }
+  ],
+  "total_pread_bytes": 1081344,
+  "maximum_pread_bytes": 2097152,
+  "engram_payload_bytes": 202758032400
+}

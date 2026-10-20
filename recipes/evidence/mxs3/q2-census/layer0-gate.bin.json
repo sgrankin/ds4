@@ -1,0 +1,11 @@
+{
+  "repo": "antirez/deepseek-v4.1-flash-gguf",
+  "revision": "9dcee51692e6540f697141fc98b097e3c96492a3",
+  "file": "DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+  "url": "https://huggingface.co/antirez/deepseek-v4.1-flash-gguf/resolve/9dcee51692e6540f697141fc98b097e3c96492a3/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+  "status": 206,
+  "content_range": "bytes 2190082048-2190352383/365713686528",
+  "offset": 2190082048,
+  "bytes": 270336,
+  "sha256": "6f78cd9512ecf79965f398c9f697d8eb6680dc922bc63e8d729197c1c6fd7c2c"
+}

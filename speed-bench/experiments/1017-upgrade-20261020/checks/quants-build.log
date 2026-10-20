@@ -1,0 +1,1 @@
+cc -O3 -Wall -Wextra -std=c11 -mcpu=native -D_GNU_SOURCE -dynamiclib -fPIC -o libds4quants.dylib quants.c -lm -pthread

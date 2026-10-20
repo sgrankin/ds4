@@ -1,0 +1,71 @@
+{
+  "decision": "Keep baseline; no useful decoder throughput gain measured.",
+  "baseline_gen_tps": [
+    19.49,
+    19.56
+  ],
+  "candidate_gen_tps": [
+    19.7,
+    19.36
+  ],
+  "baseline_mean_gen_tps": 19.525,
+  "candidate_mean_gen_tps": 19.53,
+  "candidate_mean_change_percent": 0.025608194622295244,
+  "arithmetic_means_of_rounded_csv_tps": true,
+  "prefill_frontiers": {
+    "count": 4,
+    "all_logit_vectors_byte_equal": true,
+    "sha256": "504ca69876735adf264e5cbc374f87699f6c7d61c94194822019da89f7da0598",
+    "kl": 0.0,
+    "scope": "Post-prefill, before teacher-forced decode; this does not qualify changed decoder logits."
+  },
+  "shader_sha256": {
+    "baseline.metal": "b3ae62713a47e54c47959023a0d15c8589198ec6092307dfcf4014f180bc7f42",
+    "moe.metal": "17e6b820ef7abcea991f3d9385f809664393d68de5ddbd04b0431c284d7f3587"
+  },
+  "numerical": {
+    "ssd_address": "Baseline and candidate pass rows169,170,171,257,512.",
+    "ssd_experts": "Both pass the initial exact-output portion, then fail seed/release retained-RSS check; full tests fail. Root cause unresolved.",
+    "begin_only_autoreleasepool_trial": "Baseline same retained-RSS failure; reverted before ABBA."
+  },
+  "pressure": {
+    "abba-guard": {
+      "samples": 301,
+      "max_level": 1,
+      "swap_growth_mib": 0.0,
+      "reasons": []
+    },
+    "numerical-guard": {
+      "samples": 4,
+      "max_level": 1,
+      "swap_growth_mib": 0.0,
+      "reasons": []
+    },
+    "numerical-remaining-guard": {
+      "samples": 4,
+      "max_level": 1,
+      "swap_growth_mib": 0.0,
+      "reasons": []
+    },
+    "numerical-after-pool-guard": {
+      "samples": 3,
+      "max_level": 1,
+      "swap_growth_mib": 0.0,
+      "reasons": []
+    }
+  },
+  "large_logits": "Original four ~1.5MiB JSON vectors retained in .workspaces; omitted from publication.",
+  "coverage": {
+    "returncode": 0,
+    "affected_path": "iq2_slots6_pair_swiglu",
+    "gate_up_profile_records": 120,
+    "matching_stage_records": 480,
+    "stage_counts": {
+      "gate_up": 120,
+      "activation_weight": 120,
+      "down": 120,
+      "sum": 120
+    },
+    "scope": "Separate profiled candidate run; confirms affected production kernel path from stage records, not a GPU-dispatch count, latency comparison or decoder quality measurement."
+  }
+}

@@ -1,0 +1,7 @@
+sample,input_bytes,packed_bytes,iterations,encode_seconds,decode_seconds,memcpy_seconds,encode_MiB_s,decode_MiB_s,memcpy_MiB_s,roundtrip_exact,python_packet_exact,raw_groups
+/Volumes/Models/ds4/.workspaces/upgrade-20261020/mxs3/layer0-gate-expert0.mxfp4,6266880,6036901,128,0.068286000,0.026187000,0.009848000,11202.882,29212.968,77680.747,true,true,0
+/Volumes/Models/ds4/.workspaces/upgrade-20261020/mxs3/layer0-up-expert191.mxfp4,6266880,6036863,128,0.069337000,0.027266000,0.010526000,11033.070,28056.921,72677.182,true,true,0
+/Volumes/Models/ds4/.workspaces/upgrade-20261020/mxs3/layer0-down-expert383.mxfp4,6266880,6036861,128,0.073064000,0.027952000,0.010345000,10470.273,27368.346,73948.767,true,true,0
+/Volumes/Models/ds4/.workspaces/upgrade-20261020/mxs3/layer5-gate-expert383.mxfp4,6266880,6036851,128,0.068918000,0.025612000,0.009743000,11100.148,29868.811,78517.911,true,true,0
+/Volumes/Models/ds4/.workspaces/upgrade-20261020/mxs3/layer5-up-expert0.mxfp4,6266880,6036845,128,0.067756000,0.026236000,0.009553000,11290.513,29158.408,80079.555,true,true,0
+/Volumes/Models/ds4/.workspaces/upgrade-20261020/mxs3/layer5-down-expert191.mxfp4,6266880,6036840,128,0.067441000,0.028018000,0.009315000,11343.248,27303.876,82125.603,true,true,0

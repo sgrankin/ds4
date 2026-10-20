@@ -1,0 +1,10 @@
+{
+  "0": {
+    "scale_low_nibble_unique": 14,
+    "min_high_nibble_unique": 16
+  },
+  "20": {
+    "scale_low_nibble_unique": 14,
+    "min_high_nibble_unique": 16
+  }
+}

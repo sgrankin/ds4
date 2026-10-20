@@ -53,7 +53,7 @@ are not interchangeable with it.
 
 | Target | File size | Main weights |
 | --- | ---: | ---: |
-| `ds41f-q2` | 341 GiB | 152 GiB |
+| `ds41f-q2` (1017) | 341 GiB | 152 GiB |
 | `ds41f-q4` | 483 GiB | 294 GiB |
 
 Both use imatrix-calibrated routed experts and include 189 GiB of Engram
@@ -64,7 +64,7 @@ On one 128 GB Mac, use SSD streaming. Leave the expert cache budget automatic:
 
 ```sh
 ./download_model.sh ds41f-q2
-./ds4 -m gguf/DeepSeek-V4.1-Flash-Q2.gguf \
+./ds4 -m gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf \
   --ssd-streaming --ctx 32768
 ```
 
@@ -106,13 +106,20 @@ continuation test, with unchanged overall top-token agreement. See the
 [QA results](../QA_BEFORE_RELEASES.md#17-deepseek-v41-flash) for details
 and remaining differences.
 
-For images, download the matching encoder and add it to the same command:
+The Q2 target now downloads the October 17 checkpoint; the Q4 target still
+uses the earlier checkpoint. Match the language model and vision encoder by
+source revision. The engine rejects a mismatched pair.
+
+For images with the 1017 Q2 model, download its matching encoder:
 
 ```sh
-./download_model.sh ds41f-vision
-./ds4-agent -m gguf/DeepSeek-V4.1-Flash-Q2.gguf \
-  --ssd-streaming --vision gguf/DeepSeek-V4.1-Flash-Vision.gguf
+./download_model.sh ds41f-1017-vision
+./ds4-agent -m gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf \
+  --ssd-streaming --vision gguf/DeepSeek-V4.1-Flash-1017-vision-BF16.gguf
 ```
+
+For the earlier Q4 model, use `./download_model.sh ds41f-vision` and
+`--vision gguf/DeepSeek-V4.1-Flash-Vision.gguf`.
 
 Vision works with SSD streaming, full residency and two-Mac TP. Pass the encoder
 on both TP ranks. Use `/read image.png` in `ds4`, `view_image` in `ds4-agent`,

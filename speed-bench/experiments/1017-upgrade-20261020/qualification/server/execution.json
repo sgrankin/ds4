@@ -1,0 +1,33 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/ds4-server",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "60623",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--ctx",
+    "8192",
+    "--prefill-chunk",
+    "2048",
+    "--batched-session",
+    "1",
+    "--mtp-draft",
+    "1",
+    "--vision",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-vision-BF16.gguf"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "0",
+    "DS4_SERVER_RESPONSE_STORE_DIR": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/server/responses"
+  },
+  "application_ssd_kv_cache": "disabled",
+  "warmup_requests": 0
+}

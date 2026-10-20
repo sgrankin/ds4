@@ -1,0 +1,5 @@
+{
+  "at_utc": "2026-10-20T19:44:29.127372+00:00",
+  "event": "User reports starting Homebrew security updates",
+  "decision": "Interrupt owned scheduler timing; retain partial outputs; rerun clean bracket after updates finish. Kernel ABBA completed before this report."
+}

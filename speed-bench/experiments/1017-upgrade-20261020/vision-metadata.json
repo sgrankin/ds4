@@ -1,0 +1,11 @@
+{
+  "path": "gguf/DeepSeek-V4.1-Flash-1017-vision-BF16.gguf",
+  "version": 3,
+  "tensor_count": 266,
+  "metadata": {
+    "general.architecture": "deepseek4-vision",
+    "general.name": "DeepSeek V4.1 Flash 1017 Vision Encoder",
+    "general.source.revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+    "deepseek4-vision.checkpoint_variant": "v4.1-flash"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Volumes/Models/ds4/speed-bench/ideas/pressure_run.py",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/repeat-live-guard",
+    "--",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/right-repeat-1017",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--out",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/repeat-live",
+    "--moves",
+    "3",
+    "--prerope",
+    "1",
+    "--ctx",
+    "8192",
+    "--chunk",
+    "512",
+    "--cache-gb",
+    "64"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "DS4_PT_environment": {}
+}

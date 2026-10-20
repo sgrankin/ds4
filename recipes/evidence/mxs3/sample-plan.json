@@ -1,0 +1,110 @@
+[
+  {
+    "tensor": {
+      "name": "blk.0.ffn_gate_exps.weight",
+      "shape": [
+        5120,
+        2304,
+        384
+      ],
+      "type": 39,
+      "relative_offset": 2184075776,
+      "absolute_offset": 2189850336,
+      "extent_until_next_tensor": 2406481920
+    },
+    "expert": 0,
+    "bytes": 6266880,
+    "offset": 2189850336,
+    "sample": "layer0-gate-expert0.mxfp4"
+  },
+  {
+    "tensor": {
+      "name": "blk.0.ffn_up_exps.weight",
+      "shape": [
+        5120,
+        2304,
+        384
+      ],
+      "type": 39,
+      "relative_offset": 4603091456,
+      "absolute_offset": 4608866016,
+      "extent_until_next_tensor": 2406481920
+    },
+    "expert": 191,
+    "bytes": 6266880,
+    "offset": 5805840096,
+    "sample": "layer0-up-expert191.mxfp4"
+  },
+  {
+    "tensor": {
+      "name": "blk.0.ffn_down_exps.weight",
+      "shape": [
+        2304,
+        5120,
+        384
+      ],
+      "type": 39,
+      "relative_offset": 7022107136,
+      "absolute_offset": 7027881696,
+      "extent_until_next_tensor": 2406481920
+    },
+    "expert": 383,
+    "bytes": 6266880,
+    "offset": 9428096736,
+    "sample": "layer0-down-expert383.mxfp4"
+  },
+  {
+    "tensor": {
+      "name": "blk.5.ffn_gate_exps.weight",
+      "shape": [
+        5120,
+        2304,
+        384
+      ],
+      "type": 39,
+      "relative_offset": 39527536128,
+      "absolute_offset": 39533310688,
+      "extent_until_next_tensor": 2406481920
+    },
+    "expert": 383,
+    "bytes": 6266880,
+    "offset": 41933525728,
+    "sample": "layer5-gate-expert383.mxfp4"
+  },
+  {
+    "tensor": {
+      "name": "blk.5.ffn_up_exps.weight",
+      "shape": [
+        5120,
+        2304,
+        384
+      ],
+      "type": 39,
+      "relative_offset": 41946551808,
+      "absolute_offset": 41952326368,
+      "extent_until_next_tensor": 2406481920
+    },
+    "expert": 0,
+    "bytes": 6266880,
+    "offset": 41952326368,
+    "sample": "layer5-up-expert0.mxfp4"
+  },
+  {
+    "tensor": {
+      "name": "blk.5.ffn_down_exps.weight",
+      "shape": [
+        2304,
+        5120,
+        384
+      ],
+      "type": 39,
+      "relative_offset": 44365567488,
+      "absolute_offset": 44371342048,
+      "extent_until_next_tensor": 2406481920
+    },
+    "expert": 191,
+    "bytes": 6266880,
+    "offset": 45568316128,
+    "sample": "layer5-down-expert191.mxfp4"
+  }
+]

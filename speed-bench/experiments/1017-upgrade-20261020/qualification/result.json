@@ -1,0 +1,46 @@
+{
+  "native_server": {
+    "checks": {
+      "normal_generation": true,
+      "response_parent": true,
+      "response_get": true,
+      "previous_response_id": true,
+      "conversation_recall": true,
+      "vision_ocr": true
+    },
+    "error": null,
+    "server_returncode": 0,
+    "seconds": 28.37479762500152,
+    "vision_requested": true,
+    "vision_fixture": "/Volumes/Models/ds4/tests/vision-fixtures/qwen38/orbit.png",
+    "first_attempts": true,
+    "pass": true
+  },
+  "persistent_agent": {
+    "returncode": 0,
+    "error": null,
+    "seconds": 110.033667499898,
+    "checks": {
+      "five_turns_complete": true,
+      "opaque_target_removed": true,
+      "retained_ids_stable": true,
+      "verbatim_archive": true,
+      "fresh_storage_answer": true,
+      "retrieval_tool_visible": true,
+      "one_context_edit": true,
+      "no_automatic_compaction": true,
+      "no_edit_rejection": true,
+      "fresh_coding_8_cases": true
+    },
+    "answer": {
+      "archived_code": "EMBER-7319",
+      "current_key": "COVE-3917",
+      "retrieval_token": "CHECK-dba0a370aaf9"
+    },
+    "suffix_activation_lines": [],
+    "first_attempts": true,
+    "pass": true
+  },
+  "pass": true,
+  "scope": "Tiny first-attempt compatibility/quality screen on new weights, not a baseline or speed claim. Vision is qualified only if explicitly requested and its check passes."
+}

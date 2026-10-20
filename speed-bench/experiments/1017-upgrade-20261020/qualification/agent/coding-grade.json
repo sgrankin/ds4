@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-c",
+    "\nimport ast,copy,pathlib,sys\np=pathlib.Path(sys.argv[1])\nscope={}\nexec(compile(ast.parse(p.read_text()),str(p),\"exec\"),scope)\nf=scope[\"merge_intervals\"]\ncases=[([],[]),([[1,3]],[[1,3]]),([[1,3],[2,6],[8,10],[9,11]],[[1,6],[8,11]]),\n ([[5,7],[1,2],[2,5]],[[1,7]]),([[-4,-1],[-2,0],[1,1]],[[-4,0],[1,1]]),\n ([[1,10],[2,3],[1,10]],[[1,10]]),([[4,5],[1,2]],[[1,2],[4,5]]),\n ([[0,0],[0,0]],[[0,0]])]\nfor data,gold in cases:\n before=copy.deepcopy(data)\n assert f(data)==gold,(data,gold)\n assert data==before,\"input mutated\"\nprint(\"PASS 8 merge-interval cases and input preservation\")\n",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/agent/first-merge_intervals.py"
+  ],
+  "cwd": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/agent/work",
+  "source": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/agent/first-merge_intervals.py",
+  "observation": "first file observed by existing 100ms protocol loop",
+  "first_observed_matches_final": true,
+  "returncode": 0,
+  "stdout": "PASS 8 merge-interval cases and input preservation\n",
+  "stderr": ""
+}

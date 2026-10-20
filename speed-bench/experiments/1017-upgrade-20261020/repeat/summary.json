@@ -1,0 +1,17 @@
+{
+  "moves": 3,
+  "source_capture_count": 1,
+  "reused_per_move": 513,
+  "fresh_per_move": 128,
+  "native_total_edit_ms": 205185.068,
+  "reuse_total_edit_ms": 143068.016,
+  "edit_time_saving_fraction": 0.30273670791677687,
+  "teacher_rows": 12,
+  "mean_delta_nll": 6.524460938890833e-05,
+  "mean_kl": 3.0485475633823333e-05,
+  "max_delta_nll": 0.000217124725914,
+  "max_kl": 0.000110830768571,
+  "argmax_flips": 0,
+  "logit_rows_byte_equal": 0,
+  "scope": "Three synthetic repeated relocations from one immutable pre-RoPE source, right66/left128/right514. Edit-time sum only; source setup and teacher continuation excluded. Not whole-agent latency or broad quality."
+}

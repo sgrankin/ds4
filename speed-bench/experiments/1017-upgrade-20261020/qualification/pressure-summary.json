@@ -1,0 +1,31 @@
+{
+  "samples": 133,
+  "first": {
+    "time": 1792523391.249265,
+    "level": 1,
+    "swap_gb": 0.01453125,
+    "physical_gb": 128.0,
+    "free_gb": 73.3992919921875,
+    "file_backed_gb": 10.294708251953125,
+    "wired_gb": 6.5761260986328125,
+    "compressor_gb": 11.98577880859375,
+    "reason": null,
+    "consecutive_bad": 0
+  },
+  "last": {
+    "time": 1792523529.027034,
+    "level": 1,
+    "swap_gb": 0.01501953125,
+    "physical_gb": 128.0,
+    "free_gb": 1.540069580078125,
+    "file_backed_gb": 28.716659545898438,
+    "wired_gb": 73.04605102539062,
+    "compressor_gb": 18.04705810546875,
+    "reason": null,
+    "consecutive_bad": 0
+  },
+  "guard_result": {
+    "status": "complete",
+    "child_returncode": 0
+  }
+}

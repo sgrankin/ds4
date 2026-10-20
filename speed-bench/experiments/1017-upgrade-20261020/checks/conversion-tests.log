@@ -1,0 +1,22 @@
+E
+======================================================================
+ERROR: setUpClass (__main__.ConversionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Models/ds4/tests/test_deepseek41_conversion.py", line 55, in setUpClass
+    cls.q = NativeQuantizer(str(ROOT / "gguf-tools" / f"libds4quants.{suffix}"))
+            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Models/ds4/gguf-tools/glm53_quantize.py", line 769, in __init__
+    self.lib = ctypes.CDLL(library_path)
+               ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 433, in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 475, in _load_library
+    return _dlopen(name, mode)
+OSError: dlopen(/Volumes/Models/ds4/gguf-tools/libds4quants.dylib, 0x0006): tried: '/Volumes/Models/ds4/gguf-tools/libds4quants.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Volumes/Models/ds4/gguf-tools/libds4quants.dylib' (no such file), '/Volumes/Models/ds4/gguf-tools/libds4quants.dylib' (no such file)
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.001s
+
+FAILED (errors=1)

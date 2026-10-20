@@ -1,0 +1,100 @@
+{
+  "arm": 2,
+  "mixed_prefill_quantum": 512,
+  "error": "InterruptedError: driver interrupted by signal 15",
+  "server_pid": 65890,
+  "startup_seconds": 0.4128926668781787,
+  "server_returncode": 130,
+  "arm_seconds": 213.15506924991496,
+  "requests": {
+    "B": {
+      "label": "B",
+      "started_s": 0.4195283749140799,
+      "content_events": [
+        {
+          "received_s": 4.768235999858007,
+          "text": "["
+        },
+        {
+          "received_s": 4.846379749942571,
+          "text": "1"
+        },
+        {
+          "received_s": 21.191829083953053,
+          "text": ","
+        },
+        {
+          "received_s": 38.03754079178907,
+          "text": "2"
+        },
+        {
+          "received_s": 54.894158749841154,
+          "text": ","
+        },
+        {
+          "received_s": 72.47935762489215,
+          "text": "3"
+        },
+        {
+          "received_s": 90.44788587489165,
+          "text": ","
+        },
+        {
+          "received_s": 108.4781644588802,
+          "text": "4"
+        },
+        {
+          "received_s": 125.73976791696623,
+          "text": ","
+        },
+        {
+          "received_s": 143.14319166680798,
+          "text": "5"
+        },
+        {
+          "received_s": 163.2253562498372,
+          "text": ","
+        },
+        {
+          "received_s": 182.9584058339242,
+          "text": "6"
+        },
+        {
+          "received_s": 202.56549512478523,
+          "text": ","
+        }
+      ],
+      "usage": null,
+      "finish_reason": null,
+      "done": false,
+      "error": null,
+      "http_status": 200,
+      "finished_s": 213.12433874979615,
+      "seconds": 212.70481037488207,
+      "content": "[1,2,3,4,5,6,",
+      "ttft_seconds": 4.348707624943927
+    },
+    "A": {
+      "label": "A",
+      "started_s": 4.76838079188019,
+      "content_events": [],
+      "usage": null,
+      "finish_reason": null,
+      "done": false,
+      "error": null,
+      "http_status": 200,
+      "finished_s": 213.12418433395214,
+      "seconds": 208.35580354207195,
+      "content": "",
+      "ttft_seconds": null
+    }
+  },
+  "B_max_content_gap_after_A_start_seconds": 20.082164583029225,
+  "B_content_events_after_A_start": 12,
+  "overlap_observed": true,
+  "B_correct": false,
+  "A_correct": false,
+  "A_prompt_tokens": null,
+  "A_prompt_in_8k_10k_target": false,
+  "pass": false
+}

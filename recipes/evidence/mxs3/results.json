@@ -1,0 +1,955 @@
+{
+  "status": "REAL_NATIVE_MXFP4_LOSSLESS_PILOT_PASS",
+  "timing_scope": "one CPU Python in-memory encode/decode pass per sample/grain; excludes network/disk; not Metal or model performance",
+  "repo": "antirez/deepseek-v4.1-flash-gguf",
+  "revision": "9dcee51692e6540f697141fc98b097e3c96492a3",
+  "file": "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00001-of-00009.gguf",
+  "total_real_sample_bytes": 37601280,
+  "aggregate": [
+    {
+      "group": "256",
+      "samples": 6,
+      "input_bytes": 37601280,
+      "packed_bytes": 36246102,
+      "saved_bytes": 1355178,
+      "saved_percent": 3.6040741166258217,
+      "encode_seconds": 0.30713362409733236,
+      "decode_seconds": 0.4300147918984294,
+      "encode_input_MiB_per_second": 116.75496326848265,
+      "decode_output_MiB_per_second": 83.391026717216,
+      "raw_fallback_groups": 0,
+      "groups": 8640,
+      "dictionary_bytes": 18462,
+      "index_bytes": 829440,
+      "group_tag_bytes": 8640,
+      "file_header_bytes": 120,
+      "all_roundtrips_byte_equal": true
+    },
+    {
+      "group": "4096",
+      "samples": 6,
+      "input_bytes": 37601280,
+      "packed_bytes": 36221161,
+      "saved_bytes": 1380119,
+      "saved_percent": 3.670404305385344,
+      "encode_seconds": 0.32431337679736316,
+      "decode_seconds": 0.4344021659344435,
+      "encode_input_MiB_per_second": 110.5701385311824,
+      "decode_output_MiB_per_second": 82.5487942097683,
+      "raw_fallback_groups": 0,
+      "groups": 540,
+      "dictionary_bytes": 1621,
+      "index_bytes": 829440,
+      "group_tag_bytes": 540,
+      "file_header_bytes": 120,
+      "all_roundtrips_byte_equal": true
+    },
+    {
+      "group": "whole_expert",
+      "samples": 6,
+      "input_bytes": 37601280,
+      "packed_bytes": 36219030,
+      "saved_bytes": 1382250,
+      "saved_percent": 3.6760716656454195,
+      "encode_seconds": 0.3252981249243021,
+      "decode_seconds": 0.4355043319519609,
+      "encode_input_MiB_per_second": 110.23541868968532,
+      "decode_output_MiB_per_second": 82.33988130330592,
+      "raw_fallback_groups": 0,
+      "groups": 6,
+      "dictionary_bytes": 24,
+      "index_bytes": 829440,
+      "group_tag_bytes": 6,
+      "file_header_bytes": 120,
+      "all_roundtrips_byte_equal": true
+    }
+  ],
+  "rows": [
+    {
+      "sample": "layer0-gate-expert0.mxfp4",
+      "tensor_name": "blk.0.ffn_gate_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 0,
+      "source_offset": 2189850336,
+      "input_bytes": 6266880,
+      "packed_bytes": 6041247,
+      "saved_bytes": 225633,
+      "saved_percent": 3.60040402879902,
+      "group_blocks": 256,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 433,
+        "120": 252687,
+        "121": 115453,
+        "122": 67
+      },
+      "encode_seconds": 0.05299600004218519,
+      "decode_seconds": 0.07190312491729856,
+      "encode_input_MiB_per_second": 112.77384133222535,
+      "decode_output_MiB_per_second": 83.11964892866777,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "da3c040e28d3e30076f3b674e37b2e882c8222d7bbe06b3764b75dcbd484fbb9",
+      "restored_sha256": "da3c040e28d3e30076f3b674e37b2e882c8222d7bbe06b3764b75dcbd484fbb9",
+      "packed_sha256": "5ac102036f6cbc7fdbb9f3fdbe41c85d13673d077e9b1607dd5c5fcb332bed23",
+      "group_alphabet_histogram": {
+        "2": 1021,
+        "3": 411,
+        "4": 8
+      },
+      "groups": 1440,
+      "group_tag_bytes": 1440,
+      "dictionary_bytes": 3307,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer0-gate-expert0.mxfp4",
+      "tensor_name": "blk.0.ffn_gate_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 0,
+      "source_offset": 2189850336,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036901,
+      "saved_bytes": 229979,
+      "saved_percent": 3.669752731821896,
+      "group_blocks": 4096,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 433,
+        "120": 252687,
+        "121": 115453,
+        "122": 67
+      },
+      "encode_seconds": 0.05425183312036097,
+      "decode_seconds": 0.07281108293682337,
+      "encode_input_MiB_per_second": 110.16332824626653,
+      "decode_output_MiB_per_second": 82.08314255105553,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "da3c040e28d3e30076f3b674e37b2e882c8222d7bbe06b3764b75dcbd484fbb9",
+      "restored_sha256": "da3c040e28d3e30076f3b674e37b2e882c8222d7bbe06b3764b75dcbd484fbb9",
+      "packed_sha256": "d53f35120196fbc13db738d643641c555ce1189bbdecd67ab6bbcc22423c7f65",
+      "group_alphabet_histogram": {
+        "3": 49,
+        "4": 41
+      },
+      "groups": 90,
+      "group_tag_bytes": 90,
+      "dictionary_bytes": 311,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer0-gate-expert0.mxfp4",
+      "tensor_name": "blk.0.ffn_gate_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 0,
+      "source_offset": 2189850336,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036505,
+      "saved_bytes": 230375,
+      "saved_percent": 3.6760716656454195,
+      "group_blocks": 368640,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 433,
+        "120": 252687,
+        "121": 115453,
+        "122": 67
+      },
+      "encode_seconds": 0.05437970906496048,
+      "decode_seconds": 0.07264954084530473,
+      "encode_input_MiB_per_second": 109.90427500927902,
+      "decode_output_MiB_per_second": 82.2656610139644,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "da3c040e28d3e30076f3b674e37b2e882c8222d7bbe06b3764b75dcbd484fbb9",
+      "restored_sha256": "da3c040e28d3e30076f3b674e37b2e882c8222d7bbe06b3764b75dcbd484fbb9",
+      "packed_sha256": "1c2aeff36cfc41c5b460ffa92de0c3f837568ebcc157f8ec3420f4a86c7c1812",
+      "group_alphabet_histogram": {
+        "4": 1
+      },
+      "groups": 1,
+      "group_tag_bytes": 1,
+      "dictionary_bytes": 4,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer0-up-expert191.mxfp4",
+      "tensor_name": "blk.0.ffn_up_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 191,
+      "source_offset": 5805840096,
+      "input_bytes": 6266880,
+      "packed_bytes": 6041070,
+      "saved_bytes": 225810,
+      "saved_percent": 3.603228400735292,
+      "group_blocks": 256,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 264,
+        "120": 253208,
+        "121": 115159,
+        "122": 9
+      },
+      "encode_seconds": 0.05064333393238485,
+      "decode_seconds": 0.07160954200662673,
+      "encode_input_MiB_per_second": 118.01281700725814,
+      "decode_output_MiB_per_second": 83.46042067196758,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "decc8069ce12ceb145b64a91a9806f68d803f27a8d2302937187cce3503ed196",
+      "restored_sha256": "decc8069ce12ceb145b64a91a9806f68d803f27a8d2302937187cce3503ed196",
+      "packed_sha256": "dd0f4c5bf4daf61257fc6c4919f896724c667ce0325b3c2b2e0dee2858439072",
+      "group_alphabet_histogram": {
+        "2": 1190,
+        "3": 250
+      },
+      "groups": 1440,
+      "group_tag_bytes": 1440,
+      "dictionary_bytes": 3130,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer0-up-expert191.mxfp4",
+      "tensor_name": "blk.0.ffn_up_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 191,
+      "source_offset": 5805840096,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036863,
+      "saved_bytes": 230017,
+      "saved_percent": 3.670359094158493,
+      "group_blocks": 4096,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 264,
+        "120": 253208,
+        "121": 115159,
+        "122": 9
+      },
+      "encode_seconds": 0.05410370882600546,
+      "decode_seconds": 0.07215999998152256,
+      "encode_input_MiB_per_second": 110.46493169664754,
+      "decode_output_MiB_per_second": 82.82375972187322,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "decc8069ce12ceb145b64a91a9806f68d803f27a8d2302937187cce3503ed196",
+      "restored_sha256": "decc8069ce12ceb145b64a91a9806f68d803f27a8d2302937187cce3503ed196",
+      "packed_sha256": "74f7f75c1a87bf9c17b0da96e04aee474b50e72085fc1990366fe43cb2c23999",
+      "group_alphabet_histogram": {
+        "2": 6,
+        "3": 75,
+        "4": 9
+      },
+      "groups": 90,
+      "group_tag_bytes": 90,
+      "dictionary_bytes": 273,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer0-up-expert191.mxfp4",
+      "tensor_name": "blk.0.ffn_up_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 191,
+      "source_offset": 5805840096,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036505,
+      "saved_bytes": 230375,
+      "saved_percent": 3.6760716656454195,
+      "group_blocks": 368640,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 264,
+        "120": 253208,
+        "121": 115159,
+        "122": 9
+      },
+      "encode_seconds": 0.05433087493292987,
+      "decode_seconds": 0.07278808392584324,
+      "encode_input_MiB_per_second": 110.00306009019585,
+      "decode_output_MiB_per_second": 82.10907854215455,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "decc8069ce12ceb145b64a91a9806f68d803f27a8d2302937187cce3503ed196",
+      "restored_sha256": "decc8069ce12ceb145b64a91a9806f68d803f27a8d2302937187cce3503ed196",
+      "packed_sha256": "baab23b6ee92195085c32fe30201f911a061f98e3f31c4c2babc6daf083d727c",
+      "group_alphabet_histogram": {
+        "4": 1
+      },
+      "groups": 1,
+      "group_tag_bytes": 1,
+      "dictionary_bytes": 4,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer0-down-expert383.mxfp4",
+      "tensor_name": "blk.0.ffn_down_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        2304,
+        5120,
+        384
+      ],
+      "expert": 383,
+      "source_offset": 9428096736,
+      "input_bytes": 6266880,
+      "packed_bytes": 6040974,
+      "saved_bytes": 225906,
+      "saved_percent": 3.604760263480389,
+      "group_blocks": 256,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 130,
+        "120": 228542,
+        "121": 139940,
+        "122": 28
+      },
+      "encode_seconds": 0.05075904098339379,
+      "decode_seconds": 0.07165670907124877,
+      "encode_input_MiB_per_second": 117.74380256623206,
+      "decode_output_MiB_per_second": 83.40548397300051,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "4a020e66df9f0096718129ea3ba890f0a6355237f2d4dea77cfc3298d29bf168",
+      "restored_sha256": "4a020e66df9f0096718129ea3ba890f0a6355237f2d4dea77cfc3298d29bf168",
+      "packed_sha256": "50f03892feaf38967d5f41f8afb9da72a3a9966dc98cb370ac3bb3e499689bcd",
+      "group_alphabet_histogram": {
+        "2": 1289,
+        "3": 148,
+        "4": 3
+      },
+      "groups": 1440,
+      "group_tag_bytes": 1440,
+      "dictionary_bytes": 3034,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer0-down-expert383.mxfp4",
+      "tensor_name": "blk.0.ffn_down_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        2304,
+        5120,
+        384
+      ],
+      "expert": 383,
+      "source_offset": 9428096736,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036861,
+      "saved_bytes": 230019,
+      "saved_percent": 3.67039100796569,
+      "group_blocks": 4096,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 130,
+        "120": 228542,
+        "121": 139940,
+        "122": 28
+      },
+      "encode_seconds": 0.05432066693902016,
+      "decode_seconds": 0.07252966705709696,
+      "encode_input_MiB_per_second": 110.02373197496323,
+      "decode_output_MiB_per_second": 82.40162601732499,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "4a020e66df9f0096718129ea3ba890f0a6355237f2d4dea77cfc3298d29bf168",
+      "restored_sha256": "4a020e66df9f0096718129ea3ba890f0a6355237f2d4dea77cfc3298d29bf168",
+      "packed_sha256": "87474023368b8dd8802056fc3761a4e4d8c995d7c987160afe57377ccfeb2e1f",
+      "group_alphabet_histogram": {
+        "2": 18,
+        "3": 53,
+        "4": 19
+      },
+      "groups": 90,
+      "group_tag_bytes": 90,
+      "dictionary_bytes": 271,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer0-down-expert383.mxfp4",
+      "tensor_name": "blk.0.ffn_down_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        2304,
+        5120,
+        384
+      ],
+      "expert": 383,
+      "source_offset": 9428096736,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036505,
+      "saved_bytes": 230375,
+      "saved_percent": 3.6760716656454195,
+      "group_blocks": 368640,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 130,
+        "120": 228542,
+        "121": 139940,
+        "122": 28
+      },
+      "encode_seconds": 0.05407391698099673,
+      "decode_seconds": 0.07260966603644192,
+      "encode_input_MiB_per_second": 110.52579198396802,
+      "decode_output_MiB_per_second": 82.31083857348187,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "4a020e66df9f0096718129ea3ba890f0a6355237f2d4dea77cfc3298d29bf168",
+      "restored_sha256": "4a020e66df9f0096718129ea3ba890f0a6355237f2d4dea77cfc3298d29bf168",
+      "packed_sha256": "0af69b59215fe08e6611eef9488dec948f7ff13f97210ad3976794f4581dceec",
+      "group_alphabet_histogram": {
+        "4": 1
+      },
+      "groups": 1,
+      "group_tag_bytes": 1,
+      "dictionary_bytes": 4,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-gate-expert383.mxfp4",
+      "tensor_name": "blk.5.ffn_gate_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 383,
+      "source_offset": 41933525728,
+      "input_bytes": 6266880,
+      "packed_bytes": 6040954,
+      "saved_bytes": 225926,
+      "saved_percent": 3.6050794015522913,
+      "group_blocks": 256,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 106,
+        "120": 223110,
+        "121": 145386,
+        "122": 38
+      },
+      "encode_seconds": 0.050974249839782715,
+      "decode_seconds": 0.0717754999641329,
+      "encode_input_MiB_per_second": 117.24669845627837,
+      "decode_output_MiB_per_second": 83.26744506114986,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "910785ccb76960da2167ae1dc6be188f603f288b06486306193bf7605a4b12df",
+      "restored_sha256": "910785ccb76960da2167ae1dc6be188f603f288b06486306193bf7605a4b12df",
+      "packed_sha256": "3160b2975daae253e536c2078c0271a43aded001fa7b350bd01f0777401fb777",
+      "group_alphabet_histogram": {
+        "2": 1307,
+        "3": 132,
+        "4": 1
+      },
+      "groups": 1440,
+      "group_tag_bytes": 1440,
+      "dictionary_bytes": 3014,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-gate-expert383.mxfp4",
+      "tensor_name": "blk.5.ffn_gate_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 383,
+      "source_offset": 41933525728,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036851,
+      "saved_bytes": 230029,
+      "saved_percent": 3.67055057700163,
+      "group_blocks": 4096,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 106,
+        "120": 223110,
+        "121": 145386,
+        "122": 38
+      },
+      "encode_seconds": 0.05365912499837577,
+      "decode_seconds": 0.07216329080983996,
+      "encode_input_MiB_per_second": 111.38017066399996,
+      "decode_output_MiB_per_second": 82.8199827492492,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "910785ccb76960da2167ae1dc6be188f603f288b06486306193bf7605a4b12df",
+      "restored_sha256": "910785ccb76960da2167ae1dc6be188f603f288b06486306193bf7605a4b12df",
+      "packed_sha256": "a01ece67ef4ec0613320c108653d27a4973fbbca4011ec5e4cd0fb2b72dd2c30",
+      "group_alphabet_histogram": {
+        "2": 23,
+        "3": 53,
+        "4": 14
+      },
+      "groups": 90,
+      "group_tag_bytes": 90,
+      "dictionary_bytes": 261,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-gate-expert383.mxfp4",
+      "tensor_name": "blk.5.ffn_gate_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 383,
+      "source_offset": 41933525728,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036505,
+      "saved_bytes": 230375,
+      "saved_percent": 3.6760716656454195,
+      "group_blocks": 368640,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 106,
+        "120": 223110,
+        "121": 145386,
+        "122": 38
+      },
+      "encode_seconds": 0.054136708145961165,
+      "decode_seconds": 0.07237183302640915,
+      "encode_input_MiB_per_second": 110.39759720680168,
+      "decode_output_MiB_per_second": 82.58133378795445,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "910785ccb76960da2167ae1dc6be188f603f288b06486306193bf7605a4b12df",
+      "restored_sha256": "910785ccb76960da2167ae1dc6be188f603f288b06486306193bf7605a4b12df",
+      "packed_sha256": "fe76a82c0d8c484a91278085bfa552167243af750fbf3549e4ce29ba2ffc8936",
+      "group_alphabet_histogram": {
+        "4": 1
+      },
+      "groups": 1,
+      "group_tag_bytes": 1,
+      "dictionary_bytes": 4,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-up-expert0.mxfp4",
+      "tensor_name": "blk.5.ffn_up_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 0,
+      "source_offset": 41952326368,
+      "input_bytes": 6266880,
+      "packed_bytes": 6040938,
+      "saved_bytes": 225942,
+      "saved_percent": 3.6053347120098,
+      "group_blocks": 256,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 113,
+        "120": 228439,
+        "121": 140079,
+        "122": 9
+      },
+      "encode_seconds": 0.050714333076030016,
+      "decode_seconds": 0.071556415874511,
+      "encode_input_MiB_per_second": 117.84760121049102,
+      "decode_output_MiB_per_second": 83.52238477792321,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "74a5f732c9828afcea385138ed65ef5fb1490bf594d3fe9066740a0c6cc08268",
+      "restored_sha256": "74a5f732c9828afcea385138ed65ef5fb1490bf594d3fe9066740a0c6cc08268",
+      "packed_sha256": "4dc082ac058962029af35aa743dee290b31694bf1ea07785d8abfea25a385bc2",
+      "group_alphabet_histogram": {
+        "2": 1324,
+        "3": 114,
+        "4": 2
+      },
+      "groups": 1440,
+      "group_tag_bytes": 1440,
+      "dictionary_bytes": 2998,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-up-expert0.mxfp4",
+      "tensor_name": "blk.5.ffn_up_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 0,
+      "source_offset": 41952326368,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036845,
+      "saved_bytes": 230035,
+      "saved_percent": 3.6706463184231986,
+      "group_blocks": 4096,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 113,
+        "120": 228439,
+        "121": 140079,
+        "122": 9
+      },
+      "encode_seconds": 0.054027708945795894,
+      "decode_seconds": 0.07238204218447208,
+      "encode_input_MiB_per_second": 110.62032088008905,
+      "decode_output_MiB_per_second": 82.56968606616815,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "74a5f732c9828afcea385138ed65ef5fb1490bf594d3fe9066740a0c6cc08268",
+      "restored_sha256": "74a5f732c9828afcea385138ed65ef5fb1490bf594d3fe9066740a0c6cc08268",
+      "packed_sha256": "466e8bde653a12133321ca151d9a810469183485943f05e0992be2d211da0686",
+      "group_alphabet_histogram": {
+        "2": 23,
+        "3": 59,
+        "4": 8
+      },
+      "groups": 90,
+      "group_tag_bytes": 90,
+      "dictionary_bytes": 255,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-up-expert0.mxfp4",
+      "tensor_name": "blk.5.ffn_up_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        5120,
+        2304,
+        384
+      ],
+      "expert": 0,
+      "source_offset": 41952326368,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036505,
+      "saved_bytes": 230375,
+      "saved_percent": 3.6760716656454195,
+      "group_blocks": 368640,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 113,
+        "120": 228439,
+        "121": 140079,
+        "122": 9
+      },
+      "encode_seconds": 0.05441424995660782,
+      "decode_seconds": 0.07249462511390448,
+      "encode_input_MiB_per_second": 109.83451034914492,
+      "decode_output_MiB_per_second": 82.4414567370967,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "74a5f732c9828afcea385138ed65ef5fb1490bf594d3fe9066740a0c6cc08268",
+      "restored_sha256": "74a5f732c9828afcea385138ed65ef5fb1490bf594d3fe9066740a0c6cc08268",
+      "packed_sha256": "e78c45df3fea075950e68947fc74ef35875b2c2c2d86898397fc6366c01c6c76",
+      "group_alphabet_histogram": {
+        "4": 1
+      },
+      "groups": 1,
+      "group_tag_bytes": 1,
+      "dictionary_bytes": 4,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-down-expert191.mxfp4",
+      "tensor_name": "blk.5.ffn_down_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        2304,
+        5120,
+        384
+      ],
+      "expert": 191,
+      "source_offset": 45568316128,
+      "input_bytes": 6266880,
+      "packed_bytes": 6040919,
+      "saved_bytes": 225961,
+      "saved_percent": 3.605637893178104,
+      "group_blocks": 256,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 71,
+        "120": 206211,
+        "121": 162328,
+        "122": 30
+      },
+      "encode_seconds": 0.0510466662235558,
+      "decode_seconds": 0.07151350006461143,
+      "encode_input_MiB_per_second": 117.0803686537727,
+      "decode_output_MiB_per_second": 83.572507213327,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "b6355703572c799bf4f54a34e4bcb164819db74226987e4055aca1ac7c103987",
+      "restored_sha256": "b6355703572c799bf4f54a34e4bcb164819db74226987e4055aca1ac7c103987",
+      "packed_sha256": "7b7a30ec077fc9b3bff7a7b09be6eae0f45761a70f73aaaf9af3eb39f9cfd306",
+      "group_alphabet_histogram": {
+        "2": 1342,
+        "3": 97,
+        "4": 1
+      },
+      "groups": 1440,
+      "group_tag_bytes": 1440,
+      "dictionary_bytes": 2979,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-down-expert191.mxfp4",
+      "tensor_name": "blk.5.ffn_down_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        2304,
+        5120,
+        384
+      ],
+      "expert": 191,
+      "source_offset": 45568316128,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036840,
+      "saved_bytes": 230040,
+      "saved_percent": 3.6707261029411797,
+      "group_blocks": 4096,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 71,
+        "120": 206211,
+        "121": 162328,
+        "122": 30
+      },
+      "encode_seconds": 0.05395033396780491,
+      "decode_seconds": 0.07235608296468854,
+      "encode_input_MiB_per_second": 110.77897133253224,
+      "decode_output_MiB_per_second": 82.59930962427447,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "b6355703572c799bf4f54a34e4bcb164819db74226987e4055aca1ac7c103987",
+      "restored_sha256": "b6355703572c799bf4f54a34e4bcb164819db74226987e4055aca1ac7c103987",
+      "packed_sha256": "9082d254b56b6766e34456dc543e424bf061b813647c77b427337e2c5c8a665e",
+      "group_alphabet_histogram": {
+        "2": 29,
+        "3": 52,
+        "4": 9
+      },
+      "groups": 90,
+      "group_tag_bytes": 90,
+      "dictionary_bytes": 250,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    },
+    {
+      "sample": "layer5-down-expert191.mxfp4",
+      "tensor_name": "blk.5.ffn_down_exps.weight",
+      "tensor_type": 39,
+      "tensor_shape": [
+        2304,
+        5120,
+        384
+      ],
+      "expert": 191,
+      "source_offset": 45568316128,
+      "input_bytes": 6266880,
+      "packed_bytes": 6036505,
+      "saved_bytes": 230375,
+      "saved_percent": 3.6760716656454195,
+      "group_blocks": 368640,
+      "scale_alphabet": [
+        119,
+        120,
+        121,
+        122
+      ],
+      "scale_counts": {
+        "119": 71,
+        "120": 206211,
+        "121": 162328,
+        "122": 30
+      },
+      "encode_seconds": 0.053962665842846036,
+      "decode_seconds": 0.07259058300405741,
+      "encode_input_MiB_per_second": 110.75365545144444,
+      "decode_output_MiB_per_second": 82.33247692288053,
+      "roundtrip_byte_equal": true,
+      "input_sha256": "b6355703572c799bf4f54a34e4bcb164819db74226987e4055aca1ac7c103987",
+      "restored_sha256": "b6355703572c799bf4f54a34e4bcb164819db74226987e4055aca1ac7c103987",
+      "packed_sha256": "d2184b2f620fcccfdbb9fb8c4190519b207082679b1dd2d6738c727c97368222",
+      "group_alphabet_histogram": {
+        "4": 1
+      },
+      "groups": 1,
+      "group_tag_bytes": 1,
+      "dictionary_bytes": 4,
+      "index_bytes": 138240,
+      "unchanged_code_bytes": 5898240,
+      "raw_fallback_bytes": 0,
+      "raw_fallback_groups": 0,
+      "file_header_bytes": 20
+    }
+  ]
+}

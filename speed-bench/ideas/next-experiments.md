@@ -561,3 +561,34 @@ Item42 measurements completed **15:19 UTC**, within budget. [Stable-context repo
 Item43 starts **2026-10-09 23:12 UTC**, one-hour cap ending **2026-10-10 00:12 UTC**; expect a short format follow-up. Replace monotonically allocated turn IDs with opaque random hex IDs at user request; file order defines conversation order, IDs stay with edited/moved turns. Reuse focused CPU fixture to verify deletion, append uniqueness and a reordered edit preserve identities. Build the agent, execute the exact prompt recipe, record outcome and stop; no new model performance screen or harness expansion.
 
 Item43 checks complete **23:15 UTC**. [Opaque-ID report](../experiments/agent-context-opaque-ids-20261009/README.md): random hex64 IDs replace the counter; recipes use string IDs, file order defines order. Build/agent tests/strict-C11 suffix mock pass, including reordered edit preserving ID/body associations and unique append. Exact embedded deletion recipe preserves the kept block/prefix and prints zero bytes. No new model or performance screen; previous Item42 evidence stays intact. Stop this format follow-up here.
+
+Item44 — **2026-10-20, one-hour kernel experiment cap.** On the verified 1017
+Q2 checkpoint, test one selected-cache IQ2 gate/up epilogue change: retain four
+row reductions in registers through SwiGLU. Source preparation and existing
+numerical tests precede the **19:31–19:37 UTC** fixed-teacher ABBA. Keep first
+failures; do not expand this into a kernel framework. A short dispatch-only
+profile after the scheduler bracket completed the coverage check by **20:02 UTC**.
+
+Item44 complete: baseline/candidate means **19.525/19.530 tokens/s**, no useful
+gain. The affected production path is observed in 120 gate/up profile records;
+profiled timings are excluded. Mixed SSD-address numerical checks pass, but the
+SSD-experts retained-RSS check fails on both baseline and candidate. An ineffective
+begin-only pool trial was reverted; root cause remains unresolved. Runtime
+shaders/defaults unchanged. [Recipe and evidence](../../recipes/10-q2-kernel-epilogue.md).
+
+Item45 starts **2026-10-20 19:37 UTC**, deadline **20:37 UTC**. Vary only the
+existing mixed-prefill quantum across **128 → 512 → 2048 → 128**, with one native
+1017 model process at a time, 64 GiB expert budget, two sessions, an active JSON
+stream and a new 8,493-token prompt. Measure complete first answers, long-request
+wall and active-stream content-event gaps; plot the practical tradeoff.
+
+Item45 finished **20:00:48 UTC**. The first run was interrupted during quantum512
+when the user started Homebrew security updates; preserve it separately. After
+the user reported completion, restart the entire bracket in a fresh directory.
+All four clean arms passed both answers. Quantum128 bracket mean long wall/gap:
+**212.11 s / 7.32 s**; quantum512 **304.50 s / 19.30 s**; quantum2048
+**96.02 s / 20.39 s**. Long-wall bracket drift **−3.45%**. Quantum2048 saves54.73%
+long-request wall but increases the worst content gap to2.78×; quantum512 is
+dominated by128. Keep interactive128 default, document2048 as the throughput
+tradeoff. This is one fixture, not general task throughput or a DeepInfer
+asynchronous-scheduler port. [Report and curve](../../recipes/08-official-inference-lessons.md).

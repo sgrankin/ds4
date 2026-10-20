@@ -1,0 +1,7 @@
+sample,tensor,expert,type,tensor_shape,source_offset,bytes,scale_alphabet,roundtrip_exact
+layer0-gate-expert0.mxfp4,blk.0.ffn_gate_exps.weight,0,39,"[5120, 2304, 384]",2189850336,6266880,"[119, 120, 121, 122]",True
+layer0-up-expert191.mxfp4,blk.0.ffn_up_exps.weight,191,39,"[5120, 2304, 384]",5805840096,6266880,"[119, 120, 121, 122]",True
+layer0-down-expert383.mxfp4,blk.0.ffn_down_exps.weight,383,39,"[2304, 5120, 384]",9428096736,6266880,"[119, 120, 121, 122]",True
+layer5-gate-expert383.mxfp4,blk.5.ffn_gate_exps.weight,383,39,"[5120, 2304, 384]",41933525728,6266880,"[119, 120, 121, 122]",True
+layer5-up-expert0.mxfp4,blk.5.ffn_up_exps.weight,0,39,"[5120, 2304, 384]",41952326368,6266880,"[119, 120, 121, 122]",True
+layer5-down-expert191.mxfp4,blk.5.ffn_down_exps.weight,191,39,"[2304, 5120, 384]",45568316128,6266880,"[119, 120, 121, 122]",True

@@ -1,0 +1,7 @@
+make: `ds4' is up to date.
+make: `ds4-server' is up to date.
+make: `ds4-agent' is up to date.
+make: `ds4_test' is up to date.
+make: `ds4_agent_test' is up to date.
+make: `tests/test_resident_route' is up to date.
+cc -O3 -g -mcpu=native -Wall -Wextra -std=c99 -I. -o tests/test_engram tests/test_engram.c ds4_engram.c -lm -pthread

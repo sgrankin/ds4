@@ -1,0 +1,189 @@
+{
+  "date": "2026-10-20",
+  "upstream": "5379c1c9ac315f1540371b06a3db88491d4059ff",
+  "original_tip": "6110237291321b6e93a989a5b706a26d07497ea4",
+  "original_archive": "archive/pre-1017-20261020",
+  "reconstruction": "six file-group commits, byte-identical net tree before rebase",
+  "rebased_feature_commits": [
+    "bfd4e79ddaf6",
+    "4abefef3f7b9",
+    "d006476e60d4",
+    "0d99ee53749c",
+    "ed0c3f5bba41",
+    "4f93ec1539b7"
+  ],
+  "compatibility_commit": "c820ed50",
+  "vision_patch_source": "https://github.com/antirez/ds4/pull/1225",
+  "vision_patch_revision": "ef7894bf3c2e03ae828c1a7ef0d553ed5a61d7ef",
+  "cleanup": {
+    "unregistered_empty_workspaces": 112,
+    "abandoned_empty_tips": 121,
+    "preserved_source_heads": true,
+    "generated_bytes_freed": 65509171200
+  },
+  "qualification": "passed all 16 first-attempt checks: six native server/vision and ten persistent-agent checks; tiny compatibility/quality screen, no speed baseline",
+  "model": {
+    "repository": "antirez/deepseek-v4.1-flash-gguf",
+    "revision": "9dcee51692e6540f697141fc98b097e3c96492a3",
+    "filename": "DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "expected_bytes": 365713686528,
+    "expected_sha256": "5296e85ff64b42ecb62c8d0c0c54e1caa07e3df8e93112f2365ebbaed62ce93a",
+    "actual_sha256": "5296e85ff64b42ecb62c8d0c0c54e1caa07e3df8e93112f2365ebbaed62ce93a",
+    "actual_bytes": 365713686528,
+    "verified_full_file": true
+  },
+  "vision": {
+    "repository": "kyuz0/deepseek-v4.1-flash-gguf",
+    "revision": "20408f699619df7071aa7cda6034e9cef5bf804b",
+    "filename": "DeepSeek-V4.1-Flash-1017-vision-BF16.gguf",
+    "expected_bytes": 970555552,
+    "expected_sha256": "861f1097e8686111fa23dc4a6bf139fd0c4cc114db2f1b4090a267f7683c0dbf",
+    "actual_sha256": "861f1097e8686111fa23dc4a6bf139fd0c4cc114db2f1b4090a267f7683c0dbf",
+    "actual_bytes": 970555552,
+    "verified_full_file": true
+  },
+  "source_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "clones": {
+    "DeepInfer": "774ce244b87cc0eb8d4b94ab9f5de2ab22049f01",
+    "deepseek-recipe": "935817c66f5d6e64838f419692545f06787e485f"
+  },
+  "corrections": [
+    "Initial make named nonexistent ds4_server_test; corrected build targets passed.",
+    "Initial standalone state-cache make used builtin rule without dependencies; explicit documented compiler command passed.",
+    "Conversion tests first lacked libds4quants; build then five tests passed.",
+    "Suffix mock first lacked required existing directory; created directory and unchanged test passed.",
+    "ds4.c rebase review caught shared_here declared only in non-Apple branch; moved to common scope before final build."
+  ],
+  "right_repeat_probe_build": "passed; three actual1017 relocations completed",
+  "default_model_link": {
+    "previous_target": "/Volumes/Models/ds4/gguf/Qwen3.8-Flash-Next-Q4.gguf",
+    "current_target": "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf"
+  },
+  "qualification_result": "qualification/result.json",
+  "right_repeat_result": {
+    "moves": 3,
+    "source_capture_count": 1,
+    "reused_per_move": 513,
+    "fresh_per_move": 128,
+    "native_total_edit_ms": 205185.068,
+    "reuse_total_edit_ms": 143068.016,
+    "edit_time_saving_fraction": 0.30273670791677687,
+    "teacher_rows": 12,
+    "mean_delta_nll": 6.524460938890833e-05,
+    "mean_kl": 3.0485475633823333e-05,
+    "max_delta_nll": 0.000217124725914,
+    "max_kl": 0.000110830768571,
+    "argmax_flips": 0,
+    "logit_rows_byte_equal": 0,
+    "scope": "Three synthetic repeated relocations from one immutable pre-RoPE source, right66/left128/right514. Edit-time sum only; source setup and teacher continuation excluded. Not whole-agent latency or broad quality."
+  },
+  "engram_scale": {
+    "result": "../../../recipes/evidence/engram-scale/results.json",
+    "sample_saving_fraction": 0.018860788056344696,
+    "ideal_whole_model_saving_fraction": 0.010500329606083776,
+    "scope": "Eight fixed windows; exact round trip, no runtime or serving gain measured"
+  },
+  "scheduler": {
+    "result": "scheduler/result.json",
+    "summary": "scheduler/summary.json",
+    "plot": "scheduler/pareto.png",
+    "order": [
+      128,
+      512,
+      2048,
+      128
+    ],
+    "answers_passed": 8,
+    "answers_total": 8,
+    "all_completed_stop": true,
+    "A_128_bracket_mean_seconds": 212.11073870805558,
+    "A_128_closing_drift_percent": -3.4474181318912556,
+    "B_128_gap_mean_seconds": 7.322939208010212,
+    "rows": [
+      {
+        "arm": 1,
+        "quantum": 128,
+        "A_seconds": 215.83103787503205,
+        "A_ttft_seconds": 215.41543887509033,
+        "B_seconds": 224.39364383299835,
+        "B_ttft_seconds": 4.563294833060354,
+        "B_max_content_gap_seconds": 7.442466415930539,
+        "arm_seconds": 226.20439183409326,
+        "A_correct": true,
+        "B_correct": true,
+        "both_completed_stop": true,
+        "A_saving_vs_128_mean_percent": -1.7539419218642216,
+        "B_gap_change_vs_128_mean_percent": 1.632229962930487
+      },
+      {
+        "arm": 2,
+        "quantum": 512,
+        "A_seconds": 304.4956120417919,
+        "A_ttft_seconds": 303.9792053338606,
+        "B_seconds": 315.29681150009856,
+        "B_ttft_seconds": 4.177635959116742,
+        "B_max_content_gap_seconds": 19.303147125057876,
+        "arm_seconds": 317.51047229091637,
+        "A_correct": true,
+        "B_correct": true,
+        "both_completed_stop": true,
+        "A_saving_vs_128_mean_percent": -43.555019371693746,
+        "B_gap_change_vs_128_mean_percent": 163.59835274807543
+      },
+      {
+        "arm": 3,
+        "quantum": 2048,
+        "A_seconds": 96.01978504098952,
+        "A_ttft_seconds": 95.54516220791265,
+        "B_seconds": 107.03608587500639,
+        "B_ttft_seconds": 4.354738875059411,
+        "B_max_content_gap_seconds": 20.38693333300762,
+        "arm_seconds": 108.92189508397132,
+        "A_correct": true,
+        "B_correct": true,
+        "both_completed_stop": true,
+        "A_saving_vs_128_mean_percent": 54.73129478222742,
+        "B_gap_change_vs_128_mean_percent": 178.39823264826958
+      },
+      {
+        "arm": 4,
+        "quantum": 128,
+        "A_seconds": 208.3904395410791,
+        "A_ttft_seconds": 207.97600883292034,
+        "B_seconds": 216.67230670899153,
+        "B_ttft_seconds": 4.302394209196791,
+        "B_max_content_gap_seconds": 7.203412000089884,
+        "arm_seconds": 218.41994704096578,
+        "A_correct": true,
+        "B_correct": true,
+        "both_completed_stop": true,
+        "A_saving_vs_128_mean_percent": 1.7539419218642216,
+        "B_gap_change_vs_128_mean_percent": -1.6322299629304982
+      }
+    ],
+    "pressure": {
+      "samples": 830,
+      "normal_samples": 830,
+      "bad_samples": 0,
+      "initial_swap_gib": 0.744140625,
+      "final_swap_gib": 0.76556640625,
+      "max_swap_gib": 0.76556640625,
+      "swapgrowth_gib": 0.021425781250000053,
+      "peak_wired_compressor_gib": 98.03648376464844,
+      "original_pressure_path": ".workspaces/upgrade-20261020/quantum-clean-guard/pressure.jsonl",
+      "source_stderr_retained_only_in_original": ".workspaces/upgrade-20261020/quantum-clean/*-q*/server.stderr.log"
+    },
+    "interactive_default_unchanged": 128,
+    "scope": "Ordered one-fixture mixed-prefill tradeoff; no general throughput claim. SSE gaps are client content-event gaps, not device token latency.",
+    "earlier_interrupted_attempt": "scheduler-interrupted/"
+  },
+  "known_gpu_test_failure": {
+    "test": "SSD-expert memory-release/resize",
+    "baseline_and_candidate_fail": true,
+    "rss_increment_per_reseed_mib_approximately": 28,
+    "initial_numerical_and_address_checks_pass": true,
+    "root_cause": "unresolved",
+    "command_pool_trial": "ineffective and reverted",
+    "details": "kernel/README.md"
+  }
+}

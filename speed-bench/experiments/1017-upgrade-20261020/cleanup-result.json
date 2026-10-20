@@ -1,0 +1,8 @@
+{
+  "files_removed": 5771,
+  "allocated_bytes_selected": 65509171200,
+  "free_bytes_before": 507904000000,
+  "free_bytes_after": 573440000000,
+  "when": 1792504709.347669,
+  "preserved": "source, reports, commands, metrics and failure records; generated raw.fp32, ds4sc chunks and .kv only"
+}

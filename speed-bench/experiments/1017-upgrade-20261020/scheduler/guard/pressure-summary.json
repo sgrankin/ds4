@@ -1,0 +1,12 @@
+{
+  "samples": 830,
+  "normal_samples": 830,
+  "bad_samples": 0,
+  "initial_swap_gib": 0.744140625,
+  "final_swap_gib": 0.76556640625,
+  "max_swap_gib": 0.76556640625,
+  "swapgrowth_gib": 0.021425781250000053,
+  "peak_wired_compressor_gib": 98.03648376464844,
+  "original_pressure_path": ".workspaces/upgrade-20261020/quantum-clean-guard/pressure.jsonl",
+  "source_stderr_retained_only_in_original": ".workspaces/upgrade-20261020/quantum-clean/*-q*/server.stderr.log"
+}

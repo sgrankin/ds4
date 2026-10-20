@@ -1,0 +1,37 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/ds4-bench",
+    "--metal",
+    "-m",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--prompt-file",
+    "/Volumes/Models/ds4/speed-bench/promessi_sposi.txt",
+    "--ctx-start",
+    "2048",
+    "--ctx-max",
+    "2048",
+    "--ctx-alloc",
+    "4096",
+    "--gen-tokens",
+    "128",
+    "--prefill-chunk",
+    "512",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--teacher-forced-decode",
+    "--csv",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/abba/2-candidate/speed.csv",
+    "--dump-frontier-logits-dir",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/abba/2-candidate"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/moe.metal",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0"
+  },
+  "shader_sha256": "17e6b820ef7abcea991f3d9385f809664393d68de5ddbd04b0431c284d7f3587",
+  "prompt_sha256": "f53e0d80cb2d4492d24ebd63c7000c397b16ae70f9bf09b3763e5d8323ec209f"
+}

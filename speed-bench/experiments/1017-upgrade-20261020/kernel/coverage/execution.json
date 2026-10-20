@@ -1,0 +1,35 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/ds4-bench",
+    "--metal",
+    "-m",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--prompt-file",
+    "/Volumes/Models/ds4/speed-bench/promessi_sposi.txt",
+    "--ctx-start",
+    "64",
+    "--ctx-max",
+    "64",
+    "--ctx-alloc",
+    "512",
+    "--gen-tokens",
+    "8",
+    "--prefill-chunk",
+    "512",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--teacher-forced-decode",
+    "--csv",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/coverage/speed.csv"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_METAL_MOE_SOURCE": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/moe.metal",
+    "DS4_METAL_MOE_ONE_STAGE_PROFILE": "1",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0"
+  },
+  "purpose": "Dispatch coverage only. Profiling forces drains; not latency evidence."
+}

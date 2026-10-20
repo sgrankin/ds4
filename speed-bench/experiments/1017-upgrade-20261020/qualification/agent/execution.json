@@ -1,0 +1,36 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/ds4-local",
+    "persistent-fast",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--ctx",
+    "16384",
+    "--prefill-chunk",
+    "2048",
+    "--nothink",
+    "--temp",
+    "0",
+    "--tokens",
+    "1024",
+    "--seed",
+    "20261020",
+    "--non-interactive",
+    "--chdir",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/agent/work",
+    "--live-context-file",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/agent/work/context.txt",
+    "--trace",
+    "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/agent/agent.trace"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_AGENT_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/agent/bootstrap",
+    "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/qualification-live/agent/state-cache",
+    "DS4_STATE_CACHE_HOT_MB": "0",
+    "DS4_STATE_CACHE_SSD_MB": "4096",
+    "DS4_AGENT_TEST_TIME": "1792490400"
+  },
+  "profile": "persistent-fast",
+  "first_attempts": true
+}

@@ -1,0 +1,43 @@
+{
+  "label": "A",
+  "started_s": 4.592083166120574,
+  "content_events": [
+    {
+      "received_s": 308.57128849998116,
+      "text": "COR"
+    },
+    {
+      "received_s": 308.71966037503444,
+      "text": "AL"
+    },
+    {
+      "received_s": 308.85514650004916,
+      "text": "-"
+    },
+    {
+      "received_s": 308.97247604094446,
+      "text": "843"
+    },
+    {
+      "received_s": 309.0868649580516,
+      "text": "1"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8493,
+    "completion_tokens": 5,
+    "total_tokens": 8498,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 8493
+    }
+  },
+  "finish_reason": "stop",
+  "done": true,
+  "error": null,
+  "http_status": 200,
+  "finished_s": 309.0876952079125,
+  "seconds": 304.4956120417919,
+  "content": "CORAL-8431",
+  "ttft_seconds": 303.9792053338606
+}

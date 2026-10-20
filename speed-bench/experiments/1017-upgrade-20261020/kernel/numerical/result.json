@@ -1,0 +1,11 @@
+[
+  {
+    "variant": "baseline",
+    "test": "ssd-experts",
+    "command": [
+      "tests/test_metal_ssd_experts"
+    ],
+    "shader": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/baseline.metal",
+    "returncode": 1
+  }
+]

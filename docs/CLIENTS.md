@@ -5,7 +5,7 @@
 Start the server first:
 
 ```sh
-./ds4-server --ctx 100000 --kv-disk-dir /tmp/ds4-kv --kv-disk-space-mb 8192
+./ds4-server --ctx 100000 --kv-disk-dir .workspaces/client-kv --kv-disk-space-mb 8192
 ```
 
 Set the client's context limit no higher than the server's. Output tokens also
@@ -19,7 +19,7 @@ The installed Pi 0.83.0 CLI was exercised with the actual `persistent-fast`
 wrapper. Start that server instead of the generic command above:
 
 ```sh
-./ds4-local --server persistent-fast --model gguf/DeepSeek-V4.1-Flash-Q2.gguf --port 8080 --tokens 2048
+./ds4-local --server persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf --port 8080 --tokens 2048
 ```
 
 Create an isolated client directory, `mkdir -p .workspaces/pi-local`, and save

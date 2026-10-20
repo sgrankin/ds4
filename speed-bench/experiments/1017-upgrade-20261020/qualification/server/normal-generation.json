@@ -1,0 +1,48 @@
+{
+  "name": "normal-generation",
+  "method": "POST",
+  "route": "/chat/completions",
+  "request": {
+    "model": "deepseek-v4.1-flash",
+    "temperature": 0,
+    "reasoning_effort": "none",
+    "chat_template_kwargs": {
+      "enable_thinking": false
+    },
+    "max_tokens": 32,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Reply only LANGUAGE_OK."
+      }
+    ]
+  },
+  "status": 200,
+  "wire": "{\"id\":\"chatcmpl-c0c7d6d2c3f28b7b2a9946a8\",\"object\":\"chat.completion\",\"created\":1792523397,\"model\":\"deepseek-v4.1-flash\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"LANGUAGE_OK\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":9,\"completion_tokens\":3,\"total_tokens\":12,\"prompt_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":9}}}\n",
+  "seconds": 2.197412374895066,
+  "body": {
+    "id": "chatcmpl-c0c7d6d2c3f28b7b2a9946a8",
+    "object": "chat.completion",
+    "created": 1792523397,
+    "model": "deepseek-v4.1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "LANGUAGE_OK"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 9,
+      "completion_tokens": 3,
+      "total_tokens": 12,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 9
+      }
+    }
+  }
+}

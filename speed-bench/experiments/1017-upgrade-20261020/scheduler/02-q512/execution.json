@@ -1,0 +1,40 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/ds4-server",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "64944",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--batched-session",
+    "2",
+    "--ctx",
+    "16384",
+    "--prefill-chunk",
+    "2048",
+    "--mixed-prefill-quantum",
+    "512",
+    "--mtp-draft",
+    "1",
+    "--tokens",
+    "512"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+    "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "0",
+    "DS4_SERVER_RESPONSE_STORE_DIR": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/quantum-clean/02-q512/responses"
+  },
+  "application_ssd_kv_cache": "disabled: no DS4_STATE_CACHE_DIR or --kv-disk-dir",
+  "health": "GET /v1/models",
+  "warmup_requests": 0,
+  "timeout_seconds": 900,
+  "reserved_state_dir": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/quantum-clean/02-q512/state",
+  "reserved_cache_dir": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/quantum-clean/02-q512/cache"
+}

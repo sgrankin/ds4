@@ -1,0 +1,16 @@
+{
+  "file": "DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+  "tensor_count": 1046,
+  "header_bytes": 5828463,
+  "data_offset": 5832704,
+  "metadata": {
+    "general.architecture": "deepseek41",
+    "general.name": "DeepSeek V4.1 Flash",
+    "general.source.url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017",
+    "general.source.revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+    "general.alignment": 16384,
+    "deepseek41.quantization": "IQ2_XXS gate/up; Q2_K down; Q8_0 attention/shared/head",
+    "deepseek41.calibration": "imatrix"
+  },
+  "source": "pinned 206 range census, not payload validation"
+}

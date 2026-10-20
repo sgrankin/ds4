@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "python3",
+    "speed-bench/experiments/1017-upgrade-20261020/serve_quantum.py",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--output",
+    ".workspaces/upgrade-20261020/quantum-clean"
+  ],
+  "initial": {
+    "time": 1792525576.792346,
+    "level": 1,
+    "swap_gb": 0.744140625,
+    "physical_gb": 128.0,
+    "free_gb": 46.061004638671875,
+    "file_backed_gb": 53.25248718261719,
+    "wired_gb": 6.18243408203125,
+    "compressor_gb": 15.551513671875
+  },
+  "polling_seconds": 1,
+  "stop_rule": "two consecutive adverse samples; large RAM use alone is allowed"
+}

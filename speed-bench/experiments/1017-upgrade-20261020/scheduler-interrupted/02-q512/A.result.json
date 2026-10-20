@@ -1,0 +1,14 @@
+{
+  "label": "A",
+  "started_s": 4.76838079188019,
+  "content_events": [],
+  "usage": null,
+  "finish_reason": null,
+  "done": false,
+  "error": null,
+  "http_status": 200,
+  "finished_s": 213.12418433395214,
+  "seconds": 208.35580354207195,
+  "content": "",
+  "ttft_seconds": null
+}

@@ -1,0 +1,15 @@
+test_1017_vision_is_verified_without_changing_link (__main__.DownloadTests.test_1017_vision_is_verified_without_changing_link) ... ok
+test_failure_does_not_replace_link (__main__.DownloadTests.test_failure_does_not_replace_link) ... ok
+test_help_and_invalid_target (__main__.DownloadTests.test_help_and_invalid_target) ... ok
+test_partial_requires_explicit_cleanup (__main__.DownloadTests.test_partial_requires_explicit_cleanup) ... ok
+test_q4_no_space_preserves_resumable_parts (__main__.DownloadTests.test_q4_no_space_preserves_resumable_parts) ... ok
+test_q4_rejects_corrupt_parts_and_assembly (__main__.DownloadTests.test_q4_rejects_corrupt_parts_and_assembly) ... ok
+test_q4_resumes_interrupted_assembly (__main__.DownloadTests.test_q4_resumes_interrupted_assembly) ... ok
+test_quants_vision_and_existing (__main__.DownloadTests.test_quants_vision_and_existing) ... ok
+test_qwen_is_one_verified_file (__main__.DownloadTests.test_qwen_is_one_verified_file) ... ok
+test_truncated_and_corrupt_artifacts (__main__.DownloadTests.test_truncated_and_corrupt_artifacts) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.338s
+
+OK

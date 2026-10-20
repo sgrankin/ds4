@@ -1,0 +1,31 @@
+[
+  {
+    "variant": "baseline",
+    "test": "ssd-address",
+    "command": [
+      "tests/test_metal_moe_prefill",
+      "--ssd-address"
+    ],
+    "shader": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/baseline.metal",
+    "returncode": 0
+  },
+  {
+    "variant": "candidate",
+    "test": "ssd-experts",
+    "command": [
+      "tests/test_metal_ssd_experts"
+    ],
+    "shader": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/moe.metal",
+    "returncode": 1
+  },
+  {
+    "variant": "candidate",
+    "test": "ssd-address",
+    "command": [
+      "tests/test_metal_moe_prefill",
+      "--ssd-address"
+    ],
+    "shader": "/Volumes/Models/ds4/.workspaces/upgrade-20261020/q2-epilogue/moe.metal",
+    "returncode": 0
+  }
+]

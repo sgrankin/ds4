@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "checks_passed": 16,
+  "checks_total": 16,
+  "first_attempts": true,
+  "result": "qualification/result.json",
+  "repeat_result": "repeat/summary.json",
+  "scope": "Tiny first-attempt compatibility/quality screen on new weights, not a baseline or speed claim. Vision is qualified only if explicitly requested and its check passes.",
+  "scheduler_latency": "completed clean128/512/2048/128 bracket:8/8 answers pass;128 interactive default unchanged,2048 bulk/responsiveness tradeoff",
+  "new_model_general_performance_claims": false,
+  "scheduler_result": "scheduler/summary.json",
+  "scheduler_control_drift_percent": -3.4474181318912556,
+  "known_gpu_test_failure": "SSD-expert memory-release/resize fails both baseline and candidate; unresolved, see kernel/README.md"
+}
