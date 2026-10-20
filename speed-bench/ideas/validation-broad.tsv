@@ -1,0 +1,18 @@
+# Locked 2026-10-02 before broader-policy results on these prompts.
+# Previously unused case indices 1 mod6; separate from screen 0 mod6 and first heldout 3 mod6.
+case_001	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_001.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_001.txt
+case_007	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_007.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_007.txt
+case_013	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_013.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_013.txt
+case_019	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_019.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_019.txt
+case_025	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_025.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_025.txt
+case_031	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_031.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_031.txt
+case_037	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_037.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_037.txt
+case_043	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_043.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_043.txt
+case_049	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_049.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_049.txt
+case_055	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_055.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_055.txt
+case_061	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_061.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_061.txt
+case_067	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_067.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_067.txt
+case_073	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_073.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_073.txt
+case_079	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_079.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_079.txt
+case_085	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_085.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_085.txt
+case_091	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/prompts/case_091.txt	gguf-tools/quality-testing/deepseek-v4.1-flash-20260919-router/continuations/case_091.txt

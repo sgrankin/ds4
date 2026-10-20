@@ -4,3 +4,22 @@ local-runs/
 metal_decode_schedule_bench
 metal_prefill_variant_bench
 session_concurrency_bench
+
+# Generated model arrays and token-ID scratch files.
+*.bin
+*.fp32
+*.i32
+*.ids
+*.raw
+*.state
+/experiments/**/probe
+
+# Matplotlib caches and disposable tool-task workspaces.
+.mplcache/
+mpl-cache/
+plot-config/
+/experiments/**/visible/
+/experiments/**/analysis-current.json
+
+# One-off local experiment launchers.
+/ideas/root-*.py
