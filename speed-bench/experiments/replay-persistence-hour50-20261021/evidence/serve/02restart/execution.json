@@ -1,0 +1,39 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/ds4-server",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "62293",
+    "--ssd-streaming",
+    "--ssd-streaming-cache-experts",
+    "64GB",
+    "--ctx",
+    "16384",
+    "--prefill-chunk",
+    "8192",
+    "--mtp-draft",
+    "1"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_V41_DECODER_REPLAY_ROWS": "128",
+    "DS4_V41_DECODER_REPLAY_SELECTED": "1",
+    "DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS": "1",
+    "DS4_SERVER_CONTEXT_SUFFIX_REUSE": "0",
+    "DS4_STATE_CACHE_DIR": "/Volumes/Models/ds4/.workspaces/replay-persistence-hour50/serve/cache",
+    "DS4_STATE_CACHE_HOT_MB": "0",
+    "DS4_STATE_CACHE_SSD_MB": "4096",
+    "DS4_SERVER_RESPONSE_STORE_DIR": "/Volumes/Models/ds4/.workspaces/replay-persistence-hour50/serve/02restart/responses",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0"
+  },
+  "server_sha256": "682256f532243beb179454766ae043a7c58317bb0b2820cc46e1e3ab6971b883",
+  "batched_sessions": 0,
+  "application_ssd_kv_cache": "shared, disk-only",
+  "timing": "workflow includes three HTTP requests and actual note read; startup separate",
+  "pid": 44093
+}

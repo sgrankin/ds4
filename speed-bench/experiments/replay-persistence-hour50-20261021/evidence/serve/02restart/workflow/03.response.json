@@ -1,0 +1,37 @@
+{
+  "id": "resp_d91fd644a8e8b9c898ae0e02",
+  "object": "response",
+  "created_at": 1792547490,
+  "status": "completed",
+  "model": "deepseek-v4.1-flash",
+  "store": false,
+  "previous_response_id": null,
+  "conversation": null,
+  "output": [
+    {
+      "id": "msg_7d7d866ad73fdb1f20244516",
+      "type": "message",
+      "status": "completed",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ50\",\"current_key\":\"SABLE-1937\"}",
+          "annotations": []
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 8854,
+    "input_tokens_details": {
+      "cached_tokens": 8823,
+      "cache_write_tokens": 31
+    },
+    "output_tokens": 26,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 8880
+  }
+}

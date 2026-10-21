@@ -40,7 +40,7 @@ typedef struct sc_endpoint {
     char key[41], prefix[41];
     char *profile;
     uint32_t ctx, tokens, nseg, pins;
-    bool approximate;
+    ds4_state_cache_kind kind;
     uint64_t state_bytes, pre_bytes, manifest_bytes, used;
     sc_segment *seg;
     struct sc_endpoint *next;
@@ -134,10 +134,25 @@ static uint64_t sc_state_bytes(uint32_t n) {
     return size;
 }
 
-static bool sc_state_valid(const uint8_t *p, uint64_t bytes, bool approximate,
+static uint64_t sc_state_header(ds4_state_cache_kind kind) {
+    return kind == DS4_STATE_CACHE_REPLAY ? 84u : 52u;
+}
+
+static bool sc_state_valid(const uint8_t *p, uint64_t bytes, ds4_state_cache_kind kind,
                             uint32_t *ctx, uint32_t *tokens) {
-    if (!p || bytes < 52 || bytes > SIZE_MAX) return false;
-    if (sc_u32(p) != (approximate ? UINT32_C(0x44535344) : UINT32_C(0x34565344)) ||
+    if (!p || bytes < sc_state_header(kind) || bytes > SIZE_MAX ||
+        (unsigned)kind > DS4_STATE_CACHE_REPLAY) return false;
+    if (kind == DS4_STATE_CACHE_REPLAY) {
+        /* DRP1 v1: kind, K, selected flag, inner bytes, reserved. The inner
+         * canonical body is storage only; it must not be loaded as exact. */
+        if (sc_u32(p) != UINT32_C(0x31505244) || sc_u32(p + 4) != 1 ||
+            sc_u32(p + 8) != 1 ||
+            (sc_u32(p + 12) != 128 && sc_u32(p + 12) != 256) ||
+            sc_u32(p + 16) > 1 || sc_u64(p + 20) != bytes - 32u ||
+            sc_u32(p + 28) != 0) return false;
+        p += 32u; bytes -= 32u;
+    }
+    if (sc_u32(p) != (kind == DS4_STATE_CACHE_SUFFIX ? UINT32_C(0x44535344) : UINT32_C(0x34565344)) ||
         sc_u32(p + 4) != 2) return false;
     uint32_t h[13];
     for (unsigned i = 0; i < 13; i++) h[i] = sc_u32(p + i * 4u);
@@ -198,7 +213,8 @@ static bool sc_pages(sc_endpoint *e, const uint8_t *p, uint32_t which,
 
 static bool sc_split(sc_endpoint *e, const uint8_t *p, const uint8_t *pre) {
     uint64_t off = 0, bytes;
-    if (!sc_pages(e, p, 0, &off, 52u, 52u) ||
+    const uint64_t header = sc_state_header(e->kind);
+    if (!sc_pages(e, p, 0, &off, header, header) ||
         !sc_pages(e, p, 0, &off, (uint64_t)e->tokens * 4u, SC_PAGE * 4u) ||
         !sc_pages(e, p, 0, &off, SC_VOCAB * 4u, SC_VOCAB * 4u)) return false;
     uint64_t raw = e->tokens < 128 ? e->tokens : 128;
@@ -226,7 +242,7 @@ static uint8_t *sc_manifest(sc_endpoint *e) {
     memcpy(p, "DS4SC01", 7);
     ds4_kvstore_le_put32(p + 8, e->ctx);
     ds4_kvstore_le_put32(p + 12, e->tokens);
-    ds4_kvstore_le_put32(p + 16, e->approximate ? 1u : 0u);
+    ds4_kvstore_le_put32(p + 16, (uint32_t)e->kind);
     ds4_kvstore_le_put32(p + 20, (uint32_t)plen);
     sc_put64(p + 24, e->state_bytes); sc_put64(p + 32, e->pre_bytes);
     ds4_kvstore_le_put32(p + 40, e->nseg);
@@ -254,21 +270,23 @@ static sc_endpoint *sc_parse_manifest(const uint8_t *p, uint64_t bytes, const ch
     uint32_t plen = sc_u32(p + 20), nseg = sc_u32(p + 40);
     if (!plen || plen > 255 || !nseg ||
         bytes != SC_HEADER + plen + (uint64_t)nseg * SC_RECORD ||
-        p[88] != 0 || sc_u32(p + 16) > 1) return NULL;
+        p[88] != 0 || sc_u32(p + 16) > DS4_STATE_CACHE_REPLAY) return NULL;
     char digest[41]; ds4_kvstore_sha1_bytes_hex(p, (size_t)bytes, digest);
     if (strcmp(digest, key)) return NULL;
     sc_endpoint *e = calloc(1, sizeof(*e));
     if (!e) return NULL;
     memcpy(e->key, key, 41); memcpy(e->prefix, p + 48, 41);
     e->ctx = sc_u32(p + 8); e->tokens = sc_u32(p + 12);
-    e->approximate = sc_u32(p + 16) != 0;
+    e->kind = (ds4_state_cache_kind)sc_u32(p + 16);
     e->state_bytes = sc_u64(p + 24); e->pre_bytes = sc_u64(p + 32);
     e->manifest_bytes = bytes; e->nseg = nseg;
     e->profile = calloc(1, (size_t)plen + 1u);
     e->seg = calloc(nseg, sizeof(*e->seg));
     if (!e->profile || !e->seg || !sc_key(e->prefix) || !e->ctx || e->ctx > 1048576 ||
-        !e->tokens || e->tokens >= e->ctx || e->state_bytes != sc_state_bytes(e->tokens) ||
-        e->pre_bytes > SIZE_MAX || (e->approximate && !e->pre_bytes)) goto bad;
+        !e->tokens || e->tokens >= e->ctx ||
+        e->state_bytes != sc_state_bytes(e->tokens) + sc_state_header(e->kind) - 52u ||
+        e->pre_bytes > SIZE_MAX || (e->kind == DS4_STATE_CACHE_SUFFIX && !e->pre_bytes) ||
+        (e->kind == DS4_STATE_CACHE_REPLAY && e->pre_bytes)) goto bad;
     memcpy(e->profile, p + SC_HEADER, plen);
     if (strlen(e->profile) != plen) goto bad;
     uint64_t cursor[2] = {0, 0};
@@ -477,20 +495,23 @@ fail:
     ds4_state_cache_close(c, NULL, 0); return NULL;
 }
 
-int ds4_state_cache_put(ds4_state_cache *c, const char *profile,
+int ds4_state_cache_put_kind(ds4_state_cache *c, const char *profile,
                         const void *state, uint64_t state_bytes,
                         const void *pre, uint64_t pre_bytes,
-                        bool approximate, char key[41], char *err, size_t errlen) {
+                        ds4_state_cache_kind kind, char key[41], char *err, size_t errlen) {
     if (!c || !profile || !*profile || strlen(profile) > 255 || !key ||
-        pre_bytes > SIZE_MAX || (pre_bytes && !pre) || (approximate && !pre_bytes))
+        (unsigned)kind > DS4_STATE_CACHE_REPLAY ||
+        pre_bytes > SIZE_MAX || (pre_bytes && !pre) ||
+        (kind == DS4_STATE_CACHE_SUFFIX && !pre_bytes) ||
+        (kind == DS4_STATE_CACHE_REPLAY && pre_bytes))
         return sc_error(err, errlen, "invalid state-cache put");
     sc_endpoint *e = calloc(1, sizeof(*e)); uint8_t *manifest = NULL;
     if (!e) return sc_error(err, errlen, "state-cache allocation failed");
     bool registered = false;
-    if (!sc_state_valid(state, state_bytes, approximate, &e->ctx, &e->tokens)) goto invalid;
+    if (!sc_state_valid(state, state_bytes, kind, &e->ctx, &e->tokens)) goto invalid;
     e->profile = strdup(profile); e->state_bytes = state_bytes; e->pre_bytes = pre_bytes;
-    e->approximate = approximate;
-    if (!e->profile || !sc_prefix(profile, e->ctx, (const uint8_t *)state + 52,
+    e->kind = kind;
+    if (!e->profile || !sc_prefix(profile, e->ctx, (const uint8_t *)state + sc_state_header(kind),
                                   e->tokens, false, e->prefix) ||
         !sc_split(e, state, pre) || !(manifest = sc_manifest(e))) goto failed;
     sc_endpoint *existing = sc_endpoint_find(c, e->key);
@@ -547,6 +568,14 @@ cleanup:
     free(manifest); sc_endpoint_free(e); return -1;
 }
 
+int ds4_state_cache_put(ds4_state_cache *c, const char *profile,
+                        const void *state, uint64_t state_bytes,
+                        const void *pre, uint64_t pre_bytes,
+                        bool approximate, char key[41], char *err, size_t errlen) {
+    return ds4_state_cache_put_kind(c, profile, state, state_bytes, pre, pre_bytes,
+        approximate ? DS4_STATE_CACHE_SUFFIX : DS4_STATE_CACHE_NATIVE, key, err, errlen);
+}
+
 ds4_state_cache_ref *ds4_state_cache_get(ds4_state_cache *c, const char *key) {
     if (!c || !sc_key(key)) return NULL;
     sc_endpoint *e = sc_endpoint_find(c, key);
@@ -560,7 +589,7 @@ ds4_state_cache_ref *ds4_state_cache_find_prefix(ds4_state_cache *c, const char 
     if (!c || !profile || !ids) return NULL;
     sc_endpoint *best = NULL;
     for (sc_endpoint *e = c->endpoints; e; e = e->next) {
-        if (e->approximate || e->ctx != ctx || e->tokens > n || strcmp(e->profile, profile) ||
+        if (e->kind == DS4_STATE_CACHE_SUFFIX || e->ctx != ctx || e->tokens > n || strcmp(e->profile, profile) ||
             (best && best->tokens >= e->tokens)) continue;
         char key[41];
         if (sc_prefix(profile, ctx, ids, e->tokens, true, key) && !strcmp(key, e->prefix)) best = e;
@@ -572,8 +601,8 @@ ds4_state_cache_ref *ds4_state_cache_find_prefix(ds4_state_cache *c, const char 
 }
 
 static bool sc_token_tail(ds4_state_cache *c, sc_endpoint *e, const int *ids, uint32_t n) {
-    uint64_t start = 52u + (uint64_t)(e->tokens - n) * 4u;
-    uint64_t stop = 52u + (uint64_t)e->tokens * 4u;
+    uint64_t start = sc_state_header(e->kind) + (uint64_t)(e->tokens - n) * 4u;
+    uint64_t stop = sc_state_header(e->kind) + (uint64_t)e->tokens * 4u;
     for (uint32_t i = 0; i < e->nseg; i++) {
         sc_segment *s = &e->seg[i];
         if (s->which || s->offset >= stop || s->offset + s->bytes <= start) continue;
@@ -599,7 +628,7 @@ ds4_state_cache_ref *ds4_state_cache_find_suffix(ds4_state_cache *c, const char 
     if (!c || !profile || !ids || !n) return NULL;
     sc_endpoint *best = NULL;
     for (sc_endpoint *e = c->endpoints; e; e = e->next)
-        if (e->ctx == ctx && e->tokens >= n && !strcmp(e->profile, profile) &&
+        if (e->kind != DS4_STATE_CACHE_REPLAY && e->ctx == ctx && e->tokens >= n && !strcmp(e->profile, profile) &&
             (!best || e->used > best->used) && sc_token_tail(c, e, ids, n)) best = e;
     if (!best) return NULL;
     ds4_state_cache_ref *ref = sc_acquire(c, best);
@@ -612,7 +641,7 @@ static bool sc_ref_tokens(ds4_state_cache_ref *ref) {
     ref->ids = malloc((size_t)e->tokens * sizeof(*ref->ids));
     if (!ref->ids) return false;
     ref->cache->lease_bytes += (uint64_t)e->tokens * sizeof(*ref->ids);
-    const uint64_t start = 52u, stop = 52u + (uint64_t)e->tokens * 4u;
+    const uint64_t start = sc_state_header(e->kind), stop = start + (uint64_t)e->tokens * 4u;
     for (uint32_t i = 0; i < e->nseg; i++) {
         sc_segment *s = &e->seg[i];
         if (s->which || s->offset >= stop || s->offset + s->bytes <= start) continue;
@@ -643,7 +672,7 @@ ds4_state_cache_ref *ds4_state_cache_next_candidate(ds4_state_cache *c,
     if (!c || !profile || !cursor || (*cursor && !sc_key(cursor))) return NULL;
     sc_endpoint *next = NULL;
     for (sc_endpoint *e = c->endpoints; e; e = e->next)
-        if (e->ctx == ctx && !strcmp(e->profile, profile) && strcmp(e->key, cursor) > 0 &&
+        if (e->kind != DS4_STATE_CACHE_REPLAY && e->ctx == ctx && !strcmp(e->profile, profile) && strcmp(e->key, cursor) > 0 &&
             (!next || strcmp(e->key, next->key) < 0)) next = e;
     if (!next) return NULL;
     ds4_state_cache_ref *ref = sc_acquire(c, next);
@@ -652,7 +681,7 @@ ds4_state_cache_ref *ds4_state_cache_next_candidate(ds4_state_cache *c,
     if (!sc_ref_tokens(ref)) { ds4_state_cache_release(ref); return NULL; }
     if (ids) *ids = ref->ids;
     if (n) *n = next->tokens;
-    if (approximate) *approximate = next->approximate;
+    if (approximate) *approximate = next->kind != DS4_STATE_CACHE_NATIVE;
     return ref;
 }
 
@@ -670,14 +699,15 @@ int ds4_state_cache_materialize(ds4_state_cache_ref *ref, ds4_state_cache_blob *
     if (e->pre_bytes) blob.prerope = malloc((size_t)e->pre_bytes);
     if (!blob.state || (e->pre_bytes && !blob.prerope)) goto failed;
     blob.state_bytes = e->state_bytes; blob.prerope_bytes = e->pre_bytes;
-    blob.ctx_size = e->ctx; blob.tokens = e->tokens; blob.approximate = e->approximate;
+    blob.ctx_size = e->ctx; blob.tokens = e->tokens; blob.kind = e->kind;
+    blob.approximate = e->kind != DS4_STATE_CACHE_NATIVE;
     for (uint32_t i = 0; i < e->nseg; i++) {
         sc_segment *s = &e->seg[i];
         uint8_t *p = s->which ? blob.prerope : blob.state;
         if (!sc_read_chunk(ref->cache, sc_chunk_find(ref->cache, s->key), p + s->offset)) goto failed;
     }
     uint32_t ctx, n;
-    if (!sc_state_valid(blob.state, blob.state_bytes, blob.approximate, &ctx, &n) ||
+    if (!sc_state_valid(blob.state, blob.state_bytes, blob.kind, &ctx, &n) ||
         ctx != e->ctx || n != e->tokens) goto failed;
     *out = blob; return 0;
 failed:

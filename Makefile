@@ -161,6 +161,12 @@ speed-bench/kv_pack_roundtrip_bench.o: speed-bench/kv_pack_roundtrip_bench.c ds4
 speed-bench/kv_pack_roundtrip_bench: speed-bench/kv_pack_roundtrip_bench.o $(CORE_OBJS)
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -o $@ $^ $(METAL_LDLIBS)
 
+speed-bench/replay_checkpoint_bench.o: speed-bench/replay_checkpoint_bench.c ds4.h ds4_state_cache.h
+	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -I. -c -o $@ $<
+
+speed-bench/replay_checkpoint_bench: speed-bench/replay_checkpoint_bench.o ds4_state_cache.o ds4_kvstore.o $(CORE_OBJS)
+	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -o $@ $^ $(METAL_LDLIBS)
+
 speed-bench/session_concurrency_bench.o: speed-bench/session_concurrency_bench.c ds4.h
 	$(CC) $(CFLAGS) -I. -c -o $@ $<
 
@@ -1419,6 +1425,7 @@ tests/test_agent_live_context.o tests/test_agent_context_frontiers.o: ds4_suffix
 clean:
 	rm -f speed-bench/decoder_replay_bench
 	rm -f speed-bench/kv_pack_roundtrip_bench
+	rm -f speed-bench/replay_checkpoint_bench
 	rm -f tests/test_mmvq_cuda tests/test_mmvq_rocm
 	rm -f speed-bench/state_cache_bench
 	rm -f speed-bench/overthink_pilot

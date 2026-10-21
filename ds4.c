@@ -43858,13 +43858,24 @@ static uint32_t ds41_encoder_chunk_cap(const ds41_gpu_graph *g, uint32_t count) 
 /* Opt-in approximation of the existing wide decoder suffix. Encoder and
  * compressed/index publication remain complete; only decoder local replay
  * is shortened. Its missing raw keys are excluded by decoder_replay_floor. */
-static uint32_t ds41_decoder_replay_rows(const ds41_gpu_graph *g, uint32_t count) {
+static uint32_t ds41_decoder_replay_setting(void) {
     const char *value = getenv("DS4_V41_DECODER_REPLAY_ROWS");
     if (!value || !*value || !strcmp(value, "0")) return 0;
     uint32_t rows = 0;
     if (!strcmp(value, "128")) rows = 128u;
     else if (!strcmp(value, "256")) rows = 256u;
     else ds4_die("DS4_V41_DECODER_REPLAY_ROWS must be 0, 128 or 256");
+    return rows;
+}
+
+static bool ds41_decoder_replay_selected_setting(void) {
+    const char *value = getenv("DS4_V41_DECODER_REPLAY_SELECTED");
+    return value && !strcmp(value, "1");
+}
+
+static uint32_t ds41_decoder_replay_rows(const ds41_gpu_graph *g, uint32_t count) {
+    const uint32_t rows = ds41_decoder_replay_setting();
+    if (!rows) return 0;
     if (count < 8192u || count <= ds41_encoder_chunk_cap(g, count) ||
         getenv("DS4_METAL_DISABLE_V41_DECODER_SUFFIX")) return 0;
     if (g->tp_world != 1u || g->dspark || g->image_count || g->imatrix || g->quality)
@@ -43906,9 +43917,7 @@ static bool ds41_graph_prefill_sweep(ds41_gpu_graph *g, const ds4_model *m,
     const bool decoder_suffix = wide && total_count >= 8192u &&
         !getenv("DS4_METAL_DISABLE_V41_DECODER_SUFFIX");
     const uint32_t replay_rows = ds41_decoder_replay_rows(g, total_count);
-    const char *replay_selected_env = getenv("DS4_V41_DECODER_REPLAY_SELECTED");
-    const bool replay_selected_requested = replay_rows && replay_selected_env &&
-        !strcmp(replay_selected_env, "1");
+    const bool replay_selected_requested = replay_rows && ds41_decoder_replay_selected_setting();
     bool replay_selected[DS4_MAX_LAYER] = {0};
     uint32_t replay_selected_layers = 0;
 #ifdef __APPLE__
@@ -62848,6 +62857,8 @@ struct ds4_session {
     bool checkpoint_valid;
     bool approximate_suffix;
     bool approximate_decoder_replay; /* Not a relocatable suffix-cache source. */
+    uint32_t decoder_replay_rows;
+    bool decoder_replay_selected;
     bool mtp_draft_valid;
     bool greedy_splitkv_anchor_valid;
 };
@@ -66481,6 +66492,8 @@ int ds4_session_load_payload(ds4_session *s, FILE *fp, uint64_t payload_bytes, c
         s->overthink_prompt_len = s->checkpoint.len;
         s->approximate_suffix = false;
         s->approximate_decoder_replay = false;
+        s->decoder_replay_rows = 0;
+        s->decoder_replay_selected = false;
     }
     return rc;
 }
@@ -66566,6 +66579,137 @@ void ds4_session_snapshot_free(ds4_session_snapshot *snap) {
 
 bool ds4_session_is_approximate(const ds4_session *s) {
     return s && s->approximate_suffix;
+}
+
+bool ds4_session_is_decoder_replay(const ds4_session *s) {
+    return s && s->approximate_decoder_replay;
+}
+
+#ifdef DS4_HAS_DEEPSEEK41_GPU
+static bool ds41_replay_checkpoint_supported(const ds4_session *s) {
+    if (!s || s->distributed || !s->engine || s->engine->tp.active ||
+        !ds4_session_is_ds41(s) || !s->ds41_graph_ready ||
+        ds4_session_has_vision_state(s)) return false;
+    const ds41_gpu_graph *g = &s->ds41_graph;
+    return !g->workspace_failed && g->tp_world == 1u && !g->dspark &&
+        !g->quality && !g->imatrix && !g->image_count &&
+        !g->predict_active && !g->predict_load.active;
+}
+#endif
+
+uint64_t ds4_session_replay_snapshot_bytes(ds4_session *s) {
+#ifdef DS4_HAS_DEEPSEEK41_GPU
+    if (!ds41_replay_checkpoint_supported(s) || !s->approximate_decoder_replay ||
+        !s->approximate_suffix || !s->checkpoint_valid || !s->ds41_graph.valid ||
+        !s->checkpoint.len || s->ds41_graph.pos != (uint32_t)s->checkpoint.len ||
+        (s->decoder_replay_rows != 128u && s->decoder_replay_rows != 256u)) return 0;
+    return DS4_SESSION_REPLAY_SNAPSHOT_HEADER_BYTES +
+        DS4_SESSION_PAYLOAD_U32_FIELDS * 4u +
+        ds41_payload_body_bytes(&s->ds41_graph, s->ds41_graph.pos);
+#else
+    (void)s;
+    return 0;
+#endif
+}
+
+int ds4_session_save_replay_snapshot(ds4_session *s, ds4_session_snapshot *snap,
+                                      char *err, size_t errlen) {
+    if (snap) snap->len = 0;
+#ifdef DS4_HAS_DEEPSEEK41_GPU
+    const uint64_t bytes = ds4_session_replay_snapshot_bytes(s);
+    if (!snap || !bytes || bytes >= SIZE_MAX) {
+        payload_set_err(err, errlen, "no complete decoder replay checkpoint to save");
+        return 1;
+    }
+    if (snap->cap < bytes + 1u) {
+        uint8_t *p = realloc(snap->ptr, (size_t)bytes + 1u);
+        if (!p) {
+            payload_set_err(err, errlen, "cannot allocate decoder replay checkpoint");
+            return 1;
+        }
+        snap->ptr = p;
+        snap->cap = bytes + 1u;
+    }
+    const uint64_t body = bytes - DS4_SESSION_REPLAY_SNAPSHOT_HEADER_BYTES;
+    const uint32_t h[8] = {DS4_SESSION_REPLAY_SNAPSHOT_MAGIC,
+        DS4_SESSION_REPLAY_SNAPSHOT_VERSION, DS4_SESSION_REPLAY_SNAPSHOT_KIND,
+        s->decoder_replay_rows, s->decoder_replay_selected ? 1u : 0u,
+        (uint32_t)body, (uint32_t)(body >> 32), 0};
+    FILE *fp = fmemopen(snap->ptr, (size_t)bytes + 1u, "wb");
+    if (!fp) {
+        payload_set_err(err, errlen, "cannot open decoder replay checkpoint");
+        return 1;
+    }
+    int rc = 0;
+    for (uint32_t i = 0; i < 8u && !rc; i++) rc = payload_write_u32(fp, h[i], err, errlen);
+    if (!rc) rc = ds41_save_payload(s, fp, err, errlen);
+    if (fclose(fp) && !rc) {
+        payload_set_err(err, errlen, "cannot finalize decoder replay checkpoint");
+        rc = 1;
+    }
+    if (!rc) snap->len = bytes;
+    return rc;
+#else
+    (void)s;
+    payload_set_err(err, errlen, "decoder replay checkpoints require GPU DS4.1");
+    return 1;
+#endif
+}
+
+int ds4_session_load_replay_snapshot(ds4_session *s, const ds4_session_snapshot *snap,
+                                      char *err, size_t errlen) {
+#ifdef DS4_HAS_DEEPSEEK41_GPU
+    if (!ds41_replay_checkpoint_supported(s) || !snap || !snap->ptr ||
+        snap->len > snap->cap || snap->len > SIZE_MAX ||
+        snap->len < DS4_SESSION_REPLAY_SNAPSHOT_HEADER_BYTES +
+                    DS4_SESSION_PAYLOAD_U32_FIELDS * 4u) {
+        payload_set_err(err, errlen, "invalid decoder replay checkpoint");
+        return 1;
+    }
+    uint32_t h[8];
+    for (uint32_t i = 0; i < 8u; i++) h[i] = payload_get_u32(snap->ptr + i * 4u);
+    const uint64_t body = (uint64_t)h[5] | (uint64_t)h[6] << 32;
+    const uint8_t *inner = snap->ptr + DS4_SESSION_REPLAY_SNAPSHOT_HEADER_BYTES;
+    if (h[0] != DS4_SESSION_REPLAY_SNAPSHOT_MAGIC ||
+        h[1] != DS4_SESSION_REPLAY_SNAPSHOT_VERSION ||
+        h[2] != DS4_SESSION_REPLAY_SNAPSHOT_KIND ||
+        (h[3] != 128u && h[3] != 256u) || (h[4] & ~1u) || h[7] ||
+        body != snap->len - DS4_SESSION_REPLAY_SNAPSHOT_HEADER_BYTES ||
+        h[3] != ds41_decoder_replay_setting() ||
+        (h[4] != 0) != ds41_decoder_replay_selected_setting() ||
+        payload_get_u32(inner) != DS4_SESSION_PAYLOAD_MAGIC ||
+        payload_get_u32(inner + 4u) != DS4_SESSION_PAYLOAD_VERSION ||
+        payload_get_u32(inner + 8u) != s->ds41_graph.ctx) {
+        payload_set_err(err, errlen, "decoder replay checkpoint policy or layout mismatch");
+        return 1;
+    }
+    FILE *fp = fmemopen((void *)inner, (size_t)body, "rb");
+    if (!fp) {
+        payload_set_err(err, errlen, "cannot open decoder replay checkpoint restore");
+        return 1;
+    }
+    /* Keep canonical exports blocked during and after private restoration. */
+    s->approximate_suffix = true;
+    s->approximate_decoder_replay = true;
+    s->decoder_replay_rows = h[3];
+    s->decoder_replay_selected = h[4] != 0;
+    int rc = ds4_session_load_payload_internal(s, fp, body, err, errlen);
+    if (fclose(fp) && !rc) {
+        payload_set_err(err, errlen, "cannot close decoder replay checkpoint restore");
+        rc = 1;
+    }
+    if (rc) {
+        ds4_session_invalidate(s);
+        return 1;
+    }
+    s->overthink_prompt_len = s->checkpoint.len;
+    s->mtp_draft_valid = false;
+    return 0;
+#else
+    (void)s; (void)snap;
+    payload_set_err(err, errlen, "decoder replay checkpoints require GPU DS4.1");
+    return 1;
+#endif
 }
 
 void ds4_suffix_cache_free(ds4_suffix_cache *cache) {
@@ -79098,6 +79242,8 @@ static int ds4_session_sync_internal(ds4_session *s, const ds4_tokens *prompt, c
             s->checkpoint_valid = false;
             s->approximate_suffix = false;
             s->approximate_decoder_replay = false;
+            s->decoder_replay_rows = 0;
+            s->decoder_replay_selected = false;
         }
         bool pending_logits = false, interrupted = false, decoder_pending = false;
         if (g->prefill_max > g->prefill_cap) {
@@ -79171,11 +79317,22 @@ static int ds4_session_sync_internal(ds4_session *s, const ds4_tokens *prompt, c
             /* Never add an encoder sweep just to defer the decoder. A short
              * remainder finishes the pending decoder here, then runs normally. */
             const bool layer_major = count > 1u;
-            if (!short_count && layer_major && ds41_decoder_replay_rows(g, count)) {
+            const uint32_t replay_rows = !short_count && layer_major ?
+                ds41_decoder_replay_rows(g, count) : 0u;
+            if (replay_rows) {
+                const bool selected = ds41_decoder_replay_selected_setting();
+                if (s->approximate_decoder_replay &&
+                    (s->decoder_replay_rows != replay_rows || s->decoder_replay_selected != selected)) {
+                    ds41_encoder_release(g, &e->model, &encoder);
+                    snprintf(err, errlen, "decoder replay policy changed; invalidate or restore an exact checkpoint first");
+                    return 1;
+                }
                 /* Mark before any approximate writes, including a deferred
                  * encoder sweep. Canonical exports remain unavailable. */
                 s->approximate_suffix = true;
                 s->approximate_decoder_replay = true;
+                s->decoder_replay_rows = replay_rows;
+                s->decoder_replay_selected = selected;
             }
             const bool ok = short_count ?
                 ds41_graph_short_prefill(g, &e->model, &e->weights, prompt->v + i, count) :
@@ -89559,6 +89716,8 @@ void ds4_session_invalidate(ds4_session *s) {
     if (!s) return;
     s->approximate_suffix = false;
     s->approximate_decoder_replay = false;
+    s->decoder_replay_rows = 0;
+    s->decoder_replay_selected = false;
     if (ds4_session_tp_leader(s) &&
         !ds4_tp_failed(s->engine->tp.ctx)) {
         (void)ds4_tp_send_invalidate(s->engine->tp.ctx, s->tp_session_id);

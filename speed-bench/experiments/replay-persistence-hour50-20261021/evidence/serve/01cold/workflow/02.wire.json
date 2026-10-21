@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "seconds": 7.21055275015533,
+  "wire": "{\"id\":\"resp_0f08796c9df7331f26da6326\",\"object\":\"response\",\"created_at\":1792547466,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":false,\"previous_response_id\":null,\"conversation\":null,\"output\":[{\"id\":\"fc_354549c17b901f3a6b1e9ee5\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"read_note\",\"call_id\":\"call_7ab958bbfefd163f7c31029da74eb21b\",\"arguments\":\"{\\\"path\\\":\\\"/Volumes/Models/ds4/.workspaces/replay-persistence-hour50/serve/fixtures/note.json\\\"}\"}],\"usage\":{\"input_tokens\":8761,\"input_tokens_details\":{\"cached_tokens\":8673,\"cache_write_tokens\":88},\"output_tokens\":62,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":8823}}"
+}

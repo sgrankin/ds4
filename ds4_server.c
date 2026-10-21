@@ -10671,8 +10671,8 @@ static void server_context_cache_profile(const server *s, const request *req,
         buf_puts(&identity, ":suffix:");
         buf_puts(&identity, req->prompt_cache_key);
     } else {
-        /* Replay keeps only a private live graph; suffix capture/export stays
-         * disabled. Retain it across matching continuations of this profile. */
+        /* Replay checkpoints resume under this policy; they are not suffix
+         * sources. Matching live continuations use the same identity. */
         const char *selected = getenv("DS4_V41_DECODER_REPLAY_SELECTED");
         buf_puts(&identity, ":decoder-replay-v1:");
         buf_puts(&identity, replay_rows);
@@ -13022,16 +13022,19 @@ static void server_state_cache_load_prefix(server *s, server_slot *slot,
         ds4_suffix_cache original = {.state = snap, .engine = s->engine,
             .ctx_size = s->ctx_size, .prerope = blob.prerope,
             .prerope_bytes = blob.prerope_bytes};
-        int loaded = !blob.approximate && blob.ctx_size == (uint32_t)s->ctx_size &&
+        int loaded = blob.kind != DS4_STATE_CACHE_SUFFIX &&
+                     blob.ctx_size == (uint32_t)s->ctx_size &&
                      blob.tokens == matched ?
-            (s->context_suffix_reuse && blob.prerope ?
+            (blob.kind == DS4_STATE_CACHE_REPLAY ?
+                ds4_session_load_replay_snapshot(slot->session, &snap, cache_err, sizeof(cache_err)) :
+             s->context_suffix_reuse && blob.prerope ?
                 ds4_session_load_suffix_prefix(slot->session, &original, cache_err, sizeof(cache_err)) :
                 ds4_session_load_snapshot(slot->session, &snap, cache_err, sizeof(cache_err))) : 1;
         if (loaded == 0 &&
             ds4_session_pos(slot->session) == (int)matched &&
             ds4_tokens_starts_with(prompt, ds4_session_tokens(slot->session))) {
-            server_log(DS4_LOG_KVCACHE, "ds4-server: state cache exact hit slot=%d tokens=%u",
-                       slot->id, matched);
+            server_log(DS4_LOG_KVCACHE, "ds4-server: state cache %s hit slot=%d tokens=%u",
+                       blob.kind == DS4_STATE_CACHE_REPLAY ? "replay" : "exact", slot->id, matched);
         } else {
             /* A failed loader may have published only part of a payload. */
             ds4_session_invalidate(slot->session);
@@ -13049,12 +13052,26 @@ static void server_state_cache_load_prefix(server *s, server_slot *slot,
 static void server_state_cache_store_endpoint(server *s, server_slot *slot) {
     if (!s->state_cache || slot_job_cancelled(slot) ||
         ds4_session_has_vision_state(slot->session)) return;
+    bool replay = ds4_session_is_decoder_replay(slot->session);
     bool approximate = ds4_session_is_approximate(slot->session);
-    if (approximate && (!s->context_suffix_reuse || !slot->context_cache_profile[0])) return;
+    if (approximate && !replay && (!s->context_suffix_reuse || !slot->context_cache_profile[0])) return;
     const ds4_tokens *tokens = ds4_session_tokens(slot->session);
     if (!tokens || tokens->len <= 0 || ds4_session_pos(slot->session) != tokens->len) return;
     ds4_suffix_cache captured = {0};
     char cache_err[160] = {0}, key[41];
+    if (replay) {
+        int rc = ds4_session_save_replay_snapshot(slot->session, &captured.state,
+                                                  cache_err, sizeof(cache_err));
+        if (!rc) rc = ds4_state_cache_put_kind(s->state_cache, s->state_cache_profile,
+            captured.state.ptr, captured.state.len, NULL, 0, DS4_STATE_CACHE_REPLAY,
+            key, cache_err, sizeof(cache_err));
+        server_log(rc ? DS4_LOG_WARNING : DS4_LOG_KVCACHE,
+            "ds4-server: state cache replay store %s slot=%d tokens=%d%s%s",
+            rc ? "skipped" : "ok", slot->id, tokens->len,
+            cache_err[0] ? ": " : "", cache_err);
+        ds4_suffix_cache_free(&captured);
+        return;
+    }
     int rc = s->context_suffix_reuse ?
         ds4_session_capture_suffix_cache(slot->session, &captured, cache_err, sizeof(cache_err)) :
         ds4_session_save_snapshot(slot->session, &captured.state, cache_err, sizeof(cache_err));

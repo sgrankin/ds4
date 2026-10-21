@@ -684,3 +684,22 @@ as the legacy escape hatch. Build/server tests pass; all633 guard samples
 normal, peak wired+compressed98.10GiB, max swap growth3.87MiB. Cache restrictions
 were clarified as unfinished prototype integration, without altering runtime.
 [Recipe and current evidence](../../recipes/11-incremental-tool-schemas.md).
+
+Item50 starts **2026-10-21 01:40 UTC**, deadline **02:40 UTC**.
+Support durable replay checkpoints using a small versioned state envelope around
+the existing native body and an explicit resumable replay kind in the SSD
+manifest. Preserve native/grafted formats and immutable chunk sharing. Bind
+replay policy to cache identity, restore its approximate status, and keep replay
+out of suffix-source lookup. Reuse existing model-free cache checks and one
+guarded restart/continuation qualification; no general format rewrite.
+Item51 follows sequentially, with one hour for F16 suffix relocation and
+repeated moves from immutable originals, using the existing probe.
+
+Item50 complete **01:52 UTC**, within budget: private DRP1/REPLAY persistence
+retains approximate identity and old formats. Odd8193 SSD reopen into F16
+retained all bytes and next-token129280 logits exactly. Two fresh server PIDs
+passed actual read workflows; restart restored8616 tokens with no replay sweep
+(47.713s cold/18.628s restart, one ordered pair). All90 pressure samples normal.
+Existing HTTP usage underreports state-cache hits; log evidence is retained and
+a small reporting correction is a separate follow-up.
+[Report](../experiments/replay-persistence-hour50-20261021/README.md).

@@ -70,6 +70,14 @@ static ds4_state_cache *ds4_state_cache_runtime_open(ds4_engine *engine,
     for (size_t i = 0; i < count; i++) fprintf(fp, "%s\n", policy[i]);
     fprintf(fp, "prefill_chunk=%u quality=%d\n",
             ds4_engine_prefill_chunk(engine), options->quality);
+    /* Keep native identities stable; replay checkpoints belong to their
+     * configured forward policy, including selected-expert execution. */
+    const char *replay = getenv("DS4_V41_DECODER_REPLAY_ROWS");
+    if (replay && strcmp(replay, "0")) {
+        const char *selected = getenv("DS4_V41_DECODER_REPLAY_SELECTED");
+        fprintf(fp, "decoder_replay=DRP1 rows=%s selected=%d\n", replay,
+                selected && !strcmp(selected, "1"));
+    }
     free(policy);
     if (fclose(fp)) { free(identity); snprintf(err, errlen, "cannot finish cache identity"); return NULL; }
     ds4_kvstore_sha1_bytes_hex(identity, len, profile);

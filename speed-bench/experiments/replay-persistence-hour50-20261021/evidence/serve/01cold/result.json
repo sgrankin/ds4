@@ -1,0 +1,148 @@
+{
+  "arm": "01cold",
+  "pass": true,
+  "error": null,
+  "pid": 43818,
+  "startup_seconds": 3.071607624879107,
+  "workflow": {
+    "case": "http-replay-persistence",
+    "history_mode": "full",
+    "pass": true,
+    "error": null,
+    "requests": [
+      {
+        "step": 1,
+        "seconds": 37.614524457836524,
+        "usage": {
+          "input_tokens": 8616,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 8616
+          },
+          "output_tokens": 57,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8673
+        },
+        "status": "completed",
+        "output_types": [
+          "message",
+          "tool_search_call"
+        ]
+      },
+      {
+        "step": 2,
+        "seconds": 7.21055275015533,
+        "usage": {
+          "input_tokens": 8761,
+          "input_tokens_details": {
+            "cached_tokens": 8673,
+            "cache_write_tokens": 88
+          },
+          "output_tokens": 62,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8823
+        },
+        "status": "completed",
+        "output_types": [
+          "function_call"
+        ]
+      },
+      {
+        "step": 3,
+        "seconds": 2.8840159999672323,
+        "usage": {
+          "input_tokens": 8854,
+          "input_tokens_details": {
+            "cached_tokens": 8823,
+            "cache_write_tokens": 31
+          },
+          "output_tokens": 26,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8880
+        },
+        "status": "completed",
+        "output_types": [
+          "message"
+        ]
+      }
+    ],
+    "first_search_arguments": {
+      "query": "read_note"
+    },
+    "tool_seconds": 0.00020212517119944096,
+    "actual_file_read": true,
+    "read_sha256": "0e4c3efa0d8e4400a7c69d149842e7ebe4eb7d3ed85801658a9e8acc2027cbfb",
+    "parent_id_after_read_call": "resp_0f08796c9df7331f26da6326",
+    "answer": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ50\",\"current_key\":\"SABLE-1937\"}",
+    "workflow_seconds": 47.712782457936555,
+    "total_seconds": 47.71279287501238
+  },
+  "server_returncode": 0,
+  "arm_seconds": 52.91305537498556,
+  "runtime_replay_lines": [
+    "ds4: V4.1 decoder replay rows=128 floor=8064 end=8192 approximate=1",
+    "ds4: V4.1 decoder replay selected_layers=20 full_layers=0"
+  ],
+  "state_cache_lines": [
+    "1020 21:50:21 ds4-server: state cache enabled dir=/Volumes/Models/ds4/.workspaces/replay-persistence-hour50/serve/cache profile=18c161b5820e690bc7f6da886b19b2c174537ca0",
+    "1020 21:50:54 ds4-server: state cache replay store ok slot=0 tokens=8616",
+    "1020 21:51:02 ds4-server: state cache replay store ok slot=0 tokens=8761",
+    "1020 21:51:07 ds4-server: state cache replay store ok slot=0 tokens=8854"
+  ],
+  "replay_store_lines": [
+    "1020 21:50:54 ds4-server: state cache replay store ok slot=0 tokens=8616",
+    "1020 21:51:02 ds4-server: state cache replay store ok slot=0 tokens=8761",
+    "1020 21:51:07 ds4-server: state cache replay store ok slot=0 tokens=8854"
+  ],
+  "replay_hit_lines": [],
+  "first_request_replay_hit_tokens": 0,
+  "replay_executed": true,
+  "usage": [
+    {
+      "input_tokens": 8616,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 8616
+      },
+      "output_tokens": 57,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 8673
+    },
+    {
+      "input_tokens": 8761,
+      "input_tokens_details": {
+        "cached_tokens": 8673,
+        "cache_write_tokens": 88
+      },
+      "output_tokens": 62,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 8823
+    },
+    {
+      "input_tokens": 8854,
+      "input_tokens_details": {
+        "cached_tokens": 8823,
+        "cache_write_tokens": 31
+      },
+      "output_tokens": 26,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 8880
+    }
+  ],
+  "eligible_prompt": true,
+  "first_request_cached_tokens": 0,
+  "usage_limitation": "HTTP cached_tokens is counted before the state-cache loader; it may underreport SSD hits. First-request replay-hit log is the qualification evidence.",
+  "successful_replay_store": true
+}

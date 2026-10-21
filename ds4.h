@@ -680,6 +680,23 @@ int ds4_session_save_snapshot(ds4_session *s, ds4_session_snapshot *snap, char *
 int ds4_session_load_snapshot(ds4_session *s, const ds4_session_snapshot *snap, char *err, size_t errlen);
 void ds4_session_snapshot_free(ds4_session_snapshot *snap);
 
+/* Private decoder-replay checkpoint: a 32-byte little-endian DRP1 envelope
+ * around unchanged DSV4 v2 bytes. Fields: magic, version, kind=1, replay rows,
+ * flags(bit0=selected requested), inner bytes low/high, reserved=0.
+ * Frontends bind model/forward policy through their cache profile. Loading
+ * requires matching configured rows/selected and preserves approximate state;
+ * canonical snapshot APIs never accept or emit this envelope. */
+#define DS4_SESSION_REPLAY_SNAPSHOT_MAGIC UINT32_C(0x31505244) /* "DRP1" */
+#define DS4_SESSION_REPLAY_SNAPSHOT_VERSION 1u
+#define DS4_SESSION_REPLAY_SNAPSHOT_HEADER_BYTES 32u
+#define DS4_SESSION_REPLAY_SNAPSHOT_KIND 1u
+bool ds4_session_is_decoder_replay(const ds4_session *s);
+uint64_t ds4_session_replay_snapshot_bytes(ds4_session *s);
+int ds4_session_save_replay_snapshot(ds4_session *s, ds4_session_snapshot *snap,
+                                      char *err, size_t errlen);
+int ds4_session_load_replay_snapshot(ds4_session *s, const ds4_session_snapshot *snap,
+                                      char *err, size_t errlen);
+
 /* Experimental session-private stale suffix cache. Explicit calls opt in;
  * ordinary sync never uses this path. Without pre-RoPE originals capture a
  * freshly evaluated text-only DS4.1 checkpoint with no prior suffix graft,

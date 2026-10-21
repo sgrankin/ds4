@@ -36,14 +36,44 @@ that owner under the existing inference lock. Active sessions still have their
 own mutable GPU graphs. This storage layer is not GPU paged attention or a new
 concurrent GPU scheduler.
 
-Exact lookup requires a compatible model/forward-policy profile and token IDs,
-and excludes private suffix-approximate sources. Our profile includes model
+Prefix lookup requires a compatible model/forward-policy profile and token IDs.
+It returns native or explicitly typed decoder-replay checkpoints; private
+suffix-approximate sources remain excluded. A replay restore stays approximate.
+Our profile includes model
 file identity/stat metadata, context, routed quantization, chunk/quality mode
-and sorted `DS4_METAL_*` environment settings. It is not a full 365 GB weight-file
+and sorted `DS4_METAL_*` environment settings, with replay K/selected policy added
+for replay configurations. It is not a full 365 GB weight-file
 digest. Suffix discovery can enumerate private approximate originals, with
 the caller still checking latest-User freshness and relocation geometry.
 See [host cache API](../ds4_state_cache.h),
 [implementation](../ds4_state_cache.c) and [profile adapter](../ds4_state_cache_runtime.h).
+
+## Typed replay persistence and format boundaries
+
+Item50 adds a resumable replay kind without changing the old native or suffix
+encodings. The `DS4SC01` manifest distinguishes native (0), original-backed
+suffix (1) and decoder replay (2). Replay state has a versioned 32-byte `DRP1`
+envelope around the existing `DSV4` v2 payload, recording replay K and the
+selected-expert setting. The dedicated loader checks those settings and retains
+the approximate/replay identity. Canonical exports and suffix capture stay
+blocked; replay records cannot appear in suffix discovery. See the
+[replay recipe](12-bounded-decoder-replay.md) and
+[Item50 qualification](../speed-bench/experiments/replay-persistence-hour50-20261021/README.md)
+for the SSD reopen, cross-layout fresh-logit and real server-restart qualification.
+
+The new reader still accepts old native/suffix records. Downgrading to an older
+reader makes replay records unknown: its startup cleanup prunes those manifests
+and unreferenced chunks, so replay must be recomputed. These are disposable KV
+records, not the agent's factual archive. Keep one process owner per directory.
+
+The design is sufficient for this cache: immutable hashed chunks, atomic
+manifest publication and explicit state kinds/versions permit this bounded
+extension. It is not a generic portable database. The adapter still hardcodes
+DS4.1 layer counts, dimensions, vocabulary and frontier layout; a different
+architecture needs a deliberate adapter/format change. Disk payloads retain F32
+values even with the opt-in F16 runtime main cache, so runtime allocation savings
+do not halve persisted bytes. A replay's inner `DSV4` bytes are storage inside
+its private envelope, not permission to load the state as canonical/exact.
 
 ## Knobs and scope
 

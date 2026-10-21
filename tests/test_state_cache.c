@@ -71,15 +71,27 @@ static fixture make_fixture(uint32_t n) {
     return f;
 }
 
-static void equal_source(ds4_state_cache *c, const char *key, const fixture *f, bool approx) {
+static fixture make_replay_fixture(const fixture *native) {
+    fixture f = {.bytes = native->bytes + 32u, .n = native->n};
+    f.p = calloc(1, (size_t)f.bytes); assert(f.p);
+    const uint32_t h[8] = {0x31505244u, 1, 1, 128, 1,
+                           (uint32_t)native->bytes, (uint32_t)(native->bytes >> 32), 0};
+    for (unsigned i = 0; i < 8; i++) ds4_kvstore_le_put32(f.p + i * 4u, h[i]);
+    memcpy(f.p + 32u, native->p, (size_t)native->bytes);
+    return f;
+}
+
+static void equal_source(ds4_state_cache *c, const char *key, const fixture *f,
+                          ds4_state_cache_kind kind) {
     char err[256] = {0};
     ds4_state_cache_ref *r = ds4_state_cache_get(c, key); assert(r);
     ds4_state_cache_blob b = {0};
     assert(ds4_state_cache_materialize(r, &b, err, sizeof(err)) == 0);
-    assert(b.tokens == f->n && b.ctx_size == 8192 && b.approximate == approx);
+    assert(b.tokens == f->n && b.ctx_size == 8192 && b.kind == kind);
+    assert(b.approximate == (kind != DS4_STATE_CACHE_NATIVE));
     assert(b.state_bytes == f->bytes && b.prerope_bytes == f->pre_bytes);
     assert(!memcmp(b.state, f->p, (size_t)f->bytes));
-    assert(!memcmp(b.prerope, f->pre, (size_t)f->pre_bytes));
+    if (f->pre_bytes) assert(!memcmp(b.prerope, f->pre, (size_t)f->pre_bytes));
     ds4_state_cache_release(r);
     /* Materialization is independently owned after releasing the cache pin. */
     assert(!memcmp(b.state, f->p, (size_t)f->bytes));
@@ -94,8 +106,8 @@ int main(int argc, char **argv) {
     snprintf(dir, sizeof(dir), "%s/tier", argv[1]);
     const uint64_t hot = 1024u * 1024u, disk = 96u * 1024u * 1024u;
     ds4_state_cache *c = ds4_state_cache_open(dir, hot, disk, err, sizeof(err)); assert(c);
-    fixture a = make_fixture(2048), b = make_fixture(2051);
-    char ka[41], kb[41], kd[41];
+    fixture a = make_fixture(2048), b = make_fixture(2051), replay = make_replay_fixture(&b);
+    char ka[41], kb[41], kd[41], kr[41];
 
     /* Make an ordinary atomic rename fail independently of cache internals.
      * Its first immutable header chunk cannot replace this directory. */
@@ -123,7 +135,8 @@ int main(int argc, char **argv) {
     assert(two.endpoints == 2 && two.hot_bytes <= hot && two.ssd_bytes <= disk);
     /* Sharing must save the 12.5 MiB full cumulative page, not just headers. */
     assert(two.ssd_bytes + 12u * 1024u * 1024u < a.bytes + a.pre_bytes + b.bytes + b.pre_bytes);
-    equal_source(c, ka, &a, false); equal_source(c, kb, &b, false);
+    equal_source(c, ka, &a, DS4_STATE_CACHE_NATIVE);
+    equal_source(c, kb, &b, DS4_STATE_CACHE_NATIVE);
     ds4_state_cache_get_stats(c, &two); assert(two.disk_reads > 0);
     /* Later mutation of borrowed input storage cannot mutate cached sources. */
     uint8_t saved = a.p[52]; a.p[52] ^= 1;
@@ -142,19 +155,64 @@ int main(int argc, char **argv) {
     assert(!ds4_state_cache_find_prefix(c, "native-model-profile", 8192, ids, b.n, NULL));
     ids[0] ^= 1;
 
+    const char *replay_profile = "model-profile-replay-K128-selected1";
+    assert(ds4_state_cache_put_kind(c, replay_profile, replay.p, replay.bytes,
+        NULL, 0, DS4_STATE_CACHE_REPLAY, kr, err, sizeof(err)) == 0);
+    equal_source(c, kr, &replay, DS4_STATE_CACHE_REPLAY);
+    r = ds4_state_cache_find_prefix(c, replay_profile, 8192, ids, b.n + 1u, &matched);
+    assert(r && matched == b.n); ds4_state_cache_release(r);
+    assert(!ds4_state_cache_find_prefix(c, "model-profile-replay-K256-selected1",
+        8192, ids, b.n, NULL));
+    assert(!ds4_state_cache_find_suffix(c, replay_profile, 8192, ids + b.n - 64u, 64u, NULL));
+    char replay_cursor[41] = {0};
+    assert(!ds4_state_cache_next_candidate(c, replay_profile, 8192,
+        replay_cursor, NULL, NULL, NULL));
+    assert(ds4_state_cache_put_kind(c, replay_profile, replay.p, replay.bytes,
+        NULL, 0, (ds4_state_cache_kind)3, kr, err, sizeof(err)) != 0);
+    assert(ds4_state_cache_put(c, replay_profile, replay.p, replay.bytes,
+        NULL, 0, false, kr, err, sizeof(err)) != 0);
+
     ds4_kvstore_le_put32(b.p, 0x44535344u);
     assert(ds4_state_cache_put(c, "approx-only", b.p, b.bytes, b.pre, b.pre_bytes,
                                true, kd, err, sizeof(err)) == 0);
     assert(!ds4_state_cache_find_prefix(c, "approx-only", 8192, ids, b.n, NULL));
     assert(ds4_state_cache_put(c, "approx-only", b.p, b.bytes, b.pre, b.pre_bytes,
                                false, kd, err, sizeof(err)) != 0);
-    equal_source(c, kd, &b, true);
+    equal_source(c, kd, &b, DS4_STATE_CACHE_SUFFIX);
     assert(ds4_state_cache_close(c, err, sizeof(err)) == 0);
 
+    /* A future manifest kind is a cache miss, not an exact or suffix state. */
+    char manifest_path[4096], unknown_key[41];
+    path_n = snprintf(manifest_path, sizeof(manifest_path), "%s/ds4sc-%s.manifest", dir, kr);
+    assert(path_n > 0 && (size_t)path_n < sizeof(manifest_path));
+    struct stat manifest_stat; assert(!stat(manifest_path, &manifest_stat));
+    size_t manifest_bytes = (size_t)manifest_stat.st_size;
+    uint8_t *manifest = malloc(manifest_bytes); assert(manifest);
+    FILE *fp = fopen(manifest_path, "rb"); assert(fp);
+    assert(fread(manifest, 1, manifest_bytes, fp) == manifest_bytes && !fclose(fp));
+    assert(!memcmp(manifest, "DS4SC01\0", 8));
+    assert(ds4_kvstore_le_get32(manifest + 16) == DS4_STATE_CACHE_REPLAY);
+    ds4_kvstore_le_put32(manifest + 16, 3);
+    ds4_kvstore_sha1_bytes_hex(manifest, manifest_bytes, unknown_key);
+    path_n = snprintf(manifest_path, sizeof(manifest_path), "%s/ds4sc-%s.manifest", dir, unknown_key);
+    assert(path_n > 0 && (size_t)path_n < sizeof(manifest_path));
+    fp = fopen(manifest_path, "wb"); assert(fp);
+    assert(fwrite(manifest, 1, manifest_bytes, fp) == manifest_bytes && !fclose(fp));
+    free(manifest);
+
     c = ds4_state_cache_open(dir, hot, disk, err, sizeof(err)); assert(c);
-    equal_source(c, ka, &a, false); equal_source(c, kd, &b, true);
+    assert(!ds4_state_cache_get(c, unknown_key));
+    equal_source(c, ka, &a, DS4_STATE_CACHE_NATIVE);
+    equal_source(c, kd, &b, DS4_STATE_CACHE_SUFFIX);
+    equal_source(c, kr, &replay, DS4_STATE_CACHE_REPLAY);
+    r = ds4_state_cache_find_prefix(c, replay_profile, 8192, ids, b.n, &matched);
+    assert(r && matched == b.n); ds4_state_cache_release(r);
+    assert(!ds4_state_cache_find_suffix(c, replay_profile, 8192, ids + b.n - 64u, 64u, NULL));
+    replay_cursor[0] = 0;
+    assert(!ds4_state_cache_next_candidate(c, replay_profile, 8192,
+        replay_cursor, NULL, NULL, NULL));
     ds4_kvstore_le_put32(b.p, 0x34565344u);
-    equal_source(c, kb, &b, false);
+    equal_source(c, kb, &b, DS4_STATE_CACHE_NATIVE);
     char cursor[41] = {0}; unsigned seen = 0; const int *borrowed; uint32_t n;
     while ((r = ds4_state_cache_next_candidate(c, "native-model-profile", 8192,
                                               cursor, &borrowed, &n, NULL))) {
@@ -176,10 +234,10 @@ int main(int argc, char **argv) {
     /* Reopening with a smaller SSD budget evicts unpinned endpoints/pages. */
     c = ds4_state_cache_open(dir, hot, first.ssd_bytes + 65536u, err, sizeof(err)); assert(c);
     ds4_state_cache_get_stats(c, &two);
-    assert(two.endpoint_evictions > 0 && two.endpoints < 3);
+    assert(two.endpoint_evictions > 0 && two.endpoints < 4);
     assert(two.ssd_bytes <= first.ssd_bytes + 65536u);
     assert(ds4_state_cache_close(c, err, sizeof(err)) == 0);
-    free(ids); free(a.p); free(a.pre); free(b.p); free(b.pre);
-    puts("state-cache: dedup, RAM spill, SSD restart, immutable sources, discovery and budgets PASS");
+    free(ids); free(a.p); free(a.pre); free(b.p); free(b.pre); free(replay.p);
+    puts("state-cache: dedup, RAM spill, SSD restart, native/suffix/replay kinds, discovery and budgets PASS");
     return 0;
 }

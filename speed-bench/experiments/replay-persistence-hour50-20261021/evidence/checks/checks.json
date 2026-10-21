@@ -1,0 +1,29 @@
+{
+  "base_revision": "c360d3789a8e64c8c4612eaeb51751f8eca12396",
+  "builds": [
+    {
+      "command": "make -j6 ds4-server ds4-agent speed-bench/replay_checkpoint_bench ds4_test ds4_agent_test",
+      "returncode": 0
+    }
+  ],
+  "tests": [
+    {
+      "command": "clang -std=c11 -O2 -ffunction-sections -fdata-sections tests/test_state_cache.c ds4_state_cache.c ds4_kvstore.c -Wl,-dead_strip -lm -o tests/test_state_cache && ./tests/test_state_cache .workspaces/replay-persistence-hour50/unit-cache",
+      "returncode": 0,
+      "result": "state-cache: dedup, RAM spill, SSD restart, native/suffix/replay kinds, discovery and budgets PASS"
+    },
+    {
+      "command": "./ds4_test --server",
+      "returncode": 0
+    },
+    {
+      "command": "./ds4_agent_test",
+      "returncode": 0
+    }
+  ],
+  "binary_sha256": {
+    "ds4-server": "682256f532243beb179454766ae043a7c58317bb0b2820cc46e1e3ab6971b883",
+    "ds4-agent": "5b023828c180e7e723314b39262dcd066fc4abc6393b50d8d3a35f9ac60deca9",
+    "speed-bench/replay_checkpoint_bench": "8ae810c7d8f774a54481432d43daa4f0507501589ff83df42bb1f87c630b496a"
+  }
+}

@@ -5433,12 +5433,14 @@ static bool agent_state_cache_allowed(agent_worker *w) {
 }
 
 static bool agent_state_cache_materialize(agent_worker *w, ds4_state_cache_ref *ref,
-                                         ds4_suffix_cache *out, char *err, size_t errlen) {
+                                         ds4_suffix_cache *out, ds4_state_cache_kind *kind,
+                                         char *err, size_t errlen) {
     ds4_state_cache_blob blob = {0};
     if (ds4_state_cache_materialize(ref, &blob, err, errlen)) return false;
     if (blob.ctx_size != (uint32_t)agent_worker_effective_ctx_size(w)) {
         ds4_state_cache_blob_free(&blob); return false;
     }
+    if (kind) *kind = blob.kind;
     *out = (ds4_suffix_cache){.state = {.ptr = blob.state, .len = blob.state_bytes,
                                       .cap = blob.state_bytes},
         .prerope = blob.prerope, .prerope_bytes = blob.prerope_bytes,
@@ -5461,9 +5463,10 @@ static bool agent_state_cache_put_source(agent_worker *w, const ds4_suffix_cache
 }
 
 static void agent_state_cache_store_endpoint(agent_worker *w) {
+    bool replay = ds4_session_is_decoder_replay(w->session);
     if (!agent_state_cache_allowed(w) || worker_cancel_session_cb(w) ||
-        (ds4_session_is_approximate(w->session) && !agent_context_prerope_requested())) return;
-    uint64_t bytes = agent_context_prerope_requested()
+        (ds4_session_is_approximate(w->session) && !replay && !agent_context_prerope_requested())) return;
+    uint64_t bytes = replay ? ds4_session_replay_snapshot_bytes(w->session) : agent_context_prerope_requested()
         ? ds4_session_suffix_cache_bytes(w->session) : ds4_session_payload_bytes(w->session);
     uint64_t budget = (uint64_t)agent_parse_int_default(
         getenv("DS4_AGENT_CONTEXT_FRONTIER_MB"), 128, 1, 1024) << 20;
@@ -5474,6 +5477,16 @@ static void agent_state_cache_store_endpoint(agent_worker *w) {
         return;
     }
     ds4_suffix_cache source = {0}; char err[160] = {0}, key[41];
+    if (replay) {
+        int rc = ds4_session_save_replay_snapshot(w->session, &source.state, err, sizeof(err));
+        if (!rc) rc = ds4_state_cache_put_kind(w->state_cache, w->state_cache_profile,
+            source.state.ptr, source.state.len, NULL, 0, DS4_STATE_CACHE_REPLAY,
+            key, err, sizeof(err));
+        agent_trace(w, "state cache replay store %s tokens=%d%s%s", rc ? "miss" : "ok",
+            ds4_session_pos(w->session), err[0] ? " error=" : "", err);
+        ds4_suffix_cache_free(&source);
+        return;
+    }
     int rc = agent_context_prerope_requested()
         ? ds4_session_capture_suffix_cache(w->session, &source, err, sizeof(err))
         : ds4_session_save_snapshot(w->session, &source.state, err, sizeof(err));
@@ -5494,6 +5507,7 @@ static bool agent_state_cache_restore_prefix(agent_worker *w, const ds4_tokens *
         tokens->v, (uint32_t)tokens->len, &matched);
     if (!ref) return false;
     ds4_suffix_cache source = {0}; char err[160] = {0}; bool ok = false;
+    ds4_state_cache_kind kind = DS4_STATE_CACHE_NATIVE;
     uint64_t state_bytes, pre_bytes;
     ds4_state_cache_ref_sizes(ref, &state_bytes, &pre_bytes);
     uint64_t budget = (uint64_t)agent_parse_int_default(
@@ -5502,9 +5516,12 @@ static bool agent_state_cache_restore_prefix(agent_worker *w, const ds4_tokens *
         (w->state_cache_staged_bytes ? 0u : (UINT64_C(8) << 20));
     if (matched > have && staged <= budget && w->state_cache_staged_bytes <= budget - staged &&
         w->context_frontier_bytes <= budget - staged - w->state_cache_staged_bytes &&
-        agent_state_cache_materialize(w, ref, &source, err, sizeof(err)) && !source.approximate) {
+        agent_state_cache_materialize(w, ref, &source, &kind, err, sizeof(err)) &&
+        (!source.approximate || kind == DS4_STATE_CACHE_REPLAY)) {
         ds4_session_set_cancel(w->session, worker_cancel_session_cb, w);
-        ok = (agent_context_prerope_requested()
+        ok = (kind == DS4_STATE_CACHE_REPLAY
+            ? ds4_session_load_replay_snapshot(w->session, &source.state, err, sizeof(err))
+            : agent_context_prerope_requested()
             ? ds4_session_load_suffix_prefix(w->session, &source, err, sizeof(err))
             : ds4_session_load_snapshot(w->session, &source.state, err, sizeof(err))) == 0;
         ds4_session_set_cancel(w->session, NULL, NULL);
@@ -5512,7 +5529,8 @@ static bool agent_state_cache_restore_prefix(agent_worker *w, const ds4_tokens *
         ok = ok && live && live->len == (int)matched &&
              !memcmp(live->v, tokens->v, (size_t)matched * sizeof(int));
         if (!ok) ds4_session_invalidate(w->session);
-        agent_trace(w, "state cache exact prefix %s tokens=%u%s%s", ok ? "hit" : "miss",
+        agent_trace(w, "state cache %s prefix %s tokens=%u%s%s",
+                    kind == DS4_STATE_CACHE_REPLAY ? "replay" : "exact", ok ? "hit" : "miss",
                     matched, err[0] ? " error=" : "", err);
     }
     ds4_suffix_cache_free(&source); ds4_state_cache_release(ref); return ok;
@@ -5743,7 +5761,7 @@ static bool agent_worker_restore_context_frontier(agent_worker *w,
         if (!f->disk_key[0] || (ref && staged <= budget &&
             w->state_cache_staged_bytes <= budget - staged &&
             w->context_frontier_bytes <= budget - staged - w->state_cache_staged_bytes &&
-            agent_state_cache_materialize(w, ref, &disk_source, err, sizeof(err)))) {
+            agent_state_cache_materialize(w, ref, &disk_source, NULL, err, sizeof(err)))) {
             if (f->disk_key[0]) source = &disk_source;
             if (!source->approximate)
                 rc = agent_context_prerope_requested()
@@ -6413,7 +6431,7 @@ static int agent_worker_try_context_suffix(agent_worker *w, const ds4_tokens *ed
         ds4_session_save_snapshot(w->session, &undo, attempt_err, sizeof(attempt_err)) != 0)
         goto done;
     if (plan.disk_ref) {
-        if (!agent_state_cache_materialize(w, plan.disk_ref, &cache, attempt_err, sizeof(attempt_err))) goto done;
+        if (!agent_state_cache_materialize(w, plan.disk_ref, &cache, NULL, attempt_err, sizeof(attempt_err))) goto done;
         if (!agent_context_prerope_requested()) {
             free(cache.prerope); cache.prerope = NULL; cache.prerope_bytes = 0;
         }

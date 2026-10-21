@@ -14,12 +14,21 @@
 typedef struct ds4_state_cache ds4_state_cache;
 typedef struct ds4_state_cache_ref ds4_state_cache_ref;
 
+/* On-disk DS4SC01 kind at header offset 16. Values 0/1 retain the original
+ * exact/approximate encoding; older readers reject the new replay kind. */
+typedef enum {
+    DS4_STATE_CACHE_NATIVE = 0,
+    DS4_STATE_CACHE_SUFFIX = 1,
+    DS4_STATE_CACHE_REPLAY = 2,
+} ds4_state_cache_kind;
+
 typedef struct {
     uint8_t *state;
     uint64_t state_bytes;
     uint8_t *prerope;
     uint64_t prerope_bytes;
     uint32_t ctx_size, tokens;
+    ds4_state_cache_kind kind;
     bool approximate;
 } ds4_state_cache_blob;
 
@@ -36,11 +45,19 @@ typedef struct {
 ds4_state_cache *ds4_state_cache_open(const char *dir, uint64_t hot_bytes,
                                      uint64_t ssd_bytes, char *err, size_t errlen);
 
-/* Borrow inputs only until return. Store DSV4 as exact, DSSD as approximate;
- * approximate sources require their original pre-RoPE blob. A successful put
+/* Borrow inputs only until return. Store DSV4 as native, DSSD as suffix state,
+ * or DRP1 as resumable decoder replay. Suffix states require their original
+ * pre-RoPE blob; replay states cannot carry one or serve as suffix sources.
+ * A successful put
  * is committed to SSD. Pages are shared by byte hash, not by mutable pointers.
  * key is a stable 40-character identifier for this immutable source.
  */
+int ds4_state_cache_put_kind(ds4_state_cache *cache, const char *profile,
+                             const void *state, uint64_t state_bytes,
+                             const void *prerope, uint64_t prerope_bytes,
+                             ds4_state_cache_kind kind, char key[41],
+                             char *err, size_t errlen);
+/* Compatibility entry point: false selects native, true selects suffix state. */
 int ds4_state_cache_put(ds4_state_cache *cache, const char *profile,
                         const void *state, uint64_t state_bytes,
                         const void *prerope, uint64_t prerope_bytes,
@@ -48,7 +65,9 @@ int ds4_state_cache_put(ds4_state_cache *cache, const char *profile,
                         char *err, size_t errlen);
 
 /* Returned references pin the endpoint and its chunks against eviction.
- * Exact lookup returns the longest captured native prefix of ids[0:n].
+ * Prefix lookup returns the longest captured native or replay prefix of ids[0:n].
+ * The profile must include replay K/selected policy; the core replay loader also
+ * validates that policy. A replay result remains approximate after restoration.
  * Suffix lookup returns a candidate whose endpoint ends in all supplied ids;
  * source_start identifies that suffix in the stored original token history.
  * The caller still checks relocation, fresh-tail and latest-user eligibility.
@@ -67,7 +86,8 @@ ds4_state_cache_ref *ds4_state_cache_find_suffix(ds4_state_cache *cache,
 
 /* Restart discovery: initialize cursor[0]=0, iterate key order, and release
  * every returned reference. ids are borrowed immutable bytes owned by that
- * reference, valid until release. Both exact and approximate sources appear;
+ * reference, valid until release. Native and suffix sources appear; resumable
+ * replay states are excluded because they cannot be relocated.
  * the caller matches its anchor and checks full suffix geometry. No graph or
  * large state blob is materialized merely to enumerate token histories.
  */
@@ -80,7 +100,8 @@ ds4_state_cache_ref *ds4_state_cache_next_candidate(ds4_state_cache *cache,
                                                   bool *approximate);
 
 /* Fresh owned bytes, valid after release/reset/overwrite of any session.
- * Exact state loads through existing payload APIs. A suffix caller rebinds
+ * Native state loads through existing payload APIs; replay state requires its
+ * dedicated loader. A suffix caller rebinds
  * its engine pointer after checking profile/context; no pointer is persisted.
  */
 int ds4_state_cache_materialize(ds4_state_cache_ref *ref,

@@ -61,20 +61,35 @@ Approximation is marked before writes and remains sticky through continuation.
 Turning the variable off does not restore exactness to an existing live session.
 Canonical payload/layer/snapshot exports and suffix capture are blocked,
 including capture with original pre-RoPE tape. Invalidation/recomputation or a
-successful canonical load clears that state. This keeps approximate replay out
-of ordinary token-keyed prefix caches and relocatable suffix sources.
+successful canonical load clears that state. Private replay persistence uses a
+separate typed path; it never makes the state an exact canonical prefix or a
+relocatable suffix source.
 
-The persistence restriction is an intentional first-prototype guard, not a
-fundamental inability to save these tensors. A separately tagged checkpoint
-could restore and continue the same approximate state; restoring it would not
-make its activations native or exact. This capability is not implemented.
+## Private persistent replay checkpoints (Item50)
 
-The current SSD cache's approximate record kind specifically represents an
-original-backed, relocatable suffix and requires its pre-RoPE tape. Decoder
-replay is a different state kind. Durable replay would need its own tag/profile
-and a loader that preserves the approximation identity instead of importing it
-as an exact prefix. Matching live continuations work today; ordinary disk
-persistence of replay state remains blocked.
+Item47 intentionally allowed matching live continuations while blocking disk
+persistence. Item50 adds dedicated save/load APIs and cache kind
+`DS4_STATE_CACHE_REPLAY`. Its 32-byte `DRP1` v1 envelope records K and selected
+policy around the existing `DSV4` v2 payload. Prefix lookup uses matching
+model/forward-policy and token identities; the loader independently checks
+configured K/selected settings and restores both approximate and decoder-replay
+flags. Restored sessions can continue decoding without relabelling their
+activations as exact.
+
+Canonical export and suffix capture remain blocked, including with a pre-RoPE
+tape. Replay records carry no originals tape and are excluded from suffix lookup
+and enumeration. Native and original-backed suffix formats remain readable.
+An older reader rejects/prunes the unknown replay kind on downgrade; KV is
+recomputed. The disk payload still uses F32 cache values even when the receiving
+session uses F16 runtime compressed KV. This is typed private persistence,
+not a canonical disk-format change or a shared mutable GPU cache.
+
+[Item50 qualification](../speed-bench/experiments/replay-persistence-hour50-20261021/README.md)
+passed odd-frontier SSD reopen into F16 with identical fresh logits and a real
+server restart restoring 8,616 tokens. Both actual tool-read workflows passed.
+One ordered cold/restart pair took 47.713/18.628s; this is restart evidence,
+not a bracketed throughput estimate. [Checkpoint storage](03-state-cache.md) describes ownership,
+compatibility and the architecture-specific layout boundaries.
 
 ## Item47 method
 
@@ -158,7 +173,8 @@ includes a 433-token normally processed tail and real tool round trips.
 This qualifies an opt-in for these fixtures, with no whole-agent, coding or
 general task-quality claim. The existing batched 512-row preset is unchanged
 and does not activate the wide path. Canonical SSD prefix storage and suffix
-capture remain blocked for private replay state. Use the existing
+capture were blocked in that Item47 measurement and remain blocked; Item50's
+typed private persistence is a separate follow-up. Use the existing
 [HTTP driver and exact first-output evidence](../speed-bench/experiments/decoder-replay-hour47-20261020/README.md#fixed-http360-result-bounded-whole-workflow-qualification)
 to reproduce the measured configuration; incremental schemas were fixed on,
 native routing was used and suffix reuse/application SSD KV cache were off.

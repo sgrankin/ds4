@@ -1,0 +1,11 @@
+{
+  "pass": true,
+  "identical_first_request": true,
+  "distinct_processes": true,
+  "cold_workflow_seconds": 47.712782457936555,
+  "restart_workflow_seconds": 18.627922999905422,
+  "restart_restored_tokens": 8616,
+  "restart_replay_executed": false,
+  "actual_file_reads": 2,
+  "scope": "one ordered cold/restart pair; restart benefit, not an ABBA latency comparison or physical cold SSD proof"
+}
