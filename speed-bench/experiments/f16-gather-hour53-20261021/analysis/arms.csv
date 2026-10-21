@@ -1,0 +1,7 @@
+directory,case,packed,sync_ms,teacher_ms,greedy_sync_ms,greedy_ms,practical_ms,teacher_rows,byte_equal_rows,all_rows_byte_equal,mean_delta_nll,max_abs_delta_nll,mean_kl,max_kl,argmax_flips,answer_correct,answer_text_equal,answer_tokens_equal
+01-ordinary-packed0,ordinary,0,22123.35,1368.089,21305.305,1247.506,22552.811,7,7,True,0.0,0.0,0.0,0.0,0,True,True,True
+02-ordinary-packed1,ordinary,1,22947.081,1684.323,21327.009,1290.234,22617.243,7,7,True,0.0,0.0,0.0,0.0,0,True,True,True
+03-ordinary-packed1,ordinary,1,22199.23,1536.036,21725.764,1456.632,23182.396,7,7,True,0.0,0.0,0.0,0.0,0,True,True,True
+04-ordinary-packed0,ordinary,0,23959.072,1502.645,22698.016,1441.573,24139.589,7,7,True,0.0,0.0,0.0,0.0,0,True,True,True
+05-favorable-packed0,favorable,0,23499.78,1633.794,22262.758,1484.353,23747.111,8,8,True,0.0,0.0,0.0,0.0,0,True,True,True
+06-favorable-packed1,favorable,1,23329.934,1699.413,22133.199,1501.845,23635.044,8,8,True,0.0,0.0,0.0,0.0,0,True,True,True

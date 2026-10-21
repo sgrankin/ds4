@@ -559,6 +559,7 @@ static int check_compressed_kv_f16(void) {
     const float scales[] = {0x1p-9f, 0x1p-6f, .5f, 1.0f, 64.0f, 448.0f};
     const float alphabet[] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
     const int32_t picked[KEPT] = {8, 0, 5, 2};
+    const int32_t identity[KEPT] = {0, 1, 2, 3};
     float source[N], quantized[N], actual[KEPT * WIDTH];
     for (int i = 0; i < N; i++) {
         float value = scales[(i / 16) % 6] * alphabet[i % 8];
@@ -569,12 +570,19 @@ static int check_compressed_kv_f16(void) {
     ds4_gpu_tensor *plain = upload(source, sizeof(source));
     ds4_gpu_tensor *packed = upload(NULL, packed_bytes);
     ds4_gpu_tensor *ids = upload(picked, sizeof(picked));
+    ds4_gpu_tensor *identity_ids = upload(identity, sizeof(identity));
     ds4_gpu_tensor *out = upload(NULL, sizeof(actual));
-    CHECK(plain && packed && ids && out);
+    const uint64_t selected_bytes = (PREFIX + KEPT + 1u) * row_bytes;
+    ds4_gpu_tensor *selected_storage = upload(NULL, selected_bytes);
+    CHECK(plain && packed && ids && identity_ids && out && selected_storage);
     uint8_t *guard = ds4_gpu_tensor_contents(packed);
     CHECK(guard); memset(guard, 0xa5, (size_t)packed_bytes);
+    uint8_t *selected_guard = ds4_gpu_tensor_contents(selected_storage);
+    CHECK(selected_guard); memset(selected_guard, 0xa5, (size_t)selected_bytes);
     ds4_gpu_tensor *cache = ds4_gpu_tensor_view(packed, PREFIX * row_bytes, ROWS * row_bytes);
-    CHECK(cache && ds4_gpu_tensor_bytes(cache) == sizeof(source) / 2);
+    ds4_gpu_tensor *selected = ds4_gpu_tensor_view(selected_storage,
+        PREFIX * row_bytes, KEPT * row_bytes);
+    CHECK(cache && selected && ds4_gpu_tensor_bytes(cache) == sizeof(source) / 2);
     CHECK(ds4_gpu_dsv41_quantize(plain, WIDTH, ROWS, DS4_V41_FP4_E4M3));
     CHECK(ds4_gpu_tensor_read(plain, 0, quantized, sizeof(quantized)));
     for (int i = 0; i < N; i++) {
@@ -586,12 +594,111 @@ static int check_compressed_kv_f16(void) {
     CHECK(ds4_gpu_tensor_read(out, 0, actual, sizeof(actual)));
     for (int row = 0; row < KEPT; row++)
         CHECK(!memcmp(actual + row * WIDTH, quantized + picked[row] * WIDTH, WIDTH * sizeof(float)));
+    CHECK(ds4_gpu_dsv41_gather_kv_f16_packed(selected, cache, ids, ROWS, KEPT));
+    CHECK(ds4_gpu_dsv41_gather_kv_f16(out, selected, identity_ids, KEPT, KEPT));
+    CHECK(ds4_gpu_tensor_read(out, 0, actual, sizeof(actual)));
+    for (int row = 0; row < KEPT; row++) {
+        CHECK(!memcmp(selected_guard + (PREFIX + row) * row_bytes,
+            guard + (PREFIX + picked[row]) * row_bytes, (size_t)row_bytes));
+        CHECK(!memcmp(actual + row * WIDTH, quantized + picked[row] * WIDTH, WIDTH * sizeof(float)));
+    }
     CHECK(ds4_gpu_synchronize());
     for (uint64_t i = 0; i < PREFIX * row_bytes; i++) CHECK(guard[i] == 0xa5);
     for (uint64_t i = (PREFIX + ROWS) * row_bytes; i < packed_bytes; i++) CHECK(guard[i] == 0xa5);
+    for (uint64_t i = 0; i < PREFIX * row_bytes; i++) CHECK(selected_guard[i] == 0xa5);
+    for (uint64_t i = (PREFIX + KEPT) * row_bytes; i < selected_bytes; i++)
+        CHECK(selected_guard[i] == 0xa5);
     ds4_gpu_tensor_free(cache); ds4_gpu_tensor_free(plain); ds4_gpu_tensor_free(packed);
-    ds4_gpu_tensor_free(ids); ds4_gpu_tensor_free(out);
-    fprintf(stderr, "V4.1 mode3 compressed KV F16 storage, offset publication and sparse gather: exact\n");
+    ds4_gpu_tensor_free(selected); ds4_gpu_tensor_free(selected_storage);
+    ds4_gpu_tensor_free(identity_ids); ds4_gpu_tensor_free(ids); ds4_gpu_tensor_free(out);
+    fprintf(stderr, "V4.1 mode3 compressed KV F16 storage, offset publication and F32/packed sparse gathers: exact\n");
+    return 1;
+}
+
+/* Reuse the real scalar attention API: legacy gather expands to F32 before
+ * attention stages it as F16; packed gather supplies those F16 bytes directly.
+ * All buffers/model-map storage are prepared before warmup and timing. */
+static int bench_compressed_kv_f16(void) {
+    enum { WIDTH = 512, ROWS = 1537, MAX_KEPT = 512, HEADS = 64, RAW = 128, CALLS = 16 };
+    const unsigned kept_counts[] = {128, 512};
+    const float alphabet[] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
+    const size_t source_values = (size_t)ROWS * WIDTH, head_values = HEADS * WIDTH;
+    const size_t page = (size_t)getpagesize();
+    float *sinks = NULL;
+    CHECK(!posix_memalign((void **)&sinks, page, page));
+    for (int h = 0; h < HEADS; h++) sinks[h] = random_value() / 16;
+    CHECK(ds4_gpu_set_model_map(sinks, page));
+    ds4_gpu_set_quality(false);
+    ds4_gpu_tensor *plain = upload(NULL, source_values * sizeof(float));
+    ds4_gpu_tensor *packed = upload(NULL, source_values * sizeof(uint16_t));
+    ds4_gpu_tensor *ids = upload(NULL, MAX_KEPT * sizeof(int32_t));
+    ds4_gpu_tensor *legacy = upload(NULL, MAX_KEPT * WIDTH * sizeof(float));
+    ds4_gpu_tensor *selected = upload(NULL, MAX_KEPT * WIDTH * sizeof(uint16_t));
+    ds4_gpu_tensor *query = upload(NULL, head_values * sizeof(float));
+    ds4_gpu_tensor *raw = upload(NULL, RAW * WIDTH * sizeof(float));
+    ds4_gpu_tensor *heads[2] = {upload(NULL, head_values * sizeof(float)),
+                               upload(NULL, head_values * sizeof(float))};
+    CHECK(plain && packed && ids && legacy && selected && query && raw && heads[0] && heads[1]);
+    float *source = ds4_gpu_tensor_contents(plain), *q = ds4_gpu_tensor_contents(query);
+    float *r = ds4_gpu_tensor_contents(raw);
+    int32_t *picked = ds4_gpu_tensor_contents(ids);
+    CHECK(source && q && r && picked);
+    for (size_t i = 0; i < source_values; i++)
+        source[i] = copysignf(alphabet[i % 8] / 8, (i / 8) & 1 ? -1 : 1);
+    for (size_t i = 0; i < head_values; i++) q[i] = bf16(random_value() / 8);
+    for (int i = 0; i < RAW * WIDTH; i++) r[i] = bf16(random_value() / 8);
+    for (int i = 0; i < MAX_KEPT; i++) picked[i] = ROWS - 1 - (i * 19 % ROWS);
+    CHECK(ds4_gpu_tensor_copy_f32_to_f16(packed, 0, plain, 0, source_values));
+    puts("source_rows,selected,scope,calls_per_batch,paired_repeats,legacy_ms_per_call,packed_ms_per_call,gather_byte_equal,attention_byte_equal,attention_max_abs");
+    for (unsigned k = 0; k < sizeof(kept_counts) / sizeof(*kept_counts); k++) {
+        const uint32_t kept = kept_counts[k];
+        for (unsigned attention = 0; attention < 2; attention++) {
+            double elapsed[2] = {0};
+            bool attention_equal = true;
+            double attention_max_abs = 0;
+            for (unsigned repeat = 0; repeat < 7; repeat++) {
+                for (unsigned j = 0; j < 2; j++) {
+                    const unsigned mode = j ^ (repeat & 1);
+                    const double begin = monotonic_seconds();
+                    CHECK(ds4_gpu_begin_commands());
+                    for (unsigned call = 0; call < CALLS; call++) {
+                        CHECK(mode ? ds4_gpu_dsv41_gather_kv_f16_packed(selected, packed, ids, ROWS, kept)
+                                   : ds4_gpu_dsv41_gather_kv_f16(legacy, packed, ids, ROWS, kept));
+                        if (attention) CHECK(ds4_gpu_attention_decode_heads_tensor(heads[mode],
+                            sinks, page, 0, query, raw, RAW, RAW, 17,
+                            mode ? selected : legacy, mode, kept, NULL, 0, HEADS, WIDTH));
+                    }
+                    CHECK(ds4_gpu_end_commands());
+                    if (repeat) elapsed[mode] += (monotonic_seconds() - begin) * (1000.0 / (6 * CALLS));
+                }
+                if (attention) {
+                    const float *before = ds4_gpu_tensor_contents(heads[0]);
+                    const float *after = ds4_gpu_tensor_contents(heads[1]);
+                    attention_equal = attention_equal && !memcmp(before, after, head_values * sizeof(float));
+                    for (size_t i = 0; i < head_values; i++) {
+                        CHECK(isfinite(before[i]) && isfinite(after[i]));
+                        attention_max_abs = fmax(attention_max_abs, fabs((double)before[i] - after[i]));
+                    }
+                }
+            }
+            const uint16_t *packed_source = ds4_gpu_tensor_contents(packed);
+            const uint16_t *packed_selected = ds4_gpu_tensor_contents(selected);
+            const float *legacy_selected = ds4_gpu_tensor_contents(legacy);
+            for (uint32_t i = 0; i < kept; i++) {
+                CHECK(!memcmp(packed_selected + i * WIDTH,
+                    packed_source + (size_t)picked[i] * WIDTH, WIDTH * sizeof(uint16_t)));
+                CHECK(!memcmp(legacy_selected + i * WIDTH,
+                    source + (size_t)picked[i] * WIDTH, WIDTH * sizeof(float)));
+            }
+            printf("%u,%u,%s,%u,6,%.9f,%.9f,1,%d,%.12g\n", (unsigned)ROWS, kept,
+                attention ? "gather_attention" : "gather", (unsigned)CALLS,
+                elapsed[0], elapsed[1], attention ? attention_equal : -1, attention_max_abs);
+        }
+    }
+    ds4_gpu_tensor_free(plain); ds4_gpu_tensor_free(packed); ds4_gpu_tensor_free(ids);
+    ds4_gpu_tensor_free(legacy); ds4_gpu_tensor_free(selected); ds4_gpu_tensor_free(query);
+    ds4_gpu_tensor_free(raw); ds4_gpu_tensor_free(heads[0]); ds4_gpu_tensor_free(heads[1]);
+    ds4_gpu_cleanup(); free(sinks);
     return 1;
 }
 #endif
@@ -1325,6 +1432,11 @@ int main(int argc, char **argv) {
 #ifdef __APPLE__
     if (argc == 2 && !strcmp(argv[1], "--compressed-kv-f16")) {
         const int ok = ds4_gpu_init() && check_compressed_kv_f16();
+        ds4_gpu_cleanup();
+        return ok ? 0 : 1;
+    }
+    if (argc == 2 && !strcmp(argv[1], "--compressed-kv-f16-bench")) {
+        const int ok = ds4_gpu_init() && check_compressed_kv_f16() && bench_compressed_kv_f16();
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }

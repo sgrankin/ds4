@@ -41704,12 +41704,28 @@ static bool ds41_compressed_store(ds41_gpu_graph *g, uint32_t owner, uint32_t fi
         (uint64_t)first * DS4_N_HEAD_DIM * sizeof(float), source, 0, values * sizeof(float)) != 0;
 }
 
-static bool ds41_compressed_gather(ds41_gpu_graph *g, uint32_t owner,
-                                   uint32_t rows, uint32_t selected) {
+static bool ds41_packed_f16_gather(const ds41_gpu_graph *g) {
 #ifdef __APPLE__
-    if (g->compressed_kv_f16)
+    const char *value = getenv("DS4_METAL_V41_PACKED_F16_GATHER");
+    return g->compressed_kv_f16 && (!value || strcmp(value, "0") != 0);
+#else
+    (void)g;
+    return false;
+#endif
+}
+
+static bool ds41_compressed_gather(ds41_gpu_graph *g, uint32_t owner,
+                                   uint32_t rows, uint32_t selected, bool packed) {
+#ifdef __APPLE__
+    if (g->compressed_kv_f16) {
+        if (packed)
+            return ds4_gpu_dsv41_gather_kv_f16_packed(g->selected_kv, g->compressed[owner],
+                g->selected_comp, rows, selected) != 0;
         return ds4_gpu_dsv41_gather_kv_f16(g->selected_kv, g->compressed[owner],
             g->selected_comp, rows, selected) != 0;
+    }
+#else
+    (void)packed;
 #endif
     return ds4_gpu_dsv41_gather_kv(g->selected_kv, g->compressed[owner],
         g->selected_comp, rows, selected) != 0;
@@ -41834,12 +41850,13 @@ static bool ds41_attention(ds41_gpu_graph *g, const ds4_model *m,
                              g->kv, 0, 512u * 4u) ||
         !ds41_attention_select(g, m, l, il)) return false;
     const uint32_t attended = n_comp < DS4_N_INDEXER_TOP_K ? n_comp : DS4_N_INDEXER_TOP_K;
-    if (n_comp && !ds41_compressed_gather(g, owner, n_comp, attended)) return false;
+    const bool packed = ds41_packed_f16_gather(g);
+    if (n_comp && !ds41_compressed_gather(g, owner, n_comp, attended, packed)) return false;
     const uint32_t n_raw = ds41_raw_past(g, pos, 127u) + 1u;
     if (!ds4_gpu_attention_decode_heads_tensor(g->heads, m->map, m->size,
             l->attn_sinks->abs_offset + (uint64_t)head0 * sizeof(float),
             g->q, g->window[il], n_raw, 128, (pos + 1u - n_raw) % 128u,
-            g->selected_kv, 0, attended, NULL, 0,
+            g->selected_kv, packed, attended, NULL, 0,
             heads, DS4_N_HEAD_DIM) ||
         !ds41_bf16(g->heads, heads * DS4_N_HEAD_DIM) ||
         !ds41_rope(g->heads, heads, DS4_N_HEAD_DIM, il, pos, true)) return false;

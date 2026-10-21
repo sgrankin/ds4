@@ -150,6 +150,12 @@ python3 speed-bench/ideas/pressure_run.py .workspaces/item51-http-guard -- \
 
 ## Decision
 
+[Item53](../f16-gather-hour53-20261021/README.md) subsequently split the timing
+CSV by phase: about94% of the F16/control total gap occurred rebuilding the
+prefix, with only0.572s in graft plus fresh tail across four edits. Do not
+attribute the entire6.55% to F16 copies, rotary repair or attention kernels;
+prefix expert I/O and run order remain part of that observation.
+
 The option remains
 `DS4_V41_COMPRESSED_KV_F16=1`; existing presets do not enable it automatically.
 This compatibility follow-up does not establish a new serving-speed gain or

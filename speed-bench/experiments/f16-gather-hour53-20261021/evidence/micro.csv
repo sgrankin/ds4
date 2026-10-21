@@ -1,0 +1,6 @@
+source_rows,selected,scope,calls_per_batch,paired_repeats,legacy_ms_per_call,packed_ms_per_call,gather_byte_equal,attention_byte_equal,attention_max_abs
+1537,128,gather,16,6,0.026593751,0.020395831,1,-1,0
+1537,128,gather_attention,16,6,0.103531245,0.096895834,1,1,0
+1537,512,gather,16,6,0.016000001,0.013249999,1,-1,0
+1537,512,gather_attention,16,6,0.070812498,0.067135421,1,1,0
+{"status": "complete", "child_returncode": 0}

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "speed-bench/metal_decode_schedule_bench",
+    "--ssd-streaming",
+    "--model",
+    "gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--prefix-tokens",
+    "8192",
+    "--ctx",
+    "16384",
+    "--warmup",
+    "16",
+    "--tokens",
+    "256",
+    "--candidate-env",
+    "DS4_METAL_V41_PACKED_F16_GATHER",
+    "--include-selection"
+  ],
+  "env": {
+    "DS4_V41_COMPRESSED_KV_F16": "1",
+    "DS4_V41_DECODER_REPLAY_ROWS": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+  },
+  "base_revision": "a2c47483ffd2ffac58726da0f07da5df4cf9accd",
+  "binary_sha256": "7926ee7ef17bf5436f8c7521f130f28f2e133e4c07c3017bff048caada98b922",
+  "prompt_file_sha256": "93d91efd0bf133dcd7d6000985346cc3b5699af5ba4a171ccbad42ddb5730042"
+}

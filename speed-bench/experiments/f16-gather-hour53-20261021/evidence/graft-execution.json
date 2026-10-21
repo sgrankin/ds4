@@ -1,0 +1,31 @@
+{
+  "command": [
+    ".workspaces/f16-gather-hour53/relocate",
+    "--model",
+    "gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--out",
+    ".workspaces/f16-gather-hour53/graft3",
+    "--source-f16",
+    "1",
+    "--destination-f16",
+    "1",
+    "--moves",
+    "3",
+    "--prerope",
+    "1",
+    "--ctx",
+    "8192",
+    "--chunk",
+    "512",
+    "--cache-gb",
+    "64"
+  ],
+  "explicit_environment": {
+    "DS4_METAL_V41_PACKED_F16_GATHER": "1",
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+  },
+  "other_DS4_environment": "none inherited; F16 layout set by benchmark source/destination arguments",
+  "binary_sha256": "8cb182448cf8ff7ebef3c6a3d6f47b14ceb0ccc255483799a015c0755c8dcb8c",
+  "base_revision": "a2c47483ffd2ffac58726da0f07da5df4cf9accd"
+}

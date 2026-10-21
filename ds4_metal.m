@@ -48485,6 +48485,42 @@ int ds4_gpu_dsv41_gather_kv_f16(ds4_gpu_tensor *out, const ds4_gpu_tensor *sourc
     }
 }
 
+int ds4_gpu_dsv41_gather_kv_f16_packed(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
+                                      const ds4_gpu_tensor *ids, uint32_t source_rows,
+                                      uint32_t selected_rows) {
+    if (!source_rows || !selected_rows || selected_rows > 512u ||
+        selected_rows > source_rows || !source || !out ||
+        !ds4_gpu_tensor_buffer(source) || !ds4_gpu_tensor_buffer(out) ||
+        ds4_gpu_tensor_bytes(source) < (uint64_t)source_rows * 512u * sizeof(uint16_t) ||
+        ds4_gpu_tensor_bytes(out) < (uint64_t)selected_rows * 512u * sizeof(uint16_t) ||
+        !dsv41_tensor_has_floats(ids, selected_rows)) return 0;
+    if (!g_initialized && !ds4_gpu_init()) return 0;
+    @autoreleasepool {
+        id<MTLComputePipelineState> pipeline = ds4_gpu_get_pipeline("kernel_dsv41_gather_kv_f16_packed");
+        if (!pipeline) return 0;
+        /* Match the legacy F16 gather's launch shape for this comparison. */
+        NSUInteger nth = g_get_rows_f16_pipeline.maxTotalThreadsPerThreadgroup;
+        if (nth > 512u) nth = 512u;
+        if (!nth || nth > pipeline.maxTotalThreadsPerThreadgroup) return 0;
+        const NSUInteger groups = (512u + nth - 1u) / nth;
+        const uint32_t args[] = {source_rows, selected_rows};
+        int owned = 0;
+        id<MTLCommandBuffer> cb = ds4_gpu_command_buffer(&owned);
+        id<MTLComputeCommandEncoder> enc = cb ? ds4_gpu_compute_encoder(cb) : nil;
+        if (!enc) return 0;
+        [enc setComputePipelineState:pipeline];
+        [enc setBytes:args length:sizeof(args) atIndex:0];
+        const ds4_gpu_tensor *inputs[] = {source, ids, out};
+        for (NSUInteger i = 0; i < 3; i++)
+            [enc setBuffer:ds4_gpu_tensor_buffer(inputs[i])
+                    offset:ds4_gpu_tensor_offset(inputs[i]) atIndex:i + 1];
+        [enc dispatchThreadgroups:MTLSizeMake(groups * selected_rows, 1, 1)
+             threadsPerThreadgroup:MTLSizeMake(nth, 1, 1)];
+        ds4_gpu_end_compute_encoder(cb, enc);
+        return ds4_gpu_finish_command_buffer(cb, owned, "V4.1 packed selected F16 KV gather");
+    }
+}
+
 void ds4_gpu_set_glm_mtp_verify_mode(bool enabled) {
     (void)enabled;
 }

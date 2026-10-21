@@ -1,0 +1,24 @@
+{
+  "packed_reader_switch": "unset",
+  "teacher_rows": 7,
+  "vocab": 129280,
+  "byte_equal_to_previous_explicit_on": true,
+  "logits_sha256": "7d7f8ad6e82d19893f1e0b220e53963ba4a08f03477d772da2c0f86130c648ea",
+  "answer": {
+    "case": "ordinary",
+    "expected": "CODE=EMBER-7319",
+    "text": "CODE=EMBER-7319",
+    "tokens": [
+      83552,
+      31,
+      72048,
+      15,
+      29107,
+      27
+    ],
+    "stopped": true,
+    "exact": true
+  },
+  "pressure_samples": 47,
+  "all_pressure_normal": true
+}

@@ -1,0 +1,14 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal SSD streaming mode enabled; full model residency and warmup are skipped
+ds4: metal SSD streaming cache target 64.00 GiB; effective 64.00 GiB = 7.12 GiB prefill headroom + 56.88 GiB dynamic cache (6136 experts, 9.49 MiB each)
+ds4: Metal SSD static weights locked 9.37 GiB; pageable 0.00 GiB
+ds4: SSD streaming initial metal model map (569 spans, 9.37 GiB tensor span)
+ds4: metal backend initialized for graph diagnostics
+ds4: memory: KV 0.07 GiB (raw 0.01 + compressed 0.06) + buffers 1.62 GiB + resident model 9.37 GiB + expert cache 56.88 GiB + prefill expert reserve 7.12 GiB = 75.05 GiB planned
+ds4: memory detail: ctx=16384 prefill_cap=512 raw_kv_rows=128 compressed_kv_rows=16385 backend=metal
+ds4: V4.1 static context buffers 1724.87 MiB (ctx=16384), Engram disk-only
+ds4: V4.1 KV allocated main=f16 main_bytes=41947136 index_bytes=20973568 raw_bytes=10485760
+CASE favorable rows=0 prompt=8192 teacher=8 record_start=8110 query_start=8170
+RESULT favorable rows=0 sync_ms=23499.780 teacher_ms=1633.794 greedy_sync_ms=22262.758 greedy_ms=1484.353 generated=7 stopped=1 exact=1 answer=CODE=CEDAR-4826

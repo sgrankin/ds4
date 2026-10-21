@@ -29,11 +29,13 @@ typedef struct {
     const char *model_path;
     const char *prompt_path;
     const char *candidate_env;
+    const char *control_env_value;
     int prefix_tokens;
     int ctx;
     int warmup;
     int measured;
     bool include_selection;
+    bool ssd_streaming;
     decode_schedule control;
     decode_schedule candidate;
 } bench_config;
@@ -48,11 +50,13 @@ static void usage(FILE *fp, const char *argv0) {
             "  --ctx N                session allocation (default: 4096)\n"
             "  --warmup N             untimed steps per variant (default: 16)\n"
             "  --tokens N             measured steps per variant (default: 512)\n"
+            "  --ssd-streaming        stream experts with 64 GiB cache, prefill chunk 512, no weight warmup\n"
             "  --control-first N      control first split (default: 2)\n"
             "  --control-second N     control second split (default: 32)\n"
             "  --candidate-first N    candidate first split (default: 1; control with --candidate-env)\n"
             "  --candidate-second N   candidate second split (default: 32; control with --candidate-env)\n"
             "  --candidate-env NAME   unset NAME for control, set NAME=1 for candidate\n"
+            "  --control-env-value V  set control NAME=V instead of unsetting (requires --candidate-env)\n"
             "  --include-selection    include one non-EOS argmax in each timed step\n",
             argv0);
 }
@@ -87,11 +91,13 @@ static bench_config parse_options(int argc, char **argv) {
         .model_path = "ds4flash.gguf",
         .prompt_path = "ds4.c",
         .candidate_env = NULL,
+        .control_env_value = NULL,
         .prefix_tokens = DEFAULT_PREFIX_TOKENS,
         .ctx = DEFAULT_CTX,
         .warmup = DEFAULT_WARMUP,
         .measured = DEFAULT_MEASURED,
         .include_selection = false,
+        .ssd_streaming = false,
         .control = {.first = 2, .second = 32},
         .candidate = {.first = 1, .second = 32},
     };
@@ -109,8 +115,12 @@ static bench_config parse_options(int argc, char **argv) {
             cfg.prompt_path = need_arg(&i, argc, argv, arg);
         } else if (!strcmp(arg, "--candidate-env")) {
             cfg.candidate_env = need_arg(&i, argc, argv, arg);
+        } else if (!strcmp(arg, "--control-env-value")) {
+            cfg.control_env_value = need_arg(&i, argc, argv, arg);
         } else if (!strcmp(arg, "--include-selection")) {
             cfg.include_selection = true;
+        } else if (!strcmp(arg, "--ssd-streaming")) {
+            cfg.ssd_streaming = true;
         } else if (!strcmp(arg, "--prefix-tokens")) {
             cfg.prefix_tokens =
                 parse_int_arg(need_arg(&i, argc, argv, arg), arg, 1);
@@ -143,6 +153,11 @@ static bench_config parse_options(int argc, char **argv) {
             usage(stderr, argv[0]);
             exit(2);
         }
+    }
+
+    if (cfg.control_env_value && !cfg.candidate_env) {
+        fprintf(stderr, "metal-decode-schedule-bench: --control-env-value requires --candidate-env\n");
+        exit(2);
     }
 
     /*
@@ -248,7 +263,8 @@ static int select_variant(const bench_config *cfg, int variant) {
     }
     if (cfg->candidate_env &&
         (variant == 0
-             ? unsetenv(cfg->candidate_env)
+             ? (cfg->control_env_value ? setenv(cfg->candidate_env, cfg->control_env_value, 1)
+                                       : unsetenv(cfg->candidate_env))
              : setenv(cfg->candidate_env, "1", 1)) != 0) {
         fprintf(stderr,
                 "metal-decode-schedule-bench: failed to select candidate "
@@ -372,7 +388,10 @@ int main(int argc, char **argv) {
         .backend = DS4_BACKEND_METAL,
         .context_size = cfg.ctx,
         .power_percent = 100,
-        .warm_weights = true,
+        .prefill_chunk = cfg.ssd_streaming ? 512 : 0,
+        .ssd_streaming = cfg.ssd_streaming,
+        .ssd_streaming_cache_bytes = cfg.ssd_streaming ? UINT64_C(64) << 30 : 0,
+        .warm_weights = !cfg.ssd_streaming,
     };
     ds4_engine *engine = NULL;
     ds4_session *sessions[VARIANT_COUNT] = {0};
@@ -386,6 +405,13 @@ int main(int argc, char **argv) {
     size_t exact_selected_ids = 0;
     int rc = 1;
 
+    fprintf(stderr,
+            "metal-decode-schedule-bench: ssd_streaming=%s cache_bytes=%llu "
+            "prefill_chunk=%u warm_weights=%s\n",
+            cfg.ssd_streaming ? "yes" : "no",
+            (unsigned long long)opt.ssd_streaming_cache_bytes,
+            opt.prefill_chunk,
+            opt.warm_weights ? "yes" : "no");
     if (ds4_engine_open(&engine, &opt) != 0) goto done;
     ds4_tokenize_text(engine, text, &tokens);
     free(text);
@@ -438,7 +464,7 @@ int main(int argc, char **argv) {
     fprintf(stderr,
             "metal-decode-schedule-bench: model=%s prompt=%s prefix=%d "
             "ctx=%d warmup=%d measured=%d control=%d/%d candidate=%d/%d "
-            "candidate_env=%s include_selection=%s\n",
+            "candidate_env=%s control_env_value=%s include_selection=%s\n",
             cfg.model_path,
             cfg.prompt_path,
             cfg.prefix_tokens,
@@ -450,6 +476,7 @@ int main(int argc, char **argv) {
             cfg.candidate.first,
             cfg.candidate.second,
             cfg.candidate_env ? cfg.candidate_env : "(none)",
+            cfg.control_env_value ? cfg.control_env_value : "(unset)",
             cfg.include_selection ? "yes" : "no");
 
     const int eos = ds4_token_eos(engine);

@@ -732,3 +732,31 @@ restartHTTP reports8618cached/0writes matching8618restoredtokens. R2/R3
 countsretainlive8675/8827andfresh88/31; all6read+write totalsmatchinput.
 Server/agentsuites pass; all67guard samplesnormal, zeronewswap.
 [Report](../experiments/state-cache-usage-hour52-20261021/README.md).
+
+Item53 starts **2026-10-21 02:46 UTC**, one-hour cap **03:46 UTC**.
+Profile F16 vs F32 small-edit costs, separating prefix/fresh work from graft
+repair. Inspect publication/gather/attention kernel launches and typed-copy
+overheads; try one targeted simplification after a concrete baseline. Phase
+CSV inspection assigns94% of Item51's total gap to prefix reconstruction,
+so do not attribute it to rotary repair. Selected F16 rows currently expand
+to F32 then repack for scalar attention; remove that round trip and reuse
+existing gathered staging. Reuse focused GPU checks and ordinary ABBA plus
+favorable paired model probes, preserving capacity/routing. Retain quality,
+phase timing and the first measured result.
+
+Item53 complete **03:14 UTC**, within the one-hour cap. Packed scalar gather
+removes the F16→F32→F16 round trip and enables existing gathered staging.
+Two isolated primitive repeats improve gather+attention by1–16%, but ordinary
+ABBA apparent1.91% saving is inside7.04% control drift; favorable singlepair
+0.47% is weak evidence. Same-frontier256-step paired decode is neutral:
+20.7582→20.7405tokens/s, all273frontiers exact. All6taskanswers pass and
+15sharedteacherpositions match. Three original-backed moves/recaptures pass;
+24freshnative/graft rows matchItem51counterparts exactly. All669pressure
+samplesnormal. Keepreader experimental/defaultoff; no model-wide gain claim.
+[Report](../experiments/f16-gather-hour53-20261021/README.md).
+
+Item53 default follow-up: the packed reader now follows opt-in F16 storage
+automatically, with `DS4_METAL_V41_PACKED_F16_GATHER=0` as the comparison
+override. Exact measured outputs and neutral overall speed do not justify
+a separate enable switch. The paired decode tool now accepts an explicit
+control environment value so default-on comparisons still exercise both paths.

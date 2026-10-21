@@ -241,6 +241,21 @@ kernel void kernel_dsv41_carry_copy(
 
 struct ds4_metal_args_dsv41_prerope { uint width, rows, pack; };
 
+/* Same row order as get_rows_f16, without its half-to-float conversion. */
+kernel void kernel_dsv41_gather_kv_f16_packed(
+        constant uint2 &args, device const ushort *source,
+        device const int *ids, device ushort *out,
+        uint group [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]],
+        ushort threads [[threads_per_threadgroup]]) {
+    const uint row = group % args.y;
+    const uint column = (group / args.y) * threads + tid;
+    if (column >= 512u) return;
+    const int id = ids[row];
+    if (id < 0 || uint(id) >= args.x) return;
+    out[(ulong)row * 512u + column] = source[(ulong)id * 512u + column];
+}
+
 kernel void kernel_dsv41_prerope_copy(
         constant ds4_metal_args_dsv41_prerope &args, device ushort *packed, device float *plain,
         uint2 index [[thread_position_in_grid]]) {

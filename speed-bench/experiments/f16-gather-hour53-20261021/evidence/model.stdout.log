@@ -1,0 +1,7 @@
+{"directory": "01-ordinary-packed0", "case": "ordinary", "packed": 0, "returncode": 0, "seconds": 50.7016647499986}
+{"directory": "02-ordinary-packed1", "case": "ordinary", "packed": 1, "returncode": 0, "seconds": 49.05562149989419}
+{"directory": "03-ordinary-packed1", "case": "ordinary", "packed": 1, "returncode": 0, "seconds": 48.65992704196833}
+{"directory": "04-ordinary-packed0", "case": "ordinary", "packed": 0, "returncode": 0, "seconds": 51.890359667129815}
+{"directory": "05-favorable-packed0", "case": "favorable", "packed": 0, "returncode": 0, "seconds": 51.09147308394313}
+{"directory": "06-favorable-packed1", "case": "favorable", "packed": 1, "returncode": 0, "seconds": 50.93954037502408}
+{"status": "complete", "child_returncode": 0}

@@ -1,0 +1,477 @@
+{
+  "scope": "F16 storage fixed; one fixture per case. Ordinary ABBA; favorable single pair.",
+  "timing_formula": "practical_ms = greedy_sync_ms + greedy_ms; teacher run is separate",
+  "quality_formula": "Full-vocabulary fixed-teacher comparison against first packed=0 arm per case",
+  "limitations": [
+    "Fresh engine per arm; OS/SSD caches carry over.",
+    "Exactness covers captured teacher rows and reported answers, not every intermediate state.",
+    "Favorable has one control and candidate; no closing-control drift estimate."
+  ],
+  "failed_arms": [],
+  "arms": [
+    {
+      "directory": "01-ordinary-packed0",
+      "case": "ordinary",
+      "packed": 0,
+      "timing": {
+        "sync_ms": 22123.35,
+        "teacher_ms": 1368.089,
+        "greedy_sync_ms": 21305.305,
+        "greedy_ms": 1247.506,
+        "practical_ms": 22552.811
+      },
+      "quality": {
+        "teacher_rows": 7,
+        "byte_equal_rows": 7,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "answer": {
+        "case": "ordinary",
+        "expected": "CODE=EMBER-7319",
+        "text": "CODE=EMBER-7319",
+        "tokens": [
+          83552,
+          31,
+          72048,
+          15,
+          29107,
+          27
+        ],
+        "stopped": true,
+        "exact": true
+      },
+      "answer_correct": true,
+      "answer_text_equal": true,
+      "answer_tokens_equal": true,
+      "logits_sha256": "7d7f8ad6e82d19893f1e0b220e53963ba4a08f03477d772da2c0f86130c648ea"
+    },
+    {
+      "directory": "02-ordinary-packed1",
+      "case": "ordinary",
+      "packed": 1,
+      "timing": {
+        "sync_ms": 22947.081,
+        "teacher_ms": 1684.323,
+        "greedy_sync_ms": 21327.009,
+        "greedy_ms": 1290.234,
+        "practical_ms": 22617.243
+      },
+      "quality": {
+        "teacher_rows": 7,
+        "byte_equal_rows": 7,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "answer": {
+        "case": "ordinary",
+        "expected": "CODE=EMBER-7319",
+        "text": "CODE=EMBER-7319",
+        "tokens": [
+          83552,
+          31,
+          72048,
+          15,
+          29107,
+          27
+        ],
+        "stopped": true,
+        "exact": true
+      },
+      "answer_correct": true,
+      "answer_text_equal": true,
+      "answer_tokens_equal": true,
+      "logits_sha256": "7d7f8ad6e82d19893f1e0b220e53963ba4a08f03477d772da2c0f86130c648ea"
+    },
+    {
+      "directory": "03-ordinary-packed1",
+      "case": "ordinary",
+      "packed": 1,
+      "timing": {
+        "sync_ms": 22199.23,
+        "teacher_ms": 1536.036,
+        "greedy_sync_ms": 21725.764,
+        "greedy_ms": 1456.632,
+        "practical_ms": 23182.396
+      },
+      "quality": {
+        "teacher_rows": 7,
+        "byte_equal_rows": 7,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "answer": {
+        "case": "ordinary",
+        "expected": "CODE=EMBER-7319",
+        "text": "CODE=EMBER-7319",
+        "tokens": [
+          83552,
+          31,
+          72048,
+          15,
+          29107,
+          27
+        ],
+        "stopped": true,
+        "exact": true
+      },
+      "answer_correct": true,
+      "answer_text_equal": true,
+      "answer_tokens_equal": true,
+      "logits_sha256": "7d7f8ad6e82d19893f1e0b220e53963ba4a08f03477d772da2c0f86130c648ea"
+    },
+    {
+      "directory": "04-ordinary-packed0",
+      "case": "ordinary",
+      "packed": 0,
+      "timing": {
+        "sync_ms": 23959.072,
+        "teacher_ms": 1502.645,
+        "greedy_sync_ms": 22698.016,
+        "greedy_ms": 1441.573,
+        "practical_ms": 24139.589
+      },
+      "quality": {
+        "teacher_rows": 7,
+        "byte_equal_rows": 7,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "answer": {
+        "case": "ordinary",
+        "expected": "CODE=EMBER-7319",
+        "text": "CODE=EMBER-7319",
+        "tokens": [
+          83552,
+          31,
+          72048,
+          15,
+          29107,
+          27
+        ],
+        "stopped": true,
+        "exact": true
+      },
+      "answer_correct": true,
+      "answer_text_equal": true,
+      "answer_tokens_equal": true,
+      "logits_sha256": "7d7f8ad6e82d19893f1e0b220e53963ba4a08f03477d772da2c0f86130c648ea"
+    },
+    {
+      "directory": "05-favorable-packed0",
+      "case": "favorable",
+      "packed": 0,
+      "timing": {
+        "sync_ms": 23499.78,
+        "teacher_ms": 1633.794,
+        "greedy_sync_ms": 22262.758,
+        "greedy_ms": 1484.353,
+        "practical_ms": 23747.111
+      },
+      "quality": {
+        "teacher_rows": 8,
+        "byte_equal_rows": 8,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "answer": {
+        "case": "favorable",
+        "expected": "CODE=CEDAR-4826",
+        "text": "CODE=CEDAR-4826",
+        "tokens": [
+          83552,
+          62534,
+          3316,
+          2271,
+          15,
+          24980,
+          24
+        ],
+        "stopped": true,
+        "exact": true
+      },
+      "answer_correct": true,
+      "answer_text_equal": true,
+      "answer_tokens_equal": true,
+      "logits_sha256": "8466eb11f9c7a6bfb0d93528309ba46e4d8df6e41084f62be6d7fdbd78bb55ff"
+    },
+    {
+      "directory": "06-favorable-packed1",
+      "case": "favorable",
+      "packed": 1,
+      "timing": {
+        "sync_ms": 23329.934,
+        "teacher_ms": 1699.413,
+        "greedy_sync_ms": 22133.199,
+        "greedy_ms": 1501.845,
+        "practical_ms": 23635.044
+      },
+      "quality": {
+        "teacher_rows": 8,
+        "byte_equal_rows": 8,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "answer": {
+        "case": "favorable",
+        "expected": "CODE=CEDAR-4826",
+        "text": "CODE=CEDAR-4826",
+        "tokens": [
+          83552,
+          62534,
+          3316,
+          2271,
+          15,
+          24980,
+          24
+        ],
+        "stopped": true,
+        "exact": true
+      },
+      "answer_correct": true,
+      "answer_text_equal": true,
+      "answer_tokens_equal": true,
+      "logits_sha256": "8466eb11f9c7a6bfb0d93528309ba46e4d8df6e41084f62be6d7fdbd78bb55ff"
+    }
+  ],
+  "cases": {
+    "ordinary": {
+      "reference": "01-ordinary-packed0",
+      "order": [
+        {
+          "directory": "01-ordinary-packed0",
+          "packed": 0
+        },
+        {
+          "directory": "02-ordinary-packed1",
+          "packed": 1
+        },
+        {
+          "directory": "03-ordinary-packed1",
+          "packed": 1
+        },
+        {
+          "directory": "04-ordinary-packed0",
+          "packed": 0
+        }
+      ],
+      "control_arms": 2,
+      "candidate_arms": 2,
+      "timing": {
+        "sync_ms": {
+          "control_values": [
+            22123.35,
+            23959.072
+          ],
+          "candidate_values": [
+            22947.081,
+            22199.23
+          ],
+          "control_mean": 23041.211,
+          "candidate_mean": 22573.1555,
+          "saving": 0.020313841143158595,
+          "control_drift": 0.08297667396664621
+        },
+        "teacher_ms": {
+          "control_values": [
+            1368.089,
+            1502.645
+          ],
+          "candidate_values": [
+            1684.323,
+            1536.036
+          ],
+          "control_mean": 1435.367,
+          "candidate_mean": 1610.1795000000002,
+          "saving": -0.12178940995578147,
+          "control_drift": 0.0983532504098783
+        },
+        "greedy_sync_ms": {
+          "control_values": [
+            21305.305,
+            22698.016
+          ],
+          "candidate_values": [
+            21327.009,
+            21725.764
+          ],
+          "control_mean": 22001.660499999998,
+          "candidate_mean": 21526.3865,
+          "saving": 0.02160173319645564,
+          "control_drift": 0.0653692120342797
+        },
+        "greedy_ms": {
+          "control_values": [
+            1247.506,
+            1441.573
+          ],
+          "candidate_values": [
+            1290.234,
+            1456.632
+          ],
+          "control_mean": 1344.5395,
+          "candidate_mean": 1373.433,
+          "saving": -0.021489513695952978,
+          "control_drift": 0.15556398125540083
+        },
+        "practical_ms": {
+          "control_values": [
+            22552.811,
+            24139.589
+          ],
+          "candidate_values": [
+            22617.243,
+            23182.396
+          ],
+          "control_mean": 23346.2,
+          "candidate_mean": 22899.819499999998,
+          "saving": 0.019120049515553017,
+          "control_drift": 0.07035832473388792
+        }
+      },
+      "candidate_quality": {
+        "teacher_rows": 14,
+        "byte_equal_rows": 14,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "control_drift_quality": {
+        "teacher_rows": 7,
+        "byte_equal_rows": 7,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "correct_answers": 4,
+      "answer_count": 4,
+      "all_answer_text_equal": true,
+      "all_answer_tokens_equal": true
+    },
+    "favorable": {
+      "reference": "05-favorable-packed0",
+      "order": [
+        {
+          "directory": "05-favorable-packed0",
+          "packed": 0
+        },
+        {
+          "directory": "06-favorable-packed1",
+          "packed": 1
+        }
+      ],
+      "control_arms": 1,
+      "candidate_arms": 1,
+      "timing": {
+        "sync_ms": {
+          "control_values": [
+            23499.78
+          ],
+          "candidate_values": [
+            23329.934
+          ],
+          "control_mean": 23499.78,
+          "candidate_mean": 23329.934,
+          "saving": 0.007227557023937958,
+          "control_drift": null
+        },
+        "teacher_ms": {
+          "control_values": [
+            1633.794
+          ],
+          "candidate_values": [
+            1699.413
+          ],
+          "control_mean": 1633.794,
+          "candidate_mean": 1699.413,
+          "saving": -0.04016357019305983,
+          "control_drift": null
+        },
+        "greedy_sync_ms": {
+          "control_values": [
+            22262.758
+          ],
+          "candidate_values": [
+            22133.199
+          ],
+          "control_mean": 22262.758,
+          "candidate_mean": 22133.199,
+          "saving": 0.005819539519766659,
+          "control_drift": null
+        },
+        "greedy_ms": {
+          "control_values": [
+            1484.353
+          ],
+          "candidate_values": [
+            1501.845
+          ],
+          "control_mean": 1484.353,
+          "candidate_mean": 1501.845,
+          "saving": -0.011784258865647157,
+          "control_drift": null
+        },
+        "practical_ms": {
+          "control_values": [
+            23747.111
+          ],
+          "candidate_values": [
+            23635.044
+          ],
+          "control_mean": 23747.111,
+          "candidate_mean": 23635.044,
+          "saving": 0.004719184577862912,
+          "control_drift": null
+        }
+      },
+      "candidate_quality": {
+        "teacher_rows": 8,
+        "byte_equal_rows": 8,
+        "all_rows_byte_equal": true,
+        "mean_delta_nll": 0.0,
+        "max_abs_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "control_drift_quality": null,
+      "correct_answers": 2,
+      "answer_count": 2,
+      "all_answer_text_equal": true,
+      "all_answer_tokens_equal": true
+    }
+  },
+  "all_answers_correct": true,
+  "all_teacher_rows_byte_equal": true,
+  "complete_planned_order": true
+}

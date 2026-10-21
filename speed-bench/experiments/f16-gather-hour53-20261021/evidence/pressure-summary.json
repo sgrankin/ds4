@@ -1,0 +1,56 @@
+{
+  "check-guard": {
+    "samples": 1,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 18.467254638671875,
+    "max_swap_growth_mib": 0
+  },
+  "check2-guard": {
+    "samples": 3,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 18.52337646484375,
+    "max_swap_growth_mib": 0
+  },
+  "graft-guard": {
+    "samples": 0,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 21.277069091796875,
+    "max_swap_growth_mib": 0
+  },
+  "graft3-guard": {
+    "samples": 297,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 94.30943298339844,
+    "max_swap_growth_mib": 0
+  },
+  "micro-guard": {
+    "samples": 1,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 18.600921630859375,
+    "max_swap_growth_mib": 0
+  },
+  "micro2-guard": {
+    "samples": 3,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 21.503082275390625,
+    "max_swap_growth_mib": 0
+  },
+  "micro3-guard": {
+    "samples": 3,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 22.249237060546875,
+    "max_swap_growth_mib": 0
+  },
+  "model-guard": {
+    "samples": 288,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 94.91943359375,
+    "max_swap_growth_mib": 1.0
+  },
+  "warm-guard": {
+    "samples": 73,
+    "all_normal": true,
+    "peak_wired_plus_compressor_gib": 93.59159851074219,
+    "max_swap_growth_mib": 0.37000000000000455
+  }
+}

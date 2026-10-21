@@ -1,0 +1,4 @@
+variant=control first_split=2 second_split=32 tokens=256 seconds=12.332474 tokens_per_second=20.7582
+variant=candidate first_split=2 second_split=32 tokens=256 seconds=12.342978 tokens_per_second=20.7405
+exact_rows=273 exact_floats=35293440 exact_selected_ids=272 vocab=129280
+{"status": "complete", "child_returncode": 0}

@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/speed-bench/decoder_replay_bench",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--out",
+    "/Volumes/Models/ds4/.workspaces/f16-gather-hour53/model/05-favorable-packed0",
+    "--rows",
+    "0",
+    "--tokens",
+    "8192",
+    "--chunk",
+    "512",
+    "--ctx",
+    "16384",
+    "--compressed-kv-f16",
+    "1",
+    "--case",
+    "favorable"
+  ],
+  "base_revision": "a2c47483ffd2ffac58726da0f07da5df4cf9accd",
+  "binary_sha256": "e883eb4c2d5a0f80aaf2a8c36c3cd23b6e3fb681d4f449d5c30743f366107281",
+  "environment": {
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024",
+    "DS4_METAL_V41_PACKED_F16_GATHER": "0"
+  },
+  "started_utc": "2026-10-21T02:59:17Z"
+}

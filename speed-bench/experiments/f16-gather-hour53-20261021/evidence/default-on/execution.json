@@ -1,0 +1,27 @@
+{
+  "command": [
+    "speed-bench/decoder_replay_bench",
+    "--model",
+    "gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--out",
+    ".workspaces/f16-gather-default/model",
+    "--rows",
+    "0",
+    "--tokens",
+    "8192",
+    "--chunk",
+    "512",
+    "--ctx",
+    "16384",
+    "--compressed-kv-f16",
+    "1",
+    "--case",
+    "ordinary"
+  ],
+  "packed_reader_environment": "unset; selects default",
+  "binary_sha256": "384efe67a1ffccc5fd60e7ca740eaac48177e73815694f277eebe0b4655d5d3b",
+  "explicit_environment": {
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+  }
+}

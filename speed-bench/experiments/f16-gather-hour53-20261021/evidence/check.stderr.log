@@ -1,0 +1,73 @@
+ds4: Metal device Apple M5 Max, 128.00 GiB RAM
+ds4: Metal 4 tensor API enabled for Tensor kernels
+ds4: drift-patch flags hc_stable=on norm_unify=on kv_raw_f32=off rope_exp2_log2=off math_safe=off tensor_matmul=on
+ds4: Metal shader compilation failed: program_source:25:9: warning: 'M_PI_F' macro redefined [-Wmacro-redefined]
+#define M_PI_F 3.14159265358979323846f
+        ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_types:318:9: note: previous definition is here
+#define M_PI_F __FLT_M_PI__
+        ^
+program_source:16721:36: warning: 'mem_device_and_threadgroup' is deprecated: use mem_device or mem_threadgroup instead [-Wdeprecated-declarations]
+    threadgroup_barrier(mem_flags::mem_device_and_threadgroup);
+                                   ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_compute:27:30: note: 'mem_device_and_threadgroup' has been explicitly marked deprecated here
+  mem_device_and_threadgroup METAL_DEPRECATED("use mem_device or mem_threadgroup instead") = mem_device | mem_threadgroup
+                             ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_types:17:47: note: expanded from macro 'METAL_DEPRECATED'
+#define METAL_DEPRECATED(M...) __attribute__((deprecated(M)))
+                                              ^
+program_source:16900:36: warning: 'mem_device_and_threadgroup' is deprecated: use mem_device or mem_threadgroup instead [-Wdeprecated-declarations]
+    threadgroup_barrier(mem_flags::mem_device_and_threadgroup);
+                                   ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_compute:27:30: note: 'mem_device_and_threadgroup' has been explicitly marked deprecated here
+  mem_device_and_threadgroup METAL_DEPRECATED("use mem_device or mem_threadgroup instead") = mem_device | mem_threadgroup
+                             ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_types:17:47: note: expanded from macro 'METAL_DEPRECATED'
+#define METAL_DEPRECATED(M...) __attribute__((deprecated(M)))
+                                              ^
+program_source:16912:36: warning: 'mem_device_and_threadgroup' is deprecated: use mem_device or mem_threadgroup instead [-Wdeprecated-declarations]
+    threadgroup_barrier(mem_flags::mem_device_and_threadgroup);
+                                   ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_compute:27:30: note: 'mem_device_and_threadgroup' has been explicitly marked deprecated here
+  mem_device_and_threadgroup METAL_DEPRECATED("use mem_device or mem_threadgroup instead") = mem_device | mem_threadgroup
+                             ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_types:17:47: note: expanded from macro 'METAL_DEPRECATED'
+#define METAL_DEPRECATED(M...) __attribute__((deprecated(M)))
+                                              ^
+program_source:18079:13: error: expecting input declarations with either all scalar types or all vector types with the same number of elements
+kernel void kernel_dsv41_gather_kv_f16_packed(
+            ^
+program_source:18082:14: note: declaration with attribute 'threadgroup_position_in_grid' of type 'thread uint' (aka 'thread unsigned int') here
+        uint group [[threadgroup_position_in_grid]],
+        ~~~~~^~~~~
+program_source:18084:17: note: declaration with attribute 'threads_per_threadgroup' of type 'thread ushort3' (vector of 3 'unsigned short' values) here
+        ushort3 threads [[threads_per_threadgroup]]) {
+        ~~~~~~~~^~~~~~~
+program_source:18712:36: warning: 'mem_device_and_threadgroup' is deprecated: use mem_device or mem_threadgroup instead [-Wdeprecated-declarations]
+    threadgroup_barrier(mem_flags::mem_device_and_threadgroup);
+                                   ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_compute:27:30: note: 'mem_device_and_threadgroup' has been explicitly marked deprecated here
+  mem_device_and_threadgroup METAL_DEPRECATED("use mem_device or mem_threadgroup instead") = mem_device | mem_threadgroup
+                             ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_types:17:47: note: expanded from macro 'METAL_DEPRECATED'
+#define METAL_DEPRECATED(M...) __attribute__((deprecated(M)))
+                                              ^
+program_source:27838:36: warning: 'mem_device_and_threadgroup' is deprecated: use mem_device or mem_threadgroup instead [-Wdeprecated-declarations]
+    threadgroup_barrier(mem_flags::mem_device_and_threadgroup);
+                                   ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_compute:27:30: note: 'mem_device_and_threadgroup' has been explicitly marked deprecated here
+  mem_device_and_threadgroup METAL_DEPRECATED("use mem_device or mem_threadgroup instead") = mem_device | mem_threadgroup
+                             ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_types:17:47: note: expanded from macro 'METAL_DEPRECATED'
+#define METAL_DEPRECATED(M...) __attribute__((deprecated(M)))
+                                              ^
+program_source:27853:36: warning: 'mem_device_and_threadgroup' is deprecated: use mem_device or mem_threadgroup instead [-Wdeprecated-declarations]
+    threadgroup_barrier(mem_flags::mem_device_and_threadgroup);
+                                   ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_compute:27:30: note: 'mem_device_and_threadgroup' has been explicitly marked deprecated here
+  mem_device_and_threadgroup METAL_DEPRECATED("use mem_device or mem_threadgroup instead") = mem_device | mem_threadgroup
+                             ^
+/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/lib/clang/32023/include/metal/metal_types:17:47: note: expanded from macro 'METAL_DEPRECATED'
+#define METAL_DEPRECATED(M...) __attribute__((deprecated(M)))
+                                              ^
+

@@ -5,7 +5,7 @@ fixtures and an exact odd-frontier canonical round trip. No speed gain is
 established. A default broad GPU-suite failure also reproduces on the parent.** Item48
 stores only the main compressed-KV tensors in F16 instead of F32, enabled by
 `DS4_V41_COMPRESSED_KV_F16=1`. It preserves the existing quantizer and uses
-existing typed attention with a selected-row gather that expands to F32.
+existing typed attention with a selected-row gather that stays in F16.
 This halves the allocated main-cache bytes. It is not native bitpacked FP4
 storage, a new quantizer or a weight conversion. Presets remain unchanged.
 
@@ -18,10 +18,38 @@ The experiment changes the container for those existing values:
 
 ```text
 publish: existing quantizer -> existing BF16 values -> store as F16
-scalar decode: gather selected F16 rows -> exact F32 expansion -> attention
+scalar decode: gather selected F16 rows -> F16 attention staging
 batch attention: use existing typed compressed-cache reader
 canonical save/load: expand/convert across the ordinary F32 wire representation
 ```
+
+Item53 adds a packed scalar reader, enabled automatically with F16 storage.
+Gather copies the selected F16 words
+directly into scratch and supplies F16 to attention, avoiding the expansion
+and subsequent repacking. Existing gathered staging fuses the raw-ring and
+compressed-row copies where supported. The current DS4.1 path retains its
+existing reduction, BF16 boundary and separate inverse-RoPE steps.
+
+Two clean primitive runs measured a 1–16% reduction for gather plus attention,
+depending on shape and repeat, with exact outputs. Direct task timings remained within control
+drift; a same-frontier continuing-decode measurement was effectively neutral
+(20.7582 versus 20.7405 tokens/s). All 273 paired frontier rows matched exactly.
+This does not establish a full-model gain. The reader is nevertheless the
+default within the opt-in F16 mode: it removes duplicate conversions at
+unchanged measured outputs and neutral overall performance. Set
+`DS4_METAL_V41_PACKED_F16_GATHER=0` to restore the old expanded reader for
+comparison. No extra switch is needed for ordinary use:
+
+```sh
+DS4_V41_COMPRESSED_KV_F16=1 \
+  ./ds4-local persistent-fast \
+  --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
+```
+
+[Item53's method and phase measurements](../speed-bench/experiments/f16-gather-hour53-20261021/README.md)
+also show that 94% of Item51's apparent F16 edit penalty was in prefix rebuilding,
+not the measured graft-plus-fresh-tail phase. That gap does not establish
+intrinsically slower F16 arithmetic.
 
 Index caches, raw sliding-window rings and unfinished compression-pair state
 remain F32. The attention algorithm, positions, routing and weights are unchanged by this
