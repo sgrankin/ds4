@@ -5326,8 +5326,11 @@ item_fail:
             }
             chat_msg msg = {0};
             msg.role = xstrdup("tool");
+            /* The system update already carries these definitions. Preserve
+             * explicit caller data, otherwise avoid rendering the same tools twice. */
             const char *body = output ? output :
                                result ? result :
+                               announcement ? "Tool discovery complete." :
                                tools_json ? tools_json : "";
             msg.content = xstrdup(body);
             if (call_id || item_id) {
@@ -5514,16 +5517,19 @@ static bool parse_responses_reasoning(const char **p, ds4_think_mode *effort,
 
 #include "ds4_conversations.h"
 
+static bool server_incremental_tool_schemas_enabled(server_model_syntax syntax) {
+    const char *env = getenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS");
+    return syntax == SERVER_MODEL_SYNTAX_DEEPSEEK41 && (!env || strcmp(env, "0"));
+}
+
 static bool parse_responses_request(ds4_engine *e, server *s, const char *body, int def_tokens,
                                     int ctx_size, request *r, char *err, size_t errlen) {
     if (errlen) err[0] = 0;
     request_init(r, REQ_CHAT, def_tokens);
     r->api = API_RESPONSES;
     r->model_syntax = server_model_syntax_for_engine(e);
-    const char *incremental_env = getenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS");
     const bool incremental_tool_schemas =
-        r->model_syntax == SERVER_MODEL_SYNTAX_DEEPSEEK41 &&
-        incremental_env && strcmp(incremental_env, "0");
+        server_incremental_tool_schemas_enabled(r->model_syntax);
     r->responses_store_dir = server_response_store_dir(s);
     r->responses_store = r->responses_store_dir != NULL;
     const char *p = body;
@@ -18064,6 +18070,19 @@ static void test_responses_input_tool_search_output_rejects_bad_tools(void) {
 }
 
 static void test_responses_incremental_tool_schemas(void) {
+    const char *env = getenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS");
+    char *saved_env = env ? xstrdup(env) : NULL;
+    unsetenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS");
+    TEST_ASSERT(server_incremental_tool_schemas_enabled(SERVER_MODEL_SYNTAX_DEEPSEEK41));
+    TEST_ASSERT(!server_incremental_tool_schemas_enabled(SERVER_MODEL_SYNTAX_DEEPSEEK));
+    setenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS", "1", 1);
+    TEST_ASSERT(server_incremental_tool_schemas_enabled(SERVER_MODEL_SYNTAX_DEEPSEEK41));
+    setenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS", "0", 1);
+    TEST_ASSERT(!server_incremental_tool_schemas_enabled(SERVER_MODEL_SYNTAX_DEEPSEEK41));
+    if (saved_env) setenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS", saved_env, 1);
+    else unsetenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS");
+    free(saved_env);
+
     const char *input =
         "[{\"role\":\"user\",\"content\":\"Read the note\"},"
         "{\"type\":\"function_call\",\"call_id\":\"b\",\"name\":\"probe\",\"arguments\":\"{}\"},"
@@ -18083,6 +18102,7 @@ static void test_responses_incremental_tool_schemas(void) {
     TEST_ASSERT(!loaded.len && msgs.len == 5);
     if (msgs.len != 5) goto done;
     TEST_ASSERT(!strcmp(msgs.v[2].role, "tool") && !strcmp(msgs.v[3].role, "tool"));
+    TEST_ASSERT(!strcmp(msgs.v[2].content, "Tool discovery complete."));
     TEST_ASSERT(!strcmp(msgs.v[3].content, "PROBE OK"));
     TEST_ASSERT(!strcmp(msgs.v[4].role, "system") && msgs.v[4].discovered_tools);
     TEST_ASSERT(strstr(msgs.v[4].content, "### Updated Tool Schemas\n\n"));
@@ -18091,9 +18111,12 @@ static void test_responses_incremental_tool_schemas(void) {
     char *after = render_deepseek41_chat(&msgs, 0, initial_tools, DS4_THINK_NONE, false);
     TEST_ASSERT(!strncmp(before, after, strlen(before)));
     const char *result = strstr(after, "PROBE OK</tool_result>");
-    const char *search_result = strstr(after, "<tool_result>[{");
+    const char *search_result = strstr(after, "<tool_result>Tool discovery complete.</tool_result>");
     const char *update = strstr(after, "<｜System｜>\n\n### Updated Tool Schemas");
     TEST_ASSERT(result && search_result && update && result < search_result && search_result < update);
+    const char *schema = strstr(after, "\"name\":\"notes__read_note\"");
+    TEST_ASSERT(schema && !strstr(schema + 1, "\"name\":\"notes__read_note\""));
+    TEST_ASSERT(!strstr(after, "\"type\":\"namespace\""));
 
     request r;
     request_init(&r, REQ_CHAT, 128);
@@ -18103,13 +18126,14 @@ static void test_responses_incremental_tool_schemas(void) {
     responses_prepare_live_continuation(NULL, &r, &msgs);
     TEST_ASSERT(r.responses_live_call_ids.len == 2 && r.responses_live_suffix_text);
     TEST_ASSERT(r.responses_live_suffix_text && strstr(r.responses_live_suffix_text,
-        "PROBE OK</tool_result>\n\n<tool_result>[{"));
+        "PROBE OK</tool_result>\n\n<tool_result>Tool discovery complete.</tool_result>"));
     TEST_ASSERT(r.responses_live_suffix_text && strstr(r.responses_live_suffix_text,
         "<｜System｜>\n\n### Updated Tool Schemas"));
     request_free(&r);
 
     /* previous_response_id and Conversations use this same trusted replay. */
     char *replay = responses_replay_history(&msgs, 0);
+    TEST_ASSERT(strstr(replay, "\"ds4_discovered_tools\":[{\"type\":\"namespace\""));
     chat_msgs restored = {0};
     tool_schema_orders restored_orders = {0};
     p = replay;
@@ -18149,9 +18173,32 @@ static void test_responses_incremental_tool_schemas(void) {
     char *legacy_prompt = render_deepseek41_chat(&legacy, 0, all_tools.ptr, DS4_THINK_NONE, false);
     TEST_ASSERT(strncmp(before, legacy_prompt, strlen(before)) != 0);
     TEST_ASSERT(!strstr(legacy_prompt, "### Updated Tool Schemas"));
+    TEST_ASSERT(strstr(legacy_prompt, "<tool_result>[{\"type\":\"namespace\""));
     free(legacy_prompt); free(before); free(after);
     buf_free(&all_tools); buf_free(&legacy_loaded);
     tool_schema_orders_free(&legacy_orders); chat_msgs_free(&legacy);
+
+    /* An explicit caller body remains data, even when tools are announced. */
+    const char *caller_input =
+        "[{\"type\":\"tool_search_output\",\"call_id\":\"a\",\"output\":\"CALLER OUTPUT\","
+        "\"result\":\"unused\",\"tools\":[{\"type\":\"function\",\"name\":\"read_note\"}]},"
+        "{\"type\":\"tool_search_output\",\"call_id\":\"b\",\"result\":\"CALLER RESULT\","
+        "\"tools\":[{\"type\":\"function\",\"name\":\"read_note\"}]},"
+        "{\"type\":\"tool_search_output\",\"call_id\":\"c\",\"tools\":[]}]";
+    chat_msgs caller = {0};
+    tool_schema_orders caller_orders = {0};
+    buf caller_loaded = {0};
+    p = caller_input;
+    TEST_ASSERT(parse_responses_input(&p, &caller, &caller_loaded, &caller_orders, true));
+    TEST_ASSERT(caller.len == 5);
+    if (caller.len == 5) {
+        TEST_ASSERT(!strcmp(caller.v[0].content, "CALLER OUTPUT"));
+        TEST_ASSERT(!strcmp(caller.v[1].content, "CALLER RESULT"));
+        TEST_ASSERT(!strcmp(caller.v[2].content, "[]"));
+        TEST_ASSERT(caller.v[3].discovered_tools && caller.v[4].discovered_tools);
+    }
+    buf_free(&caller_loaded);
+    tool_schema_orders_free(&caller_orders); chat_msgs_free(&caller);
 done:
     buf_free(&loaded);
     tool_schema_orders_free(&orders);

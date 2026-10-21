@@ -111,12 +111,15 @@ def scenario(args, base, common, fixture, out, parent_check=False):
     return result
 
 def arm(args, index, enabled, fixtures):
-    out = args.output / f'{index:02d}-{"late" if enabled else "native"}'
+    label = 'default' if enabled is None else 'late' if enabled else 'native'
+    out = args.output / f'{index:02d}-{label}'
     out.mkdir()
     env = {k:v for k,v in os.environ.items() if not k.startswith(('DS4','PT_'))}
-    env.update(DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS=str(int(enabled)), DS4_SERVER_CONTEXT_SUFFIX_REUSE='0',
+    env.update(DS4_SERVER_CONTEXT_SUFFIX_REUSE='0',
         DS4_SERVER_RESPONSE_STORE_DIR=str(out/'responses'), DS4_METAL_V41_RESIDENT_ROUTE_GAP='0',
         DS4_METAL_V41_RESIDENT_PREFILL_GAP='0', DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS='0')
+    if enabled is not None:
+        env['DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS'] = str(int(enabled))
     with socket.socket() as reserve:
         reserve.bind(('127.0.0.1',0)); port = reserve.getsockname()[1]
     command = [str(args.server), '--model',str(args.model),'--host','127.0.0.1','--port',str(port),
@@ -162,7 +165,8 @@ def main():
     p.add_argument('--model',type=Path,required=True)
     p.add_argument('--server',type=Path,default=ROOT/'ds4-server')
     p.add_argument('--output',type=Path,required=True)
-    p.add_argument('--order',default='0110',choices=('0','1','0110'))
+    p.add_argument('--order',default='0110',choices=('0','1','0110','u','0uu0'),
+        help='0=legacy, 1=incremental, u=unset flag to qualify the server default')
     p.add_argument('--cases',default='ordinary,favorable')
     p.add_argument('--timeout',type=float,default=600)
     p.add_argument('--parent-check',action='store_true',help='compatibility after timed workflow, excluded from workflow time')
@@ -196,7 +200,7 @@ def main():
     for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP): signal.signal(sig,interrupt)
     rows=[]
     for i,flag in enumerate(args.order,1):
-        rows.append(arm(args,i,flag=='1',fixtures));save(args.output/'result.json',rows)
+        rows.append(arm(args,i,None if flag=='u' else flag=='1',fixtures));save(args.output/'result.json',rows)
         if rows[-1]['error']: break
     return 0 if len(rows)==len(args.order) and all(r['pass'] for r in rows) else 3
 if __name__=='__main__': raise SystemExit(main())

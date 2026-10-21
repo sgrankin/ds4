@@ -1,0 +1,33 @@
+{
+  "id": "resp_80fecc1507592fbc1f5729bf",
+  "object": "response",
+  "created_at": 1792545869,
+  "status": "completed",
+  "model": "deepseek-v4.1-flash",
+  "store": true,
+  "previous_response_id": "resp_faeb13635afd7822bae14765",
+  "conversation": null,
+  "output": [
+    {
+      "id": "fc_e46bda9d09165025ef2cd73c",
+      "type": "function_call",
+      "status": "completed",
+      "name": "read_note",
+      "namespace": "archive__",
+      "call_id": "call_f96fcbec62cc68ad9dc355f1ed8d2519",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/incremental-tools-20261021/item49/abba/fixtures/favorable/note.json\"}"
+    }
+  ],
+  "usage": {
+    "input_tokens": 6878,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 6878
+    },
+    "output_tokens": 72,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 6950
+  }
+}

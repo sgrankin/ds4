@@ -662,3 +662,25 @@ existing safe-math diagnostic passes the full suite. Defaults/timed settings
 remain unchanged and the first failure is retained, rather than widening this
 storage experiment into a quantizer change.
 [Portable recipe and all evidence](../../recipes/13-packed-compressed-kv.md).
+
+Item49 starts **2026-10-21 01:18 UTC**, one-hour cap ending **02:18 UTC**.
+Remove duplicate tool definitions from incremental Responses discovery: retain
+one chronological system announcement and a short tool-result receipt, while
+preserving explicit caller output/result and original private schema metadata.
+Qualify live/full-input and durable-parent workflows with the existing Item46
+driver, then promote the single-copy rendering to the DeepSeek41 default with
+legacy0 available. Preserve first outcomes and native brackets; no new harness
+or cache-policy implementation belongs in this follow-up.
+
+Item49 measurements finished **01:33 UTC**, within budget. The default-unset
+0/u/u/0 bracket passed all8 first workflows and real file reads. Single-copy
+announcements saved57.45% on the durable-parent workflow (188.734→80.300s),
+81.62% after discovery. The short live workflow remained4.00% slower
+(29.502→30.683s); R2+R3 was4.23% slower, with9 extra format tokens rather than
+the old implementation's73. Candidate R1, before any schema announcement,
+accounted for0.769s of the1.181s whole-workflow gap; raw timings are retained.
+Keep this coherent server default for persistent-agent discovery, with explicit0
+as the legacy escape hatch. Build/server tests pass; all633 guard samples
+normal, peak wired+compressed98.10GiB, max swap growth3.87MiB. Cache restrictions
+were clarified as unfinished prototype integration, without altering runtime.
+[Recipe and current evidence](../../recipes/11-incremental-tool-schemas.md).

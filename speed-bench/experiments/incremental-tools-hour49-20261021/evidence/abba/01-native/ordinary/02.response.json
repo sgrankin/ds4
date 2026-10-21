@@ -1,0 +1,32 @@
+{
+  "id": "resp_cb045f073190a439953b5c58",
+  "object": "response",
+  "created_at": 1792545733,
+  "status": "completed",
+  "model": "deepseek-v4.1-flash",
+  "store": true,
+  "previous_response_id": null,
+  "conversation": null,
+  "output": [
+    {
+      "id": "fc_b9f280f64eee3cf3388e7783",
+      "type": "function_call",
+      "status": "completed",
+      "name": "read_note",
+      "call_id": "call_2d6d77132a356b916b89d2f79337bbae",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/incremental-tools-20261021/item49/abba/fixtures/ordinary/note.json\"}"
+    }
+  ],
+  "usage": {
+    "input_tokens": 748,
+    "input_tokens_details": {
+      "cached_tokens": 669,
+      "cache_write_tokens": 79
+    },
+    "output_tokens": 70,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 818
+  }
+}

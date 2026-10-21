@@ -1,0 +1,13 @@
+{
+  "build": {
+    "command": "make -j2 ds4-server ds4_test",
+    "returncode": 0
+  },
+  "unit": {
+    "command": "./ds4_test --server",
+    "returncode": 0
+  },
+  "server_sha256": "b6869f2862bb20dcbf96363115d5187ac72ffd6ebd4ad36552390db7f05e820d",
+  "base_revision": "4e12e4f2b6cff8594167abb22651a44957637063",
+  "qualification": "Two timed candidate servers have the feature environment variable absent."
+}

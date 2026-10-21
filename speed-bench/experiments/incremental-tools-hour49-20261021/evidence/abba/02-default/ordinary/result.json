@@ -1,0 +1,79 @@
+{
+  "case": "ordinary",
+  "history_mode": "full",
+  "pass": true,
+  "error": null,
+  "requests": [
+    {
+      "step": 1,
+      "seconds": 21.435450749937445,
+      "usage": {
+        "input_tokens": 621,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 621
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 669
+      },
+      "status": "completed",
+      "output_types": [
+        "message",
+        "tool_search_call"
+      ]
+    },
+    {
+      "step": 2,
+      "seconds": 7.267439750023186,
+      "usage": {
+        "input_tokens": 757,
+        "input_tokens_details": {
+          "cached_tokens": 669,
+          "cache_write_tokens": 88
+        },
+        "output_tokens": 70,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 827
+      },
+      "status": "completed",
+      "output_types": [
+        "function_call"
+      ]
+    },
+    {
+      "step": 3,
+      "seconds": 2.9887776251416653,
+      "usage": {
+        "input_tokens": 861,
+        "input_tokens_details": {
+          "cached_tokens": 827,
+          "cache_write_tokens": 34
+        },
+        "output_tokens": 29,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 890
+      },
+      "status": "completed",
+      "output_types": [
+        "message"
+      ]
+    }
+  ],
+  "first_search_arguments": {
+    "query": "read_note"
+  },
+  "tool_seconds": 0.00018700002692639828,
+  "actual_file_read": true,
+  "read_sha256": "d95114f08842385a27d27edd3de93402becb0c7e622d2d7bc533aca25915bc19",
+  "parent_id_after_read_call": "resp_ecc93d097435f6a742f76561",
+  "answer": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ-46-ordinary\",\"current_key\":\"SABLE-1937\"}",
+  "workflow_seconds": 31.69359358306974,
+  "total_seconds": 31.693593790987507
+}

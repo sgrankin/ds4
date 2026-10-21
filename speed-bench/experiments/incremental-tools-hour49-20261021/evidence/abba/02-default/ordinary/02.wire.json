@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "seconds": 7.267439750023186,
+  "wire": "{\"id\":\"resp_ecc93d097435f6a742f76561\",\"object\":\"response\",\"created_at\":1792545957,\"status\":\"completed\",\"model\":\"deepseek-v4.1-flash\",\"store\":true,\"previous_response_id\":null,\"conversation\":null,\"output\":[{\"id\":\"fc_4a56cd442eb70fefc28f5f71\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"read_note\",\"call_id\":\"call_a672cecda50367420ba2f88c72c41c47\",\"arguments\":\"{\\\"path\\\":\\\"/Volumes/Models/ds4/.workspaces/incremental-tools-20261021/item49/abba/fixtures/ordinary/note.json\\\"}\"}],\"usage\":{\"input_tokens\":757,\"input_tokens_details\":{\"cached_tokens\":669,\"cache_write_tokens\":88},\"output_tokens\":70,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":827}}"
+}

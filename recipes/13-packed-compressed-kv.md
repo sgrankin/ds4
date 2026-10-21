@@ -44,6 +44,17 @@ This is intended to preserve existing canonical prefixes and their disk bytes;
 this feature does not halve canonical SSD-cache files or snapshot staging RAM.
 
 Original-backed suffix capture/relocation currently rejects packed sessions.
+This is unfinished typed-copy and rotary-repair work, not a fundamental
+incompatibility with the independent BF16 pre-RoPE archive. The current graft
+copies compressed rows using four-byte offsets, and its rotary repair operates
+on F32 views; those operations cannot be used directly on two-byte F16 storage.
+
+Supporting relocation would require typed compressed-row copies and bounded
+unpack/rotate/requantize/repack work for the rotary tails. It would not require
+a permanent full-cache F32 mirror. Until that work is implemented and measured,
+canonical SSD prefixes remain usable with suffix reuse disabled; the combined
+packed-layout/suffix mode is unsupported.
+
 Use the server directly with suffix reuse disabled while qualifying the option:
 
 ```sh

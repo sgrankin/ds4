@@ -1,0 +1,79 @@
+{
+  "case": "favorable",
+  "history_mode": "parent",
+  "pass": true,
+  "error": null,
+  "requests": [
+    {
+      "step": 1,
+      "seconds": 55.84898924990557,
+      "usage": {
+        "input_tokens": 4485,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 4485
+        },
+        "output_tokens": 54,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4539
+      },
+      "status": "completed",
+      "output_types": [
+        "message",
+        "tool_search_call"
+      ]
+    },
+    {
+      "step": 2,
+      "seconds": 77.98685054201633,
+      "usage": {
+        "input_tokens": 6878,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 6878
+        },
+        "output_tokens": 72,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 6950
+      },
+      "status": "completed",
+      "output_types": [
+        "function_call"
+      ]
+    },
+    {
+      "step": 3,
+      "seconds": 56.36618383298628,
+      "usage": {
+        "input_tokens": 5895,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 5895
+        },
+        "output_tokens": 29,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 5924
+      },
+      "status": "completed",
+      "output_types": [
+        "message"
+      ]
+    }
+  ],
+  "first_search_arguments": {
+    "query": "read_note"
+  },
+  "tool_seconds": 0.00015900004655122757,
+  "actual_file_read": true,
+  "read_sha256": "c955c1fa68ac501e443220d383ef5de6e263a80c6edaa7b6f2c962f69ffa44d3",
+  "parent_id_after_read_call": "resp_80fecc1507592fbc1f5729bf",
+  "answer": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ-46-favorable\",\"current_key\":\"SABLE-1937\"}",
+  "workflow_seconds": 190.20832700002939,
+  "total_seconds": 190.20832770806737
+}

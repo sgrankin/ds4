@@ -64,6 +64,18 @@ including capture with original pre-RoPE tape. Invalidation/recomputation or a
 successful canonical load clears that state. This keeps approximate replay out
 of ordinary token-keyed prefix caches and relocatable suffix sources.
 
+The persistence restriction is an intentional first-prototype guard, not a
+fundamental inability to save these tensors. A separately tagged checkpoint
+could restore and continue the same approximate state; restoring it would not
+make its activations native or exact. This capability is not implemented.
+
+The current SSD cache's approximate record kind specifically represents an
+original-backed, relocatable suffix and requires its pre-RoPE tape. Decoder
+replay is a different state kind. Durable replay would need its own tag/profile
+and a loader that preserves the approximation identity instead of importing it
+as an exact prefix. Matching live continuations work today; ordinary disk
+persistence of replay state remains blocked.
+
 ## Item47 method
 
 The direct-session driver fixes all three prompts at 8,192 tokens on the verified
