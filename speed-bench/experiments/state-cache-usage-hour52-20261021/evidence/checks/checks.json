@@ -1,0 +1,21 @@
+{
+  "base_revision": "129aaa0c52f81b357a11e22884df7d8834da9790",
+  "build": {
+    "command": "make -j6 ds4-server ds4-agent ds4_test ds4_agent_test",
+    "returncode": 0
+  },
+  "tests": [
+    {
+      "command": "./ds4_test --server",
+      "returncode": 0
+    },
+    {
+      "command": "./ds4_agent_test",
+      "returncode": 0
+    }
+  ],
+  "binary_sha256": {
+    "ds4-server": "363960720cc372bda5b5fa30c0d8862d61e385be9bcbbc62d707324fa4875408",
+    "ds4-agent": "ff6e4f31fed28d7c35877b4258dc73e028de1c495de00a54c3bf61cfab832803"
+  }
+}

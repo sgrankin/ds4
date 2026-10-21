@@ -99,14 +99,17 @@ def arm(args, label, fixture):
     first_usage = (requests[0].get('usage') or {}) if requests else {}
     result['eligible_prompt'] = first_usage.get('input_tokens', 0) >= 8192
     result['first_request_cached_tokens'] = first_usage.get('input_tokens_details', {}).get('cached_tokens', 0)
-    result['usage_limitation'] = ('HTTP cached_tokens is counted before the state-cache loader; '
-        'it may underreport SSD hits. First-request replay-hit log is the qualification evidence.')
+    result['usage_totals_match'] = all(
+        u['input_tokens_details']['cached_tokens'] + u['input_tokens_details']['cache_write_tokens'] == u['input_tokens']
+        for u in result['usage'])
+    result['usage_matches_restore'] = (label == '01cold' or
+        result['first_request_cached_tokens'] == result['first_request_replay_hit_tokens'])
     result['successful_replay_store'] = any('state cache replay store ok ' in s for s in lines)
     persistence_pass = (result['replay_executed'] and result['successful_replay_store']
                         if label == '01cold' else
-                        result['first_request_replay_hit_tokens'] > 0)
+                        result['first_request_replay_hit_tokens'] > 0 and result['usage_matches_restore'])
     result['pass'] = (not result['error'] and workflow.get('pass', False) and
-        not workflow.get('error') and result['eligible_prompt'] and persistence_pass)
+        not workflow.get('error') and result['eligible_prompt'] and persistence_pass and result['usage_totals_match'])
     save(out/'result.json', result)
     print(json.dumps({'arm': label, 'pid': result.get('pid'), 'pass': result['pass'],
                       'error': result['error']}), flush=True)

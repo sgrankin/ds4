@@ -1,0 +1,14 @@
+{
+  "pass": true,
+  "restored_tokens": 8618,
+  "reported_cached_tokens": 8618,
+  "usage_matches_restore": true,
+  "both_workflows_pass": true,
+  "pressure": {
+    "samples": 67,
+    "all_normal": true,
+    "peak_wired_compressed_gb": 99.46629333496094,
+    "max_swap_growth_mb": 0.0
+  },
+  "all_six_usage_totals_match": true
+}

@@ -1,0 +1,32 @@
+{
+  "id": "resp_084e73b4d4a18d6da0860438",
+  "object": "response",
+  "created_at": 1792550276,
+  "status": "completed",
+  "model": "deepseek-v4.1-flash",
+  "store": false,
+  "previous_response_id": null,
+  "conversation": null,
+  "output": [
+    {
+      "id": "fc_ea4774b982928aa282174e5d",
+      "type": "function_call",
+      "status": "completed",
+      "name": "read_note",
+      "call_id": "call_9bbf2e5872817d8e2f4c9a85bd28412a",
+      "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/state-cache-usage-hour52/serve/fixtures/note.json\"}"
+    }
+  ],
+  "usage": {
+    "input_tokens": 8763,
+    "input_tokens_details": {
+      "cached_tokens": 8675,
+      "cache_write_tokens": 88
+    },
+    "output_tokens": 64,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 8827
+  }
+}

@@ -719,3 +719,16 @@ zeroadditionalF16DNLL/KL. LegacyF16left4rows passes separately. F16edit
 time+6.55%vsF32controls for halvedmainallocation; keepoptional. All7HTTPsteps
 and6actualreads pass, including1368token nativeSSDrestore andtwo832token
 approximateSSDgraftsafterrestart. [Report](../experiments/f16-suffix-hour51-20261021/README.md).
+
+Item52 starts **2026-10-21 02:35 UTC**, 10-minute cap **02:45 UTC**.
+Correct demonstrated HTTPusage underreporting for state-cache prefix hits.
+Carry actual newly restored prefix credits out of sync, preserving live/graft
+counts and excluding newly computed tokens. Reuse Item50 two-process restart
+driver with cached_tokens required to equal the actual hit length; no new
+harness or general cache-accounting redesign.
+
+Item52 complete **02:38 UTC**, within10mincap. Bothactualreadworkflows pass;
+restartHTTP reports8618cached/0writes matching8618restoredtokens. R2/R3
+countsretainlive8675/8827andfresh88/31; all6read+write totalsmatchinput.
+Server/agentsuites pass; all67guard samplesnormal, zeronewswap.
+[Report](../experiments/state-cache-usage-hour52-20261021/README.md).

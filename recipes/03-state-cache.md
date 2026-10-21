@@ -75,6 +75,10 @@ values even with the opt-in F16 runtime main cache, so runtime allocation saving
 do not halve persisted bytes. A replay's inner `DSV4` bytes are storage inside
 its private envelope, not permission to load the state as canonical/exact.
 
+HTTP cached-token usage includes newly restored SSD prefixes after the
+[Item52 reporting correction](../speed-bench/experiments/state-cache-usage-hour52-20261021/README.md);
+existing live reads and fresh writes remain separate.
+
 ## Knobs and scope
 
 `DS4_STATE_CACHE_DIR` enables storage. `DS4_STATE_CACHE_HOT_MB=0` uses disk-backed

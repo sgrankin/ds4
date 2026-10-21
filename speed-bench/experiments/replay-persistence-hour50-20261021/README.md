@@ -56,7 +56,9 @@ This is one ordered restart qualification, not an ABBA throughput estimate;
 OS file caching is not flushed. HTTP `cached_tokens` currently reports0 for
 that SSD hit because existing usage accounting runs before the state-cache
 loader. The actual replay-hit log, fresh-process identity and continuation
-grade establish restoration; the counter is a known separate reporting defect.
+grade establish restoration. [Item52](../state-cache-usage-hour52-20261021/README.md)
+subsequently fixes the reporting defect; the historical Item50 observations
+above remain unchanged.
 
 The probe's20 and server pair's70 pressure samples were all normal. Peak
 wired+compressed was87.221/100.424GiB, maximum swap growth2.69/0MiB. One model

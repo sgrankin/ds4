@@ -12994,12 +12994,14 @@ static int server_prefill_quantum(server *s) {
 
 /* Called only while inference_mu owns the session and the shared cache.
  * This exact-token tier supplements the existing hidden/visible/tool-map
- * recovery paths; it never interprets rendered text or image placeholders. */
-static void server_state_cache_load_prefix(server *s, server_slot *slot,
-                                            const ds4_tokens *prompt) {
+ * recovery paths; it never interprets rendered text or image placeholders.
+ * Credit only restored rows beyond the usable live frontier, not work already
+ * prefetched earlier in this request. */
+static int server_state_cache_load_prefix(server *s, server_slot *slot,
+                                           const ds4_tokens *prompt) {
     if (!s->state_cache || prompt->len <= 0 ||
         ds4_session_is_approximate(slot->session) ||
-        ds4_session_has_vision_state(slot->session) || slot_job_cancelled(slot)) return;
+        ds4_session_has_vision_state(slot->session) || slot_job_cancelled(slot)) return 0;
     int live = ds4_session_pos(slot->session);
     int common = ds4_session_common_prefix(slot->session, prompt);
     int usable = common == live && prompt->len >= live ? live : 0;
@@ -13007,15 +13009,16 @@ static void server_state_cache_load_prefix(server *s, server_slot *slot,
     ds4_state_cache_ref *ref = ds4_state_cache_find_prefix(s->state_cache,
         s->state_cache_profile, (uint32_t)s->ctx_size, prompt->v,
         (uint32_t)prompt->len, &matched);
-    if (!ref) return;
-    if (matched <= (uint32_t)usable) { ds4_state_cache_release(ref); return; }
+    if (!ref) return 0;
+    if (matched <= (uint32_t)usable) { ds4_state_cache_release(ref); return 0; }
+    int restored = 0;
     ds4_state_cache_blob blob = {0};
     char cache_err[160] = {0};
     if (ds4_state_cache_materialize(ref, &blob, cache_err, sizeof(cache_err)) == 0) {
         if (slot_job_cancelled(slot)) {
             ds4_state_cache_blob_free(&blob);
             ds4_state_cache_release(ref);
-            return;
+            return 0;
         }
         ds4_session_snapshot snap = {.ptr = blob.state, .len = blob.state_bytes,
                                     .cap = blob.state_bytes};
@@ -13033,6 +13036,7 @@ static void server_state_cache_load_prefix(server *s, server_slot *slot,
         if (loaded == 0 &&
             ds4_session_pos(slot->session) == (int)matched &&
             ds4_tokens_starts_with(prompt, ds4_session_tokens(slot->session))) {
+            restored = (int)matched - usable;
             server_log(DS4_LOG_KVCACHE, "ds4-server: state cache %s hit slot=%d tokens=%u",
                        blob.kind == DS4_STATE_CACHE_REPLAY ? "replay" : "exact", slot->id, matched);
         } else {
@@ -13047,6 +13051,7 @@ static void server_state_cache_load_prefix(server *s, server_slot *slot,
     }
     ds4_state_cache_blob_free(&blob);
     ds4_state_cache_release(ref);
+    return restored;
 }
 
 static void server_state_cache_store_endpoint(server *s, server_slot *slot) {
@@ -13215,14 +13220,16 @@ done:
 /* Synchronize one resident slot without monopolizing the model executor.  A
  * non-matching prompt is first rebuilt to one quantum; a matching checkpoint
  * advances from its current frontier. Absolute positions remain session-local,
- * so compressor alignment is independent of scheduler order. */
+ * so compressor alignment is independent of scheduler order. Optional cache
+ * credits accumulate across calls; the request caller initializes them to 0. */
 static int server_session_sync(server *s, server_slot *slot,
-                               const ds4_tokens *prompt,
+                               const ds4_tokens *prompt, int *state_cache_credits,
                                char *err, size_t errlen) {
     if (!s || !slot || !prompt) return 1;
     if (!s->batched_mode) {
         if (!server_prefill_enter(s, slot)) return DS4_SESSION_SYNC_INTERRUPTED;
-        server_state_cache_load_prefix(s, slot, prompt);
+        int restored = server_state_cache_load_prefix(s, slot, prompt);
+        if (state_cache_credits) *state_cache_credits += restored;
         int rc = 0;
         int anchor = prompt->len - s->context_suffix_fresh;
         if (s->context_suffix_reuse && slot->context_cache_profile[0] &&
@@ -13250,7 +13257,8 @@ static int server_session_sync(server *s, server_slot *slot,
         int quantum = server_prefill_quantum(s);
         if (!server_prefill_enter(s, slot)) return DS4_SESSION_SYNC_INTERRUPTED;
         if (!called && s->state_cache) {
-            server_state_cache_load_prefix(s, slot, prompt);
+            int restored = server_state_cache_load_prefix(s, slot, prompt);
+            if (state_cache_credits) *state_cache_credits += restored;
             int current = ds4_session_pos(slot->session);
             int shared = ds4_session_common_prefix(slot->session, prompt);
             done = shared == current && prompt->len >= current ? current : 0;
@@ -13309,7 +13317,7 @@ static int server_session_sync_multimodal(server *s, server_slot *slot,
                                           size_t image_count,
                                           char *err, size_t errlen) {
     if (!image_count)
-        return server_session_sync(s, slot, prompt, err, errlen);
+        return server_session_sync(s, slot, prompt, NULL, err, errlen);
     if (!s || !slot || !prompt || !images) return 1;
     if (!s->batched_mode) {
         if (!server_prefill_enter(s, slot)) return DS4_SESSION_SYNC_INTERRUPTED;
@@ -13384,7 +13392,7 @@ static bool append_rendered_suffix_to_live_session(server *s, server_slot *slot,
     ds4_tokens target = {0};
     build_prompt_from_exact_prefix_and_text_suffix(s->engine, live, suffix, &target);
     const int before = ds4_session_pos(slot->session);
-    bool ok = server_session_sync(s, slot, &target, err, errlen) == 0;
+    bool ok = server_session_sync(s, slot, &target, NULL, err, errlen) == 0;
     if (ok && tokens_appended) {
         int delta = ds4_session_pos(slot->session) - before;
         *tokens_appended = delta > 0 ? delta : 0;
@@ -13916,7 +13924,7 @@ static void canonicalize_tool_checkpoint(server *s, server_slot *slot,
         snprintf(rebuild_progress.ctx, sizeof(rebuild_progress.ctx), "%s", rebuild_ctx);
         ds4_session_set_progress(slot->session, server_progress_cb, &rebuild_progress);
         ds4_session_set_display_progress(slot->session, server_progress_cb, &rebuild_progress);
-        if (server_session_sync(s, slot, sync_prompt,
+        if (server_session_sync(s, slot, sync_prompt, NULL,
                                 sync_err, sizeof(sync_err)) == 0) {
             ds4_session_set_progress(slot->session, NULL, NULL);
             ds4_session_set_display_progress(slot->session, NULL, NULL);
@@ -14560,6 +14568,7 @@ static void generate_job_inner(server *s, server_slot *slot, job *j) {
         }
     }
 
+    int state_cache_credits = 0;
     int cold_store_len = 0;
     if (!multimodal && cached == 0 &&
         s->kv.enabled &&
@@ -14591,7 +14600,7 @@ static void generate_job_inner(server *s, server_slot *slot, job *j) {
     {
         ds4_tokens prefix = {0};
         tokens_copy_prefix(&prefix, prompt_for_sync, cold_store_len);
-        if (server_session_sync(s, slot, &prefix, err, sizeof(err)) != 0) {
+        if (server_session_sync(s, slot, &prefix, &state_cache_credits, err, sizeof(err)) != 0) {
             ds4_tokens_free(&prefix);
             ds4_tokens_free(&effective_prompt);
             ds4_session_set_progress(slot->session, NULL, NULL);
@@ -14625,7 +14634,7 @@ static void generate_job_inner(server *s, server_slot *slot, job *j) {
         server_session_sync_multimodal(s, slot, prompt_for_sync,
                                        j->req.images, j->req.image_count,
                                        err, sizeof(err)) :
-        server_session_sync(s, slot, prompt_for_sync, err, sizeof(err));
+        server_session_sync(s, slot, prompt_for_sync, &state_cache_credits, err, sizeof(err));
     if (prompt_sync_rc != 0) {
         ds4_tokens_free(&effective_prompt);
         ds4_session_set_progress(slot->session, NULL, NULL);
@@ -14642,6 +14651,16 @@ static void generate_job_inner(server *s, server_slot *slot, job *j) {
         trace_event(s, trace_id, "prefill failed: %s", err);
         send_prefill_failure_response(s, j, &progress, ctx_span, req_flags, err);
         return;
+    }
+    if (state_cache_credits > 0) {
+        cached = clamp_usage_tokens(cached + state_cache_credits, prompt_tokens);
+        j->req.cache_read_tokens = cached;
+        j->req.cache_write_tokens = prompt_tokens - cached;
+        progress.cached_tokens = cached;
+        request_ctx_span(ctx_span, sizeof(ctx_span), cached, prompt_tokens);
+        snprintf(progress.ctx, sizeof(progress.ctx), "%s", ctx_span);
+        trace_event(s, trace_id, "state cache SSD credits=%d cached=%d prompt=%d",
+                    state_cache_credits, cached, prompt_tokens);
     }
     free(disk_cache_path);
     if (job_cancelled(j)) {

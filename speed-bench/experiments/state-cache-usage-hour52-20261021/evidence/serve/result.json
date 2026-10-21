@@ -1,0 +1,303 @@
+{
+  "pass": true,
+  "arms": [
+    {
+      "arm": "01cold",
+      "pass": true,
+      "error": null,
+      "pid": 75746,
+      "startup_seconds": 0.42393074999563396,
+      "workflow": {
+        "case": "http-replay-persistence",
+        "history_mode": "full",
+        "pass": true,
+        "error": null,
+        "requests": [
+          {
+            "step": 1,
+            "seconds": 36.37392254197039,
+            "usage": {
+              "input_tokens": 8618,
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 8618
+              },
+              "output_tokens": 57,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 8675
+            },
+            "status": "completed",
+            "output_types": [
+              "message",
+              "tool_search_call"
+            ]
+          },
+          {
+            "step": 2,
+            "seconds": 7.334784000180662,
+            "usage": {
+              "input_tokens": 8763,
+              "input_tokens_details": {
+                "cached_tokens": 8675,
+                "cache_write_tokens": 88
+              },
+              "output_tokens": 64,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 8827
+            },
+            "status": "completed",
+            "output_types": [
+              "function_call"
+            ]
+          },
+          {
+            "step": 3,
+            "seconds": 2.9427234588656574,
+            "usage": {
+              "input_tokens": 8858,
+              "input_tokens_details": {
+                "cached_tokens": 8827,
+                "cache_write_tokens": 31
+              },
+              "output_tokens": 26,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 8884
+            },
+            "status": "completed",
+            "output_types": [
+              "message"
+            ]
+          }
+        ],
+        "first_search_arguments": {
+          "query": "read_note"
+        },
+        "tool_seconds": 0.00019387505017220974,
+        "actual_file_read": true,
+        "read_sha256": "0e4c3efa0d8e4400a7c69d149842e7ebe4eb7d3ed85801658a9e8acc2027cbfb",
+        "parent_id_after_read_call": "resp_c3f93e9061bcd39340447a91",
+        "answer": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ50\",\"current_key\":\"SABLE-1937\"}",
+        "workflow_seconds": 46.655460708076134,
+        "total_seconds": 46.655460958136246
+      },
+      "server_returncode": 0,
+      "arm_seconds": 48.77522025001235,
+      "runtime_replay_lines": [
+        "ds4: V4.1 decoder replay rows=128 floor=8064 end=8192 approximate=1",
+        "ds4: V4.1 decoder replay selected_layers=20 full_layers=0"
+      ],
+      "state_cache_lines": [
+        "1020 22:36:51 ds4-server: state cache enabled dir=/Volumes/Models/ds4/.workspaces/state-cache-usage-hour52/serve/cache profile=18c161b5820e690bc7f6da886b19b2c174537ca0",
+        "1020 22:37:23 ds4-server: state cache replay store ok slot=0 tokens=8618",
+        "1020 22:37:31 ds4-server: state cache replay store ok slot=0 tokens=8763",
+        "1020 22:37:36 ds4-server: state cache replay store ok slot=0 tokens=8858"
+      ],
+      "replay_store_lines": [
+        "1020 22:37:23 ds4-server: state cache replay store ok slot=0 tokens=8618",
+        "1020 22:37:31 ds4-server: state cache replay store ok slot=0 tokens=8763",
+        "1020 22:37:36 ds4-server: state cache replay store ok slot=0 tokens=8858"
+      ],
+      "replay_hit_lines": [],
+      "first_request_replay_hit_tokens": 0,
+      "replay_executed": true,
+      "usage": [
+        {
+          "input_tokens": 8618,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 8618
+          },
+          "output_tokens": 57,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8675
+        },
+        {
+          "input_tokens": 8763,
+          "input_tokens_details": {
+            "cached_tokens": 8675,
+            "cache_write_tokens": 88
+          },
+          "output_tokens": 64,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8827
+        },
+        {
+          "input_tokens": 8858,
+          "input_tokens_details": {
+            "cached_tokens": 8827,
+            "cache_write_tokens": 31
+          },
+          "output_tokens": 26,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8884
+        }
+      ],
+      "eligible_prompt": true,
+      "first_request_cached_tokens": 0,
+      "usage_matches_restore": true,
+      "successful_replay_store": true
+    },
+    {
+      "arm": "02restart",
+      "pass": true,
+      "error": null,
+      "pid": 75984,
+      "startup_seconds": 0.4133397920522839,
+      "workflow": {
+        "case": "http-replay-persistence",
+        "history_mode": "full",
+        "pass": true,
+        "error": null,
+        "requests": [
+          {
+            "step": 1,
+            "seconds": 6.817560666939244,
+            "usage": {
+              "input_tokens": 8618,
+              "input_tokens_details": {
+                "cached_tokens": 8618,
+                "cache_write_tokens": 0
+              },
+              "output_tokens": 57,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 8675
+            },
+            "status": "completed",
+            "output_types": [
+              "message",
+              "tool_search_call"
+            ]
+          },
+          {
+            "step": 2,
+            "seconds": 9.006620791973546,
+            "usage": {
+              "input_tokens": 8763,
+              "input_tokens_details": {
+                "cached_tokens": 8675,
+                "cache_write_tokens": 88
+              },
+              "output_tokens": 64,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 8827
+            },
+            "status": "completed",
+            "output_types": [
+              "function_call"
+            ]
+          },
+          {
+            "step": 3,
+            "seconds": 3.0092392910737544,
+            "usage": {
+              "input_tokens": 8858,
+              "input_tokens_details": {
+                "cached_tokens": 8827,
+                "cache_write_tokens": 31
+              },
+              "output_tokens": 26,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "total_tokens": 8884
+            },
+            "status": "completed",
+            "output_types": [
+              "message"
+            ]
+          }
+        ],
+        "first_search_arguments": {
+          "query": "read_note"
+        },
+        "tool_seconds": 0.00013087503612041473,
+        "actual_file_read": true,
+        "read_sha256": "0e4c3efa0d8e4400a7c69d149842e7ebe4eb7d3ed85801658a9e8acc2027cbfb",
+        "parent_id_after_read_call": "resp_084e73b4d4a18d6da0860438",
+        "answer": "{\"archived_code\":\"MAPLE-4826\",\"receipt\":\"READ50\",\"current_key\":\"SABLE-1937\"}",
+        "workflow_seconds": 18.837317417142913,
+        "total_seconds": 18.837317750090733
+      },
+      "server_returncode": 0,
+      "arm_seconds": 20.73248187499121,
+      "runtime_replay_lines": [],
+      "state_cache_lines": [
+        "1020 22:37:40 ds4-server: state cache enabled dir=/Volumes/Models/ds4/.workspaces/state-cache-usage-hour52/serve/cache profile=18c161b5820e690bc7f6da886b19b2c174537ca0",
+        "1020 22:37:40 ds4-server: state cache replay hit slot=0 tokens=8618",
+        "1020 22:37:40 ds4-server: state cache replay store ok slot=0 tokens=8618",
+        "1020 22:37:52 ds4-server: state cache replay store ok slot=0 tokens=8763",
+        "1020 22:37:57 ds4-server: state cache replay store ok slot=0 tokens=8858"
+      ],
+      "replay_store_lines": [
+        "1020 22:37:40 ds4-server: state cache replay store ok slot=0 tokens=8618",
+        "1020 22:37:52 ds4-server: state cache replay store ok slot=0 tokens=8763",
+        "1020 22:37:57 ds4-server: state cache replay store ok slot=0 tokens=8858"
+      ],
+      "replay_hit_lines": [
+        "1020 22:37:40 ds4-server: state cache replay hit slot=0 tokens=8618"
+      ],
+      "first_request_replay_hit_tokens": 8618,
+      "replay_executed": false,
+      "usage": [
+        {
+          "input_tokens": 8618,
+          "input_tokens_details": {
+            "cached_tokens": 8618,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 57,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8675
+        },
+        {
+          "input_tokens": 8763,
+          "input_tokens_details": {
+            "cached_tokens": 8675,
+            "cache_write_tokens": 88
+          },
+          "output_tokens": 64,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8827
+        },
+        {
+          "input_tokens": 8858,
+          "input_tokens_details": {
+            "cached_tokens": 8827,
+            "cache_write_tokens": 31
+          },
+          "output_tokens": 26,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 8884
+        }
+      ],
+      "eligible_prompt": true,
+      "first_request_cached_tokens": 8618,
+      "usage_matches_restore": true,
+      "successful_replay_store": true
+    }
+  ],
+  "identical_first_request": true,
+  "distinct_processes": true
+}
