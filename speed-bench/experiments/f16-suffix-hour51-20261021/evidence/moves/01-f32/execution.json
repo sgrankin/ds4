@@ -1,0 +1,34 @@
+{
+  "command": [
+    "/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/relocate",
+    "--model",
+    "/Volumes/Models/ds4/gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+    "--out",
+    "/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/moves/01-f32",
+    "--source-f16",
+    "0",
+    "--destination-f16",
+    "0",
+    "--moves",
+    "4",
+    "--prerope",
+    "1",
+    "--ctx",
+    "8192",
+    "--chunk",
+    "512",
+    "--cache-gb",
+    "64"
+  ],
+  "cwd": "/Volumes/Models/ds4",
+  "env": {
+    "DS4_V41_DECODER_REPLAY_ROWS": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_PREFILL_GAP": "0",
+    "DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS": "0",
+    "DS4_METAL_V41_SELECTED_TILE": "64",
+    "DS4_METAL_V41_SELECTED_LIMIT": "1024"
+  },
+  "base_revision": "2436f414f083b7b04a9b0dedec4788e6f6bd62d0",
+  "binary_sha256": "954c92f28480b55aa5d7491fe89a2fdddd85cebf0dc121556b184093af67d1b2"
+}

@@ -703,3 +703,19 @@ passed actual read workflows; restart restored8616 tokens with no replay sweep
 Existing HTTP usage underreports state-cache hits; log evidence is retained and
 a small reporting correction is a separate follow-up.
 [Report](../experiments/replay-persistence-hour50-20261021/README.md).
+
+Item51 starts **2026-10-21 01:53 UTC**, deadline **02:53 UTC**.
+Support suffix capture, canonical-prefix restore and zero/even left/right grafts
+with F16 main compressed KV. Reuse the canonical source plus one bounded F32
+rotary-repair tile; preserve immutable pre-RoPE originals, no full F32 mirror.
+Qualify repeated moves and both layout transitions with the existing Item39
+probe, then existing SSD/HTTP integration if time permits. Keep F32 controls
+and measure additional distribution change separately from stale suffix error.
+
+Item51 complete **02:34 UTC**, within budget. F16 suffixcapture/restore/zero and
+evenleft/right grafts use one256KiBrepairtile. All6lowlevelarms pass; all5
+originalbackedlogitfiles byteidentical (native16+grafted16freshrowsperarm),
+zeroadditionalF16DNLL/KL. LegacyF16left4rows passes separately. F16edit
+time+6.55%vsF32controls for halvedmainallocation; keepoptional. All7HTTPsteps
+and6actualreads pass, including1368token nativeSSDrestore andtwo832token
+approximateSSDgraftsafterrestart. [Report](../experiments/f16-suffix-hour51-20261021/README.md).

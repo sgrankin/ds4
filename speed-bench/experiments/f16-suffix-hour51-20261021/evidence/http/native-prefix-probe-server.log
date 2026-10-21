@@ -1,0 +1,7 @@
+1020 22:32:29 ds4-server: chat ctx=0..1368:1368 RESPPROTO TOOLS prompt start
+1020 22:32:29 ds4-server: suffix exact fallback slot=0 reason=no-aligned-source
+1020 22:32:29 ds4-server: state cache exact hit slot=0 tokens=1368
+1020 22:32:29 ds4-server: chat ctx=0..1368:1368 RESPPROTO TOOLS prompt done 0.160s
+1020 22:32:30 ds4-server: chat ctx=1368..1369:1 gen=1 RESPPROTO TOOLS decoding chunk=2.37 t/s avg=2.37 t/s 0.423s
+1020 22:32:30 ds4-server: reasoning_summary id=chatcmpl-e40aaa28b730622ae7f2aec8 ctx=0..1368:1368 budget=0 thinking_tokens=0 forced=0 deferred=0
+1020 22:32:30 ds4-server: chat ctx=0..1368:1368 gen=1 RESPPROTO TOOLS finish=length 0.583s

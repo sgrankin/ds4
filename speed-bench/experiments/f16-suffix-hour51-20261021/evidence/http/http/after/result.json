@@ -1,0 +1,181 @@
+{
+  "phase": "after",
+  "mode": "reuse",
+  "steps": [
+    {
+      "step": "A-edit2",
+      "session": "A",
+      "seconds": 30.591479584109038,
+      "text": "{\"active_total\": 416, \"archived_code\": \"RIVER-74\"}",
+      "answer": {
+        "active_total": 416,
+        "archived_code": "RIVER-74"
+      },
+      "gold": {
+        "active_total": 416,
+        "archived_code": "RIVER-74"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_b2823ee10d7c69f49df11f807e8ca6c9",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/shared/A/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/shared/A/archive.json",
+          "text": "{\n  \"archived_code\": \"RIVER-74\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/shared/A/archive.json",
+      "replies": [
+        {
+          "seconds": 28.802092000143602,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1370,
+            "input_tokens_details": {
+              "cached_tokens": 832,
+              "cache_write_tokens": 538
+            },
+            "output_tokens": 90,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1460
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.78832520917058,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1485,
+            "input_tokens_details": {
+              "cached_tokens": 1460,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1503
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1020 22:32:52 ds4-server: suffix APPROXIMATE slot=1 reused=832 fresh=228 graft_fresh=164 source=812:1644 destination=310:1142 latest_user_start=1277 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=0 right_shift=0 22027.689 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [],
+      "pass": true,
+      "seconds_including_edit": 30.59203870804049,
+      "edit_seconds": 0.0001984999980777502
+    },
+    {
+      "step": "B-edit2",
+      "session": "B",
+      "seconds": 32.136043209116906,
+      "text": "{\"active_total\": 202, \"archived_code\": \"CEDAR-92\"}",
+      "answer": {
+        "active_total": 202,
+        "archived_code": "CEDAR-92"
+      },
+      "gold": {
+        "active_total": 202,
+        "archived_code": "CEDAR-92"
+      },
+      "correct": true,
+      "fresh_read": true,
+      "complete": true,
+      "calls": [
+        {
+          "name": "read",
+          "call_id": "call_5adc7a2c710d8151a077680219aefeb9",
+          "arguments": "{\"path\":\"/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/shared/B/archive.json\",\"whole\":true,\"raw\":true}",
+          "read": true,
+          "error": null,
+          "path": "/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/shared/B/archive.json",
+          "text": "{\n  \"archived_code\": \"CEDAR-92\"\n}\n"
+        }
+      ],
+      "required_read": "/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/shared/B/archive.json",
+      "replies": [
+        {
+          "seconds": 30.37975858314894,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1370,
+            "input_tokens_details": {
+              "cached_tokens": 832,
+              "cache_write_tokens": 538
+            },
+            "output_tokens": 90,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1460
+          },
+          "incomplete_details": null
+        },
+        {
+          "seconds": 1.7552006249316037,
+          "http_status": 200,
+          "response_status": "completed",
+          "usage": {
+            "input_tokens": 1485,
+            "input_tokens_details": {
+              "cached_tokens": 1460,
+              "cache_write_tokens": 25
+            },
+            "output_tokens": 18,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1503
+          },
+          "incomplete_details": null
+        }
+      ],
+      "errors": [],
+      "suffix_log_lines": [
+        "1020 22:33:24 ds4-server: suffix APPROXIMATE slot=0 reused=832 fresh=228 graft_fresh=164 source=814:1646 destination=310:1142 latest_user_start=1277 pre_rope=1 source_ssd=1 source_approximate=1 prefix_pad=0 right_shift=0 23595.916 ms"
+      ],
+      "exact_hit_log_lines": [],
+      "slot_eviction_log_lines": [
+        "1020 22:33:00 slot 0: request reuses nothing; evicting checkpoint (1369 tokens, idle 30 s, protected)"
+      ],
+      "pass": true,
+      "seconds_including_edit": 32.13660441711545,
+      "edit_seconds": 0.00020275008864700794
+    }
+  ],
+  "edits": [
+    {
+      "removed_bytes": 2469,
+      "remaining_blocks": 0,
+      "session": "A",
+      "seconds": 0.0001984999980777502
+    },
+    {
+      "removed_bytes": 2469,
+      "remaining_blocks": 0,
+      "session": "B",
+      "seconds": 0.00020275008864700794
+    }
+  ],
+  "seconds": 62.729571792064235,
+  "source_warmup_seconds": 0,
+  "edited_seconds": 62.72864312515594,
+  "suffix_grafts_observed": 2,
+  "approximate_ssd_sources_observed": 2,
+  "pass": true,
+  "restart_owned_by_ROOT": true
+}

@@ -31,7 +31,7 @@ result blocks, not relabelled historical measurements.
 | [Q2 kernel epilogue](10-q2-kernel-epilogue.md) | Keep paired gate/up activation in registers; measure before adopting | No useful ABBA gain; patch retained for replication, defaults unchanged |
 | [Incremental tool schemas](11-incremental-tool-schemas.md) | Announce discovered schemas once at their history position; preserve reusable prefixes | V4.1 Responses default, explicit `0` legacy escape hatch; Item49 favorable workflow 57.45% faster, ordinary 4.00% slower; all eight first workflows pass |
 | [Bounded decoder replay](12-bounded-decoder-replay.md) | Replay a fixed decoder tail while retaining complete compressed/index state | Opt-in 128/selected1 with typed SSD restart persistence; 7.03% unbatched HTTP workflow saving includes shorter search output; separate direct fixtures save 34.32–38.17%; presets unchanged |
-| [Packed compressed KV](13-packed-compressed-kv.md) | Store existing quantized main-cache values in F16; keep canonical F32 I/O | Main allocation halves; fixture logits and odd-frontier round trip exact; latency neutral/unresolved; default GPU-suite failure reproduces on parent; presets unchanged |
+| [Packed compressed KV](13-packed-compressed-kv.md) | Store existing quantized main-cache values in F16; keep canonical F32 I/O | Main allocation halves; F16 suffix/cross-layout and SSD restart pass; small graft diagnostic +6.55% time; fixture logits and odd-frontier round trip exact; latency neutral/unresolved; default GPU-suite failure reproduces on parent; presets unchanged |
 
 [Not-adopted summary](not-adopted/README.md) collects short reasons and links
 for rejected policies and candidates that still lack serving evidence. The

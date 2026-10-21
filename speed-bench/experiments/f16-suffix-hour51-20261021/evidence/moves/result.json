@@ -1,0 +1,44 @@
+[
+  {
+    "arm": "01-f32",
+    "returncode": 0,
+    "source_f16": 0,
+    "destination_f16": 0,
+    "prerope": 1
+  },
+  {
+    "arm": "02-f16",
+    "returncode": 0,
+    "source_f16": 1,
+    "destination_f16": 1,
+    "prerope": 1
+  },
+  {
+    "arm": "03-f32-to-f16",
+    "returncode": 0,
+    "source_f16": 0,
+    "destination_f16": 1,
+    "prerope": 1
+  },
+  {
+    "arm": "04-f16-to-f32",
+    "returncode": 0,
+    "source_f16": 1,
+    "destination_f16": 0,
+    "prerope": 1
+  },
+  {
+    "arm": "05-f32",
+    "returncode": 0,
+    "source_f16": 0,
+    "destination_f16": 0,
+    "prerope": 1
+  },
+  {
+    "arm": "06-legacy-f16",
+    "returncode": 0,
+    "source_f16": 1,
+    "destination_f16": 1,
+    "prerope": 0
+  }
+]

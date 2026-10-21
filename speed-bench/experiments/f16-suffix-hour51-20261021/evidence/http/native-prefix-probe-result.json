@@ -1,0 +1,9 @@
+{
+  "http_status": 200,
+  "seconds": 0.5841282499022782,
+  "exact_hit_lines": [
+    "1020 22:32:29 ds4-server: state cache exact hit slot=0 tokens=1368"
+  ],
+  "pass": true,
+  "scope": "Unchanged native-prefix restore only; one-token output is not a task grade."
+}

@@ -66726,8 +66726,7 @@ static bool ds41_suffix_configuration_supported(ds4_session *s) {
            !s->engine->directional_steering_dirs && !s->engine->dspark &&
            !ds4_engine_has_mtp(s->engine) && ds4_session_is_ds41(s) &&
            s->ds41_graph_ready &&
-           !s->ds41_graph.workspace_failed && !s->ds41_graph.compressed_kv_f16 &&
-           !s->ds41_graph.image_count &&
+           !s->ds41_graph.workspace_failed && !s->ds41_graph.image_count &&
            !s->ds41_graph.imatrix && !s->ds41_graph.predict_active &&
            !s->ds41_graph.predict_load.active && !ds4_session_has_vision_state(s);
 }
@@ -66852,7 +66851,7 @@ static bool ds41_suffix_payload_view(ds4_session *s, const ds4_suffix_cache *cac
 int ds4_session_enable_suffix_prerope(ds4_session *s, char *err, size_t errlen) {
 #if defined(DS4_HAS_DEEPSEEK41_GPU) && defined(__APPLE__)
     if (!ds41_suffix_configuration_supported(s)) {
-        payload_set_err(err, errlen, "pre-RoPE archive requires text-only native DS4.1 session with F32 compressed KV");
+        payload_set_err(err, errlen, "pre-RoPE archive requires text-only native DS4.1 session");
         return 1;
     }
     ds41_gpu_graph *g = &s->ds41_graph;
@@ -67086,6 +67085,36 @@ static bool ds41_suffix_original_keys(ds4_gpu_tensor *base, uint64_t offset,
     ds4_gpu_tensor_free(v);
     return ok;
 }
+
+/* Canonical suffix payloads remain F32. Repair in one bounded F32 tile, then
+ * store into the packed cache; neither the source nor its originals change. */
+#define DS41_SUFFIX_F16_TILE_ROWS 128u
+static bool ds41_suffix_compressed_f16(ds4_session *s, ds4_gpu_tensor *tile,
+                                      uint32_t owner, const uint8_t *source,
+                                      uint32_t source_first, uint32_t first,
+                                      uint32_t rows, uint32_t ratio, bool originals) {
+    ds41_gpu_graph *g = &s->ds41_graph;
+    for (uint32_t off = 0; off < rows; off += DS41_SUFFIX_F16_TILE_ROWS) {
+        if (ds4_session_cancelled(s)) return false;
+        const uint32_t count = rows - off < DS41_SUFFIX_F16_TILE_ROWS ?
+            rows - off : DS41_SUFFIX_F16_TILE_ROWS;
+        const uint64_t bytes = (uint64_t)count * DS4_N_HEAD_DIM * sizeof(float);
+        if (!ds4_gpu_tensor_write(tile, 0,
+                source + (uint64_t)off * DS4_N_HEAD_DIM * sizeof(float), bytes)) return false;
+        if (source_first != first) {
+            const bool repaired = originals ?
+                ds41_suffix_original_keys(tile, 0, g->prerope->compressed[owner],
+                    first + off, DS4_N_HEAD_DIM, count, (first + off) * ratio,
+                    ratio, true, DS4_V41_FP4_E4M3) :
+                ds41_suffix_repair_keys(tile, 0, DS4_N_HEAD_DIM, count,
+                    (source_first + off) * ratio, (first + off) * ratio,
+                    ratio, true, DS4_V41_FP4_E4M3);
+            if (!repaired) return false;
+        }
+        if (!ds41_compressed_store(g, owner, first + off, tile, count)) return false;
+    }
+    return true;
+}
 #endif
 
 static int ds4_session_graft_suffix(ds4_session *s, const ds4_suffix_cache *cache,
@@ -67159,6 +67188,17 @@ static int ds4_session_graft_suffix(ds4_session *s, const ds4_suffix_cache *cach
         return 1;
     }
     ds41_gpu_graph *g = &s->ds41_graph;
+    ds4_gpu_tensor *compressed_tile = NULL;
+    if (g->compressed_kv_f16) {
+        /* Allocate the 256 KiB repair tile before invalidating or writing any
+         * destination state. It is released on every later exit. */
+        compressed_tile = ds4_gpu_tensor_alloc(
+            (uint64_t)DS41_SUFFIX_F16_TILE_ROWS * DS4_N_HEAD_DIM * sizeof(float));
+        if (!compressed_tile) {
+            payload_set_err(err, errlen, "cannot allocate packed suffix repair tile");
+            return 1;
+        }
+    }
     ds4_suffix_reuse_stats observed = {.reused_tokens = end - start,
         .raw_rows_per_layer = end - start < 128u ? end - start : 128u,
         .fresh_tail_tokens = (uint32_t)prompt->len - end};
@@ -67203,8 +67243,9 @@ static int ds4_session_graft_suffix(ds4_session *s, const ds4_suffix_cache *cach
         uint64_t ik_off = (uint64_t)first * 128u * 4u;
         uint64_t source_kv_off = (uint64_t)source_first * 512u * 4u;
         uint64_t source_ik_off = (uint64_t)source_first * 128u * 4u;
-        if (rows && (!ds4_gpu_tensor_write(g->compressed[owner], kv_off, src.compressed[owner] + source_kv_off,
-                                  (uint64_t)rows * 512u * 4u) ||
+        if (rows && ((!g->compressed_kv_f16 &&
+            !ds4_gpu_tensor_write(g->compressed[owner], kv_off, src.compressed[owner] + source_kv_off,
+                                  (uint64_t)rows * 512u * 4u)) ||
             !ds4_gpu_tensor_write(g->index_cache[owner], ik_off, src.index[owner] + source_ik_off,
                                   (uint64_t)rows * 128u * 4u))) goto fail;
         if (use_originals && rows) {
@@ -67213,16 +67254,21 @@ static int ds4_session_graft_suffix(ds4_session *s, const ds4_suffix_cache *cach
                 !ds4_gpu_tensor_write(g->prerope->index[owner], (uint64_t)first * 128u,
                     originals.index[owner] + (uint64_t)source_first * 128u, (uint64_t)rows * 128u)) goto fail;
             memset(g->prerope->published[owner] + first, 3, rows);
-            if (displacement && (!ds41_suffix_original_keys(g->compressed[owner], kv_off,
+            if (displacement && ((!g->compressed_kv_f16 &&
+                !ds41_suffix_original_keys(g->compressed[owner], kv_off,
                     g->prerope->compressed[owner], first, 512u, rows, first * ratio, ratio, true,
-                    DS4_V41_FP4_E4M3) ||
+                    DS4_V41_FP4_E4M3)) ||
                 !ds41_suffix_original_keys(g->index_cache[owner], ik_off,
                     g->prerope->index[owner], first, 128u, rows, first * ratio, ratio, true,
                     DS4_V41_FP4_E8M0))) goto fail;
-        } else if (displacement && (!ds41_suffix_repair_keys(g->compressed[owner], kv_off,
-                512u, rows, source_first * ratio, first * ratio, ratio, true, DS4_V41_FP4_E4M3) ||
+        } else if (displacement && ((!g->compressed_kv_f16 &&
+            !ds41_suffix_repair_keys(g->compressed[owner], kv_off,
+                512u, rows, source_first * ratio, first * ratio, ratio, true, DS4_V41_FP4_E4M3)) ||
             !ds41_suffix_repair_keys(g->index_cache[owner], ik_off,
                 128u, rows, source_first * ratio, first * ratio, ratio, true, DS4_V41_FP4_E8M0))) goto fail;
+        if (g->compressed_kv_f16 && !ds41_suffix_compressed_f16(s, compressed_tile, owner,
+                src.compressed[owner] + source_kv_off, source_first, first, rows, ratio,
+                use_originals)) goto fail;
         if (displacement) { repaired.compressed_keys_repaired += rows; repaired.index_keys_repaired += rows; }
         observed.compressed_rows += rows; observed.index_rows += rows;
         observed.copied_bytes += (uint64_t)rows * (512u + 128u) * 4u;
@@ -67244,8 +67290,10 @@ static int ds4_session_graft_suffix(ds4_session *s, const ds4_suffix_cache *cach
     if (ds4_session_sync(s, prompt, err, errlen) != 0) goto fail;
     if (stats) *stats = observed;
     if (relocation) { repaired.reuse = observed; *relocation = repaired; }
+    ds4_gpu_tensor_free(compressed_tile);
     return 0;
 fail:
+    ds4_gpu_tensor_free(compressed_tile);
     ds4_session_invalidate(s);
     if (!err || !errlen || !err[0]) payload_set_err(err, errlen, "suffix graft or fresh-tail evaluation failed");
     return 1;

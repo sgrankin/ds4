@@ -1,0 +1,28 @@
+{
+  "base_revision": "2436f414f083b7b04a9b0dedec4788e6f6bd62d0",
+  "builds": [
+    {
+      "command": "make -j6 ds4-server ds4-agent ds4_test ds4_agent_test",
+      "returncode": 0
+    },
+    {
+      "command": "clang -O3 -g -mcpu=native -Wall -Wextra -std=c99 -I. speed-bench/experiments/recipe-rightshift-hour39-20261008/repeat.c ds4.o ds4_image.o ds4_distributed.o ds4_tp.o ds4_ssd.o ds4_metal.o ds4_layer_pack.o ds4_engram.o -lm -pthread -framework Foundation -framework Metal -o .workspaces/f16-suffix-hour51/relocate",
+      "returncode": 0
+    }
+  ],
+  "tests": [
+    {
+      "command": "./ds4_test --server",
+      "returncode": 0
+    },
+    {
+      "command": "./ds4_agent_test",
+      "returncode": 0
+    }
+  ],
+  "binary_sha256": {
+    "ds4-server": "fd2be02c59422fc94ea47f6c59c46aa995bf010d5164adf359b0b379de511aa6",
+    "ds4-agent": "89dd2d9324c65a22b9f20ef57f5996a265d3e086271b4316bd0b7fad7057faba",
+    ".workspaces/f16-suffix-hour51/relocate": "954c92f28480b55aa5d7491fe89a2fdddd85cebf0dc121556b184093af67d1b2"
+  }
+}

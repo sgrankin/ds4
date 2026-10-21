@@ -1,0 +1,170 @@
+{
+  "scope": "fixed teacher histories; layout effect separate from existing stale suffix approximation",
+  "layout_comparisons": {
+    "01-f32": {
+      "native": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "grafted": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "raw_logits_sha256": "23b1961a2ac2d14c1610ee256da80ae07476deb2dee716931b1f24309812020b"
+    },
+    "02-f16": {
+      "native": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "grafted": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "raw_logits_sha256": "23b1961a2ac2d14c1610ee256da80ae07476deb2dee716931b1f24309812020b"
+    },
+    "03-f32-to-f16": {
+      "native": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "grafted": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "raw_logits_sha256": "23b1961a2ac2d14c1610ee256da80ae07476deb2dee716931b1f24309812020b"
+    },
+    "04-f16-to-f32": {
+      "native": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "grafted": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "raw_logits_sha256": "23b1961a2ac2d14c1610ee256da80ae07476deb2dee716931b1f24309812020b"
+    },
+    "05-f32": {
+      "native": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "grafted": {
+        "byte_equal": true,
+        "rows": 16,
+        "mean_delta_nll": 0.0,
+        "mean_kl": 0.0,
+        "max_kl": 0.0,
+        "argmax_flips": 0
+      },
+      "raw_logits_sha256": "23b1961a2ac2d14c1610ee256da80ae07476deb2dee716931b1f24309812020b"
+    }
+  },
+  "stale_suffix_metrics": {
+    "01-f32": {
+      "rows": 16,
+      "mean_delta_nll": 4.128895031737313e-05,
+      "mean_kl": 1.934012469598875e-05,
+      "max_kl": 0.000102983673904,
+      "argmax_flips": 0
+    },
+    "02-f16": {
+      "rows": 16,
+      "mean_delta_nll": 4.128895031737313e-05,
+      "mean_kl": 1.934012469598875e-05,
+      "max_kl": 0.000102983673904,
+      "argmax_flips": 0
+    },
+    "03-f32-to-f16": {
+      "rows": 16,
+      "mean_delta_nll": 4.128895031737313e-05,
+      "mean_kl": 1.934012469598875e-05,
+      "max_kl": 0.000102983673904,
+      "argmax_flips": 0
+    },
+    "04-f16-to-f32": {
+      "rows": 16,
+      "mean_delta_nll": 4.128895031737313e-05,
+      "mean_kl": 1.934012469598875e-05,
+      "max_kl": 0.000102983673904,
+      "argmax_flips": 0
+    },
+    "05-f32": {
+      "rows": 16,
+      "mean_delta_nll": 4.128895031737313e-05,
+      "mean_kl": 1.934012469598875e-05,
+      "max_kl": 0.000102983673904,
+      "argmax_flips": 0
+    },
+    "06-legacy-f16": {
+      "rows": 4,
+      "mean_delta_nll": 2.3453931352612498e-05,
+      "mean_kl": 1.4573193631599999e-05,
+      "max_kl": 3.12698361926e-05,
+      "argmax_flips": 0
+    }
+  },
+  "timing": {
+    "01-f32": {
+      "native": 190.04252400000001,
+      "reuse": 142.540663
+    },
+    "02-f16": {
+      "native": 196.496562,
+      "reuse": 152.863828
+    },
+    "03-f32-to-f16": {
+      "native": 197.626459,
+      "reuse": 148.39389
+    },
+    "04-f16-to-f32": {
+      "native": 192.067291,
+      "reuse": 148.102716
+    },
+    "05-f32": {
+      "native": 190.345717,
+      "reuse": 144.385874
+    },
+    "06-legacy-f16": {
+      "native": 40.521082,
+      "reuse": 29.022512
+    }
+  }
+}

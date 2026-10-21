@@ -1,0 +1,3 @@
+move,shift,arm,destination_start,destination_end,prefix_ms,suffix_and_fresh_ms,total_edit_ms,teacher_ms,reused,fresh,pending_pairs,raw_repaired,compressed_repaired,index_repaired,state_fnv,prerope_fnv
+1,128,native,896,1409,26805.074000,13716.008000,40521.082000,234.366000,0,0,0,0,0,0,a06414a57578bddc,cbf29ce484222325
+1,128,reuse,896,1409,25978.131000,3044.381000,29022.512000,259.796000,513,128,3,5120,1281,1281,a06414a57578bddc,cbf29ce484222325

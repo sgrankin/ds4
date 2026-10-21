@@ -1,0 +1,40 @@
+{
+  "argv_phase": "after",
+  "mode": "reuse",
+  "base_url": "http://127.0.0.1:49687",
+  "shared": "/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/shared",
+  "output": "/Volumes/Models/ds4/.workspaces/f16-suffix-hour51/http/http",
+  "tools": [
+    {
+      "type": "function",
+      "name": "read",
+      "description": "Read one advertised JSON file in full.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "whole": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "whole",
+          "raw"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "server_started_by_driver": false,
+  "source_context_tokens": "estimated about2K; usage is actual",
+  "turn_order": [
+    "A-edit2",
+    "B-edit2"
+  ]
+}

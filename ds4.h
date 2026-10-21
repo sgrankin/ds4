@@ -705,7 +705,9 @@ int ds4_session_load_replay_snapshot(ds4_session *s, const ds4_session_snapshot 
  * This source check does not track expert rerouting or other forward-policy
  * history. Native-fresh comparisons require the caller to keep both forward
  * profiles native and fixed. The same-position entry point reuses one suffix
- * starting on an even compression boundary; relocation is declared below. */
+ * starting on an even compression boundary; relocation is declared below.
+ * F32 and F16 main compressed-KV sessions share canonical F32 source bytes
+ * and BF16 originals. Packed relocation uses one 256 KiB F32 repair tile. */
 typedef struct {
     ds4_session_snapshot state;
     ds4_engine *engine;

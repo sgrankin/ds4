@@ -1,4 +1,5 @@
 /* Item39: capture once, then move the same originals right/left/right.
+ * Item51 adds source/destination cache layouts and an optional zero shift.
  * Adapted from suffix_prerope_repeat_bench.c; strict hash checks retained.
  * Source-only fixture adapted from suffix_fact_oracle.c's padding, scoring and
  * native-prefix preparation. Run only through the existing model pressure guard.
@@ -23,7 +24,7 @@
 #define FRESH 128
 #define TEACHER 4
 
-static const int shifts[3] = {-66, 128, -514};
+static const int shifts[4] = {-66, 128, -514, 0};
 static double ms(void) {
     struct timespec t; clock_gettime(CLOCK_MONOTONIC, &t);
     return t.tv_sec * 1000.0 + t.tv_nsec / 1e6;
@@ -72,10 +73,15 @@ static FILE *output(const char *dir, const char *name, const char *mode) {
 int main(int argc, char **argv) {
     const char *model = NULL, *out = NULL;
     int moves = 3, prerope = 1, ctx = 8192, chunk = 512, cache_gb = 64;
+    const char *f16_env = getenv("DS4_V41_COMPRESSED_KV_F16");
+    int source_f16 = f16_env && !strcmp(f16_env, "1"), destination_f16 = source_f16;
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--help")) {
             puts("suffix_prerope_repeat_bench --model MODEL --out EXISTING_DIR "
-                 "[--moves 3] [--prerope 0|1] [--ctx 8192] [--chunk 512] [--cache-gb 64]");
+                 "[--moves 3|4] [--prerope 0|1] [--ctx 8192] [--chunk 512] [--cache-gb 64] "
+                 "[--source-f16 0|1] [--destination-f16 0|1]\n"
+                 "Layout defaults inherit DS4_V41_COMPRESSED_KV_F16. "
+                 "--moves 1 --prerope 0 runs only legacy left128.");
             return 0;
         }
         if (++i >= argc) return 2;
@@ -90,14 +96,18 @@ int main(int argc, char **argv) {
             else if (!strcmp(key, "--ctx")) ctx = (int)n;
             else if (!strcmp(key, "--chunk")) chunk = (int)n;
             else if (!strcmp(key, "--cache-gb")) cache_gb = (int)n;
+            else if (!strcmp(key, "--source-f16")) source_f16 = (int)n;
+            else if (!strcmp(key, "--destination-f16")) destination_f16 = (int)n;
             else return 2;
         }
     }
-    if (!model || !out || moves != 3 || prerope > 1 ||
+    if (!model || !out || (moves != 3 && moves != 4 && !(moves == 1 && !prerope)) ||
+        prerope > 1 || source_f16 > 1 || destination_f16 > 1 ||
         ctx <= SOURCE_END + FRESH + TEACHER || chunk < 1 || chunk > 8192 ||
         cache_gb < 1 || cache_gb > 96) return 2;
     int rc = 1, vocab = 0; char err[256] = {0};
-    ds4_engine *e = NULL; ds4_session *s = NULL; ds4_suffix_cache source = {0};
+    ds4_engine *e = NULL; ds4_session *s = NULL;
+    ds4_suffix_cache source = {0}, recaptured = {0};
     ds4_tokens parts[6] = {0}, a = {0}, b = {0}, c = {0}, fresh = {0};
     ds4_tokens original = {0}, prefix = {0}, prompt = {0};
     FILE *csv = NULL, *timing = NULL, *raw = NULL, *tokens = NULL;
@@ -116,6 +126,7 @@ int main(int argc, char **argv) {
     csv = output(out, "rows.csv", "wx"); timing = output(out, "moves.csv", "wx");
     raw = output(out, "logits.bin", "wbx"); tokens = output(out, "tokens.json", "wx");
     CHECK(csv && timing && raw && tokens);
+    CHECK(setenv("DS4_V41_COMPRESSED_KV_F16", source_f16 ? "1" : "0", 1) == 0);
     ds4_engine_options opt = {.model_path = model, .backend = DS4_BACKEND_METAL,
         .context_size = (uint32_t)ctx, .prefill_chunk = (uint32_t)chunk,
         .ssd_streaming = true, .ssd_streaming_cache_bytes = (uint64_t)cache_gb << 30,
@@ -146,6 +157,21 @@ int main(int argc, char **argv) {
         ms() - started, (unsigned long long)state_bytes, (unsigned long long)pre_bytes,
         (unsigned long long)ds4_session_suffix_prerope_bytes(s),
         (unsigned long long)state_hash, (unsigned long long)pre_hash);
+    /* Keep one mutable session at a time; source bytes outlive its graph. */
+    ds4_session_free(s); s = NULL;
+    CHECK(setenv("DS4_V41_COMPRESSED_KV_F16", destination_f16 ? "1" : "0", 1) == 0);
+    CHECK(ds4_session_create(&s, e, ctx) == 0);
+    if (prerope) CHECK(ds4_session_enable_suffix_prerope(s, err, sizeof(err)) == 0);
+    CHECK(ds4_session_load_suffix_prefix(s, &source, err, sizeof(err)) == 0);
+    CHECK(ds4_session_pos(s) == SOURCE_END && !ds4_session_is_approximate(s));
+    CHECK(ds4_session_capture_suffix_cache(s, &recaptured, err, sizeof(err)) == 0);
+    CHECK(!recaptured.approximate && recaptured.state.len == state_bytes &&
+        recaptured.prerope_bytes == pre_bytes &&
+        !memcmp(recaptured.state.ptr, source.state.ptr, (size_t)state_bytes) &&
+        (!pre_bytes || !memcmp(recaptured.prerope, source.prerope, (size_t)pre_bytes)));
+    ds4_suffix_cache_free(&recaptured);
+    fprintf(stderr, "PREFIX_RESTORE source_f16=%d destination_f16=%d "
+        "canonical_equal=1 originals_equal=1\n", source_f16, destination_f16);
     size_t bytes = (size_t)vocab * sizeof(float);
     reference = malloc(bytes * TEACHER); row = malloc(bytes); CHECK(reference && row);
     /* Raw order: move0 native four rows, move0 reuse four rows, move1 ... */
@@ -154,7 +180,9 @@ int main(int argc, char **argv) {
     CHECK(fwrite(parts[5].v, sizeof(int), TEACHER, raw) == TEACHER);
     fprintf(csv, "move,shift,step,target,native_nll,reuse_nll,delta_nll,kl,argmax_flip,byte_equal\n");
     fprintf(timing, "move,shift,arm,destination_start,destination_end,prefix_ms,suffix_and_fresh_ms,total_edit_ms,teacher_ms,reused,fresh,pending_pairs,raw_repaired,compressed_repaired,index_repaired,state_fnv,prerope_fnv\n");
-    fprintf(tokens, "{\"source_start\":%d,\"source_end\":%d,\"source\":[", SOURCE_START, SOURCE_END);
+    fprintf(tokens, "{\"source_f16\":%d,\"destination_f16\":%d,"
+        "\"source_start\":%d,\"source_end\":%d,\"source\":[",
+        source_f16, destination_f16, SOURCE_START, SOURCE_END);
     for (int i = 0; i < original.len; i++) fprintf(tokens, "%s%d", i ? "," : "", original.v[i]);
     fprintf(tokens, "],\"fresh\":[");
     for (int i = 0; i < fresh.len; i++) fprintf(tokens, "%s%d", i ? "," : "", fresh.v[i]);
@@ -162,7 +190,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < TEACHER; i++) fprintf(tokens, "%s%d", i ? "," : "", parts[5].v[i]);
     fprintf(tokens, "],\"edited_prefixes\":[");
     for (int move = 0; move < moves; move++) {
-        int shift = shifts[move], destination = SOURCE_START - shift;
+        int shift = moves == 1 ? 128 : shifts[move], destination = SOURCE_START - shift;
         prefix.len = prompt.len = b.len = 0;
         CHECK(pad(&b, &parts[1], OLD_EDIT - shift - parts[3].len)); append(&b, &parts[3], parts[3].len);
         append(&prefix, &a, a.len); append(&prefix, &b, b.len); CHECK(prefix.len == destination);
@@ -194,13 +222,22 @@ int main(int argc, char **argv) {
             if (reuse) CHECK(ds4_session_reuse_suffix_relocated(s, &source, &prompt,
                 SOURCE_START, &stats, err, sizeof(err)) == 0);
             else CHECK(ds4_session_sync(s, &prompt, err, sizeof(err)) == 0);
-            double suffix_ms = ms() - tail_begin, edit_ms = ms() - begin, teacher_begin = ms();
+            double suffix_ms = ms() - tail_begin, edit_ms = ms() - begin;
             CHECK(ds4_session_pos(s) == prompt.len && ds4_session_is_approximate(s) == (reuse != 0));
             if (reuse) CHECK(stats.source_start == SOURCE_START && stats.source_end == SOURCE_END &&
                 stats.destination_start == (uint32_t)destination &&
                 stats.destination_end == (uint32_t)(SOURCE_END - shift) &&
                 stats.reuse.reused_tokens == REUSED && stats.reuse.fresh_tail_tokens == FRESH &&
                 stats.reuse.pending_pairs == 3);
+            if (reuse && !shift) CHECK(!stats.raw_keys_repaired &&
+                !stats.compressed_keys_repaired && !stats.index_keys_repaired);
+            if (reuse && prerope) {
+                CHECK(ds4_session_capture_suffix_cache(s, &recaptured, err, sizeof(err)) == 0);
+                CHECK(recaptured.approximate && recaptured.state.len && recaptured.prerope_bytes);
+                ds4_suffix_cache_free(&recaptured);
+                fprintf(stderr, "RECAPTURE move=%d approximate=1 originals=1\n", move + 1);
+            }
+            double teacher_begin = ms();
             for (int step = 0; step < TEACHER; step++) {
                 CHECK(ds4_session_copy_logits(s, row, vocab) == vocab);
                 double qz = log_z(row, vocab); CHECK(isfinite(qz));
@@ -241,7 +278,7 @@ done:
     if (timing && fclose(timing)) rc = 1;
     if (raw && fclose(raw)) rc = 1;
     if (tokens && fclose(tokens)) rc = 1;
-    free(reference); free(row); ds4_suffix_cache_free(&source);
+    free(reference); free(row); ds4_suffix_cache_free(&source); ds4_suffix_cache_free(&recaptured);
     ds4_tokens_free(&a); ds4_tokens_free(&b); ds4_tokens_free(&c); ds4_tokens_free(&fresh);
     ds4_tokens_free(&original); ds4_tokens_free(&prefix); ds4_tokens_free(&prompt);
     for (int i = 0; i < 6; i++) ds4_tokens_free(&parts[i]);
