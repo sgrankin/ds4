@@ -1,0 +1,134 @@
+Explain the boundary and preserve ownership.
+//! CLI transcript/prefix and session ownership. Terminal input, configuration,
+//! prefill progress and the generation loop stay in the C frontend.
+const std = @import("std");
+const c = @import("cli_chat_c");
+const Chat = c.ds4_cli_chat;
+const Tokens = c.ds4_tokens;
+const Engine = c.ds4_engine;
+const Session = c.ds4_session;
+const Image = c.ds4_vision_span;
+
+export fn ds4_cli_chat_trim_images(chat: *Chat, count: usize) void {
+    while (chat.image_count > count) {
+        chat.image_count -= 1;
+        c.ds4_vision_embedding_free(&chat.images[chat.image_count].embedding);
+    }
+}
+
+export fn ds4_cli_chat_add_image(chat: *Chat) ?*Image {
+    if (chat.image_count == chat.image_cap) {
+        const capacity = if (chat.image_cap != 0) chat.image_cap *% 2 else 4;
+        if (capacity > std.math.maxInt(usize) / @sizeOf(Image)) return null;
+        const storage = c.realloc(chat.images, capacity * @sizeOf(Image)) orelse return null;
+        chat.images = @ptrCast(@alignCast(storage));
+        chat.image_cap = capacity;
+    }
+    const image = &chat.images[chat.image_count];
+    chat.image_count += 1;
+    @memset(std.mem.asBytes(image), 0);
+    return image;
+}
+
+fn insertTokens(dst: *Tokens, position: c_int, src: *const Tokens) void {
+    if (src.len <= 0) return;
+    const pos: usize = @intCast(@max(0, @min(position, dst.len)));
+    const old_len: usize = @intCast(dst.len);
+    const added: usize = @intCast(src.len);
+    while (dst.len + src.len > dst.cap) {
+        dst.cap = if (dst.cap != 0) dst.cap * 2 else 64;
+        const capacity: usize = @intCast(dst.cap);
+        const storage = c.realloc(dst.v, capacity * @sizeOf(c_int)) orelse {
+            c.perror("ds4: realloc");
+            c.exit(1);
+        };
+        dst.v = @ptrCast(@alignCast(storage));
+    }
+    const data = dst.v[0..@as(usize, @intCast(dst.cap))];
+    std.mem.copyBackwards(c_int, data[pos + added .. old_len + added], data[pos..old_len]);
+    @memcpy(data[pos .. pos + added], src.v[0..added]);
+    dst.len += src.len;
+}
+
+fn removeTokens(dst: *Tokens, position: c_int, count: c_int) void {
+    if (count <= 0 or position < 0 or position >= dst.len) return;
+    const removed = @min(count, dst.len - position);
+    const pos: usize = @intCast(position);
+    const end: usize = @intCast(position + removed);
+    const old_len: usize = @intCast(dst.len);
+    const new_len: usize = @intCast(dst.len - removed);
+    const data = dst.v[0..old_len];
+    std.mem.copyForwards(c_int, data[pos..new_len], data[end..old_len]);
+    dst.len -= removed;
+}
+
+fn buildThinkPrefix(engine: ?*Engine, mode: c.ds4_think_mode, initial_system_text: bool) Tokens {
+    var prefix = std.mem.zeroes(Tokens);
+    c.ds4_chat_append_think_prefix(engine, &prefix, mode);
+    if (c.ds4_engine_is_deepseek41(engine) and initial_system_text and prefix.len == 0) {
+        c.ds4_chat_append_message(engine, &prefix, "system", "");
+    }
+    return prefix;
+}
+
+export fn ds4_cli_chat_apply_think_prefix(engine: ?*Engine, chat: *Chat, mode: c.ds4_think_mode) bool {
+    var prefix = buildThinkPrefix(engine, mode, chat.initial_system_text);
+    defer c.ds4_tokens_free(&prefix);
+    const prefix_len: usize = @intCast(prefix.len);
+    var same = chat.think_prefix_tokens == prefix.len;
+    if (same and prefix_len != 0) {
+        const pos: usize = @intCast(chat.think_prefix_pos);
+        same = std.mem.eql(c_int, chat.transcript.v[pos..][0..prefix_len], prefix.v[0..prefix_len]);
+    }
+    if (same) return true;
+
+    // The prefix lives immediately after BOS and before all system/user text,
+    // matching the model's GGUF template. Check room before touching live state.
+    const shift = prefix.len - chat.think_prefix_tokens;
+    if (chat.ctx_size > 0 and @as(i64, chat.transcript.len) + shift >= chat.ctx_size) {
+        _ = c.fputs("ds4: no context room to change the thinking prefix\n", c.__stderrp);
+        return false;
+    }
+    removeTokens(&chat.transcript, chat.think_prefix_pos, chat.think_prefix_tokens);
+    insertTokens(&chat.transcript, chat.think_prefix_pos, &prefix);
+    chat.think_prefix_tokens = prefix.len;
+    if (chat.image_count != 0) {
+        for (chat.images[0..chat.image_count]) |*image| {
+            const shifted: i64 = @as(i64, image.token_start) + shift;
+            // Preserve C's uint32_t conversion when storing shifted positions.
+            image.token_start = @truncate(@as(u64, @bitCast(shifted)));
+        }
+    }
+    if (chat.session != null) c.ds4_session_invalidate(chat.session);
+    return true;
+}
+
+export fn ds4_cli_chat_create_session(engine: ?*Engine, chat: *Chat, ctx_size: c_int) c_int {
+    var session: ?*Session = null;
+    if (c.ds4_session_create(&session, engine, ctx_size) != 0) {
+        _ = c.fputs("ds4: interactive chat KV cache requires a session backend\n", c.__stderrp);
+        return 1;
+    }
+    // Direct creation replaces an old session only after the new one exists.
+    if (chat.session != null) c.ds4_session_free(chat.session);
+    chat.session = session;
+    chat.ctx_size = ctx_size;
+    return 0;
+}
+
+export fn ds4_cli_chat_free(maybe_chat: ?*Chat) void {
+    const chat = maybe_chat orelse return;
+    c.ds4_session_free(chat.session);
+    c.ds4_tokens_free(&chat.transcript);
+    ds4_cli_chat_trim_images(chat, 0);
+    c.free(chat.images);
+    @memset(std.mem.asBytes(chat), 0);
+}
+
+export fn ds4_cli_chat_set_ctx(engine: ?*Engine, chat: *Chat, ctx_size: c_int) c_int {
+    // /ctx releases first, so failed creation leaves no stale session/context.
+    c.ds4_session_free(chat.session);
+    chat.session = null;
+    chat.ctx_size = 0;
+    return ds4_cli_chat_create_session(engine, chat, ctx_size);
+}

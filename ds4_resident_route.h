@@ -40,6 +40,41 @@ typedef struct {
     float old_mass;
 } ds4_resident_drop_change;
 
+#ifdef DS4_NATIVE_RESIDENT_ROUTE
+/* Native bodies use these exact shared records. Cache ownership, snapshots,
+ * commit timing and metrics remain with the existing C engine. */
+bool ds4_resident_route_weakest(const int32_t *selected,
+        const float *affinity, uint32_t total, uint32_t used, float max_mass,
+        uint32_t *slot, float *mass);
+bool ds4_resident_route_choose(const int32_t *selected,
+        const float *affinity, const float *bias, const uint8_t *resident,
+        uint32_t total, uint32_t used, float max_gap, uint32_t max_rank, float max_mass,
+        ds4_resident_route_change *change);
+uint32_t ds4_resident_route_weak_pair(const int32_t *selected,
+        const float *affinity, uint32_t total, uint32_t used, float max_mass,
+        uint32_t *slots, float *masses);
+uint32_t ds4_resident_route_weak_triple(const int32_t *selected,
+        const float *affinity, uint32_t total, uint32_t used, float max_mass,
+        uint32_t *slots, float *masses);
+bool ds4_resident_route_choose_triple(const int32_t *selected,
+        const float *affinity, const float *bias, const uint8_t *resident,
+        uint32_t total, uint32_t used, float max_gap, uint32_t max_rank,
+        float max_mass, float max_total_mass, ds4_resident_route_plan *plan);
+bool ds4_resident_route_choose_plan(const int32_t *selected,
+        const float *affinity, const float *bias, const uint8_t *resident,
+        uint32_t total, uint32_t used, float max_gap, uint32_t max_rank,
+        float max_mass, uint32_t max_subs, float max_total_mass,
+        ds4_resident_route_plan *plan);
+bool ds4_resident_route_choose_drop(const int32_t *selected,
+        const float *affinity, const uint8_t *selected_resident,
+        uint32_t total, uint32_t used, float max_mass,
+        ds4_resident_drop_change *change);
+void ds4_resident_route_drop_weights(float *weights, const int32_t *original,
+        const float *affinity, uint32_t used, uint32_t dropped_slot, float scale);
+void ds4_resident_route_weights(float *weights, const int32_t *ids,
+        const float *affinity, uint32_t used, float scale);
+#else
+
 /* The caller can reject an ineligible native route before examining the cache. */
 static inline bool ds4_resident_route_weakest(const int32_t *selected,
         const float *affinity, uint32_t total, uint32_t used, float max_mass,
@@ -315,5 +350,7 @@ static inline void ds4_resident_route_weights(float *weights, const int32_t *ids
     for (uint32_t i = 0; i < used; i++)
         weights[i] = affinity[(uint32_t)ids[i]] / sum * scale;
 }
+
+#endif /* DS4_NATIVE_RESIDENT_ROUTE */
 
 #endif

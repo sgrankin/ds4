@@ -9,10 +9,11 @@ static void put_u32(uint8_t *p, uint32_t x) {
 
 int main(void) {
 #ifdef DS4_HAS_DEEPSEEK41_GPU
+    g_ds4_shape = DS4_SHAPE_FLASH41;
     ds4_engine engine = {0};
     ds4_session s = {.engine = &engine, .ctx_size = 8};
-    s.ds41_graph.ctx = 8;
-    const uint64_t len = 52u + ds41_payload_body_bytes(&s.ds41_graph, 1);
+    s.ds41.graph.ctx = 8;
+    const uint64_t len = 52u + ds41_payload_body_bytes(&s.ds41.graph, 1);
     ds4_session_snapshot canonical = {.ptr = calloc(1, (size_t)len), .len = len, .cap = len};
     ds4_session_snapshot diagnostic = {.ptr = calloc(1, (size_t)len), .len = len, .cap = len};
     CHECK(canonical.ptr && diagnostic.ptr);
@@ -26,8 +27,20 @@ int main(void) {
     ds41_suffix_payload view = {0};
     CHECK(ds41_suffix_payload_view(&s, &cache, &view));
     CHECK(view.end == 1 && ds41_suffix_u32(view.tokens) == 7);
+#ifdef DS4_NATIVE_ENGINE_SUFFIX
+    const ds4_model_config config = ds41_native_config();
+    uint32_t native_end = 0;
+    char native_error[160] = {0};
+    CHECK(ds4_native_graph_suffix_validate_prefix41(&s.ds41.graph, &config,
+        &cache, &native_end, native_error, sizeof(native_error)) == 0);
+    CHECK(native_end == 1);
+#endif
     cache.state = diagnostic;
     CHECK(!ds41_suffix_payload_view(&s, &cache, &view));
+#ifdef DS4_NATIVE_ENGINE_SUFFIX
+    CHECK(ds4_native_graph_suffix_validate_prefix41(&s.ds41.graph, &config,
+        &cache, &native_end, native_error, sizeof(native_error)) != 0);
+#endif
     CHECK(suffix_diagnostic_equal_canonical(&diagnostic, &canonical));
     diagnostic.ptr[52] ^= 1;
     CHECK(!suffix_diagnostic_equal_canonical(&diagnostic, &canonical));

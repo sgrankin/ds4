@@ -1,0 +1,5 @@
+# Item100 — Live terminal and input queue
+
+Native Terminal owns the live editor, CPR filtering, complete paste envelopes, byte queues, split UTF8/ANSI/grapheme state, cursor/layout/scroll margins, linenoise lifetime and asynchronous output. UiText owns actual input buffers/prompt queues, status/footer/welcome and user echo. Actual InputBuffer/PromptQueue/Editor records move once into a real shared header; actual third-party linenoise state/library remain. C algorithms stay independent fallback.
+
+Integration19:48–19:50UTC at6ebc7d12. Native ReleaseFast/Debug pass production fixtures and actual PTY checks;17 stable artifacts match C, including deferred wrap, split UTF8/control and queue/footer behavior. Two compile failures retained: shadowed start, Zig backspace spelling, ignored existing nonvoid returns, original privately-declared linenoiseEditInsert, constrained integer varargs and double-pointer free. Fixed explicit ABI edges, no test/assertion or runtime policy change. Complete interactive model/compaction remains final Agent gate. No latency claim.

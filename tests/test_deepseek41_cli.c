@@ -18,12 +18,21 @@ int main(int argc, char **argv) {
         repl_chat chat = {.initial_system_text = system != 0};
         ds4_chat_begin(engine, &chat.transcript);
         chat.think_prefix_pos = chat.transcript.len;
-        repl_chat_apply_think_prefix(engine, &chat, modes[0]);
+        ds4_cli_chat_apply_think_prefix(engine, &chat, modes[0]);
         if (system) ds4_chat_append_message(engine, &chat.transcript, "system", "System text.");
         ds4_chat_append_message(engine, &chat.transcript, "user", "First question");
         ds4_chat_append_message(engine, &chat.transcript, "assistant", "First answer");
+        ds4_vision_span *image = ds4_cli_chat_add_image(&chat);
+        assert(image && chat.image_count == 1);
+        for (size_t i = 0; i < sizeof(*image); i++)
+            assert(((const unsigned char *)image)[i] == 0);
+        image->token_start = (uint32_t)chat.transcript.len - 1;
         for (size_t i = 0; i < sizeof(modes) / sizeof(*modes); i++) {
-            assert(repl_chat_apply_think_prefix(engine, &chat, modes[i]));
+            const int old_prefix = chat.think_prefix_tokens;
+            const uint32_t old_image_start = image->token_start;
+            assert(ds4_cli_chat_apply_think_prefix(engine, &chat, modes[i]));
+            assert(image->token_start == (uint32_t)((int64_t)old_image_start +
+                   chat.think_prefix_tokens - old_prefix));
             ds4_tokens expected = {0};
             ds4_chat_begin(engine, &expected);
             ds4_chat_append_think_prefix(engine, &expected, modes[i]);
@@ -36,13 +45,19 @@ int main(int argc, char **argv) {
         }
         ds4_tokens before = {0};
         ds4_tokens_copy(&before, &chat.transcript);
+        ds4_vision_span *images_before = chat.images;
+        const size_t image_count_before = chat.image_count, image_cap_before = chat.image_cap;
+        unsigned char image_before[sizeof(*image)];
+        memcpy(image_before, image, sizeof(image_before));
         chat.ctx_size = chat.transcript.len + 1;
-        assert(!repl_chat_apply_think_prefix(engine, &chat, DS4_THINK_MAX));
+        assert(!ds4_cli_chat_apply_think_prefix(engine, &chat, DS4_THINK_MAX));
         assert(before.len == chat.transcript.len && ds4_tokens_starts_with(&chat.transcript, &before));
+        assert(chat.images == images_before && chat.image_count == image_count_before &&
+               chat.image_cap == image_cap_before && !memcmp(image, image_before, sizeof(image_before)));
         ds4_tokens_free(&before);
-        repl_chat_free(&chat);
+        ds4_cli_chat_free(&chat);
     }
     ds4_engine_close(engine);
-    puts("V4.1 CLI thinking prefix transitions: PASS");
+    puts("V4.1 CLI thinking prefix transitions and image offsets: PASS");
     return 0;
 }

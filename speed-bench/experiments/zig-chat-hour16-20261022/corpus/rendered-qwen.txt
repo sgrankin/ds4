@@ -1,0 +1,9 @@
+<|im_start|>system
+Keep facts in checkable storage.<|im_end|>
+<|im_start|>user
+Read the code PINE-251.<|im_end|>
+<|im_start|>assistant
+<think>Inspect it.</think>
+<tool_call>{"name":"read","arguments":{"path":"note"}}</tool_call><|im_end|>
+<|im_start|>tool
+PINE-251 is current.<|im_end|>

@@ -866,10 +866,8 @@ static int check_indexer_batch(void) {
     const uint64_t packed_bytes = ds4_gpu_dsv41_indexer_packed_bytes(KEYS, ROWS);
     ds4_gpu_tensor *pt = upload(NULL, (size_t)packed_bytes + 4);
     CHECK(qt && kt && wt && st && pt);
-#ifndef __APPLE__
     ds4_gpu_tensor *reference = upload(NULL, (size_t)KEYS * sizeof(float));
     CHECK(reference);
-#endif
     float *q = ds4_gpu_tensor_contents(qt), *k = ds4_gpu_tensor_contents(kt);
     float *w = ds4_gpu_tensor_contents(wt), *s = ds4_gpu_tensor_contents(st);
     CHECK(q && k && w && s);
@@ -928,6 +926,15 @@ static int check_indexer_batch(void) {
                         }
                         ds4_gpu_set_quality(false);
 #endif
+                        /* The scalar public API was formerly tested only on
+                         * CUDA. Check it against this same double oracle. */
+                        const uint32_t scalar_rows = (start + 1u) / ratio;
+                        const bool check_scalar = rows == 1 && mode == 0 && scalar_rows != 0;
+                        if (check_scalar) {
+                            CHECK(ds4_gpu_glm_indexer_score_one_tensor(reference,
+                                qt, wt, kt, scalar_rows, HEADS, DIM, 1.0f / 64.0f, false));
+                            CHECK(ds4_gpu_synchronize());
+                        }
                         double worst = 0;
                         for (uint32_t t = 0; t < rows; t++) {
                             const uint32_t visible = (start + t + 1u) / ratio;
@@ -948,6 +955,10 @@ static int check_indexer_batch(void) {
                                 const double error = fabs(actual - expected) / fmax(magnitude, 1);
                                 worst = fmax(worst, error);
                                 CHECK(error < 0.00001);
+                                if (check_scalar) {
+                                    const float *scalar = ds4_gpu_tensor_contents(reference);
+                                    CHECK(isfinite(scalar[j]) && fabs(scalar[j] - expected) / fmax(magnitude, 1) < 0.00001);
+                                }
                             }
                         }
                         fprintf(stderr, "V4.1 index scores mode=%u range=%u ratio=%u start=%u rows=%u error=%.9g\n",
@@ -973,9 +984,7 @@ static int check_indexer_batch(void) {
     CHECK(!ds4_gpu_dsv41_indexer_scores_packed(st, qt, wt, kt, st,
         KEYS, ROWS, 0, 1, ROWS, 0));
     ds4_gpu_tensor_free(pt);
-#ifndef __APPLE__
     ds4_gpu_tensor_free(reference);
-#endif
     ds4_gpu_tensor_free(st); ds4_gpu_tensor_free(wt);
     ds4_gpu_tensor_free(kt); ds4_gpu_tensor_free(qt);
     fprintf(stderr, "V4.1 causal batched index scores: double-precision oracle PASS\n");
@@ -1168,6 +1177,15 @@ static int check_general_topk(void) {
 #endif
                     }
                 }
+#ifdef __APPLE__
+                if ((k & (k - 1u)) == 0) {
+                    CHECK(ds4_gpu_sort_i32_rows_asc_tensor(selected, selected, k, rows));
+                    CHECK(ds4_gpu_synchronize());
+                    CHECK(ids[rows * k] == 0xabcdef01);
+                    for (uint32_t t = 0; t < rows; t++) for (uint32_t i = 1; i < k; i++)
+                        CHECK(ids[t * k + i - 1] <= ids[t * k + i]);
+                }
+#endif
             }
         }
         fprintf(stderr, "V4.1 variable-k sort width=%u: independent sorted-value/unique-ID oracle PASS\n", width);
@@ -1448,6 +1466,11 @@ int main(int argc, char **argv) {
 #endif
     if (argc == 2 && !strcmp(argv[1], "--bf16-linear")) {
         const int ok = ds4_gpu_init() && check_bf16_linear();
+        ds4_gpu_cleanup();
+        return ok ? 0 : 1;
+    }
+    if (argc == 2 && !strcmp(argv[1], "--activation-dispatch")) {
+        const int ok = ds4_gpu_init() && check_bf16_linear() && check_engram() && check_pool();
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }

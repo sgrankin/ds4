@@ -21,6 +21,19 @@
 #define DS4_RESPONSE_STORE_MAX_BYTES ((size_t)64 * 1024 * 1024)
 #define DS4_RESPONSE_STORE_ID_MAX 40
 
+#ifdef DS4_NATIVE_RESPONSE_STORE
+bool ds4_response_store_valid_id(const char *id);
+int ds4_response_store_error(char *err, size_t errlen, const char *operation, int code);
+int ds4_response_store_path(char path[PATH_MAX], const char *dir,
+                            const char *id, bool temporary, char *err, size_t errlen);
+int ds4_response_store_init(const char *dir, char *err, size_t errlen);
+int ds4_response_store_write(const char *dir, const char *id,
+                             const char *json, size_t bytes, char *err, size_t errlen);
+int ds4_response_store_read(const char *dir, const char *id,
+                            char **json, size_t *bytes, char *err, size_t errlen);
+int ds4_response_store_delete(const char *dir, const char *id, char *err, size_t errlen);
+#else
+
 static inline bool ds4_response_store_valid_id(const char *id) {
     if (!id || strncmp(id, "resp_", 5) || !id[5]) return false;
     size_t n = 5;
@@ -139,5 +152,7 @@ static inline int ds4_response_store_delete(const char *dir, const char *id,
     if (unlink(path)) return errno == ENOENT ? 1 : ds4_response_store_error(err, errlen, "delete response store", errno);
     return 0;
 }
+
+#endif /* DS4_NATIVE_RESPONSE_STORE */
 
 #endif

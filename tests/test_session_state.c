@@ -6,8 +6,8 @@
 static void test_vision_prefix(void) {
     ds4_session *s = calloc(1, sizeof(*s));
     assert(s);
-    s->checkpoint_valid = true;
-    s->checkpoint.len = 100;
+    s->frontier.checkpoint_valid = true;
+    s->frontier.checkpoint.len = 100;
     ds4_vision_span images[2] = {
         {.token_start = 100, .embedding = {.token_count = 10, .fingerprint = {1}}},
         {.token_start = 150, .embedding = {.token_count = 10, .fingerprint = {2}}},
@@ -18,8 +18,8 @@ static void test_vision_prefix(void) {
     images[0].token_start = 99;
     assert(!ds4_session_vision_prefix_matches(s, images, 1));
     ds4_vision_identity old = {.token_start = 50, .token_count = 10, .fingerprint = {1}};
-    s->checkpoint_images = &old;
-    s->checkpoint_image_count = 1;
+    s->frontier.checkpoint_images = &old;
+    s->frontier.checkpoint_image_count = 1;
     images[0].token_start = 50;
     assert(ds4_session_vision_state_matches(s, images, 1));
     assert(ds4_session_vision_prefix_matches(s, images, 2));
@@ -51,8 +51,8 @@ static void test_vision_prefix(void) {
         {.token_start = 50, .token_count = 10, .fingerprint = {1}},
         {.token_start = 70, .token_count = 10, .fingerprint = {2}},
     };
-    s->checkpoint_images = pair;
-    s->checkpoint_image_count = 2;
+    s->frontier.checkpoint_images = pair;
+    s->frontier.checkpoint_image_count = 2;
     images[0].token_start = 7;
     images[1].token_start = 8;
     images[1].embedding.fingerprint[31] ^= 1;
@@ -65,7 +65,7 @@ static void test_vision_prefix(void) {
     ds4_vision_span swapped[2] = {images[1], images[0]};
     assert(!ds4_session_rebase_vision_state(s, swapped, 2));
     assert(!ds4_session_vision_prefix_matches(s, swapped, 2));
-    s->checkpoint_valid = false;
+    s->frontier.checkpoint_valid = false;
     assert(!ds4_session_vision_prefix_matches(s, images, 2));
     assert(!ds4_session_rebase_vision_state(s, images, 2));
     free(s);
@@ -78,12 +78,12 @@ static void test_vision_prefix(void) {
 static void test_vision_fingerprint_prefix(void) {
     ds4_session *s = calloc(1, sizeof(*s));
     assert(s);
-    s->checkpoint_valid = true;
-    s->checkpoint.len = 100;
+    s->frontier.checkpoint_valid = true;
+    s->frontier.checkpoint.len = 100;
     ds4_vision_identity ckpt = {.token_start = 50, .token_count = 10,
                                 .fingerprint = {1}};
-    s->checkpoint_images = &ckpt;
-    s->checkpoint_image_count = 1;
+    s->frontier.checkpoint_images = &ckpt;
+    s->frontier.checkpoint_image_count = 1;
 
     ds4_vision_span images[2] = {
         {.token_start = 50, .embedding = {.token_count = 10, .fingerprint = {1}}},
@@ -111,38 +111,38 @@ static void test_vision_fingerprint_prefix(void) {
     /* A text-only request cannot reuse an image-conditioned checkpoint. */
     assert(!ds4_session_vision_fingerprint_prefix_matches(s, images, 0));
     /* Invalid checkpoints never match. */
-    s->checkpoint_valid = false;
+    s->frontier.checkpoint_valid = false;
     assert(!ds4_session_vision_fingerprint_prefix_matches(s, images, 2));
     assert(!ds4_session_vision_fingerprint_prefix_matches(NULL, images, 2));
     free(s);
 }
 
 static void test_rewind(void) {
-    ds4_engine e = { .backend = DS4_BACKEND_CPU };
+    ds4_engine e = { .core.backend = DS4_BACKEND_CPU };
     ds4_session *s = calloc(1, sizeof(*s));
     assert(s);
     s->engine = &e;
-    s->ctx_size = 1024;
-    for (int i = 0; i < 260; i++) ds4_tokens_push(&s->checkpoint, i);
-    s->checkpoint_valid = true;
-    s->mtp_draft_valid = true;
-    s->checkpoint_images = calloc(1, sizeof(*s->checkpoint_images));
-    assert(s->checkpoint_images);
-    s->checkpoint_image_count = 1;
-    ds4_vision_identity *images = s->checkpoint_images;
+    s->frontier.ctx_size = 1024;
+    for (int i = 0; i < 260; i++) ds4_tokens_push(&s->frontier.checkpoint, i);
+    s->frontier.checkpoint_valid = true;
+    s->frontier.mtp_draft_valid = true;
+    s->frontier.checkpoint_images = calloc(1, sizeof(*s->frontier.checkpoint_images));
+    assert(s->frontier.checkpoint_images);
+    s->frontier.checkpoint_image_count = 1;
+    ds4_vision_identity *images = s->frontier.checkpoint_images;
 
     ds4_session_rewind(s, 260);
-    assert(s->checkpoint_valid && s->mtp_draft_valid);
+    assert(s->frontier.checkpoint_valid && s->frontier.mtp_draft_valid);
     ds4_session_rewind(s, 300);
-    assert(s->checkpoint.len == 260 && s->checkpoint_valid);
+    assert(s->frontier.checkpoint.len == 260 && s->frontier.checkpoint_valid);
     const int boundaries[] = {259, 256, 255, 128, 127, 4, 3, 0};
     for (size_t i = 0; i < sizeof(boundaries) / sizeof(*boundaries); i++) {
-        s->checkpoint_valid = true;
+        s->frontier.checkpoint_valid = true;
         ds4_session_rewind(s, boundaries[i]);
-        assert(s->checkpoint.len == boundaries[i]);
-        assert(!s->checkpoint_valid && !s->mtp_draft_valid);
-        assert(s->checkpoint_images == images && s->checkpoint_image_count == 1);
-        assert(ds4_session_common_prefix(s, &s->checkpoint) == 0);
+        assert(s->frontier.checkpoint.len == boundaries[i]);
+        assert(!s->frontier.checkpoint_valid && !s->frontier.mtp_draft_valid);
+        assert(s->frontier.checkpoint_images == images && s->frontier.checkpoint_image_count == 1);
+        assert(ds4_session_common_prefix(s, &s->frontier.checkpoint) == 0);
         assert(ds4_session_argmax(s) == -1);
         assert(ds4_session_argmax_excluding(s, 1) == -1);
         assert(ds4_session_argmax_ignoring_eos(s, DS4_THINK_NONE) == -1);
@@ -162,7 +162,7 @@ static void test_rewind(void) {
 
 static void test_session_memory(void) {
     const uint64_t gib = UINT64_C(1) << 30;
-    ds4_engine e = { .backend = DS4_BACKEND_METAL,
+    ds4_engine e = { .core.backend = DS4_BACKEND_METAL,
                      .placement_session_count_hint = 4 };
     assert(ds4_engine_glm_graph_budget(&e, 2*gib) == 8*gib);
     e.glm_session_count = 1;
@@ -174,17 +174,17 @@ static void test_session_memory(void) {
     e.placement_session_count_hint = 0;
     assert(ds4_engine_glm_graph_budget(&e, 3*gib) == 11*gib);
     assert(ds4_engine_glm_graph_budget(&e, UINT64_MAX) == UINT64_MAX);
-    e.backend = DS4_BACKEND_CUDA;
+    e.core.backend = DS4_BACKEND_CUDA;
     assert(ds4_engine_glm_graph_budget(&e, 3*gib) == 3*gib);
 
     ds4_session *s = calloc(1, sizeof(*s));
     assert(s);
-    e.backend = DS4_BACKEND_CPU;
+    e.core.backend = DS4_BACKEND_CPU;
     s->engine = &e;
     s->glm_reserved_graph_bytes = 2*gib;
     ds4_session_free(s);
     assert(e.glm_session_count == 3 && e.glm_session_graph_bytes == 6*gib);
-    e.backend = DS4_BACKEND_METAL;
+    e.core.backend = DS4_BACKEND_METAL;
     e.placement_session_count_hint = 4;
     assert(ds4_engine_glm_graph_budget(&e, 2*gib) == 8*gib);
 }
@@ -237,17 +237,17 @@ static void test_snapshot_bytes(void) {
     g_ds4_shape.n_head_dim = 4;
     g_ds4_shape.n_vocab = 8;
     g_ds4_compress_ratios[0] = 0;
-    ds4_engine e = {.backend = DS4_BACKEND_CPU};
+    ds4_engine e = {.core.backend = DS4_BACKEND_CPU};
     ds4_session *s = calloc(1, sizeof(*s));
     assert(s);
     s->engine = &e;
-    s->ctx_size = 8;
-    s->prefill_cap = 1;
-    s->checkpoint_valid = true;
-    s->logits = calloc(DS4_N_VOCAB, sizeof(float));
-    assert(s->logits);
+    s->frontier.ctx_size = 8;
+    s->frontier.prefill_cap = 1;
+    s->frontier.checkpoint_valid = true;
+    s->frontier.logits = calloc(DS4_N_VOCAB, sizeof(float));
+    assert(s->frontier.logits);
     kv_cache_init(&s->cpu_cache, 8, 0);
-    for (int i = 0; i < 3; i++) ds4_tokens_push(&s->checkpoint, i);
+    for (int i = 0; i < 3; i++) ds4_tokens_push(&s->frontier.checkpoint, i);
     /* Every byte of the final float is nonzero, including the last byte. */
     const uint32_t bits = UINT32_C(0x3f9e0652);
     for (int i = 0; i < 3 * 4; i++)
@@ -255,7 +255,7 @@ static void test_snapshot_bytes(void) {
     ds4_session_snapshot snapshot = {0};
     const int lengths[] = {1, 3, 2, 3};
     for (size_t i = 0; i < sizeof(lengths) / sizeof(*lengths); i++) {
-        s->checkpoint.len = lengths[i];
+        s->frontier.checkpoint.len = lengths[i];
         s->cpu_cache.layer[0].n_raw = lengths[i];
         char err[192] = {0};
         FILE *fp = tmpfile();
@@ -284,25 +284,37 @@ static void test_snapshot_bytes(void) {
 
 static void test_text_observations(void) {
     ds4_engine e = {0};
-    ds4_vocab *v = &e.vocab;
+    ds4_vocab *v = &e.core.vocab;
     char bytes[256][5] = {{0}};
     v->n_vocab = 260;
     v->token = calloc((size_t)v->n_vocab, sizeof(*v->token));
     assert(v->token);
-    table_init(&v->token_to_id, v->n_vocab);
-    table_init(&v->merge_rank, 0);
+    v->token_to_id = ds4_token_map_create(v->n_vocab);
+    v->merge_rank = ds4_token_map_create(0);
+    assert(v->token_to_id && v->merge_rank);
+    /* Fixture vocabulary for GPT-2's printable-byte alphabet. The maps borrow
+     * these stack keys until vocab_free below; no private BPE helper is needed. */
+    uint32_t escaped = 256;
     for (int i = 0; i < 256; i++) {
-        char *p = bytes[i];
-        utf8_put(&p, gpt2_byte_to_codepoint((uint8_t)i));
-        v->token[i] = (ds4_str){bytes[i], (uint64_t)(p - bytes[i])};
-        table_put(&v->token_to_id, v->token[i], i);
+        const bool printable = (i >= 33 && i <= 126) ||
+            (i >= 161 && i <= 172) || i >= 174;
+        const uint32_t cp = printable ? (uint32_t)i : escaped++;
+        const uint64_t len = cp < 0x80 ? 1u : 2u;
+        if (len == 1) bytes[i][0] = (char)cp;
+        else {
+            bytes[i][0] = (char)(0xc0u | (cp >> 6));
+            bytes[i][1] = (char)(0x80u | (cp & 0x3fu));
+        }
+        v->token[i] = (ds4_str){bytes[i], len};
+        assert(ds4_token_map_put(v->token_to_id, bytes[i], len, i));
     }
     const char *special[] = {
         "<|user|>", "<|observation|>", "<tool_response>", "</tool_response>"
     };
     for (int i = 0; i < 4; i++) {
         v->token[256+i] = (ds4_str){special[i], strlen(special[i])};
-        table_put(&v->token_to_id, v->token[256+i], 256+i);
+        assert(ds4_token_map_put(v->token_to_id, special[i],
+                                v->token[256+i].len, 256+i));
     }
     v->user_id = 256;
     v->observation_id = 257;
@@ -339,16 +351,16 @@ static void test_text_observations(void) {
             assert(actual.len == len && image.data == &pixel && !span.embedding.data);
 #ifndef DS4_NO_GPU
             const bool glm = DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_GLM_DSA;
-            e.vision_ready = true;
-            e.vision_kind = glm ? DS4_VISION_GLM53 : DS4_VISION_DEEPSEEK4;
-            e.vision_start_token = 260;
-            e.vision_image_token = 261;
-            e.vision_end_token = 262;
+            e.core.vision_ready = true;
+            e.core.vision_kind = glm ? DS4_VISION_GLM53 : DS4_VISION_DEEPSEEK4;
+            e.core.vision_start_token = 260;
+            e.core.vision_image_token = 261;
+            e.core.vision_end_token = 262;
             /* A zero sentinel row is sufficient: this tests prompt assembly,
              * not the encoder or language graph. */
-            e.vision_model.size = (uint64_t)DS4_N_EMBD * sizeof(uint16_t);
-            void *sentinels = calloc(1, (size_t)e.vision_model.size);
-            e.vision_model.map = sentinels;
+            e.core.vision_model.size = (uint64_t)DS4_N_EMBD * sizeof(uint16_t);
+            void *sentinels = calloc(1, (size_t)e.core.vision_model.size);
+            e.core.vision_model.map = sentinels;
             assert(sentinels);
             const char *image_text[] = {
                 "before & </tool_result>", "between </tool_response>", "after"
@@ -405,9 +417,9 @@ static void test_text_observations(void) {
                 ds4_vision_embedding_free(&got[i].embedding);
             }
             free(sentinels);
-            e.vision_model.map = NULL;
-            e.vision_ready = false;
-            e.vision_kind = DS4_VISION_NONE;
+            e.core.vision_model.map = NULL;
+            e.core.vision_ready = false;
+            e.core.vision_kind = DS4_VISION_NONE;
 #endif
             ds4_tokens_free(&expected);
             ds4_tokens_free(&actual);
@@ -545,10 +557,10 @@ static void test_spark_dspark_policy(void) {
     assert(e && s);
     ds4_tensor gate = {.type = DS4_TENSOR_MXFP4};
     ds4_tensor down = {.type = DS4_TENSOR_MXFP4};
-    e->backend = DS4_BACKEND_CUDA;
+    e->core.backend = DS4_BACKEND_CUDA;
     e->tp.active = true;
-    e->weights.layer[DS4_N_LEADING_DENSE].ffn_gate_exps = &gate;
-    e->weights.layer[DS4_N_LEADING_DENSE].ffn_down_exps = &down;
+    e->core.weights.layer[DS4_N_LEADING_DENSE].ffn_gate_exps = &gate;
+    e->core.weights.layer[DS4_N_LEADING_DENSE].ffn_down_exps = &down;
     s->engine = e;
     unsetenv("DS4_DSPARK_SCHEDULER_WINDOW");
     unsetenv("DS4_DSPARK_SCHEDULER_MIN_AVG_MILLI");
@@ -579,14 +591,14 @@ static void test_spark_dspark_policy(void) {
     assert(ds4_dspark_scheduler_window(s) == 4);
     assert(ds4_dspark_scheduler_min_avg_milli(s) == 1500);
     e->tp.active = true;
-    e->ssd_streaming = true;
+    e->core.ssd_streaming = true;
     assert(!ds4_dspark_spark_tp_policy(e, true));
     assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-    e->ssd_streaming = false;
-    e->dspark_exact_sampling = true;
+    e->core.ssd_streaming = false;
+    e->core.dspark_exact_sampling = true;
     assert(!ds4_dspark_spark_tp_policy(e, true));
     assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-    e->dspark_exact_sampling = false;
+    e->core.dspark_exact_sampling = false;
     g_ds4_flash_vision_exp = true;
     assert(!ds4_dspark_spark_tp_policy(e, true));
     assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
@@ -597,15 +609,15 @@ static void test_spark_dspark_policy(void) {
     assert(ds4_dspark_scheduler_window(s) == 16);
     assert(ds4_dspark_scheduler_min_avg_milli(s) == 1000);
     assert(ds4_dspark_scheduler_tail_min_tokens(s) == 4);
-    e->ssd_streaming = true;
+    e->core.ssd_streaming = true;
     assert(!ds4_dspark_spark_tp_policy(e, true));
     assert(ds4_dspark_scheduler_window(s) == 4);
     assert(ds4_dspark_scheduler_min_avg_milli(s) == 1500);
-    e->ssd_streaming = false;
-    e->dspark_exact_sampling = true;
+    e->core.ssd_streaming = false;
+    e->core.dspark_exact_sampling = true;
     assert(!ds4_dspark_spark_tp_policy(e, true));
     assert(ds4_dspark_scheduler_window(s) == 4);
-    e->dspark_exact_sampling = false;
+    e->core.dspark_exact_sampling = false;
     g_ds4_flash_vision_exp = true;
     assert(!ds4_dspark_spark_tp_policy(e, true));
     g_ds4_flash_vision_exp = false;
@@ -623,15 +635,15 @@ static void test_spark_dspark_policy(void) {
     ds4_tensor draft_down = {.type = DS4_TENSOR_Q2_K, .ndim = 3,
                              .dim = {2048, 4096, 256}};
     ds4_tensor dense = {.type = DS4_TENSOR_Q8_0, .dim = {4096, 2048}};
-    e->dspark = true;
-    e->support_kind = DS4_SUPPORT_DSPARK;
-    e->weights.output = &output;
-    e->dspark_weights.n_stages = 1;
-    e->dspark_weights.block_size = 6;
-    e->dspark_weights.markov_rank = 128;
-    e->dspark_weights.stage[0].markov_w1 = &dense;
-    e->dspark_weights.stage[0].markov_w2 = &dense;
-    ds4_layer_weights *draft = &e->dspark_weights.stage[0].block;
+    e->core.dspark = true;
+    e->core.support_kind = DS4_SUPPORT_DSPARK;
+    e->core.weights.output = &output;
+    e->core.dspark_weights.n_stages = 1;
+    e->core.dspark_weights.block_size = 6;
+    e->core.dspark_weights.markov_rank = 128;
+    e->core.dspark_weights.stage[0].markov_w1 = &dense;
+    e->core.dspark_weights.stage[0].markov_w2 = &dense;
+    ds4_layer_weights *draft = &e->core.dspark_weights.stage[0].block;
     draft->ffn_gate_exps = draft->ffn_up_exps = &draft_gate;
     draft->ffn_down_exps = &draft_down;
     draft->attn_q_b = draft->attn_output_a = draft->attn_output_b = &dense;
@@ -641,16 +653,16 @@ static void test_spark_dspark_policy(void) {
     assert(tp_dspark_split_eligible(e, true, true));
     assert(tp_dspark_split_eligible(e, false, true));
     assert(!tp_dspark_split_eligible(e, true, false));
-    e->dspark_confidence_threshold = 0.4f;
+    e->core.dspark_confidence_threshold = 0.4f;
     assert(!tp_dspark_split_eligible(e, true, true));
     assert(tp_dspark_split_eligible(e, false, true));
-    e->dspark_confidence_threshold = 0;
-    e->dspark_exact_sampling = true;
+    e->core.dspark_confidence_threshold = 0;
+    e->core.dspark_exact_sampling = true;
     assert(!tp_dspark_split_eligible(e, true, true));
-    e->dspark_exact_sampling = false;
-    e->ssd_streaming = true;
+    e->core.dspark_exact_sampling = false;
+    e->core.ssd_streaming = true;
     assert(!tp_dspark_split_eligible(e, true, true));
-    e->ssd_streaming = false;
+    e->core.ssd_streaming = false;
     g_ds4_flash_vision_exp = true;
     assert(!tp_dspark_split_eligible(e, true, true));
     g_ds4_flash_vision_exp = false;
@@ -660,7 +672,7 @@ static void test_spark_dspark_policy(void) {
     setenv("DS4_TP_DISABLE_DSPARK_SPLIT", "1", 1);
     assert(!tp_dspark_split_eligible(e, true, true));
     unsetenv("DS4_TP_DISABLE_DSPARK_SPLIT");
-    e->backend = DS4_BACKEND_METAL;
+    e->core.backend = DS4_BACKEND_METAL;
     assert(!tp_dspark_split_eligible(e, true, true));
     assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
     free(s);
@@ -756,7 +768,73 @@ static void test_dspark_tp_split_reserve(void) {
     g_ds4_shape = saved_shape;
 }
 
+/* Public Session policy must distinguish adjusted selection from raw diagnostic
+ * logits, and cached/prefilled thinking must not spend the generated threshold. */
+static void test_session_sampling_policy(void) {
+    const ds4_shape saved_shape = g_ds4_shape;
+    g_ds4_shape = DS4_SHAPE_FLASH41;
+    g_ds4_shape.n_vocab = 8;
+    ds4_engine e = { .core.backend = DS4_BACKEND_CPU,
+        .core.vocab = {.assistant_id = 6, .think_start_id = 4, .think_end_id = 5,
+                  .eos_id = 7, .endoftext_id = -1},
+        .core.overthink = {.penalty = .75f, .think_only = true, .after = 1,
+                      .ids = {2, -1, 8}, .count = 3} };
+    ds4_session *s = calloc(1, sizeof(*s));
+    assert(s);
+    s->engine = &e;
+    s->frontier.logits = malloc(8 * sizeof(float));
+    s->frontier.sample_probs = malloc(8 * sizeof(float));
+    assert(s->frontier.logits && s->frontier.sample_probs);
+    const float raw[] = {-9, -9, 2, 1.5f, -9, -9, -9, -9};
+    assert(ds4_session_set_logits(s, raw, 8) == 0);
+    ds4_tokens_push(&s->frontier.checkpoint, 6);
+    ds4_tokens_push(&s->frontier.checkpoint, 4);
+    s->frontier.overthink_prompt_len = 2;
+    s->frontier.checkpoint_valid = true;
+    assert(ds4_session_argmax(s) == 2); /* Prefilled thoughts are not generated. */
+    assert(!s->frontier.sampling_logits);
+    ds4_tokens_push(&s->frontier.checkpoint, 0);
+    assert(ds4_session_argmax(s) == 3);
+    assert(ds4_session_argmax_excluding(s, 3) == 2);
+    float adjusted[8], copied[8];
+    assert(ds4_session_copy_sampling_logits(s, adjusted, 8) == 8);
+    assert(adjusted[2] == 1.25f && adjusted[3] == 1.5f);
+    assert(ds4_session_copy_logits(s, copied, 8) == 8);
+    assert(!memcmp(raw, copied, sizeof(raw)));
+    ds4_token_score top[2], single;
+    assert(ds4_session_top_logprobs(s, top, 2) == 2 && top[0].id == 2);
+    assert(ds4_session_token_logprob(s, 2, &single) == 1);
+    assert(single.logit == raw[2] && single.logprob == top[0].logprob);
+    uint64_t actual_rng = 17, expected_rng = 17;
+    int expected = ds4_sample_logits(adjusted, 8, .7f, 0, .9f, .05f, &expected_rng);
+    assert(ds4_session_sample(s, .7f, 0, .9f, .05f, &actual_rng) == expected);
+    assert(actual_rng == expected_rng);
+    ds4_tokens_push(&s->frontier.checkpoint, 5);
+    assert(ds4_session_argmax(s) == 2); /* Closed thinking disables the policy. */
+    const float controls[] = {-9, -9, 1, 7, 8, -9, -9, 9};
+    assert(ds4_session_set_logits(s, controls, 8) == 0);
+    assert(ds4_session_argmax_ignoring_eos(s, DS4_THINK_NONE) == 3);
+    assert(ds4_session_argmax_ignoring_eos(s, DS4_THINK_HIGH) == 4);
+    assert(ds4_session_common_prefix(s, &s->frontier.checkpoint) == 4);
+    s->frontier.checkpoint_valid = false;
+    assert(ds4_session_common_prefix(s, &s->frontier.checkpoint) == 0);
+    assert(ds4_session_argmax(s) == -1);
+    assert(ds4_session_copy_sampling_logits(s, copied, 8) == 0);
+    /* Raw diagnostic/copy/set entry points historically lack a valid gate. */
+    assert(ds4_session_copy_logits(s, copied, 8) == 8);
+    assert(ds4_session_top_logprobs(s, top, 2) == 2 && top[0].id == 7);
+    assert(ds4_session_copy_logits(s, copied, 7) == 0);
+    assert(ds4_session_set_logits(s, raw, 7) == 1);
+    free(s->frontier.sampling_logits);
+    free(s->frontier.logits);
+    free(s->frontier.sample_probs);
+    ds4_tokens_free(&s->frontier.checkpoint);
+    free(s);
+    g_ds4_shape = saved_shape;
+}
+
 int main(void) {
+    test_session_sampling_policy();
     test_dspark_tp_verify_flags();
     test_dspark_tp_split_reserve();
     test_vision_prefix();

@@ -8,8 +8,8 @@ int main(int argc, char **argv) {
     CHECK(argc == 2);
     ds4_session *s = calloc(1, sizeof(*s));
     CHECK(s);
-    s->checkpoint_valid = true;
-    s->approximate_suffix = true;
+    s->frontier.checkpoint_valid = true;
+    s->frontier.approximate_suffix = true;
     CHECK(ds4_session_is_approximate(s));
     CHECK(ds4_session_payload_bytes(s) == 0);
     CHECK(ds4_session_layer_payload_bytes(s, 0, 0) == 0);
@@ -40,8 +40,8 @@ int main(int argc, char **argv) {
     CHECK(snapshot.ptr == storage && snapshot.len == 7 && snapshot.cap == sizeof(storage));
     CHECK(memcmp(storage, before, sizeof(storage)) == 0);
 
-    s->approximate_suffix = false;
-    s->checkpoint_valid = false;
+    s->frontier.approximate_suffix = false;
+    s->frontier.checkpoint_valid = false;
     CHECK(!ds4_session_is_approximate(s));
     CHECK(ds4_session_layer_payload_bytes(s, 0, 0) == 0);
     CHECK(ds4_session_save_layer_payload(s, NULL, 0, 0, err, sizeof(err)) != 0);

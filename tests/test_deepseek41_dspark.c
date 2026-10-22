@@ -124,7 +124,7 @@ static int check_runtime(const char *target, const char *draft, const ds4_tp_opt
             ta[i] = 700 + i;
             tb[i] = i < keep ? ta[i] : 900 + (int)i;
         }
-        ds41_dspark *da = a->ds41_graph.dspark, *db = b->ds41_graph.dspark;
+        ds41_dspark *da = a->ds41.graph.dspark, *db = b->ds41.graph.dspark;
         REQUIRE(ds41_session_verify(a, ta, 6));
         REQUIRE(ds41_session_commit(a, ta, 6, 6));
         REQUIRE(ds41_session_verify(b, tb, 6));
@@ -135,41 +135,45 @@ static int check_runtime(const char *target, const char *draft, const ds4_tp_opt
         fprintf(stderr, "verify prefix=%u causal max=%.8g\n", keep, worst);
         REQUIRE(worst < 0.0001);
         if (keep < 6) REQUIRE(ds4_session_rewind_speculative(a, 127 + keep));
-        REQUIRE(a->checkpoint.len == b->checkpoint.len && a->checkpoint_valid);
-        REQUIRE(!memcmp(a->logits, b->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(a->frontier.checkpoint.len == b->frontier.checkpoint.len && a->frontier.checkpoint_valid);
+        REQUIRE(!memcmp(a->frontier.logits, b->frontier.logits, DS4_N_VOCAB * sizeof(float)));
         for (unsigned i = 0; i < 8; i++) {
             REQUIRE(!ds4_session_eval(a, 1200 + i, err, sizeof(err)));
             REQUIRE(!ds4_session_eval(b, 1200 + i, err, sizeof(err)));
             worst = 0;
             for (uint32_t v = 0; v < DS4_N_VOCAB; v++)
-                worst = fmax(worst, fabs(a->logits[v] - b->logits[v]));
+                worst = fmax(worst, fabs(a->frontier.logits[v] - b->frontier.logits[v]));
             REQUIRE(worst < 0.0001);
         }
-        REQUIRE(!ds4_session_rewind_speculative(a, a->checkpoint.len - 1));
+        REQUIRE(!ds4_session_rewind_speculative(a, a->frontier.checkpoint.len - 1));
         fprintf(stderr, "verify prefix=%u rollback and 8 continuation steps PASS\n", keep);
     }
     puts("V4.1 DSpark causal verification, all prefix commits/rewinds and snapshot load: PASS");
     for (unsigned exact = 0; exact < 2; exact++) {
         ds4_session_invalidate(a);
         REQUIRE(!ds4_session_sync(a, &prompt, err, sizeof(err)));
-        engine->dspark_exact_sampling = exact != 0;
-        engine->dspark_confidence_threshold = 0;
+        engine->core.dspark_exact_sampling = exact != 0;
+        engine->core.dspark_confidence_threshold = 0;
         uint64_t rng = 12345;
         for (unsigned cycle = 0; cycle < 8; cycle++) {
-            const int seed = sample_argmax(a->logits, DS4_N_VOCAB);
-            const int before = a->checkpoint.len;
+            const int seed = sample_argmax(a->frontier.logits, DS4_N_VOCAB);
+            const int before = a->frontier.checkpoint.len;
             int accepted[6];
             const int count = ds4_session_eval_speculative(a, seed, 6, -1,
                 0.7f, 0, 0.95f, 0, &rng, accepted, 6, err, sizeof(err));
             REQUIRE(count >= 1 && count <= 6 && accepted[0] == seed);
-            REQUIRE(a->checkpoint.len == before + count &&
-                    a->ds41_graph.pos == (uint32_t)a->checkpoint.len);
+            REQUIRE(a->frontier.checkpoint.len == before + count &&
+                    a->ds41.graph.pos == (uint32_t)a->frontier.checkpoint.len);
             for (int i = 0; i < count; i++)
-                REQUIRE(a->checkpoint.v[before + i] == accepted[i]);
+                REQUIRE(a->frontier.checkpoint.v[before + i] == accepted[i]);
+            fprintf(stderr, "cycle exact=%u index=%u accepted=%d rng=%016" PRIx64 " tokens=",
+                exact, cycle, count, rng);
+            for (int i = 0; i < count; i++) fprintf(stderr, "%s%d", i ? "," : "", accepted[i]);
+            fputc('\n', stderr);
             if (count > 1) {
                 REQUIRE(ds4_session_rewind_speculative(a, before + count - 1));
                 REQUIRE(!ds4_session_eval(a, accepted[count - 1], err, sizeof(err)));
-                REQUIRE(a->checkpoint.len == before + count);
+                REQUIRE(a->frontier.checkpoint.len == before + count);
             }
         }
         if (!tp) {
@@ -178,11 +182,11 @@ static int check_runtime(const char *target, const char *draft, const ds4_tp_opt
             const uint64_t saved_bytes = ds4_session_payload_bytes(a);
             rewind(snapshot);
             REQUIRE(!ds4_session_load_payload(b, snapshot, saved_bytes, err, sizeof(err)));
-            REQUIRE(!b->ds41_graph.dspark->kv_valid);
+            REQUIRE(!b->ds41.graph.dspark->kv_valid);
             for (unsigned i = 0; i < 3; i++) {
                 REQUIRE(!ds4_session_eval(a, 1500 + i, err, sizeof(err)));
                 REQUIRE(!ds4_session_eval(b, 1500 + i, err, sizeof(err)));
-                REQUIRE(!memcmp(a->logits, b->logits, DS4_N_VOCAB * sizeof(float)));
+                REQUIRE(!memcmp(a->frontier.logits, b->frontier.logits, DS4_N_VOCAB * sizeof(float)));
             }
         }
         fprintf(stderr, "V4.1 DSpark exact=%u sampling and frontier%s: PASS\n", exact,
@@ -191,22 +195,22 @@ static int check_runtime(const char *target, const char *draft, const ds4_tp_opt
     {
         int accepted[6];
         uint64_t rng = 71;
-        const int pos = a->checkpoint.len;
+        const int pos = a->frontier.checkpoint.len;
         ds4_session_set_cancel(a, cancel_now, NULL);
-        REQUIRE(ds4_session_eval_speculative(a, sample_argmax(a->logits, DS4_N_VOCAB),
+        REQUIRE(ds4_session_eval_speculative(a, sample_argmax(a->frontier.logits, DS4_N_VOCAB),
             6, -1, 0.7f, 0, 0.95f, 0, &rng, accepted, 6, err, sizeof(err)) < 0);
-        REQUIRE(a->checkpoint_valid && a->checkpoint.len == pos);
+        REQUIRE(a->frontier.checkpoint_valid && a->frontier.checkpoint.len == pos);
         ds4_session_set_cancel(a, NULL, NULL);
         err[0] = '\0';
         REQUIRE(!ds4_session_eval(a, 1600, err, sizeof(err)));
         while (prompt.len < 2043) ds4_tokens_push(&prompt, 300 + prompt.len % 23);
         ds4_session_invalidate(a);
         REQUIRE(!ds4_session_sync(a, &prompt, err, sizeof(err)));
-        while (a->checkpoint.len < 2048) {
-            const int before = a->checkpoint.len;
-            const int n = ds4_session_eval_speculative(a, sample_argmax(a->logits, DS4_N_VOCAB),
+        while (a->frontier.checkpoint.len < 2048) {
+            const int before = a->frontier.checkpoint.len;
+            const int n = ds4_session_eval_speculative(a, sample_argmax(a->frontier.logits, DS4_N_VOCAB),
                 6, -1, 0.7f, 0, 0.95f, 0, &rng, accepted, 6, err, sizeof(err));
-            REQUIRE(n >= 1 && n <= 2048 - before && a->checkpoint.len == before + n);
+            REQUIRE(n >= 1 && n <= 2048 - before && a->frontier.checkpoint.len == before + n);
         }
         REQUIRE(ds4_session_eval_speculative(a, 1600, 6, -1, 0.7f, 0, 0.95f, 0,
             &rng, accepted, 6, err, sizeof(err)) == 0);
@@ -255,8 +259,16 @@ int main(int argc, char **argv) {
     weights_bind(&tw, &target, false, 0, UINT32_MAX, true, false);
     model_open(&draft, argv[2], true, false);
     REQUIRE(support_model_checkpoint_compatible(&draft));
+    const ds4_shape target_shape = g_ds4_shape;
+    g_ds4_shape = DS4_SHAPE_FLASH;
+    fprintf(stderr, "Expected V4/V4.1 support-family rejection follows:\n");
+    const bool wrong_family_rejected = !support_model_checkpoint_compatible(&draft);
+    g_ds4_shape = target_shape;
+    REQUIRE(wrong_family_rejected && support_model_checkpoint_compatible(&draft));
     ds4_dspark_summary summary = model_dspark_summary(&draft);
     dspark_weights_bind_optional(&dw, &draft, &summary);
+    fprintf(stderr, "DSpark binding: present=%u missing=%u invalid=%u metadata=%u\n",
+        dw.present_tensors, dw.missing_tensors, dw.invalid_tensors, dw.metadata_errors);
     REQUIRE(dw.v41 && !dw.invalid_tensors && !dw.missing_tensors && !dw.metadata_errors);
     REQUIRE(ds4_gpu_init());
     const uint64_t offsets[] = {tw.token_embd->abs_offset, tw.output->abs_offset};

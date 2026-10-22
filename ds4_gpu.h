@@ -297,6 +297,8 @@ int ds4_gpu_set_decode_pipeline_fast_lookup(int enabled);
 int ds4_gpu_test_decode_pipeline_fast_lookup(void);
 /* Strict test oracle for the extended decode mul_mv_ext (nsg + nxpsg) cache. */
 int ds4_gpu_test_decode_pipeline_fast_lookup_ext(void);
+/* Real exact-range cache/owned/transient GPU lifetime oracle. */
+int ds4_gpu_test_exact_view_lifetimes(int expect_eviction);
 /* Strict test oracle for the generated resident-prefill MXFP4 half LUT. */
 int ds4_gpu_test_mxfp4_down_half_lut(uint16_t *legacy_bits,
                                      uint16_t *lut_bits);

@@ -1,0 +1,65 @@
+//! C facade for native model input. Owners and algorithms live in pure modules
+//! so graph/session code can reuse them without exporting a second ABI copy.
+const c = @import("gguf_c");
+const mapping = @import("model.zig");
+const configuration = @import("config.zig");
+const binding = @import("weights.zig");
+pub const Model = mapping.Model;
+pub const ModelConfig = configuration.ModelConfig;
+pub const Weights = binding.Weights;
+
+export fn ds4_native_model_open(record: *c.ds4_model, path: [*c]const u8, metal_mapping: bool, prefetch_cpu: bool) void {
+    mapping.openRecord(record, path, metal_mapping, prefetch_cpu);
+}
+export fn ds4_native_model_close(record: ?*c.ds4_model) void {
+    mapping.closeRecordPointer(record);
+}
+export fn ds4_model_config_deepseek41(model: *const c.ds4_model, output: *c.ds4_model_config, error_text: [*c]u8, error_capacity: usize) bool {
+    return configuration.readRecord(model, output, error_text, error_capacity);
+}
+export fn ds4_native_weights_bind41(output: *c.ds4_weights, model: *const c.ds4_model, config: *const c.ds4_model_config, load_slice: bool, start: u32, end: u32, require_output: bool, optional_output: bool, error_text: [*c]u8, error_capacity: usize) bool {
+    return binding.bindRecord(output, model, config, load_slice, start, end, require_output, optional_output, error_text, error_capacity);
+}
+
+// Append to the ONE existing input facade, not a second graph export root.
+// Core imports the pure owner directly through this same gguf_c type identity.
+const support_owner = @import("support_weights.zig");
+export fn ds4_native_support_summary(model: *const c.ds4_model, out: *c.ds4_dspark_summary) void {
+    out.* = support_owner.summarize(model);
+}
+export fn ds4_native_support_detect(model: ?*const c.ds4_model, stages: ?*u32, summary: ?*c.ds4_dspark_summary) c.ds4_support_kind {
+    return support_owner.detect(model, stages, summary);
+}
+export fn ds4_native_support_compatible(model: *const c.ds4_model, family: c.ds4_model_family, vision_exp: bool) bool {
+    return support_owner.compatible(model, family, vision_exp);
+}
+export fn ds4_native_support_bind(weights: *c.ds4_dspark_weights, model: ?*const c.ds4_model, summary: ?*const c.ds4_dspark_summary, shape: *const c.ds4_shape) void {
+    support_owner.bind(weights, model, summary, shape);
+}
+export fn ds4_native_support_bind_mtp(weights: *c.ds4_mtp_weights, model: *const c.ds4_model, shape: *const c.ds4_shape) void {
+    support_owner.bindLegacy(weights, model, shape);
+}
+
+// Append to the ONE existing input facade/shared gguf_c Module.
+const vision_binding = @import("vision_weights.zig");
+export fn ds4_native_vision_weights_bind(weights: *c.ds4_deepseek4_vision_weights, model: *const c.ds4_model, shape: *const c.ds4_shape) void {
+    vision_binding.bind(weights, model, shape);
+}
+
+// Append to the ONE existing input.zig facade, sharing its actual gguf_c.
+const VisionRuntime = @import("vision_runtime.zig");
+fn visionErrors(pointer: [*c]u8, length: usize) []u8 {
+    return if (pointer == null or length == 0) &.{} else pointer[0..length];
+}
+export fn ds4_native_vision_encode_file41(core: *c.ds4_engine_core, shape: *const c.ds4_shape, path: [*c]const u8, out: ?*c.ds4_vision_embedding, errors: [*c]u8, capacity: usize) c_int {
+    return @intFromBool((VisionRuntime.Vision{ .core = core, .shape = shape }).encodeFile(path, out, visionErrors(errors, capacity)));
+}
+export fn ds4_native_vision_encode_memory41(core: *c.ds4_engine_core, shape: *const c.ds4_shape, encoded: [*c]const u8, length: usize, out: ?*c.ds4_vision_embedding, errors: [*c]u8, capacity: usize) c_int {
+    return @intFromBool((VisionRuntime.Vision{ .core = core, .shape = shape }).encodeMemory(encoded, length, out, visionErrors(errors, capacity)));
+}
+export fn ds4_native_vision_append41(core: *c.ds4_engine_core, shape: *const c.ds4_shape, tokens: ?*c.ds4_tokens, span: ?*c.ds4_vision_span, embedding: ?*c.ds4_vision_embedding, errors: [*c]u8, capacity: usize) c_int {
+    return @intFromBool((VisionRuntime.Vision{ .core = core, .shape = shape }).append(tokens, span, embedding, visionErrors(errors, capacity)));
+}
+export fn ds4_native_vision_message41(core: *c.ds4_engine_core, shape: *const c.ds4_shape, tokens: ?*c.ds4_tokens, role: [*c]const u8, parts: [*c]const [*c]const u8, embeddings: [*c]c.ds4_vision_embedding, image_count: usize, spans: [*c]c.ds4_vision_span, errors: [*c]u8, capacity: usize) c_int {
+    return @intFromBool((VisionRuntime.Vision{ .core = core, .shape = shape }).message(tokens, role, parts, embeddings, image_count, spans, visionErrors(errors, capacity)));
+}

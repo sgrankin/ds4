@@ -1,5 +1,53 @@
 # Next experiments: one hour each
 
+## Selective Zig migration, authorized 2026-10-22
+
+Keep `main` fixed. Preserve the previous translation on `zig-rewrite`; work
+from the C implementation on `zig-modular`. The user extended the window to
+about seven hours. Each item has a one-hour ceiling including source review,
+builds, qualification and a small commit; finish sooner when the evidence is
+sufficient. Keep readable source and meaningful original comments as acceptance
+criteria alongside behavior and build/runtime cost. Do not fill the budget by
+expanding the harness or migrating disconnected code merely for line counts.
+
+| Order | Ceiling | Deliverable |
+| --- | --- | --- |
+| 1. Checkpoint cache | 03:27:33–04:27:33 UTC | Build original C/ObjC with Zig, substitute only the handwritten checkpoint cache, run the existing production-linked fixture in Debug/release, and check actual SSD restart plus tool retrieval in both C/Zig directions. |
+| 2. KV persistence | One hour | Review the handwritten store against C formats, ownership and eviction policy; migrate only if it remains legible. Qualify the actual object with existing fixtures and a real caller. |
+| 3. Engine cursor boundary | One hour | Source review identified a stronger small seam than another Metal wrapper: bounded GGUF cursor reads and metadata skipping, with no graph/OS ownership. Preserve exact bounds, position and error behavior; qualify real production calls. Keep tensor/model tables and ARC host ownership in C. |
+| 4. Small host utilities | One hour | Reuse clear SSD/configuration and prompt-prefix modules. Preserve comments, test against existing C fixtures, and measure incremental builds. Avoid migrating CUDA argument policy merely for coverage. |
+| 5. Numerical helper | One hour | Migrate a bounded engine helper only with its numerical caveats and production-linked tests intact. Engram is a candidate; select based on the preceding review. |
+| 6. CLI boundary | One hour | Extract bounded transcript/session helpers through the existing opaque engine API. Source review found a whole CLI rewrite too large for one qualified hour; keep terminal/decode glue in C rather than dropping REPL, vision or diagnostic behavior. |
+| 7. Metadata directory | One hour | Extend the established GGUF cursor boundary to borrowed key/type/value-offset records. Keep model allocation and fatal policy in C; qualify partial progress/alignment and real model loading. |
+| 8. Tokenizer maps and BPE | One hour | Replace tokenizer-local maps with opaque borrowed-key maps and represent merged BPE symbols as spans of one encoded allocation. Preserve ranks/ties/fallback; compare exact real-vocabulary IDs and warm tokenization cost. |
+| 9. Metal publication | One hour | Selectively salvage the readable F16 publication controller through a minimal typed Objective-C bridge. Check retained command lifetime and actual GPU results before keeping it. |
+| 10. HC prefill controller | One hour | If the minimal bridge qualifies, extend only for the ordinary HC prefill controller and its real GPU/shape cases. Preserve the current fallback. |
+| 11. Benchmark frontend | One hour | Move the complete benchmark frontend with real snapshot/replay and multiplicative cases; preserve public CLI output. |
+| 12. Pretokenizers | One hour | Move all three ordered family splitters using existing Unicode tables; compare actual vocabularies and mixed microtimings. |
+| 13. Complete CLI | One hour | Build on the chat/options boundaries to move one-shot, REPL and diagnostics; qualify actual generation, session changes and SIGINT rollback. |
+| 14. RMS/QKV dispatch | One hour | Extend the typed resource bridge only for ordinary RMS controllers; qualify actual CPU, GPU and model callers. |
+| 15. Image decode | One hour | Move decode ownership, orientation and identity over existing codecs; compare full pixels/fingerprints and warm decode cost. |
+| 16. Chat rendering | One hour | Move family rendering/control policy; use standard marker scanning and measure actual prompt/token parity and formatting cost. |
+| 17. Vocabulary | One hour | Move construction/release and token-byte decoding over real GGUF cursors; compare every real vocabulary entry. |
+| 18. Image preprocessing | One hour | Move resizing/patch/layout policy; measure geometry, full arrays, ordinary/extreme inputs and official DeepInfer layout agreement. |
+| 19. Activation controllers | One hour | Move quantization/Engram/pool host dispatch; qualify ownership, actual GPU kernels and alternating model performance. |
+| 20. Streaming tool parser | One hour | Move four syntax parsers and call owners over shared real records; run existing production-linked Debug/release fixtures and retain discovered failures. |
+| 21. Combined qualification | One hour | Run all retained modules together, measure real build/runtime costs, test cross-restart retrieval and repeated suffix reuse. |
+| 22. Numeric sampling | 05:33–06:33 UTC | Move active argmax/RNG/filter/probability/correction algorithms behind a primitive typed API; keep session/penalty/stop policy in C. Reuse actual sampling hooks/fixtures, record production versus finite-aware diagnostic math, then qualify real seeded generation and microtimings. |
+| 23. Resident-route policy | 05:43–06:43 UTC | Move the complete active nine-function route policy using existing records and frozen-C differential fixtures. Preserve caps/ordering/arithmetic, then compare actual resident-fast coding/route counters. |
+| 24. Final review | Remaining window | Inspect retained tradeoffs and exact remaining C scope, install qualified binaries and consolidate a short reviewable branch while retaining individual experiments. |
+
+Items1–20 are retained with separate reports linked from [the module guide](../../zig/README.md).
+Item21 passed against frozen code `b8c71f98`; item22 sampling also passed CPU and actual fixed-seed callers. Resident-route source preparation follows those measurements. The item numbers record sequence,
+not hours consumed. Source preparation overlapped; compiler/model measurements
+remained sequential. The server JSON survey retained C because standard-scanner
+compatibility changes would expand this migration. No harness framework or
+whole-runtime translation dump was introduced.
+
+The final qualification will retain timings and approximation differences,
+record the substantial engine/Objective-C scope that remains, and preserve the
+individual experiment commits behind a short reviewable branch. Main stays fixed.
+
 ## Recipe follow-up authorized 2026-10-08
 
 Compare against `../ds4-recipe` revision `0316b956f8236d810f50c2ae0a6fda9f77ce35d6`.
@@ -522,7 +570,7 @@ Item28 finished at **20:29 UTC**. [Combined CLM coding report](../experiments/cl
 
 Item29 starts **20:29 UTC**, with a **21:19 UTC** deadline;10 minutes of prior quota-source/launcher preparation are charged. Keep the qualified four-session suffix64/canonical1/PAD1/visible-continuation workflow fixed and compare SSD4096 before,512,128,4096 after, with hot0/native routing. Measure actual eviction, source misses, owned bytes, whole/edited wall, all reads/facts/format/caps and restart. Capacity loss is a measured outcome; do not rescue checkpoints or add a cache API.
 
-Item29 finished early at **20:54 UTC**. [SSD quota report](../experiments/ssd-budget-hour29-20261004/README.md):512MiB retained all four grafts/four approximate continuations, with1.23% additional whole wall and24 endpoint evictions.128MiB lost all four sources, used short exact-prefix recomputation, and added20.69% whole/53.88% edited wall. All32 real reads/all16 edited facts passed; the128 Cwarm READY-plus-correct-prose failure remains, so strict31/32. Both4096 controls repeated public content/usage with0.92% whole drift. All1188 guard samples normal, zero swap growth; observed owned bytes remained under quotas and no admission warnings occurred. Keep the preset4096 headroom;512 is a qualified smaller capacity on this workload.
+Item29 finished early at **20:54 UTC**. [SSD quota report](../experiments/ssd-budget-hour29-20261004/README.md):512MiB retained all four grafts/four approximate continuations, with1.23% additional whole wall and24 endpoint evictions.128MiB lost all four sources, used short exact-prefix recomputation, and added20.69% whole/53.88% edited wall. All32 real reads/all 16 edited facts passed; the128 Cwarm READY-plus-correct-prose failure remains, so strict31/32. Both4096 controls repeated public content/usage with0.92% whole drift. All1188 guard samples normal, zero swap growth; observed owned bytes remained under quotas and no admission warnings occurred. Keep the preset4096 headroom;512 is a qualified smaller capacity on this workload.
 
 Item30 starts **20:54 UTC**, with a **21:44 UTC** deadline;10 minutes of earlier source preparation/API review are charged. Compare native-before/reuse64/native-after on two durable Conversations with three public item deletions each. Retain active inventory tool results, require eight actual current-file reads, keep A archive code stable and change B on each edit. Restart after edit1 with the same arm-owned cache/store. Credit approximate SSD sources only when actual graft logs prove them; canonical full-input policy excludes Conversation references, while PAD1 remains eligible. Preserve first replies, format/caps, whole costs and fallbacks without retries or geometry tuning.
 
@@ -760,3 +808,733 @@ automatically, with `DS4_METAL_V41_PACKED_F16_GATHER=0` as the comparison
 override. Exact measured outputs and neutral overall speed do not justify
 a separate enable switch. The paired decode tool now accepts an explicit
 control environment value so default-on comparisons still exercise both paths.
+
+Item54 — **2026-10-22 03:27 UTC**, selective Zig restart on `zig-modular`.
+Main stays at `ec5424de`; the complete mechanical translation is preserved as
+`zig-rewrite` (`108f90cf`). Each replacement has a one-hour ceiling, with source
+preparation in parallel and builds/model measurements serialized. Report folder
+`hourN` names are item numbers, not hours consumed. Retained so far: build graph,
+checkpoint/KV persistence, GGUF cursor/index, SSD/prefix utilities, Engram,
+CLI transcript helper, token maps/span BPE, and typed F16/HC Metal controllers.
+Each has a linked qualification under `zig/README.md`; exact measured behavior
+and real cache/model workflows are distinguished from source-only work.
+
+Next in order, each at most one hour: complete benchmark frontend (snapshot and
+replay at successive frontiers); complete pre-tokenization (ordinary/multilingual
+corpora and all available model families); complete interactive CLI (one-shot,
+REPL, diagnostics and cancellation); then the normal-path RMS Metal controller
+family if its small bridge remains readable. Close with combined real serving,
+build/incremental cost, comments/source review and a short rebaseable stack.
+Overall work window ends about **10:27 UTC** or earlier if tokens expire. Stop
+an individual migration if its boundary becomes a generic translation layer;
+keep the existing C reference build available. No runtime-default changes are
+part of the language migration.
+
+Selective Zig restart update **2026-10-22 05:59 UTC**: the bounded components
+through numeric sampling and resident policy are qualified. The sampler saves
+57.76%/42.85% CPU time in its existing alternating fixture; this is not a model
+throughput claim. The route policy preserves all six coding results and actual
+substitution counts, with1.60% more whole-task time against its C bracket mean.
+Reports and exact scope remain linked from `zig/README.md`.
+
+Next, sequential qualification with at most one hour per item (source prep may
+overlap): agent atomic file/edit operations; GGUF typed getters and tensor
+directory; F32 Metal matmul dispatch. Keep each existing C reference and actual
+production fixtures. Finish with the default installation, source/comment
+review and a short stack preserving the detailed steps. The work window still
+ends about10:27UTC or when tokens run out; leave main unchanged.
+
+Selective Zig restart final qualification **2026-10-22 06:32 UTC**: 27 handwritten
+implementation files / 9,532 physical lines, plus the small binding adapter.
+All 78 CPU fixture invocations and four builds pass; the final Debug router
+passes all 90 GPU cases. Final C/native persistent-agent arms complete twelve
+turns, six fresh archive reads/correct answers and six SSD/pre-RoPE grafts,
+including four after prior approximate states. All 437 pressure samples remain
+normal with no swap growth. All five default installed binaries match the
+qualified native binaries. [Final report](../experiments/zig-final-20261022/README.md).
+
+The focused build comparison records Make/native full points 9.184/9.557 s,
+no-op means 0.0127/0.3997 s and migrated Metal-controller edit means
+3.2460/0.5005 s. Retain the costs and both stopped measurement attempts;
+no whole-model speedup is claimed. The implementation and journal are being
+consolidated into a short stack, preserving detailed steps separately. Main
+and the earlier mechanical rewrite stay unchanged. Substantial engine,
+Metal resource/attention, server and agent orchestration still remain C;
+see `zig/README.md` for exact boundaries. This closes the accepted selective
+restart stage; do not open another boundary just to consume the time budget.
+
+Item55 starts **2026-10-22 12:18 UTC**, one-hour first-stage cap **13:18 UTC**.
+The user approved continuing the handwritten rewrite through the Metal engine
+and remaining applications. Work on `zig-engine`, based on `zig-modular`;
+main remains frozen. First stage: actual native model mapping/lifetime,
+explicit DS41 model configuration and typed weight binding. Preserve private
+versus shared mappings and exclusion of Engram/Qwen disk-only tails. Reuse the
+actual model fixtures, add only open/config/bind/close identity/lifetime coverage,
+and run the existing guard serially across all three real model families.
+
+Subsequent stages, broken into measured one-hour work blocks: a working native
+DS41 graph/prefill/decode path; session/checkpoint/replay/suffix state; remaining
+Metal family controllers/speculation/batching/vision; server and agent
+orchestration. Source preparation may overlap; builds and model jobs stay
+serialized. Keep Engine/Session handles opaque and move resource ownership in
+cohesive units. Use one actual shared record where transitional C callers
+need its fields; never mirror giant engine/session layouts or add a field
+accessor framework. Keep the ARC/resource bridge, shaders and third-party
+libraries in their natural languages. Record partial scope at each checkpoint.
+
+Item55 input ownership passes ReleaseFast/Debug real model lifecycle identity
+checks across DeepSeek, GLM and Qwen, the existing negative mapping fixtures,
+the model-free session fixture, and a short Metal continuation. Native DS41
+configuration and weight binding use values and borrowed tensor descriptors;
+other families still retain C validation/binding. No startup/throughput gain is
+claimed. [Report](../experiments/zig-engine-input-20261022/README.md).
+
+Item56 graph ownership started 12:41 UTC (one-hour cap 13:41 UTC), finishing
+qualification by 12:51. Layout/allocation/workspace/reset/free now use explicit
+configuration and the actual shared graph record. Existing C/native planning
+and real allocation/accounting fixtures pass, including Debug native objects.
+The 512-prefill/128-teacher ordinary ABBA bracket retains exact frontier logits
+with measured inference time +0.28%; F16 pair also matches. This is a neutral
+ownership change, with control drift retained. C attention/execution still runs.
+[Report](../experiments/zig-engine-graph-20261022/README.md).
+
+Item57 scalar and batch attention starts 12:52 UTC, one-hour cap 13:52 UTC.
+Move the actual controllers over explicit configuration and public Metal APIs;
+preserve rounding/publication, pre-RoPE originals, F16 caches, TP partitions and
+causal score tiling. Qualify real scalar decode as well as prefill; saved prefill
+frontier vectors alone cannot detect a decode-only regression. Keep the existing
+C reference and one pressure-guarded model job at a time.
+
+Item57 qualification completed by 13:09 UTC. Six full prefill frontier vectors
+match within storage mode. Three 32-step greedy decode pairs (F32, packed F16,
+legacy F16) match every selected ID and top-20 record, as does native Debug.
+The six-turn native agent check passes all three fresh archive reads and three
+SSD/pre-RoPE grafts, including two from prior approximate states. Throughput is
+neutral in the noisy short bracket; no inference speed gain is claimed.
+[Report](../experiments/zig-engine-attention-20261022/README.md).
+
+Item58 complete DS41 execution starts 13:10 UTC, one-hour cap 14:10 UTC.
+Activate the reviewed native layer/token executor, MoE, streaming-map/preparation
+owners, prefill sweep and session-batch controllers as one cohesive path. Keep
+private diagnostic/cache services and DSpark ownership explicit at the boundary;
+preserve Metal flags, cancellation, replay, image/TP routing, retained views and
+thread joins. Qualify ordinary scalar and prefill, warm/selected appends, actual
+archive/suffix use and a longer carry case with existing tools. Keep a frozen
+attention-stage control, and record failures before changing scope.
+
+Item58 completed by 13:30 UTC. All eight ordinary/F16/8,192-token frontier
+vectors match the frozen attention control. Three 32-step scalar pairs and
+native Debug match full top-20 records. Image encoding plus a follow-up query,
+batch admission and six-turn archive/repeated-suffix use pass. Native execution
+owns layer/token sequencing, MoE, mapped preparation, prefill and small batches;
+outer session policy and encoder residency remain C. No shader change.
+[Report](../experiments/zig-engine-execution-20261022/README.md).
+
+Item59 canonical DS41 payload activation starts 13:32 UTC (one-hour cap14:32).
+Its source/fixture preparation overlapped the preceding qualification. Own the
+unchanged DSV4v2 numerical wire format over actual Graph/Config; keep Session
+policy and canonical/replay/SSD envelopes in C. Compare actual cross-build disk
+files and fresh full-vocabulary continuations at odd/even/raw-ring frontiers,
+with F32 and F16 runtime storage. Test the demonstrated mutation boundary with
+three bounded failure cases, and record cross-storage rounding separately.
+
+Item59 finished by13:36 UTC. Unchanged DSV4v2 payload files and freshly computed
+full-vocabulary logits match C↔native in F32/F16 at six frontiers. Both storage
+conversion imports and native Debug also pass. Invalid header/token preserves
+the old frontier; post-mutation short reads invalidate it and good reload
+recovers.63 normal pressure samples, no swap growth. No latency claim.
+[Report](../experiments/zig-engine-payload-20261022/README.md).
+
+Item60 suffix/pre-RoPE graph activation starts13:37 UTC (cap14:37), following
+source preparation/review during prior jobs. Keep actual session provenance,
+canonical/exact prefix eligibility, checkpoint ownership and fresh-tail sync
+in C. Native owns original tape, graph-copy/relocation, F16 repair tiles and
+coverage/publication over actual records. Reuse the existing right/left/zero
+repeat probe and practical six-turn archive workflow; compare payload-stage
+control with one changed graph owner at a time.
+
+Item60 completed by14:25 UTC. All three C/native pairs (F32 originals, F16
+originals and legacy F16 left) retain identical complete teacher vectors,
+tokens, geometry/source hashes and quality records. Native Debug legacy F16
+also matches. The six-turn agent passes three accepted edits, three fresh
+archive reads and three SSD/pre-RoPE grafts, including two after prior
+approximation and one using an approximate source. No new speed claim.
+[Report](../experiments/zig-engine-suffix-20261022/README.md).
+
+Item61 DSpark ownership activation starts14:26 UTC (cap15:26), after
+source-only preparation/review during prior qualifications. Move the actual
+draft records once; native owns allocation/capture, three-stage draft math
+and bounded target verify/commit. Preserve a pre-activation target fixture,
+then compare real target capture/rollback and fresh continuations in F32/F16
+and Debug. Trained draft inference is unqualified without matching weights;
+record that limit instead of treating target-only coverage as a draft result.
+
+Item61 completed by14:44 UTC. Five target arms retain identical full vectors
+and state records. Matching1017 DSpark weights were downloaded and hash-checked;
+all49 trained oracle tensors match C/native ReleaseFast/Debug byte-for-byte.
+Both runtime fixtures pass keep0..6, rewinds/eight fresh steps, exact sampling
+0/1, payload restore, cancellation and context clamping. Two common loader
+admission/binding failures were isolated and fixed (redundant family metadata,
+upstream Markov names); strict layouts remain. No throughput claim; outer
+Session cycle remains C. [Report](../experiments/zig-engine-dspark-20261022/README.md).
+
+Item62 V4.1 speculative-cycle activation starts14:46 UTC (cap15:46).
+Compose the qualified native drafter/target executor with existing numeric
+sampling and explicit borrowed action arguments; move the actual stats record
+once. Keep C TP dispatch/public admission/rewind and both fallbacks. Preserve
+a C-cycle/native-drafter control first. Compare all 16 cycle accepted-token/RNG
+records plus existing real causal/rewind/restore/cancel/context invariants;
+qualify native Debug too. No new runtime approximation or tuning choice.
+
+Item62 completed by14:53 UTC. C-cycle/native-drafter control and native
+ReleaseFast/Debug pass all runtime assertions and16/16 exact token/RNG records.
+Both sampling modes actually accept multi-token drafts (3/8 ordinary cycles,
+8/8 exact cycles). C retains public admission, transport dispatch and rewind;
+native owns the synchronous cycle. No throughput claim.
+[Report](../experiments/zig-engine-cycle-20261022/README.md).
+
+Item63 native vision controller activation starts14:55 UTC (cap15:55).
+Keep the existing BF16 sidecar binder and ARC/PSO/shader leaves in C/Objective-C;
+native owns per-image workspace,32block/BF16/3x3 aligner flow and readback.
+Preserve a C controller before selecting the standalone native GPU entry.
+Compare complete finite/repeated embeddings in C/native/Debug on the real1017
+sidecar, then actual image+follow-up CLI. Legacy4096-sidecar remains unqualified.
+
+Item63 completed by15:03 UTC. C/native ReleaseFast/native Debug produce identical
+complete 921,600-value embeddings, with repeated encodes internally exact. Actual
+image question and follow-up both answer RED. Native owns the workspace/layer
+controller; sidecar binding and shader leaves stay C/Objective-C. Legacy4096
+sidecar remains unqualified. No latency claim.
+[Report](../experiments/zig-engine-vision-20261022/README.md).
+
+Item64 HTTP activation starts15:04 UTC (cap16:04). Freeze existing C-transport
+control, activate the prepared native framing/socket owner, and run existing
+server CPU fixtures in ReleaseFast and Debug. Follow with the cohesive input
+codecs and coordinator, then one cumulative real concurrent/durable HTTP check.
+
+Item64 transport CPU qualification passes by15:05 UTC in ReleaseFast and Debug.
+One explicit uint16 annotation at htons fixed the first compile failure.
+
+Item65 cohesive endpoint/tools/messages/Responses input activation starts15:05 UTC
+(cap16:05). Compile one export facade over pure owners and the actual shared
+records, with the existing C primitive JSON parser and single materialization
+pass. Run the broad existing server fixture in ReleaseFast/Debug, preserving
+first failures. Keep runtime/render/model policy in C.
+
+Item65 request qualification passes by15:07 UTC in ReleaseFast and Debug.
+The original broad endpoint/tool/schema/image/Responses fixture passes unchanged;
+first compiler API/type errors are retained. No request grammar change.
+
+Item66 coordinator activation starts15:07 UTC (cap16:07). Native owns admission,
+round-robin/quantum scheduling, pending/in-flight cancellation, eval batching
+and shutdown over the one actual shared server/slot/job definition. Keep C
+routing/session generation/cache policy, exercise existing CPU schedules first.
+
+Item66 CPU qualification passes by15:09 UTC in ReleaseFast and Debug. Native
+coordinator preserves existing fairness/quantum/pending/in-flight cancellation
+assertions. First shadowing compile errors and a harmless records-only preparation
+build are retained separately.
+
+Item67 exact DSML tool-memory ownership starts15:09 UTC (cap16:09). Native owns
+shared immutable blocks, ID/refcount/LRU and unchanged KTM1 trailer read/write
+over actual records; C keeps enable-policy and directory scan. Run existing
+replay/prune/trailer/server tests, then the cumulative actual HTTP workflow.
+
+Item67 CPU qualification passes by15:11 UTC in ReleaseFast and Debug. Existing
+exact replay/pruning/trailer tests pass, with no new I/O callbacks or cache policy.
+The cumulative native production server is frozen for one real two-slot, actual
+disconnect, durable Conversation/Responses restart campaign under the pressure
+guard. C fallback build/tests are checked before model execution.
+
+Items64–67 cumulative real HTTP qualification passes by15:16 UTC: five graded
+answers, overlapping clients, actual two-row decode batches, cancellation after
+a real SSE text delta, exact stored objects/history across restart, independent
+continuations and CRUD including item GET404. First probe falsely expected a
+delete receipt where this existing API returns the Conversation; fixed only the
+probe and retained both campaigns. C/native ReleaseFast/Debug CPU fixtures pass.
+[Report](../experiments/zig-server-20261022/README.md). No latency claim.
+
+Item68 Context transaction activation begins15:17 UTC (cap16:17). Freeze a
+C-context/native-engine control first; exercise existing model-free stable-ID /
+suffix rollback tests and guarded real-vocabulary import invariants. Preserve
+C worker graph/graft/import ordering. One demonstrated fixture omission for
+decoder-replay detection is repaired before selecting the native owner.
+
+Item68 completed by15:21 UTC. Native ReleaseFast/Debug pass the existing
+model-free stable-ID/control/edit/transaction/rollback cases. C-context control,
+native and native Debug also pass real-vocabulary imports without evaluating
+model tokens. The C-control crash was a stale mock missing decoder-replay
+detection; its fake Session now explicitly reports no decoder replay. Keep
+all first failures. Native owns text/turn transactions; C owns graph decisions.
+[Report](../experiments/zig-agent-runtime-20261022/README.md).
+
+Item69 Bash process owner activation starts15:21 UTC (cap16:21). Native owns
+spawn/process group/monitor, descriptors, timeout/reaping and output snapshots.
+C retains job list/IDs/terminal UI. Reuse the actual process tests including
+closed stdio, descendants, isolation, timeout and large output, in ReleaseFast
+and Debug. Run the combined practical agent task after the final agent slice.
+
+Item69 CPU qualification passes by15:25 UTC. Actual native spawn/closed-stdio,
+large-output capture, timeout, descendant kill and process-group isolation
+assertions pass in ReleaseFast and Debug. Cumulative suffix/Context mocks also
+pass both modes. First ABI/length inference compile errors are retained.
+[Report](../experiments/zig-agent-runtime-20261022/README.md). The actual model
+agent integration follows after the final compaction planner slice.
+
+Item70 Responses output activation starts15:25 UTC (cap16:25). Native owns
+stream/nonstream item identity, reasoning/text/tool lifecycle, usage/status and
+sequence emission over actual records. Keep C durable publication and tolerant
+argument codec as whole library actions; preserve the original fallback. Add
+only demonstrated lifecycle gaps to the existing server socket fixture, then
+run the already-qualified actual concurrent/durable HTTP workflow again.
+
+Item70 completed by15:30 UTC. Native first compile was clean; C-control/native
+ReleaseFast/Debug plus full-C fallback fixtures pass. Targeted socket cases
+cover UTF-8 reasoning/text transitions, incomplete reasoning and tool-event
+identity/order. The actual concurrent HTTP/cancel/durable restart campaign
+passes five answers and eighteen structural checks. No latency claim.
+[Report](../experiments/zig-server-output-20261022/README.md).
+
+Item71 compaction planner activation starts15:30 UTC (cap16:30). Freeze the
+C two-phase plan before selecting native summary-prefix/budget/tail/same-message
+resume construction. Keep the single C model/UI/image/graft/rollback controller.
+Check existing boundaries/mocked full compaction and one real-vocabulary open
+thinking-assistant case, then real interactive /compact and final six-turn
+archive/edit/retrieval workflows. Final ordinary runtime/build measurements
+follow at the same frozen source.
+
+Item71 completed by15:47 UTC. Ten CPU fixtures and all three real-vocabulary
+C/native/Debug resume cases pass. Actual interactive C/native `/compact` both
+retain summary-only facts and answer correctly:5459→3365 /5459→3314,819-token
+tails. Interactive start dates differ (fixed-time override is noninteractive
+only), so these are independent functional proofs, not matched-output/timing
+comparisons. No new compaction policy.
+[Report](../experiments/zig-agent-compaction-20261022/README.md).
+
+Item72 final Metal tensor resources activation starts15:49 UTC (cap16:49).
+Native owns allocation/view/range policy, standard live registry and accounting;
+keep retained Objective-C handles and true ARC/buffer/blit leaves. Preserve a
+C-resource control, test nested views/zero ranges/parent retirement/double free
+with the actual API, then existing8192-cycle debug-layer memory modes and full
+Metal numeric fixture. Final actual agent workflow/runtime/build comparisons
+follow at this frozen source. No further owner expansion before measurements.
+
+Item72 completed by15:59 UTC. Native ReleaseFast/Debug build cleanly. All twelve
+actual command-memory cases pass with Metal validation, including nested views,
+parent retirement and duplicate-free protection; all three complete numeric
+suites pass with the existing math-safe setting. No shader or command ownership
+change. Final same-source C/native agent/runtime/build qualification follows.
+[Report](../experiments/zig-metal-resources-20261022/README.md).
+
+Selected-engine checkpoint qualification completes16:12 UTC. Matching C/native
+six-turn agents pass all twelve turns, six correct fresh archive reads and six
+SSD/pre-RoPE grafts (four after prior approximation). Ordinary C/native/native/C
+frontiers match; steady decode17.77/17.93t/s with8.4%prefill control drift, so no
+runtime speed claim. Warm five-program full builds9.731/8.929s; F32 edit means
+3.481/.618s; native no-op overhead.524s remains. Main stays fixed. This is a
+qualified partial rewrite checkpoint, not the end of the whole rewrite goal.
+[Report](../experiments/zig-engine-final-20261022/README.md).
+
+Next sequence toward completing the supported Metal serving path:
+
+73. Session frontier/sync/eval/invalidate and scoped encoder residency. Move one
+    actual shared frontier record; preserve other-family dispatch in C. Budget
+    one hour including integration and targeted state/continuation checks.
+74. Agent Markdown presentation, then tool-stream projection as separate owners.
+    Preserve actual output and comments; no Worker mirrors. One hour per owner.
+75. Server DS4.1 prompt/replay renderer and shared tool codec, then the remaining
+    generated-reply/protocol output owners. One hour per owner.
+76. Metal model-view range/registry policy, retaining four true ARC/driver
+    leaves. Check actual repeated target-map replacements and auxiliary reads.
+77. Engine V4.1 memory admission and workspace/cache rebalance over one actual
+    accounting record. Exercise fit/reject/rollback and actual workspace growth.
+78. Exact Metal model-view cache keys, range admission and lifetime policy.
+    Preserve command-boundary eviction; check real retained-handle ownership.
+
+Prepared follow-on owners remain separate experiments: Agent Stream after74,
+primitive server JSON and generated-reply parsing after75. Each gets its own
+one-hour integration/qualification cap; source preparation can overlap the
+single guarded model job, but activation and measurements stay sequential.
+
+Follow those with Session lifecycle/budgets/persistence/public batch policy,
+server materialization/generation/routing, agent tool/history/worker/UI owners,
+and remaining Metal cache/dispatch policy. Explicitly inventory remaining active
+project-owned C before claiming completion; true ARC/driver leaves, Metal shader
+language and third-party libraries remain legitimate foreign boundaries.
+
+Item73 actual record/controller integration begins16:20 UTC (cap17:20).
+First move the seventeen fields once and compile/run the C-controller control;
+then select native Session/Frontier/Residency. Keep CPU/distributed routing on
+its existing path. Reuse session-state assertions in both model-free and GPU
+selections, existing graph/frontier/cancellation and actual model continuations.
+
+Item73 completes17:03 UTC. C/native/Debug scalar Session fixtures and all four
+GPU state selections pass. Eight real-model arms have identical full prefill
+frontier vectors across F32/F16, demand growth2048→4096 and selected replay256.
+C/native default prefill fixtures pass all five cache/snapshot/continued-decode
+frontiers and cancellation recovery; both encoder fixtures pass partial-lock
+cancel, acquisition, exact cache/logits/decode and budget restoration. Normal
+pressure throughout. These single pairs do not establish a speed improvement.
+[Report](../experiments/zig-session-frontier-20261022/README.md).
+
+Item74 Presentation activation begins17:04 UTC (cap18:04). First preserve the
+shared-record C control; select native rendering only after its byte/screen
+fixtures pass. Use the existing terminal/PTY/hint helpers and real code repaint
+case in C/native ReleaseFast/Debug. Stream remains a separate next owner.
+
+Item74 Presentation completes17:09 UTC. C/native ReleaseFast/Debug and full-C
+fallback all pass actual Agent, terminal/hint/PTY/code-screen and suffix/Context
+fixtures. Fourteen stable artifacts match bytewise across all five modes; PTY
+uses its existing concurrent screen assertions. No model/performance claim.
+[Report](../experiments/zig-agent-presentation-20261022/README.md).
+
+Item74b Stream activation begins17:10 UTC (cap18:10). Move actual projection
+records once, preserve an otherwise-native C Stream control, then compose pure
+Presentation directly. Reuse byte-split parser/visualization, terminal/PTY and
+suffix assertions; actual whole-agent archive/edit workflow follows tool owners.
+
+Item74b completes17:15 UTC. All five actual C/native/Debug/fallback Agent,
+terminal/PTY and suffix selections pass; fourteen stable artifacts match exactly.
+Native Stream composes pure Renderer directly. No new test body/model/performance
+claim. [Report](../experiments/zig-agent-stream-20261022/README.md).
+
+Item75 server prompt/replay rendering activation starts17:16 UTC (cap18:16).
+Freeze the otherwise-native C control after moving actual argument records and
+adding the shared primitive minify action. Then select native DS41 full/live
+rendering and tool codecs; run the unchanged production server fixture in
+C/native ReleaseFast/Debug and fallback. Primitive JSON and Reply follow as
+separate bounded owners before aggregate actual HTTP generation.
+
+Item75 completes17:26 UTC. All five final C/native/Debug/fallback production
+server fixtures pass. Existing Qwen checkpoint rendering exposed allocated-empty
+buffer adoption losing its pointer; the same input-vector bug was reproduced
+with a valid repeated stop field. Fixed actual helpers and added one same-suite
+regression; C renderer controls rebuilt afterward. No assertions weakened.
+[Report](../experiments/zig-server-renderer-20261022/README.md).
+
+Item75b primitive JSON activation starts17:27 UTC (cap18:27). Keep the existing
+grammar/cursor/output contracts and reuse the unchanged broad server suite;
+the nine primitive actions include the single shared minifier. Reply and each
+protocol controller remain subsequent bounded items.
+
+Item75b completes17:29 UTC. All five C/native/Debug/fallback server fixture
+selections pass the existing accepted-grammar/cursor/ownership/nesting suite;
+no compiler/runtime failures or new test cases. The shared minifier is native.
+[Report](../experiments/zig-server-json-20261022/README.md).
+
+Item75c generated-reply parsing/recovery activation starts17:30 UTC (cap18:30).
+Retain otherwise-native C parser controls, then select native syntax/reasoning/
+tool-wrapper recovery with actual shared protocol constants and records. Reuse
+the unchanged full server fixture; OpenAI and Anthropic output remain separate.
+
+Item75c completes17:34UTC. All five final C/native/Debug/fallback fixtures pass.
+Review fixed the allocated-empty ownership rule in reply calls/repair; the
+existing repair case now reuses both allocations. Initial fixture-only compile
+failure and stale run are retained and excluded; final controls pass.
+[Report](../experiments/zig-server-reply-20261022/README.md).
+
+Item75d OpenAI output activation starts17:34UTC (cap18:34). Move actual stream
+records once, preserve C controls, then select complete native response/SSE/live
+projection. Reuse unchanged full socket/parser suite before Anthropic.
+
+Item75d completes17:36UTC. All five C/native/Debug/fallback server fixtures pass
+cleanly, with unchanged socket/live-ID/UTF8/reasoning assertions. No new test or
+model/performance claim. [Report](../experiments/zig-server-openai-20261022/README.md).
+
+Item75e Anthropic output starts17:36UTC (cap18:36). Compose its distinct block/
+signature/tool lifecycle over the same records and byte helpers. Add one actual
+V4.1 split-UTF8 socket case, qualify C-first then native and fallback.
+
+Item75e completes17:37UTC. All five C/native/Debug/fallback server fixtures pass,
+including the new actual V4.1/split-UTF8 socket case. Native protocol composition
+retains one shared actual-record binding. Aggregate HTTP/restart check follows
+before Metal model views. [Report](../experiments/zig-server-anthropic-20261022/README.md).
+
+Aggregate server screen completes17:40UTC at9d0d96c0. Retained C and native each
+pass22 checks, five Responses fact answers and four OpenAI/Anthropic generated
+wire answers. Durable restart, actual cancellation and survivor all pass; sources
+unchanged, normal pressure/fixed swap. Ordered functional pair, no speed claim.
+[Report](../experiments/zig-server-protocols-http-20261022/README.md).
+
+Item76 ModelViews activation starts17:40UTC (cap18:40). Move actual ARC registry
+once, qualify original C policy, then native range/coverage/compaction with the
+existing4100-replacement SSD fixture, actual auxiliary GPU reads and numerics.
+
+Item76 completes17:43UTC. All twelve C/native/Debug/fallback GPU fixtures pass,
+including4100 target replacements+actual retained auxiliary reads. Real-model
+C/native short generations return identical MAPLE bytes, source unchanged.
+Normal pressure/fixed swap; ordered functional pair, no timing claim.
+[Report](../experiments/zig-metal-model-views-20261022/README.md).
+
+Item77 Memory admission/growth starts17:43UTC (cap18:43). Move eleven existing
+Engine counters once, preserve C record-only control, then compose native Memory
+into Session directly. Exercise simulated budgets/fit/reject/accounting plus
+actual demand workspace growth and scalar Session persistence/continuation.
+
+Item77 completes17:49UTC. Four selections pass model-free state and all twelve
+admission/accounting/scalar Session cases. Real8192-prefix C/native pair grows
+2048→4096 and has identical129280-logit prefill frontiers. Source unchanged,
+normal pressure/fixed swap; functional pair only. Native Session now composes
+Memory directly. [Report](../experiments/zig-engine-memory-20261022/README.md).
+
+Item78 ExactCache starts17:49UTC (cap18:49). Replace formatted cache keys with
+native values; preserve retained ARC ownership and command-boundary eviction.
+Use real cache identity/owned/transient GPU offset-read cases with small-bound
+and unlimited budgets, then existing broad GPU/numeric and actual model paths.
+
+Item78 completes17:54UTC. All24 final C/native/Debug/fallback GPU cases pass,
+covering true ordinary/unretained commands, forced/unlimited eviction and real
+owned/transient/cache offset reads. First misconfigured C trial retained/excluded.
+Real-model MAPLE bytes match, source frozen, normal pressure/fixed swap. No speed
+claim. [Report](../experiments/zig-metal-exact-cache-20261022/README.md).
+
+79. Session canonical/snapshot/private-replay/staged checkpoint transactions.
+    Budget one hour. Reuse actual scalar Session/frontiers and the existing
+    F32→SSD-close/reopen→fresh-F16 DRP1 probe, including fresh next-token logits.
+80. Session create/free resource lifecycle over actual Device/Memory/Frontier.
+    Budget one hour. Existing accounting/create-recreate and real Session/DSpark.
+81. Session sampling/overthink/public logits over actual policy record. One hour.
+82. Engine startup cache sizing/reserve (three ordered phases). One hour.
+83. Target residency/static map transaction and owned MapSelection. One hour.
+Then integrate queued Agent tools/edit/saved-session/history/checkpoint/executor/
+context owners, and Server Conversation/materialization/tracker/reuse/persistence/
+generation owners. One hour per coherent owner; final aggregate workflows/build
+and ordinary timings after a source freeze. Remaining Metal index selection and
+attention/dispatch owners have their own source/qualification boundaries.
+
+Item79 starts17:54UTC (cap18:54). Preserve current native-engine C checkpoint
+control, append pure transactions to the one graph facade, then qualify real
+payload/frontier/private persistence with no mirrored records or format change.
+
+Item79 completes18:05UTC. All four selections pass model-free state/server and
+sixteen GPU/real-model cases: canonical F32/F16 plus8193-token DRP1 SSD→F16.
+Fresh logits and private bytes roundtrip exactly; normal pressure/fixed swap,
+source frozen. C-first exposed/fixed only the old fixture's F32-write assumption
+for F16 backing; original assertions retained, failure artifacts recorded.
+[Report](../experiments/zig-session-checkpoint-20261022/README.md).
+
+Item80 SessionResources starts18:05UTC (cap19:05). Move actual Device/TP records
+once, qualify C control, then native scoped construction/publication/free and
+actual accounting/recreation/DSpark, reusing current scalar/typed fixtures.
+
+Item80 completes18:15UTC. Four builds/model-free Session suites and thirteen
+GPU/model cases pass. Actual trained DSpark C/native decision traces are byte-
+identical; native allocation accounting/free/recreate and scalar continuation
+match. Source unchanged, normal pressure; no timing or two-host TP claim.
+[Report](../experiments/zig-session-resources-20261022/README.md).
+
+Item81 SessionSampling starts18:15UTC (cap19:15). Move the actual overthink
+policy once, run its meaningful public Session fixture C-first, then select
+native selection/raw diagnostics and compare ordinary/active-penalty runtime.
+
+Item81 completes18:18UTC. Four builds pass actual Session/numeric policy suites;
+six real-model arms preserve seeded outputs and raw logprob JSON for ordinary
+and active0.75-penalty settings. C include rebase failure retained/corrected;
+normal pressure, unchanged source, no speed/full-KL claim.
+[Report](../experiments/zig-session-sampling-20261022/README.md).
+
+Item82 StartupMemory starts18:18UTC (cap19:18). Select the three ordered cache
+sizing phases over actual Memory; compare auto, byte and expert-count startup.
+
+Item82 completes18:21UTC. C/native auto/32GB/512-slot budgets and all129280
+frontier logits match in six real-model arms; Debug auto matches too. Existing
+SSD and extended memory-plan cases pass. Compile-width correction retained;
+source unchanged and pressure normal.
+[Report](../experiments/zig-engine-startup-memory-20261022/README.md).
+
+Item83 TargetResidency starts18:21UTC (one-hour cap). Move mapping selection
+once, select complete cache/static-lock/model-view transaction, compare F32/F16
+and trained DSpark support-map ordering before Core integration.
+
+Item83 completes18:25UTC. Ordinary F32/automatic and F16/32GB map/frontier
+pairs match; Debug F16 and trained DSpark causal/accepted/RNG/cleanup pass.
+Native compiles first attempt; corrected reused driver failure retained.
+Source unchanged, normal pressure; no speed/two-host TP claim.
+[Report](../experiments/zig-engine-target-residency-20261022/README.md).
+
+84. Loaded V4.1 Metal Engine Core, actual fields once, complete post-family
+    startup and retirement. Starts18:25UTC; one-hour cap. C record-only control
+    first, then actual ordinary/F16/DSpark/vision, inspect/failure and cleanup.
+85. Strict support tensor/metadata binding. One hour.
+86. Strict DeepSeek vision-sidecar binding. One hour.
+Then queued Agent/Server owners and remaining Metal dense/index/attention/MoE
+controllers, with the same bounded integrate/measure/decide loop.
+
+Item84 completes18:37UTC. Four selections pass broad CPU suites; eight actual
+Core frontier arms match across ordinary/F16/penalty/paired-sidecar startup.
+Inspect and trained DSpark decisions match; Debug/full fallback F16 match.
+Actual failed startup→same-process reopen/accounting passes all four selections.
+Only target-name/parameter-shadow compile failures, retained; no runtime fix.
+Source unchanged, normal pressure; no speed or image-encoding quality claim.
+[Report](../experiments/zig-engine-core-20261022/README.md).
+
+Item85 strict SupportWeights starts18:37UTC (one-hour cap). Reuse qualified Core
+C-binder binaries as fixed control, select native metadata/layout binding, run
+existing metadata and actual trained DSpark/inspect paths before VisionWeights.
+
+Item85 completes18:50UTC. Trained support inspect and complete verifier decision
+traces match fixed C baseline; native ReleaseFast/Debug and C fallback CPU suites
+pass. Shared-predicate guard compile miss corrected/retained. Isolated inspect
+delay did not repeat in C/N/N/C. Source unchanged, normal pressure, no speed claim.
+[Report](../experiments/zig-engine-support-weights-20261022/README.md).
+
+Item86 strict VisionWeights starts18:50UTC (one-hour cap). Compare actual paired
+sidecar full embeddings C/native/Debug and ordinary image/read follow-up, then
+select the shared cache-runtime before queued Agent/Server integrations.
+
+Item86 completes18:56UTC. C/native/Debug complete921600-value image embeddings
+are byte-identical and internally repeatable; actual CLI image+follow-up both
+answer RED. Native CPU suites pass, source unchanged, pressure normal. Header
+context correction retained; no numerical or latency claim.
+[Report](../experiments/zig-engine-vision-weights-20261022/README.md).
+
+Item87 shared cache-runtime starts18:56UTC (one-hour cap). Select the common
+Agent/server profile/open transaction and actual generated Blob/Stats records;
+qualify current StateCache and frontend fixtures, then real cross-restart reuse.
+
+Item87 completes19:00UTC. Native ReleaseFast/Debug cache/server/Agent suites pass;
+C→native real SSD restart passes all 22HTTP/five Responses answer checks and
+actual disk hits. Public Blob/Stats now derive from their real header. Baseline
+fixture argument mistakes retained/corrected; normal pressure, source unchanged.
+[Report](../experiments/zig-cache-runtime-20261022/README.md).
+
+Item88 Agent ToolActions starts19:00UTC (one-hour cap). Move actual Pager and
+Observation records once; qualify selected streamed read/search/owned image
+observations, first with the existing CPU/terminal fixture and then real tools.
+
+Item88 completes19:06UTC. Four selections pass production Agent/terminal/PTY
+with14 stable artifacts equal; N/D suffix fixtures pass. Actual C/N/D image
+Observation cloning/retirement/multimodal continuation passes with identical
+geometry/next tokens. New fixture natural-versus-expanded assumption corrected
+C-first; no production numeric fix. Normal pressure/source unchanged.
+[Report](../experiments/zig-agent-tool-actions-20261022/README.md).
+
+Item89 Agent Edit starts19:06UTC (one-hour cap). Qualify actual write/preflight/
+atomic edit/line effects and upto forcing C-first, then select complete native
+actions over the actual shared Forcer and ToolActions Buffer.
+
+Item89 completes19:08UTC. C/native/Debug/fallback actual write/edit/preflight/
+upto+terminal suites pass;14 stable artifacts match. Native compiles first
+attempt, no runtime correction; whole-task model gate remains aggregate.
+[Report](../experiments/zig-agent-edit-20261022/README.md).
+
+Item90 Agent SavedSessions starts19:08UTC (one-hour cap). Move actual identity/
+metadata once and select complete catalog/codec/atomic strip after C-first
+real-file fixtures; save/reload/strip model workflow follows live Checkpoint.
+
+Item90 completes19:10UTC. Four selections pass real-file catalog/codec and
+production terminal suites with14 stable artifacts equal. Native compiles first
+attempt; fixture invocation rebase retained. Actual KV/strip model gate pending
+live Checkpoint integration.
+[Report](../experiments/zig-agent-sessions-20261022/README.md).
+
+Item91 Agent History starts19:10UTC (one-hour cap). Select complete saved-text
+replay using existing pure Stream/Presentation; compare actual output queue,
+summary/tool-only semantics and bounded UTF8 tails C-first.
+
+Item91 completes19:11UTC. Four selections pass actual saved-history/terminal
+suites;17 stable artifacts match including three real output-queue cases.
+Native compiles first attempt; no runtime correction or task-quality claim.
+[Report](../experiments/zig-agent-history-20261022/README.md).
+
+Item92 Agent Checkpoint starts19:11UTC (one-hour cap). Select live saved-file
+transactions over actual Session; C-first full-context rebuild plus a real
+nonzero-KV save/reload/strip/reload/history cycle under the pressure guard.
+
+Item92 completes19:17UTC. Four CPU/terminal selections pass; C/native/Debug
+full-context recovery plus actual1.4MB KV→switch→strip→switch/history cycle
+passes with identical tokens/next token/stdout. Existing TP predicate test
+reconnected to native policy; no runtime fix. Normal pressure/source unchanged.
+[Report](../experiments/zig-agent-checkpoint-20261022/README.md).
+
+Item93 Agent Executor starts19:17UTC (one-hour cap). Move actual ToolRuntime
+once; qualify complete dispatch/job lifetime/terminal projection C-first then
+native, retaining real Bash process/monitor ownership in its existing library.
+
+Item93 completes19:21UTC. Four selections pass real dispatch/process/job/
+terminal suites;17 stable captures match. Missing actual linenoise include
+corrected/recorded; no runtime fix. Model/live-context gate remains next.
+[Report](../experiments/zig-agent-executor-20261022/README.md).
+
+Item94 Agent ContextRuntime starts19:21UTC (one-hour cap). Move actual Worker
+record once, select complete live-context/frontier/SSD/suffix transactions,
+then reuse actual vocabulary/image and six-turn persistent-agent workflows.
+
+Item94 completes19:42UTC. Four CPU/terminal selections match17 stable captures; real vocabulary/image checks pass. Fixed C/native six-turn tasks pass identical answers/stdout and three identical SSD pre-RoPE graft geometries, including reuse after approximation. One ordered timing pair is not a latency claim. Source unchanged and normal pressure.
+[Report](../experiments/zig-agent-context-runtime-20261022/README.md).
+
+Item95 Agent Result starts19:42UTC (one-hour cap). Select complete tool-result import/fit/commit transactions and qualify C-first; then integrate communications and the turn owner before the next real-model aggregate.
+
+Item95 completes19:43UTC. Selected native ReleaseFast/Debug pass production terminal suites and17 stable captures match fixed C baseline. Build-selection and actual native commit fixture bridge corrections retained; model transaction gate pending Turn aggregate.
+[Report](../experiments/zig-agent-result-20261022/README.md).
+
+Item96 Worker Communications starts19:43UTC (one-hour cap). Exercise real condition/pipe/output-ownership handoffs C-first, then select the native transaction.
+
+Item96 completes19:45UTC. C-first/native ReleaseFast/Debug real thread/pipe/output handoffs and production terminal suites pass;17 stable captures match. Varargs pointer typing compile corrections retained; model gate remains Turn aggregate.
+[Report](../experiments/zig-agent-communications-20261022/README.md).
+
+Item97 Agent Turn starts19:45UTC (one-hour cap). Select complete raw/chat/tool generation and direct progress-aware sync; compare CPU/terminal artifacts before real model aggregate.
+
+Item97 completes19:46UTC. Native ReleaseFast/Debug production fixtures match17 captures. Existing pointer-identity/byte tests caught incorrect address-of imported extern literals; fixed direct symbol pointers and retained failures. Actual generation gate is the final Agent aggregate.
+[Report](../experiments/zig-agent-turn-20261022/README.md).
+
+Item98 Agent System/Summary starts19:46UTC (one-hour cap). Select complete system construction/private summary inference and exact transcript/image rollback; retire the final temporary summary services.
+
+Item98 completes19:47UTC. Native ReleaseFast/Debug production fixtures match17 captures; first semantic compile passes after applying the known literal pointer correction. Private model summary is an explicit final Agent aggregate gate.
+[Report](../experiments/zig-agent-summary-20261022/README.md).
+
+Item99 Worker Sessions/Lifecycle starts19:47UTC (one-hour cap). Select real saved-session orchestration, shared cache startup and complete worker command-thread lifetime; reuse existing fixtures then actual saved-KV/compaction/task gates.
+
+Item99 completes19:48UTC. Native ReleaseFast/Debug production suites and17 stable captures match C on first compile. Saved-KV/thread model qualification remains final Agent aggregate.
+[Report](../experiments/zig-agent-lifecycle-20261022/README.md).
+
+Item100 Agent Terminal starts19:48UTC (one-hour cap). Move actual editor/queue records once, select live terminal/queue controllers and compare real PTY behavior.
+
+Item100 completes19:50UTC. Native ReleaseFast/Debug real terminal/PTY and17 stable captures match C. Explicit SDK/type/discard compile corrections retained; no runtime fix. Interactive model frontend gate remains next.
+[Report](../experiments/zig-agent-terminal-20261022/README.md).
+
+Item101 Agent Frontend starts19:50UTC (one-hour cap). Select complete options/bootstrap/headless/interactive/commands, retaining sole signal/backend-fact leaves; then run actual six-turn task, image/save/reload and interactive compact aggregate.
+
+Item101 completes20:07UTC. Release/Debug/fallback fixtures and17 stable captures match C; actual six-turn SSD reuse, images, thinking, raw generation and nonzero saved-KV cycle pass. Interactive Debug exposed default-thread-stack exhaustion; explicit8MiB fixes the same complete compaction/follow-up task. Failed process report retained; normal pressure/source accounting.
+[Report](../experiments/zig-agent-frontend-20261022/README.md).
+
+Item102 Server Conversations starts20:07UTC (one-hour cap). Apply reviewed declaration/fallback guards, record C-controller baseline with added actual storage/image fixtures, then enable native owners one at a time.
+
+Item102 completes20:11UTC. C-controller/fallback baseline plus native Conversation release/Debug pass actual server/storage fixtures. First native compile passes, no runtime fix. Later controllers remain C behind installed inverse guards until their individual selections.
+[Report](../experiments/zig-server-conversations-20261022/README.md).
+
+Item103 materialize: sequential native release/Debug server suite passes. One-hour cap, actual model gate remains combined serving HTTP. [Report](../experiments/zig-server-materialize-20261022/README.md).
+
+Item104 decode: sequential native release/Debug server suite passes. One-hour cap, actual model gate remains combined serving HTTP. [Report](../experiments/zig-server-decode-20261022/README.md).
+
+Item105 reuse: sequential native release/Debug server suite passes. One-hour cap, actual model gate remains combined serving HTTP. [Report](../experiments/zig-server-reuse-20261022/README.md).
+
+Item106 persist: sequential native release/Debug server suite passes. One-hour cap, actual model gate remains combined serving HTTP. [Report](../experiments/zig-server-persist-20261022/README.md).
+
+Item107 generation: sequential native release/Debug server suite passes. One-hour cap, actual model gate remains combined serving HTTP. [Report](../experiments/zig-server-generation-20261022/README.md).
+
+Item108 serving: sequential native release/Debug server suite passes. One-hour cap, actual model gate remains combined serving HTTP. [Report](../experiments/zig-server-serving-20261022/README.md).
+
+Item109 boot: sequential native release/Debug server suite passes. One-hour cap, actual model gate remains combined serving HTTP. [Report](../experiments/zig-server-boot-20261022/README.md).
+
+Item110 images: sequential native release/Debug server suite passes. One-hour cap, actual model gate remains combined serving HTTP. [Report](../experiments/zig-server-images-20261022/README.md).
+
+Items102–110 combined actual serving HTTP complete: release→Debug restart, concurrent decode, cancellation and SSD/durable response recovery pass. [Report](../experiments/zig-server-full-20261022/README.md).
+
+Item111 Session controllers starts20:22UTC; completes20:33UTC within one hour. Release/Debug compile and CPU suites pass; trained C/native/Debug16cycle records exact; public image and concurrent/durable HTTP pass. [Report](../experiments/zig-session-controllers-20261022/README.md).
+
+Item112 Metal controller integration starts20:34UTC. C-after-record-move baseline first, then select Index/Dense/Attention/Routed/Cache/Load/Output/RoPE/Compressor/Scheduling/Embedding/Quant sequentially; one-hour cap per owner, existing real GPU fixtures and final whole-model aggregate.
+
+Item112 completes20:49UTC. All15 native families compile and pass focused GPU fixtures; one packed-gather launch-width runtime bug fixed against the unchanged byte guard. Final combined Debug/model/performance pending. [Report](../experiments/zig-metal-controllers-20261022/README.md).
+
+Item113 Eval starts20:54UTC; completes21:15UTC within one hour. Complete native grading/trace/options/runtime/UI selected; C/native/Debug20CPU cases exact, actual model byte blocks and15 trace regrades exact, seven real PTY finish/pause/navigation/interrupt cases pass. Truncated Law samples remain INCOMPLETE, so no benchmark-grade or speed claim. [Report](../experiments/zig-eval-frontend-20261022/README.md).
+
+Item114 remaining Metal controllers starts21:15UTC (one-hour cap per owner). Original-C controller baseline passes after actual record moves, including new existing-fixture parallel-FFN/deferred-KV invariants. Select HC, shared/router, primitives, supported carry/BF16 and TP/prefetch sequentially, then aggregate.
+
+Item114 completes21:17UTC. Six remaining controller groups compile and focused GPU fixtures pass; TP needs one opaque-pointer type correction. C/native actual parallel-FFN and deferred-KV invariants pass. Full combined qualification follows. [Report](../experiments/zig-metal-final-20261022/README.md).
+
+Item115 Web frontend starts21:17UTC; completes21:20UTC within one hour. Complete native Web/HTTP/WebSocket controller selected; same existing local recovery fixture passes C/native/Debug. Initial compiler diagnostics retained, actual browser/website qualification not implied. [Report](../experiments/zig-web-20261022/README.md).
+
+Items116–118 close ModelLifecycle, RouteDiagnostics and Bootstrap. Source drafts prepared before the pause; integration resumes22:21UTC. Four configuration builds and98CPU/host fixtures pass,45 GPU fixture calls pass, and six diagnostic record/replay/merge calls retain identical bytes. No runtime math fix. Complete model/performance campaign is next. [Report](../experiments/zig-metal-lifecycle-20261022/README.md).
+
+Item119 final matched qualification completes:98 host/CPU,45 GPU and six diagnostic invocations pass; full ordinary frontier vectors exact, both six-turn Agent tasks pass, durable C→native HTTP restart and all 16 trained cycles match, both six-case vision suites pass. Runtime is near neutral on these points; full rebuild 29.5%slower but F32 edit 67.1%faster. Include-path-only Make fix retained with first failure. [Report](../experiments/zig-qualified-20261022/README.md).

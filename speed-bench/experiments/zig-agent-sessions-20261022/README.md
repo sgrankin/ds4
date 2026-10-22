@@ -1,0 +1,7 @@
+# Item90 — Saved-session identity and catalog
+
+The handwritten Sessions owner implements stable identity, title codec, bounded text/trailer reads, catalog/list/completion/find/delete and atomic strip. Actual four-field identity and five-field Meta records move once into a shared header. Engine remains opaque; live load/save/switch controllers are separate subsequent owners. C reference bodies remain over the same records.
+
+Integration19:08–19:10UTC starts at0815c006. C control, native ReleaseFast/Debug and full C fallback compile and pass production Agent/terminal suites;14 stable artifacts match. The SAME existing fixture now writes two real saved files and checks title/payload cursor restoration, stable identity, ambiguous/exact lookup publication, recency completion, model filtering, deletion and ownership clearing. Native compiles first attempt. The new fixture invocation needed rebasing around the preceding edit case; rejected invocation hunk is retained, with no assertion change.
+
+These model-free file/terminal checks qualify the selected codec/catalog; they do not claim nonzero-KV restore/strip inference. That real workflow follows Checkpoint integration. No format, runtime-policy, quality or speed change is claimed. Exact commands and hashes accompany this report; use existing ../zig-agent-presentation-20261022/qualify.py with each ds4_agent_test and fresh artifact directory.

@@ -9,56 +9,56 @@
 
 static int check_batch_admission(void) {
     int rc = 1;
-    ds4_engine engine = {.backend = DS4_BACKEND_METAL};
+    ds4_engine engine = {.core.backend = DS4_BACKEND_METAL};
     ds4_session *sessions = calloc(8, sizeof(*sessions));
     ds4_decode_item items[8] = {0};
     REQUIRE(sessions);
     for (int i = 0; i < 8; i++) {
         sessions[i].engine = &engine;
-        sessions[i].ds41_graph_ready = sessions[i].checkpoint_valid = true;
-        sessions[i].ds41_graph.valid = true;
-        sessions[i].ds41_graph.prefill_cap = 1;
-        sessions[i].checkpoint.len = sessions[i].ds41_graph.pos = 1;
+        sessions[i].ds41.ready = sessions[i].frontier.checkpoint_valid = true;
+        sessions[i].ds41.graph.valid = true;
+        sessions[i].ds41.graph.prefill_cap = 1;
+        sessions[i].frontier.checkpoint.len = sessions[i].ds41.graph.pos = 1;
         items[i].session = &sessions[i];
     }
     REQUIRE(!ds41_sessions_batch_supported(NULL, 2, &engine));
     REQUIRE(!ds41_sessions_batch_supported(items, 1, &engine));
     REQUIRE(!ds41_sessions_batch_supported(items, 9, &engine));
     REQUIRE(!ds41_sessions_batch_supported(items, 2, &engine));
-    sessions[1].ds41_graph.prefill_cap = 2;
+    sessions[1].ds41.graph.prefill_cap = 2;
     REQUIRE(ds41_sessions_batch_supported(items, 2, &engine));
     REQUIRE(!ds41_sessions_batch_supported(items, 2, NULL));
     sessions[1].engine = NULL;
     REQUIRE(!ds41_sessions_batch_supported(items, 2, &engine));
     sessions[1].engine = &engine;
-    engine.backend = DS4_BACKEND_CPU;
+    engine.core.backend = DS4_BACKEND_CPU;
     REQUIRE(!ds41_sessions_batch_supported(items, 2, &engine));
-    engine.backend = DS4_BACKEND_METAL;
+    engine.core.backend = DS4_BACKEND_METAL;
     REQUIRE(!ds41_sessions_batch_supported(items, 8, &engine));
-    sessions[7].ds41_graph.prefill_cap = 8;
+    sessions[7].ds41.graph.prefill_cap = 8;
     REQUIRE(ds41_sessions_batch_supported(items, 8, &engine));
-    sessions[1].ds41_graph.tp_world = 2;
+    sessions[1].ds41.graph.tp_world = 2;
     REQUIRE(!ds41_sessions_batch_supported(items, 2, &engine));
-    sessions[1].ds41_graph.prefill_cap = 3;
+    sessions[1].ds41.graph.prefill_cap = 3;
     REQUIRE(ds41_sessions_batch_supported(items, 3, &engine));
-    sessions[1].ds41_graph.tp_world = 1;
-    sessions[3].ds41_graph.streaming = true;
+    sessions[1].ds41.graph.tp_world = 1;
+    sessions[3].ds41.graph.streaming = true;
     REQUIRE(!ds41_sessions_batch_supported(items, 8, &engine));
-    sessions[3].ds41_graph.streaming = false;
-    sessions[3].ds41_graph.image_count = 1;
+    sessions[3].ds41.graph.streaming = false;
+    sessions[3].ds41.graph.image_count = 1;
     REQUIRE(!ds41_sessions_batch_supported(items, 8, &engine));
-    sessions[3].ds41_graph.image_count = 0;
-    sessions[3].ds41_graph.quality = true;
+    sessions[3].ds41.graph.image_count = 0;
+    sessions[3].ds41.graph.quality = true;
     REQUIRE(!ds41_sessions_batch_supported(items, 8, &engine));
-    sessions[3].ds41_graph.quality = false;
-    sessions[3].ds41_graph.pos++;
+    sessions[3].ds41.graph.quality = false;
+    sessions[3].ds41.graph.pos++;
     REQUIRE(!ds41_sessions_batch_supported(items, 8, &engine));
-    sessions[3].ds41_graph.pos--;
+    sessions[3].ds41.graph.pos--;
     REQUIRE(setenv("DS4_METAL_DISABLE_V41_SESSION_BATCH", "1", 1) == 0);
     REQUIRE(!ds41_sessions_batch_supported(items, 8, &engine));
     REQUIRE(unsetenv("DS4_METAL_DISABLE_V41_SESSION_BATCH") == 0);
     REQUIRE(ds41_sessions_batch_supported(items, 8, &engine));
-    ds41_gpu_graph *graphs[] = {&sessions[0].ds41_graph, &sessions[1].ds41_graph};
+    ds41_gpu_graph *graphs[] = {&sessions[0].ds41.graph, &sessions[1].ds41.graph};
     graphs[0]->prefill_cap = graphs[1]->prefill_cap = 8192;
     graphs[0]->ctx = 65536;
     graphs[1]->ctx = 98304;
@@ -251,16 +251,16 @@ static void note_progress(void *ud, const char *event, int current, int total) {
     if (p->snapshot_session && !p->snapshot_checked) {
         ds4_session_snapshot snap = {0};
         char err[256];
-        assert(!p->snapshot_session->ds41_graph.valid);
-        assert(!p->expect_encoder || p->snapshot_session->ds41_graph.encoder_resident);
+        assert(!p->snapshot_session->ds41.graph.valid);
+        assert(!p->expect_encoder || p->snapshot_session->ds41.graph.encoder_resident);
         assert(ds4_session_save_snapshot(p->snapshot_session, &snap, err, sizeof(err)) != 0);
         ds4_session_snapshot_free(&snap);
         p->snapshot_checked = true;
     }
-    if (p->snapshot_session && !display && p->snapshot_session->checkpoint_valid) {
+    if (p->snapshot_session && !display && p->snapshot_session->frontier.checkpoint_valid) {
         ds4_session_snapshot snap = {0};
         char err[256];
-        assert(p->snapshot_session->ds41_graph.valid);
+        assert(p->snapshot_session->ds41.graph.valid);
         assert(ds4_session_pos(p->snapshot_session) == current);
         assert(ds4_session_save_snapshot(p->snapshot_session, &snap, err, sizeof(err)) == 0);
         ds4_session_snapshot_free(&snap);
@@ -350,12 +350,12 @@ static int check_sessions(const char *path) {
         REQUIRE(snap.len == ds4_session_payload_bytes(s));
         REQUIRE(ds4_session_load_snapshot(restored, &snap, err, sizeof(err)) == 0);
         REQUIRE(ds4_session_pos(restored) == tokens.len);
-        REQUIRE(memcmp(s->logits, restored->logits, DS4_N_VOCAB * sizeof(float)) == 0);
-        REQUIRE(memcmp(&s->ds41_graph.history, &restored->ds41_graph.history,
-                        sizeof(s->ds41_graph.history)) == 0);
+        REQUIRE(memcmp(s->frontier.logits, restored->frontier.logits, DS4_N_VOCAB * sizeof(float)) == 0);
+        REQUIRE(memcmp(&s->ds41.graph.history, &restored->ds41.graph.history,
+                        sizeof(s->ds41.graph.history)) == 0);
         REQUIRE(ds4_session_eval(s, 987, err, sizeof(err)) == 0);
         REQUIRE(ds4_session_eval(restored, 987, err, sizeof(err)) == 0);
-        REQUIRE(memcmp(s->logits, restored->logits, DS4_N_VOCAB * sizeof(float)) == 0);
+        REQUIRE(memcmp(s->frontier.logits, restored->frontier.logits, DS4_N_VOCAB * sizeof(float)) == 0);
         REQUIRE(ds4_session_load_snapshot(s, &snap, err, sizeof(err)) == 0);
         fprintf(stderr, "V4.1 session/snapshot parity at %d: PASS\n", tokens.len);
     }
@@ -364,31 +364,44 @@ static int check_sessions(const char *path) {
     ds4_session_invalidate(restored);
     tokens.len = 1;
     REQUIRE(ds4_session_sync(restored, &tokens, err, sizeof(err)) == 0);
-    tokens.len = s->checkpoint.len;
+    tokens.len = s->frontier.checkpoint.len;
     for (int i = 1; i < tokens.len; i++)
         REQUIRE(ds4_session_eval(restored, tokens.v[i], err, sizeof(err)) == 0);
-    REQUIRE(memcmp(s->logits, restored->logits, DS4_N_VOCAB * sizeof(float)) == 0);
-    REQUIRE(memcmp(&s->ds41_graph.history, &restored->ds41_graph.history,
-                    sizeof(s->ds41_graph.history)) == 0);
+    REQUIRE(memcmp(s->frontier.logits, restored->frontier.logits, DS4_N_VOCAB * sizeof(float)) == 0);
+    REQUIRE(memcmp(&s->ds41.graph.history, &restored->ds41.graph.history,
+                    sizeof(s->ds41.graph.history)) == 0);
     puts("V4.1 final-head prefill versus every-token head: PASS");
-    /* Zero weights cannot reveal a missing cache span. Fill every saved byte
-     * with a nonzero deterministic pattern, erase it, then restore exactly. */
+    /* Zero weights cannot reveal a missing cache span. Fill every saved value
+     * with a nonzero deterministic pattern, erase it, then restore exactly.
+     * Span bytes describe canonical F32 wire sizes; F16 storage uses half that
+     * space and an exactly representable finite half pattern. */
     ds41_state_span spans[54];
-    uint32_t span_count = ds41_state_spans(&s->ds41_graph, 129, spans);
+    uint32_t span_count = ds41_state_spans(&s->ds41.graph, 129, spans);
     for (uint32_t i = 0; i < span_count; i++) {
         float *data = ds4_gpu_tensor_contents(spans[i].tensor);
         REQUIRE(data);
-        for (uint64_t j = 0; j < spans[i].bytes / 4u; j++)
-            data[j] = (float)(i + 1u) + (float)(j % 256u) / 256.0f;
+        const uint64_t storage_bytes = spans[i].f16 ? spans[i].bytes / 2u : spans[i].bytes;
+        REQUIRE(ds4_gpu_tensor_bytes(spans[i].tensor) >= storage_bytes);
+        for (uint64_t j = 0; j < spans[i].bytes / 4u; j++) {
+            if (spans[i].f16)
+                ((uint16_t *)data)[j] = (uint16_t)(0x3c00u + (i * 31u + j) % 1024u);
+            else
+                data[j] = (float)(i + 1u) + (float)(j % 256u) / 256.0f;
+        }
     }
     REQUIRE(ds4_session_save_snapshot(s, &snap, err, sizeof(err)) == 0);
     for (uint32_t i = 0; i < span_count; i++)
-        memset(ds4_gpu_tensor_contents(spans[i].tensor), 0, (size_t)spans[i].bytes);
+        memset(ds4_gpu_tensor_contents(spans[i].tensor), 0,
+               (size_t)(spans[i].f16 ? spans[i].bytes / 2u : spans[i].bytes));
     REQUIRE(ds4_session_load_snapshot(s, &snap, err, sizeof(err)) == 0);
     for (uint32_t i = 0; i < span_count; i++) {
         const float *data = ds4_gpu_tensor_contents(spans[i].tensor);
-        for (uint64_t j = 0; j < spans[i].bytes / 4u; j++)
-            REQUIRE(data[j] == (float)(i + 1u) + (float)(j % 256u) / 256.0f);
+        for (uint64_t j = 0; j < spans[i].bytes / 4u; j++) {
+            if (spans[i].f16)
+                REQUIRE(((const uint16_t *)data)[j] == (uint16_t)(0x3c00u + (i * 31u + j) % 1024u));
+            else
+                REQUIRE(data[j] == (float)(i + 1u) + (float)(j % 256u) / 256.0f);
+        }
     }
     snap.ptr[48] ^= 1u;
     REQUIRE(ds4_session_load_snapshot(s, &snap, err, sizeof(err)) != 0);
@@ -402,22 +415,22 @@ static int check_sessions(const char *path) {
     progress = (session_progress){.cancel_at = 2};
     ds4_session_set_cancel(s, cancel_progress, &progress);
     REQUIRE(ds4_session_sync(s, &tokens, err, sizeof(err)) == DS4_SESSION_SYNC_INTERRUPTED);
-    REQUIRE(ds4_session_pos(s) == 2 && s->checkpoint_valid);
+    REQUIRE(ds4_session_pos(s) == 2 && s->frontier.checkpoint_valid);
     REQUIRE(ds4_session_save_snapshot(s, &snap, err, sizeof(err)) == 0);
     ds4_session_invalidate(restored);
     tokens.len = 2;
     REQUIRE(ds4_session_sync(restored, &tokens, err, sizeof(err)) == 0);
-    REQUIRE(memcmp(s->logits, restored->logits, DS4_N_VOCAB * sizeof(float)) == 0);
+    REQUIRE(memcmp(s->frontier.logits, restored->frontier.logits, DS4_N_VOCAB * sizeof(float)) == 0);
     REQUIRE(ds4_session_load_snapshot(restored, &snap, err, sizeof(err)) == 0);
     REQUIRE(ds4_session_eval(s, 987, err, sizeof(err)) == 0);
     REQUIRE(ds4_session_eval(restored, 987, err, sizeof(err)) == 0);
-    REQUIRE(memcmp(s->logits, restored->logits, DS4_N_VOCAB * sizeof(float)) == 0);
+    REQUIRE(memcmp(s->frontier.logits, restored->frontier.logits, DS4_N_VOCAB * sizeof(float)) == 0);
     REQUIRE(ds4_session_load_snapshot(s, &snap, err, sizeof(err)) == 0);
     tokens.len = 5;
     ds4_session_set_cancel(s, NULL, NULL);
     REQUIRE(ds4_session_sync(s, &tokens, err, sizeof(err)) == 0 && progress.current == 5);
     REQUIRE(ds4_session_eval(s, -1, err, sizeof(err)) != 0);
-    REQUIRE(!s->checkpoint_valid);
+    REQUIRE(!s->frontier.checkpoint_valid);
     REQUIRE(ds4_session_sync(s, &tokens, err, sizeof(err)) == 0);
     REQUIRE(ds4_session_create(&too_large, engine, 1048577) != 0 && too_large == NULL);
     puts("V4.1 public sessions, prefix reuse, snapshots, cancellation and bounds: PASS");
@@ -472,16 +485,16 @@ static int check_long_sessions(const char *path, const char *prompt_path) {
         REQUIRE(snap.len == ds4_session_payload_bytes(s));
         ds4_session_invalidate(restored);
         REQUIRE(ds4_session_load_snapshot(restored, &snap, err, sizeof(err)) == 0);
-        REQUIRE(memcmp(s->logits, restored->logits, DS4_N_VOCAB * sizeof(float)) == 0);
-        REQUIRE(memcmp(&s->ds41_graph.history, &restored->ds41_graph.history,
-                       sizeof(s->ds41_graph.history)) == 0);
+        REQUIRE(memcmp(s->frontier.logits, restored->frontier.logits, DS4_N_VOCAB * sizeof(float)) == 0);
+        REQUIRE(memcmp(&s->ds41.graph.history, &restored->ds41.graph.history,
+                       sizeof(s->ds41.graph.history)) == 0);
         /* Continue beyond each restored boundary so latent KV, reused index
          * keys and a pending compression pair all affect the comparison. */
         const int token = tokens.len < total ? tokens.v[tokens.len] :
-                          sample_argmax(s->logits, DS4_N_VOCAB);
+                          sample_argmax(s->frontier.logits, DS4_N_VOCAB);
         REQUIRE(ds4_session_eval(s, token, err, sizeof(err)) == 0);
         REQUIRE(ds4_session_eval(restored, token, err, sizeof(err)) == 0);
-        REQUIRE(memcmp(s->logits, restored->logits, DS4_N_VOCAB * sizeof(float)) == 0);
+        REQUIRE(memcmp(s->frontier.logits, restored->frontier.logits, DS4_N_VOCAB * sizeof(float)) == 0);
         REQUIRE(ds4_session_load_snapshot(s, &snap, err, sizeof(err)) == 0);
         fprintf(stderr, "V4.1 long sync/restore at %d: PASS (%.1fs, %.2f MiB snapshot)\n",
                 tokens.len, now_sec() - start, (double)snap.len / 1048576.0);
@@ -543,10 +556,10 @@ static int check_prefill(const char *path, const char *prompt_path,
         const double batch = now_sec() - start;
         ds4_session_set_progress(candidate, NULL, NULL);
         REQUIRE(!check_live || (live.snapshot_checked && live.snapshot_ready));
-        REQUIRE(memcmp(control->logits, candidate->logits, DS4_N_VOCAB * 4u) == 0);
+        REQUIRE(memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * 4u) == 0);
         ds41_state_span a[54], b[54];
-        const uint32_t count = ds41_state_spans(&control->ds41_graph, tokens.len, a);
-        REQUIRE(ds41_state_spans(&candidate->ds41_graph, tokens.len, b) == count);
+        const uint32_t count = ds41_state_spans(&control->ds41.graph, tokens.len, a);
+        REQUIRE(ds41_state_spans(&candidate->ds41.graph, tokens.len, b) == count);
         for (uint32_t j = 0; j < count; j++) {
             REQUIRE(a[j].bytes == b[j].bytes);
             REQUIRE(memcmp(ds4_gpu_tensor_contents(a[j].tensor),
@@ -558,7 +571,7 @@ static int check_prefill(const char *path, const char *prompt_path,
             const int token = tokens.v[tokens.len++];
             REQUIRE(ds4_session_eval(control, token, err, sizeof(err)) == 0);
             REQUIRE(ds4_session_eval(candidate, token, err, sizeof(err)) == 0);
-            REQUIRE(memcmp(control->logits, candidate->logits, DS4_N_VOCAB * 4u) == 0);
+            REQUIRE(memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * 4u) == 0);
         }
         fprintf(stderr, "V4.1 prefill frontier %d: exact logits/cache/continued decode, %.3fs %s / %.3fs default\n",
                 frontiers[i], serial, encoder ? "two-layer" : "serial", batch);
@@ -571,8 +584,8 @@ static int check_prefill(const char *path, const char *prompt_path,
     ds4_session_set_cancel(candidate, cancel_progress, &progress);
     tokens.len = encoder ? 16385 : 257;
     REQUIRE(ds4_session_sync(candidate, &tokens, err, sizeof(err)) == DS4_SESSION_SYNC_INTERRUPTED);
-    REQUIRE(!candidate->checkpoint_valid && !candidate->ds41_graph.valid);
-    REQUIRE(!candidate->ds41_graph.encoder_resident);
+    REQUIRE(!candidate->frontier.checkpoint_valid && !candidate->ds41.graph.valid);
+    REQUIRE(!candidate->ds41.graph.encoder_resident);
     REQUIRE(ds4_gpu_stream_expert_cache_configured_count() == cache_budget);
     REQUIRE(ds4_session_save_snapshot(candidate, &snap, err, sizeof(err)) != 0);
     ds4_session_set_cancel(candidate, NULL, NULL);
@@ -581,7 +594,7 @@ static int check_prefill(const char *path, const char *prompt_path,
     tokens.len = 129;
     REQUIRE(ds4_session_sync(candidate, &tokens, err, sizeof(err)) == 0);
     REQUIRE(ds4_session_sync(control, &tokens, err, sizeof(err)) == 0);
-    REQUIRE(memcmp(control->logits, candidate->logits, DS4_N_VOCAB * 4u) == 0);
+    REQUIRE(memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * 4u) == 0);
     puts("V4.1 layer-major cancellation refuses partial state and rebuilds correctly: PASS");
     rc = 0;
 done:
@@ -647,14 +660,14 @@ static int check_encoder(const char *path, const char *prompt_path) {
     REQUIRE(ds4_session_create(&candidate, engine, 4096) == 0);
     const uint32_t budget = ds4_gpu_stream_expert_cache_configured_count();
     REQUIRE(budget >= 20u * DS4_N_EXPERT);
-    ds41_encoder_acquire(&candidate->ds41_graph, &engine->model, &engine->weights,
+    ds41_encoder_acquire(&candidate->ds41.graph, &engine->core.model, &engine->core.weights,
                          16383, &residency, NULL, NULL);
-    REQUIRE(!candidate->ds41_graph.encoder_resident && !residency.cache_budget);
+    REQUIRE(!candidate->ds41.graph.encoder_resident && !residency.cache_budget);
     REQUIRE(ds4_gpu_stream_expert_cache_configured_count() == budget);
     ds4_gpu_set_streaming_expert_cache_budget(1);
-    ds41_encoder_acquire(&candidate->ds41_graph, &engine->model, &engine->weights,
+    ds41_encoder_acquire(&candidate->ds41.graph, &engine->core.model, &engine->core.weights,
                          16384, &residency, NULL, NULL);
-    REQUIRE(!candidate->ds41_graph.encoder_resident && !residency.cache_budget);
+    REQUIRE(!candidate->ds41.graph.encoder_resident && !residency.cache_budget);
     REQUIRE(ds4_gpu_stream_expert_cache_configured_count() == 1);
     ds4_gpu_set_streaming_expert_cache_budget(budget);
     tokens.len = 1025;
@@ -663,45 +676,45 @@ static int check_encoder(const char *path, const char *prompt_path) {
     REQUIRE(ds4_session_sync(candidate, &tokens, err, sizeof(err)) == 0);
     unsigned calls = 0;
     ds4_gpu_print_memory_report("before encoder residency");
-    ds41_encoder_acquire(&candidate->ds41_graph, &engine->model, &engine->weights,
+    ds41_encoder_acquire(&candidate->ds41.graph, &engine->core.model, &engine->core.weights,
                          16384, &residency, cancel_encoder_load, &calls);
-    REQUIRE(calls == 3 && !candidate->ds41_graph.encoder_resident);
+    REQUIRE(calls == 3 && !candidate->ds41.graph.encoder_resident);
     REQUIRE(!residency.cache_budget && ds4_gpu_stream_expert_cache_configured_count() == budget);
     for (unsigned i = 0; i < 60; i++) REQUIRE(!residency.span[i].locked);
     ds4_gpu_print_memory_report("after cancelled encoder load");
     const double start = now_sec();
-    ds41_encoder_acquire(&candidate->ds41_graph, &engine->model, &engine->weights,
+    ds41_encoder_acquire(&candidate->ds41.graph, &engine->core.model, &engine->core.weights,
                          16384, &residency, NULL, NULL);
-    REQUIRE(candidate->ds41_graph.encoder_resident);
+    REQUIRE(candidate->ds41.graph.encoder_resident);
     REQUIRE(ds4_gpu_stream_expert_cache_configured_count() == 0);
     fprintf(stderr, "V4.1 encoder load: %.3fs\n", now_sec() - start);
     ds4_gpu_print_memory_report("encoder resident");
-    REQUIRE(ds41_graph_prefill(&candidate->ds41_graph, &engine->model, &engine->weights,
+    REQUIRE(ds41_graph_prefill(&candidate->ds41.graph, &engine->core.model, &engine->core.weights,
                               tokens.v + 257, 768, NULL, NULL, 1025, NULL, NULL));
-    REQUIRE(ds41_graph_logits(&candidate->ds41_graph, &engine->model,
-                             &engine->weights, candidate->logits));
-    REQUIRE(memcmp(control->logits, candidate->logits, DS4_N_VOCAB * 4u) == 0);
+    REQUIRE(ds41_graph_logits(&candidate->ds41.graph, &engine->core.model,
+                             &engine->core.weights, candidate->frontier.logits));
+    REQUIRE(memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * 4u) == 0);
     ds41_state_span a[54], b[54];
-    const uint32_t count = ds41_state_spans(&control->ds41_graph, 1025, a);
-    REQUIRE(ds41_state_spans(&candidate->ds41_graph, 1025, b) == count);
+    const uint32_t count = ds41_state_spans(&control->ds41.graph, 1025, a);
+    REQUIRE(ds41_state_spans(&candidate->ds41.graph, 1025, b) == count);
     for (uint32_t j = 0; j < count; j++) {
         REQUIRE(a[j].bytes == b[j].bytes);
         REQUIRE(memcmp(ds4_gpu_tensor_contents(a[j].tensor),
                        ds4_gpu_tensor_contents(b[j].tensor), (size_t)a[j].bytes) == 0);
     }
-    ds41_encoder_release(&candidate->ds41_graph, &engine->model, &residency);
-    REQUIRE(!candidate->ds41_graph.encoder_resident);
+    ds41_encoder_release(&candidate->ds41.graph, &engine->core.model, &residency);
+    REQUIRE(!candidate->ds41.graph.encoder_resident);
     REQUIRE(ds4_gpu_stream_expert_cache_configured_count() == budget);
     ds4_gpu_print_memory_report("encoder released");
-    REQUIRE(ds41_graph_step(&candidate->ds41_graph, &engine->model,
-                           &engine->weights, tokens.v[1025], candidate->logits));
+    REQUIRE(ds41_graph_step(&candidate->ds41.graph, &engine->core.model,
+                           &engine->core.weights, tokens.v[1025], candidate->frontier.logits));
     REQUIRE(ds4_session_eval(control, tokens.v[1025], err, sizeof(err)) == 0);
-    REQUIRE(memcmp(control->logits, candidate->logits, DS4_N_VOCAB * 4u) == 0);
+    REQUIRE(memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * 4u) == 0);
     puts("V4.1 resident encoder: exact logits/cache/decode and bounded cancellation/release: PASS");
     rc = 0;
 done:
     if (candidate && engine)
-        ds41_encoder_release(&candidate->ds41_graph, &engine->model, &residency);
+        ds41_encoder_release(&candidate->ds41.graph, &engine->core.model, &residency);
     unsetenv("DS4_METAL_DISABLE_V41_WIDE_PREFILL");
     if (rc) fprintf(stderr, "encoder error: %s\n", err);
     ds4_tokens_free(&tokens);
@@ -722,7 +735,7 @@ static int check_chat(const char *path, const char *level, const char *system, c
     else if (!ds4_think_mode_parse_level(level, &mode)) return 2;
     model_open(&model, path, true, false);
     config_validate_model(&model);
-    vocab_load(&engine.vocab, &model);
+    vocab_load(&engine.core.vocab, &model);
     REQUIRE(ds4_engine_is_deepseek41(&engine));
     REQUIRE(ds4_think_mode_for_context(mode, 256) == mode);
     ds4_encode_chat_prompt(&engine, system, prompt, mode, &direct);
@@ -732,10 +745,10 @@ static int check_chat(const char *path, const char *level, const char *system, c
     ds4_chat_append_message(&engine, &incremental, "user", prompt);
     ds4_chat_append_assistant_prefix(&engine, &incremental, mode);
     REQUIRE(direct.len == incremental.len && ds4_tokens_starts_with(&direct, &incremental));
-    dump_tokens_fp(stdout, &engine.vocab, &direct);
+    dump_tokens_fp(stdout, &engine.core.vocab, &direct);
     const int previous = incremental.len;
     ds4_chat_append_message(&engine, &incremental, "system", "A later instruction");
-    REQUIRE(incremental.v[previous] == engine.vocab.system_id);
+    REQUIRE(incremental.v[previous] == engine.core.vocab.system_id);
     const char *invalid[] = {"", "-1", "+1", "101", "1.5", "1e2", " 25", "25 ", "99999999999999999"};
     for (size_t i = 0; i < sizeof(invalid) / sizeof(*invalid); i++)
         REQUIRE(!ds4_think_mode_parse_level(invalid[i], &mode));
@@ -743,7 +756,7 @@ static int check_chat(const char *path, const char *level, const char *system, c
     rc = 0;
 done:
     ds4_tokens_free(&direct); ds4_tokens_free(&incremental);
-    vocab_free(&engine.vocab); model_close(&model);
+    vocab_free(&engine.core.vocab); model_close(&model);
     return rc;
 }
 
@@ -845,7 +858,7 @@ static int check_wide_prefill(const char *path, const char *prompt_path,
     REQUIRE(ds4_session_create(&control, engine, context) == 0);
     if (chunk_partition || compact_carry || prefill_alias) unsetenv(control_env);
     REQUIRE(ds4_session_create(&candidate, engine, context) == 0);
-    ds41_gpu_graph *a = &control->ds41_graph, *b = &candidate->ds41_graph;
+    ds41_gpu_graph *a = &control->ds41.graph, *b = &candidate->ds41.graph;
     REQUIRE(!chunk_partition || (a->prefill_cap == 2048u && b->prefill_cap == 8192u));
     REQUIRE(!packed_wide || (a->prefill_cap == 8192u && b->prefill_cap == 8192u));
     REQUIRE(!compact_carry || (!a->compact_carry && b->compact_carry));
@@ -878,13 +891,13 @@ static int check_wide_prefill(const char *path, const char *prompt_path,
         double t0 = now_sec();
         if (control_env) {
             setenv(control_env, "1", 1);
-            REQUIRE(ds41_graph_prefill(a, &engine->model, &engine->weights, tokens.v + start,
+            REQUIRE(ds41_graph_prefill(a, &engine->core.model, &engine->core.weights, tokens.v + start,
                 count, NULL, NULL, (int)(start + count), NULL, NULL));
             unsetenv(control_env);
         } else {
             for (uint32_t off = 0; off < count; off += a->prefill_cap) {
                 const uint32_t rows = count - off < a->prefill_cap ? count - off : a->prefill_cap;
-                REQUIRE(ds41_graph_prefill(a, &engine->model, &engine->weights,
+                REQUIRE(ds41_graph_prefill(a, &engine->core.model, &engine->core.weights,
                     tokens.v + start + off, rows, NULL, NULL,
                 (int)(start + count), NULL, NULL));
             }
@@ -892,7 +905,7 @@ static int check_wide_prefill(const char *path, const char *prompt_path,
         const double reference_seconds = now_sec() - t0;
         session_progress progress = {0};
         t0 = now_sec();
-        REQUIRE(ds41_graph_prefill(b, &engine->model, &engine->weights,
+        REQUIRE(ds41_graph_prefill(b, &engine->core.model, &engine->core.weights,
             tokens.v + start, count, note_progress, &progress, (int)(start + count), NULL, NULL));
         const double candidate_seconds = now_sec() - t0;
         REQUIRE(progress.current == (int)(start + count));
@@ -913,17 +926,17 @@ static int check_wide_prefill(const char *path, const char *prompt_path,
                 goto done;
             }
         }
-        REQUIRE(ds41_graph_logits(a, &engine->model, &engine->weights, control->logits));
-        REQUIRE(ds41_graph_logits(b, &engine->model, &engine->weights, candidate->logits));
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(ds41_graph_logits(a, &engine->core.model, &engine->core.weights, control->frontier.logits));
+        REQUIRE(ds41_graph_logits(b, &engine->core.model, &engine->core.weights, candidate->frontier.logits));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
         fprintf(stderr, "V4.1 %s prefill start=%u count=%u: exact state/logits, %.2f -> %.2f t/s\n",
                 label, start, count,
                 count / reference_seconds, count / candidate_seconds);
     }
     if (!cancel_only) {
-        REQUIRE(ds41_graph_step(a, &engine->model, &engine->weights, tokens.v[a->pos], control->logits));
-        REQUIRE(ds41_graph_step(b, &engine->model, &engine->weights, tokens.v[b->pos], candidate->logits));
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(ds41_graph_step(a, &engine->core.model, &engine->core.weights, tokens.v[a->pos], control->frontier.logits));
+        REQUIRE(ds41_graph_step(b, &engine->core.model, &engine->core.weights, tokens.v[b->pos], candidate->frontier.logits));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
     }
     if (chunk_partition) {
         REQUIRE(tokens.len >= 32768);
@@ -942,7 +955,7 @@ static int check_wide_prefill(const char *path, const char *prompt_path,
             REQUIRE(!memcmp(ds4_gpu_tensor_contents(sa[j].tensor),
                             ds4_gpu_tensor_contents(sb[j].tensor), (size_t)sa[j].bytes));
         }
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
         puts("V4.1 32k automatic prefill partition: exact state/logits PASS");
     }
     ds4_session_invalidate(candidate);
@@ -956,7 +969,7 @@ static int check_wide_prefill(const char *path, const char *prompt_path,
     tokens.len = 8192;
     char err[256];
     REQUIRE(ds4_session_sync(candidate, &tokens, err, sizeof(err)) == DS4_SESSION_SYNC_INTERRUPTED);
-    REQUIRE(cancelled.snapshot_checked && !b->valid && !candidate->checkpoint_valid);
+    REQUIRE(cancelled.snapshot_checked && !b->valid && !candidate->frontier.checkpoint_valid);
     REQUIRE(!decoder_cancel || cancelled.current > 4096);
     ds4_session_set_progress(candidate, NULL, NULL);
     ds4_session_set_cancel(candidate, NULL, NULL);
@@ -965,7 +978,7 @@ static int check_wide_prefill(const char *path, const char *prompt_path,
             ds4_session_invalidate(candidate);
             const int saved = b->table[table].fd;
             b->table[table].fd = -1;
-            const bool failed = !ds41_graph_prefill(b, &engine->model, &engine->weights,
+            const bool failed = !ds41_graph_prefill(b, &engine->core.model, &engine->core.weights,
                 tokens.v, 4096, NULL, NULL, 4096, NULL, NULL);
             b->table[table].fd = saved;
             REQUIRE(failed && !b->valid);
@@ -974,7 +987,7 @@ static int check_wide_prefill(const char *path, const char *prompt_path,
     tokens.len = 129;
     REQUIRE(ds4_session_sync(candidate, &tokens, err, sizeof(err)) == 0);
     REQUIRE(ds4_session_sync(control, &tokens, err, sizeof(err)) == 0);
-    REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+    REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
     puts(engram_overlap ? "V4.1 Engram overlap: exact state/logits, cancellation, read errors and rebuild PASS" :
         control_env ? "V4.1 batched prefill: exact state/logits, cancellation and rebuild PASS" :
         decoder_cancel ? "V4.1 decoder suffix cancellation and exact rebuild: PASS" :
@@ -1010,7 +1023,7 @@ static int check_prefill_alias_fallback(const char *path, const char *prompt_pat
     REQUIRE(ds4_session_create(&control, engine, 1024) == 0);
     unsetenv("DS4_METAL_DISABLE_V41_PREFILL_ALIAS");
     REQUIRE(ds4_session_create(&candidate, engine, 1024) == 0);
-    ds41_gpu_graph *a = &control->ds41_graph, *b = &candidate->ds41_graph;
+    ds41_gpu_graph *a = &control->ds41.graph, *b = &candidate->ds41.graph;
     REQUIRE(!a->prefill_alias && b->prefill_alias);
     for (uint32_t mode = 0; mode < 8; mode++) {
         for (uint32_t j = 0; j < 3; j++) {
@@ -1020,9 +1033,9 @@ static int check_prefill_alias_fallback(const char *path, const char *prompt_pat
         ds41_graph_reset(a); ds41_graph_reset(b);
         for (uint32_t pass = 0; pass < 2; pass++) {
             const uint32_t start = a->pos, count = pass ? 29 : 19;
-            REQUIRE(ds41_graph_prefill(a, &engine->model, &engine->weights,
+            REQUIRE(ds41_graph_prefill(a, &engine->core.model, &engine->core.weights,
                 tokens.v + start, count, NULL, NULL, (int)(start + count), NULL, NULL));
-            REQUIRE(ds41_graph_prefill(b, &engine->model, &engine->weights,
+            REQUIRE(ds41_graph_prefill(b, &engine->core.model, &engine->core.weights,
                 tokens.v + start, count, NULL, NULL, (int)(start + count), NULL, NULL));
             ds41_state_span sa[64], sb[64];
             const uint32_t n = ds41_state_spans(a, a->pos, sa);
@@ -1033,15 +1046,15 @@ static int check_prefill_alias_fallback(const char *path, const char *prompt_pat
                 REQUIRE(!memcmp(ds4_gpu_tensor_contents(sa[j].tensor),
                     ds4_gpu_tensor_contents(sb[j].tensor), (size_t)sa[j].bytes));
             }
-            REQUIRE(ds41_graph_logits(a, &engine->model, &engine->weights, control->logits));
-            REQUIRE(ds41_graph_logits(b, &engine->model, &engine->weights, candidate->logits));
-            REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+            REQUIRE(ds41_graph_logits(a, &engine->core.model, &engine->core.weights, control->frontier.logits));
+            REQUIRE(ds41_graph_logits(b, &engine->core.model, &engine->core.weights, candidate->frontier.logits));
+            REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
             fprintf(stderr, "V4.1 prefill storage aliases mode=%u count=%u: exact state/logits PASS\n",
                 mode, count);
         }
-        REQUIRE(ds41_graph_step(a, &engine->model, &engine->weights, tokens.v[a->pos], control->logits));
-        REQUIRE(ds41_graph_step(b, &engine->model, &engine->weights, tokens.v[b->pos], candidate->logits));
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(ds41_graph_step(a, &engine->core.model, &engine->core.weights, tokens.v[a->pos], control->frontier.logits));
+        REQUIRE(ds41_graph_step(b, &engine->core.model, &engine->core.weights, tokens.v[b->pos], candidate->frontier.logits));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
     }
     rc = 0;
 done:
@@ -1058,7 +1071,7 @@ static void note_deferred_progress(void *ud, const char *event, int current, int
     assert(current >= p->current);
     note_progress(ud, event, current, total);
     if (p->cancel_at == -1 && !strcmp(event, "prefill_chunk") &&
-        !p->snapshot_session->ds41_graph.valid) p->cancel_at = p->progress;
+        !p->snapshot_session->ds41.graph.valid) p->cancel_at = p->progress;
 }
 
 static int check_deferred_decoder(const char *path, const char *prompt_path) {
@@ -1078,7 +1091,7 @@ static int check_deferred_decoder(const char *path, const char *prompt_path) {
     REQUIRE(tokens.len >= 49157);
     REQUIRE(ds4_session_create(&control, engine, opt.context_size) == 0);
     REQUIRE(ds4_session_create(&candidate, engine, opt.context_size) == 0);
-    ds41_gpu_graph *a = &control->ds41_graph, *b = &candidate->ds41_graph;
+    ds41_gpu_graph *a = &control->ds41.graph, *b = &candidate->ds41.graph;
     REQUIRE(a->carry_cap >= 16384u && b->carry_cap >= 16384u);
     a->carry_cap = b->carry_cap = 16384u;
     /* A tiny tail must not force an extra encoder sweep. This callback would
@@ -1088,14 +1101,14 @@ static int check_deferred_decoder(const char *path, const char *prompt_path) {
     ds4_session_set_cancel(candidate, cancel_progress, &short_tail);
     tokens.len = 16385;
     REQUIRE(ds4_session_sync(candidate, &tokens, err, sizeof(err)) == 0);
-    REQUIRE(short_tail.cancel_at == -1 && b->valid && candidate->checkpoint_valid);
+    REQUIRE(short_tail.cancel_at == -1 && b->valid && candidate->frontier.checkpoint_valid);
     ds4_session_set_cancel(candidate, NULL, NULL);
     ds4_session_set_progress(candidate, NULL, NULL);
     ds4_session_invalidate(candidate);
     const int frontiers[] = {24577, 49155};
     for (size_t i = 0; i < sizeof(frontiers) / sizeof(*frontiers); i++) {
         tokens.len = frontiers[i];
-        const int count = tokens.len - control->checkpoint.len;
+        const int count = tokens.len - control->frontier.checkpoint.len;
         setenv("DS4_METAL_DISABLE_V41_DEFER_DECODER", "1", 1);
         double start = now_sec();
         REQUIRE(ds4_session_sync(control, &tokens, err, sizeof(err)) == 0);
@@ -1110,7 +1123,7 @@ static int check_deferred_decoder(const char *path, const char *prompt_path) {
         REQUIRE(progress.current == tokens.len && progress.snapshot_checked && progress.snapshot_ready);
         REQUIRE(a->valid && b->valid && a->pos == b->pos);
         REQUIRE(!memcmp(&a->history, &b->history, sizeof(a->history)));
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
         ds41_state_span sa[64], sb[64];
         const uint32_t spans = ds41_state_spans(a, a->pos, sa);
         REQUIRE(spans == ds41_state_spans(b, b->pos, sb));
@@ -1125,7 +1138,7 @@ static int check_deferred_decoder(const char *path, const char *prompt_path) {
         const int token = tokens.v[tokens.len++];
         REQUIRE(ds4_session_eval(control, token, err, sizeof(err)) == 0);
         REQUIRE(ds4_session_eval(candidate, token, err, sizeof(err)) == 0);
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
         fprintf(stderr, "V4.1 deferred decoder frontier=%d: exact state/logits/snapshot/nextdecode, %.2f -> %.2f t/s\n",
             frontiers[i], count / before, count / after);
     }
@@ -1136,7 +1149,7 @@ static int check_deferred_decoder(const char *path, const char *prompt_path) {
     tokens.len = 24577;
     REQUIRE(ds4_session_sync(candidate, &tokens, err, sizeof(err)) == DS4_SESSION_SYNC_INTERRUPTED);
     REQUIRE(cancelled.current == 16384 && cancelled.snapshot_checked && !cancelled.snapshot_ready);
-    REQUIRE(!b->valid && !candidate->checkpoint_valid);
+    REQUIRE(!b->valid && !candidate->frontier.checkpoint_valid);
     REQUIRE(ds4_session_save_snapshot(candidate, &snap, err, sizeof(err)) != 0);
     ds4_session_set_cancel(candidate, NULL, NULL);
     ds4_session_set_progress(candidate, NULL, NULL);
@@ -1144,7 +1157,7 @@ static int check_deferred_decoder(const char *path, const char *prompt_path) {
     tokens.len = 129;
     REQUIRE(ds4_session_sync(control, &tokens, err, sizeof(err)) == 0);
     REQUIRE(ds4_session_sync(candidate, &tokens, err, sizeof(err)) == 0);
-    REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+    REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
     puts("V4.1 deferred decoder: exact initial/continued state and interruption recovery PASS");
     rc = 0;
 done:
@@ -1172,7 +1185,7 @@ static int check_sweep_partitions(const char *path, const char *prompt_path) {
     REQUIRE(tokens.len > 49152);
     REQUIRE(ds4_session_create(&control, engine, opt.context_size) == 0);
     REQUIRE(ds4_session_create(&candidate, engine, opt.context_size) == 0);
-    ds41_gpu_graph *a = &control->ds41_graph, *b = &candidate->ds41_graph;
+    ds41_gpu_graph *a = &control->ds41.graph, *b = &candidate->ds41.graph;
     REQUIRE(a->carry_cap >= 24576 && b->carry_cap >= 24576);
     a->carry_cap = 8192;
     const uint32_t frontiers[] = {24576, 49152};
@@ -1190,14 +1203,14 @@ static int check_sweep_partitions(const char *path, const char *prompt_path) {
             REQUIRE(!memcmp(ds4_gpu_tensor_contents(sa[j].tensor),
                 ds4_gpu_tensor_contents(sb[j].tensor), (size_t)sa[j].bytes));
         }
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
         fprintf(stderr, "V4.1 sweep partitions at %u: exact state/logits PASS\n", a->pos);
     }
     for (uint32_t i = 0; i < 8; i++) {
-        const int token = sample_argmax(control->logits, DS4_N_VOCAB);
+        const int token = sample_argmax(control->frontier.logits, DS4_N_VOCAB);
         REQUIRE(ds4_session_eval(control, token, err, sizeof(err)) == 0);
         REQUIRE(ds4_session_eval(candidate, token, err, sizeof(err)) == 0);
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
     }
     puts("V4.1 sweep partitions: initial/continued prefill and following decode exact PASS");
     rc = 0;
@@ -1228,17 +1241,17 @@ static int check_decoder_suffix(const char *path, const char *prompt_path) {
     REQUIRE(tokens.len > 16386);
     REQUIRE(ds4_session_create(&control, engine, 18432) == 0);
     REQUIRE(ds4_session_create(&candidate, engine, 18432) == 0);
-    ds41_gpu_graph *a = &control->ds41_graph, *b = &candidate->ds41_graph;
+    ds41_gpu_graph *a = &control->ds41.graph, *b = &candidate->ds41.graph;
     for (uint32_t pass = 0; pass < 2; pass++) {
         const uint32_t start = a->pos, count = 8192;
         setenv("DS4_METAL_DISABLE_V41_DECODER_SUFFIX", "1", 1);
         double t0 = now_sec();
-        REQUIRE(ds41_graph_prefill(a, &engine->model, &engine->weights,
+        REQUIRE(ds41_graph_prefill(a, &engine->core.model, &engine->core.weights,
             tokens.v + start, count, NULL, NULL, (int)(start + count), NULL, NULL));
         const double reference = now_sec() - t0;
         unsetenv("DS4_METAL_DISABLE_V41_DECODER_SUFFIX");
         t0 = now_sec();
-        REQUIRE(ds41_graph_prefill(b, &engine->model, &engine->weights,
+        REQUIRE(ds41_graph_prefill(b, &engine->core.model, &engine->core.weights,
             tokens.v + start, count, NULL, NULL, (int)(start + count), NULL, NULL));
         const double candidate_time = now_sec() - t0;
         ds41_state_span sa[64], sb[64];
@@ -1253,14 +1266,14 @@ static int check_decoder_suffix(const char *path, const char *prompt_path) {
             }
         }
         REQUIRE(!memcmp(&a->history, &b->history, sizeof(a->history)));
-        REQUIRE(ds41_graph_logits(a, &engine->model, &engine->weights, control->logits));
-        REQUIRE(ds41_graph_logits(b, &engine->model, &engine->weights, candidate->logits));
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(ds41_graph_logits(a, &engine->core.model, &engine->core.weights, control->frontier.logits));
+        REQUIRE(ds41_graph_logits(b, &engine->core.model, &engine->core.weights, candidate->frontier.logits));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
         fprintf(stderr, "V4.1 decoder suffix start=%u count=%u: exact state/logits, %.2f -> %.2f t/s\n",
                 start, count, count / reference, count / candidate_time);
-        REQUIRE(ds41_graph_step(a, &engine->model, &engine->weights, tokens.v[a->pos], control->logits));
-        REQUIRE(ds41_graph_step(b, &engine->model, &engine->weights, tokens.v[b->pos], candidate->logits));
-        REQUIRE(!memcmp(control->logits, candidate->logits, DS4_N_VOCAB * sizeof(float)));
+        REQUIRE(ds41_graph_step(a, &engine->core.model, &engine->core.weights, tokens.v[a->pos], control->frontier.logits));
+        REQUIRE(ds41_graph_step(b, &engine->core.model, &engine->core.weights, tokens.v[b->pos], candidate->frontier.logits));
+        REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
     }
     puts("V4.1 exact decoder dependency suffix: initial/continued prefill and decode PASS");
     rc = 0;
@@ -1285,7 +1298,7 @@ static int check_decoder_publication(const char *path, bool encoder) {
     REQUIRE(ds4_engine_open(&engine, &opt) == 0);
     REQUIRE(ds4_session_create(&a, engine, 19000) == 0);
     REQUIRE(ds4_session_create(&b, engine, 19000) == 0);
-    ds41_gpu_graph *old = &a->ds41_graph, *fast = &b->ds41_graph;
+    ds41_gpu_graph *old = &a->ds41.graph, *fast = &b->ds41.graph;
     const struct { uint32_t start, count; } shapes[] = {
         {0, 1}, {0, 2}, {127, 1}, {127, 31}, {128, 129}, {129, 513}, {8191, 4096}, {16383, 2048}};
     const uint32_t layers[] = {20, 2, 8, 14};
@@ -1323,12 +1336,12 @@ static int check_decoder_publication(const char *path, bool encoder) {
         for (uint32_t t = 0; t < count; t++) {
             row.pos = start + t;
             row.norm = old->rows_view[t].norm;
-            REQUIRE(ds41_attention_publish(&row, &engine->model, &engine->weights.layer[il], il));
+            REQUIRE(ds41_attention_publish(&row, &engine->core.model, &engine->core.weights.layer[il], il));
         }
         REQUIRE(ds4_gpu_end_commands());
         REQUIRE(ds4_gpu_begin_commands());
-        REQUIRE(ds41_attention_publish_batch(fast, &fast->batch, &engine->model,
-                                             &engine->weights.layer[il], il, start, count));
+        REQUIRE(ds41_attention_publish_batch(fast, &fast->batch, &engine->core.model,
+                                             &engine->core.weights.layer[il], il, start, count));
         REQUIRE(ds4_gpu_end_commands());
         for (uint32_t j = 0; j < 2; j++) {
             const float *x = ds4_gpu_tensor_contents(expected[j]);
@@ -1391,7 +1404,7 @@ static int check_attention_batches(const char *path, bool batch_index) {
     REQUIRE(ds4_engine_open(&engine, &opt) == 0);
     REQUIRE(ds4_session_create(&a, engine, 19000) == 0);
     REQUIRE(ds4_session_create(&b, engine, 19000) == 0);
-    ds41_gpu_graph *old = &a->ds41_graph, *fast = &b->ds41_graph;
+    ds41_gpu_graph *old = &a->ds41.graph, *fast = &b->ds41.graph;
     const struct { uint32_t start, count; } shapes[] = {
         {0, 31}, {127, 129}, {129, 513}, {16383, 1025}};
     const uint32_t layers[] = {0, 2, 3, 20, 24, 39};
@@ -1447,11 +1460,11 @@ static int check_attention_batches(const char *path, bool batch_index) {
                 row.heads = old->rows_view[t].heads;
                 row.selected_comp = old->rows_view[t].selected_comp;
                 row.block_mask = old->rows_view[t].block_mask;
-                REQUIRE(ds41_attention(&row, &engine->model, &engine->weights.layer[il], il, true));
+                REQUIRE(ds41_attention(&row, &engine->core.model, &engine->core.weights.layer[il], il, true));
             }
             REQUIRE(ds4_gpu_end_commands());
             REQUIRE(ds4_gpu_begin_commands());
-            REQUIRE(ds41_attention_batch(fast, &engine->model, &engine->weights.layer[il], il, count));
+            REQUIRE(ds41_attention_batch(fast, &engine->core.model, &engine->core.weights.layer[il], il, count));
             REQUIRE(ds4_gpu_end_commands());
             for (uint32_t j = 0; j < spans; j++) {
                 REQUIRE(memcmp(ds4_gpu_tensor_contents(sa[j].tensor),
@@ -1505,7 +1518,7 @@ static int check_partitions(const char *path) {
     ds4_gpu_set_streaming_expert_cache_budget(16);
     setenv("DS4_TP_NO_KEEPALIVE", "1", 1);
     REQUIRE(ds4_gpu_set_model_fd(model.fd));
-    REQUIRE(ds41_graph_alloc(&g, &model, &weights, path, 1, true));
+    REQUIRE(ds41_graph_alloc(&g, &model, &weights, path, 1, 0, true));
     const size_t bytes = DS4_N_EMBD * sizeof(float);
     const size_t head_bytes = DS4_N_HEAD * DS4_N_HEAD_DIM * sizeof(float);
     expected = malloc(head_bytes); actual = malloc(head_bytes); first = malloc(head_bytes);
@@ -1626,26 +1639,31 @@ static int check_session_accounting(const char *path) {
     ds4_engine_options opt = {.model_path = path, .backend = DS4_BACKEND_METAL,
         .context_size = 16384, .power_percent = 100, .ssd_streaming = true,
         .ssd_streaming_cache_bytes = UINT64_C(16) << 30};
+    /* Failed post-family startup must release its map and instance lock so
+     * another Engine can open immediately in this same process. */
+    ds4_engine_options rejected = opt;
+    rejected.power_percent = 50;
+    REQUIRE(ds4_engine_open(&engine, &rejected) != 0 && engine == NULL);
     REQUIRE(ds4_engine_open(&engine, &opt) == 0);
     setenv("DS4_METAL_DISABLE_V41_WIDE_CHUNK", "1", 1);
     REQUIRE(ds4_session_create(&small, engine, opt.context_size) == 0);
-    const uint64_t first = engine->ds41_session_bytes;
+    const uint64_t first = engine->core.memory.ds41_session_bytes;
     REQUIRE(first);
     unsetenv("DS4_METAL_DISABLE_V41_WIDE_CHUNK");
     REQUIRE(ds4_session_create(&wide, engine, opt.context_size) == 0);
-    const uint64_t second = engine->ds41_session_bytes - first;
+    const uint64_t second = engine->core.memory.ds41_session_bytes - first;
     REQUIRE(second > first);
     /* Debug settings and logical sweep limits may change after allocation. */
-    small->ds41_graph.carry_cap = 8192;
+    small->ds41.graph.carry_cap = 8192;
     ds4_session_free(small); small = NULL;
-    REQUIRE(engine->ds41_session_bytes == second);
+    REQUIRE(engine->core.memory.ds41_session_bytes == second);
     setenv("DS4_METAL_DISABLE_V41_WIDE_CHUNK", "1", 1);
     ds4_session_free(wide); wide = NULL;
-    REQUIRE(engine->ds41_session_bytes == 0);
+    REQUIRE(engine->core.memory.ds41_session_bytes == 0);
     REQUIRE(ds4_session_create(&small, engine, opt.context_size) == 0);
-    REQUIRE(engine->ds41_session_bytes == first);
+    REQUIRE(engine->core.memory.ds41_session_bytes == first);
     ds4_session_free(small); small = NULL;
-    REQUIRE(engine->ds41_session_bytes == 0);
+    REQUIRE(engine->core.memory.ds41_session_bytes == 0);
     puts("V4.1 session accounting retains allocation sizes across debug settings: PASS");
     rc = 0;
 done:
@@ -1656,16 +1674,16 @@ done:
 
 static int check_memory_plan(const char *path) {
     const uint64_t gib = UINT64_C(1073741824);
-    ds4_engine e = {.model = {.fd = -1}};
+    ds4_engine e = {.core.model = {.fd = -1}};
     const uint64_t saved_shard = g_tp_shard_model_bytes;
     int rc = 1;
-    model_open(&e.model, path, true, false);
-    config_validate_model(&e.model);
+    model_open(&e.core.model, path, true, false);
+    config_validate_model(&e.core.model);
     REQUIRE(DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41);
-    REQUIRE(ds41_prefill_limit(8191) == 2048u);
-    REQUIRE(ds41_prefill_limit(8192) == 4096u);
-    REQUIRE(ds41_prefill_limit(16383) == 4096u);
-    REQUIRE(ds41_prefill_limit(16384) == 8192u);
+    REQUIRE(ds41_graph_memory(8191, 0).prefill_cap == 2048u);
+    REQUIRE(ds41_graph_memory(8192, 0).prefill_cap == 4096u);
+    REQUIRE(ds41_graph_memory(16383, 0).prefill_cap == 4096u);
+    REQUIRE(ds41_graph_memory(16384, 0).prefill_cap == 8192u);
     ds4_engine_options opt = {0};
     REQUIRE(!engine_warm_full_model(&opt));
     opt.warm_weights = true;
@@ -1688,12 +1706,12 @@ static int check_memory_plan(const char *path) {
     REQUIRE(!engine_warm_full_model(&opt));
     opt.distributed.role = DS4_DISTRIBUTED_COORDINATOR;
     REQUIRE(!engine_warm_full_model(&opt));
-    weights_bind(&e.weights, &e.model, false, 0, UINT32_MAX, true, false);
-    REQUIRE(e.model.size < e.model.file_size);
-    const bool q4 = e.weights.layer[0].ffn_gate_exps->type == DS4_TENSOR_Q4_K;
-    REQUIRE(q4 || e.weights.layer[0].ffn_gate_exps->type == DS4_TENSOR_IQ2_XXS);
+    weights_bind(&e.core.weights, &e.core.model, false, 0, UINT32_MAX, true, false);
+    REQUIRE(e.core.model.size < e.core.model.file_size);
+    const bool q4 = e.core.weights.layer[0].ffn_gate_exps->type == DS4_TENSOR_Q4_K;
+    REQUIRE(q4 || e.core.weights.layer[0].ffn_gate_exps->type == DS4_TENSOR_IQ2_XXS);
     g_tp_shard_model_bytes = 0;
-    uint64_t graph = ds41_graph_bytes(1048576);
+    uint64_t graph = ds41_graph_bytes(1048576, 0);
     REQUIRE(!ds41_memory_admit_for_host(&e, graph, true, 128 * gib, 110 * gib));
     REQUIRE(ds41_memory_admit_for_host(&e, graph, true, 256 * gib, 224 * gib) == !q4);
     REQUIRE(ds41_memory_admit_for_host(&e, graph, true, 512 * gib, 448 * gib));
@@ -1707,29 +1725,46 @@ static int check_memory_plan(const char *path) {
     REQUIRE(ds41_memory_admit_for_host(&e, graph, true, 128 * gib, 110 * gib) == !q4);
     REQUIRE(ds41_memory_admit_for_host(&e, graph, true, 256 * gib, 224 * gib));
     g_tp_shard_model_bytes = 0;
-    e.ssd_streaming = true;
-    e.ssd_streaming_prefill_headroom_bytes = (q4 ? 16 : 8) * gib;
-    e.ssd_streaming_cache_experts = DS4_N_LAYER * DS4_N_EXPERT;
+    e.core.ssd_streaming = true;
+    e.core.memory.ssd_streaming_prefill_headroom_bytes = (q4 ? 16 : 8) * gib;
+    e.core.memory.ssd_streaming_cache_experts = DS4_N_LAYER * DS4_N_EXPERT;
     uint64_t expert = 0, fixed = 0;
-    REQUIRE(ds4_streaming_routed_expert_bytes(&e.weights, &expert) && expert);
-    REQUIRE(weights_streaming_non_routed_bytes(&e.weights, &fixed));
+    REQUIRE(ds4_streaming_routed_expert_bytes(&e.core.weights, &expert) && expert);
+    REQUIRE(weights_streaming_non_routed_bytes(&e.core.weights, &fixed));
     REQUIRE(ds41_memory_admit_for_host(&e, graph, true, 128 * gib, 110 * gib));
-    REQUIRE(e.ssd_streaming_cache_bytes == (uint64_t)e.ssd_streaming_cache_experts * expert);
-    REQUIRE(ds4_engine_dynamic_expert_cache_bytes(&e) == e.ssd_streaming_cache_bytes);
+    REQUIRE(e.core.memory.ssd_streaming_cache_bytes == (uint64_t)e.core.memory.ssd_streaming_cache_experts * expert);
+    REQUIRE(ds4_engine_dynamic_expert_cache_bytes(&e) == e.core.memory.ssd_streaming_cache_bytes);
     uint64_t planned = fixed + graph + 2 * gib +
-        ds4_engine_dynamic_expert_cache_bytes(&e) + e.ssd_streaming_prefill_headroom_bytes;
-    REQUIRE(e.ssd_streaming_cache_experts > 0 && planned <= 110 * gib);
+        ds4_engine_dynamic_expert_cache_bytes(&e) + e.core.memory.ssd_streaming_prefill_headroom_bytes;
+    REQUIRE(e.core.memory.ssd_streaming_cache_experts > 0 && planned <= 110 * gib);
     REQUIRE(planned + expert > 110 * gib);
-    const uint32_t fitted = e.ssd_streaming_cache_experts;
+    const uint32_t fitted = e.core.memory.ssd_streaming_cache_experts;
     REQUIRE(ds41_memory_admit_for_host(&e, graph, false, 128 * gib, 110 * gib));
     REQUIRE(!ds41_memory_admit_for_host(&e, graph + expert, false, 128 * gib, 110 * gib));
-    REQUIRE(e.ssd_streaming_cache_experts == fitted);
+    REQUIRE(e.core.memory.ssd_streaming_cache_experts == fitted);
     REQUIRE(!ds41_memory_admit_for_host(&e, graph, true, 8 * gib, 6 * gib));
+    /* Byte targets retain one complete slot after a reduced prefill reserve;
+     * count targets reserve no bytes and cap at actual cacheable layers. */
+    e.core.backend = DS4_BACKEND_METAL;
+    e.core.ssd_streaming_full_layers_set = true;
+    e.core.memory.ssd_streaming_full_layers = 2;
+    e.core.memory.ssd_streaming_cache_bytes = expert * ((uint64_t)DS4_N_EXPERT + 1u);
+    const uint64_t startup_target = e.core.memory.ssd_streaming_cache_bytes;
+    REQUIRE(ds4_engine_configure_streaming_cache_budget(&e));
+    REQUIRE(e.core.memory.ssd_streaming_cache_experts == 1 && e.core.memory.ssd_streaming_cache_bytes == expert);
+    REQUIRE(e.core.memory.ssd_streaming_prefill_headroom_bytes == startup_target - expert);
+    REQUIRE(!e.core.memory.ssd_streaming_full_layers && !e.core.memory.ssd_streaming_full_layer_bytes);
+    uint64_t cacheable = 0;
+    REQUIRE(ds4_streaming_cacheable_expert_count(&e.core.weights, &cacheable, NULL));
+    e.core.memory.ssd_streaming_cache_bytes = 0;
+    e.core.memory.ssd_streaming_cache_experts = UINT32_MAX;
+    REQUIRE(ds4_engine_configure_streaming_cache_budget(&e));
+    REQUIRE(e.core.memory.ssd_streaming_cache_experts == cacheable && !e.core.memory.ssd_streaming_prefill_headroom_bytes);
     puts("V4.1 disk-only Engram, 128/256/512 GiB residency, TP and SSD admission: PASS");
     rc = 0;
 done:
     g_tp_shard_model_bytes = saved_shard;
-    model_close(&e.model);
+    model_close(&e.core.model);
     return rc;
 }
 
@@ -1789,7 +1824,12 @@ static int check_vision_routing(void) {
         for (unsigned shape = 0; shape < sizeof(counts) / sizeof(*counts); shape++) {
             const uint32_t count = counts[shape];
             REQUIRE(ds4_gpu_begin_commands());
+#ifdef DS4_NATIVE_ENGINE_ROUTE_SERVICES
+            const ds4_model_config route_config = ds41_native_config();
+            REQUIRE(ds4_native_graph_route_batch41(g, &model, &layer, &route_config, count));
+#else
             REQUIRE(ds41_route_batch(g, &model, &layer, count));
+#endif
             REQUIRE(ds4_gpu_end_commands());
             const int32_t *selected = ds4_gpu_tensor_contents(g->batch.selected);
             const float *weights = ds4_gpu_tensor_contents(g->batch.route_weights);
@@ -1830,13 +1870,13 @@ done:
 static int check_vision_encoder(const char *path, const char *image, const char *output) {
     ds4_engine *e = calloc(1, sizeof(*e));
     if (!e) return 1;
-    e->vision_model.fd = -1;
-    e->backend = DS4_BACKEND_METAL;
-    e->vision_kind = DS4_VISION_DEEPSEEK4;
-    e->vision_ready = true;
+    e->core.vision_model.fd = -1;
+    e->core.backend = DS4_BACKEND_METAL;
+    e->core.vision_kind = DS4_VISION_DEEPSEEK4;
+    e->core.vision_ready = true;
     g_ds4_shape = DS4_SHAPE_FLASH41;
-    model_open(&e->vision_model, path, true, false);
-    deepseek4_vision_weights_bind(&e->deepseek4_vision_weights, &e->vision_model);
+    model_open(&e->core.vision_model, path, true, false);
+    deepseek4_vision_weights_bind(&e->core.deepseek4_vision_weights, &e->core.vision_model);
     ds4_vision_embedding first = {0}, second = {0};
     FILE *fp = NULL;
     char error[256] = {0};
@@ -1861,7 +1901,7 @@ done:
     ds4_vision_embedding_free(&first);
     ds4_vision_embedding_free(&second);
     ds4_gpu_cleanup();
-    model_close(&e->vision_model);
+    model_close(&e->core.vision_model);
     free(e);
     return rc;
 }
@@ -2032,7 +2072,7 @@ int main(int argc, char **argv) {
     }
     REQUIRE(ds4_gpu_set_model_map_spans(model.map, model.size, offsets, sizes,
                                        spans.len, spans.max_tensor_bytes));
-    REQUIRE(ds41_graph_alloc(&graph, &model, &weights, argv[1], zero ? 20000 : 4096, true));
+    REQUIRE(ds41_graph_alloc(&graph, &model, &weights, argv[1], zero ? 20000 : 4096, 0, true));
     logits = malloc((size_t)DS4_N_VOCAB * sizeof(float));
     REQUIRE(logits);
     const double start = now_sec();
@@ -2059,7 +2099,7 @@ int main(int argc, char **argv) {
         for (uint32_t j = 0; j < DS4_N_VOCAB; j++) REQUIRE(logits[j] == 0);
         puts("V4.1 zero-weight SSD graph and reset: PASS");
     } else {
-        ds4_engine output = {.vocab = vocab};
+        ds4_engine output = {.core.vocab = vocab};
         for (int i = 0; i < generate; i++) {
             const int token = sample_argmax(logits, DS4_N_VOCAB);
             size_t len = 0;

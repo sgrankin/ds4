@@ -12,6 +12,12 @@
 /* Two frontends use the same opt-in cache settings and weight/policy identity.
  * A directory has one process owner; server clients share that owner. */
 extern char **environ;
+#ifdef DS4_NATIVE_STATE_CACHE_RUNTIME
+/* Shared native transaction; the C header remains the independent fallback. */
+ds4_state_cache *ds4_state_cache_runtime_open(ds4_engine *engine,
+    const ds4_engine_options *options, int ctx, char profile[41],
+    char *err, size_t errlen);
+#else
 static int ds4_state_cache_env_cmp(const void *a, const void *b) {
     return strcmp(*(const char *const *)a, *(const char *const *)b);
 }
@@ -84,5 +90,7 @@ static ds4_state_cache *ds4_state_cache_runtime_open(ds4_engine *engine,
     free(identity);
     return ds4_state_cache_open(dir, hot, ssd, err, errlen);
 }
+
+#endif /* DS4_NATIVE_STATE_CACHE_RUNTIME */
 
 #endif

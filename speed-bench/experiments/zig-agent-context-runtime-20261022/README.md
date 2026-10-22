@@ -1,0 +1,9 @@
+# Item94 — Complete live-context and cache transactions
+
+ContextRuntime owns live import/export, actual image vectors, RAM frontiers, SSD endpoint/prefix restoration, suffix source selection, pre-RoPE grafting and exact undo/fallback. Actual Worker/config/frontier/Plan records move once into real shared headers. Agent and queued server persistence compose one pure suffix matcher. System-token construction and UI-aware sync remain explicit temporary C actions until subsequent owners. Original C algorithms remain available.
+
+Integration19:21–19:42UTC starts at8179b209. Four selections pass production Agent/terminal/PTY suites; all17 stable captures match. Native ReleaseFast/Debug and C fallback pass real-vocabulary live-context fixtures. Native/Debug real image Observation ownership and multimodal continuation match (194 expanded visual rows,227 prompt tokens, first671/next14445).
+
+Fixed C-controller and native real six-turn tasks both pass, with byte-identical stdout, three correct416/RIVER-73 answers and three fresh archive reads. Both perform three SSD pre-RoPE grafts with identical source/destination geometry; two follow an earlier approximation and the third uses an approximate source. This does not establish an immutable-original source claim. Whole-task234.437s C and243.116s native (+3.70%) are one ordered functional pair, insufficient for a latency attribution or nonregression claim.
+
+Two compile failures (root-module import boundary, then a shadowed local/reference) are retained. The shared matcher is a named build module; no runtime correction was required. Active source hashes remain unchanged through qualification. Every pressure sample is normal with fixed0.00903GiB swap. Commands, source hashes, fixture captures and compressed actual traces accompany this report; model, binaries and cache chunks stay out of version control.

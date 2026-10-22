@@ -1,4 +1,5 @@
 #include "ds4.h"
+#include "ds4_cli_chat.h"
 #include "ds4_distributed.h"
 #include "ds4_gpu_args.h"
 #include "ds4_tp.h"
@@ -1324,28 +1325,17 @@ static void history_file_path(char *buf, size_t len) {
     snprintf(buf, len, "%s/.ds4_history", home);
 }
 
-typedef struct {
-    ds4_session *session;
-    ds4_tokens transcript;
-    ds4_vision_span *images;
-    size_t image_count;
-    size_t image_cap;
-    int ctx_size;
-    int think_prefix_pos;
-    int think_prefix_tokens;
-    bool initial_system_text;
-} repl_chat;
+typedef ds4_cli_chat repl_chat;
 
-static void repl_chat_free(repl_chat *chat);
-
-static void repl_chat_trim_images(repl_chat *chat, size_t count) {
+#ifndef DS4_NATIVE_CLI_CHAT
+void ds4_cli_chat_trim_images(repl_chat *chat, size_t count) {
     while (chat->image_count > count) {
         chat->image_count--;
         ds4_vision_embedding_free(&chat->images[chat->image_count].embedding);
     }
 }
 
-static ds4_vision_span *repl_chat_add_image(repl_chat *chat) {
+ds4_vision_span *ds4_cli_chat_add_image(repl_chat *chat) {
     if (chat->image_count == chat->image_cap) {
         size_t cap = chat->image_cap ? chat->image_cap * 2u : 4u;
         if (cap > SIZE_MAX / sizeof(chat->images[0])) return NULL;
@@ -1395,7 +1385,7 @@ static void repl_chat_build_think_prefix(ds4_engine *engine,
 /* Insert/replace the model-family thinking prefix inside the existing
  * transcript.  It lives immediately after the BOS sequence and before any
  * user/system text, matching the GGUF chat templates. */
-static bool repl_chat_apply_think_prefix(ds4_engine *engine,
+bool ds4_cli_chat_apply_think_prefix(ds4_engine *engine,
                                          repl_chat *chat,
                                          ds4_think_mode mode) {
     ds4_tokens prefix = {0};
@@ -1431,7 +1421,7 @@ static bool repl_chat_apply_think_prefix(ds4_engine *engine,
     return true;
 }
 
-static int repl_chat_create_session(ds4_engine *engine, repl_chat *chat, int ctx_size) {
+int ds4_cli_chat_create_session(ds4_engine *engine, repl_chat *chat, int ctx_size) {
     ds4_session *session = NULL;
     if (ds4_session_create(&session, engine, ctx_size) != 0) {
         fprintf(stderr, "ds4: interactive chat KV cache requires a session backend\n");
@@ -1443,23 +1433,25 @@ static int repl_chat_create_session(ds4_engine *engine, repl_chat *chat, int ctx
     return 0;
 }
 
+#endif
+
 static int repl_chat_init(ds4_engine *engine, repl_chat *chat, const cli_config *cfg) {
     memset(chat, 0, sizeof(*chat));
     chat->initial_system_text = cfg->gen.system && cfg->gen.system[0];
     ds4_chat_begin(engine, &chat->transcript);
     chat->think_prefix_pos = chat->transcript.len;
-    repl_chat_apply_think_prefix(engine, chat, cli_effective_think_mode(&cfg->gen));
+    ds4_cli_chat_apply_think_prefix(engine, chat, cli_effective_think_mode(&cfg->gen));
     if (cfg->gen.system && cfg->gen.system[0]) {
         ds4_chat_append_message(engine, &chat->transcript, "system", cfg->gen.system);
     }
     ds4_prompt_prefix_append(engine, &chat->transcript, &cfg->gen.prefix);
-    if (repl_chat_create_session(engine, chat, cfg->gen.ctx_size) != 0) {
+    if (ds4_cli_chat_create_session(engine, chat, cfg->gen.ctx_size) != 0) {
         ds4_tokens_free(&chat->transcript);
         return 1;
     }
     if (cfg->gen.prefix.count == 0) return 0;
     if (cli_wait_distributed_route(cfg, chat->session) != 0) {
-        repl_chat_free(chat);
+        ds4_cli_chat_free(chat);
         return 1;
     }
 
@@ -1482,27 +1474,30 @@ static int repl_chat_init(ds4_engine *engine, repl_chat *chat, const cli_config 
     if (rc != 0) {
         fprintf(stderr, "ds4: prefix prefill failed: %s\n",
                 err[0] ? err : "unknown error");
-        repl_chat_free(chat);
+        ds4_cli_chat_free(chat);
         return 1;
     }
     return 0;
 }
 
-static void repl_chat_free(repl_chat *chat) {
+#ifndef DS4_NATIVE_CLI_CHAT
+void ds4_cli_chat_free(repl_chat *chat) {
     if (!chat) return;
     ds4_session_free(chat->session);
     ds4_tokens_free(&chat->transcript);
-    repl_chat_trim_images(chat, 0);
+    ds4_cli_chat_trim_images(chat, 0);
     free(chat->images);
     memset(chat, 0, sizeof(*chat));
 }
 
-static int repl_chat_set_ctx(ds4_engine *engine, repl_chat *chat, int ctx_size) {
+int ds4_cli_chat_set_ctx(ds4_engine *engine, repl_chat *chat, int ctx_size) {
     ds4_session_free(chat->session);
     chat->session = NULL;
     chat->ctx_size = 0;
-    return repl_chat_create_session(engine, chat, ctx_size);
+    return ds4_cli_chat_create_session(engine, chat, ctx_size);
 }
+
+#endif
 
 static bool repl_chat_assistant_turn_uses_eos(ds4_engine *engine) {
     return !ds4_engine_is_glm_dsa(engine);
@@ -1522,17 +1517,17 @@ static int run_chat_turn(ds4_engine *engine, cli_config *cfg, repl_chat *chat,
 
     ds4_think_mode think_mode = ds4_think_mode_for_context(cfg->gen.think_mode,
                                                            chat->ctx_size);
-    if (!repl_chat_apply_think_prefix(engine, chat, think_mode)) return 1;
+    if (!ds4_cli_chat_apply_think_prefix(engine, chat, think_mode)) return 1;
     const int rollback_len = chat->transcript.len;
     const size_t rollback_images = chat->image_count;
     if (image) {
-        ds4_vision_span *span = repl_chat_add_image(chat);
+        ds4_vision_span *span = ds4_cli_chat_add_image(chat);
         const char *text_parts[] = {"", user_text ? user_text : ""};
         char image_error[160] = {0};
         if (!span || !ds4_chat_append_multimodal_message(
                 engine, &chat->transcript, "user", text_parts,
                 image, 1, span, image_error, sizeof(image_error))) {
-            repl_chat_trim_images(chat, rollback_images);
+            ds4_cli_chat_trim_images(chat, rollback_images);
             chat->transcript.len = rollback_len;
             fprintf(stderr, "ds4: failed to add image: %s\n",
                     image_error[0] ? image_error : "out of memory");
@@ -1571,7 +1566,7 @@ static int run_chat_turn(ds4_engine *engine, cli_config *cfg, repl_chat *chat,
         ds4_session_set_progress(chat->session, NULL, NULL);
         ds4_session_set_display_progress(chat->session, NULL, NULL);
         chat->transcript.len = rollback_len;
-        repl_chat_trim_images(chat, rollback_images);
+        ds4_cli_chat_trim_images(chat, rollback_images);
         fprintf(stderr, "ds4: prompt processing failed: %s\n", err);
         return 1;
     }
@@ -1680,7 +1675,7 @@ static int run_chat_turn(ds4_engine *engine, cli_config *cfg, repl_chat *chat,
     const bool interrupted = cli_interrupt_requested();
     if (interrupted && generated == 0) {
         chat->transcript.len = rollback_len;
-        repl_chat_trim_images(chat, rollback_images);
+        ds4_cli_chat_trim_images(chat, rollback_images);
         ds4_session_invalidate(chat->session);
     } else if (repl_chat_assistant_turn_uses_eos(engine)) {
         ds4_tokens_push(&chat->transcript, ds4_token_eos(engine));
@@ -1754,21 +1749,21 @@ static int run_repl(ds4_engine *engine, cli_config *cfg) {
             if (arg[0] && (!ds4_engine_is_deepseek41(engine) ||
                            !ds4_think_mode_parse_level(arg, &mode))) {
                 fprintf(stderr, "ds4: /think N requires V4.1 and a level from 0 to 100\n");
-            } else if (repl_chat_apply_think_prefix(engine, &chat, mode)) {
+            } else if (ds4_cli_chat_apply_think_prefix(engine, &chat, mode)) {
                 cfg->gen.think_mode = mode;
                 printf("Thinking mode: %s.\n", ds4_think_mode_name(mode));
             }
         } else if (!strcmp(cmd, "/think-max")) {
             bool active = ds4_think_mode_for_context(DS4_THINK_MAX,
                                                      chat.ctx_size) == DS4_THINK_MAX;
-            if (repl_chat_apply_think_prefix(engine, &chat,
+            if (ds4_cli_chat_apply_think_prefix(engine, &chat,
                                               active ? DS4_THINK_MAX : DS4_THINK_HIGH)) {
                 cfg->gen.think_mode = DS4_THINK_MAX;
                 cli_warn_think_max_downgraded(&cfg->gen, "/think-max");
                 printf("Thinking mode: %s.\n", active ? "max" : "high (ctx below 393216)");
             }
         } else if (!strcmp(cmd, "/nothink")) {
-            if (repl_chat_apply_think_prefix(engine, &chat, DS4_THINK_NONE)) {
+            if (ds4_cli_chat_apply_think_prefix(engine, &chat, DS4_THINK_NONE)) {
                 cfg->gen.think_mode = DS4_THINK_NONE;
                 puts("Thinking mode: none.");
             }
@@ -1813,14 +1808,14 @@ static int run_repl(ds4_engine *engine, cli_config *cfg) {
                                    cfg->gen.ctx_size,
                                    ds4_engine_prefill_chunk(engine),
                                    cfg->engine.ssd_streaming);
-                rc = repl_chat_set_ctx(engine, &chat, cfg->gen.ctx_size);
+                rc = ds4_cli_chat_set_ctx(engine, &chat, cfg->gen.ctx_size);
                 if (rc != 0) {
                     linenoiseFree(line);
                     break;
                 }
                 ds4_think_mode effective = ds4_think_mode_for_context(cfg->gen.think_mode,
                                                                       chat.ctx_size);
-                repl_chat_apply_think_prefix(engine, &chat, effective);
+                ds4_cli_chat_apply_think_prefix(engine, &chat, effective);
                 cli_warn_think_max_downgraded(&cfg->gen, "/ctx");
             }
         } else if (!strcmp(cmd, "/quit") || !strcmp(cmd, "/exit")) {
@@ -1860,7 +1855,7 @@ static int run_repl(ds4_engine *engine, cli_config *cfg) {
         linenoiseFree(line);
     }
     if (sigint_installed) sigaction(SIGINT, &old_int, NULL);
-    repl_chat_free(&chat);
+    ds4_cli_chat_free(&chat);
     return rc;
 }
 

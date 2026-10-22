@@ -1,0 +1,9 @@
+# Item86 — Strict vision-sidecar binding
+
+The pure150-line VisionWeights owner validates V4/V4.1 sidecar metadata and its complete required tensor directory, then binds borrowed tensors into the existing actual VisionWeights record. Core composes it directly; the existing input facade provides the sole C entry. The final temporary Core vision binder adapter is removed. The original C validator remains the inverse fallback. No shader, layout, format or numerical change.
+
+Integration18:50–18:56UTC starts at10feced0. Its qualified native binaries with the C vision binder are the fixed control. Native ReleaseFast and Debug compile; sparse GGUF and Session-state fixtures pass. On the actual1017 BF16 sidecar, all three encoder arms repeat internally and produce exactly the same921600 finite F32 values (15×12 grid,5120-wide embeddings; SHA25635f1d31866e16697ee6894af87efb2a1f3fad62a93063996d2b500e805ae6b92). This compares every byte, not a sampled summary. Large embedding files stay in the ignored workspace. The native CLI then reads the real red image and answers both the image question and contextual follow-up RED.
+
+The cumulative draft's header patch missed current context; the one missing include was applied directly, with the rejected patch retained. Native compiles first attempt. Pressure guards finish normally and active source hashes stay unchanged. These ordered functional runs do not establish latency differences. The legacy4096-wide sidecar is implemented but not available for runtime qualification.
+
+Reuse the existing `zig-engine-vision-20261022/qualify.py` with control/native/Debug graph binaries and its `cli.py` with the native CLI, under pressure_run.py. Exact commands, binary hashes and complete comparisons are in encoder/results.json and cli/run.json. CLI history writes were denied with sandbox-exec.

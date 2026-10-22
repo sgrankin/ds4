@@ -1,0 +1,9 @@
+# Item92 — Agent saved-file transactions
+
+Native Checkpoint owns admission/read/identity and canonical-payload load, held FILE across stripped rebuild sync, metadata publication, staging/write/flush/close/rename and cleanup. Actual Engine/Session remain opaque; original C reference transactions remain. Worker sync/progress/identity/status orchestration stays the later owner. Disk formats and approximate/text-only policy are unchanged.
+
+Integration19:11–19:17UTC starts atfa1a45f1. C control, native ReleaseFast/Debug and full C fallback pass production terminal/Agent fixtures, with17 stable artifacts equal. The initial native build caught an existing embedded test calling an excluded C private predicate. That same production payload/TP predicate is now a tiny pure function exported to the existing test; all three assertions remain and exercise native policy. Failed build retained. No runtime correction.
+
+The existing full-context model mode now uses32GB SSD streaming/chunk512 (avoiding its former full-residency default) and .workspaces paths. Original256/257-token text-only save/larger-context rebuild invariants all pass C/native/Debug. A SAME-mode extension additionally syncs10 tokens, saves a1400412-byte nonzero KV payload, loads it via actual switch/history, strips that same saved file, checks zero payload and rebuilds via actual switch again. Full transcript equality, stable title/identity, next-token ID70935 and history MAPLE hold throughout. All three stdout records match exactly. No fake Session or copied implementation.
+
+All final guards remain normal, with unchanged swap and active source. Ordered whole runs are33.079/36.728/37.349s (C/native/Debug), a functional screen rather than a latency estimate. Raw commands/settings/build hashes and all stdout/stderr accompany the report; no model/cache blobs are checked in. Reuse `ds4_agent_test --full-context-save MODEL` through clean_exec.py under pressure_run.py.

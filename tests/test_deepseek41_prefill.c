@@ -135,7 +135,7 @@ static void progress_note(void *ud, const char *event, int current, int total) {
     p->callbacks++;
     if (!strcmp(event, "prefill_display")) {
         if (!p->displays++) p->first_display = now_sec() - p->begin;
-        assert(!s->ds41_graph.valid);
+        assert(!s->ds41.graph.valid);
         if (!p->partial_checked) {
             ds4_session_snapshot snap = {0};
             char err[256];
@@ -147,20 +147,20 @@ static void progress_note(void *ud, const char *event, int current, int total) {
         assert(!strcmp(event, "prefill_chunk"));
         if (current != p->frontier) {
             const int count = current - p->frontier;
-            ds41_gpu_graph before = s->ds41_graph;
+            ds41_gpu_graph before = s->ds41.graph;
             before.pos = (uint32_t)p->frontier;
-            const uint32_t small = ds41_short_prefill_count(&before, &s->engine->weights,
+            const uint32_t small = ds41_short_prefill_count(&before, &s->engine->core.weights,
                 (uint32_t)(total - p->frontier));
             assert((uint32_t)count == (small ? small : ds41_prefill_count(&before,
                 (uint32_t)(total - p->frontier))));
             if (count == 1) p->scalar++;
             else if (small) p->short_batches++;
             else p->batches++;
-            if (!s->ds41_graph.valid) p->deferred++;
+            if (!s->ds41.graph.valid) p->deferred++;
             p->frontier = current;
         }
-        if (s->checkpoint_valid) {
-            assert(current == total && s->ds41_graph.valid);
+        if (s->frontier.checkpoint_valid) {
+            assert(current == total && s->ds41.graph.valid);
             p->final_checked = true;
         }
     }
@@ -171,14 +171,14 @@ static bool cancel_after_display(void *ud) {
 }
 
 static bool state_equal(ds4_session *a, ds4_session *b) {
-    if (!a->checkpoint_valid || !b->checkpoint_valid ||
-        !a->ds41_graph.valid || !b->ds41_graph.valid ||
+    if (!a->frontier.checkpoint_valid || !b->frontier.checkpoint_valid ||
+        !a->ds41.graph.valid || !b->ds41.graph.valid ||
         ds4_session_pos(a) != ds4_session_pos(b) ||
-        memcmp(&a->ds41_graph.history, &b->ds41_graph.history,
-            sizeof(a->ds41_graph.history))) return false;
+        memcmp(&a->ds41.graph.history, &b->ds41.graph.history,
+            sizeof(a->ds41.graph.history))) return false;
     ds41_state_span sa[64], sb[64];
-    uint32_t n = ds41_state_spans(&a->ds41_graph, a->ds41_graph.pos, sa);
-    if (n != ds41_state_spans(&b->ds41_graph, b->ds41_graph.pos, sb)) return false;
+    uint32_t n = ds41_state_spans(&a->ds41.graph, a->ds41.graph.pos, sa);
+    if (n != ds41_state_spans(&b->ds41.graph, b->ds41.graph.pos, sb)) return false;
     for (uint32_t i = 0; i < n; i++) {
         const size_t bytes = (size_t)sa[i].bytes;
         void *left = malloc(bytes), *right = malloc(bytes);
@@ -207,9 +207,9 @@ static bool state_equal(ds4_session *a, ds4_session *b) {
         free(left); free(right);
     }
     for (uint32_t i = 0; i < DS4_N_VOCAB; i++) {
-        if (!isfinite(a->logits[i]) || a->logits[i] != b->logits[i]) {
+        if (!isfinite(a->frontier.logits[i]) || a->frontier.logits[i] != b->frontier.logits[i]) {
             fprintf(stderr, "frontier=%d logit=%u control=%.9g mixed=%.9g\n",
-                ds4_session_pos(a), i, a->logits[i], b->logits[i]);
+                ds4_session_pos(a), i, a->frontier.logits[i], b->frontier.logits[i]);
             return false;
         }
     }
@@ -354,11 +354,11 @@ static int check_mixed(const char *model, const char *prompt_path,
             ds4_session_set_progress(mixed, progress_note, &cancelled);
             ds4_session_set_cancel(mixed, cancel_after_display, &cancelled);
             CHECK(ds4_session_sync(mixed, &tokens, err, sizeof(err)) == DS4_SESSION_SYNC_INTERRUPTED);
-            CHECK(cancelled.partial_checked && !mixed->checkpoint_valid);
+            CHECK(cancelled.partial_checked && !mixed->frontier.checkpoint_valid);
             /* TP invalidates both ranks and resets to an empty valid graph;
              * the local path leaves its unfinished graph explicitly invalid. */
-            CHECK(tp ? (mixed->ds41_graph.valid && mixed->ds41_graph.pos == 0 &&
-                         mixed->checkpoint.len == 0) : !mixed->ds41_graph.valid);
+            CHECK(tp ? (mixed->ds41.graph.valid && mixed->ds41.graph.pos == 0 &&
+                         mixed->frontier.checkpoint.len == 0) : !mixed->ds41.graph.valid);
             ds4_session_set_cancel(mixed, NULL, NULL);
             ds4_session_set_progress(mixed, NULL, NULL);
             if (tp) {

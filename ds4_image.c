@@ -12,6 +12,7 @@
 #include "third_party/iris/jpeg.h"
 #include "third_party/iris/png.h"
 
+#ifndef DS4_NATIVE_IMAGE_DECODE
 typedef struct {
     uint32_t state[8];
     uint64_t bytes;
@@ -125,12 +126,16 @@ static void ds4_sha256_final(ds4_sha256 *sha, uint8_t out[32]) {
         out[i * 4 + 3] = (uint8_t)sha->state[i];
     }
 }
+#endif
 
+#if !defined(DS4_NATIVE_IMAGE_DECODE) || !defined(DS4_NATIVE_IMAGE_PREPROCESS)
 static void ds4_image_error(char *error, size_t cap, const char *message) {
     if (!error || cap == 0) return;
     snprintf(error, cap, "%s", message);
 }
+#endif
 
+#ifndef DS4_NATIVE_IMAGE_DECODE
 static uint16_t ds4_exif_u16(const uint8_t *p, int little) {
     return little ? (uint16_t)(p[0] | (p[1] << 8))
                   : (uint16_t)((p[0] << 8) | p[1]);
@@ -328,7 +333,9 @@ void ds4_image_free(ds4_image *image) {
     free(image->rgb);
     memset(image, 0, sizeof(*image));
 }
+#endif
 
+#ifndef DS4_NATIVE_IMAGE_PREPROCESS
 static uint32_t ds4_align_u32(uint32_t value, uint32_t factor) {
     return (value + factor - 1) / factor * factor;
 }
@@ -1157,3 +1164,4 @@ int ds4_deepseek4_attention_bounds(
     }
     return 1;
 }
+#endif

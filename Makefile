@@ -103,11 +103,11 @@ ds4-server: ds4_server.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gp
 ds4-bench: ds4_bench.o ds4_help.o ds4_gpu_args.o $(CORE_OBJS)
 	$(CC) $(CFLAGS) -o $@ ds4_bench.o ds4_help.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
 
-ds4-eval: ds4_eval.o ds4_eval_cases.o ds4_help.o $(CORE_OBJS)
-	$(CC) $(CFLAGS) -o $@ ds4_eval.o ds4_eval_cases.o ds4_help.o $(CORE_OBJS) $(METAL_LDLIBS)
+ds4-eval: ds4_eval.o ds4_eval_cases.o ds4_eval_data.o ds4_help.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ ds4_eval.o ds4_eval_cases.o ds4_eval_data.o ds4_help.o $(CORE_OBJS) $(METAL_LDLIBS)
 
-ds4-agent: ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
-	$(CC) $(CFLAGS) -o $@ ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
+ds4-agent: ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+	$(CC) $(CFLAGS) -o $@ ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS) $(METAL_LDLIBS)
 
 speed-bench/overthink_pilot: speed-bench/overthink_pilot.c ds4.h $(CORE_OBJS)
 	$(CC) $(CFLAGS) -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
@@ -202,19 +202,19 @@ speed-bench/state_cache_bench: speed-bench/state_cache_bench.o ds4_state_cache.o
 tests/test_agent_compact_prefix.o: tests/test_agent_compact_prefix.c ds4_agent.c ds4.h ds4_kvstore.h
 	$(CC) $(CFLAGS) -Wno-unused-function -I. -c -o $@ $<
 
-tests/test_agent_compact_prefix: tests/test_agent_compact_prefix.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+tests/test_agent_compact_prefix: tests/test_agent_compact_prefix.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
 
 tests/test_agent_live_context.o: tests/test_agent_live_context.c ds4_agent.c ds4.h ds4_kvstore.h
 	$(CC) $(CFLAGS) -Wno-unused-function -I. -c -o $@ $<
 
-tests/test_agent_live_context: tests/test_agent_live_context.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+tests/test_agent_live_context: tests/test_agent_live_context.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
 
 tests/test_agent_context_frontiers.o: tests/test_agent_context_frontiers.c ds4_agent.c ds4.h ds4_kvstore.h
 	$(CC) $(CFLAGS) -Wno-unused-function -I. -c -o $@ $<
 
-tests/test_agent_context_frontiers: tests/test_agent_context_frontiers.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+tests/test_agent_context_frontiers: tests/test_agent_context_frontiers.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(METAL_LDLIBS)
 
 tests/test_mxfp4_metal.o: tests/test_mxfp4_metal.c ds4_gpu.h
@@ -302,13 +302,13 @@ tests/test_deepseek41_metal: tests/test_deepseek41_metal.o $(CORE_OBJS)
 test-deepseek41-metal: tests/test_deepseek41_metal
 	./tests/test_deepseek41_metal
 
-tests/test_deepseek41_graph.o: tests/test_deepseek41_graph.c ds4.c ds4_gpu.h ds4_engram.h
+tests/test_deepseek41_graph.o: tests/test_deepseek41_graph.c ds4.c ds4_gpu.h ds4_engram.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -Wno-unused-function -I. -c -o $@ $<
 
 tests/test_deepseek41_graph: tests/test_deepseek41_graph.o $(filter-out ds4.o,$(CORE_OBJS))
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -o $@ $^ $(METAL_LDLIBS)
 
-tests/test_deepseek41_dspark.o: tests/test_deepseek41_dspark.c ds4.c ds4_deepseek41_dspark.h ds4_gpu.h
+tests/test_deepseek41_dspark.o: tests/test_deepseek41_dspark.c ds4.c ds4_deepseek41_dspark.h ds4_gpu.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_dspark_state.h
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -Wno-unused-function -I. -c -o $@ $<
 
 tests/test_deepseek41_dspark: tests/test_deepseek41_dspark.o $(filter-out ds4.o,$(CORE_OBJS))
@@ -323,7 +323,7 @@ tests/test_deepseek41_prefill: tests/test_deepseek41_prefill.o $(filter-out ds4.
 tests/test_metal_tp_bulk: tests/test_metal_tp_bulk.c ds4_gpu.h ds4_tp.h $(CORE_OBJS)
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
 
-tests/test_deepseek41_cli.o: tests/test_deepseek41_cli.c ds4_cli.c ds4.h
+tests/test_deepseek41_cli.o: tests/test_deepseek41_cli.c ds4_cli.c ds4.h ds4_cli_chat.h
 	$(CC) $(CFLAGS) -Wno-unused-function -I. -c -o $@ $<
 
 tests/test_deepseek41_cli: tests/test_deepseek41_cli.o ds4_help.o ds4_prompt_prefix.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
@@ -338,12 +338,12 @@ tests/test_metal_dense_mpp: tests/test_metal_dense_mpp.o $(CORE_OBJS)
 test-metal-dense-mpp: tests/test_metal_dense_mpp
 	./tests/test_metal_dense_mpp
 
-cpu: ds4_cli_cpu.o ds4_server_cpu.o ds4_bench_cpu.o ds4_eval_cpu.o ds4_eval_cases.o ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS)
+cpu: ds4_cli_cpu.o ds4_server_cpu.o ds4_bench_cpu.o ds4_eval_cpu.o ds4_eval_cases.o ds4_eval_data.o ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS)
 	$(CC) $(CFLAGS) -o ds4 ds4_cli_cpu.o ds4_help.o ds4_prompt_prefix.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 	$(CC) $(CFLAGS) -o ds4-server ds4_server_cpu.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 	$(CC) $(CFLAGS) -o ds4-bench ds4_bench_cpu.o ds4_help.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
-	$(CC) $(CFLAGS) -o ds4-eval ds4_eval_cpu.o ds4_eval_cases.o ds4_help.o $(CPU_CORE_OBJS) $(LDLIBS)
-	$(CC) $(CFLAGS) -o ds4-agent ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o ds4-eval ds4_eval_cpu.o ds4_eval_cases.o ds4_eval_data.o ds4_help.o $(CPU_CORE_OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o ds4-agent ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 
 cuda-regression:
 	@echo "cuda-regression requires a CUDA build"
@@ -419,10 +419,10 @@ ds4-server: ds4_server.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gp
 ds4-bench: ds4_bench.o ds4_help.o ds4_gpu_args.o $(CORE_OBJS)
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 
-ds4-eval: ds4_eval.o ds4_eval_cases.o ds4_help.o $(CORE_OBJS)
+ds4-eval: ds4_eval.o ds4_eval_cases.o ds4_eval_data.o ds4_help.o $(CORE_OBJS)
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 
-ds4-agent: ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
+ds4-agent: ds4_agent.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args.o $(CORE_OBJS)
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 
 gguf-tools/quality-testing/score_official.o: gguf-tools/quality-testing/score_official.c ds4.h
@@ -719,7 +719,7 @@ tests/test_deepseek41_prefill.o: tests/test_deepseek41_prefill.c ds4.c ds4_gpu.h
 tests/test_deepseek41_prefill: tests/test_deepseek41_prefill.o $(filter-out ds4.o,$(CORE_OBJS))
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 
-tests/test_deepseek41_dspark.o: tests/test_deepseek41_dspark.c ds4.c ds4_deepseek41_dspark.h ds4_gpu.h
+tests/test_deepseek41_dspark.o: tests/test_deepseek41_dspark.c ds4.c ds4_deepseek41_dspark.h ds4_gpu.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_dspark_state.h
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -Wno-unused-function -I. -c -o $@ $<
 
 tests/test_deepseek41_dspark: tests/test_deepseek41_dspark.o $(filter-out ds4.o,$(CORE_OBJS))
@@ -748,12 +748,12 @@ tests/test_cuda_dspark_moe: tests/test_cuda_dspark_moe.o $(CORE_OBJS)
 test-cuda-dspark-moe: tests/test_cuda_dspark_moe
 	./tests/test_cuda_dspark_moe
 
-cpu: ds4_cli_cpu.o ds4_server_cpu.o ds4_bench_cpu.o ds4_eval_cpu.o ds4_eval_cases.o ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS)
+cpu: ds4_cli_cpu.o ds4_server_cpu.o ds4_bench_cpu.o ds4_eval_cpu.o ds4_eval_cases.o ds4_eval_data.o ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS)
 	$(CC) $(CFLAGS) -o ds4 ds4_cli_cpu.o ds4_help.o ds4_prompt_prefix.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 	$(CC) $(CFLAGS) -o ds4-server ds4_server_cpu.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 	$(CC) $(CFLAGS) -o ds4-bench ds4_bench_cpu.o ds4_help.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
-	$(CC) $(CFLAGS) -o ds4-eval ds4_eval_cpu.o ds4_eval_cases.o ds4_help.o $(CPU_CORE_OBJS) $(LDLIBS)
-	$(CC) $(CFLAGS) -o ds4-agent ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o ds4-eval ds4_eval_cpu.o ds4_eval_cases.o ds4_eval_data.o ds4_help.o $(CPU_CORE_OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o ds4-agent ds4_agent_cpu.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o ds4_gpu_args_cpu.o $(CPU_CORE_OBJS) $(LDLIBS)
 
 cuda-regression: tests/cuda_long_context_smoke
 	./tests/cuda_long_context_smoke
@@ -808,7 +808,7 @@ test-qwen4-cuda: tests/test_qwen4_cuda
 	./tests/test_qwen4_cuda
 endif
 
-ds4.o: ds4.c ds4.h ds4_ssd.h ds4_distributed.h ds4_gpu.h ds4_gpu_copy.h ds4_gpu_tp.h ds4_deepseek41_gpu.h ds4_deepseek41_dspark.h ds4_linux_memory.h ds4_engram.h ds4_resident_route.h ds4_resident_native_weights.h ds4_suffix_layout.h
+ds4.o: ds4.c ds4.h ds4_session_control.h ds4_session_batch.h ds4_engine_vision.h ds4_session_frontier.h ds4_session_sampling.h ds4_engine_memory.h ds4_engine_core.h ds4_model_residency.h ds4_session_resources.h ds4_engine_tp_state.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_ssd.h ds4_distributed.h ds4_gpu.h ds4_gpu_copy.h ds4_gpu_tp.h ds4_deepseek41_gpu.h ds4_deepseek41_dspark.h ds4_linux_memory.h ds4_engram.h ds4_resident_route.h ds4_resident_native_weights.h ds4_suffix_layout.h
 	$(CC) $(CFLAGS) -c -o $@ ds4.c
 
 ds4_image.o: ds4_image.c ds4_image.h third_party/iris/jpeg.h third_party/iris/png.h
@@ -820,7 +820,7 @@ ds4_ssd.o: ds4_ssd.c ds4_ssd.h
 ds4_engram.o: ds4_engram.c ds4_engram.h
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -c -o $@ ds4_engram.c
 
-ds4_cli.o: ds4_cli.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_prompt_prefix.h linenoise.h
+ds4_cli.o: ds4_cli.c ds4.h ds4_cli_chat.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_prompt_prefix.h linenoise.h
 	$(CC) $(CFLAGS) -c -o $@ ds4_cli.c
 
 ds4_distributed.o: ds4_distributed.c ds4_distributed.h ds4.h ds4_ssd.h
@@ -838,13 +838,13 @@ ds4_prompt_prefix.o: ds4_prompt_prefix.c ds4_prompt_prefix.h ds4.h
 ds4_gpu_args.o: ds4_gpu_args.c ds4_gpu_args.h ds4_gpu_mgpu.h
 	$(CC) $(CFLAGS) -c -o $@ ds4_gpu_args.c
 
-ds4_server.o: ds4_server.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_kvstore.h rax.h
+ds4_server.o: ds4_server.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_kvstore.h rax.h ds4_server_http.h ds4_server_materialize.h ds4_server_decode.h ds4_server_reuse.h ds4_server_persist.h ds4_server_generation.h ds4_server_serving.h ds4_server_boot.h ds4_server_images.h ds4_server_input.h ds4_server_runtime.h ds4_server_tool_memory.h ds4_server_output.h
 	$(CC) $(CFLAGS) -c -o $@ ds4_server.c
 
 ds4_bench.o: ds4_bench.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h
 	$(CC) $(CFLAGS) -c -o $@ ds4_bench.c
 
-ds4_eval.o: ds4_eval.c ds4_eval_cases.h ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h
+ds4_eval.o: ds4_eval.c ds4_eval_cases.h ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_eval_frontend.h ds4_eval_selftests.inc
 	$(CC) $(CFLAGS) -c -o $@ ds4_eval.c
 
 ds4_eval_cases.o: ds4_eval_cases.c ds4_eval_cases.h
@@ -853,7 +853,7 @@ ds4_eval_cases.o: ds4_eval_cases.c ds4_eval_cases.h
 ds4_agent.o: ds4_agent.c ds4.h ds4_ssd.h ds4_distributed.h ds4_tp.h ds4_help.h ds4_prompt_prefix.h ds4_kvstore.h ds4_web.h linenoise.h
 	$(CC) $(CFLAGS) -c -o $@ ds4_agent.c
 
-ds4_web.o: ds4_web.c ds4_web.h
+ds4_web.o: ds4_web.c ds4_web.h ds4_web_internal.h
 	$(CC) $(CFLAGS) -c -o $@ ds4_web.c
 
 ds4_kvstore.o: ds4_kvstore.c ds4_kvstore.h ds4.h ds4_ssd.h
@@ -862,7 +862,7 @@ ds4_kvstore.o: ds4_kvstore.c ds4_kvstore.h ds4.h ds4_ssd.h
 ds4_state_cache.o: ds4_state_cache.c ds4_state_cache.h ds4_kvstore.h ds4.h ds4_ssd.h
 	$(CC) $(CFLAGS) -c -o $@ ds4_state_cache.c
 
-ds4_test.o: tests/ds4_test.c ds4_server.c ds4.h ds4_image.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_kvstore.h rax.h
+ds4_test.o: tests/ds4_test.c ds4_server.c ds4.h ds4_image.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_kvstore.h rax.h ds4_server_http.h ds4_server_materialize.h ds4_server_decode.h ds4_server_reuse.h ds4_server_persist.h ds4_server_generation.h ds4_server_serving.h ds4_server_boot.h ds4_server_images.h ds4_server_input.h ds4_server_runtime.h ds4_server_tool_memory.h ds4_server_output.h
 	$(CC) $(CFLAGS) -Wno-unused-function -c -o $@ tests/ds4_test.c
 
 ds4_agent_test.o: tests/ds4_agent_test.c ds4_agent.c ds4.h ds4_ssd.h ds4_distributed.h ds4_tp.h ds4_help.h ds4_prompt_prefix.h ds4_kvstore.h ds4_web.h linenoise.h
@@ -877,7 +877,7 @@ rax.o: rax.c rax.h rax_malloc.h
 linenoise.o: linenoise.c linenoise.h
 	$(CC) $(CFLAGS) -c -o $@ linenoise.c
 
-ds4_cpu.o: ds4.c ds4.h ds4_ssd.h ds4_distributed.h ds4_gpu.h ds4_gpu_tp.h ds4_resident_route.h
+ds4_cpu.o: ds4.c ds4.h ds4_session_frontier.h ds4_session_sampling.h ds4_engine_memory.h ds4_engine_core.h ds4_model_residency.h ds4_session_resources.h ds4_engine_tp_state.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_ssd.h ds4_distributed.h ds4_gpu.h ds4_gpu_tp.h ds4_resident_route.h
 	$(CC) $(CFLAGS) -Wno-unused-function -DDS4_NO_GPU -c -o $@ ds4.c
 
 ds4_cli_cpu.o: ds4_cli.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_prompt_prefix.h linenoise.h
@@ -886,19 +886,19 @@ ds4_cli_cpu.o: ds4_cli.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_prompt
 ds4_gpu_args_cpu.o: ds4_gpu_args.c ds4_gpu_args.h ds4_gpu_mgpu.h
 	$(CC) $(CFLAGS) -DDS4_NO_GPU -c -o $@ ds4_gpu_args.c
 
-ds4_server_cpu.o: ds4_server.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_kvstore.h rax.h
+ds4_server_cpu.o: ds4_server.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_kvstore.h rax.h ds4_server_http.h ds4_server_materialize.h ds4_server_decode.h ds4_server_reuse.h ds4_server_persist.h ds4_server_generation.h ds4_server_serving.h ds4_server_boot.h ds4_server_images.h ds4_server_input.h ds4_server_runtime.h ds4_server_tool_memory.h ds4_server_output.h
 	$(CC) $(CFLAGS) -DDS4_NO_GPU -c -o $@ ds4_server.c
 
 ds4_bench_cpu.o: ds4_bench.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h
 	$(CC) $(CFLAGS) -DDS4_NO_GPU -c -o $@ ds4_bench.c
 
-ds4_eval_cpu.o: ds4_eval.c ds4_eval_cases.h ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h
+ds4_eval_cpu.o: ds4_eval.c ds4_eval_cases.h ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_eval_frontend.h ds4_eval_selftests.inc
 	$(CC) $(CFLAGS) -DDS4_NO_GPU -c -o $@ ds4_eval.c
 
 ds4_agent_cpu.o: ds4_agent.c ds4.h ds4_ssd.h ds4_distributed.h ds4_help.h ds4_prompt_prefix.h ds4_kvstore.h ds4_web.h linenoise.h
 	$(CC) $(CFLAGS) -DDS4_NO_GPU -c -o $@ ds4_agent.c
 
-ds4_metal.o: ds4_metal.m ds4.h ds4_gpu.h ds4_gpu_tp.h ds4_deepseek41_gpu.h ds4_image.h $(METAL_SRCS)
+ds4_metal.o: ds4_metal.m $(wildcard zig/metal/*.h zig/metal/*.inc.m) ds4.h ds4_gpu.h ds4_gpu_tp.h ds4_deepseek41_gpu.h ds4_image.h $(METAL_SRCS) zig/metal/bridge.h zig/metal/bridge.inc.m zig/metal/model_views.h zig/metal/model_views.inc.m zig/metal/exact_cache.h zig/metal/exact_cache.inc.m
 	$(CC) $(OBJCFLAGS) -c -o $@ ds4_metal.m
 
 tests/test_glm53_kda.o: tests/test_glm53_kda.c ds4_gpu.h
@@ -1058,7 +1058,7 @@ tests/test_engram: tests/test_engram.c ds4_engram.c ds4_engram.h
 test-engram: tests/test_engram
 	./tests/test_engram
 
-tests/test_deepseek41_gguf.o: tests/test_deepseek41_gguf.c ds4.c ds4.h ds4_engram.h
+tests/test_deepseek41_gguf.o: tests/test_deepseek41_gguf.c ds4.c ds4.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_engram.h
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -Wno-unused-function -DDS4_NO_GPU -I. -c -o $@ $<
 
 tests/test_deepseek41_gguf: tests/test_deepseek41_gguf.o ds4_engram.c $(filter-out ds4_cpu.o,$(CPU_CORE_OBJS))
@@ -1068,7 +1068,7 @@ tests/test_deepseek41_gguf: tests/test_deepseek41_gguf.o ds4_engram.c $(filter-o
 test-deepseek41-gguf: tests/test_deepseek41_gguf
 	./tests/test_deepseek41_gguf
 
-tests/test_qwen4_ngrams.o: tests/test_qwen4_ngrams.c ds4.c ds4.h
+tests/test_qwen4_ngrams.o: tests/test_qwen4_ngrams.c ds4.c ds4.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -Wno-unused-function -I. -c -o $@ $<
 
 tests/test_qwen4_ngrams: tests/test_qwen4_ngrams.o $(filter-out ds4_cpu.o,$(CPU_CORE_OBJS))
@@ -1078,7 +1078,7 @@ tests/test_qwen4_ngrams: tests/test_qwen4_ngrams.o $(filter-out ds4_cpu.o,$(CPU_
 test-qwen4-ngrams: tests/test_qwen4_ngrams
 	./tests/test_qwen4_ngrams
 
-tests/test_qwen4_ngram_state.o: tests/test_qwen4_ngram_state.c ds4.c ds4.h
+tests/test_qwen4_ngram_state.o: tests/test_qwen4_ngram_state.c ds4.c ds4.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -Wno-unused-function -I. -c -o $@ $<
 
 tests/test_qwen4_ngram_state: tests/test_qwen4_ngram_state.o $(filter-out ds4.o,$(CORE_OBJS))
@@ -1184,7 +1184,7 @@ tests/test_gpu_args.o: tests/test_gpu_args.c ds4_gpu_args.h ds4_gpu_mgpu.h
 tests/test_gpu_args: tests/test_gpu_args.o ds4_gpu_args_cpu.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-ds4_cpu_test_hooks.o: ds4.c ds4.h ds4_image.h ds4_gpu.h ds4_gpu_mgpu.h ds4_layer_pack.h
+ds4_cpu_test_hooks.o: ds4.c ds4.h ds4_session_frontier.h ds4_session_sampling.h ds4_engine_memory.h ds4_engine_core.h ds4_model_residency.h ds4_session_resources.h ds4_engine_tp_state.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_image.h ds4_gpu.h ds4_gpu_mgpu.h ds4_layer_pack.h
 	$(CC) $(CFLAGS) -Wno-unused-function -DDS4_NO_GPU -DDS4_TEST_HOOKS -c -o $@ ds4.c
 
 tests/test_engine_mgpu_placement.o: tests/test_engine_mgpu_placement.c ds4.h ds4_gpu_mgpu.h ds4_layer_pack.h
@@ -1199,13 +1199,13 @@ tests/test_sampling.o: tests/test_sampling.c ds4.h
 tests/test_sampling: tests/test_sampling.o ds4_cpu_test_hooks.o ds4_image.o ds4_distributed.o ds4_tp.o ds4_ssd.o ds4_layer_pack.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-tests/test_session_state.o: tests/test_session_state.c ds4.c ds4.h ds4_gpu.h ds4_image.h ds4_tp.h
+tests/test_session_state.o: tests/test_session_state.c ds4.c ds4.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_gpu.h ds4_image.h ds4_tp.h
 	$(CC) $(CFLAGS) -Wno-unused-function -DDS4_NO_GPU -I. -c -o $@ $<
 
 tests/test_session_state: tests/test_session_state.o $(filter-out ds4_cpu.o,$(CPU_CORE_OBJS))
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-tests/test_session_state_gpu.o: tests/test_session_state.c ds4.c ds4.h ds4_gpu.h ds4_image.h ds4_tp.h
+tests/test_session_state_gpu.o: tests/test_session_state.c ds4.c ds4.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_gpu.h ds4_image.h ds4_tp.h
 	$(CC) $(CFLAGS) -Wno-unused-function -I. -c -o $@ $<
 
 tests/test_session_state_gpu: tests/test_session_state_gpu.o $(filter-out ds4.o,$(CORE_OBJS))
@@ -1215,7 +1215,7 @@ else
 	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
 endif
 
-tests/test_deepseek_indexer.o: tests/test_deepseek_indexer.c ds4.c ds4.h ds4_gpu.h ds4_tp.h
+tests/test_deepseek_indexer.o: tests/test_deepseek_indexer.c ds4.c ds4.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_gpu.h ds4_tp.h
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -Wno-unused-function -I. -c -o $@ $<
 
 tests/test_deepseek_indexer: tests/test_deepseek_indexer.o $(filter-out ds4.o,$(CORE_OBJS))
@@ -1275,7 +1275,7 @@ tests/test_gpu_lookup_cache_strict.o: tests/test_gpu_lookup_cache_strict.c ds4_g
 tests/test_gpu_lookup_cache_strict: tests/test_gpu_lookup_cache_strict.o ds4_cuda.o ds4_image.o $(MMQ_OBJS)
 	$(NVCC) $(NVCCFLAGS) -o $@ $^ $(CUDA_LDLIBS)
 
-ds4_cuda_test_hooks.o: ds4.c ds4.h ds4_gpu.h ds4_gpu_mgpu.h ds4_gpu_tp.h ds4_layer_pack.h
+ds4_cuda_test_hooks.o: ds4.c ds4.h ds4_session_frontier.h ds4_session_sampling.h ds4_engine_memory.h ds4_engine_core.h ds4_model_residency.h ds4_session_resources.h ds4_engine_tp_state.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_gpu.h ds4_gpu_mgpu.h ds4_gpu_tp.h ds4_layer_pack.h
 	$(CC) $(CFLAGS) -Wno-unused-function -DDS4_TEST_HOOKS -I$(CUDA_HOME)/include -c -o $@ ds4.c
 
 tests/test_engine_mgpu_refusal.o: tests/test_engine_mgpu_refusal.c ds4.h ds4_gpu_mgpu.h
@@ -1322,11 +1322,11 @@ else
 	$(DS4_LINK) -o $@ ds4_test.o ds4_help.o ds4_kvstore.o ds4_state_cache.o rax.o $(CORE_OBJS) $(DS4_LINK_LIBS)
 endif
 
-ds4_agent_test: ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS)
+ds4_agent_test: ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS)
 ifeq ($(UNAME_S),Darwin)
-	$(CC) $(CFLAGS) -o $@ ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS) $(METAL_LDLIBS)
+	$(CC) $(CFLAGS) -o $@ ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS) $(METAL_LDLIBS)
 else
-	$(DS4_LINK) -o $@ ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS) $(DS4_LINK_LIBS)
+	$(DS4_LINK) -o $@ ds4_agent_test.o ds4_help.o ds4_prompt_prefix.o ds4_web.o ds4_web_data.o ds4_kvstore.o ds4_state_cache.o linenoise.o $(CORE_OBJS) $(DS4_LINK_LIBS)
 endif
 
 tests/test_prompt_prefix.o: tests/test_prompt_prefix.c ds4_prompt_prefix.h
@@ -1344,8 +1344,8 @@ test-frontends: ds4_test ds4_agent_test test-web-recovery
 test-web-recovery: tests/test_web_recovery
 	python3 tests/test_web_recovery.py ./tests/test_web_recovery
 
-tests/test_web_recovery: tests/test_web_recovery.c ds4_web.c ds4_web.h
-	$(CC) $(CFLAGS) -Wno-unused-function -o $@ tests/test_web_recovery.c
+tests/test_web_recovery: tests/test_web_recovery.c ds4_web.c ds4_web.h ds4_web_internal.h ds4_web_data.o
+	$(CC) $(CFLAGS) -Wno-unused-function -o $@ tests/test_web_recovery.c ds4_web_data.o
 
 test: ds4_test ds4_agent_test ds4-eval q4k-dot-test mxfp4-dot-test test-session-state test-linux-memory test-engram test-web-recovery \
 	tests/test_layer_pack tests/test_engine_mgpu_placement tests/test_gpu_args \
@@ -1417,10 +1417,11 @@ ds4_test.o ds4_agent_test.o tests/test_agent_compact_prefix.o \
 tests/test_agent_live_context.o tests/test_agent_context_frontiers.o: \
 ds4_state_cache.h ds4_state_cache_runtime.h ds4_tp.h
 
-ds4_server.o ds4_server_cpu.o ds4_test.o: ds4_suffix_match.h ds4_suffix_layout.h ds4_response_store.h ds4_conversations.h
+ds4_server.o ds4_server_cpu.o ds4_test.o: ds4_suffix_match.h ds4_suffix_layout.h ds4_response_store.h ds4_conversations.h ds4_server_render.h ds4_server_reply.h ds4_server_protocol.h
 
 ds4_agent.o ds4_agent_cpu.o ds4_agent_test.o tests/test_agent_compact_prefix.o \
-tests/test_agent_live_context.o tests/test_agent_context_frontiers.o: ds4_suffix_match.h
+tests/test_agent_live_context.o tests/test_agent_context_frontiers.o \
+tests/test_agent_context_suffix_mock.o: ds4_suffix_match.h ds4_agent_tools.h ds4_agent_file.h ds4_agent_context.h ds4_agent_bash.h ds4_agent_compaction.h ds4_agent_presentation.h ds4_agent_stream.h ds4_agent_tool_actions.h ds4_agent_edit.h ds4_agent_sessions.h ds4_agent_history.h ds4_agent_checkpoint.h ds4_agent_executor.h ds4_agent_worker.h ds4_agent_context_runtime.h ds4_agent_result.h ds4_agent_communications.h ds4_agent_turn.h ds4_agent_summary.h ds4_agent_lifecycle.h ds4_agent_terminal.h ds4_agent_frontend.h ds4_agent_summary_prompts.h ds4_agent_prompts.h
 
 clean:
 	rm -f speed-bench/decoder_replay_bench
@@ -1494,7 +1495,7 @@ clean:
 # The active tokenizer includes generated Unicode classes.
 ds4.o ds4_cpu.o ds4_cpu_test_hooks.o: ds4_qwen4_unicode.inc
 
-ds4_verify_test_hooks.o: ds4.c ds4.h ds4_deepseek41_dspark.h ds4_gpu.h
+ds4_verify_test_hooks.o: ds4.c ds4.h ds4_session_frontier.h ds4_session_sampling.h ds4_engine_memory.h ds4_engine_core.h ds4_model_residency.h ds4_session_resources.h ds4_engine_tp_state.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc ds4_deepseek41_dspark.h ds4_gpu.h
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -DDS4_TEST_HOOKS -Wno-unused-function -c -o $@ $<
 
 gguf-tools/quality-testing/score_official_verify.o: gguf-tools/quality-testing/score_official.c ds4.h
@@ -1507,7 +1508,7 @@ gguf-tools/quality-testing/score_official_verify: gguf-tools/quality-testing/sco
 tests/test_deepseek41_scalar_queue: tests/test_deepseek41_scalar_queue.c ds4.h $(CORE_OBJS)
 	$(CC) $(CFLAGS) -I. -o $@ $< $(CORE_OBJS) $(METAL_LDLIBS)
 
-tests/trace_deepseek41_prefill: tests/trace_deepseek41_prefill.c ds4.c ds4.h $(filter-out ds4.o,$(CORE_OBJS))
+tests/trace_deepseek41_prefill: tests/trace_deepseek41_prefill.c ds4.c ds4.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc $(filter-out ds4.o,$(CORE_OBJS))
 	$(CC) $(CFLAGS) -I. -o $@ $< $(filter-out ds4.o,$(CORE_OBJS)) $(METAL_LDLIBS)
 
 tests/test_deepseek41_exact_tail: tests/test_deepseek41_exact_tail.c ds4.h $(CORE_OBJS)
@@ -1538,6 +1539,12 @@ tests/test_resident_route: tests/test_resident_route.c ds4_resident_route.h
 	$(CC) $(filter-out -ffast-math,$(CFLAGS)) -I. -o $@ $< -lm
 
 ifeq ($(UNAME_S),Darwin)
-tests/test_session_suffix_exports: tests/test_session_suffix_exports.c ds4.c ds4.h $(filter-out ds4.o,$(CORE_OBJS))
+tests/test_session_suffix_exports: tests/test_session_suffix_exports.c ds4.c ds4.h ds4_gguf.h ds4_model_config.h ds4_model_weights.h ds4_dspark_weights.h ds4_support_weights.h zig/engine/vision_weights_api.h ds4_dspark_cycle.h ds4_deepseek41_graph.h ds4_deepseek41_dspark_state.h ds4_tokenizer.h ds4_pretokenizer.h ds4_vocab.h ds4_sampling.h ds4_qwen4_unicode.inc $(filter-out ds4.o,$(CORE_OBJS))
 	$(CC) $(CFLAGS) -I. -o $@ $< $(filter-out ds4.o,$(CORE_OBJS)) $(METAL_LDLIBS)
 endif
+
+ds4_eval_data.o: ds4_eval_data.c ds4_eval_frontend.h ds4_eval_cases.h
+	$(CC) $(CFLAGS) -c -o $@ ds4_eval_data.c
+
+ds4_web_data.o: ds4_web_data.c
+	$(CC) $(CFLAGS) -c -o $@ ds4_web_data.c

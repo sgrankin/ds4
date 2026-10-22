@@ -1,0 +1,13 @@
+# Complete supported session request controllers
+
+The supported Metal DS41 public session path now composes native sync, multimodal admission, suffix archive/graft transactions, eval/batching, greedy/stochastic speculation and rewind. Actual Control fields move once into their shared record; batch rows borrow real member pointers. Routing services own their process tape/probe/resident policy state. Public vision owns encode/layout/message transactions over the existing Core. Other families/backends and the small opaque Session allocation/TP transport boundary remain explicit C libraries.
+
+ReleaseFast and Debug compile all five programs and the existing graph/DSpark fixtures. The session, server and resident-route suites pass, including100,000 differential one/two-slot plans and50,000 triple invariants. Both modes pass the actual batch admission and image-route fixtures; the image selector fixture calls the same production native selector. Debug image observation reports194 visual rows,3,973,120 bytes,prompt227,first671,next14445, matching the prior qualified C/native observation.
+
+The real trained DSpark fixture passes C/native/Debug: all16 accepted-token/RNG records are exact. All causal keep0..6, rollback+eight continuations, post-verify snapshot, cancellation and context-cap markers match. Whole-process times49.380/46.795/50.118 seconds are ordered diagnostics, not a speed claim.
+
+The existing actual HTTP driver passes with native release then Debug restart, simultaneous clients/native decode batches, cancellation, surviving generation, SSD checkpoint hits, durable parent responses and conversations. Both processes exit zero under the unchanged pressure guard. This is a functional qualification, not full coding-quality or throughput measurement. Later whole-agent suffix and final Metal qualification cover the combined final selection.
+
+Compiler corrections retained: use one named resident-route math module with the same gguf_c identity; move the C memory-input declaration before suffix callers; avoid a local plan shadow; keep CPU-only suffix retirement in its C arm. A separate small native embedding-retirement facade prevents CPU fixtures from extracting the unrelated GPU encoder object. Initial build and command-option failures are retained without weakening assertions.
+
+Source reviews clear Coordinator/Suffix/Batch/Route/Vision; independent review of the final Speculation/Cycle composition was still pending at this checkpoint. Existing tests and unchanged numerical operators provide runtime evidence; two-host TP behavior is not hardware-qualified here.

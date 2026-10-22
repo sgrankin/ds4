@@ -5,6 +5,10 @@ Start every response with an expressive kaomoji that fits what you are saying.
 Favor the simplest implementation that lets us learn whether a change is useful.
 Write for the experiment we need now, not hypothetical future callers or mistakes.
 
+Read [zig/JOURNAL.md](zig/JOURNAL.md) when resuming rewrite or serving work.
+Update it at meaningful checkpoints with decisions, progress and next steps;
+distinguish completed work from proposals and retain relevant evidence links.
+
 - Use a short loop: fixed baseline, one change, measure, inspect, decide.
   Record the revision, command, settings and results; reuse existing tools.
 - Work sequentially from `speed-bench/ideas/next-experiments.md`, with a
@@ -23,3 +27,5 @@ Write for the experiment we need now, not hypothetical future callers or mistake
   RAM cap. Pause unrelated work during final latency measurements.
 - Keep useful temporary workspaces and results under `.workspaces/` and
   `speed-bench/`, rather than `/tmp`. Keep experiments in small jj commits.
+- Keep raw benchmark output, logs and generated snapshots local and ignored.
+  Commit concise reports, reproduction scripts and necessary fixture inputs.

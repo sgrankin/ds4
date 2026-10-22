@@ -3,17 +3,31 @@
 set -eu
 root=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 server=0
-if [ "${1-}" = "--server" ]; then server=1; shift; fi
-if [ "${1-}" = "--preset" ]; then shift; fi
+bin_dir=$root
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --server) server=1; shift ;;
+        --bin-dir)
+            if [ "$#" -lt 2 ] || [ -z "$2" ]; then
+                echo 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast [binary arguments]' >&2
+                exit 2
+            fi
+            bin_dir=$2
+            shift 2
+            ;;
+        --preset) shift ;;
+        *) break ;;
+    esac
+done
 preset=${1-}
 case "$preset" in
     context-fast|resident-fast|persistent-fast) shift ;;
     --help|-h)
-        echo 'Usage: ds4-local [--server] [--preset] context-fast|resident-fast|persistent-fast [binary arguments]'
+        echo 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast [binary arguments]'
         echo 'persistent-fast combines left/right suffix reuse with decode and prefill resident substitutions for ds4-agent or ds4-server.'
         exit 0 ;;
     *)
-        echo 'Usage: ds4-local [--server] [--preset] context-fast|resident-fast|persistent-fast [binary arguments]' >&2
+        echo 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast [binary arguments]' >&2
         exit 2 ;;
 esac
 # These are the measured common prefill settings.
@@ -80,9 +94,9 @@ done
 if [ "$server" = 1 ]; then
     export DS4_SERVER_RESPONSE_STORE_DIR=${DS4_SERVER_RESPONSE_STORE_DIR:-$root/.workspaces/response-store}
     mkdir -p -- "$(dirname -- "$DS4_SERVER_RESPONSE_STORE_DIR")"
-    exec "$root/ds4-server" --host 127.0.0.1 --batched-session 2 \
+    exec "$bin_dir/ds4-server" --host 127.0.0.1 --batched-session 2 \
         --ssd-streaming --ssd-streaming-cache-experts 64GB \
         --ctx 8192 --prefill-chunk 512 "$@"
 fi
-exec "$root/ds4-agent" --ssd-streaming --ssd-streaming-cache-experts 64GB \
+exec "$bin_dir/ds4-agent" --ssd-streaming --ssd-streaming-cache-experts 64GB \
     --ctx 8192 --prefill-chunk 512 "$@"

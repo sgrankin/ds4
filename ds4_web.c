@@ -22,46 +22,13 @@
 #include <time.h>
 #include <unistd.h>
 
-#ifndef PATH_MAX
-#define PATH_MAX 4096
-#endif
-
-#define DS4_WEB_DEFAULT_PORT 9333
-#define DS4_WEB_CONNECT_TIMEOUT_MS 3000
-#define DS4_WEB_CDP_TIMEOUT_MS 20000
-#define DS4_WEB_MAX_RESULT_BYTES (1024*1024)
+#include "ds4_web_internal.h"
 
 typedef struct {
     char *ptr;
     size_t len;
     size_t cap;
 } web_buf;
-
-struct ds4_web {
-    char home[PATH_MAX];
-    char profile_dir[PATH_MAX];
-    int port;
-    pid_t chrome_pid;
-    bool browser_allowed;
-    ds4_web_confirm_fn confirm;
-    void *confirm_privdata;
-    ds4_web_log_fn log;
-    void *log_privdata;
-    ds4_web_cancel_fn cancel;
-    void *cancel_privdata;
-    int next_cdp_id;
-};
-
-typedef struct {
-    int fd;
-    int next_id;
-    ds4_web *web;
-} cdp_ws;
-
-typedef struct {
-    char *id;
-    char *ws_url;
-} web_tab;
 
 static void *web_xmalloc(size_t n) {
     void *p = malloc(n ? n : 1);
@@ -822,9 +789,7 @@ static bool web_cdp_navigate(cdp_ws *ws, const char *url,
 
 static bool web_page_probe(cdp_ws *ws, char **href_out, char **ready_out,
                            long *text_len_out, char *err, size_t err_len) {
-    const char *expr =
-        "location.href+'\\n'+document.readyState+'\\n'+"
-        "((document.body&&document.body.innerText)||'').length";
+    const char *expr = ds4_web_probe_js;
     char *probe = web_cdp_eval_string(ws, expr, err, err_len);
     if (!probe) return false;
 
@@ -909,44 +874,7 @@ static bool web_cdp_prepare_page(cdp_ws *ws, char *err, size_t err_len) {
 }
 
 static bool web_scroll_dynamic_page(cdp_ws *ws, char *err, size_t err_len) {
-    const char *expr =
-        "(() => new Promise(resolve => {"
-        "const root=()=>document.scrollingElement||document.documentElement||document.body;"
-        "const blockSel='h1,h2,h3,h4,h5,h6,p,li,pre,blockquote,td,th,[id=\"content-text\"],[class*=\"comment-body\"],[class*=\"comment-content\"],[data-testid*=\"comment-text\"]';"
-        "const lazySel='[onscroll],[loading=\"lazy\"],[data-src],[data-lazy],[class*=\"lazy\"],[class*=\"infinite\"],[class*=\"virtual\"],[role=\"feed\"],[id*=\"comment\"],[class*=\"comment\"],[data-testid*=\"comment\"]';"
-        "const hookCount=()=>{let n=0;try{if(window.onscroll)n++;if(document.onscroll)n++;if(document.body&&document.body.onscroll)n++;}catch(e){}"
-        "try{if(typeof getEventListeners==='function'){for(const o of [window,document,document.body]){if(!o)continue;const ev=getEventListeners(o);if(ev&&ev.scroll)n+=ev.scroll.length;}}}catch(e){}"
-        "try{n+=document.querySelectorAll(lazySel).length;}catch(e){}return n;};"
-        "const metrics=()=>{const r=root();return {"
-        "height:r?r.scrollHeight:0,"
-        "view:innerHeight||900,"
-        "y:scrollY||(r&&r.scrollTop)||0,"
-        "text:((document.body&&document.body.innerText)||'').length,"
-        "links:document.links?document.links.length:0,"
-        "blocks:document.body?document.body.querySelectorAll(blockSel).length:0,"
-        "hooks:hookCount()};};"
-        "const sig=m=>[m.height,m.text,m.links,m.blocks].join('|');"
-        "const grew=(a,b)=>b.height>a.height+20||b.text>a.text+200||b.links>a.links+2||b.blocks>a.blocks+2;"
-        "const scrollOnce=()=>{const r=root();if(!r)return;"
-        "const h=Math.max(700,Math.floor((innerHeight||900)*0.85));"
-        "window.scrollTo(0,Math.min(r.scrollHeight,(scrollY||r.scrollTop||0)+h));};"
-        "let last=metrics(),lastSig=sig(last),same=0,steps=0;"
-        "const scrollable=last.height>last.view*1.35;"
-        "if(!scrollable||last.hooks===0){resolve('scroll skipped hooks='+last.hooks+' text='+last.text);return;}"
-        "const tick=()=>{"
-        "if(steps>=28){resolve('scrolled '+steps+' text='+last.text);return;}"
-        "const before=last;"
-        "scrollOnce();steps++;"
-        "setTimeout(()=>{const now=metrics(),nowSig=sig(now);"
-        "if(nowSig===lastSig)same++;else same=0;"
-        "const loaded=grew(before,now);"
-        "last=now;lastSig=nowSig;"
-        "if(steps===1&&!loaded){resolve('scroll probe unchanged text='+now.text);return;}"
-        "const atBottom=now.y+now.view+20>=now.height;"
-        "if(same>=4||(atBottom&&same>=1)){resolve('scrolled '+steps+' text='+now.text);return;}"
-        "tick();},900);"
-        "};tick();"
-        "}))()";
+    const char *expr = ds4_web_scroll_js;
     if (web_set_cancel_err(ws ? ws->web : NULL, err, err_len)) return false;
 
     char local_err[160] = {0};
@@ -1273,59 +1201,11 @@ static void web_close_tab(ds4_web *web, const web_tab *tab) {
     }
 }
 
-static const char *web_click_google_consent_js =
-"(() => {"
-"const clean=s=>(s||'').replace(/\\s+/g,' ').trim();"
-"const pats=[/accept all/i,/i agree/i,/agree/i,/accetta tutto/i,/tout accepter/i,/aceptar todo/i,/alle akzeptieren/i];"
-"const els=[...document.querySelectorAll('button,[role=button],input[type=submit],a')];"
-"for (const el of els){const t=clean(el.innerText||el.value||el.textContent);"
-"if(!t)continue; if(pats.some(p=>p.test(t))){el.click(); return 'clicked '+t;}}"
-"return '';"
-"})()";
+#define web_click_google_consent_js ds4_web_click_google_consent_js
 
-static const char *web_extract_search_js =
-"(() => {"
-"const clean=s=>(s||'').replace(/\\s+/g,' ').trim();"
-"const esc=s=>clean(s).replace(/\\\\/g,'\\\\\\\\').replace(/\\[/g,'\\\\[').replace(/\\]/g,'\\\\]').replace(/\\n/g,' ');"
-"const visible=el=>{const r=el.getBoundingClientRect();const st=getComputedStyle(el);return r.width>0&&r.height>0&&st.display!=='none'&&st.visibility!=='hidden'&&st.opacity!=='0';};"
-"const bad=h=>(/(^|\\.)google\\./.test(h)||/(^|\\.)gstatic\\./.test(h)||/(^|\\.)googleusercontent\\./.test(h));"
-"const lines=['# Google search results','',`URL: ${location.href}`,'','## Visible links'];"
-"const seen=new Set();"
-"for(const a of document.querySelectorAll('a[href]')){if(!visible(a))continue;let href=a.href||'';"
-"try{const u=new URL(href);if(u.pathname==='/url'&&u.searchParams.get('q'))href=u.searchParams.get('q');}catch{}"
-"let u;try{u=new URL(href);}catch{continue;}if(!/^https?:$/.test(u.protocol))continue;if(bad(u.hostname))continue;"
-"const text=esc(a.innerText||a.textContent);if(text.length<3)continue;if(seen.has(u.href))continue;seen.add(u.href);"
-"lines.push(`- [${text.slice(0,180)}](${u.href})`);if(seen.size>=20)break;}"
-"lines.push('','## Text snapshot',clean(document.body.innerText).slice(0,1200));"
-"return lines.join('\\n');"
-"})()";
+#define web_extract_search_js ds4_web_extract_search_js
 
-static const char *web_extract_page_js =
-"(() => {"
-"const clean=s=>(s||'').replace(/\\s+/g,' ').trim();"
-"const esc=s=>clean(s).replace(/\\\\/g,'\\\\\\\\').replace(/\\[/g,'\\\\[').replace(/\\]/g,'\\\\]').replace(/\\n/g,' ');"
-"const visible=el=>{const r=el.getBoundingClientRect();const st=getComputedStyle(el);return r.width>0&&r.height>0&&st.display!=='none'&&st.visibility!=='hidden'&&st.opacity!=='0';};"
-"const inline=n=>{if(!n)return'';if(n.nodeType===3)return n.nodeValue;if(n.nodeType!==1)return'';const el=n;"
-"if(el.tagName==='SCRIPT'||el.tagName==='STYLE'||el.tagName==='NOSCRIPT')return'';"
-"if(el.tagName==='A'){const t=esc(el.innerText||el.textContent);const h=el.href||'';return t&&h?`[${t}](${h})`:t;}"
-"if(el.tagName==='CODE')return '`'+clean(el.innerText||el.textContent).replace(/`/g,'\\\\`')+'`';"
-"return [...el.childNodes].map(inline).join('');};"
-"const lines=[`# ${clean(document.title)||location.href}`,'',`URL: ${location.href}`,'','## Content'];"
-"const blocks=[...document.body.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li,pre,blockquote,td,th,[id=\"content-text\"],[class*=\"comment-body\"],[class*=\"comment-content\"],[data-testid*=\"comment-text\"]')];"
-"const seen=new Set();"
-"for(const el of blocks){if(!visible(el))continue;let s='';const tag=el.tagName;"
-"if(/^H[1-6]$/.test(tag)){s='#'.repeat(Number(tag[1]))+' '+inline(el);}"
-"else if(tag==='LI'){s='- '+inline(el);}"
-"else if(tag==='PRE'){s='```\\n'+(el.innerText||el.textContent||'').trimEnd()+'\\n```';}"
-"else if(tag==='BLOCKQUOTE'){s='> '+clean(el.innerText||el.textContent);}"
-"else{s=inline(el);}s=s.trim();if(!s||seen.has(s))continue;seen.add(s);lines.push('',s);"
-"if(lines.join('\\n').length>900000){lines.push('','[Content truncated by browser extractor.]');break;}}"
-"lines.push('','## Visible links');let n=0;const linkSeen=new Set();"
-"for(const a of document.querySelectorAll('a[href]')){if(!visible(a))continue;const t=esc(a.innerText||a.textContent);if(t.length<3)continue;"
-"let u;try{u=new URL(a.href);}catch{continue;}if(!/^https?:$/.test(u.protocol)||linkSeen.has(u.href))continue;linkSeen.add(u.href);"
-"lines.push(`- [${t.slice(0,160)}](${u.href})`);if(++n>=80)break;}"
-"return lines.join('\\n');"
-"})()";
+#define web_extract_page_js ds4_web_extract_page_js
 
 static char *web_run_page_js(ds4_web *web, const char *url, const char *js,
                              bool dynamic_scroll,

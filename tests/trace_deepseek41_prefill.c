@@ -15,9 +15,9 @@ int main(int argc, char **argv) {
     ds41_trace_dir = argv[5]; ds41_trace_pos = count - 1;
     if (!strcmp(argv[4], "scalar")) {
         for (uint32_t i = 0; i < count; i++)
-            if (!ds41_graph_step(&s->ds41_graph, &e->model, &e->weights, tokens.v[i], NULL)) goto done;
+            if (!ds41_graph_step(&s->ds41.graph, &e->core.model, &e->core.weights, tokens.v[i], NULL)) goto done;
     } else if (!strcmp(argv[4], "batch")) {
-        if (!ds41_graph_prefill(&s->ds41_graph, &e->model, &e->weights,
+        if (!ds41_graph_prefill(&s->ds41.graph, &e->core.model, &e->core.weights,
                                tokens.v, count, NULL, NULL, count, NULL, NULL)) goto done;
     } else goto done;
     rc = 0;

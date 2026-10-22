@@ -1,0 +1,5 @@
+[gMASK]<sop><|system|>Keep facts in checkable storage.
+<|user|>Read the code PINE-251.
+<|assistant|><think>Inspect it.</think>
+<|observation|>PINE-251 is current.
+<|user|>Return only the code.

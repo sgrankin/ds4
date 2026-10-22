@@ -1,0 +1,7 @@
+# Item93 — Complete tool dispatch and job orchestration
+
+Executor owns parsed-call dispatch, Bash node lifetime/wait/stop/observations, terminal-safe child output, Web wrappers and the compaction job receipt. Actual Pager, job-list head, next ID and Web handle form one ToolRuntime embedded in Worker; the selected two-field Bash node moves once to the shared header. Native File/Edit/ToolActions/Bash and real Web APIs remain composed libraries. Browser lifetime/permission policy and fit/commit/turn orchestration remain subsequent owners. Original C references remain.
+
+Integration19:17–19:21UTC starts at6bed1ed6. C control, native ReleaseFast/Debug and full C fallback pass production Agent/terminal/PTY suites; all17 stable artifacts match. Existing actual process tests cover shell spawn/groups, deadlines without polling, descendant and bounded large output, concurrent jobs, wait/removal and terminal controls/invalid UTF8. No fixture body or mock is copied. Initial native compile lacked the actual linenoise header for UTF8Decode; adding that include fixes compilation, with the failure retained. No runtime correction.
+
+These qualify selected dispatch and real process ownership. Whole model/live-context/archive/retrieve and browser interaction are not claimed here; the former is the next ContextRuntime aggregate gate. No quality or timing claim. Exact commands/hashes/captures accompany this report.

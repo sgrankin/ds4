@@ -1,0 +1,38 @@
+[
+  {
+    "label": "ordinary-code",
+    "path": "/Volumes/Models/ds4/.workspaces/zig-tokenizer-20261022/real/corpus/ordinary-code.txt",
+    "bytes": 5695,
+    "sha256": "ea9635b152d67b016126ad54736a4deb51507960f9a66a40eef4cd80335a578a"
+  },
+  {
+    "label": "persistent-context",
+    "path": "/Volumes/Models/ds4/.workspaces/zig-tokenizer-20261022/real/corpus/persistent-context.txt",
+    "bytes": 34615,
+    "sha256": "4c5eb5e4d7ba8ef3586f6acad336c1325086749f67bd1ff4fbabe8ead9622952"
+  },
+  {
+    "label": "tool-output",
+    "path": "/Volumes/Models/ds4/.workspaces/zig-tokenizer-20261022/real/corpus/tool-output.txt",
+    "bytes": 86110,
+    "sha256": "849f2d4c0b906b92c3194646ffe6b340f5f8e0abe095bbd56ada879743711ae4"
+  },
+  {
+    "label": "long-piece",
+    "path": "/Volumes/Models/ds4/.workspaces/zig-tokenizer-20261022/real/corpus/long-piece.txt",
+    "bytes": 1920,
+    "sha256": "dac66404c7dc35de1a0cf4650aac485bf831214c332f11ced6124ca398eb45c5"
+  },
+  {
+    "label": "multilingual",
+    "path": "/Volumes/Models/ds4/.workspaces/zig-tokenizer-20261022/real/corpus/multilingual.txt",
+    "bytes": 3296,
+    "sha256": "2c2b11cd0b5bd81d2a3a44ac8d8a356add1f0dd3609db2326948791bc28ed30e"
+  },
+  {
+    "label": "rendered-turns",
+    "path": "/Volumes/Models/ds4/.workspaces/zig-tokenizer-20261022/real/corpus/rendered-turns.txt",
+    "bytes": 223,
+    "sha256": "25cccea1fb732d18534659e769d750f33e9f1cdf5488b8e55ac70b74768d65df"
+  }
+]

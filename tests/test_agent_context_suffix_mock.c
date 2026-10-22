@@ -3,6 +3,7 @@
  * actual agent implementation. No model is opened and no GPU API is called. */
 #include <inttypes.h>
 #define ds4_session_is_approximate mock_approximate
+#define ds4_session_is_decoder_replay mock_decoder_replay
 #define ds4_session_payload_bytes mock_payload_bytes
 #define ds4_session_enable_suffix_prerope mock_enable_prerope
 #define ds4_session_suffix_prerope_bytes mock_prerope_bytes
@@ -62,6 +63,8 @@ static bool reject_capture, cancel_sync;
 static int mock_user_id = 'U';
 
 bool mock_approximate(const ds4_session *s) { return s && s->approximate; }
+/* This suffix fixture has no decoder-replay graph state. */
+bool mock_decoder_replay(const ds4_session *s) { (void)s; return false; }
 const ds4_tokens *mock_tokens(ds4_session *s) { return &s->tokens; }
 int mock_pos(ds4_session *s) { return s->valid ? s->tokens.len : 0; }
 int mock_ctx(ds4_session *s) { (void)s; return 4096; }
@@ -260,7 +263,7 @@ static void prepare(agent_worker *w, agent_config *cfg, ds4_session *s) {
 static void cleanup(agent_worker *w) {
     agent_live_context_clear(w);
     agent_context_frontiers_clear(w); ds4_tokens_free(&w->transcript); ds4_tokens_free(&w->session->tokens);
-    free(w->session_title); free(w->out); CHECK(pthread_mutex_destroy(&w->mu) == 0);
+    free(w->identity.title); free(w->out); CHECK(pthread_mutex_destroy(&w->mu) == 0);
 }
 static ds4_tokens replacement(agent_worker *w, int deletion) {
     ds4_tokens t = {0};
@@ -560,7 +563,7 @@ static void test_import_and_persistence(const char *directory) {
     agent_worker w; agent_config cfg; ds4_session s; prepare(&w, &cfg, &s);
     char context[PATH_MAX], err[256] = {0}, sha[41]; snprintf(context, sizeof(context), "%s/context.txt", directory);
     cfg.gen.live_context_path = context; w.cache_dir = (char *)directory;
-    w.session_title = strdup("Model-free suffix persistence"); w.session_created_at = 123456;
+    w.identity.title = strdup("Model-free suffix persistence"); w.identity.created_at = 123456;
     ds4_tokens t = replacement(&w, 0); size_t n; char *text = mock_render(w.engine, &t, &n);
     CHECK(agent_replace_file(context, text, n, NULL, 0, err, sizeof(err)) == 0); free(text);
     uint32_t original_tag = s.graph_tag; graft_mode = 2;
@@ -680,10 +683,10 @@ static void test_numbered_turn_edits(const char *directory) {
     CHECK(mock_sync(&s, &w.transcript, err, sizeof(err)) == 0);
     reset_counters();
     CHECK(agent_worker_export_live_context(&w, err, sizeof(err)));
-    CHECK(w.live_context_turn_count == 5);
+    CHECK(w.live_context.turn_count == 5);
     uint64_t ids[5];
     for (int i = 0; i < 5; i++) {
-        ids[i] = w.live_context_turns[i].id; CHECK(ids[i]);
+        ids[i] = w.live_context.turns[i].id; CHECK(ids[i]);
         for (int j = 0; j < i; j++) CHECK(ids[i] != ids[j]);
     }
     /* Startup date metadata after the generated system tokens remains part
@@ -699,8 +702,8 @@ static void test_numbered_turn_edits(const char *directory) {
     CHECK(agent_worker_import_live_context(&w, err, sizeof(err)) == 1);
     CHECK(agent_tokens_equal(&w.transcript, &expected));
     CHECK(agent_worker_export_live_context(&w, err, sizeof(err)));
-    CHECK(w.live_context_turn_count == 4);
-    for (int i = 0; i < 4; i++) CHECK(w.live_context_turns[i].id == ids[i + 1]);
+    CHECK(w.live_context.turn_count == 4);
+    for (int i = 0; i < 4; i++) CHECK(w.live_context.turns[i].id == ids[i + 1]);
     ds4_tokens_free(&expected);
 
     bodies[1] = "compact observation one";
@@ -709,8 +712,8 @@ static void test_numbered_turn_edits(const char *directory) {
     CHECK(agent_worker_import_live_context(&w, err, sizeof(err)) == 1);
     CHECK(agent_tokens_equal(&w.transcript, &expected));
     CHECK(agent_worker_export_live_context(&w, err, sizeof(err)));
-    CHECK(w.live_context_turn_count == 4);
-    for (int i = 0; i < 4; i++) CHECK(w.live_context_turns[i].id == ids[i + 1]);
+    CHECK(w.live_context.turn_count == 4);
+    for (int i = 0; i < 4; i++) CHECK(w.live_context.turns[i].id == ids[i + 1]);
     ds4_tokens_free(&expected);
 
     /* Two edits straddle a completely unchanged turn with literal control
@@ -721,8 +724,8 @@ static void test_numbered_turn_edits(const char *directory) {
     CHECK(agent_worker_import_live_context(&w, err, sizeof(err)) == 1);
     CHECK(agent_tokens_equal(&w.transcript, &expected));
     CHECK(agent_worker_export_live_context(&w, err, sizeof(err)));
-    CHECK(w.live_context_turn_count == 4);
-    for (int i = 0; i < 4; i++) CHECK(w.live_context_turns[i].id == ids[i + 1]);
+    CHECK(w.live_context.turn_count == 4);
+    for (int i = 0; i < 4; i++) CHECK(w.live_context.turns[i].id == ids[i + 1]);
     CHECK(mock_sync(&s, &w.transcript, err, sizeof(err)) == 0);
     CHECK(agent_tokens_equal(&s.tokens, &expected));
     size_t raw_len = 0; char *raw = mock_render(w.engine, &s.tokens, &raw_len);
@@ -744,18 +747,18 @@ static void test_numbered_turn_edits(const char *directory) {
     CHECK(agent_worker_import_live_context(&w, err, sizeof(err)) == 1);
     CHECK(agent_tokens_equal(&w.transcript, &expected));
     CHECK(agent_worker_export_live_context(&w, err, sizeof(err)));
-    CHECK(w.live_context_turn_count == 4);
-    for (int i = 0; i < 4; i++) CHECK(w.live_context_turns[i].id == ids[reordered[i]]);
+    CHECK(w.live_context.turn_count == 4);
+    for (int i = 0; i < 4; i++) CHECK(w.live_context.turns[i].id == ids[reordered[i]]);
     CHECK(agent_worker_import_live_context(&w, err, sizeof(err)) == 0);
     ds4_tokens_push(&w.transcript, 'U');
     const char *fresh = "new task after deletion";
     for (const unsigned char *p = (const unsigned char *)fresh; *p; p++)
         ds4_tokens_push(&w.transcript, *p);
     CHECK(agent_worker_export_live_context(&w, err, sizeof(err)));
-    CHECK(w.live_context_turn_count == 5);
-    for (int i = 0; i < 4; i++) CHECK(w.live_context_turns[i].id == ids[reordered[i]]);
-    CHECK(w.live_context_turns[4].id);
-    for (int i = 0; i < 5; i++) CHECK(w.live_context_turns[4].id != ids[i]);
+    CHECK(w.live_context.turn_count == 5);
+    for (int i = 0; i < 4; i++) CHECK(w.live_context.turns[i].id == ids[reordered[i]]);
+    CHECK(w.live_context.turns[4].id);
+    for (int i = 0; i < 5; i++) CHECK(w.live_context.turns[4].id != ids[i]);
     CHECK(agent_worker_import_live_context(&w, err, sizeof(err)) == 0);
     ds4_tokens_free(&expected); ds4_tokens_free(&original);
     unlink(path); cleanup(&w);

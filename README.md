@@ -95,6 +95,10 @@ and hardware-specific setups:
 | [Strix Halo / Framework Desktop](docs/STRIX_HALO.md) | `make strix-halo` |
 | [One or more CUDA cards, including Ada/L40S](docs/CUDA_MULTI_GPU.md) | `make cuda-generic` |
 
+This branch also offers a Metal build with handwritten Zig modules:
+`tools/zig-build`, with programs in `zig-out/bin`. See the
+[Zig module guide](zig/README.md) for scope, C fallback, presets and measurements.
+
 For a first run on a 96 or 128 GB machine, download DeepSeek V4 Flash Q2:
 
 ```sh

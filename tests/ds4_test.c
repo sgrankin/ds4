@@ -4,6 +4,9 @@
 #include "../ds4_server.c"
 #ifndef DS4_NO_GPU
 #include "../ds4_gpu.h"
+#ifdef __APPLE__
+#include "../zig/metal/attention_decode.h"
+#endif
 #include "../ds4_image.h"
 #include <math.h>
 
@@ -3379,6 +3382,93 @@ static void test_metal_gathered_kv_stage_exact(void) {
     ds4_gpu_tensor_free(raw_base);
 }
 
+/* Existing operators are the independent reference: ordinary attention then
+ * standalone inverse RoPE. Unpacked fusion preserves exact bytes. Packed
+ * fusion has a different reduction; use the existing attention oracle bound
+ * and retain bit/ULP diagnostics rather than assert false C exactness. */
+static void test_metal_attention_deferred_rope_exact(void) {
+    const char *packed_env = "DS4_METAL_DISABLE_M5_FLASH_ATTN_PACKED32_REDUCE";
+    const char *trace_env = "DS4_METAL_TRACE_M5_FLASH_ATTN_PACKED32_REDUCE";
+    const char *pair_env = "DS4_METAL_DISABLE_INPLACE_ROPE_PAIR";
+    const char *affine_env = "DS4_METAL_DISABLE_AFFINE_ROPE_PAIR";
+    char *saved_packed = test_save_env(packed_env), *saved_trace = test_save_env(trace_env);
+    char *saved_pair = test_save_env(pair_env), *saved_affine = test_save_env(affine_env);
+    unsetenv(pair_env); unsetenv(affine_env);
+    if (!ds4_gpu_decode_attn_rope_fuse_available()) {
+        fprintf(stderr, "ds4-test: deferred attention RoPE skipped (affine path unavailable)\n");
+        test_restore_env(packed_env, saved_packed); test_restore_env(trace_env, saved_trace);
+        test_restore_env(pair_env, saved_pair); test_restore_env(affine_env, saved_affine);
+        return;
+    }
+    enum { DIM = 512, HEADS = 64, RAW_CAP = 128, RAW = 127, COMP = 128 };
+    const uint64_t q_bytes = (uint64_t)HEADS * DIM * sizeof(float);
+    const uint64_t raw_bytes = (uint64_t)RAW_CAP * DIM * sizeof(float);
+    const uint64_t comp_bytes = (uint64_t)COMP * DIM * sizeof(uint16_t);
+    const size_t page = (size_t)getpagesize();
+    void *model = NULL;
+    TEST_ASSERT(posix_memalign(&model, page, page) == 0);
+    ds4_gpu_tensor *q = ds4_gpu_tensor_alloc(q_bytes);
+    ds4_gpu_tensor *raw = ds4_gpu_tensor_alloc(raw_bytes);
+    ds4_gpu_tensor *comp_base = ds4_gpu_tensor_alloc(comp_bytes + 2);
+    ds4_gpu_tensor *comp = comp_base ? ds4_gpu_tensor_view(comp_base, 2, comp_bytes) : NULL;
+    ds4_gpu_tensor *reference = ds4_gpu_tensor_alloc(q_bytes);
+    ds4_gpu_tensor *candidate = ds4_gpu_tensor_alloc(q_bytes);
+    float *expected = malloc((size_t)q_bytes), *actual = malloc((size_t)q_bytes);
+    TEST_ASSERT(model && q && raw && comp_base && comp && reference && candidate && expected && actual);
+    if (model && q && raw && comp_base && comp && reference && candidate && expected && actual) {
+        memset(model, 0, page);
+        float *sinks = model, *query = ds4_gpu_tensor_contents(q), *r = ds4_gpu_tensor_contents(raw);
+        uint16_t *compressed = ds4_gpu_tensor_contents(comp);
+        TEST_ASSERT(query && r && compressed);
+        if (query && r && compressed) {
+            for (unsigned h = 0; h < HEADS; h++) sinks[h] = (int)(h % 7) / 32.0f - .125f;
+            for (size_t i = 0; i < HEADS * DIM; i++) query[i] = ((int)(i * 37 % 113) - 56) / 128.0f;
+            for (size_t i = 0; i < RAW_CAP * DIM; i++) r[i] = ((int)(i * 19 % 127) - 63) / 128.0f;
+            for (size_t i = 0; i < COMP * DIM; i++) compressed[i] = test_float_to_f16(((int)(i * 23 % 109) - 54) / 128.0f);
+            TEST_ASSERT(ds4_gpu_set_model_map(model, page));
+            ds4_gpu_set_quality(false);
+            const float base = 160000.0f, scale = 1.0f / 16.0f;
+            const float attention = 1.0f / (1.0f + 0.1f * logf(1.0f / scale));
+            TEST_ASSERT(setenv(packed_env, "1", 1) == 0);
+            /* Retire any pending request left by a preceding model fixture.
+             * This valid warmup output is discarded; reference starts unarmed. */
+            ds4_gpu_set_decode_attn_rope_fuse(DIM, 64, 0, 65536, true, base, scale, 1, attention, 32, 1);
+            TEST_ASSERT(ds4_gpu_attention_decode_heads_tensor(candidate, model, page, 0,
+                q, raw, RAW, RAW_CAP, 117, comp, 1, COMP, NULL, 0, HEADS, DIM));
+            TEST_ASSERT(ds4_gpu_decode_attn_rope_fuse_used());
+            for (unsigned packed = 0; packed < 2; packed++) {
+                if (packed) TEST_ASSERT(unsetenv(packed_env) == 0);
+                TEST_ASSERT(ds4_gpu_attention_decode_heads_tensor(reference, model, page, 0,
+                    q, raw, RAW, RAW_CAP, 117, comp, 1, COMP, NULL, 0, HEADS, DIM));
+                TEST_ASSERT(ds4_gpu_rope_tail_tensor(reference, 1, HEADS, DIM, 64, 65533,
+                    65536, true, base, scale, 1, attention, 32, 1));
+                TEST_ASSERT(ds4_gpu_tensor_read(reference, 0, expected, q_bytes));
+
+                TEST_ASSERT(setenv(trace_env, "1", 1) == 0);
+                ds4_gpu_set_decode_attn_rope_fuse(DIM, 64, 65533, 65536, true, base, scale, 1, attention, 32, 1);
+                TEST_ASSERT(ds4_gpu_attention_decode_heads_tensor(candidate, model, page, 0,
+                    q, raw, RAW, RAW_CAP, 117, comp, 1, COMP, NULL, 0, HEADS, DIM));
+                TEST_ASSERT(ds4_gpu_decode_attn_rope_fuse_used());
+                TEST_ASSERT(ds4_gpu_tensor_read(candidate, 0, actual, q_bytes));
+                for (size_t i = 0; i < HEADS * DIM; i++) TEST_ASSERT(isfinite(expected[i]) && isfinite(actual[i]));
+                const test_float_compare_stats stats = test_compare_float_bits(expected, actual, HEADS * DIM);
+                fprintf(stderr, "ds4-test: deferred attention RoPE packed_allowed=%u mismatches=%zu/%u max_ulp=%u max_abs=%g\n",
+                    packed, stats.mismatch_count, HEADS * DIM, stats.max_ulp, stats.max_abs);
+                if (!packed) TEST_ASSERT(stats.mismatch_count == 0);
+                else for (size_t i = 0; i < HEADS * DIM; i++)
+                    TEST_ASSERT(fabs((double)expected[i] - actual[i]) < 3e-5 * (1 + fabs(expected[i])));
+            }
+        }
+    }
+    free(actual); free(expected);
+    ds4_gpu_tensor_free(candidate); ds4_gpu_tensor_free(reference);
+    ds4_gpu_tensor_free(comp); ds4_gpu_tensor_free(comp_base);
+    ds4_gpu_tensor_free(raw); ds4_gpu_tensor_free(q);
+    free(model);
+    test_restore_env(packed_env, saved_packed); test_restore_env(trace_env, saved_trace);
+    test_restore_env(pair_env, saved_pair); test_restore_env(affine_env, saved_affine);
+}
+
 static void test_metal_contiguous_compressed_f16_attention_exact(void) {
     const uint32_t head_dim = 512;
     const uint32_t n_head = 2;
@@ -5258,6 +5348,7 @@ static void test_metal_kernel_group(void) {
     test_metal_inplace_rope_pair_exact();
     test_metal_contiguous_f32_f16_roundtrip_exact();
     test_metal_gathered_kv_stage_exact();
+    test_metal_attention_deferred_rope_exact();
     test_metal_contiguous_compressed_f16_attention_exact();
     test_metal_compressed_selection_causality();
     test_metal_persistent_zero_attention_mask_exact();

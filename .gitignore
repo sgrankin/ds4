@@ -122,6 +122,8 @@ __pycache__/
 /misc/
 .*.swp
 .DS_Store
+/.zig-cache/
+/zig-out/
 
 /tests/test_qwen4_conv_parallel
 /tests/test_q8_prefill_variants
@@ -154,3 +156,16 @@ speed-bench/ideas/artifacts/
 /speed-bench/experiments/**/suffix-repeat-bench
 /speed-bench/experiments/**/test-state-cache
 /speed-bench/experiments/**/.ds4sc.lock
+
+# Experiment output stays local. Track reports, reproduction scripts and inputs.
+/speed-bench/experiments/**/*
+!/speed-bench/experiments/**/
+!/speed-bench/experiments/*/README.md
+!/speed-bench/experiments/*/*.py
+!/speed-bench/experiments/*/*.sh
+!/speed-bench/experiments/*/*.c
+!/speed-bench/experiments/*/corpus/*.txt
+!/speed-bench/experiments/*/corpus/manifest.json
+!/speed-bench/experiments/zig-qualified-20261022/evidence/*.py
+!/speed-bench/experiments/zig-qualified-20261022/evidence/*.sh
+!/speed-bench/experiments/zig-web-20261022/evidence/qualify.py

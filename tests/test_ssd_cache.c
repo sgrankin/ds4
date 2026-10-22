@@ -7,6 +7,25 @@
 
 int main(void) {
     const uint64_t gib = 1ull << 30;
+    uint64_t bytes = 0;
+    uint32_t experts = 0;
+    assert(ds4_parse_gib_arg("4GB", &bytes) && bytes == 4 * gib);
+    assert(ds4_parse_streaming_cache_experts_arg("64", &experts, &bytes));
+    assert(experts == 64 && bytes == 0);
+    assert(ds4_parse_streaming_cache_experts_arg("4gb", &experts, &bytes));
+    assert(experts == 0 && bytes == 4 * gib);
+    assert(!ds4_parse_streaming_cache_experts_arg("4294967296", &experts, &bytes));
+    assert(experts == 0 && bytes == 0);
+
+    /* Check ownership with a tiny allocation, without a pressure experiment. */
+    ds4_ssd_memory_lock lock = {0};
+    assert(ds4_ssd_memory_lock_acquire(&lock, 0) && lock.ptr == NULL);
+    assert(ds4_ssd_memory_lock_acquire(&lock, 8192));
+    assert(lock.ptr != NULL && lock.bytes == 8192);
+    ds4_ssd_memory_lock_release(&lock);
+    assert(lock.ptr == NULL && lock.bytes == 0);
+    ds4_ssd_memory_lock_release(&lock);
+
     ds4_ssd_cache_plan p;
     unsetenv("DS4_SSD_AUTO_CACHE_PCT");
     assert(ds4_ssd_auto_cache_plan(100 * gib, 86, 0, 10 * gib, gib, 1000, &p));

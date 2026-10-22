@@ -1,0 +1,5 @@
+<｜begin▁of▁sentence｜>System facts remain checkable.
+<｜User｜>Read the file.
+<｜Assistant｜><think>Inspect it.</think>
+<tool_result>int main(void) { return 0; }</tool_result>
+<｜User｜>Keep the code PINE-251.

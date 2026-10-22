@@ -102,10 +102,55 @@ done:
     return ok;
 }
 
+/* Exercise the production C plan wrappers in both selected implementations.
+ * The retained tail starts inside this still-open assistant thinking span. */
+static bool compact_thinking_resume(agent_worker *w, const ds4_tokens *sys,
+                                    char *err, size_t err_len) {
+    bool ok = false;
+    agent_worker input = {.cfg = w->cfg, .engine = w->engine};
+    ds4_agent_compaction_plan plan = {0};
+    ds4_tokens fragment = {0}, resume = {0};
+    ds4_tokens_copy(&input.transcript, sys);
+    ds4_chat_append_message(w->engine, &input.transcript, "user", "Keep the unfinished answer.");
+    int open_assistant = input.transcript.len;
+    ds4_chat_append_assistant_prefix(w->engine, &input.transcript, DS4_THINK_HIGH);
+    ds4_tokenize_rendered_chat(w->engine, " unfinished_fragment", &fragment);
+    CHECK(fragment.len > 0);
+    int budget = w->cfg->gen.ctx_size / AGENT_COMPACT_TAIL_DIVISOR;
+    for (int i = 0; i < 3 * budget + 17; i++)
+        ds4_tokens_push(&input.transcript, fragment.v[i % fragment.len]);
+    CHECK(agent_worker_compaction_prepare_plan(&input, sys, "fixture", w->cfg->gen.ctx_size,
+                                              &plan, err, err_len));
+    CHECK(plan.summary_bottom > open_assistant && plan.summary_max > 0);
+    CHECK(!memcmp(plan.prompt.v, input.transcript.v,
+                  (size_t)plan.summary_bottom * sizeof(*plan.prompt.v)));
+    CHECK(agent_worker_compaction_rebuild_plan(&input, sys, "An answer remains unfinished.",
+                                              &open_assistant, w->cfg->gen.ctx_size,
+                                              &plan, err, err_len));
+    CHECK(plan.tail_start > open_assistant && plan.tail_start < input.transcript.len);
+    CHECK(ds4_tokens_starts_with(&plan.compacted, sys));
+    ds4_chat_append_assistant_prefix(w->engine, &resume, DS4_THINK_HIGH);
+    CHECK(plan.resumed_start >= sys->len);
+    CHECK(plan.tail_dst_start == plan.resumed_start + resume.len);
+    CHECK(!memcmp(plan.compacted.v + plan.resumed_start, resume.v,
+                  (size_t)resume.len * sizeof(*resume.v)));
+    int tail_len = input.transcript.len - plan.tail_start;
+    CHECK(plan.compacted.len == plan.tail_dst_start + tail_len);
+    CHECK(!memcmp(plan.compacted.v + plan.tail_dst_start,
+                  input.transcript.v + plan.tail_start, (size_t)tail_len * sizeof(*resume.v)));
+    CHECK(ds4_session_pos(w->session) == 0); /* no private summary/model evaluation */
+    ok = true;
+done:
+    agent_compaction_plan_free(&plan);
+    ds4_tokens_free(&input.transcript);
+    ds4_tokens_free(&fragment); ds4_tokens_free(&resume);
+    return ok;
+}
+
 int main(int argc, char **argv) {
-    if (argc != 2) { fprintf(stderr, "usage: %s MODEL\n", argv[0]); return 2; }
+    if (argc != 3) { fprintf(stderr, "usage: %s MODEL OUTPUT_PARENT\n", argv[0]); return 2; }
     int rc = 1;
-    char err[256] = {0}, dir[] = "/tmp/ds4-live-context-XXXXXX", path[PATH_MAX] = {0};
+    char err[256] = {0}, dir[PATH_MAX] = {0}, path[PATH_MAX] = {0};
     agent_config cfg = {.non_interactive = true,
         .gen = {.ctx_size = 8192, .think_mode = DS4_THINK_HIGH},
         .engine = {.model_path = argv[1], .backend = DS4_BACKEND_METAL,
@@ -115,8 +160,11 @@ int main(int argc, char **argv) {
                    .power_percent = 100}};
     agent_worker w = {.cfg = &cfg, .wake_fd = {-1, -1}};
     ds4_tokens sys = {0}, edited = {0}, expected = {0};
+    int length = snprintf(dir, sizeof(dir), "%s/ds4-live-context-XXXXXX", argv[2]);
+    CHECK(length >= 0 && (size_t)length < sizeof(dir));
     CHECK(mkdtemp(dir));
-    snprintf(path, sizeof(path), "%s/context.txt", dir);
+    length = snprintf(path, sizeof(path), "%s/context.txt", dir);
+    CHECK(length >= 0 && (size_t)length < sizeof(path));
     cfg.gen.live_context_path = path;
     CHECK(ds4_engine_open(&w.engine, &cfg.engine) == 0);
     CHECK(ds4_session_create(&w.session, w.engine, cfg.gen.ctx_size) == 0);
@@ -135,6 +183,7 @@ int main(int argc, char **argv) {
     CHECK(agent_tokens_equal(&w.transcript, &edited));
     CHECK(ds4_session_pos(w.session) == 0); /* import itself runs no model tokens */
     CHECK(literal_markup_edits(&w, &sys, err, sizeof(err)));
+    CHECK(compact_thinking_resume(&w, &sys, err, sizeof(err)));
     ds4_tokens_copy(&expected, &w.transcript);
 
     edited.v[0] = edited.v[0] == 1 ? 2 : 1;
@@ -173,6 +222,7 @@ done:
     if (path[0]) unlink(path);
     rmdir(dir);
     ds4_tokens_free(&sys); ds4_tokens_free(&edited); ds4_tokens_free(&expected);
+    agent_live_context_clear(&w);
     ds4_tokens_free(&w.transcript);
     ds4_session_free(w.session); ds4_engine_close(w.engine);
     return rc;
