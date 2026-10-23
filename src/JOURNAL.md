@@ -62,9 +62,10 @@ copying and SSD wait costs before choosing a more elaborate queue.
 
 ## Current implementation
 
-- `main`, `zig-rewrite` and `zig-engine` now identify the qualified Zig runtime
-  at `37498248b4cb`. The user authorized promotion on 2026-10-23; `origin/main`
-  was verified at the same commit after the fast-forward push. The stack starts
+- `main`, `origin/main` and `flint-metal` identify the qualified Flint stack at
+  `635d5d534e77`, published at the user's request on 2026-10-23 and verified
+  directly on origin. `zig-rewrite` and `zig-engine` retain the earlier qualified
+  Zig runtime at `37498248b4cb`. The stack starts
   at condensed base `60813d03`. The original condensed commit before artifact cleanup was
   `da7940e2f2d8`; use bookmarks for its rewritten successor.
 - Detailed implementation history is preserved at
@@ -165,6 +166,16 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
 ## Progress log
 
 ### 2026-10-23
+
+- Planned, explicitly deferred: add native Metal V4.1/1017 activation steering,
+  starting with FFN outputs. **Do not implement yet. Zero speed degradation is
+  a hard acceptance requirement with steering disabled/zero and enabled.** Do
+  not accept a small slowdown in exchange for behavioral control; compare fixed
+  token workloads so shorter answers cannot hide slower inference. Prefer
+  projection fused into existing kernels, retaining cache exclusions initially.
+  The restriction already existed in upstream's first V4.1 implementation; it
+  was not a feature removed by the Zig rewrite. The initial future experiment
+  has a one-hour ceiling; see the [deferred plan](../speed-bench/ideas/next-experiments.md#deferred-v411017-activation-steering--planned-2026-10-23).
 
 - Completed the M4 Pro and M5 Pro ports and cross-profile qualification on the
   available M5 Max. Auto detection selects Recursive's 36/32 resident schedule

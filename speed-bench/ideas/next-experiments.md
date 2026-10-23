@@ -1,5 +1,34 @@
 # Next experiments: one hour each
 
+## Deferred: V4.1/1017 activation steering — planned 2026-10-23
+
+**Planning only. Do not implement until the user schedules this item.** Initial
+budget: one hour, including implementation, measurement and the adoption decision.
+
+- Start with FFN-only activation steering in the native Metal V4.1 engine;
+  attention steering is a later decision. The current restriction predates both
+  1017 and the Zig rewrite: this is missing execution support, not a model ban.
+- **Hard requirement: zero performance degradation, with steering both disabled
+  or at zero strength and enabled at nonzero strength.** Any reproducible slowdown
+  blocks adoption; there is no allowance for a small speed/behavior tradeoff.
+  This is an adoption gate, not a promised outcome. Loading unused vectors must
+  leave the existing zero/off kernels and cache paths unchanged.
+- Prefer fusing the projection into existing output/residual kernels. Do not
+  add separate per-layer GPU dispatches or CPU readbacks for steering. Check
+  whether added shader work changes register pressure or the unsteered fast path.
+- Compare a frozen baseline with disabled, zero and nonzero steering using fixed
+  token sequences, ordinary prefill/append and decode workloads, alternating run
+  order, and the existing pressure guard. Measure prefill latency, decode rate
+  and request latency; shorter generated answers do not offset slower inference.
+  Nonzero steering may change expert routing and SSD/cache behavior even with
+  fixed tokens: measure kernel overhead and whole-request cost separately,
+  including any lost cache reuse. Report startup/vector-loading costs separately.
+  Retain run variation and treat a repeatable regression as a failed point.
+- Check unchanged results when disabled/zero, then measure nonzero behavioral
+  effects and practical quality. Keep current cache/suffix exclusions initially;
+  checkpoint compatibility and live scale changes need explicit semantics before
+  those combinations are enabled. Reuse existing fixtures and measurement tools.
+
 ## Selective Zig migration, authorized 2026-10-22
 
 Keep `main` fixed. Preserve the previous translation on `zig-rewrite`; work
