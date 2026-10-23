@@ -129,7 +129,7 @@ For an interleaved comparison against a diagnostic rollback:
 The control unsets the variable; the candidate sets it in alternating ABBA
 blocks. Use only controls read at dispatch time. Keep prompts, context, memory
 pressure and thermal conditions comparable, and retain generated text when
-measuring speculation. `concurrency_sweep.sh` runs each cell in a fresh process.
+measuring speculation. `concurrency_sweep.nu` runs each cell in a fresh process.
 
 `serve_concurrency_bench.py` measures the HTTP server, including queueing,
 prompt rendering, prefix reuse and streaming:

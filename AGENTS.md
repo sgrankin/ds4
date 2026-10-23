@@ -16,6 +16,10 @@ distinguish completed work from proposals and retain relevant evidence links.
   stress cases; plot tradeoffs for tunable features.
 - Output degradation is acceptable. Measure speed and practical task quality;
   use delta-NLL and KL to describe changes, not as automatic rejection criteria.
+- Use Nushell for maintained orchestration and shell test drivers, with plain
+  `#!/usr/bin/env nu` shebangs and normal `nu script.nu` invocations. Keep Python
+  for numerical/conversion work and focused binary I/O; retain historical
+  experiment snapshots in their recorded languages.
 - Prefer standard parsers and simple formats. Check essential assumptions and
   make real failures obvious; avoid custom validation frameworks, redundant
   provenance layers and exhaustive malformed-input tests.

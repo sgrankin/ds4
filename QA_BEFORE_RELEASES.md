@@ -69,7 +69,7 @@ in this system.
 
 - Run the default suite:
   `make test`.
-- Run `tests/test_gpu_args_cli.sh` explicitly after changing executable option
+- Run `tests/test_gpu_args_cli.nu` explicitly after changing executable option
   parsing or multi-GPU placement. Invalid values and device/budget count
   mismatches must reach the shared GPU parser in all four binaries; an
   `unknown option` response from a binary that advertises the flag is a
@@ -420,7 +420,7 @@ substitute for this matrix.
 - Run the 100-case Q4 XL and Q2 official fixtures from section 3 and preserve
   both `summary` and `api_summary` lines. Compare against the documented Q4 and
   Q2 reference bands independently.
-- Run `tests/glm_long_context_smoke.sh` with the release-advertised context on
+- Run `tests/glm_long_context_smoke.nu` with the release-advertised context on
   the 512 GB Metal host. The generated continuation must begin with `>` and
   contain none of the known token-corruption markers.
 - Exercise integrated GLM MTP with `--mtp-timing` on a deterministic
@@ -1044,7 +1044,7 @@ a substitute for CUDA or Metal release testing.
   must be materially faster and must still pass the matching continuation-
   quality gate. `--quality` must stay on the full-FP32 activation path.
 - Test DSpark with the matched 0731 target and support files:
-  `DS4_BIN=./ds4 DS4_DSPARK_MODEL=gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf DS4_DSPARK_SUPPORT=gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf DS4_DSPARK_FIXTURE_TOKENS=64 sh tests/dspark_acceptance_fixture.sh`.
+  `DS4_BIN=./ds4 DS4_DSPARK_MODEL=gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf DS4_DSPARK_SUPPORT=gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf DS4_DSPARK_FIXTURE_TOKENS=64 nu tests/dspark_acceptance_fixture.nu`.
   Require proposals, accepted draft tokens, at least one direct state commit,
   zero verifier errors, and no unexplained replay fallbacks. With
   `DS4_DSPARK_SPEC_LOG=1`, a five-of-six commit may report `prefix-extended`:
@@ -1269,7 +1269,7 @@ does not establish that speculative cache reuse is efficient.
 
 ## 14. Download Script And Model Files
 
-- Test `download_model.sh` in a temporary directory so local weights are not
+- Test `download-model.nu` in a temporary directory so local weights are not
   overwritten.
 - Test one Flash target and one PRO target enough to verify URL, resume, Hugging
   Face CLI/curl behavior, file naming, and symlink policy.

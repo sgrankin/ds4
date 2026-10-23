@@ -46,7 +46,8 @@ independent references after the transaction's safe boundary.
 ## Build and run
 
 Run from the repository root with Zig **0.17**, Apple Clang and the macOS SDK on
-Apple Silicon. The build detects the host macOS version and uses the matching
+Apple Silicon, with Nushell **0.116.1** tested for the project scripts. The build
+detects the host macOS version and uses the matching
 Clang deployment target. Older deployment targets and other platforms are not
 qualified by this build.
 
@@ -86,6 +87,23 @@ engine or the Zig DeepSeek V4.1 engine; no separate frontend is needed. Historic
 C implementations remain available in version history for comparison. Resident
 substitution, decoder replay and suffix relocation retain their existing
 preset/opt-in rules.
+
+## Project scripts
+
+`ds4-local` and `tools/zig-build` are executable Nushell scripts; existing commands
+keep their names and argument order. The downloader is `./download-model.nu`;
+its target catalogue is standard JSON in `tools/model-downloads.json`. Download
+verification and split-file resume remain explicit. The small binary-assembly
+helper retains Python's streaming I/O, file locking and fsync.
+
+Shell test/benchmark drivers use `.nu` names. `make test` runs the Nu host/script
+suite; `make test-scripts` runs the fast script contracts. Python remains for
+numerical/model conversion, protocol tests and binary helpers. Historical
+experiment snapshots retain the commands and languages of their revisions.
+
+Development checks use `nu-check --debug` and
+`nufmt --dry-run --shebang ds4-local tools/zig-build download-model.nu tests/*.nu`;
+`nufmt.nuon` keeps four-space indentation and readable multiline pipelines.
 
 ## C, Objective-C and shader boundaries
 

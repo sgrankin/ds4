@@ -3,7 +3,8 @@
 import hashlib
 import os
 from pathlib import Path
-import re
+import json
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -36,23 +37,27 @@ def payload(name):
 
 class DownloadTests(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory()
+        work = ROOT / ".workspaces"
+        work.mkdir(exist_ok=True)
+        self.tmp = tempfile.TemporaryDirectory(prefix="download-tests-", dir=work)
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name).resolve() / "source tree"
         self.root.mkdir()
         self.bin = self.root / "bin"
         self.bin.mkdir()
         self.out = self.root / "gguf files"
-        self.script = self.root / "download_model.sh"
-        text = (ROOT / "download_model.sh").read_text()
+        self.script = self.root / "download-model.nu"
+        shutil.copy2(ROOT / "download-model.nu", self.script)
+        tools = self.root / "tools"
+        tools.mkdir()
+        shutil.copy2(ROOT / "tools/join-model-parts.py", tools)
+        catalog = json.loads((ROOT / "tools/model-downloads.json").read_text())
         for name, (size, sha) in ARTIFACTS.items():
+            self.assertEqual(catalog["artifacts"][name], {"bytes": size, "sha256": sha})
             data = payload(name)
-            # Match one identity pair: the two vision files have equal real sizes.
-            pattern = rf"expected_bytes={size}(\s+expected_sha=){sha}\b"
-            text, count = re.subn(pattern, lambda match:
-                f"expected_bytes={len(data)}{match[1]}{hashlib.sha256(data).hexdigest()}", text)
-            self.assertEqual(count, 1, name)
-        self.script.write_text(text)
+            catalog["artifacts"][name] = {
+                "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+        (tools / "model-downloads.json").write_text(json.dumps(catalog))
         hf = self.bin / "hf"
         hf.write_text("""#!/usr/bin/env python3
 import os
@@ -75,7 +80,7 @@ out.mkdir(parents=True, exist_ok=True)
                         DS4_GGUF_DIR=str(self.out))
 
     def run_download(self, target, ok=True):
-        result = subprocess.run(["sh", str(self.script), target], env=self.env,
+        result = subprocess.run(["nu", str(self.script), target], env=self.env,
                                 text=True, capture_output=True, timeout=30)
         self.assertEqual(result.returncode == 0, ok, result.stdout + result.stderr)
         return result.stdout + result.stderr
@@ -93,6 +98,14 @@ out.mkdir(parents=True, exist_ok=True)
         self.assertIn("Already downloaded", self.run_download("ds41f-q4"))
         self.assertIn("Verifying SHA-256", self.run_download("ds41f-vision"))
         self.assertEqual(link.resolve(), self.out / Q4)
+
+    def test_empty_output_directory_uses_repo_gguf(self):
+        self.env["DS4_GGUF_DIR"] = ""
+        self.run_download("ds41f-q2")
+        target = self.root / "gguf" / Q2
+        self.assertEqual(target.read_bytes(), payload(Q2))
+        self.assertEqual((self.root / "ds4flash.gguf").resolve(), target)
+        self.assertFalse(self.out.exists())
 
     def test_1017_vision_is_verified_without_changing_link(self):
         self.run_download("ds41f-q2")
@@ -190,6 +203,43 @@ out.mkdir(parents=True, exist_ok=True)
         self.env["FAIL_DOWNLOAD"] = "1"
         self.run_download("ds41f-q4")
         self.assertEqual((self.out / Q4).read_bytes(), payload(Q4))
+
+    def test_curl_resume_and_sidecar(self):
+        name = "DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf"
+        self.out.mkdir()
+        partial = self.out / (name + ".part")
+        partial.write_bytes(payload(name)[:7])
+        curl = self.bin / "curl"
+        curl.write_text("""#!/usr/bin/env python3
+import json, os, sys
+from pathlib import Path
+args = sys.argv[1:]
+assert args[args.index('-C') + 1] == '-'
+assert args[args.index('-H') + 1] == 'Authorization: Bearer fixture secret'
+Path(os.environ['CURL_ARGS']).write_text(json.dumps(args))
+out = Path(args[args.index('-o') + 1])
+data = (args[-1].rsplit('/', 1)[-1] + '\\n').encode()
+with out.open('ab') as stream:
+    stream.write(data[out.stat().st_size:])
+""")
+        curl.chmod(0o755)
+        self.env.update(HF_TOKEN="fixture secret", CURL_ARGS=str(self.root / "curl.json"))
+        text = self.run_download("ds4f-q2")
+        self.assertNotIn("fixture secret", text)
+        self.assertEqual((self.out / name).read_bytes(), payload(name))
+        self.assertFalse(partial.exists())
+        self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / name)
+        (self.out / (name + ".aria2")).touch()
+        self.assertIn("aria2", self.run_download("ds4f-q2", ok=False))
+
+    def test_hf_failure_preserves_code_and_hides_token(self):
+        self.env["FAIL_DOWNLOAD"] = "1"
+        result = subprocess.run(
+            ["nu", str(self.script), "ds41f-q2", "--token", "fixture secret"],
+            env=self.env, text=True, capture_output=True, timeout=30)
+        self.assertEqual(result.returncode, 7)
+        self.assertNotIn("fixture secret", result.stdout + result.stderr)
+        self.assertFalse((self.root / "ds4flash.gguf").exists())
 
     def test_help_and_invalid_target(self):
         help_text = self.run_download("--help")

@@ -1,0 +1,266 @@
+{
+  "targets": {
+    "ds4f-q2": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf",
+      "transport": "curl",
+      "description": "2-bit routed experts, about 81 GB on disk. Recommended model for 96 and 128 GB RAM machines."
+    },
+    "ds4f-q2-q4": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-Layers37-42Q4KExperts-OtherExpertLayersIQ2XXSGateUp-Q2KDown-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-fixed-0731.gguf",
+      "transport": "curl",
+      "description": "Mixed Flash quant: mostly q2 routed experts, with the last 6 layers using q4 routed experts. About 98 GB on disk. Good for higher quality inference for 128 GB MacBooks. Works on DGX Spark but loading may struggle compared to ds4f-q2."
+    },
+    "ds4f-q4": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-Q4KExperts-F16HC-F16Compressor-F16Indexer-Q8Attn-Q8Shared-Q8Out-chat-v2-imatrix-0731.gguf",
+      "transport": "curl",
+      "description": "4-bit routed experts, about 153 GB on disk. Recommended model for machines with 256 GB RAM or more."
+    },
+    "ds4f-mxfp4": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-MXFP4Experts-F16HC-F16Compressor-F16Indexer-Q8Attn-Q8Shared-Q8Out-chat-v2-mxfp4-0731.gguf",
+      "transport": "hf",
+      "description": "Native DeepSeek V4 Flash MXFP4 routed experts, about 156 GB on disk. Supported by Metal and CUDA; Blackwell uses FP4 tensor cores for batched expert work, while CUDA decode keeps Q8 activations."
+    },
+    "ds4f-dspark": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-DSpark-support-0731.gguf",
+      "transport": "curl",
+      "link": false,
+      "description": "Optional DSpark speculative decoding support GGUF for Flash 0731, about 6 GB. Enable it with --dspark and --mtp-model when running ds4 or ds4-server."
+    },
+    "ds4f-vision-q2": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-Vision-Exp-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8.gguf",
+      "files": [
+        "DeepSeek-V4-Flash-Vision-Exp-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8.gguf",
+        "DeepSeek-V4-Flash-Vision-Encoder.gguf"
+      ],
+      "transport": "hf",
+      "description": "DeepSeek V4 Flash Vision Experimental with 2-bit routed experts, about 81 GiB, plus its vision encoder. Recommended for 96 and 128 GB Macs."
+    },
+    "ds4f-vision-q2-q4": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-Vision-Exp-Layers37-42Q4KExperts-OtherExpertLayersIQ2XXSGateUp-Q2KDown-AProjQ8-SExpQ8-OutQ8.gguf",
+      "files": [
+        "DeepSeek-V4-Flash-Vision-Exp-Layers37-42Q4KExperts-OtherExpertLayersIQ2XXSGateUp-Q2KDown-AProjQ8-SExpQ8-OutQ8.gguf",
+        "DeepSeek-V4-Flash-Vision-Encoder.gguf"
+      ],
+      "transport": "hf",
+      "description": "Mixed Vision Experimental quant with routed experts in layers 37-42 at Q4_K and the others at 2 bits, about 91 GiB, plus its vision encoder."
+    },
+    "ds4f-vision-mxfp4": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-Vision-Exp-MXFP4Experts-F16HC-F16Compressor-F16Indexer-Q8Attn-Q8Shared-Q8Out.gguf",
+      "files": [
+        "DeepSeek-V4-Flash-Vision-Exp-MXFP4Experts-F16HC-F16Compressor-F16Indexer-Q8Attn-Q8Shared-Q8Out.gguf",
+        "DeepSeek-V4-Flash-Vision-Encoder.gguf"
+      ],
+      "transport": "hf",
+      "description": "Native MXFP4 Vision Experimental model, about 145 GiB, plus its vision encoder. Intended for CUDA or two 128 GB Macs using tensor parallelism."
+    },
+    "ds4f-vision-encoder": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-Vision-Encoder.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "Standalone Vision Experimental encoder, about 0.9 GiB. Use this when the matching language GGUF is already present."
+    },
+    "ds4f-vision-dspark": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Flash-Vision-Exp-DSpark-support.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "Matching DSpark speculative decoding support for Vision Experimental, about 5.6 GiB. It is not compatible with the 0731 language checkpoint."
+    },
+    "ds41f-q2": {
+      "repo": "antirez/deepseek-v4.1-flash-gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf",
+      "transport": "hf",
+      "description": "DeepSeek V4.1 Flash 1017 calibrated Q2, about 341 GiB on disk. Main weights occupy 152 GiB; Engram tables stay on disk. Metal only: use SSD streaming on one 128 GB Mac, tensor parallelism on two, or a larger resident Mac."
+    },
+    "ds41f-q4": {
+      "repo": "antirez/deepseek-v4.1-flash-gguf",
+      "file": "DeepSeek-V4.1-Flash-Q4.gguf",
+      "transport": "hf",
+      "description": "DeepSeek V4.1 Flash calibrated Q4, about 483 GiB on disk. Main weights occupy 294 GiB; Engram tables stay on disk. Metal only: use SSD streaming on smaller Macs or full residency on a 512 GB Mac. Downloads two parts and joins them automatically; allow another 37 GiB of free disk space."
+    },
+    "ds41f-vision": {
+      "repo": "antirez/deepseek-v4.1-flash-gguf",
+      "file": "DeepSeek-V4.1-Flash-Vision.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "September V4.1 Flash vision encoder, about 0.9 GiB, matching ds41f-q4. For the current 1017 Q2, use ds41f-1017-vision instead. Does not update ./ds4flash.gguf."
+    },
+    "ds41f-1017-vision": {
+      "repo": "kyuz0/deepseek-v4.1-flash-gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-vision-BF16.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "Matching 1017 BF16 vision encoder from kyuz0, about 0.9 GiB. Add --vision FILE to the language-model command. Does not update ./ds4flash.gguf."
+    },
+    "pro-q2-imatrix": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Pro-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-Instruct-imatrix-0813.gguf",
+      "transport": "hf",
+      "description": "DeepSeek V4 PRO 0813 q2 imatrix quant, as a single GGUF file. About 430 GB on disk; intended for 512 GB RAM machines."
+    },
+    "pro-q4-layers00-30": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Pro-Q4K-Layers00-30.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "First half of the DeepSeek V4 PRO Q4 routed-expert quant, layers 0..30. Use on the coordinator in a two-Mac-Studio distributed run. About 426 GB."
+    },
+    "pro-q4-layers31-output": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Pro-Q4K-Layers-31-output.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "Second half of the DeepSeek V4 PRO Q4 routed-expert quant, layers 31..output. Use on the worker in a two-Mac-Studio distributed run. About 412 GB."
+    },
+    "pro-q4-split": {
+      "repo": "antirez/deepseek-v4-gguf",
+      "file": "DeepSeek-V4-Pro-Q4K-Layers00-30.gguf",
+      "files": [
+        "DeepSeek-V4-Pro-Q4K-Layers00-30.gguf",
+        "DeepSeek-V4-Pro-Q4K-Layers-31-output.gguf"
+      ],
+      "transport": "hf",
+      "link": false,
+      "description": "Downloads both PRO Q4 split files into the download directory. About 838 GB total. This target does not update ./ds4flash.gguf."
+    },
+    "glm-unsloth-q4": {
+      "repo": "unsloth/GLM-5.2-GGUF",
+      "file": "GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf",
+      "files": [
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00002-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00003-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00004-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00005-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00006-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00007-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00008-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00009-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00010-of-00011.gguf",
+        "UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00011-of-00011.gguf"
+      ],
+      "transport": "hf",
+      "flatten": true,
+      "description": "GLM 5.2 Unsloth UD-Q4_K_XL quant from unsloth/GLM-5.2-GGUF. Downloads all 11 shards and links ./ds4flash.gguf to the first shard."
+    },
+    "glm-antirez-q2": {
+      "repo": "antirez/GLM-5.2-GGUF",
+      "file": "GLM-5.2-UD-Q2_K_RoutedQ2K.gguf",
+      "transport": "hf",
+      "description": "GLM 5.2 antirez routed Q2_K GGUF from antirez/GLM-5.2-GGUF. About 262 GB on disk."
+    },
+    "glm-antirez-iq2xxs": {
+      "repo": "antirez/GLM-5.2-GGUF",
+      "file": "GLM-5.2-UD-IQ2_XXS_RoutedIQ2XXS_blk78Q2K.gguf",
+      "transport": "hf",
+      "description": "GLM 5.2 antirez routed IQ2_XXS GGUF from antirez/GLM-5.2-GGUF. Includes Q2_K block 78 and is intended for reduced-memory testing."
+    },
+    "glm-antirez-q4": {
+      "repo": "antirez/GLM-5.2-GGUF",
+      "file": "GLM-5.2-UD-Q4_K_RoutedQ4K.gguf",
+      "transport": "hf",
+      "description": "GLM 5.2 antirez routed Q4_K GGUF from antirez/GLM-5.2-GGUF. About 434 GB on disk."
+    },
+    "glm53-full-q2": {
+      "repo": "antirez/glm-5.3-gguf",
+      "file": "GLM-5.3-UD-IQ2_XXS_RoutedIQ2XXS_blk78Q2K.gguf",
+      "transport": "hf",
+      "description": "Full GLM 5.3 routed IQ2_XXS/Q2_K GGUF, about 197 GiB on disk. Intended for 256 GB machines or SSD streaming on smaller systems."
+    },
+    "glm53-q2": {
+      "repo": "antirez/glm-5.3-flash-gguf",
+      "file": "GLM-5.3-Flash-Q2.gguf",
+      "transport": "hf",
+      "description": "GLM 5.3 Flash imatrix Q2 GGUF, about 90 GiB on disk. Intended for resident inference on 128 GB Macs."
+    },
+    "glm53-q4": {
+      "repo": "antirez/glm-5.3-flash-gguf",
+      "file": "GLM-5.3-Flash-Q4_K.gguf",
+      "transport": "hf",
+      "description": "GLM 5.3 Flash Q4_K GGUF, about 178 GiB on disk. Intended for two-Mac tensor parallelism or single-Mac SSD streaming."
+    },
+    "glm53-fp8": {
+      "repo": "antirez/glm-5.3-flash-gguf",
+      "file": "GLM-5.3-Flash-FP8.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "Text-only GLM 5.3 Flash native FP8 GGUF, about 305 GiB on disk. It preserves the released weights without requantization. DwarfStar inference support for this paired FP8-code/scale format is pending."
+    },
+    "glm53-vision": {
+      "repo": "antirez/glm-5.3-flash-gguf",
+      "file": "GLM-5.3-Flash-Vision-Encoder.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "GLM 5.3 Flash vision encoder, about 1.1 GB on disk. Load it separately with --vision; this target does not update ./ds4flash.gguf."
+    },
+    "qwen38-q2": {
+      "repo": "antirez/qwen3.8-flash-next-gguf",
+      "file": "Qwen3.8-Flash-Next-Q2.gguf",
+      "transport": "hf",
+      "description": "Qwen3.8-Flash-Next Q2: one 137.10 GiB GGUF. Main/MTP weights occupy 41.73 GiB; original BF16 n-grams stay on disk. Imatrix IQ2_XXS gate/up and Q2_K down experts (640 logical inputs, padded to 768 on disk), with higher-precision dense/control tensors. Smaller option for 64 GB Macs: start with --ctx 8192 and --prefill-chunk 1024. Context buffers need additional RAM. Keep the file on a local SSD. Add --mtp for speculation."
+    },
+    "qwen38-q4k": {
+      "repo": "antirez/qwen3.8-flash-next-gguf",
+      "file": "Qwen3.8-Flash-Next-Q4.gguf",
+      "transport": "hf",
+      "description": "Qwen3.8-Flash-Next Q4: one 165.11 GiB GGUF. Main/MTP weights occupy 69.74 GiB; original BF16 n-grams stay on disk. Imatrix Q4_K gate/up and MXFP4 down routed experts. Fits 128 GB Macs with room for context buffers. Add --mtp for speculation."
+    },
+    "qwen38-vision": {
+      "repo": "ggml-org/Qwen3.8-Flash-Next-GGUF",
+      "file": "mmproj-Qwen3.8-Flash-Next-Q8_0.gguf",
+      "transport": "hf",
+      "link": false,
+      "description": "Qwen3.8-Flash-Next vision encoder, about 0.6 GB on disk. Load it with --vision; this target does not update ./ds4flash.gguf."
+    }
+  },
+  "aliases": {
+    "qwen38-iq2": "qwen38-q2"
+  },
+  "artifacts": {
+    "Qwen3.8-Flash-Next-Q2.gguf": {
+      "bytes": 147207127040,
+      "sha256": "b1b93fa69aca5f187b0fb813aca8f3ec1beb5cf8cf0bd38cf041b93e0b6ccac9"
+    },
+    "Qwen3.8-Flash-Next-Q4.gguf": {
+      "bytes": 177280286720,
+      "sha256": "680944460a8cbe93ba8b6d7b6107213ffb7e22320bd913000e563ca0a0f25a8a"
+    },
+    "DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf": {
+      "bytes": 365713686528,
+      "sha256": "5296e85ff64b42ecb62c8d0c0c54e1caa07e3df8e93112f2365ebbaed62ce93a"
+    },
+    "DeepSeek-V4.1-Flash-Q4.gguf": {
+      "bytes": 518596067328,
+      "sha256": "a5e2e2c3ada4b2e98d9f9e4b50f6d9c2a12c2c96f5da165c07e13aff9264984e"
+    },
+    "DeepSeek-V4.1-Flash-Q4.gguf.part1": {
+      "bytes": 480000000000,
+      "sha256": "6442b1f9224079662c02003c0ef9ef6be6e2aff509510f681dab9e6cc41df246"
+    },
+    "DeepSeek-V4.1-Flash-Q4.gguf.part2": {
+      "bytes": 38596067328,
+      "sha256": "7c3e10646c918eeaffbc39305a75ec96117450262c61454ff194cef00d7617f0"
+    },
+    "DeepSeek-V4.1-Flash-Vision.gguf": {
+      "bytes": 970555552,
+      "sha256": "cc283f032b3e8b8d78aeb5fccaa14e97b859b0c53aae3cd6bffa690ddf0e9e15"
+    },
+    "DeepSeek-V4.1-Flash-1017-vision-BF16.gguf": {
+      "bytes": 970555552,
+      "sha256": "861f1097e8686111fa23dc4a6bf139fd0c4cc114db2f1b4090a267f7683c0dbf"
+    }
+  },
+  "split": {
+    "target": "ds41f-q4",
+    "file": "DeepSeek-V4.1-Flash-Q4.gguf"
+  }
+}

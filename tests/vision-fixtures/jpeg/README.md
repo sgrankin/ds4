@@ -5,7 +5,7 @@ Ah=2, Al=1`) with restart markers. The unpatched Iris decoder mishandles ZRL
 (`run=15, size=0`) in that scan: it keeps consuming correction bits after the
 16th currently-zero coefficient.
 
-Generated with libjpeg-turbo 3.2.0 `cjpeg`. Re-run `./generate.sh` if you have
+Generated with libjpeg-turbo 3.2.0 `cjpeg`. Re-run `./generate.nu` if you have
 `cjpeg` on `PATH`.
 
 | File | Size | Why it is here |

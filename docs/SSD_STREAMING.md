@@ -25,15 +25,15 @@ Examples:
 
 ```sh
 # Flash Q2 on a smaller Mac.
-./download_model.sh ds4f-q2
+./download-model.nu ds4f-q2
 ./ds4 --ssd-streaming --ctx 32768 --nothink
 
 # GLM 5.3 Flash Q4 on a 128 GB Mac.
-./download_model.sh glm53-q4
+./download-model.nu glm53-q4
 ./ds4 --ssd-streaming --ctx 4096
 
 # PRO Q2 on a 128 GB Mac: usable for inspection, but slow.
-./download_model.sh pro-q2-imatrix
+./download-model.nu pro-q2-imatrix
 ./ds4 --ssd-streaming --ctx 32768 --nothink
 ```
 

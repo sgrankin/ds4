@@ -4,7 +4,7 @@
 
 DwarfStar is not a general GGUF runner. Use the download targets below: other
 GGUFs may have unsupported tensor layouts, metadata, or quantization mixes.
-Run `./download_model.sh --help` for filenames and all available targets.
+Run `./download-model.nu --help` for filenames and all available targets.
 
 Main-model downloads update `ds4flash.gguf`. Encoders, draft models, packaged
 FP8 weights, and split PRO pieces do not. Pass `-m FILE` to avoid depending on
@@ -26,7 +26,7 @@ your cached Hugging Face token or `HF_TOKEN` is used when present.
 | `pro-q4-split` | Both PRO Q4 pieces for pipeline execution |
 
 ```sh
-./download_model.sh ds4f-q2
+./download-model.nu ds4f-q2
 ./ds4
 ```
 
@@ -63,7 +63,7 @@ never loaded as a resident table. Keep the GGUF on a fast local SSD.
 On one 128 GB Mac, use SSD streaming. Leave the expert cache budget automatic:
 
 ```sh
-./download_model.sh ds41f-q2
+./download-model.nu ds41f-q2
 ./ds4 -m gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf \
   --ssd-streaming --ctx 32768
 ```
@@ -82,7 +82,7 @@ main weights; full residency has been tested on an M3 Ultra with 512 GB.
 
 Q4 needs SSD streaming on smaller Macs, or a 512 GB Mac for full residency.
 It does not fit resident TP across two 128 GB Macs. Download it with
-`./download_model.sh ds41f-q4` and select `gguf/DeepSeek-V4.1-Flash-Q4.gguf`.
+`./download-model.nu ds41f-q4` and select `gguf/DeepSeek-V4.1-Flash-Q4.gguf`.
 The download comes in two parts; the script joins and verifies them automatically.
 Allow another 37 GiB of free disk space while joining. Rerun the command to resume an
 interrupted download or join.
@@ -113,12 +113,12 @@ source revision. The engine rejects a mismatched pair.
 For images with the 1017 Q2 model, download its matching encoder:
 
 ```sh
-./download_model.sh ds41f-1017-vision
+./download-model.nu ds41f-1017-vision
 ./ds4-agent -m gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf \
   --ssd-streaming --vision gguf/DeepSeek-V4.1-Flash-1017-vision-BF16.gguf
 ```
 
-For the earlier Q4 model, use `./download_model.sh ds41f-vision` and
+For the earlier Q4 model, use `./download-model.nu ds41f-vision` and
 `--vision gguf/DeepSeek-V4.1-Flash-Vision.gguf`.
 
 Vision works with SSD streaming, full residency and two-Mac TP. Pass the encoder
@@ -129,7 +129,7 @@ to build the GGUFs from safetensors.
 
 ## Qwen3.8 Flash Next
 
-`./download_model.sh qwen38-q2` downloads one **137.10 GiB** GGUF: 41.73 GiB
+`./download-model.nu qwen38-q2` downloads one **137.10 GiB** GGUF: 41.73 GiB
 of main/MTP weights and 95.37 GiB of original BF16 n-grams kept on disk.
 Its gate/up experts use IQ2_XXS; down experts use Q2_K with 640 logical inputs
 padded to 768 in the weight file. It replaces the larger MXFP4-down IQ2 release.
@@ -149,7 +149,7 @@ Add `--mtp` for speculation; no second file is needed.
 See [Qwen setup](QWEN38_FLASH_NEXT.md)
 for memory, conversion, vision, and sampling details.
 
-Vision uses a separate encoder. `./download_model.sh qwen38-vision` downloads
+Vision uses a separate encoder. `./download-model.nu qwen38-vision` downloads
 llama.cpp's Q8_0 mmproj from
 [ggml-org/Qwen3.8-Flash-Next-GGUF](https://huggingface.co/ggml-org/Qwen3.8-Flash-Next-GGUF);
 pass it at runtime with `--vision`.
@@ -163,7 +163,7 @@ pass it at runtime with `--vision`.
 | `glm53-fp8` | 305 GiB | Packaged native weights only; inference not implemented |
 
 ```sh
-./download_model.sh glm53-q2
+./download-model.nu glm53-q2
 ./ds4 -m gguf/GLM-5.3-Flash-Q2.gguf --ctx 32768
 ```
 
@@ -189,7 +189,7 @@ before choosing between the default opportunistic mode and exact sampling.
 Full GLM 5.3 Q2 is about 197 GiB. Use a sufficiently large machine or streaming:
 
 ```sh
-./download_model.sh glm53-full-q2
+./download-model.nu glm53-full-q2
 ./ds4 --ssd-streaming
 ```
 
@@ -219,7 +219,7 @@ Vision Experimental is a different language checkpoint from Flash 0731.
 The main download includes its encoder:
 
 ```sh
-./download_model.sh ds4f-vision-q2
+./download-model.nu ds4f-vision-q2
 ./ds4 --vision gguf/DeepSeek-V4-Flash-Vision-Encoder.gguf
 ```
 
@@ -232,7 +232,7 @@ already present. Vision Experimental has its own [DSpark drafter](SPECULATIVE_DE
 The text GGUF stays the same. Download and add the encoder explicitly:
 
 ```sh
-./download_model.sh glm53-vision
+./download-model.nu glm53-vision
 ./ds4 -m gguf/GLM-5.3-Flash-Q2.gguf \
   --vision gguf/GLM-5.3-Flash-Vision-Encoder.gguf
 ```
@@ -250,7 +250,7 @@ For HTTP image formats and limits, see [serving](SERVER.md#images).
 The text GGUF stays the same. Download and add the encoder explicitly:
 
 ```sh
-./download_model.sh qwen38-vision
+./download-model.nu qwen38-vision
 ./ds4 --mtp \
   --vision gguf/mmproj-Qwen3.8-Flash-Next-Q8_0.gguf
 ```

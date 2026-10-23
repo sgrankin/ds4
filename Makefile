@@ -8,16 +8,7 @@ ZIG_FLAGS ?=
 CC ?= cc
 PROGRAMS := ds4 ds4-server ds4-agent ds4-bench ds4-eval
 
-HOST_STEPS := sampling-test engram-test image-test vision-image-test vocab-test \
-	tokenizer-test pretokenizer-test gguf-test ssd-test prompt-prefix-test \
-	session-state-test serving-boundary-test websocket-frames-test \
-	resident-route-test state-cache-test response-store-test
-HOST_BINS := test-sampling test-engram test-image-decode test-deepseek4-vision-image \
-	test-vocab test-tokenizer-piece test-pretokenizer test-gguf-cursor \
-	test-ssd-cache test-prompt-prefix test-session-state test-serving-boundary \
-	test-websocket-frames test-resident-route test-resident-three test-resident-drop
-
-.PHONY: all $(PROGRAMS) help clean test test-frontends test-web-recovery \
+.PHONY: all $(PROGRAMS) help clean test test-scripts test-frontends test-web-recovery \
 	test-state-cache test-response-store test-metal check-mxfp4-half-lut \
 	q4k-dot-test mxfp4-dot-test test-quality-api test-download-model \
 	quantize quants-shared quality-score ds4_test ds4_agent_test
@@ -36,7 +27,8 @@ help:
 	@echo 'make                         Build the five Metal executables in the repo root'
 	@echo 'make ds4-server              Build one executable'
 	@echo 'make ZIG_FLAGS=-Doptimize=Debug  Select Debug host modules'
-	@echo 'make test                    Run model-free host, protocol and frontend checks'
+	@echo 'make test                    Run model-free host, protocol and script checks'
+	@echo 'make test-scripts            Run fast Nushell launcher/downloader contracts'
 	@echo 'make test-metal              Run DeepSeek, Qwen and GLM Metal kernel checks'
 	@echo 'make zig-<step>              Build any named step from tools/zig-build --help'
 	@echo 'make quantize quants-shared  Build the standalone GGUF quantization tools'
@@ -50,17 +42,10 @@ zig-%:
 
 # The default suite does not load model weights or run GPU/latency experiments.
 test:
-	./tools/zig-build $(ZIG_FLAGS) ds4-eval $(HOST_STEPS) server-test agent-test web-test
-	./zig-out/bin/ds4-eval --validate-cases
-	./zig-out/bin/ds4-eval --self-test-extractors
-	@set -eu; for fixture in $(HOST_BINS); do ./zig-out/bin/$$fixture; done
-	@mkdir -p .workspaces
-	@set -eu; work=$$(mktemp -d .workspaces/make-tests.XXXXXX); \
-		./zig-out/bin/test-state-cache "$$work/state"; \
-		./zig-out/bin/test-response-store "$$work/responses"
-	./zig-out/bin/ds4_test --server
-	./zig-out/bin/ds4_agent_test
-	python3 tests/test_web_recovery.py ./zig-out/bin/test-web-recovery
+	nu tests/verify.nu $(ZIG_FLAGS)
+
+test-scripts:
+	nu tests/verify.nu scripts
 
 # Keep common individual aliases. Each fixture uses the production Zig objects.
 DIRECT_TESTS := test-sampling test-engram test-image-decode \

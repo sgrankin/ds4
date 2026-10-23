@@ -46,8 +46,9 @@ do not establish coding/tool-task success or reasoning improvement.
 Build against a completed runtime (no compilation during final timing):
 
 ```sh
-sh speed-bench/ideas/build_probe.sh . speed-bench/ideas/artifacts/quality-probe-base
-sh speed-bench/ideas/build_probe.sh .workspaces/idea-resident speed-bench/ideas/artifacts/quality-probe-resident
+# C-era controls require an archived checkout with compiled .o files.
+nu speed-bench/ideas/build_probe.nu ARCHIVED_C_CHECKOUT speed-bench/ideas/artifacts/quality-probe-base
+nu speed-bench/ideas/build_probe.nu .workspaces/idea-resident speed-bench/ideas/artifacts/quality-probe-resident
 speed-bench/ideas/artifacts/quality-probe-base --self-test
 python3 speed-bench/ideas/run_screen.py speed-bench/ideas/artifacts/resident-screen \
   --baseline speed-bench/ideas/artifacts/quality-probe-base \

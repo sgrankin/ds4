@@ -53,7 +53,7 @@ configuration; doing so changes device isolation.
 
 ```sh
 make strix-halo
-./download_model.sh ds4f-q2
+./download-model.nu ds4f-q2
 ./ds4 --rocm
 ```
 
@@ -67,7 +67,7 @@ SSD-streaming path.
 Use Q2 with SSD streaming on a 128 GB machine:
 
 ```sh
-./download_model.sh ds41f-q2
+./download-model.nu ds41f-q2
 ./ds4 --rocm -m gguf/DeepSeek-V4.1-Flash-Q2.gguf \
   --ssd-streaming --ctx 4096
 ```
@@ -84,7 +84,7 @@ The reference Q2 setup uses SSD streaming to leave room for its graph and KV
 state. Begin with automatic cache sizing and a small context:
 
 ```sh
-./download_model.sh glm53-q2
+./download-model.nu glm53-q2
 ./ds4 --rocm -m gguf/GLM-5.3-Flash-Q2.gguf \
   --ssd-streaming --ctx 4096
 ```

@@ -1,8 +1,10 @@
-#!/bin/sh
+#!/usr/bin/env nu
 # Keep build caches and useful local artifacts under the workspace.
-set -eu
-root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-cd "$root"
-export ZIG_GLOBAL_CACHE_DIR="$root/.workspaces/zig-build/global-cache"
-export ZIG_LOCAL_CACHE_DIR="$root/.workspaces/zig-build/local-cache"
-exec zig build -j12 "$@"
+const ROOT = path self ..
+
+def --wrapped main [...args: string] {
+    cd $ROOT
+    $env.ZIG_GLOBAL_CACHE_DIR = ($ROOT | path join '.workspaces/zig-build/global-cache')
+    $env.ZIG_LOCAL_CACHE_DIR = ($ROOT | path join '.workspaces/zig-build/local-cache')
+    exec zig build -j12 ...$args
+}

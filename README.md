@@ -96,13 +96,14 @@ and hardware-specific setups:
 | [One or more CUDA cards, including Ada/L40S](docs/CUDA_MULTI_GPU.md) | `make cuda-generic` |
 
 This branch also offers a Metal build with handwritten Zig modules:
-`tools/zig-build`, with programs in `zig-out/bin`. See the
+`tools/zig-build`, with programs in `zig-out/bin`. Maintained launchers and
+build/download wrappers use Nushell (tested with 0.116.1). See the
 [Zig module guide](src/README.md) for scope, model backends, presets and measurements.
 
 For a first run on a 96 or 128 GB machine, download DeepSeek V4 Flash Q2:
 
 ```sh
-./download_model.sh ds4f-q2
+./download-model.nu ds4f-q2
 ```
 
 Downloads go in `gguf/`. Repeat the command to resume an interrupted download.
@@ -465,14 +466,14 @@ The GGUF also contains 95.37 GiB of original BF16 n-grams, read directly
 from disk rather than loaded into RAM. Keep it on a fast SSD. Start with 8K context:
 
 ```sh
-./download_model.sh qwen38-q2
+./download-model.nu qwen38-q2
 ./ds4 --ctx 8192 --prefill-chunk 1024
 ```
 
 The download fetches one 137.10 GiB file and updates `ds4flash.gguf`.
 Add `--mtp` for speculative decoding. The larger
 `qwen38-q4k` target is also available. Download the optional vision encoder
-with `./download_model.sh qwen38-vision` and pass it with `--vision`.
+with `./download-model.nu qwen38-vision` and pass it with `--vision`.
 See [Qwen setup](docs/QWEN38_FLASH_NEXT.md) for details.
 
 Speculative decoding is opt-in. GLM and Qwen use `--mtp`; V4 Flash DSpark needs a matching

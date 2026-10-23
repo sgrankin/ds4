@@ -10,7 +10,7 @@ Check that `nvidia-smi` sees the GPU before building.
 
 ```sh
 make cuda-spark
-./download_model.sh ds4f-q2
+./download-model.nu ds4f-q2
 ./ds4 --cuda
 ```
 
@@ -24,7 +24,7 @@ for memory. Restore any services you stopped when finished.
 Q2 needs SSD streaming on one 128 GB Spark:
 
 ```sh
-./download_model.sh ds41f-q2
+./download-model.nu ds41f-q2
 ./ds4 --cuda -m gguf/DeepSeek-V4.1-Flash-Q2.gguf \
   --ssd-streaming --ctx 32768
 ```
@@ -106,7 +106,7 @@ automatic once DSpark is enabled; speculation itself remains opt-in.
 Both Q2 and Q4 fit on one Spark. After building:
 
 ```sh
-./download_model.sh qwen38-q2
+./download-model.nu qwen38-q2
 ./ds4 --mtp --ctx 32768
 ```
 
@@ -127,7 +127,7 @@ its benefit depends on the prompt.
 Q2 is the resident target for one Spark:
 
 ```sh
-./download_model.sh glm53-q2
+./download-model.nu glm53-q2
 ./ds4 --cuda -m gguf/GLM-5.3-Flash-Q2.gguf --ctx 16384
 ```
 
@@ -139,7 +139,7 @@ implemented; the two-Mac RDMA instructions do not apply to GLM on CUDA.
 DeepSeek Vision Experimental needs its matching text model and encoder:
 
 ```sh
-./download_model.sh ds4f-vision-q2
+./download-model.nu ds4f-vision-q2
 ./ds4 --cuda --vision gguf/DeepSeek-V4-Flash-Vision-Encoder.gguf
 ```
 

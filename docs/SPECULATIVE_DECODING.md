@@ -23,8 +23,8 @@ up to five future tokens. Match its checkpoint to the main model:
 For the 0731 Q2 model:
 
 ```sh
-./download_model.sh ds4f-q2
-./download_model.sh ds4f-dspark
+./download-model.nu ds4f-q2
+./download-model.nu ds4f-dspark
 ./ds4 --dspark --mtp-model gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf
 ```
 
@@ -94,7 +94,7 @@ needed, and ordinary decode remains the default.
 Both Qwen downloads include MTP and native BF16 n-grams in the main GGUF:
 
 ```sh
-./download_model.sh qwen38-q4k
+./download-model.nu qwen38-q4k
 ./ds4 --mtp
 ```
 
