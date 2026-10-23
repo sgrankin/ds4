@@ -2,6 +2,8 @@
 //! All shared records are the actual C declarations; model handles stay opaque.
 const std = @import("std");
 const c = @import("server_serving_c");
+const ModelBackend = @import("model.zig").Backend(c);
+const ModelPolicy = @import("ds4_model");
 const allocator = std.heap.c_allocator;
 const stale_seconds: c.time_t = 60 * 60;
 const idle_cap: c_int = 1 << 20;
@@ -65,32 +67,15 @@ fn log(comptime pattern: [*:0]const u8, arguments: anytype) void {
     c.ds4_server_persist_log(c.DS4_LOG_KVCACHE, line.ptr);
 }
 pub fn modelId(engine: ?*c.ds4_engine) [*:0]const u8 {
-    if (c.ds4_engine_is_deepseek41(engine)) return "deepseek-v4.1-flash";
-    if (c.ds4_engine_is_qwen4(engine)) return "qwen3.8-flash-next";
-    if (c.ds4_engine_is_glm53(engine)) return "glm-5.3-flash";
-    if (c.ds4_engine_is_glm_dsa(engine)) return "glm-5.2";
-    return if (c.ds4_engine_model_id(engine) == 1) "deepseek-v4-pro" else "deepseek-v4-flash";
+    return (ModelBackend{ .engine = engine }).model().id().ptr;
 }
 pub fn knownModel(value: [*c]const u8) bool {
-    if (value == null) return false;
-    const names = [_][]const u8{
-        "deepseek-v4-flash",            "deepseek-v4.1-flash",              "deepseek-v4-pro",
-        "qwen3.8-flash-next",           "qwen3.8-flash-next-chat",          "qwen3.8-flash-next-no-think",
-        "qwen3.8-flash-next-nothink",   "qwen3.8-flash-next-reasoner",      "qwen/qwen3.8-flash-next",
-        "qwen/qwen3.8-flash-next-chat", "qwen/qwen3.8-flash-next-reasoner", "glm-5.2",
-        "glm-5.2-chat",                 "glm-5.2-no-think",                 "glm-5.2-nothink",
-        "glm-5.2-reasoner",             "zai/glm-5.2",                      "zai/glm-5.2-chat",
-        "zai/glm-5.2-reasoner",         "glm-5.3-flash",                    "glm-5.3-flash-chat",
-        "glm-5.3-flash-no-think",       "glm-5.3-flash-nothink",            "glm-5.3-flash-reasoner",
-        "zai/glm-5.3-flash",            "zai/glm-5.3-flash-chat",           "zai/glm-5.3-flash-reasoner",
-    };
-    for (names) |name| if (same(value, name)) return true;
-    return false;
+    return value != null and ModelPolicy.knownModel(text(value));
 }
 pub fn decodeInput(engine: ?*c.ds4_engine, runtime: ?*c.server, endpoint: c.ds4_server_input_endpoint, body: [*c]const u8, default_tokens: c_int, context: c_int, out: *c.request, errors: []u8) bool {
-    const syntax: c.server_model_syntax = if (c.ds4_engine_is_qwen4(engine)) c.SERVER_MODEL_SYNTAX_QWEN else if (c.ds4_engine_is_glm_dsa(engine)) c.SERVER_MODEL_SYNTAX_GLM else if (c.ds4_engine_is_deepseek41(engine)) c.SERVER_MODEL_SYNTAX_DEEPSEEK41 else c.SERVER_MODEL_SYNTAX_DEEPSEEK;
-    const schemas = c.getenv("DS4_SERVER_INCREMENTAL_TOOL_SCHEMAS");
-    const incremental = syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and (schemas == null or !same(schemas, "0"));
+    const backend: ModelBackend = .{ .engine = engine };
+    const syntax = backend.syntax();
+    const incremental = backend.incrementalTools();
     const defaults = c.ds4_server_input_defaults{ .max_tokens = default_tokens, .ctx_size = context, .syntax = syntax, .responses_store_dir = if (runtime) |srv| srv.responses_store_dir else null, .incremental_tool_schemas = incremental };
     var input = zero(c.ds4_server_input);
     if (!c.ds4_server_input_decode(endpoint, body, &defaults, &input, errors.ptr, errors.len)) {

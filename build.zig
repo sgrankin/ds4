@@ -54,7 +54,23 @@ fn nativeObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
     const m = module(b, target, sdk, optimize);
     m.root_source_file = b.path(source);
     m.addImport(api_name, api);
+    if (std.mem.startsWith(u8, source, "zig/server/")) servingImports(b, m, target, optimize);
     return b.addObject(.{ .name = std.fs.path.stem(source), .root_module = m }).getEmittedBin();
+}
+
+// Protocol bridges and model implementations share native types, rather than
+// obtaining their type identity from a server C header. These modules also
+// compile in the standalone fixture without the server, engine or Metal.
+fn servingImports(b: *std.Build, destination: *std.Build.Module, target: std.Build.ResolvedTarget, optimize: std.builtin.Optimize) void {
+    const types = b.createModule(.{ .root_source_file = b.path("zig/serving/types.zig"), .target = target, .optimize = optimize });
+    const model = b.createModule(.{ .root_source_file = b.path("zig/models/ds4.zig"), .target = target, .optimize = optimize });
+    model.addImport("serving_types", types);
+    const prompt = b.createModule(.{ .root_source_file = b.path("zig/models/deepseek41/prompt.zig"), .target = target, .optimize = optimize });
+    prompt.addImport("serving_types", types);
+    model.addImport("ds41_prompt", prompt);
+    destination.addImport("serving_types", types);
+    destination.addImport("ds4_model", model);
+    destination.addImport("ds41_prompt", prompt);
 }
 
 fn executable(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, core: *std.Build.Step.Compile, cache: ?std.Build.LazyPath, kvstore: ?std.Build.LazyPath, name: []const u8, frontend: std.Build.LazyPath, optimize: std.builtin.Optimize) *std.Build.Step.Compile {
@@ -351,6 +367,13 @@ pub fn build(b: *std.Build) void {
     const image_library = b.addLibrary(.{ .name = "ds4-image", .linkage = .dynamic, .root_module = image_library_module });
     b.step("image-library", "Build a libc-only library from the selected production image objects").dependOn(&b.addInstallArtifact(image_library, .{}).step);
     const core = b.addLibrary(.{ .name = "ds4-metal-c", .root_module = core_module });
+    if (native) {
+        const boundary_module = module(b, target, sdk, optimize);
+        boundary_module.root_source_file = b.path("zig/serving/boundary_test.zig");
+        servingImports(b, boundary_module, target, optimize);
+        const boundary_test = b.addExecutable(.{ .name = "test-serving-boundary", .root_module = boundary_module });
+        b.step("serving-boundary-test", "Build the native request/model boundary fixture without engine or Metal objects").dependOn(&b.addInstallArtifact(boundary_test, .{}).step);
+    }
     const cache = if (native) cache_object: {
         const api = generatedApi(b, target, sdk, optimize, "zig/state_cache_api.h");
         break :cache_object nativeObject(b, target, sdk, optimize, "zig/state_cache.zig", "state_cache_c", api);

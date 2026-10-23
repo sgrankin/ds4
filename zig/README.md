@@ -1,6 +1,8 @@
 # Handwritten Zig runtime
 
 See [JOURNAL.md](JOURNAL.md) for current project direction, decisions and next steps.
+The [serving request/model boundary](serving/README.md) describes native logical
+input and the DS4.1 preparation path, including its remaining compatibility edges.
 
 This tree contains the handwritten implementation of the supported DeepSeek
 V4.1 Metal runtime, its Agent and server, and the CLI, benchmark and evaluation

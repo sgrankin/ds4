@@ -3,6 +3,7 @@
 //! and the Request commits only after prompt tokenization succeeds.
 const std = @import("std");
 const c = @import("server_materialize_c");
+const ModelBackend = @import("model.zig").Backend(c);
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidRequest};
 
@@ -117,34 +118,6 @@ fn historyUsesTools(messages: *const c.chat_msgs, schemas: [*c]const u8) bool {
     }
     return false;
 }
-fn thinking(input: *const c.ds4_server_input, req: *c.request, context: c_int) void {
-    var enabled = input.thinking_enabled;
-    if (!input.got_thinking) {
-        const disabled = [_][]const u8{
-            "deepseek-chat",              "qwen3.8-flash-next-chat",      "qwen3.8-flash-next-no-think",
-            "qwen3.8-flash-next-nothink", "qwen/qwen3.8-flash-next-chat", "glm-5.2-chat",
-            "glm-5.2-no-think",           "glm-5.2-nothink",              "zai/glm-5.2-chat",
-            "glm-5.3-flash-chat",         "glm-5.3-flash-no-think",       "glm-5.3-flash-nothink",
-            "zai/glm-5.3-flash-chat",
-        };
-        const enabled_aliases = [_][]const u8{
-            "deepseek-reasoner",          "qwen3.8-flash-next-reasoner", "qwen/qwen3.8-flash-next-reasoner",
-            "glm-5.2-reasoner",           "zai/glm-5.2-reasoner",        "glm-5.3-flash-reasoner",
-            "zai/glm-5.3-flash-reasoner",
-        };
-        for (disabled) |alias| if (equal(req.model, alias)) {
-            enabled = false;
-            break;
-        };
-        for (enabled_aliases) |alias| if (equal(req.model, alias)) {
-            enabled = true;
-            break;
-        };
-    }
-    const mode: c.ds4_think_mode = if (!enabled or input.reasoning_effort == c.DS4_THINK_NONE) c.DS4_THINK_NONE else input.reasoning_effort;
-    req.think_mode = c.ds4_think_mode_for_context(mode, context);
-}
-
 /// Read the real mutable live frontier under its existing mutex. Validation
 /// still locks per ID, matching the old acceptance boundary rather than taking
 /// an invented snapshot that could outlive another request's slot replacement.
@@ -229,15 +202,13 @@ pub fn validate(runtime: ?*c.server, optional_messages: ?*const c.chat_msgs, api
     return true;
 }
 
-fn render(runtime: ?*c.server, req: *const c.request, messages: *const c.chat_msgs, start: c_int, schemas: [*c]const u8, live: bool, ids: ?*const c.stop_list) [*c]u8 {
-    if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41)
-        return c.ds4_server_materialize_render_other(req.model_syntax, messages, start, schemas, &req.tool_orders, req.think_mode, live);
+fn render(backend: ModelBackend, runtime: ?*c.server, req: *const c.request, messages: *const c.chat_msgs, start: c_int, schemas: [*c]const u8, live: bool, ids: ?*const c.stop_list, context: usize) [*c]u8 {
     if (live) {
         var order = liveOrder(runtime, req.api, ids.?);
         defer freeIds(&order);
-        return c.ds4_server_render_deepseek41(messages, start, null, req.think_mode, true, &order);
+        return backend.render(req, messages, @intCast(start), null, true, &order, context);
     }
-    return c.ds4_server_render_deepseek41(messages, 0, schemas, req.think_mode, false, null);
+    return backend.render(req, messages, 0, schemas, false, null, context);
 }
 
 /// This only prepares evidence. Generation still rechecks the actual sampled
@@ -268,7 +239,8 @@ pub fn prepareLive(runtime: ?*c.server, optional_request: ?*c.request, optional_
     if (ids.len == 0) return;
     const suffix = if (req.api == c.API_RESPONSES) &req.responses_live_suffix_text else &req.anthropic_live_suffix_text;
     c.free(suffix.*);
-    suffix.* = render(runtime, req, messages, @intCast(start), null, true, ids);
+    const backend: ModelBackend = .{ .engine = if (runtime) |server| server.engine else null };
+    suffix.* = render(backend, runtime, req, messages, @intCast(start), null, true, ids, 0);
 }
 
 /// The first matching STRING field is a probe, not a full-object validator.
@@ -347,7 +319,7 @@ pub fn loadResponse(directory: [*c]const u8, id: [*c]const u8, response: *[*c]u8
 }
 
 const Transaction = struct {
-    engine: ?*c.ds4_engine,
+    backend: ModelBackend,
     runtime: ?*c.server,
     input: *c.ds4_server_input,
     req: c.request,
@@ -363,7 +335,7 @@ const Transaction = struct {
         input.req = std.mem.zeroes(c.request);
         const messages = input.messages;
         input.messages = std.mem.zeroes(c.chat_msgs);
-        return .{ .engine = engine, .runtime = runtime, .input = input, .req = req, .messages = messages, .schemas = take(&input.tool_schemas), .instructions = take(&input.instructions), .loaded_schemas = take(&input.loaded_tool_schemas), .context = context, .errors = errors };
+        return .{ .backend = .{ .engine = engine }, .runtime = runtime, .input = input, .req = req, .messages = messages, .schemas = take(&input.tool_schemas), .instructions = take(&input.instructions), .loaded_schemas = take(&input.loaded_tool_schemas), .context = context, .errors = errors };
     }
     fn deinit(self: *Transaction) void {
         c.ds4_server_input_request_free(&self.req);
@@ -388,8 +360,8 @@ const Transaction = struct {
     }
     fn finishPrompt(self: *Transaction, schemas: [*c]const u8) Invalid!void {
         self.req.prompt_preserves_reasoning = historyUsesTools(&self.messages, schemas);
-        self.req.prompt_text = render(self.runtime, &self.req, &self.messages, 0, schemas, false, null);
-        if (!c.ds4_server_materialize_tokenize(self.engine, self.runtime, &self.req, &self.messages, errorPointer(self.errors), self.errors.len)) return error.InvalidRequest;
+        self.req.prompt_text = render(self.backend, self.runtime, &self.req, &self.messages, 0, schemas, false, null, @intCast(@max(self.context, 0)));
+        if (!self.backend.tokenize(self.runtime, &self.req, &self.messages, self.errors)) return error.InvalidRequest;
     }
     fn conversation(self: *Transaction, incremental: bool) Invalid!void {
         var record = std.mem.zeroes(c.ds4_conversation);
@@ -442,7 +414,7 @@ const Transaction = struct {
         if (self.req.ignore_eos and !(self.req.temperature_set and self.req.temperature == 0))
             return fail(self.errors, "ignore_eos requires an explicit temperature of 0");
         self.req.has_tools = text(self.schemas).len != 0 and !self.input.tool_choice_none;
-        thinking(self.input, &self.req, self.context);
+        self.backend.thinking(self.input, &self.req, self.context);
         self.attachTools();
         try self.finishPrompt(if (self.req.has_tools) self.schemas else null);
     }
@@ -451,7 +423,7 @@ const Transaction = struct {
         if (text(self.instructions).len != 0)
             prependSystem(&self.messages, take(&self.instructions), self.req.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41);
         self.req.has_tools = text(self.schemas).len != 0 and !self.input.tool_choice_none;
-        thinking(self.input, &self.req, self.context);
+        self.backend.thinking(self.input, &self.req, self.context);
         if (!validate(self.runtime, &self.messages, c.API_ANTHROPIC, self.req.think_mode, &self.req.anthropic_requires_live_tool_state, null, self.errors)) return error.InvalidRequest;
         self.attachTools();
         prepareLive(self.runtime, &self.req, &self.messages);
@@ -485,8 +457,8 @@ const Transaction = struct {
         }
         const active: [*c]const u8 = if (!self.input.tool_choice_none and schemas.items.len != 0) schemas.items.ptr else null;
         self.req.has_tools = !self.input.tool_choice_none and (text(active).len != 0 or discovered != 0);
-        thinking(self.input, &self.req, self.context);
-        if (self.req.reasoning_budget != 0 and (self.engine == null or !c.ds4_engine_is_deepseek41(self.engine)))
+        self.backend.thinking(self.input, &self.req, self.context);
+        if (self.req.reasoning_budget != 0 and (self.backend.engine == null or !self.backend.model().capabilities().reasoning_budget))
             return fail(self.errors, "ds4_reasoning_budget currently supports native DS4.1 text only");
         if (!validate(self.runtime, &self.messages, c.API_RESPONSES, self.req.think_mode, &self.req.responses_requires_live_tool_state, &self.req.responses_requires_live_reasoning, self.errors)) return error.InvalidRequest;
         self.attachTools();
@@ -507,14 +479,14 @@ const Transaction = struct {
     fn completion(self: *Transaction) Invalid!void {
         const prompt = take(&self.input.completion_prompt);
         if (prompt == null) return fail(self.errors, "missing prompt");
-        thinking(self.input, &self.req, self.context);
+        self.backend.thinking(self.input, &self.req, self.context);
         prependSystem(&self.messages, duplicate("You are a helpful assistant"), false);
         var user = std.mem.zeroes(c.chat_msg);
         user.role = duplicate("user");
         user.content = prompt;
         appendMessage(&self.messages, user);
-        self.req.prompt_text = render(self.runtime, &self.req, &self.messages, 0, null, false, null);
-        c.ds4_tokenize_rendered_chat(self.engine, self.req.prompt_text, &self.req.prompt);
+        self.req.prompt_text = render(self.backend, self.runtime, &self.req, &self.messages, 0, null, false, null, @intCast(@max(self.context, 0)));
+        self.backend.tokenizeText(self.req.prompt_text, &self.req.prompt);
     }
 };
 

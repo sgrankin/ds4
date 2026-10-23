@@ -1,6 +1,6 @@
 # Serving project journal
 
-Last updated: 2026-10-22. This is the compact handoff for resumed work and context
+Last updated: 2026-10-23. This is the compact handoff for resumed work and context
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
@@ -62,7 +62,8 @@ copying and SSD wait costs before choosing a more elaborate queue.
 
 ## Current implementation
 
-- `zig-rewrite` and `zig-engine` identify the condensed handwritten rewrite;
+- `zig-rewrite` and `zig-engine` identify the rewrite branch: condensed base
+  `60813d03`, followed by the focused request/model boundary change;
   `main` remains at `ec5424de5562`. Do not advance main or push without further
   authorization. The original condensed commit before artifact cleanup was
   `da7940e2f2d8`; use bookmarks for its rewritten successor.
@@ -81,11 +82,11 @@ copying and SSD wait costs before choosing a more elaborate queue.
   bounded-prefill coordinator, Responses continuation and durable conversations.
   Responses WebSocket serving is not implemented.
 
-The new files expose useful owners, but dependency boundaries still largely
-follow the old C program. Serving code imports shared C server/session records,
-detects model families and selects prompt syntax. State storage still understands
-DS4.1 checkpoint kinds. This is a qualified foundation for the intended component
-architecture; component independence is unfinished.
+Request preparation now has a C-free canonical input/model boundary. Engine
+detection and C conversions stay in the runtime adapter; DS4.1 formatting and
+reasoning policy live in native model modules. Execution/scheduling still import
+shared C server/session records, and state storage still understands DS4.1
+checkpoint kinds. Further component independence is unfinished.
 
 ## Qualification and costs
 
@@ -106,25 +107,56 @@ and [the implementation guide](README.md) for exact scope, commands and limits.
   owners improve readability, while C interop and retained dual implementations
   still impose complexity.
 
-## Next proposed implementation slice
+## Current architectural slice and next steps
 
-The architecture discussion has not authorized another broad rewrite. A useful
-next slice, if we proceed, is:
+On 2026-10-23 the user authorized the canonical request/model architectural
+change. The completed slice separates logical request/history handling from
+DS4.1 prompt, tool and reasoning materialization.
 
-1. Separate canonical conversation/request handling from DS4-specific prompt,
-   tool and reasoning materialization. Use native Zig records at this boundary;
-   keep needed C interop inside the implementation.
-2. Feed Responses HTTP and new WebSocket transport through that same path.
-3. Qualify two interleaved conversations, reconnect/restart, idle-state eviction
-   and server-owned context editing/suffix reuse using a real agent client.
-4. Let a second actual model reveal further shared interfaces. Defer a universal
-   kernel framework, runtime plugin ABI and custom ring-I/O implementation.
+- New native records live in `serving/types.zig`, with model policy in
+  `models/ds4.zig` and the DS4.1 renderer in `models/deepseek41/prompt.zig`.
+- Production request materialization invokes those modules through
+  `server/canonical.zig` and `server/model.zig`; required C interop remains in
+  those compatibility adapters. The old whole DS4.1 renderer was removed.
+- Existing native server fixtures and five standalone boundary cases pass in
+  ReleaseFast and Debug. The standalone fixture requires no server/engine
+  objects or Metal. Guarded HTTP restart/concurrency campaigns pass 22/22 checks
+  and 5/5 graded answers each, for C -> refactored and refactored -> refactored.
+  See [the focused report](../speed-bench/experiments/zig-serving-boundary-20261023/README.md).
+
+Next after this slice: feed new Responses WebSocket transport through the same
+preparation path, then qualify incremental conversations/reconnect, idle-state
+eviction and server-owned context editing/suffix reuse using a real agent client.
+Execution/session records and persisted payload semantics remain DS4-specific;
+further backend independence is unfinished. Let a second actual model reveal
+additional shared interfaces. Defer a universal kernel framework, runtime plugin
+ABI and custom ring-I/O implementation.
 
 Keep one heavy model job at a time under the pressure guard. Use bounded
 experiments and existing tools; do not expand the harness after a useful
 measurement is possible. Large RAM usage is expected; watch pressure and swap.
 
 ## Progress log
+
+### 2026-10-23
+
+- User authorized the request/model architectural change. Added native logical
+  records and a C-free DS4.1 preparation implementation, replacing the previous
+  whole renderer. Model aliases, reasoning policy and runtime format selection
+  now belong behind the model adapter; durable history remains server-owned.
+- ReleaseFast and Debug build and CPU checks pass. A build caught a signed C
+  enum conversion mismatch; review caught the disabled fallback for unknown C
+  reasoning values. Both were corrected before final CPU verification.
+- Reusing the existing guarded HTTP two-session/restart/cancellation campaign;
+  both cross-version and refactored-only campaigns completed normally. They
+  cover fresh requests, concurrent decode, cancellation, surviving requests,
+  streaming and durable Responses/conversation restart. No numerical kernel or
+  checkpoint format changed. Results are local under
+  `.workspaces/zig-serving-boundary-20261023/`; concise results and commands are
+  [tracked](../speed-bench/experiments/zig-serving-boundary-20261023/README.md).
+- The current slice is complete. Responses WebSocket transport remains the next
+  proposed feature; a generic execution backend and second native model remain
+  later work. Keep these distinct from the completed preparation boundary.
 
 ### 2026-10-22
 

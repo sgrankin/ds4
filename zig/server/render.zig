@@ -3,6 +3,8 @@
 //! argument ownership, Anthropic split views and call-order policy live here.
 const std = @import("std");
 const c = @import("server_render_c");
+const Canonical = @import("canonical.zig");
+const Prompt = @import("ds41_prompt");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidJson};
 
@@ -330,26 +332,7 @@ fn qwenCalls(out: *Text, calls: [*c]const c.tool_calls, has_content: bool, order
     }
 }
 
-const v41_tools_preamble =
-    "## Tools\n\n" ++
-    "You can invoke tools using this format:\n\n" ++
-    "<｜DSML｜ calls>" ++
-    "\n" ++
-    "<｜DSML｜ invoke" ++
-    " name=\"$TOOL_NAME\">\n" ++
-    "<｜DSML｜ parameter" ++
-    " name=\"$PARAMETER_NAME\" string=\"true|false\">$PARAMETER_VALUE" ++
-    "</｜DSML｜ parameter>" ++
-    "\n" ++
-    "</｜DSML｜ invoke>" ++
-    "\n" ++
-    "</｜DSML｜ calls>" ++
-    "\n\n" ++
-    "String values use string=\"true\"; all other values use JSON and string=\"false\". " ++
-    "Inside string values only, escape a literal </｜DSML｜ parameter> as &lt;/｜DSML｜ parameter>. " ++
-    "To write that escaped spelling literally, use &amp;lt;/｜DSML｜ parameter>. Other HTML entities are unchanged.\n\n" ++
-    "Finish reasoning with </think> before tool calls or a final response.\n\n" ++
-    "### Available Tool Schemas\n\n";
+const v41_tools_preamble = Prompt.tools_preamble;
 const legacy_tools_preamble =
     "## Tools\n\n" ++
     "You have access to a set of tools to help answer the user question. " ++
@@ -370,9 +353,7 @@ const legacy_tools_preamble =
     "When thinking mode is enabled, finish reasoning with </think> before any tool calls or final response.\n\n" ++
     "Otherwise, output directly after </think> with tool calls or final response.\n\n" ++
     "### Available Tool Schemas\n\n";
-const tools_footer =
-    "\n\nYou MUST strictly follow the above defined tool name and parameter schemas to invoke tool calls. " ++
-    "Use the exact parameter names from the schemas.";
+const tools_footer = Prompt.tools_footer;
 
 fn tools(out: *Text, schemas: [*c]const u8, v41: bool) void {
     if (bytes(schemas).len == 0) return;
@@ -431,198 +412,20 @@ fn glmTools(out: *Text, schemas: [*c]const u8) void {
 fn messageSlice(messages: [*c]const c.chat_msgs) []const c.chat_msg {
     return if (messages == null) &.{} else items(c.chat_msg, messages.*.v, @intCast(messages.*.len));
 }
-fn userLike(message: *const c.chat_msg) bool {
-    return equal(message.role, "user") or equal(message.role, "tool") or equal(message.role, "function");
-}
-fn systemLike(message: *const c.chat_msg) bool {
-    return equal(message.role, "system") or equal(message.role, "developer");
-}
-fn toolContext(messages: []const c.chat_msg, schemas: [*c]const u8) bool {
-    if (bytes(schemas).len != 0) return true;
-    for (messages) |message| {
-        if ((equal(message.role, "assistant") and message.calls.len > 0) or equal(message.role, "tool") or equal(message.role, "function")) return true;
-    }
-    return false;
-}
-
-const Views = struct {
-    messages: std.ArrayList(c.chat_msg) = .empty,
-    strings: std.ArrayList([*c]u8) = .empty,
-    start: usize = 0,
-
-    fn deinit(self: *Views) void {
-        for (self.strings.items) |value| c.free(value);
-        self.strings.deinit(allocator);
-        self.messages.deinit(allocator);
-    }
-    fn owned(self: *Views, value: []const u8) [*c]u8 {
-        const result = duplicate(value);
-        self.strings.append(allocator, result) catch fatal();
-        return result;
-    }
-    fn append(self: *Views, message: c.chat_msg) void {
-        self.messages.append(allocator, message) catch fatal();
-    }
-    fn init(source: []const c.chat_msg, start: usize) Views {
-        var views: Views = .{};
-        for (source, 0..) |message, position| {
-            if (position == start) views.start = views.messages.items.len;
-            if (!equal(message.role, "user") or message.tool_results_len == 0) {
-                views.append(message);
-                continue;
-            }
-            // Most views borrow the original message. Only split Anthropic
-            // blocks own strings, leaving the source history/images untouched.
-            const content = bytes(message.content);
-            const spans = items(c.tool_result_span, message.tool_results, @intCast(message.tool_results_len));
-            var begin: usize = 0;
-            for (0..spans.len + 1) |part| {
-                const span: ?*const c.tool_result_span = if (part < spans.len) &spans[part] else null;
-                const end = if (span) |result| result.begin else content.len;
-                if (end > begin) {
-                    var text = std.mem.zeroes(c.chat_msg);
-                    text.role = views.owned("user");
-                    text.content = views.owned(content[begin..end]);
-                    views.append(text);
-                }
-                if (span) |result| {
-                    var tool = std.mem.zeroes(c.chat_msg);
-                    tool.role = views.owned("tool");
-                    tool.content = views.owned(bytes(result.content));
-                    tool.tool_call_id = if (result.id == null) null else views.owned(bytes(result.id));
-                    views.append(tool);
-                    begin = result.end;
-                }
-            }
-        }
-        if (start >= source.len) views.start = views.messages.items.len;
-        return views;
-    }
-};
-
-const RankedResult = struct {
-    message: *const c.chat_msg,
-    order: usize,
-    position: usize,
-
-    fn before(_: void, left: RankedResult, right: RankedResult) bool {
-        return if (left.order != right.order) left.order < right.order else left.position < right.position;
-    }
-};
-fn orderedMessages(messages: []const c.chat_msg, initial: [*c]const c.stop_list) []*const c.chat_msg {
-    const ordered = allocator.alloc(*const c.chat_msg, messages.len) catch fatal();
-    var results: std.ArrayList(RankedResult) = .empty;
-    defer results.deinit(allocator);
-    var order: std.StringHashMap(usize) = .init(allocator);
-    defer order.deinit();
-    if (initial != null) for (items([*c]u8, initial.*.v, @intCast(initial.*.len)), 0..) |id, rank| {
-        order.put(bytes(id), rank) catch fatal();
-    };
-    var position: usize = 0;
-    while (position < messages.len) {
-        const message = &messages[position];
-        ordered[position] = message;
-        if (equal(message.role, "assistant") and message.calls.len != 0) {
-            order.clearRetainingCapacity();
-            for (callSlice(&message.calls), 0..) |call, rank| {
-                if (bytes(call.id).len != 0) order.put(bytes(call.id), rank) catch fatal();
-            }
-        }
-        if (!userLike(message)) {
-            position += 1;
-            continue;
-        }
-        const begin = position;
-        results.clearRetainingCapacity();
-        while (position < messages.len and userLike(&messages[position])) : (position += 1) {
-            const result = &messages[position];
-            ordered[position] = result;
-            if (!equal(result.role, "user")) results.append(allocator, .{
-                .message = result,
-                // Missing IDs sort at rank zero, matching the original rax
-                // lookup; original positions break ties deterministically.
-                .order = if (result.tool_call_id == null) 0 else order.get(bytes(result.tool_call_id)) orelse 0,
-                .position = position,
-            }) catch fatal();
-        }
-        std.mem.sortUnstable(RankedResult, results.items, {}, RankedResult.before);
-        var next: usize = 0;
-        for (begin..position) |slot| {
-            if (equal(messages[slot].role, "user")) continue;
-            ordered[slot] = results.items[next].message;
-            next += 1;
-        }
-    }
-    return ordered;
-}
-
+/// Compatibility entry for callers still owning the C logical records. The
+/// model implementation sees only native borrowed conversation values.
 pub export fn ds4_server_render_deepseek41(messages: [*c]const c.chat_msgs, start: c_int, schemas: [*c]const u8, mode: c.ds4_think_mode, live_tail: bool, initial: [*c]const c.stop_list) [*c]u8 {
-    var views = Views.init(messageSlice(messages), @intCast(start));
-    defer views.deinit();
-    const ordered = orderedMessages(views.messages.items, initial);
-    defer allocator.free(ordered);
-    const think = c.ds4_think_mode_enabled(mode);
-    const keep_reasoning = live_tail or toolContext(views.messages.items, schemas);
-    const effort = c.ds4_deepseek41_reasoning_effort_text(mode);
-    var out: Text = .{};
-    defer out.deinit();
-    var initial_system = false;
-    var pending = false;
-    var user_open = false;
-    var last_user: ?usize = null;
-    for (views.messages.items, 0..) |*message, position| {
-        if (userLike(message) or (position > 0 and systemLike(message))) last_user = position;
-    }
-    if (live_tail) out.append("<｜end▁of▁sentence｜>") else {
-        out.append("<｜begin▁of▁sentence｜>");
-        if (effort != null or bytes(schemas).len != 0) {
-            out.append("<｜System｜>");
-            initial_system = true;
-            out.string(effort);
-            if (bytes(schemas).len != 0) tools(&out, schemas, true);
-        }
-    }
-    // Full requests and live tails share these separators and transitions;
-    // they must agree exactly at the authoritative live-KV boundary.
-    for (views.start..ordered.len) |position| {
-        const message = ordered[position];
-        if (systemLike(message)) {
-            if (position == 0 and initial_system) {
-                if (bytes(schemas).len != 0) out.append("\n\n");
-            } else out.append("<｜System｜>");
-            out.string(message.content);
-            pending = position > 0 or live_tail;
-            user_open = false;
-        } else if (userLike(message)) {
-            out.append(if (user_open) "\n\n" else "<｜User｜>");
-            if (!equal(message.role, "user")) {
-                out.append("<tool_result>");
-                body(&out, message.content, "</tool_result>");
-                out.append("</tool_result>");
-            } else out.string(message.content);
-            pending = true;
-            user_open = true;
-        } else if (equal(message.role, "assistant")) {
-            if (pending) {
-                out.append("<｜Assistant｜>");
-                if (think and (keep_reasoning or last_user == null or position > last_user.?)) {
-                    out.append("<think>");
-                    out.string(message.reasoning);
-                }
-                out.append("</think>");
-            }
-            out.string(message.content);
-            dsmlCalls(&out, &message.calls, true);
-            out.append("<｜end▁of▁sentence｜>");
-            pending = false;
-            user_open = false;
-        }
-    }
-    if (pending) {
-        out.append("<｜Assistant｜>");
-        out.append(if (think) "<think>" else "</think>");
-    }
-    return out.take();
+    var view = Canonical.View.init(allocator, c, messages, null) catch fatal();
+    defer view.deinit();
+    const initial_order = view.strings(initial) catch fatal();
+    const prompt = Prompt.render(allocator, view.messages, .{
+        .start = @intCast(start),
+        .schemas = if (schemas == null) null else bytes(schemas),
+        .reasoning = Canonical.reasoning(c, mode),
+        .live_tail = live_tail,
+        .initial_tool_order = initial_order,
+    }) catch fatal();
+    return prompt.ptr;
 }
 
 fn replayMessage(out: *Text, message: *const c.chat_msg) void {
