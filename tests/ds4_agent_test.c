@@ -1,6 +1,6 @@
 #define DS4_AGENT_TEST
 #define DS4_AGENT_TEST_NO_MAIN
-#include "../ds4_agent.c"
+#include "../src/ds4_agent.c"
 #include <sys/resource.h>
 #define agent_completion_worker ds4_agent_completion_worker
 #define agent_switch_completion_callback ds4_agent_frontend_complete

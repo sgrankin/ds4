@@ -11,7 +11,7 @@
 // decode overhead comes on top of it).
 //
 // Build: /usr/local/cuda/bin/nvcc -O3 -std=c++17 -arch=sm_121 \
-//        cuda/mmq/test/proto_gemm_lib.cu -o proto_gemm_lib -lcublasLt
+//        src/cuda/mmq/test/proto_gemm_lib.cu -o proto_gemm_lib -lcublasLt
 // argv: [reps=10]
 
 #include <cublasLt.h>

@@ -15,6 +15,12 @@ their original languages.
 
 ## Scope and organization
 
+Project C/H and common include tables live here alongside the Zig owners.
+`metal/` contains the Zig host controllers, Objective-C driver and MSL shaders;
+retained CUDA and ROCm sources live in `cuda/` and `rocm/`. The supported build
+remains macOS Metal. Tests, tools, third-party dependencies and model weights
+have their own top-level directories.
+
 | Area | Native ownership |
 | --- | --- |
 | [Engine](engine/) | Model mapping/lifetime and input, DS4.1 configuration and weights, graph/workspace ownership, prefill and decode, attention/MoE execution, session/frontier policy, sampling, checkpoints, canonical payloads, suffix reuse, trained DSpark and speculative verification, and vision encoding. |

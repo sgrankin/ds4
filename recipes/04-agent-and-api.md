@@ -60,7 +60,7 @@ import:
 Protect the COMPLETE prefix, including session-date text between static system
 tokens and the first user, not just the generated system-prompt token count.
 Preserve the latest request and useful evidence. See `agent_live_context_*` and
-the injected editing recipes in [ds4_agent.c](../ds4_agent.c).
+the injected editing recipes in [ds4_agent.c](../src/ds4_agent.c).
 
 Built-in automatic compaction and `/compact` instead generate a task-state
 summary and retain recent verbatim history. The pre-RoPE path can reuse an

@@ -1,5 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
-#include "../ds4.h"
+#include "../src/ds4.h"
 #include <ctype.h>
 #include <errno.h>
 #include <stdio.h>

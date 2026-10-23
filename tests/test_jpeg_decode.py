@@ -3,9 +3,7 @@ uv run --with numpy --with pillow python -m unittest discover -s tests -p test_j
 """
 import ctypes
 import io
-import os
 from pathlib import Path
-import shlex
 import subprocess
 import tempfile
 import unittest
@@ -23,13 +21,14 @@ class DecodedImage(ctypes.Structure):
 class JpegDecodeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.temp = tempfile.TemporaryDirectory(prefix="ds4-jpeg-test-")
-        cls.addClassCleanup(cls.temp.cleanup)
         root = Path(__file__).resolve().parents[1]
-        lib = Path(cls.temp.name) / "image.so"
-        subprocess.run(shlex.split(os.environ.get("CC", "cc")) +
-                       ["-shared", "-fPIC", "-O2", str(root / "ds4_image.c"),
-                        "-lm", "-o", str(lib)], check=True)
+        workspaces = root / ".workspaces"
+        workspaces.mkdir(exist_ok=True)
+        cls.temp = tempfile.TemporaryDirectory(prefix="ds4-jpeg-test-", dir=workspaces)
+        cls.addClassCleanup(cls.temp.cleanup)
+        subprocess.run([str(root / "tools/zig-build"), "--prefix", cls.temp.name,
+                        "image-library"], cwd=root, check=True)
+        lib = Path(cls.temp.name) / "lib/libds4-image.dylib"
         cls.lib = ctypes.CDLL(str(lib))
         cls.lib.ds4_image_decode_memory.argtypes = [ctypes.POINTER(DecodedImage),
             ctypes.c_void_p, ctypes.c_size_t, ctypes.c_void_p, ctypes.c_size_t]

@@ -42,7 +42,7 @@ typedef struct {
     uint64_t nb1;
     int32_t nr0;
     /* Tensor-parallel expert ownership; see ds4_metal_args_mul_mv_id in
-     * metal/moe.metal.  Zero (from struct literals) means no split. */
+     * src/metal/moe.metal.  Zero (from struct literals) means no split. */
     int32_t tp_rank;
     int32_t tp_world;
     int32_t tp_addend;

@@ -26,30 +26,30 @@
 
 #include "ds4.h"
 #include "ds4_gpu.h"
-#include "src/metal/bootstrap.h"
-#include "src/metal/tp_prefetch.h"
-#include "src/metal/tp_control.h"
-#include "src/metal/primitives.h"
-#include "src/metal/router.h"
-#include "src/metal/router_shared.h"
-#include "src/metal/hc_control.h"
-#include "src/metal/embedding.h"
-#include "src/metal/supported_primitives.h"
-#include "src/metal/scheduling.h"
-#include "src/metal/compressor.h"
-#include "src/metal/model_views.h"
-#include "src/metal/exact_cache.h"
-#include "src/metal/bridge.h"
-#include "src/metal/index_selection.h"
-#include "src/metal/dense_matmul.h"
-#include "src/metal/attention_decode.h"
-#include "src/metal/attention_batch.h"
-#include "src/metal/routed_batch.h"
-#include "src/metal/attention_output.h"
-#include "src/metal/rope.h"
-#include "src/metal/expert_load.h"
-#include "src/metal/routed_single.h"
-#include "src/metal/resources.h"
+#include "bootstrap.h"
+#include "tp_prefetch.h"
+#include "tp_control.h"
+#include "primitives.h"
+#include "router.h"
+#include "router_shared.h"
+#include "hc_control.h"
+#include "embedding.h"
+#include "supported_primitives.h"
+#include "scheduling.h"
+#include "compressor.h"
+#include "model_views.h"
+#include "exact_cache.h"
+#include "bridge.h"
+#include "index_selection.h"
+#include "dense_matmul.h"
+#include "attention_decode.h"
+#include "attention_batch.h"
+#include "routed_batch.h"
+#include "attention_output.h"
+#include "rope.h"
+#include "expert_load.h"
+#include "routed_single.h"
+#include "resources.h"
 #include "ds4_image.h"
 
 /*
@@ -723,8 +723,8 @@ static int g_model_fd = -1;
 static int g_stream_prefill_batch_selected_addr_building;
 static const ds4_gpu_tensor *g_stream_expert_batch_ready;
 static int g_glm_stream_expert_addr_table_building;
-#include "src/metal/expert_cache.h"
-#include "src/metal/expert_tables.h"
+#include "expert_cache.h"
+#include "expert_tables.h"
 static ds4_metal_expert_cache_state g_expert_cache = {
     .cache_first_decode_layer = UINT32_MAX,
 };
@@ -3586,32 +3586,32 @@ static NSString *ds4_gpu_full_source(void) {
      * run can swap one source file without changing the executable.
      */
     NSArray<NSArray<NSString *> *> *required_sources = @[
-        @[@"DS4_METAL_FLASH_ATTN_SOURCE", @"metal/flash_attn.metal"],
-        @[@"DS4_METAL_DENSE_SOURCE",      @"metal/dense.metal"],
-        @[@"DS4_METAL_GLM53_BF16_SOURCE", @"metal/glm53_bf16.metal"],
-        @[@"DS4_METAL_GLM53_VISION_SOURCE", @"metal/glm53_vision.metal"],
-        @[@"DS4_METAL_DEEPSEEK4_VISION_SOURCE", @"metal/deepseek4_vision.metal"],
-        @[@"DS4_METAL_GLM53_KDA_SOURCE",  @"metal/glm53_kda.metal"],
-        @[@"DS4_METAL_MOE_SOURCE",        @"metal/moe.metal"],
-        @[@"DS4_METAL_DSV4_HC_SOURCE",    @"metal/dsv4_hc.metal"],
-        @[@"DS4_METAL_UNARY_SOURCE",      @"metal/unary.metal"],
-        @[@"DS4_METAL_DSV4_KV_SOURCE",    @"metal/dsv4_kv.metal"],
-        @[@"DS4_METAL_DSV41_SOURCE",      @"metal/dsv41.metal"],
-        @[@"DS4_METAL_DSV4_ROPE_SOURCE",  @"metal/dsv4_rope.metal"],
-        @[@"DS4_METAL_DSV4_MISC_SOURCE",  @"metal/dsv4_misc.metal"],
-        @[@"DS4_METAL_ARGSORT_SOURCE",    @"metal/argsort.metal"],
-        @[@"DS4_METAL_CPY_SOURCE",        @"metal/cpy.metal"],
-        @[@"DS4_METAL_CONCAT_SOURCE",     @"metal/concat.metal"],
-        @[@"DS4_METAL_GET_ROWS_SOURCE",   @"metal/get_rows.metal"],
-        @[@"DS4_METAL_SUM_ROWS_SOURCE",   @"metal/sum_rows.metal"],
-        @[@"DS4_METAL_SOFTMAX_SOURCE",    @"metal/softmax.metal"],
-        @[@"DS4_METAL_REPEAT_SOURCE",     @"metal/repeat.metal"],
-        @[@"DS4_METAL_GLU_SOURCE",        @"metal/glu.metal"],
-        @[@"DS4_METAL_NORM_SOURCE",       @"metal/norm.metal"],
-        @[@"DS4_METAL_BIN_SOURCE",        @"metal/bin.metal"],
-        @[@"DS4_METAL_SET_ROWS_SOURCE",   @"metal/set_rows.metal"],
-        @[@"DS4_METAL_QWEN4_SOURCE",      @"metal/qwen4.metal"],
-        @[@"DS4_METAL_QWEN4_VISION_SOURCE", @"metal/qwen4_vision.metal"],
+        @[@"DS4_METAL_FLASH_ATTN_SOURCE", @"src/metal/flash_attn.metal"],
+        @[@"DS4_METAL_DENSE_SOURCE",      @"src/metal/dense.metal"],
+        @[@"DS4_METAL_GLM53_BF16_SOURCE", @"src/metal/glm53_bf16.metal"],
+        @[@"DS4_METAL_GLM53_VISION_SOURCE", @"src/metal/glm53_vision.metal"],
+        @[@"DS4_METAL_DEEPSEEK4_VISION_SOURCE", @"src/metal/deepseek4_vision.metal"],
+        @[@"DS4_METAL_GLM53_KDA_SOURCE",  @"src/metal/glm53_kda.metal"],
+        @[@"DS4_METAL_MOE_SOURCE",        @"src/metal/moe.metal"],
+        @[@"DS4_METAL_DSV4_HC_SOURCE",    @"src/metal/dsv4_hc.metal"],
+        @[@"DS4_METAL_UNARY_SOURCE",      @"src/metal/unary.metal"],
+        @[@"DS4_METAL_DSV4_KV_SOURCE",    @"src/metal/dsv4_kv.metal"],
+        @[@"DS4_METAL_DSV41_SOURCE",      @"src/metal/dsv41.metal"],
+        @[@"DS4_METAL_DSV4_ROPE_SOURCE",  @"src/metal/dsv4_rope.metal"],
+        @[@"DS4_METAL_DSV4_MISC_SOURCE",  @"src/metal/dsv4_misc.metal"],
+        @[@"DS4_METAL_ARGSORT_SOURCE",    @"src/metal/argsort.metal"],
+        @[@"DS4_METAL_CPY_SOURCE",        @"src/metal/cpy.metal"],
+        @[@"DS4_METAL_CONCAT_SOURCE",     @"src/metal/concat.metal"],
+        @[@"DS4_METAL_GET_ROWS_SOURCE",   @"src/metal/get_rows.metal"],
+        @[@"DS4_METAL_SUM_ROWS_SOURCE",   @"src/metal/sum_rows.metal"],
+        @[@"DS4_METAL_SOFTMAX_SOURCE",    @"src/metal/softmax.metal"],
+        @[@"DS4_METAL_REPEAT_SOURCE",     @"src/metal/repeat.metal"],
+        @[@"DS4_METAL_GLU_SOURCE",        @"src/metal/glu.metal"],
+        @[@"DS4_METAL_NORM_SOURCE",       @"src/metal/norm.metal"],
+        @[@"DS4_METAL_BIN_SOURCE",        @"src/metal/bin.metal"],
+        @[@"DS4_METAL_SET_ROWS_SOURCE",   @"src/metal/set_rows.metal"],
+        @[@"DS4_METAL_QWEN4_SOURCE",      @"src/metal/qwen4.metal"],
+        @[@"DS4_METAL_QWEN4_VISION_SOURCE", @"src/metal/qwen4_vision.metal"],
     ];
 
     NSMutableString *source = [NSMutableString stringWithString:base];
@@ -7385,7 +7385,7 @@ int ds4_gpu_matmul_q8_0_f16_out_tensor(
 
 /* Decode-only fusion of the router logits matvec with the shared-expert
  * gate/up SwiGLU: one dispatch instead of two on the same normalized FFN
- * input.  Bit-exact by construction (see metal/dense.metal).  Returns 1 on
+ * input.  Bit-exact by construction (see src/metal/dense.metal).  Returns 1 on
  * success, 0 when the shape is unsupported (caller falls back), -1 on
  * error. */
 
@@ -7407,7 +7407,7 @@ int ds4_gpu_matmul_q8_0_f16_out_tensor(
 /* Quad variant of the paired compressor projection: the attention compressor
  * and indexer compressor pairs share the input activation and F16 matvec
  * shape, so one dispatch covers all four matrices.  Bit-exact by
- * construction (see metal/dense.metal).  Returns 1 when the fused dispatch
+ * construction (see src/metal/dense.metal).  Returns 1 when the fused dispatch
  * ran, 0 when the caller should use the separate paths, -1 on error. */
 
 /* Decode-only emit-path fusion: finalize the freshly pooled attention and
@@ -7429,7 +7429,7 @@ int ds4_gpu_matmul_q8_0_f16_out_tensor(
 
 /* Decode-only triple fusion: q/kv RMS norm + KV RoPE tail + FP8/raw store.
  * Same arithmetic, order and rounding as the three separate dispatches (see
- * metal/norm.metal); gated and verified against full-vocabulary logits.
+ * src/metal/norm.metal); gated and verified against full-vocabulary logits.
  * Returns 1 on success, 0 on unsupported shape (caller falls back). */
 /* Deferred kv norm/RoPE/FP8 task: the q/kv norm dispatch runs its q task
  * only and the kv task is folded into the KV staging kernel of the same
@@ -13999,7 +13999,7 @@ int ds4_gpu_glm_routed_moe_batch_direct_scalar_q4_tensor(
 
 /* Fused decode HC-pre: unweighted RMSNorm over the flattened HC row plus the
  * F16 HC-mix matvec in one dispatch.  The kernel reproduces the standalone
- * kernels' reduction trees bit-exactly (see metal/dsv4_hc.metal), so this is
+ * kernels' reduction trees bit-exactly (see src/metal/dsv4_hc.metal), so this is
  * purely a dispatch-count optimization. */
 
 
@@ -14733,7 +14733,7 @@ static int deepseek4_vision_dispatch_gelu_bias(
                                           "DeepSeek vision aligner GELU");
 }
 
-#include "src/metal/vision_bridge.inc.m"
+#include "vision_bridge.inc.m"
 
 int ds4_gpu_glm53_scatter_image_hc(
         ds4_gpu_tensor       *hc,
@@ -15083,7 +15083,7 @@ void ds4_gpu_set_glm_mtp_verify_mode(bool enabled) {
     (void)enabled;
 }
 
-/* Qwen3.8-Flash-Next kernels (metal/qwen4.metal): one dispatch per wrapper,
+/* Qwen3.8-Flash-Next kernels (src/metal/qwen4.metal): one dispatch per wrapper,
  * weights bound from the model map by offset, transients as ds4_gpu_tensors.
  * Every wrapper joins the active command batch. */
 
@@ -15451,9 +15451,9 @@ static int qwen4_dispatch_resident(int kernel, const void *args, size_t args_len
                         fprintf(stderr,
                             "ds4: Qwen3.8 kernel '%s' is absent from the compiled Metal sources.\n"
                             "ds4: Metal sources are loaded from ./metal at startup, so a binary newer\n"
-                            "ds4: than the working directory's metal/ files (e.g. run from an older\n"
+                            "ds4: than the working directory's src/metal/ files (e.g. run from an older\n"
                             "ds4: checkout) produces this error. Run from the matching checkout, update\n"
-                            "ds4: metal/, or point DS4_METAL_QWEN4_SOURCE at a current qwen4.metal.\n",
+                            "ds4: src/metal/, or point DS4_METAL_QWEN4_SOURCE at a current qwen4.metal.\n",
                             qwen4_kernel_names[kernel]);
                     }
                     return 0;
@@ -17373,7 +17373,7 @@ int ds4_gpu_qwen4_batch_mm_q8_tensor(
                           MTLSizeMake((NSUInteger)((n + 255) / 256), 1, 1), MTLSizeMake(256, 1, 1), 0);
 }
 
-/* Vision tower (metal/qwen4_vision.metal). */
+/* Vision tower (src/metal/qwen4_vision.metal). */
 typedef struct { uint32_t rows, width, grid_w, n_head, head_dim, mode; float eps, scale; } qwen4_vis_args;
 
 static int qwen4_vis_rows(int kernel, const qwen4_vis_args *a, qwen4_bind *b, int n_bind, uint32_t rows, uint32_t y) {
@@ -17559,64 +17559,64 @@ int ds4_gpu_qwen4_hc_mix_rows_tensor(ds4_gpu_tensor *mixed, const ds4_gpu_tensor
                           MTLSizeMake((n_embd + 255) / 256, n_tokens, 1), MTLSizeMake(256, 1, 1), 0);
 }
 
-#include "src/metal/resources.inc.m"
+#include "resources.inc.m"
 
-#include "src/metal/bridge.inc.m"
+#include "bridge.inc.m"
 
-#include "src/metal/model_views.inc.m"
+#include "model_views.inc.m"
 
-#include "src/metal/exact_cache.inc.m"
+#include "exact_cache.inc.m"
 
-#include "src/metal/index_selection.inc.m"
+#include "index_selection.inc.m"
 
-#include "src/metal/dense_matmul.inc.m"
+#include "dense_matmul.inc.m"
 
-#include "src/metal/attention_decode.inc.m"
+#include "attention_decode.inc.m"
 
-#include "src/metal/attention_batch.inc.m"
+#include "attention_batch.inc.m"
 
-#include "src/metal/routed_batch.inc.m"
+#include "routed_batch.inc.m"
 
-#include "src/metal/routed_single.inc.m"
+#include "routed_single.inc.m"
 
-#include "src/metal/expert_cache.inc.m"
+#include "expert_cache.inc.m"
 
-#include "src/metal/expert_tables.inc.m"
+#include "expert_tables.inc.m"
 
-#include "src/metal/expert_load.inc.m"
+#include "expert_load.inc.m"
 
-#include "src/metal/attention_output.inc.m"
+#include "attention_output.inc.m"
 
-#include "src/metal/rope.inc.m"
-
-
-#include "src/metal/compressor.inc.m"
+#include "rope.inc.m"
 
 
-#include "src/metal/scheduling.inc.m"
+#include "compressor.inc.m"
 
 
-#include "src/metal/embedding.inc.m"
+#include "scheduling.inc.m"
 
 
-#include "src/metal/hc_control.inc.m"
+#include "embedding.inc.m"
 
 
-#include "src/metal/router_shared.inc.m"
+#include "hc_control.inc.m"
 
 
-#include "src/metal/router.inc.m"
+#include "router_shared.inc.m"
 
 
-#include "src/metal/supported_primitives.inc.m"
+#include "router.inc.m"
 
 
-#include "src/metal/tp_control.inc.m"
-
-#include "src/metal/primitives.inc.m"
+#include "supported_primitives.inc.m"
 
 
-#include "src/metal/tp_prefetch.inc.m"
+#include "tp_control.inc.m"
+
+#include "primitives.inc.m"
+
+
+#include "tp_prefetch.inc.m"
 
 /* Test-only observation of the real two-level scheduler. No fabricated state:
  * public start owns admission/resources, and public finish owns retirement. */
@@ -17628,6 +17628,6 @@ int ds4_gpu_test_parallel_ffn_stages(const ds4_gpu_tensor *routed_mid) {
 }
 
 /* Native resource lifecycle policy shares these ARC driver leaves. */
-#include "src/metal/model_lifecycle.inc.m"
+#include "model_lifecycle.inc.m"
 
-#include "src/metal/bootstrap.inc.m"
+#include "bootstrap.inc.m"

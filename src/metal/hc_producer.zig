@@ -16,7 +16,7 @@ pub fn available() c_int {
     return @intFromBool(norm_mix_available.?);
 }
 // The fused reduction reproduces standalone RMSNorm/matvec reduction trees
-// bit-exactly (metal/dsv4_hc.metal); this only removes a dispatch boundary.
+// bit-exactly (src/metal/dsv4_hc.metal); this only removes a dispatch boundary.
 pub fn normMix(inputs: Inputs, model: Model, n: u32, out_dim: u32, eps: f32) c_int {
     if (!h.init() or inputs.out == null or inputs.input == null or model.map == null or n != 16384 or out_dim != 24) return 0;
     const weight_bytes = @as(u64, n) * 2 * out_dim;

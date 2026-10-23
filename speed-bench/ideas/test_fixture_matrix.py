@@ -28,8 +28,8 @@ class FixtureMatrixTest(unittest.TestCase):
         self.continuation.write_text('answer')
         self.fixtures=self.root/'fixtures.tsv'
         self.fixtures.write_text(f'case\t{self.prompt}\t{self.continuation}\n')
-        (self.root/'metal').mkdir()
-        (self.root/'metal/example.metal').write_text('// frozen\n')
+        (self.root/'src/metal').mkdir(parents=True)
+        (self.root/'src/metal/example.metal').write_text('// frozen\n')
         self.binary=self.root/'probe'
         self.binary.write_text('''#!/usr/bin/env python3
 import json,os,pathlib,sys

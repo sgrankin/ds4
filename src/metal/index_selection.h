@@ -1,6 +1,6 @@
 #ifndef DS4_METAL_INDEX_SELECTION_H
 #define DS4_METAL_INDEX_SELECTION_H
-#include "../../ds4_gpu.h"
+#include "../ds4_gpu.h"
 
 /* Actual shader packets moved once; C fallback and native construction share
  * field widths/padding. Stack packets are borrowed during encode only. */

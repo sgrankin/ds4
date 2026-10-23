@@ -1,5 +1,5 @@
 /* Existing C tests and the real signal-disposition leaves only. */
-#include "src/eval/eval_api.h"
+#include "eval/eval_api.h"
 #define find_case_answer ds4_eval_find_case_answer
 #define find_case_answer_strict ds4_eval_find_case_answer_strict
 #define answer_matches ds4_eval_answer_matches

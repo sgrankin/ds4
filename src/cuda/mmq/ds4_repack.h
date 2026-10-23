@@ -5,7 +5,7 @@
  * hash, and the three aligned repack builds (IQ2_XXS gate/up, Q2_K down,
  * Q8_0 dense) live here so both producers emit bit-identical artifacts
  * (gate: --repack-hash / DS4_WS_REPACK_HASH FNV lines).  Layout contracts
- * are shared with the consuming kernels in cuda/mmq/ds4_mmq.h. */
+ * are shared with the consuming kernels in src/cuda/mmq/ds4_mmq.h. */
 #ifndef DS4_REPACK_H
 #define DS4_REPACK_H
 

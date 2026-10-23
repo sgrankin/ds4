@@ -1,7 +1,7 @@
 #ifndef DS4_ENGINE_VISION_API_H
 #define DS4_ENGINE_VISION_API_H
 
-#include "../../ds4_gpu.h"
+#include "ds4_gpu.h"
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -30,10 +30,10 @@
 // arg, swept by the harness.
 //
 // Build on the GB10/Blackwell box after `make -j6 cuda-spark`:
-//   ar rcs libds4mmq.a cuda/mmq/ds4_ggml_stubs.o cuda/mmq/ds4_mmq.o \
-//          cuda/mmq/quantize.o cuda/mmq/mmid.o cuda/mmq/mmvq.o
+//   ar rcs libds4mmq.a src/cuda/mmq/ds4_ggml_stubs.o src/cuda/mmq/ds4_mmq.o \
+//          src/cuda/mmq/quantize.o src/cuda/mmq/mmid.o src/cuda/mmq/mmvq.o
 //   /usr/local/cuda/bin/nvcc -O3 --use_fast_math -std=c++17 -arch=sm_121 \
-//        -Icuda/mmq cuda/mmq/test/proto_gemm_dense_q8_d2r.cu libds4mmq.a \
+//        -Icuda/mmq src/cuda/mmq/test/proto_gemm_dense_q8_d2r.cu libds4mmq.a \
 //        -lcudart -lcublas -lcuda -o proto_gemm_dense_q8_d2r
 // argv: [reps=20] [warmup=5] [N=4096]
 

@@ -1,6 +1,6 @@
 /* Check the actual decode selection, not just similarity of generated text.
  * Run on a dedicated GPU host with a resident DeepSeek V4 Flash GGUF. */
-#include "../ds4.c"
+#include "../src/ds4.c"
 
 #define REQUIRE(x) do { if (!(x)) { \
     fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, #x); goto done; \

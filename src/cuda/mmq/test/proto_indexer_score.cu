@@ -5,7 +5,7 @@
 // bit-identical F32 oracle, while V2/V2b/V4/V5/V5B/V5C/V5C32/V5D use a <=2-ULP
 // accumulation-order oracle.  Build with the engine's fast-math mode for the GB10 target
 // (48 SMs, 100 KB smem/SM, 64K regs/SM):
-// /usr/local/cuda/bin/nvcc -O3 -std=c++17 --use_fast_math -arch=sm_121 cuda/mmq/test/proto_indexer_score.cu -o proto_indexer_score
+// /usr/local/cuda/bin/nvcc -O3 -std=c++17 --use_fast_math -arch=sm_121 src/cuda/mmq/test/proto_indexer_score.cu -o proto_indexer_score
 // argv: [n_comp_deep=59082]
 
 #include <cuda_runtime.h>

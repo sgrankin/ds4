@@ -1,5 +1,5 @@
 /* Real payload loader/source parser; no model, tensors or GPU are opened. */
-#include "../ds4.c"
+#include "../src/ds4.c"
 #include "../speed-bench/suffix_snapshot_compare.h"
 #define CHECK(x) do { if (!(x)) { fprintf(stderr, "diagnostic test:%d %s\n", __LINE__, #x); abort(); } } while (0)
 

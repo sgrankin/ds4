@@ -1,6 +1,6 @@
 /* Link the selected production pretokenizer AND maps/BPE. Synthetic ranks make
  * the important split boundaries observable without a model or copied lexer. */
-#include "../ds4_pretokenizer.h"
+#include "../src/ds4_pretokenizer.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>

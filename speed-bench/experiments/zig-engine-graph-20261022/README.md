@@ -18,7 +18,7 @@ growth, reset and destruction into handwritten Zig:
   handles, host hash buffers and disk-read Engram descriptors. Scoped cleanup
   releases partial construction; `take` transfers the actual graph record.
 - [graph.zig](../../../src/engine/graph.zig) connects that owner to existing C
-  sessions through the shared [graph record](../../../ds4_deepseek41_graph.h).
+  sessions through the shared [graph record](../../../src/ds4_deepseek41_graph.h).
 
 C execution-row copies borrow the record and must not destroy its resources.
 Model/weight mappings outlive the graph. Aliases use retained view handles and

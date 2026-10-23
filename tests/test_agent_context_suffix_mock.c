@@ -4,7 +4,7 @@
 #include <inttypes.h>
 #include "agent_runtime_mock_seams.h"
 #define DS4_AGENT_TEST_NO_MAIN
-#include "../ds4_agent.c"
+#include "../src/ds4_agent.c"
 
 /* Test-only native facades expose selection without copying its algorithm. */
 bool agent_context_suffix_select(agent_worker *, const ds4_tokens *, int,

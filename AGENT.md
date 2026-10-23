@@ -1,8 +1,10 @@
 # Agent Notes
 
-`ds4.c` is a DeepSeek V4 Flash specific inference engine. It is not a generic
-GGUF runner. The goal is a small, readable, high-performance C codebase with
-Objective-C only where Metal requires it and Metal kernels under `metal/`.
+The rewrite branch uses Zig for DeepSeek V4.1 and the shared serving frontends,
+with retained C engines and an Objective-C Metal driver. Current branch scope
+and experiment guidance are in [AGENTS.md](AGENTS.md) and
+[src/JOURNAL.md](src/JOURNAL.md); they supersede the broader upstream backend
+assumptions in the notes below.
 
 ## Goals
 
@@ -30,22 +32,22 @@ Objective-C only where Metal requires it and Metal kernels under `metal/`.
 
 ## Layout
 
-- `ds4.c`: model loading, tokenizer, CPU reference code, Metal graph scheduling,
-  sessions, disk-cache payload serialization.
-- `ds4_cli.c`: command line, linenoise REPL, interactive transcript handling.
-- `ds4_server.c`: OpenAI/Anthropic compatible HTTP API, worker queue, streaming,
-  tool-call mapping, disk KV cache policy.
-- `ds4_metal.m`: Objective-C Metal runtime and kernel wrappers.
-- `metal/*.metal`: compute kernels.
+- `src/`: Zig owners, common C/H interfaces and retained C model implementations.
+- `src/engine/`, `src/models/`: DeepSeek execution and model request translation.
+- `src/server/`, `src/agent/`, `src/serving/`: frontends and shared protocol types.
+- `src/cli.zig`: command line, REPL and interactive transcript handling.
+- `src/metal/`: Zig controllers, Objective-C driver and compute shaders.
+- `src/cuda/`, `src/rocm/`: retained upstream backend sources, not qualified by
+  the macOS Metal build.
 - `tests/`: unit and live integration tests.
-- `misc/`: ignored notes, experiments, and old planning material.
+- `misc/`: ignored notes, experiments and old planning material.
 
 This list is not complete, check the files for more info.
 
 ## Testing
 
-Use `make` for build validation. Use `make test` for unit/regression tests when a
-model and Metal are available. Use live server tests only when intentionally
+Use `make` for build validation and `make test` for model-free host/regression
+tests. Run model/GPU fixtures separately under the existing pressure guard. Use live server tests only when intentionally
 testing the API surface.
 
 At every major change where one of the following could be affected, make sure to:

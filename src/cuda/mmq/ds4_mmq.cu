@@ -2936,7 +2936,7 @@ int ds4_mmq_moe_vec_impl(
 // vec_dot_iq2_xxs_q8_1 (vecdotq.cuh); only the float accumulation order
 // differs (per-warp-row here vs per-mmvq-tile there).  Proven +12% over the
 // raw-layout vec path at the production decode shape
-// (cuda/mmq/test/proto_iq2_aligned.cu).
+// (src/cuda/mmq/test/proto_iq2_aligned.cu).
 __global__ void iq2_xxs_aligned_moe_vec_kernel(
         float             *out,        // [n_tokens*n_expert_used, M]
         const uint2       *qs,         // 64B-aligned code pairs

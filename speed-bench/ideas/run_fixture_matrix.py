@@ -61,7 +61,7 @@ def run(args):
     env={key:value for key,value in os.environ.items() if not key.startswith('DS4_')}
     metal=output/'metal'
     metal.mkdir()
-    for source in sorted((args.source_root.resolve()/'metal').glob('*.metal')):
+    for source in sorted((args.source_root.resolve()/'src/metal').glob('*.metal')):
         target=metal/source.name
         shutil.copy2(source,target)
         env['DS4_METAL_'+source.stem.upper()+'_SOURCE']=str(target)

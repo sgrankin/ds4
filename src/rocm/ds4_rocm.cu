@@ -122,59 +122,59 @@ __device__ __constant__ static const int8_t cuda_mxfp4_values_x2[16] = {
      0, -1, -2, -3, -4, -6, -8, -12,
 };
 
-#include "ds4_iq2_tables_cuda.inc"
+#include "../cuda/ds4_iq2_tables_cuda.inc"
 
-#include "rocm/ds4_rocm_runtime.cuh"
+#include "ds4_rocm_runtime.cuh"
 
-#include "rocm/ds4_rocm_common.cuh"
+#include "ds4_rocm_common.cuh"
 
 extern "C" int ds4_gpu_dspark_gfx1151_fast_path(void) {
     return ds4_rocm_is_gfx1151();
 }
 
-#include "rocm/ds4_rocm_q8.cuh"
+#include "ds4_rocm_q8.cuh"
 
-#include "rocm/ds4_rocm_norm_rope.cuh"
+#include "ds4_rocm_norm_rope.cuh"
 
-#include "rocm/ds4_rocm_fp8_kv.cuh"
+#include "ds4_rocm_fp8_kv.cuh"
 
-#include "rocm/ds4_rocm_attention.cuh"
+#include "ds4_rocm_attention.cuh"
 
-#include "rocm/ds4_rocm_hc.cuh"
+#include "ds4_rocm_hc.cuh"
 
-#include "rocm/ds4_rocm_output.cuh"
+#include "ds4_rocm_output.cuh"
 
-#include "rocm/ds4_rocm_indexer.cuh"
+#include "ds4_rocm_indexer.cuh"
 
-#include "rocm/ds4_rocm_embedding_launch.cuh"
+#include "ds4_rocm_embedding_launch.cuh"
 
-#include "rocm/ds4_rocm_matmul.cuh"
+#include "ds4_rocm_matmul.cuh"
 
-#include "rocm/ds4_rocm_fp8_kv_launch.cuh"
+#include "ds4_rocm_fp8_kv_launch.cuh"
 
-#include "rocm/ds4_rocm_compressor.cuh"
+#include "ds4_rocm_compressor.cuh"
 
-#include "rocm/ds4_rocm_attention_launch.cuh"
+#include "ds4_rocm_attention_launch.cuh"
 
-#include "rocm/ds4_rocm_shared_expert.cuh"
+#include "ds4_rocm_shared_expert.cuh"
 
-#include "rocm/ds4_rocm_misc_launch.cuh"
-#include "rocm/ds4_rocm_router.cuh"
+#include "ds4_rocm_misc_launch.cuh"
+#include "ds4_rocm_router.cuh"
 
-#include "rocm/ds4_rocm_moe.cuh"
+#include "ds4_rocm_moe.cuh"
 
-#include "rocm/ds4_rocm_moe_launch.cuh"
+#include "ds4_rocm_moe_launch.cuh"
 
-#include "rocm/ds4_rocm_glm.cuh"
+#include "ds4_rocm_glm.cuh"
 
-#include "rocm/ds4_rocm_hc_output_launch.cuh"
+#include "ds4_rocm_hc_output_launch.cuh"
 
-#include "rocm/ds4_rocm_current_api_compat.cuh"
+#include "ds4_rocm_current_api_compat.cuh"
 
-#include "ds4_glm53_vision_gpu.cuh"
-#include "ds4_deepseek4_vision_gpu.cuh"
-#include "rocm/ds4_rocm_deepseek4_vision.cuh"
-#include "ds4_deepseek41_cuda.cuh"
+#include "../cuda/ds4_glm53_vision_gpu.cuh"
+#include "../cuda/ds4_deepseek4_vision_gpu.cuh"
+#include "ds4_rocm_deepseek4_vision.cuh"
+#include "../cuda/ds4_deepseek41_cuda.cuh"
 
 /* Tensor-parallel gates are Metal-only; stubs keep shared graph code
  * linkable (TP option validation rejects non-Metal backends). */

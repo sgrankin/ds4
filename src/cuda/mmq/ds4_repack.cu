@@ -712,7 +712,7 @@ static void repack_free_artifact(const ds4_repack_build_args &a, ds4_repack_arti
 /* Aligned-SoA Q8_0 dense artifacts: [__half dq[nblk]][pad to 64B]
  * [int8 qs[nblk*32]], nblk = out_dim * (in_dim/32), block order identical to
  * the raw tensor byte order.  Layout contract shared with
- * ds4_mmq_q8_0_aligned_dense_vec (cuda/mmq/ds4_mmq.h).  ADDITIVE: the raw
+ * ds4_mmq_q8_0_aligned_dense_vec (src/cuda/mmq/ds4_mmq.h).  ADDITIVE: the raw
  * spans stay served, so only the n_tokens==1 decode GEMV dispatches on the
  * artifact; every other consumer reads raw as before. */
 bool ds4_repack_build_q8_aligned(const ds4_repack_build_args &a,
@@ -925,7 +925,7 @@ bool ds4_repack_build_q8_f16(const ds4_repack_build_args &a,
 /* Aligned-SoA IQ2_XXS routed-expert artifacts.  Byte-neutral: [__half
  * dq[nblk]][pad to 64B][uint2 qs[nblk*8]], block order identical to the raw
  * tensor byte order.  Layout contract shared with
- * ds4_mmq_iq2_xxs_aligned_moe_vec (cuda/mmq/ds4_mmq.h).  These REPLACE the
+ * ds4_mmq_iq2_xxs_aligned_moe_vec (src/cuda/mmq/ds4_mmq.h).  These REPLACE the
  * raw residency of their source tensors (the producer stops serving/pinning
  * the raw spans); raw-layout consumers fall back to the host mmap. */
 bool ds4_repack_build_iq2_aligned(const ds4_repack_build_args &a,
@@ -1040,7 +1040,7 @@ bool ds4_repack_build_iq2_aligned(const ds4_repack_build_args &a,
  * raw-order row-pair blocks (rows 2p, 2p+1 of an expert),
  *   [uint2 dm2[npair]][pad64][int4 sc4[npair*2]][pad64][uint2 qs2[npair*16]]
  * Layout contract shared with ds4_mmq_q2_K_aligned_moe_vec
- * (cuda/mmq/ds4_mmq.h).  Chunks are whole row pairs so the repack kernel's
+ * (src/cuda/mmq/ds4_mmq.h).  Chunks are whole row pairs so the repack kernel's
  * global pair index math holds across chunk boundaries. */
 bool ds4_repack_build_q2k_aligned(const ds4_repack_build_args &a,
                                   std::vector<ds4_repack_artifact> &out,

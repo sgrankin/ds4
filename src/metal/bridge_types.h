@@ -1,7 +1,7 @@
 #ifndef DS4_ZIG_METAL_BRIDGE_TYPES_H
 #define DS4_ZIG_METAL_BRIDGE_TYPES_H
 
-#include "../../ds4_gpu.h"
+#include "../ds4_gpu.h"
 #include <stddef.h>
 
 /* The existing copy shader's argument packet. Keep the C encoder and Zig

@@ -52,7 +52,7 @@ workstations. A model may be removed when a better replacement arrives.
 
 ## Acknowledgements to llama.cpp and GGML
 
-`ds4.c` does not link against GGML, but it **exists thanks to the path opened by the
+`src/ds4.c` does not link against GGML, but it **exists thanks to the path opened by the
 llama.cpp project and the kernels, quantization formats, GGUF ecosystem, and hard-won
 engineering knowledge developed there**.
 We are thankful and indebted to [`llama.cpp`](https://github.com/ggml-org/llama.cpp)

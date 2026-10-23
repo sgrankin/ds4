@@ -1,13 +1,13 @@
 #define DS4_SERVER_TEST
 #define DS4_SERVER_TEST_NO_MAIN
 #include <inttypes.h>
-#include "../ds4_server.c"
+#include "../src/ds4_server.c"
 #ifndef DS4_NO_GPU
-#include "../ds4_gpu.h"
+#include "../src/ds4_gpu.h"
 #ifdef __APPLE__
 #include "../src/metal/attention_decode.h"
 #endif
-#include "../ds4_image.h"
+#include "../src/ds4_image.h"
 #include <math.h>
 
 bool ds4_test_dspark_cache_window_crop(void);

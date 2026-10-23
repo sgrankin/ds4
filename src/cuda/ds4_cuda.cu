@@ -24,8 +24,8 @@
 #include <vector>
 #include <algorithm>
 
-#include "cuda/mmq/ds4_mmq.h"
-#include "cuda/mmq/ds4_repack.h"
+#include "mmq/ds4_mmq.h"
+#include "mmq/ds4_repack.h"
 #include "ds4_image.h"
 
 #ifndef M_PI
@@ -1232,7 +1232,7 @@ extern "C" int ds4_gpu_decode_graph_end(const ds4_decode_graph_key *key) {
 }
 
 /* ------------------------------------------------------------------------
- * Vendored llama.cpp mmq prefill tier (cuda/mmq/, see cuda/mmq/VENDOR.md).
+ * Vendored llama.cpp mmq prefill tier (src/cuda/mmq/, see src/cuda/mmq/VENDOR.md).
  *
  * Ported from the Entrpi/ds4 batched-serving fork (fork commits 39d3877c,
  * a56e07a5, 944482d5 and the Phase 5/6 MoE wiring; author Entrpi

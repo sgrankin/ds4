@@ -9,7 +9,7 @@
 #ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 200809L
 #endif
-#include "../../ds4_session_sampling.h"
+#include "ds4_session_sampling.h"
 #include <math.h>
 #include <string.h>
 

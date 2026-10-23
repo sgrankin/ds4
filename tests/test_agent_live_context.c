@@ -1,7 +1,7 @@
 /* Model vocabulary integration for transactional live-context edits. This
  * never evaluates model tokens: it checks the real rendered-chat format. */
 #define DS4_AGENT_TEST_NO_MAIN
-#include "../ds4_agent.c"
+#include "../src/ds4_agent.c"
 
 #define CHECK(x) do { if (!(x)) { fprintf(stderr, "live-context line %d: %s: %s\n", __LINE__, #x, err); goto done; } } while (0)
 

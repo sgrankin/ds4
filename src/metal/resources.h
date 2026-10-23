@@ -1,7 +1,7 @@
 #ifndef DS4_ZIG_METAL_RESOURCES_H
 #define DS4_ZIG_METAL_RESOURCES_H
 
-#include "../../ds4_gpu.h"
+#include "../ds4_gpu.h"
 
 /* A borrowed, immutable region description, not the Objective-C class layout.
  * The caller must retain the tensor while reading it or using its contents. */

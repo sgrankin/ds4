@@ -1,8 +1,8 @@
 #ifndef DS4_ENGINE_MOE_SERVICES_H
 #define DS4_ENGINE_MOE_SERVICES_H
 
-#include "../../../ds4_deepseek41_graph.h"
-#include "../../../ds4_resident_route.h"
+#include "ds4_deepseek41_graph.h"
+#include "ds4_resident_route.h"
 #include <time.h>
 
 /* One scalar-call snapshot of existing process-wide diagnostics. The metrics

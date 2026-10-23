@@ -2,7 +2,7 @@
 #define DS4_METAL_ATTENTION_BATCH_H
 #include "attention_decode.h"
 #include "index_selection.h"
-#include "../../ds4_image.h"
+#include "../ds4_image.h"
 /* Original shader records, shared once with the flag-off C implementation. */
 typedef struct {
     int32_t ne01, ne30, ne31, ne32, ne33;

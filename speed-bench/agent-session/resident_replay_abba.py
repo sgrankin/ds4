@@ -225,7 +225,7 @@ def main():
     parser.add_argument('--binary', type=Path, default=REPO / 'speed-bench/ideas/artifacts/resident-replay-integrated')
     parser.add_argument('--replay', type=Path, default=HERE / 'session-v1.txt')
     parser.add_argument('--model', type=Path, default=REPO / 'gguf/DeepSeek-V4.1-Flash-Q2.gguf')
-    parser.add_argument('--shader-root', type=Path, default=REPO / 'metal')
+    parser.add_argument('--shader-root', type=Path, default=REPO / 'src/metal')
     parser.add_argument('--candidate-env', action='append', help='DS4_NAME=VALUE; overrides .05/.12/maxsubs1 defaults')
     parser.add_argument('--base-env', action='append', help='common DS4_NAME=VALUE for both arms')
     parser.add_argument('--cache-gb', type=int, default=64)

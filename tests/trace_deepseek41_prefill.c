@@ -1,6 +1,6 @@
 /* Diagnostic-only instrumented runtime. Normal ds4.c builds have no trace I/O. */
 #define DS4_TEST_V41_TRACE 1
-#include "../ds4.c"
+#include "../src/ds4.c"
 int main(int argc, char **argv) {
     if (argc != 6) { fprintf(stderr, "usage: %s MODEL PROMPT TOKENS scalar|batch OUTDIR\n", argv[0]); return 2; }
     ds4_engine_options opt = {.model_path = argv[1], .backend = DS4_BACKEND_METAL,

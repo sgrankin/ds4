@@ -1,6 +1,6 @@
 // proto_m2_q2k.cu — M2 megakernel program, moe-down Q2K aligned-SoA proto.
 //
-// Target: mul_mat_vec_q_moe<GGML_TYPE_Q2_K, 2> (cuda/mmq/mmvq.cu:608), the
+// Target: mul_mat_vec_q_moe<GGML_TYPE_Q2_K, 2> (src/cuda/mmq/mmvq.cu:608), the
 // production decode down-proj kernel: 43 launches/step at 87.3 us = 3.755
 // ms/step reading raw 84-byte block_q2_K stacks at ~190 GB/s vs the 216-233
 // GB/s device substrate (nsys33d).  This proto vendors the production kernel

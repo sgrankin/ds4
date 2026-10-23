@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 // iq2_host_tables.h - host-accessible copies of the IQ2 lookup tables.
-// Regenerate from cuda/mmq/ggml-common.h whenever upstream changes them:
+// Regenerate from src/cuda/mmq/ggml-common.h whenever upstream changes them:
 //
 //   awk '/GGML_TABLE_BEGIN.*iq2xxs_grid, 256/,/GGML_TABLE_END/' \
-//       cuda/mmq/ggml-common.h | grep -v GGML_TABLE > iq2xxs_grid.lines
+//       src/cuda/mmq/ggml-common.h | grep -v GGML_TABLE > iq2xxs_grid.lines
 //
 // In the vendored ggml-common.h the IQ2 tables are gated on
 // GGML_COMMON_IMPL_CUDA and emitted as static const __device__, so they

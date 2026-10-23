@@ -1,6 +1,6 @@
 /* Link this fixture with the selected production C or Zig cursor module.
  * All backing bytes are stack-owned; no model, filesystem or GPU is needed. */
-#include "../ds4_gguf.h"
+#include "../src/ds4_gguf.h"
 
 #include <assert.h>
 #include <stddef.h>

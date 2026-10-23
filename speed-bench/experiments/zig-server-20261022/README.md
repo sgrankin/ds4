@@ -53,7 +53,7 @@ No candidate success, quality or latency claim is made from this control step.
 The native [HTTP owner](../../../src/server/http.zig) owns one-request framing,
 its temporary request/body buffers, response/SSE formatting, progress deadlines
 and socket configuration/disconnect policy. The shared
-[request record and API](../../../ds4_server_http.h) preserve libc body ownership
+[request record and API](../../../src/ds4_server_http.h) preserve libc body ownership
 and the bounded method/path grammar. The C accept loop retains descriptor
 close, signal and thread ownership; endpoint JSON, model inference and queueing
 remain separate. This stage is not a complete native server claim.
@@ -89,7 +89,7 @@ owners together.
 The native request owner now handles endpoint-field policy and lifetime,
 OpenAI/Anthropic messages, Responses item order/reasoning/tool-result groups,
 tool-schema values. It shares the actual
-server records through [the input header](../../../ds4_server_input.h), uses
+server records through [the input header](../../../src/ds4_server_input.h), uses
 libc-owned allocations, and retains the existing primitive C JSON grammar and
 image-resource services. C still materializes durable history, live bindings,
 rendered prompts and tokenization; the native request code does not import
@@ -133,7 +133,7 @@ coordinator results are recorded separately below.
 The native [coordinator](../../../src/server/coordinator.zig) owns pending versus
 in-flight admission, per-slot generation/evaluation, decode coalescing, actual
 session-batch grouping and worker completion/shutdown. It uses the one shared
-[Server/Slot/Job record layout](../../../ds4_server_runtime.h), borrows the
+[Server/Slot/Job record layout](../../../src/ds4_server_runtime.h), borrows the
 existing mutex/condition-variable ownership and calls public engine/session
 APIs. The HTTP accept loop and endpoint/request materialization remain outside
 this owner.
@@ -164,7 +164,7 @@ associated with protocol IDs so a client rebuilding/reordering argument JSON
 can replay the original model text. Cache allocation, bounded eviction,
 lookups, store/resolve operations and cleanup are owned here; live request and
 model policy remain outside it. It uses the actual
-[shared records](../../../ds4_server_tool_memory.h), not copied server layouts.
+[shared records](../../../src/ds4_server_tool_memory.h), not copied server layouts.
 
 | Tool-memory step | Whole process | Result |
 | --- | ---: | --- |
@@ -215,7 +215,7 @@ and actual disk-prefix-cache hits. The guard completed with child return code
 3 because the probe's `item_deleted` check was false.
 
 The probe expected an item DELETE to return `deleted:true`. The existing
-[`ds4_conversations.h`](../../../ds4_conversations.h) instead removes that
+[`ds4_conversations.h`](../../../src/ds4_conversations.h) instead removes that
 item, persists the changed conversation and returns its conversation object.
 The [raw DELETE response](evidence/http-first/after/item-delete.response.json)
 contains that existing response shape. This is a probe-contract error; no

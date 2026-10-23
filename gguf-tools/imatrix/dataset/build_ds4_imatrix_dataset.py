@@ -288,7 +288,11 @@ def chunk_text(text: str, size: int, overlap: int) -> list[str]:
 
 
 def code_prompt(path: str, chunk: str, task: str) -> list[dict]:
-    lang = "metal" if path.endswith(".metal") else "c"
+    lang = "c"
+    if path.endswith(".metal"):
+        lang = "metal"
+    elif path.endswith(".zig"):
+        lang = "zig"
     return [
         {"role": "system", "content": DEFAULT_SYSTEM},
         {"role": "user", "content": f"{task}\n\nFile: {path}\n\n```{lang}\n{chunk}\n```"},
@@ -304,12 +308,13 @@ def doc_prompt(path: str, chunk: str, task: str) -> list[dict]:
 
 def make_source_records(root: Path, records: list[Record]) -> None:
     files = [
-        "ds4.c", "ds4_server.c", "ds4_cli.c", "ds4_metal.m", "ds4.h", "ds4_gpu.h",
+        "src/ds4.c", "src/ds4_server.c", "src/cli.zig", "src/metal/ds4_metal.m",
+        "src/ds4.h", "src/ds4_gpu.h",
         "README.md", "AGENT.md", "gguf-tools/README.md",
         "gguf-tools/imatrix/README.md", "gguf-tools/imatrix/dataset/README.md",
         "gguf-tools/quality-testing/README.md",
     ]
-    files += [str(p.relative_to(root)) for p in sorted((root / "metal").glob("*.metal"))]
+    files += [str(p.relative_to(root)) for p in sorted((root / "src/metal").glob("*.metal"))]
     tasks = [
         "Review this excerpt for correctness risks, memory lifetime issues, and performance bottlenecks.",
         "Explain what this code does and identify the inference stage it belongs to.",
@@ -321,7 +326,7 @@ def make_source_records(root: Path, records: list[Record]) -> None:
         text = read_text(root / name)
         if not text:
             continue
-        is_code = name.endswith((".c", ".h", ".m", ".metal"))
+        is_code = name.endswith((".c", ".h", ".m", ".metal", ".zig"))
         size = 2600 if is_code else 3200
         chunks = chunk_text(text, size=size, overlap=180)
         for idx, chunk in enumerate(chunks):
@@ -849,8 +854,8 @@ def c_scan_string_end(text: str, pos: int) -> int:
 def c_string_value_at(text: str, pos: int) -> tuple[str, int]:
     """Parse one or more adjacent C string literals.
 
-    ``ds4_eval.c`` uses ordinary escaped C strings for embedded questions.  We
-    reuse those definitions instead of duplicating 75 benchmark prompts in this
+    ``src/ds4_eval_data.c`` uses ordinary escaped C strings for embedded questions.  We
+    reuse those definitions instead of duplicating benchmark prompts in this
     generator.  Python's literal parser handles the escaped newlines, quotes,
     and backslashes used by these string initializers.
     """
@@ -870,13 +875,13 @@ def c_string_value_at(text: str, pos: int) -> tuple[str, int]:
 
 
 def eval_case_blocks(eval_source: str) -> list[str]:
-    marker = "static const eval_case eval_cases[]"
+    marker = "const eval_case eval_core_cases[]"
     start = eval_source.find(marker)
     if start < 0:
-        raise ValueError("missing eval_cases array")
+        raise ValueError("missing eval_core_cases array")
     pos = eval_source.find("{", start)
     if pos < 0:
-        raise ValueError("missing eval_cases initializer")
+        raise ValueError("missing eval_core_cases initializer")
 
     blocks: list[str] = []
     depth = 1
@@ -995,12 +1000,12 @@ def build_eval_imatrix_prompt(case: dict) -> str:
 def make_eval_reasoning_records(root: Path, records: list[Record]) -> None:
     """Include the exact benchmark prompt family used by ``ds4-eval``.
 
-    The benchmark cases are already embedded in ``ds4_eval.c`` with source
+    The benchmark cases are already embedded in ``src/ds4_eval_data.c`` with source
     licensing notes.  This parser keeps the imatrix corpus synchronized with the
     integration harness while excluding answer keys from model-visible text.
     """
 
-    text = read_text(root / "ds4_eval.c")
+    text = read_text(root / "src/ds4_eval_data.c")
     system = (
         "You are solving a hard benchmark question. Reason carefully. "
         "The final answer must follow the requested format exactly."
@@ -1035,15 +1040,15 @@ def make_long_context_records(root: Path, records: list[Record]) -> None:
     sources = [
         ("README.md", read_text(root / "README.md")),
         ("AGENT.md", read_text(root / "AGENT.md")),
-        ("METAL.md", read_text(root / "METAL.md")),
+        ("METAL.md", read_text(root / "docs/METAL.md")),
         ("gguf-tools/imatrix/README.md", read_text(root / "gguf-tools/imatrix/README.md")),
         ("gguf-tools/imatrix/dataset/README.md", read_text(root / "gguf-tools/imatrix/dataset/README.md")),
         ("gguf-tools/quality-testing/README.md", read_text(root / "gguf-tools/quality-testing/README.md")),
-        ("ds4_server.c", read_text(root / "ds4_server.c")),
-        ("ds4_metal.m", read_text(root / "ds4_metal.m")),
-        ("metal/dsv4_hc.metal", read_text(root / "metal/dsv4_hc.metal")),
-        ("metal/moe.metal", read_text(root / "metal/moe.metal")),
-        ("metal/dense.metal", read_text(root / "metal/dense.metal")),
+        ("ds4_server.c", read_text(root / "src/ds4_server.c")),
+        ("ds4_metal.m", read_text(root / "src/metal/ds4_metal.m")),
+        ("metal/dsv4_hc.metal", read_text(root / "src/metal/dsv4_hc.metal")),
+        ("metal/moe.metal", read_text(root / "src/metal/moe.metal")),
+        ("metal/dense.metal", read_text(root / "src/metal/dense.metal")),
     ]
     by_name: dict[str, list[str]] = {}
     for name, text in sources:
@@ -2221,9 +2226,9 @@ def main() -> None:
 
 def find_repo_root(start: Path) -> Path:
     for path in [start, *start.parents]:
-        if (path / "ds4.c").exists() and (path / "metal").is_dir():
+        if (path / "src/ds4.c").exists() and (path / "src/metal").is_dir():
             return path
-    raise RuntimeError(f"could not find ds4.c repository root from {start}")
+    raise RuntimeError(f"could not find repository root containing src/ds4.c from {start}")
 
 
 if __name__ == "__main__":

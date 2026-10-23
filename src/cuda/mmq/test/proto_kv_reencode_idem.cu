@@ -24,7 +24,7 @@
 // battery is the fix as shipped in v0.3 (dsv4_pow2_ceil_scale + signbit) and
 // is the gate (exit status).  Build MUST mirror the engine's fast-math flags:
 //   /usr/local/cuda/bin/nvcc -O3 -std=c++17 --use_fast_math -arch=sm_121 \
-//       cuda/mmq/test/proto_kv_reencode_idem.cu -o proto_kv_reencode_idem
+//       src/cuda/mmq/test/proto_kv_reencode_idem.cu -o proto_kv_reencode_idem
 // argv: [n_rows_fp8=131072] [n_rows_fp4=131072]
 
 #include <cuda_runtime.h>

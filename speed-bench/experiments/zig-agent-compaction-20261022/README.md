@@ -9,7 +9,7 @@ checks, so they are independent functionality observations. No speed gain is cla
 
 ## Actual boundary
 
-The [shared Plan](../../../ds4_agent_compaction.h) owns a private summary-request
+The [shared Plan](../../../src/ds4_agent_compaction.h) owns a private summary-request
 vector, a replacement transcript vector and the summary/tail geometry. The
 [native planner](../../../src/agent_compaction.zig) selects thresholds, complete
 turn/image boundaries and summary budgets, constructs the private request,

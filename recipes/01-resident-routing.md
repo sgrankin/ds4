@@ -39,7 +39,7 @@ The assumptions are model-family routing semantics, unique resident experts and
 an execution path that accepts changed IDs with preserved coefficients. Port
 the policy at the routing boundary; do not copy DeepSeek bias/affinity formulas
 unchanged into a different MoE. Sources:
-[selector](../ds4_resident_route.h), [runtime](../ds4.c),
+[selector](../src/ds4_resident_route.h), [runtime](../src/ds4.c),
 [focused test](../tests/test_resident_route.c).
 
 ## Local knobs and measured points

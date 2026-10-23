@@ -134,7 +134,7 @@ test-metal: test-deepseek41-metal test-metal-dense-mpp test-metal-shared-bf16 \
 	test-qwen4-kernels test-glm53-kda
 
 check-mxfp4-half-lut:
-	python3 metal/generate_mxfp4_half_lut.py --check
+	python3 src/metal/generate_mxfp4_half_lut.py --check
 
 # Standalone numerical references and tooling tests do not link an engine.
 q4k-dot-test:
@@ -149,7 +149,7 @@ mxfp4-dot-test:
 
 test-quality-api:
 	@mkdir -p zig-out/bin
-	$(CC) -O3 -Wall -Wextra -std=c11 -I. -ffunction-sections -fdata-sections \
+	$(CC) -O3 -Wall -Wextra -std=c11 -I. -Isrc -ffunction-sections -fdata-sections \
 		-o zig-out/bin/test-quality-api tests/test_quality_api.c -Wl,-dead_strip -lm
 	./zig-out/bin/test-quality-api
 	python3 tests/test_collect_official.py

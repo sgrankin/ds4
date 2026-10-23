@@ -20,8 +20,8 @@ class ReplayMatrixTest(unittest.TestCase):
         self.model.write_bytes(b'not a model')
         self.replay=self.root/'session.txt'
         self.replay.write_text('P 0 1 1\nD 0 1 2\n')
-        (self.root/'metal').mkdir()
-        (self.root/'metal/example.metal').write_text('// frozen shader\n')
+        (self.root/'src/metal').mkdir(parents=True)
+        (self.root/'src/metal/example.metal').write_text('// frozen shader\n')
         self.binary=self.root/'probe'
         self.binary.write_text('''#!/usr/bin/env python3
 import json,os,pathlib,sys

@@ -1,6 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
-#include "../ds4_state_cache.h"
-#include "../ds4_kvstore.h"
+#include "../src/ds4_state_cache.h"
+#include "../src/ds4_kvstore.h"
 
 #include <assert.h>
 #include <stdio.h>

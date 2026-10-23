@@ -165,6 +165,30 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
 
 ### 2026-10-23
 
+- Completed source layout after the user clarified that C/H files and backend
+  trees belong under `src/` too: 225 additional tracked files preserved. Common
+  C/H/include tables are in `src/`; Metal driver/shaders join `src/metal/`;
+  retained CUDA/ROCm sources are in `src/cuda/` and `src/rocm/`. No root C/H or
+  backend source directories remain. Algorithms and supported-backend scope
+  are unchanged; CUDA/ROCm are retained source, not newly hardware-qualified.
+- `make all` / `make test`, native suffix transactions, four packet/ownership
+  fixtures and the official scorer build pass. Default shader discovery works
+  in a guarded DeepSeek run; tokens and all reported top-20 logits/logprobs
+  match the saved pre-layout baseline exactly. The preset launcher also works.
+- Updated active helpers and documentation links, leaving historical experiment
+  source lists intact. JPEG tests now load the existing production image library
+  instead of compiling the obsolete C decoder alone; all three pass. Existing
+  benchmark helper checks pass 8 + 5 cases, and the calibration helper discovers
+  the repository and extracts 184 Eval records without rewriting datasets.
+- Independent review confirms file preservation and path-only backend changes.
+  Reproduce the host checks with `make all test`; run extra fixtures through
+  `tools/zig-build agent-context-suffix-test native-activation-test
+  native-norm-test native-hc-projection-test native-f16-publication-test
+  quality-score`. The layout smoke uses the same model command as the adoption
+  report. Raw logs/manifests remain in
+  `.workspaces/source-layout-completion-20261023/`; JPEG/helper logs are under
+  `.workspaces/src-layout-20261023/`. Main is unchanged.
+
 - Adoption cleanup completed: all five production mains are Zig. Removed the
   migration build option, native-selection switches and duplicate C owners;
   retain Qwen/GLM C engines behind the shared frontends and actual Objective-C

@@ -538,7 +538,7 @@ def fixtures(source):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--source', type=Path, default=Path(__file__).resolve().parents[1] / 'ds4.c')
+    parser.add_argument('--source', type=Path, default=Path(__file__).resolve().parents[1] / 'src/ds4.c')
     parser.add_argument('--output', type=Path, help='exclusive-new evidence directory')
     parser.add_argument('--prepare-only', action='store_true', help='extract only; no compiler or test executable')
     args = parser.parse_args()

@@ -1,5 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
-#include "../ds4_response_store.h"
+#include "../src/ds4_response_store.h"
 
 #include <assert.h>
 

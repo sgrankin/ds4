@@ -30,7 +30,7 @@ for generated step:
 
 Do not merely inject the spelling of a closing marker into visible output;
 update the model session and parser state consistently. The server implementation
-and force/defer counters are in [ds4_server.c](../ds4_server.c). Presets leave
+and force/defer counters are in [ds4_server.c](../src/ds4_server.c). Presets leave
 thinking policy unchanged. Earlier `PT_WRITE_REASONING_BUDGET` controls belong
 to private experiment helpers and do not enable this behavior in ordinary
 `ds4-agent`; use the implemented server request field or port the small policy

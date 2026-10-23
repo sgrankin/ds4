@@ -23,7 +23,7 @@ def run(args):
     shutil.copy2(args.replay.resolve(),replay)
     binary.chmod(0o555)
     env={k:v for k,v in os.environ.items() if not k.startswith('DS4_')}
-    shaders,hashes=freeze_shaders(output,ROOT/'metal',env)
+    shaders,hashes=freeze_shaders(output,ROOT/'src/metal',env)
     env.update(shaders)
     env.update(DS4_REPLAY_CONTEXT=str(args.ctx),DS4_REPLAY_CACHE_GB=str(args.cache_gb),
         DS4_REPLAY_PREFILL_CHUNK=str(args.chunk),DS4_REPLAY_ROUTE_METRICS='1',

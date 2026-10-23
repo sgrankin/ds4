@@ -1,6 +1,6 @@
 #ifndef DS4_METAL_EXPERT_CACHE_H
 #define DS4_METAL_EXPERT_CACHE_H
-#include "../../ds4_gpu.h"
+#include "../ds4_gpu.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>

@@ -10,10 +10,10 @@
 #ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 200809L
 #endif
-#include "../../ds4_gguf.h"
-#include "../../ds4_model_config.h"
-#include "../../ds4_model_weights.h"
-#include "../../ds4_support_weights.h"
+#include "ds4_gguf.h"
+#include "ds4_model_config.h"
+#include "ds4_model_weights.h"
+#include "ds4_support_weights.h"
 #include "vision_weights_api.h"
 #include <errno.h>
 #include <fcntl.h>

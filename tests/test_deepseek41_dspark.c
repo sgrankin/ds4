@@ -1,5 +1,5 @@
 /* Native V4.1 DSpark graph oracle. No target experts are made resident. */
-#include "../ds4.c"
+#include "../src/ds4.c"
 
 #define REQUIRE(x) do { if (!(x)) { fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, #x); goto done; } } while (0)
 

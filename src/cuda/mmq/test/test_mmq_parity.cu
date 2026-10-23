@@ -293,7 +293,7 @@ void dequantize_row_q4_K_cpu(const block_q4_K * x, float * y, int K) {
 
 // Port of dequantize_row_iq2_xxs from ggml/src/ggml-quants.c:2412.  The
 // CPU-side lookup tables live in iq2_host_tables.h - generated from the
-// canonical bit-patterns in cuda/mmq/ggml-common.h.
+// canonical bit-patterns in src/cuda/mmq/ggml-common.h.
 
 void dequantize_row_iq2_xxs_cpu(const block_iq2_xxs * x, float * y, int K) {
     const int nb = K / QK_K_LOCAL;

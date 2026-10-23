@@ -349,7 +349,7 @@ def prod_out_colperm(base_name):
 
 
 def deq_q4_k_blocks(buf: "np.ndarray (n,144) uint8") -> "np.ndarray (n,256) f32":
-    """Vectorized ggml block_q4_K dequant (matches metal/qwen4.metal stage8)."""
+    """Vectorized ggml block_q4_K dequant (matches src/metal/qwen4.metal stage8)."""
     d = buf[:, 0:2].copy().view("<f2").astype(np.float32).reshape(-1, 1)
     dmin = buf[:, 2:4].copy().view("<f2").astype(np.float32).reshape(-1, 1)
     sc = buf[:, 4:16].astype(np.int32)

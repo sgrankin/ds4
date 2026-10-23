@@ -25,7 +25,7 @@ fn object(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, clan
     compile.addArgs(flags);
     const version = target.result.os.version_range.semver.min;
     const clang_target = b.fmt("arm64-apple-macos{d}.{d}.{d}", .{ version.major, version.minor, version.patch });
-    compile.addArgs(&.{ "-isysroot", sdk, "-target", clang_target, "-I", ".", "-MMD", "-MF" });
+    compile.addArgs(&.{ "-isysroot", sdk, "-target", clang_target, "-I", ".", "-I", "src", "-MMD", "-MF" });
     // Run parses Clang's discovered project-header dependencies for cache reuse.
     _ = compile.addDepFileOutputArg2(b.fmt("{s}.d", .{name}), .{});
     compile.addArg("-c");
@@ -44,6 +44,7 @@ fn generatedApi(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
         .link_libc = true,
     });
     api.addIncludePath(b.path("."));
+    api.addIncludePath(b.path("src"));
     api.addSystemIncludePath(.{ .cwd_relative = b.fmt("{s}/usr/include", .{sdk}) });
     api.addFrameworkPath(.{ .cwd_relative = b.fmt("{s}/System/Library/Frameworks", .{sdk}) });
     api.defineCMacro("_FORTIFY_SOURCE", "0");
@@ -111,19 +112,19 @@ pub fn build(b: *std.Build) void {
         const api = generatedApi(b, target, sdk, optimize, "src/web_api.h");
         break :web nativeObject(b, target, sdk, optimize, "src/web_entry.zig", "web_c", api);
     };
-    const web_data = object(b, target, sdk, clang, "ds4_web_data.c", "web-data", .fast, c_flags);
+    const web_data = object(b, target, sdk, clang, "src/ds4_web_data.c", "web-data", .fast, c_flags);
     core_module.addObjectFile(web_data);
     core_module.addObjectFile(native_web);
     for ([_][]const u8{
-        "ds4.c",      "ds4_distributed.c", "ds4_tp.c",       "ds4_layer_pack.c",
-        "ds4_help.c", "ds4_eval_cases.c",  "ds4_gpu_args.c", "linenoise.c",
-        "rax.c",      "ds4_metal.m",
+        "src/ds4.c",      "src/ds4_distributed.c", "src/ds4_tp.c",       "src/ds4_layer_pack.c",
+        "src/ds4_help.c", "src/ds4_eval_cases.c",  "src/ds4_gpu_args.c", "src/linenoise.c",
+        "src/rax.c",      "src/metal/ds4_metal.m",
     }) |source| {
         const flags = if (std.mem.endsWith(u8, source, ".m")) objc_flags else c_flags;
         core_module.addObjectFile(object(b, target, sdk, clang, source, b.fmt("core-{s}", .{std.fs.path.stem(source)}), .fast, flags));
     }
     // Reuse the exact image objects for production and the libc-only test library.
-    const image_object = object(b, target, sdk, clang, "ds4_image.c", "core-ds4_image", .fast, c_flags);
+    const image_object = object(b, target, sdk, clang, "src/ds4_image.c", "core-ds4_image", .fast, c_flags);
     core_module.addObjectFile(image_object);
     const image_library_module = module(b, target, sdk, optimize);
     image_library_module.addObjectFile(image_object);
@@ -145,24 +146,24 @@ pub fn build(b: *std.Build) void {
         core_module.addObjectFile(b.addObject(.{ .name = "graph", .root_module = graph_module }).getEmittedBin());
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "ds4_cli_chat.h");
+        const api = generatedApi(b, target, sdk, optimize, "src/ds4_cli_chat.h");
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/cli_chat.zig", "cli_chat_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "ds4_tokenizer.h");
+        const api = generatedApi(b, target, sdk, optimize, "src/ds4_tokenizer.h");
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/tokenizer.zig", "tokenizer_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "ds4_pretokenizer.h");
+        const api = generatedApi(b, target, sdk, optimize, "src/ds4_pretokenizer.h");
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/pretokenizer.zig", "pretokenizer_c", api));
     }
     {
-        const vocab_api = generatedApi(b, target, sdk, optimize, "ds4_vocab.h");
+        const vocab_api = generatedApi(b, target, sdk, optimize, "src/ds4_vocab.h");
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/chat.zig", "chat_c", vocab_api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/vocab.zig", "vocab_c", vocab_api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "ds4_agent_tools.h");
+        const api = generatedApi(b, target, sdk, optimize, "src/ds4_agent_tools.h");
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/agent_tools.zig", "agent_tools_c", api));
     }
     {
@@ -170,7 +171,7 @@ pub fn build(b: *std.Build) void {
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/agent_file.zig", "agent_file_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "ds4_sampling.h");
+        const api = generatedApi(b, target, sdk, optimize, "src/ds4_sampling.h");
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/sampling.zig", "sampling_c", api));
     }
     {
@@ -380,8 +381,8 @@ pub fn build(b: *std.Build) void {
         const api = generatedApi(b, target, sdk, optimize, "src/eval/eval_api.h");
         break :eval nativeObject(b, target, sdk, optimize, "src/eval/eval_entry.zig", "eval_c", api);
     };
-    const eval_data = object(b, target, sdk, clang, "ds4_eval_data.c", "eval-data", .fast, c_flags);
-    const eval_native_shim = object(b, target, sdk, clang, "ds4_eval_native.c", "eval-native-os-tests", .fast, c_flags);
+    const eval_data = object(b, target, sdk, clang, "src/ds4_eval_data.c", "eval-data", .fast, c_flags);
+    const eval_native_shim = object(b, target, sdk, clang, "src/ds4_eval_native.c", "eval-native-os-tests", .fast, c_flags);
     const native_cli = cli: {
         const api = generatedApi(b, target, sdk, optimize, "src/cli_api.h");
         break :cli nativeObject(b, target, sdk, optimize, "src/cli.zig", "cli_c", api);
@@ -436,8 +437,8 @@ pub fn build(b: *std.Build) void {
         break :server nativeObject(b, target, sdk, optimize, "src/server/main.zig", "server_boot_c", api);
     };
     const agent_main = nativeObject(b, target, sdk, optimize, "src/agent/main.zig", "agent_runtime_c", agent_runtime_api);
-    const server_support = object(b, target, sdk, clang, "ds4_server.c", "server-support", .fast, c_flags);
-    const agent_support = object(b, target, sdk, clang, "ds4_agent.c", "agent-support", .fast, c_flags);
+    const server_support = object(b, target, sdk, clang, "src/ds4_server.c", "server-support", .fast, c_flags);
+    const agent_support = object(b, target, sdk, clang, "src/ds4_agent.c", "agent-support", .fast, c_flags);
     inline for (.{
         .{ "ds4", native_cli },
         .{ "ds4-server", server_main },
@@ -691,7 +692,7 @@ pub fn build(b: *std.Build) void {
     const sampling_math_flags = if (optimize == .debug) debug_flags else c_flags;
     const sampling_engine_base = std.mem.concat(b.allocator, []const u8, &.{ sampling_math_flags, &.{ "-DDS4_NO_GPU=1", "-DDS4_TEST_HOOKS=1", "-Wno-unused-function" } }) catch @panic("OOM");
     const sampling_fixture_flags = std.mem.concat(b.allocator, []const u8, &.{ sampling_math_flags, &.{ "-DDS4_TEST_HOOKS=1", "-fno-finite-math-only" } }) catch @panic("OOM");
-    const sampling_engine = object(b, target, sdk, clang, "ds4.c", "sampling-engine", optimize, sampling_engine_base);
+    const sampling_engine = object(b, target, sdk, clang, "src/ds4.c", "sampling-engine", optimize, sampling_engine_base);
     const sampling_frontend = object(b, target, sdk, clang, "tests/test_sampling.c", "test-sampling-main", optimize, sampling_fixture_flags);
     const sampling_test = executable(b, target, sdk, core, null, null, "test-sampling", sampling_frontend, optimize);
     sampling_test.root_module.addObjectFile(sampling_engine);

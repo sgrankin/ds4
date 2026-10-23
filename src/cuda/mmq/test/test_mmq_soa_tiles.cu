@@ -22,10 +22,10 @@
 // switch).
 //
 // Build (on the box, after `make -j6 cuda-spark` built the mmq objects):
-//   ar rcs libds4mmq.a cuda/mmq/ds4_ggml_stubs.o cuda/mmq/ds4_mmq.o \
-//          cuda/mmq/quantize.o cuda/mmq/mmid.o cuda/mmq/mmvq.o
+//   ar rcs libds4mmq.a src/cuda/mmq/ds4_ggml_stubs.o src/cuda/mmq/ds4_mmq.o \
+//          src/cuda/mmq/quantize.o src/cuda/mmq/mmid.o src/cuda/mmq/mmvq.o
 //   /usr/local/cuda/bin/nvcc -O3 --use_fast_math -std=c++17 -arch=sm_121 \
-//        -Icuda/mmq cuda/mmq/test/test_mmq_soa_tiles.cu libds4mmq.a \
+//        -Icuda/mmq src/cuda/mmq/test/test_mmq_soa_tiles.cu libds4mmq.a \
 //        -lcudart -lcublas -lcuda -o test_mmq_soa_tiles
 
 #include "ds4_mmq.h"

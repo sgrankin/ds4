@@ -1,6 +1,6 @@
 /* Exercise the real opaque-session export guards without a model or GPU.
  * Including the core gives this test access to the private provenance bit. */
-#include "../ds4.c"
+#include "../src/ds4.c"
 
 #define CHECK(x) do { if (!(x)) { fprintf(stderr, "suffix export line %d: %s\n", __LINE__, #x); abort(); } } while (0)
 

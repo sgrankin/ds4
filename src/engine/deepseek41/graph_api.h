@@ -5,19 +5,19 @@
  * input/config/weights when activating the graph owner; no SDK dump is kept. */
 #include "../model_api.h"
 #include "../core_api.h"
-#include "../../../ds4_deepseek41_graph.h"
-#include "../../../ds4_session_frontier.h"
-#include "../../../ds4_engine_memory.h"
-#include "../../../ds4_model_residency.h"
-#include "../../../ds4_ssd.h"
-#include "../../../ds4_session_resources.h"
-#include "../../../ds4_engine_tp_state.h"
-#include "../../../ds4_sampling.h"
+#include "ds4_deepseek41_graph.h"
+#include "ds4_session_frontier.h"
+#include "ds4_engine_memory.h"
+#include "ds4_model_residency.h"
+#include "ds4_ssd.h"
+#include "ds4_session_resources.h"
+#include "ds4_engine_tp_state.h"
+#include "ds4_sampling.h"
 #include <sys/sysctl.h>
-#include "../../../ds4_deepseek41_dspark_state.h"
-#include "../../../ds4_deepseek41_gpu.h"
-#include "../../../ds4_tp.h"
-#include "../../../ds4_gpu_tp.h"
+#include "ds4_deepseek41_dspark_state.h"
+#include "ds4_deepseek41_gpu.h"
+#include "ds4_tp.h"
+#include "ds4_gpu_tp.h"
 #include <string.h>
 #include <pthread.h>
 #include <time.h>
@@ -109,8 +109,8 @@ bool ds4_native_dspark_verify41(ds41_dspark *, ds41_gpu_graph *, const ds4_model
 bool ds4_native_dspark_commit41(ds41_dspark *, ds41_gpu_graph *, const ds4_model_config *, uint32_t, float *);
 
 /* Complete V4.1 speculative cycle over borrowed actual session owners. */
-#include "../../../ds4_dspark_cycle.h"
-#include "../../../ds4_sampling.h"
+#include "ds4_dspark_cycle.h"
+#include "ds4_sampling.h"
 
 bool ds4_native_dspark_cycle_draft41(const ds4_dspark_cycle_args *,
     ds41_gpu_graph *, const ds4_model *, const ds4_weights *, const ds4_model *,
@@ -225,7 +225,7 @@ bool ds4_native_target_residency_install41(ds4_engine_memory *, const ds4_weight
 void ds4_native_target_selection_free41(ds4_model_map_selection *);
 
 /* Append to the SAME graph_api.h generated input. */
-#include "../../../ds4_session_control.h"
+#include "ds4_session_control.h"
 int ds4_native_session_request_sync41(ds4_session_frontier *,
     ds4_deepseek41_session_device *, ds4_engine_core *, ds4_engine_tp_state *,
     ds4_session_control *, const ds4_model_config *,
@@ -269,7 +269,7 @@ int ds4_native_session_suffix_graft41(ds4_session_frontier *, ds4_deepseek41_ses
     ds4_suffix_reuse_stats *, ds4_suffix_relocation_stats *, char *, size_t);
 
 /* Include the real borrowed view in the SAME graph_api.h / gguf_c Module. */
-#include "../../../ds4_session_batch.h"
+#include "ds4_session_batch.h"
 int ds4_native_session_request_eval41(ds4_session_frontier *,
     ds4_deepseek41_session_device *, ds4_engine_core *, ds4_engine_tp_state *,
     ds4_session_control *, ds4_session *, ds4_dist_session *,
@@ -304,7 +304,7 @@ int ds4_native_session_speculative_batch41(const ds4_session_batch_view *,
     int count, int (*accepted)[2], int *counts, bool exact,
     bool *native_batch, bool *mixed_batch, char *, size_t);
 
-#include "../../../ds4_engine_vision.h"
+#include "ds4_engine_vision.h"
 
 int ds4_native_graph_route_batch41(ds41_gpu_graph *, const ds4_model *, const ds4_layer_weights *, const ds4_model_config *, uint32_t);
 #endif

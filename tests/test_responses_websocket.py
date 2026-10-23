@@ -73,8 +73,8 @@ class Server:
             port = reservation.getsockname()[1]
         self.base = f"http://127.0.0.1:{port}"
         self.ws_url = f"ws://127.0.0.1:{port}/v1/responses"
-        shaders = dict(re.findall(r'@\[@"(DS4_METAL_[A-Z0-9_]+_SOURCE)",\s*@"(metal/[^\"]+)"\]',
-                                  (ROOT / "ds4_metal.m").read_text()))
+        shaders = dict(re.findall(r'@\[@"(DS4_METAL_[A-Z0-9_]+_SOURCE)",\s*@"(src/metal/[^\"]+)"\]',
+                                  (ROOT / "src/metal/ds4_metal.m").read_text()))
         env = {key: value for key, value in os.environ.items() if not key.startswith(("DS4", "PT_"))}
         env.update({key: str(ROOT / value) for key, value in shaders.items()})
         env.update(DS4_SERVER_RESPONSE_STORE_DIR=str(store), DS4_STATE_CACHE_DIR=str(cache),

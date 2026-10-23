@@ -14,7 +14,7 @@ identity/order, reasoning/text visibility, output JSON and streaming lifecycle.
 The worker retains generation and socket activation policy. The existing
 durable publisher and tolerant tool-argument codec remain complete C library
 actions. Actual buffer/stream/tool-item records are shared once through
-[the output header](../../../ds4_server_output.h); no Engine/Session layout is
+[the output header](../../../src/ds4_server_output.h); no Engine/Session layout is
 copied. Native output must durably publish before reporting successful
 completion.
 

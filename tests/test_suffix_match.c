@@ -1,4 +1,4 @@
-#include "../ds4_suffix_match.h"
+#include "../src/ds4_suffix_match.h"
 #include <assert.h>
 #include <stdio.h>
 

@@ -51,7 +51,7 @@
 static constexpr int WARP_SIZE = 32;
 
 /* ------------------------------------------------------------------ */
-/* Vendored from cuda/mmq/mmid.cu + common.cuh (verbatim semantics)     */
+/* Vendored from src/cuda/mmq/mmid.cu + common.cuh (verbatim semantics)     */
 
 template <int width = WARP_SIZE>
 static __device__ __forceinline__ int warp_reduce_any(int x) {

@@ -86,7 +86,7 @@ fi
 mkdir -p -- "$(dirname -- "$DS4_STATE_CACHE_DIR")"
 
 # Keep shader paths usable with --chdir; retain explicit source overrides.
-for source in "$root"/metal/*.metal; do
+for source in "$root"/src/metal/*.metal; do
     name=$(basename "$source" .metal | tr '[:lower:]' '[:upper:]')
     key="DS4_METAL_${name}_SOURCE"
     if [ -z "$(printenv "$key" || :)" ]; then export "$key=$source"; fi

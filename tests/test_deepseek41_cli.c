@@ -1,5 +1,5 @@
 /* No generation: exercise the actual CLI transcript updater with the V4.1 fixture. */
-#include "../ds4_cli_chat.h"
+#include "../src/ds4_cli_chat.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>

@@ -10,7 +10,7 @@ def snapshot_shaders(output):
     dest = Path(output).resolve() / 'metal'
     dest.mkdir()
     overrides, manifest = {}, {}
-    for source in sorted(Path('metal').glob('*.metal')):
+    for source in sorted(Path('src/metal').glob('*.metal')):
         name = f'DS4_METAL_{source.stem.upper()}_SOURCE'
         target = dest / source.name
         source = Path(os.environ.get(name) or source)

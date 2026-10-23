@@ -1,6 +1,6 @@
 /* Link this fixture to the selected production C or Zig map/BPE implementation.
  * Keys are caller-owned static/stack bytes; no model or GPU is involved. */
-#include "../ds4_tokenizer.h"
+#include "../src/ds4_tokenizer.h"
 
 #include <assert.h>
 #include <limits.h>

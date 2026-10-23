@@ -23,9 +23,9 @@ and one reused span per edit. Source/destination starts and displacement must
 respect pair compression: even starts and even shifts. Both left deletions and
 right insertions/growing replacements work. The layout code handles raw rings,
 compressed pools/index keys and pending pairs; a superficially matching byte
-range is insufficient. See [layout](../ds4_suffix_layout.h),
-[matcher](../ds4_suffix_match.h), [public API](../ds4.h) and
-`ds4_session_reuse_suffix_relocated` in [core](../ds4.c).
+range is insufficient. See [layout](../src/ds4_suffix_layout.h),
+[matcher](../src/ds4_suffix_match.h), [public API](../src/ds4.h) and
+`ds4_session_reuse_suffix_relocated` in [core](../src/ds4.c).
 
 Keep the complete latest User message and following history fresh, as well as
 the requested minimum tail. A long current user/tool loop may therefore offer

@@ -45,8 +45,8 @@ and sorted `DS4_METAL_*` environment settings, with replay K/selected policy add
 for replay configurations. It is not a full 365 GB weight-file
 digest. Suffix discovery can enumerate private approximate originals, with
 the caller still checking latest-User freshness and relocation geometry.
-See [host cache API](../ds4_state_cache.h),
-[implementation](../ds4_state_cache.c) and [profile adapter](../ds4_state_cache_runtime.h).
+See [host cache API](../src/ds4_state_cache.h),
+[implementation](../ds4_state_cache.c) and [profile adapter](../src/ds4_state_cache_runtime.h).
 
 ## Typed replay persistence and format boundaries
 
