@@ -11,12 +11,28 @@ to this checkpoint's affine group-64 INT4 projections/experts and INT8 embedding
 49 layers, 256 experts/top-six routing, and BF16 KV. It is not a general GGUF or
 BF16-checkpoint loader.
 
-The resident schedule is specifically **M5 Max: 76 groups of 256 threads, 64
-MLP/head groups**. Its device-wide barriers require all groups to make progress.
-Other chips need a qualified schedule rather than a larger arbitrary grid.
-Compile with safe math; explicit fast operations are already in the shader.
+The resident schedules mirror the source runtime:
 
-Both `flint_decode_scalar` and `flint_decode_greedy8` use these buffer bindings:
+| Profile | Resident groups × threads | MLP/head groups | Prefill chunk |
+| --- | --- | --- | --- |
+| M4 Pro | 36 ×256 | 32 | 2048 |
+| M5 Pro | 36 ×256 | 32 | 4096 |
+| M5 Max | 76 ×256 | 64 | 4096 |
+
+Device-wide barriers require every resident group to make progress. The profile
+selector rejects a larger residency envelope and the M5 tensor path on M4.
+A smaller profile can be exercised on M5 Max; that does not establish its speed
+or residency on the target chip. M1 Max still needs its own implementation and
+qualification. Compile with safe math; explicit fast operations are in the shader.
+The M5 Max shader remains unchanged. M4/M5 Pro use separate generated files and
+entry-point names so a cached Metal pipeline cannot silently retain another
+profile's launch envelope. The exporter also retains upstream's mixed-expert
+specialization flag (off on M4, on on M5); the installed INT4 checkpoint does not
+take the optional INT3 specialization branch.
+
+Both scalar and greedy entry points use these buffer bindings. M5 Max retains
+`flint_decode_scalar`/`flint_decode_greedy8`; Pro variants append `_m4_pro` or
+`_m5_pro`:
 
 | Binding | Payload |
 | --- | --- |
@@ -29,7 +45,7 @@ Both `flint_decode_scalar` and `flint_decode_greedy8` use these buffer bindings:
 | 21 | Scalar constants, or greedy `float[6]`: count, EOS count, four EOS IDs |
 | 22 | BF16 vocabulary logits: 150,144 entries per step |
 | 23 | BF16 layer trace: `50 × 2048` entries per step |
-| 24 | One synchronization diagnostic per resident group |
+| 24 | Diagnostics: 76-word stride; smaller profiles use the first36 words |
 | 25 | Scalar profile scratch, or greedy `uint[17]` token-chain record |
 | 26 | BF16 workspace, 78,848 entries |
 | 27 | FP32 attention partials, 2,097,152 entries |

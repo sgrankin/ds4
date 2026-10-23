@@ -9,8 +9,10 @@ The first supported checkpoint is Recursive's group-64 INT4 export, with INT8
 embeddings, from [recursive-oss/rec](https://github.com/recursive-oss/rec) revision
 `e53663b262af4cb1ca498e596ca8b1a2d79e0800`. Keep `config.json`, `tokenizer.json`,
 `flint-int4.json`, and its safetensors shards together. This loader accepts that
-directory format, not GGUF. The resident decoder is qualified on **M5 Max only**;
-other chips need a separately qualified schedule.
+directory format, not GGUF. Native profiles are available for **M4 Pro, M5 Pro
+and M5 Max**. Physical hardware qualification so far is **M5 Max only**; running
+the Pro schedules on that machine does not establish their speed or resident
+kernel behavior on an actual Pro.
 
 ## Download
 
@@ -35,13 +37,53 @@ let model = './gguf/flint-int4'
 ```
 
 The `flint` preset selects two conversation slots, a 262144-token context,
-4096-token prefill chunks, and durable Responses history at
+prefill chunks of up to 4096 tokens, and durable Responses history at
 `.workspaces/response-store`. It removes
 inherited DeepSeek SSD/suffix settings. Override its ordinary arguments, for
 example `--ctx 8192`, or set `DS4_SERVER_RESPONSE_STORE_DIR` for a separate
 history directory. `--bin-dir` is optional when using the root executables.
 The server model ID is `flint`; `flint-int4` is also accepted. Sampling defaults
 are temperature 1, top-k 20, top-p 0.95 and min-p 0, matching the original harness.
+
+## Hardware profiles
+
+`--flint-profile auto` is the default. The engine selects a profile from the
+Metal device name before loading the weights. The recognized devices are
+`Apple M4 Pro`, `Apple M5 Pro` and `Apple M5 Max`; other devices are rejected.
+The same option works with `ds4`, `ds4-server` and the server preset:
+
+```nu
+./ds4-local --bin-dir ./zig-out/bin --server flint --model $model --flint-profile auto --port 8001
+```
+
+| Profile | Resident groups | MLP groups | Prefill | Default / maximum chunk |
+| --- | ---: | ---: | --- | ---: |
+| `m4-pro` | 36 | 32 | Portable SIMD matrix multiplication and attention | 2048 |
+| `m5-pro` | 36 | 32 | M5 NAX matrix multiplication and attention | 4096 |
+| `m5-max` | 76 | 64 | M5 NAX matrix multiplication and attention | 4096 |
+
+M4 prefill has a separate SIMD implementation and does not compile the M5-only
+NAX path. An explicit `--prefill-chunk` may lower the chunk size; a larger value
+is capped at the selected profile's maximum. Thus the preset's 4096 request
+uses 2048-token chunks with `m4-pro`.
+
+Explicit `--flint-profile m4-pro`, `m5-pro` or `m5-max` permits a smaller schedule
+on a larger supported device: M5 Max can exercise either Pro profile, and M5 Pro
+can exercise M4 Pro. The engine rejects a larger resident grid and rejects an
+M5 NAX profile on M4. These overrides support cross-validation; they do not make
+M5 Max timings representative of the smaller chips. See the
+[profile qualification report](../speed-bench/experiments/flint-profiles-20261023/README.md)
+for the completed measurements and remaining hardware checks.
+
+On M5 Max, both Pro profiles pass the full 29-check WebSocket suite and all 17
+answer probes, including tools, concurrency, restart and multichunk continuation.
+Their greedy scalar and eight-token packet paths produce identical 128-token
+continuations in all twelve short/context repetitions. The M5 Pro and M5 Max
+teacher logits retain the frozen native Max results exactly; M4's separate
+SIMD arithmetic produces small measured differences. Physical Pro testing is
+the remaining hardware qualification step.
+
+## Agent connections
 
 The built-in `ds4-agent` does not yet support Flint's tool format and rejects
 this model. Use an agent connected to the server. The plain `ds4 --model DIR`
@@ -119,6 +161,26 @@ python3 speed-bench/ideas/pressure_run.py .workspaces/flint-native-context-guard
 python3 speed-bench/ideas/pressure_run.py .workspaces/flint-native-quality-guard -- ./zig-out/bin/flint-smoke $model ($output | path join 'teacher-suite.json') ($output | path join 'teacher-native') quality
 python3 tools/flint-quality.py ($output | path join 'teacher-suite.json') ($output | path join 'teacher-reference') ($output | path join 'teacher-native')
 ```
+
+For profile comparisons, place the selector before the model argument:
+
+```nu
+python3 speed-bench/ideas/pressure_run.py .workspaces/flint-m5-pro-guard -- ./zig-out/bin/flint-smoke --flint-profile m5-pro $model ($output | path join 'short-prompt.json') ($output | path join 'm5-pro-short') default
+```
+
+The no-model fixture compiles the selected shaders and checks KV publication,
+sampling, and M4's portable matrix/attention arithmetic. The `scalar` benchmark
+mode provides a one-token-at-a-time greedy control for the normal packet path:
+
+```nu
+python3 speed-bench/ideas/pressure_run.py .workspaces/flint-m4-fixture-guard -- ./zig-out/bin/flint-smoke --flint-profile m4-pro --compile-only
+python3 speed-bench/ideas/pressure_run.py .workspaces/flint-m4-scalar-guard -- ./zig-out/bin/flint-smoke --flint-profile m4-pro $model ($output | path join 'short-prompt.json') ($output | path join 'm4-pro-short-scalar') scalar
+```
+
+The existing WebSocket qualification accepts the same optional
+`--flint-profile` selector and forwards it to both the initial and restarted
+servers. Its Flint cases include a prompt longer than 4096 tokens followed by
+an append after decoding, alongside tools and independent conversations.
 
 Quality capture uses positions 16/32/64/96 in each reference greedy continuation.
 It measures the same target token and full vocabulary at each fixed prefix;

@@ -729,6 +729,8 @@ fn parseOptions(argv: [][*c]u8) Options {
                 fatal(2, "ds4: --simulate-used-memory must be a positive GiB value, e.g. 64GB\n", .{});
         } else if (same(arg, "--prefill-chunk")) {
             cfg.engine.prefill_chunk = @intCast(integer(args.value(arg), arg, false));
+        } else if (same(arg, "--flint-profile")) {
+            cfg.engine.flint_profile = args.value(arg);
         } else if (same(arg, "--power")) {
             cfg.engine.power_percent = integer(args.value(arg), arg, false);
             if (cfg.engine.power_percent > 100) fatal(2, "ds4: --power must be between 1 and 100\n", .{});

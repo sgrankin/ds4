@@ -2,6 +2,7 @@
 //! tensor readback, MLX graph or Python callback occurs between operations.
 const std = @import("std");
 pub const shaders = @import("prefill_shaders.zig");
+pub const Backend = shaders.Backend;
 
 pub const View = extern struct {
     handle: ?*anyopaque,
@@ -43,6 +44,7 @@ pub const Model = struct {
     banks: [13]View,
     metadata: *const [50][64]u32,
     routed_bits: u32 = 4,
+    backend: Backend = .nax,
 
     fn tensor(self: Model, row: *const [64]u32, column: usize) View {
         return self.banks[row[0]].at(row[column]);
@@ -145,9 +147,9 @@ const Embedding = extern struct { rows: u32, width: u32 = 2048, vocab: u32 = 150
 const Qk = extern struct { rows: u32, heads: u32, position: u32, rope: u32, epsilon: f32 = 1e-6, theta: f32 = 10000 };
 const Route = extern struct { rows: u32, experts: u32 = 256, top_k: u32 = 6, pad: u32 = 0 };
 const Scatter = extern struct { rows: u32, width: u32 = 2048, top_k: u32 = 6, pad: u32 = 0 };
-const Matmul = extern struct { m: i32, n: i32, k: i32, pad: i32 = 0 };
+pub const Matmul = extern struct { m: i32, n: i32, k: i32, pad: i32 = 0 };
 pub const Kv = extern struct { offset: u64, capacity: u32, position: u32, rows: u32, is_global: u32, prior: u32, total: u32, initial_position: u32, pad: u32 = 0 };
-const AttentionBase = extern struct {
+pub const AttentionBase = extern struct {
     batch: i32 = 1,
     heads: i32 = 32,
     dim: i32 = 128,
@@ -167,7 +169,7 @@ const AttentionBase = extern struct {
     value_strides: [3]i64,
     output_strides: [3]i64,
 };
-const Attention = extern struct { base: AttentionBase, window: i32, pad: i32 = 0 };
+pub const Attention = extern struct { base: AttentionBase, window: i32, pad: i32 = 0 };
 
 fn groups(items: u32, width: u32) [3]u32 {
     return .{ std.math.divCeil(u32, items, width) catch unreachable, 1, 1 };
@@ -178,20 +180,29 @@ fn elementwise(encoder: anytype, name: [:0]const u8, params: Rows, bindings: []c
 fn linear(encoder: anytype, model: Model, row: *const [64]u32, column: usize, input: View, output: View, count: u32) !void {
     const p = Matmul{ .m = @intCast(count), .n = @intCast(row[column + 3]), .k = @intCast(row[column + 4]) };
     const narrow = count <= 8;
-    try encoder.dispatch(if (narrow) "flint_prefill_qmv4_packed" else "flint_prefill_qmm4", p, &.{
+    const tile: i32 = if (model.backend == .simd) 32 else 64;
+    const name: [:0]const u8 = if (model.backend == .simd)
+        (if (narrow) "flint_prefill_qmv4_packed_simd" else "flint_prefill_qmm4_simd")
+    else
+        (if (narrow) "flint_prefill_qmv4_packed" else "flint_prefill_qmm4");
+    try encoder.dispatch(name, p, &.{
         model.tensor(row, column).binding(1),     model.tensor(row, column + 1).binding(2),
         model.tensor(row, column + 2).binding(3), input.binding(4),
         output.binding(5),
-    }, if (narrow) .{ @intCast(@divTrunc(p.n + 15, 16)), count, 1 } else .{ @intCast(@divExact(p.n, 64)), @intCast(@divTrunc(p.m + 63, 64)), 1 }, 128);
+    }, if (narrow) .{ @intCast(@divTrunc(p.n + 15, 16)), count, 1 } else .{ @intCast(@divExact(p.n, tile)), @intCast(@divTrunc(p.m + tile - 1, tile)), 1 }, 128);
 }
 fn gatherLinear(encoder: anytype, model: Model, row: *const [64]u32, column: usize, input: View, output: View, ids: View, count: u32) !void {
     const p = Matmul{ .m = @intCast(count), .n = @intCast(row[column + 3]), .k = @intCast(row[column + 4]) };
     const narrow = count <= 768 and model.routed_bits == 4;
-    const name: [:0]const u8 = if (narrow) "flint_prefill_gather_qmv4_packed" else if (model.routed_bits == 4) "flint_prefill_gather_qmm4" else "flint_prefill_gather_qmm3";
+    const tile: i32 = if (model.backend == .simd) 32 else 64;
+    const name: [:0]const u8 = if (model.backend == .simd)
+        (if (narrow) "flint_prefill_gather_qmv4_packed_simd" else if (model.routed_bits == 4) "flint_prefill_gather_qmm4_simd" else "flint_prefill_gather_qmm3_simd")
+    else
+        (if (narrow) "flint_prefill_gather_qmv4_packed" else if (model.routed_bits == 4) "flint_prefill_gather_qmm4" else "flint_prefill_gather_qmm3");
     try encoder.dispatch(name, p, &.{
         input.binding(1),                         model.tensor(row, column).binding(2), model.tensor(row, column + 1).binding(3),
         model.tensor(row, column + 2).binding(4), ids.binding(5),                       output.binding(6),
-    }, if (narrow) .{ @intCast(@divTrunc(p.n + 15, 16)), count, 1 } else .{ @intCast(@divExact(p.n, 64)), @intCast(@divTrunc(p.m + 63, 64)), 1 }, 128);
+    }, if (narrow) .{ @intCast(@divTrunc(p.n + 15, 16)), count, 1 } else .{ @intCast(@divExact(p.n, tile)), @intCast(@divTrunc(p.m + tile - 1, tile)), 1 }, 128);
 }
 fn mlp(encoder: anytype, model: Model, row: *const [64]u32, column: usize, scratch: Scratch, output: View, count: u32) !void {
     try linear(encoder, model, row, column, scratch.view(.norm), scratch.view(.gate), count);
@@ -274,25 +285,26 @@ pub fn encode(encoder: anytype, model: Model, cache: Cache, scratch: Scratch, to
         }
         const q_stride = [3]i64{ @as(i64, count) * 4096, 128, 4096 };
         const kv_stride = [3]i64{ @as(i64, stride) * 512, @as(i64, stride) * 128, 128 };
+        const attention_block: u32 = if (model.backend == .simd) 32 else 64;
         const attention = Attention{ .base = .{
             .queries = @intCast(count),
             .keys = @intCast(kv.total),
-            .query_blocks = @intCast((count + 63) / 64),
-            .key_blocks = @intCast((kv.total + 63) / 64),
-            .query_aligned = @intCast(count / 64),
-            .key_aligned = @intCast(kv.total / 64),
-            .query_remainder = @intCast(count % 64),
-            .key_remainder = @intCast(kv.total % 64),
+            .query_blocks = @intCast((count + attention_block - 1) / attention_block),
+            .key_blocks = @intCast((kv.total + attention_block - 1) / attention_block),
+            .query_aligned = @intCast(count / attention_block),
+            .key_aligned = @intCast(kv.total / attention_block),
+            .query_remainder = @intCast(count % attention_block),
+            .key_remainder = @intCast(kv.total % attention_block),
             .query_offset = @intCast(prior),
             .query_strides = q_stride,
             .key_strides = kv_stride,
             .value_strides = kv_stride,
             .output_strides = q_stride,
         }, .window = if (is_global) 0 else 513 };
-        try encoder.dispatch("flint_prefill_attention", attention, &.{
+        try encoder.dispatch(if (model.backend == .simd) "flint_prefill_attention_simd" else "flint_prefill_attention", attention, &.{
             scratch.view(.q).binding(1),         keys.binding(2),                 values.binding(3),
             scratch.view(.attention).binding(4), model.tensor(row, 7).binding(5),
-        }, .{ (count + 63) / 64, 32, 1 }, 128);
+        }, .{ (count + attention_block - 1) / attention_block, 32, 1 }, 128);
         if (!is_global) try publishKv(encoder, kv, cache.banks, scratch);
         try linear(encoder, model, row, 25, scratch.view(.attention), scratch.view(.projection), count);
         try elementwise(encoder, "flint_prefill_add", .{ .rows = count, .width = 2048 }, &.{
@@ -308,9 +320,10 @@ pub fn encode(encoder: anytype, model: Model, cache: Cache, scratch: Scratch, to
             });
         } else {
             try mlp(encoder, model, row, 45, scratch, scratch.view(.shared), count);
-            try encoder.dispatch("flint_prefill_router_mm", Matmul{ .m = @intCast(count), .n = 256, .k = 2048 }, &.{
+            const router_block: u32 = if (model.backend == .simd) 32 else 64;
+            try encoder.dispatch(if (model.backend == .simd) "flint_prefill_router_mm_simd" else "flint_prefill_router_mm", Matmul{ .m = @intCast(count), .n = 256, .k = 2048 }, &.{
                 scratch.view(.norm).binding(1), model.tensor(row, 60).binding(2), scratch.view(.router).binding(3),
-            }, .{ 4, (count + 63) / 64, 1 }, 128);
+            }, .{ 256 / router_block, (count + router_block - 1) / router_block, 1 }, 128);
             try encoder.dispatch("flint_prefill_route", Route{ .rows = count }, &.{
                 scratch.view(.router).binding(1), model.tensor(row, 9).binding(2),
                 scratch.view(.ids).binding(3),    scratch.view(.weights).binding(4),

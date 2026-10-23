@@ -199,6 +199,8 @@ pub fn parse(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend) c.se
             }
         } else if (is(option, "--prefill-chunk")) {
             cfg.engine.prefill_chunk = @intCast(integer(args.value(option), option, false));
+        } else if (is(option, "--flint-profile")) {
+            cfg.engine.flint_profile = args.value(option);
         } else if (is(option, "--power")) {
             cfg.engine.power_percent = integer(args.value(option), option, false);
             if (cfg.engine.power_percent < 1 or cfg.engine.power_percent > 100) {

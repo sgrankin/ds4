@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Export Flint's M5 Max resident decoder as ordinary, standalone MSL.
+"""Export Flint's M4 Pro, M5 Pro and M5 Max resident decoders as standalone MSL.
 
 Build-time conversion only: imports the upstream string transforms, never MLX,
 loads no weights and creates no GPU objects. The checked-in output is what the
 native engine compiles; serving has no Python or MLX dependency.
 
-Usage: python3 tools/export-flint-kernels.py [../flint]
+Usage: python3 tools/export-flint-kernels.py [../flint] [--profile m5-max]
 Source: recursive-oss/rec e53663b262af4cb1ca498e596ca8b1a2d79e0800
 (Apache-2.0). Keep the packet loop and BF16 boundaries intact when updating.
 """
@@ -46,15 +46,23 @@ def literal(source, name):
     raise ValueError(f"Missing upstream source literal {name}")
 
 
-def render(text):
+PROFILES = {
+    "m4-pro": ("M4 Pro", 36, 32, False, "decode-m4-pro.metal", "_m4_pro"),
+    "m5-pro": ("M5 Pro", 36, 32, True, "decode-m5-pro.metal", "_m5_pro"),
+    "m5-max": ("M5 Max", 76, 64, True, "decode.metal", ""),
+}
+
+
+def render(text, workers, mlp_workers):
     values = dict(
-        WORKERS=76, GROUPS=608, THREADS=19456, GROUP_THREADS=256, GROUP_SIMDS=8,
+        WORKERS=workers, GROUPS=workers * 8, THREADS=workers * 256,
+        GROUP_THREADS=256, GROUP_SIMDS=8,
         KV_FIRST=0, PROFILE=0, SHORT_HEADS=4, LONG_HEADS=8, LONG_CONTEXT=1024,
-        UNROLL=1, TEAM_MLP_WORKERS=64, EPS="1e-06f",
+        UNROLL=1, TEAM_MLP_WORKERS=mlp_workers, EPS="1e-06f",
         LOGBASE=f"{math.log2(10000.0)!r}f",
     )
     for phase in ("ATTENTION", "MERGE", "ROUTER", "MLP", "HEAD"):
-        count = 64 if phase in ("MLP", "HEAD") else 76
+        count = mlp_workers if phase in ("MLP", "HEAD") else workers
         values[phase + "_WORKERS"] = count
         values[phase + "_GROUPS"] = count * 8
     for key, value in values.items():
@@ -130,28 +138,22 @@ kernel void flint_init_silu(device bfloat16_t* table [[buffer(0)]],
 """
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("checkout", nargs="?", type=Path, default=Path(__file__).resolve().parents[2] / "flint")
-    parser.add_argument("--output", type=Path, default=Path(__file__).resolve().parents[1] / "src/metal/flint/decode.metal")
-    args = parser.parse_args()
-    directory = args.checkout / "engine/src/rec_mlx/kernels"
-    original = (directory / "megakernel.py").read_text()
-    transforms = load_transforms(directory)
+def export(original, transforms, profile):
+    chip, workers, mlp_workers, specialize, _filename, suffix = PROFILES[profile]
     header = literal(original, "_HEADER")
     body = literal(original, "_BODY")
-    header = transforms["expert_teams"].transform(header, 64)
+    header = transforms["expert_teams"].transform(header, mlp_workers)
     header = transforms["resident_optimizations"].transform(header)
-    header, body = render(header), render(body)
-    header, body = transforms["rank_routing"].transform(header, body, 64)
-    header, body = transforms["kv_teams"].transform(header, body, 76)
+    header, body = render(header, workers, mlp_workers), render(body, workers, mlp_workers)
+    header, body = transforms["rank_routing"].transform(header, body, mlp_workers)
+    header, body = transforms["kv_teams"].transform(header, body, workers)
     model = types.SimpleNamespace(
         embedding=types.SimpleNamespace(bits=8), head=types.SimpleNamespace(bits=4),
         config={"mlx_export": {"routed_expert_bits": 4}},
     )
-    header, body = transforms["mixed_bits"].transform(header, body, model, 64, True)
+    header, body = transforms["mixed_bits"].transform(header, body, model, mlp_workers, specialize)
     header = transforms["activation_optimization"].transform(header)
-    packet = transforms["resident_block"].transform(body, 76)
+    packet = transforms["resident_block"].transform(body, workers)
     packet = packet.replace("block_step<8u", "block_step<uint(sampling[0])")
     anchor = "if(index==0)profile[block_step*2+1]=block_input_token;"
     assert packet.count(anchor) == 1
@@ -170,14 +172,36 @@ def main():
         return;
     }
 """ + body
-    result = PREAMBLE + header + entry("flint_decode_scalar", scalar)
-    result += entry("flint_decode_greedy8", packet, packet=True) + HELPERS
+    preamble = PREAMBLE.replace(
+        "Apple M5 Max, 76 groups x 256 threads, 64 MLP/head groups.",
+        f"Apple {chip}, {workers} groups x 256 threads, {mlp_workers} MLP/head groups.",
+    )
+    result = preamble + header + entry("flint_decode_scalar" + suffix, scalar)
+    result += entry("flint_decode_greedy8" + suffix, packet, packet=True) + HELPERS
     assert "__WORKERS__" not in result and "__EPS__" not in result
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(result)
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("checkout", nargs="?", type=Path, default=Path(__file__).resolve().parents[2] / "flint")
+    parser.add_argument("--profile", choices=["all", *PROFILES], default="all")
+    parser.add_argument("--output", type=Path, help="Output file, when exporting a single profile")
+    args = parser.parse_args()
+    if args.output is not None and args.profile == "all":
+        parser.error("--output requires a single --profile")
+    directory = args.checkout / "engine/src/rec_mlx/kernels"
+    original = (directory / "megakernel.py").read_text()
+    transforms = load_transforms(directory)
+    output_directory = Path(__file__).resolve().parents[1] / "src/metal/flint"
+    for profile in PROFILES if args.profile == "all" else [args.profile]:
+        result = export(original, transforms, profile)
+        output = args.output or output_directory / PROFILES[profile][4]
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(result)
+        print(f"{output}: {len(result.splitlines())} lines, {len(result)} bytes")
     # Preserve the source license alongside the derived shader.
-    (args.output.parent / "LICENSE.rec").write_text((args.checkout / "LICENSE").read_text())
-    print(f"{args.output}: {len(result.splitlines())} lines, {len(result)} bytes")
+    (output.parent / "LICENSE.rec").write_text((args.checkout / "LICENSE").read_text())
 
 
 if __name__ == "__main__":

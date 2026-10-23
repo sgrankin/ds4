@@ -1,6 +1,7 @@
 //! Assemble the small, vendored MLX Metal dependency closure into one source.
 //! This uses shader source only; the serving executable does not link MLX.
 const std = @import("std");
+pub const Backend = enum { simd, nax };
 
 const Entry = struct { name: []const u8, text: []const u8 };
 const entries = [_]Entry{
@@ -18,9 +19,15 @@ const entries = [_]Entry{
     .{ .name = "mlx/backend/metal/kernels/steel/attn/params.h", .text = @embedFile("../../metal/flint/prefill/vendor/mlx/backend/metal/kernels/steel/attn/params.h") },
     .{ .name = "mlx/backend/metal/kernels/steel/attn/transforms.h", .text = @embedFile("../../metal/flint/prefill/vendor/mlx/backend/metal/kernels/steel/attn/transforms.h") },
     .{ .name = "mlx/backend/metal/kernels/quantized_nax.h", .text = @embedFile("../../metal/flint/prefill/vendor/mlx/backend/metal/kernels/quantized_nax.h") },
+    .{ .name = "mlx/backend/metal/kernels/quantized.h", .text = @embedFile("../../metal/flint/prefill/vendor/mlx/backend/metal/kernels/quantized.h") },
+    .{ .name = "mlx/backend/metal/kernels/quantized_utils.h", .text = @embedFile("../../metal/flint/prefill/vendor/mlx/backend/metal/kernels/quantized_utils.h") },
+    .{ .name = "mlx/backend/metal/kernels/steel/attn/loader.h", .text = @embedFile("../../metal/flint/prefill/vendor/mlx/backend/metal/kernels/steel/attn/loader.h") },
+    .{ .name = "mlx/backend/metal/kernels/steel/attn/mma.h", .text = @embedFile("../../metal/flint/prefill/vendor/mlx/backend/metal/kernels/steel/attn/mma.h") },
     .{ .name = "ops.metal", .text = @embedFile("../../metal/flint/prefill/ops.metal") },
     .{ .name = "matmul.metal", .text = @embedFile("../../metal/flint/prefill/matmul.metal") },
     .{ .name = "attention.metal", .text = @embedFile("../../metal/flint/prefill/attention.metal") },
+    .{ .name = "matmul_simd.metal", .text = @embedFile("../../metal/flint/prefill/matmul_simd.metal") },
+    .{ .name = "attention_simd.metal", .text = @embedFile("../../metal/flint/prefill/attention_simd.metal") },
 };
 
 const Builder = struct {
@@ -42,11 +49,12 @@ const Builder = struct {
                     const close = std.mem.lastIndexOfScalar(u8, line, '"') orelse return error.InvalidShaderInclude;
                     try self.include(line[10..close]);
                 } else if (std.mem.eql(u8, line, "#pragma once") or
-                    (std.mem.eql(u8, entry.name, "mlx/backend/metal/kernels/quantized_nax.h") and
+                    (std.mem.startsWith(u8, entry.name, "mlx/backend/metal/kernels/quantized") and
                         std.mem.startsWith(u8, line, "#include <")))
                 {
                     continue;
-                } else if (std.mem.eql(u8, entry.name, "mlx/backend/metal/kernels/quantized_nax.h") and
+                } else if ((std.mem.eql(u8, entry.name, "mlx/backend/metal/kernels/quantized_nax.h") or
+                    std.mem.eql(u8, entry.name, "mlx/backend/metal/kernels/quantized.h")) and
                     std.mem.startsWith(u8, line, "constant bool align_"))
                 {
                     // All Flint widths are multiples of 64. Token rows retain
@@ -84,6 +92,21 @@ pub fn source(allocator: std.mem.Allocator) ![]u8 {
     return builder.out.toOwnedSlice(allocator);
 }
 
+pub fn sourceFor(allocator: std.mem.Allocator, backend: Backend) ![]u8 {
+    if (backend == .nax) return source(allocator);
+    var builder = Builder{ .allocator = allocator };
+    errdefer builder.out.deinit(allocator);
+    try builder.include("mlx/backend/metal/kernels/utils.h");
+    try builder.include("mlx/backend/metal/kernels/steel/utils.h");
+    try builder.include("mlx/backend/metal/kernels/steel/attn/loader.h");
+    try builder.include("mlx/backend/metal/kernels/steel/attn/mma.h");
+    try builder.include("mlx/backend/metal/kernels/steel/attn/params.h");
+    try builder.include("ops.metal");
+    try builder.include("matmul_simd.metal");
+    try builder.include("attention_simd.metal");
+    return builder.out.toOwnedSlice(allocator);
+}
+
 test "prefill source resolves its vendored headers and fixed entries" {
     const text = try source(std.testing.allocator);
     defer std.testing.allocator.free(text);
@@ -91,4 +114,15 @@ test "prefill source resolves its vendored headers and fixed entries" {
     try std.testing.expect(std.mem.indexOf(u8, text, "[[function_constant(") == null);
     try std.testing.expect(std.mem.indexOf(u8, text, "flint_prefill_qmm4") != null);
     try std.testing.expect(std.mem.indexOf(u8, text, "flint_prefill_attention") != null);
+}
+
+test "portable prefill excludes M5 tensor operations and has unique entries" {
+    const text = try sourceFor(std.testing.allocator, .simd);
+    defer std.testing.allocator.free(text);
+    try std.testing.expect(std.mem.indexOf(u8, text, "#include \"") == null);
+    try std.testing.expect(std.mem.indexOf(u8, text, "[[function_constant(") == null);
+    try std.testing.expect(std.mem.indexOf(u8, text, "MetalPerformancePrimitives") == null);
+    try std.testing.expect(std.mem.indexOf(u8, text, "NAXTile") == null);
+    try std.testing.expect(std.mem.indexOf(u8, text, "flint_prefill_qmm4_simd") != null);
+    try std.testing.expect(std.mem.indexOf(u8, text, "flint_prefill_attention_simd") != null);
 }

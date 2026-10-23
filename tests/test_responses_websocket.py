@@ -64,7 +64,7 @@ def http(base, output, name, method, path, payload=None, expected=200):
 
 
 class Server:
-    def __init__(self, binary, model, output, store, cache):
+    def __init__(self, binary, model, output, store, cache, flint_profile=None):
         self.process = None
         self.output = output
         self.flint = model.is_dir() and (model / "flint-int4.json").is_file()
@@ -96,6 +96,8 @@ class Server:
             "--mtp-draft", "1", "--tokens", "1024" if self.flint else "128", "--trace", str(output / "trace.log")]
         if not self.flint:
             command += ["--ssd-streaming", "--ssd-streaming-cache-experts", "32GB", "--mixed-prefill-quantum", "512"]
+        if flint_profile is not None:
+            command += ["--flint-profile", flint_profile]
         save(output / "execution.json", {"command": command, "cwd": str(ROOT),
             "env": {k: v for k, v in env.items() if k.startswith("DS4")},
             "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest()})
@@ -200,6 +202,8 @@ def main():
     parser.add_argument("--restart-server", type=Path)
     parser.add_argument("--model", type=Path, default=MODEL)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--flint-profile", choices=("auto", "m4-pro", "m5-pro", "m5-max"),
+                        help="Select a native Flint kernel profile for qualification")
     parser.add_argument("--sdk", action="store_true", help="Also test the installed official OpenAI Python client")
     args = parser.parse_args()
     args.server, args.model, args.output = args.server.resolve(), args.model.resolve(), args.output.resolve()
@@ -232,7 +236,8 @@ def main():
         return actual, valid_json
 
     try:
-        server = Server(args.server, args.model, args.output / "before", args.output / "responses", args.output / "cache")
+        server = Server(args.server, args.model, args.output / "before", args.output / "responses", args.output / "cache",
+                        args.flint_profile)
         with Client(server, "sequential") as client:
             client.send(server.create('Return JSON {"ready":true}.', max_output_tokens=48), fragmented=True)
             basic, events = client.complete()
@@ -419,7 +424,8 @@ def main():
             # multi-session decode-batch kernel. Socket overlap and completed
             # responses above still qualify the concurrent conversation path.
             result["decode_execution"] = "serialized_resident_packets"
-        server = Server(args.restart_server, args.model, args.output / "after", args.output / "responses", args.output / "cache")
+        server = Server(args.restart_server, args.model, args.output / "after", args.output / "responses", args.output / "cache",
+                        args.flint_profile)
         with Client(server, "restart") as client:
             client.send(server.create("Return JSON with the remembered code and count.", store=True, previous_response_id=continued["id"]))
             after, _ = client.complete()

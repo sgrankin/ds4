@@ -4,14 +4,20 @@
 const std = @import("std");
 const c = @import("flint_c");
 const weights = @import("weights.zig");
+const profiles = @import("profile.zig");
+pub const Profile = profiles.Profile;
 
 pub const vocab: u32 = 150144;
 pub const layers: u32 = 49;
+/// Buffers keep the largest profile's stride; a smaller resident grid uses only
+/// its first workerCount() diagnostics. The sampler can therefore share its ABI.
 pub const workers: u32 = 76;
 pub const packet_width: u32 = 8;
 pub const block_tokens: u32 = 65536;
 pub const context_limit: u32 = block_tokens * 4;
 pub const shader_source = @embedFile("../../metal/flint/decode.metal");
+const m4_pro_source = @embedFile("../../metal/flint/decode-m4-pro.metal");
+const m5_pro_source = @embedFile("../../metal/flint/decode-m5-pro.metal");
 pub const sampling_source = @embedFile("../../metal/flint/sampling.metal");
 const metadata_bytes: usize = 50 * 64 * 4;
 const parameters_bytes: usize = (packet_width + 1) * 4 * 4;
@@ -50,9 +56,14 @@ fn gpuError(gpu: *c.flint_gpu, operation: []const u8) void {
 
 /// Compile without allocating a model or a KV cache; used by the qualification
 /// executable as well as model initialization.
-pub fn compile(gpu: *c.flint_gpu) !void {
+pub fn compile(gpu: *c.flint_gpu, profile: Profile) !void {
     var error_text: [4096]u8 = @splat(0);
-    for ([_][]const u8{ shader_source, sampling_source }) |source| {
+    const decoder_source: []const u8 = switch (profile) {
+        .m4_pro => m4_pro_source,
+        .m5_pro => m5_pro_source,
+        .m5_max => shader_source,
+    };
+    for ([_][]const u8{ decoder_source, sampling_source }) |source| {
         if (!c.flint_gpu_compile(gpu, source.ptr, source.len, &error_text, error_text.len)) {
             std.debug.print("flint: decode compilation: {s}\n", .{std.mem.sliceTo(&error_text, 0)});
             return error.CompileDecode;
@@ -62,14 +73,16 @@ pub fn compile(gpu: *c.flint_gpu) !void {
 
 pub const Decoder = struct {
     model: *const weights.Weights,
+    profile: Profile,
     silu: *anyopaque,
 
-    pub fn init(model: *const weights.Weights) !Decoder {
-        // Resident grid barriers require all 76 groups to make progress. Do not
-        // guess another chip's safe schedule from its advertised core count.
+    pub fn init(model: *const weights.Weights, profile: Profile) !Decoder {
+        // A larger device can qualify a smaller schedule. Never launch more
+        // resident groups than the physical device's supported profile allows.
         const device = c.flint_gpu_device_name(model.gpu);
-        if (device == null or !std.mem.eql(u8, std.mem.span(device), "Apple M5 Max")) return error.UnsupportedResidentDevice;
-        try compile(model.gpu);
+        if (device == null) return error.UnsupportedResidentDevice;
+        _ = try profiles.select(std.mem.span(device), profile.name());
+        try compile(model.gpu, profile);
         const silu = try allocation(model.gpu, 65536 * 2);
         errdefer c.flint_gpu_buffer_free(silu);
         const command = c.flint_gpu_command_begin(model.gpu) orelse return error.GpuCommand;
@@ -80,7 +93,23 @@ pub const Decoder = struct {
             gpuError(model.gpu, "SiLU initialization");
             return error.GpuDispatch;
         }
-        return .{ .model = model, .silu = silu };
+        return .{ .model = model, .profile = profile, .silu = silu };
+    }
+
+    fn scalarKernel(self: *const Decoder) [*:0]const u8 {
+        return switch (self.profile) {
+            .m4_pro => "flint_decode_scalar_m4_pro",
+            .m5_pro => "flint_decode_scalar_m5_pro",
+            .m5_max => "flint_decode_scalar",
+        };
+    }
+
+    fn greedyKernel(self: *const Decoder) [*:0]const u8 {
+        return switch (self.profile) {
+            .m4_pro => "flint_decode_greedy8_m4_pro",
+            .m5_pro => "flint_decode_greedy8_m5_pro",
+            .m5_max => "flint_decode_greedy8",
+        };
     }
 
     pub fn deinit(self: *Decoder) void {
@@ -306,12 +335,13 @@ pub const Session = struct {
     }
 
     fn checkDiagnostics(self: *Session, count: u32) !void {
-        for (contents(u32, self.outputs[2], count * workers), 0..) |failure, group| {
+        const diagnostic = contents(u32, self.outputs[2], count * workers);
+        for (0..count) |step| for (diagnostic[step * workers ..][0..self.decoder.profile.workerCount()], 0..) |failure, group| {
             if (failure == 0) continue;
             self.usable = false;
-            std.debug.print("flint: resident synchronization failed at step {d}, group {d}, phase {d}\n", .{ group / workers, group % workers, failure });
+            std.debug.print("flint: resident synchronization failed at step {d}, group {d}, phase {d}\n", .{ step, group, failure });
             return error.ResidentSynchronization;
-        }
+        };
     }
 
     fn dispatch(self: *Session, token: u32, count: u32, packet: bool, eos: []const u32) !void {
@@ -338,7 +368,7 @@ pub const Session = struct {
         const bound = self.bindings(0);
         const gpu = self.decoder.model.gpu;
         const command = c.flint_gpu_command_begin(gpu) orelse return error.GpuCommand;
-        const dispatched = c.flint_gpu_dispatch(gpu, command, if (packet) "flint_decode_greedy8" else "flint_decode_scalar", null, 0, &bound, bound.len, &[_]u32{ workers, 1, 1 }, &[_]u32{ 256, 1, 1 });
+        const dispatched = c.flint_gpu_dispatch(gpu, command, if (packet) self.decoder.greedyKernel() else self.decoder.scalarKernel(), null, 0, &bound, bound.len, &[_]u32{ self.decoder.profile.workerCount(), 1, 1 }, &[_]u32{ 256, 1, 1 });
         const completed = c.flint_gpu_command_end(gpu, command, true);
         if (!dispatched or !completed) {
             self.usable = false;
@@ -411,7 +441,7 @@ pub const Session = struct {
         for (0..count) |i| {
             const step: u32 = @intCast(i);
             const bound = self.bindings(step);
-            dispatched = c.flint_gpu_dispatch(gpu, command, "flint_decode_scalar", null, 0, &bound, bound.len, &[_]u32{ workers, 1, 1 }, &[_]u32{ 256, 1, 1 });
+            dispatched = c.flint_gpu_dispatch(gpu, command, self.decoder.scalarKernel(), null, 0, &bound, bound.len, &[_]u32{ self.decoder.profile.workerCount(), 1, 1 }, &[_]u32{ 256, 1, 1 });
             if (!dispatched) break;
             const config = try SampleConfig.init(options, step, count);
             dispatched = self.encodeSample(command, &config, self.outputs[0], @as(u64, step) * vocab * 2, false);

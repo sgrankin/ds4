@@ -68527,7 +68527,7 @@ static int ds4_engine_open_internal(ds4_engine **out,
             free(e); *out = NULL; return 1;
         }
         char error[256] = "";
-        e->flint = flint_engine_open(opt->model_path, opt->prefill_chunk, error, sizeof(error));
+        e->flint = flint_engine_open(opt->model_path, opt->prefill_chunk, opt->flint_profile, error, sizeof(error));
         if (!e->flint) {
             fprintf(stderr, "ds4: Flint: %s\n", error);
             free(e); *out = NULL; return 1;
@@ -68553,6 +68553,10 @@ static int ds4_engine_open_internal(ds4_engine **out,
         }
         *out = e;
         return 0;
+    }
+    if (opt->flint_profile) {
+        fprintf(stderr, "ds4: --flint-profile requires a Flint checkpoint\n");
+        free(e); *out = NULL; return 1;
     }
 #if defined(DS4_ROCM_BUILD) && !defined(DS4_NO_GPU)
     g_glm_rocm_guard_available_baseline = 0;

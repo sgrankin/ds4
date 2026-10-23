@@ -5,6 +5,7 @@ const c = @import("flint_c");
 const weights = @import("weights.zig");
 const decode = @import("decode.zig");
 const prefill = @import("prefill.zig");
+const profiles = @import("profile.zig");
 const a = std.heap.c_allocator;
 
 pub const Engine = struct {
@@ -17,21 +18,29 @@ pub const Engine = struct {
     chunk: u32,
     stops: [4]u32,
 
-    pub fn open(directory: []const u8, chunk: u32) !*Engine {
+    pub fn open(directory: []const u8, chunk: u32, requested_profile: ?[]const u8) !*Engine {
+        const profile = selected: {
+            const probe = c.flint_gpu_create() orelse return error.MetalUnavailable;
+            defer c.flint_gpu_free(probe);
+            const device = c.flint_gpu_device_name(probe);
+            if (device == null) return error.MetalUnavailable;
+            break :selected try profiles.select(std.mem.span(device), requested_profile);
+        };
         const self = try a.create(Engine);
         errdefer a.destroy(self);
         if (c.pthread_mutex_init(&self.mutex, null) != 0) return error.MutexInitialization;
         errdefer _ = c.pthread_mutex_destroy(&self.mutex);
         self.model = try weights.load(directory);
         errdefer self.model.deinit();
-        const source = try prefill.shaders.source(a);
+        const backend: prefill.Backend = if (profile.usesNax()) .nax else .simd;
+        const source = try prefill.shaders.sourceFor(a, backend);
         defer a.free(source);
         var compiler_error: [4096]u8 = @splat(0);
         if (!c.flint_gpu_compile(self.model.gpu, source.ptr, source.len, &compiler_error, compiler_error.len)) {
             std.debug.print("flint: prefill compilation: {s}\n", .{std.mem.sliceTo(&compiler_error, 0)});
             return error.CompilePrefill;
         }
-        self.decoder = try decode.Decoder.init(&self.model);
+        self.decoder = try decode.Decoder.init(&self.model, profile);
         errdefer self.decoder.deinit();
         const tokenizer_path = try std.fmt.allocPrintSentinel(a, "{s}/tokenizer.json", .{directory}, 0);
         defer a.free(tokenizer_path);
@@ -43,7 +52,10 @@ pub const Engine = struct {
             if (found < 0) return error.MissingStopToken;
             id.* = @intCast(found);
         }
-        self.chunk = if (chunk == 0) 4096 else @min(chunk, 4096);
+        self.chunk = if (chunk == 0) profile.prefillChunk() else @min(chunk, profile.prefillChunk());
+        std.debug.print("flint: profile {s}, {d} resident groups, prefill {s}, chunk {d}\n", .{
+            profile.name(), profile.workerCount(), if (profile.usesNax()) @as([]const u8, "NAX") else "SIMD", self.chunk,
+        });
         return self;
     }
 
@@ -176,7 +188,7 @@ pub const Session = struct {
             for (self.engine.model.banks, &bank_views) |buffer, *view| view.* = .{ .handle = buffer };
             var kv_views: [4]prefill.View = undefined;
             for (self.native.kv, &kv_views) |buffer, *view| view.* = .{ .handle = buffer };
-            prefill.encode(prefill.Encoder{ .context = @ptrCast(gpu), .command = command }, .{ .banks = bank_views, .metadata = &self.native.metadata }, .{ .banks = kv_views, .initial_position = self.native.initial_position }, self.layout.bind(.{ .handle = self.scratch }), .{ .handle = self.inputs }, begin, count, .{ .handle = self.logits }) catch |err| {
+            prefill.encode(prefill.Encoder{ .context = @ptrCast(gpu), .command = command }, .{ .banks = bank_views, .metadata = &self.native.metadata, .backend = if (self.engine.decoder.profile.usesNax()) .nax else .simd }, .{ .banks = kv_views, .initial_position = self.native.initial_position }, self.layout.bind(.{ .handle = self.scratch }), .{ .handle = self.inputs }, begin, count, .{ .handle = self.logits }) catch |err| {
                 _ = c.flint_gpu_command_end(gpu, command, true);
                 self.native.usable = false;
                 self.valid = false;
@@ -262,9 +274,9 @@ export fn flint_engine_detect(directory: [*c]const u8) bool {
     defer a.free(path);
     return c.access(path, c.F_OK) == 0;
 }
-export fn flint_engine_open(directory: [*c]const u8, chunk: u32, error_text: [*c]u8, error_size: usize) ?*c.flint_engine {
+export fn flint_engine_open(directory: [*c]const u8, chunk: u32, requested_profile: [*c]const u8, error_text: [*c]u8, error_size: usize) ?*c.flint_engine {
     if (directory == null) return null;
-    return @ptrCast(Engine.open(std.mem.span(directory), chunk) catch |err| {
+    return @ptrCast(Engine.open(std.mem.span(directory), chunk, if (requested_profile == null) null else std.mem.span(requested_profile)) catch |err| {
         report(error_text, error_size, err);
         return null;
     });

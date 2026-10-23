@@ -166,6 +166,34 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
 
 ### 2026-10-23
 
+- Completed the M4 Pro and M5 Pro ports and cross-profile qualification on the
+  available M5 Max. Auto detection selects Recursive's 36/32 resident schedule
+  on Pro devices; `--flint-profile` permits a compatible smaller profile for
+  qualification. M4 uses portable SIMD-group matrix/attention prefill with a
+  2048-token chunk cap; M5 retains the existing NAX path and 4096-token cap.
+  Profiles have distinct shader entry names; oversized resident grids and M5
+  NAX on M4 are rejected before loading weights. The original M5 Max decoder
+  source is unchanged.
+- All three profiles ran two prompts with greedy/default sampling. Current
+  M5 Max and M5 Pro reproduce the frozen native Max's 128-token continuations
+  and eight teacher distributions exactly. M4 differs numerically: 8/8 teacher
+  top tokens agree, mean KL 0.001505 and delta-NLL -0.014220 nats on the small
+  eight-point probe; its free-running continuations eventually differ.
+  Twelve Pro scalar/packet continuation comparisons match. Model-free GPU
+  fixtures cover portable matrices, expert tails, attention/window/sinks,
+  actual KV bank crossing/local-ring wrap and sampler handoff.
+- Both Pro profiles pass 29 WebSocket/protocol checks and 17 answer probes,
+  including tools, concurrent conversations, SDK, cancellation, durable restart,
+  and 4855-token prefill followed by cached continuation. The host/server/
+  storage/agent/script regression suite passes. On this M5 Max, M4's 798-token
+  prefill is 478 ms versus 217 ms for NAX, with generation around 219 versus
+  232 tokens/s. These are cross-profile measurements, not predictions for Pro
+  hardware. Physical M4/M5 Pro residency, compiler behavior and performance
+  remain unqualified. See the [profile report](../speed-bench/experiments/flint-profiles-20261023/README.md);
+  raw evidence stays in `.workspaces/flint-profiles-20261023/`. `make all`
+  installed the qualified executables; installed CLI/server bytes match the
+  copies used for qualification. Changes remain on the local Flint stack.
+
 - Added `download-model.nu flint` / `flint-int4` for the qualified native
   safetensors directory. Uses Recursive's pinned Hugging Face revision
   `3b93f9053b530488405ae9fca51d4900d6ce21f0`, twelve file identities from the

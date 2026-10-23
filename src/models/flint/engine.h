@@ -6,6 +6,7 @@ typedef struct flint_engine flint_engine;
 typedef struct flint_session flint_session;
 bool flint_engine_detect(const char *directory);
 flint_engine *flint_engine_open(const char *directory, uint32_t chunk,
+                               const char *profile,
                                char *error, size_t error_size);
 void flint_engine_close(flint_engine *engine);
 const flint_tokenizer *flint_engine_tokenizer(flint_engine *engine);
