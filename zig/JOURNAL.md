@@ -80,7 +80,8 @@ copying and SSD wait costs before choosing a more elaborate queue.
   with `./ds4-local --bin-dir ./zig-out/bin ...`.
 - The server already has one engine, multiple active session slots, a decode /
   bounded-prefill coordinator, Responses continuation and durable conversations.
-  Responses WebSocket serving is not implemented.
+  Stateful Responses WebSocket serving is implemented and qualified. See
+  [usage and supported scope](serving/RESPONSES.md).
 
 Request preparation now has a C-free canonical input/model boundary. Engine
 detection and C conversions stay in the runtime adapter; DS4.1 formatting and
@@ -109,6 +110,29 @@ and [the implementation guide](README.md) for exact scope, commands and limits.
 
 ## Current architectural slice and next steps
 
+Completed serving goal (authorized 2026-10-23): stateful Responses WebSocket
+serving using OpenResponses, reusing the native request/model path and qualified
+for incremental conversations, concurrency and reconnect/restart under the
+pressure guard. Main remains unchanged and raw results remain local.
+
+OpenResponses `2026-04-24` requires sequential turns on each WebSocket; concurrent
+conversations use separate sockets. Newer OpenAI documentation's `stream_id`
+multiplexing is a separate extension and is not the initial target. Reference
+checkout: `.workspaces/openresponses-reference`, commit
+`8907bc3b7c4300ff5c21fd647cfde9929243afa1` (ignored).
+
+Implemented: RFC6455 framing/upgrade, direct semantic-event sink
+shared with HTTP, latest connection-local parent for `store=false`, durable
+fallback for stored responses, and complete OpenResponses response envelopes.
+ReleaseFast and Debug each pass the framing/native-boundary fixtures and all
+26 integration checks, including the official SDK, real tool retrieval and clean
+shutdown/restart. Ten selected unchanged official OpenResponses tests pass when
+run serially. A stable tool loop reuses 292/317 prompt tokens and correctly reads
+stored facts. The observed answer error in three optional cancellation probes
+also reproduces on the independent C baseline. See the
+[qualification report](../speed-bench/experiments/responses-websocket-20261023/README.md).
+The installed `zig-out/bin/ds4-server` is byte-identical to the qualified binary.
+
 On 2026-10-23 the user authorized the canonical request/model architectural
 change. The completed slice separates logical request/history handling from
 DS4.1 prompt, tool and reasoning materialization.
@@ -124,9 +148,10 @@ DS4.1 prompt, tool and reasoning materialization.
   and 5/5 graded answers each, for C -> refactored and refactored -> refactored.
   See [the focused report](../speed-bench/experiments/zig-serving-boundary-20261023/README.md).
 
-Next after this slice: feed new Responses WebSocket transport through the same
-preparation path, then qualify incremental conversations/reconnect, idle-state
-eviction and server-owned context editing/suffix reuse using a real agent client.
+Next proposed work: qualify server-owned context editing/suffix relocation and
+idle-state eviction through an ordinary WebSocket agent workflow. Keep archival
+and real retrieval in that task; existing HTTP/Agent features are not new
+WebSocket qualification of every approximation setting.
 Execution/session records and persisted payload semantics remain DS4-specific;
 further backend independence is unfinished. Let a second actual model reveal
 additional shared interfaces. Defer a universal kernel framework, runtime plugin
@@ -155,8 +180,27 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
   `.workspaces/zig-serving-boundary-20261023/`; concise results and commands are
   [tracked](../speed-bench/experiments/zig-serving-boundary-20261023/README.md).
 - The current slice is complete. Responses WebSocket transport remains the next
-  proposed feature; a generic execution backend and second native model remain
-  later work. Keep these distinct from the completed preparation boundary.
+  feature in this sequence; the subsequent user-authorized goal completed it.
+  A generic execution backend and second native model remain later work.
+- Completed stateful WebSocket serving using OpenResponses `2026-04-24`, with
+  sequential sockets and cross-socket concurrency. Added direct event sinks,
+  ephemeral parent replay, durable recovery, framing and shared response schemas.
+- ReleaseFast and Debug integration each pass 26 required checks; the real
+  function tool reads a stored record whose facts are absent from its prompt.
+  Official Python SDK 3.37.0 works. All test servers exit cleanly.
+- The stock OpenResponses runner overfills the two-slot server with ten parallel
+  tests and a 30 s timeout (3/10 pass). The unchanged ten official cases pass
+  serially with 180 s timeouts. Do not present the first timeout run as a schema
+  failure or claim that all optional protocol features are supported.
+- Quality records remain separate: each full run passes 12/15 answer probes;
+  the other three repeat one wrong JSON answer before/during/after cancellation.
+  An independent C-server control produces the same answer and token counts.
+- Stable instructions/tools yield 292/317 cached prompt tokens in a real file
+  lookup loop; changed instructions in the broader integration yield no prefix
+  hit, as expected. This is reuse evidence, not a whole-agent speedup claim.
+- Installed the qualified server in `zig-out/bin`. Results, first failures and
+  reference sources stay local under `.workspaces/`; only concise reports,
+  implementation and necessary tests are tracked. Serving goal is complete.
 
 ### 2026-10-22
 

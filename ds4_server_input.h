@@ -116,9 +116,20 @@ typedef struct {
     size_t max_len;
 } stop_list;
 
+/* Optional borrowed transport for Responses semantic events. A connection owns
+ * this sink until its job completes. load_parent returns libc-owned response
+ * and logical replay strings (0 found, 1 missing); durable fallback is separate.
+ * HTTP leaves it NULL. Model and canonical input records do not depend on it. */
+typedef struct {
+    void *context;
+    bool (*emit)(void *context, const char *json, size_t length);
+    int (*load_parent)(void *context, const char *id, char **response, char **replay);
+} server_response_sink;
+
 typedef struct {
     req_kind kind;
     api_style api;
+    const server_response_sink *response_sink;
     server_model_syntax model_syntax;
     ds4_tokens prompt;
     ds4_vision_span *images;

@@ -15,6 +15,10 @@ typedef struct {
     char path[256];
     char *body;
     size_t body_len;
+    char *headers;
+    size_t headers_len;
+    char *prefetched;
+    size_t prefetched_len;
 } ds4_server_http_request;
 
 /* Sockets are borrowed. The C accept loop retains close/signal/thread ownership.

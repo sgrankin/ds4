@@ -394,7 +394,13 @@ const Transaction = struct {
         var replay: [*c]u8 = null;
         defer c.free(response);
         defer c.free(replay);
-        const status = loadResponse(self.req.responses_store_dir, self.req.previous_response_id, &response, &replay, self.errors);
+        var status: c_int = 1;
+        if (self.req.response_sink != null) {
+            const sink = &self.req.response_sink[0];
+            if (sink.load_parent) |load| status = load(sink.context, self.req.previous_response_id, &response, &replay);
+        }
+        if (status == 1 and self.req.responses_store_dir != null and (self.req.response_sink == null or self.req.responses_store))
+            status = loadResponse(self.req.responses_store_dir, self.req.previous_response_id, &response, &replay, self.errors);
         if (status != 0) {
             if (status == 1) report(self.errors, "previous_response_id was not found");
             return error.InvalidRequest;
@@ -430,7 +436,8 @@ const Transaction = struct {
         try self.finishPrompt(if (self.req.has_tools) self.schemas else null);
     }
     fn responses(self: *Transaction, incremental: bool) Invalid!void {
-        if ((self.req.responses_store or self.req.previous_response_id != null or self.req.conversation_id != null) and self.req.responses_store_dir == null)
+        const disk_parent = self.req.previous_response_id != null and self.req.response_sink == null;
+        if ((self.req.responses_store or disk_parent or self.req.conversation_id != null) and self.req.responses_store_dir == null)
             return fail(self.errors, "response storage requires DS4_SERVER_RESPONSE_STORE_DIR");
         if (self.req.conversation_id != null and self.req.previous_response_id != null)
             return fail(self.errors, "conversation and previous_response_id are mutually exclusive");
@@ -462,9 +469,9 @@ const Transaction = struct {
             return fail(self.errors, "ds4_reasoning_budget currently supports native DS4.1 text only");
         if (!validate(self.runtime, &self.messages, c.API_RESPONSES, self.req.think_mode, &self.req.responses_requires_live_tool_state, &self.req.responses_requires_live_reasoning, self.errors)) return error.InvalidRequest;
         self.attachTools();
-        if (self.req.responses_store or self.req.conversation_id != null) {
+        if (self.req.responses_store or self.req.conversation_id != null or self.req.response_sink != null) {
             for (messageItems(&self.messages)) |message| {
-                if (message.images.len != 0) return fail(self.errors, "stored responses currently support text and function tools");
+                if (message.images.len != 0 and (self.req.responses_store or self.req.conversation_id != null)) return fail(self.errors, "stored responses currently support text and function tools");
             }
             self.req.responses_replay = c.ds4_server_render_replay_history(&self.messages, if (synthetic) 1 else 0);
         }

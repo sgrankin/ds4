@@ -122,6 +122,7 @@ pub fn randomId(destination: []u8, prefix: []const u8) void {
 }
 pub fn init(request: *const Request, stream: *Stream) void {
     stream.* = std.mem.zeroes(Stream);
+    stream.sink = request.response_sink;
     stream.mode = if (c.ds4_think_mode_enabled(request.think_mode)) c.RESP_STREAM_THINKING else c.RESP_STREAM_TEXT;
     randomId(&stream.response_id, "resp_");
     randomId(&stream.reasoning_id, "rs_");
@@ -279,8 +280,125 @@ fn messageItem(out: *Text, id: []const u8, item_status: []const u8, value: []con
     out.quoted(value);
     out.append(",\"annotations\":[]}]}");
 }
-fn terminalDetails(out: *Text, finish: []const u8) void {
-    if (std.mem.eql(u8, finish, "error")) out.append(",\"error\":{\"code\":\"server_error\",\"message\":\"generation failed\"}") else if (std.mem.eql(u8, finish, "length")) out.append(",\"incomplete_details\":{\"reason\":\"max_output_tokens\"}");
+// Optional request metadata uses the standard parser. The actual sampling and
+// storage values below come from Request, never an unchecked wire override.
+const Options = struct {
+    parsed: ?std.json.Parsed(std.json.Value) = null,
+
+    fn init(request: *const Request) Options {
+        if (request.raw_body == null) return .{};
+        const parsed = std.json.parseFromSlice(std.json.Value, allocator, text(request.raw_body), .{ .duplicate_field_behavior = .use_last }) catch return .{};
+        return .{ .parsed = parsed };
+    }
+    fn deinit(self: *Options) void {
+        if (self.parsed) |parsed| parsed.deinit();
+    }
+    fn field(self: *const Options, name: []const u8) ?std.json.Value {
+        const parsed = self.parsed orelse return null;
+        return if (parsed.value == .object) parsed.value.object.get(name) else null;
+    }
+    fn append(self: *const Options, out: *Text, name: []const u8, fallback: []const u8) void {
+        out.append(",\"");
+        out.append(name);
+        out.append("\":");
+        if (self.field(name)) |value| jsonValue(out, value) else out.append(fallback);
+    }
+};
+fn jsonValue(out: *Text, value: std.json.Value) void {
+    const encoded = std.json.Stringify.valueAlloc(allocator, value, .{}) catch fatal();
+    defer allocator.free(encoded);
+    out.append(encoded);
+}
+fn objectField(out: *Text, object: std.json.ObjectMap, name: []const u8, fallback: []const u8) void {
+    out.append(",\"");
+    out.append(name);
+    out.append("\":");
+    if (object.get(name)) |value| jsonValue(out, value) else out.append(fallback);
+}
+fn toolsField(out: *Text, options: *const Options) void {
+    out.append(",\"tools\":[");
+    if (options.field("tools")) |tools| if (tools == .array) {
+        for (tools.array.items, 0..) |tool, index| {
+            if (index != 0) out.byte(',');
+            // Function output requires nullable fields that may be absent from
+            // the input declaration. Preserve provider extensions as-is.
+            if (tool == .object) {
+                const kind = tool.object.get("type");
+                if (kind != null and kind.? == .string and std.mem.eql(u8, kind.?.string, "function")) {
+                    out.append("{\"type\":\"function\",\"name\":");
+                    if (tool.object.get("name")) |name| jsonValue(out, name) else out.quoted("");
+                    objectField(out, tool.object, "description", "null");
+                    objectField(out, tool.object, "parameters", "null");
+                    objectField(out, tool.object, "strict", "null");
+                    out.byte('}');
+                    continue;
+                }
+            }
+            jsonValue(out, tool);
+        }
+    };
+    out.byte(']');
+}
+fn reasoningField(out: *Text, request: *const Request, options: *const Options) void {
+    const effort: []const u8 = switch (request.think_mode) {
+        c.DS4_THINK_NONE => "none",
+        c.DS4_THINK_LOW => "low",
+        c.DS4_THINK_MEDIUM => "medium",
+        c.DS4_THINK_MAX => "xhigh",
+        c.DS4_THINK_HIGH => "high",
+        else => block: {
+            const level = c.ds4_think_mode_level(request.think_mode);
+            break :block if (level <= 0) "none" else if (level <= 25) "low" else if (level <= 50) "medium" else if (level <= 75) "high" else "xhigh";
+        },
+    };
+    out.append(",\"reasoning\":{\"effort\":");
+    out.quoted(effort);
+    out.append(",\"summary\":");
+    if (request.reasoning_summary_emit) {
+        const raw = options.field("reasoning");
+        if (raw != null and raw.? == .object) {
+            if (raw.?.object.get("summary")) |summary| jsonValue(out, summary) else out.quoted("auto");
+        } else out.quoted("auto");
+    } else out.append("null");
+    out.byte('}');
+}
+fn terminalDetails(out: *Text, finish: ?[]const u8) void {
+    if (finish != null and std.mem.eql(u8, finish.?, "error")) out.append(",\"error\":{\"code\":\"server_error\",\"message\":\"generation failed\"}") else out.append(",\"error\":null");
+    if (finish != null and std.mem.eql(u8, finish.?, "length")) out.append(",\"incomplete_details\":{\"reason\":\"max_output_tokens\"}") else out.append(",\"incomplete_details\":null");
+}
+/// All ResponseResource envelopes share this shape across both transports.
+/// Output and usage follow after these common fields.
+fn responsePrefix(out: *Text, request: *const Request, id: []const u8, created_at: c_long, response_status: []const u8, finish: ?[]const u8) void {
+    var options = Options.init(request);
+    defer options.deinit();
+    out.append("{\"id\":");
+    out.quoted(id);
+    out.append(",\"object\":\"response\",\"created_at\":");
+    out.number(created_at);
+    out.append(",\"status\":");
+    out.quoted(response_status);
+    out.append(",\"model\":");
+    out.quoted(text(request.model));
+    storageFields(out, request);
+    out.append(",\"completed_at\":");
+    if (std.mem.eql(u8, response_status, "completed")) out.number(c.time(null)) else out.append("null");
+    terminalDetails(out, finish);
+    options.append(out, "instructions", "null");
+    toolsField(out, &options);
+    options.append(out, "tool_choice", "\"auto\"");
+    // Report fixed policies honestly rather than echoing ignored options.
+    out.append(",\"truncation\":\"disabled\",\"parallel_tool_calls\":true,\"text\":{\"format\":{\"type\":\"text\"}},\"top_p\":");
+    out.number(request.top_p);
+    out.append(",\"presence_penalty\":0,\"frequency_penalty\":0,\"top_logprobs\":0,\"temperature\":");
+    out.number(request.temperature);
+    reasoningField(out, request, &options);
+    out.append(",\"max_output_tokens\":");
+    if (request.max_tokens >= 0) out.number(request.max_tokens) else out.append("null");
+    out.append(",\"max_tool_calls\":null,\"background\":false,\"service_tier\":\"default\"");
+    options.append(out, "metadata", "{}");
+    options.append(out, "safety_identifier", "null");
+    out.append(",\"prompt_cache_key\":");
+    if (request.prompt_cache_key != null) out.quoted(text(request.prompt_cache_key)) else out.append("null");
 }
 fn event(kind: []const u8) Text {
     var out: Text = .{};
@@ -305,7 +423,6 @@ pub const Output = struct {
         const bytes = body.list.items;
         var frame: Text = .{};
         defer frame.deinit();
-        frame.append("data: ");
         var closing: ?usize = null;
         if (std.mem.startsWith(u8, bytes, "{\"type\":\"")) {
             var index: usize = 9;
@@ -321,19 +438,34 @@ pub const Output = struct {
             stream.sequence += 1;
             frame.append(bytes[end..]);
         } else frame.append(bytes);
-        frame.append("\n\n");
-        return c.ds4_server_http_send_all(self.descriptor, frame.list.items.ptr, frame.list.items.len, self.stop_requested);
+        if (stream.sink != null) {
+            const sink = stream.sink.*;
+            if (sink.emit) |send| return send(sink.context, frame.list.items.ptr, frame.list.items.len);
+            return false;
+        }
+        var wire: Text = .{};
+        defer wire.deinit();
+        if (closing) |end| {
+            wire.append("event: ");
+            wire.append(bytes[9 .. end - 1]);
+            wire.byte('\n');
+        }
+        wire.append("data: ");
+        wire.append(frame.list.items);
+        wire.append("\n\n");
+        return c.ds4_server_http_send_all(self.descriptor, wire.list.items.ptr, wire.list.items.len, self.stop_requested);
     }
     pub fn created(self: Output, request: *const Request, stream: *Stream, created_at: c_long) bool {
         var out = event("response.created");
         defer out.deinit();
-        out.append(",\"response\":{\"id\":");
-        out.quoted(text(&stream.response_id));
-        out.append(",\"object\":\"response\",\"created_at\":");
-        out.number(created_at);
-        out.append(",\"status\":\"in_progress\",\"model\":");
-        out.quoted(text(request.model));
-        out.append(",\"output\":[]}}");
+        out.append(",\"response\":");
+        responsePrefix(&out, request, text(&stream.response_id), created_at, "in_progress", null);
+        out.append(",\"output\":[],\"usage\":null}}");
+        if (!self.emit(stream, &out)) return false;
+        out.list.clearRetainingCapacity();
+        out.append("{\"type\":\"response.in_progress\",\"response\":");
+        responsePrefix(&out, request, text(&stream.response_id), created_at, "in_progress", null);
+        out.append(",\"output\":[],\"usage\":null}}");
         return self.emit(stream, &out);
     }
     fn added(self: Output, stream: *Stream, reasoning: bool) bool {
@@ -441,16 +573,7 @@ pub const Output = struct {
         const kind: []const u8 = if (std.mem.eql(u8, finish, "error")) "response.failed" else if (std.mem.eql(u8, finish, "length")) "response.incomplete" else "response.completed";
         var body: Text = .{};
         defer body.deinit();
-        body.append("{\"id\":");
-        body.quoted(text(&stream.response_id));
-        body.append(",\"object\":\"response\",\"created_at\":");
-        body.number(created_at);
-        body.append(",\"status\":");
-        body.quoted(status(finish));
-        body.append(",\"model\":");
-        body.quoted(text(request.model));
-        storageFields(&body, request);
-        terminalDetails(&body, finish);
+        responsePrefix(&body, request, text(&stream.response_id), created_at, status(finish), finish);
         body.append(",\"output\":[");
         var wrote = false;
         if (stream.reasoning_emitted_any) {
@@ -480,9 +603,10 @@ pub const Output = struct {
             framed.append(body.list.items);
             framed.byte('}');
         } else {
-            framed.append(",\"code\":\"server_error\",\"message\":");
+            if (stream.sink != null) framed.append(",\"status\":500");
+            framed.append(",\"error\":{\"type\":\"server_error\",\"code\":\"server_error\",\"message\":");
             framed.quoted(text(&error_text));
-            framed.byte('}');
+            framed.append(",\"param\":null}}");
         }
         return self.emit(stream, &framed);
     }
@@ -614,16 +738,7 @@ pub const Output = struct {
         defer allocator.free(items);
         var body: Text = .{};
         defer body.deinit();
-        body.append("{\"id\":");
-        body.quoted(text(&response_id));
-        body.append(",\"object\":\"response\",\"created_at\":");
-        body.number(c.time(null));
-        body.append(",\"status\":");
-        body.quoted(status(finish));
-        body.append(",\"model\":");
-        body.quoted(text(request.model));
-        storageFields(&body, request);
-        terminalDetails(&body, finish);
+        responsePrefix(&body, request, text(&response_id), c.time(null), status(finish), finish);
         body.append(",\"output\":[");
         var wrote = false;
         // Worker post-processing supplies parsed reasoning; retain response

@@ -364,7 +364,10 @@ pub fn progress(packet: [*c]c.server_prefill_progress, event: [*c]const u8, curr
     const stamp = now();
     // Send headers once, then only comments. A failed write cancels the job;
     // the backend callback observes that at its existing safe boundary.
-    if (p.stream and p.fd >= 0 and !p.stream_failed) {
+    const job: ?*c.job = if (p.request_job == null) null else @ptrCast(p.request_job);
+    const websocket = if (job) |owner| owner.req.response_sink != null else false;
+    if (websocket) p.headers_sent = true;
+    if (p.stream and !websocket and p.fd >= 0 and !p.stream_failed) {
         if (!p.headers_sent) {
             p.headers_sent = true;
             if (c.ds4_server_http_sse_headers(p.fd, p.enable_cors, stop)) p.last_keepalive = stamp else {
@@ -603,7 +606,7 @@ pub fn structuredStream(req: *const c.request) bool {
     return req.stream and (req.api == c.API_ANTHROPIC or req.api == c.API_RESPONSES or (req.api == c.API_OPENAI and req.kind == c.REQ_CHAT));
 }
 fn appendReplay(req: *c.request, content: [*c]const u8, reasoning: [*c]const u8, calls: *const c.tool_calls, finish: [*c]const u8) void {
-    if ((!req.responses_store and req.conversation_id == null) or req.responses_replay == null or same(finish, "error") or same(finish, "length")) return;
+    if ((!req.responses_store and req.conversation_id == null and req.response_sink == null) or req.responses_replay == null or same(finish, "error") or same(finish, "length")) return;
     const history = text(req.responses_replay);
     if (history.len == 0 or history[history.len - 1] != ']') return;
     var out = zero(c.buf);
@@ -640,12 +643,27 @@ pub const Generation = struct {
     fn httpError(self: Generation, status: c_int, message: [*c]const u8) void {
         var out = zero(c.buf);
         defer freeBuffer(&out);
+        if (self.job.req.response_sink != null) {
+            const sink = &self.job.req.response_sink[0];
+            append(&out, "{\"type\":\"error\",\"status\":");
+            var digits: [16]u8 = undefined;
+            append(&out, std.mem.print(&digits, "{d}", .{status}) catch unreachable);
+            append(&out, ",\"error\":{\"type\":\"server_error\",\"code\":\"server_error\",\"param\":null,\"message\":");
+            quote(&out, message);
+            append(&out, "}}");
+            if (sink.emit) |emit| _ = emit(sink.context, out.ptr, out.len);
+            return;
+        }
         append(&out, "{\"error\":{\"message\":");
         quote(&out, message);
         append(&out, ",\"type\":\"invalid_request_error\"}}\n");
         _ = c.ds4_server_http_response(self.job.fd, self.runtime.enable_cors, status, "application/json", out.ptr, self.stop);
     }
     fn prefillFailure(self: Generation, p: *const c.server_prefill_progress, context: [*c]const u8, label: [*c]const u8, errors: [*c]const u8) void {
+        if (self.job.req.response_sink != null) {
+            self.httpError(500, errors);
+            return;
+        }
         if (self.job.req.stream and p.headers_sent) {
             const kind: [*:0]const u8 = if (self.job.req.kind == c.REQ_CHAT) "chat" else "completion";
             if (p.stream_failed) {
@@ -882,7 +900,7 @@ pub const Generation = struct {
                 return;
             }
             // Prefill may already have sent headers; never write them twice.
-            if (!p.headers_sent and !c.ds4_server_http_sse_headers(job.fd, srv.enable_cors, self.stop)) {
+            if (!p.headers_sent and req.response_sink == null and !c.ds4_server_http_sse_headers(job.fd, srv.enable_cors, self.stop)) {
                 markCancelled(job);
                 log(c.DS4_LOG_GENERATION, "ds4-server: %s ctx=%s%s%s sse headers failed", .{ kind, context, space, request_flags });
                 clearLive(srv, slot);

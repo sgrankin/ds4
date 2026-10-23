@@ -4,6 +4,7 @@ const std = @import("std");
 const c = @import("server_serving_c");
 const ModelBackend = @import("model.zig").Backend(c);
 const ModelPolicy = @import("ds4_model");
+const WebSocket = @import("websocket.zig");
 const allocator = std.heap.c_allocator;
 const stale_seconds: c.time_t = 60 * 60;
 const idle_cap: c_int = 1 << 20;
@@ -73,6 +74,9 @@ pub fn knownModel(value: [*c]const u8) bool {
     return value != null and ModelPolicy.knownModel(text(value));
 }
 pub fn decodeInput(engine: ?*c.ds4_engine, runtime: ?*c.server, endpoint: c.ds4_server_input_endpoint, body: [*c]const u8, default_tokens: c_int, context: c_int, out: *c.request, errors: []u8) bool {
+    return decodeWithSink(engine, runtime, endpoint, body, default_tokens, context, null, out, errors);
+}
+pub fn decodeWithSink(engine: ?*c.ds4_engine, runtime: ?*c.server, endpoint: c.ds4_server_input_endpoint, body: [*c]const u8, default_tokens: c_int, context: c_int, sink: ?*const c.server_response_sink, out: *c.request, errors: []u8) bool {
     const backend: ModelBackend = .{ .engine = engine };
     const syntax = backend.syntax();
     const incremental = backend.incrementalTools();
@@ -83,6 +87,7 @@ pub fn decodeInput(engine: ?*c.ds4_engine, runtime: ?*c.server, endpoint: c.ds4_
         return false;
     }
     defer c.ds4_server_input_deinit(&input);
+    input.req.response_sink = sink;
     return c.ds4_server_materialize(engine, runtime, endpoint, &input, context, incremental, out, errors.ptr, errors.len);
 }
 pub fn exceedsContext(req: [*c]const c.request, context: c_int) bool {
@@ -403,6 +408,10 @@ pub fn client(srv: *c.server, fd: c_int, stop: [*c]const volatile c.sig_atomic_t
     }
     if (same(&http.method, "OPTIONS")) {
         _ = c.ds4_server_http_response(fd, srv.enable_cors, 204, null, "", stop);
+        return;
+    }
+    if (same(&http.method, "GET") and same(&http.path, "/v1/responses")) {
+        WebSocket.serve(srv, fd, &http, @ptrCast(stop));
         return;
     }
     if (same(&http.method, "GET") and same(&http.path, "/v1/models")) {

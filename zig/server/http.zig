@@ -198,11 +198,20 @@ pub fn readRequest(descriptor: c_int, request: *Request) bool {
     @memcpy(body[0..body_length], received.items[body_start..][0..body_length]);
     body[body_length] = 0;
     request.body = body;
+    request.headers = (allocator.dupeSentinel(u8, received.items[0..body_start], 0) catch fatal("out of memory")).ptr;
+    request.headers_len = body_start;
+    const remaining = received.items[body_start + body_length ..];
+    if (remaining.len != 0) {
+        request.prefetched = (allocator.dupeSentinel(u8, remaining, 0) catch fatal("out of memory")).ptr;
+        request.prefetched_len = remaining.len;
+    }
     return true;
 }
 
 pub fn freeRequest(request: *Request) void {
     c.free(request.body);
+    c.free(request.headers);
+    c.free(request.prefetched);
     request.* = std.mem.zeroes(Request);
 }
 pub fn pollDisconnected(revents: c_short) bool {

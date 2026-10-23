@@ -39,8 +39,8 @@ wire decoder / durable conversation resolution
 history and validates live continuation before invoking model preparation.
 `server/model.zig` contains C enum/engine detection and allocation handoff. The
 wire parser and existing execution/session records still use their established
-C ABI. New transports can reuse this preparation boundary; Responses WebSocket
-transport itself is a subsequent feature.
+C ABI. HTTP and [Responses WebSocket](RESPONSES.md) now share this preparation
+boundary and the generation/output path.
 
 The canonical bridge uses an arena for descriptor arrays and normalized tool
 parameters, borrowing message/image/schema bytes from the decoded request.

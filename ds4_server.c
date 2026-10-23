@@ -9849,7 +9849,13 @@ static bool responses_store_publish(request *r, const char *id, const char *publ
             }
         }
     }
-    if (!r->responses_store) return true;
+    if (!r->responses_store) {
+        /* Connection-local publication also identifies the live approximate
+         * frontier. It creates no durable response file. */
+        if (r->response_sink)
+            snprintf(r->responses_published_id, sizeof(r->responses_published_id), "%s", id);
+        return true;
+    }
     buf record = {0};
     buf_puts(&record, "{\"response\":");
     buf_puts(&record, public_json);
@@ -20165,6 +20171,14 @@ static void test_responses_usage_reports_cache_details(void) {
 /* The real output owner, reached through the same private entries as worker.
  * No model is needed to protect the Responses lifecycle/visibility contract. */
 static void test_responses_output_lifecycle(void) {
+    /* Ephemeral Responses still identify the authoritative live frontier. */
+    request ephemeral = {0};
+    server_response_sink sink = {0};
+    ephemeral.response_sink = &sink;
+    char publish_error[160] = {0};
+    TEST_ASSERT(responses_store_publish(&ephemeral, "resp_connection_local", "{}",
+                                       publish_error, sizeof(publish_error)));
+    TEST_ASSERT(!strcmp(ephemeral.responses_published_id, "resp_connection_local"));
     for (int scenario = 0; scenario < 3; scenario++) {
         request r;
         request_init(&r, REQ_CHAT, 128);

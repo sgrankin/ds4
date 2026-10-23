@@ -22,6 +22,7 @@ typedef enum {
 
 typedef struct {
     responses_stream_mode mode;
+    const server_response_sink *sink;
     size_t emit_pos;
     bool active;
     bool checked_think_prefix;

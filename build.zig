@@ -55,6 +55,8 @@ fn nativeObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
     m.root_source_file = b.path(source);
     m.addImport(api_name, api);
     if (std.mem.startsWith(u8, source, "zig/server/")) servingImports(b, m, target, optimize);
+    if (std.mem.eql(u8, source, "zig/server/serving_entry.zig"))
+        m.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "zig/server/http_api.h"));
     return b.addObject(.{ .name = std.fs.path.stem(source), .root_module = m }).getEmittedBin();
 }
 
@@ -373,6 +375,11 @@ pub fn build(b: *std.Build) void {
         servingImports(b, boundary_module, target, optimize);
         const boundary_test = b.addExecutable(.{ .name = "test-serving-boundary", .root_module = boundary_module });
         b.step("serving-boundary-test", "Build the native request/model boundary fixture without engine or Metal objects").dependOn(&b.addInstallArtifact(boundary_test, .{}).step);
+        const frames_module = module(b, target, sdk, optimize);
+        frames_module.root_source_file = b.path("zig/server/websocket_frames_test.zig");
+        frames_module.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "zig/server/http_api.h"));
+        const frames_test = b.addExecutable(.{ .name = "test-websocket-frames", .root_module = frames_module });
+        b.step("websocket-frames-test", "Build focused WebSocket framing/ownership checks without a model").dependOn(&b.addInstallArtifact(frames_test, .{}).step);
     }
     const cache = if (native) cache_object: {
         const api = generatedApi(b, target, sdk, optimize, "zig/state_cache_api.h");
