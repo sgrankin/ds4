@@ -241,12 +241,12 @@ fn decode(engine: *Engine, cfg: *const Options, session: *Session, printer: *Pri
     var generated: c_int = 0;
     var message: [160]u8 = undefined;
     while (generated < maximum and !interruptRequested()) {
-        const token = c.ds4_session_sample(session, cfg.gen.temperature, 0, cfg.gen.top_p, cfg.gen.min_p, rng);
+        const token = c.ds4_session_sample(session, cfg.gen.temperature, cfg.gen.top_k, cfg.gen.top_p, cfg.gen.min_p, rng);
         if (c.ds4_token_is_stop_for_think_mode(engine, token, mode)) break;
-        if (c.ds4_engine_mtp_draft_tokens(engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
+        if (c.ds4_engine_decode_packet_size(engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
             var tokens: [17]c_int = undefined;
             busySet(cfg, true);
-            const count = c.ds4_session_eval_speculative(session, token, maximum - generated, c.ds4_token_eos(engine), cfg.gen.temperature, 0, cfg.gen.top_p, cfg.gen.min_p, rng, &tokens, tokens.len, &message, message.len);
+            const count = c.ds4_session_eval_speculative(session, token, maximum - generated, c.ds4_token_eos(engine), cfg.gen.temperature, cfg.gen.top_k, cfg.gen.top_p, cfg.gen.min_p, rng, &tokens, tokens.len, &message, message.len);
             busySet(cfg, false);
             if (count < 0) {
                 report("ds4: decode failed: %s\n", .{&message});
@@ -343,7 +343,7 @@ fn generation(engine: *Engine, cfg: *const Options) c_int {
     // override permits like-for-like single-node versus TP validation.
     if (shared.coordinator(cfg) or cfg.engine.tp.role == c.DS4_TP_LEADER or
         c.getenv("DS4_CLI_FORCE_SESSION") != null or c.ds4_engine_overthinking_penalty_enabled(engine) or
-        cfg.gen.temperature > 0 or c.ds4_engine_mtp_draft_tokens(engine) > 1)
+        cfg.gen.temperature > 0 or c.ds4_engine_decode_packet_size(engine) > 1)
         return sampledGeneration(engine, cfg, &prompt);
     var printer = Printer.init(engine, shared.effectiveThink(&cfg.gen));
     var progress = shared.Progress{ .input_tokens = prompt.len, .use_color = c.ds4_log_is_tty(c.__stderrp) };
@@ -517,6 +517,10 @@ fn repl(engine: *Engine, cfg: *Options) c_int {
         if (same(command, "/help")) {
             replHelp();
         } else if (commandArg(command, "/think")) |arg| {
+            if (c.ds4_engine_is_flint(engine)) {
+                report("ds4: Flint chooses when to reason; thinking controls are unsupported\n", .{});
+                continue;
+            }
             var mode: c.ds4_think_mode = c.DS4_THINK_HIGH;
             if (arg.len != 0 and (!c.ds4_engine_is_deepseek41(engine) or !c.ds4_think_mode_parse_level(arg.ptr, &mode))) {
                 report("ds4: /think N requires V4.1 and a level from 0 to 100\n", .{});
@@ -525,6 +529,10 @@ fn repl(engine: *Engine, cfg: *Options) c_int {
                 _ = c.printf("Thinking mode: %s.\n", c.ds4_think_mode_name(mode));
             }
         } else if (same(command, "/think-max")) {
+            if (c.ds4_engine_is_flint(engine)) {
+                report("ds4: Flint chooses when to reason; thinking controls are unsupported\n", .{});
+                continue;
+            }
             const active = c.ds4_think_mode_for_context(c.DS4_THINK_MAX, chat.ctx_size) == c.DS4_THINK_MAX;
             if (c.ds4_cli_chat_apply_think_prefix(engine, &chat, if (active) c.DS4_THINK_MAX else c.DS4_THINK_HIGH)) {
                 cfg.gen.think_mode = c.DS4_THINK_MAX;
@@ -532,6 +540,10 @@ fn repl(engine: *Engine, cfg: *Options) c_int {
                 _ = c.printf("Thinking mode: %s.\n", @as([*:0]const u8, if (active) "max" else "high (ctx below 393216)"));
             }
         } else if (same(command, "/nothink")) {
+            if (c.ds4_engine_is_flint(engine)) {
+                report("ds4: Flint chooses when to reason; thinking controls are unsupported\n", .{});
+                continue;
+            }
             if (c.ds4_cli_chat_apply_think_prefix(engine, &chat, c.DS4_THINK_NONE)) {
                 cfg.gen.think_mode = c.DS4_THINK_NONE;
                 _ = c.puts("Thinking mode: none.");
@@ -690,6 +702,9 @@ fn parseOptions(argv: [][*c]u8) Options {
         } else if (same(arg, "--top-p")) {
             cfg.gen.top_p = decimal(args.value(arg), arg, 0, 1);
             cfg.gen.top_p_set = true;
+        } else if (same(arg, "--top-k")) {
+            cfg.gen.top_k = integer(args.value(arg), arg, true);
+            cfg.gen.top_k_set = true;
         } else if (same(arg, "--min-p")) {
             cfg.gen.min_p = decimal(args.value(arg), arg, 0, 1);
             cfg.gen.min_p_set = true;
@@ -887,10 +902,15 @@ fn run(cfg: *Options) c_int {
         report("ds4: --think-level requires a DeepSeek V4.1 model\n", .{});
         return 2;
     }
-    if (c.ds4_engine_is_glm_dsa(engine)) {
+    if (c.ds4_engine_is_flint(engine) and cfg.gen.think_mode != c.DS4_THINK_HIGH) {
+        report("ds4: Flint chooses when to reason; --nothink, --think-max and --think-level are unsupported\n", .{});
+        return 2;
+    }
+    if (c.ds4_engine_is_glm_dsa(engine) or c.ds4_engine_is_flint(engine)) {
         if (!cfg.gen.temperature_set) cfg.gen.temperature = 1;
         if (!cfg.gen.top_p_set) cfg.gen.top_p = 0.95;
         if (!cfg.gen.min_p_set) cfg.gen.min_p = 0;
+        if (c.ds4_engine_is_flint(engine) and !cfg.gen.top_k_set) cfg.gen.top_k = 20;
     }
     if (cfg.engine.tp.role == c.DS4_TP_WORKER) return c.ds4_tp_worker_run(engine, &cfg.engine.tp);
     if (cfg.engine.tp.role == c.DS4_TP_LEADER and !bindLeader(engine, cfg, &leader)) return 1;

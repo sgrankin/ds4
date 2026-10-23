@@ -153,7 +153,7 @@ pub const Output = struct {
         const ok = self.event("message_start", &wire);
         stream.* = std.mem.zeroes(Stream);
         stream.active = ok;
-        stream.mode = if (c.ds4_think_mode_enabled(request.think_mode)) c.ANTH_STREAM_THINKING else c.ANTH_STREAM_TEXT;
+        stream.mode = if (request.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT and c.ds4_think_mode_enabled(request.think_mode)) c.ANTH_STREAM_THINKING else c.ANTH_STREAM_TEXT;
         stream.guard_second_reasoning = shared.guardSecondReasoning(request);
         return ok;
     }
@@ -397,6 +397,14 @@ pub const Output = struct {
     pub fn update(self: Output, request: *const c.request, id: []const u8, stream: *Stream, raw: ?[]const u8, final: bool) bool {
         const sampled = raw orelse return true;
         if (!stream.active) return true;
+        if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT and !stream.checked_think_prefix) {
+            if (!final and sampled.len < 7 and std.mem.startsWith(u8, "<think>", sampled)) return true;
+            stream.checked_think_prefix = true;
+            if (std.mem.startsWith(u8, sampled, "<think>")) {
+                stream.mode = c.ANTH_STREAM_THINKING;
+                stream.emit_pos = 7;
+            }
+        }
         if (stream.mode == c.ANTH_STREAM_THINKING) {
             if (!stream.checked_think_prefix) {
                 if (sampled.len < "<think>".len and std.mem.startsWith(u8, "<think>", sampled) and !final) return true;

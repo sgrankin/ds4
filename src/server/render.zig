@@ -5,6 +5,7 @@ const std = @import("std");
 const c = @import("server_render_c");
 const Canonical = @import("canonical.zig");
 const Prompt = @import("ds41_prompt");
+const FlintPrompt = @import("flint_prompt");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidJson};
 
@@ -426,6 +427,31 @@ pub export fn ds4_server_render_deepseek41(messages: [*c]const c.chat_msgs, star
         .initial_tool_order = initial_order,
     }) catch fatal();
     return prompt.ptr;
+}
+
+pub export fn ds4_server_render_flint(messages: [*c]const c.chat_msgs, start: c_int, schemas: [*c]const u8) [*c]u8 {
+    var view = Canonical.View.init(allocator, c, messages, null) catch fatal();
+    defer view.deinit();
+    const prompt = FlintPrompt.render(allocator, view.messages, .{
+        .start = @intCast(@max(start, 0)),
+        .schemas = if (schemas == null) null else bytes(schemas),
+    }) catch fatal();
+    return prompt.ptr;
+}
+
+pub export fn ds4_server_render_flint_calls(out: *c.buf, calls: [*c]const c.tool_calls, orders: [*c]const c.tool_schema_orders) void {
+    if (calls == null or calls.*.len == 0) return;
+    var message = std.mem.zeroes(c.chat_msg);
+    message.role = @constCast("assistant");
+    message.calls = calls.*;
+    const messages: c.chat_msgs = .{ .v = &message, .len = 1, .cap = 1 };
+    var view = Canonical.View.init(allocator, c, &messages, orders) catch fatal();
+    defer view.deinit();
+    const rendered = FlintPrompt.render(allocator, view.messages, .{ .add_generation_prompt = false }) catch fatal();
+    defer allocator.free(rendered);
+    var text = Text.adopt(out);
+    text.append(rendered["<|assistant|>".len..]);
+    text.store(out);
 }
 
 fn replayMessage(out: *Text, message: *const c.chat_msg) void {

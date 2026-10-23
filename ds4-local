@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 # Opt-in local profiles. Later arguments override the program's CLI defaults.
 const ROOT = path self .
-const USAGE = 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast [binary arguments]'
+const USAGE = 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast|flint [binary arguments]'
 
 def env-or [name: string, fallback: string] {
     $env | get --optional $name | default --empty $fallback
@@ -10,6 +10,22 @@ def env-or [name: string, fallback: string] {
 def usage-error [] {
     print --stderr $USAGE
     exit 2
+}
+
+def shader-settings [] {
+    mut settings = {}
+    # Absolute sources keep --chdir usable; explicit shader overrides win.
+    for source in (glob ($ROOT | path join 'src/metal/*.metal')) {
+        let name = (
+            $source
+            | path parse
+            | get stem
+            | str uppercase
+        )
+        let key = $'DS4_METAL_($name)_SOURCE'
+        $settings = ($settings | upsert $key (env-or $key $source))
+    }
+    $settings
 }
 
 # Keep program arguments as strings, including --help after a preset.
@@ -36,10 +52,34 @@ def --wrapped main [...arguments: string] {
     if $preset in ['--help' '-h'] {
         print $USAGE
         print 'persistent-fast combines left/right suffix reuse with decode and prefill resident substitutions for ds4-agent or ds4-server.'
+        print 'flint is server-only: native resident decoding with durable Responses JSON; provide --model DIR.'
         return
     }
-    if $preset not-in ['context-fast' 'resident-fast' 'persistent-fast'] { usage-error }
+    if $preset not-in ['context-fast' 'resident-fast' 'persistent-fast' 'flint'] { usage-error }
     $args = ($args | skip 1)
+
+    if $preset == 'flint' {
+        if not $server {
+            print --stderr 'ds4-agent does not yet support Flint tool formatting. Use ds4-local --server flint --model DIR, or ds4 --model DIR for the plain CLI.'
+            exit 2
+        }
+        # A Flint process has its own KV layout. Do not inherit DeepSeek-only
+        # substitutions, suffix relocation or SSD GPU-state cache settings.
+        let incompatible = ($env | columns | where {|key| (
+            ($key | str starts-with 'DS4_METAL_V41_') or
+            ($key | str starts-with 'DS4_V41_') or
+            ($key | str starts-with 'DS4_STATE_CACHE_') or
+            ($key | str starts-with 'DS4_AGENT_CONTEXT_') or
+            ($key | str starts-with 'DS4_SERVER_CONTEXT_SUFFIX_') or
+            $key == 'DS4_AGENT_COMPACT_PREFIX_CACHE'
+        )
+        })
+        hide-env --ignore-errors ...$incompatible
+        let store = env-or DS4_SERVER_RESPONSE_STORE_DIR ($ROOT | path join '.workspaces/response-store')
+        mkdir ($store | path dirname)
+        load-env {DS4_SERVER_RESPONSE_STORE_DIR: $store}
+        exec ($bin_dir | path join 'ds4-server') --host 127.0.0.1 --batched-session 2 --ctx 262144 --prefill-chunk 4096 ...$args
+    }
 
     mut settings = {DS4_METAL_V41_SELECTED_TILE: '64', DS4_METAL_V41_SELECTED_LIMIT: '1024'}
     if $preset in ['context-fast' 'persistent-fast'] {
@@ -96,17 +136,7 @@ def --wrapped main [...arguments: string] {
     })
     mkdir ($cache | path dirname)
 
-    # Absolute sources keep --chdir usable; explicit shader overrides win.
-    for source in (glob ($ROOT | path join 'src/metal/*.metal')) {
-        let name = (
-            $source
-            | path parse
-            | get stem
-            | str uppercase
-        )
-        let key = $'DS4_METAL_($name)_SOURCE'
-        $settings = ($settings | upsert $key (env-or $key $source))
-    }
+    $settings = ($settings | merge (shader-settings))
     mut defaults = [
         '--ssd-streaming'
         '--ssd-streaming-cache-experts'

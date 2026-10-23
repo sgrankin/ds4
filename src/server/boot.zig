@@ -155,6 +155,7 @@ pub fn parse(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend) c.se
             cfg.batched_sessions = integer(args.value(option), option, false);
         } else if (is(option, "--mixed-prefill-quantum")) {
             cfg.mixed_prefill_quantum = integer(args.value(option), option, false);
+            cfg.mixed_prefill_quantum_set = true;
         } else if (is(option, "--kv-disk-dir")) {
             cfg.kv_disk_dir = args.value(option);
         } else if (is(option, "--kv-disk-space-mb")) {
@@ -310,7 +311,22 @@ pub fn close(srv: *c.server) void {
     srv.* = zero(c.server);
 }
 fn contextMemory(cfg: *const c.server_config, engine: ?*c.ds4_engine, slots: c_int) void {
-    const memory = c.ds4_context_memory_estimate_with_prefill_mode(cfg.engine.backend, cfg.ctx_size, c.ds4_engine_prefill_chunk(engine), cfg.engine.ssd_streaming);
+    const memory = c.ds4_engine_context_memory_estimate(engine, cfg.ctx_size);
+    if (c.ds4_engine_is_flint(engine)) {
+        const mib: f64 = 1024 * 1024;
+        const gib = mib * 1024;
+        log(c.DS4_LOG_DEFAULT, "ds4-server: Flint configured context buffers up to %.2f MiB/session (ctx=%d, BF16 KV bank capacity=%u, prefill_chunk=%u, KV=%.2f MiB, scratch/snapshots=%.2f MiB); %d independent sessions up to %.2f GiB total", .{
+            @as(f64, @floatFromInt(memory.total_bytes)) / mib,
+            cfg.ctx_size,
+            memory.raw_cap,
+            memory.prefill_cap,
+            @as(f64, @floatFromInt(memory.raw_bytes)) / mib,
+            @as(f64, @floatFromInt(memory.scratch_bytes)) / mib,
+            slots,
+            @as(f64, @floatFromInt(memory.total_bytes)) * @as(f64, @floatFromInt(slots)) / gib,
+        });
+        return;
+    }
     log(c.DS4_LOG_DEFAULT, "ds4-server: context buffers %.2f MiB (ctx=%d, backend=%s, prefill_chunk=%u, raw_kv_rows=%u, compressed_kv_rows=%u)", .{
         @as(f64, @floatFromInt(memory.total_bytes)) / (1024 * 1024),
         cfg.ctx_size,
@@ -425,6 +441,7 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
             return 1;
         }
     }
+    if (c.ds4_engine_is_flint(engine) and !cfg.mixed_prefill_quantum_set) cfg.mixed_prefill_quantum = 1024;
     const slot_count = if (cfg.batched_sessions > 0) cfg.batched_sessions else 1;
     contextMemory(&cfg, engine, slot_count);
     var srv = zero(c.server);

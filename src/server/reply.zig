@@ -275,7 +275,7 @@ const Outputs = struct {
         self.calls.raw_tool_text = duplicate(value);
     }
 };
-const Kind = enum { deepseek, glm, qwen };
+const Kind = enum { deepseek, glm, qwen, flint };
 const Search = struct { start: usize, recovered: bool };
 fn toolSearch(text: []const u8, require_closed: bool, kind: Kind, out: Outputs) ?Search {
     if (!require_closed) return .{ .start = 0, .recovered = false };
@@ -287,6 +287,7 @@ fn toolSearch(text: []const u8, require_closed: bool, kind: Kind, out: Outputs) 
             .deepseek => "DSML",
             .glm => "GLM tool calls",
             .qwen => "Qwen tool calls",
+            .flint => "Flint tool calls",
         };
         _ = c.fprintf(c.__stderrp, "ds4-server: thinking not closed, ignoring incomplete %s in reasoning\n", label.ptr);
         out.unterminated(text);
@@ -412,8 +413,51 @@ fn parseDeepseek(text: []const u8, require_closed: bool, out: Outputs) Invalid!v
     }
 }
 
-fn parseGlm(text: []const u8, require_closed: bool, out: Outputs) Invalid!void {
-    const search = toolSearch(text, require_closed, .glm, out) orelse return;
+fn schemaAccepts(schema: std.json.Value, kind: []const u8) bool {
+    if (schema != .object) return false;
+    if (schema.object.get("type")) |value| {
+        if (value == .string and std.mem.eql(u8, value.string, kind)) return true;
+        if (value == .array) for (value.array.items) |item| {
+            if (item == .string and std.mem.eql(u8, item.string, kind)) return true;
+        };
+    }
+    if (std.mem.eql(u8, kind, "string")) {
+        if (schema.object.get("enum")) |value| {
+            if (value == .array) for (value.array.items) |item| if (item == .string) return true;
+        }
+    }
+    for ([_][]const u8{ "anyOf", "oneOf" }) |key| {
+        if (schema.object.get(key)) |value| {
+            if (value == .array) for (value.array.items) |item| if (schemaAccepts(item, kind)) return true;
+        }
+    }
+    return false;
+}
+
+fn flintString(orders: [*c]const c.tool_schema_orders, name: [*c]const u8, key: [*c]const u8, value: [*c]const u8) bool {
+    // Flint's XML strings are raw; other arguments attempt JSON decoding.
+    // Nullable string schemas give the exact spelling "null" its JSON meaning.
+    if (orders != null and name != null) {
+        for (items(c.tool_schema_order, orders.*.v, @intCast(orders.*.len))) |order| {
+            if (order.name == null or !std.mem.eql(u8, bytes(order.name), bytes(name))) continue;
+            for (items([*c]u8, order.prop, @intCast(order.len)), 0..) |property, index| {
+                if (!std.mem.eql(u8, bytes(property), bytes(key))) continue;
+                const schema = std.json.parseFromSlice(std.json.Value, allocator, bytes(order.prop_schema[index]), .{}) catch break;
+                defer schema.deinit();
+                if (std.mem.eql(u8, bytes(value), "null") and schemaAccepts(schema.value, "null")) return false;
+                if (schemaAccepts(schema.value, "string")) return true;
+                break;
+            }
+            break;
+        }
+    }
+    const parsed = std.json.parseFromSlice(std.json.Value, allocator, bytes(value), .{}) catch return true;
+    parsed.deinit();
+    return false;
+}
+
+fn parseXml(text: []const u8, require_closed: bool, out: Outputs, flint: bool, orders: [*c]const c.tool_schema_orders) Invalid!void {
+    const search = toolSearch(text, require_closed, if (flint) .flint else .glm, out) orelse return;
     const start = find(text, search.start, "<tool_call>") orelse {
         out.split(text);
         return;
@@ -430,6 +474,9 @@ fn parseGlm(text: []const u8, require_closed: bool, out: Outputs) Invalid!void {
         const name_end = if (argument != null and argument.? <= close) argument.? else close;
         const name_text = trim(text[position..name_end]);
         if (name_text.len == 0) return error.InvalidToolCall;
+        if (flint) for (name_text) |byte| {
+            if (byte == '<' or std.ascii.isWhitespace(byte)) return error.InvalidToolCall;
+        };
         var name: [*c]u8 = duplicate(name_text);
         defer if (name != null) c.free(name);
         position = @intFromPtr(name_text.ptr) + name_text.len - @intFromPtr(text.ptr);
@@ -445,16 +492,16 @@ fn parseGlm(text: []const u8, require_closed: bool, out: Outputs) Invalid!void {
             position += "<arg_key>".len;
             const key_end = find(text, position, "</arg_key>") orelse return error.InvalidToolCall;
             if (key_end > close) return error.InvalidToolCall;
-            const key = unescapeValue(trim(text[position..key_end]), "</arg_key>");
+            const key = if (flint) duplicate(text[position..key_end]) else unescapeValue(trim(text[position..key_end]), "</arg_key>");
             defer c.free(key);
             position = skipWhitespace(text, key_end + "</arg_key>".len);
             if (!at(text, position, "<arg_value>")) return error.InvalidToolCall;
             position += "<arg_value>".len;
             const value_end = find(text, position, "</arg_value>") orelse return error.InvalidToolCall;
             if (value_end > close) return error.InvalidToolCall;
-            const value = unescapeValue(text[position..value_end], "</arg_value>");
+            const value = if (flint) duplicate(text[position..value_end]) else unescapeValue(text[position..value_end], "</arg_value>");
             defer c.free(value);
-            arguments.argument(key, value, true);
+            arguments.argument(key, value, !flint or flintString(orders, name, key, value));
             position = value_end + "</arg_value>".len;
         }
         out.push(name, &arguments);
@@ -570,7 +617,8 @@ fn parseQwen(text: []const u8, require_closed: bool, out: Outputs, orders: [*c]c
 fn parseWithOrders(syntax: c.server_model_syntax, text: [*c]const u8, require_closed: bool, content: *[*c]u8, reasoning: *[*c]u8, calls: *c.tool_calls, orders: [*c]const c.tool_schema_orders) bool {
     const out: Outputs = .{ .content = content, .reasoning = reasoning, .calls = calls };
     switch (syntax) {
-        c.SERVER_MODEL_SYNTAX_GLM => parseGlm(bytes(text), require_closed, out) catch return false,
+        c.SERVER_MODEL_SYNTAX_GLM => parseXml(bytes(text), require_closed, out, false, orders) catch return false,
+        c.SERVER_MODEL_SYNTAX_FLINT => parseXml(bytes(text), require_closed and std.mem.startsWith(u8, bytes(text), "<think>"), out, true, orders) catch return false,
         c.SERVER_MODEL_SYNTAX_QWEN => parseQwen(bytes(text), require_closed, out, orders) catch return false,
         else => parseDeepseek(bytes(text), require_closed, out) catch return false,
     }

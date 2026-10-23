@@ -210,9 +210,13 @@ static void print_sampling(FILE *fp, const help_colors *c, bool full, ds4_help_t
     opt(fp, c, "-n, --tokens N", "Maximum generated tokens.");
     opt(fp, c, "--temp F", "Sampling temperature. 0 is greedy/deterministic.");
     opt(fp, c, "--top-p F", "Nucleus sampling probability.");
+    if (tool == DS4_HELP_DS4)
+        opt(fp, c, "--top-k N", "Keep the N highest-scoring tokens; 0 disables the limit. Flint defaults to 20.");
     opt(fp, c, "--min-p F", "Keep tokens scoring at least F times the top token.");
     opt(fp, c, "--seed N", "Sampling seed for reproducible non-greedy runs.");
     para(fp, c, "GLM CLI and agent runs default to temperature 1.0, top-p 0.95, and min-p 0 unless those options are set explicitly.");
+    if (tool == DS4_HELP_DS4)
+        para(fp, c, "Flint CLI runs default to temperature 1.0, top-k 20, top-p 0.95 and min-p 0. Flint decides when to emit reasoning; thinking effort controls are unsupported.");
     opt(fp, c, "--think", "Use normal thinking mode (V4.1: effort 75).");
     opt(fp, c, "--think-max", "Use maximum thinking (V4.1: 100; V4: requires ctx >= 393216).");
     if (tool == DS4_HELP_DS4 || tool == DS4_HELP_AGENT)

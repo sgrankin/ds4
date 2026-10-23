@@ -24,6 +24,7 @@ typedef struct {
     bool enable_cors;
     int batched_sessions;
     int mixed_prefill_quantum;
+    bool mixed_prefill_quantum_set;
 } server_config;
 
 server_config ds4_server_boot_parse(int argc, char **argv,

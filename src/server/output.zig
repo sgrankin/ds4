@@ -123,7 +123,7 @@ pub fn randomId(destination: []u8, prefix: []const u8) void {
 pub fn init(request: *const Request, stream: *Stream) void {
     stream.* = std.mem.zeroes(Stream);
     stream.sink = request.response_sink;
-    stream.mode = if (c.ds4_think_mode_enabled(request.think_mode)) c.RESP_STREAM_THINKING else c.RESP_STREAM_TEXT;
+    stream.mode = if (request.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT and c.ds4_think_mode_enabled(request.think_mode)) c.RESP_STREAM_THINKING else c.RESP_STREAM_TEXT;
     randomId(&stream.response_id, "resp_");
     randomId(&stream.reasoning_id, "rs_");
     randomId(&stream.message_id, "msg_");
@@ -612,6 +612,16 @@ pub const Output = struct {
     }
     pub fn update(self: Output, request: *const Request, stream: *Stream, raw: []const u8, final: bool) bool {
         if (!stream.active) return true;
+        if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT and !stream.checked_think_prefix) {
+            // Flint emits its own optional opening tag; its prompt does not
+            // place every answer inside reasoning before generation starts.
+            if (!final and raw.len < 7 and std.mem.startsWith(u8, "<think>", raw)) return true;
+            stream.checked_think_prefix = true;
+            if (std.mem.startsWith(u8, raw, "<think>")) {
+                stream.mode = c.RESP_STREAM_THINKING;
+                stream.emit_pos = 7;
+            }
+        }
         // Walk reasoning even when summary output was not requested, but never
         // expose it on the visible message surface as a shortcut.
         // Generation starts inside the prompt's think tag. Missing an opening

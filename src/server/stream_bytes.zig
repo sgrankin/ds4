@@ -31,7 +31,7 @@ pub fn whitespace(raw: []const u8, position: usize) usize {
 }
 pub fn guardSecondReasoning(request: *const c.request) bool {
     return c.ds4_think_mode_enabled(request.think_mode) and request.has_tools and
-        request.model_syntax != c.SERVER_MODEL_SYNTAX_QWEN;
+        request.model_syntax != c.SERVER_MODEL_SYNTAX_QWEN and request.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT;
 }
 
 pub const Text = struct {

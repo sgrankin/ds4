@@ -17,7 +17,7 @@ fn callsSlice(calls: ?*const c.tool_calls) []const c.tool_call {
 pub fn init(request: *const c.request, stream: *Stream) void {
     stream.* = std.mem.zeroes(Stream);
     stream.active = true;
-    stream.mode = if (c.ds4_think_mode_enabled(request.think_mode)) c.OPENAI_STREAM_THINKING else c.OPENAI_STREAM_TEXT;
+    stream.mode = if (request.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT and c.ds4_think_mode_enabled(request.think_mode)) c.OPENAI_STREAM_THINKING else c.OPENAI_STREAM_TEXT;
     stream.guard_second_reasoning = shared.guardSecondReasoning(request);
 }
 fn freeTool(stream: *ToolStream) void {
@@ -333,6 +333,14 @@ pub const Output = struct {
     pub fn update(self: Output, request: *const c.request, id: []const u8, stream: *Stream, raw: ?[]const u8, final: bool) bool {
         const sampled = raw orelse return true;
         if (!stream.active) return true;
+        if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT and !stream.checked_think_prefix) {
+            if (!final and sampled.len < 7 and std.mem.startsWith(u8, "<think>", sampled)) return true;
+            stream.checked_think_prefix = true;
+            if (std.mem.startsWith(u8, sampled, "<think>")) {
+                stream.mode = c.OPENAI_STREAM_THINKING;
+                stream.emit_pos = 7;
+            }
+        }
         if (stream.mode == c.OPENAI_STREAM_THINKING) {
             if (!stream.checked_think_prefix) {
                 if (sampled.len < "<think>".len and std.mem.startsWith(u8, "<think>", sampled) and !final) return true;

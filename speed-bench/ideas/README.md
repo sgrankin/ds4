@@ -812,3 +812,12 @@ runtime files and defaults are unchanged.
 Six first-attempt native/control arms completed. Both actual long-tail dispatch changes were exercised:128 rows changed64+64 to sixteen8-row calls;511 rows changed seven64+63 to one511-row call. Native controls matched full logits, canonical state and IO. The first32 teacher vectors were bit-identical; the second32 shifted probabilities. Across64 predictions, independent full-vocabulary FP64 audit confirms mean delta-NLL +0.05274755, mean KL0.00518421, max KL0.18942086 and zero argmax flips. These are two artificial extensions, not generated semantic tasks. Profiled single-order times remain diagnostic; no quiet timing grant, quality-preserving or default claim.
 
 Evidence: `../experiments/ragged-native-tail-qualification-20261003/compact-summary.json`; all six raw/state outcomes retained with literal SHA/size/mode refs in its archive index.
+
+## Flint native/reference comparison
+
+`flint_reference.py --model DIR --output DIR [--quality]` measures the unchanged
+Flint harness with fixed prompts and captures optional full-vocabulary teacher
+rows. Use the original Flint Python environment only for this reference job.
+[Commands and qualification boundaries](../../docs/FLINT.md#reproduce-the-comparison)
+cover the pressure guard, native `flint-smoke` runs and numerical comparison.
+Keep its generated output local under `.workspaces/`.

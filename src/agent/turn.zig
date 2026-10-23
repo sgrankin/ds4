@@ -217,7 +217,7 @@ pub const Turn = struct {
     fn decodeBlock(self: Turn, token: c_int, remaining: c_int, mode_greedy: bool, rng: *u64, output: *[17]c_int, errors: []u8) c_int {
         const worker = self.worker;
         const generation = &self.config().gen;
-        if (c.ds4_engine_mtp_draft_tokens(worker.engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null)
+        if (c.ds4_engine_decode_packet_size(worker.engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null)
             return c.ds4_session_eval_speculative(worker.session, token, remaining, c.ds4_token_eos(worker.engine), if (mode_greedy) 0 else generation.temperature, 0, if (mode_greedy) 1 else generation.top_p, if (mode_greedy) 0 else generation.min_p, rng, output, output.len, errors.ptr, errors.len);
         if (c.ds4_session_eval(worker.session, token, errors.ptr, errors.len) != 0) return -1;
         output[0] = token;

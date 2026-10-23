@@ -67,6 +67,7 @@ class Server:
     def __init__(self, binary, model, output, store, cache):
         self.process = None
         self.output = output
+        self.flint = model.is_dir() and (model / "flint-int4.json").is_file()
         output.mkdir()
         with socket.socket() as reservation:
             reservation.bind(("127.0.0.1", 0))
@@ -84,10 +85,17 @@ class Server:
             DS4_V41_DECODER_REPLAY_ROWS="0", DS4_V41_COMPRESSED_KV_F16="0",
             DS4_METAL_V41_RESIDENT_ROUTE_GAP="0", DS4_METAL_V41_RESIDENT_PREFILL_GAP="0",
             DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS="0")
+        if self.flint:
+            # Durable Responses JSON is independent of GPU-state caching.
+            # Flint currently has its own in-memory KV layout, without the
+            # DS4 SSD snapshot format or suffix relocation implementation.
+            env = {key: value for key, value in env.items() if not key.startswith("DS4_STATE_CACHE_")}
         command = [str(binary), "--model", str(model), "--host", "127.0.0.1", "--port", str(port),
-            "--ssd-streaming", "--ssd-streaming-cache-experts", "32GB", "--ctx", "8192",
-            "--prefill-chunk", "512", "--batched-session", "2", "--mixed-prefill-quantum", "512",
-            "--mtp-draft", "1", "--tokens", "128", "--trace", str(output / "trace.log")]
+            "--ctx", "8192",
+            "--prefill-chunk", "4096" if self.flint else "512", "--batched-session", "2",
+            "--mtp-draft", "1", "--tokens", "1024" if self.flint else "128", "--trace", str(output / "trace.log")]
+        if not self.flint:
+            command += ["--ssd-streaming", "--ssd-streaming-cache-experts", "32GB", "--mixed-prefill-quantum", "512"]
         save(output / "execution.json", {"command": command, "cwd": str(ROOT),
             "env": {k: v for k, v in env.items() if k.startswith("DS4")},
             "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest()})
@@ -116,9 +124,16 @@ class Server:
         return not shutdown["forced_kill"] and shutdown["returncode"] == 0
 
     def create(self, input, **options):
-        return {"type": "response.create", "model": self.model_id,
+        request = {"type": "response.create", "model": self.model_id,
             "temperature": 0, "reasoning": {"effort": "none"}, "max_output_tokens": 128,
             "store": False, "instructions": JSON_ONLY, "input": input} | options
+        if self.flint:
+            # Flint's packaged template does not expose a thinking-off switch.
+            # Give its generated reasoning room without claiming effort=none.
+            if "reasoning" not in options:
+                request.pop("reasoning", None)
+            request["max_output_tokens"] = max(1024, request["max_output_tokens"])
+        return request
 
 
 class Client:
@@ -317,11 +332,14 @@ def main():
         victim = Client(server, "disconnect-victim")
         try:
             victim.send(server.create("Write the integers from 1 through 1000, one per line, without skipping any.",
-                instructions="Follow the user's request.", max_output_tokens=1024))
+                instructions="Follow the user's request.", max_output_tokens=1024,
+                **({"reasoning": {"summary": "detailed"}} if server.flint else {})))
             while True:
                 event = victim.receive()
                 assert event["type"] not in TERMINAL and event["type"] != "error", event
-                if event["type"] == "response.output_text.delta" and event.get("delta"):
+                observable = event["type"] == "response.output_text.delta" or (
+                    server.flint and event["type"] == "response.reasoning_summary_text.delta")
+                if observable and event.get("delta"):
                     break
             submitted = threading.Event()
             def surviving():
@@ -353,7 +371,8 @@ def main():
             sdk = OpenAI(base_url=server.base + "/v1", api_key="local")
             with sdk.responses.connect() as connection:
                 connection.response.create(model=server.model_id, store=False, temperature=0,
-                    reasoning={"effort": "none"}, max_output_tokens=48, input='Return JSON {"sdk":true}.')
+                    max_output_tokens=1024 if server.flint else 48, input='Return JSON {"sdk":true}.',
+                    **({} if server.flint else {"reasoning": {"effort": "none"}}))
                 for event in connection:
                     if event.type == "error":
                         raise AssertionError(event.model_dump())
@@ -363,11 +382,43 @@ def main():
                         grade("official_sdk", sdk_response, {"sdk": True})
                         break
 
+        if server.flint:
+            # HF tokenizer reference: this raw input is 4,834 tokens, before
+            # role/instruction overhead. Usage is authoritative, so the test
+            # fails if a template/tokenizer change makes it a single chunk.
+            long_fact = {"code": "SOLSTICE-92", "count": 583}
+            notes = "Permanent record: code=SOLSTICE-92 and count=583. Keep this record unchanged.\n"
+            notes += "".join(f"Journal note {i:03d}: routine background; no changes to the permanent record.\n"
+                             for i in range(320))
+            notes += "\nReturn one concise JSON object containing only the permanent record code and count."
+            with Client(server, "long-context-continuation") as client:
+                client.send(server.create(notes))
+                long_parent, _ = client.complete()
+                input_tokens = long_parent["usage"]["input_tokens"]
+                check("long_context_prefill_exceeds_4096", input_tokens > 4096, long_parent["usage"])
+                grade("long_context_parent", long_parent, long_fact)
+                client.send(server.create("Return JSON with the same permanent record code and count.",
+                                          previous_response_id=long_parent["id"]))
+                long_continued, _ = client.complete()
+                grade("long_context_after_decode_continuation", long_continued, long_fact)
+                usage = long_continued["usage"]
+                cached = usage.get("input_tokens_details", {}).get("cached_tokens")
+                result["long_context"] = {"parent_input_tokens": input_tokens,
+                    "continuation_input_tokens": usage["input_tokens"], "continuation_cached_tokens": cached}
+                if cached is not None:
+                    check("long_context_continuation_cache_hit", cached > 4096, usage)
+
         check("first_server_shutdown", server.close())
         first_logs = (server.output / "server.stderr").read_text(errors="replace")
         counts = [int(n) for n in re.findall(r"decode batch count=(\d+)", first_logs)]
         result["decode_batch_counts"] = counts
-        check("coordinator_decode_observed", bool(counts))
+        if not server.flint:
+            check("coordinator_decode_observed", bool(counts))
+        else:
+            # Flint uses serialized resident packets, rather than DS4's
+            # multi-session decode-batch kernel. Socket overlap and completed
+            # responses above still qualify the concurrent conversation path.
+            result["decode_execution"] = "serialized_resident_packets"
         server = Server(args.restart_server, args.model, args.output / "after", args.output / "responses", args.output / "cache")
         with Client(server, "restart") as client:
             client.send(server.create("Return JSON with the remembered code and count.", store=True, previous_response_id=continued["id"]))

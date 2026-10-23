@@ -274,7 +274,7 @@ pub fn sync(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const c.ds
     const live = c.ds4_session_pos(slot.session);
     const common = c.ds4_session_common_prefix(slot.session, prompt);
     _ = c.pthread_mutex_unlock(&srv.inference_mu);
-    var done: c_int = if (common == live and prompt.*.len >= live) live else 0;
+    var done: c_int = if (c.ds4_engine_is_flint(srv.engine)) common else if (common == live and prompt.*.len >= live) live else 0;
     var called = false;
     while (!stopped(stop) and !slotCancelled(slot) and (!called or done < prompt.*.len)) {
         const quantum = c.ds4_server_coordinator_quantum(srv);
@@ -415,7 +415,7 @@ pub fn progress(packet: [*c]c.server_prefill_progress, event: [*c]const u8, curr
 fn appendCalls(out: *c.buf, request: ?*const c.request, calls: [*c]const c.tool_calls) void {
     const syntax = if (request) |req| req.model_syntax else c.SERVER_MODEL_SYNTAX_DEEPSEEK;
     const orders = if (request) |req| &req.tool_orders else null;
-    if (syntax == c.SERVER_MODEL_SYNTAX_GLM) c.ds4_server_render_glm_calls(out, calls, orders) else if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) c.ds4_server_render_qwen_calls(out, calls, out.len != 0, orders) else c.ds4_server_render_dsml_calls(out, calls, syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41);
+    if (syntax == c.SERVER_MODEL_SYNTAX_FLINT) c.ds4_server_render_flint_calls(out, calls, orders) else if (syntax == c.SERVER_MODEL_SYNTAX_GLM) c.ds4_server_render_glm_calls(out, calls, orders) else if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) c.ds4_server_render_qwen_calls(out, calls, out.len != 0, orders) else c.ds4_server_render_dsml_calls(out, calls, syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41);
 }
 fn qwenSuffix(request: ?*const c.request, content: [*c]const u8, reasoning: [*c]const u8, with_reasoning: bool, calls: [*c]const c.tool_calls) [*c]u8 {
     var out = zero(c.buf);
@@ -436,6 +436,16 @@ pub fn assistantSuffix(request: ?*const c.request, content: [*c]const u8, reason
     const include_reasoning = !visible or (request != null and request.?.reasoning_summary_emit and calls != null and calls.*.len > 0);
     if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) return qwenSuffix(request, content, reasoning, include_reasoning, calls);
     var out = zero(c.buf);
+    if (syntax == c.SERVER_MODEL_SYNTAX_FLINT) {
+        if (include_reasoning and text(reasoning).len > 0) {
+            append(&out, "<think>");
+            puts(&out, reasoning);
+            append(&out, "</think>");
+        }
+        puts(&out, content);
+        appendCalls(&out, request, calls);
+        return take(&out);
+    }
     // A visible Responses key contains reasoning only when the client can
     // replay a tool-call summary; hidden final-answer reasoning remains in KV.
     if (request != null and c.ds4_think_mode_enabled(request.?.think_mode)) {
@@ -503,12 +513,12 @@ pub fn invalidSuffix(request: ?*const c.request, thinking: [*c]const c.thinking_
     const enabled = request != null and c.ds4_think_mode_enabled(request.?.think_mode);
     var error_text = zero(c.buf);
     defer freeBuffer(&error_text);
-    append(&error_text, if (syntax == c.SERVER_MODEL_SYNTAX_GLM) "Tool error: invalid GLM tool call" else if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) "Tool error: invalid Qwen tool call" else "Tool error: invalid DSML tool call");
+    append(&error_text, if (syntax == c.SERVER_MODEL_SYNTAX_FLINT) "Tool error: invalid Flint tool call" else if (syntax == c.SERVER_MODEL_SYNTAX_GLM) "Tool error: invalid GLM tool call" else if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) "Tool error: invalid Qwen tool call" else "Tool error: invalid DSML tool call");
     if (text(detail).len != 0) {
         append(&error_text, ": ");
         puts(&error_text, detail);
     }
-    if (syntax == c.SERVER_MODEL_SYNTAX_GLM) append(&error_text, "\nThe previous assistant output was not executed because the <tool_call> syntax was malformed. Emit a new valid <tool_call>, or answer normally if no tool is needed.") else if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) append(&error_text, "\nThe previous assistant output was not executed because the <tool_call><function=...> syntax was malformed. Emit a new valid <tool_call>, or answer normally if no tool is needed.") else {
+    if (syntax == c.SERVER_MODEL_SYNTAX_GLM or syntax == c.SERVER_MODEL_SYNTAX_FLINT) append(&error_text, "\nThe previous assistant output was not executed because the <tool_call> syntax was malformed. Emit a new valid <tool_call>, or answer normally if no tool is needed.") else if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) append(&error_text, "\nThe previous assistant output was not executed because the <tool_call><function=...> syntax was malformed. Emit a new valid <tool_call>, or answer normally if no tool is needed.") else {
         append(&error_text, "\nThe previous assistant output was not executed because the DSML syntax was malformed. Emit a new valid DSML tool call, or answer normally if no tool is needed.");
         const system = systemRegion(if (request) |req| req.prompt_text else null);
         if (system.len != 0) {
@@ -518,7 +528,11 @@ pub fn invalidSuffix(request: ?*const c.request, thinking: [*c]const c.thinking_
     }
     var out = zero(c.buf);
     if (enabled and thinking != null and thinking.*.inside) append(&out, if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) "\n</think>\n\n" else "</think>");
-    if (syntax == c.SERVER_MODEL_SYNTAX_GLM) {
+    if (syntax == c.SERVER_MODEL_SYNTAX_FLINT) {
+        append(&out, "<|observation|><tool_response>");
+        puts(&out, error_text.ptr);
+        append(&out, "</tool_response><|assistant|>");
+    } else if (syntax == c.SERVER_MODEL_SYNTAX_GLM) {
         append(&out, "<|observation|><tool_response>");
         c.ds4_server_render_glm_result(&out, ptr(error_text.ptr));
         append(&out, "</tool_response><|assistant|>");
@@ -939,7 +953,7 @@ pub const Generation = struct {
         var generated_thinking: c_int = 0;
         var deferred: c_int = 0;
         var forced = false;
-        const close_token: c_int = 128822;
+        const close_token: c_int = if (req.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) 150007 else 128822;
         // A non-streaming invalid tool can inject one model-visible error and
         // retry inside the same total output budget. Each attempt owns its text
         // and parsed result, while RNG and reasoning counters stay continuous.
@@ -983,7 +997,7 @@ pub const Generation = struct {
                 var top_k = req.top_k;
                 var top_p = req.top_p;
                 var min_p = req.min_p;
-                if (c.ds4_think_mode_enabled(req.think_mode)) {
+                if (req.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT and c.ds4_think_mode_enabled(req.think_mode)) {
                     // Explicit client sampling always wins, including greedy.
                     if (!req.temperature_set) temperature = c.DS4_DEFAULT_TEMPERATURE;
                     if (!req.top_k_set) top_k = 0;
@@ -1023,7 +1037,7 @@ pub const Generation = struct {
                 var tokens: [17]c_int = undefined;
                 var count: c_int = 0;
                 const block_start = c.ds4_session_pos(slot.session);
-                if (req.reasoning_budget == 0 and !srv.batched_mode and c.ds4_engine_mtp_draft_tokens(srv.engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
+                if (req.reasoning_budget == 0 and (!srv.batched_mode or c.ds4_engine_is_flint(srv.engine)) and c.ds4_engine_decode_packet_size(srv.engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
                     count = if (req.ignore_eos) c.ds4_session_eval_speculative_argmax_ignoring_eos(slot.session, token, maximum - completion, eos, req.think_mode, &tokens, tokens.len, errors.ptr, errors.len) else c.ds4_session_eval_speculative(slot.session, token, maximum - completion, eos, temperature, top_k, top_p, min_p, &rng, &tokens, tokens.len, errors.ptr, errors.len);
                     if (count < 0) {
                         finish = "error";
@@ -1198,9 +1212,10 @@ pub const Generation = struct {
                         break;
                     }
                     const next_greedy = !thinking.inside and c.ds4_server_decode_is_tool(tracker.decode) and !c.ds4_server_decode_is_payload(tracker.decode);
-                    // Opportunistic drafts are greedy in both modes. Only
-                    // exact sampling changes their acceptance distribution.
-                    if (offset + 1 < count and c.ds4_engine_mtp_exact_sampling(srv.engine) and payload_temperature > 0 and next_greedy != greedy_syntax) {
+                    // Exact sampled packets must restart when entering/leaving
+                    // greedy tool syntax. Flint packets contain sampled tokens
+                    // directly rather than opportunistic greedy drafts.
+                    if (offset + 1 < count and (c.ds4_engine_mtp_exact_sampling(srv.engine) or c.ds4_engine_is_flint(srv.engine)) and payload_temperature > 0 and next_greedy != greedy_syntax) {
                         resample = true;
                         break;
                     }
@@ -1536,6 +1551,9 @@ pub const Generation = struct {
                 prompt = &effective;
             }
         }
+        // An ID/text splice preserves logical history, but Flint recomputes
+        // its generated tail through prefill. Credit only its saved prefix.
+        if (c.ds4_engine_is_flint(srv.engine)) cached = c.ds4_session_common_prefix(slot.session, prompt);
         const reasoning_preserved = cached > 0 and (same(cache_source, "responses-visible") or same(cache_source, "responses-tool-output") or (same(cache_source, "disk-text") and disk_flags & c.DS4_KVSTORE_EXT_RESPONSES_VISIBLE != 0));
         const visible_without_reasoning = responses and req.responses_requires_live_reasoning and !reasoning_preserved;
         var prompt_tokens = prompt.len;

@@ -5,8 +5,9 @@
 const std = @import("std");
 const serving = @import("serving_types");
 const ds41 = @import("ds41_prompt");
+const flint = @import("flint_prompt");
 
-pub const Family = enum { deepseek, deepseek41, glm, glm53, qwen };
+pub const Family = enum { deepseek, deepseek41, glm, glm53, qwen, flint };
 pub const Capabilities = struct {
     reasoning_budget: bool,
     context_relocation: bool,
@@ -20,6 +21,7 @@ pub const Model = struct {
     pub fn id(self: Model) [:0]const u8 {
         return switch (self.family) {
             .deepseek41 => "deepseek-v4.1-flash",
+            .flint => "flint",
             .qwen => "qwen3.8-flash-next",
             .glm53 => "glm-5.3-flash",
             .glm => "glm-5.2",
@@ -41,6 +43,10 @@ pub const Model = struct {
     /// Native model preparation takes logical values, independent of HTTP,
     /// persisted record layouts and the engine's C ABI.
     pub fn prepare(self: Model, allocator: std.mem.Allocator, request: serving.Request, options: ds41.Options, context: usize) ![:0]u8 {
+        if (self.family == .flint) return flint.render(allocator, request.messages, .{
+            .start = options.start,
+            .schemas = request.tool_schemas,
+        });
         if (self.family != .deepseek41) return error.LegacyModelAdapterRequired;
         var selected = options;
         selected.schemas = request.tool_schemas;
@@ -81,15 +87,21 @@ fn aliasThinking(alias: ?[]const u8) ?bool {
 
 pub fn knownModel(name: []const u8) bool {
     const names = [_][]const u8{
-        "deepseek-v4-flash",            "deepseek-v4.1-flash",              "deepseek-v4-pro",
-        "qwen3.8-flash-next",           "qwen3.8-flash-next-chat",          "qwen3.8-flash-next-no-think",
-        "qwen3.8-flash-next-nothink",   "qwen3.8-flash-next-reasoner",      "qwen/qwen3.8-flash-next",
-        "qwen/qwen3.8-flash-next-chat", "qwen/qwen3.8-flash-next-reasoner", "glm-5.2",
-        "glm-5.2-chat",                 "glm-5.2-no-think",                 "glm-5.2-nothink",
-        "glm-5.2-reasoner",             "zai/glm-5.2",                      "zai/glm-5.2-chat",
-        "zai/glm-5.2-reasoner",         "glm-5.3-flash",                    "glm-5.3-flash-chat",
-        "glm-5.3-flash-no-think",       "glm-5.3-flash-nothink",            "glm-5.3-flash-reasoner",
-        "zai/glm-5.3-flash",            "zai/glm-5.3-flash-chat",           "zai/glm-5.3-flash-reasoner",
+        "flint",                            "flint-int4",
+        "deepseek-v4-flash",                "deepseek-v4.1-flash",
+        "deepseek-v4-pro",                  "qwen3.8-flash-next",
+        "qwen3.8-flash-next-chat",          "qwen3.8-flash-next-no-think",
+        "qwen3.8-flash-next-nothink",       "qwen3.8-flash-next-reasoner",
+        "qwen/qwen3.8-flash-next",          "qwen/qwen3.8-flash-next-chat",
+        "qwen/qwen3.8-flash-next-reasoner", "glm-5.2",
+        "glm-5.2-chat",                     "glm-5.2-no-think",
+        "glm-5.2-nothink",                  "glm-5.2-reasoner",
+        "zai/glm-5.2",                      "zai/glm-5.2-chat",
+        "zai/glm-5.2-reasoner",             "glm-5.3-flash",
+        "glm-5.3-flash-chat",               "glm-5.3-flash-no-think",
+        "glm-5.3-flash-nothink",            "glm-5.3-flash-reasoner",
+        "zai/glm-5.3-flash",                "zai/glm-5.3-flash-chat",
+        "zai/glm-5.3-flash-reasoner",
     };
     for (names) |candidate| if (std.mem.eql(u8, name, candidate)) return true;
     return false;

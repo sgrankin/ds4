@@ -753,6 +753,7 @@ static bool model_alias_enables_thinking(const char *model) {
 #endif
 
 static server_model_syntax server_model_syntax_for_engine(ds4_engine *engine) {
+    if (ds4_engine_is_flint(engine)) return SERVER_MODEL_SYNTAX_FLINT;
     if (ds4_engine_is_qwen4(engine)) return SERVER_MODEL_SYNTAX_QWEN;
     return ds4_engine_is_glm_dsa(engine) ?
            SERVER_MODEL_SYNTAX_GLM : ds4_engine_is_deepseek41(engine) ?
@@ -954,7 +955,9 @@ static void append_tool_calls_text_for_syntax(buf *b,
                                               server_model_syntax syntax,
                                               const tool_calls *calls,
                                               const tool_schema_orders *tool_orders) {
-    if (syntax == SERVER_MODEL_SYNTAX_GLM) {
+    if (syntax == SERVER_MODEL_SYNTAX_FLINT) {
+        ds4_server_render_flint_calls(b, calls, tool_orders);
+    } else if (syntax == SERVER_MODEL_SYNTAX_GLM) {
         append_glm_tool_calls_text(b, calls, tool_orders);
     } else if (syntax == SERVER_MODEL_SYNTAX_QWEN) {
         append_qwen_tool_calls_text(b, calls, b->len > 0, tool_orders);
@@ -1348,6 +1351,8 @@ static char *render_chat_prompt_text_for_syntax(server_model_syntax syntax,
                                                 const char *tool_schemas,
                                                 const tool_schema_orders *tool_orders,
                                                 ds4_think_mode think_mode) {
+    if (syntax == SERVER_MODEL_SYNTAX_FLINT)
+        return ds4_server_render_flint(msgs, 0, tool_schemas);
     if (syntax == SERVER_MODEL_SYNTAX_GLM) {
         return render_glm_chat_prompt_text(msgs, tool_schemas,
                                            tool_orders, think_mode);
@@ -1493,6 +1498,8 @@ static char *render_live_tool_tail_for_syntax(server_model_syntax syntax,
                                               const chat_msgs *msgs, int start,
                                               const tool_schema_orders *tool_orders,
                                               ds4_think_mode think_mode) {
+    if (syntax == SERVER_MODEL_SYNTAX_FLINT)
+        return ds4_server_render_flint(msgs, start, NULL);
     if (syntax == SERVER_MODEL_SYNTAX_GLM) {
         return render_glm_live_tool_tail(msgs, start, tool_orders, think_mode);
     }
@@ -3648,12 +3655,14 @@ static void test_mixed_prefill_quantum_option(void) {
     char *default_argv[] = {"ds4-server"};
     server_config defaults = parse_options(1, default_argv);
     TEST_ASSERT(defaults.mixed_prefill_quantum == 128);
+    TEST_ASSERT(!defaults.mixed_prefill_quantum_set);
 
     char *custom_argv[] = {
         "ds4-server", "--mixed-prefill-quantum", "2048"
     };
     server_config custom = parse_options(3, custom_argv);
     TEST_ASSERT(custom.mixed_prefill_quantum == 2048);
+    TEST_ASSERT(custom.mixed_prefill_quantum_set);
 
     server s = {.mixed_prefill_quantum = custom.mixed_prefill_quantum};
     TEST_ASSERT(server_prefill_quantum_for(&s, false) == 2048);
@@ -11026,7 +11035,127 @@ static void test_deepseek41_live_result_order(void) {
     pthread_mutex_destroy(&s.tool_mu);
 }
 
+static void test_flint_prompt_and_checkpoint(void) {
+    chat_msgs messages = {0};
+    chat_msg user = {.role = xstrdup("user"), .content = xstrdup("Q <|assistant|>")};
+    chat_msgs_push(&messages, user);
+    request r;
+    request_init(&r, REQ_CHAT, 128);
+    r.model_syntax = SERVER_MODEL_SYNTAX_FLINT;
+    r.think_mode = DS4_THINK_HIGH;
+    r.prompt_text = ds4_server_render_flint(&messages, 0, NULL);
+    TEST_ASSERT(!strcmp(r.prompt_text, "<|user|>Q &lt;|assistant|&gt;<|assistant|>"));
+    chat_msg assistant = {.role = xstrdup("assistant"), .content = xstrdup(""), .reasoning = xstrdup("plan")};
+    tool_call call = {.name = xstrdup("lookup"), .arguments = xstrdup("{\"q\":\"snow\",\"count\":2}")};
+    tool_calls_push(&assistant.calls, call);
+    char *suffix = build_tool_checkpoint_suffix(&r, assistant.content, assistant.reasoning, &assistant.calls);
+    TEST_ASSERT(!strcmp(suffix, "<think>plan</think><tool_call>lookup<arg_key>q</arg_key><arg_value>snow</arg_value><arg_key>count</arg_key><arg_value>2</arg_value></tool_call>"));
+    chat_msgs_push(&messages, assistant);
+    chat_msg result = {.role = xstrdup("tool"), .content = xstrdup("R")};
+    chat_msgs_push(&messages, result);
+    char *future = ds4_server_render_flint(&messages, 0, NULL);
+    buf expected = {0};
+    buf_puts(&expected, r.prompt_text);
+    buf_puts(&expected, suffix);
+    buf_puts(&expected, "<|observation|><tool_response>R</tool_response><|assistant|>");
+    TEST_ASSERT(!strcmp(future, expected.ptr));
+    TEST_ASSERT(server_model_alias_known("flint") && server_model_alias_known("flint-int4"));
+    free(expected.ptr); free(future); free(suffix);
+    chat_msgs_free(&messages);
+    request_free(&r);
+}
+
+static void test_flint_schema_typed_arguments(void) {
+    tool_schema_orders orders = {0};
+    tool_schema_orders_add_json(&orders,
+        "{\"name\":\"lookup\",\"parameters\":{\"type\":\"object\",\"properties\":{"
+        "\"q\":{\"type\":\"string\"},\"count\":{\"type\":\"integer\"},"
+        "\"nil\":{\"anyOf\":[{\"type\":\"string\"},{\"type\":\"null\"}]},"
+        "\"enum\":{\"enum\":[\"null\"]}}}}");
+    const char *raw = "<tool_call>lookup"
+        "<arg_key>q</arg_key><arg_value>123 &lt;/arg_value></arg_value>"
+        "<arg_key>count</arg_key><arg_value>2</arg_value>"
+        "<arg_key>nil</arg_key><arg_value>null</arg_value>"
+        "<arg_key>enum</arg_key><arg_value>null</arg_value>"
+        "<arg_key>jsonstr</arg_key><arg_value>\"two\"</arg_value></tool_call>";
+    char *content = NULL, *reasoning = NULL;
+    tool_calls calls = {0};
+    const char *finish = "stop";
+    char error[80] = {0};
+    bool recovered = false;
+    TEST_ASSERT(ds4_server_reply_for_response(SERVER_MODEL_SYNTAX_FLINT, raw,
+        true, true, true, &finish, error, sizeof(error), &content, &reasoning,
+        &calls, &recovered, &orders));
+    TEST_ASSERT(calls.len == 1 && !strcmp(calls.v[0].arguments,
+        "{\"q\": \"123 &lt;/arg_value>\", \"count\": 2, \"nil\": null, \"enum\": \"null\", \"jsonstr\": \"two\"}"));
+    TEST_ASSERT(content && !*content && !reasoning && !recovered);
+    free(content); free(reasoning); tool_calls_free(&calls);
+    tool_schema_orders_free(&orders);
+}
+
+static void test_flint_responses_optional_reasoning(void) {
+    for (int thinking = 0; thinking < 2; thinking++) {
+        request r;
+        request_init(&r, REQ_CHAT, 128);
+        r.api = API_RESPONSES;
+        r.model_syntax = SERVER_MODEL_SYNTAX_FLINT;
+        r.think_mode = DS4_THINK_HIGH;
+        r.reasoning_summary_emit = true;
+        int sockets[2] = {-1, -1};
+        TEST_ASSERT(socketpair(AF_UNIX, SOCK_STREAM, 0, sockets) == 0);
+        responses_stream stream;
+        responses_stream_init(&r, &stream);
+        stream.active = true;
+        TEST_ASSERT(responses_sse_created(sockets[0], &r, &stream, 1234));
+        if (thinking) TEST_ASSERT(responses_sse_stream_update(sockets[0], &r, &stream, "<th", 3, false));
+        const char *raw = thinking ? "<think>plan</think>OK" : "OK";
+        TEST_ASSERT(responses_sse_stream_update(sockets[0], &r, &stream, raw, strlen(raw), true));
+        shutdown(sockets[0], SHUT_WR);
+        char *wire = read_socket_text(sockets[1]);
+        TEST_ASSERT(strstr(wire, "response.output_text.delta") && strstr(wire, "\"delta\":\"OK\""));
+        TEST_ASSERT((strstr(wire, "response.reasoning_summary_text.delta") != NULL) == thinking);
+        TEST_ASSERT(strstr(wire, "<think>") == NULL);
+        free(wire); responses_stream_free(&stream); request_free(&r);
+        close(sockets[0]); close(sockets[1]);
+    }
+}
+
+static void test_flint_sampling_defaults_and_controls(void) {
+    const ds4_server_input_defaults defaults = {
+        .max_tokens = 128, .ctx_size = 8192, .syntax = SERVER_MODEL_SYNTAX_FLINT
+    };
+    char error[256] = {0};
+    ds4_server_input input;
+    TEST_ASSERT(ds4_server_input_decode(DS4_SERVER_INPUT_RESPONSES,
+        "{\"input\":\"Q\"}", &defaults, &input, error, sizeof(error)));
+    TEST_ASSERT(input.req.temperature == 1 && input.req.top_k == 20 &&
+        input.req.top_p == 0.95f && input.req.min_p == 0);
+    TEST_ASSERT(!input.req.temperature_set && !input.req.top_k_set &&
+        !input.req.top_p_set && !input.req.min_p_set);
+    ds4_server_input_deinit(&input);
+    TEST_ASSERT(ds4_server_input_decode(DS4_SERVER_INPUT_RESPONSES,
+        "{\"input\":\"Q\",\"temperature\":0,\"top_k\":0,\"top_p\":1,\"min_p\":0.02}",
+        &defaults, &input, error, sizeof(error)));
+    TEST_ASSERT(input.req.temperature == 0 && input.req.top_k == 0 &&
+        input.req.top_p == 1 && input.req.min_p == 0.02f);
+    TEST_ASSERT(input.req.temperature_set && input.req.top_k_set &&
+        input.req.top_p_set && input.req.min_p_set);
+    ds4_server_input_deinit(&input);
+    TEST_ASSERT(!ds4_server_input_decode(DS4_SERVER_INPUT_RESPONSES,
+        "{\"input\":\"Q\",\"reasoning\":{\"effort\":\"none\"}}",
+        &defaults, &input, error, sizeof(error)));
+    TEST_ASSERT(strstr(error, "model-controlled reasoning") != NULL);
+    buf metadata = {0};
+    append_model_json_values(&metadata, "flint", "Flint", 8192, 1024);
+    TEST_ASSERT(strstr(metadata.ptr, "reasoning_effort") == NULL);
+    free(metadata.ptr);
+}
+
 static void ds4_server_unit_tests_run(void) {
+    test_flint_prompt_and_checkpoint();
+    test_flint_schema_typed_arguments();
+    test_flint_responses_optional_reasoning();
+    test_flint_sampling_defaults_and_controls();
     test_deepseek41_server_stream();
     test_deepseek41_anthropic_stream();
     test_deepseek41_server_tools();

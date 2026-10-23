@@ -62,17 +62,18 @@ copying and SSD wait costs before choosing a more elaborate queue.
 
 ## Current implementation
 
-- `zig-rewrite` and `zig-engine` identify the rewrite branch: condensed base
-  `60813d03`, followed by the focused request/model boundary change;
-  `main` remains at `ec5424de5562`. Do not advance main or push without further
-  authorization. The original condensed commit before artifact cleanup was
+- `main`, `zig-rewrite` and `zig-engine` now identify the qualified Zig runtime
+  at `37498248b4cb`. The user authorized promotion on 2026-10-23; `origin/main`
+  was verified at the same commit after the fast-forward push. The stack starts
+  at condensed base `60813d03`. The original condensed commit before artifact cleanup was
   `da7940e2f2d8`; use bookmarks for its rewritten successor.
 - Detailed implementation history is preserved at
   `zig-rewrite-history-20261022`; the mechanical translation is archived at
   `zig-mechanical-archive`.
-- Supported native scope is DeepSeek V4.1 Flash on Metal plus the shared
-  Agent/server/CLI/benchmark/Eval/Web stack. Other model families and backends
-  retain their C implementations.
+- Supported native scope is DeepSeek V4.1 Flash and Flint on Metal plus the
+  shared server/CLI stack. DeepSeek also supports the native Agent/benchmark/
+  Eval/Web stack. Flint's internal ds4-agent tool mapping is not implemented;
+  use its Responses server with an external agent. Qwen/GLM retain C engines.
 - Actual Metal objects/ARC operations and pipeline catalogues remain Objective-C;
   MSL kernels and third-party C dependencies remain in their existing languages.
 - Build using `tools/zig-build`; selected binaries are in `zig-out/bin`.
@@ -164,6 +165,119 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
 ## Progress log
 
 ### 2026-10-23
+
+- Completed Recursive Flint's native Zig/Metal backend and existing Responses
+  HTTP/WebSocket integration. User explicitly chose the existing Metal runtime
+  only: no MLX library or embedded Python in production. Reused licensed shader
+  source and the original M5 Max persistent decode schedule. Source reference
+  is `/Volumes/Models/flint` at `e53663b262af`; installed affine INT4 weights
+  are under its `.local/share/rec/models/fdc85248...` directory (22.57 GB).
+  [Usage and reproduction](../docs/FLINT.md),
+  [qualification report](../speed-bench/experiments/flint-native-20261023/README.md).
+- Reference baseline completed under the pressure guard after the user stopped
+  their DS4 agent. Original Python Engine, M5 Max, context 262144, 128 generated
+  tokens, three repetitions; medians of repetitions 1 and 2: short 21-token
+  prompt prefill 43.5 ms / greedy 246.1 tok/s / default grammar 224.94 tok/s;
+  798-token prompt prefill 227.3 ms / greedy 239.75 tok/s / default grammar
+  212.61 tok/s. Raw results and exact driver remain ignored under
+  `.workspaces/flint-baseline-20261023/`. This is the reference, not a native
+  performance result. Default sampling is T=1, top-p=.95, top-k=20.
+- Native tokenizer/prompt, raw safetensors bank packing, batched prefill,
+  resident decode and GPU filtered sampling are implemented. Tokenizer matches
+  47 HF cases in Release/Debug; seven packaged templates match. Native short
+  prefill improved 202 -> 61 -> 37 ms by testing one small-batch QMV change at
+  a time. Selected packed QMV retains NAX for larger batches. Default-sampling
+  decode is 247.1 / 225.9 tok/s (short / 798-token), reference 224.9 / 212.6;
+  greedy longer-task total is neutral (756.8 vs 757.7 ms), with slightly slower
+  decode. These are narrow warm measurements, not a universal speed guarantee.
+- Eight teacher-forced distributions inside reasoning: mean delta-NLL +0.013817
+  nats, mean KL 0.0010015, all eight top tokens equal; perplexity ratio 1.0139.
+  This is a small two-prompt proxy. Native RNG differs from MLX; native serving
+  has no grammar masks. Do not claim exact output equivalence.
+- Final real-model WS qualification passes 29 checks and 17 quality grades:
+  independent concurrent conversations, real tool retrieval, disconnect,
+  reconnect/restart and official SDK. A 4,855-token prompt plus post-decode
+  continuation passes; input 5,011 correctly credits 4,855 cached prefill rows.
+  Generated continuation is recomputed through prefill, so it is not counted as
+  reused KV. Actual GPU fixtures pass token-65,536 bank crossing and wrapped
+  local-ring publication; full 262k-token inference is not yet qualified.
+- Per-conversation BF16 KV and bounded local-ring/logit snapshots are native.
+  An engine mutex serializes prefill/resident packets: overlapping two resident
+  kernels risks GPU barrier deadlock. Flint packets are distinct from MTP.
+  Durable Responses JSON survives restart; Flint GPU-state SSD checkpoints,
+  suffix relocation, vision and internal ds4-agent tools remain unsupported.
+  The server-only `flint` preset selects model defaults and clears incompatible
+  DeepSeek cache settings. Main is unchanged; new work stays local.
+- Full model-free host/script verification passes, as do Debug server/session
+  fixtures and all 11 launcher cases. A guarded existing DeepSeek control and
+  final runtime produce identical selected IDs and all reported top-logprobs.
+  Raw artifacts remain ignored in `.workspaces/flint-baseline-20261023/` and
+  `.workspaces/flint-tests/`; commit source, concise reports and reproduction
+  helpers only.
+
+- Followed up on the user's script preference: use plain `#!/usr/bin/env nu`
+  and `nu script.nu` invocations, removing blanket `--no-config-file` flags
+  from entry points, callers and test children.
+- Qualified the Nushell script migration using Nu 0.116.1. `ds4-local` and
+  `tools/zig-build` keep their executable names, arguments and process-replacing
+  behavior. Downloader/test/benchmark/service drivers use `.nu` names; the
+  downloader is now `download-model.nu` with a standard JSON target catalogue.
+- Keep Python for model/numerical work and the small split-model binary-I/O
+  helper (flock, streaming copy/hash and fsync). All 30 download targets and eight
+  pinned identities are preserved. Historical experiment snapshots retain their
+  recorded scripts; the C-era build helper is a Nu wrapper for archived objects.
+- Validation: the full Nu host verifier passes; `make test-scripts` passes ten
+  launcher cases, thirteen genuinely hashed offline download cases and driver
+  contracts. One-time controls match 66 GPU CLI invocations, DSpark cases, GLM
+  prompts and sweep status/arguments. JPEG fixture bytes reproduce exactly.
+  Nu parse/format checks and Linux-runner helper checks pass; Linux service
+  actions and model/GPU runs were not part of this script migration.
+- `make test` now delegates to `tests/verify.nu`; `make test-scripts` selects its
+  fast script-only subcommand. Build flags are forwarded as arguments. Runtime
+  binaries remain unchanged while the user's agent is running. Raw evidence is
+  local under `.workspaces/nu-launchers/`, `.workspaces/nu-downloader-20261023/`,
+  `.workspaces/nu-drivers-20261023/` and `.workspaces/nu-scripts-20261023/`.
+  Keep these script changes separate from the pending research journal notes.
+
+- Promoted the qualified runtime through `37498248b4cb` to `main` and pushed to
+  `origin` at the user's explicit request. Confirmed remote main had not moved,
+  ancestry was linear and no conflicts/raw benchmark dumps were introduced.
+  Publication reused existing qualification. Pending local research notes were
+  preserved outside the published commits.
+
+- Completed a source review of Strata, local Flint and Luciano Martins's eight
+  October 6–8 vLLM optimization PRs against Zig runtime `37498248b4cb`.
+  This is research and proposed work; no runtime change or model benchmark ran.
+  Flint remains at `e53663b262af`; Strata snapshot is `7ddc17a38fe7`.
+- Strata's [cache-conditioned router](https://github.com/Niko1221/Strata/blob/7ddc17a38fe7f31637e895ecfba58c2cd43d65ec/src/kernels/cuda/route_prior.cu)
+  biases selection toward resident experts while retaining unbiased mixture
+  weights. DS4 already has global decayed hotness, bounded resident substitutions,
+  selected-cache overlap and exact decoder dependency suffixes. Proposed follow-up:
+  compare a simple residency bonus with the existing policy, retaining DS4's
+  transformed-affinity/bias semantics and measuring task quality and SSD bytes.
+- The first architectural target is exposed host/GPU handoff cost on cache hits.
+  Existing [SSD experiments 62–66](../speed-bench/experiments/ds41-ssd/README.md#62-full-session-route-and-exposed-io-census)
+  found 75.3% all-resident layer events, a 30.7% decode-time reduction with free
+  future routes plus deferred checks, and a slower real prefetch predictor.
+  These are historical workload results and oracle bounds, not current Zig speed
+  measurements. Refresh the baseline before changing the selected-load schedule.
+- A small independent candidate remains head-only Q4_K. Header-only inspection
+  of the local 1017 checkpoint confirms `output.weight` is Q8_0, 5120 × 129280,
+  670.703 MiB; Q4_K would occupy 355.078 MiB. Existing native dense dispatch
+  accepts Q4_K. Profile head time, then measure speed, continuation delta-NLL/KL
+  and practical outputs; the 47.1% head-byte reduction is not an end-to-end gain.
+- vLLM sources: [attention tuning](https://github.com/vllm-project/vllm/pull/60317),
+  [KV-sharing metadata](https://github.com/vllm-project/vllm/pull/60445),
+  [vision/audio](https://github.com/vllm-project/vllm/pull/60478),
+  [MoE shapes](https://github.com/vllm-project/vllm/pull/60504),
+  [vision batching](https://github.com/vllm-project/vllm/pull/60643),
+  [diffusion batching](https://github.com/vllm-project/vllm/pull/60663),
+  [text fusion](https://github.com/vllm-project/vllm/pull/60674) and
+  [MTP/head work](https://github.com/vllm-project/vllm/pull/60689).
+  Only 60643 is merged at this review; seven remain open. Transferable proposals
+  are actual-shape M5 tuning, fewer intermediate passes and host dependencies,
+  and speculation selected by accepted tokens per wall time and unique expert
+  bytes. Preserve the existing pressure guard and one-change/hour workflow.
 
 - Completed source layout after the user clarified that C/H files and backend
   trees belong under `src/` too: 225 additional tracked files preserved. Common

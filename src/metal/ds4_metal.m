@@ -4640,6 +4640,18 @@ int ds4_gpu_init(void) {
     }
 }
 
+/* Model-independent Metal access. A Flint-only process needs the same device
+ * and queue, without compiling the DeepSeek pipeline catalogue. */
+bool ds4_gpu_metal_shared_context(void **device, void **queue) {
+    @autoreleasepool {
+        if (!g_device && !ds4_metal_bootstrap_device()) return false;
+        if (!g_queue && !ds4_metal_bootstrap_queue()) return false;
+        *device = (__bridge void *)g_device;
+        *queue = (__bridge void *)g_queue;
+        return true;
+    }
+}
+
 int ds4_gpu_test_mxfp4_down_half_lut(uint16_t *legacy_bits,
                                      uint16_t *lut_bits) {
     if (!legacy_bits || !lut_bits) return 0;

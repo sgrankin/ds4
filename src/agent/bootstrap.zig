@@ -8,6 +8,12 @@ const Ui = @import("ui_text.zig");
 
 pub fn run(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend, frontend: Frontend.Frontend, handler: ?*const fn (c_int) callconv(.c) void) c_int {
     var config = Options.parse(argc, argv, default_backend);
+    const manifest = std.fmt.allocPrintSentinel(std.heap.c_allocator, "{s}/flint-int4.json", .{config.engine.model_path}, 0) catch return 1;
+    defer std.heap.c_allocator.free(manifest);
+    if (c.access(manifest, c.F_OK) == 0) {
+        _ = c.fprintf(c.__stderrp, "ds4-agent: Flint tool formatting is not implemented; use ds4-local --server flint --model DIR, or ds4 --model DIR for the plain CLI\n");
+        return 2;
+    }
     if (config.chdir_path != null) {
         var info: c.struct_stat = undefined;
         if (c.stat(config.chdir_path, &info) != 0) {

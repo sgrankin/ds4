@@ -13,7 +13,7 @@ pub fn Backend(comptime c: type) type {
 
         pub fn model(self: Self) policy.Model {
             return .{
-                .family = if (c.ds4_engine_is_deepseek41(self.engine)) .deepseek41 else if (c.ds4_engine_is_qwen4(self.engine)) .qwen else if (c.ds4_engine_is_glm53(self.engine)) .glm53 else if (c.ds4_engine_is_glm_dsa(self.engine)) .glm else .deepseek,
+                .family = if (c.ds4_engine_is_flint(self.engine)) .flint else if (c.ds4_engine_is_deepseek41(self.engine)) .deepseek41 else if (c.ds4_engine_is_qwen4(self.engine)) .qwen else if (c.ds4_engine_is_glm53(self.engine)) .glm53 else if (c.ds4_engine_is_glm_dsa(self.engine)) .glm else .deepseek,
                 .legacy_pro = c.ds4_engine_model_id(self.engine) == 1,
                 .max_effort_min_context = c.ds4_think_max_min_context(),
             };
@@ -22,6 +22,7 @@ pub fn Backend(comptime c: type) type {
         pub fn syntax(self: Self) c.server_model_syntax {
             return switch (self.model().family) {
                 .deepseek41 => c.SERVER_MODEL_SYNTAX_DEEPSEEK41,
+                .flint => c.SERVER_MODEL_SYNTAX_FLINT,
                 .qwen => c.SERVER_MODEL_SYNTAX_QWEN,
                 .glm, .glm53 => c.SERVER_MODEL_SYNTAX_GLM,
                 .deepseek => c.SERVER_MODEL_SYNTAX_DEEPSEEK,
@@ -44,7 +45,7 @@ pub fn Backend(comptime c: type) type {
 
         pub fn render(self: Self, req: *const c.request, messages: *const c.chat_msgs, start: usize, schemas: [*c]const u8, live: bool, order: ?*const c.stop_list, context: usize) [*c]u8 {
             _ = self;
-            if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41)
+            if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and req.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT)
                 return c.ds4_server_materialize_render_other(req.model_syntax, messages, @intCast(start), schemas, &req.tool_orders, req.think_mode, live);
 
             var view = Canonical.View.init(std.heap.c_allocator, c, messages, &req.tool_orders) catch fatal();
@@ -59,7 +60,7 @@ pub fn Backend(comptime c: type) type {
                 // validation. Preserve that exact decision at rendering.
                 .reasoning = .{ .enabled = true, .effort = Canonical.reasoning(c, req.think_mode) },
             };
-            const target: policy.Model = .{ .family = .deepseek41 };
+            const target: policy.Model = .{ .family = if (req.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) .flint else .deepseek41 };
             const rendered = target.prepare(std.heap.c_allocator, request, .{ .start = start, .live_tail = live, .initial_tool_order = initial }, context) catch fatal();
             return rendered.ptr;
         }

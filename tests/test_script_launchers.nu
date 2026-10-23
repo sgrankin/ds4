@@ -101,6 +101,30 @@ def main [] {
     assert (($work | path join 'custom cache') | path exists)
     assert (($work | path join 'custom store') | path exists)
 
+    let flint_args = ['--model' 'models with spaces/flint' '--ctx' '32768' '--prefill-chunk' '1024']
+    let flint_result = (call $launcher (['--server'] ++ $leading ++ ['flint'] ++ $flint_args) {
+        DS4_STATE_CACHE_DIR: ($work | path join 'incompatible state')
+        DS4_STATE_CACHE_HOT_MB: '512' DS4_STATE_CACHE_SSD_MB: '8192'
+        DS4_METAL_V41_SELECTED_TILE: '128' DS4_METAL_V41_RESIDENT_ROUTE_GAP: '.90'
+        DS4_SERVER_CONTEXT_SUFFIX_REUSE: '1' DS4_AGENT_CONTEXT_SUFFIX_REUSE: '1'
+        DS4_V41_COMPRESSED_KV_F16: '1'
+        DS4_SERVER_RESPONSE_STORE_DIR: ($work | path join 'flint store/responses')
+    })
+    assert equal $flint_result.exit_code 0 $flint_result.stderr
+    let flint = $flint_result.stdout | from json
+    assert equal $flint.program 'ds4-server'
+    assert equal $flint.args (['--host' '127.0.0.1' '--batched-session' '2' '--ctx' '262144' '--prefill-chunk' '4096'] ++ $flint_args)
+    assert equal $flint.cwd $work
+    assert equal $flint.env.DS4_SERVER_RESPONSE_STORE_DIR ($work | path join 'flint store/responses')
+    for key in [DS4_STATE_CACHE_DIR DS4_STATE_CACHE_HOT_MB DS4_STATE_CACHE_SSD_MB
+        DS4_METAL_V41_SELECTED_TILE DS4_METAL_V41_RESIDENT_ROUTE_GAP
+        DS4_SERVER_CONTEXT_SUFFIX_REUSE DS4_AGENT_CONTEXT_SUFFIX_REUSE DS4_V41_COMPRESSED_KV_F16] {
+        assert equal ($flint.env | get --optional $key) null $'Flint inherited ($key)'
+    }
+    let flint_agent = call $launcher ($leading ++ ['flint'] ++ $flint_args)
+    assert equal $flint_agent.exit_code 2
+    assert ($flint_agent.stderr | str contains '--server flint')
+
     let context = (call $launcher ($leading ++ ['context-fast'])).stdout | from json
     assert equal $context.env.DS4_METAL_V41_RESIDENT_ROUTE_GAP '0'
     assert equal $context.env.DS4_AGENT_CONTEXT_SUFFIX_REUSE '1'
@@ -129,5 +153,5 @@ def main [] {
         PATH: ([$bin] ++ $env.PATH)
         DS4_TEST_EXIT: '9'
     }).exit_code 9
-    print 'PASS: Nu launchers (10 cases): profiles, quoted argv, overrides, shader paths, cache paths, help and child status'
+    print 'PASS: Nu launchers (11 cases): profiles, quoted argv, overrides, shader paths, cache paths, help and child status'
 }

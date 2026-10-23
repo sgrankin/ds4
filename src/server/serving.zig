@@ -355,7 +355,9 @@ pub fn modelValues(out: *c.buf, id: [*c]const u8, name: [*c]const u8, context: c
     number(out, context);
     append(out, ",\"max_completion_tokens\":");
     number(out, @min(default_tokens, context));
-    append(out, ",\"is_moderated\":false},\"supported_parameters\":[\"tools\",\"tool_choice\",\"max_tokens\",\"temperature\",\"top_p\",\"top_k\",\"min_p\",\"ignore_eos\",\"stop\",\"seed\",\"stream\",\"reasoning_effort\"]}");
+    append(out, ",\"is_moderated\":false},\"supported_parameters\":[\"tools\",\"tool_choice\",\"max_tokens\",\"temperature\",\"top_p\",\"top_k\",\"min_p\",\"ignore_eos\",\"stop\",\"seed\",\"stream\"");
+    if (!same(id, "flint") and !same(id, "flint-int4")) append(out, ",\"reasoning_effort\"");
+    append(out, "]}");
 }
 fn models(srv: *c.server, fd: c_int, id: [*c]const u8, stop: [*c]const volatile c.sig_atomic_t) void {
     var out = zero(c.buf);
@@ -365,7 +367,7 @@ fn models(srv: *c.server, fd: c_int, id: [*c]const u8, stop: [*c]const volatile 
         append(&out, "\n");
     } else {
         append(&out, "{\"object\":\"list\",\"data\":[");
-        if (c.ds4_engine_is_deepseek41(srv.engine)) modelValues(&out, modelId(srv.engine), c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens) else if (c.ds4_engine_is_qwen4(srv.engine)) {
+        if (c.ds4_engine_is_deepseek41(srv.engine) or c.ds4_engine_is_flint(srv.engine)) modelValues(&out, modelId(srv.engine), c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens) else if (c.ds4_engine_is_qwen4(srv.engine)) {
             for ([_][*:0]const u8{ "qwen3.8-flash-next", "qwen3.8-flash-next-chat", "qwen3.8-flash-next-reasoner" }, 0..) |alias, index| {
                 if (index != 0) append(&out, ",");
                 modelValues(&out, alias, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);

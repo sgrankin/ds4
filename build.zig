@@ -55,7 +55,7 @@ fn nativeObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
     const m = module(b, target, sdk, optimize);
     m.root_source_file = b.path(source);
     m.addImport(api_name, api);
-    if (std.mem.startsWith(u8, source, "src/server/")) servingImports(b, m, target, optimize);
+    if (std.mem.startsWith(u8, source, "src/server/") or std.mem.eql(u8, source, "src/models/flint/tokenizer.zig")) servingImports(b, m, target, optimize);
     if (std.mem.eql(u8, source, "src/server/serving_entry.zig"))
         m.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "src/server/http_api.h"));
     return b.addObject(.{ .name = std.fs.path.stem(source), .root_module = m }).getEmittedBin();
@@ -71,9 +71,13 @@ fn servingImports(b: *std.Build, destination: *std.Build.Module, target: std.Bui
     const prompt = b.createModule(.{ .root_source_file = b.path("src/models/deepseek41/prompt.zig"), .target = target, .optimize = optimize });
     prompt.addImport("serving_types", types);
     model.addImport("ds41_prompt", prompt);
+    const flint_prompt = b.createModule(.{ .root_source_file = b.path("src/models/flint/prompt.zig"), .target = target, .optimize = optimize });
+    flint_prompt.addImport("serving_types", types);
+    model.addImport("flint_prompt", flint_prompt);
     destination.addImport("serving_types", types);
     destination.addImport("ds4_model", model);
     destination.addImport("ds41_prompt", prompt);
+    destination.addImport("flint_prompt", flint_prompt);
 }
 
 fn executable(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, core: *std.Build.Step.Compile, cache: ?std.Build.LazyPath, kvstore: ?std.Build.LazyPath, name: []const u8, frontend: std.Build.LazyPath, optimize: std.builtin.Optimize) *std.Build.Step.Compile {
@@ -84,6 +88,7 @@ fn executable(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, 
     m.linkLibrary(core);
     m.linkFramework("Foundation", .{});
     m.linkFramework("Metal", .{});
+    m.linkSystemLibrary("icucore", .{});
     return b.addExecutable(.{ .name = name, .root_module = m });
 }
 
@@ -116,9 +121,9 @@ pub fn build(b: *std.Build) void {
     core_module.addObjectFile(web_data);
     core_module.addObjectFile(native_web);
     for ([_][]const u8{
-        "src/ds4.c",      "src/ds4_distributed.c", "src/ds4_tp.c",       "src/ds4_layer_pack.c",
-        "src/ds4_help.c", "src/ds4_eval_cases.c",  "src/ds4_gpu_args.c", "src/linenoise.c",
-        "src/rax.c",      "src/metal/ds4_metal.m",
+        "src/ds4.c",      "src/ds4_distributed.c", "src/ds4_tp.c",             "src/ds4_layer_pack.c",
+        "src/ds4_help.c", "src/ds4_eval_cases.c",  "src/ds4_gpu_args.c",       "src/linenoise.c",
+        "src/rax.c",      "src/metal/ds4_metal.m", "src/metal/flint/driver.m",
     }) |source| {
         const flags = if (std.mem.endsWith(u8, source, ".m")) objc_flags else c_flags;
         core_module.addObjectFile(object(b, target, sdk, clang, source, b.fmt("core-{s}", .{std.fs.path.stem(source)}), .fast, flags));
@@ -152,6 +157,14 @@ pub fn build(b: *std.Build) void {
     {
         const api = generatedApi(b, target, sdk, optimize, "src/ds4_tokenizer.h");
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/tokenizer.zig", "tokenizer_c", api));
+    }
+    {
+        const api = generatedApi(b, target, sdk, optimize, "src/flint_tokenizer.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/models/flint/tokenizer.zig", "flint_tokenizer_c", api));
+    }
+    {
+        const api = generatedApi(b, target, sdk, optimize, "src/models/flint/api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/flint_entry.zig", "flint_c", api));
     }
     {
         const api = generatedApi(b, target, sdk, optimize, "src/ds4_pretokenizer.h");
@@ -578,6 +591,13 @@ pub fn build(b: *std.Build) void {
     const tokenizer_test_frontend = object(b, target, sdk, clang, "tests/test_tokenizer_piece.c", "test-tokenizer-piece-main", optimize, test_flags);
     const tokenizer_test = executable(b, target, sdk, core, null, null, "test-tokenizer-piece", tokenizer_test_frontend, optimize);
     b.step("tokenizer-test", "Build the production tokenizer map/piece fixture").dependOn(&b.addInstallArtifact(tokenizer_test, .{}).step);
+    const flint_tokenizer_frontend = object(b, target, sdk, clang, "tests/test_flint_tokenizer.c", "test-flint-tokenizer-main", optimize, test_flags);
+    const flint_tokenizer_test = executable(b, target, sdk, core, null, null, "test-flint-tokenizer", flint_tokenizer_frontend, optimize);
+    b.step("flint-tokenizer-test", "Build the native Flint tokenizer parity fixture").dependOn(&b.addInstallArtifact(flint_tokenizer_test, .{}).step);
+    const flint_api = generatedApi(b, target, sdk, optimize, "src/models/flint/api.h");
+    const flint_smoke_frontend = nativeObject(b, target, sdk, optimize, "src/flint_smoke_entry.zig", "flint_c", flint_api);
+    const flint_smoke = executable(b, target, sdk, core, null, null, "flint-smoke", flint_smoke_frontend, optimize);
+    b.step("flint-smoke", "Build the native Flint driver/model qualification executable").dependOn(&b.addInstallArtifact(flint_smoke, .{}).step);
     // This fixture includes ds4_cli.c and opens a model; build only here.
     const cli_test_frontend = object(b, target, sdk, clang, "tests/test_deepseek41_cli.c", "test-deepseek41-cli-main", optimize, test_flags);
     const cli_test = executable(b, target, sdk, core, null, null, "test-deepseek41-cli", cli_test_frontend, optimize);

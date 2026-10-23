@@ -49,7 +49,7 @@ fn maximumStart() usize {
 const Start = struct { after: usize, syntax: *const Syntax };
 fn findStart(raw: []const u8, offset: usize, family: c.server_model_syntax) ?Start {
     if (offset > raw.len) return null;
-    if (family == c.SERVER_MODEL_SYNTAX_GLM or family == c.SERVER_MODEL_SYNTAX_QWEN) {
+    if (family == c.SERVER_MODEL_SYNTAX_GLM or family == c.SERVER_MODEL_SYNTAX_FLINT or family == c.SERVER_MODEL_SYNTAX_QWEN) {
         const syntax = if (family == c.SERVER_MODEL_SYNTAX_QWEN) &qwen_syntax else &glm_syntax;
         const found = std.mem.findPos(u8, raw, offset, text(syntax.tool_calls_start)) orelse return null;
         return .{ .after = found + text(syntax.tool_calls_start).len, .syntax = syntax };
@@ -192,7 +192,7 @@ pub fn update(tracker: *Tracker, raw: []const u8) void {
                         tracker.decode = c.DSML_DECODE_STRUCTURAL;
                         return;
                     };
-                    const is_string = tracker.model_syntax == c.SERVER_MODEL_SYNTAX_GLM or tracker.model_syntax == c.SERVER_MODEL_SYNTAX_QWEN or stringAttribute(raw, tracker.pos, end + 1);
+                    const is_string = tracker.model_syntax == c.SERVER_MODEL_SYNTAX_GLM or tracker.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT or tracker.model_syntax == c.SERVER_MODEL_SYNTAX_QWEN or stringAttribute(raw, tracker.pos, end + 1);
                     tracker.pos = end + 1;
                     if (is_string) {
                         tracker.mode = c.DSML_TRACK_STRING_BODY;
@@ -209,7 +209,7 @@ pub fn update(tracker: *Tracker, raw: []const u8) void {
                     tracker.decode = c.DSML_DECODE_STRUCTURAL;
                     return;
                 }
-                if (tracker.model_syntax == c.SERVER_MODEL_SYNTAX_GLM) {
+                if (tracker.model_syntax == c.SERVER_MODEL_SYNTAX_GLM or tracker.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) {
                     // GLM puts function and argument names between tags.
                     tracker.pos += 1;
                     continue;

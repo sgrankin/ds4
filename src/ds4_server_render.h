@@ -33,6 +33,8 @@ void ds4_server_render_object(buf *out, const char *json);
 void ds4_server_render_dsml_calls(buf *out, const tool_calls *calls, bool v41);
 void ds4_server_render_glm_calls(buf *out, const tool_calls *calls,
     const tool_schema_orders *orders);
+void ds4_server_render_flint_calls(buf *out, const tool_calls *calls,
+    const tool_schema_orders *orders);
 void ds4_server_render_qwen_calls(buf *out, const tool_calls *calls,
     bool has_content, const tool_schema_orders *orders);
 
@@ -42,6 +44,8 @@ void ds4_server_render_qwen_calls(buf *out, const tool_calls *calls,
 char *ds4_server_render_deepseek41(const chat_msgs *messages, int start,
     const char *schemas, ds4_think_mode mode, bool live_tail,
     const stop_list *initial_order);
+char *ds4_server_render_flint(const chat_msgs *messages, int start,
+    const char *schemas);
 void ds4_server_render_replay_message(buf *out, const chat_msg *message);
 char *ds4_server_render_replay_history(const chat_msgs *messages, int skip);
 

@@ -338,6 +338,8 @@ ds4_context_memory ds4_context_memory_estimate_with_prefill_mode(
         int ctx_size,
         uint32_t prefill_chunk,
         bool ssd_streaming);
+/* Model-aware configured session capacity, including model-specific scratch. */
+ds4_context_memory ds4_engine_context_memory_estimate(ds4_engine *e, int ctx_size);
 bool ds4_log_is_tty(FILE *fp);
 void ds4_log(FILE *fp, ds4_log_type type, const char *fmt, ...);
 int ds4_engine_generate_argmax(ds4_engine *e, const ds4_tokens *prompt,
@@ -365,6 +367,7 @@ int ds4_dump_chat_tokenization(const char *model_path,
 int ds4_engine_head_test(ds4_engine *e, const ds4_tokens *prompt);
 bool ds4_engine_is_glm_dsa(ds4_engine *e);
 bool ds4_engine_is_deepseek41(ds4_engine *e);
+bool ds4_engine_is_flint(ds4_engine *e);
 const char *ds4_deepseek41_reasoning_effort_text(ds4_think_mode mode);
 int ds4_engine_first_token_test(ds4_engine *e, const ds4_tokens *prompt);
 int ds4_engine_metal_graph_test(ds4_engine *e, const ds4_tokens *prompt);
@@ -633,6 +636,8 @@ int ds4_engine_routed_quant_bits(ds4_engine *e);
 bool ds4_engine_has_output_head(ds4_engine *e);
 bool ds4_engine_has_mtp(ds4_engine *e);
 int ds4_engine_mtp_draft_tokens(ds4_engine *e);
+/* Resident decode packet width, distinct from draft-model/MTP availability. */
+int ds4_engine_decode_packet_size(ds4_engine *e);
 bool ds4_engine_mtp_exact_sampling(ds4_engine *e);
 const ds4_tokens *ds4_session_tokens(ds4_session *s);
 

@@ -345,6 +345,14 @@ pub const Input = struct {
         request.temperature = c.DS4_DEFAULT_TEMPERATURE;
         request.top_p = c.DS4_DEFAULT_TOP_P;
         request.min_p = c.DS4_DEFAULT_MIN_P;
+        if (defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT) {
+            // Match the model's reference harness; explicit fields decoded
+            // below retain their own flags, including zero-valued controls.
+            request.temperature = 1;
+            request.top_k = 20;
+            request.top_p = 0.95;
+            request.min_p = 0;
+        }
         request.think_mode = c.DS4_THINK_HIGH;
         input.thinking_enabled = true;
         input.reasoning_effort = c.DS4_THINK_HIGH;
@@ -363,6 +371,10 @@ pub const Input = struct {
         // The old API decoder stops at the closing brace. It does not impose
         // end-of-document validation or change partial malformed-input cursors.
         if (reader.peek() != '}') return error.InvalidJson;
+        if (defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT and input.got_thinking) {
+            message(error_text, "Flint's template uses model-controlled reasoning; reasoning effort and enable_thinking controls are unsupported");
+            return error.Policy;
+        }
         return result;
     }
 
@@ -428,10 +440,10 @@ pub const Input = struct {
         } else if (std.mem.eql(u8, key, "top_p")) {
             request.top_p = @floatCast(try reader.readNumber());
             request.top_p_set = true;
-        } else if ((chat or completion) and std.mem.eql(u8, key, "min_p")) {
+        } else if ((chat or completion or defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT) and std.mem.eql(u8, key, "min_p")) {
             request.min_p = @floatCast(try reader.readNumber());
             request.min_p_set = true;
-        } else if (!responses and std.mem.eql(u8, key, "top_k")) {
+        } else if ((!responses or defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT) and std.mem.eql(u8, key, "top_k")) {
             try reader.readInt(&request.top_k);
             request.top_k_set = true;
         } else if ((chat or completion) and std.mem.eql(u8, key, "seed")) {
@@ -448,6 +460,7 @@ pub const Input = struct {
             input.got_thinking = true;
         } else if (!responses and std.mem.eql(u8, key, "reasoning_effort")) {
             try effortValue(reader, &input.reasoning_effort);
+            if (defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT) input.got_thinking = true;
         } else if (chat and std.mem.eql(u8, key, "chat_template_kwargs")) {
             // Qwen's documented enable_thinking/reasoning_effort controls;
             // unknown template keys remain ignored extensions.
