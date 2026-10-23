@@ -3,8 +3,6 @@
 #define _DARWIN_C_SOURCE 1
 #define _POSIX_C_SOURCE 200809L
 #define _FORTIFY_SOURCE 0
-#define DS4_NATIVE_RESPONSE_STORE 1
-#define DS4_NATIVE_STATE_CACHE_RUNTIME 1
 #include "ds4_server_boot.h"
 #include "ds4_server_images.h"
 #include "ds4_state_cache_runtime.h"

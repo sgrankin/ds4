@@ -2,13 +2,9 @@
 #define DS4_AGENT_TEST_NO_MAIN
 #include "../ds4_agent.c"
 #include <sys/resource.h>
-#ifdef DS4_NATIVE_AGENT_FRONTEND
 #define agent_completion_worker ds4_agent_completion_worker
 #define agent_switch_completion_callback ds4_agent_frontend_complete
-#endif
-#ifdef DS4_NATIVE_AGENT_RESULT
 #define agent_tool_observation_commit ds4_agent_result_commit
-#endif
 #if defined(__APPLE__) || defined(__linux__)
 #include <sys/xattr.h>
 #endif

@@ -398,7 +398,7 @@ pub const Runtime = struct {
         if (destination & 1 != 0) return null;
         return .{ .source = @intCast(source), .destination = @intCast(destination) };
     }
-    fn selectDisk(self: Runtime, edited: *const c.ds4_tokens, fresh: c_int, plan: *c.agent_context_suffix_plan) bool {
+    pub fn selectDisk(self: Runtime, edited: *const c.ds4_tokens, fresh: c_int, plan: *c.agent_context_suffix_plan) bool {
         if (!self.cacheAllowed()) return false;
         const worker = self.worker;
         const prerope = preropeRequested();
@@ -459,7 +459,7 @@ pub const Runtime = struct {
     /// complete following message/history must be evaluated freshly. Unknown
     /// role layouts rebuild. Approximate sources are private pre-RoPE only;
     /// canonical prefix restoration always excludes them.
-    fn selectSuffix(self: Runtime, edited: *const c.ds4_tokens, requested: c_int, plan: *c.agent_context_suffix_plan) bool {
+    pub fn selectSuffix(self: Runtime, edited: *const c.ds4_tokens, requested: c_int, plan: *c.agent_context_suffix_plan) bool {
         plan.* = zero(c.agent_context_suffix_plan);
         plan.source_frontier = -1;
         const worker = self.worker;

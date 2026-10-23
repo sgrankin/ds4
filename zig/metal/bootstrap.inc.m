@@ -43,14 +43,7 @@ bool ds4_metal_bootstrap_queue(void) {
 }
 
 bool ds4_metal_bootstrap_bookkeeping(void) {
-    #ifdef DS4_NATIVE_METAL_EXACT_CACHE
     ds4_metal_exact_cache_init();
-    #else
-    g_model_buffer_cache = [NSMutableDictionary dictionary];
-    g_model_buffer_cache_bytes = 0;
-    g_model_buffer_cache_evictions = 0;
-    g_model_buffer_cache_over_limit = 0;
-    #endif
     g_q4_expert_table_cache = [NSMutableDictionary dictionary];
     g_q4_expert_layer_residency_cache = [NSMutableDictionary dictionary];
     g_pipeline_cache = [NSMutableDictionary dictionary];
@@ -59,9 +52,6 @@ bool ds4_metal_bootstrap_bookkeeping(void) {
     g_transient_buffers = [NSMutableArray array];
     g_pending_cbs = [NSMutableArray array];
     if (
-    #ifndef DS4_NATIVE_METAL_EXACT_CACHE
-        !g_model_buffer_cache ||
-    #endif
         !g_q4_expert_table_cache ||
         !g_q4_expert_layer_residency_cache ||
         !g_pipeline_cache || !g_dsv4_completion_cache ||
@@ -73,11 +63,7 @@ bool ds4_metal_bootstrap_bookkeeping(void) {
         g_pipeline_cache = nil;
         g_q4_expert_layer_residency_cache = nil;
         g_q4_expert_table_cache = nil;
-    #ifdef DS4_NATIVE_METAL_EXACT_CACHE
         ds4_metal_exact_cache_cleanup();
-    #else
-        g_model_buffer_cache = nil;
-    #endif
         g_queue = nil;
         g_device = nil;
         return 0;
@@ -2699,11 +2685,6 @@ void ds4_metal_bootstrap_retire_maps(void) {
     g_model_views.wrap_count = 0;
     g_model_views.wrap_bytes = 0;
     g_model_views.wrap_max_bytes = 0;
-    #ifndef DS4_NATIVE_METAL_EXACT_CACHE
-    g_model_buffer_cache_bytes = 0;
-    g_model_buffer_cache_evictions = 0;
-    g_model_buffer_cache_over_limit = 0;
-    #endif
 }
 
 void ds4_metal_bootstrap_retire_bookkeeping(void) {
@@ -2715,12 +2696,7 @@ void ds4_metal_bootstrap_retire_bookkeeping(void) {
     g_q4_expert_layer_residency_cache = nil;
     [g_q4_expert_table_cache removeAllObjects];
     g_q4_expert_table_cache = nil;
-    #ifdef DS4_NATIVE_METAL_EXACT_CACHE
     ds4_metal_exact_cache_cleanup();
-    #else
-    [g_model_buffer_cache removeAllObjects];
-    g_model_buffer_cache = nil;
-    #endif
     g_transient_buffers = nil;
     g_pending_cbs = nil;
     g_library = nil;

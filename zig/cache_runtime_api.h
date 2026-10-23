@@ -3,7 +3,6 @@
 #define _DARWIN_C_SOURCE 1
 #define _POSIX_C_SOURCE 200809L
 #define _FORTIFY_SOURCE 0
-#define DS4_NATIVE_STATE_CACHE_RUNTIME 1
 #include "ds4_state_cache_runtime.h"
 #include <errno.h>
 #include <stdio.h>

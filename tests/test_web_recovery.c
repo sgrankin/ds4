@@ -1,12 +1,8 @@
 /* Exercise the real CDP/HTTP transport against the local fixture server. */
-#ifdef DS4_NATIVE_WEB
 #include "../ds4_web_internal.h"
 #define web_open_tab ds4_web_open_tab
 #define web_close_tab ds4_web_close_tab
 #define web_tab_free ds4_web_tab_free
-#else
-#include "../ds4_web.c"
-#endif
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

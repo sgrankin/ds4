@@ -8,9 +8,10 @@ the supported OpenResponses contract.
 
 This tree contains the handwritten implementation of the supported DeepSeek
 V4.1 Metal runtime, its Agent and server, and the CLI, benchmark and evaluation
-frontends. The optional Web client is a separate native library. The build keeps
-the C implementations selectable for comparison and compatibility; this is not
-a rewrite of every model family, backend or third-party dependency.
+frontends. The optional Web client is a separate Zig library. All five program
+entry points are Zig. Qwen and GLM retain their C inference implementations
+behind the same frontends; third-party dependencies and the Metal driver retain
+their original languages.
 
 ## Scope and organization
 
@@ -44,14 +45,14 @@ Clang deployment target. Older deployment targets and other platforms are not
 qualified by this build.
 
 ```sh
-# Native selection; installs all five programs in zig-out/bin.
+# Installs all five programs in zig-out/bin.
 tools/zig-build
 zig-out/bin/ds4 --help
 zig-out/bin/ds4-agent --help
 zig-out/bin/ds4-server --help
 
-# Independent C reference installation.
-tools/zig-build -Dnative=false --prefix .workspaces/zig-c-reference
+# Optional compatibility names in the repository root, using the same build.
+make
 
 # Debug native owners and fixtures, without replacing the release installation.
 tools/zig-build -Doptimize=Debug --prefix .workspaces/zig-debug
@@ -73,10 +74,12 @@ Use the existing presets with an explicit binary directory:
 ./ds4-local --bin-dir "$PWD/zig-out/bin" --server persistent-fast --model MODEL
 ```
 
-The original Make build remains available. `-Dnative=false` selects the retained
-C algorithms over the same current headers and compatibility fixes. Selecting
-the native build does not enable approximation features; resident substitution,
-decoder replay and suffix relocation retain their existing preset/opt-in rules.
+Make delegates to this same Zig build and copies the five executables to the
+repository root for existing launchers. Model metadata selects the C Qwen/GLM
+engine or the Zig DeepSeek V4.1 engine; no separate frontend is needed. Historical
+C implementations remain available in version history for comparison. Resident
+substitution, decoder replay and suffix relocation retain their existing
+preset/opt-in rules.
 
 ## C, Objective-C and shader boundaries
 
@@ -100,12 +103,11 @@ image codecs, line editing and radix-tree support, remain dependencies. Public
 C compatibility shells, platform/signal installation, selected diagnostic I/O
 and TP/distributed transport also remain explicit boundaries.
 
-Legacy and other-family inference/render paths, compatibility-only steering
-profiles and non-Metal backends retain C implementations. Shared utilities and
-selected kernels used by
-DS4.1 do not imply a complete GLM/Qwen, CUDA, ROCm or CPU-engine rewrite. The
-large C/Objective-C files still contain guarded reference bodies and those
-remaining paths; their presence alone does not identify the selected owner.
+Qwen/GLM and legacy model inference paths retain C implementations. Shared
+utilities and selected kernels used by DS4.1 do not imply a complete GLM/Qwen
+rewrite. This build supports macOS Metal; other backend code still present for
+upstream correspondence is not a maintained alternate product. Migration
+switches and duplicate C bodies for the adopted Zig implementation are removed.
 
 ## Qualification and evidence
 

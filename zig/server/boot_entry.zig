@@ -1,6 +1,8 @@
 //! Sole facade: C option fixtures and production startup use these same bodies.
 const c = @import("server_boot_c");
 const owner = @import("boot.zig");
+export var ds4_server_stop_requested: c.sig_atomic_t = 0;
+export var ds4_server_listen_fd: c.sig_atomic_t = -1;
 
 export fn ds4_server_boot_parse(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend) c.server_config {
     return owner.parse(argc, argv, default_backend);

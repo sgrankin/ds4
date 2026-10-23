@@ -9,12 +9,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-/* Real production cache and serializer hash, synthetic independently laid-out
- * native bytes. Supply a fresh persistent directory; no model/GPU is opened.
- * macOS example (dead_strip discards unused KV-store engine entry points):
- * clang -std=c11 -O2 -ffunction-sections -fdata-sections tests/test_state_cache.c
- *       ds4_state_cache.c ds4_kvstore.c -Wl,-dead_strip -lm -o test-state-cache
- */
+/* Build: tools/zig-build state-cache-test */
 
 typedef struct { uint8_t *p, *pre; uint64_t bytes, pre_bytes; uint32_t n; } fixture;
 

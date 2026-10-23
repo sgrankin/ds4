@@ -29,6 +29,8 @@ typedef struct {
 server_config ds4_server_boot_parse(int argc, char **argv,
     ds4_backend default_backend);
 void ds4_server_boot_close(server *runtime);
+extern volatile sig_atomic_t ds4_server_stop_requested;
+extern volatile sig_atomic_t ds4_server_listen_fd;
 int ds4_server_boot_main(int argc, char **argv,
     volatile sig_atomic_t *stop, volatile sig_atomic_t *listen_fd,
     ds4_backend default_backend);

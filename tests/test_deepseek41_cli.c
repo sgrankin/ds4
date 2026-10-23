@@ -1,8 +1,8 @@
 /* No generation: exercise the actual CLI transcript updater with the V4.1 fixture. */
-#define main ds4_cli_main
-#include "../ds4_cli.c"
-#undef main
+#include "../ds4_cli_chat.h"
 #include <assert.h>
+#include <stdio.h>
+#include <string.h>
 
 int main(int argc, char **argv) {
     if (argc != 2) return 2;
@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
         (ds4_think_mode)(DS4_THINK_LEVEL_BASE + 25), DS4_THINK_MAX,
         (ds4_think_mode)DS4_THINK_LEVEL_BASE, DS4_THINK_HIGH, DS4_THINK_NONE};
     for (int system = 0; system < 2; system++) {
-        repl_chat chat = {.initial_system_text = system != 0};
+        ds4_cli_chat chat = {.initial_system_text = system != 0};
         ds4_chat_begin(engine, &chat.transcript);
         chat.think_prefix_pos = chat.transcript.len;
         ds4_cli_chat_apply_think_prefix(engine, &chat, modes[0]);

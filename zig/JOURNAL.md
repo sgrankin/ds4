@@ -76,8 +76,8 @@ copying and SSD wait costs before choosing a more elaborate queue.
 - Actual Metal objects/ARC operations and pipeline catalogues remain Objective-C;
   MSL kernels and third-party C dependencies remain in their existing languages.
 - Build using `tools/zig-build`; selected binaries are in `zig-out/bin`.
-  Root-level Make executables are independent. Presets select native binaries
-  with `./ds4-local --bin-dir ./zig-out/bin ...`.
+  Make delegates to the same build and supplies root executable names. Presets
+  can select a separate installation with `./ds4-local --bin-dir ./zig-out/bin ...`.
 - The server already has one engine, multiple active session slots, a decode /
   bounded-prefill coordinator, Responses continuation and durable conversations.
   Stateful Responses WebSocket serving is implemented and qualified. See
@@ -105,8 +105,8 @@ and [the implementation guide](README.md) for exact scope, commands and limits.
   native 1.092 s. Native no-op build overhead is about one second.
 - Passing behavior checks does not establish good source architecture. The
   original mechanical translation failed readability expectations. Handwritten
-  owners improve readability, while C interop and retained dual implementations
-  still impose complexity.
+  owners improve readability, while C interop remains a source of complexity. The adoption cleanup removes
+  the duplicate C implementations rather than maintaining two products.
 
 ## Current architectural slice and next steps
 
@@ -164,6 +164,31 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
 ## Progress log
 
 ### 2026-10-23
+
+- Adoption cleanup completed: all five production mains are Zig. Removed the
+  migration build option, native-selection switches and duplicate C owners;
+  retain Qwen/GLM C engines behind the shared frontends and actual Objective-C
+  Metal driver boundary. Server signal flags have one Zig owner shared with C
+  signal/I/O helpers. Make now delegates to Zig, preserving root launch paths;
+  GGUF scoring links the production engine. Main is unchanged.
+- Qualified frozen-parent vs cleanup inference on DeepSeek, GLM and Qwen:
+  short generated continuations and every reported top-20 logit/logprob value
+  match exactly. GLM uses SSD streaming; Qwen uses its normal Metal path with
+  residency/warmup disabled (n-grams remain disk-only, no Qwen SSD support).
+  22 ReleaseFast host fixtures, seven Debug fixtures, Qwen/GLM GPU suites and
+  all 26 required live WebSocket checks pass. Both live servers exit cleanly.
+  Installed the same executables through Make at the usual root paths; both
+  `make all` and `make test` pass end to end.
+- The default DeepSeek Metal fixture has a pre-existing FP4 rounding-midpoint
+  failure reproduced identically by the frozen parent; no kernel fix is bundled
+  with adoption. The earlier three WebSocket answer-quality failures also remain
+  unchanged. A resident GLM baseline was pressure-stopped before switching to
+  the working SSD path. Full details and commands are in the
+  [cleanup report](../speed-bench/experiments/zig-adoption-20261023/README.md);
+  raw results stay under `.workspaces/zig-adoption-cleanup-20261023/`.
+- Recommended source layout: rename `zig/` to `src/` in a separate move commit
+  after cleanup. This is a proposal, not a completed directory move. Keep build
+  metadata and project documentation at root and organize source by component.
 
 - User authorized the request/model architectural change. Added native logical
   records and a C-free DS4.1 preparation implementation, replacing the previous

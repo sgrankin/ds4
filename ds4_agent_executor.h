@@ -10,15 +10,12 @@
 #define DS4_AGENT_WEB_HEAD_LINES 100
 
 typedef struct agent_bash_job agent_bash_job;
-#ifdef DS4_NATIVE_AGENT_BASH
-/* Actual selected list node, moved once. Process owns its monitor/FD/group;
- * ToolRuntime owns only this node and its next link. The old C process layout
- * stays in the inverse Bash branch, not mirrored into native code. */
+/* Process owns its monitor, descriptors and process group. ToolRuntime owns
+ * the list node and its next link; the process itself stays opaque. */
 struct agent_bash_job {
     ds4_agent_bash *process;
     struct agent_bash_job *next;
 };
-#endif
 
 /* The four existing Worker fields form one actual tool runtime owner. Web is
  * created/freed by Worker startup/shutdown; native actions borrow its handle. */

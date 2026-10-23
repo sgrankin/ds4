@@ -1824,12 +1824,8 @@ static int check_vision_routing(void) {
         for (unsigned shape = 0; shape < sizeof(counts) / sizeof(*counts); shape++) {
             const uint32_t count = counts[shape];
             REQUIRE(ds4_gpu_begin_commands());
-#ifdef DS4_NATIVE_ENGINE_ROUTE_SERVICES
             const ds4_model_config route_config = ds41_native_config();
             REQUIRE(ds4_native_graph_route_batch41(g, &model, &layer, &route_config, count));
-#else
-            REQUIRE(ds41_route_batch(g, &model, &layer, count));
-#endif
             REQUIRE(ds4_gpu_end_commands());
             const int32_t *selected = ds4_gpu_tensor_contents(g->batch.selected);
             const float *weights = ds4_gpu_tensor_contents(g->batch.route_weights);

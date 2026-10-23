@@ -6,7 +6,7 @@
  * the ds4_gpu_config struct, and the new tensor APIs.
  *
  * Why not in ds4_gpu.h? The legacy ds4_gpu.h is included from C-only
- * callers (ds4.c, ds4_cli.c, etc.) and from the Metal build, but is NOT
+ * callers (ds4.c, the Zig CLI, etc.) and from the Metal build, but is NOT
  * included from ds4_cuda.cu historically. That asymmetry hid pre-existing
  * signature mismatches between the legacy header and ds4_cuda.cu. We keep
  * the legacy header opaque and put the new shared types here, so this
