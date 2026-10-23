@@ -97,7 +97,7 @@ and hardware-specific setups:
 
 This branch also offers a Metal build with handwritten Zig modules:
 `tools/zig-build`, with programs in `zig-out/bin`. See the
-[Zig module guide](zig/README.md) for scope, model backends, presets and measurements.
+[Zig module guide](src/README.md) for scope, model backends, presets and measurements.
 
 For a first run on a 96 or 128 GB machine, download DeepSeek V4 Flash Q2:
 

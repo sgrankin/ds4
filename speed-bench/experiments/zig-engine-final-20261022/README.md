@@ -132,7 +132,7 @@ checks. The install times reuse build caches and are setup observations, not
 full-rebuild measurements. The final default installation completed in 0.554 s;
 [all five installed binary hashes](evidence/installed.json) match the qualified
 native prefix exactly. Earlier module-specific GPU, payload, suffix, HTTP and
-agent qualifications remain in the [milestone guide](../../../zig/README.md).
+agent qualifications remain in the [milestone guide](../../../src/README.md).
 
 ## Reproduction
 
@@ -167,7 +167,7 @@ entries and 20,827 physical lines in total, including comments and blank lines.
 A bounded final peer review found no concrete blockers; selected Zig/build
 formatter checks and the final diff check passed. Most public records come
 from actual C/SDK headers; the earlier checkpoint-cache `Blob`/`Stats` manual
-extern-ABI exception is documented in the [guide](../../../zig/README.md).
+extern-ABI exception is documented in the [guide](../../../src/README.md).
 
 The selected package owns active V4.1 model/configuration/weights,
 graph/resources, scalar/batch attention, execution/MoE/prefill/streaming,

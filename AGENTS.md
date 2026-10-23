@@ -5,7 +5,7 @@ Start every response with an expressive kaomoji that fits what you are saying.
 Favor the simplest implementation that lets us learn whether a change is useful.
 Write for the experiment we need now, not hypothetical future callers or mistakes.
 
-Read [zig/JOURNAL.md](zig/JOURNAL.md) when resuming rewrite or serving work.
+Read [src/JOURNAL.md](src/JOURNAL.md) when resuming rewrite or serving work.
 Update it at meaningful checkpoints with decisions, progress and next steps;
 distinguish completed work from proposals and retain relevant evidence links.
 

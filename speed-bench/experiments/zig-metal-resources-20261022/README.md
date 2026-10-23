@@ -8,14 +8,14 @@ application/runtime performance is reported separately, with no speed claim here
 
 ## Actual boundary
 
-The [native resource owner](../../../zig/metal/resources.zig) owns admitted
+The [native resource owner](../../../src/metal/resources.zig) owns admitted
 allocation sizes, view offset/range policy, live-handle membership and
 live/peak accounting, CPU read/write/fill/copy decisions and the distinction
 between an existing command batch and direct CPU access. Its
-[public facade](../../../zig/metal/resources_entry.zig) preserves the existing
-GPU API. A small [ARC bridge](../../../zig/metal/resources.inc.m) creates/releases
+[public facade](../../../src/metal/resources_entry.zig) preserves the existing
+GPU API. A small [ARC bridge](../../../src/metal/resources.inc.m) creates/releases
 retained tensor handles, borrows immutable regions/contents and encodes the
-existing blit operation. The [shared header](../../../zig/metal/resources.h)
+existing blit operation. The [shared header](../../../src/metal/resources.h)
 describes regions and diagnostic totals rather than copying an Objective-C
 class layout. SDK mutex bindings replace guessed platform layouts.
 

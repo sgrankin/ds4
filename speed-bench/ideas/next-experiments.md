@@ -37,7 +37,7 @@ expanding the harness or migrating disconnected code merely for line counts.
 | 23. Resident-route policy | 05:43–06:43 UTC | Move the complete active nine-function route policy using existing records and frozen-C differential fixtures. Preserve caps/ordering/arithmetic, then compare actual resident-fast coding/route counters. |
 | 24. Final review | Remaining window | Inspect retained tradeoffs and exact remaining C scope, install qualified binaries and consolidate a short reviewable branch while retaining individual experiments. |
 
-Items1–20 are retained with separate reports linked from [the module guide](../../zig/README.md).
+Items1–20 are retained with separate reports linked from [the module guide](../../src/README.md).
 Item21 passed against frozen code `b8c71f98`; item22 sampling also passed CPU and actual fixed-seed callers. Resident-route source preparation follows those measurements. The item numbers record sequence,
 not hours consumed. Source preparation overlapped; compiler/model measurements
 remained sequential. The server JSON survey retained C because standard-scanner
@@ -816,7 +816,7 @@ preparation in parallel and builds/model measurements serialized. Report folder
 `hourN` names are item numbers, not hours consumed. Retained so far: build graph,
 checkpoint/KV persistence, GGUF cursor/index, SSD/prefix utilities, Engram,
 CLI transcript helper, token maps/span BPE, and typed F16/HC Metal controllers.
-Each has a linked qualification under `zig/README.md`; exact measured behavior
+Each has a linked qualification under `src/README.md`; exact measured behavior
 and real cache/model workflows are distinguished from source-only work.
 
 Next in order, each at most one hour: complete benchmark frontend (snapshot and
@@ -835,7 +835,7 @@ through numeric sampling and resident policy are qualified. The sampler saves
 57.76%/42.85% CPU time in its existing alternating fixture; this is not a model
 throughput claim. The route policy preserves all six coding results and actual
 substitution counts, with1.60% more whole-task time against its C bracket mean.
-Reports and exact scope remain linked from `zig/README.md`.
+Reports and exact scope remain linked from `src/README.md`.
 
 Next, sequential qualification with at most one hour per item (source prep may
 overlap): agent atomic file/edit operations; GGUF typed getters and tensor
@@ -860,7 +860,7 @@ no whole-model speedup is claimed. The implementation and journal are being
 consolidated into a short stack, preserving detailed steps separately. Main
 and the earlier mechanical rewrite stay unchanged. Substantial engine,
 Metal resource/attention, server and agent orchestration still remain C;
-see `zig/README.md` for exact boundaries. This closes the accepted selective
+see `src/README.md` for exact boundaries. This closes the accepted selective
 restart stage; do not open another boundary just to consume the time budget.
 
 Item55 starts **2026-10-22 12:18 UTC**, one-hour first-stage cap **13:18 UTC**.

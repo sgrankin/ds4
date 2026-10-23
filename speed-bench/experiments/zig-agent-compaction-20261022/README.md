@@ -11,7 +11,7 @@ checks, so they are independent functionality observations. No speed gain is cla
 
 The [shared Plan](../../../ds4_agent_compaction.h) owns a private summary-request
 vector, a replacement transcript vector and the summary/tail geometry. The
-[native planner](../../../zig/agent_compaction.zig) selects thresholds, complete
+[native planner](../../../src/agent_compaction.zig) selects thresholds, complete
 turn/image boundaries and summary budgets, constructs the private request,
 and rebuilds summary plus retained tail. It does not evaluate tokens or mutate
 the live session. C retains the private summary generation, live publication,

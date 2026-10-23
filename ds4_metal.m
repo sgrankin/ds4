@@ -26,30 +26,30 @@
 
 #include "ds4.h"
 #include "ds4_gpu.h"
-#include "zig/metal/bootstrap.h"
-#include "zig/metal/tp_prefetch.h"
-#include "zig/metal/tp_control.h"
-#include "zig/metal/primitives.h"
-#include "zig/metal/router.h"
-#include "zig/metal/router_shared.h"
-#include "zig/metal/hc_control.h"
-#include "zig/metal/embedding.h"
-#include "zig/metal/supported_primitives.h"
-#include "zig/metal/scheduling.h"
-#include "zig/metal/compressor.h"
-#include "zig/metal/model_views.h"
-#include "zig/metal/exact_cache.h"
-#include "zig/metal/bridge.h"
-#include "zig/metal/index_selection.h"
-#include "zig/metal/dense_matmul.h"
-#include "zig/metal/attention_decode.h"
-#include "zig/metal/attention_batch.h"
-#include "zig/metal/routed_batch.h"
-#include "zig/metal/attention_output.h"
-#include "zig/metal/rope.h"
-#include "zig/metal/expert_load.h"
-#include "zig/metal/routed_single.h"
-#include "zig/metal/resources.h"
+#include "src/metal/bootstrap.h"
+#include "src/metal/tp_prefetch.h"
+#include "src/metal/tp_control.h"
+#include "src/metal/primitives.h"
+#include "src/metal/router.h"
+#include "src/metal/router_shared.h"
+#include "src/metal/hc_control.h"
+#include "src/metal/embedding.h"
+#include "src/metal/supported_primitives.h"
+#include "src/metal/scheduling.h"
+#include "src/metal/compressor.h"
+#include "src/metal/model_views.h"
+#include "src/metal/exact_cache.h"
+#include "src/metal/bridge.h"
+#include "src/metal/index_selection.h"
+#include "src/metal/dense_matmul.h"
+#include "src/metal/attention_decode.h"
+#include "src/metal/attention_batch.h"
+#include "src/metal/routed_batch.h"
+#include "src/metal/attention_output.h"
+#include "src/metal/rope.h"
+#include "src/metal/expert_load.h"
+#include "src/metal/routed_single.h"
+#include "src/metal/resources.h"
 #include "ds4_image.h"
 
 /*
@@ -723,8 +723,8 @@ static int g_model_fd = -1;
 static int g_stream_prefill_batch_selected_addr_building;
 static const ds4_gpu_tensor *g_stream_expert_batch_ready;
 static int g_glm_stream_expert_addr_table_building;
-#include "zig/metal/expert_cache.h"
-#include "zig/metal/expert_tables.h"
+#include "src/metal/expert_cache.h"
+#include "src/metal/expert_tables.h"
 static ds4_metal_expert_cache_state g_expert_cache = {
     .cache_first_decode_layer = UINT32_MAX,
 };
@@ -14733,7 +14733,7 @@ static int deepseek4_vision_dispatch_gelu_bias(
                                           "DeepSeek vision aligner GELU");
 }
 
-#include "zig/metal/vision_bridge.inc.m"
+#include "src/metal/vision_bridge.inc.m"
 
 int ds4_gpu_glm53_scatter_image_hc(
         ds4_gpu_tensor       *hc,
@@ -17559,64 +17559,64 @@ int ds4_gpu_qwen4_hc_mix_rows_tensor(ds4_gpu_tensor *mixed, const ds4_gpu_tensor
                           MTLSizeMake((n_embd + 255) / 256, n_tokens, 1), MTLSizeMake(256, 1, 1), 0);
 }
 
-#include "zig/metal/resources.inc.m"
+#include "src/metal/resources.inc.m"
 
-#include "zig/metal/bridge.inc.m"
+#include "src/metal/bridge.inc.m"
 
-#include "zig/metal/model_views.inc.m"
+#include "src/metal/model_views.inc.m"
 
-#include "zig/metal/exact_cache.inc.m"
+#include "src/metal/exact_cache.inc.m"
 
-#include "zig/metal/index_selection.inc.m"
+#include "src/metal/index_selection.inc.m"
 
-#include "zig/metal/dense_matmul.inc.m"
+#include "src/metal/dense_matmul.inc.m"
 
-#include "zig/metal/attention_decode.inc.m"
+#include "src/metal/attention_decode.inc.m"
 
-#include "zig/metal/attention_batch.inc.m"
+#include "src/metal/attention_batch.inc.m"
 
-#include "zig/metal/routed_batch.inc.m"
+#include "src/metal/routed_batch.inc.m"
 
-#include "zig/metal/routed_single.inc.m"
+#include "src/metal/routed_single.inc.m"
 
-#include "zig/metal/expert_cache.inc.m"
+#include "src/metal/expert_cache.inc.m"
 
-#include "zig/metal/expert_tables.inc.m"
+#include "src/metal/expert_tables.inc.m"
 
-#include "zig/metal/expert_load.inc.m"
+#include "src/metal/expert_load.inc.m"
 
-#include "zig/metal/attention_output.inc.m"
+#include "src/metal/attention_output.inc.m"
 
-#include "zig/metal/rope.inc.m"
-
-
-#include "zig/metal/compressor.inc.m"
+#include "src/metal/rope.inc.m"
 
 
-#include "zig/metal/scheduling.inc.m"
+#include "src/metal/compressor.inc.m"
 
 
-#include "zig/metal/embedding.inc.m"
+#include "src/metal/scheduling.inc.m"
 
 
-#include "zig/metal/hc_control.inc.m"
+#include "src/metal/embedding.inc.m"
 
 
-#include "zig/metal/router_shared.inc.m"
+#include "src/metal/hc_control.inc.m"
 
 
-#include "zig/metal/router.inc.m"
+#include "src/metal/router_shared.inc.m"
 
 
-#include "zig/metal/supported_primitives.inc.m"
+#include "src/metal/router.inc.m"
 
 
-#include "zig/metal/tp_control.inc.m"
-
-#include "zig/metal/primitives.inc.m"
+#include "src/metal/supported_primitives.inc.m"
 
 
-#include "zig/metal/tp_prefetch.inc.m"
+#include "src/metal/tp_control.inc.m"
+
+#include "src/metal/primitives.inc.m"
+
+
+#include "src/metal/tp_prefetch.inc.m"
 
 /* Test-only observation of the real two-level scheduler. No fabricated state:
  * public start owns admission/resources, and public finish owns retirement. */
@@ -17628,6 +17628,6 @@ int ds4_gpu_test_parallel_ffn_stages(const ds4_gpu_tensor *routed_mid) {
 }
 
 /* Native resource lifecycle policy shares these ARC driver leaves. */
-#include "zig/metal/model_lifecycle.inc.m"
+#include "src/metal/model_lifecycle.inc.m"
 
-#include "zig/metal/bootstrap.inc.m"
+#include "src/metal/bootstrap.inc.m"

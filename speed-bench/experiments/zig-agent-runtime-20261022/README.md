@@ -58,8 +58,8 @@ run by this report author.
 The selected `DS4_NATIVE_AGENT_CONTEXT=1` path now owns live-context rendering,
 body-label quoting, token-text/control validation and staged prepare/commit
 transactions through the actual [Context records](../../../ds4_agent_context.h).
-The [native owner](../../../zig/agent_context.zig) contains ordinary Zig APIs;
-its [C facade](../../../zig/agent_context_entry.zig) is the boundary used by the
+The [native owner](../../../src/agent_context.zig) contains ordinary Zig APIs;
+its [C facade](../../../src/agent_context_entry.zig) is the boundary used by the
 existing C worker. Only a successful caller-side graft/exact decision commits
 staged transcript/turn owners. Graph/session policy and suffix selection stay
 with the worker. Display labels do not enter model tokens.
@@ -134,7 +134,7 @@ only small commands, diagnostics and outcomes are retained here.
 
 ## Item 69: native Bash CPU qualification
 
-The selected native [Bash owner](../../../zig/agent_bash.zig) now owns the shell
+The selected native [Bash owner](../../../src/agent_bash.zig) now owns the shell
 job's monitor thread, process group, child reaping, descriptors, timeout checks
 and bounded output observation. C retains list nodes/IDs and the UI callback.
 The shared [immutable snapshot](../../../ds4_agent_bash.h) is copied under the

@@ -54,9 +54,9 @@ fn nativeObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
     const m = module(b, target, sdk, optimize);
     m.root_source_file = b.path(source);
     m.addImport(api_name, api);
-    if (std.mem.startsWith(u8, source, "zig/server/")) servingImports(b, m, target, optimize);
-    if (std.mem.eql(u8, source, "zig/server/serving_entry.zig"))
-        m.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "zig/server/http_api.h"));
+    if (std.mem.startsWith(u8, source, "src/server/")) servingImports(b, m, target, optimize);
+    if (std.mem.eql(u8, source, "src/server/serving_entry.zig"))
+        m.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "src/server/http_api.h"));
     return b.addObject(.{ .name = std.fs.path.stem(source), .root_module = m }).getEmittedBin();
 }
 
@@ -64,10 +64,10 @@ fn nativeObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
 // obtaining their type identity from a server C header. These modules also
 // compile in the standalone fixture without the server, engine or Metal.
 fn servingImports(b: *std.Build, destination: *std.Build.Module, target: std.Build.ResolvedTarget, optimize: std.builtin.Optimize) void {
-    const types = b.createModule(.{ .root_source_file = b.path("zig/serving/types.zig"), .target = target, .optimize = optimize });
-    const model = b.createModule(.{ .root_source_file = b.path("zig/models/ds4.zig"), .target = target, .optimize = optimize });
+    const types = b.createModule(.{ .root_source_file = b.path("src/serving/types.zig"), .target = target, .optimize = optimize });
+    const model = b.createModule(.{ .root_source_file = b.path("src/models/ds4.zig"), .target = target, .optimize = optimize });
     model.addImport("serving_types", types);
-    const prompt = b.createModule(.{ .root_source_file = b.path("zig/models/deepseek41/prompt.zig"), .target = target, .optimize = optimize });
+    const prompt = b.createModule(.{ .root_source_file = b.path("src/models/deepseek41/prompt.zig"), .target = target, .optimize = optimize });
     prompt.addImport("serving_types", types);
     model.addImport("ds41_prompt", prompt);
     destination.addImport("serving_types", types);
@@ -99,17 +99,17 @@ pub fn build(b: *std.Build) void {
 
     const test_flags = if (optimize == .debug) debug_flags else strict_flags;
     // Shared public declarations/layouts for the handwritten host modules.
-    const c_api = generatedApi(b, target, sdk, optimize, "zig/c_api.h");
+    const c_api = generatedApi(b, target, sdk, optimize, "src/c_api.h");
 
     const core_module = module(b, target, sdk, .fast);
     const suffix_match_module = matcher: {
         const m = module(b, target, sdk, optimize);
-        m.root_source_file = b.path("zig/suffix_match.zig");
+        m.root_source_file = b.path("src/suffix_match.zig");
         break :matcher m;
     };
     const native_web = web: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/web_api.h");
-        break :web nativeObject(b, target, sdk, optimize, "zig/web_entry.zig", "web_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/web_api.h");
+        break :web nativeObject(b, target, sdk, optimize, "src/web_entry.zig", "web_c", api);
     };
     const web_data = object(b, target, sdk, clang, "ds4_web_data.c", "web-data", .fast, c_flags);
     core_module.addObjectFile(web_data);
@@ -127,220 +127,220 @@ pub fn build(b: *std.Build) void {
     core_module.addObjectFile(image_object);
     const image_library_module = module(b, target, sdk, optimize);
     image_library_module.addObjectFile(image_object);
-    for ([_][]const u8{ "zig/ssd.zig", "zig/prompt_prefix.zig", "zig/engram.zig" }) |source| {
+    for ([_][]const u8{ "src/ssd.zig", "src/prompt_prefix.zig", "src/engram.zig" }) |source| {
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, source, "c_api", c_api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/engine/deepseek41/graph_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/gguf.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/engine/input.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/engine/vision_free_entry.zig", "gguf_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/engine/deepseek41/graph_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/gguf.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/input.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/vision_free_entry.zig", "gguf_c", api));
         const route_math = module(b, target, sdk, optimize);
-        route_math.root_source_file = b.path("zig/resident_route.zig");
+        route_math.root_source_file = b.path("src/resident_route.zig");
         route_math.addImport("gguf_c", api);
         const graph_module = module(b, target, sdk, optimize);
-        graph_module.root_source_file = b.path("zig/engine/graph.zig");
+        graph_module.root_source_file = b.path("src/engine/graph.zig");
         graph_module.addImport("gguf_c", api);
         graph_module.addImport("resident_route", route_math);
         core_module.addObjectFile(b.addObject(.{ .name = "graph", .root_module = graph_module }).getEmittedBin());
     }
     {
         const api = generatedApi(b, target, sdk, optimize, "ds4_cli_chat.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/cli_chat.zig", "cli_chat_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/cli_chat.zig", "cli_chat_c", api));
     }
     {
         const api = generatedApi(b, target, sdk, optimize, "ds4_tokenizer.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/tokenizer.zig", "tokenizer_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/tokenizer.zig", "tokenizer_c", api));
     }
     {
         const api = generatedApi(b, target, sdk, optimize, "ds4_pretokenizer.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/pretokenizer.zig", "pretokenizer_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/pretokenizer.zig", "pretokenizer_c", api));
     }
     {
         const vocab_api = generatedApi(b, target, sdk, optimize, "ds4_vocab.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/chat.zig", "chat_c", vocab_api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/vocab.zig", "vocab_c", vocab_api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/chat.zig", "chat_c", vocab_api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/vocab.zig", "vocab_c", vocab_api));
     }
     {
         const api = generatedApi(b, target, sdk, optimize, "ds4_agent_tools.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/agent_tools.zig", "agent_tools_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/agent_tools.zig", "agent_tools_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/agent_file_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/agent_file.zig", "agent_file_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/agent_file_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/agent_file.zig", "agent_file_c", api));
     }
     {
         const api = generatedApi(b, target, sdk, optimize, "ds4_sampling.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/sampling.zig", "sampling_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/sampling.zig", "sampling_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/engine/session_sampling_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/engine/session_sampling_entry.zig", "gguf_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/engine/session_sampling_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_sampling_entry.zig", "gguf_c", api));
     }
     const native_response_store = store: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/response_store_api.h");
-        const selected = nativeObject(b, target, sdk, optimize, "zig/response_store.zig", "response_store_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/response_store_api.h");
+        const selected = nativeObject(b, target, sdk, optimize, "src/response_store.zig", "response_store_c", api);
         core_module.addObjectFile(selected);
         break :store selected;
     };
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/http_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/http.zig", "server_http_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/http_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/http.zig", "server_http_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/input_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/input_entry.zig", "server_input_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/input_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/input_entry.zig", "server_input_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/runtime_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/coordinator.zig", "server_runtime_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/runtime_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/coordinator.zig", "server_runtime_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/tool_memory_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/tool_memory_entry.zig", "server_tool_memory_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/tool_memory_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/tool_memory_entry.zig", "server_tool_memory_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/output_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/output_entry.zig", "server_output_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/output_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/output_entry.zig", "server_output_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/render_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/render.zig", "server_render_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/render_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/render.zig", "server_render_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/json_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/json.zig", "server_json_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/json_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/json.zig", "server_json_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/reply_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/reply_entry.zig", "server_reply_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/reply_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/reply_entry.zig", "server_reply_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/protocol_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/protocol_entry.zig", "server_protocol_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/protocol_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/protocol_entry.zig", "server_protocol_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/conversations_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/conversations_entry.zig", "server_conversations_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/conversations_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/conversations_entry.zig", "server_conversations_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/materialize_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/materialize_entry.zig", "server_materialize_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/materialize_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/materialize_entry.zig", "server_materialize_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/decode_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/decode_entry.zig", "server_decode_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/decode_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/decode_entry.zig", "server_decode_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/reuse_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/reuse_entry.zig", "server_reuse_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/reuse_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/reuse_entry.zig", "server_reuse_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/persist_api.h");
+        const api = generatedApi(b, target, sdk, optimize, "src/server/persist_api.h");
         const m = module(b, target, sdk, optimize);
-        m.root_source_file = b.path("zig/server/persist_entry.zig");
+        m.root_source_file = b.path("src/server/persist_entry.zig");
         m.addImport("server_persist_c", api);
         m.addImport("suffix_match", suffix_match_module);
         core_module.addObjectFile(b.addObject(.{ .name = "persist_entry", .root_module = m }).getEmittedBin());
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/generation_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/generation_entry.zig", "server_generation_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/generation_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/generation_entry.zig", "server_generation_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/serving_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/serving_entry.zig", "server_serving_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/serving_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/serving_entry.zig", "server_serving_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/boot_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/boot_entry.zig", "server_boot_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/boot_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/boot_entry.zig", "server_boot_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/images_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/server/image_resources_entry.zig", "server_images_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/server/images_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/server/image_resources_entry.zig", "server_images_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/metal/model_views_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/model_views_entry.zig", "model_views_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/metal/model_views_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/model_views_entry.zig", "model_views_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/metal/exact_cache_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/exact_cache_entry.zig", "exact_cache_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/metal/exact_cache_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/exact_cache_entry.zig", "exact_cache_c", api));
     }
     const native_resident_route = route: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/resident_route_api.h");
-        const selected = nativeObject(b, target, sdk, optimize, "zig/resident_route_entry.zig", "gguf_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/resident_route_api.h");
+        const selected = nativeObject(b, target, sdk, optimize, "src/resident_route_entry.zig", "gguf_c", api);
         core_module.addObjectFile(selected);
         break :route selected;
     };
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/engine/vision_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/engine/vision_entry.zig", "gguf_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/engine/vision_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/vision_entry.zig", "gguf_c", api));
     }
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/metal/resources_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/resources_entry.zig", "resource_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/metal/resources_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/resources_entry.zig", "resource_c", api));
     }
     {
-        const metal_c = generatedApi(b, target, sdk, optimize, "zig/metal/bridge.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/f16_publication.zig", "metal_c", metal_c));
-        const hc_object = nativeObject(b, target, sdk, optimize, "zig/metal/hc_projection.zig", "metal_c", metal_c);
+        const metal_c = generatedApi(b, target, sdk, optimize, "src/metal/bridge.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/f16_publication.zig", "metal_c", metal_c));
+        const hc_object = nativeObject(b, target, sdk, optimize, "src/metal/hc_projection.zig", "metal_c", metal_c);
         core_module.addObjectFile(hc_object);
-        const norm_object = nativeObject(b, target, sdk, optimize, "zig/metal/norm.zig", "metal_c", metal_c);
+        const norm_object = nativeObject(b, target, sdk, optimize, "src/metal/norm.zig", "metal_c", metal_c);
         core_module.addObjectFile(norm_object);
-        const activation_object = nativeObject(b, target, sdk, optimize, "zig/metal/activation.zig", "metal_c", metal_c);
+        const activation_object = nativeObject(b, target, sdk, optimize, "src/metal/activation.zig", "metal_c", metal_c);
         core_module.addObjectFile(activation_object);
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/matmul_f32.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/index_selection_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/dense_matmul_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/attention_decode_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/attention_batch_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/routed_batch_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/routed_single_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/expert_cache_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/expert_tables_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/expert_load_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/attention_output_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/rope_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/compressor_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/scheduling_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/embedding_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/quant_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/hc_control_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/router_shared_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/router_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/primitives_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/supported_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/tp_control_entry.zig", "metal_c", metal_c));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/metal/bootstrap_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/matmul_f32.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/index_selection_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/dense_matmul_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/attention_decode_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/attention_batch_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/routed_batch_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/routed_single_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/expert_cache_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/expert_tables_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/expert_load_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/attention_output_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/rope_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/compressor_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/scheduling_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/embedding_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/quant_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/hc_control_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/router_shared_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/router_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/primitives_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/supported_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/tp_control_entry.zig", "metal_c", metal_c));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/bootstrap_entry.zig", "metal_c", metal_c));
         const activation_test_module = module(b, target, sdk, optimize);
-        activation_test_module.addObjectFile(object(b, target, sdk, clang, "zig/metal/activation_test.c", "activation-test", optimize, test_flags));
+        activation_test_module.addObjectFile(object(b, target, sdk, clang, "src/metal/activation_test.c", "activation-test", optimize, test_flags));
         activation_test_module.addObjectFile(activation_object);
         const activation_test = b.addExecutable(.{ .name = "test-activation", .root_module = activation_test_module });
         b.step("native-activation-test", "Build the standalone CPU activation packet and ownership fixture").dependOn(&b.addInstallArtifact(activation_test, .{}).step);
         const norm_test_module = module(b, target, sdk, optimize);
-        norm_test_module.addObjectFile(object(b, target, sdk, clang, "zig/metal/norm_test.c", "norm-test", optimize, test_flags));
+        norm_test_module.addObjectFile(object(b, target, sdk, clang, "src/metal/norm_test.c", "norm-test", optimize, test_flags));
         norm_test_module.addObjectFile(norm_object);
         const norm_test = b.addExecutable(.{ .name = "test-norm-cpu", .root_module = norm_test_module });
         b.step("native-norm-test", "Build the standalone C/native norm descriptor and ownership fixture").dependOn(&b.addInstallArtifact(norm_test, .{}).step);
 
         const hc_test_module = module(b, target, sdk, optimize);
-        hc_test_module.addObjectFile(object(b, target, sdk, clang, "zig/metal/hc_projection_test.c", "hc-projection-test", optimize, test_flags));
+        hc_test_module.addObjectFile(object(b, target, sdk, clang, "src/metal/hc_projection_test.c", "hc-projection-test", optimize, test_flags));
         hc_test_module.addObjectFile(hc_object);
         const hc_test = b.addExecutable(.{ .name = "test-hc-projection", .root_module = hc_test_module });
         b.step("native-hc-projection-test", "Build the standalone C/native HC descriptor and ownership fixture").dependOn(&b.addInstallArtifact(hc_test, .{}).step);
 
         // This fixture supplies CPU stubs; it does not link the GPU/core archive.
         const test_module = module(b, target, sdk, optimize);
-        test_module.root_source_file = b.path("zig/metal/f16_publication_test.zig");
+        test_module.root_source_file = b.path("src/metal/f16_publication_test.zig");
         test_module.addImport("metal_c", metal_c);
         const test_exe = b.addExecutable(.{ .name = "test-f16-publication", .root_module = test_module });
         b.step("native-f16-publication-test", "Build the standalone CPU descriptor/ownership fixture").dependOn(&b.addInstallArtifact(test_exe, .{}).step);
     }
     {
-        const image_c = generatedApi(b, target, sdk, optimize, "zig/image_api.h");
-        const decode_object = nativeObject(b, target, sdk, optimize, "zig/image.zig", "image_c", image_c);
-        const preprocess_object = nativeObject(b, target, sdk, optimize, "zig/image_preprocess.zig", "image_c", image_c);
+        const image_c = generatedApi(b, target, sdk, optimize, "src/image_api.h");
+        const decode_object = nativeObject(b, target, sdk, optimize, "src/image.zig", "image_c", image_c);
+        const preprocess_object = nativeObject(b, target, sdk, optimize, "src/image_preprocess.zig", "image_c", image_c);
         core_module.addObjectFile(decode_object);
         core_module.addObjectFile(preprocess_object);
         image_library_module.addObjectFile(decode_object);
@@ -351,57 +351,57 @@ pub fn build(b: *std.Build) void {
     const core = b.addLibrary(.{ .name = "ds4-metal-c", .root_module = core_module });
     {
         const boundary_module = module(b, target, sdk, optimize);
-        boundary_module.root_source_file = b.path("zig/serving/boundary_test.zig");
+        boundary_module.root_source_file = b.path("src/serving/boundary_test.zig");
         servingImports(b, boundary_module, target, optimize);
         const boundary_test = b.addExecutable(.{ .name = "test-serving-boundary", .root_module = boundary_module });
         b.step("serving-boundary-test", "Build the native request/model boundary fixture without engine or Metal objects").dependOn(&b.addInstallArtifact(boundary_test, .{}).step);
         const frames_module = module(b, target, sdk, optimize);
-        frames_module.root_source_file = b.path("zig/server/websocket_frames_test.zig");
-        frames_module.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "zig/server/http_api.h"));
+        frames_module.root_source_file = b.path("src/server/websocket_frames_test.zig");
+        frames_module.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "src/server/http_api.h"));
         const frames_test = b.addExecutable(.{ .name = "test-websocket-frames", .root_module = frames_module });
         b.step("websocket-frames-test", "Build focused WebSocket framing/ownership checks without a model").dependOn(&b.addInstallArtifact(frames_test, .{}).step);
     }
     const cache = cache_object: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/state_cache_api.h");
-        break :cache_object nativeObject(b, target, sdk, optimize, "zig/state_cache.zig", "state_cache_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/state_cache_api.h");
+        break :cache_object nativeObject(b, target, sdk, optimize, "src/state_cache.zig", "state_cache_c", api);
     };
     {
-        const api = generatedApi(b, target, sdk, optimize, "zig/cache_runtime_api.h");
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/cache_runtime_entry.zig", "cache_runtime_c", api));
+        const api = generatedApi(b, target, sdk, optimize, "src/cache_runtime_api.h");
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/cache_runtime_entry.zig", "cache_runtime_c", api));
     }
-    const kvstore = nativeObject(b, target, sdk, optimize, "zig/kvstore.zig", "c_api", c_api);
+    const kvstore = nativeObject(b, target, sdk, optimize, "src/kvstore.zig", "c_api", c_api);
 
     const native_bench = bench: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/bench_api.h");
-        break :bench nativeObject(b, target, sdk, optimize, "zig/bench.zig", "bench_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/bench_api.h");
+        break :bench nativeObject(b, target, sdk, optimize, "src/bench.zig", "bench_c", api);
     };
 
     const native_eval = eval: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/eval/eval_api.h");
-        break :eval nativeObject(b, target, sdk, optimize, "zig/eval/eval_entry.zig", "eval_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/eval/eval_api.h");
+        break :eval nativeObject(b, target, sdk, optimize, "src/eval/eval_entry.zig", "eval_c", api);
     };
     const eval_data = object(b, target, sdk, clang, "ds4_eval_data.c", "eval-data", .fast, c_flags);
     const eval_native_shim = object(b, target, sdk, clang, "ds4_eval_native.c", "eval-native-os-tests", .fast, c_flags);
     const native_cli = cli: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/cli_api.h");
-        break :cli nativeObject(b, target, sdk, optimize, "zig/cli.zig", "cli_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/cli_api.h");
+        break :cli nativeObject(b, target, sdk, optimize, "src/cli.zig", "cli_c", api);
     };
     // Presentation and the following Stream owner share real record identity.
-    const agent_presentation_api = generatedApi(b, target, sdk, optimize, "zig/agent/history_api.h");
-    const native_agent_presentation = nativeObject(b, target, sdk, optimize, "zig/agent/presentation_entry.zig", "agent_presentation_c", agent_presentation_api);
-    const native_agent_stream = nativeObject(b, target, sdk, optimize, "zig/agent/stream_entry.zig", "agent_presentation_c", agent_presentation_api);
-    const native_agent_history = nativeObject(b, target, sdk, optimize, "zig/agent/history_entry.zig", "agent_presentation_c", agent_presentation_api);
-    const agent_tool_actions_api = generatedApi(b, target, sdk, optimize, "zig/agent/executor_api.h");
-    const native_agent_tool_actions = nativeObject(b, target, sdk, optimize, "zig/agent/tool_actions_entry.zig", "agent_tool_actions_c", agent_tool_actions_api);
-    const native_agent_edit = nativeObject(b, target, sdk, optimize, "zig/agent/edit_entry.zig", "agent_tool_actions_c", agent_tool_actions_api);
-    const native_agent_executor = nativeObject(b, target, sdk, optimize, "zig/agent/executor_entry.zig", "agent_tool_actions_c", agent_tool_actions_api);
-    const agent_sessions_api = generatedApi(b, target, sdk, optimize, "zig/agent/checkpoint_api.h");
-    const native_agent_sessions = nativeObject(b, target, sdk, optimize, "zig/agent/sessions_entry.zig", "agent_sessions_c", agent_sessions_api);
-    const native_agent_checkpoint = nativeObject(b, target, sdk, optimize, "zig/agent/checkpoint_entry.zig", "agent_sessions_c", agent_sessions_api);
-    const agent_runtime_api = generatedApi(b, target, sdk, optimize, "zig/agent/frontend_api.h");
+    const agent_presentation_api = generatedApi(b, target, sdk, optimize, "src/agent/history_api.h");
+    const native_agent_presentation = nativeObject(b, target, sdk, optimize, "src/agent/presentation_entry.zig", "agent_presentation_c", agent_presentation_api);
+    const native_agent_stream = nativeObject(b, target, sdk, optimize, "src/agent/stream_entry.zig", "agent_presentation_c", agent_presentation_api);
+    const native_agent_history = nativeObject(b, target, sdk, optimize, "src/agent/history_entry.zig", "agent_presentation_c", agent_presentation_api);
+    const agent_tool_actions_api = generatedApi(b, target, sdk, optimize, "src/agent/executor_api.h");
+    const native_agent_tool_actions = nativeObject(b, target, sdk, optimize, "src/agent/tool_actions_entry.zig", "agent_tool_actions_c", agent_tool_actions_api);
+    const native_agent_edit = nativeObject(b, target, sdk, optimize, "src/agent/edit_entry.zig", "agent_tool_actions_c", agent_tool_actions_api);
+    const native_agent_executor = nativeObject(b, target, sdk, optimize, "src/agent/executor_entry.zig", "agent_tool_actions_c", agent_tool_actions_api);
+    const agent_sessions_api = generatedApi(b, target, sdk, optimize, "src/agent/checkpoint_api.h");
+    const native_agent_sessions = nativeObject(b, target, sdk, optimize, "src/agent/sessions_entry.zig", "agent_sessions_c", agent_sessions_api);
+    const native_agent_checkpoint = nativeObject(b, target, sdk, optimize, "src/agent/checkpoint_entry.zig", "agent_sessions_c", agent_sessions_api);
+    const agent_runtime_api = generatedApi(b, target, sdk, optimize, "src/agent/frontend_api.h");
     const prompt_prefix_module = prefix: {
         const m = module(b, target, sdk, optimize);
-        m.root_source_file = b.path("zig/prompt_prefix_append.zig");
+        m.root_source_file = b.path("src/prompt_prefix_append.zig");
         break :prefix m;
     };
     const agent_runtime_sources = [_][]const u8{ "context_runtime_entry", "result_entry", "communications_entry", "turn_entry", "summary_entry", "lifecycle_entry", "terminal_entry", "frontend_entry" };
@@ -409,7 +409,7 @@ pub fn build(b: *std.Build) void {
         var objects: [agent_runtime_sources.len]std.Build.LazyPath = undefined;
         for (agent_runtime_sources, 0..) |name, i| {
             const m = module(b, target, sdk, optimize);
-            m.root_source_file = b.path(b.fmt("zig/agent/{s}.zig", .{name}));
+            m.root_source_file = b.path(b.fmt("src/agent/{s}.zig", .{name}));
             m.addImport("agent_runtime_c", agent_runtime_api);
             m.addImport("agent_presentation_c", agent_presentation_api);
             m.addImport("suffix_match", suffix_match_module);
@@ -420,22 +420,22 @@ pub fn build(b: *std.Build) void {
     };
     // Keep agent context transactions scoped to the agent and its fixtures.
     const native_agent_context = context: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/agent_context_api.h");
-        break :context nativeObject(b, target, sdk, optimize, "zig/agent_context_entry.zig", "agent_context_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/agent_context_api.h");
+        break :context nativeObject(b, target, sdk, optimize, "src/agent_context_entry.zig", "agent_context_c", api);
     };
     const native_agent_bash = bash: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/agent_bash_api.h");
-        break :bash nativeObject(b, target, sdk, optimize, "zig/agent_bash_entry.zig", "agent_bash_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/agent_bash_api.h");
+        break :bash nativeObject(b, target, sdk, optimize, "src/agent_bash_entry.zig", "agent_bash_c", api);
     };
     const native_agent_compaction = compaction: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/agent_compaction_api.h");
-        break :compaction nativeObject(b, target, sdk, optimize, "zig/agent_compaction_entry.zig", "agent_compaction_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/agent_compaction_api.h");
+        break :compaction nativeObject(b, target, sdk, optimize, "src/agent_compaction_entry.zig", "agent_compaction_c", api);
     };
     const server_main = server: {
-        const api = generatedApi(b, target, sdk, optimize, "zig/server/boot_api.h");
-        break :server nativeObject(b, target, sdk, optimize, "zig/server/main.zig", "server_boot_c", api);
+        const api = generatedApi(b, target, sdk, optimize, "src/server/boot_api.h");
+        break :server nativeObject(b, target, sdk, optimize, "src/server/main.zig", "server_boot_c", api);
     };
-    const agent_main = nativeObject(b, target, sdk, optimize, "zig/agent/main.zig", "agent_runtime_c", agent_runtime_api);
+    const agent_main = nativeObject(b, target, sdk, optimize, "src/agent/main.zig", "agent_runtime_c", agent_runtime_api);
     const server_support = object(b, target, sdk, clang, "ds4_server.c", "server-support", .fast, c_flags);
     const agent_support = object(b, target, sdk, clang, "ds4_agent.c", "agent-support", .fast, c_flags);
     inline for (.{
@@ -637,10 +637,10 @@ pub fn build(b: *std.Build) void {
     const suffix_mock_test = executable(b, target, sdk, core, cache, kvstore, "test-agent-context-suffix-mock", suffix_mock_frontend, optimize);
     {
         const api = generatedApi(b, target, sdk, optimize, "tests/agent_context_mock_api.h");
-        suffix_mock_test.root_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/agent_context_entry.zig", "agent_context_c", api));
+        suffix_mock_test.root_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/agent_context_entry.zig", "agent_context_c", api));
         suffix_mock_test.root_module.addObjectFile(native_agent_bash);
         const compaction_api = generatedApi(b, target, sdk, optimize, "tests/agent_compaction_mock_api.h");
-        suffix_mock_test.root_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/agent_compaction_entry.zig", "agent_compaction_c", compaction_api));
+        suffix_mock_test.root_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/agent_compaction_entry.zig", "agent_compaction_c", compaction_api));
         suffix_mock_test.root_module.addObjectFile(native_agent_presentation);
         suffix_mock_test.root_module.addObjectFile(native_agent_stream);
         suffix_mock_test.root_module.addObjectFile(native_agent_history);
@@ -648,12 +648,12 @@ pub fn build(b: *std.Build) void {
         suffix_mock_test.root_module.addObjectFile(native_agent_edit);
         suffix_mock_test.root_module.addObjectFile(native_agent_executor);
         const sessions_api = generatedApi(b, target, sdk, optimize, "tests/agent_sessions_mock_api.h");
-        suffix_mock_test.root_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/agent/sessions_entry.zig", "agent_sessions_c", sessions_api));
-        suffix_mock_test.root_module.addObjectFile(nativeObject(b, target, sdk, optimize, "zig/agent/checkpoint_entry.zig", "agent_sessions_c", sessions_api));
+        suffix_mock_test.root_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/agent/sessions_entry.zig", "agent_sessions_c", sessions_api));
+        suffix_mock_test.root_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/agent/checkpoint_entry.zig", "agent_sessions_c", sessions_api));
         const runtime_api = generatedApi(b, target, sdk, optimize, "tests/agent_runtime_mock_api.h");
         for (agent_runtime_sources) |name| {
             const m = module(b, target, sdk, optimize);
-            m.root_source_file = b.path(b.fmt("zig/agent/{s}.zig", .{name}));
+            m.root_source_file = b.path(b.fmt("src/agent/{s}.zig", .{name}));
             m.addImport("agent_runtime_c", runtime_api);
             m.addImport("agent_presentation_c", agent_presentation_api);
             m.addImport("suffix_match", suffix_match_module);
@@ -661,7 +661,7 @@ pub fn build(b: *std.Build) void {
             suffix_mock_test.root_module.addObjectFile(b.addObject(.{ .name = b.fmt("mock-{s}", .{name}), .root_module = m }).getEmittedBin());
         }
         const context_runtime = module(b, target, sdk, optimize);
-        context_runtime.root_source_file = b.path("zig/agent/context_runtime.zig");
+        context_runtime.root_source_file = b.path("src/agent/context_runtime.zig");
         context_runtime.addImport("agent_runtime_c", runtime_api);
         context_runtime.addImport("suffix_match", suffix_match_module);
         const selectors = module(b, target, sdk, optimize);

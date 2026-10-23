@@ -5,7 +5,7 @@
 #define ds4_tokenize_rendered_chat mock_tokenize
 #define ds4_token_user mock_user
 #define ds4_token_assistant mock_assistant_id
-#include "zig/agent_context_api.h"
+#include "src/agent_context_api.h"
 #undef ds4_kvstore_render_tokens_text
 #undef ds4_token_text
 #undef ds4_tokenize_rendered_chat

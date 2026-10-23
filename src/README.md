@@ -6,7 +6,7 @@ input and the DS4.1 preparation path, including its remaining compatibility edge
 [Stateful Responses](serving/RESPONSES.md) documents HTTP/WebSocket usage and
 the supported OpenResponses contract.
 
-This tree contains the handwritten implementation of the supported DeepSeek
+`src/` contains the handwritten implementation of the supported DeepSeek
 V4.1 Metal runtime, its Agent and server, and the CLI, benchmark and evaluation
 frontends. The optional Web client is a separate Zig library. All five program
 entry points are Zig. Qwen and GLM retain their C inference implementations

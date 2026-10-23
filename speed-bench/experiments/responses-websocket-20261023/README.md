@@ -20,7 +20,7 @@ Reference: [OpenResponses 2026-04-24](https://www.openresponses.org/specificatio
 checkout `openresponses/openresponses` at
 `8907bc3b7c4300ff5c21fd647cfde9929243afa1`. That version requires one in-flight
 response per socket. Newer OpenAI multiplexing/warmup/steering extensions are
-not implemented. See [usage and limits](../../../zig/serving/RESPONSES.md).
+not implemented. See [usage and limits](../../../src/serving/RESPONSES.md).
 
 ## Results
 

@@ -56,11 +56,11 @@
 #include "ds4_model_weights.h"
 #include "ds4_dspark_weights.h"
 #include "ds4_support_weights.h"
-#include "zig/engine/vision_weights_api.h"
+#include "src/engine/vision_weights_api.h"
 #include "ds4_dspark_cycle.h"
 #include "ds4_deepseek41_graph.h"
-#include "zig/engine/model_api.h"
-#include "zig/engine/deepseek41/graph_api.h"
+#include "src/engine/model_api.h"
+#include "src/engine/deepseek41/graph_api.h"
 /* Private input API keeps the existing engine call sites and C fallback. */
 #define tensor_type ds4_gguf_tensor_type
 #define tensor_nbytes ds4_gguf_tensor_nbytes

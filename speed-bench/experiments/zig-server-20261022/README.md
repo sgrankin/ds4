@@ -50,7 +50,7 @@ No candidate success, quality or latency claim is made from this control step.
 
 ## Item 64: HTTP transport
 
-The native [HTTP owner](../../../zig/server/http.zig) owns one-request framing,
+The native [HTTP owner](../../../src/server/http.zig) owns one-request framing,
 its temporary request/body buffers, response/SSE formatting, progress deadlines
 and socket configuration/disconnect policy. The shared
 [request record and API](../../../ds4_server_http.h) preserve libc body ownership
@@ -130,7 +130,7 @@ coordinator results are recorded separately below.
 
 ## Item 66: resident inference coordinator
 
-The native [coordinator](../../../zig/server/coordinator.zig) owns pending versus
+The native [coordinator](../../../src/server/coordinator.zig) owns pending versus
 in-flight admission, per-slot generation/evaluation, decode coalescing, actual
 session-batch grouping and worker completion/shutdown. It uses the one shared
 [Server/Slot/Job record layout](../../../ds4_server_runtime.h), borrows the
@@ -158,7 +158,7 @@ fixtures do not replace a real concurrent generation/cancellation check.
 
 ## Item 67: sampled tool-text memory
 
-The [native tool-memory owner](../../../zig/server/tool_memory.zig) borrows the
+The [native tool-memory owner](../../../src/server/tool_memory.zig) borrows the
 actual cache record and server mutex. It keeps the sampled DSML tool text
 associated with protocol IDs so a client rebuilding/reordering argument JSON
 can replay the original model text. Cache allocation, bounded eviction,

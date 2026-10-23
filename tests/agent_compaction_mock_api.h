@@ -6,7 +6,7 @@
 #define ds4_token_user mock_user
 #define ds4_token_assistant mock_assistant_id
 #define ds4_engine_is_glm_dsa mock_glm
-#include "zig/agent_compaction_api.h"
+#include "src/agent_compaction_api.h"
 #undef ds4_tokenize_rendered_chat
 #undef ds4_chat_append_message
 #undef ds4_chat_append_assistant_prefix

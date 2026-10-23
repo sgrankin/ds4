@@ -11,19 +11,19 @@ speed gain.
 
 The active native path now uses four handwritten modules:
 
-- [model.zig](../../../zig/engine/model.zig) owns the file descriptors, mapping,
+- [model.zig](../../../src/engine/model.zig) owns the file descriptors, mapping,
   metadata and tensor directory. `init` uses `errdefer` for partial construction;
   `deinit` closes the owner, and `take` transfers the actual shared C record
   without allocating another owner. Engram and Qwen n-gram tails remain outside
   the resident weight mapping. The Qwen disk descriptor is checked against the
   same file before transfer.
-- [config.zig](../../../zig/engine/config.zig) constructs a validated DS4.1
+- [config.zig](../../../src/engine/config.zig) constructs a validated DS4.1
   `ModelConfig` by value, including its real shape and layer policies. Its tiny
   `1e-20` RMS epsilon and source/consumer layer roles are documented explicitly.
-- [weights.zig](../../../zig/engine/weights.zig) binds and validates the DS4.1
+- [weights.zig](../../../src/engine/weights.zig) binds and validates the DS4.1
   pointer table with an explicit configuration. Tensor descriptors borrow the
   `Model` lifetime; weight binding owns neither payload bytes nor mappings.
-- [input.zig](../../../zig/engine/input.zig) is the narrow compatibility
+- [input.zig](../../../src/engine/input.zig) is the narrow compatibility
   facade. The actual model, configuration and weight records are shared headers,
   rather than parallel Zig layouts.
 

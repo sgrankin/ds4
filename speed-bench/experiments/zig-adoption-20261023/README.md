@@ -23,7 +23,9 @@ repository root for existing launchers. GGUF quantizers remain standalone; the
 continuation scorer links the same production engine through `quality-score`.
 
 The proposed `zig/` to `src/` directory move is deliberately separate and has
-not happened in this change.
+not happened in this change. A subsequent commit renames the current tree to
+`src/`; historical source paths below and in earlier reports refer to their
+recorded revisions.
 
 ## Qualification
 

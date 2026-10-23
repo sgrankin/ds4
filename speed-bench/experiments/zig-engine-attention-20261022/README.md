@@ -10,9 +10,9 @@ with C attention; the candidate selects native scalar and batch attention.
 ## Scope
 
 The active native entry points call handwritten
-[scalar attention](../../../zig/engine/deepseek41/attention.zig),
-[batch attention](../../../zig/engine/deepseek41/batch_attention.zig) and shared
-[support operations](../../../zig/engine/deepseek41/ops.zig). These controllers
+[scalar attention](../../../src/engine/deepseek41/attention.zig),
+[batch attention](../../../src/engine/deepseek41/batch_attention.zig) and shared
+[support operations](../../../src/engine/deepseek41/ops.zig). These controllers
 own publication/selection order, raw and compressed cache geometry, the existing
 F32/F16 storage choices, projection and quantization boundaries, attention
 kernel selection, inverse RoPE and output projection. They call the existing

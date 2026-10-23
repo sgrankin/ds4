@@ -1708,7 +1708,7 @@ static char *agent_tool_search(agent_worker *w, const agent_tool_call *call) {
  * Browser Web Tools
  * ============================================================================
  *
- * The browser subsystem lives in zig/web/: it owns visible Chrome and CDP. The
+ * The browser subsystem lives in src/web/: it owns visible Chrome and CDP. The
  * agent side only asks for permission, dispatches tools, and caps visit_page
  * output using the same "head plus temp file" shape as bash.
  */

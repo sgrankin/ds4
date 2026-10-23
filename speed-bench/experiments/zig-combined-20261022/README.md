@@ -4,7 +4,7 @@ The frozen code snapshot is `b8c71f98` (2026-10-22), before the subsequent numer
 sampler experiment. Main remains `ec5424de5562269cbe6952cdad7408989df293de`.
 All five Metal programs build with selected native modules or C references.
 The retained source is handwritten, uses real project headers, and keeps SDK
-binding generation in compiler caches. [Current module guide](../../../zig/README.md).
+binding generation in compiler caches. [Current module guide](../../../src/README.md).
 
 ## Actual workflows
 

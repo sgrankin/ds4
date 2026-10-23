@@ -2,7 +2,7 @@
 
 Final implementation snapshot: `9649f2a5`, based on frozen C main `ec5424de`.
 This is a selective migration of 27 handwritten implementation files, not a
-complete engine rewrite. The [module guide](../../../zig/README.md) lists the
+complete engine rewrite. The [module guide](../../../src/README.md) lists the
 boundaries, individual experiments, retained costs and substantial remaining
 C/Objective-C scope. Reports named `hourN` identify sequential items, each with
 a one-hour ceiling; they do not mean 27 elapsed hours.

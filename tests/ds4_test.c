@@ -5,7 +5,7 @@
 #ifndef DS4_NO_GPU
 #include "../ds4_gpu.h"
 #ifdef __APPLE__
-#include "../zig/metal/attention_decode.h"
+#include "../src/metal/attention_decode.h"
 #endif
 #include "../ds4_image.h"
 #include <math.h>

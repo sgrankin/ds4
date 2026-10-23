@@ -12,12 +12,12 @@ not establish an inference speed gain. Work ran from 12:41 to approximately
 The active path moves V4.1 graph layout, memory estimation, allocation, workspace
 growth, reset and destruction into handwritten Zig:
 
-- [layout.zig](../../../zig/engine/deepseek41/layout.zig) uses the validated
+- [layout.zig](../../../src/engine/deepseek41/layout.zig) uses the validated
   per-model configuration to describe scratch, carry and alias storage.
-- [resources.zig](../../../zig/engine/deepseek41/resources.zig) owns tensor/view
+- [resources.zig](../../../src/engine/deepseek41/resources.zig) owns tensor/view
   handles, host hash buffers and disk-read Engram descriptors. Scoped cleanup
   releases partial construction; `take` transfers the actual graph record.
-- [graph.zig](../../../zig/engine/graph.zig) connects that owner to existing C
+- [graph.zig](../../../src/engine/graph.zig) connects that owner to existing C
   sessions through the shared [graph record](../../../ds4_deepseek41_graph.h).
 
 C execution-row copies borrow the record and must not destroy its resources.

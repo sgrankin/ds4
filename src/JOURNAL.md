@@ -186,9 +186,17 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
   the working SSD path. Full details and commands are in the
   [cleanup report](../speed-bench/experiments/zig-adoption-20261023/README.md);
   raw results stay under `.workspaces/zig-adoption-cleanup-20261023/`.
-- Recommended source layout: rename `zig/` to `src/` in a separate move commit
-  after cleanup. This is a proposal, not a completed directory move. Keep build
-  metadata and project documentation at root and organize source by component.
+- Completed the authorized `zig/` to `src/` directory rename as a separate
+  change after adoption. Component structure and runtime behavior are unchanged;
+  build paths, C includes, test imports and current documentation links follow
+  the new location. Historical experiment source lists retain their old paths
+  for the revisions they describe. Build metadata stays at root; the resume
+  journal is now `src/JOURNAL.md`. `make all` and `make test` pass, as do
+  the model-free suffix transaction fixture and four Metal packet/ownership
+  fixtures. All 376 files are preserved; implementation content matches after
+  path substitution, and all 31 updated Markdown links resolve. No new model
+  or latency campaign was needed for this directory-only change. Raw build/test
+  logs stay under `.workspaces/src-rename-20261023/`.
 
 - User authorized the request/model architectural change. Added native logical
   records and a C-free DS4.1 preparation implementation, replacing the previous

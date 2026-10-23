@@ -9,7 +9,7 @@ eighteen structural checks. No performance claim is made.
 
 ## Boundary and qualification
 
-The [native output owner](../../../zig/server/output.zig) owns Responses item
+The [native output owner](../../../src/server/output.zig) owns Responses item
 identity/order, reasoning/text visibility, output JSON and streaming lifecycle.
 The worker retains generation and socket activation policy. The existing
 durable publisher and tolerant tool-argument codec remain complete C library

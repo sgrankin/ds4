@@ -279,7 +279,7 @@ export fn ds4_native_dspark_cycle_run41(args: *const c.ds4_dspark_cycle_args, gr
     return cycle.run(&context, draft, first_token, cap, eos, ignore_eos, think_mode, temperature, top_k, top_p, min_p, rng, accepted[0..capacity], errorBuffer(err, errlen));
 }
 
-// Append to the ONE existing zig/engine/graph.zig export facade. The pure owners
+// Append to the ONE existing src/engine/graph.zig export facade. The pure owners
 // below do not import this file, so no second graph export object is linked.
 const SessionRuntime = @import("deepseek41/session.zig").Runtime;
 const FrontierOwner = @import("deepseek41/frontier.zig").Frontier;
