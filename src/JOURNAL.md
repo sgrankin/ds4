@@ -166,6 +166,16 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
 
 ### 2026-10-23
 
+- Added `download-model.nu flint` / `flint-int4` for the qualified native
+  safetensors directory. Uses Recursive's pinned Hugging Face revision
+  `3b93f9053b530488405ae9fca51d4900d6ce21f0`, twelve file identities from the
+  original packaging manifest, and the existing resumable HF/SHA-256 flow.
+  Downloads into `gguf/flint-int4` without changing the default GGUF symlink.
+  All 15 offline download tests pass. A live run downloaded all seven metadata
+  files from the pinned revision and verified the five existing weight shards
+  through workspace symlinks, avoiding another 22.6 GB transfer. Nu parse and
+  format checks pass; no inference/kernels changed.
+
 - Completed Recursive Flint's native Zig/Metal backend and existing Responses
   HTTP/WebSocket integration. User explicitly chose the existing Metal runtime
   only: no MLX library or embedded Python in production. Reused licensed shader

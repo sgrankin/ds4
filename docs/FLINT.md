@@ -12,13 +12,25 @@ embeddings, from [recursive-oss/rec](https://github.com/recursive-oss/rec) revis
 directory format, not GGUF. The resident decoder is qualified on **M5 Max only**;
 other chips need a separately qualified schedule.
 
+## Download
+
+```nu
+./download-model.nu flint
+```
+
+`flint-int4` is the same target. It downloads the five safetensors shards and
+all seven metadata/tokenizer files into `gguf/flint-int4`, pinned to Hugging Face
+revision `3b93f9053b530488405ae9fca51d4900d6ce21f0`. Every file receives size
+and SHA-256 checks; rerun the command to resume. `DS4_GGUF_DIR` changes the parent
+directory. The download leaves `ds4flash.gguf` unchanged.
+
 ## Serve
 
-From Nushell, set the path to your existing Flint model directory:
+From Nushell, select the downloaded directory (or your existing Flint directory):
 
 ```nu
 nu tools/zig-build ds4-server flint-smoke
-let model = '/path/to/flint-int4-model'
+let model = './gguf/flint-int4'
 ./ds4-local --bin-dir ./zig-out/bin --server flint --model $model --port 8001
 ```
 

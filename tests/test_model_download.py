@@ -17,7 +17,24 @@ VISION = "DeepSeek-V4.1-Flash-Vision.gguf"
 VISION_1017 = "DeepSeek-V4.1-Flash-1017-vision-BF16.gguf"
 QWEN_Q2 = "Qwen3.8-Flash-Next-Q2.gguf"
 QWEN_Q4 = "Qwen3.8-Flash-Next-Q4.gguf"
+FLINT_REVISION = "3b93f9053b530488405ae9fca51d4900d6ce21f0"
+# recursive-oss/rec packaging/flint-int4-mlx.json, qualified INT4 checkpoint.
+FLINT_ARTIFACTS = {
+    "chat_template.jinja": (2328, "7940f4ffa3275c36caa4a582f845aaad79da11018b3961e8fbcad6ae29733466"),
+    "config.json": (3082, "80f577a984db1bd40dfff88457b611d4c13e807704a945616be27f28809eed21"),
+    "generation_config.json": (202, "a499c71895e008abd572558a5ad5904feaed92cf2a3b6e2cb0e9cabf03b96ed3"),
+    "model-00000.safetensors": (4745746152, "1a362742a0136c95ed751e2c56d83e63d4ed9ac674984b23b368f105d16cfe7a"),
+    "model-00001.safetensors": (4682022280, "12979140fa019042ff5cdec4c0237cc87db13b56428ce7fe093dd9d33893ea32"),
+    "model-00002.safetensors": (4682022280, "01805c6b882fdec008b0184ec68e7516102205b521e63ca5126f9d52b9aed87b"),
+    "model-00003.safetensors": (4682022280, "9380ed032d90e0ff566d49672faf292f354b3b0e7320820c150eeed8c75e9d42"),
+    "model-00004.safetensors": (3777099608, "c1ba12d2c2a80feb5e554554a01cfde2b71c2638e27fc0ee597b4121399eff99"),
+    "special_tokens_map.json": (20192, "be37b302338dda189bc70bfbe902d8faebeb5986d60c1342713439eefc4ca182"),
+    "tokenizer.json": (10879128, "a263cce0b7e2b03f7ee07ce809783ef4b47f160c3f268a4ea1524f638da45b68"),
+    "tokenizer_config.json": (30439, "159ac88217e90ffd0a4a294726048bb302829e82e1958dc85bb203aa79138fbf"),
+    "flint-int4.json": (1206, "319822f10e32a5916b57e23c7f05f9e92b24d02b3a136d02a3846b5edab78109"),
+}
 ARTIFACTS = {
+    **FLINT_ARTIFACTS,
     QWEN_Q2: (147207127040, "b1b93fa69aca5f187b0fb813aca8f3ec1beb5cf8cf0bd38cf041b93e0b6ccac9"),
     QWEN_Q4: (177280286720, "680944460a8cbe93ba8b6d7b6107213ffb7e22320bd913000e563ca0a0f25a8a"),
     Q2: (365713686528, "5296e85ff64b42ecb62c8d0c0c54e1caa07e3df8e93112f2365ebbaed62ce93a"),
@@ -60,17 +77,25 @@ class DownloadTests(unittest.TestCase):
         (tools / "model-downloads.json").write_text(json.dumps(catalog))
         hf = self.bin / "hf"
         hf.write_text("""#!/usr/bin/env python3
-import os
+import json, os
 from pathlib import Path
 import sys
 args = sys.argv[1:]
 assert args[0] == 'download'
-assert args[1] == ('kyuz0/deepseek-v4.1-flash-gguf' if args[2] == 'DeepSeek-V4.1-Flash-1017-vision-BF16.gguf'
-                   else 'antirez/qwen3.8-flash-next-gguf' if args[2].startswith('Qwen')
-                   else 'antirez/deepseek-v4.1-flash-gguf')
-if os.environ.get('FAIL_DOWNLOAD'):
-    sys.exit(7)
+if args[1] == 'RecursiveSI/flint-int4':
+    assert args[args.index('--revision') + 1] == '3b93f9053b530488405ae9fca51d4900d6ce21f0'
+else:
+    assert args[1] == ('kyuz0/deepseek-v4.1-flash-gguf' if args[2] == 'DeepSeek-V4.1-Flash-1017-vision-BF16.gguf'
+                       else 'antirez/qwen3.8-flash-next-gguf' if args[2].startswith('Qwen')
+                       else 'antirez/deepseek-v4.1-flash-gguf')
+    assert '--revision' not in args
 out = Path(args[args.index('--local-dir') + 1])
+if os.environ.get('HF_CALLS'):
+    with Path(os.environ['HF_CALLS']).open('a') as log:
+        log.write(json.dumps({'repo': args[1], 'file': args[2], 'directory': str(out),
+            'revision': args[args.index('--revision') + 1] if '--revision' in args else None}) + '\\n')
+if os.environ.get('FAIL_DOWNLOAD') or os.environ.get('FAIL_DOWNLOAD_FILE') == args[2]:
+    sys.exit(7)
 out.mkdir(parents=True, exist_ok=True)
 (out / args[2]).write_bytes((args[2] + '\\n').encode())
 """)
@@ -144,6 +169,53 @@ out.mkdir(parents=True, exist_ok=True)
         self.run_download("ds41f-q4", ok=False)
         self.run_download("ds41f-vision", ok=False)
         self.run_download("ds41f-1017-vision", ok=False)
+        self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / Q2)
+
+    def test_flint_pinned_directory_bundle_and_existing(self):
+        self.run_download("ds41f-q2")
+        calls = self.root / "hf-calls.jsonl"
+        self.env["HF_CALLS"] = str(calls)
+        text = self.run_download("flint")
+        self.assertIn("Verifying SHA-256", text)
+        directory = self.out / "flint-int4"
+        self.assertEqual({p.name for p in directory.iterdir()}, set(FLINT_ARTIFACTS))
+        for name in FLINT_ARTIFACTS:
+            self.assertEqual((directory / name).read_bytes(), payload(name))
+        self.assertTrue((directory / "flint-int4.json").is_file())
+        self.assertFalse((self.out / "config.json").exists())
+        self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / Q2)
+        records = [json.loads(line) for line in calls.read_text().splitlines()]
+        self.assertEqual([row["file"] for row in records], list(FLINT_ARTIFACTS))
+        for row in records:
+            self.assertEqual(row["repo"], "RecursiveSI/flint-int4")
+            self.assertEqual(row["revision"], FLINT_REVISION)
+            self.assertEqual(Path(row["directory"]), directory)
+        self.env["FAIL_DOWNLOAD"] = "1"
+        self.assertEqual(self.run_download("flint-int4").count("Already downloaded"), 12)
+        self.assertEqual(len(calls.read_text().splitlines()), 12)
+        self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / Q2)
+
+    def test_flint_corrupt_metadata_and_resume_missing_shard(self):
+        self.run_download("ds41f-q2")
+        self.run_download("flint-int4")
+        directory = self.out / "flint-int4"
+        metadata = directory / "config.json"
+        metadata.write_bytes(b"x" * len(payload("config.json")))
+        self.assertIn("Checksum mismatch", self.run_download("flint", ok=False))
+        self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / Q2)
+        metadata.write_bytes(payload("config.json"))
+        missing = "model-00003.safetensors"
+        (directory / missing).unlink()
+        calls = self.root / "hf-calls.jsonl"
+        self.env.update(HF_CALLS=str(calls), FAIL_DOWNLOAD_FILE=missing)
+        self.run_download("flint-int4", ok=False)
+        self.assertFalse((directory / missing).exists())
+        self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / Q2)
+        del self.env["FAIL_DOWNLOAD_FILE"]
+        self.run_download("flint")
+        self.assertEqual((directory / missing).read_bytes(), payload(missing))
+        records = [json.loads(line) for line in calls.read_text().splitlines()]
+        self.assertEqual([row["file"] for row in records], [missing, missing])
         self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / Q2)
 
     def test_partial_requires_explicit_cleanup(self):

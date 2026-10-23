@@ -53,7 +53,7 @@ def find-hf [] {
     for candidate in $candidates {
         if (which $candidate | is-not-empty) { return $candidate }
     }
-    fail 'Large GGUF downloads require the official Hugging Face CLI. Install it with:
+    fail 'Model downloads require the official Hugging Face CLI. Install it with:
   python3 -m pip install -U huggingface_hub hf_xet'
 }
 
@@ -88,7 +88,19 @@ def download-one [
         let command = (find-hf)
         print $"using ($command) download\nIf the download stops, run the same command again to resume it."
         let auth = if $token == '' { [] } else { [--token $token] }
-        checked $command download $model.repo $file --repo-type model --local-dir $directory ...$auth
+        let revision = if ($model.revision? | default '') == '' { [] } else { [--revision $model.revision] }
+        (checked
+            $command
+            download
+            $model.repo
+            $file
+            --repo-type
+            model
+            --local-dir
+            $directory
+            ...$revision
+            ...$auth
+        )
         let hf_out = $directory | path join $file
         if $hf_out != $out and (nonempty $hf_out) {
             mv $hf_out $out
@@ -98,6 +110,7 @@ def download-one [
     } else {
         print 'If the download stops, run the same command again to resume it.'
         let auth = if $token == '' { [] } else { [-H $"Authorization: Bearer ($token)"] }
+        let revision = $model.revision? | default main
         (checked
             curl
             -fL
@@ -107,7 +120,7 @@ def download-one [
             ...$auth
             -o
             $part
-            $"https://huggingface.co/($model.repo)/resolve/main/($file)"
+            $"https://huggingface.co/($model.repo)/resolve/($revision)/($file)"
         )
         verify $catalog $file $part
         mv $part $out
@@ -146,19 +159,20 @@ def download-split [
 }
 
 def usage [catalog: record] {
-    print 'DwarfStar GGUF downloader
+    print 'DwarfStar model downloader
 Usage: ./download-model.nu TARGET [--token TOKEN]
 DS4_GGUF_DIR selects the download directory (default: ./gguf).
-Main-model downloads update ./ds4flash.gguf after successful download.
+Flint downloads a complete model directory at ./gguf/flint-int4.
+Main GGUF downloads update ./ds4flash.gguf after successful download; Flint leaves it unchanged.
 Pinned artifacts also receive size and SHA-256 checks.
 '
     for model in ($catalog.targets | transpose name configuration) {
         print $"($model.name): ($model.configuration.description? | default $model.configuration.file)"
     }
-    print "\nAlias: qwen38-iq2 -> qwen38-q2"
+    print "\nAliases: qwen38-iq2 -> qwen38-q2; flint -> flint-int4"
 }
 
-# Download a GGUF with resumable HF/curl transfers and pinned size/SHA checks.
+# Download model files with resumable HF/curl transfers and pinned size/SHA checks.
 # Use target "help" for detailed model descriptions.
 #
 # Targets:
@@ -170,6 +184,7 @@ Pinned artifacts also receive size and SHA-256 checks.
 #   glm-unsloth-q4, glm-antirez-iq2xxs, glm-antirez-q2, glm-antirez-q4
 #   glm53-full-q2, glm53-q2, glm53-q4, glm53-fp8, glm53-vision
 #   qwen38-q2 (alias qwen38-iq2), qwen38-q4k, qwen38-vision
+#   flint-int4 (alias flint): complete native affine INT4 safetensors directory
 #
 # HF_TOKEN or the local HF token cache is used when --token is absent.
 # DS4_GGUF_DIR chooses the output directory (default: repository ./gguf).
@@ -186,7 +201,8 @@ def main [target?: string, --token: string] {
     let selected = $catalog.aliases | get --optional $target | default $target
     let model = $catalog.targets | get --optional $selected
     if $model == null { fail $"Unknown model: ($target). Use ./download-model.nu help for available targets." }
-    let directory = $ROOT | path join ($env.DS4_GGUF_DIR? | default --empty gguf) | path expand
+    let base = $ROOT | path join ($env.DS4_GGUF_DIR? | default --empty gguf) | path expand
+    let directory = $base | path join ($model.directory? | default '')
     let token_file = $env.HOME | path join .cache/huggingface/token
     let auth = $token | default ($env.HF_TOKEN? | default '')
     let auth = if $auth == '' and (nonempty $token_file) {
@@ -208,7 +224,9 @@ def main [target?: string, --token: string] {
         print $"Linked ./ds4flash.gguf -> ($directory | path join $model.file)"
     }
     print 'Done.'
-    if $selected == ds4f-dspark or $selected == ds4f-vision-dspark {
+    if $selected == flint-int4 {
+        print $"Run ./ds4-local --server flint --model '($directory)'"
+    } else if $selected == ds4f-dspark or $selected == ds4f-vision-dspark {
         print $"Enable DSpark explicitly with --dspark --mtp-model ($directory | path join $model.file); use only its matching language checkpoint."
     } else if $selected == qwen38-q2 {
         print 'Run ./ds4 --ctx 8192 --prefill-chunk 1024. Add --mtp to enable speculation.'

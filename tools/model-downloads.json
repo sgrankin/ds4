@@ -220,10 +220,34 @@
       "transport": "hf",
       "link": false,
       "description": "Qwen3.8-Flash-Next vision encoder, about 0.6 GB on disk. Load it with --vision; this target does not update ./ds4flash.gguf."
+    },
+    "flint-int4": {
+      "repo": "RecursiveSI/flint-int4",
+      "revision": "3b93f9053b530488405ae9fca51d4900d6ce21f0",
+      "file": "flint-int4.json",
+      "files": [
+        "chat_template.jinja",
+        "config.json",
+        "generation_config.json",
+        "model-00000.safetensors",
+        "model-00001.safetensors",
+        "model-00002.safetensors",
+        "model-00003.safetensors",
+        "model-00004.safetensors",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "flint-int4.json"
+      ],
+      "directory": "flint-int4",
+      "transport": "hf",
+      "link": false,
+      "description": "Recursive Flint affine INT4 with INT8 embeddings, about 22.6 GB. Downloads all five safetensors shards, tokenizer/config files and manifest into gguf/flint-int4. Native Metal serving on M5 Max; use ds4-local --server flint --model gguf/flint-int4. Leaves ds4flash.gguf unchanged."
     }
   },
   "aliases": {
-    "qwen38-iq2": "qwen38-q2"
+    "qwen38-iq2": "qwen38-q2",
+    "flint": "flint-int4"
   },
   "artifacts": {
     "Qwen3.8-Flash-Next-Q2.gguf": {
@@ -257,6 +281,54 @@
     "DeepSeek-V4.1-Flash-1017-vision-BF16.gguf": {
       "bytes": 970555552,
       "sha256": "861f1097e8686111fa23dc4a6bf139fd0c4cc114db2f1b4090a267f7683c0dbf"
+    },
+    "chat_template.jinja": {
+      "bytes": 2328,
+      "sha256": "7940f4ffa3275c36caa4a582f845aaad79da11018b3961e8fbcad6ae29733466"
+    },
+    "config.json": {
+      "bytes": 3082,
+      "sha256": "80f577a984db1bd40dfff88457b611d4c13e807704a945616be27f28809eed21"
+    },
+    "generation_config.json": {
+      "bytes": 202,
+      "sha256": "a499c71895e008abd572558a5ad5904feaed92cf2a3b6e2cb0e9cabf03b96ed3"
+    },
+    "model-00000.safetensors": {
+      "bytes": 4745746152,
+      "sha256": "1a362742a0136c95ed751e2c56d83e63d4ed9ac674984b23b368f105d16cfe7a"
+    },
+    "model-00001.safetensors": {
+      "bytes": 4682022280,
+      "sha256": "12979140fa019042ff5cdec4c0237cc87db13b56428ce7fe093dd9d33893ea32"
+    },
+    "model-00002.safetensors": {
+      "bytes": 4682022280,
+      "sha256": "01805c6b882fdec008b0184ec68e7516102205b521e63ca5126f9d52b9aed87b"
+    },
+    "model-00003.safetensors": {
+      "bytes": 4682022280,
+      "sha256": "9380ed032d90e0ff566d49672faf292f354b3b0e7320820c150eeed8c75e9d42"
+    },
+    "model-00004.safetensors": {
+      "bytes": 3777099608,
+      "sha256": "c1ba12d2c2a80feb5e554554a01cfde2b71c2638e27fc0ee597b4121399eff99"
+    },
+    "special_tokens_map.json": {
+      "bytes": 20192,
+      "sha256": "be37b302338dda189bc70bfbe902d8faebeb5986d60c1342713439eefc4ca182"
+    },
+    "tokenizer.json": {
+      "bytes": 10879128,
+      "sha256": "a263cce0b7e2b03f7ee07ce809783ef4b47f160c3f268a4ea1524f638da45b68"
+    },
+    "tokenizer_config.json": {
+      "bytes": 30439,
+      "sha256": "159ac88217e90ffd0a4a294726048bb302829e82e1958dc85bb203aa79138fbf"
+    },
+    "flint-int4.json": {
+      "bytes": 1206,
+      "sha256": "319822f10e32a5916b57e23c7f05f9e92b24d02b3a136d02a3846b5edab78109"
     }
   },
   "split": {
