@@ -7,6 +7,7 @@
 #include "../core_api.h"
 #include "../diagnostics_api.h"
 #include "../payload_io.h"
+#include "../pagein_api.h"
 #include "../qwen4/api.h"
 #include "../qwen4/model_api.h"
 #include "../qwen4/vision_api.h"
@@ -191,23 +192,12 @@ int ds4_native_checkpoint_save_payload41(ds4_session_frontier *frontier,
     ds41_gpu_graph *graph, const ds4_model_config *config, bool ready, FILE *stream, char *error, size_t error_size);
 int ds4_native_checkpoint_load_payload41(ds4_session_frontier *frontier,
     ds41_gpu_graph *graph, const ds4_model_config *config, bool ready, FILE *stream, uint64_t bytes, char *error, size_t error_size);
-int ds4_native_checkpoint_save_snapshot41(ds4_session_frontier *frontier,
-    ds41_gpu_graph *graph, const ds4_model_config *config, bool ready, ds4_session_snapshot *snapshot, char *error, size_t error_size);
-int ds4_native_checkpoint_load_snapshot41(ds4_session_frontier *frontier,
-    ds41_gpu_graph *graph, const ds4_model_config *config, bool ready, const ds4_session_snapshot *snapshot, char *error, size_t error_size);
-int ds4_native_checkpoint_stage41(ds4_session_frontier *frontier,
-    ds41_gpu_graph *graph, const ds4_model_config *config, bool ready, ds4_session_payload_file *output, char *error, size_t error_size);
 uint64_t ds4_native_checkpoint_replay_bytes41(ds4_session_frontier *frontier,
     ds41_gpu_graph *graph, const ds4_model_config *config, bool ready);
 int ds4_native_checkpoint_save_replay41(ds4_session_frontier *frontier,
     ds41_gpu_graph *graph, const ds4_model_config *config, bool ready, ds4_session_snapshot *snapshot, char *error, size_t error_size);
 int ds4_native_checkpoint_load_replay41(ds4_session_frontier *frontier,
     ds41_gpu_graph *graph, const ds4_model_config *config, bool ready, const ds4_session_snapshot *snapshot, bool *invalidate, char *error, size_t error_size);
-int ds4_native_checkpoint_write_staged41(const ds4_session_payload_file *staged,
-    FILE *stream, char *error, size_t error_size);
-void ds4_native_checkpoint_free_staged41(ds4_session_payload_file *staged);
-void ds4_native_checkpoint_free_snapshot41(ds4_session_snapshot *snapshot);
-
 /* Whole V4.1 device/host-resource lifetime. All inputs are actual records;
  * caller-owned Session shell and TP transport registration remain outside. */
 bool ds4_native_session_resources_init41(ds4_deepseek41_session_device *,

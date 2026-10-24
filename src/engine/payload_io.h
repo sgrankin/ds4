@@ -3,6 +3,7 @@
 
 #include "ds4_gpu.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /* Bounded file/device transfers shared by the native model codecs. Each
  * codec owns its span order, state validation and commit/rollback policy. */
@@ -12,6 +13,9 @@ int ds4_native_payload_read_bytes(FILE *, void *, uint64_t, uint64_t *,
     char *, size_t);
 int ds4_native_payload_write_u32(FILE *, uint32_t, char *, size_t);
 int ds4_native_payload_read_u32(FILE *, uint32_t *, uint64_t *, char *, size_t);
+int ds4_native_payload_skip_bytes(FILE *, uint64_t, uint8_t *, size_t,
+    uint64_t *, char *, size_t);
+int ds4_native_payload_copy_file(FILE *, FILE *, uint64_t, char *, size_t);
 int ds4_native_payload_write_tensor_span(FILE *, const ds4_gpu_tensor *,
     uint64_t offset, uint64_t bytes, uint8_t *scratch, size_t capacity,
     char *, size_t);

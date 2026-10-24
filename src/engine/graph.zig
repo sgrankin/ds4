@@ -381,21 +381,6 @@ export fn ds4_native_checkpoint_load_payload41(state: *c.ds4_session_frontier, g
     const owner = checkpoint(state, graph, &config, ready);
     return owner.loadCanonical(stream, bytes, errorBuffer(errors, error_size));
 }
-export fn ds4_native_checkpoint_save_snapshot41(state: *c.ds4_session_frontier, graph: *c.ds41_gpu_graph, raw: *const c.ds4_model_config, ready: bool, snapshot: ?*c.ds4_session_snapshot, errors: [*c]u8, error_size: usize) c_int {
-    const config = configuration(raw);
-    const owner = checkpoint(state, graph, &config, ready);
-    return owner.saveSnapshot(snapshot, errorBuffer(errors, error_size));
-}
-export fn ds4_native_checkpoint_load_snapshot41(state: *c.ds4_session_frontier, graph: *c.ds41_gpu_graph, raw: *const c.ds4_model_config, ready: bool, snapshot: ?*const c.ds4_session_snapshot, errors: [*c]u8, error_size: usize) c_int {
-    const config = configuration(raw);
-    const owner = checkpoint(state, graph, &config, ready);
-    return owner.loadSnapshot(snapshot, errorBuffer(errors, error_size));
-}
-export fn ds4_native_checkpoint_stage41(state: *c.ds4_session_frontier, graph: *c.ds41_gpu_graph, raw: *const c.ds4_model_config, ready: bool, output: ?*c.ds4_session_payload_file, errors: [*c]u8, error_size: usize) c_int {
-    const config = configuration(raw);
-    const owner = checkpoint(state, graph, &config, ready);
-    return owner.stage(output, errorBuffer(errors, error_size));
-}
 export fn ds4_native_checkpoint_replay_bytes41(state: *c.ds4_session_frontier, graph: *c.ds41_gpu_graph, raw: *const c.ds4_model_config, ready: bool) u64 {
     const config = configuration(raw);
     const owner = checkpoint(state, graph, &config, ready);
@@ -411,16 +396,6 @@ export fn ds4_native_checkpoint_load_replay41(state: *c.ds4_session_frontier, gr
     const owner = checkpoint(state, graph, &config, ready);
     return owner.loadReplay(snapshot, invalidate, errorBuffer(errors, error_size));
 }
-export fn ds4_native_checkpoint_write_staged41(staged: ?*const c.ds4_session_payload_file, stream: ?*c.FILE, errors: [*c]u8, error_size: usize) c_int {
-    return CheckpointOwner.writeStaged(staged, stream, errorBuffer(errors, error_size));
-}
-export fn ds4_native_checkpoint_free_staged41(staged: ?*c.ds4_session_payload_file) void {
-    CheckpointOwner.freeStaged(staged);
-}
-export fn ds4_native_checkpoint_free_snapshot41(snapshot: ?*c.ds4_session_snapshot) void {
-    CheckpointOwner.freeSnapshot(snapshot);
-}
-
 // Complete Session resource lifetime; Session shell/transport registration stay C.
 const SessionResources = @import("deepseek41/session_resources.zig");
 export fn ds4_native_session_resources_init41(device: *c.ds4_deepseek41_session_device, frontier: *c.ds4_session_frontier, memory_state: *c.ds4_engine_memory, inputs: *const c.ds4_engine_memory_inputs, model: *const c.ds4_model, weights: *const c.ds4_weights, raw: *const c.ds4_model_config, path: [*:0]const u8, context: u32, chunk: u32, quality: bool, streaming: bool, drafter: ?*const c.ds4_dspark_weights, transport: *const c.ds4_engine_tp_state) bool {

@@ -71,6 +71,72 @@ protocol/quality checks pass, including store=false isolation, concurrent
 sessions, disconnects and restart recovery. Evidence: `slice3-{build,server,store}.log`,
 `slice3-qwen-responses/` and `slice3-ws-guard/`.
 
+## 4. Generic payload I/O — complete
+
+Native modules own bounded FILE copies, little-endian words, tensor transfers
+and F16/F32 wire conversion. FILE-only exports stay separate from GPU exports,
+so CPU fixtures cannot extract a second runtime. The focused production-linked
+fixture checks all 65,536 half encodings and 1,143,805 float encodings against
+the prior ARM conversions, plus partial transfer/accounting and staged copies.
+
+The full host/script suite passes. Both Qwen and GLM pass frozen → native →
+frozen canonical payload exchange at positions 1/3/4/5/129: every wire byte and
+fresh continuation logit matches, with invalid/truncated state checks retained.
+Both guards complete normally. Build/run `payload-io-test` / `test-payload-io`;
+the maintained `payload_exchange.nu` uses the frozen and candidate helpers.
+Evidence: `slice4-{build,host}.log`, `slice4-{qwen,glm}-payload/` and guards.
+
+## 5. Snapshot/staged-file envelopes — complete
+
+Native stdio ownership covers snapshot resize/save/load/free and staged-file
+create/save/flush/measure/copy/unlink. Public APIs borrow the opaque session;
+model codecs retain wire ordering and frontier mutation. Internal DS41 suffix
+capture needs the same envelope, so `snapshot_buffer.zig` shares the concrete
+memory-stream rules with thin checkpoint adapters. Unused DS41 C exports and
+its duplicate staging implementation are removed.
+
+Focused snapshot lifetime/publication checks and the full host suite pass.
+Qwen and GLM payload/fresh-logit checks pass against frozen state. The frozen
+`e37e53d9` source built the DS41 control helper; all eight existing F32/F16,
+return-import and cross-storage campaigns pass at 1/2/3/127/128/129. Same-storage
+wire and fresh logits remain identical; cross-storage rounding is reported.
+Evidence: `slice5-{build,envelope,host}.log`, `slice5-{qwen,glm,ds41}-payload/`
+and guards. Build/run `session-snapshot-test` / `test-session-snapshot`; the
+existing canonical `qualify.py` reproduces the DS41 matrix.
+
+## 6. Selected-expert worker — complete
+
+The native process worker owns start, one mailbox, event waiting, ID readback,
+validation, expert loads and consumed completion. Actual job/pthread layouts
+remain single-source; count inputs are captured at submission. Non-Apple legacy
+workers retain their separate compatibility branch.
+
+The real-pthread CPU fixture passes busy, completed-but-unconsumed, event/read/ID,
+cache-load/override failure and reuse checks. Actual DS41 Metal execution with
+`DS4_METAL_V41_ASYNC_EXPERT_LOAD=1` passes canonical/fresh continuation comparisons
+against the frozen control at 1/2/3/127/128/129, including failed-restore recovery.
+This flag reaches the moved async path; ordinary defaults alone would not.
+Evidence: `slice6-{build,worker}.log`, `slice6-ds41-async/` and `slice6-async-guard/`.
+Build/run `stream-selected-test` / `test-stream-selected`; the real model uses
+the same `payload-roundtrip` helper with that environment setting.
+
+## 7. Page-in and view handoffs — complete
+
+Native code owns bounded pread, page touches, madvise/readahead, range partition,
+selected-ID run coalescing, pthread start/join, occupied slots and model-view
+array handoff. DS41 reuses the same pread leaf; no I/O sorting policy is added.
+A temporary C leaf selects family spans; slice 10 removes it with explicit
+shape/resident-policy inputs.
+
+The real-file/thread fixture and full host suite pass. DS41 and GLM canonical
+bytes/fresh logits match frozen controls. Profiled 256-token model prefills reach
+all 40 DS41 and all 45 GLM layer preads, with `ok=1`; short state tests alone do
+not enter the full-layer preparation path. Other hint modes use real OS I/O in
+the focused fixture. Evidence: `slice7-{build,pagein,host}.log`,
+`slice7-{ds41,glm}-pread/`, `slice7-{ds41,glm}-prefill.*` and guards.
+Build/run `pagein-test` / `test-pagein`; enable
+`DS4_METAL_STREAMING_PREFILL_LAYER_PREAD_PROFILE=1` for the model check.
+
 Later slices remain pending integration/qualification. Payload I/O,
 snapshot-envelope, selected-worker and common-session preparations are retained
 separately until their preceding slices qualify.

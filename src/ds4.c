@@ -61,6 +61,8 @@
 #include "ds4_dspark_cycle.h"
 #include "ds4_deepseek41_graph.h"
 #include "engine/model_api.h"
+#include "engine/session_snapshot_api.h"
+#include "engine/pagein_api.h"
 #include "engine/qwen4/model_api.h"
 #include "engine/glm53/model_api.h"
 #include "engine/qwen4/vision_api.h"
@@ -5293,18 +5295,6 @@ static void weights_bind(
     weights_validate_layout(w, start, end, require_token_embd, require_output);
 }
 
-typedef struct {
-    uint64_t off;
-    uint64_t end;
-    bool isolate;
-} ds4_model_map_span;
-
-typedef struct {
-    ds4_model_map_span *v;
-    uint32_t len;
-    uint32_t cap;
-    uint64_t max_tensor_bytes;
-} ds4_model_map_span_vec;
 
 static void model_map_span_include_tensor(
         const ds4_tensor *t,
@@ -16927,6 +16917,14 @@ static bool metal_graph_alloc(
                                      1, false, NULL, false, NULL);
 }
 
+#ifdef __APPLE__
+static bool metal_graph_install_model_spans(
+        const ds4_model              *model,
+        const ds4_model_map_span_vec *spans,
+        const char                   *label) {
+    return ds4_native_pagein_install_spans(model, spans, label);
+}
+#else
 static bool metal_graph_install_model_spans(
         const ds4_model              *model,
         const ds4_model_map_span_vec *spans,
@@ -16955,6 +16953,7 @@ static bool metal_graph_install_model_spans(
     free(sizes);
     return ok;
 }
+#endif
 
 static bool metal_graph_stream_readahead_enabled(void) {
     return glm_graph_env_present("DS4_ROCM_ENABLE_STREAMING_READAHEAD",
@@ -17005,6 +17004,15 @@ static bool metal_graph_stream_decode_layer_batch_enabled(
                                   "DS4_METAL_GRAPH_DUMP_PREFIX");
 }
 
+#ifdef __APPLE__
+static void metal_graph_stream_readahead_range_impl(
+        const ds4_model *model,
+        uint64_t         offset,
+        uint64_t         size,
+        bool             enabled) {
+    ds4_native_pagein_readahead(model, offset, size, enabled);
+}
+#else
 static void metal_graph_stream_readahead_range_impl(
         const ds4_model *model,
         uint64_t         offset,
@@ -17042,7 +17050,18 @@ static void metal_graph_stream_readahead_range_impl(
     (void)size;
 #endif
 }
+#endif
 
+#ifdef __APPLE__
+static bool metal_graph_stream_madvise_willneed_range_impl(
+        const ds4_model *model,
+        uint64_t         offset,
+        uint64_t         size,
+        bool             enabled,
+        uint64_t        *advised) {
+    return ds4_native_pagein_madvise(model, offset, size, enabled, advised);
+}
+#else
 static bool metal_graph_stream_madvise_willneed_range_impl(
         const ds4_model *model,
         uint64_t         offset,
@@ -17095,6 +17114,7 @@ static bool metal_graph_stream_madvise_willneed_range_impl(
     return true;
 #endif
 }
+#endif
 
 static void metal_graph_stream_readahead_range(
         const ds4_model *model,
@@ -17805,6 +17825,7 @@ static void metal_graph_stream_prefill_selected_profile_summary(
             "Metal streaming prefill selected profile");
 }
 
+#ifndef __APPLE__
 static bool metal_graph_stream_pagein_touch_range(
         const ds4_model *model,
         uint64_t         offset,
@@ -17986,6 +18007,9 @@ static void *metal_graph_stream_pagein_worker_main(void *arg) {
     return NULL;
 }
 
+#endif
+
+#ifndef __APPLE__
 static uint32_t metal_graph_stream_prefill_layer_pagein_threads(void) {
     const char *env = glm_graph_env_value(
             "DS4_ROCM_STREAMING_PREFILL_LAYER_PREPARE_THREADS",
@@ -18031,6 +18055,8 @@ static uint32_t metal_graph_stream_prefill_selected_prepare_gap(void) {
     return v > 8 ? 8u : (uint32_t)v;
 }
 
+#endif
+
 static bool metal_graph_stream_prefill_layer_pagein_overlap_enabled(void) {
     return !glm_graph_env_present("DS4_ROCM_STREAMING_PREFILL_LAYER_PREPARE_NO_OVERLAP",
                                   "DS4_METAL_STREAMING_PREFILL_LAYER_PREPARE_NO_OVERLAP") &&
@@ -18058,6 +18084,22 @@ static uint32_t metal_graph_stream_prefill_layer_prepare_ahead(void) {
     return (uint32_t)v;
 }
 
+#ifdef __APPLE__
+static bool metal_graph_stream_prefill_selected_pagein_start(
+        ds4_gpu_graph                 *g,
+        const ds4_model               *model,
+        const ds4_layer_weights       *layer,
+        uint32_t                       il,
+        uint32_t                       n_tokens,
+        uint64_t                       gate_expert_bytes,
+        uint64_t                       down_expert_bytes,
+        metal_graph_stream_pagein_job *job) {
+    return ds4_native_pagein_selected_start(model, layer,
+        g ? metal_graph_batch_router_selected(g) : NULL, il, n_tokens,
+        gate_expert_bytes, down_expert_bytes, g != NULL,
+        g && g->ssd_streaming, DS4_N_EXPERT, DS4_N_EXPERT_USED, job);
+}
+#else
 static bool metal_graph_stream_prefill_selected_pagein_start(
         ds4_gpu_graph                 *g,
         const ds4_model               *model,
@@ -18243,7 +18285,14 @@ static bool metal_graph_stream_prefill_selected_pagein_start(
     job->started = true;
     return true;
 }
+#endif
 
+#ifdef __APPLE__
+static bool metal_graph_stream_prefill_selected_pagein_join(
+        metal_graph_stream_pagein_job *job) {
+    return ds4_native_pagein_join(job, true);
+}
+#else
 static bool metal_graph_stream_prefill_selected_pagein_join(
         metal_graph_stream_pagein_job *job) {
     if (!job || !job->started) return true;
@@ -18304,7 +18353,29 @@ static bool metal_graph_stream_prefill_selected_pagein_join(
     memset(job, 0, sizeof(*job));
     return ok;
 }
+#endif
 
+#ifdef __APPLE__
+static bool metal_graph_stream_prefill_layer_pagein_start(
+        const ds4_gpu_graph           *g,
+        const ds4_model               *model,
+        const ds4_weights             *weights,
+        uint32_t                       il,
+        uint32_t                       n_tokens,
+        bool                           madvise_only,
+        bool                           pread_only,
+        bool                           readahead_only,
+        bool                           decode_only,
+        metal_graph_stream_pagein_job *job) {
+    const uint32_t flags =
+        (madvise_only ? DS4_STREAM_PREPARE_MADVISE : 0u) |
+        (pread_only ? DS4_STREAM_PREPARE_PREAD : 0u) |
+        (readahead_only ? DS4_STREAM_PREPARE_READAHEAD : 0u) |
+        (decode_only ? DS4_STREAM_PREPARE_DECODE : 0u);
+    return ds4_native_pagein_layer_start(model, weights, il, n_tokens, flags,
+        g != NULL, g && g->ssd_streaming, DS4_N_LAYER, job);
+}
+#else
 static bool metal_graph_stream_prefill_layer_pagein_start(
         const ds4_gpu_graph           *g,
         const ds4_model               *model,
@@ -18457,7 +18528,14 @@ static bool metal_graph_stream_prefill_layer_pagein_start(
     job->started = true;
     return true;
 }
+#endif
 
+#ifdef __APPLE__
+static bool metal_graph_stream_prefill_layer_pagein_join(
+        metal_graph_stream_pagein_job *job) {
+    return ds4_native_pagein_join(job, false);
+}
+#else
 static bool metal_graph_stream_prefill_layer_pagein_join(
         metal_graph_stream_pagein_job *job) {
     if (!job || !job->started) return true;
@@ -18521,9 +18599,11 @@ static bool metal_graph_stream_prefill_layer_pagein_join(
     memset(job, 0, sizeof(*job));
     return ok;
 }
+#endif
 
 
 
+#ifndef __APPLE__
 static metal_graph_stream_prepare_slot *metal_graph_stream_prepare_slot_find(
         metal_graph_stream_prepare_slot *slots,
         uint32_t                         n_slots,
@@ -18543,6 +18623,30 @@ static metal_graph_stream_prepare_slot *metal_graph_stream_prepare_slot_free(
     return NULL;
 }
 
+#endif
+
+#ifdef __APPLE__
+static bool metal_graph_stream_prepare_start_if_needed(
+        const ds4_gpu_graph          *g,
+        const ds4_model              *model,
+        const ds4_weights            *weights,
+        uint32_t                      layer,
+        uint32_t                      n_tokens,
+        bool                          madvise_only,
+        bool                          pread_only,
+        bool                          readahead_only,
+        bool                          decode_only,
+        metal_graph_stream_prepare_slot *slots,
+        uint32_t                      n_slots) {
+    const uint32_t flags =
+        (madvise_only ? DS4_STREAM_PREPARE_MADVISE : 0u) |
+        (pread_only ? DS4_STREAM_PREPARE_PREAD : 0u) |
+        (readahead_only ? DS4_STREAM_PREPARE_READAHEAD : 0u) |
+        (decode_only ? DS4_STREAM_PREPARE_DECODE : 0u);
+    return ds4_native_pagein_prepare_start(model, weights, layer, n_tokens,
+        flags, g != NULL, g && g->ssd_streaming, DS4_N_LAYER, slots, n_slots);
+}
+#else
 static bool metal_graph_stream_prepare_start_if_needed(
         const ds4_gpu_graph          *g,
         const ds4_model              *model,
@@ -18585,7 +18689,30 @@ static bool metal_graph_stream_prepare_start_if_needed(
     slot->active = slot->job.started;
     return true;
 }
+#endif
 
+#ifdef __APPLE__
+static bool metal_graph_stream_prepare_join_layer(
+        const ds4_gpu_graph          *g,
+        const ds4_model              *model,
+        const ds4_weights            *weights,
+        uint32_t                      layer,
+        uint32_t                      n_tokens,
+        bool                          madvise_only,
+        bool                          pread_only,
+        bool                          readahead_only,
+        bool                          decode_only,
+        metal_graph_stream_prepare_slot *slots,
+        uint32_t                      n_slots) {
+    const uint32_t flags =
+        (madvise_only ? DS4_STREAM_PREPARE_MADVISE : 0u) |
+        (pread_only ? DS4_STREAM_PREPARE_PREAD : 0u) |
+        (readahead_only ? DS4_STREAM_PREPARE_READAHEAD : 0u) |
+        (decode_only ? DS4_STREAM_PREPARE_DECODE : 0u);
+    return ds4_native_pagein_prepare_join_layer(model, weights, layer, n_tokens,
+        flags, g != NULL, g && g->ssd_streaming, DS4_N_LAYER, slots, n_slots);
+}
+#else
 static bool metal_graph_stream_prepare_join_layer(
         const ds4_gpu_graph          *g,
         const ds4_model              *model,
@@ -18621,7 +18748,15 @@ static bool metal_graph_stream_prepare_join_layer(
     memset(slot, 0, sizeof(*slot));
     return ok;
 }
+#endif
 
+#ifdef __APPLE__
+static bool metal_graph_stream_prepare_join_all(
+        metal_graph_stream_prepare_slot *slots,
+        uint32_t                         n_slots) {
+    return ds4_native_pagein_prepare_join_all(slots, n_slots);
+}
+#else
 static bool metal_graph_stream_prepare_join_all(
         metal_graph_stream_prepare_slot *slots,
         uint32_t                         n_slots) {
@@ -18635,6 +18770,7 @@ static bool metal_graph_stream_prepare_join_all(
     }
     return ok;
 }
+#endif
 
 static void metal_graph_stream_readahead_layer(
         const ds4_model   *model,
@@ -20631,6 +20767,24 @@ static bool metal_graph_cuda_stream_prefill_batch_selected_load(
 
 
 
+#ifdef __APPLE__
+/* The native owner has one process-wide mailbox. Capture the active shape at
+ * submission; the worker never reads mutable process-global model settings. */
+static DS4_MAYBE_UNUSED bool metal_graph_selected_async_load_start_tensor(
+        metal_graph_selected_async_load *job,
+        ds4_gpu_tensor *selected, const ds4_model *model,
+        const ds4_layer_weights *layer, uint32_t il, uint64_t event,
+        uint64_t gate_bytes, uint64_t down_bytes) {
+    return ds4_native_stream_selected_start(job, selected, model, layer, il,
+        event, gate_bytes, down_bytes, DS4_N_EXPERT, DS4_N_EXPERT_USED);
+}
+
+static bool metal_graph_selected_async_load_finish(
+        metal_graph_selected_async_load *job) {
+    return ds4_native_stream_selected_finish(job);
+}
+#else
+/* Retained non-Metal backends have not adopted the native storage worker. */
 static pthread_mutex_t g_metal_graph_selected_async_load_mutex =
     PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t g_metal_graph_selected_async_load_cond =
@@ -20793,6 +20947,24 @@ static DS4_MAYBE_UNUSED bool metal_graph_selected_async_load_start_tensor(
     return true;
 }
 
+static bool metal_graph_selected_async_load_finish(
+        metal_graph_selected_async_load *job) {
+    if (!job || !job->active) return false;
+    pthread_mutex_lock(&g_metal_graph_selected_async_load_mutex);
+    while (!g_metal_graph_selected_async_load_done) {
+        pthread_cond_wait(&g_metal_graph_selected_async_load_done_cond,
+                          &g_metal_graph_selected_async_load_mutex);
+    }
+    *job = g_metal_graph_selected_async_load_job;
+    g_metal_graph_selected_async_load_done = false;
+    pthread_mutex_unlock(&g_metal_graph_selected_async_load_mutex);
+    job->active = false;
+    if (!job->ok) return false;
+    return ds4_gpu_routed_moe_set_selected_override(job->selected_ids,
+                                                   DS4_N_EXPERT_USED) != 0;
+}
+#endif
+
 static DS4_MAYBE_UNUSED bool metal_graph_selected_async_load_start(
         metal_graph_selected_async_load *job,
         ds4_gpu_graph                   *g,
@@ -20811,23 +20983,6 @@ static DS4_MAYBE_UNUSED bool metal_graph_selected_async_load_start(
             event_value,
             gate_expert_bytes,
             down_expert_bytes);
-}
-
-static bool metal_graph_selected_async_load_finish(
-        metal_graph_selected_async_load *job) {
-    if (!job || !job->active) return false;
-    pthread_mutex_lock(&g_metal_graph_selected_async_load_mutex);
-    while (!g_metal_graph_selected_async_load_done) {
-        pthread_cond_wait(&g_metal_graph_selected_async_load_done_cond,
-                          &g_metal_graph_selected_async_load_mutex);
-    }
-    *job = g_metal_graph_selected_async_load_job;
-    g_metal_graph_selected_async_load_done = false;
-    pthread_mutex_unlock(&g_metal_graph_selected_async_load_mutex);
-    job->active = false;
-    if (!job->ok) return false;
-    return ds4_gpu_routed_moe_set_selected_override(job->selected_ids,
-                                                   DS4_N_EXPERT_USED) != 0;
 }
 
 #ifdef DS4_ROCM_BUILD
@@ -48107,6 +48262,14 @@ static uint32_t glm_graph_prefill_chunk_tokens(uint32_t full_attention_cap) {
     return full_attention_cap ? full_attention_cap : DS4_GLM_METAL_FULL_ATTN_DEFAULT_CONTEXT;
 }
 
+/* Temporary model-specific selection leaf. Generic I/O partitions these
+ * ranges and owns worker lifetimes; engine migration will retire this policy. */
+bool ds4_native_pagein_layer_spans(const ds4_weights *weights, uint32_t layer,
+        bool decode, ds4_model_map_span_vec *spans) {
+    return decode ? weights_model_map_decode_layer_spans(weights, layer, spans) :
+        weights_model_map_spans(weights, layer, layer, false, spans);
+}
+
 /* Shared storage actions; native owners decide their lifecycle and ordering. */
 bool ds4_native_stream_prepare_start(const ds4_model *model,
         const ds4_weights *weights, uint32_t layer, uint32_t rows, uint32_t flags,
@@ -53814,85 +53977,13 @@ static uint32_t payload_get_u32(const uint8_t in[4]) {
            ((uint32_t)in[3] << 24);
 }
 
-static int payload_write_bytes(FILE *fp, const void *ptr, uint64_t bytes, char *err, size_t errlen) {
-    const uint8_t *p = ptr;
-    while (bytes != 0) {
-        const size_t n = bytes > (uint64_t)SIZE_MAX ? SIZE_MAX : (size_t)bytes;
-        if (fwrite(p, 1, n, fp) != n) {
-            payload_set_err(err, errlen, "failed to write session payload");
-            return 1;
-        }
-        p += n;
-        bytes -= n;
-    }
-    return 0;
-}
-
-static DS4_MAYBE_UNUSED int payload_read_bytes(FILE *fp, void *ptr, uint64_t bytes, uint64_t *remaining, char *err, size_t errlen) {
-    if (remaining && *remaining < bytes) {
-        payload_set_err(err, errlen, "truncated session payload");
-        return 1;
-    }
-    const uint64_t original = bytes;
-    uint8_t *p = ptr;
-    while (bytes != 0) {
-        const size_t n = bytes > (uint64_t)SIZE_MAX ? SIZE_MAX : (size_t)bytes;
-        if (fread(p, 1, n, fp) != n) {
-            payload_set_err(err, errlen, "failed to read session payload");
-            return 1;
-        }
-        p += n;
-        bytes -= n;
-    }
-    if (remaining) *remaining -= original;
-    return 0;
-}
-
-static DS4_MAYBE_UNUSED int payload_skip_bytes(FILE *fp, uint64_t bytes,
-                                               uint8_t *buf, size_t cap,
-                                               uint64_t *remaining,
-                                               char *err, size_t errlen) {
-    if (remaining && *remaining < bytes) {
-        payload_set_err(err, errlen, "truncated session payload");
-        return 1;
-    }
-    if (!buf || cap == 0) {
-        payload_set_err(err, errlen, "session payload skip buffer is missing");
-        return 1;
-    }
-    const uint64_t original = bytes;
-    while (bytes != 0) {
-        const size_t n = bytes > (uint64_t)cap ? cap : (size_t)bytes;
-        if (fread(buf, 1, n, fp) != n) {
-            payload_set_err(err, errlen, "failed to skip session payload");
-            return 1;
-        }
-        bytes -= n;
-    }
-    if (remaining) *remaining -= original;
-    return 0;
-}
-
-static DS4_MAYBE_UNUSED int payload_write_u32(FILE *fp, uint32_t v, char *err, size_t errlen) {
-    uint8_t b[4];
-    payload_put_u32(b, v);
-    return payload_write_bytes(fp, b, sizeof(b), err, errlen);
-}
-
-static DS4_MAYBE_UNUSED int payload_read_u32(FILE *fp, uint32_t *v, uint64_t *remaining, char *err, size_t errlen) {
-    uint8_t b[4];
-    if (remaining && *remaining < sizeof(b)) {
-        payload_set_err(err, errlen, "truncated session payload");
-        return 1;
-    }
-    if (fread(b, 1, sizeof(b), fp) != sizeof(b)) {
-        payload_set_err(err, errlen, "failed to read session payload");
-        return 1;
-    }
-    if (remaining) *remaining -= sizeof(b);
-    *v = payload_get_u32(b);
-    return 0;
-}
+/* Generic transfer algorithms are owned by the native payload I/O modules.
+ * These names keep legacy/model-specific policy and private fixtures readable. */
+#define payload_write_bytes ds4_native_payload_write_bytes
+#define payload_read_bytes ds4_native_payload_read_bytes
+#define payload_skip_bytes ds4_native_payload_skip_bytes
+#define payload_write_u32 ds4_native_payload_write_u32
+#define payload_read_u32 ds4_native_payload_read_u32
 
 static int payload_read_tokens_for_rebuild(FILE *fp, uint32_t count,
                                           uint64_t remaining,
@@ -53914,27 +54005,6 @@ static int payload_read_tokens_for_rebuild(FILE *fp, uint32_t count,
     uint8_t buf[65536];
     return payload_skip_bytes(fp, remaining, buf, sizeof(buf),
                                &remaining, err, errlen);
-}
-
-static DS4_MAYBE_UNUSED int payload_copy_file_bytes(FILE *src, FILE *dst, uint64_t bytes, char *err, size_t errlen) {
-    uint8_t *buf = xmalloc(DS4_SESSION_IO_CHUNK);
-    int rc = 0;
-    while (bytes != 0) {
-        const size_t n = bytes > DS4_SESSION_IO_CHUNK ? DS4_SESSION_IO_CHUNK : (size_t)bytes;
-        if (fread(buf, 1, n, src) != n) {
-            payload_set_err(err, errlen, "failed to read staged session payload");
-            rc = 1;
-            break;
-        }
-        if (fwrite(buf, 1, n, dst) != n) {
-            payload_set_err(err, errlen, "failed to write staged session payload");
-            rc = 1;
-            break;
-        }
-        bytes -= n;
-    }
-    free(buf);
-    return rc;
 }
 
 static DS4_MAYBE_UNUSED uint64_t layer_attn_state_bytes(uint32_t ratio) {
@@ -54118,168 +54188,10 @@ static bool glm_layer_payload_tensor_bytes(uint32_t layer,
     return true;
 }
 
-/* Accelerator tensors are copied through a fixed-size CPU buffer.  We do not mmap the
- * cache file and we do not allocate a second graph-sized blob just to serialize
- * it; both would be poor fits for this very large model. */
-static int payload_write_tensor_span(FILE *fp, const ds4_gpu_tensor *tensor,
-                                     uint64_t offset, uint64_t bytes,
-                                     uint8_t *buf, size_t cap, char *err, size_t errlen) {
-    if (!tensor || offset > ds4_gpu_tensor_bytes(tensor) ||
-        bytes > ds4_gpu_tensor_bytes(tensor) - offset)
-    {
-        payload_set_err(err, errlen, "session tensor is smaller than the payload");
-        return 1;
-    }
-    uint64_t done = 0;
-    while (done < bytes) {
-        const size_t n = bytes - done > (uint64_t)cap ? cap : (size_t)(bytes - done);
-        if (ds4_gpu_tensor_read(tensor, offset + done, buf, n) == 0) {
-            payload_set_err(err, errlen, "failed to read accelerator session tensor");
-            return 1;
-        }
-        if (payload_write_bytes(fp, buf, n, err, errlen) != 0) return 1;
-        done += n;
-    }
-    return 0;
-}
-
-static int payload_read_tensor_span(FILE *fp, ds4_gpu_tensor *tensor,
-                                    uint64_t offset, uint64_t bytes,
-                                    uint8_t *buf, size_t cap, uint64_t *remaining,
-                                    char *err, size_t errlen) {
-    if (!tensor || offset > ds4_gpu_tensor_bytes(tensor) ||
-        bytes > ds4_gpu_tensor_bytes(tensor) - offset)
-    {
-        payload_set_err(err, errlen, "session tensor is smaller than the payload");
-        return 1;
-    }
-    uint64_t done = 0;
-    while (done < bytes) {
-        const size_t n = bytes - done > (uint64_t)cap ? cap : (size_t)(bytes - done);
-        if (payload_read_bytes(fp, buf, n, remaining, err, errlen) != 0) return 1;
-        if (ds4_gpu_tensor_write(tensor, offset + done, buf, n) == 0) {
-            payload_set_err(err, errlen, "failed to restore accelerator session tensor");
-            return 1;
-        }
-        done += n;
-    }
-    return 0;
-}
-
-static DS4_MAYBE_UNUSED int payload_write_tensor_span_f16_as_f32(FILE *fp, const ds4_gpu_tensor *tensor,
-                                                                 uint64_t offset_f16, uint64_t count,
-                                                                 uint8_t *buf, size_t cap, char *err, size_t errlen) {
-    if (!tensor ||
-        count > (UINT64_MAX / sizeof(uint16_t)) ||
-        count > (UINT64_MAX / sizeof(float)) ||
-        offset_f16 > ds4_gpu_tensor_bytes(tensor) ||
-        count * sizeof(uint16_t) > ds4_gpu_tensor_bytes(tensor) - offset_f16)
-    {
-        payload_set_err(err, errlen, "session tensor is smaller than the F16 payload");
-        return 1;
-    }
-
-    size_t cap_elems = cap / (sizeof(uint16_t) + sizeof(float));
-    cap_elems &= ~(size_t)1u;
-    if (cap_elems == 0) {
-        payload_set_err(err, errlen, "session tensor conversion buffer is too small");
-        return 1;
-    }
-    uint16_t *h = (uint16_t *)buf;
-    float *f = (float *)(void *)(buf + cap_elems * sizeof(uint16_t));
-
-    uint64_t done = 0;
-    while (done < count) {
-        const size_t n = count - done > (uint64_t)cap_elems
-            ? cap_elems
-            : (size_t)(count - done);
-        if (ds4_gpu_tensor_read(tensor, offset_f16 + done * sizeof(uint16_t),
-                                h, n * sizeof(uint16_t)) == 0) {
-            payload_set_err(err, errlen, "failed to read Metal F16 session tensor");
-            return 1;
-        }
-        for (size_t i = 0; i < n; i++) f[i] = f16_to_f32(h[i]);
-        if (payload_write_bytes(fp, f, (uint64_t)n * sizeof(float), err, errlen) != 0) return 1;
-        done += n;
-    }
-    return 0;
-}
-
-static DS4_MAYBE_UNUSED int payload_read_tensor_span_f32_as_f16(FILE *fp, ds4_gpu_tensor *tensor,
-                                                                uint64_t offset_f16, uint64_t count,
-                                                                uint8_t *buf, size_t cap, uint64_t *remaining,
-                                                                char *err, size_t errlen) {
-    if (!tensor ||
-        count > (UINT64_MAX / sizeof(uint16_t)) ||
-        count > (UINT64_MAX / sizeof(float)) ||
-        offset_f16 > ds4_gpu_tensor_bytes(tensor) ||
-        count * sizeof(uint16_t) > ds4_gpu_tensor_bytes(tensor) - offset_f16)
-    {
-        payload_set_err(err, errlen, "session tensor is smaller than the F16 payload");
-        return 1;
-    }
-
-    size_t cap_elems = cap / (sizeof(uint16_t) + sizeof(float));
-    cap_elems &= ~(size_t)1u;
-    if (cap_elems == 0) {
-        payload_set_err(err, errlen, "session tensor conversion buffer is too small");
-        return 1;
-    }
-    uint16_t *h = (uint16_t *)buf;
-    float *f = (float *)(void *)(buf + cap_elems * sizeof(uint16_t));
-
-    uint64_t done = 0;
-    while (done < count) {
-        const size_t n = count - done > (uint64_t)cap_elems
-            ? cap_elems
-            : (size_t)(count - done);
-        if (payload_read_bytes(fp, f, (uint64_t)n * sizeof(float), remaining, err, errlen) != 0) return 1;
-        for (size_t i = 0; i < n; i++) h[i] = f32_to_f16(f[i]);
-        if (ds4_gpu_tensor_write(tensor, offset_f16 + done * sizeof(uint16_t),
-                                 h, n * sizeof(uint16_t)) == 0) {
-            payload_set_err(err, errlen, "failed to restore Metal F16 session tensor");
-            return 1;
-        }
-        done += n;
-    }
-    return 0;
-}
-
-int ds4_native_payload_write_bytes(FILE *fp, const void *data, uint64_t bytes,
-        char *err, size_t errlen) {
-    return payload_write_bytes(fp, data, bytes, err, errlen);
-}
-int ds4_native_payload_read_bytes(FILE *fp, void *data, uint64_t bytes,
-        uint64_t *remaining, char *err, size_t errlen) {
-    return payload_read_bytes(fp, data, bytes, remaining, err, errlen);
-}
-int ds4_native_payload_write_u32(FILE *fp, uint32_t value, char *err, size_t errlen) {
-    return payload_write_u32(fp, value, err, errlen);
-}
-int ds4_native_payload_read_u32(FILE *fp, uint32_t *value, uint64_t *remaining,
-        char *err, size_t errlen) {
-    return payload_read_u32(fp, value, remaining, err, errlen);
-}
-int ds4_native_payload_write_tensor_span(FILE *fp, const ds4_gpu_tensor *tensor,
-        uint64_t offset, uint64_t bytes, uint8_t *buf, size_t cap,
-        char *err, size_t errlen) {
-    return payload_write_tensor_span(fp, tensor, offset, bytes, buf, cap, err, errlen);
-}
-int ds4_native_payload_read_tensor_span(FILE *fp, ds4_gpu_tensor *tensor,
-        uint64_t offset, uint64_t bytes, uint8_t *buf, size_t cap,
-        uint64_t *remaining, char *err, size_t errlen) {
-    return payload_read_tensor_span(fp, tensor, offset, bytes, buf, cap, remaining, err, errlen);
-}
-int ds4_native_payload_write_f16_as_f32(FILE *fp, const ds4_gpu_tensor *tensor,
-        uint64_t offset, uint64_t count, uint8_t *buf, size_t cap,
-        char *err, size_t errlen) {
-    return payload_write_tensor_span_f16_as_f32(fp, tensor, offset, count, buf, cap, err, errlen);
-}
-int ds4_native_payload_read_f32_as_f16(FILE *fp, ds4_gpu_tensor *tensor,
-        uint64_t offset, uint64_t count, uint8_t *buf, size_t cap,
-        uint64_t *remaining, char *err, size_t errlen) {
-    return payload_read_tensor_span_f32_as_f16(fp, tensor, offset, count, buf, cap, remaining, err, errlen);
-}
+#define payload_write_tensor_span ds4_native_payload_write_tensor_span
+#define payload_read_tensor_span ds4_native_payload_read_tensor_span
+#define payload_write_tensor_span_f16_as_f32 ds4_native_payload_write_f16_as_f32
+#define payload_read_tensor_span_f32_as_f16 ds4_native_payload_read_f32_as_f16
 
 static int payload_write_glm_compact_span(FILE *fp, const ds4_gpu_tensor *tensor,
                                           uint64_t count, uint8_t *buf, size_t cap,
@@ -55717,102 +55629,10 @@ uint64_t ds4_session_payload_bytes(ds4_session *s) {
 #endif
 }
 
-int ds4_session_write_staged_payload(const ds4_session_payload_file *payload,
-                                     FILE *fp, char *err, size_t errlen) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
-    return ds4_native_checkpoint_write_staged41(payload, fp, err, errlen);
-#else
-    if (!payload || !payload->path || !fp) {
-        payload_set_err(err, errlen, "invalid staged session payload");
-        return 1;
-    }
-    FILE *src = fopen(payload->path, "rb");
-    if (!src) {
-        payload_set_err(err, errlen, "failed to open staged session payload");
-        return 1;
-    }
-    int rc = payload_copy_file_bytes(src, fp, payload->bytes, err, errlen);
-    if (fclose(src) != 0 && rc == 0) {
-        payload_set_err(err, errlen, "failed to close staged session payload");
-        return 1;
-    }
-    return rc;
-#endif
-}
-
-void ds4_session_payload_file_free(ds4_session_payload_file *payload) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
-    ds4_native_checkpoint_free_staged41(payload);
-#else
-    if (!payload) return;
-    if (payload->path) {
-        unlink(payload->path);
-        free(payload->path);
-    }
-    memset(payload, 0, sizeof(*payload));
-#endif
-}
-
 int ds4_session_stage_payload(ds4_session *s, ds4_session_payload_file *out,
                               char *err, size_t errlen) {
     if (s && s->flint) { payload_set_err(err, errlen, "Flint GPU-state persistence/suffix reuse is not implemented"); return 1; }
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
-    if (ds41_native_checkpoint_session(s)) {
-        const ds4_model_config config = ds41_native_config();
-        return ds4_native_checkpoint_stage41(&s->frontier, &s->ds41.graph,
-            &config, s->ds41.ready, out, err, errlen);
-    }
-#endif
-    if (!out) {
-        payload_set_err(err, errlen, "invalid session payload staging request");
-        return 1;
-    }
-    memset(out, 0, sizeof(*out));
-    if (!s || !s->frontier.checkpoint_valid) {
-        payload_set_err(err, errlen, "session has no valid checkpoint to stage");
-        return 1;
-    }
-
-    char tmpl[] = "/tmp/ds4-session-payload.XXXXXX";
-    int fd = mkstemp(tmpl);
-    if (fd < 0) {
-        payload_set_err(err, errlen, "failed to create staged session payload");
-        return 1;
-    }
-    FILE *fp = fdopen(fd, "wb");
-    if (!fp) {
-        int saved = errno;
-        close(fd);
-        unlink(tmpl);
-        if (errlen) snprintf(err, errlen, "failed to open staged session payload: %s",
-                             strerror(saved));
-        return 1;
-    }
-
-    int rc = ds4_session_save_payload(s, fp, err, errlen);
-    if (rc == 0 && fflush(fp) != 0) {
-        payload_set_err(err, errlen, "failed to flush staged session payload");
-        rc = 1;
-    }
-    off_t pos = -1;
-    if (rc == 0) {
-        pos = ftello(fp);
-        if (pos < 0) {
-            payload_set_err(err, errlen, "failed to measure staged session payload");
-            rc = 1;
-        }
-    }
-    if (fclose(fp) != 0 && rc == 0) {
-        payload_set_err(err, errlen, "failed to close staged session payload");
-        rc = 1;
-    }
-    if (rc != 0) {
-        unlink(tmpl);
-        return 1;
-    }
-    out->path = ds4_strdup(tmpl);
-    out->bytes = (uint64_t)pos;
-    return 0;
+    return ds4_native_session_stage_payload(s, out, err, errlen);
 }
 
 #ifdef DS4_HAS_QWEN4_GPU
@@ -56870,101 +56690,12 @@ int ds4_session_load_payload(ds4_session *s, FILE *fp, uint64_t payload_bytes, c
 
 int ds4_session_save_snapshot(ds4_session *s, ds4_session_snapshot *snap, char *err, size_t errlen) {
     if (s && s->flint) { payload_set_err(err, errlen, "Flint GPU-state persistence/suffix reuse is not implemented"); return 1; }
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
-    if (ds41_native_checkpoint_session(s)) {
-        const ds4_model_config config = ds41_native_config();
-        return ds4_native_checkpoint_save_snapshot41(&s->frontier, &s->ds41.graph,
-            &config, s->ds41.ready, snap, err, errlen);
-    }
-#endif
-    if (!s || !snap) {
-        payload_set_err(err, errlen, "invalid session snapshot save");
-        return 1;
-    }
-    if (s->distributed) {
-        payload_set_err(err, errlen, "distributed session snapshots are not supported yet");
-        return 1;
-    }
-    const uint64_t bytes = ds4_session_payload_bytes(s);
-    if (bytes == 0) {
-        payload_set_err(err, errlen, "session has no valid checkpoint to snapshot");
-        return 1;
-    }
-    if (bytes >= (uint64_t)SIZE_MAX) {
-        payload_set_err(err, errlen, "session snapshot is too large for this platform");
-        return 1;
-    }
-    /* fmemopen appends a NUL even in binary mode. Keep it outside the payload
-     * or fclose can overwrite the final byte of the last cache tensor. */
-    const uint64_t capacity = bytes + 1;
-    if (snap->cap < capacity) {
-        uint8_t *p = realloc(snap->ptr, (size_t)capacity);
-        if (!p) {
-            payload_set_err(err, errlen, "out of memory while allocating session snapshot");
-            return 1;
-        }
-        snap->ptr = p;
-        snap->cap = capacity;
-    }
-
-    FILE *fp = fmemopen(snap->ptr, (size_t)capacity, "wb");
-    if (!fp) {
-        payload_set_err(err, errlen, "failed to open memory stream for session snapshot");
-        return 1;
-    }
-    const int rc = ds4_session_save_payload(s, fp, err, errlen);
-    if (fclose(fp) != 0 && rc == 0) {
-        payload_set_err(err, errlen, "failed to finalize memory session snapshot");
-        return 1;
-    }
-    if (rc != 0) return 1;
-    snap->len = bytes;
-    return 0;
+    return ds4_native_session_save_snapshot(s, snap, err, errlen);
 }
 
 int ds4_session_load_snapshot(ds4_session *s, const ds4_session_snapshot *snap, char *err, size_t errlen) {
     if (s && s->flint) { payload_set_err(err, errlen, "Flint GPU-state persistence/suffix reuse is not implemented"); return 1; }
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
-    if (ds41_native_checkpoint_session(s)) {
-        const ds4_model_config config = ds41_native_config();
-        return ds4_native_checkpoint_load_snapshot41(&s->frontier, &s->ds41.graph,
-            &config, s->ds41.ready, snap, err, errlen);
-    }
-#endif
-    if (!s || !snap || !snap->ptr || snap->len == 0) {
-        payload_set_err(err, errlen, "invalid session snapshot load");
-        return 1;
-    }
-    if (s->distributed) {
-        payload_set_err(err, errlen, "distributed session snapshots are not supported yet");
-        return 1;
-    }
-    if (snap->len > (uint64_t)SIZE_MAX) {
-        payload_set_err(err, errlen, "session snapshot is too large for this platform");
-        return 1;
-    }
-
-    FILE *fp = fmemopen((void *)snap->ptr, (size_t)snap->len, "rb");
-    if (!fp) {
-        payload_set_err(err, errlen, "failed to open memory stream for session snapshot restore");
-        return 1;
-    }
-    const int rc = ds4_session_load_payload(s, fp, snap->len, err, errlen);
-    if (fclose(fp) != 0 && rc == 0) {
-        payload_set_err(err, errlen, "failed to close memory session snapshot");
-        return 1;
-    }
-    return rc;
-}
-
-void ds4_session_snapshot_free(ds4_session_snapshot *snap) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
-    ds4_native_checkpoint_free_snapshot41(snap);
-#else
-    if (!snap) return;
-    free(snap->ptr);
-    memset(snap, 0, sizeof(*snap));
-#endif
+    return ds4_native_session_load_snapshot(s, snap, err, errlen);
 }
 
 bool ds4_session_is_approximate(const ds4_session *s) {

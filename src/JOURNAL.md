@@ -34,7 +34,17 @@ select its pure model owner. Six pure GLM tests, seven native preparation cases,
 exact server fixtures and all 25 real GLM Responses checks pass by 11:09 UTC.
 Slice 3 is complete: native Responses publication and prompt parsing pass the
 existing server/store fixtures and all 25 real Qwen Responses/WebSocket checks.
-Slice 4 is active: generic FILE/tensor payload transfers. Independent payload-I/O, snapshot-envelope,
+Slice 4 is complete: bounded native FILE/tensor/F16 transfers pass the full
+host suite and Qwen/GLM frozen → native → frozen payload/fresh-logit exchange.
+Slice 5 is complete: one native envelope handles public and suffix snapshots,
+with CPU lifetime/error fixtures, full host checks, Qwen/GLM exchange and all
+eight DS41 F32/F16 cross-binary/conversion campaigns passing.
+Slice 6 is complete: the native pthread mailbox passes failure/busy/reuse
+checks, and actual DS41 async loading matches frozen bytes/fresh logits at
+six frontiers with its flag enabled. Slice 7 is complete: native real-file/thread tests, full host suite, DS41/GLM
+state/fresh-logit comparisons and actual profiled 256-token layer preads pass.
+A clearly named C span-selection leaf remains until slice 10, where its native
+replacement is prepared. Slice 8 is active: shared session routing/control. Independent payload-I/O, snapshot-envelope,
 selected-worker and session-control/resource source preparation overlaps; only
 root integrates shared files and schedules guarded model jobs. Frozen baseline
 binaries and original shared sources are under

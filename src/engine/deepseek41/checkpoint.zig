@@ -8,9 +8,8 @@ const c = @import("gguf_c");
 const Config = @import("../config.zig").ModelConfig;
 const payload = @import("state_payload.zig");
 const policy = @import("prefill_policy.zig");
-const allocator = std.heap.c_allocator;
 const Snapshot = c.ds4_session_snapshot;
-const Staged = c.ds4_session_payload_file;
+const buffers = @import("../snapshot_buffer.zig");
 const header_bytes: u64 = c.DS4_SESSION_PAYLOAD_U32_FIELDS * 4;
 const replay_header_bytes: u64 = c.DS4_SESSION_REPLAY_SNAPSHOT_HEADER_BYTES;
 
@@ -133,38 +132,6 @@ pub const Checkpoint = struct {
         return result;
     }
 
-    pub fn saveSnapshot(self: *const Checkpoint, maybe_snapshot: ?*Snapshot, errors: []u8) c_int {
-        const snapshot = maybe_snapshot orelse return fail(errors, "invalid session snapshot save");
-        const bytes = self.canonicalBytes();
-        if (bytes == 0) return fail(errors, "session has no valid checkpoint to snapshot");
-        if (bytes >= std.math.maxInt(usize)) return fail(errors, "session snapshot is too large for this platform");
-        // fmemopen appends NUL even in binary mode. Its extra byte must stay
-        // outside the payload or close can overwrite the final cache byte.
-        const capacity = bytes + 1;
-        if (!reserve(snapshot, capacity, errors, "out of memory while allocating session snapshot")) return 1;
-        const stream = openMemory(snapshot.ptr, capacity, "wb") orelse
-            return fail(errors, "failed to open memory stream for session snapshot");
-        const result = self.saveCanonical(stream, errors);
-        if (c.fclose(stream) != 0 and result == 0)
-            return fail(errors, "failed to finalize memory session snapshot");
-        if (result != 0) return 1;
-        snapshot.len = bytes;
-        return 0;
-    }
-    pub fn loadSnapshot(self: *const Checkpoint, maybe_snapshot: ?*const Snapshot, errors: []u8) c_int {
-        const snapshot = maybe_snapshot orelse return fail(errors, "invalid session snapshot load");
-        if (snapshot.ptr == null or snapshot.len == 0) return fail(errors, "invalid session snapshot load");
-        if (snapshot.len > std.math.maxInt(usize)) return fail(errors, "session snapshot is too large for this platform");
-        const stream = openMemory(snapshot.ptr, snapshot.len, "rb") orelse
-            return fail(errors, "failed to open memory stream for session snapshot restore");
-        const result = self.loadCanonical(stream, snapshot.len, errors);
-        // Canonical close failure reports an error after the completed load;
-        // unlike private replay failure it does not invalidate that frontier.
-        if (c.fclose(stream) != 0 and result == 0)
-            return fail(errors, "failed to close memory session snapshot");
-        return result;
-    }
-
     fn replaySupported(self: *const Checkpoint) bool {
         const graph = self.graph;
         return self.ready and self.frontier.checkpoint_image_count == 0 and self.frontier.sync_image_count == 0 and
@@ -172,6 +139,13 @@ pub const Checkpoint = struct {
             !graph.quality and graph.imatrix == null and graph.image_count == 0 and
             !graph.predict_active and !graph.predict_load.active;
     }
+    pub fn saveSnapshot(self: *const Checkpoint, snapshot: ?*Snapshot, errors: []u8) c_int {
+        return buffers.save(c, self, snapshot, errors);
+    }
+    pub fn loadSnapshot(self: *const Checkpoint, snapshot: ?*const Snapshot, errors: []u8) c_int {
+        return buffers.load(c, self, snapshot, errors);
+    }
+
     pub fn replayBytes(self: *const Checkpoint) u64 {
         const frontier = self.frontier;
         if (!self.replaySupported() or !frontier.approximate_decoder_replay or !frontier.approximate_suffix or
@@ -237,85 +211,8 @@ pub const Checkpoint = struct {
         self.frontier.mtp_draft_valid = false;
         return 0;
     }
-
-    pub fn stage(self: *const Checkpoint, maybe_output: ?*Staged, errors: []u8) c_int {
-        const output = maybe_output orelse return fail(errors, "invalid session payload staging request");
-        output.* = std.mem.zeroes(Staged);
-        if (!self.frontier.checkpoint_valid) return fail(errors, "session has no valid checkpoint to stage");
-        var template = "/tmp/ds4-session-payload.XXXXXX".*;
-        const fd = c.mkstemp(&template);
-        if (fd < 0) return fail(errors, "failed to create staged session payload");
-        var keep = false;
-        defer if (!keep) {
-            _ = c.unlink(&template);
-        };
-        const raw = c.fdopen(fd, "wb");
-        if (raw == null) {
-            const saved = c.__error().*;
-            _ = c.close(fd);
-            if (errors.len != 0) _ = c.snprintf(errors.ptr, errors.len, "failed to open staged session payload: %s", c.strerror(saved));
-            return 1;
-        }
-        const stream: *c.FILE = @ptrCast(raw);
-        var result = self.saveCanonical(stream, errors);
-        if (result == 0 and c.fflush(stream) != 0) result = fail(errors, "failed to flush staged session payload");
-        var bytes: c.off_t = -1;
-        if (result == 0) {
-            bytes = c.ftello(stream);
-            if (bytes < 0) result = fail(errors, "failed to measure staged session payload");
-        }
-        if (c.fclose(stream) != 0 and result == 0) result = fail(errors, "failed to close staged session payload");
-        if (result != 0) return 1;
-        output.path = (allocator.dupeSentinel(u8, std.mem.span(@as([*:0]const u8, &template)), 0) catch c.ds4_engine_model_die("out of memory")).ptr;
-        output.bytes = @intCast(bytes);
-        keep = true;
-        return 0;
-    }
 };
 
-pub fn freeSnapshot(maybe_snapshot: ?*Snapshot) void {
-    const snapshot = maybe_snapshot orelse return;
-    c.free(snapshot.ptr);
-    snapshot.* = std.mem.zeroes(Snapshot);
-}
-pub fn freeStaged(maybe_staged: ?*Staged) void {
-    const staged = maybe_staged orelse return;
-    if (staged.path != null) {
-        _ = c.unlink(staged.path);
-        c.free(staged.path);
-    }
-    staged.* = std.mem.zeroes(Staged);
-}
-pub fn writeStaged(maybe_staged: ?*const Staged, maybe_stream: ?*c.FILE, errors: []u8) c_int {
-    const staged = maybe_staged orelse return fail(errors, "invalid staged session payload");
-    const stream = maybe_stream orelse return fail(errors, "invalid staged session payload");
-    if (staged.path == null) return fail(errors, "invalid staged session payload");
-    const raw = c.fopen(staged.path, "rb");
-    if (raw == null) return fail(errors, "failed to open staged session payload");
-    const source: *c.FILE = @ptrCast(raw);
-    const result = copyStaged(source, stream, staged.bytes, errors);
-    if (c.fclose(source) != 0 and result == 0) return fail(errors, "failed to close staged session payload");
-    return result;
-}
-
-// The scratch allocation retires before fclose(source), as in the existing
-// staged-copy helper; neither file ownership nor error precedence is hidden.
-fn copyStaged(source: *c.FILE, stream: *c.FILE, bytes: u64, errors: []u8) c_int {
-    const scratch = allocator.alloc(u8, 8 * 1024 * 1024) catch c.ds4_engine_model_die("out of memory");
-    defer allocator.free(scratch);
-    var remaining = bytes;
-    var result: c_int = 0;
-    while (remaining != 0) {
-        const count: usize = @intCast(@min(remaining, scratch.len));
-        if (c.fread(scratch.ptr, 1, count, source) != count) {
-            result = fail(errors, "failed to read staged session payload");
-            break;
-        }
-        if (c.fwrite(scratch.ptr, 1, count, stream) != count) {
-            result = fail(errors, "failed to write staged session payload");
-            break;
-        }
-        remaining -= count;
-    }
-    return result;
+pub fn freeSnapshot(snapshot: ?*Snapshot) void {
+    buffers.free(c, snapshot);
 }

@@ -140,28 +140,7 @@ fn prepareThreads() u32 {
 }
 
 fn readRange(model: *const Model, range: Range, read_bytes: *u64, sink: *u8) bool {
-    if (model.fd < 0 or range.first > model.size or range.bytes == 0 or
-        range.bytes > model.size - range.first or range.first > std.math.maxInt(i64)) return false;
-    const buffer = allocator.alloc(u8, 1024 * 1024) catch outOfMemory();
-    defer allocator.free(buffer);
-    var position = range.first;
-    var remaining = range.bytes;
-    while (remaining != 0) {
-        const wanted: usize = @intCast(@min(remaining, buffer.len));
-        var got: isize = undefined;
-        while (true) {
-            got = c.pread(model.fd, buffer.ptr, wanted, @intCast(position));
-            if (got >= 0 or c.__error().* != c.EINTR) break;
-        }
-        if (got <= 0) return false;
-        const count: usize = @intCast(got);
-        sink.* ^= buffer[0];
-        sink.* ^= buffer[count - 1];
-        position += count;
-        remaining -= count;
-        read_bytes.* +|= count;
-    }
-    return true;
+    return c.ds4_native_pagein_pread(model, range.first, range.bytes, read_bytes, sink);
 }
 
 const Worker = struct {

@@ -165,6 +165,37 @@ pub fn build(b: *std.Build) void {
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/qwen4_model_entry.zig", "gguf_c", api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/glm53_model_entry.zig", "gguf_c", api));
     }
+    // Keep FILE-only payload exports cold so host fixtures do not extract GPU code.
+    const payload_api = generatedApi(b, target, sdk, optimize, "src/engine/payload_io.h");
+    const payload_file = nativeObject(b, target, sdk, optimize, "src/engine/payload_io_entry.zig", "payload_io_c", payload_api);
+    const payload_tensor = nativeObject(b, target, sdk, optimize, "src/engine/payload_tensor_entry.zig", "payload_io_c", payload_api);
+    core_module.addObjectFile(payload_file);
+    core_module.addObjectFile(payload_tensor);
+    const pagein_api = generatedApi(b, target, sdk, optimize, "src/engine/pagein_api.h");
+    core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/pagein_entry.zig", "pagein_c", pagein_api));
+    const pagein_module = module(b, target, sdk, .debug);
+    pagein_module.root_source_file = b.path("src/engine/pagein.zig");
+    pagein_module.addImport("pagein_c", pagein_api);
+    const pagein_test_module = module(b, target, sdk, .debug);
+    pagein_test_module.root_source_file = b.path("tests/test_pagein.zig");
+    pagein_test_module.addImport("pagein", pagein_module);
+    pagein_test_module.addImport("pagein_c", pagein_api);
+    const pagein_test = b.addTest(.{ .name = "test-pagein", .root_module = pagein_test_module });
+    b.step("pagein-test", "Build real-file page-in, worker and view fixture").dependOn(&b.addInstallArtifact(pagein_test, .{}).step);
+    const selected_api = generatedApi(b, target, sdk, optimize, "src/engine/stream_selected_api.h");
+    core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/stream_selected_entry.zig", "stream_selected_c", selected_api));
+    const selected_module = module(b, target, sdk, .debug);
+    selected_module.root_source_file = b.path("src/engine/stream_selected.zig");
+    selected_module.addImport("stream_selected_c", selected_api);
+    const selected_test_module = module(b, target, sdk, .debug);
+    selected_test_module.root_source_file = b.path("tests/test_stream_selected.zig");
+    selected_test_module.addImport("stream_selected", selected_module);
+    selected_test_module.addImport("stream_selected_c", selected_api);
+    const selected_test = b.addTest(.{ .name = "test-stream-selected", .root_module = selected_test_module });
+    b.step("stream-selected-test", "Build real-pthread selected-expert worker fixture").dependOn(&b.addInstallArtifact(selected_test, .{}).step);
+    const snapshot_api = generatedApi(b, target, sdk, optimize, "src/engine/session_snapshot_api.h");
+    const snapshot_object = nativeObject(b, target, sdk, optimize, "src/engine/session_snapshot_entry.zig", "session_snapshot_c", snapshot_api);
+    core_module.addObjectFile(snapshot_object);
     {
         const api = generatedApi(b, target, sdk, optimize, "src/ds4_cli_chat.h");
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/cli_chat.zig", "cli_chat_c", api));
@@ -525,6 +556,18 @@ pub fn build(b: *std.Build) void {
         const test_exe = b.addExecutable(.{ .name = fixture[0], .root_module = test_module });
         resident_step.dependOn(&b.addInstallArtifact(test_exe, .{}).step);
     }
+    const payload_io_test_module = module(b, target, sdk, optimize);
+    payload_io_test_module.addObjectFile(object(b, target, sdk, clang, "tests/test_payload_io.c", "test-payload-io-main", optimize, test_flags));
+    payload_io_test_module.addObjectFile(payload_file);
+    payload_io_test_module.addObjectFile(payload_tensor);
+    const payload_io_test = b.addExecutable(.{ .name = "test-payload-io", .root_module = payload_io_test_module });
+    b.step("payload-io-test", "Build bounded FILE/tensor transfer and F16 wire fixture").dependOn(&b.addInstallArtifact(payload_io_test, .{}).step);
+    const snapshot_test_module = module(b, target, sdk, optimize);
+    snapshot_test_module.addObjectFile(object(b, target, sdk, clang, "tests/test_session_snapshot.c", "test-session-snapshot-main", optimize, test_flags));
+    snapshot_test_module.addObjectFile(payload_file);
+    snapshot_test_module.addObjectFile(snapshot_object);
+    const snapshot_test = b.addExecutable(.{ .name = "test-session-snapshot", .root_module = snapshot_test_module });
+    b.step("session-snapshot-test", "Build snapshot/staged-file lifetime fixture").dependOn(&b.addInstallArtifact(snapshot_test, .{}).step);
     const response_store_test_module = module(b, target, sdk, optimize);
     response_store_test_module.addObjectFile(object(b, target, sdk, clang, "tests/test_response_store.c", "test-response-store-main", optimize, test_flags));
     response_store_test_module.addObjectFile(native_response_store);

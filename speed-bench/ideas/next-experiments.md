@@ -52,12 +52,14 @@ separate from the normal single-Metal ownership path; migrate it only for a
 concrete use. Cache capability extensions and I/O optimizations are subsequent
 experiments, after existing behavior has one clear owner.
 
-Slice 1 is complete within its first hour: native Qwen model preparation,
-exact server templates, pure assembly/CPU tests and all 25 real Responses
-checks pass. [Progress report](../experiments/native-runtime-20261024/README.md).
-Slice 2 also passes six pure GLM tests, seven assembly cases, exact server
-templates and all 25 real GLM Responses checks. Slice 3 publication is next;
-later independent source prep remains unintegrated.
+Slices 1–7 are qualified. Qwen/GLM preparation and Responses publication,
+payload I/O, snapshot envelopes, selected-load workers and page-in now have
+native owners. Existing host tests, real protocol checks and cross-binary state
+comparisons pass. Slice 8 shared session routing/control is active. The model
+span-selection leaf introduced by slice 7 closes in slice 10; it is recorded as
+an integration dependency, not called an OS primitive. Independent source prep
+continues for resources, admission/cache policy and complete engine lifecycle.
+[Progress and reproduction evidence](../experiments/native-runtime-20261024/README.md).
 
 ## Deferred: V4.1/1017 activation steering — planned 2026-10-23
 

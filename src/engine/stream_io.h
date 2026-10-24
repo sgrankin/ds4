@@ -28,6 +28,15 @@ bool ds4_native_moe_selected_start(metal_graph_selected_async_load *,
     uint64_t down_expert_bytes);
 bool ds4_native_moe_selected_finish(metal_graph_selected_async_load *);
 
+#ifdef __APPLE__
+/* Compatibility callers capture their active shape when submitting. */
+bool ds4_native_stream_selected_start(metal_graph_selected_async_load *,
+    ds4_gpu_tensor *, const ds4_model *, const ds4_layer_weights *,
+    uint32_t layer, uint64_t event, uint64_t gate_bytes, uint64_t down_bytes,
+    uint32_t expert_count, uint32_t selected_count);
+bool ds4_native_stream_selected_finish(metal_graph_selected_async_load *);
+#endif
+
 /* Actual existing page-in service records, shared once with native callers.
  * Worker/range allocations are released by join, including failed jobs. */
 typedef struct {
