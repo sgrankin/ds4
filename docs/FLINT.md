@@ -111,8 +111,11 @@ barriers require exclusive execution. The default mixed-prefill quantum is
 
 - Text, native tokenizer/prompt rendering, model-controlled reasoning, tool
   schema rendering, and structured tool-call parsing use the shared protocol.
-  Omit `reasoning` effort and `enable_thinking` controls; Flint rejects those
-  switches because its template lets the model decide when to reason.
+  Flint decides when to reason. Responses returns its thinking through reasoning
+  summary events/items by default; `reasoning: {summary: null}` hides that text.
+  Effort and thinking-enable hints are accepted and ignored, matching the
+  reference harness. Responses reports `reasoning.effort: null` because no effort
+  control was applied.
 - Generation uses packets of up to 8 tokens on the GPU. Greedy and common
   filtered sampling use the native packet path; unsupported sampling settings
   use scalar evaluation. The native random stream differs from MLX's keys.

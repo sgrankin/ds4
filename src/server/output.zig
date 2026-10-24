@@ -352,7 +352,7 @@ fn reasoningField(out: *Text, request: *const Request, options: *const Options) 
         },
     };
     out.append(",\"reasoning\":{\"effort\":");
-    out.quoted(effort);
+    if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) out.append("null") else out.quoted(effort);
     out.append(",\"summary\":");
     if (request.reasoning_summary_emit) {
         const raw = options.field("reasoning");

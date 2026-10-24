@@ -11141,10 +11141,6 @@ static void test_flint_sampling_defaults_and_controls(void) {
     TEST_ASSERT(input.req.temperature_set && input.req.top_k_set &&
         input.req.top_p_set && input.req.min_p_set);
     ds4_server_input_deinit(&input);
-    TEST_ASSERT(!ds4_server_input_decode(DS4_SERVER_INPUT_RESPONSES,
-        "{\"input\":\"Q\",\"reasoning\":{\"effort\":\"none\"}}",
-        &defaults, &input, error, sizeof(error)));
-    TEST_ASSERT(strstr(error, "model-controlled reasoning") != NULL);
     buf metadata = {0};
     append_model_json_values(&metadata, "flint", "Flint", 8192, 1024);
     TEST_ASSERT(strstr(metadata.ptr, "reasoning_effort") == NULL);

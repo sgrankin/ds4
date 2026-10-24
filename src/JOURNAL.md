@@ -4,6 +4,23 @@ Last updated: 2026-10-23. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## Flint reasoning visibility fix — 2026-10-23
+
+The user's dsh `openai-responses` profile received no thinking because our server
+required `reasoning.summary` even though OpenResponses does not require that
+hidden-by-default policy. Flint Responses now emits its generated reasoning
+through the existing summary events/items by default, on HTTP and WebSocket.
+An explicit `reasoning.summary: null` suppresses that text. Effort/thinking hints
+are accepted and ignored, matching Flint's model-controlled reasoning policy;
+the response envelope reports `reasoning.effort: null` instead of a fictitious
+effort. DeepSeek visibility defaults are unchanged.
+
+No regression checks were added or run, at the user's request. The obsolete
+fixture assertion that Flint must reject effort was removed.
+`nu tools/zig-build ds4-server` succeeded, and the root executable was replaced
+atomically for `ds4-local` without interrupting the running server.
+The already-running server needs restarting to pick up the new binary.
+
 ## Intended product
 
 The user wants a focused local inference server for their M5 Max, with possible

@@ -256,7 +256,9 @@ fn responsesReasoning(reader: *Reader, input: *Record) Failure!void {
                 effort_seen = true;
             }
         } else if (equal(key, "summary")) {
-            if (!reader.literal("null")) {
+            if (reader.literal("null")) {
+                input.req.reasoning_summary_emit = false;
+            } else {
                 if (reader.peek() == '"') {
                     const mode = try reader.readString();
                     defer c.free(mode);
@@ -352,6 +354,9 @@ pub const Input = struct {
             request.top_k = 20;
             request.top_p = 0.95;
             request.min_p = 0;
+            // Flint chooses when to think; expose that output without making
+            // clients opt into a separate summary or effort control.
+            request.reasoning_summary_emit = endpoint == c.DS4_SERVER_INPUT_RESPONSES;
         }
         request.think_mode = c.DS4_THINK_HIGH;
         input.thinking_enabled = true;
@@ -371,9 +376,12 @@ pub const Input = struct {
         // The old API decoder stops at the closing brace. It does not impose
         // end-of-document validation or change partial malformed-input cursors.
         if (reader.peek() != '}') return error.InvalidJson;
-        if (defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT and input.got_thinking) {
-            message(error_text, "Flint's template uses model-controlled reasoning; reasoning effort and enable_thinking controls are unsupported");
-            return error.Policy;
+        if (defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT) {
+            // Match Flint's reference server: accept unsupported reasoning
+            // hints without letting them change its model-controlled policy.
+            input.got_thinking = false;
+            input.thinking_enabled = true;
+            input.reasoning_effort = c.DS4_THINK_HIGH;
         }
         return result;
     }
