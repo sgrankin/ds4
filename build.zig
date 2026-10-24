@@ -74,10 +74,21 @@ fn servingImports(b: *std.Build, destination: *std.Build.Module, target: std.Bui
     const flint_prompt = b.createModule(.{ .root_source_file = b.path("src/models/flint/prompt.zig"), .target = target, .optimize = optimize });
     flint_prompt.addImport("serving_types", types);
     model.addImport("flint_prompt", flint_prompt);
+    const tool_schema = b.createModule(.{ .root_source_file = b.path("src/models/tool_schema.zig"), .target = target, .optimize = optimize });
+    const qwen_prompt = b.createModule(.{ .root_source_file = b.path("src/models/qwen38/prompt.zig"), .target = target, .optimize = optimize });
+    qwen_prompt.addImport("serving_types", types);
+    qwen_prompt.addImport("tool_schema", tool_schema);
+    model.addImport("qwen_prompt", qwen_prompt);
+    const glm_prompt = b.createModule(.{ .root_source_file = b.path("src/models/glm53/prompt.zig"), .target = target, .optimize = optimize });
+    glm_prompt.addImport("serving_types", types);
+    glm_prompt.addImport("tool_schema", tool_schema);
+    model.addImport("glm_prompt", glm_prompt);
     destination.addImport("serving_types", types);
     destination.addImport("ds4_model", model);
     destination.addImport("ds41_prompt", prompt);
     destination.addImport("flint_prompt", flint_prompt);
+    destination.addImport("qwen_prompt", qwen_prompt);
+    destination.addImport("glm_prompt", glm_prompt);
 }
 
 fn executable(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, core: *std.Build.Step.Compile, cache: ?std.Build.LazyPath, kvstore: ?std.Build.LazyPath, name: []const u8, frontend: std.Build.LazyPath, optimize: std.builtin.Optimize) *std.Build.Step.Compile {

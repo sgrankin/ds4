@@ -1,9 +1,11 @@
 //! Responses stream/nonstream lifecycle over the actual shared request/state.
 //! The generation worker supplies parsed content/tool calls and owns sockets.
 //! Native output owns framing, item identity/order/status and text visibility;
-//! the existing durable publisher and tolerant argument codec remain libraries.
+//! publication commits durable state before completion is reported. Tolerant
+//! argument parsing remains shared with the native request/rendering owners.
 const std = @import("std");
 const c = @import("server_output_c");
+const Publication = @import("publication.zig");
 const allocator = std.heap.c_allocator;
 pub const Stream = c.responses_stream;
 pub const Item = c.responses_tool_item;
@@ -595,7 +597,7 @@ pub const Output = struct {
         usage(&body, request, input, output);
         body.byte('}');
         var error_text: [160]u8 = @splat(0);
-        const stored = c.ds4_server_output_publish(request, &stream.response_id, body.terminated(), &error_text, error_text.len);
+        const stored = Publication.publish(request, &stream.response_id, body.terminated(), &error_text);
         var framed = event(if (stored) kind else "error");
         defer framed.deinit();
         if (stored) {
@@ -771,7 +773,7 @@ pub const Output = struct {
         usage(&body, request, input, output);
         body.byte('}');
         var error_text: [160]u8 = @splat(0);
-        if (c.ds4_server_output_publish(request, &response_id, body.terminated(), &error_text, error_text.len))
+        if (Publication.publish(request, &response_id, body.terminated(), &error_text))
             return c.ds4_server_http_response(self.descriptor, cors, 200, "application/json", body.terminated(), self.stop_requested);
         var failure: Text = .{};
         defer failure.deinit();

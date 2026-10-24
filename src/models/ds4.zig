@@ -6,11 +6,19 @@ const std = @import("std");
 const serving = @import("serving_types");
 const ds41 = @import("ds41_prompt");
 const flint = @import("flint_prompt");
+const qwen = @import("qwen_prompt");
+const glm = @import("glm_prompt");
 
 pub const Family = enum { deepseek, deepseek41, glm, glm53, qwen, flint };
 pub const Capabilities = struct {
     reasoning_budget: bool,
     context_relocation: bool,
+};
+
+pub const PrepareOptions = struct {
+    start: usize = 0,
+    live_tail: bool = false,
+    initial_tool_order: []const []const u8 = &.{},
 };
 
 pub const Model = struct {
@@ -42,15 +50,33 @@ pub const Model = struct {
 
     /// Native model preparation takes logical values, independent of HTTP,
     /// persisted record layouts and the engine's C ABI.
-    pub fn prepare(self: Model, allocator: std.mem.Allocator, request: serving.Request, options: ds41.Options, context: usize) ![:0]u8 {
+    pub fn prepare(self: Model, allocator: std.mem.Allocator, request: serving.Request, options: PrepareOptions, context: usize) ![:0]u8 {
         if (self.family == .flint) return flint.render(allocator, request.messages, .{
             .start = options.start,
             .schemas = request.tool_schemas,
         });
+        if (self.family == .qwen) return qwen.render(allocator, request.messages, .{
+            .start = options.start,
+            .schemas = request.tool_schemas,
+            .tools = request.tools,
+            .reasoning = self.reasoning(request.reasoning, request.model, context),
+            .live_tail = options.live_tail,
+        });
+        if (self.family == .glm53 or self.family == .glm) return glm.render(allocator, request.messages, .{
+            .start = options.start,
+            .schemas = request.tool_schemas,
+            .tools = request.tools,
+            .reasoning = self.reasoning(request.reasoning, request.model, context),
+            .live_tail = options.live_tail,
+        });
         if (self.family != .deepseek41) return error.LegacyModelAdapterRequired;
-        var selected = options;
-        selected.schemas = request.tool_schemas;
-        selected.reasoning = self.reasoning(request.reasoning, request.model, context);
+        const selected: ds41.Options = .{
+            .start = options.start,
+            .live_tail = options.live_tail,
+            .initial_tool_order = options.initial_tool_order,
+            .schemas = request.tool_schemas,
+            .reasoning = self.reasoning(request.reasoning, request.model, context),
+        };
         return ds41.render(allocator, request.messages, selected);
     }
 

@@ -6,12 +6,12 @@ input and the DS4.1 preparation path, including its remaining compatibility edge
 [Stateful Responses](serving/RESPONSES.md) documents HTTP/WebSocket usage and
 the supported OpenResponses contract.
 
-`src/` contains the handwritten implementation of the supported DeepSeek
-V4.1 Metal runtime, its Agent and server, and the CLI, benchmark and evaluation
-frontends. The optional Web client is a separate Zig library. All five program
-entry points are Zig. Qwen and GLM retain their C inference implementations
-behind the same frontends; third-party dependencies and the Metal driver retain
-their original languages.
+`src/` contains handwritten Zig model implementations for DeepSeek V4.1 Flash,
+Flint, Qwen 3.8 Flash Next and GLM-5.3 Flash on Metal, plus the Agent, server,
+CLI, benchmark and evaluation frontends. The optional Web client is a separate
+Zig library. All five program entry points are Zig. Shared engine/session and
+I/O integration is being migrated in the sequence recorded in the journal;
+third-party dependencies and the Metal driver retain their original languages.
 
 ## Scope and organization
 
@@ -82,8 +82,8 @@ Use the existing presets with an explicit binary directory:
 ```
 
 Make delegates to this same Zig build and copies the five executables to the
-repository root for existing launchers. Model metadata selects the C Qwen/GLM
-engine or the Zig DeepSeek V4.1 engine; no separate frontend is needed. Historical
+repository root for existing launchers. Model metadata selects the corresponding
+native Metal model implementation; no separate frontend is needed. Historical
 C implementations remain available in version history for comparison. Resident
 substitution, decoder replay and suffix relocation retain their existing
 preset/opt-in rules.
@@ -127,9 +127,10 @@ image codecs, line editing and radix-tree support, remain dependencies. Public
 C compatibility shells, platform/signal installation, selected diagnostic I/O
 and TP/distributed transport also remain explicit boundaries.
 
-Qwen/GLM and legacy model inference paths retain C implementations. Shared
-utilities and selected kernels used by DS4.1 do not imply a complete GLM/Qwen
-rewrite. This build supports macOS Metal; other backend code still present for
+Original DeepSeek V4, GLM52, independent CPU references and explicit legacy or
+distributed diagnostic paths retain C implementations. Ordinary DS4.1, Flint,
+Qwen and GLM53 Metal execution and prompt mapping have native owners.
+This build supports macOS Metal; other backend code still present for
 upstream correspondence is not a maintained alternate product. Migration
 switches and duplicate C bodies for the adopted Zig implementation are removed.
 

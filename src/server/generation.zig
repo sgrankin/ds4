@@ -3,6 +3,8 @@
 //! opaque; only complete trace/log I/O and other-family rendering stay in C.
 const std = @import("std");
 const c = @import("server_generation_c");
+const Canonical = @import("canonical.zig");
+const QwenPrompt = @import("qwen_prompt");
 const allocator = std.heap.c_allocator;
 
 fn zero(comptime T: type) T {
@@ -417,24 +419,25 @@ fn appendCalls(out: *c.buf, request: ?*const c.request, calls: [*c]const c.tool_
     const orders = if (request) |req| &req.tool_orders else null;
     if (syntax == c.SERVER_MODEL_SYNTAX_FLINT) c.ds4_server_render_flint_calls(out, calls, orders) else if (syntax == c.SERVER_MODEL_SYNTAX_GLM) c.ds4_server_render_glm_calls(out, calls, orders) else if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) c.ds4_server_render_qwen_calls(out, calls, out.len != 0, orders) else c.ds4_server_render_dsml_calls(out, calls, syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41);
 }
-fn qwenSuffix(request: ?*const c.request, content: [*c]const u8, reasoning: [*c]const u8, with_reasoning: bool, calls: [*c]const c.tool_calls) [*c]u8 {
-    var out = zero(c.buf);
-    if (request != null and c.ds4_think_mode_enabled(request.?.think_mode)) {
-        if (with_reasoning) trim(&out, reasoning);
-        append(&out, "\n</think>\n\n");
-    }
-    var body = zero(c.buf);
-    defer freeBuffer(&body);
-    trim(&body, content);
-    puts(&out, body.ptr);
-    c.ds4_server_render_qwen_calls(&out, calls, body.len > 0, if (request) |req| &req.tool_orders else null);
-    append(&out, "<|im_end|>");
-    return take(&out);
+fn qwenSuffix(request: ?*const c.request, content: [*c]const u8, reasoning: [*c]const u8, with_reasoning: bool, calls: [*c]const c.tool_calls, include_stop: bool) [*c]u8 {
+    var message = zero(c.chat_msg);
+    message.role = @constCast("assistant");
+    message.content = @constCast(content);
+    message.reasoning = @constCast(reasoning);
+    if (calls != null) message.calls = calls.*;
+    const messages: c.chat_msgs = .{ .v = &message, .len = 1, .cap = 1 };
+    var view = Canonical.View.init(allocator, c, &messages, if (request) |req| &req.tool_orders else null) catch fatal();
+    defer view.deinit();
+    return (QwenPrompt.assistantSuffix(allocator, view.messages[0], view.tools, .{
+        .reasoning = if (request) |req| Canonical.reasoning(c, req.think_mode) else .none,
+        .include_reasoning = with_reasoning,
+        .include_stop = include_stop,
+    }) catch fatal()).ptr;
 }
 pub fn assistantSuffix(request: ?*const c.request, content: [*c]const u8, reasoning: [*c]const u8, calls: [*c]const c.tool_calls, visible: bool) [*c]u8 {
     const syntax = if (request) |req| req.model_syntax else c.SERVER_MODEL_SYNTAX_DEEPSEEK;
     const include_reasoning = !visible or (request != null and request.?.reasoning_summary_emit and calls != null and calls.*.len > 0);
-    if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) return qwenSuffix(request, content, reasoning, include_reasoning, calls);
+    if (syntax == c.SERVER_MODEL_SYNTAX_QWEN) return qwenSuffix(request, content, reasoning, include_reasoning, calls, true);
     var out = zero(c.buf);
     if (syntax == c.SERVER_MODEL_SYNTAX_FLINT) {
         if (include_reasoning and text(reasoning).len > 0) {
@@ -485,12 +488,11 @@ pub fn thinkingVisible(request: ?*const c.request, content: [*c]const u8) [*c]u8
 pub fn qwenToolVisible(request: ?*const c.request, finish: [*c]const u8, inside: bool, content: [*c]const u8, calls: [*c]const c.tool_calls) [*c]u8 {
     const req = request orelse return null;
     if (calls == null or calls.*.len == 0 or req.kind != c.REQ_CHAT or req.image_count != 0 or req.api == c.API_RESPONSES or req.api == c.API_ANTHROPIC or req.model_syntax != c.SERVER_MODEL_SYNTAX_QWEN or text(req.prompt_text).len == 0 or text(calls.*.raw_tool_text).len == 0 or !same(finish, "tool_calls") or inside) return null;
-    const suffix = qwenSuffix(req, content, null, false, calls);
+    const suffix = qwenSuffix(req, content, null, false, calls, false);
     defer c.free(suffix);
     var out = zero(c.buf);
     puts(&out, req.prompt_text);
-    const bytes = text(suffix);
-    append(&out, bytes[0 .. bytes.len - "<|im_end|>".len]);
+    puts(&out, suffix);
     return take(&out);
 }
 fn systemRegion(prompt: [*c]const u8) []const u8 {

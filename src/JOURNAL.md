@@ -4,6 +4,43 @@ Last updated: 2026-10-24. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## Next migration sequence — active 2026-10-24
+
+The user authorized this sequence with “Ok. Make it so.” The plan is twelve
+one-hour ceilings, with earlier completion encouraged: Qwen prompt mapping;
+GLM prompt mapping; Responses publication integration; generic payload I/O;
+snapshot/staged-file envelopes; selected-expert workers; page-in/model-view
+services; common session control; session resources; engine startup/admission;
+engine Metal lifecycle; assembled-runtime qualification and removal of old
+owners. [Detailed sequence and checks](../speed-bench/ideas/next-experiments.md).
+
+The target is one Zig owner per active single-Metal component, keeping model
+arithmetic, formats and cache/threading policy stable during the migration.
+Use the qualified `e37e53d9` model port as baseline and leave main unchanged.
+Keep actual records single-source and cold/GPU objects separate. Source prep
+can overlap; integration and guarded model runs remain sequential. Prefer
+existing fixtures and stable live-session timing cases. Metal ARC/MSL,
+third-party libraries and separate legacy/reference/distributed C are explicit
+boundaries, rather than targets for line-count conversion.
+
+Slice 1 completed within its first hour (start about 10:33 UTC): Qwen full/live
+prompt, schema/tool-call and checkpoint-suffix formatting now has one C-free
+model owner. Exact existing server fixtures, six pure assembly cases, three
+focused CPU tests and all 25 real Responses/WebSocket checks pass. C retains
+small compatibility/test adapters. [Progress and commands](../speed-bench/experiments/native-runtime-20261024/README.md).
+
+Slice 2 is complete too: GLM full/live templates and tool/schema formatting
+select its pure model owner. Six pure GLM tests, seven native preparation cases,
+exact server fixtures and all 25 real GLM Responses checks pass by 11:09 UTC.
+Slice 3 is complete: native Responses publication and prompt parsing pass the
+existing server/store fixtures and all 25 real Qwen Responses/WebSocket checks.
+Slice 4 is active: generic FILE/tensor payload transfers. Independent payload-I/O, snapshot-envelope,
+selected-worker and session-control/resource source preparation overlaps; only
+root integrates shared files and schedules guarded model jobs. Frozen baseline
+binaries and original shared sources are under
+`.workspaces/runtime-migrations-20261024/baseline/`. The work bookmark is
+`native-runtime`; the qualified model port stays on `qwen-glm-zig`, main unchanged.
+
 ## Native Qwen 3.8 and GLM Flash ports — completed 2026-10-24
 
 The user authorized handwritten Zig model ports, explicitly reusing downloaded

@@ -1,6 +1,36 @@
 #include "../src/ds4.c"
 #include <assert.h>
 
+/* This public convenience method must advance Qwen's actual graph, rather
+ * than the legacy DeepSeek graph that a Qwen session never allocates. */
+static void check_public_eval_argmax(ds4_engine *engine, const ds4_tokens *prompt) {
+    ds4_session *live = NULL, *control = NULL;
+    const int vocabulary = ds4_engine_vocab_size(engine);
+    float *a = malloc((size_t)vocabulary * sizeof(float));
+    float *b = malloc((size_t)vocabulary * sizeof(float));
+    char error[256] = {0};
+    assert(a && b);
+    assert(ds4_session_create(&live, engine, 256) == 0);
+    assert(ds4_session_create(&control, engine, 256) == 0);
+    assert(ds4_session_sync(live, prompt, error, sizeof(error)) == 0);
+    assert(ds4_session_sync(control, prompt, error, sizeof(error)) == 0);
+    for (int step = 0; step < 4; step++) {
+        const int token = ds4_session_argmax(control);
+        assert(token >= 0);
+        assert(ds4_session_eval(control, token, error, sizeof(error)) == 0);
+        assert(ds4_session_eval_argmax(live, token, error, sizeof(error)) == ds4_session_argmax(control));
+        assert(ds4_session_pos(live) == ds4_session_pos(control));
+        assert(ds4_session_copy_logits(live, a, vocabulary) == vocabulary);
+        assert(ds4_session_copy_logits(control, b, vocabulary) == vocabulary);
+        assert(!memcmp(a, b, (size_t)vocabulary * sizeof(float)));
+    }
+    ds4_session_free(control);
+    ds4_session_free(live);
+    free(b);
+    free(a);
+    puts("Qwen public eval_argmax: four tokens and all logits match eval+argmax");
+}
+
 static void check_batch(ds4_engine *engine, const ds4_tokens *prompt, bool speculative) {
     enum { N = 4 };
     ds4_session *sessions[N] = {0};
@@ -147,8 +177,8 @@ static void check_arena_resize(ds4_engine *engine, const ds4_tokens *prompt) {
 /* A failed disk lookup must invalidate the recurrent frontier, including
  * speculative snapshots. Retrying must rebuild from the retained tokens. */
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        fprintf(stderr, "usage: %s QWEN_GGUF\n", argv[0]);
+    if (argc != 2 && !(argc == 3 && !strcmp(argv[2], "--argmax-only"))) {
+        fprintf(stderr, "usage: %s QWEN_GGUF [--argmax-only]\n", argv[0]);
         return 2;
     }
     ds4_engine *engine = NULL;
@@ -164,6 +194,12 @@ int main(int argc, char **argv) {
     assert(ds4_engine_is_qwen4(engine) && engine->core.model.ngram_tensor);
     ds4_tokens prompt = {0};
     ds4_encode_chat_prompt(engine, NULL, "Count from one to ten.", DS4_THINK_NONE, &prompt);
+    check_public_eval_argmax(engine, &prompt);
+    if (argc == 3) {
+        ds4_tokens_free(&prompt);
+        ds4_engine_close(engine);
+        return 0;
+    }
     char error[256] = {0};
     for (int mode = 0; mode < 4; mode++) {
         ds4_session *live = NULL, *control = NULL;

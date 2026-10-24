@@ -105,11 +105,35 @@ fn modelOwnsReasoningPolicy() !void {
     }
 }
 
+fn qwenPreparation() !void {
+    const model: policy.Model = .{ .family = .qwen };
+    const messages = [_]types.Message{.{ .role = "user", .content = "Hi" }};
+    const rendered = try model.prepare(allocator, .{
+        .messages = &messages,
+        .reasoning = .{ .enabled = false },
+    }, .{}, 8192);
+    defer allocator.free(rendered);
+    try equal("<|im_start|>user\nHi<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n", rendered);
+}
+
+fn glmPreparation() !void {
+    const model: policy.Model = .{ .family = .glm53 };
+    const messages = [_]types.Message{.{ .role = "user", .content = "Hi" }};
+    const rendered = try model.prepare(allocator, .{
+        .messages = &messages,
+        .reasoning = .{ .enabled = false },
+    }, .{}, 8192);
+    defer allocator.free(rendered);
+    try equal("[gMASK]<sop><|user|>Hi<|assistant|><think></think>", rendered);
+}
+
 pub fn main() !void {
     try simpleConversation();
     try sampledToolsAndReasoning();
     try liveResultOrder();
     try mixedResultsKeepUserText();
     try modelOwnsReasoningPolicy();
-    std.debug.print("PASS: native serving/model boundary (5 cases)\n", .{});
+    try qwenPreparation();
+    try glmPreparation();
+    std.debug.print("PASS: native serving/model boundary (7 cases)\n", .{});
 }

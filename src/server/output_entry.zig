@@ -2,12 +2,21 @@
 const std = @import("std");
 const c = @import("server_output_c");
 const owner = @import("output.zig");
+const Publication = @import("publication.zig");
 const Stop = *const volatile c.sig_atomic_t;
 fn text(pointer: [*c]const u8) []const u8 {
     return if (pointer == null) &.{} else std.mem.span(pointer);
 }
 fn output(fd: c_int, stop: Stop) owner.Output {
     return .{ .descriptor = fd, .stop_requested = stop };
+}
+export fn ds4_server_output_object_json(arguments: [*c]const u8) [*c]u8 {
+    var buffer = std.mem.zeroes(c.buf);
+    c.ds4_server_render_object(&buffer, arguments);
+    return buffer.ptr;
+}
+export fn ds4_server_output_publish(request: *c.request, id: [*c]const u8, json: [*c]const u8, errors: [*c]u8, capacity: usize) bool {
+    return Publication.publish(request, id, json, if (errors == null or capacity == 0) &.{} else errors[0..capacity]);
 }
 export fn ds4_server_output_random_id(destination: [*c]u8, capacity: usize, prefix: [*c]const u8) void {
     owner.randomId(if (capacity == 0) &.{} else destination[0..capacity], text(prefix));

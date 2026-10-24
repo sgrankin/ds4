@@ -6,6 +6,8 @@ const c = @import("server_render_c");
 const Canonical = @import("canonical.zig");
 const Prompt = @import("ds41_prompt");
 const FlintPrompt = @import("flint_prompt");
+const QwenPrompt = @import("qwen_prompt");
+const GlmPrompt = @import("glm_prompt");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidJson};
 
@@ -195,27 +197,12 @@ fn dsmlArgument(out: *Text, argument: *const c.json_arg, v41: bool) void {
     out.append(end);
     out.byte('\n');
 }
-fn glmArgument(out: *Text, argument: *const c.json_arg) void {
-    out.append("<arg_key>");
-    body(out, argument.key, "</arg_key>");
-    out.append("</arg_key><arg_value>");
-    body(out, argument.value, "</arg_value>");
-    out.append("</arg_value>");
-}
-fn orderedArguments(out: *Text, raw: [*c]const u8, order: [*c]const c.tool_schema_order, v41: bool, glm: bool) bool {
+fn orderedArguments(out: *Text, raw: [*c]const u8, v41: bool) bool {
     var args = std.mem.zeroes(c.json_args);
     if (!ds4_server_render_arguments_parse(raw, &args)) return false;
     defer ds4_server_render_arguments_free(&args);
-    if (order != null) for (items([*c]u8, order.*.prop, @intCast(order.*.len))) |property| {
-        const found = ds4_server_render_arguments_find(&args, property);
-        if (found < 0) continue;
-        const argument: *c.json_arg = @ptrCast(&args.v[@intCast(found)]);
-        if (glm) glmArgument(out, argument) else dsmlArgument(out, argument, v41);
-        argument.used = true;
-    };
     for (items(c.json_arg, args.v, @intCast(args.len))) |*argument| {
-        if (argument.used) continue;
-        if (glm) glmArgument(out, argument) else dsmlArgument(out, argument, v41);
+        dsmlArgument(out, argument, v41);
     }
     return true;
 }
@@ -238,13 +225,6 @@ fn object(out: *Text, raw: [*c]const u8) void {
     }
     out.byte('}');
 }
-fn findOrder(orders: [*c]const c.tool_schema_orders, name: [*c]const u8) [*c]const c.tool_schema_order {
-    if (orders == null or name == null) return null;
-    for (items(c.tool_schema_order, orders.*.v, @intCast(orders.*.len))) |*order| {
-        if (order.name != null and equal(order.name, bytes(name))) return order;
-    }
-    return null;
-}
 fn callSlice(calls: [*c]const c.tool_calls) []const c.tool_call {
     return if (calls == null) &.{} else items(c.tool_call, calls.*.v, @intCast(calls.*.len));
 }
@@ -261,7 +241,7 @@ fn dsmlCalls(out: *Text, calls: [*c]const c.tool_calls, v41: bool) void {
         out.append(" name=\"");
         attribute(out, call.name);
         out.append("\">\n");
-        if (!orderedArguments(out, call.arguments, null, v41, false)) {
+        if (!orderedArguments(out, call.arguments, v41)) {
             out.append(if (v41) parameter_open else "<｜DSML｜parameter");
             out.append(" name=\"arguments\" string=\"true\">");
             body(out, call.arguments, if (v41) parameter_close else "</｜DSML｜parameter>");
@@ -271,68 +251,6 @@ fn dsmlCalls(out: *Text, calls: [*c]const c.tool_calls, v41: bool) void {
     }
     out.append(if (v41) calls_close else "</｜DSML｜tool_calls>");
 }
-fn glmCalls(out: *Text, calls: [*c]const c.tool_calls, orders: [*c]const c.tool_schema_orders) void {
-    const list = callSlice(calls);
-    if (list.len == 0) return;
-    if (bytes(calls.*.raw_tool_text).len != 0) {
-        out.string(calls.*.raw_tool_text);
-        return;
-    }
-    // GLM emits this inline. Added newlines would change the replayed prefix.
-    for (list) |call| {
-        out.append("<tool_call>");
-        out.string(call.name);
-        if (!orderedArguments(out, call.arguments, findOrder(orders, call.name), false, true)) {
-            out.append("<arg_key>arguments</arg_key><arg_value>");
-            body(out, call.arguments, "</arg_value>");
-            out.append("</arg_value>");
-        }
-        out.append("</tool_call>");
-    }
-}
-fn qwenCalls(out: *Text, calls: [*c]const c.tool_calls, has_content: bool, orders: [*c]const c.tool_schema_orders) void {
-    const list = callSlice(calls);
-    if (list.len == 0) return;
-    if (bytes(calls.*.raw_tool_text).len != 0) {
-        out.string(calls.*.raw_tool_text);
-        return;
-    }
-    for (list, 0..) |call, position| {
-        out.append(if (position != 0) "\n<tool_call>\n<function=" else if (has_content) "\n\n<tool_call>\n<function=" else "<tool_call>\n<function=");
-        out.string(call.name);
-        out.append(">\n");
-        var args = std.mem.zeroes(c.json_args);
-        if (ds4_server_render_arguments_parse(call.arguments, &args)) {
-            defer ds4_server_render_arguments_free(&args);
-            const order = findOrder(orders, call.name);
-            for (0..2) |pass| {
-                const count: usize = if (pass == 0) (if (order == null) 0 else @intCast(order.*.len)) else @intCast(args.len);
-                for (0..count) |property| {
-                    const found: c_int = if (pass == 0) ds4_server_render_arguments_find(&args, order.*.prop[property]) else @intCast(property);
-                    if (found < 0) continue;
-                    const argument: *c.json_arg = @ptrCast(&args.v[@intCast(found)]);
-                    if (pass != 0 and argument.used) continue;
-                    argument.used = true;
-                    out.append("<parameter=");
-                    body(out, argument.key, ">");
-                    out.append(">\n");
-                    if (argument.is_string) body(out, argument.value, "</parameter>") else {
-                        const raw = c.ds4_server_json_minify(if (argument.value == null) "null" else argument.value);
-                        defer c.free(raw);
-                        body(out, if (bytes(raw).len == 0) "null" else raw, "</parameter>");
-                    }
-                    out.append("\n</parameter>\n");
-                }
-            }
-        } else if (bytes(call.arguments).len != 0) {
-            out.append("<parameter=arguments>\n");
-            body(out, call.arguments, "</parameter>");
-            out.append("\n</parameter>\n");
-        }
-        out.append("</function>\n</tool_call>");
-    }
-}
-
 const v41_tools_preamble = Prompt.tools_preamble;
 const legacy_tools_preamble =
     "## Tools\n\n" ++
@@ -362,54 +280,6 @@ fn tools(out: *Text, schemas: [*c]const u8, v41: bool) void {
     out.string(schemas);
     out.append(tools_footer);
 }
-fn glmSchema(out: *Text, raw: [*c]const u8, emitted: *bool) bool {
-    emitted.* = false;
-    var args = std.mem.zeroes(c.json_args);
-    if (!ds4_server_render_arguments_parse(raw, &args)) return false;
-    defer ds4_server_render_arguments_free(&args);
-    const arguments = items(c.json_arg, args.v, @intCast(args.len));
-    for (arguments) |argument| {
-        if (equal(argument.key, "defer_loading") and !argument.is_string and equal(argument.value, "true")) return true;
-    }
-    out.byte('{');
-    var wrote = false;
-    for (arguments) |argument| {
-        if (equal(argument.key, "defer_loading") or equal(argument.key, "strict")) continue;
-        if (wrote) out.append(", ");
-        out.quoted(argument.key);
-        out.append(": ");
-        if (argument.is_string) out.quoted(argument.value) else out.string(argument.value);
-        wrote = true;
-    }
-    out.byte('}');
-    emitted.* = true;
-    return true;
-}
-fn glmTools(out: *Text, schemas: [*c]const u8) void {
-    if (bytes(schemas).len == 0) return;
-    out.append("\n# Tools\n\nYou may call one or more functions to assist with the user query.\n\n" ++
-        "You are provided with function signatures within <tools></tools> XML tags:\n<tools>\n\n");
-    var reader: Reader = .{ .cursor = schemas };
-    var any = false;
-    while (reader.peek() != 0) {
-        const raw = reader.raw() catch break;
-        defer c.free(raw);
-        var emitted = false;
-        if (!glmSchema(out, raw, &emitted)) {
-            out.string(raw);
-            emitted = true;
-        }
-        if (emitted) {
-            out.append("\n\n\n");
-            any = true;
-        }
-    }
-    if (!any) out.byte('\n');
-    out.append("</tools>\n\nFor each function call, output the function name and arguments within the following XML format:\n" ++
-        "<tool_call>{function-name}<arg_key>{arg-key-1}</arg_key><arg_value>{arg-value-1}</arg_value>" ++
-        "<arg_key>{arg-key-2}</arg_key><arg_value>{arg-value-2}</arg_value>...</tool_call>");
-}
-
 fn messageSlice(messages: [*c]const c.chat_msgs) []const c.chat_msg {
     return if (messages == null) &.{} else items(c.chat_msg, messages.*.v, @intCast(messages.*.len));
 }
@@ -437,6 +307,30 @@ pub export fn ds4_server_render_flint(messages: [*c]const c.chat_msgs, start: c_
         .schemas = if (schemas == null) null else bytes(schemas),
     }) catch fatal();
     return prompt.ptr;
+}
+
+pub export fn ds4_server_render_qwen(messages: [*c]const c.chat_msgs, start: c_int, schemas: [*c]const u8, orders: [*c]const c.tool_schema_orders, mode: c.ds4_think_mode, live_tail: bool) [*c]u8 {
+    var view = Canonical.View.init(allocator, c, messages, orders) catch fatal();
+    defer view.deinit();
+    return (QwenPrompt.render(allocator, view.messages, .{
+        .start = @intCast(@max(start, 0)),
+        .schemas = if (schemas == null) null else bytes(schemas),
+        .tools = view.tools,
+        .reasoning = Canonical.reasoning(c, mode),
+        .live_tail = live_tail,
+    }) catch fatal()).ptr;
+}
+
+pub export fn ds4_server_render_glm(messages: [*c]const c.chat_msgs, start: c_int, schemas: [*c]const u8, orders: [*c]const c.tool_schema_orders, mode: c.ds4_think_mode, live_tail: bool) [*c]u8 {
+    var view = Canonical.View.init(allocator, c, messages, orders) catch fatal();
+    defer view.deinit();
+    return (GlmPrompt.render(allocator, view.messages, .{
+        .start = @intCast(@max(start, 0)),
+        .schemas = if (schemas == null) null else bytes(schemas),
+        .tools = view.tools,
+        .reasoning = Canonical.reasoning(c, mode),
+        .live_tail = live_tail,
+    }) catch fatal()).ptr;
 }
 
 pub export fn ds4_server_render_flint_calls(out: *c.buf, calls: [*c]const c.tool_calls, orders: [*c]const c.tool_schema_orders) void {
@@ -512,25 +406,10 @@ pub export fn ds4_server_render_tools(buffer: *c.buf, schemas: [*c]const u8, v41
     defer out.store(buffer);
     tools(&out, schemas, v41);
 }
-pub export fn ds4_server_render_glm_schema(buffer: *c.buf, raw: [*c]const u8, emitted: *bool) bool {
-    var out = Text.adopt(buffer);
-    defer out.store(buffer);
-    return glmSchema(&out, raw, emitted);
-}
-pub export fn ds4_server_render_glm_tools(buffer: *c.buf, schemas: [*c]const u8) void {
-    var out = Text.adopt(buffer);
-    defer out.store(buffer);
-    glmTools(&out, schemas);
-}
 pub export fn ds4_server_render_glm_body(buffer: *c.buf, value: [*c]const u8, end: [*c]const u8) void {
     var out = Text.adopt(buffer);
     defer out.store(buffer);
     body(&out, value, bytes(end));
-}
-pub export fn ds4_server_render_glm_value(buffer: *c.buf, value: [*c]const u8) void {
-    var out = Text.adopt(buffer);
-    defer out.store(buffer);
-    body(&out, value, "</arg_value>");
 }
 pub export fn ds4_server_render_glm_result(buffer: *c.buf, value: [*c]const u8) void {
     var out = Text.adopt(buffer);
@@ -553,14 +432,32 @@ pub export fn ds4_server_render_dsml_calls(buffer: *c.buf, calls: [*c]const c.to
     dsmlCalls(&out, calls, v41);
 }
 pub export fn ds4_server_render_glm_calls(buffer: *c.buf, calls: [*c]const c.tool_calls, orders: [*c]const c.tool_schema_orders) void {
+    if (calls == null or calls.*.len == 0) return;
+    var message = std.mem.zeroes(c.chat_msg);
+    message.role = @constCast("assistant");
+    message.calls = calls.*;
+    const messages: c.chat_msgs = .{ .v = &message, .len = 1, .cap = 1 };
+    var view = Canonical.View.init(allocator, c, &messages, orders) catch fatal();
+    defer view.deinit();
+    const rendered = GlmPrompt.renderCalls(allocator, view.messages[0].calls, view.messages[0].raw_tool_text, view.tools) catch fatal();
+    defer allocator.free(rendered);
     var out = Text.adopt(buffer);
     defer out.store(buffer);
-    glmCalls(&out, calls, orders);
+    out.append(rendered);
 }
 pub export fn ds4_server_render_qwen_calls(buffer: *c.buf, calls: [*c]const c.tool_calls, has_content: bool, orders: [*c]const c.tool_schema_orders) void {
+    if (calls == null or calls.*.len == 0) return;
+    var message = std.mem.zeroes(c.chat_msg);
+    message.role = @constCast("assistant");
+    message.calls = calls.*;
+    const messages: c.chat_msgs = .{ .v = &message, .len = 1, .cap = 1 };
+    var view = Canonical.View.init(allocator, c, &messages, orders) catch fatal();
+    defer view.deinit();
+    const rendered = QwenPrompt.renderCalls(allocator, view.messages[0], view.tools, has_content) catch fatal();
+    defer allocator.free(rendered);
     var out = Text.adopt(buffer);
     defer out.store(buffer);
-    qwenCalls(&out, calls, has_content, orders);
+    out.append(rendered);
 }
 pub export fn ds4_server_render_replay_message(buffer: *c.buf, message: *const c.chat_msg) void {
     var out = Text.adopt(buffer);

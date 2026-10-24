@@ -82,7 +82,7 @@ bool ds4_server_output_final(int fd, bool cors, request *req,
     const char *finish, int input_tokens, int output_tokens,
     const volatile sig_atomic_t *stop);
 
-/* Transitional real libraries, not callbacks. Canonical arguments use the
+/* Native compatibility entries, not callbacks. Canonical arguments use the
  * existing tolerant object codec; the returned string is libc-owned. Durable
  * publication retains Conversations version checks, store files and locking.
  * Native output must publish before it reports successful completion. */

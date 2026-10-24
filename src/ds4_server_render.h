@@ -23,10 +23,7 @@ bool ds4_server_render_arguments_parse(const char *json, json_args *args);
 void ds4_server_render_arguments_free(json_args *args);
 int ds4_server_render_arguments_find(json_args *args, const char *key);
 void ds4_server_render_tools(buf *out, const char *schemas, bool v41);
-bool ds4_server_render_glm_schema(buf *out, const char *json, bool *emitted);
-void ds4_server_render_glm_tools(buf *out, const char *schemas);
 void ds4_server_render_glm_body(buf *out, const char *text, const char *end);
-void ds4_server_render_glm_value(buf *out, const char *text);
 void ds4_server_render_glm_result(buf *out, const char *text);
 void ds4_server_render_tool_result(buf *out, const char *text);
 void ds4_server_render_object(buf *out, const char *json);
@@ -46,6 +43,12 @@ char *ds4_server_render_deepseek41(const chat_msgs *messages, int start,
     const stop_list *initial_order);
 char *ds4_server_render_flint(const chat_msgs *messages, int start,
     const char *schemas);
+char *ds4_server_render_qwen(const chat_msgs *messages, int start,
+    const char *schemas, const tool_schema_orders *orders,
+    ds4_think_mode mode, bool live_tail);
+char *ds4_server_render_glm(const chat_msgs *messages, int start,
+    const char *schemas, const tool_schema_orders *orders,
+    ds4_think_mode mode, bool live_tail);
 void ds4_server_render_replay_message(buf *out, const chat_msg *message);
 char *ds4_server_render_replay_history(const chat_msgs *messages, int skip);
 

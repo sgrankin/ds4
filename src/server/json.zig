@@ -245,3 +245,31 @@ pub export fn ds4_server_json_minify(raw: [*c]const u8) [*c]u8 {
     }
     return (out.toOwnedSliceSentinel(allocator, 0) catch fatal()).ptr;
 }
+
+// Completion requests retain the existing first-string/first-array-item rule.
+pub export fn ds4_server_json_prompt(cursor: Cursor, output: *[*c]u8) bool {
+    ds4_server_json_ws(cursor);
+    if (cursor.*[0] == '"') return ds4_server_json_string(cursor, output);
+    if (cursor.*[0] != '[') {
+        if (!ds4_server_json_skip(cursor)) return false;
+        output.* = (allocator.dupeSentinel(u8, "", 0) catch fatal()).ptr;
+        return true;
+    }
+    cursor.* += 1;
+    ds4_server_json_ws(cursor);
+    if (cursor.*[0] == '"') {
+        if (!ds4_server_json_string(cursor, output)) return false;
+    } else {
+        output.* = (allocator.dupeSentinel(u8, "", 0) catch fatal()).ptr;
+        if (cursor.*[0] != 0 and cursor.*[0] != ']' and !ds4_server_json_skip(cursor)) return false;
+    }
+    while (cursor.*[0] != 0 and cursor.*[0] != ']') {
+        ds4_server_json_ws(cursor);
+        if (cursor.*[0] != ',') break;
+        cursor.* += 1;
+        if (!ds4_server_json_skip(cursor)) return false;
+    }
+    if (cursor.*[0] != ']') return false;
+    cursor.* += 1;
+    return true;
+}

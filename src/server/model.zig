@@ -45,7 +45,7 @@ pub fn Backend(comptime c: type) type {
 
         pub fn render(self: Self, req: *const c.request, messages: *const c.chat_msgs, start: usize, schemas: [*c]const u8, live: bool, order: ?*const c.stop_list, context: usize) [*c]u8 {
             _ = self;
-            if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and req.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT)
+            if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and req.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT and req.model_syntax != c.SERVER_MODEL_SYNTAX_QWEN and req.model_syntax != c.SERVER_MODEL_SYNTAX_GLM)
                 return c.ds4_server_materialize_render_other(req.model_syntax, messages, @intCast(start), schemas, &req.tool_orders, req.think_mode, live);
 
             var view = Canonical.View.init(std.heap.c_allocator, c, messages, &req.tool_orders) catch fatal();
@@ -60,7 +60,12 @@ pub fn Backend(comptime c: type) type {
                 // validation. Preserve that exact decision at rendering.
                 .reasoning = .{ .enabled = true, .effort = Canonical.reasoning(c, req.think_mode) },
             };
-            const target: policy.Model = .{ .family = if (req.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) .flint else .deepseek41 };
+            const target: policy.Model = .{ .family = switch (req.model_syntax) {
+                c.SERVER_MODEL_SYNTAX_FLINT => .flint,
+                c.SERVER_MODEL_SYNTAX_QWEN => .qwen,
+                c.SERVER_MODEL_SYNTAX_GLM => .glm53,
+                else => .deepseek41,
+            } };
             const rendered = target.prepare(std.heap.c_allocator, request, .{ .start = start, .live_tail = live, .initial_tool_order = initial }, context) catch fatal();
             return rendered.ptr;
         }

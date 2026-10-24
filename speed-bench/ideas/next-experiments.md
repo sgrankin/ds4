@@ -1,5 +1,64 @@
 # Next experiments: one hour each
 
+## Next C-to-Zig migrations — authorized 2026-10-24
+
+The user approved the full sequence. Start from the qualified native
+model port at `e37e53d9` (`qwen-glm-zig`), leaving main unchanged. The goal is a
+Zig-owned single-Metal engine assembled from model preparation/execution,
+session lifecycle and shared storage/I/O. Preserve current model arithmetic,
+wire formats, cache policies and threading behavior during each migration.
+
+Each numbered slice has a one-hour ceiling including review, implementation,
+builds, qualification and a short report. These are twelve ceilings, not a
+requirement to consume twelve hours. At a deadline, record the qualified result
+or the concrete obstacle and revise the next slice. Do not widen an unfinished
+slice into a generic engine framework or a new test harness.
+
+| Order | Deliverable | Existing qualification |
+| --- | --- | --- |
+| 1 | Qwen prompt/tool mapping in its model module; use the native model preparation boundary | Rendered bytes/token IDs, server fixtures and real tool/image continuation |
+| 2 | GLM53 prompt/tool mapping in its model module, including live tool tails | Same checks with the installed GLM model and bounded SSD settings |
+| 3 | Remaining Responses publication transaction and server integration policy in Zig | Response-store fixtures, HTTP/WebSocket continuation and restart recovery; retain small OS/varargs adapters where useful |
+| 4 | Generic byte/tensor/F16 payload I/O leaves | Frozen/native payload exchange, short reads and exact recovery using the existing helper |
+| 5 | Public snapshots/staged files and dispatch to native family codecs | Existing state/snapshot and SSD-cache fixtures, cancellation/invalid-frontier checks |
+| 6 | Selected-expert asynchronous worker start/finish and ownership | Existing SSD-expert fixture, failed-read recovery and short streaming frontier comparison |
+| 7 | Page-in range preparation/join, model-view handoffs and read/madvise services | Streaming fixtures plus DS4.1/GLM prefill/decode/MTP; verify joins precede retiring maps/tensors |
+| 8 | Shared session dispatch, validation, cancellation and frontier control | Existing state, multimodal, cancellation and Responses fixtures |
+| 9 | Single-Metal session creation/free, pools, scratch and reservations | Repeated lifecycle, Qwen arena growth and GLM invalid-state recovery |
+| 10 | Engine startup/configuration/admission assembly | Existing metadata/inspect checks, installed model startup and partial-failure release |
+| 11 | Engine Metal initialization/close and final family dispatch | All four native families' short execution and shutdown; actual model/kernel owners remain unchanged |
+| 12 | Remove superseded production C bodies, verify dispatch and qualify the assembled runtime | Full host suite, selected all-family state/Responses/persistence checks, stable live-append/decode comparisons and build timings |
+
+Keep one authoritative ownership record per component. Existing shared C
+headers may remain the ABI definition while callers move; do not add mirrored
+Engine/Session structs. Keep the CPU-safe/GPU object split so model-free fixtures
+cannot extract a duplicate core. Prefer ordinary modules and explicit family
+dispatch over a plugin registry. Complete a slice by replacing its C owner,
+with a small compatibility shell where needed; a Zig forwarding facade alone
+does not complete an algorithm migration.
+
+Independent source preparation may overlap, with explicit file ownership;
+integration and guarded model runs stay sequential. Reuse the downloaded
+weights and the established stable within-session append/decode workloads.
+Qwen first-prefill variability is already documented; do not turn that noisy
+startup measurement into a port regression or speedup claim. Investigate any
+repeatable runtime/build regression before accepting that slice. Keep raw
+artifacts ignored. Retain small working checkpoints, then consolidate qualified
+related slices into a short reviewable stack.
+
+Objective-C Metal ownership/ARC, MSL kernels and third-party codecs/linenoise/
+radix trees remain explicit dependencies. Legacy/reference/distributed C stays
+separate from the normal single-Metal ownership path; migrate it only for a
+concrete use. Cache capability extensions and I/O optimizations are subsequent
+experiments, after existing behavior has one clear owner.
+
+Slice 1 is complete within its first hour: native Qwen model preparation,
+exact server templates, pure assembly/CPU tests and all 25 real Responses
+checks pass. [Progress report](../experiments/native-runtime-20261024/README.md).
+Slice 2 also passes six pure GLM tests, seven assembly cases, exact server
+templates and all 25 real GLM Responses checks. Slice 3 publication is next;
+later independent source prep remains unintegrated.
+
 ## Deferred: V4.1/1017 activation steering — planned 2026-10-23
 
 **Planning only. Do not implement until the user schedules this item.** Initial
