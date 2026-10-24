@@ -9,9 +9,11 @@ the supported OpenResponses contract.
 `src/` contains handwritten Zig model implementations for DeepSeek V4.1 Flash,
 Flint, Qwen 3.8 Flash Next and GLM-5.3 Flash on Metal, plus the Agent, server,
 CLI, benchmark and evaluation frontends. The optional Web client is a separate
-Zig library. All five program entry points are Zig. Shared engine/session and
-I/O integration is being migrated in the sequence recorded in the journal;
-third-party dependencies and the Metal driver retain their original languages.
+Zig library. All five program entry points are Zig. Shared engine/session,
+startup/admission, continuation/batch, payload and SSD map/page-in policy have
+native owners too. The [runtime migration report](../speed-bench/experiments/native-runtime-20261024/README.md)
+records their qualification. Third-party dependencies and the Metal driver
+retain their original languages.
 
 ## Scope and organization
 
@@ -23,7 +25,7 @@ have their own top-level directories.
 
 | Area | Native ownership |
 | --- | --- |
-| [Engine](engine/) | Model mapping/lifetime and input, DS4.1 configuration and weights, graph/workspace ownership, prefill and decode, attention/MoE execution, session/frontier policy, sampling, checkpoints, canonical payloads, suffix reuse, trained DSpark and speculative verification, and vision encoding. |
+| [Engine](engine/) | Engine factory/admission, model configuration and weights, input/vision, graph/workspace lifetime and execution, sessions/batching/continuation, sampling, snapshots/payloads, suffix reuse, trained DSpark/speculation, selected-expert workers and SSD view/page-in policy. |
 | [Metal host controllers](metal/) | GPU startup/retirement policy, model-map/residency/warmup transactions, dense and routed matmul, expert cache/tables/load scheduling, attention/output projection, compressor updates, embedding/gather, RoPE, normalization, HC, router selection, quantization/copy primitives, resource and command scheduling, and selected-route diagnostic files. MSL kernels remain unchanged. |
 | [Agent](agent/) | Options/startup, worker sessions, turns and tools, terminal/streaming output, history and live context, archive retrieval, editing and Bash, compaction/private summary, checkpoints, cancellation and shutdown. |
 | [Server](server/) | HTTP/input/JSON, request materialization, OpenAI/Anthropic/Responses output, conversations and tool memory, image resources, batching, cache reuse/publication, generation, routing and serving lifecycle. |
@@ -67,7 +69,7 @@ tools/zig-build -Doptimize=Debug --prefix .workspaces/zig-debug
 
 The installed programs are `ds4`, `ds4-agent`, `ds4-server`, `ds4-bench` and
 `ds4-eval`. A program name can also select an individual build target.
-The wrapper uses `-j12` and workspace-local caches under
+The wrapper uses Zig's default CPU parallelism and workspace-local caches under
 `.workspaces/zig-build`. Apple Clang compiles residual C/Objective-C objects
 with discovered header dependencies; Zig compiles the native objects and links
 the programs. `-Dsdk=PATH` overrides SDK discovery. Debug controls native owners
@@ -127,6 +129,13 @@ image codecs, line editing and radix-tree support, remain dependencies. Public
 C compatibility shells, platform/signal installation, selected diagnostic I/O
 and TP/distributed transport also remain explicit boundaries.
 
+Ordinary calls still use C platform/library services for allocation admission,
+token-vector storage, process/thread/lock operations, memory measurements,
+page warming and diagnostic/report I/O. Compatibility entry points allocate
+private Engine/Session shells and borrow actual shared component addresses;
+Zig does not duplicate their layouts. These services are distinct from the
+separate C model implementations below.
+
 Original DeepSeek V4, GLM52, independent CPU references and explicit legacy or
 distributed diagnostic paths retain C implementations. Ordinary DS4.1, Flint,
 Qwen and GLM53 Metal execution and prompt mapping have native owners.
@@ -167,7 +176,7 @@ Make fix. It records 98 host/CPU,45 GPU and six diagnostic invocations, exact
 ordinary frontier vectors, repeated Agent/SSD reuse, durable server restart,
 trained speculative cycles and six actual vision tasks in each implementation.
 
-## Final matched measurements
+## Historical rewrite measurements — 2026-10-22
 
 | Measurement | C reference | Native selection |
 | --- | ---: | ---: |

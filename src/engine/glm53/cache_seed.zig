@@ -3,6 +3,7 @@
 //! the storage cache's existing GPU-copy/selected-load primitives.
 const c = @import("gguf_c");
 const std = @import("std");
+const Spans = @import("../model_spans.zig");
 const Graph = c.ds4_glm_gpu_graph;
 const Model = c.ds4_model;
 const Weights = c.ds4_weights;
@@ -52,7 +53,7 @@ pub fn seedLayer(graph: *Graph, model: *const Model, weights: *const Weights, la
     const shape = &graph.config.shape;
     if (!full_layer or rows == 0 or graph.layer_count == 0 or graph.tp_world >= 2 or graph.layer_start != 0 or graph.layer_count != graph.normal_layers or
         c.getenv("DS4_METAL_DISABLE_STREAMING_PREFILL_CACHE_SEED") != null or
-        !c.ds4_native_glm_experts_uniform(weights, index) or !c.ds4_native_glm_seed_layer_expected(graph, weights, layer_weights, index)) return true;
+        !Spans.uniform(weights, &graph.config.shape, index) or !c.ds4_native_glm_seed_layer_expected(graph, weights, layer_weights, index)) return true;
     const routed_layers = if (graph.layer_count > shape.n_leading_dense) graph.layer_count - shape.n_leading_dense else graph.layer_count;
     const target = @min(c.ds4_gpu_stream_expert_cache_configured_count() / routed_layers, 128);
     if (target == 0) return true;

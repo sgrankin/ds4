@@ -4,7 +4,29 @@ Last updated: 2026-10-24. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
-## Next migration sequence — active 2026-10-24
+## Model retention direction — 2026-10-24
+
+The user revised the cleanup direction after discussing V4.1 Pro:
+
+- Keep DeepSeek V4 Pro's existing C path for now, including helpers shared
+  with it. Do not port it speculatively or remove it with old Flash support.
+- Retire V4 Flash and GLM 5.2-specific support where it can be separated from
+  retained models. No model code has been removed for this cleanup yet.
+- Full GLM 5.3 is a future native port target. Its possible legacy glm-dsa
+  compatibility shares the fixed79-layer GLM5.2 path; preserve useful shared
+  DSA code until its actual checkpoint/profile is qualified and ported.
+- Treat V4.1 Pro as a future model, with no guessed dimensions or promised
+  compatibility. The native V4.1 family is the likely starting point; old
+  Pro remains a useful reference for larger-model handling.
+
+DeepSeek's [V4.1 announcement](https://api-docs.deepseek.com/news/news260910/)
+names a future V4.1-Pro. The later [API changelog](https://api-docs.deepseek.com/updates/)
+reverses V4 Pro's announced API retirement and keeps its service/billing.
+The user supplied [this release-status discussion](https://www.yottalabs.ai/post/deepseek-v4-1-pro-release-date-what-is-known-how-to-prepare-2026).
+These are retention decisions and future work, not implemented cleanup or
+support for an unreleased architecture. Main remains unchanged.
+
+## Shared runtime migration — completed 2026-10-24
 
 The user authorized this sequence with “Ok. Make it so.” The plan is twelve
 one-hour ceilings, with earlier completion encouraged: Qwen prompt mapping;
@@ -62,8 +84,39 @@ all 40/45-layer real pread runs. Slice 11 is complete: all five executables, ful
 paths, Qwen unowned-error isolation, frozen DS41/GLM state+fresh logits and Flint
 ordinary inference/teardown pass. The actual Core configuration is authoritative;
 legacy globals are compatibility reads, with old DS41 TP ownership distinguished.
-The bounded continuation component is next, then sampling, multimodal and small
-rewrite/steering/generation controllers before combined qualification.
+Common continuation and all-family sampling are now complete: isolated Qwen
+state/MTP/recovery and all25 Responses checks pass, all28 Flint continuation
+checks pass, plus host and47 real tokenizer parity cases. Multimodal is complete: four CPU transaction cases, host+GPU state fixtures,
+seven exact Qwen/GLM image outputs and exact frozen/public DS41 image comparison
+pass. Small rewrite/steering policy passes Fast/Debug CPU probes and host checks;
+Qwen steering getter now reads its actual graph. Stateless generation is complete:
+host/Fast/Debug probes and isolated Qwen/GLM ABBA runs pass with exact output.
+Warm decode is effectively level; first cold arms are retained, not speedup
+claims. GLM storage closure is complete: CPU decision tests, host checks,
+frozen payload/fresh logits,16 actual MTP snapshot cycles (seven double-token),
+context reuse and all45 profiled256-token layer preads pass. Dead-helper cleanup
+is integrated:133 production C lines and77 private Objective-C definitions
+removed; no warning suppression or kernel change. All-five final build is
+warning-free and the complete final host suite passes. The immutable prefix is
+`.workspaces/runtime-migrations-20261024/final/bin`. Combined state/kernel and
+Qwen/GLM recovery checks pass; four repeated F16 suffix relocations pass, and
+all103 protocol checks pass across DS41/Qwen/GLM/Flint. Qwen/GLM/Flint answer
+probes pass; DS41 repeats three known wrong disconnect JSON answers, now being
+matched exactly by the frozen baseline. Runtime screens preserve exact outputs;
+Qwen live append changes0.13%, GLM decode0%. A measured Flint terminal argmax
+was removed; counter probes, host and28 serving checks pass. Longer256-token
+Flint ABBA is level (243.57/243.88 frozen vs245.41/242.99 native t/s).
+Fresh builds initially grew14.24→19.22s. Compatible hot exports and cold
+math/spans now share separate compile units; standard Zig CPU parallelism
+replaces the wrapper's12-job cap. Full build is11.87s (baseline11.41s with
+equal parallelism; old capped wrapper14.24s), cached0.97s. Final grouped state,
+fresh-logit, GPU and Flint serving checks pass. Grouped Qwen append differs
+0.08%, decode0.70%; longer Flint decode1.07%, with exact output/frontiers.
+These are small regression screens with visible point-to-point variation.
+All requested owners are complete. The five installed root executables match
+the qualified binary hashes. The local native-runtime stack is consolidated
+into five reviewable commits; original checkpoints are retained on
+archive/native-runtime-steps-20261024. Main stays unchanged; nothing is pushed.
 
 Final routing audit identified additional actual ordinary controllers beyond the
 initial inventory: Qwen/GLM sampling gates/history/logprobs, common multimodal
@@ -91,8 +144,8 @@ shared headers; generic selected-load/page-in services live in `stream_io.h`.
 Cold model/n-gram/memory exports are separate from hot GPU objects so CPU-only
 fixtures never pull a second C core. Existing Metal/MSL primitives remain.
 
-The ordinary algorithms do not forward to C model traversal. C retains common
-engine/session lifecycle and platform/storage services, GLM52, independent CPU
+The ordinary algorithms do not forward to C model traversal. At that checkpoint
+C retained common engine/session lifecycle and platform/storage services, GLM52, independent CPU
 oracles and explicit profiling/distributed/legacy paths. GLM expanded full-KV
 allocation remains unreachable as in the baseline; disabling indexed prefill
 retains the existing rejection. This is a Flash single-Metal completion boundary.
@@ -916,3 +969,17 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
 - [3FS USRBIO](https://github.com/deepseek-ai/3FS/blob/main/src/lib/api/UsrbIo.md)
 - [Responses WebSocket semantics](https://developers.openai.com/api/docs/guides/websocket-mode)
 - [Responses conversation state](https://developers.openai.com/api/docs/guides/conversation-state)
+
+## Qualification constraint — resolved 2026-10-24
+
+A terminal-launched user Flint server on 127.0.0.1:8001 started at 08:21 Eastern
+(PID38036); it is not one of this task's qualification binaries. Qwen candidate
+and frozen control were both pressure-stopped with unchanged guards. Actual
+Flint continuation passes all28 checks; common continuation CPU/host probes pass.
+The user stopped that server; isolated Qwen continuation then passed with normal
+pressure and unchanged guards. The two stopped runs remain recorded failures.
+Combined qualification and root installation are complete. The user's Flint
+server is restored on127.0.0.1:8001 with its original model, two sessions,
+262144 context and4096 prefill chunk; GET /v1/models confirms Flint/context.
+Account for this live server before future latency/model campaigns. Main stays
+unchanged; the private review stack contains five commits.

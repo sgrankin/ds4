@@ -3,6 +3,7 @@
 
 #include "../../ds4_glm_graph.h"
 #include "memory_api.h"
+#include "storage_api.h"
 #include "../diagnostics_api.h"
 #include "../payload_io.h"
 #include "../stream_io.h"
@@ -75,12 +76,11 @@ bool ds4_native_glm_mtp_step(ds4_glm_gpu_graph *, const ds4_model *,
     const ds4_weights *, int next_token, uint32_t position,
     uint32_t minimum_position, int *draft);
 
-/* Existing cache admission/boosted-layer policy, without numerical dispatch. */
+/* Compatibility captures; cache/mapping policy lives in native storage. */
 bool ds4_native_glm_stream_selected_cache(const ds4_glm_gpu_graph *,
     const ds4_layer_weights *, uint32_t layer);
 bool ds4_native_glm_seed_layer_expected(const ds4_glm_gpu_graph *,
     const ds4_weights *, const ds4_layer_weights *, uint32_t layer);
-bool ds4_native_glm_experts_uniform(const ds4_weights *, uint32_t layer);
 bool ds4_native_glm_map_token(ds4_glm_gpu_graph *, const ds4_model *,
     const ds4_weights *);
 bool ds4_native_glm_map_prefill_layer(ds4_glm_gpu_graph *, const ds4_model *,

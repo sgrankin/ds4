@@ -4,6 +4,8 @@
 #include "ds4_session_frontier.h"
 #include "ds4_vocab.h"
 #include "ds4_sampling.h"
+#include "ds4_model_config.h"
+#include "flint_tokenizer.h"
 
 /* The five existing Engine fields, embedded ONCE. Configuration/token mapping
  * stays with the engine's vocabulary owner; sampling only borrows this policy.
@@ -26,7 +28,15 @@ typedef struct {
     const ds4_overthink_policy *policy;
     const ds4_vocab *vocab;
     uint32_t count;
+    ds4_model_family family;
+    const flint_tokenizer *flint;
 } ds4_session_sampling_view;
+
+bool ds4_native_token_is_stop(const ds4_vocab *, ds4_model_family,
+    const flint_tokenizer *, int);
+bool ds4_native_token_is_thinking_control(const ds4_vocab *, int);
+bool ds4_native_token_is_stop_for_think_mode(const ds4_vocab *, ds4_model_family,
+    const flint_tokenizer *, int, ds4_think_mode);
 
 int ds4_native_session_argmax(const ds4_session_sampling_view *);
 int ds4_native_session_argmax_excluding(const ds4_session_sampling_view *, int);

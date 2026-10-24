@@ -6,5 +6,5 @@ def --wrapped main [...args: string] {
     cd $ROOT
     $env.ZIG_GLOBAL_CACHE_DIR = ($ROOT | path join '.workspaces/zig-build/global-cache')
     $env.ZIG_LOCAL_CACHE_DIR = ($ROOT | path join '.workspaces/zig-build/local-cache')
-    exec zig build -j12 ...$args
+    exec zig build ...$args
 }

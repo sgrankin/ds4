@@ -152,25 +152,26 @@ pub fn build(b: *std.Build) void {
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/gguf.zig", "gguf_c", api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/input.zig", "gguf_c", api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/vision_free_entry.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_entry.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/engine_admission_entry.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/engine_lifecycle_entry.zig", "gguf_c", api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/engine_lifecycle_tokens_entry.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/engine_cache_sizes_entry.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/engine_admission_math_entry.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/model_spans_entry.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_batch_entry.zig", "gguf_c", api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_control_entry.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/cold_policy_entry.zig", "gguf_c", api));
         const route_math = module(b, target, sdk, optimize);
         route_math.root_source_file = b.path("src/resident_route.zig");
         route_math.addImport("gguf_c", api);
         const graph_module = module(b, target, sdk, optimize);
-        graph_module.root_source_file = b.path("src/engine/graph.zig");
+        graph_module.root_source_file = b.path("src/engine/runtime_entry.zig");
         graph_module.addImport("gguf_c", api);
         graph_module.addImport("resident_route", route_math);
-        core_module.addObjectFile(b.addObject(.{ .name = "graph", .root_module = graph_module }).getEmittedBin());
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/qwen4_entry.zig", "gguf_c", api));
-        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/glm53_entry.zig", "gguf_c", api));
+        core_module.addObjectFile(b.addObject(.{ .name = "runtime", .root_module = graph_module }).getEmittedBin());
+        const storage_module = module(b, target, sdk, .debug);
+        storage_module.root_source_file = b.path("src/engine/glm53_storage_entry.zig");
+        storage_module.addImport("gguf_c", api);
+        const storage_test_module = module(b, target, sdk, .debug);
+        storage_test_module.root_source_file = b.path("tests/test_glm53_storage.zig");
+        storage_test_module.addImport("glm_storage", storage_module);
+        storage_test_module.addImport("gguf_c", api);
+        const storage_test = b.addTest(.{ .name = "test-glm53-storage", .root_module = storage_test_module });
+        b.step("glm53-storage-test", "Build GLM SSD map/cache decision fixture").dependOn(&b.addInstallArtifact(storage_test, .{}).step);
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/qwen4_model_entry.zig", "gguf_c", api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/glm53_model_entry.zig", "gguf_c", api));
     }
@@ -180,6 +181,18 @@ pub fn build(b: *std.Build) void {
     const payload_tensor = nativeObject(b, target, sdk, optimize, "src/engine/payload_tensor_entry.zig", "payload_io_c", payload_api);
     core_module.addObjectFile(payload_file);
     core_module.addObjectFile(payload_tensor);
+    const vision_runtime_api = generatedApi(b, target, sdk, optimize, "src/engine/vision_runtime_api.h");
+    const multimodal_module = module(b, target, sdk, .debug);
+    multimodal_module.root_source_file = b.path("src/engine/vision_runtime.zig");
+    multimodal_module.addImport("gguf_c", vision_runtime_api);
+    const multimodal_test_module = module(b, target, sdk, .debug);
+    multimodal_test_module.root_source_file = b.path("tests/test_multimodal.zig");
+    multimodal_test_module.addImport("vision_runtime", multimodal_module);
+    multimodal_test_module.addImport("gguf_c", vision_runtime_api);
+    const multimodal_test = b.addTest(.{ .name = "test-multimodal", .root_module = multimodal_test_module });
+    b.step("multimodal-test", "Build image/text ordering and embedding lifetime fixture").dependOn(&b.addInstallArtifact(multimodal_test, .{}).step);
+    const generation_api = generatedApi(b, target, sdk, optimize, "src/engine/engine_generation_api.h");
+    core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/engine_generation_entry.zig", "generation_c", generation_api));
     const resource_api = generatedApi(b, target, sdk, optimize, "src/engine/session_resources_api.h");
     core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_resources_entry.zig", "session_resources_c", resource_api));
     const pool_api = generatedApi(b, target, sdk, optimize, "src/engine/session_resource_pool_api.h");
@@ -622,6 +635,15 @@ pub fn build(b: *std.Build) void {
         const frontend = object(b, target, sdk, clang, fixture[2], fixture[1], optimize, test_flags);
         const test_exe = executable(b, target, sdk, core, null, null, fixture[1], frontend, optimize);
         b.step(fixture[0], "Build the existing production-linked GPU fixture (run separately)").dependOn(&b.addInstallArtifact(test_exe, .{}).step);
+    }
+    const vision_encoder_step = b.step("vision-encoder-test", "Build existing native Qwen/GLM encoder fixtures");
+    inline for (.{
+        .{ "test-qwen4-vision-encoder", "tests/test_qwen4_vision.c" },
+        .{ "test-glm53-vision-engine", "tests/test_glm53_vision_engine.c" },
+    }) |fixture| {
+        const frontend = object(b, target, sdk, clang, fixture[1], fixture[0], optimize, test_flags);
+        const fixture_exe = executable(b, target, sdk, core, null, null, fixture[0], frontend, optimize);
+        vision_encoder_step.dependOn(&b.addInstallArtifact(fixture_exe, .{}).step);
     }
     const metal_test_frontend = object(b, target, sdk, clang, "tests/test_deepseek41_metal.c", "test-deepseek41-metal-main", optimize, test_flags);
     const metal_test = executable(b, target, sdk, core, null, null, "test-deepseek41-metal", metal_test_frontend, optimize);

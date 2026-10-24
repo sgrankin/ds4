@@ -45,21 +45,3 @@ const vision_binding = @import("vision_weights.zig");
 export fn ds4_native_vision_weights_bind(weights: *c.ds4_deepseek4_vision_weights, model: *const c.ds4_model, shape: *const c.ds4_shape) void {
     vision_binding.bind(weights, model, shape);
 }
-
-// Append to the ONE existing input.zig facade, sharing its actual gguf_c.
-const VisionRuntime = @import("vision_runtime.zig");
-fn visionErrors(pointer: [*c]u8, length: usize) []u8 {
-    return if (pointer == null or length == 0) &.{} else pointer[0..length];
-}
-export fn ds4_native_vision_encode_file41(core: *c.ds4_engine_core, shape: *const c.ds4_shape, path: [*c]const u8, out: ?*c.ds4_vision_embedding, errors: [*c]u8, capacity: usize) c_int {
-    return @intFromBool((VisionRuntime.Vision{ .core = core, .shape = shape }).encodeFile(path, out, visionErrors(errors, capacity)));
-}
-export fn ds4_native_vision_encode_memory41(core: *c.ds4_engine_core, shape: *const c.ds4_shape, encoded: [*c]const u8, length: usize, out: ?*c.ds4_vision_embedding, errors: [*c]u8, capacity: usize) c_int {
-    return @intFromBool((VisionRuntime.Vision{ .core = core, .shape = shape }).encodeMemory(encoded, length, out, visionErrors(errors, capacity)));
-}
-export fn ds4_native_vision_append41(core: *c.ds4_engine_core, shape: *const c.ds4_shape, tokens: ?*c.ds4_tokens, span: ?*c.ds4_vision_span, embedding: ?*c.ds4_vision_embedding, errors: [*c]u8, capacity: usize) c_int {
-    return @intFromBool((VisionRuntime.Vision{ .core = core, .shape = shape }).append(tokens, span, embedding, visionErrors(errors, capacity)));
-}
-export fn ds4_native_vision_message41(core: *c.ds4_engine_core, shape: *const c.ds4_shape, tokens: ?*c.ds4_tokens, role: [*c]const u8, parts: [*c]const [*c]const u8, embeddings: [*c]c.ds4_vision_embedding, image_count: usize, spans: [*c]c.ds4_vision_span, errors: [*c]u8, capacity: usize) c_int {
-    return @intFromBool((VisionRuntime.Vision{ .core = core, .shape = shape }).message(tokens, role, parts, embeddings, image_count, spans, visionErrors(errors, capacity)));
-}

@@ -145,7 +145,7 @@ def main [] {
     assert equal $build_result.exit_code 0 $build_result.stderr
     let build = $build_result.stdout | from json
     assert equal $build.program 'zig'
-    assert equal $build.args (['build' '-j12'] ++ $build_args)
+    assert equal $build.args (['build'] ++ $build_args)
     assert equal $build.cwd $ROOT
     assert equal $build.env.ZIG_GLOBAL_CACHE_DIR ($ROOT | path join '.workspaces/zig-build/global-cache')
     assert equal $build.env.ZIG_LOCAL_CACHE_DIR ($ROOT | path join '.workspaces/zig-build/local-cache')

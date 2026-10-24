@@ -34,3 +34,13 @@ export fn ds4_native_session_set_logits(view: *const c.ds4_session_sampling_view
 export fn ds4_native_frontier_common_prefix(state: *c.ds4_session_frontier, prompt: *const c.ds4_tokens) c_int {
     return owner.commonPrefix(state, prompt);
 }
+
+export fn ds4_native_token_is_stop(vocab: [*c]const c.ds4_vocab, family: c.ds4_model_family, flint: ?*const c.flint_tokenizer, token: c_int) bool {
+    return owner.generationStop(if (vocab == null) null else @ptrCast(vocab), family, flint, token);
+}
+export fn ds4_native_token_is_thinking_control(vocab: [*c]const c.ds4_vocab, token: c_int) bool {
+    return owner.thinkingControl(if (vocab == null) null else @ptrCast(vocab), token);
+}
+export fn ds4_native_token_is_stop_for_think_mode(vocab: [*c]const c.ds4_vocab, family: c.ds4_model_family, flint: ?*const c.flint_tokenizer, token: c_int, mode: c.ds4_think_mode) bool {
+    return owner.stopForThinkMode(if (vocab == null) null else @ptrCast(vocab), family, flint, token, mode);
+}

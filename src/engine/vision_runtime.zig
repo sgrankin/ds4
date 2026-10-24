@@ -1,9 +1,10 @@
-//! Supported DS41 public vision transaction. Core/Shape are the actual shared
+//! Common public vision transaction. Core/Shape are the actual shared
 //! storage; Engine remains opaque at the C family/backend dispatch boundary.
 //! Natural image rows are expanded into prompt rows only when ownership moves
 //! into a span. Failed construction leaves the caller's embedding untouched.
 const std = @import("std");
 const c = @import("gguf_c");
+pub const Qwen = @import("qwen4/vision_input.zig");
 const Shape = c.ds4_shape;
 const Core = c.ds4_engine_core;
 const Embedding = c.ds4_vision_embedding;
@@ -48,7 +49,7 @@ pub const Vision = struct {
         defer c.ds4_image_free(&image);
         return self.encodeImage(&image, out, errors);
     }
-    fn encodeImage(self: Vision, image: *const c.ds4_image, optional_out: ?*Embedding, errors: []u8) bool {
+    pub fn encodeImage(self: Vision, image: *const c.ds4_image, optional_out: ?*Embedding, errors: []u8) bool {
         if (optional_out == null or !self.core.vision_ready) return fail(errors, "vision encoder is not loaded");
         const out = optional_out.?;
         out.* = std.mem.zeroes(Embedding);
@@ -61,34 +62,67 @@ pub const Vision = struct {
             if (errors.len != 0) _ = c.snprintf(errorPointer(errors), errors.len, "unable to map vision weights on %s", c.ds4_backend_name(self.core.backend));
             return false;
         }
-        var patches = std.mem.zeroes(c.ds4_deepseek4_image_patches);
-        if (c.ds4_image_preprocess_deepseek41(&patches, image, errorPointer(errors), errors.len) == 0) return false;
         var data: [*c]f32 = null;
         var count: u32 = 0;
         var content_width: u32 = 0;
         var content_height: u32 = 0;
         var grid_width: u32 = 0;
         var grid_height: u32 = 0;
+        var layout: u32 = 0;
         const ok = encoded: {
-            defer c.ds4_deepseek4_image_patches_free(&patches);
-            count = patches.llm_grid_height *% patches.llm_grid_width;
-            const allocation = c.malloc(@as(usize, count) *% self.shape.n_embd *% @sizeOf(f32));
-            data = if (allocation) |pointer| @ptrCast(@alignCast(pointer)) else null;
-            const success = data != null and c.ds4_gpu_deepseek4_vision_encode(data, patches.patches, patches.grid_height, patches.grid_width, model.map, model.size, &self.core.deepseek4_vision_weights) != 0;
-            content_width = patches.content_width;
-            content_height = patches.content_height;
-            grid_width = patches.llm_grid_width;
-            grid_height = patches.llm_grid_height;
-            break :encoded success;
+            switch (self.core.vision_kind) {
+                c.DS4_VISION_DEEPSEEK4 => {
+                    var patches = std.mem.zeroes(c.ds4_deepseek4_image_patches);
+                    if (c.ds4_image_preprocess_deepseek41(&patches, image, errorPointer(errors), errors.len) == 0) return false;
+                    defer c.ds4_deepseek4_image_patches_free(&patches);
+                    count = patches.llm_grid_height *% patches.llm_grid_width;
+                    const allocation = c.malloc(@as(usize, count) *% self.shape.n_embd *% @sizeOf(f32));
+                    data = if (allocation) |pointer| @ptrCast(@alignCast(pointer)) else null;
+                    const success = data != null and c.ds4_gpu_deepseek4_vision_encode(data, patches.patches, patches.grid_height, patches.grid_width, model.map, model.size, &self.core.deepseek4_vision_weights) != 0;
+                    content_width = patches.content_width;
+                    content_height = patches.content_height;
+                    grid_width = patches.llm_grid_width;
+                    grid_height = patches.llm_grid_height;
+                    layout = c.DS4_VISION_LAYOUT_DEEPSEEK4_NATURAL;
+                    break :encoded success;
+                },
+                c.DS4_VISION_QWEN4 => {
+                    var patches = std.mem.zeroes(c.ds4_image_patches);
+                    defer c.ds4_image_patches_free(&patches);
+                    if (!Qwen.encode(model, &self.core.qwen4_vision_weights, image, 64, Qwen.maxTokens(), &data, &patches, errors)) return false;
+                    count = patches.image_token_count;
+                    content_width = patches.content_width;
+                    content_height = patches.content_height;
+                    grid_width = patches.grid_width / 2;
+                    grid_height = patches.grid_height / 2;
+                    break :encoded true;
+                },
+                else => {
+                    var patches = std.mem.zeroes(c.ds4_image_patches);
+                    if (c.ds4_image_preprocess_glm53(&patches, image, 16, 8000, errorPointer(errors), errors.len) == 0) return false;
+                    defer c.ds4_image_patches_free(&patches);
+                    count = patches.image_token_count;
+                    const allocation = c.malloc(@as(usize, count) * 4096 * @sizeOf(f32));
+                    data = if (allocation) |pointer| @ptrCast(@alignCast(pointer)) else null;
+                    const success = data != null and c.ds4_gpu_glm53_vision_encode(data, patches.patches, patches.grid_height, patches.grid_width, model.map, model.size, &self.core.vision_weights) != 0;
+                    content_width = patches.content_width;
+                    content_height = patches.content_height;
+                    break :encoded success;
+                },
+            }
         };
         if (data == null) return fail(errors, "unable to allocate vision output");
         if (!ok) {
             c.free(data);
-            return fail(errors, "DeepSeek V4 vision inference failed");
+            return fail(errors, switch (self.core.vision_kind) {
+                c.DS4_VISION_DEEPSEEK4 => "DeepSeek V4 vision inference failed",
+                c.DS4_VISION_QWEN4 => "Qwen3.8 vision inference failed",
+                else => "GLM-5.3 vision inference failed",
+            });
         }
         out.data = data;
         out.token_count = count;
-        out.layout = c.DS4_VISION_LAYOUT_DEEPSEEK4_NATURAL;
+        out.layout = layout;
         out.grid_width = grid_width;
         out.grid_height = grid_height;
         out.width = image.width;
@@ -110,6 +144,17 @@ pub const Vision = struct {
         const tokens = optional_tokens.?;
         const span = optional_span.?;
         const embedding = optional_embedding.?;
+        if (self.core.vision_kind != c.DS4_VISION_DEEPSEEK4) {
+            if (@as(u64, @intCast(tokens.len)) + embedding.token_count + 2 > std.math.maxInt(c_int)) return fail(errors, "vision prompt is too large");
+            span.* = std.mem.zeroes(Span);
+            c.ds4_tokens_push(tokens, self.core.vision_start_token);
+            span.token_start = @intCast(tokens.len);
+            for (0..embedding.token_count) |_| c.ds4_tokens_push(tokens, self.core.vision_image_token);
+            c.ds4_tokens_push(tokens, self.core.vision_end_token);
+            span.embedding = embedding.*;
+            embedding.* = std.mem.zeroes(Embedding);
+            return true;
+        }
         if (embedding.layout != c.DS4_VISION_LAYOUT_DEEPSEEK4_NATURAL or embedding.grid_height == 0 or
             embedding.grid_width == 0 or embedding.token_count != embedding.grid_height *% embedding.grid_width) return fail(errors, "invalid DeepSeek vision embedding layout");
         var layout = std.mem.zeroes(c.ds4_deepseek4_image_layout);
@@ -157,12 +202,24 @@ pub const Vision = struct {
         keep = true;
         return true;
     }
+    fn family(self: Vision) c.ds4_chat_family {
+        return switch (self.shape.family) {
+            c.DS4_MODEL_FAMILY_QWEN4_EXP => c.DS4_CHAT_QWEN35,
+            c.DS4_MODEL_FAMILY_GLM_DSA => c.DS4_CHAT_GLM4,
+            else => c.DS4_CHAT_DEEPSEEK41,
+        };
+    }
     fn emit(self: Vision, tokens: *Tokens, input: [*c]const u8) void {
         const bytes = text(input);
         if (bytes.len == 0) return;
         c.ds4_vocab_admit_text(bytes.len);
         const vocab = &self.core.vocab;
-        if (!c.ds4_pretokenize(c.DS4_PRETOKENIZER_JOYAI, vocab.token_to_id, vocab.merge_rank, bytes.ptr, bytes.len, tokens)) die();
+        const lexer: c.ds4_pretokenizer_family = switch (self.family()) {
+            c.DS4_CHAT_GLM4 => c.DS4_PRETOKENIZER_GLM4,
+            c.DS4_CHAT_QWEN35 => c.DS4_PRETOKENIZER_QWEN35,
+            else => c.DS4_PRETOKENIZER_JOYAI,
+        };
+        if (!c.ds4_pretokenize(lexer, vocab.token_to_id, vocab.merge_rank, bytes.ptr, bytes.len, tokens)) die();
     }
     pub fn message(self: Vision, optional_tokens: ?*Tokens, role: [*c]const u8, parts: [*c]const [*c]const u8, embeddings: [*c]Embedding, count: usize, spans: [*c]Span, errors: []u8) bool {
         if (optional_tokens == null or role == null or parts == null or (count != 0 and (embeddings == null or spans == null))) return fail(errors, "invalid multimodal message");
@@ -170,23 +227,40 @@ pub const Vision = struct {
         const name = text(role);
         const tool = std.mem.eql(u8, name, "tool") or std.mem.eql(u8, name, "function");
         const user = std.mem.eql(u8, name, "user");
-        if (!tool and !user) return fail(errors, "multimodal messages require a supported user or tool role");
+        const qwen = self.shape.family == c.DS4_MODEL_FAMILY_QWEN4_EXP;
+        const glm = self.shape.family == c.DS4_MODEL_FAMILY_GLM_DSA;
+        if (!tool and !user) return fail(errors, if (qwen) "multimodal messages require a user or tool role" else "multimodal messages require a supported user or tool role");
         // Text-only tool results retain the ordinary wrapper and payload
         // escaping, and require no loaded vision encoder.
-        if (count == 0) {
-            if (!c.ds4_vocab_chat_append(&self.core.vocab, c.DS4_CHAT_DEEPSEEK41, role, parts[0], tokens)) die();
+        if (!qwen and count == 0) {
+            if (!c.ds4_vocab_chat_append(&self.core.vocab, self.family(), role, parts[0], tokens)) die();
             return true;
         }
-        if (self.core.vision_kind != c.DS4_VISION_DEEPSEEK4) return fail(errors, "model does not support image messages");
-        for (embeddings[0..count]) |embedding| if (embedding.data == null or embedding.token_count == 0) return fail(errors, "invalid image embedding");
+        if (!qwen and !glm and self.core.vision_kind != c.DS4_VISION_DEEPSEEK4) return fail(errors, "model does not support image messages");
+        if (count != 0) for (embeddings[0..count]) |embedding| if (embedding.data == null or embedding.token_count == 0) return fail(errors, "invalid image embedding");
         const old_length = tokens.len;
-        c.ds4_tokens_push(tokens, self.core.vocab.user_id);
-        if (tool) self.emit(tokens, "<tool_result>");
+        const vocab = &self.core.vocab;
+        const glm_tool = glm and tool;
+        if (qwen) {
+            // Image tool results use a user ChatML turn. Keep newlines outside
+            // the escaped payload, as in the official model template.
+            c.ds4_tokens_push(tokens, vocab.im_start_id);
+            self.emit(tokens, "user");
+            self.emit(tokens, "\n");
+            if (tool) self.emit(tokens, "<tool_response>\n");
+        } else if (glm_tool) {
+            if (vocab.observation_id >= 0) c.ds4_tokens_push(tokens, vocab.observation_id);
+            if (!c.ds4_vocab_tokenize_rendered(vocab, self.family(), "<tool_response>", tokens)) die();
+        } else {
+            c.ds4_tokens_push(tokens, vocab.user_id);
+            if (tool) self.emit(tokens, "<tool_result>");
+        }
         var moved: usize = 0;
         for (0..count + 1) |index| {
             const part: [*c]const u8 = if (parts[index] == null) "" else parts[index];
             if (tool) {
-                if (!c.ds4_vocab_tokenize_payload(&self.core.vocab, c.DS4_CHAT_DEEPSEEK41, part, "</tool_result>", tokens)) die();
+                const closing: [*:0]const u8 = if (qwen or glm_tool) "</tool_response>" else "</tool_result>";
+                if (!c.ds4_vocab_tokenize_payload(vocab, self.family(), part, closing, tokens)) die();
             } else self.emit(tokens, part);
             if (index == count) break;
             if (!self.append(tokens, @ptrCast(&spans[index]), @ptrCast(&embeddings[index]), errors)) {
@@ -199,7 +273,13 @@ pub const Vision = struct {
             }
             moved += 1;
         }
-        if (tool) self.emit(tokens, "</tool_result>");
+        if (qwen) {
+            if (tool) self.emit(tokens, "\n</tool_response>");
+            c.ds4_tokens_push(tokens, vocab.im_end_id);
+            self.emit(tokens, "\n");
+        } else if (glm_tool) {
+            if (!c.ds4_vocab_tokenize_rendered(vocab, self.family(), "</tool_response>", tokens)) die();
+        } else if (tool) self.emit(tokens, "</tool_result>");
         return true;
     }
 };

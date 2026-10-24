@@ -1,5 +1,5 @@
 //! Single-token Metal execution. Model arithmetic and layer traversal stay
-//! here; C's temporary storage leaves retain only mapping/cache policy.
+//! here. Native storage owns SSD policy; C captures its actual process record.
 const c = @import("gguf_c");
 const std = @import("std");
 const Config = @import("config.zig");

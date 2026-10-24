@@ -3,6 +3,48 @@
 #include "../src/ds4.c"
 #include <assert.h>
 
+/* Synthetic legacy profile for private state bookkeeping. Production model
+ * metadata is owned by the native GLM adapter. */
+static const ds4_shape DS4_SHAPE_GLM53 = {
+    .name = "GLM 5.3 Flash",
+    .family = DS4_MODEL_FAMILY_GLM_DSA,
+    .variant = DS4_VARIANT_GLM53,
+    .n_layer = 46,
+    .n_embd = 4096,
+    .n_vocab = 154880,
+    .n_head = 64,
+    .n_head_kv = 1,
+    /* Raw DSA cache row: 512 latent dimensions and no RoPE tail. */
+    .n_head_dim = 512,
+    .n_value_dim = 256,
+    .n_rot = 0,
+    .n_lora_q = 1536,
+    .n_expert = 288,
+    .n_expert_used = 8,
+    .n_expert_shared = 1,
+    .n_ff_exp = 2048,
+    .n_ff_dense = 12288,
+    .n_indexer_head = 32,
+    .n_indexer_head_dim = 128,
+    .n_indexer_top_k = 2048,
+    .n_hc = 4,
+    .n_hc_sinkhorn_iter = 20,
+    .n_nextn_predict = 1,
+    .n_leading_dense = 3,
+    .n_kv_lora = 512,
+    .n_key_mla = 256,
+    .n_value_mla = 256,
+    .n_kda_head = 64,
+    .n_kda_head_dim = 128,
+    .n_kda_conv = 4,
+    .rms_eps = 1.0e-5f,
+    .hc_eps = 1.0e-6f,
+    .expert_weight_scale = 2.5f,
+    .swiglu_clamp_exp = 10.0f,
+    .rope_orig_ctx = 1048576,
+    .kda_gate_lower_bound = -5.0f,
+};
+
 static void test_vision_prefix(void) {
     ds4_session *s = calloc(1, sizeof(*s));
     assert(s);
@@ -480,6 +522,7 @@ static void test_glm_spec_rollback(void) {
     assert(ds4_gpu_set_model_map(model, MODEL_BYTES));
     ds4_glm_gpu_graph *g = calloc(1, sizeof(*g));
     assert(g);
+    ds4_native_glm_graph_configure(g, &g_ds4_shape);
     g->glm53 = true;
     g->layer_end = 3;
     for (int il = 0; il < 3; il++) {
@@ -833,7 +876,68 @@ static void test_session_sampling_policy(void) {
     g_ds4_shape = saved_shape;
 }
 
+/* Protocol boundaries differ: GLM role IDs stop generation; Qwen/DS41
+ * roles do not. Sampling still applies penalties, while diagnostics stay raw.
+ * Owned Core metadata must win over the legacy reference snapshot. */
+static void test_session_sampling_families(void) {
+    const ds4_shape saved = g_ds4_shape;
+    const ds4_model_family families[] = {
+        DS4_MODEL_FAMILY_DEEPSEEK41, DS4_MODEL_FAMILY_QWEN4_EXP, DS4_MODEL_FAMILY_GLM_DSA
+    };
+    for (size_t family = 0; family < sizeof(families)/sizeof(families[0]); family++) {
+        ds4_engine engine = {0};
+        engine.native_core = true;
+        engine.core.configuration.shape = saved;
+        engine.core.configuration.shape.family = families[family];
+        engine.core.configuration.shape.n_layer = 1;
+        engine.core.configuration.shape.n_vocab = 12;
+        engine.core.vocab = (ds4_vocab){.n_vocab=12, .eos_id=11, .endoftext_id=10,
+            .system_id=2, .user_id=3, .assistant_id=4, .observation_id=5,
+            .think_start_id=6, .think_end_id=7};
+        g_ds4_shape.family = DS4_MODEL_FAMILY_DEEPSEEK4;
+        g_ds4_shape.n_vocab = 5; /* Deliberately stale compatibility metadata. */
+        float logits[] = {-10,-10,90,80,70,60,50,49,40,39,101,100};
+        float probabilities[12], adjusted[12], copied[12];
+        ds4_session *session = calloc(1, sizeof(*session));
+        assert(session);
+        session->engine = &engine;
+        session->frontier.logits = logits;
+        session->frontier.sample_probs = probabilities;
+        session->frontier.checkpoint_valid = true;
+        const bool glm = families[family] == DS4_MODEL_FAMILY_GLM_DSA;
+        for (int role = 2; role <= 5; role++) {
+            assert(ds4_token_is_stop(&engine, role) == glm);
+            assert(ds4_token_is_stop_for_think_mode(&engine, role, DS4_THINK_HIGH) == glm);
+        }
+        assert(!ds4_token_is_stop(&engine, -1));
+        assert(ds4_token_is_thinking_control(&engine, 6));
+        assert(!ds4_token_is_stop_for_think_mode(&engine, 6, DS4_THINK_HIGH));
+        assert(ds4_token_is_stop_for_think_mode(&engine, 6, DS4_THINK_NONE));
+        assert(ds4_session_argmax_ignoring_eos(session, DS4_THINK_HIGH) == (glm ? 6 : 2));
+        assert(ds4_session_argmax_ignoring_eos(session, DS4_THINK_NONE) == (glm ? 8 : 2));
+        engine.core.overthink = (ds4_overthink_policy){.penalty=100, .think_only=false,
+            .ids={2,6}, .count=2};
+        assert(ds4_session_argmax_ignoring_eos(session, DS4_THINK_HIGH) == (glm ? 7 : 3));
+        assert(ds4_session_copy_sampling_logits(session, adjusted, 12) == 12);
+        assert(adjusted[2] == -10 && adjusted[6] == -50 && logits[2] == 90 && logits[6] == 50);
+        ds4_token_score scores[2];
+        assert(ds4_session_top_logprobs(session, scores, 2) == 2 && scores[0].id == 10 && scores[1].id == 11);
+        assert(ds4_session_token_logprob(session, 11, &scores[0]) == 1 && scores[0].id == 11);
+        assert(ds4_session_copy_logits(session, copied, 11) == 0);
+        assert(ds4_session_set_logits(session, logits, 11) == 1);
+        assert(ds4_session_set_logits(session, logits, 12) == 0);
+        session->frontier.checkpoint_valid = false;
+        assert(ds4_session_argmax(session) == -1);
+        assert(ds4_session_top_logprobs(session, scores, 2) == 2);
+        assert(ds4_session_copy_logits(session, copied, 12) == 12 && !memcmp(copied, logits, sizeof(logits)));
+        free(session->frontier.sampling_logits);
+        free(session);
+    }
+    g_ds4_shape = saved;
+}
+
 int main(void) {
+    test_session_sampling_families();
     test_session_sampling_policy();
     test_dspark_tp_verify_flags();
     test_dspark_tp_split_reserve();

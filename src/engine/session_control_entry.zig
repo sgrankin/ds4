@@ -2,6 +2,7 @@
 //! dispatch so include-ds4.c fixtures do not extract a second GPU/C engine.
 const c = @import("gguf_c");
 const control = @import("session_control.zig");
+const rewrite = @import("session_rewrite.zig");
 const Frontier = @import("session_frontier.zig").Frontier;
 
 fn images(pointer: [*c]const c.ds4_vision_span, count: usize) []const c.ds4_vision_span {
@@ -51,4 +52,11 @@ export fn ds4_native_control_cancelled(record: ?*const c.ds4_session_control) bo
 }
 export fn ds4_native_control_report(record: ?*const c.ds4_session_control, event: [*c]const u8, current: c_int, total: c_int) void {
     if (record) |owner| control.report(owner, event, current, total);
+}
+
+export fn ds4_session_rewrite_requires_rebuild(live: c_int, canonical: c_int, common: c_int) bool {
+    return rewrite.requiresRebuild(live, canonical, common);
+}
+export fn ds4_native_session_rewrite(session: ?*c.ds4_session, frontier: ?*const c.ds4_session_frontier, prompt: ?*const c.ds4_tokens, common: c_int, text: [*c]u8, capacity: usize) c.ds4_session_rewrite_result {
+    return rewrite.rewrite(session, frontier, prompt, common, if (capacity == 0) &.{} else text[0..capacity]);
 }

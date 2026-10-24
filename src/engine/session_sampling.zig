@@ -48,11 +48,37 @@ fn generatedThinking(history: []const c_int, prompt_length: c_int, vocab: *const
     return count;
 }
 
+/// Generation control differs by model protocol. Flint's native tokenizer
+/// also owns its developer stop token; its think tags remain ordinary output
+/// controls even in no-thinking mode. GLM stops on every message-role boundary.
+pub fn generationStop(vocab: ?*const c.ds4_vocab, family: c.ds4_model_family, flint: ?*const c.flint_tokenizer, token: c_int) bool {
+    if (flint) |tokenizer| return c.flint_tokenizer_is_stop(tokenizer, token);
+    const vocabulary = vocab orelse return false;
+    if (token < 0) return false;
+    if (token == vocabulary.eos_id or (vocabulary.endoftext_id >= 0 and token == vocabulary.endoftext_id)) return true;
+    return family == c.DS4_MODEL_FAMILY_GLM_DSA and
+        ((vocabulary.system_id >= 0 and token == vocabulary.system_id) or
+            (vocabulary.user_id >= 0 and token == vocabulary.user_id) or
+            (vocabulary.assistant_id >= 0 and token == vocabulary.assistant_id) or
+            (vocabulary.observation_id >= 0 and token == vocabulary.observation_id));
+}
+pub fn thinkingControl(vocab: ?*const c.ds4_vocab, token: c_int) bool {
+    const vocabulary = vocab orelse return false;
+    return token >= 0 and ((vocabulary.think_start_id >= 0 and token == vocabulary.think_start_id) or
+        (vocabulary.think_end_id >= 0 and token == vocabulary.think_end_id));
+}
+pub fn stopForThinkMode(vocab: ?*const c.ds4_vocab, family: c.ds4_model_family, flint: ?*const c.flint_tokenizer, token: c_int, mode: c.ds4_think_mode) bool {
+    if (generationStop(vocab, family, flint, token)) return true;
+    return flint == null and !c.ds4_think_mode_enabled(mode) and thinkingControl(vocab, token);
+}
+
 pub const Selection = struct {
     state: *c.ds4_session_frontier,
     policy: ?*const c.ds4_overthink_policy,
     vocab: ?*const c.ds4_vocab,
     count: u32,
+    family: c.ds4_model_family,
+    flint: ?*const c.flint_tokenizer,
 
     pub fn init(view: *const c.ds4_session_sampling_view) Selection {
         return .{
@@ -60,6 +86,8 @@ pub const Selection = struct {
             .policy = if (view.policy == null) null else @ptrCast(view.policy),
             .vocab = if (view.vocab == null) null else @ptrCast(view.vocab),
             .count = view.count,
+            .family = view.family,
+            .flint = view.flint,
         };
     }
     fn raw(self: Selection) []const f32 {
@@ -96,20 +124,16 @@ pub const Selection = struct {
         return c.ds4_sampling_argmax_excluding(self.adjusted().ptr, self.count, excluded);
     }
     pub fn stop(self: Selection, token: c_int, mode: c.ds4_think_mode) bool {
-        const vocab = self.vocab orelse return false;
-        if (token < 0) return false;
-        if (token == vocab.eos_id or (vocab.endoftext_id >= 0 and token == vocab.endoftext_id)) return true;
-        // No-thinking prompts already supplied the protocol close tag. A
-        // repeated thinking control is not printable assistant content.
-        return !c.ds4_think_mode_enabled(mode) and
-            ((vocab.think_start_id >= 0 and token == vocab.think_start_id) or
-                (vocab.think_end_id >= 0 and token == vocab.think_end_id));
+        return stopForThinkMode(self.vocab, self.family, self.flint, token, mode);
     }
     pub fn argmaxIgnoringEos(self: Selection, mode: c.ds4_think_mode) c_int {
         @setFloatMode(.strict);
         var best: c_int = -1;
         var maximum = negative_infinity;
-        for (self.adjusted(), 0..) |value, index| {
+        // Preserve Flint's existing continuation selection: it ignores stop
+        // tokens in RAW logits. Other families apply the configured penalty.
+        const logits = if (self.flint != null) self.raw() else self.adjusted();
+        for (logits, 0..) |value, index| {
             const token: c_int = @intCast(index);
             if (self.stop(token, mode)) continue;
             if (best < 0 or value > maximum) {

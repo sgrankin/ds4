@@ -20,6 +20,8 @@ const HOST = [
     [stream-selected-test, [test-stream-selected]]
     [pagein-test, [test-pagein]]
     [model-spans-test, [test-model-spans]]
+    [multimodal-test, [test-multimodal]]
+    [glm53-storage-test, [test-glm53-storage]]
     [serving-boundary-test, [test-serving-boundary]]
     [websocket-frames-test, [test-websocket-frames]]
     [resident-route-test, [test-resident-route test-resident-three test-resident-drop]]

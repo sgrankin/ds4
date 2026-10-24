@@ -6,6 +6,7 @@ const std = @import("std");
 const c = @import("gguf_c");
 const Frontier = @import("session_frontier.zig").Frontier;
 const Control = @import("session_control.zig");
+const Runtime = @import("session_runtime.zig");
 const Qwen = @import("qwen4/session.zig");
 const QwenPayload = @import("qwen4/payload.zig");
 const Glm = @import("glm53/session.zig");
@@ -22,34 +23,11 @@ fn pointer(errors: []u8) [*c]u8 {
 fn images(raw: [*c]const c.ds4_vision_span, count: usize) []const c.ds4_vision_span {
     return if (count == 0) &.{} else raw[0..count];
 }
-fn commonSync(user: ?*anyopaque, prompt: [*c]const c.ds4_tokens, errors: [*c]u8, capacity: usize) callconv(.c) c_int {
-    const view: *View = @ptrCast(@alignCast(user orelse return 1));
-    return sync(view, if (prompt == null) null else @ptrCast(prompt), if (capacity == 0) &.{} else errors[0..capacity]);
-}
 pub fn qwenRuntime(view: *View) c.ds4_qwen4_runtime {
-    return .{
-        .state = view.qwen,
-        .frontier = view.frontier,
-        .pending = view.pending,
-        .control = view.control,
-        .model = &view.core.*.model,
-        .weights = &view.core.*.weights,
-        .exact_sampling = view.core.*.dspark_exact_sampling,
-        .sync = commonSync,
-        .user = view,
-    };
+    return Runtime.qwen(view);
 }
 pub fn glmRuntime(view: *View) c.ds4_glm_runtime {
-    return .{
-        .state = view.glm,
-        .frontier = view.frontier,
-        .pending = view.pending,
-        .control = view.control,
-        .core = view.core,
-        .ablate_mask = view.ablate_mask,
-        .sync = commonSync,
-        .user = view,
-    };
+    return Runtime.glm(view);
 }
 fn flintProgress(user: ?*anyopaque, event: [*c]const u8, current: c_int, total: c_int) callconv(.c) void {
     const view: *View = @ptrCast(@alignCast(user orelse return));

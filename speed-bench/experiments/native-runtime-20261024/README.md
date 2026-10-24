@@ -7,6 +7,27 @@ formats, cache policy and thread behavior stay fixed while ownership moves.
 Raw binaries, original sources, commands and logs are ignored under
 `.workspaces/runtime-migrations-20261024/`.
 
+Completed and installed all five executables on the private `native-runtime`
+bookmark. Five reviewable commits retain the original slice history on
+`archive/native-runtime-steps-20261024`. Main is unchanged; nothing is pushed.
+
+Reproduce the assembled checks from the repository root, with the installed
+model paths named in the driver and a Python environment containing
+`websockets` (pass it with `--python` if different):
+
+```nu
+nu tools/zig-build ds4 ds4-agent ds4-server ds4-bench ds4-eval server-test session-state-gpu-test qwen-ngram-state-test payload-test suffix-test --prefix .workspaces/runtime-final
+nu tests/verify.nu
+nu speed-bench/experiments/native-runtime-20261024/qualify.nu .workspaces/runtime-final/bin .workspaces/runtime-final-checks
+nu speed-bench/experiments/native-runtime-20261024/measure.nu BASELINE_BIN .workspaces/runtime-final/bin .workspaces/runtime-final-performance
+```
+
+Run one model job at a time; stop competing model servers for these campaigns.
+The driver uses the existing pressure guard. Qwen/GLM/Flint durable Responses
+replay remains JSON/session reconstruction; automatic SSD KV and suffix-cache
+admission still applies to DS41 only. No cache format or approximation setting
+was changed to make the migration pass.
+
 ## 1. Qwen model preparation — complete
 
 Completed within the first one-hour budget, starting at about 10:33 UTC on
@@ -244,9 +265,161 @@ family tokenizer choices. Evidence: `slice11-build-isolated.log`,
 prefix is `slice11-final`; the small ownership regression is in the existing
 Qwen n-gram fixture.
 
-The remaining bounded ordinary controllers identified by route tracing are
-still pending integration/qualification; source preparation is not completion.
+The bounded ordinary controllers identified by route tracing were subsequently
+integrated and qualified in the follow-ups below.
 
-Later slices remain pending integration/qualification. Payload I/O,
-snapshot-envelope, selected-worker and common-session preparations are retained
-separately until their preceding slices qualify.
+## Bounded continuation follow-up — complete
+
+Common Qwen/GLM/Flint speculation/packet limits, fallback/publication and rewind
+now use the actual SessionView and shared native Runtime borrow. DS41 retains
+its existing native controller. Fast/Debug CPU routing probes, host suite and
+all28 real Flint Responses checks pass. Qwen and its frozen control both hit
+macOS pressure stops while a separately terminal-launched Flint server was
+active. Those runs are not qualification passes. After the user stopped that server, the isolated Qwen full state/MTP/recovery/
+arena fixture passed under the same guard. Final combined checks remain open.
+Evidence: `continuation-{build,host}.log`, `continuation-flint-responses/`,
+`continuation-{qwen,qwen-control}-guard/`. Source/CPU integration can proceed
+independently on the work bookmark while final model qualification remains open.
+
+## All-family sampling policy — complete
+
+The existing native Selection owner now handles Qwen/GLM as well as DS41/Flint.
+Actual Core metadata controls family/count, including public copy/set/token
+prechecks. GLM role boundaries remain stops; Qwen/DS41 retain their own EOS and
+thinking controls. Flint keeps tokenizer-owned stops, printable think controls
+and raw-logit ignore-EOS. Numeric sampling/RNG/normalization code is unchanged.
+
+Full host checks pass, including new stale-global metadata and family-policy
+assertions in existing fixtures. Actual Flint tokenizer parity passes47 HF
+cases. Qwen passes all25 real Responses protocol/quality checks. The existing
+DS41 direct Selection constructor was updated for explicit family/tokenizer
+fields during full integration. Evidence: `sampling-build-final.log`,
+`sampling-host-final.log`, `sampling-tokenizer.log`, `sampling-qwen-responses/`
+and guard. Other-family real serving remains in combined qualification.
+
+## Common multimodal orchestration — complete
+
+One native owner now assembles image/text turns and owns file/memory image
+encoding for DS41/Qwen/GLM. Qwen's input/position preparation is native too. The
+hot ABI moves atomically out of cold model input, leaving lazy host-only free
+independent. Ownership transfer/rollback, marker escaping, tool wrappers and
+text-only behavior remain unchanged.
+
+Four CPU transaction fixtures and the full host suite pass. Seven Qwen/GLM
+image outputs match frozen results byte for byte; GLM repeats are exact. A
+separate public-API DS41 image output also matches frozen `e37e53d9` exactly.
+The existing synthetic Metal state fixture was updated to populate its actual
+captured graph configuration, then passes without runtime fallback to globals.
+Evidence: `multimodal-{build-final,cpu,host-final,state-fixed}.log`,
+`multimodal-images/results.json`, `multimodal-ds41-comparison.json` and guards.
+Build targets `multimodal-test`, `vision-encoder-test`, `session-state-gpu-test`
+reuse the maintained fixtures and existing image files; raw arrays stay ignored.
+
+## Canonical rewrite and live steering — CPU/host qualified
+
+Canonical validation/rebuild policy is cold native code over actual Frontier
+and opaque Session; exact extension uses public sync. Live steering selects the
+actual model record through SessionView, preserving proposal invalidation and
+existing DS41/Flint nonzero rejection. Qwen's getter now reads the same actual
+scale its setter updates, correcting an inherited legacy-graph read.
+
+Fast/Debug probes cover exact extension/failure/no-mutation, scale validation,
+model publication and pending-state invalidation. Full host checks pass.
+Evidence: `policy-{build,host}.log` and `session-policy/{release,debug}/`.
+Real tool/canonical continuation remains included in combined Responses checks.
+
+## Stateless generation — complete
+
+The ordinary four-family greedy entry is native. DS41/Flint/GLM compose the
+native session API; Qwen retains its specialized graph and computes the output
+head only for the last prefill chunk. Explicit tracing/legacy/CPU paths remain
+separate. Fast/Debug probes, all-five build and host checks pass.
+
+Isolated ABBA frozen `e37e53d9` versus native generation runs emit identical
+output bytes in all four arms for each model. Qwen decode averages 54.37 versus
+54.79 t/s; GLM 1.035 versus 1.05 t/s. Warm prefill is similar (Qwen frozen1132,
+native1157–1163; GLM frozen19.48, native19.31–19.86 t/s). First cold A arms were
+661 and2.78 t/s respectively, so these are regression screens rather than
+startup speedup claims. Commands/settings and all arms remain in
+`stateless-{qwen,glm}-abba/`; `generation-{build,host}.log` records integration.
+
+## GLM SSD policy closure — complete
+
+`engine/glm53/storage.zig` owns remaining static-map reuse, per-layer and
+full/selected prefill mapping, token/output handoff, selected/MTP cache and
+seed eligibility. It borrows actual graph configuration and process policy,
+reusing native spans and page-in. Eight C entry points only capture arguments.
+
+Two focused CPU transactions and168,480 original-C comparisons preserve map
+selection, failure publication and255/256 thresholds. All-five build and full
+host checks pass; the first sandboxed host run could not bind a local socket,
+so the complete pass is `storage-host-final.log`. Frozen state/fresh logits
+match exactly at five frontiers. Real MTP snapshot restore passes16 cycles
+(nine single, seven double) and context reuse (three single, one double).
+All45 actual256-token prefill layer reads report `ok=1`. Evidence is in
+`storage-glm-{payload,mtp,prefill}*`, with unchanged pressure guards.
+
+## 12. Dead-owner cleanup and assembled qualification
+
+Removed133 production C lines and77 unused private Objective-C functions
+(plus11 declarations). Real fixture/CUDA consumers keep their existing guards.
+Production syntax and all-five final build are warning-free, without suppressing
+unused-function diagnostics. Objective-C exports and executable instructions
+are unchanged apart from source-line constants in a failure-reporting fixture.
+MSL kernels are unchanged.
+
+The immutable `final/bin` build passes the full host/script suite, GPU state
+rollback, Metal kernels, Qwen ordinary/MTP/failure/batch recovery, GLM MTP
+snapshot/context reuse and canceled-frontier recovery. Four pre-RoPE F16 suffix
+moves (right66, left128, right514, zero) pass persistence, recapture and fresh
+continuations, preserving source data/originals. These are lifetime/format
+checks; graft-versus-recompute output differences remain approximation.
+
+Four-family live serving passes all103 protocol checks: DS41/Qwen/GLM25 each,
+Flint28. Qwen/GLM pass14/14 answer probes, Flint16/16. DS41 passes11/14;
+the three disconnect probes all return the same wrong `{"surived":false}`
+answer in frozen and native. The complete baseline/candidate check and answer
+records match (`final-deepseek-comparison.json`); these are inherited quality
+failures, not protocol passes or a new quality claim.
+
+The first ABBA screen preserves all CLI output hashes and exact Qwen FP32
+frontiers at2047/4095. GLM decode is unchanged; Qwen2048-token live append is
+1242.71/1240.40 frozen versus1244.92/1241.41 native t/s (0.13% less time).
+DeepSeek warm decode is16.61 frozen versus16.99/16.58 native t/s. First cold
+arms remain recorded and are excluded from startup speedup claims.
+
+A repeatable3.24% short Flint decode regression exposed one extra terminal
+argmax. The native loop now selects only inside the budget/context-checked
+loop, matching C. CPU counters check zero-budget/full-context and exact packet
+selection counts. Host and all28 Flint serving checks pass again. The corrected
+32-token bracket averages level but retains2–3% variation in individual warm
+points; a longer256-token bracket is level:243.57/243.88 frozen versus
+245.41/242.99 native t/s, identical output (0.19% less decode time).
+
+Fresh builds initially regress14.24→19.22s. Grouping compatible exports into
+one hot and one CPU-safe policy compilation unit reduces duplicate compiler
+work. Removing the wrapper's12-job cap uses standard Zig CPU parallelism;
+the measured fresh build is11.87s. The logical component files stay separate.
+Host/archive extraction passes and final grouped DS41/Qwen/GLM payloads and
+fresh logits match frozen state exactly; GPU kernels, Qwen recovery and all28
+Flint Responses checks pass. A smaller six-entry grouping took17.70s and was
+not retained. Final grouped Qwen append is1243.35/1240.97 frozen versus
+1242.48/1243.79 native t/s (0.08% less time); decode0.70% longer. Grouped
+Flint256-token decode is1.07% longer on the ABBA inverse-throughput mean,
+with exact output. Individual short/warm points vary by several percent;
+these screens support near-neutral runtime, not a blanket speedup.
+
+With equal standard CPU parallelism, frozen fresh build is11.41s versus
+11.87s native (4% longer). The actual wrapper transition improves14.24→11.87s
+by lifting its12-job limit; cached native build is0.97s. Standard defaults and
+explicit hot/cold compilation units are retained, rather than a build scheduler.
+
+For the longer Flint case, use the same guarded ABBA CLI invocation with
+`--ctx 512 --temp 0 --tokens 256 --prompt 'Count from one to one thousand, separated by commas. Output only the sequence.'`
+and the installed Flint model directory. No sampling, quantization or kernel
+setting changes between arms.
+
+Artifacts stay under `final-checks/`, `final-performance/`,
+`final-flint-256-performance/`, `postgroup/` and the build-screen folders;
+`final-binaries.sha256` identifies the selected programs. The installed selection
+uses `final-qualified/bin`; earlier immutable prefixes remain for comparisons.

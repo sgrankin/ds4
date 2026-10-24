@@ -52,15 +52,17 @@ separate from the normal single-Metal ownership path; migrate it only for a
 concrete use. Cache capability extensions and I/O optimizations are subsequent
 experiments, after existing behavior has one clear owner.
 
-Slices 1–9 plus common batch follow-up 8b are qualified. Slice 10 engine/cache/
-span policy is integrating; native engine lifecycle follows. Final route review
-found additional ordinary C policy despite native numerical leaves: common
-continuation/rewind, Qwen/GLM sampling history/logprobs, multimodal assembly,
-small canonical-rewrite/live-steering settings and stateless greedy generation.
-Treat these as separate bounded one-hour components before final combined
-qualification, with actual-record/opaque-public-API inputs and existing fixtures.
-Do not claim them complete from forwarding wrappers or count inactive legacy
-fallbacks as active. [Progress/evidence](../experiments/native-runtime-20261024/README.md).
+Slices 1–11 and common batch follow-up8b are qualified. Route review also found
+ordinary C continuation/rewind, sampling, multimodal assembly, canonical rewrite/
+live steering, stateless generation and GLM SSD map/cache policy. Their bounded
+native follow-ups are complete, using actual records and existing fixtures.
+Slice12 combined qualification is complete after dead-helper removal:103 live
+protocol checks, host/GPU/state/frozen-logit checks, matched runtime/build screens.
+The small Flint terminal-selection regression was fixed. No material steady-
+state regression appears in these screens; retain recorded timing variation.
+Do not count
+inactive legacy fallbacks as active owners or extend this work into a generic
+framework. [Progress/evidence](../experiments/native-runtime-20261024/README.md).
 
 ## Deferred: V4.1/1017 activation steering — planned 2026-10-23
 

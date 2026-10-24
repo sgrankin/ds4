@@ -311,7 +311,7 @@ int ds4_native_session_speculative_batch41(const ds4_session_batch_view *,
     int count, int (*accepted)[2], int *counts, bool exact,
     bool *native_batch, bool *mixed_batch, char *, size_t);
 
-#include "ds4_engine_vision.h"
+#include "../vision_runtime_api.h"
 
 int ds4_native_graph_route_batch41(ds41_gpu_graph *, const ds4_model *, const ds4_layer_weights *, const ds4_model_config *, uint32_t);
 #endif

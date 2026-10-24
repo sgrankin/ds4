@@ -55,6 +55,7 @@
 #include "ds4_engine_memory.h"
 #include "ds4_engine_core.h"
 #include "ds4_engine_vision.h"
+#include "engine/vision_runtime_api.h"
 #include "ds4_model_residency.h"
 #include "ds4_gguf.h"
 #include "ds4_model_config.h"
@@ -76,6 +77,7 @@
 #include "engine/deepseek41/graph_api.h"
 #include "engine/session_batch_api.h"
 #include "engine/session_api.h"
+#include "engine/engine_generation_api.h"
 /* Private input API keeps the existing engine call sites and C fallback. */
 #define tensor_type ds4_gguf_tensor_type
 #define tensor_nbytes ds4_gguf_tensor_nbytes
@@ -712,45 +714,7 @@ static const ds4_shape DS4_SHAPE_GLM52 = {
     .rope_orig_ctx = 1048576,
 };
 
-static const ds4_shape DS4_SHAPE_GLM53 = {
-    .name = "GLM 5.3 Flash",
-    .family = DS4_MODEL_FAMILY_GLM_DSA,
-    .variant = DS4_VARIANT_GLM53,
-    .n_layer = 46,
-    .n_embd = 4096,
-    .n_vocab = 154880,
-    .n_head = 64,
-    .n_head_kv = 1,
-    /* Raw DSA cache row: 512 latent dimensions and no RoPE tail. */
-    .n_head_dim = 512,
-    .n_value_dim = 256,
-    .n_rot = 0,
-    .n_lora_q = 1536,
-    .n_expert = 288,
-    .n_expert_used = 8,
-    .n_expert_shared = 1,
-    .n_ff_exp = 2048,
-    .n_ff_dense = 12288,
-    .n_indexer_head = 32,
-    .n_indexer_head_dim = 128,
-    .n_indexer_top_k = 2048,
-    .n_hc = 4,
-    .n_hc_sinkhorn_iter = 20,
-    .n_nextn_predict = 1,
-    .n_leading_dense = 3,
-    .n_kv_lora = 512,
-    .n_key_mla = 256,
-    .n_value_mla = 256,
-    .n_kda_head = 64,
-    .n_kda_head_dim = 128,
-    .n_kda_conv = 4,
-    .rms_eps = 1.0e-5f,
-    .hc_eps = 1.0e-6f,
-    .expert_weight_scale = 2.5f,
-    .swiglu_clamp_exp = 10.0f,
-    .rope_orig_ctx = 1048576,
-    .kda_gate_lower_bound = -5.0f,
-};
+
 
 static ds4_shape g_ds4_shape = {
     .name = "DeepSeek V4 Flash",
@@ -5007,15 +4971,22 @@ static void qwen4_vision_weights_bind(ds4_qwen4_vision_weights *w, const ds4_mod
 #ifdef DS4_HAS_QWEN4_GPU
 /* Learned 2D position table (side x side) resampled to the patch grid with
  * bilinear, align_corners interpolation; rows in 2x2 window order. */
+#ifndef __APPLE__
 static void qwen4_vision_pos_embed(const float *table, uint32_t side, uint32_t n_embd,
                                    uint32_t grid_h, uint32_t grid_w, float *out) {
     ds4_native_qwen4_vision_pos_embed(table, side, n_embd, grid_h, grid_w, out);
 }
 
+#endif
+
 static uint32_t qwen4_vision_max_tokens(void) {
+#ifdef __APPLE__
+    return ds4_native_qwen4_vision_max_tokens();
+#else
     const char *env = getenv("DS4_QWEN4_IMAGE_MAX_TOKENS");
     const long v = env ? atol(env) : 0;
     return v >= 64 && v <= 16383 ? (uint32_t)v : 1024u;   /* 4 patches per token, < 65536 patches */
+#endif
 }
 
 /* preprocess + encode one image with the bound mmproj; out gets malloc'd
@@ -5023,6 +4994,10 @@ static uint32_t qwen4_vision_max_tokens(void) {
 static int qwen4_vision_encode_image(const ds4_model *vm, const ds4_qwen4_vision_weights *w, const ds4_image *image,
                                      uint32_t min_tokens, uint32_t max_tokens, float **out, ds4_image_patches *patches,
                                      char *error, size_t error_cap) {
+#ifdef __APPLE__
+    return ds4_native_qwen4_vision_image(vm, w, image, min_tokens, max_tokens,
+        out, patches, error, error_cap);
+#else
     *out = NULL;
     if (!ds4_image_preprocess_qwen4(patches, image, min_tokens, max_tokens, error, error_cap)) return 0;
     const uint64_t n = patches->patch_count;
@@ -5043,6 +5018,7 @@ static int qwen4_vision_encode_image(const ds4_model *vm, const ds4_qwen4_vision
     }
     *out = emb;
     return 1;
+#endif
 }
 #endif
 #endif
@@ -5686,14 +5662,7 @@ static bool glm_stream_selected_expert_cache_supported(
 }
 #endif
 
-#ifdef __APPLE__
-static bool glm_stream_decode_experts_are_streamed(
-        const ds4_weights       *w,
-        const ds4_layer_weights *l,
-        uint32_t                 il) {
-    return ds4_native_model_spans_glm_streamed(w, &g_ds4_shape, l, il);
-}
-#else
+#ifndef __APPLE__
 static bool glm_stream_decode_experts_are_streamed(
         const ds4_weights       *w,
         const ds4_layer_weights *l,
@@ -18440,28 +18409,7 @@ static bool metal_graph_stream_prefill_selected_pagein_join(
 }
 #endif
 
-#ifdef __APPLE__
-static bool metal_graph_stream_prefill_layer_pagein_start(
-        const ds4_gpu_graph           *g,
-        const ds4_model               *model,
-        const ds4_weights             *weights,
-        uint32_t                       il,
-        uint32_t                       n_tokens,
-        bool                           madvise_only,
-        bool                           pread_only,
-        bool                           readahead_only,
-        bool                           decode_only,
-        metal_graph_stream_pagein_job *job) {
-    const uint32_t flags =
-        (madvise_only ? DS4_STREAM_PREPARE_MADVISE : 0u) |
-        (pread_only ? DS4_STREAM_PREPARE_PREAD : 0u) |
-        (readahead_only ? DS4_STREAM_PREPARE_READAHEAD : 0u) |
-        (decode_only ? DS4_STREAM_PREPARE_DECODE : 0u);
-    return ds4_native_pagein_layer_start(model, weights, il, n_tokens, flags,
-        g != NULL, g && g->ssd_streaming, &g_ds4_shape,
-        &g_ds4_streaming_policy, job);
-}
-#else
+#ifndef __APPLE__
 static bool metal_graph_stream_prefill_layer_pagein_start(
         const ds4_gpu_graph           *g,
         const ds4_model               *model,
@@ -18616,12 +18564,7 @@ static bool metal_graph_stream_prefill_layer_pagein_start(
 }
 #endif
 
-#ifdef __APPLE__
-static bool metal_graph_stream_prefill_layer_pagein_join(
-        metal_graph_stream_pagein_job *job) {
-    return ds4_native_pagein_join(job, false);
-}
-#else
+#ifndef __APPLE__
 static bool metal_graph_stream_prefill_layer_pagein_join(
         metal_graph_stream_pagein_job *job) {
     if (!job || !job->started) return true;
@@ -38166,10 +38109,6 @@ static ds4_context_memory ds41_graph_memory(uint32_t ctx, uint32_t prefill_chunk
     const ds4_model_config config = ds41_native_config();
     return ds4_native_graph_memory41(&config, ctx, prefill_chunk);
 }
-static bool ds41_workspace_grow(ds41_gpu_graph *g, uint32_t cap) {
-    const ds4_model_config config = ds41_native_config();
-    return ds4_native_graph_workspace_grow41(g, &config, cap);
-}
 static DS4_MAYBE_UNUSED bool ds41_graph_alloc(ds41_gpu_graph *g, const ds4_model *m,
         const ds4_weights *w, const char *path, uint32_t ctx, uint32_t chunk, bool streaming) {
     const ds4_model_config config = ds41_native_config();
@@ -38316,6 +38255,7 @@ static bool DS4_MAYBE_UNUSED ds41_embed(ds41_gpu_graph *g, const ds4_model *m, c
         ds4_gpu_repeat_hc_tensor(out, scratch, DS4_N_EMBD, DS4_N_HC);
 }
 
+#if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
 static bool ds41_sum_partial(ds41_gpu_graph *g, ds4_gpu_tensor *x,
                              uint32_t il, uint32_t gate) {
     if (g->tp_world != 2) return true;
@@ -38326,6 +38266,7 @@ static bool ds41_sum_partial(ds41_gpu_graph *g, ds4_gpu_tensor *x,
     ds4_gpu_tensor *second = g->tp_rank ? g->tp_out[slot] : g->tp_in[slot];
     return ds4_gpu_add_tensor(x, first, second, DS4_N_EMBD) != 0;
 }
+#endif
 
 static bool ds41_norm(ds4_gpu_tensor *out, const ds4_gpu_tensor *in,
                       const ds4_model *m, const ds4_tensor *weight) {
@@ -38365,27 +38306,6 @@ static bool ds41_hc_expand(ds4_gpu_tensor *out, const ds4_gpu_tensor *block,
         ds41_bf16(out, DS4_N_EMBD * DS4_N_HC);
 }
 
-static bool ds41_sum_partial_batch(ds41_gpu_graph *g, ds4_gpu_tensor *x,
-                                   uint32_t il, uint32_t gate, uint32_t count) {
-    if (g->tp_world != 2) return true;
-    const uint64_t bytes = (uint64_t)count * DS4_N_EMBD * sizeof(float);
-    if (g->verify_prefix) {
-        const uint32_t slot = il * DS4_TP_BATCH_GATES_PER_LAYER + gate;
-        if (!g->tp_batch_out || !g->tp_batch_in || count > DS4_TP_BATCH_MAX_ROWS ||
-            !ds4_gpu_tensor_copy(g->tp_batch_out[slot], 0, x, 0, bytes) ||
-            !ds4_gpu_tp_batch_gate_encode(slot, count)) return false;
-        return ds4_gpu_add_tensor(x,
-            g->tp_rank ? g->tp_batch_in[slot] : g->tp_batch_out[slot],
-            g->tp_rank ? g->tp_batch_out[slot] : g->tp_batch_in[slot],
-            count * DS4_N_EMBD) != 0;
-    }
-    /* Q is dead after attention; its expert-output alias is dead after the
-     * routed reduction. Reuse it for the peer, without another large buffer. */
-    ds4_gpu_tensor *peer = g->batch.q;
-    if (!ds4_gpu_tp_big_gate_encode(il, count, x, peer, bytes)) return false;
-    return ds4_gpu_add_tensor(x, g->tp_rank ? peer : x,
-        g->tp_rank ? x : peer, count * DS4_N_EMBD) != 0;
-}
 
 static bool ds41_rope(ds4_gpu_tensor *x, uint32_t heads, uint32_t width,
                       uint32_t il, uint32_t pos, bool inverse) {
@@ -38661,36 +38581,7 @@ static bool ds41_shared_balance_enabled(void) {
 #endif
 }
 
-static bool ds41_balance_shared(const ds41_gpu_graph *g, const ds4_layer_weights *l,
-                                uint32_t count) {
-    return g->tp_world == 2 && count <= DS4_TP_BATCH_MAX_ROWS &&
-        l->ffn_gate_shexp->type == DS4_TENSOR_Q8_0 &&
-        l->ffn_up_shexp->type == DS4_TENSOR_Q8_0 &&
-        l->ffn_down_shexp->type == DS4_TENSOR_Q8_0 && ds41_shared_balance_enabled();
-}
 
-/* Preserve both projection BF16 boundaries before SwiGLU, then its BF16
- * output boundary. The fused kernel keeps the standalone reduction trees. */
-static bool ds41_shared_gate_up(ds41_gpu_graph *g, const ds4_model *m,
-        const ds4_layer_weights *l, ds4_gpu_tensor *gate, ds4_gpu_tensor *up,
-        ds4_gpu_tensor *mid, const ds4_gpu_tensor *in, uint32_t count) {
-#ifdef __APPLE__
-    if (!g->quality && g->tp_world == 1 && count <= 128u &&
-        l->ffn_gate_shexp->type == DS4_TENSOR_Q8_0 &&
-        l->ffn_up_shexp->type == DS4_TENSOR_Q8_0 &&
-        getenv("DS4_METAL_V41_FUSED_SHARED_BF16"))
-        return ds4_gpu_dsv41_shared_gate_up_bf16_rows(gate, up, mid, m->map, m->size,
-            l->ffn_gate_shexp->abs_offset, l->ffn_up_shexp->abs_offset,
-            DS4_N_EMBD, DS4_N_FF_EXP, in, count, DS4_SWIGLU_CLAMP_EXP);
-#endif
-    return (count == 1 ? ds41_matmul(gate, m, l->ffn_gate_shexp, in, true) :
-        ds41_matmul_batch(gate, m, l->ffn_gate_shexp, in, count, true)) &&
-        (count == 1 ? ds41_matmul(up, m, l->ffn_up_shexp, in, true) :
-        ds41_matmul_batch(up, m, l->ffn_up_shexp, in, count, true)) &&
-        ds4_gpu_swiglu_tensor(mid, gate, up, count * DS4_N_FF_EXP,
-            DS4_SWIGLU_CLAMP_EXP, 1.0f) &&
-        ds4_gpu_dsv41_quantize(mid, DS4_N_FF_EXP, count, DS4_V41_BF16);
-}
 
 
 
@@ -38930,14 +38821,12 @@ static bool DS4_MAYBE_UNUSED ds41_attention_batch(ds41_gpu_graph *g, const ds4_m
                                               ds41_exact_prefill_rows);
 }
 
+#if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
 static bool ds41_graph_after_moe(ds41_gpu_graph *g) {
     return ds41_hc_expand(g->residual, g->block, g->after_attn, g->ffn_split) &&
         ds4_gpu_tensor_copy(g->pre, 0, g->ffn_split, 0, DS4_N_HC * sizeof(float));
 }
 
-
-
-#if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
 /* Capture only single-token, resident TP work with stable pointers. Engram
  * rows are refreshed before entry; positional attention and gates stay eager.
  * V4.1's router does not use the token argument when hash_mode is false. */
@@ -40028,32 +39917,23 @@ int ds4_token_eos(ds4_engine *e) {
 }
 
 bool ds4_token_is_stop(ds4_engine *e, int token) {
-    if (e && e->flint) return flint_tokenizer_is_stop(flint_engine_tokenizer(e->flint), token);
-    return e ? vocab_token_is_generation_stop(&e->core.vocab, token) : false;
+    if (!e) return false;
+    return ds4_native_token_is_stop(&e->core.vocab, ds4_engine_shape(e)->family,
+        e->flint ? flint_engine_tokenizer(e->flint) : NULL, token);
 }
 
 bool ds4_token_is_thinking_control(ds4_engine *e, int token) {
-    if (!e || token < 0) return false;
-    return (e->core.vocab.think_start_id >= 0 &&
-            token == e->core.vocab.think_start_id) ||
-           (e->core.vocab.think_end_id >= 0 &&
-            token == e->core.vocab.think_end_id);
+    return ds4_native_token_is_thinking_control(e ? &e->core.vocab : NULL, token);
 }
 
 bool ds4_token_is_stop_for_think_mode(
         ds4_engine      *e,
         int              token,
         ds4_think_mode   mode) {
-    if (ds4_token_is_stop(e, token)) return true;
-    if (e && e->flint) return false;
-    /* In no-thinking mode the prompt already supplied the protocol close tag.
-     * If the model emits another thinking tag, do not print or feed it back:
-     * it is a control marker, not assistant content. */
-    if (!ds4_think_mode_enabled(mode) &&
-        ds4_token_is_thinking_control(e, token)) {
-        return true;
-    }
-    return false;
+    if (!e) return false;
+    return ds4_native_token_is_stop_for_think_mode(&e->core.vocab,
+        ds4_engine_shape(e)->family,
+        e->flint ? flint_engine_tokenizer(e->flint) : NULL, token, mode);
 }
 
 int ds4_token_user(ds4_engine *e) {
@@ -41325,9 +41205,7 @@ static bool glm_graph_stream_layer_expert_cache_supported(
 
 bool ds4_native_glm_stream_selected_cache(const ds4_glm_gpu_graph *graph,
         const ds4_layer_weights *layer, uint32_t index) {
-    return graph && graph->ssd_streaming &&
-        !glm_stream_resident_decode_layer_enabled(layer, index) &&
-        glm_graph_stream_layer_expert_cache_supported(graph->weights, layer, index);
+    return ds4_native_glm_storage_selected(graph, layer, index, &g_ds4_streaming_policy);
 }
 
 static bool glm_graph_stream_prefill_expert_addr_supported(
@@ -42817,9 +42695,6 @@ static uint32_t glm_graph_weight_type_for_offset(
         const ds4_model *model,
         uint64_t         weight_offset);
 
-static void glm53_graph_prefill_workspace_free(ds4_glm_gpu_graph *g) {
-    ds4_native_glm_prefill_workspace_free(g);
-}
 
 static bool glm53_graph_prefill_workspace_ensure(
         ds4_glm_gpu_graph *g,
@@ -46156,8 +46031,7 @@ static bool glm_graph_mtp_matmul(
  * drafted token[pos+2] by greedy argmax. Clobbers the decode scratch. */
 bool ds4_native_glm_mtp_stream_cache(const ds4_glm_gpu_graph *graph,
         const ds4_layer_weights *layer, uint32_t index) {
-    return graph && graph->ssd_streaming &&
-        glm_graph_stream_layer_expert_cache_supported(graph->weights, layer, index);
+    return ds4_native_glm_storage_mtp(graph, layer, index);
 }
 
 static bool glm_graph_mtp_step(
@@ -48275,22 +48149,19 @@ bool ds4_native_stream_prepare_join_all(metal_graph_stream_prepare_slot *slots,
 
 bool ds4_native_glm_seed_layer_expected(const ds4_glm_gpu_graph *graph,
         const ds4_weights *weights, const ds4_layer_weights *layer, uint32_t index) {
-    return glm_graph_streaming_expert_cache_seed_layer_expected(graph, weights, layer, index);
+    return ds4_native_glm_storage_seed(graph, weights, layer, index, &g_ds4_streaming_policy);
 }
 
-bool ds4_native_glm_experts_uniform(const ds4_weights *weights, uint32_t index) {
-    return weights_streaming_layer_experts_uniform(weights, index);
-}
 
 bool ds4_native_glm_map_token(ds4_glm_gpu_graph *graph,
         const ds4_model *model, const ds4_weights *weights) {
-    return glm_graph_stream_map_token(graph, model, weights);
+    return ds4_native_glm_storage_token(graph, model, weights);
 }
 
 bool ds4_native_glm_map_prefill_layer(ds4_glm_gpu_graph *graph,
         const ds4_model *model, const ds4_weights *weights, uint32_t index,
         uint32_t rows, bool full_layer) {
-    return glm_graph_stream_map_prefill_layer(graph, model, weights, index, rows, full_layer);
+    return ds4_native_glm_storage_prefill(graph, model, weights, index, rows, full_layer, &g_ds4_streaming_policy);
 }
 
 
@@ -50450,33 +50321,21 @@ static bool glm_graph_streaming_decode_sync_each_layer(void) {
 #endif
 }
 
-/* Mapping/cache policy only; native GLM owns token and layer execution. */
+/* Capture the actual process policy; native GLM owns mapping and execution. */
 bool ds4_native_glm_map_decode_begin(ds4_glm_gpu_graph *g,
         const ds4_model *model, const ds4_weights *weights,
         bool from_hidden, bool *static_map) {
-    *static_map = !from_hidden && g->has_token_embd && g->ssd_streaming &&
-        metal_graph_stream_decode_static_map_enabled() &&
-        weights_model_map_decode_static_supported(weights);
-    if (from_hidden) return true;
-    if (*static_map) {
-        const bool cache_state = metal_graph_stream_decode_static_map_state_cache_enabled();
-        if (!cache_state || !g->streaming_static_decode_map_current) {
-            if (!metal_graph_stream_map_decode_static_all(model, weights)) return false;
-            g->streaming_static_decode_map_current = cache_state;
-        }
-        return true;
-    }
-    return glm_graph_stream_map_token(g, model, weights);
+    return ds4_native_glm_storage_begin(g, model, weights, from_hidden, static_map, &g_ds4_streaming_policy);
 }
 
 bool ds4_native_glm_map_decode_layer(ds4_glm_gpu_graph *g,
         const ds4_model *model, const ds4_weights *weights, uint32_t layer) {
-    return glm_graph_stream_map_decode_layer(g, model, weights, layer);
+    return ds4_native_glm_storage_layer(g, model, weights, layer, &g_ds4_streaming_policy);
 }
 
 bool ds4_native_glm_map_output(ds4_glm_gpu_graph *g,
         const ds4_model *model, const ds4_weights *weights) {
-    return glm_graph_stream_map_output(g, model, weights);
+    return ds4_native_glm_storage_output(g, model, weights);
 }
 
 static bool glm_graph_forward_token(
@@ -53940,12 +53799,6 @@ static void payload_set_err(char *err, size_t errlen, const char *msg) {
     if (errlen != 0) snprintf(err, errlen, "%s", msg);
 }
 
-static void payload_put_u32(uint8_t out[4], uint32_t v) {
-    out[0] = (uint8_t)(v);
-    out[1] = (uint8_t)(v >> 8);
-    out[2] = (uint8_t)(v >> 16);
-    out[3] = (uint8_t)(v >> 24);
-}
 
 static uint32_t payload_get_u32(const uint8_t in[4]) {
     return (uint32_t)in[0] |
@@ -58879,6 +58732,10 @@ static int ds4_session_eval_splitkv_spec_after_first(
  * 4. fall back to ordinary one-token decode if the fast verifier cannot prove
  *    the target stream. */
 
+#ifndef DS4_NO_GPU
+static bool ds4_session_native_resource_engine(const ds4_engine *e);
+#endif
+
 int ds4_engine_generate_argmax(
         ds4_engine        *e,
         const ds4_tokens  *prompt,
@@ -58889,6 +58746,28 @@ int ds4_engine_generate_argmax(
         void              *emit_ud,
         ds4_session_progress_fn progress,
         void              *progress_ud) {
+#ifndef DS4_NO_GPU
+    /* The compatibility shell captures actual immutable owners. Explicit
+     * diagnostics and alternate backends retain their existing controllers. */
+    if (ds4_session_native_resource_engine(e) &&
+        !getenv("DS4_TRACE_TOP") && !getenv("DS4_TOKEN_TIMING") &&
+        !getenv("DS4_METAL_MEMORY_REPORT")) {
+        ds4_qwen4_config fallback;
+        const ds4_qwen4_config *configuration = NULL;
+        if (!e->flint && ds4_engine_shape(e)->family == DS4_MODEL_FAMILY_QWEN4_EXP) {
+            const ds4_engine_configuration *native = ds4_engine_native_config(e);
+            if (native) configuration = &native->qwen;
+            else {
+                /* Separate legacy/test engines only have the compatibility
+                 * snapshot. Ordinary native engines always borrow Core. */
+                fallback = qwen4_native_config();
+                configuration = &fallback;
+            }
+        }
+        return ds4_native_engine_generate_argmax(e, &e->core, configuration,
+            prompt, n_predict, ctx_size, emit, done, emit_ud, progress, progress_ud);
+    }
+#endif
     /* A top-1-only graph/CPU generator has no logits available for this policy.
      * Keep its optimized default unchanged and use ordinary session evaluation
      * only when the user explicitly enabled a logit transformation. */
@@ -64545,7 +64424,8 @@ static ds4_engine_memory_inputs ds41_memory_inputs(const ds4_engine *e) {
     };
 }
 
-static bool ds41_memory_admit_for_host(ds4_engine *e, uint64_t graph_bytes,
+/* Explicit host budgets are used by the private graph-admission fixture. */
+static DS4_MAYBE_UNUSED bool ds41_memory_admit_for_host(ds4_engine *e, uint64_t graph_bytes,
                                       bool fit_cache, uint64_t host,
                                       uint64_t recommended) {
     const ds4_model_config config = ds41_native_config();
@@ -66603,6 +66483,20 @@ static int ds4_prompt_append_deepseek4_vision(
 }
 #endif
 
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+/* Borrow the selected model's actual immutable configuration. Older model
+ * families and non-Metal implementations retain their separate compatibility
+ * route; ordinary native input owns no Engine layout or global model policy. */
+static const ds4_shape *ds4_engine_native_vision_shape(const ds4_engine *e) {
+    if (!e || e->flint || e->core.backend != DS4_BACKEND_METAL) return NULL;
+    const ds4_shape *shape = ds4_engine_shape(e);
+    if (shape->family == DS4_MODEL_FAMILY_DEEPSEEK41 ||
+        shape->family == DS4_MODEL_FAMILY_QWEN4_EXP ||
+        (shape->family == DS4_MODEL_FAMILY_GLM_DSA && shape->variant == DS4_VARIANT_GLM53)) return shape;
+    return NULL;
+}
+#endif
+
 int ds4_prompt_append_vision(
         ds4_engine *e,
         ds4_tokens *tokens,
@@ -66611,10 +66505,9 @@ int ds4_prompt_append_vision(
         char *error,
         size_t error_cap) {
 #if defined(__APPLE__) && !defined(DS4_NO_GPU)
-    if (e && e->core.backend == DS4_BACKEND_METAL &&
-        DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
-        const ds4_model_config config = ds41_native_config();
-        return ds4_native_vision_append41(&e->core, &config.shape, tokens, span,
+    const ds4_shape *native_shape = ds4_engine_native_vision_shape(e);
+    if (native_shape) {
+        return ds4_native_vision_append(&e->core, native_shape, tokens, span,
             embedding, error, error_cap);
     }
 #endif
@@ -66655,10 +66548,9 @@ int ds4_chat_append_multimodal_message(
         char                   *error,
         size_t                  error_cap) {
 #if defined(__APPLE__) && !defined(DS4_NO_GPU)
-    if (e && e->core.backend == DS4_BACKEND_METAL &&
-        DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
-        const ds4_model_config config = ds41_native_config();
-        return ds4_native_vision_message41(&e->core, &config.shape, tokens, role,
+    const ds4_shape *native_shape = ds4_engine_native_vision_shape(e);
+    if (native_shape) {
+        return ds4_native_vision_message(&e->core, native_shape, tokens, role,
             text_parts, embeddings, image_count, spans, error, error_cap);
     }
 #endif
@@ -66948,10 +66840,9 @@ int ds4_engine_vision_encode_file(
         char *error,
         size_t error_cap) {
 #if defined(__APPLE__) && !defined(DS4_NO_GPU)
-    if (e && e->core.backend == DS4_BACKEND_METAL &&
-        DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
-        const ds4_model_config config = ds41_native_config();
-        return ds4_native_vision_encode_file41(&e->core, &config.shape, path, out,
+    const ds4_shape *native_shape = ds4_engine_native_vision_shape(e);
+    if (native_shape) {
+        return ds4_native_vision_encode_file(&e->core, native_shape, path, out,
             error, error_cap);
     }
 #endif
@@ -66971,10 +66862,9 @@ int ds4_engine_vision_encode_memory(
         char *error,
         size_t error_cap) {
 #if defined(__APPLE__) && !defined(DS4_NO_GPU)
-    if (e && e->core.backend == DS4_BACKEND_METAL &&
-        DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
-        const ds4_model_config config = ds41_native_config();
-        return ds4_native_vision_encode_memory41(&e->core, &config.shape, encoded,
+    const ds4_shape *native_shape = ds4_engine_native_vision_shape(e);
+    if (native_shape) {
+        return ds4_native_vision_encode_memory(&e->core, native_shape, encoded,
             encoded_len, out, error, error_cap);
     }
 #endif
@@ -68145,6 +68035,15 @@ int ds4_session_set_power(ds4_session *s, int power_percent) {
 }
 
 float ds4_session_directional_steering_ffn(ds4_session *s) {
+#ifndef DS4_NO_GPU
+    ds4_session_view native;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &native, &config41, &memory41)) {
+        return ds4_native_session_steering_scale(&native);
+    }
+#endif
+
     if (!s || !s->engine) return 0.0f;
 #ifndef DS4_NO_GPU
     if (!ds4_session_is_cpu(s)) {
@@ -68157,6 +68056,15 @@ float ds4_session_directional_steering_ffn(ds4_session *s) {
 }
 
 int ds4_session_set_directional_steering_ffn(ds4_session *s, float scale) {
+#ifndef DS4_NO_GPU
+    ds4_session_view native;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &native, &config41, &memory41)) {
+        return ds4_native_session_steering_set(&native, scale);
+    }
+#endif
+
     if (!s || !s->engine || !isfinite(scale) ||
         scale < -100.0f || scale > 100.0f) {
         return 1;
@@ -70772,11 +70680,6 @@ static int ds4_session_sync_internal(ds4_session *s, const ds4_tokens *prompt, c
  * frontiers.  Replacing any part of the live tail requires restoring that whole
  * frontier first.  Extending exactly at the live end is safe; rewriting behind
  * it is not an in-place operation. */
-bool ds4_session_rewrite_requires_rebuild(int live_len, int canonical_len, int common) {
-    if (live_len < 0 || canonical_len < 0 || common < 0) return true;
-    if (common > live_len || common > canonical_len) return true;
-    return common < live_len;
-}
 
 /* Replace the live suffix after a shared prefix.
  *
@@ -70791,64 +70694,34 @@ bool ds4_session_rewrite_requires_rebuild(int live_len, int canonical_len, int c
 ds4_session_rewrite_result ds4_session_rewrite_from_common(
         ds4_session *s, const ds4_tokens *prompt, int common,
         char *err, size_t errlen) {
-    if (!s || !prompt) {
-        snprintf(err, errlen, "missing session or prompt");
-        return DS4_SESSION_REWRITE_ERROR;
-    }
-    if (prompt->len <= 0) {
-        snprintf(err, errlen, "empty prompt");
-        return DS4_SESSION_REWRITE_ERROR;
-    }
-    if (prompt->len >= s->frontier.ctx_size) {
-        snprintf(err, errlen,
-                 "prompt length %d exceeds context %d (one token of generation room is required)",
-                 prompt->len, s->frontier.ctx_size);
-        return DS4_SESSION_REWRITE_ERROR;
-    }
-    if (!s->frontier.checkpoint_valid) {
-        snprintf(err, errlen, "session has no valid checkpoint");
-        return DS4_SESSION_REWRITE_ERROR;
-    }
-    if (common < 0 || common > s->frontier.checkpoint.len || common > prompt->len) {
-        snprintf(err, errlen, "invalid rewrite prefix");
-        return DS4_SESSION_REWRITE_ERROR;
-    }
-    for (int i = 0; i < common; i++) {
-        if (s->frontier.checkpoint.v[i] != prompt->v[i]) {
-            snprintf(err, errlen, "rewrite prefix does not match live checkpoint");
-            return DS4_SESSION_REWRITE_ERROR;
-        }
-    }
-
-    if (common == s->frontier.checkpoint.len) {
-        return ds4_session_sync(s, prompt, err, errlen) == 0 ?
-            DS4_SESSION_REWRITE_OK : DS4_SESSION_REWRITE_ERROR;
-    }
-
-    if (ds4_session_rewrite_requires_rebuild(s->frontier.checkpoint.len, prompt->len, common)) {
-        snprintf(err, errlen, "rewrite needs rebuild: common=%d live=%d canonical=%d",
-                 common, s->frontier.checkpoint.len, prompt->len);
-        return DS4_SESSION_REWRITE_REBUILD_NEEDED;
-    }
-
-    snprintf(err, errlen, "unexpected canonical rewrite state");
-    return DS4_SESSION_REWRITE_ERROR;
+    return ds4_native_session_rewrite(s, s ? &s->frontier : NULL,
+        prompt, common, err, errlen);
 }
 
 /* Synchronous borrowed inputs. No Engine/Session layout crosses the native
  * boundary, and the outer Session keeps ownership of its host allocations. */
 static ds4_session_sampling_view ds4_session_sampling_view_for(ds4_session *s) {
     ds4_engine *e = s->engine;
+    const ds4_shape *shape = ds4_engine_shape(e);
     return (ds4_session_sampling_view){
         .frontier = &s->frontier,
         .policy = e ? &e->core.overthink : NULL,
         .vocab = e ? &e->core.vocab : NULL,
-        .count = e && e->flint ? (uint32_t)e->core.vocab.n_vocab : DS4_N_VOCAB,
+        .count = e && e->flint ? (uint32_t)e->core.vocab.n_vocab : shape->n_vocab,
+        .family = shape->family,
+        .flint = e && e->flint ? flint_engine_tokenizer(e->flint) : NULL,
     };
 }
 
+static bool ds4_session_native_sampling(const ds4_session *s) {
+    const ds4_model_family family = ds4_engine_shape(s->engine)->family;
+    return s->flint || family == DS4_MODEL_FAMILY_DEEPSEEK41 ||
+        family == DS4_MODEL_FAMILY_QWEN4_EXP || family == DS4_MODEL_FAMILY_GLM_DSA;
+}
+
 static int ds4_session_vocab_size(const ds4_session *s) {
-    return s->flint ? s->engine->core.vocab.n_vocab : (int)DS4_N_VOCAB;
+    return s->flint ? s->engine->core.vocab.n_vocab :
+        (int)ds4_engine_shape(s->engine)->n_vocab;
 }
 
 int ds4_session_common_prefix(ds4_session *s, const ds4_tokens *prompt) {
@@ -70886,7 +70759,7 @@ static const float *ds4_session_sampling_logits(ds4_session *s) {
 
 int ds4_session_argmax(ds4_session *s) {
     if (!s || !s->frontier.checkpoint_valid || !s->frontier.logits) return -1;
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_argmax(&view);
     }
@@ -70895,7 +70768,7 @@ int ds4_session_argmax(ds4_session *s) {
 
 int ds4_session_argmax_excluding(ds4_session *s, int excluded_id) {
     if (!s || !s->frontier.checkpoint_valid || !s->frontier.logits) return -1;
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_argmax_excluding(&view, excluded_id);
     }
@@ -70906,15 +70779,7 @@ int ds4_session_argmax_excluding(ds4_session *s, int excluded_id) {
 int ds4_session_argmax_ignoring_eos(ds4_session *s,
                                     ds4_think_mode think_mode) {
     if (!s || !s->frontier.checkpoint_valid || !s->frontier.logits) return -1;
-    if (s->flint) {
-        int best = -1;
-        for (int i = 0; i < ds4_session_vocab_size(s); i++) {
-            if (!ds4_token_is_stop_for_think_mode(s->engine, i, think_mode) &&
-                (best < 0 || s->frontier.logits[i] > s->frontier.logits[best])) best = i;
-        }
-        return best;
-    }
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_argmax_ignoring_eos(&view, think_mode);
     }
@@ -70948,7 +70813,7 @@ int ds4_sample_logits(const float *logits, int n_vocab, float temperature,
 
 int ds4_session_sample(ds4_session *s, float temperature, int top_k, float top_p, float min_p, uint64_t *rng) {
     if (!s || !s->frontier.checkpoint_valid || !s->frontier.logits) return -1;
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_sample(&view, temperature, top_k, top_p, min_p, rng);
     }
@@ -70958,7 +70823,7 @@ int ds4_session_sample(ds4_session *s, float temperature, int top_k, float top_p
 
 int ds4_session_top_logprobs(ds4_session *s, ds4_token_score *out, int k) {
     if (!s || !out || k <= 0) return 0;
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_top_logprobs(&view, out, k);
     }
@@ -70999,7 +70864,7 @@ int ds4_session_top_logprobs(ds4_session *s, ds4_token_score *out, int k) {
 
 int ds4_session_token_logprob(ds4_session *s, int token, ds4_token_score *out) {
     if (!s || !out || token < 0 || token >= ds4_session_vocab_size(s)) return 0;
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_token_logprob(&view, token, out);
     }
@@ -71025,7 +70890,7 @@ int ds4_session_token_logprob(ds4_session *s, int token, ds4_token_score *out) {
 
 int ds4_session_copy_logits(ds4_session *s, float *out, int cap) {
     if (!s || !out || cap < ds4_session_vocab_size(s)) return 0;
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_copy_logits(&view, out);
     }
@@ -71035,7 +70900,7 @@ int ds4_session_copy_logits(ds4_session *s, float *out, int cap) {
 
 int ds4_session_copy_sampling_logits(ds4_session *s, float *out, int cap) {
     if (!s || !s->frontier.checkpoint_valid || !s->frontier.logits || !out || cap < ds4_session_vocab_size(s)) return 0;
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_copy_sampling_logits(&view, out);
     }
@@ -71045,7 +70910,7 @@ int ds4_session_copy_sampling_logits(ds4_session *s, float *out, int cap) {
 
 int ds4_session_set_logits(ds4_session *s, const float *logits, int n) {
     if (!s || !logits || n != ds4_session_vocab_size(s)) return 1;
-    if (s->flint || DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41) {
+    if (ds4_session_native_sampling(s)) {
         const ds4_session_sampling_view view = ds4_session_sampling_view_for(s);
         return ds4_native_session_set_logits(&view, logits);
     }
@@ -78412,6 +78277,17 @@ static int ds4_session_eval_speculative_argmax_impl(
         bool ignore_eos, ds4_think_mode think_mode,
         int *accepted, int accepted_cap,
         char *err, size_t errlen) {
+#ifndef DS4_NO_GPU
+    ds4_session_view native;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &native, &config41, &memory41) &&
+        native.kind != DS4_SESSION_DS41) {
+        return ds4_native_session_speculate(&native, first_token, max_tokens,
+            eos_token, 0.0f, 0, 1.0f, 0.0f, NULL, ignore_eos,
+            accepted, accepted_cap, err, errlen);
+    }
+#endif
     if (s && s->flint) {
         if (ignore_eos) {
             if (!accepted || max_tokens < 1 || accepted_cap < 1) return 0;
@@ -79316,6 +79192,17 @@ int ds4_session_eval_speculative(ds4_session *s, int first_token,
                                  float top_p, float min_p, uint64_t *rng,
                                  int *accepted, int accepted_cap,
                                  char *err, size_t errlen) {
+#ifndef DS4_NO_GPU
+    ds4_session_view native;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &native, &config41, &memory41) &&
+        native.kind != DS4_SESSION_DS41) {
+        return ds4_native_session_speculate(&native, first_token, max_tokens,
+            eos_token, temperature, top_k, top_p, min_p, rng, false,
+            accepted, accepted_cap, err, errlen);
+    }
+#endif
     if (s && s->flint) return flint_decode_packet(s, first_token, max_tokens,
         temperature, top_k, top_p, min_p, rng, accepted, accepted_cap, err, errlen);
 #if defined(DS4_HAS_DEEPSEEK41_GPU)
@@ -79695,6 +79582,16 @@ bool ds4_session_rewind_speculative(ds4_session *s, int pos) {
 }
 
 void ds4_session_rewind(ds4_session *s, int pos) {
+#ifndef DS4_NO_GPU
+    ds4_session_view native;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &native, &config41, &memory41) &&
+        native.kind != DS4_SESSION_DS41) {
+        ds4_native_session_rewind(&native, pos);
+        return;
+    }
+#endif
     if (s && s->flint) {
         if (pos < 0) pos = 0;
         if (pos >= s->frontier.checkpoint.len) return;

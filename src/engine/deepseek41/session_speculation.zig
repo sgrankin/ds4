@@ -33,6 +33,8 @@ pub const Session = struct {
     }
     fn selection(self: *const Session) Selection {
         return .{
+            .family = c.DS4_MODEL_FAMILY_DEEPSEEK41,
+            .flint = null,
             .state = self.coordinator.runtime.state,
             .policy = &self.coordinator.core.overthink,
             .vocab = &self.coordinator.core.vocab,
