@@ -4,11 +4,11 @@ Last updated: 2026-10-23. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
-## Upstream fetch and adaptation proposal — 2026-10-23
+## Upstream adaptation and Metal follow-up — 2026-10-23
 
 Completed `jj git fetch --all-remotes`: upstream main moved from `5379c1c9ac31`
-to `ee7e8405232c`, adding exactly two commits. No upstream implementation has
-been adopted yet; main remains unchanged.
+to `ee7e8405232c`, adding exactly two commits. The user authorized catch-up using
+an adaptation merge. Main remains unchanged.
 
 - `a1012463383a` adds verified, resumable V4.1 Flash **1017 MXFP4** downloads.
   This is another quantization of the existing checkpoint. Our native Metal
@@ -24,9 +24,8 @@ been adopted yet; main remains unchanged.
   CUDA coalescing does not transfer directly to our per-expert gate/up/down
   slabs, and Metal's existing whole-layer preparation serves a different path.
 
-Follow-up discussion: the current recommendation, pending user agreement, is
-an **adaptation merge** instead of rebasing the rewrite. Its first parent is our
-current tip, its second parent is the reviewed upstream tip, and its tree is our
+We use an **adaptation merge** instead of rebasing the rewrite. Its first parent
+is our current tip, its second parent is the reviewed upstream tip, and its tree is our
 implementation plus the selected ports. This preserves published history and
 records the upstream synchronization boundary. The second parent means every
 upstream change through that point has been considered; record significant
@@ -36,14 +35,46 @@ feature changes can still be squashed/rebased. Review sync changes against their
 first parent; continue deliberate ports rather than relying on automatic merges
 to infer C-to-Zig correspondence.
 
-Proposed sequence: preserve the current tip and prepare the sync on a separate
-branch without moving main; cap downloader adaptation/qualification at one hour.
-Then spend a separate
-hour testing file-offset sorting of only the temporary selected-prefill I/O
-task array, preserving routing, allocations, decode and native lookahead.
-Use the installed Q2 model and existing timings/frontier checks before deciding
-whether to adopt that experiment. No coalescing or slab repacking is proposed
-for this first comparison.
+Created the sync on `upstream-sync-ee7e840`, with first parent `9944e786f715`
+(also preserved by `before-upstream-ee7e840`) and second parent `ee7e8405232c`.
+Restored its initial tree from our first parent before deliberately applying
+ports; the first-parent diff was empty at that point. This resolved automatic
+rename/delete conflicts without resurrecting root C files or shell launchers.
+
+Phase 1 completed in about six minutes of its one-hour budget. Added
+`./download-model.nu ds41f-mxfp4`, ten published size/hash identities, native Nu
+space accounting and verified/resumable assembly. The focused Python binary
+assembler remains byte-identical to upstream at its original `gguf-tools/`
+path. Existing Q4 and Flint paths are retained. All five executables build
+without diagnostics; the full model-free host suite passes, including 22
+offline downloader tests, 11 Nu launcher cases and the driver contracts.
+Independent comparison confirmed every new artifact identity against upstream.
+Raw checks remain under `.workspaces/upstream-sync-20261023/`.
+
+The upstream CUDA implementation and its CUDA-only documentation are
+intentionally out of scope for this Metal build. Its transferable idea was
+phase 2: file-offset sorting only in the temporary selected-prefill I/O task
+array, preserving routing, allocations, decode and native lookahead. The
+installed Q2 has uniform IQ2_XXS gate/up and Q2_K down across all 40 layers,
+satisfying the selected-prefill type guard.
+
+Phase 2 completed within its one-hour budget: the implementation was correct
+but its performance benefit was inconclusive, so the runtime knob was removed.
+The automatic-cache diagnostic reached the intended path but the pressure
+guard stopped it cleanly on elevated macOS pressure. Matched 64 GiB-budget
+ordinary appends and 32 GiB-budget forced-128-row appends completed normally.
+Their ABBA mean times favored sorting by 2.13% and 1.72%, respectively, but the
+ordinary candidates matched the first control within 0.1% and the wide-batch
+candidates matched the final control within 0.2%; an unchanged 2K-prefill
+control varied by 2.89%. All compared full 129280-logit frontier rows matched
+exactly. The default larger-cache/128-row regime remains unqualified after the
+pressure stop. This does not reject CUDA's combined sorting/coalescing policy.
+
+Runtime source is restored byte-for-byte to the qualified pre-experiment
+version. Keep the concise [experiment and reproduction patch](../speed-bench/experiments/upstream-selected-read-20261023/README.md)
+for future storage/layout comparisons; raw timings/logits/pressure logs remain
+ignored under `.workspaces/upstream-selected-read-20261023/`. No staging,
+coalescing, slab repacking or new runtime configuration was retained.
 
 Full MXFP4 qualification is separate: the merged file is 467.16 GiB and retained
 shards plus output/reserve require about 935.3 GiB, excluding HF cache extras.

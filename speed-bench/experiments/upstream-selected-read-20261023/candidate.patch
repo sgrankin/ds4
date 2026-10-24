@@ -1,0 +1,28 @@
+diff --git i/src/metal/expert_prefill_load.zig w/src/metal/expert_prefill_load.zig
+index cf048571..84f02b44 100644
+--- i/src/metal/expert_prefill_load.zig
++++ w/src/metal/expert_prefill_load.zig
+@@ -12,6 +12,11 @@ const Entry = Core.Entry;
+ const maximum = Core.experts_max;
+ const max = std.math.maxInt(u64);
+ const present = Core.present;
++
++fn fileOrder(_: void, a: Core.Task, b: Core.Task) bool {
++    return a.offset < b.offset;
++}
++
+ pub fn prepare(
+     ctx: *Context,
+     table: *const Table,
+@@ -136,6 +141,11 @@ pub fn prepare(
+         }
+         var bytes: u64 = 0;
+         var elapsed: f64 = 0;
++        if (present("DS4_METAL_STREAMING_PREFILL_SORT_SELECTED_READS")) {
++            // Adapt upstream ee7e840's CUDA prefill read ordering. Reorder only
++            // I/O tasks; router IDs and per-expert cache destinations stay put.
++            std.mem.sortUnstable(Core.Task, tasks[0..task_count], {}, fileOrder);
++        }
+         ok = IO.readTasks(&ctx.load.pool, tasks, task_count, &bytes, &elapsed);
+         if (ok) IO.noteRead(ctx.cache.state, table.layer, bytes, elapsed);
+         if (timed != 0) timed = IO.now();

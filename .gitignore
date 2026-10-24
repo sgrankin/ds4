@@ -164,6 +164,8 @@ speed-bench/ideas/artifacts/
 !/speed-bench/experiments/*/*.py
 !/speed-bench/experiments/*/*.sh
 !/speed-bench/experiments/*/*.c
+!/speed-bench/experiments/upstream-selected-read-20261023/run.nu
+!/speed-bench/experiments/upstream-selected-read-20261023/candidate.patch
 !/speed-bench/experiments/*/corpus/*.txt
 !/speed-bench/experiments/*/corpus/manifest.json
 !/speed-bench/experiments/zig-qualified-20261022/evidence/*.py

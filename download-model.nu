@@ -158,6 +158,50 @@ def download-split [
     )
 }
 
+def download-mxfp4 [catalog: record, model: record, directory: path, token: string] {
+    let out = $directory | path join $model.file
+    if ($out | path exists) {
+        verify $catalog $model.file $out
+        print $"Already downloaded: ($out)"
+        return
+    }
+    let merger = $ROOT | path join gguf-tools/merge_deepseek41_shards.py
+    if not ($merger | path exists) { fail $"Missing ($merger); use a complete checkout." }
+    let full = $catalog.artifacts | get $model.file
+    let pending = $"($out).assembling"
+    # Retain the input shards and allow an interrupted output to resume. HF
+    # partial caches can require additional space beyond this 1 GiB reserve.
+    mut needed = 1gib | into int
+    let assembled = if ($pending | path exists) { file-size $pending } else { 0 }
+    $needed += ([0 ($full.bytes - $assembled)] | math max)
+    for file in $model.files {
+        let path = $directory | path join $file
+        let present = if ($path | path exists) { file-size $path } else { 0 }
+        $needed += ([0 (($catalog.artifacts | get $file | get bytes) - $present)] | math max)
+    }
+    let location = $directory | path expand --strict
+    let disk = sys disks
+        | where { |disk| $disk.mount == '/' or $location == $disk.mount or ($location | str starts-with $"($disk.mount)/") }
+        | sort-by { |disk| $disk.mount | str length }
+        | last
+    if ($disk.free | into int) < $needed {
+        fail $"Not enough disk space for MXFP4 shards and merged GGUF: need ($needed | into filesize) free. Existing files were kept."
+    }
+    for file in $model.files { download-one $catalog $model $file $directory $token }
+    let shards = $model.files | each { |file| $directory | path join $file }
+    (checked
+        python3
+        $merger
+        --output
+        $out
+        --expected-bytes
+        ($full.bytes | into string)
+        --sha256
+        $full.sha256
+        ...$shards
+    )
+}
+
 def usage [catalog: record] {
     print 'DwarfStar model downloader
 Usage: ./download-model.nu TARGET [--token TOKEN]
@@ -179,7 +223,7 @@ Pinned artifacts also receive size and SHA-256 checks.
 #   ds4f-q2, ds4f-q2-q4, ds4f-q4, ds4f-mxfp4, ds4f-dspark
 #   ds4f-vision-q2, ds4f-vision-q2-q4, ds4f-vision-mxfp4
 #   ds4f-vision-encoder, ds4f-vision-dspark
-#   ds41f-q2, ds41f-q4, ds41f-vision, ds41f-1017-vision
+#   ds41f-q2, ds41f-q4, ds41f-mxfp4, ds41f-vision, ds41f-1017-vision
 #   pro-q2-imatrix, pro-q4-layers00-30, pro-q4-layers31-output, pro-q4-split
 #   glm-unsloth-q4, glm-antirez-iq2xxs, glm-antirez-q2, glm-antirez-q4
 #   glm53-full-q2, glm53-q2, glm53-q4, glm53-fp8, glm53-vision
@@ -213,6 +257,8 @@ def main [target?: string, --token: string] {
     mkdir $directory
     if $selected == $catalog.split.target {
         download-split $catalog $model $directory $auth
+    } else if $selected == ds41f-mxfp4 {
+        download-mxfp4 $catalog $model $directory $auth
     } else {
         let files = $model.files? | default [$model.file]
         for file in $files { download-one $catalog $model $file $directory $auth }

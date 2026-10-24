@@ -87,6 +87,23 @@
       "transport": "hf",
       "description": "DeepSeek V4.1 Flash calibrated Q4, about 483 GiB on disk. Main weights occupy 294 GiB; Engram tables stay on disk. Metal only: use SSD streaming on smaller Macs or full residency on a 512 GB Mac. Downloads two parts and joins them automatically; allow another 37 GiB of free disk space."
     },
+    "ds41f-mxfp4": {
+      "repo": "antirez/deepseek-v4.1-flash-gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-MXFP4-experts.gguf",
+      "files": [
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00001-of-00009.gguf",
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00002-of-00009.gguf",
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00003-of-00009.gguf",
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00004-of-00009.gguf",
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00005-of-00009.gguf",
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00006-of-00009.gguf",
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00007-of-00009.gguf",
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00008-of-00009.gguf",
+        "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00009-of-00009.gguf"
+      ],
+      "transport": "hf",
+      "description": "DeepSeek V4.1 Flash 1017 MXFP4 routed experts, about 467 GiB on disk. Downloads and verifies nine GGUF shards, then restores the original page-aligned GGUF. Retains the shards: allow about 935 GiB for shards plus output, with additional HF cache headroom. Downloads and merging can resume."
+    },
     "ds41f-vision": {
       "repo": "antirez/deepseek-v4.1-flash-gguf",
       "file": "DeepSeek-V4.1-Flash-Vision.gguf",
@@ -273,6 +290,46 @@
     "DeepSeek-V4.1-Flash-Q4.gguf.part2": {
       "bytes": 38596067328,
       "sha256": "7c3e10646c918eeaffbc39305a75ec96117450262c61454ff194cef00d7617f0"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts.gguf": {
+      "bytes": 501609136128,
+      "sha256": "79608a69cd5bb919d8140c37105edc3a33419692d4e6caf4e68c901e4b359141"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00001-of-00009.gguf": {
+      "bytes": 49353784544,
+      "sha256": "636918b09de6253bf41af29f06aac3ceeda220e46379d8a2058ef92c4e433ed8"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00002-of-00009.gguf": {
+      "bytes": 49412635712,
+      "sha256": "b26d3fc1e6ae1be6c52665542f3c1fee6a33791478f26e6cd90b5a75940a9f96"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00003-of-00009.gguf": {
+      "bytes": 49582960352,
+      "sha256": "20c7fe7adb0578336d8a5e5f9eed521aeb88e8c119ba46e0916cdaab28931c80"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00004-of-00009.gguf": {
+      "bytes": 49418206432,
+      "sha256": "67592ba15870c4292a615666adcc2736b53cc345b2cccb1c36710a0a6caf15b4"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00005-of-00009.gguf": {
+      "bytes": 49412829632,
+      "sha256": "ecd04e0aa71bfab8cfe79ea7fef7f35b6be0b6772455139e2081d6ce1dcc18ed"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00006-of-00009.gguf": {
+      "bytes": 49257603776,
+      "sha256": "88214e0cc80fbae578b80c114527e6ce725199684e0b6849475c7d00b3d0f54c"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00007-of-00009.gguf": {
+      "bytes": 2406482112,
+      "sha256": "38939faf3e4258f3ae333f0fa1954ce89515b75ceee90d37bf4ebe5fafe285e6"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00008-of-00009.gguf": {
+      "bytes": 101377628544,
+      "sha256": "a9d1634da2ac57459a64b10b69ddedfadda7dcde0e71ca6e55bea7c293c4a9f0"
+    },
+    "DeepSeek-V4.1-Flash-1017-MXFP4-experts-00009-of-00009.gguf": {
+      "bytes": 101380404256,
+      "sha256": "b9832b355288c005da6ef444d02424464dd27f6ebdefeadbec2244264eb65285"
     },
     "DeepSeek-V4.1-Flash-Vision.gguf": {
       "bytes": 970555552,

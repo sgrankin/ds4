@@ -61,10 +61,13 @@ are not interchangeable with it.
 | --- | ---: | ---: |
 | `ds41f-q2` (1017) | 341 GiB | 152 GiB |
 | `ds41f-q4` | 483 GiB | 294 GiB |
+| `ds41f-mxfp4` (1017) | 467 GiB | 278 GiB |
 
-Both use imatrix-calibrated routed experts and include 189 GiB of Engram
-tables. Engram rows are read directly from the file as needed in every mode,
-never loaded as a resident table. Keep the GGUF on a fast local SSD.
+Q2 and Q4 use imatrix-calibrated routed experts; MXFP4 uses OCP MXFP4 routed
+experts with higher-precision attention, shared experts and output weights.
+All include 189 GiB of Engram tables. Engram rows are read directly from the
+file as needed in every mode, never loaded as a resident table. Keep the GGUF
+on a fast local SSD.
 
 On one 128 GB Mac, use SSD streaming. Leave the expert cache budget automatic:
 
@@ -92,6 +95,34 @@ It does not fit resident TP across two 128 GB Macs. Download it with
 The download comes in two parts; the script joins and verifies them automatically.
 Allow another 37 GiB of free disk space while joining. Rerun the command to resume an
 interrupted download or join.
+
+For the 1017 MXFP4 build, run:
+
+```nu
+./download-model.nu ds41f-mxfp4
+```
+
+The target downloads all nine standard GGUF shards, verifies each size and
+SHA-256, and merges them into `gguf/DeepSeek-V4.1-Flash-1017-MXFP4-experts.gguf`.
+The V4.1 loader needs a single file with page-aligned Engram tables; the merger
+restores the original 16 KiB alignment and verifies the original whole-file
+checksum before updating `ds4flash.gguf`. Q2 and MXFP4 use the same 1017
+checkpoint; Q4 remains the previous release. This adds a download target, not a
+new model architecture.
+
+The shards are kept. Allow about **935 GiB** for shards plus merged output,
+with additional headroom for HF partial caches. The downloader checks remaining
+space before transferring files. Rerun the same command to resume downloads or
+an interrupted `.assembling` file. A verification failure preserves the inputs,
+partial assembly and previous default model.
+
+The shard identities and focused binary merger come from upstream
+[commit a1012463383a](https://github.com/antirez/ds4/commit/a1012463383a09c6d11f8164218e0ee45e267acf).
+The merger is retained unchanged at
+[`gguf-tools/merge_deepseek41_shards.py`](../gguf-tools/merge_deepseek41_shards.py);
+download orchestration remains Nushell. Offline fixtures qualify downloading,
+alignment, checksums and resumption; the full 467 GiB MXFP4 model has not been
+downloaded or run as part of this adaptation.
 
 Large SSD prefills process layers in wide batches. Metal overlaps computation
 with the next layer's reads; CUDA stages experts into its bounded device cache.
