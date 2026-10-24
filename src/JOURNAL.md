@@ -4,6 +4,52 @@ Last updated: 2026-10-23. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## Upstream fetch and adaptation proposal — 2026-10-23
+
+Completed `jj git fetch --all-remotes`: upstream main moved from `5379c1c9ac31`
+to `ee7e8405232c`, adding exactly two commits. No upstream implementation has
+been adopted yet; main remains unchanged.
+
+- `a1012463383a` adds verified, resumable V4.1 Flash **1017 MXFP4** downloads.
+  This is another quantization of the existing checkpoint. Our native Metal
+  runtime already dispatches MXFP4, and our Q2 checksum already matches the
+  upstream correction. Adapt the target/identities into the Nu catalog and
+  downloader, reusing the upstream GGUF shard assembler and small fixture tests.
+  Standard GGUF shards require tensor-directory reconstruction and 16 KiB
+  alignment; the existing raw Q4 part concatenator cannot assemble them.
+- `ee7e8405232c` sorts/coalesces CUDA selected-expert prefill reads, makes CUDA
+  whole-layer prefetch opt-in, and handles publication after upload completion.
+  Its sole shared-engine hunk excludes Apple. Native Metal already publishes
+  after joined reads, but selected-prefill I/O tasks remain in router order.
+  CUDA coalescing does not transfer directly to our per-expert gate/up/down
+  slabs, and Metal's existing whole-layer preparation serves a different path.
+
+Follow-up discussion: the current recommendation, pending user agreement, is
+an **adaptation merge** instead of rebasing the rewrite. Its first parent is our
+current tip, its second parent is the reviewed upstream tip, and its tree is our
+implementation plus the selected ports. This preserves published history and
+records the upstream synchronization boundary. The second parent means every
+upstream change through that point has been considered; record significant
+omissions/deferred work because future incremental reviews will not offer them
+again. Preserve both parents when tidying integration history. Ordinary local
+feature changes can still be squashed/rebased. Review sync changes against their
+first parent; continue deliberate ports rather than relying on automatic merges
+to infer C-to-Zig correspondence.
+
+Proposed sequence: preserve the current tip and prepare the sync on a separate
+branch without moving main; cap downloader adaptation/qualification at one hour.
+Then spend a separate
+hour testing file-offset sorting of only the temporary selected-prefill I/O
+task array, preserving routing, allocations, decode and native lookahead.
+Use the installed Q2 model and existing timings/frontier checks before deciding
+whether to adopt that experiment. No coalescing or slab repacking is proposed
+for this first comparison.
+
+Full MXFP4 qualification is separate: the merged file is 467.16 GiB and retained
+shards plus output/reserve require about 935.3 GiB, excluding HF cache extras.
+The audit found about 458 GiB free on Models, so acquiring it requires more
+storage first. Downloader fixtures can be qualified without those weights.
+
 ## C frontend warning cleanup — 2026-10-23
 
 Baseline `ec1dd845` compiled obsolete C-to-Zig migration facades and fixture-only
