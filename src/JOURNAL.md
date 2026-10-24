@@ -4,6 +4,27 @@ Last updated: 2026-10-23. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## C frontend warning cleanup — 2026-10-23
+
+Baseline `ec1dd845` compiled obsolete C-to-Zig migration facades and fixture-only
+adapters into the production support translation units: 94 unused-function
+warnings in `ds4_server.c` and 74 in `ds4_agent.c`. Removed 118 helpers with no
+runtime or fixture callers. The remaining fixture adapters compile only for
+their existing test macros, including agent fixtures that define only
+`DS4_AGENT_TEST_NO_MAIN`. Removed the old unused attributes; production warning
+flags remain enabled. Runtime bridges, Qwen/GLM rendering and shared prompt
+bytes are retained.
+
+Both support files compile without diagnostics under the production C flags
+plus `-Werror=unused-function`. Before/after object exports and the `__text`,
+`__cstring` and `__const` sections match exactly; this is source/build cleanup,
+not an inference optimization. All five executables build cleanly with
+`nu tools/zig-build ds4 ds4-server ds4-agent ds4-bench ds4-eval`.
+`nu tests/verify.nu` passes, as does the model-free suffix transaction fixture;
+the real-vocabulary live-context fixture also builds. No model job was needed.
+Raw baseline copies, warning logs and checks remain ignored under
+`.workspaces/c-warning-cleanup-20261023/`. Main is unchanged.
+
 ## Flint reasoning visibility fix — 2026-10-23
 
 The user's dsh `openai-responses` profile received no thinking because our server
