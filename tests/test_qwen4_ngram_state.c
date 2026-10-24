@@ -170,7 +170,7 @@ static void check_arena_resize(ds4_engine *engine, const ds4_tokens *prompt) {
     assert(ds4_session_sync(large, prompt, error, sizeof(error)) == 0);
     if (engine->core.backend == DS4_BACKEND_METAL) assert(!large->qwen4.graph.owns_scratch);
     ds4_session_free(large);
-    assert(engine->qwen4_arena_users == 0);
+    assert(engine->session_resources.qwen4_arena_users == 0);
     puts("Qwen shared arena: live growth fallback and idle replacement OK");
 }
 

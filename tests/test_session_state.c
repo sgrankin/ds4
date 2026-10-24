@@ -165,11 +165,11 @@ static void test_session_memory(void) {
     ds4_engine e = { .core.backend = DS4_BACKEND_METAL,
                      .placement_session_count_hint = 4 };
     assert(ds4_engine_glm_graph_budget(&e, 2*gib) == 8*gib);
-    e.glm_session_count = 1;
-    e.glm_session_graph_bytes = 3*gib;
+    e.session_resources.glm_session_count = 1;
+    e.session_resources.glm_session_graph_bytes = 3*gib;
     assert(ds4_engine_glm_graph_budget(&e, 2*gib) == 9*gib);
-    e.glm_session_count = 4;
-    e.glm_session_graph_bytes = 8*gib;
+    e.session_resources.glm_session_count = 4;
+    e.session_resources.glm_session_graph_bytes = 8*gib;
     assert(ds4_engine_glm_graph_budget(&e, 3*gib) == 11*gib);
     e.placement_session_count_hint = 0;
     assert(ds4_engine_glm_graph_budget(&e, 3*gib) == 11*gib);
@@ -183,7 +183,7 @@ static void test_session_memory(void) {
     s->engine = &e;
     s->glm.reserved_graph_bytes = 2*gib;
     ds4_session_free(s);
-    assert(e.glm_session_count == 3 && e.glm_session_graph_bytes == 6*gib);
+    assert(e.session_resources.glm_session_count == 3 && e.session_resources.glm_session_graph_bytes == 6*gib);
     e.core.backend = DS4_BACKEND_METAL;
     e.placement_session_count_hint = 4;
     assert(ds4_engine_glm_graph_budget(&e, 2*gib) == 8*gib);

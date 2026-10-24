@@ -282,7 +282,6 @@ export fn ds4_native_dspark_cycle_run41(args: *const c.ds4_dspark_cycle_args, gr
 // Append to the ONE existing src/engine/graph.zig export facade. The pure owners
 // below do not import this file, so no second graph export object is linked.
 const SessionRuntime = @import("deepseek41/session.zig").Runtime;
-const FrontierOwner = @import("deepseek41/frontier.zig").Frontier;
 
 fn sessionRuntime(state: *c.ds4_session_frontier, graph: *c.ds41_gpu_graph, model: *const c.ds4_model, weights: *const c.ds4_weights, config: *const Config, memory: *c.ds4_engine_memory, inputs: *const c.ds4_engine_memory_inputs, ready: bool, exact: bool) SessionRuntime {
     return .{
@@ -311,34 +310,6 @@ export fn ds4_native_session_eval41(state: *c.ds4_session_frontier, graph: *c.ds
 export fn ds4_native_session_invalidate41(state: *c.ds4_session_frontier, graph: ?*c.ds41_gpu_graph) void {
     @import("deepseek41/session.zig").invalidate(state, graph);
 }
-fn borrowedImages(raw: [*c]const c.ds4_vision_span, count: usize) []const c.ds4_vision_span {
-    return if (count == 0) &.{} else raw[0..count];
-}
-export fn ds4_native_frontier_vision_prefix(raw: *const c.ds4_session_frontier, images: [*c]const c.ds4_vision_span, count: usize) bool {
-    const owner = FrontierOwner{ .state = @constCast(raw) };
-    return owner.visionPrefixMatches(borrowedImages(images, count));
-}
-export fn ds4_native_frontier_vision_state(raw: *const c.ds4_session_frontier, images: [*c]const c.ds4_vision_span, count: usize) bool {
-    const owner = FrontierOwner{ .state = @constCast(raw) };
-    return owner.visionStateMatches(borrowedImages(images, count));
-}
-export fn ds4_native_frontier_vision_fingerprints(raw: *const c.ds4_session_frontier, images: [*c]const c.ds4_vision_span, count: usize) bool {
-    const owner = FrontierOwner{ .state = @constCast(raw) };
-    return owner.visionFingerprintPrefixMatches(borrowedImages(images, count));
-}
-export fn ds4_native_frontier_rebase_vision(raw: *const c.ds4_session_frontier, images: [*c]c.ds4_vision_span, count: usize) bool {
-    const owner = FrontierOwner{ .state = @constCast(raw) };
-    const values: []c.ds4_vision_span = if (count == 0) &.{} else images[0..count];
-    return owner.rebaseVision(values);
-}
-export fn ds4_native_frontier_vision_overlap(raw: *const c.ds4_session_frontier, start: u32, count: u32) bool {
-    const owner = FrontierOwner{ .state = @constCast(raw) };
-    return owner.visionRangeOverlaps(start, count);
-}
-export fn ds4_native_frontier_remember_images(state: *c.ds4_session_frontier) bool {
-    return (FrontierOwner{ .state = state }).rememberImages();
-}
-
 // Existing C fixture helpers delegate these same whole lease actions.
 export fn ds4_native_encoder_acquire41(lease: *c.ds41_encoder_residency, graph: *c.ds41_gpu_graph, model: *const c.ds4_model, weights: *const c.ds4_weights, raw: *const c.ds4_model_config, remaining: u32, cancel: c.ds4_session_cancel_fn, userdata: ?*anyopaque) void {
     const config = configuration(raw);

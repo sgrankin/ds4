@@ -44,7 +44,19 @@ checks, and actual DS41 async loading matches frozen bytes/fresh logits at
 six frontiers with its flag enabled. Slice 7 is complete: native real-file/thread tests, full host suite, DS41/GLM
 state/fresh-logit comparisons and actual profiled 256-token layer preads pass.
 A clearly named C span-selection leaf remains until slice 10, where its native
-replacement is prepared. Slice 8 is active: shared session routing/control. Independent payload-I/O, snapshot-envelope,
+replacement is prepared. Slice 8 is complete: shared native routing, control/frontier and family payload
+selection pass host checks, Qwen public eval_argmax, GLM partial-cancel recovery,
+three-family frozen payload/logit comparisons and all 28 Flint Responses checks.
+Generic common batch policy is an identified bounded follow-up after pools exist;
+model batch arithmetic was already native. Slice 9 is complete: native resource lifetime passes all-family checks, Qwen
+full recovery/batch/arena growth, DS41 exact charge/decharge, all 25 GLM Responses
+checks and fixed-build GLM cancellation recovery. Independent review found and
+fixed a stale pre-fit reserve capture; a focused construction-order probe checks
+fresh admission and exact decharge. Slice 8b is complete: common batch validation/publication and mixed sequencing
+pass Qwen full ordinary/MTP/failure recovery, host tests and all 28 Flint
+Responses checks. A final audit found single-session continuation/rewind policy
+still in C for Qwen/GLM/Flint; a bounded SessionView follow-up will close it.
+Slice 10 is active: engine admission, cache policy and shared model spans. Independent payload-I/O, snapshot-envelope,
 selected-worker and session-control/resource source preparation overlaps; only
 root integrates shared files and schedules guarded model jobs. Frozen baseline
 binaries and original shared sources are under

@@ -152,6 +152,9 @@ pub fn build(b: *std.Build) void {
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/gguf.zig", "gguf_c", api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/input.zig", "gguf_c", api));
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/vision_free_entry.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_entry.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_batch_entry.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_control_entry.zig", "gguf_c", api));
         const route_math = module(b, target, sdk, optimize);
         route_math.root_source_file = b.path("src/resident_route.zig");
         route_math.addImport("gguf_c", api);
@@ -171,6 +174,10 @@ pub fn build(b: *std.Build) void {
     const payload_tensor = nativeObject(b, target, sdk, optimize, "src/engine/payload_tensor_entry.zig", "payload_io_c", payload_api);
     core_module.addObjectFile(payload_file);
     core_module.addObjectFile(payload_tensor);
+    const resource_api = generatedApi(b, target, sdk, optimize, "src/engine/session_resources_api.h");
+    core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_resources_entry.zig", "session_resources_c", resource_api));
+    const pool_api = generatedApi(b, target, sdk, optimize, "src/engine/session_resource_pool_api.h");
+    core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/session_resource_pool_entry.zig", "session_pool_c", pool_api));
     const pagein_api = generatedApi(b, target, sdk, optimize, "src/engine/pagein_api.h");
     core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/pagein_entry.zig", "pagein_c", pagein_api));
     const pagein_module = module(b, target, sdk, .debug);

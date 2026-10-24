@@ -47,6 +47,8 @@
 #include "ds4_session_control.h"
 #include "ds4_session_sampling.h"
 #include "ds4_session_resources.h"
+#include "ds4_session_resource_pool.h"
+#include "engine/session_resources_api.h"
 #include "ds4_engine_tp_state.h"
 #include "ds4_engine_memory.h"
 #include "ds4_engine_core.h"
@@ -69,6 +71,8 @@
 #include "engine/glm53/vision_api.h"
 #include "engine/glm53/session_api.h"
 #include "engine/deepseek41/graph_api.h"
+#include "engine/session_batch_api.h"
+#include "engine/session_api.h"
 /* Private input API keeps the existing engine call sites and C fallback. */
 #define tensor_type ds4_gguf_tensor_type
 #define tensor_nbytes ds4_gguf_tensor_nbytes
@@ -39345,17 +39349,9 @@ struct ds4_engine {
 #ifndef DS4_NO_GPU
     bool shared_prefill_workspace_ready;
     ds4_gpu_graph shared_prefill_workspace;
-    /* Qwen keeps the same idea in its own graph shape; the first session
-     * allocates the arena and hands ownership here. */
-    struct ds4_qwen4_gpu_graph *qwen4_shared_workspace;
-    uint32_t qwen4_arena_users;   /* live sessions borrowing the shared workspace */
     /* batched speculative policy: the drafts' measured acceptance and the
      * wall time of a plain and of a speculative batched cycle */
     ds4_qwen4_batch_policy qwen4_batch;
-    /* Recurrent state for every slot of a layer in one tensor, so a batched
-     * decode can advance all of its rows in a single dispatch instead of one
-     * per session.  Sessions hold views into it and a slot index. */
-    ds4_qwen4_state_pool qwen4_pool;
 #endif
 
     /* Wave-2 multi-GPU placement scaffolding: optional multi-GPU placement
@@ -39375,8 +39371,7 @@ struct ds4_engine {
      * caller that doesn't set the option observe the prior behavior). */
     int            placement_ctx_hint;
     int            placement_session_count_hint;
-    uint32_t       glm_session_count;
-    uint64_t       glm_session_graph_bytes;
+    ds4_session_resource_pool session_resources;
 };
 
 static DS4_MAYBE_UNUSED uint64_t ds4_engine_glm_graph_budget(
@@ -39384,12 +39379,8 @@ static DS4_MAYBE_UNUSED uint64_t ds4_engine_glm_graph_budget(
     /* Metal guards against host capacity, so include live sessions as well as
      * the uncreated slots. Other backends keep their available-memory policy. */
     if (!e || e->core.backend != DS4_BACKEND_METAL) return next_graph_bytes;
-    uint64_t uncreated = e->placement_session_count_hint > 0 &&
-                         (uint32_t)e->placement_session_count_hint > e->glm_session_count ?
-        (uint32_t)e->placement_session_count_hint - e->glm_session_count : 1u;
-    if (next_graph_bytes > (UINT64_MAX - e->glm_session_graph_bytes) / uncreated)
-        return UINT64_MAX;
-    return e->glm_session_graph_bytes + uncreated * next_graph_bytes;
+    return ds4_native_session_graph_budget(&e->session_resources,
+        e->placement_session_count_hint, next_graph_bytes);
 }
 
 static uint64_t ds4_engine_dynamic_expert_cache_bytes(
@@ -52445,15 +52436,15 @@ static void qwen4_graph_free(ds4_qwen4_gpu_graph *g) {
  * pooled and an ad-hoc extra session simply keeps private state. */
 static bool qwen4_state_pool_ensure(ds4_engine *e, uint32_t slots) {
     const ds4_qwen4_config config = qwen4_native_config();
-    return ds4_native_qwen4_pool_ensure(&e->qwen4_pool, &config, slots);
+    return ds4_native_qwen4_pool_ensure(&e->session_resources.qwen4_pool, &config, slots);
 }
 
 static int qwen4_state_pool_take(ds4_engine *e) {
-    return ds4_native_qwen4_pool_take(&e->qwen4_pool);
+    return ds4_native_qwen4_pool_take(&e->session_resources.qwen4_pool);
 }
 
 static void qwen4_state_pool_free(ds4_engine *e) {
-    ds4_native_qwen4_pool_free(&e->qwen4_pool);
+    ds4_native_qwen4_pool_free(&e->session_resources.qwen4_pool);
 }
 
 /* Move the transients out of the first session and into the engine, which
@@ -54350,6 +54341,59 @@ static void ds4_session_glm_note_dense_cache(ds4_session *s,
 }
 #endif
 
+#ifndef DS4_NO_GPU
+/* Capture actual component owners for one synchronous local Metal request.
+ * The caller owns DS41's immutable config/input stack records through nested
+ * model replay callbacks. Fresh resource construction uses this same capture;
+ * family selection never depends on an already-created graph/session handle.
+ * Legacy/reference/distributed and explicit GLM diagnostic policy stays below. */
+static bool ds4_session_native_view(ds4_session *s, ds4_session_view *view,
+        ds4_model_config *config41, ds4_engine_memory_inputs *memory41) {
+    if (!s || !s->engine || s->distributed) return false;
+    ds4_engine *e = s->engine;
+    if (e->core.backend != DS4_BACKEND_METAL || e->tp.active || e->multi_tier ||
+        e->core.distributed.role != DS4_DISTRIBUTED_NONE) return false;
+    *view = (ds4_session_view){
+        .frontier = &s->frontier, .control = &s->control,
+        .core = &e->core, .pending = &s->model_mtp, .transport = &e->tp,
+    };
+    if (e->flint) {
+        view->kind = DS4_SESSION_FLINT;
+        view->flint = &s->flint;
+        return true;
+    }
+#ifdef DS4_HAS_DEEPSEEK41_GPU
+    if (ds4_session_is_ds41(s)) {
+        *config41 = ds41_native_config();
+        *memory41 = ds41_memory_inputs(e);
+        view->kind = DS4_SESSION_DS41;
+        view->ds41 = &s->ds41;
+        view->config41 = config41;
+        view->memory41 = memory41;
+        view->exact41 = ds41_exact_prefill_rows;
+        return true;
+    }
+#endif
+#ifdef DS4_HAS_QWEN4_GPU
+    if (ds4_session_is_qwen4(s)) {
+        view->kind = DS4_SESSION_QWEN;
+        view->qwen = &s->qwen4;
+        return true;
+    }
+#endif
+    if (ds4_model_is_glm53()) {
+        if (s->glm.ready && !glm_native_session_supported(s)) return false;
+        const char *kv_dump = getenv("DS4_GLM_KV_DUMP");
+        if (kv_dump && kv_dump[0]) return false;
+        view->kind = DS4_SESSION_GLM53;
+        view->glm = &s->glm;
+        view->ablate_mask = glm_decode_ablate_mask();
+        return true;
+    }
+    return false;
+}
+#endif
+
 static uint32_t ds4_model_normal_layer_count(void) {
     if (DS4_MODEL_FAMILY != DS4_MODEL_FAMILY_GLM_DSA) {
         return (uint32_t)DS4_N_LAYER;
@@ -55551,6 +55595,13 @@ static bool ds41_native_checkpoint_session(const ds4_session *s) {
 #endif
 
 uint64_t ds4_session_payload_bytes(ds4_session *s) {
+#ifndef DS4_NO_GPU
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &view, &config41, &memory41)) { return ds4_native_session_payload_bytes(&view); }
+#endif
+
     if (s && s->flint) return 0;
 #if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (ds41_native_checkpoint_session(s)) {
@@ -55665,6 +55716,13 @@ static int qwen4_session_load_payload(ds4_session *s, FILE *fp, const uint32_t *
 #endif
 
 int ds4_session_save_payload(ds4_session *s, FILE *fp, char *err, size_t errlen) {
+#ifndef DS4_NO_GPU
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &view, &config41, &memory41)) { return ds4_native_session_payload_save(&view, fp, err, errlen); }
+#endif
+
     if (s && s->flint) { payload_set_err(err, errlen, "Flint GPU-state persistence/suffix reuse is not implemented"); return 1; }
 #if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (ds41_native_checkpoint_session(s)) {
@@ -56669,6 +56727,13 @@ static int ds4_session_load_payload_internal(ds4_session *s, FILE *fp, uint64_t 
 }
 
 int ds4_session_load_payload(ds4_session *s, FILE *fp, uint64_t payload_bytes, char *err, size_t errlen) {
+#ifndef DS4_NO_GPU
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &view, &config41, &memory41)) { return ds4_native_session_payload_load(&view, fp, payload_bytes, err, errlen); }
+#endif
+
     if (s && s->flint) { payload_set_err(err, errlen, "Flint GPU-state persistence/suffix reuse is not implemented"); return 1; }
 #if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (ds41_native_checkpoint_session(s)) {
@@ -58367,7 +58432,8 @@ static bool ds4_session_greedy_splitkv_replay_exact(
 int ds4_session_eval_argmax(ds4_session *s, int token, char *err, size_t errlen) {
     if (!s) return -1;
     if (ds4_engine_overthinking_penalty_enabled(s->engine) ||
-        s->flint || ds4_session_is_cpu(s) || ds4_session_is_glm(s) || ds4_session_is_ds41(s)) {
+        s->flint || ds4_session_is_cpu(s) || ds4_session_is_glm(s) ||
+        ds4_session_is_qwen4(s) || ds4_session_is_ds41(s)) {
         if (ds4_session_eval(s, token, err, errlen) != 0) return -1;
         return ds4_session_argmax(s);
     }
@@ -67174,10 +67240,10 @@ void ds4_engine_close(ds4_engine *e) {
 #ifndef DS4_NO_GPU
 #ifdef DS4_HAS_QWEN4_GPU
     qwen4_state_pool_free(e);
-    if (e->qwen4_shared_workspace) {
-        qwen4_graph_free(e->qwen4_shared_workspace);
-        free(e->qwen4_shared_workspace);
-        e->qwen4_shared_workspace = NULL;
+    if (e->session_resources.qwen4_shared_workspace) {
+        qwen4_graph_free(e->session_resources.qwen4_shared_workspace);
+        free(e->session_resources.qwen4_shared_workspace);
+        e->session_resources.qwen4_shared_workspace = NULL;
     }
 #endif
     if (e->shared_prefill_workspace_ready) {
@@ -67331,8 +67397,81 @@ static int ds4_session_tp_register(ds4_session *s) {
     return 1;
 }
 
+#ifndef DS4_NO_GPU
+/* Engine/cache services retain their existing startup-policy implementation
+ * until its own migration. Numerical graph construction stays native. */
+uint64_t ds4_session_resources_fit_glm_cache(ds4_engine *e, int context) {
+    const uint32_t layers = glm_graph_normal_layer_count();
+    ds4_engine_fit_glm_streaming_budget(e, true, 0, layers - 1u, true, context);
+    return ds4_engine_streaming_transient_guard_bytes(e);
+}
+
+bool ds4_session_resources_admit_glm(const ds4_engine_core *core,
+        uint32_t context, uint32_t last, uint64_t extra) {
+    return glm_graph_memory_guard_slice_with_transient(&core->model,
+        &core->weights, core->ssd_streaming, 0, last, true, true,
+        context, extra, "before GLM graph allocation");
+}
+
+bool ds4_session_resources_seed_glm(const ds4_engine_core *core) {
+    ds4_gpu_graph seed = {0};
+    seed.quality = core->quality;
+    seed.ssd_streaming = core->ssd_streaming;
+    seed.ssd_streaming_cold = core->ssd_streaming_cold;
+    seed.streaming_preload_experts = core->memory.ssd_streaming_preload_experts;
+    return metal_graph_seed_streaming_expert_cache_from_hotlist(&seed,
+        &core->model, &core->weights);
+}
+
+static bool ds4_session_native_resource_engine(const ds4_engine *e) {
+    return e && e->core.backend == DS4_BACKEND_METAL &&
+        !e->multi_tier && !e->tp.active &&
+        e->core.distributed.role == DS4_DISTRIBUTED_NONE &&
+        (e->flint || (e->core.metal_ready &&
+            (DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41 ||
+             ds4_model_is_qwen4() || ds4_model_is_glm53())));
+}
+
+/* sizeof(Session) remains here because its CPU/reference/distributed members
+ * are private conditional C records. This is the sole Session allocation,
+ * not a native-layout mirror. The native owner constructs all resources. */
+static int ds4_session_create_native(ds4_session **out, ds4_engine *e, int context) {
+    ds4_session *s = xcalloc(1, sizeof(*s));
+    s->engine = e;
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (!ds4_session_native_view(s, &view, &config41, &memory41)) {
+        free(s);
+        return -1;
+    }
+    ds4_qwen4_config qwen = {0};
+    if (view.kind == DS4_SESSION_QWEN) qwen = qwen4_native_config();
+    const ds4_session_resource_inputs inputs = {
+        .engine = e, .flint = e->flint, .qwen_config = &qwen,
+        .shape = &g_ds4_shape,
+        .session_count_hint = e->placement_session_count_hint,
+        .streaming_transient_guard_bytes = view.kind == DS4_SESSION_GLM53
+            ? ds4_engine_streaming_transient_guard_bytes(e) : 0,
+    };
+    if (!ds4_native_session_resources_init(&view, &e->session_resources,
+            &inputs, context)) {
+        free(s);
+        return 1;
+    }
+    *out = s;
+    return 0;
+}
+#endif
+
 int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
     if (!out || !e || ctx_size <= 0) return 1;
+#ifndef DS4_NO_GPU
+    if (ds4_session_native_resource_engine(e)) {
+        const int rc = ds4_session_create_native(out, e, ctx_size);
+        if (rc >= 0) return rc;
+    }
+#endif
     if (e->flint) {
         ds4_session *s = xcalloc(1, sizeof(*s));
         s->engine = e;
@@ -67467,17 +67606,17 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
         const uint32_t block_cap = (uint32_t)ctx_size / 4u + 1u;
         const bool share = e->core.share_session_prefill_workspace &&
                            e->core.backend == DS4_BACKEND_METAL;
-        const bool arena_fits = e->qwen4_shared_workspace &&
-            e->qwen4_shared_workspace->cap_tokens >= cap_tokens &&
-            e->qwen4_shared_workspace->n_block_cap >= block_cap;
-        if (share && e->qwen4_shared_workspace && !arena_fits &&
-            e->qwen4_arena_users == 0) {
-            qwen4_graph_free(e->qwen4_shared_workspace);
-            free(e->qwen4_shared_workspace);
-            e->qwen4_shared_workspace = NULL;
+        const bool arena_fits = e->session_resources.qwen4_shared_workspace &&
+            e->session_resources.qwen4_shared_workspace->cap_tokens >= cap_tokens &&
+            e->session_resources.qwen4_shared_workspace->n_block_cap >= block_cap;
+        if (share && e->session_resources.qwen4_shared_workspace && !arena_fits &&
+            e->session_resources.qwen4_arena_users == 0) {
+            qwen4_graph_free(e->session_resources.qwen4_shared_workspace);
+            free(e->session_resources.qwen4_shared_workspace);
+            e->session_resources.qwen4_shared_workspace = NULL;
         }
         const ds4_qwen4_gpu_graph *shared =
-            share && arena_fits ? e->qwen4_shared_workspace : NULL;
+            share && arena_fits ? e->session_resources.qwen4_shared_workspace : NULL;
         s->qwen4.slot = -1;
         if (share && !e->core.glm_mtp &&
             getenv("DS4_QWEN4_NO_STATE_POOL") == NULL &&
@@ -67487,17 +67626,17 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
         }
         if (!qwen4_graph_alloc(&s->qwen4.graph, &e->core.weights, (uint32_t)ctx_size, cap_tokens,
                                e->core.glm_mtp, shared,
-                               s->qwen4.slot >= 0 ? e->qwen4_pool.state : NULL,
-                               s->qwen4.slot >= 0 ? e->qwen4_pool.history : NULL,
+                               s->qwen4.slot >= 0 ? e->session_resources.qwen4_pool.state : NULL,
+                               s->qwen4.slot >= 0 ? e->session_resources.qwen4_pool.history : NULL,
                                s->qwen4.slot >= 0 ? (uint32_t)s->qwen4.slot : 0u)) {
-            if (s->qwen4.slot >= 0) ds4_native_qwen4_pool_release(&e->qwen4_pool, (uint32_t)s->qwen4.slot);
+            if (s->qwen4.slot >= 0) ds4_native_qwen4_pool_release(&e->session_resources.qwen4_pool, (uint32_t)s->qwen4.slot);
             free(s);
             return 1;
         }
-        if (share && !e->qwen4_shared_workspace) {
-            e->qwen4_shared_workspace = xcalloc(1, sizeof(*e->qwen4_shared_workspace));
+        if (share && !e->session_resources.qwen4_shared_workspace) {
+            e->session_resources.qwen4_shared_workspace = xcalloc(1, sizeof(*e->session_resources.qwen4_shared_workspace));
             const uint64_t arena = qwen4_graph_scratch_bytes(&s->qwen4.graph);
-            qwen4_graph_transfer_scratch(e->qwen4_shared_workspace, &s->qwen4.graph);
+            qwen4_graph_transfer_scratch(e->session_resources.qwen4_shared_workspace, &s->qwen4.graph);
             fprintf(stderr,
                     "ds4: shared Qwen3.8 session transients: cap=%u, %.2f GiB once; "
                     "each further session costs its caches only\n",
@@ -67508,13 +67647,13 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
                                        e->core.directional_steering_file,
                                        e->core.directional_steering_attn_scale,
                                        e->core.directional_steering_ffn_scale)) {
-            if (s->qwen4.slot >= 0) ds4_native_qwen4_pool_release(&e->qwen4_pool, (uint32_t)s->qwen4.slot);
+            if (s->qwen4.slot >= 0) ds4_native_qwen4_pool_release(&e->session_resources.qwen4_pool, (uint32_t)s->qwen4.slot);
             qwen4_graph_free(&s->qwen4.graph);
             free(s);
             return 1;
         }
         s->qwen4.ready = true;
-        if (!s->qwen4.graph.owns_scratch) e->qwen4_arena_users++;
+        if (!s->qwen4.graph.owns_scratch) e->session_resources.qwen4_arena_users++;
         s->frontier.prefill_cap = (uint32_t)ctx_size;
         s->frontier.logits = xmalloc((size_t)DS4_N_VOCAB * sizeof(s->frontier.logits[0]));
         s->frontier.sample_probs = xmalloc((size_t)DS4_N_VOCAB * sizeof(s->frontier.sample_probs[0]));
@@ -67656,9 +67795,9 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
             }
         }
         s->glm.reserved_graph_bytes = session_mem.total_bytes;
-        e->glm_session_graph_bytes = glm_graph_saturating_add_u64(
-            e->glm_session_graph_bytes, s->glm.reserved_graph_bytes);
-        e->glm_session_count++;
+        e->session_resources.glm_session_graph_bytes = glm_graph_saturating_add_u64(
+            e->session_resources.glm_session_graph_bytes, s->glm.reserved_graph_bytes);
+        e->session_resources.glm_session_count++;
         if (!ds4_session_tp_register(s)) {
             ds4_session_free(s);
             return 1;
@@ -67841,6 +67980,16 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
 
 void ds4_session_free(ds4_session *s) {
     if (!s) return;
+#ifndef DS4_NO_GPU
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &view, &config41, &memory41)) {
+        ds4_native_session_resources_free(&view, &s->engine->session_resources);
+        free(s);
+        return;
+    }
+#endif
     if (s->flint) {
         flint_session_free(s->flint);
         token_vec_free(&s->frontier.checkpoint);
@@ -67851,8 +68000,8 @@ void ds4_session_free(ds4_session *s) {
         return;
     }
     if (s->glm.reserved_graph_bytes && s->engine) {
-        s->engine->glm_session_graph_bytes -= s->glm.reserved_graph_bytes;
-        s->engine->glm_session_count--;
+        s->engine->session_resources.glm_session_graph_bytes -= s->glm.reserved_graph_bytes;
+        s->engine->session_resources.glm_session_count--;
     }
     if (ds4_session_tp_leader(s) && s->control.tp_session_id != 0 &&
         !ds4_tp_failed(s->engine->tp.ctx)) {
@@ -67897,9 +68046,9 @@ void ds4_session_free(ds4_session *s) {
             }
             free(s->qwen4.verify_logits);
             if (s->qwen4.slot >= 0 && s->engine) {
-                ds4_native_qwen4_pool_release(&s->engine->qwen4_pool, (uint32_t)s->qwen4.slot);
+                ds4_native_qwen4_pool_release(&s->engine->session_resources.qwen4_pool, (uint32_t)s->qwen4.slot);
             }
-            if (s->qwen4.ready && !s->qwen4.graph.owns_scratch && s->engine) s->engine->qwen4_arena_users--;
+            if (s->qwen4.ready && !s->qwen4.graph.owns_scratch && s->engine) s->engine->session_resources.qwen4_arena_users--;
             qwen4_graph_free(&s->qwen4.graph);
         } else
 #endif
@@ -68040,25 +68189,19 @@ int ds4_session_set_directional_steering_ffn(ds4_session *s, float scale) {
 }
 
 void ds4_session_set_progress(ds4_session *s, ds4_session_progress_fn fn, void *ud) {
-    if (!s) return;
-    s->control.progress = fn;
-    s->control.progress_ud = ud;
+    ds4_native_control_progress(s ? &s->control : NULL, fn, ud);
 }
 
 void ds4_session_set_display_progress(ds4_session *s, ds4_session_progress_fn fn, void *ud) {
-    if (!s) return;
-    s->control.display_progress = fn;
-    s->control.display_progress_ud = ud;
+    ds4_native_control_display(s ? &s->control : NULL, fn, ud);
 }
 
 void ds4_session_set_cancel(ds4_session *s, ds4_session_cancel_fn fn, void *ud) {
-    if (!s) return;
-    s->control.cancel = fn;
-    s->control.cancel_ud = ud;
+    ds4_native_control_cancel(s ? &s->control : NULL, fn, ud);
 }
 
 static bool ds4_session_cancelled(ds4_session *s) {
-    return s && s->control.cancel && s->control.cancel(s->control.cancel_ud);
+    return ds4_native_control_cancelled(s ? &s->control : NULL);
 }
 
 static bool ds4_session_cancelled_cb(void *ud) {
@@ -68066,8 +68209,7 @@ static bool ds4_session_cancelled_cb(void *ud) {
 }
 
 void ds4_session_report_progress(ds4_session *s, const char *event, int current, int total) {
-    if (!s || !s->control.progress || !event) return;
-    s->control.progress(s->control.progress_ud, event, current, total);
+    ds4_native_control_report(s ? &s->control : NULL, event, current, total);
 }
 
 static void flint_session_progress(void *context, const char *event, int current, int total) {
@@ -69270,82 +69412,30 @@ bool ds4_session_vision_prefix_matches(
         const ds4_session     *s,
         const ds4_vision_span *images,
         size_t                 image_count) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (!s || (image_count && !images)) return false;
     return ds4_native_frontier_vision_prefix(&s->frontier, images, image_count);
-#else
-    if (!s || (image_count != 0 && !images)) return false;
-    if (!s->frontier.checkpoint_valid) return false;
-    if (s->frontier.checkpoint_image_count > image_count) return false;
-    for (size_t i = 0; i < s->frontier.checkpoint_image_count; i++) {
-        const ds4_vision_identity *old = &s->frontier.checkpoint_images[i];
-        const ds4_vision_span *current = &images[i];
-        if (old->token_start != current->token_start ||
-            old->token_count != current->embedding.token_count ||
-            memcmp(old->fingerprint, current->embedding.fingerprint,
-                   sizeof(old->fingerprint)) != 0) return false;
-    }
-    if (s->frontier.checkpoint_image_count < image_count) {
-        const ds4_vision_span *next = &images[s->frontier.checkpoint_image_count];
-        if (next->token_start < (uint32_t)s->frontier.checkpoint.len) return false;
-    }
-    return true;
-#endif
 }
 
 bool ds4_session_vision_state_matches(
         const ds4_session     *s,
         const ds4_vision_span *images,
         size_t                 image_count) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (!s || (image_count && !images)) return false;
     return ds4_native_frontier_vision_state(&s->frontier, images, image_count);
-#else
-    return s && s->frontier.checkpoint_valid &&
-           s->frontier.checkpoint_image_count == image_count &&
-           ds4_session_vision_prefix_matches(s, images, image_count);
-#endif
 }
 
 bool ds4_session_vision_fingerprint_prefix_matches(
         const ds4_session     *s,
         const ds4_vision_span *images,
         size_t                 image_count) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (!s || (image_count && !images)) return false;
     return ds4_native_frontier_vision_fingerprints(&s->frontier, images, image_count);
-#else
-    if (!s || !s->frontier.checkpoint_valid) return false;
-    if ((image_count != 0 && !images)) return false;
-    if (s->frontier.checkpoint_image_count > image_count) return false;
-    for (size_t i = 0; i < s->frontier.checkpoint_image_count; i++) {
-        const ds4_vision_identity *old = &s->frontier.checkpoint_images[i];
-        const ds4_vision_span *current = &images[i];
-        if (old->token_count != current->embedding.token_count ||
-            memcmp(old->fingerprint, current->embedding.fingerprint,
-                   sizeof(old->fingerprint)) != 0) return false;
-    }
-    return true;
-#endif
 }
 
 bool ds4_session_rebase_vision_state(const ds4_session *s,
                                      ds4_vision_span *images, size_t image_count) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (!s || (image_count && !images)) return false;
     return ds4_native_frontier_rebase_vision(&s->frontier, images, image_count);
-#else
-    if (!s || !s->frontier.checkpoint_valid || (image_count && !images) ||
-        image_count != s->frontier.checkpoint_image_count) return false;
-    for (size_t i = 0; i < image_count; i++) {
-        if (images[i].embedding.token_count != s->frontier.checkpoint_images[i].token_count ||
-            memcmp(images[i].embedding.fingerprint, s->frontier.checkpoint_images[i].fingerprint,
-                   sizeof(images[i].embedding.fingerprint))) return false;
-    }
-    for (size_t i = 0; i < image_count; i++)
-        images[i].token_start = s->frontier.checkpoint_images[i].token_start;
-    return true;
-#endif
 }
 
 bool ds4_session_has_vision_state(const ds4_session *s) {
@@ -69356,43 +69446,11 @@ static bool ds4_session_vision_range_overlaps(
         const ds4_session *s,
         uint32_t           token_start,
         uint32_t           token_count) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
     return ds4_native_frontier_vision_overlap(&s->frontier, token_start, token_count);
-#else
-    const uint64_t range_start = token_start;
-    const uint64_t range_end = range_start + token_count;
-    for (size_t i = 0; i < s->frontier.sync_image_count; i++) {
-        const uint64_t image_start = s->frontier.sync_images[i].token_start;
-        const uint64_t image_end = image_start +
-                                   s->frontier.sync_images[i].embedding.token_count;
-        if (range_start < image_end && image_start < range_end) return true;
-    }
-    return false;
-#endif
 }
 
 static bool ds4_session_store_vision_identities(ds4_session *s) {
-#if defined(DS4_HAS_DEEPSEEK41_GPU)
     return ds4_native_frontier_remember_images(&s->frontier);
-#else
-    ds4_vision_identity *copy = NULL;
-    if (s->frontier.sync_image_count != 0) {
-        if (s->frontier.sync_image_count > SIZE_MAX / sizeof(copy[0])) return false;
-        copy = calloc(s->frontier.sync_image_count, sizeof(copy[0]));
-        if (!copy) return false;
-        for (size_t i = 0; i < s->frontier.sync_image_count; i++) {
-            copy[i].token_start = s->frontier.sync_images[i].token_start;
-            copy[i].token_count = s->frontier.sync_images[i].embedding.token_count;
-            memcpy(copy[i].fingerprint,
-                   s->frontier.sync_images[i].embedding.fingerprint,
-                   sizeof(copy[i].fingerprint));
-        }
-    }
-    free(s->frontier.checkpoint_images);
-    s->frontier.checkpoint_images = copy;
-    s->frontier.checkpoint_image_count = s->frontier.sync_image_count;
-    return true;
-#endif
 }
 
 typedef struct {
@@ -69470,6 +69528,13 @@ static int ds4_session_sync_lockstep(ds4_session *s, const ds4_tokens *prompt,
  * once its matching prefill completes, surfacing worker-side failures
  * here instead of as a gate timeout mid-decode. */
 int ds4_session_sync(ds4_session *s, const ds4_tokens *prompt, char *err, size_t errlen) {
+#ifndef DS4_NO_GPU
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &view, &config41, &memory41)) { return ds4_native_session_sync(&view, prompt, err, errlen); }
+#endif
+
     if (s && s->flint) {
         if (!prompt || prompt->len < 1 || prompt->len > s->frontier.ctx_size) {
             if (err && errlen) snprintf(err, errlen, "invalid Flint prompt length");
@@ -69592,6 +69657,13 @@ int ds4_session_sync_multimodal(
         size_t image_count,
         char *err,
         size_t errlen) {
+#ifndef DS4_NO_GPU
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &view, &config41, &memory41)) { return ds4_native_session_multimodal_sync(&view, prompt, images, image_count, err, errlen); }
+#endif
+
     if (s && s->flint) {
         if (image_count) { payload_set_err(err, errlen, "Flint vision is not implemented"); return 1; }
         return ds4_session_sync(s, prompt, err, errlen);
@@ -72059,6 +72131,13 @@ static int ds4_session_eval_probe_tp(ds4_session *s, int token, bool probe_mtp,
 }
 
 int ds4_session_eval(ds4_session *s, int token, char *err, size_t errlen) {
+#ifndef DS4_NO_GPU
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &view, &config41, &memory41)) { return ds4_native_session_eval(&view, token, err, errlen); }
+#endif
+
     if (s && s->flint) {
         if (!s->frontier.checkpoint_valid || token < 0 || token >= s->engine->core.vocab.n_vocab || s->frontier.checkpoint.len >= s->frontier.ctx_size) {
             if (err && errlen) snprintf(err, errlen, "invalid Flint decode frontier/token");
@@ -72781,7 +72860,7 @@ static bool qwen4_graph_encode_native_session_batch(ds4_decode_item *items, int 
         members[i].row0 = (uint32_t)i;
     }
     return ds4_native_qwen4_batch_encode(members, (uint32_t)count, g,
-        &items[0].session->engine->qwen4_pool, m, w);
+        &items[0].session->engine->session_resources.qwen4_pool, m, w);
 }
 
 static bool qwen4_graph_native_session_batch_check(ds4_decode_item *items, int count,
@@ -72794,7 +72873,7 @@ static bool qwen4_graph_native_session_batch_check(ds4_decode_item *items, int c
             ds4_session_is_cpu(s)) return false;
         members[i] = qwen4_native_batch_member(s);
     }
-    return ds4_native_qwen4_batch_supported(e->qwen4_shared_workspace,
+    return ds4_native_qwen4_batch_supported(e->session_resources.qwen4_shared_workspace,
         members, (uint32_t)count, speculative);
 }
 
@@ -73270,7 +73349,7 @@ static int ds4_sessions_eval_batch_native(
 #ifdef DS4_HAS_QWEN4_METAL
     } else if (native_qwen4) {
         ok = qwen4_graph_encode_native_session_batch(
-                items, count, e->qwen4_shared_workspace, &e->core.model, &e->core.weights);
+                items, count, e->session_resources.qwen4_shared_workspace, &e->core.model, &e->core.weights);
 #endif
     } else if (native_glm53) {
         ok = glm53_graph_encode_native_session_batch(
@@ -73324,7 +73403,7 @@ static int ds4_sessions_eval_batch_native(
         ds4_session *s = items[i].session;
 #ifdef DS4_HAS_QWEN4_METAL
         if (native_qwen4) {
-            ok = ds4_gpu_tensor_read(e->qwen4_shared_workspace->batch_logits,
+            ok = ds4_gpu_tensor_read(e->session_resources.qwen4_shared_workspace->batch_logits,
                                      (uint64_t)i * DS4_N_VOCAB * sizeof(float),
                                      s->frontier.logits,
                                      (uint64_t)DS4_N_VOCAB * sizeof(float)) != 0;
@@ -73685,9 +73764,71 @@ static int ds41_native_spec_batch_gather(ds4_decode_item *, int, ds4_session *,
         int (*)[2], int *, char *, size_t);
 #endif
 
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+/* Capture synchronous actual component views. Model/controller algorithms and
+ * frontier mutation belong to native batch ownership; old families, TP and
+ * explicit expanded-GLM diagnostic paths retain their separate C admission. */
+static bool ds4_sessions_native_batch(ds4_decode_item *items, int count,
+        ds4_session *prefill, const ds4_tokens *prompt, bool speculative,
+        int (*accepted)[2], int *counts, char *error, size_t capacity, int *result) {
+    ds4_session *base = prefill ? prefill :
+        (items && count > 0 ? items[0].session : NULL);
+    if (!base || !base->engine || ds4_session_is_ds41(base)) return false;
+    ds4_session_view prefix;
+    ds4_model_config config;
+    ds4_engine_memory_inputs memory;
+    if (!ds4_session_native_view(base, &prefix, &config, &memory)) return false;
+    if (prefix.kind == DS4_SESSION_GLM53 && prefix.glm->graph.full_kv_cache) return false;
+    if (prefill && !prompt) return false;
+    if (!items && count > 0) return false;
+    ds4_session_view local[64], *views = local;
+    int local_tokens[64], *tokens = local_tokens;
+    if (count > 64) {
+        views = malloc((size_t)count * sizeof(*views));
+        tokens = malloc((size_t)count * sizeof(*tokens));
+        if (!views || !tokens) {
+            free(views); free(tokens);
+            if (error && capacity) snprintf(error, capacity, "unable to allocate decode batch views");
+            *result = 1;
+            return true;
+        }
+    }
+    for (int i = 0; i < count; i++) {
+        ds4_session *session = items[i].session;
+        tokens[i] = items[i].token;
+        if (!session) { memset(&views[i], 0, sizeof(views[i])); continue; }
+        if (ds4_session_is_ds41(session) ||
+            !ds4_session_native_view(session, &views[i], &config, &memory) ||
+            (views[i].kind == DS4_SESSION_GLM53 && views[i].glm->graph.full_kv_cache)) {
+            if (views != local) { free(views); free(tokens); }
+            return false;
+        }
+    }
+    ds4_engine *engine = base->engine;
+    if (prefill) {
+        *result = ds4_native_sessions_mixed_batch(views, tokens, count,
+            &engine->session_resources, &prefix, prompt, error, capacity);
+    } else if (speculative) {
+        *result = ds4_native_sessions_speculative_batch(views, tokens, count,
+            &engine->session_resources, &engine->qwen4_batch,
+            accepted, counts, error, capacity);
+    } else {
+        *result = ds4_native_sessions_eval_batch(views, tokens, count,
+            &engine->session_resources, error, capacity);
+    }
+    if (views != local) { free(views); free(tokens); }
+    return true;
+}
+#endif
+
 int ds4_sessions_eval_batch_speculative_argmax(ds4_decode_item *items, int count,
                                                int (*accepted)[2], int *n_accepted,
                                                char *err, size_t errlen) {
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+    int native_result;
+    if (ds4_sessions_native_batch(items, count, NULL, NULL, true, accepted, n_accepted, err, errlen, &native_result)) return native_result;
+#endif
+
 #if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (items && count > 0 && items[0].session && items[0].session->engine &&
         ds4_session_is_ds41(items[0].session) &&
@@ -73743,7 +73884,7 @@ int ds4_sessions_eval_batch_speculative_argmax(ds4_decode_item *items, int count
             tokens[i] = items[i].token;
         }
         const int rc = ds4_native_qwen4_batch_speculate(runtimes, tokens, (uint32_t)count,
-            e->qwen4_shared_workspace, &e->qwen4_batch, accepted, n_accepted, err, errlen);
+            e->session_resources.qwen4_shared_workspace, &e->qwen4_batch, accepted, n_accepted, err, errlen);
         if (rc != 0) {
             for (int i = 0; i < count; i++) ds4_session_invalidate(items[i].session);
         }
@@ -73854,6 +73995,11 @@ static int ds41_native_spec_batch_gather(ds4_decode_item *items, int count,
 
 int ds4_sessions_eval_batch(ds4_decode_item *items, int count,
                             char *err, size_t errlen) {
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+    int native_result;
+    if (ds4_sessions_native_batch(items, count, NULL, NULL, false, NULL, NULL, err, errlen, &native_result)) return native_result;
+#endif
+
 #if defined(DS4_HAS_DEEPSEEK41_GPU)
     if (items && count > 0 && items[0].session && items[0].session->engine &&
         ds4_session_is_ds41(items[0].session) &&
@@ -73942,6 +74088,11 @@ int ds4_sessions_eval_batch_with_prefill(
         const ds4_tokens *prefill_prompt,
         char *err,
         size_t errlen) {
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+    int native_result;
+    if (ds4_sessions_native_batch(items, count, prefill_session, prefill_prompt, false, NULL, NULL, err, errlen, &native_result)) return native_result;
+#endif
+
     if (prefill_session && prefill_session->flint) {
         if (ds4_session_sync(prefill_session, prefill_prompt, err, errlen)) return 1;
         if (ds4_sessions_eval_batch(items, count, err, errlen)) {
@@ -79302,6 +79453,13 @@ int ds4_session_eval_speculative(ds4_session *s, int first_token,
 }
 
 void ds4_session_invalidate(ds4_session *s) {
+#ifndef DS4_NO_GPU
+    ds4_session_view view;
+    ds4_model_config config41;
+    ds4_engine_memory_inputs memory41;
+    if (ds4_session_native_view(s, &view, &config41, &memory41)) { ds4_native_session_invalidate(&view); return; }
+#endif
+
     if (!s) return;
     if (s->flint) {
         flint_session_reset(s->flint);

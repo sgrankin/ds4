@@ -137,6 +137,65 @@ the focused fixture. Evidence: `slice7-{build,pagein,host}.log`,
 Build/run `pagein-test` / `test-pagein`; enable
 `DS4_METAL_STREAMING_PREFILL_LAYER_PREAD_PROFILE=1` for the model check.
 
+## 8. Common session routing/control — complete
+
+One synchronous borrowed view exposes actual Core, Frontier, Control, Pending
+and selected model state. It is not a second Session layout. Native code owns
+ordinary sync/eval, image validation/publication, invalidation, callback scopes
+and family payload selection. Common frontier/image helpers and control exports
+are cold; CPU fixtures cannot extract the model controllers.
+
+Full host checks pass. Qwen public `eval_argmax` now uses its actual graph (the
+old branch omitted Qwen); four tokens and every vocabulary logit match separate
+`eval`+`argmax`. GLM cancellation at 17/19 rejects partial state and rebuilds
+154,880 logits exactly. Qwen/GLM/DS41 frozen payload and fresh-logit comparisons
+pass, as do all 28 real Flint Responses protocol/quality checks. Image-conditioned
+assembly remains part of combined qualification. Evidence: `slice8-build-final.log`,
+`slice8-host.log`, `slice8-qwen-argmax.*`, `slice8-glm-cancel.*`,
+`slice8-{qwen,glm,ds41}-payload/` and `slice8-flint-responses/`.
+
+An audit found common batch validation/eligibility/publication still in C for
+Qwen/GLM/Flint. Its model arithmetic is already native; a separate bounded
+follow-up will move that policy after the actual pool exists (slice 9).
+
+## 9. Session resources — complete
+
+Native resource transactions compose existing model allocators and own common
+host buffers, Qwen scratch sharing/pool slots and GLM live reservations. One
+actual engine Pool replaces the old scattered members. C keeps only allocation
+of its private conditional Session shell, address capture and publication.
+
+Qwen's full n-gram/error recovery, ordinary/MTP batches and shared arena growth
+pass. DS41 repeated small/wide allocations charge and release their exact sizes,
+including failed-start cleanup. All 25 GLM Responses checks and a Flint short
+prefill/decode/teardown pass. Independent review caught a stale transient reserve
+captured before first-session cache fitting; the fix uses the fresh post-fit
+value. A CPU probe verifies reserve 99→7 reaches admission and reservation16
+returns to zero, and the corrected live GLM cancellation/recovery plus host
+suite pass. Final combined serving checks will run on immutable final binaries.
+Evidence: `slice9-build-fixed.log`, `slice9-host-fixed.log`, `slice9-qwen-state.*`,
+`slice9-ds41-resources.*`, `slice9-glm-responses/`, `slice9-flint.*`,
+`slice9-order-probe.log` and `slice9-glm-fixed.*`.
+
+A bounded 8b follows now that the shared Pool exists, closing the discovered
+common batch-policy gap before engine startup/lifecycle integration.
+
+## 8b. Common batch policy — complete
+
+Native shared batching owns membership/token/context/duplicate validation,
+optimized model dispatch, logits/frontier publication, serialized fallbacks,
+mixed-prefill order and all-member failure invalidation. It borrows the same
+SessionView and actual Pool/QwenPolicy. DS41 retains its existing native batch
+coordinator; numerical model controllers and cache policy are unchanged.
+
+Independent review restored the old zero-rotary guard for GLM's dense batch
+admission. Host checks, Qwen full ordinary/MTP/rejection/error-recovery/arena
+fixture and all 28 Flint Responses checks pass. Resident GLM batched numerical
+execution remains unmeasured with this SSD-host setup. Evidence:
+`slice8b-{build-final,host}.log`, `slice8b-qwen.*`, `slice8b-flint-responses/`
+and guards. An additional bounded continuation/rewind follow-up closes the
+small remaining common C policy found in final routing review.
+
 Later slices remain pending integration/qualification. Payload I/O,
 snapshot-envelope, selected-worker and common-session preparations are retained
 separately until their preceding slices qualify.
