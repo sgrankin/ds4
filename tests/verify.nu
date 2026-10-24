@@ -16,6 +16,7 @@ const HOST = [
     [ssd-test, [test-ssd-cache]]
     [prompt-prefix-test, [test-prompt-prefix]]
     [session-state-test, [test-session-state]]
+    [steering-bank-test, [test-steering-banks]]
     [payload-io-test, [test-payload-io]]
     [session-snapshot-test, [test-session-snapshot]]
     [stream-selected-test, [test-stream-selected]]

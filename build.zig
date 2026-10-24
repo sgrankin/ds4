@@ -177,6 +177,10 @@ pub fn build(b: *std.Build) void {
     }
     // Keep FILE-only payload exports cold so host fixtures do not extract GPU code.
     core_module.addObjectFile(object(b, target, sdk, clang, "src/engine/steering_entry.zig", "steering-entry", optimize, &.{}));
+    const steering_bank_module = module(b, target, sdk, .debug);
+    steering_bank_module.root_source_file = b.path("src/engine/steering.zig");
+    const steering_bank_test = b.addTest(.{ .name = "test-steering-banks", .root_module = steering_bank_module });
+    b.step("steering-bank-test", "Build host-only steering bank normalization checks").dependOn(&b.addInstallArtifact(steering_bank_test, .{}).step);
     const payload_api = generatedApi(b, target, sdk, optimize, "src/engine/payload_io.h");
     const payload_file = nativeObject(b, target, sdk, optimize, "src/engine/payload_io_entry.zig", "payload_io_c", payload_api);
     const payload_tensor = nativeObject(b, target, sdk, optimize, "src/engine/payload_tensor_entry.zig", "payload_io_c", payload_api);
@@ -627,8 +631,6 @@ pub fn build(b: *std.Build) void {
     inline for (.{
         .{ "dense-mpp-test", "test-metal-dense-mpp", "tests/test_metal_dense_mpp.c" },
         .{ "shared-bf16-test", "test-metal-shared-bf16", "tests/test_metal_shared_bf16.c" },
-        .{ "steering-hc-test", "test-metal-steering-hc", "tests/test_metal_steering_hc.c" },
-        .{ "session-steering-test", "test-session-steering", "tests/test_session_steering.c" },
         .{ "ssd-experts-test", "test-metal-ssd-experts", "tests/test_metal_ssd_experts.c" },
         .{ "command-memory-test", "test-metal-command-memory", "tests/test_metal_command_memory.c" },
         .{ "qwen-kernels-test", "test-qwen4-kernels", "tests/test_qwen4_kernels.c" },
@@ -638,6 +640,21 @@ pub fn build(b: *std.Build) void {
         const frontend = object(b, target, sdk, clang, fixture[2], fixture[1], optimize, test_flags);
         const test_exe = executable(b, target, sdk, core, null, null, fixture[1], frontend, optimize);
         b.step(fixture[0], "Build the existing production-linked GPU fixture (run separately)").dependOn(&b.addInstallArtifact(test_exe, .{}).step);
+    }
+    inline for (.{
+        .{ "steering-hc-test", "test-metal-steering-hc", "tests/test_metal_steering_hc.zig", "tests/steering_gpu_api.h", "steering_gpu_c" },
+        .{ "session-steering-test", "test-session-steering", "tests/test_session_steering.zig", "src/ds4.h", "steering_c" },
+    }) |fixture| {
+        const root = module(b, target, sdk, optimize);
+        root.root_source_file = b.path(fixture[2]);
+        root.addImport(fixture[4], generatedApi(b, target, sdk, optimize, fixture[3]));
+        root.linkLibrary(core);
+        root.linkFramework("Foundation", .{});
+        root.linkFramework("Metal", .{});
+        root.linkSystemLibrary("icucore", .{});
+        const fixture_exe = b.addExecutable(.{ .name = fixture[1], .root_module = root });
+        b.step(fixture[0], "Build the native Zig steering qualification fixture (run separately)")
+            .dependOn(&b.addInstallArtifact(fixture_exe, .{}).step);
     }
     const vision_encoder_step = b.step("vision-encoder-test", "Build existing native Qwen/GLM encoder fixtures");
     inline for (.{

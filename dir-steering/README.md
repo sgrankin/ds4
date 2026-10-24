@@ -15,7 +15,11 @@ Given a bank row `v`, residual `R` and configured strength `s`:
 | `add` | `R += (s / L) * v` | Divided across `L` nonzero bank rows |
 
 Project mode normalizes every nonzero row at loading. Positive strength
-suppresses that direction; negative strength amplifies it. Add mode preserves
+suppresses the component **already present** along that axis; negative strength
+amplifies the existing component. Replacing `d` with `-d` leaves projection
+unchanged. Whether removing or amplifying it encourages the learned target
+style is empirical; projection does not carry addition's target orientation.
+Add mode preserves
 learned vector magnitude. With a target-minus-control bank, positive additive
 strength moves toward the target residual; negative strength moves away.
 
@@ -135,6 +139,15 @@ The sweep prints outputs for inspection. Use the
 for latency and full-distribution comparisons. No current strength is a
 universal recommendation: layer selection, capture component and mode change
 what that number means.
+
+An initial [held-out behavioral check](../speed-bench/experiments/steering-behavior-20261024/README.md)
+found useful Flint points with the four-pair succinct/verbose bank: project
+`+0.1` shortened all four final answers (16% fewer words in total), add `+1`
+shortened all four (36% fewer), and add `-1` lengthened all four (25% more).
+The answers stayed coherent and retained the key facts; extra numerical errors
+remained in the lightning example, including in the baseline. This is four
+greedy prompts, not a preset or a universal strength recommendation. Larger
+amplification/addition points collapsed into repetition.
 
 ## Combining banks offline
 

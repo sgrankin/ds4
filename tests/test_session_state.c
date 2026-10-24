@@ -841,19 +841,7 @@ static void test_session_sampling_families(void) {
     g_ds4_shape = saved;
 }
 
-static void test_steering_banks(void) {
-    float project[] = {3, 4, 0, 0, 0, -2};
-    assert(ds4_steering_prepare_f32(project, 3, 2, DS4_STEERING_PROJECT) == 2);
-    assert(fabsf(project[0] - 0.6f) < 1e-6f && fabsf(project[1] - 0.8f) < 1e-6f);
-    assert(project[2] == 0 && project[3] == 0 && project[4] == 0 && project[5] == -1);
-    float add[] = {3, 4, 0, 0, 0, -2};
-    const float original[] = {3, 4, 0, 0, 0, -2};
-    assert(ds4_steering_prepare_f32(add, 3, 2, DS4_STEERING_ADD) == 2);
-    assert(!memcmp(add, original, sizeof(add)));
-}
-
 int main(void) {
-    test_steering_banks();
     test_retained_model_identities();
     test_session_sampling_families();
     test_session_sampling_policy();

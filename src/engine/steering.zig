@@ -27,3 +27,16 @@ pub fn prepare(values: []f32, width: usize, mode: c_int) ?u32 {
     }
     return selected;
 }
+
+test "project banks normalize selected rows and additive banks preserve magnitude" {
+    const original = [_]f32{ 3, 4, 0, 0, 0, -2 };
+    var project = original;
+    try std.testing.expectEqual(@as(u32, 2), prepare(&project, 2, 0).?);
+    try std.testing.expectApproxEqAbs(@as(f32, 0.6), project[0], 1e-6);
+    try std.testing.expectApproxEqAbs(@as(f32, 0.8), project[1], 1e-6);
+    try std.testing.expectEqualSlices(f32, &.{ 0, 0, 0, -1 }, project[2..]);
+
+    var add = original;
+    try std.testing.expectEqual(@as(u32, 2), prepare(&add, 2, 1).?);
+    try std.testing.expectEqualSlices(u8, std.mem.sliceAsBytes(&original), std.mem.sliceAsBytes(&add));
+}

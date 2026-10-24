@@ -4,7 +4,59 @@ Last updated: 2026-10-24. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
-## Completed — residual steering, 2026-10-24
+## Completed follow-up — behavioral testing and Zig fixtures, 2026-10-24
+
+The user asked for actual behavioral evidence and consistent Zig tests after
+pointing out that changing logits did not prove useful steering. This bounded
+follow-up generates and manually inspects answers to four held-out neutral
+questions: refrigerator, lightning, RAM/SSD and proportional recipe arithmetic.
+Each condition uses independent stateless Responses requests and greedy decoding.
+Runtime is the existing private b7679480 build; no inference math changed here.
+
+With the existing small residual banks, additive strength +1 gives:
+
+| Model | Final answer words, zero → add+1 | Observed effect |
+| --- | ---: | --- |
+| Flint | 660 → 420 (-36.4%) | All four shorter, complete, coherent and core-correct |
+| DS41 | 787 → 467 (-40.7%) | All four shorter, complete, coherent and core-correct |
+| Qwen | 1361 → 582 (-57.2%) | All four shorter, complete, coherent and core-correct |
+
+Flint additive -1 makes all four longer (+25%), showing bidirectional style
+control. Projection +0.1 also compresses Flint (-16.1%) and DS41 (-15.5%) totals,
+but its per-prompt direction is not uniformly consistent on DS41. Projection
+is sign-invariant in its axis and changes the existing component; do not infer
+the desired behavior from target-minus-control orientation as with addition.
+
+These are four-question demonstrations, not broad quality or refusal-ablation
+validation. Flint retains incorrect extra numerical claims in lightning answers.
+Strong settings cause repetition/caps; coherent verbose output can also hit a
+cap and must not be confused with collapse or credited as succinctness.
+Flint's baseline needed 2048 tokens; Qwen's two capped baseline cases were
+extended 512→1024 and exactly preserve their original text prefixes. Comparisons
+use natural completed answers, with changed ceilings explicitly documented.
+
+GLM's larger baseline timed out at 240seconds (~0.66t/s). A bounded arithmetic-only
+check at 128 tokens gives correct but capped zero/project +0.1 answers, while
+add +1 completes in 24 words/38 tokens with correct 75×10=750g. This is one-case
+completion evidence, not a general GLM style/length percentage.
+
+The two new standalone steering fixtures now use handwritten Zig; C predecessors
+are removed. Public ABI coverage remains through generated C declarations.
+Bank preparation checks moved from the private C session fixture to a Zig unit
+test beside the pure helper. The converted GPU oracle passes 342 cases plus 18
+norm checks (max nonzero gap 4.77e-7, zero bit-exact); converted real-model session
+checks pass Flint in both modes with independent live state, batches and exact
+full eight-token packet replay. Pure bank unit 1/1 and full host/server/agent/recovery/
+script suites pass, without build warnings. Prior four-family C fixture results
+remain earlier evidence; this conversion re-ran its real-model checks on Flint.
+Older tests that directly exercise retained private C stay with that owner.
+
+[Full behavioral results and reproduction](../speed-bench/experiments/steering-behavior-20261024/README.md).
+Raw requests/answers/logs and useful workspaces remain ignored under
+`.workspaces/steering-behavior-20261024/`. Main is unchanged; this is a local
+validation/test-language follow-up, with the production executables unchanged.
+
+## Runtime steering checkpoint — 2026-10-24
 
 Private jj change `sysvyppyvons` adds selectable **project** (default) and **add**
 through `--dir-steering-mode` in CLI/agent/server/bench and engine options. The

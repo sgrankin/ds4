@@ -85,9 +85,12 @@ See the [qualification report](../experiments/steering-20261024/README.md).
   results local and report variation; no universal zero-cost claim. One small
   Flint additive condition-hoist follow-up closes optimization for this slice.
 - Reuse the extractor, layer masks and Nu strength sweep for practical banks.
-  These tiny contrastive banks establish functionality, not useful refusal/style
-  control. Held-out behavioral/quality curves are a later experiment with a
-  chosen behavior objective, not a requirement to perfect this implementation.
+  The [held-out behavior follow-up](../experiments/steering-behavior-20261024/README.md)
+  now demonstrates useful verbosity control on four QA prompts for Flint, DS41
+  and Qwen, plus one bounded GLM arithmetic example. It records factual extras,
+  caps/repetition and practical/overdriven strengths separately. Refusal, coding/
+  tool-use and long-context quality remain unqualified. The new steering fixtures
+  and pure bank unit test now use Zig; host/GPU/session qualification passes.
 - Keep automatic KV SSD/suffix reuse excluded when a bank is loaded, including
   zero preload; expert-weight SSD streaming remains available. Cache identity
   and restoration compatibility require a separate concrete experiment.
