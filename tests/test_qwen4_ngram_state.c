@@ -29,8 +29,8 @@ static void check_batch(ds4_engine *engine, const ds4_tokens *prompt, bool specu
         if (speculative && step % 4 != 3) {
             if (step == 2) {
                 /* Counting has not finished: force rejection of an EOS draft. */
-                assert(items[0].session->glm_mtp_have);
-                items[0].session->glm_mtp_draft = ds4_token_eos(engine);
+                assert(items[0].session->model_mtp.have);
+                items[0].session->model_mtp.draft = ds4_token_eos(engine);
             }
             assert(ds4_sessions_eval_batch_speculative_argmax(items, N, accepted,
                         counts, error, sizeof(error)) == 0);
@@ -43,20 +43,20 @@ static void check_batch(ds4_engine *engine, const ds4_tokens *prompt, bool specu
                 for (int j = 0; j < counts[i]; j++)
                     assert(s->frontier.checkpoint.v[frontier[i].len + j] == accepted[i][j]);
                 if (engine->core.backend == DS4_BACKEND_METAL) {
-                    assert(!s->qwen4_graph.snap0_valid && !s->qwen4_graph.snap2_valid);
-                    if (counts[i] == 1) assert(!s->qwen4_graph.snap_valid);
+                    assert(!s->qwen4.graph.snap0_valid && !s->qwen4.graph.snap2_valid);
+                    if (counts[i] == 1) assert(!s->qwen4.graph.snap_valid);
                 }
             }
         } else {
             assert(ds4_sessions_eval_batch(items, N, error, sizeof(error)) == 0);
             for (int i = 0; i < N; i++) {
                 assert(items[i].session->frontier.checkpoint.len == frontier[i].len + 1);
-                assert(!items[i].session->glm_mtp_have);
+                assert(!items[i].session->model_mtp.have);
             }
         }
         for (int i = 0; i < N; i++) {
             ds4_session *s = items[i].session;
-            assert(s->frontier.checkpoint_valid && s->qwen4_graph.pos == (uint32_t)s->frontier.checkpoint.len);
+            assert(s->frontier.checkpoint_valid && s->qwen4.graph.pos == (uint32_t)s->frontier.checkpoint.len);
             for (uint32_t j = 0; j < DS4_N_VOCAB; j++) assert(isfinite(s->frontier.logits[j]));
         }
         if (step == 1) {
@@ -69,8 +69,8 @@ static void check_batch(ds4_engine *engine, const ds4_tokens *prompt, bool specu
                 if (counts[i] != 2) continue;
                 int pos = s->frontier.checkpoint.len - 1;
                 ds4_session_rewind(s, pos);
-                assert(s->frontier.checkpoint_valid && s->qwen4_graph.pos == (uint32_t)pos);
-                assert(!memcmp(s->frontier.logits, s->qwen4_verify_logits, DS4_N_VOCAB * sizeof(float)));
+                assert(s->frontier.checkpoint_valid && s->qwen4.graph.pos == (uint32_t)pos);
+                assert(!memcmp(s->frontier.logits, s->qwen4.verify_logits, DS4_N_VOCAB * sizeof(float)));
             }
         }
     }
@@ -131,14 +131,14 @@ static void check_arena_resize(ds4_engine *engine, const ds4_tokens *prompt) {
     assert(ds4_session_create(&large, engine, 512) == 0);
     assert(ds4_session_sync(large, prompt, error, sizeof(error)) == 0);
     if (engine->core.backend == DS4_BACKEND_METAL) {
-        assert(!small->qwen4_graph.owns_scratch);
-        assert(large->qwen4_graph.owns_scratch);
+        assert(!small->qwen4.graph.owns_scratch);
+        assert(large->qwen4.graph.owns_scratch);
     }
     ds4_session_free(large);
     ds4_session_free(small);
     assert(ds4_session_create(&large, engine, 1024) == 0);
     assert(ds4_session_sync(large, prompt, error, sizeof(error)) == 0);
-    if (engine->core.backend == DS4_BACKEND_METAL) assert(!large->qwen4_graph.owns_scratch);
+    if (engine->core.backend == DS4_BACKEND_METAL) assert(!large->qwen4.graph.owns_scratch);
     ds4_session_free(large);
     assert(engine->qwen4_arena_users == 0);
     puts("Qwen shared arena: live growth fallback and idle replacement OK");
@@ -176,7 +176,7 @@ int main(int argc, char **argv) {
         if (mode == 2) {
             assert(ds4_session_eval_speculative_argmax(live, ds4_session_argmax(live),
                 3, -1, accepted, 3, error, sizeof(error)) == 1);
-            assert(live->glm_mtp_have);
+            assert(live->model_mtp.have);
         }
         const ds4_tokens *current = ds4_session_tokens(live);
         for (int i = 0; i < current->len; i++) ds4_tokens_push(&frontier, current->v[i]);

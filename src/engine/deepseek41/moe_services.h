@@ -13,15 +13,6 @@ typedef struct {
     bool oracle_deferred;
 } ds4_native_moe_services;
 
-/* Existing single-worker service, using its actual job record. Start borrows
- * model/layer/tensor until finish. Finish joins, clears active, publishes the
- * worker result/IDs and installs the selected override only on success. */
-bool ds4_native_moe_selected_start(metal_graph_selected_async_load *job,
-    ds4_gpu_tensor *selected, const ds4_model *model,
-    const ds4_layer_weights *layer, uint32_t layer_index, uint64_t event,
-    uint64_t gate_expert_bytes, uint64_t down_expert_bytes);
-bool ds4_native_moe_selected_finish(metal_graph_selected_async_load *job);
-
 /* Diagnostic actions only. Deferred capture preserves the GPU-selected tape
  * before returning checked recorded IDs. Observe checks/records native IDs and
  * writes the optional cache snapshot, retaining existing fatal diagnostics. */

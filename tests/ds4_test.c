@@ -5597,6 +5597,121 @@ cleanup:
     ds4_tokens_free(&pattern);
 }
 
+typedef struct {
+    ds4_session *session;
+    bool immediate;
+    bool reached_partial;
+    int position;
+} test_glm_prefill_cancel;
+
+static void test_glm_partial_checkpoint_rejected(ds4_session *session) {
+    char err[192] = {0};
+    uint64_t rng = 1;
+    ds4_session_snapshot snapshot = {0};
+    ds4_session_payload_file payload = {0};
+    TEST_ASSERT(!ds4_session_checkpoint_valid(session));
+    TEST_ASSERT(ds4_session_argmax(session) == -1);
+    TEST_ASSERT(ds4_session_sample(session, 0.0f, 1, 1.0f, 0.0f, &rng) == -1);
+    TEST_ASSERT(ds4_session_payload_bytes(session) == 0);
+    TEST_ASSERT(ds4_session_save_snapshot(session, &snapshot, err, sizeof(err)) != 0);
+    TEST_ASSERT(ds4_session_stage_payload(session, &payload, err, sizeof(err)) != 0);
+    ds4_session_snapshot_free(&snapshot);
+    ds4_session_payload_file_free(&payload);
+}
+
+static void test_glm_cancel_prefill_progress(void *ud, const char *event,
+                                            int current, int total) {
+    test_glm_prefill_cancel *p = ud;
+    if (strcmp(event, "prefill_chunk") || current <= 0 || current >= total ||
+        p->reached_partial) return;
+    p->reached_partial = true;
+    p->position = current;
+    test_glm_partial_checkpoint_rejected(p->session);
+}
+
+static bool test_glm_cancel_partial_prefill(void *ud) {
+    const test_glm_prefill_cancel *p = ud;
+    return p->immediate || p->reached_partial;
+}
+
+/* GLM omits the head on nonfinal chunks. Unlike Qwen's chunk checkpoints,
+ * these partial frontiers are deliberately unavailable until sync rebuilds. */
+static void test_glm53_prefill_cancel(void) {
+    ds4_engine *engine = test_get_engine(false);
+    if (!engine || !ds4_engine_is_glm53(engine)) {
+        puts("glm53-prefill-cancel: GLM 5.3 model required, skipped");
+        return;
+    }
+    char *saved_min = test_save_env("DS4_GLM_RESUME_PREFILL_MIN");
+    setenv("DS4_GLM_RESUME_PREFILL_MIN", "8", 1);
+    ds4_session *live = NULL, *cold = NULL;
+    ds4_tokens pattern = {0}, prompt = {0};
+    float *live_logits = NULL, *cold_logits = NULL;
+    char err[192] = {0};
+    const int base_len = 16, final_len = base_len + 3;
+    ds4_tokenize_text(engine, " partial prefill must not publish stale logits", &pattern);
+    TEST_ASSERT(pattern.len > 0);
+    if (!pattern.len) goto cleanup;
+    ds4_chat_begin(engine, &prompt);
+    while (prompt.len < final_len)
+        ds4_tokens_push(&prompt, pattern.v[prompt.len % pattern.len]);
+    TEST_ASSERT(ds4_session_create(&live, engine, 256) == 0);
+    TEST_ASSERT(ds4_session_create(&cold, engine, 256) == 0);
+    if (!live || !cold) goto cleanup;
+    ds4_tokens prefix = prompt;
+    prefix.len = base_len;
+    if (ds4_session_sync(live, &prefix, err, sizeof(err))) {
+        TEST_ASSERT(false);
+        goto cleanup;
+    }
+    const int original_next = ds4_session_argmax(live);
+    TEST_ASSERT(original_next >= 0);
+    test_glm_prefill_cancel cancel = {.session = live, .immediate = true};
+    ds4_session_set_cancel(live, test_glm_cancel_partial_prefill, &cancel);
+    TEST_ASSERT(ds4_session_sync(live, &prompt, err, sizeof(err)) == DS4_SESSION_SYNC_INTERRUPTED);
+    TEST_ASSERT(ds4_session_checkpoint_valid(live));
+    TEST_ASSERT(ds4_session_pos(live) == base_len);
+    TEST_ASSERT(ds4_session_argmax(live) == original_next);
+
+    cancel.immediate = false;
+    ds4_session_set_progress(live, test_glm_cancel_prefill_progress, &cancel);
+    TEST_ASSERT(ds4_session_sync(live, &prompt, err, sizeof(err)) == DS4_SESSION_SYNC_INTERRUPTED);
+    ds4_session_set_cancel(live, NULL, NULL);
+    ds4_session_set_progress(live, NULL, NULL);
+    TEST_ASSERT(cancel.reached_partial && cancel.position == base_len + 1);
+    TEST_ASSERT(ds4_session_pos(live) == base_len + 1);
+    test_glm_partial_checkpoint_rejected(live);
+
+    TEST_ASSERT(ds4_session_sync(live, &prompt, err, sizeof(err)) == 0);
+    TEST_ASSERT(ds4_session_sync(cold, &prompt, err, sizeof(err)) == 0);
+    TEST_ASSERT(ds4_session_checkpoint_valid(live));
+    TEST_ASSERT(ds4_session_pos(live) == final_len);
+    const int vocab = ds4_engine_vocab_size(engine);
+    live_logits = malloc((size_t)vocab * sizeof(float));
+    cold_logits = malloc((size_t)vocab * sizeof(float));
+    TEST_ASSERT(live_logits && cold_logits);
+    if (live_logits && cold_logits) {
+        const int got = ds4_session_copy_logits(live, live_logits, vocab);
+        const int want = ds4_session_copy_logits(cold, cold_logits, vocab);
+        TEST_ASSERT(got == vocab && want == vocab);
+        if (got == vocab && want == vocab) {
+            const bool exact = memcmp(live_logits, cold_logits,
+                                      (size_t)vocab * sizeof(float)) == 0;
+            TEST_ASSERT(exact);
+            if (exact) fprintf(stderr, "ds4-test: GLM canceled partial frontier %d/%d rejected; rebuilt %d logits exact\n",
+                               cancel.position, final_len, vocab);
+        }
+    }
+cleanup:
+    free(cold_logits);
+    free(live_logits);
+    ds4_session_free(cold);
+    ds4_session_free(live);
+    ds4_tokens_free(&prompt);
+    ds4_tokens_free(&pattern);
+    test_restore_env("DS4_GLM_RESUME_PREFILL_MIN", saved_min);
+}
+
 static char *test_read_file(const char *path) {
     FILE *fp = fopen(path, "rb");
     if (!fp) return NULL;
@@ -7427,6 +7542,7 @@ static const ds4_test_entry test_entries[] = {
     {"--local-golden-vectors", "local-golden-vectors", "local top-k/logit drift regression for long Metal prefill", test_local_golden_vectors},
     {"--metal-short-prefill", "metal-short-prefill", "Metal ratio-4 short prefill regression", test_metal_short_prefill_ratio4},
     {"--glm53-continued-prefill", "glm53-continued-prefill", "GLM 5.3 resumed prefill latency, throughput, progress, and cold-path agreement", test_glm53_continued_prefill},
+    {"--glm53-prefill-cancel", "glm53-prefill-cancel", "GLM partial-prefill cancellation rejects stale logits and rebuilds exactly", test_glm53_prefill_cancel},
     {"--metal-kernels", "metal-kernels", "isolated Metal kernel numeric regressions", test_metal_kernel_group},
     {"--metal-tensor-equivalence", "metal-tensor-equivalence", "fast/quality Metal prompt-logit and greedy equivalence", test_metal_mpp_equivalence},
     {"--streaming-decode-prefill-correctness", "streaming-decode-prefill-correctness", "streaming decode-style cold prefill drift and repeatability", test_streaming_decode_prefill_correctness},

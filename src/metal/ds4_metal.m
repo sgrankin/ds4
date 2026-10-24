@@ -14429,152 +14429,41 @@ static int glm53_vision_dispatch_layernorm_gelu(
     return ds4_gpu_finish_command_buffer(cb, owned, "GLM-5.3 vision merger norm");
 }
 
-int ds4_gpu_glm53_vision_encode(
-        float                          *out,
-        const float                    *patches,
-        uint32_t                        grid_h,
-        uint32_t                        grid_w,
-        const void                     *model_map,
-        uint64_t                        model_size,
-        const ds4_glm53_vision_weights *weights) {
-    if (!out || !patches || !model_map || !weights || grid_h == 0 || grid_w == 0 ||
-        (grid_h & 1u) != 0 || (grid_w & 1u) != 0 ||
-        grid_h > UINT32_MAX / grid_w || ds4_gpu_commands_active()) {
-        fprintf(stderr, "ds4: invalid GLM-5.3 vision encoder input\n");
-        return 0;
+/* Vision graph allocation and the complete transformer/merger flow live in
+ * engine/glm53/vision.zig. These functions are actual encoder leaves. */
+#include "../engine/glm53/vision_api.h"
+
+int ds4_native_glm53_vision_qkv(ds4_gpu_tensor *q, ds4_gpu_tensor *k,
+        ds4_gpu_tensor *v, const ds4_gpu_tensor *qkv, const void *map,
+        uint64_t size, const ds4_glm53_vision_layer_weights *weights,
+        uint32_t rows, uint32_t grid_height, uint32_t grid_width) {
+    @autoreleasepool {
+        return glm53_vision_dispatch_qkv(q, k, v, qkv, map, size, weights,
+                                         rows, grid_height, grid_width);
     }
-    if (!g_initialized && !ds4_gpu_init()) return 0;
-    const uint32_t rows = grid_h * grid_w;
-    const uint32_t merged_rows = rows / 4u;
-    const uint64_t row1024 = (uint64_t)rows * 1024u;
-    const uint64_t row3072 = (uint64_t)rows * 3072u;
-    const uint64_t row4096 = (uint64_t)rows * 4096u;
-    const uint64_t merged10240 = (uint64_t)merged_rows * 10240u;
-    if (row4096 > SIZE_MAX / sizeof(float) ||
-        merged10240 > SIZE_MAX / sizeof(float)) return 0;
-
-    ds4_gpu_tensor *patch = NULL, *a = NULL, *b = NULL, *qkv = NULL;
-    ds4_gpu_tensor *q = NULL, *k = NULL, *v = NULL, *attn = NULL;
-    ds4_gpu_tensor *gate = NULL, *up = NULL, *mid = NULL;
-    int ok = 0;
-#define VISION_ALLOC(name_, count_) do { \
-        name_ = ds4_gpu_tensor_alloc((count_) * sizeof(float)); \
-        if (!(name_)) goto cleanup; \
-    } while (0)
-    VISION_ALLOC(patch, (uint64_t)rows * 1176u);
-    VISION_ALLOC(a, row1024);
-    VISION_ALLOC(b, row1024);
-    VISION_ALLOC(qkv, row3072);
-    VISION_ALLOC(q, row1024);
-    VISION_ALLOC(k, row1024);
-    VISION_ALLOC(v, row1024);
-    VISION_ALLOC(attn, row1024);
-    VISION_ALLOC(gate, row4096);
-    VISION_ALLOC(up, row4096);
-    VISION_ALLOC(mid, row4096);
-#undef VISION_ALLOC
-    if (!ds4_gpu_tensor_write(patch, 0, patches,
-                              (uint64_t)rows * 1176u * sizeof(float))) goto cleanup;
-    if (!ds4_gpu_begin_commands()) goto cleanup;
-    ok = ds4_gpu_glm53_matmul_bf16(a, model_map, model_size,
-                                   weights->patch_weight,
-                                   1176u, 1024u, patch, rows);
-    if (ok) ok = glm53_vision_dispatch_bias(
-            "kernel_glm53_vision_add_bias", a, NULL, model_map, model_size,
-            weights->patch_bias, 1024u, rows, "vision patch bias");
-
-    ds4_gpu_tensor *cur = a;
-    ds4_gpu_tensor *tmp = b;
-    for (uint32_t il = 0; ok && il < DS4_GLM53_VISION_LAYERS; il++) {
-        const ds4_glm53_vision_layer_weights *w = &weights->layer[il];
-        ok = glm53_vision_dispatch_rows(
-                "kernel_glm53_vision_rms_bf16", tmp, cur,
-                model_map, model_size, w->norm1, 1024u, rows, 1.0e-5f,
-                "vision norm1");
-        if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-                qkv, model_map, model_size, w->qkv_weight,
-                1024u, 3072u, tmp, rows);
-        if (ok) ok = glm53_vision_dispatch_qkv(
-                q, k, v, qkv, model_map, model_size, w, rows, grid_h, grid_w);
-        if (ok) ok = glm53_vision_dispatch_attention(attn, q, k, v, rows);
-        if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-                tmp, model_map, model_size, w->attn_proj_weight,
-                1024u, 1024u, attn, rows);
-        if (ok) ok = glm53_vision_dispatch_bias(
-                "kernel_glm53_vision_bias_residual", tmp, cur,
-                model_map, model_size, w->attn_proj_bias,
-                1024u, rows, "vision attention bias");
-        ds4_gpu_tensor *swap = cur; cur = tmp; tmp = swap;
-
-        if (ok) ok = glm53_vision_dispatch_rows(
-                "kernel_glm53_vision_rms_bf16", tmp, cur,
-                model_map, model_size, w->norm2, 1024u, rows, 1.0e-5f,
-                "vision norm2");
-        if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-                gate, model_map, model_size, w->gate_weight,
-                1024u, 4096u, tmp, rows);
-        if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-                up, model_map, model_size, w->up_weight,
-                1024u, 4096u, tmp, rows);
-        if (ok) ok = glm53_vision_dispatch_swiglu_bias(
-                mid, gate, up, model_map, model_size,
-                w->gate_bias, w->up_bias, 4096u, rows);
-        if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-                tmp, model_map, model_size, w->down_weight,
-                4096u, 1024u, mid, rows);
-        if (ok) ok = glm53_vision_dispatch_bias(
-                "kernel_glm53_vision_bias_residual", tmp, cur,
-                model_map, model_size, w->down_bias,
-                1024u, rows, "vision down bias");
-        swap = cur; cur = tmp; tmp = swap;
+}
+int ds4_native_glm53_vision_swiglu_bias(ds4_gpu_tensor *out,
+        const ds4_gpu_tensor *gate, const ds4_gpu_tensor *up,
+        const void *map, uint64_t size, uint64_t gate_bias, uint64_t up_bias,
+        uint32_t width, uint32_t rows) {
+    @autoreleasepool {
+        return glm53_vision_dispatch_swiglu_bias(out, gate, up, map, size,
+                                                gate_bias, up_bias, width, rows);
     }
-    if (ok) ok = glm53_vision_dispatch_rows(
-            "kernel_glm53_vision_rms_bf16", tmp, cur,
-            model_map, model_size, weights->post_norm,
-            1024u, rows, 1.0e-5f, "vision post norm");
-    if (ok) ok = glm53_vision_dispatch_reorder(cur, tmp, merged_rows);
-    if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-            tmp, model_map, model_size, weights->downsample_weight,
-            4096u, 4096u, cur, merged_rows);
-    if (ok) ok = glm53_vision_dispatch_bias(
-            "kernel_glm53_vision_add_bias", tmp, NULL,
-            model_map, model_size, weights->downsample_bias,
-            4096u, merged_rows, "vision downsample bias");
-    if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-            cur, model_map, model_size, weights->merger_proj,
-            4096u, 4096u, tmp, merged_rows);
-    if (ok) ok = glm53_vision_dispatch_layernorm_gelu(
-            tmp, cur, model_map, model_size,
-            weights->merger_norm, weights->merger_norm_bias, merged_rows);
-    if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-            gate, model_map, model_size, weights->merger_gate,
-            4096u, 10240u, tmp, merged_rows);
-    if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-            up, model_map, model_size, weights->merger_up,
-            4096u, 10240u, tmp, merged_rows);
-    if (ok) ok = ds4_gpu_swiglu_tensor(
-            mid, gate, up, merged_rows * 10240u, 10.0f, 1.0f);
-    if (ok) ok = ds4_gpu_glm53_matmul_bf16(
-            cur, model_map, model_size, weights->merger_down,
-            10240u, 4096u, mid, merged_rows);
-    if (ok) ok = ds4_gpu_end_commands();
-    else (void)ds4_gpu_end_commands();
-    if (ok) ok = ds4_gpu_tensor_read(
-            cur, 0, out, (uint64_t)merged_rows * 4096u * sizeof(float));
-
-cleanup:
-    ds4_gpu_tensor_free(mid);
-    ds4_gpu_tensor_free(up);
-    ds4_gpu_tensor_free(gate);
-    ds4_gpu_tensor_free(attn);
-    ds4_gpu_tensor_free(v);
-    ds4_gpu_tensor_free(k);
-    ds4_gpu_tensor_free(q);
-    ds4_gpu_tensor_free(qkv);
-    ds4_gpu_tensor_free(b);
-    ds4_gpu_tensor_free(a);
-    ds4_gpu_tensor_free(patch);
-    return ok;
+}
+int ds4_native_glm53_vision_reorder(ds4_gpu_tensor *out,
+        const ds4_gpu_tensor *input, uint32_t rows) {
+    @autoreleasepool {
+        return glm53_vision_dispatch_reorder(out, input, rows);
+    }
+}
+int ds4_native_glm53_vision_merger_norm(ds4_gpu_tensor *out,
+        const ds4_gpu_tensor *input, const void *map, uint64_t size,
+        uint64_t weight, uint64_t bias, uint32_t rows) {
+    @autoreleasepool {
+        return glm53_vision_dispatch_layernorm_gelu(out, input, map, size,
+                                                   weight, bias, rows);
+    }
 }
 
 typedef struct {
@@ -17411,135 +17300,96 @@ static bool qwen4_vis_t(qwen4_bind *b, const ds4_gpu_tensor *t, uint64_t n, cons
     return qwen4_bind_tensor(b, t, n * sizeof(float), what);
 }
 
-int ds4_gpu_qwen4_vision_encode(float *out, const float *patches, const float *pos_embed, uint32_t n_patches,
-                                uint32_t grid_w, const void *map, uint64_t size, const ds4_qwen4_vision_weights *w) {
-    if (!out || !patches || !pos_embed || !map || !w) return 0;
-    const uint32_t E = w->n_embd, FF = w->n_ff, H = w->n_head, D = H ? E / H : 0, P = w->n_patch, M = w->n_merge;
-    const uint32_t in_patch = 3u * P * P, mm = M * M, ME = E * mm, O = w->n_out;
-    if (n_patches == 0 || mm == 0 || (n_patches % mm) != 0 || grid_w == 0 || (grid_w % M) != 0 ||
-        (n_patches % grid_w) != 0 || ((n_patches / grid_w) % M) != 0 ||
-        (D != 64u && D != 72u) || H * D != E || FF == 0 || O == 0 || (in_patch % 32) != 0 || (E % 32) != 0 ||
-        n_patches > 65535u || ds4_gpu_commands_active()) {
-        fprintf(stderr, "ds4: invalid Qwen3.8 vision encoder input\n");
-        return 0;
+/* Native vision owns the workspace, 27-block loop and merger. Keep only
+ * primitive shader packets here, where Metal buffers and pipeline IDs live. */
+#include "../engine/qwen4/vision_api.h"
+
+int ds4_native_qwen4_vision_patch(ds4_gpu_tensor *out,
+        const ds4_gpu_tensor *first, const ds4_gpu_tensor *second,
+        const ds4_gpu_tensor *position, const void *map, uint64_t size,
+        uint64_t bias, uint32_t rows, uint32_t width) {
+    @autoreleasepool {
+        qwen4_vis_args args = { .rows = rows, .width = width };
+        qwen4_bind bindings[5];
+        const uint64_t count = (uint64_t)rows * width;
+        return qwen4_vis_t(&bindings[0], first, count, "vision patch a0") &&
+               qwen4_vis_t(&bindings[1], second, count, "vision patch a1") &&
+               qwen4_vis_w(&bindings[2], map, size, bias, width, "vision patch bias") &&
+               qwen4_vis_t(&bindings[3], position, count, "vision pos") &&
+               qwen4_vis_t(&bindings[4], out, count, "vision x") &&
+               qwen4_vis_elems(QWEN4_K_VIS_PATCH_FINISH, &args, bindings, 5);
     }
-    if (!g_initialized && !ds4_gpu_init()) return 0;
-    const uint32_t merged = n_patches / mm;
-    const uint64_t N = n_patches;
-    ds4_gpu_tensor *patch = NULL, *a0 = NULL, *a1 = NULL, *pos = NULL, *x = NULL, *tmp = NULL, *qkv = NULL;
-    ds4_gpu_tensor *q = NULL, *k = NULL, *v = NULL, *attn = NULL, *ffn = NULL, *m0 = NULL, *res = NULL;
-    qwen4_vis_args a = { n_patches, E, grid_w, H, D, 0, w->eps, 1.0f / sqrtf((float)D) };
-    qwen4_bind b[5];
-    int ok = 0;
-#define QWEN4_VISION_ALLOC(name_, count_) do { \
-        name_ = ds4_gpu_tensor_alloc((uint64_t)(count_) * sizeof(float)); \
-        if (!(name_)) goto cleanup; \
-    } while (0)
-    QWEN4_VISION_ALLOC(patch, N * in_patch);
-    QWEN4_VISION_ALLOC(a0, N * E);
-    QWEN4_VISION_ALLOC(a1, N * E);
-    QWEN4_VISION_ALLOC(pos, N * E);
-    QWEN4_VISION_ALLOC(x, N * E);
-    QWEN4_VISION_ALLOC(tmp, N * E);
-    QWEN4_VISION_ALLOC(qkv, N * 3u * E);
-    QWEN4_VISION_ALLOC(q, N * E);
-    QWEN4_VISION_ALLOC(k, N * E);
-    QWEN4_VISION_ALLOC(v, N * E);
-    QWEN4_VISION_ALLOC(attn, N * E);
-    QWEN4_VISION_ALLOC(ffn, N * FF);
-    QWEN4_VISION_ALLOC(m0, (uint64_t)merged * ME);
-    QWEN4_VISION_ALLOC(res, (uint64_t)merged * O);
-#undef QWEN4_VISION_ALLOC
-    if (!ds4_gpu_tensor_write(patch, 0, patches, N * in_patch * sizeof(float)) ||
-        !ds4_gpu_tensor_write(pos, 0, pos_embed, N * E * sizeof(float))) goto cleanup;
-    if (!ds4_gpu_begin_commands()) goto cleanup;
-    ok = ds4_gpu_qwen4_dense_mm_tensor(a0, patch, map, size, w->patch_w0, w->patch_type, n_patches, in_patch, E) &&
-         ds4_gpu_qwen4_dense_mm_tensor(a1, patch, map, size, w->patch_w1, w->patch_type, n_patches, in_patch, E) &&
-         qwen4_vis_t(&b[0], a0, N * E, "vision patch a0") &&
-         qwen4_vis_t(&b[1], a1, N * E, "vision patch a1") &&
-         qwen4_vis_w(&b[2], map, size, w->patch_b, E, "vision patch bias") &&
-         qwen4_vis_t(&b[3], pos, N * E, "vision pos") &&
-         qwen4_vis_t(&b[4], x, N * E, "vision x") &&
-         qwen4_vis_elems(QWEN4_K_VIS_PATCH_FINISH, &a, b, 5);
-    for (uint32_t il = 0; ok && il < DS4_QWEN4_VISION_LAYERS; il++) {
-        const ds4_qwen4_vision_layer_weights *l = &w->layer[il];
-        a.rows = n_patches; a.width = E;
-        ok = qwen4_vis_t(&b[0], x, N * E, "vision x") &&
-             qwen4_vis_w(&b[1], map, size, l->ln1_w, E, "vision ln1") &&
-             qwen4_vis_w(&b[2], map, size, l->ln1_b, E, "vision ln1 bias") &&
-             qwen4_vis_t(&b[3], tmp, N * E, "vision tmp") &&
-             qwen4_vis_rows(QWEN4_K_VIS_LAYERNORM, &a, b, 4, n_patches, 1) &&
-             ds4_gpu_qwen4_dense_mm_tensor(qkv, tmp, map, size, l->qkv_w, l->qkv_type, n_patches, E, 3u * E) &&
-             qwen4_vis_t(&b[0], qkv, N * 3u * E, "vision qkv") &&
-             qwen4_vis_w(&b[1], map, size, l->qkv_b, 3u * E, "vision qkv bias") &&
-             qwen4_vis_t(&b[2], q, N * E, "vision q") &&
-             qwen4_vis_t(&b[3], k, N * E, "vision k") &&
-             qwen4_vis_t(&b[4], v, N * E, "vision v") &&
-             qwen4_vis_rows(QWEN4_K_VIS_QKV_ROPE, &a, b, 5, n_patches, 1) &&
-             qwen4_vis_t(&b[0], q, N * E, "vision q") &&
-             qwen4_vis_t(&b[1], k, N * E, "vision k") &&
-             qwen4_vis_t(&b[2], v, N * E, "vision v") &&
-             qwen4_vis_t(&b[3], attn, N * E, "vision attn") &&
-             qwen4_vis_rows(QWEN4_K_VIS_ATTENTION, &a, b, 4, n_patches, H) &&
-             ds4_gpu_qwen4_dense_mm_tensor(tmp, attn, map, size, l->out_w, l->out_type, n_patches, E, E) &&
-             qwen4_vis_t(&b[0], x, N * E, "vision x") &&
-             qwen4_vis_t(&b[1], tmp, N * E, "vision tmp") &&
-             qwen4_vis_w(&b[2], map, size, l->out_b, E, "vision out bias") &&
-             qwen4_vis_elems(QWEN4_K_VIS_BIAS_RESIDUAL, &a, b, 3) &&
-             qwen4_vis_t(&b[0], x, N * E, "vision x") &&
-             qwen4_vis_w(&b[1], map, size, l->ln2_w, E, "vision ln2") &&
-             qwen4_vis_w(&b[2], map, size, l->ln2_b, E, "vision ln2 bias") &&
-             qwen4_vis_t(&b[3], tmp, N * E, "vision tmp") &&
-             qwen4_vis_rows(QWEN4_K_VIS_LAYERNORM, &a, b, 4, n_patches, 1) &&
-             ds4_gpu_qwen4_dense_mm_tensor(ffn, tmp, map, size, l->up_w, l->up_type, n_patches, E, FF);
-        if (!ok) break;
-        a.width = FF; a.mode = 0;
-        ok = qwen4_vis_t(&b[0], ffn, N * FF, "vision ffn") &&
-             qwen4_vis_w(&b[1], map, size, l->up_b, FF, "vision up bias") &&
-             qwen4_vis_elems(QWEN4_K_VIS_BIAS_ACT, &a, b, 2) &&
-             ds4_gpu_qwen4_dense_mm_tensor(tmp, ffn, map, size, l->down_w, l->down_type, n_patches, FF, E);
-        a.width = E;
-        ok = ok && qwen4_vis_t(&b[0], x, N * E, "vision x") &&
-             qwen4_vis_t(&b[1], tmp, N * E, "vision tmp") &&
-             qwen4_vis_w(&b[2], map, size, l->down_b, E, "vision down bias") &&
-             qwen4_vis_elems(QWEN4_K_VIS_BIAS_RESIDUAL, &a, b, 3);
+}
+int ds4_native_qwen4_vision_norm(ds4_gpu_tensor *out, const ds4_gpu_tensor *input,
+        const void *map, uint64_t size, uint64_t weight, uint64_t bias,
+        uint32_t rows, uint32_t width, float epsilon) {
+    @autoreleasepool {
+        qwen4_vis_args args = { .rows = rows, .width = width, .eps = epsilon };
+        qwen4_bind bindings[4];
+        const uint64_t count = (uint64_t)rows * width;
+        return qwen4_vis_t(&bindings[0], input, count, "vision norm input") &&
+               qwen4_vis_w(&bindings[1], map, size, weight, width, "vision norm weight") &&
+               qwen4_vis_w(&bindings[2], map, size, bias, width, "vision norm bias") &&
+               qwen4_vis_t(&bindings[3], out, count, "vision norm output") &&
+               qwen4_vis_rows(QWEN4_K_VIS_LAYERNORM, &args, bindings, 4, rows, 1);
     }
-    if (ok) {
-        a.rows = n_patches; a.width = E;
-        ok = qwen4_vis_t(&b[0], x, N * E, "vision x") &&
-             qwen4_vis_w(&b[1], map, size, w->post_ln_w, E, "vision post ln") &&
-             qwen4_vis_w(&b[2], map, size, w->post_ln_b, E, "vision post ln bias") &&
-             qwen4_vis_t(&b[3], tmp, N * E, "vision tmp") &&
-             qwen4_vis_rows(QWEN4_K_VIS_LAYERNORM, &a, b, 4, n_patches, 1) &&
-             ds4_gpu_qwen4_dense_mm_tensor(m0, tmp, map, size, w->mm0_w, w->mm0_type, merged, ME, ME);
-        a.rows = merged; a.width = ME; a.mode = 1;
-        ok = ok && qwen4_vis_t(&b[0], m0, (uint64_t)merged * ME, "vision merger") &&
-             qwen4_vis_w(&b[1], map, size, w->mm0_b, ME, "vision merger bias") &&
-             qwen4_vis_elems(QWEN4_K_VIS_BIAS_ACT, &a, b, 2) &&
-             ds4_gpu_qwen4_dense_mm_tensor(res, m0, map, size, w->mm2_w, w->mm2_type, merged, ME, O);
-        a.width = O; a.mode = 2;
-        ok = ok && qwen4_vis_t(&b[0], res, (uint64_t)merged * O, "vision out") &&
-             qwen4_vis_w(&b[1], map, size, w->mm2_b, O, "vision out bias") &&
-             qwen4_vis_elems(QWEN4_K_VIS_BIAS_ACT, &a, b, 2);
+}
+int ds4_native_qwen4_vision_qkv(ds4_gpu_tensor *q, ds4_gpu_tensor *k,
+        ds4_gpu_tensor *v, const ds4_gpu_tensor *qkv, const void *map,
+        uint64_t size, uint64_t bias, uint32_t rows, uint32_t width,
+        uint32_t grid_width, uint32_t heads, uint32_t head_width) {
+    @autoreleasepool {
+        qwen4_vis_args args = { .rows = rows, .width = width,
+            .grid_w = grid_width, .n_head = heads, .head_dim = head_width };
+        qwen4_bind bindings[5];
+        const uint64_t count = (uint64_t)rows * width;
+        return qwen4_vis_t(&bindings[0], qkv, 3u * count, "vision qkv") &&
+               qwen4_vis_w(&bindings[1], map, size, bias, 3u * width, "vision qkv bias") &&
+               qwen4_vis_t(&bindings[2], q, count, "vision q") &&
+               qwen4_vis_t(&bindings[3], k, count, "vision k") &&
+               qwen4_vis_t(&bindings[4], v, count, "vision v") &&
+               qwen4_vis_rows(QWEN4_K_VIS_QKV_ROPE, &args, bindings, 5, rows, 1);
     }
-    if (!ds4_gpu_end_commands()) ok = 0;
-    if (ok) ok = ds4_gpu_tensor_read(res, 0, out, (uint64_t)merged * O * sizeof(float));
-cleanup:
-    ds4_gpu_tensor_free(res);
-    ds4_gpu_tensor_free(m0);
-    ds4_gpu_tensor_free(ffn);
-    ds4_gpu_tensor_free(attn);
-    ds4_gpu_tensor_free(v);
-    ds4_gpu_tensor_free(k);
-    ds4_gpu_tensor_free(q);
-    ds4_gpu_tensor_free(qkv);
-    ds4_gpu_tensor_free(tmp);
-    ds4_gpu_tensor_free(x);
-    ds4_gpu_tensor_free(pos);
-    ds4_gpu_tensor_free(a1);
-    ds4_gpu_tensor_free(a0);
-    ds4_gpu_tensor_free(patch);
-    return ok;
+}
+int ds4_native_qwen4_vision_attention(ds4_gpu_tensor *out,
+        const ds4_gpu_tensor *q, const ds4_gpu_tensor *k, const ds4_gpu_tensor *v,
+        uint32_t rows, uint32_t width, uint32_t heads, uint32_t head_width,
+        float scale) {
+    @autoreleasepool {
+        qwen4_vis_args args = { .rows = rows, .width = width,
+            .n_head = heads, .head_dim = head_width, .scale = scale };
+        qwen4_bind bindings[4];
+        const uint64_t count = (uint64_t)rows * width;
+        return qwen4_vis_t(&bindings[0], q, count, "vision q") &&
+               qwen4_vis_t(&bindings[1], k, count, "vision k") &&
+               qwen4_vis_t(&bindings[2], v, count, "vision v") &&
+               qwen4_vis_t(&bindings[3], out, count, "vision attention") &&
+               qwen4_vis_rows(QWEN4_K_VIS_ATTENTION, &args, bindings, 4, rows, heads);
+    }
+}
+int ds4_native_qwen4_vision_residual(ds4_gpu_tensor *residual,
+        const ds4_gpu_tensor *input, const void *map, uint64_t size,
+        uint64_t bias, uint32_t rows, uint32_t width) {
+    @autoreleasepool {
+        qwen4_vis_args args = { .rows = rows, .width = width };
+        qwen4_bind bindings[3];
+        const uint64_t count = (uint64_t)rows * width;
+        return qwen4_vis_t(&bindings[0], residual, count, "vision residual") &&
+               qwen4_vis_t(&bindings[1], input, count, "vision residual input") &&
+               qwen4_vis_w(&bindings[2], map, size, bias, width, "vision residual bias") &&
+               qwen4_vis_elems(QWEN4_K_VIS_BIAS_RESIDUAL, &args, bindings, 3);
+    }
+}
+int ds4_native_qwen4_vision_bias_activation(ds4_gpu_tensor *tensor,
+        const void *map, uint64_t size, uint64_t bias,
+        uint32_t rows, uint32_t width, uint32_t mode) {
+    @autoreleasepool {
+        qwen4_vis_args args = { .rows = rows, .width = width, .mode = mode };
+        qwen4_bind bindings[2];
+        return qwen4_vis_t(&bindings[0], tensor, (uint64_t)rows * width, "vision activation") &&
+               qwen4_vis_w(&bindings[1], map, size, bias, width, "vision activation bias") &&
+               qwen4_vis_elems(QWEN4_K_VIS_BIAS_ACT, &args, bindings, 2);
+    }
 }
 
 int ds4_gpu_qwen4_hc_lo_act_tensor(ds4_gpu_tensor *lo_act, const ds4_gpu_tensor *lo,

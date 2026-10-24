@@ -21,6 +21,11 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = ROOT / "gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf"
+MODELS = {
+    "deepseek": MODEL,
+    "qwen": ROOT / "gguf/Qwen3.8-Flash-Next-Q4.gguf",
+    "glm": ROOT / "gguf/GLM-5.3-Flash-Q2.gguf",
+}
 TERMINAL = {"response.completed", "response.failed", "response.incomplete"}
 JSON_ONLY = "Follow the current request. Return only the requested JSON object, with no prose or Markdown."
 
@@ -64,10 +69,11 @@ def http(base, output, name, method, path, payload=None, expected=200):
 
 
 class Server:
-    def __init__(self, binary, model, output, store, cache, flint_profile=None):
+    def __init__(self, binary, model, output, store, cache, flint_profile=None, family="deepseek"):
         self.process = None
         self.output = output
         self.flint = model.is_dir() and (model / "flint-int4.json").is_file()
+        self.family = "flint" if self.flint else family
         output.mkdir()
         with socket.socket() as reservation:
             reservation.bind(("127.0.0.1", 0))
@@ -81,24 +87,37 @@ class Server:
         env.update(DS4_SERVER_RESPONSE_STORE_DIR=str(store), DS4_STATE_CACHE_DIR=str(cache),
             DS4_LOCK_FILE=str(output / "server.lock"), DS4_STATE_CACHE_HOT_MB="0",
             DS4_STATE_CACHE_SSD_MB="512", DS4_SERVER_BATCH_LOG="1",
-            DS4_SERVER_DECODE_COALESCE_US="2000", DS4_SERVER_CONTEXT_SUFFIX_REUSE="0",
-            DS4_V41_DECODER_REPLAY_ROWS="0", DS4_V41_COMPRESSED_KV_F16="0",
-            DS4_METAL_V41_RESIDENT_ROUTE_GAP="0", DS4_METAL_V41_RESIDENT_PREFILL_GAP="0",
-            DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS="0")
-        if self.flint:
+            DS4_SERVER_DECODE_COALESCE_US="2000", DS4_SERVER_CONTEXT_SUFFIX_REUSE="0")
+        if self.family == "deepseek":
+            env.update(DS4_V41_DECODER_REPLAY_ROWS="0", DS4_V41_COMPRESSED_KV_F16="0",
+                DS4_METAL_V41_RESIDENT_ROUTE_GAP="0", DS4_METAL_V41_RESIDENT_PREFILL_GAP="0",
+                DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS="0")
+        elif self.family == "qwen":
+            # Native BF16 n-grams stay disk-only; no Qwen expert SSD path.
+            env.update(DS4_METAL_NO_RESIDENCY="1", DS4_METAL_NO_MODEL_WARMUP="1")
+        elif self.family == "glm":
+            # Qualify the bounded per-layer mapping on this 128 GiB host.
+            env["DS4_METAL_DISABLE_STREAMING_STATIC_DECODE_MAP"] = "1"
+        if self.family != "deepseek":
             # Durable Responses JSON is independent of GPU-state caching.
-            # Flint currently has its own in-memory KV layout, without the
-            # DS4 SSD snapshot format or suffix relocation implementation.
+            # The server's automatic SSD/suffix cache currently admits only
+            # native DS4.1, even for families with public snapshot payloads.
             env = {key: value for key, value in env.items() if not key.startswith("DS4_STATE_CACHE_")}
         command = [str(binary), "--model", str(model), "--host", "127.0.0.1", "--port", str(port),
-            "--ctx", "8192",
-            "--prefill-chunk", "4096" if self.flint else "512", "--batched-session", "2",
+            "--ctx", "8192", "--batched-session", "2",
             "--mtp-draft", "1", "--tokens", "1024" if self.flint else "128", "--trace", str(output / "trace.log")]
-        if not self.flint:
-            command += ["--ssd-streaming", "--ssd-streaming-cache-experts", "32GB", "--mixed-prefill-quantum", "512"]
+        if self.family == "flint":
+            command += ["--prefill-chunk", "4096"]
+        elif self.family == "deepseek":
+            command += ["--prefill-chunk", "512", "--ssd-streaming", "--ssd-streaming-cache-experts", "32GB",
+                        "--mixed-prefill-quantum", "512"]
+        elif self.family == "qwen":
+            command += ["--prefill-chunk", "512", "--mixed-prefill-quantum", "512"]
+        elif self.family == "glm":
+            command += ["--ssd-streaming", "--ssd-streaming-cache-experts", "24GB"]
         if flint_profile is not None:
             command += ["--flint-profile", flint_profile]
-        save(output / "execution.json", {"command": command, "cwd": str(ROOT),
+        save(output / "execution.json", {"command": command, "cwd": str(ROOT), "family": self.family,
             "env": {k: v for k, v in env.items() if k.startswith("DS4")},
             "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest()})
         try:
@@ -200,13 +219,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--server", type=Path, required=True)
     parser.add_argument("--restart-server", type=Path)
-    parser.add_argument("--model", type=Path, default=MODEL)
+    parser.add_argument("--family", choices=("deepseek", "qwen", "glm"), default="deepseek",
+                        help="Model-family launch settings; Flint directories remain autodetected")
+    parser.add_argument("--model", type=Path, help="Override the selected family's installed checkpoint")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--flint-profile", choices=("auto", "m4-pro", "m5-pro", "m5-max"),
                         help="Select a native Flint kernel profile for qualification")
     parser.add_argument("--sdk", action="store_true", help="Also test the installed official OpenAI Python client")
     args = parser.parse_args()
-    args.server, args.model, args.output = args.server.resolve(), args.model.resolve(), args.output.resolve()
+    args.server, args.model, args.output = args.server.resolve(), (args.model or MODELS[args.family]).resolve(), args.output.resolve()
     args.restart_server = (args.restart_server or args.server).resolve()
     args.output.mkdir(parents=True, exist_ok=False)
     result = {"pass": False, "quality_pass": False, "checks": {}, "quality": [], "error": None}
@@ -237,7 +258,7 @@ def main():
 
     try:
         server = Server(args.server, args.model, args.output / "before", args.output / "responses", args.output / "cache",
-                        args.flint_profile)
+                        args.flint_profile, args.family)
         with Client(server, "sequential") as client:
             client.send(server.create('Return JSON {"ready":true}.', max_output_tokens=48), fragmented=True)
             basic, events = client.complete()
@@ -425,7 +446,7 @@ def main():
             # responses above still qualify the concurrent conversation path.
             result["decode_execution"] = "serialized_resident_packets"
         server = Server(args.restart_server, args.model, args.output / "after", args.output / "responses", args.output / "cache",
-                        args.flint_profile)
+                        args.flint_profile, args.family)
         with Client(server, "restart") as client:
             client.send(server.create("Return JSON with the remembered code and count.", store=True, previous_response_id=continued["id"]))
             after, _ = client.complete()

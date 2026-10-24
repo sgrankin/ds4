@@ -181,7 +181,7 @@ static void test_session_memory(void) {
     assert(s);
     e.core.backend = DS4_BACKEND_CPU;
     s->engine = &e;
-    s->glm_reserved_graph_bytes = 2*gib;
+    s->glm.reserved_graph_bytes = 2*gib;
     ds4_session_free(s);
     assert(e.glm_session_count == 3 && e.glm_session_graph_bytes == 6*gib);
     e.core.backend = DS4_BACKEND_METAL;

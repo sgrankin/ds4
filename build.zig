@@ -149,6 +149,10 @@ pub fn build(b: *std.Build) void {
         graph_module.addImport("gguf_c", api);
         graph_module.addImport("resident_route", route_math);
         core_module.addObjectFile(b.addObject(.{ .name = "graph", .root_module = graph_module }).getEmittedBin());
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/qwen4_entry.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/glm53_entry.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/qwen4_model_entry.zig", "gguf_c", api));
+        core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/glm53_model_entry.zig", "gguf_c", api));
     }
     {
         const api = generatedApi(b, target, sdk, optimize, "src/ds4_cli_chat.h");
@@ -536,6 +540,7 @@ pub fn build(b: *std.Build) void {
         .{ "command-memory-test", "test-metal-command-memory", "tests/test_metal_command_memory.c" },
         .{ "qwen-kernels-test", "test-qwen4-kernels", "tests/test_qwen4_kernels.c" },
         .{ "glm53-kda-test", "test-glm53-kda", "tests/test_glm53_kda.c" },
+        .{ "glm53-vision-prompt-test", "test-glm53-vision-prompt", "tests/test_glm53_vision_prompt.c" },
     }) |fixture| {
         const frontend = object(b, target, sdk, clang, fixture[2], fixture[1], optimize, test_flags);
         const test_exe = executable(b, target, sdk, core, null, null, fixture[1], frontend, optimize);
@@ -555,6 +560,9 @@ pub fn build(b: *std.Build) void {
     const session_gpu_frontend = object(b, target, sdk, clang, "tests/test_session_state.c", "test-session-state-gpu-main", optimize, graph_test_base);
     const session_gpu_test = executable(b, target, sdk, core, null, null, "test-session-state-gpu", session_gpu_frontend, optimize);
     b.step("session-state-gpu-test", "Build the existing session fixture with GPU/native frontier support (run separately)").dependOn(&b.addInstallArtifact(session_gpu_test, .{}).step);
+    const qwen_state_frontend = object(b, target, sdk, clang, "tests/test_qwen4_ngram_state.c", "test-qwen4-ngram-state-main", optimize, graph_test_base);
+    const qwen_state_test = executable(b, target, sdk, core, null, null, "test-qwen4-ngram-state", qwen_state_frontend, optimize);
+    b.step("qwen-ngram-state-test", "Build the existing Qwen batch, n-gram and rollback fixture (run separately)").dependOn(&b.addInstallArtifact(qwen_state_test, .{}).step);
     // The production native drafter and session cycle, through the real engine.
     const dspark_oracle_frontend = object(b, target, sdk, clang, "tests/test_deepseek41_dspark.c", "dspark-native-oracle-main", optimize, graph_test_base);
     const dspark_oracle = executable(b, target, sdk, core, cache, kvstore, "dspark-native-oracle", dspark_oracle_frontend, optimize);
@@ -698,6 +706,9 @@ pub fn build(b: *std.Build) void {
     const server_test_frontend = object(b, target, sdk, clang, "tests/ds4_test.c", "ds4_test-main", optimize, server_test_base);
     const server_test = executable(b, target, sdk, core, cache, kvstore, "ds4_test", server_test_frontend, optimize);
     b.step("server-test", "Build the existing C server fixture against selected host modules").dependOn(&b.addInstallArtifact(server_test, .{}).step);
+    const family_payload_frontend = object(b, target, sdk, clang, "speed-bench/experiments/model-family-ports-20261023/payload_exchange.c", "model-payload-exchange-main", optimize, strict_flags);
+    const family_payload_test = executable(b, target, sdk, core, null, null, "model-payload-exchange", family_payload_frontend, optimize);
+    b.step("model-payload-test", "Build public-API Qwen/GLM payload exchange qualification (run separately)").dependOn(&b.addInstallArtifact(family_payload_test, .{}).step);
     const cursor_test_frontend = object(b, target, sdk, clang, "tests/test_gguf_cursor.c", "test-gguf-cursor-main", optimize, test_flags);
     const cursor_test = executable(b, target, sdk, core, null, null, "test-gguf-cursor", cursor_test_frontend, optimize);
     b.step("gguf-test", "Build the production GGUF cursor fixture").dependOn(&b.addInstallArtifact(cursor_test, .{}).step);

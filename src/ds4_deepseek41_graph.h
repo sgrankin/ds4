@@ -5,6 +5,7 @@
 #include "ds4_gpu.h"
 #include "ds4_engram.h"
 #include "ds4_model_weights.h"
+#include "engine/stream_io.h"
 
 /* Actual transitional graph record shared with C sessions, state serialization,
  * suffix relocation, batching and DSpark. It is not an Engine/Session mirror.
@@ -21,22 +22,6 @@ typedef struct {
     uint32_t cache_budget;
     struct { uint64_t off, bytes, locked; } span[60];
 } ds41_encoder_residency;
-
-typedef struct metal_graph_selected_async_load {
-    bool                      active;
-    bool                      ok;
-    /* Selected ids remain usable for a synchronous retry if the service
-     * thread cannot stage the cache load without waiting on GPU work. */
-    bool                      ids_ok;
-    ds4_gpu_tensor           *router_selected;
-    const ds4_model          *model;
-    const ds4_layer_weights  *layer;
-    uint32_t                  il;
-    uint64_t                  event_value;
-    uint64_t                  gate_expert_bytes;
-    uint64_t                  down_expert_bytes;
-    int32_t                   selected_ids[DS4_MAX_EXPERT_USED];
-} metal_graph_selected_async_load;
 
 /* One view handle per field. Aliases share storage through the GPU tensor API,
  * not by duplicating handles; every successfully created view is freed once. */

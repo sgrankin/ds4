@@ -1,8 +1,86 @@
 # Serving project journal
 
-Last updated: 2026-10-23. This is the compact handoff for resumed work and context
+Last updated: 2026-10-24. This is the compact handoff for resumed work and context
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
+
+## Native Qwen 3.8 and GLM Flash ports — completed 2026-10-24
+
+The user authorized handwritten Zig model ports, explicitly reusing downloaded
+weights. Both ordinary single-Metal model paths are now native: configuration,
+weight binding/validation, graph resources, attention/experts, prefill/decode,
+recurrence, MTP, snapshots/payloads, batching, session control and vision.
+Qwen owns disk-only n-grams/PLE and pooled GDN; GLM owns compact/indexed MLA,
+KDA/mHC and chunk/cache/page-in ordering. Actual records are defined once in
+shared headers; generic selected-load/page-in services live in `stream_io.h`.
+Cold model/n-gram/memory exports are separate from hot GPU objects so CPU-only
+fixtures never pull a second C core. Existing Metal/MSL primitives remain.
+
+The ordinary algorithms do not forward to C model traversal. C retains common
+engine/session lifecycle and platform/storage services, GLM52, independent CPU
+oracles and explicit profiling/distributed/legacy paths. GLM expanded full-KV
+allocation remains unreachable as in the baseline; disabling indexed prefill
+retains the existing rejection. This is a Flash single-Metal completion boundary.
+
+Branch/bookmark: `qwen-glm-zig`, based on `030a040e` (preserved by
+`before-qwen-glm-ports`). Main remains unchanged. Installed checkpoints are
+`gguf/Qwen3.8-Flash-Next-Q4.gguf` and `gguf/GLM-5.3-Flash-Q2.gguf`, with their
+matching vision sidecars. No new weights were downloaded. Reports/module maps
+and commands: [native family qualification](../speed-bench/experiments/qwen-glm-zig-20261024/README.md)
+and [canonical payload exchange](../speed-bench/experiments/model-family-ports-20261023/PAYLOAD.md).
+Raw binaries, commands, logs, state and timings remain ignored under
+`.workspaces/model-family-ports-20261023/`.
+
+Completed qualification on the 128 GiB M5 Max, one guarded model job at a time:
+
+- Both models' 2047/2048/2049 frontier matrices match frozen C bit for bit:
+  1,209,600 floats per paired matrix. Qwen also matches the 2047→4095 extension.
+- Qwen's five state fixtures, depth-three packets (38 three-row cycles with
+  12 second-draft rejections), mixed ordinary/MTP batches, failed n-gram reads
+  and exact recovery, context limits and shared-arena growth all pass.
+- GLM snapshot, continued prefill, 84 pure geometry cases and actual bounded
+  MTP pass. Continued-vs-cold chunk ordering retains the same inherited numeric
+  difference (top token 39058, six matching top-eight ranks, max delta 0.298615).
+- Seven vision cases/repeated encodes match all 12,574,720 floats. Complete
+  Qwen image/follow-up turns pass ordinary/MTP; GLM image identity, replacement,
+  replay/restoration and fresh image-conditioned decode pass.
+- Each family passes all 25 real Responses/WebSocket checks, including tools,
+  concurrent conversation overlap and durable response/conversation recovery.
+- Frozen → native → frozen payloads at 1/3/4/5/129 match bytes and freshly
+  computed continuation logits. Invalid-header preservation, truncated-state
+  invalidation/recovery and the candidate-only early-logit cut all pass.
+- Both GPU kernel fixtures, full host/script suite, formatting and all five
+  executable builds pass. Useful reports/scripts are tracked; raw data is not.
+
+Three inherited GLM53 correctness fixes were included: stage token/nextn/head
+mappings for bounded SSD MTP (seven double-token snapshot cycles plus one reuse
+acceptance, no map failures); invalidate nonfinal prefill before mutation
+(canceled 17/19 frontier rejects sampling/persistence and rebuilds 154,880 logits
+exactly; cancellation before work preserves old state); invalidate payloads at
+first live-logit write before later validation can fail. No wire-format change,
+extra intermediate output-head work or new runtime configuration was added.
+Independent review found no additional resource/ABI/default-dispatch blocker.
+
+Runtime ABBA screens show effectively level performance: Qwen 2048-token live
+append 1242.27 vs 1245.23 t/s (0.24% longer), ordinary decode 0.03% longer and warm
+repeat 0.07%; GLM decode 0.73% longer and warm prefill 354.25 vs 355.10 t/s. Qwen first
+prefill varied 222–948 t/s in both binaries even after process warm-up; keep that
+uncertainty instead of claiming a startup speedup. The within-session append
+is stable at 1241–1247 t/s. Fresh-project-cache builds of all five executables took
+14.88 s native vs 15.50 s frozen; cached builds 1.08 s vs 1.05 s. These are small
+regression screens, not optimization claims.
+
+The initial GLM global-map attempt was pressure-stopped and a 4096-context
+allocation refused 111.42 GiB > 110 GiB. The existing
+`DS4_METAL_DISABLE_STREAMING_STATIC_DECODE_MAP=1` fallback plus a 24 GB expert cache
+then completed both frozen/native 2K campaigns, state, persistence and serving
+with normal pressure/no swap growth; guards were never relaxed. Qwen uses
+`DS4_METAL_NO_RESIDENCY=1 DS4_METAL_NO_MODEL_WARMUP=1`, no SSD-expert flag.
+
+Automatic server SSD/suffix caching still admits native DS4.1 only. Qwen/GLM
+Responses durability replays stored items after restart; public canonical model
+payloads are a separate qualified interface. Resident GLM shared-weight batch
+math is ported but has not been exercised with this SSD-only host setup.
 
 ## Upstream adaptation and Metal follow-up — 2026-10-23
 
@@ -141,9 +219,8 @@ We do not need every upstream backend, frontend or deployment mode.
   implementations rather than speculative plugin requirements.
 - Model implementations own tokenizer/prompt rendering, tool/reasoning and
   multimodal translation, execution, and saved-state semantics. Original DS4.1
-  and 1017 can share family code with explicit variant configuration. Other
-  possible implementations include Flint, Qwen and GLM; these are directions,
-  not completed native backends.
+  and 1017 share family code with explicit variant configuration. Native Metal
+  backends now include DeepSeek, Flint, Qwen 3.8 and GLM-5.3 Flash.
 - Learn from ds4-agent's context editing, archival, compaction and reuse behavior.
   Expose useful serving controls through explicit API extensions as needed so
   other agent harnesses can use them. Agents can execute their own tools.
@@ -378,10 +455,14 @@ and the local [OpenResponses hosted-tool and compaction specification](../.works
 - Detailed implementation history is preserved at
   `zig-rewrite-history-20261022`; the mechanical translation is archived at
   `zig-mechanical-archive`.
-- Supported native scope is DeepSeek V4.1 Flash and Flint on Metal plus the
+- `qwen-glm-zig` contains the completed native Qwen/GLM Flash port, based on
+  the upstream adaptation at `030a040e`; it is local and has not advanced main.
+- Supported native scope is DeepSeek V4.1 Flash, Flint, Qwen 3.8 Flash Next and
+  GLM-5.3 Flash on Metal plus the
   shared server/CLI stack. DeepSeek also supports the native Agent/benchmark/
   Eval/Web stack. Flint's internal ds4-agent tool mapping is not implemented;
-  use its Responses server with an external agent. Qwen/GLM retain C engines.
+  use its Responses server with an external agent. Legacy GLM52, independent
+  CPU oracles and explicit diagnostic/distributed model paths retain C.
 - Actual Metal objects/ARC operations and pipeline catalogues remain Objective-C;
   MSL kernels and third-party C dependencies remain in their existing languages.
 - Build using `tools/zig-build`; selected binaries are in `zig-out/bin`.
