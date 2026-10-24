@@ -61,7 +61,7 @@ fn initQwen(view: *View, pool: *Pool, inputs: *const Inputs, context: u32) bool 
         _ = c.fprintf(c.__stderrp, "ds4: shared Qwen3.8 session transients: cap=%u, %.2f GiB once; each further session costs its caches only\n", capacity, @as(f64, @floatFromInt(bytes)) / (1024 * 1024 * 1024));
     }
     c.ds4_native_qwen4_graph_reset(&state.*.graph);
-    if (!c.ds4_native_qwen4_graph_load_steering(&state.*.graph, core.*.directional_steering_file, core.*.directional_steering_attn_scale, core.*.directional_steering_ffn_scale)) {
+    if (!c.ds4_native_qwen4_graph_load_steering(&state.*.graph, core.*.directional_steering_file, core.*.directional_steering_attn_scale, core.*.directional_steering_ffn_scale, @intCast(core.*.directional_steering_mode))) {
         if (pooled) c.ds4_native_qwen4_pool_release(&pool.qwen4_pool, @intCast(state.*.slot));
         c.ds4_native_qwen4_graph_free(&state.*.graph);
         return false;
@@ -93,14 +93,45 @@ fn readVectors(path: [*c]const u8, output: [*c]f32, count: u64) bool {
         _ = c.fprintf(c.__stderrp, "ds4: failed to read %s\n", path);
         return false;
     }
+    for (output[0..@intCast(count)]) |value| {
+        if (!std.math.isFinite(value)) {
+            _ = c.fprintf(c.__stderrp, "ds4: non-finite steering vector in %s\n", path);
+            return false;
+        }
+    }
+    return true;
+}
+fn ds41Steering(view: *View) bool {
+    const core: *c.ds4_engine_core = view.core;
+    const path = core.directional_steering_file;
+    if (path == null or path[0] == 0) return true;
+    const graph = &view.ds41.*.graph;
+    const shape = &view.config41.*.shape;
+    const count = @as(u64, shape.n_layer) * shape.n_embd;
+    const bytes = count * @sizeOf(f32);
+    if (!c.ds4_native_memory_admit41(&core.memory, &core.weights, view.config41, view.memory41, core.memory.ds41_session_bytes +| bytes, false)) return false;
+    const memory = c.ds4_sampling_alloc(@intCast(bytes)) orelse unreachable;
+    defer c.free(memory);
+    const vectors: [*c]f32 = @ptrCast(@alignCast(memory));
+    if (!readVectors(path, vectors, count)) return false;
+    graph.steering_mode = @intCast(core.directional_steering_mode);
+    graph.steering_layers = @import("steering.zig").prepare(vectors[0..@intCast(count)], shape.n_embd, graph.steering_mode) orelse return false;
+    graph.steering_dirs = c.ds4_gpu_tensor_alloc(bytes);
+    if (graph.steering_dirs == null) return false;
+    graph.allocation_bytes += bytes;
+    core.memory.ds41_session_bytes += bytes;
+    if (c.ds4_gpu_tensor_write(graph.steering_dirs, 0, vectors, bytes) == 0) return false;
+    graph.steering_attn_scale = core.directional_steering_attn_scale;
+    graph.steering_ffn_scale = core.directional_steering_ffn_scale;
+    _ = c.fprintf(c.__stderrp, "ds4: V4.1 steering loaded: %s attn=%g ffn=%g\n", path, @as(f64, graph.steering_attn_scale), @as(f64, graph.steering_ffn_scale));
     return true;
 }
 fn glmSteering(graph: *c.ds4_glm_gpu_graph, core: *const c.ds4_engine_core) bool {
     const attention = core.directional_steering_attn_scale;
     const ffn = core.directional_steering_ffn_scale;
-    if (attention == 0 and ffn == 0) return true;
     const path = core.directional_steering_file;
     if (path == null or path[0] == 0) {
+        if (attention == 0 and ffn == 0) return true;
         _ = c.fputs("ds4: directional steering needs --dir-steering-file\n", c.__stderrp);
         return false;
     }
@@ -112,6 +143,10 @@ fn glmSteering(graph: *c.ds4_glm_gpu_graph, core: *const c.ds4_engine_core) bool
     defer c.free(memory);
     const vectors: [*c]f32 = @ptrCast(@alignCast(memory));
     var ok = readVectors(path, vectors, count);
+    graph.directional_steering_mode = @intCast(core.directional_steering_mode);
+    if (ok) {
+        graph.directional_steering_layers = @import("steering.zig").prepare(vectors[0..@intCast(count)], shape.n_embd, graph.directional_steering_mode) orelse return false;
+    }
     if (ok) {
         graph.directional_steering_dirs_by_tier[0] = c.ds4_gpu_tensor_alloc(count * @sizeOf(f32));
         ok = graph.directional_steering_dirs_by_tier[0] != null and
@@ -144,9 +179,14 @@ fn initGlm(view: *View, pool: *Pool, inputs: *const Inputs, context: c_int) bool
     const all_graphs = accounting.graphBudget(pool.glm_session_graph_bytes, pool.glm_session_count, inputs.session_count_hint, planned.total_bytes);
     const other_graphs = all_graphs - planned.total_bytes;
     const placement = c.ds4_model_residency_inputs{
-        .load_slice = true, .layer_start = 0, .layer_end = last,
-        .load_output = true, .context = context, .chunk = core.*.prefill_chunk,
-        .tp_shard = false, .tp_rank = 0,
+        .load_slice = true,
+        .layer_start = 0,
+        .layer_end = last,
+        .load_output = true,
+        .context = context,
+        .chunk = core.*.prefill_chunk,
+        .tp_shard = false,
+        .tp_rank = 0,
     };
     if (core.*.ssd_streaming and !core.*.memory.ssd_streaming_budget_finalized) {
         c.ds4_native_engine_fit_glm_cache(core, pool, shape, inputs.policy, &placement, inputs.session_count_hint);
@@ -198,11 +238,23 @@ pub fn init(view: *View, pool: *Pool, inputs: *const Inputs, context: c_int) boo
         c.DS4_SESSION_DS41 => {
             const core = view.core;
             const drafter = if (core.*.dspark and core.*.dspark_weights.v41) &core.*.dspark_weights else null;
-            return c.ds4_native_session_resources_init41(view.ds41, view.frontier, &core.*.memory, view.memory41, &core.*.model, &core.*.weights, view.config41, core.*.model_path, @intCast(context), core.*.prefill_chunk, core.*.quality, core.*.ssd_streaming, drafter, view.transport);
+            if (!c.ds4_native_session_resources_init41(view.ds41, view.frontier, &core.*.memory, view.memory41, &core.*.model, &core.*.weights, view.config41, core.*.model_path, @intCast(context), core.*.prefill_chunk, core.*.quality, core.*.ssd_streaming, drafter, view.transport)) return false;
+            if (ds41Steering(view)) return true;
+            // init41 already published its graph and host buffers. A failed
+            // vector load must retire that transaction before C frees the shell.
+            c.ds4_native_session_resources_free41(view.ds41, view.frontier, &core.*.memory);
+            return false;
         },
         c.DS4_SESSION_FLINT => {
             view.flint.* = c.flint_session_create(inputs.flint, @intCast(context));
             if (view.flint.* == null) return false;
+            // Other sessions retain their own scales. New sessions follow the
+            // same current Engine default as Qwen/GLM/DS41 after a live edit.
+            if (c.flint_session_set_steering_ffn(view.flint.*, view.core.*.directional_steering_ffn_scale) != 0) {
+                c.flint_session_free(view.flint.*);
+                view.flint.* = null;
+                return false;
+            }
             view.frontier.*.prefill_cap = view.core.*.prefill_chunk;
             hostBuffers(view, @intCast(view.core.*.vocab.n_vocab));
             return true;

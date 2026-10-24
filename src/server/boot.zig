@@ -209,6 +209,12 @@ pub fn parse(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend) c.se
             }
         } else if (is(option, "--dir-steering-file")) {
             cfg.engine.directional_steering_file = args.value(option);
+        } else if (is(option, "--dir-steering-mode")) {
+            const value = args.value(option);
+            cfg.engine.directional_steering_mode = if (is(value, "project")) c.DS4_STEERING_PROJECT else if (is(value, "add")) c.DS4_STEERING_ADD else {
+                log(c.DS4_LOG_DEFAULT, "ds4-server: --dir-steering-mode must be project or add", .{});
+                c.exit(2);
+            };
         } else if (is(option, "--dir-steering-ffn")) {
             cfg.engine.directional_steering_ffn = real(args.value(option), option, -100, 100);
             steering_scale_set = true;

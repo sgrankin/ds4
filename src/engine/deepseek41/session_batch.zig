@@ -20,6 +20,8 @@ pub const SessionBatch = struct {
         if (graphs.len < 2 or graphs.len > max_rows) return null;
         var largest = graphs[0];
         for (graphs[1..]) |graph| {
+            if (graph.steering_mode != graphs[0].steering_mode or graph.steering_layers != graphs[0].steering_layers or graph.steering_attn_scale != graphs[0].steering_attn_scale or
+                graph.steering_ffn_scale != graphs[0].steering_ffn_scale) return null;
             if (graph.ctx > largest.ctx or (graph.ctx == largest.ctx and graph.prefill_cap > largest.prefill_cap)) largest = graph;
         }
         return if (largest.prefill_cap >= graphs.len) largest else null;
@@ -117,14 +119,13 @@ pub const SessionBatch = struct {
             if (ok) ok = executor.ops.sumPartialBatch(graph, active.row.block, layer_index, c.DS4_TP_GATE_ATTN, rows);
             const moe = executor.moe();
             if (ok) ok = c.ds4_gpu_dsv41_quantize(active.row.block, shape.n_embd, rows, c.DS4_V41_BF16) != 0 and
-                Prefill.afterBatch(executor, &active.row, layer, rows) and moe.batch(layer, layer_index, rows, shared_owner, true) and
+                Prefill.afterBatch(executor, &active.row, layer, layer_index, rows) and moe.batch(layer, layer_index, rows, shared_owner, true) and
                 (if (shared_owner)
                     c.ds4_gpu_tensor_copy(active.row.block, 0, active.row.routed, 0, @as(u64, rows) * shape.n_embd * 4)
                 else
                     c.ds4_gpu_add_tensor(active.row.block, active.row.routed, active.row.shared, rows * shape.n_embd)) != 0 and
                 c.ds4_gpu_dsv41_quantize(active.row.block, shape.n_embd, rows, c.DS4_V41_BF16) != 0 and
-                c.ds4_gpu_hc_expand_split_tensor(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, shape.n_embd, shape.n_hc) != 0 and
-                c.ds4_gpu_dsv41_quantize(active.row.residual, shape.n_embd * shape.n_hc, rows, c.DS4_V41_BF16) != 0;
+                executor.expand(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, layer_index, rows, true);
             // The second Engram upload reuses the first one's input storage.
             if (ok and layer_index == 13) ok = c.ds4_gpu_end_commands() != 0 and c.ds4_gpu_begin_commands() != 0;
         }

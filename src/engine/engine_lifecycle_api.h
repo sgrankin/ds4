@@ -19,6 +19,9 @@ int ds4_native_engine_lifecycle_open(ds4_engine_core *,
     ds4_streaming_policy *, const ds4_engine_options *, bool *native_owned);
 void ds4_native_engine_lifecycle_close(ds4_engine_core *,
     ds4_session_resource_pool *, flint_engine **);
+/* Normalize project rows; preserve additive magnitudes. Zero rows select no
+ * layer. Returns the selected count, or -1 for an invalid mode/nonfinite bank. */
+int ds4_steering_prepare_f32(float *, uint32_t layers, uint32_t width, int mode);
 bool ds4_native_engine_overthink_set(ds4_engine_core *, ds4_model_family,
     const flint_tokenizer *, float penalty, bool think_only);
 bool ds4_native_engine_overthink_configure(ds4_engine_core *, ds4_model_family,

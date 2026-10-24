@@ -87,10 +87,9 @@ pub const Prefill = struct {
             executor.ops.normBatch(row.norm, row.x, layer.attn_norm, count);
     }
 
-    pub fn afterBatch(executor: Executor, row: *Row, layer: *const Layer, count: u32) bool {
+    pub fn afterBatch(executor: Executor, row: *Row, layer: *const Layer, index: u32, count: u32) bool {
         const shape = &executor.ops.config.shape;
-        return c.ds4_gpu_hc_expand_split_tensor(row.after_attn, row.block, row.residual, row.attn_split, shape.n_embd, shape.n_hc) != 0 and
-            c.ds4_gpu_dsv41_quantize(row.after_attn, shape.n_embd * shape.n_hc, count, c.DS4_V41_BF16) != 0 and
+        return executor.expand(row.after_attn, row.block, row.residual, row.attn_split, index, count, false) and
             executor.ops.hcMixBatch(row, layer, true, count) and
             c.ds4_gpu_hc_weighted_sum_split_tensor(row.x, row.after_attn, row.attn_split, shape.n_embd, shape.n_hc) != 0 and
             c.ds4_gpu_dsv41_quantize(row.x, shape.n_embd, count, c.DS4_V41_BF16) != 0 and
@@ -387,7 +386,7 @@ pub const Prefill = struct {
                     }
                     if (ok) ok = executor.trace(graph.batch.block, shape.n_embd, start, count, index, "2-attn");
                     stage.mark(&ok, "attention output");
-                    if (ok and batch_hc) ok = afterBatch(executor, &active.row, layer, count);
+                    if (ok and batch_hc) ok = afterBatch(executor, &active.row, layer, index, count);
                     if (ok and batch_hc) ok = executor.trace(active.row.norm, shape.n_embd, start, count, index, "3-norm") and
                         executor.trace(active.row.ffn_split, 24, start, count, index, "3-split");
                     stage.mark(&ok, "hc/ffn norm");
@@ -396,17 +395,16 @@ pub const Prefill = struct {
                         row.pos = start + token;
                         buffers.selectRow(&row, @ptrCast(&graph.rows_view[token]));
                         const local = rowExecutor(executor, &row);
-                        if (!batch_hc) ok = local.afterAttention(layer);
+                        if (!batch_hc) ok = local.afterAttention(layer, index);
                         if (ok and !batch_moe and !exact_moe) {
                             const services = (Routes.Transaction{ .ops = local.ops, .graph = &row }).snapshot(index);
                             const moe = local.moe();
                             ok = moe.partial(layer, index, @bitCast(tokens[offset + token]), &services) and moe.finish(index);
-                            if (ok and !batch_hc) ok = local.afterMoe();
+                            if (ok and !batch_hc) ok = local.afterMoe(index);
                         }
                     }
                     if (ok and batch_hc and !batch_moe and !exact_moe) ok =
-                        c.ds4_gpu_hc_expand_split_tensor(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, shape.n_embd, shape.n_hc) != 0 and
-                        c.ds4_gpu_dsv41_quantize(active.row.residual, shape.n_embd * shape.n_hc, count, c.DS4_V41_BF16) != 0;
+                        executor.expand(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, index, count, true);
                 }
                 if (ok and (batch_moe or exact_moe)) {
                     const moe = executor.moe();
@@ -418,14 +416,13 @@ pub const Prefill = struct {
                     stage.mark(&ok, "shared/routed ffn");
                     if (ok and batch_hc) ok = c.ds4_gpu_add_tensor(active.row.block, active.row.routed, active.row.shared, count * shape.n_embd) != 0 and
                         c.ds4_gpu_dsv41_quantize(active.row.block, shape.n_embd, count, c.DS4_V41_BF16) != 0 and
-                        c.ds4_gpu_hc_expand_split_tensor(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, shape.n_embd, shape.n_hc) != 0 and
-                        c.ds4_gpu_dsv41_quantize(active.row.residual, shape.n_embd * shape.n_hc, count, c.DS4_V41_BF16) != 0;
+                        executor.expand(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, index, count, true);
                     token = 0;
                     while (ok and !batch_hc and token < count) : (token += 1) {
                         buffers.selectRow(&row, @ptrCast(&graph.rows_view[token]));
                         const local = rowExecutor(executor, &row);
                         ok = c.ds4_gpu_add_tensor(row.block, row.routed, row.shared, shape.n_embd) != 0 and
-                            support.bf16(row.block, shape.n_embd) and local.afterMoe();
+                            support.bf16(row.block, shape.n_embd) and local.afterMoe(index);
                     }
                 }
                 stage.mark(&ok, "hc expand");

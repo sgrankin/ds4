@@ -45,6 +45,7 @@ pub const Graph = struct {
         graph.compressed_kv_f16 = plan.compressed_f16;
         graph.allocation_bytes = plan.bytes();
         graph.streaming = streaming;
+        graph.steering_capture_enabled = @import("steering_capture.zig").enabled();
         graph.tp_world = 1;
         const token_map = c.malloc(@as(usize, config.shape.n_vocab) * @sizeOf(u32)) orelse return error.AllocationFailed;
         graph.token_map = @ptrCast(@alignCast(token_map));
@@ -230,6 +231,7 @@ pub fn resetRecord(graph: *Record) void {
     // overwrite unfinished pairs before those pairs can be consumed.
 }
 pub fn freeRecord(graph: *Record) void {
+    c.ds4_gpu_tensor_free(graph.steering_dirs);
     c.ds4_native_graph_dspark_free(graph.dspark);
     c.ds4_engram_reader_free(graph.engram_reader);
     c.ds4_gpu_tensor_free(graph.tp_logits_half);
@@ -261,6 +263,14 @@ pub fn freeRecord(graph: *Record) void {
     c.free(graph.prefill_ids);
     graph.* = emptyRecord();
 }
+
+/// These allocations survive demand growth and are outside Layout's ordinary
+/// workspace estimate. Keep their charge when replacing that estimate.
+pub fn persistentBytes(graph: *const Record) u64 {
+    return c.ds4_gpu_tensor_bytes(graph.steering_dirs) +|
+        (if (graph.dspark != null) @as(u64, 64) << 20 else 0);
+}
+
 pub fn growRecord(graph: *Record, config: *const Config, capacity: u32) bool {
     if (capacity <= graph.prefill_cap) return true;
     if (capacity > graph.prefill_max or c.ds4_gpu_synchronize() == 0) return false;
@@ -281,7 +291,7 @@ pub fn growRecord(graph: *Record, config: *const Config, capacity: u32) bool {
         return false;
     }
     const estimate = Layout.init(config, graph.ctx, capacity);
-    graph.allocation_bytes = estimate.bytes();
+    graph.allocation_bytes = estimate.bytes() +| persistentBytes(graph);
     return true;
 }
 fn logAllocation(graph: *const Record, plan: *const Layout) void {

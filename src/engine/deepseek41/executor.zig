@@ -60,9 +60,26 @@ pub const Executor = struct {
             self.ops.norm(graph.norm, graph.x, layer.attn_norm);
     }
 
-    pub fn afterAttention(self: *const Executor, layer: *const Layer) bool {
+    /// Publish the residual first; steering acts on every complete HC stream.
+    /// Off keeps the established expansion and BF16 kernels unchanged.
+    pub fn expand(self: *const Executor, out: ?*Tensor, block: ?*Tensor, residual: ?*const Tensor, split: ?*const Tensor, index: u32, count: u32, ffn: bool) bool {
         const graph = self.graph;
-        return self.ops.hcExpand(graph.after_attn, graph.block, graph.residual, graph.attn_split) and
+        const shape = &self.ops.config.shape;
+        const raw = if (ffn) graph.steering_ffn_scale else graph.steering_attn_scale;
+        const scale = @import("../steering.zig").effectiveScale(raw, graph.steering_mode, graph.steering_layers);
+        const ok = if (scale != 0)
+            c.ds4_gpu_hc_expand_split_steering_tensor(out, block, residual, split, graph.steering_dirs, index, shape.n_embd, shape.n_hc, scale, true, graph.steering_mode) != 0
+        else if (count == 1)
+            self.ops.hcExpand(out, block, residual, split)
+        else
+            c.ds4_gpu_hc_expand_split_tensor(out, block, residual, split, shape.n_embd, shape.n_hc) != 0 and
+                c.ds4_gpu_dsv41_quantize(out, shape.n_embd * shape.n_hc, count, c.DS4_V41_BF16) != 0;
+        return ok and @import("steering_capture.zig").capture(graph, out, index, count, shape.n_embd, shape.n_hc, ffn);
+    }
+
+    pub fn afterAttention(self: *const Executor, layer: *const Layer, index: u32) bool {
+        const graph = self.graph;
+        return self.expand(graph.after_attn, graph.block, graph.residual, graph.attn_split, index, 1, false) and
             self.ops.hcMix(graph, layer, true) and
             self.ops.hcSum(graph.x, graph.after_attn, graph.attn_split, true) and
             self.ops.norm(graph.norm, graph.x, layer.ffn_norm);
@@ -70,12 +87,12 @@ pub const Executor = struct {
 
     pub fn beforeMoe(self: *const Executor, layer: *const Layer, index: u32) bool {
         const attention = Attention{ .config = self.ops.config, .model = self.ops.model, .graph = self.graph };
-        return self.beforeAttention(layer, index) and attention.run(layer, index, false) and self.afterAttention(layer);
+        return self.beforeAttention(layer, index) and attention.run(layer, index, false) and self.afterAttention(layer, index);
     }
 
-    pub fn afterMoe(self: *const Executor) bool {
+    pub fn afterMoe(self: *const Executor, index: u32) bool {
         const graph = self.graph;
-        return self.ops.hcExpand(graph.residual, graph.block, graph.after_attn, graph.ffn_split) and
+        return self.expand(graph.residual, graph.block, graph.after_attn, graph.ffn_split, index, 1, true) and
             c.ds4_gpu_tensor_copy(graph.pre, 0, graph.ffn_split, 0, @as(u64, self.ops.config.shape.n_hc) * 4) != 0;
     }
 
@@ -91,7 +108,7 @@ pub const Executor = struct {
             !self.trace(graph.attn_split, 24, position, 1, index, "1-split") or
             !attention.run(weights, index, false) or
             !self.trace(graph.block, shape.n_embd, position, 1, index, "2-attn") or
-            !self.afterAttention(weights) or
+            !self.afterAttention(weights, index) or
             !self.trace(graph.norm, shape.n_embd, position, 1, index, "3-norm") or
             !self.trace(graph.ffn_split, 24, position, 1, index, "3-split")) return false;
         const expert = self.moe();
@@ -101,7 +118,7 @@ pub const Executor = struct {
             self.trace(graph.route_weights, shape.n_expert_used, position, 1, index, "3b-weights") and
             self.trace(graph.shared, shape.n_embd, position, 1, index, "3c-shared") and
             self.trace(graph.routed, shape.n_embd, position, 1, index, "3d-routed") and
-            self.afterMoe() and self.trace(graph.residual, shape.n_hc * shape.n_embd, position, 1, index, "4-residual");
+            self.afterMoe(index) and self.trace(graph.residual, shape.n_hc * shape.n_embd, position, 1, index, "4-residual");
     }
 
     pub fn logits(self: *const Executor, output: [*c]f32) bool {

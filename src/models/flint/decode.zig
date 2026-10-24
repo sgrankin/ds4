@@ -18,11 +18,19 @@ pub const context_limit: u32 = block_tokens * 4;
 pub const shader_source = @embedFile("../../metal/flint/decode.metal");
 const m4_pro_source = @embedFile("../../metal/flint/decode-m4-pro.metal");
 const m5_pro_source = @embedFile("../../metal/flint/decode-m5-pro.metal");
+const steering_source = @embedFile("../../metal/flint/decode-steer.metal");
+const m4_pro_steering_source = @embedFile("../../metal/flint/decode-m4-pro-steer.metal");
+const m5_pro_steering_source = @embedFile("../../metal/flint/decode-m5-pro-steer.metal");
+const additive_source = @embedFile("../../metal/flint/decode-additive.metal");
+const m4_pro_additive_source = @embedFile("../../metal/flint/decode-m4-pro-additive.metal");
+const m5_pro_additive_source = @embedFile("../../metal/flint/decode-m5-pro-additive.metal");
 pub const sampling_source = @embedFile("../../metal/flint/sampling.metal");
 const metadata_bytes: usize = 50 * 64 * 4;
 const parameters_bytes: usize = (packet_width + 1) * 4 * 4;
 const control_bytes: usize = packet_width * 1024 * 4;
-const sampling_bytes: usize = 6 * 4;
+// Six packet fields plus attention/FFN steering scales. Ordinary kernels never
+// read the final two fields, and keep their original 30-binding entrypoints.
+const sampling_bytes: usize = 8 * 4;
 pub const output_bytes = [_]usize{
     packet_width * vocab * 2,
     packet_width * 50 * 2048 * 2,
@@ -71,10 +79,60 @@ pub fn compile(gpu: *c.flint_gpu, profile: Profile) !void {
     }
 }
 
+/// Active resident entrypoints live separately so ordinary model startup does
+/// not compile additional megakernels. A zero-scale preload compiles them once
+/// too, making later live scale changes allocation/compilation-free.
+pub fn compileSteering(gpu: *c.flint_gpu, profile: Profile) !void {
+    const source: []const u8 = switch (profile) {
+        .m4_pro => m4_pro_steering_source,
+        .m5_pro => m5_pro_steering_source,
+        .m5_max => steering_source,
+    };
+    var error_text: [4096]u8 = @splat(0);
+    if (!c.flint_gpu_compile(gpu, source.ptr, source.len, &error_text, error_text.len)) {
+        std.debug.print("flint: steering decode compilation: {s}\n", .{std.mem.sliceTo(&error_text, 0)});
+        return error.CompileSteeringDecode;
+    }
+    const kernels = switch (profile) {
+        .m4_pro => [_][*:0]const u8{ "flint_decode_scalar_steer_m4_pro", "flint_decode_greedy8_steer_m4_pro" },
+        .m5_pro => [_][*:0]const u8{ "flint_decode_scalar_steer_m5_pro", "flint_decode_greedy8_steer_m5_pro" },
+        .m5_max => [_][*:0]const u8{ "flint_decode_scalar_steer", "flint_decode_greedy8_steer" },
+    };
+    for (kernels) |kernel| if (!c.flint_gpu_prepare(gpu, kernel)) {
+        gpuError(gpu, "prepare steering pipeline");
+        return error.CompileSteeringPipeline;
+    };
+}
+
+/// Additive residual steering has no reduction or threadgroup scratch.
+pub fn compileAdditiveSteering(gpu: *c.flint_gpu, profile: Profile) !void {
+    const selected: []const u8 = switch (profile) {
+        .m4_pro => m4_pro_additive_source,
+        .m5_pro => m5_pro_additive_source,
+        .m5_max => additive_source,
+    };
+    var error_text: [4096]u8 = @splat(0);
+    if (!c.flint_gpu_compile(gpu, selected.ptr, selected.len, &error_text, error_text.len)) {
+        std.debug.print("flint: additive steering compilation: {s}\n", .{std.mem.sliceTo(&error_text, 0)});
+        return error.CompileAdditiveSteering;
+    }
+    const kernels = switch (profile) {
+        .m4_pro => [_][*:0]const u8{ "flint_decode_scalar_additive_m4_pro", "flint_decode_greedy8_additive_m4_pro" },
+        .m5_pro => [_][*:0]const u8{ "flint_decode_scalar_additive_m5_pro", "flint_decode_greedy8_additive_m5_pro" },
+        .m5_max => [_][*:0]const u8{ "flint_decode_scalar_additive", "flint_decode_greedy8_additive" },
+    };
+    for (kernels) |kernel| if (!c.flint_gpu_prepare(gpu, kernel)) {
+        gpuError(gpu, "prepare additive steering pipeline");
+        return error.CompileAdditiveSteeringPipeline;
+    };
+}
+
 pub const Decoder = struct {
     model: *const weights.Weights,
     profile: Profile,
     silu: *anyopaque,
+    steering: ?*anyopaque = null,
+    additive_steering: bool = false,
 
     pub fn init(model: *const weights.Weights, profile: Profile) !Decoder {
         // A larger device can qualify a smaller schedule. Never launch more
@@ -96,7 +154,17 @@ pub const Decoder = struct {
         return .{ .model = model, .profile = profile, .silu = silu };
     }
 
-    fn scalarKernel(self: *const Decoder) [*:0]const u8 {
+    fn scalarKernel(self: *const Decoder, active: bool) [*:0]const u8 {
+        if (active and self.additive_steering) return switch (self.profile) {
+            .m4_pro => "flint_decode_scalar_additive_m4_pro",
+            .m5_pro => "flint_decode_scalar_additive_m5_pro",
+            .m5_max => "flint_decode_scalar_additive",
+        };
+        if (active) return switch (self.profile) {
+            .m4_pro => "flint_decode_scalar_steer_m4_pro",
+            .m5_pro => "flint_decode_scalar_steer_m5_pro",
+            .m5_max => "flint_decode_scalar_steer",
+        };
         return switch (self.profile) {
             .m4_pro => "flint_decode_scalar_m4_pro",
             .m5_pro => "flint_decode_scalar_m5_pro",
@@ -104,7 +172,17 @@ pub const Decoder = struct {
         };
     }
 
-    fn greedyKernel(self: *const Decoder) [*:0]const u8 {
+    fn greedyKernel(self: *const Decoder, active: bool) [*:0]const u8 {
+        if (active and self.additive_steering) return switch (self.profile) {
+            .m4_pro => "flint_decode_greedy8_additive_m4_pro",
+            .m5_pro => "flint_decode_greedy8_additive_m5_pro",
+            .m5_max => "flint_decode_greedy8_additive",
+        };
+        if (active) return switch (self.profile) {
+            .m4_pro => "flint_decode_greedy8_steer_m4_pro",
+            .m5_pro => "flint_decode_greedy8_steer_m5_pro",
+            .m5_max => "flint_decode_greedy8_steer",
+        };
         return switch (self.profile) {
             .m4_pro => "flint_decode_greedy8_m4_pro",
             .m5_pro => "flint_decode_greedy8_m5_pro",
@@ -113,6 +191,7 @@ pub const Decoder = struct {
     }
 
     pub fn deinit(self: *Decoder) void {
+        if (self.steering) |buffer| c.flint_gpu_buffer_free(buffer);
         c.flint_gpu_buffer_free(self.silu);
         self.* = undefined;
     }
@@ -225,6 +304,8 @@ pub const Session = struct {
     // attention partials/statistics and expert routing handoff flags.
     outputs: [8]*anyopaque,
     last_logits_offset: usize = 0,
+    steering_attn: f32 = 0,
+    steering_ffn: f32 = 0,
 
     pub fn init(decoder: *Decoder, limit: u32) !Session {
         if (limit == 0 or limit > context_limit) return error.ContextLimit;
@@ -318,8 +399,16 @@ pub const Session = struct {
         return contents(u16, self.outputs[0], packet_width * vocab)[self.last_logits_offset..][0..vocab];
     }
 
-    fn bindings(self: *Session, step: u32) [30]c.flint_gpu_binding {
-        var result: [30]c.flint_gpu_binding = undefined;
+    fn steeringActive(self: *const Session) bool {
+        return self.decoder.steering != null and (self.steering_attn != 0 or self.steering_ffn != 0);
+    }
+
+    fn publishSteering(self: *Session) void {
+        contents(f32, self.sampling, 8)[6..8].* = .{ self.steering_attn, self.steering_ffn };
+    }
+
+    fn bindings(self: *Session, step: u32) [31]c.flint_gpu_binding {
+        var result: [31]c.flint_gpu_binding = undefined;
         for (self.decoder.model.banks, 0..) |buffer, i| result[i] = .{ .handle = buffer, .offset = 0, .index = @intCast(i) };
         result[13] = .{ .handle = self.metadata_buffer, .offset = 0, .index = 13 };
         for (self.kv, 14..) |buffer, i| result[i] = .{ .handle = buffer, .offset = 0, .index = @intCast(i) };
@@ -331,6 +420,7 @@ pub const Session = struct {
         result[22].offset = @as(u64, step) * vocab * 2;
         result[23].offset = @as(u64, step) * 50 * 2048 * 2;
         result[24].offset = @as(u64, step) * workers * 4;
+        result[30] = .{ .handle = self.decoder.steering, .offset = 0, .index = 30 };
         return result;
     }
 
@@ -365,10 +455,12 @@ pub const Session = struct {
                 sample[i + 2] = @floatFromInt(value);
             }
         } else contents(u32, self.sampling, 1)[0] = 1;
+        self.publishSteering();
         const bound = self.bindings(0);
         const gpu = self.decoder.model.gpu;
         const command = c.flint_gpu_command_begin(gpu) orelse return error.GpuCommand;
-        const dispatched = c.flint_gpu_dispatch(gpu, command, if (packet) self.decoder.greedyKernel() else self.decoder.scalarKernel(), null, 0, &bound, bound.len, &[_]u32{ self.decoder.profile.workerCount(), 1, 1 }, &[_]u32{ 256, 1, 1 });
+        const active = self.steeringActive();
+        const dispatched = c.flint_gpu_dispatch(gpu, command, if (packet) self.decoder.greedyKernel(active) else self.decoder.scalarKernel(active), null, 0, &bound, if (active) 31 else 30, &[_]u32{ self.decoder.profile.workerCount(), 1, 1 }, &[_]u32{ 256, 1, 1 });
         const completed = c.flint_gpu_command_end(gpu, command, true);
         if (!dispatched or !completed) {
             self.usable = false;
@@ -435,13 +527,15 @@ pub const Session = struct {
         @memset(contents(u32, self.control, packet_width * 1024), 0);
         @memset(contents(u32, self.outputs[2], packet_width * workers), 0);
         @memset(contents(u32, self.outputs[3], 17), 0);
+        self.publishSteering();
         const gpu = self.decoder.model.gpu;
         const command = c.flint_gpu_command_begin(gpu) orelse return error.GpuCommand;
         var dispatched = true;
         for (0..count) |i| {
             const step: u32 = @intCast(i);
             const bound = self.bindings(step);
-            dispatched = c.flint_gpu_dispatch(gpu, command, self.decoder.scalarKernel(), null, 0, &bound, bound.len, &[_]u32{ self.decoder.profile.workerCount(), 1, 1 }, &[_]u32{ 256, 1, 1 });
+            const active = self.steeringActive();
+            dispatched = c.flint_gpu_dispatch(gpu, command, self.decoder.scalarKernel(active), null, 0, &bound, if (active) 31 else 30, &[_]u32{ self.decoder.profile.workerCount(), 1, 1 }, &[_]u32{ 256, 1, 1 });
             if (!dispatched) break;
             const config = try SampleConfig.init(options, step, count);
             dispatched = self.encodeSample(command, &config, self.outputs[0], @as(u64, step) * vocab * 2, false);

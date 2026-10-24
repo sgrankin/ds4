@@ -317,11 +317,8 @@ pub fn decode(graph: *Graph, model: *const Model, weights: *const Layer, layer: 
     const ok = if (layer < shape.n_leading_dense) dense(graph, model, weights) else sparse(graph, model, weights, layer, ablate);
     if (!ok) return false;
     c.ds4_native_graph_debug_tensor("ffn_out", graph.next, shape.n_embd, layer, position);
-    if (graph.directional_steering_ffn_scale != 0) {
-        if (graph.directional_steering_dirs_by_tier[0] == null or
-            c.ds4_gpu_directional_steering_project_tensor(graph.next, graph.directional_steering_dirs_by_tier[0], layer, shape.n_embd, 1, graph.directional_steering_ffn_scale) == 0) return false;
-    }
-    return c.ds4_gpu_hc_expand_tensor(graph.hc_next, graph.next, graph.hc_after_attn, graph.hc_post, graph.hc_comb, shape.n_embd, shape.n_hc) != 0;
+    return Ops.hcExpand(graph, graph.hc_next, graph.next, graph.hc_after_attn, null, layer, graph.directional_steering_ffn_scale) and
+        @import("../steering_capture.zig").capture(graph.hc_next, layer, 1, shape.n_embd, shape.n_hc, "residual", position);
 }
 
 fn gateUpRows(graph: *Graph, model: *const Model, gate: *const Weight, up: *const Weight, mid: ?*Tensor, hidden: u32, count: u32) bool {

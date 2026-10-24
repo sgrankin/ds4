@@ -199,6 +199,11 @@ pub fn parse(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend) c.ag
             config.engine.warm_weights = true;
         } else if (same(option, "--dir-steering-file")) {
             config.engine.directional_steering_file = args.value(option);
+        } else if (same(option, "--dir-steering-mode")) {
+            const value = args.value(option);
+            config.engine.directional_steering_mode = if (same(value, "project")) c.DS4_STEERING_PROJECT else if (same(value, "add")) c.DS4_STEERING_ADD else {
+                invalid(option, value);
+            };
         } else if (same(option, "--dir-steering-ffn")) {
             config.engine.directional_steering_ffn = decimal(args.value(option), option, -100, 100);
             steering_set = true;

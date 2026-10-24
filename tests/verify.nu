@@ -38,6 +38,7 @@ def --wrapped checked [program: string, ...args: string] {
 def script-tests [] {
     checked $nu.current-exe tests/test_script_launchers.nu
     checked python3 tests/test_model_download.py
+    checked python3 -B tests/test_qwen4_steering.py --builder-only --output .workspaces/steering-builder-contract
     checked $nu.current-exe tests/test_script_drivers.nu
 }
 

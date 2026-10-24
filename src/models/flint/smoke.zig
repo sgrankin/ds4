@@ -10,6 +10,7 @@ const kv_test = @import("kv_test.zig");
 const profiles = @import("profile.zig");
 const profile_test = @import("profile_test.zig");
 const prefill_test = @import("prefill_test.zig");
+const steering_test = @import("steering_test.zig");
 const a = std.heap.c_allocator;
 
 export fn main(argc: c_int, argv: [*][*:0]u8) c_int {
@@ -56,6 +57,11 @@ fn runSelected(argc: c_int, argv: [*][*:0]u8, requested_profile: ?[:0]const u8) 
     try decode.compile(gpu, profile);
     std.debug.print("flint: native decode profile {s} compiled\n", .{profile.name()});
     try sampling_test.run(gpu);
+    if (!decode_only) {
+        try decode.compileSteering(gpu, profile);
+        try decode.compileAdditiveSteering(gpu, profile);
+        try steering_test.run(gpu);
+    }
     if (argc > 1 and !std.mem.startsWith(u8, std.mem.span(argv[1]), "--")) {
         var model = try weights.load(std.mem.span(argv[1]));
         defer model.deinit();

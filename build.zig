@@ -176,6 +176,7 @@ pub fn build(b: *std.Build) void {
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/engine/glm53_model_entry.zig", "gguf_c", api));
     }
     // Keep FILE-only payload exports cold so host fixtures do not extract GPU code.
+    core_module.addObjectFile(object(b, target, sdk, clang, "src/engine/steering_entry.zig", "steering-entry", optimize, &.{}));
     const payload_api = generatedApi(b, target, sdk, optimize, "src/engine/payload_io.h");
     const payload_file = nativeObject(b, target, sdk, optimize, "src/engine/payload_io_entry.zig", "payload_io_c", payload_api);
     const payload_tensor = nativeObject(b, target, sdk, optimize, "src/engine/payload_tensor_entry.zig", "payload_io_c", payload_api);
@@ -626,6 +627,8 @@ pub fn build(b: *std.Build) void {
     inline for (.{
         .{ "dense-mpp-test", "test-metal-dense-mpp", "tests/test_metal_dense_mpp.c" },
         .{ "shared-bf16-test", "test-metal-shared-bf16", "tests/test_metal_shared_bf16.c" },
+        .{ "steering-hc-test", "test-metal-steering-hc", "tests/test_metal_steering_hc.c" },
+        .{ "session-steering-test", "test-session-steering", "tests/test_session_steering.c" },
         .{ "ssd-experts-test", "test-metal-ssd-experts", "tests/test_metal_ssd_experts.c" },
         .{ "command-memory-test", "test-metal-command-memory", "tests/test_metal_command_memory.c" },
         .{ "qwen-kernels-test", "test-qwen4-kernels", "tests/test_qwen4_kernels.c" },

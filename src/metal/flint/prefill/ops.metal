@@ -176,6 +176,144 @@ kernel void flint_prefill_combine(
     hidden[i]=flint_bf16(float(hidden[i])+float(mlp));
 }
 
+// Steering edits the BF16 residual after the ordinary module addition. Project
+// uses one token-wide reduction; add keeps the ordinary coordinate grid. Both
+// replace the existing residual dispatch, with no extra per-layer launch.
+inline float flint_prefill_steering_dot(thread flint_bf16* values,
+    device const float* direction, uint tid, uint lane, uint sg,
+    threadgroup float* partial) {
+    float dot=0.0f;
+    for(uint j=0;j<8;++j) dot+=float(values[j])*direction[tid+j*256];
+    dot=simd_sum(dot);
+    if(lane==0)partial[sg]=dot;
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    return simd_sum(lane<8?partial[lane]:0.0f);
+}
+
+inline flint_bf16 flint_prefill_mixture(device const flint_bf16* experts,
+    device const uint* permutation,device const flint_bf16* weights,
+    device const flint_bf16* shared,uint row,uint col,uint width) {
+    flint_bf16 sum=flint_bf16(experts[permutation[row*6]*width+col]*weights[row*6]);
+    for(uint rank=1;rank<6;++rank) {
+        flint_bf16 product=flint_bf16(experts[permutation[row*6+rank]*width+col]*weights[row*6+rank]);
+        sum=flint_bf16(float(sum)+float(product));
+    }
+    return flint_bf16(float(sum)+float(shared[row*width+col]));
+}
+
+kernel void flint_prefill_add_steer(
+    constant FlintRows& p [[buffer(0)]], device const flint_bf16* x [[buffer(1)]],
+    device const flint_bf16* y [[buffer(2)]], device flint_bf16* out [[buffer(3)]],
+    device const float* direction [[buffer(4)]],
+    uint row [[threadgroup_position_in_grid]], uint tid [[thread_index_in_threadgroup]],
+    uint lane [[thread_index_in_simdgroup]], uint sg [[simdgroup_index_in_threadgroup]]) {
+    threadgroup float partial[8];
+    flint_bf16 values[8];
+    for(uint j=0;j<8;++j) {
+        uint i=row*2048+tid+j*256;
+        values[j]=flint_bf16(float(x[i])+float(y[i]));
+    }
+    float factor=p.epsilon*flint_prefill_steering_dot(values,direction,tid,lane,sg,partial);
+    for(uint j=0;j<8;++j) {
+        uint col=tid+j*256;
+        out[row*2048+col]=flint_bf16(float(values[j])-factor*direction[col]);
+    }
+}
+
+kernel void flint_prefill_combine_steer(
+    constant FlintRows& p [[buffer(0)]], device const flint_bf16* experts [[buffer(1)]],
+    device const uint* permutation [[buffer(2)]], device const flint_bf16* weights [[buffer(3)]],
+    device const flint_bf16* shared [[buffer(4)]], device flint_bf16* hidden [[buffer(5)]],
+    device const float* direction [[buffer(6)]],
+    uint row [[threadgroup_position_in_grid]], uint tid [[thread_index_in_threadgroup]],
+    uint lane [[thread_index_in_simdgroup]], uint sg [[simdgroup_index_in_threadgroup]]) {
+    threadgroup float partial[8];
+    flint_bf16 values[8];
+    for(uint j=0;j<8;++j) {
+        uint col=tid+j*256,i=row*2048+col;
+        values[j]=flint_bf16(float(hidden[i])+float(flint_prefill_mixture(experts,permutation,weights,shared,row,col,2048)));
+    }
+    float factor=p.epsilon*flint_prefill_steering_dot(values,direction,tid,lane,sg,partial);
+    for(uint j=0;j<8;++j) {
+        uint col=tid+j*256;
+        hidden[row*2048+col]=flint_bf16(float(values[j])-factor*direction[col]);
+    }
+}
+
+kernel void flint_prefill_add_additive(
+    constant FlintRows& p [[buffer(0)]], device const flint_bf16* x [[buffer(1)]],
+    device const flint_bf16* y [[buffer(2)]], device flint_bf16* out [[buffer(3)]],
+    device const float* direction [[buffer(4)]], uint i [[thread_position_in_grid]]) {
+    if(i>=p.rows*p.width)return;
+    flint_bf16 residual=flint_bf16(float(x[i])+float(y[i]));
+    out[i]=flint_bf16(float(residual)+p.epsilon*direction[i%p.width]);
+}
+
+kernel void flint_prefill_combine_additive(
+    constant FlintRows& p [[buffer(0)]], device const flint_bf16* experts [[buffer(1)]],
+    device const uint* permutation [[buffer(2)]], device const flint_bf16* weights [[buffer(3)]],
+    device const flint_bf16* shared [[buffer(4)]], device flint_bf16* hidden [[buffer(5)]],
+    device const float* direction [[buffer(6)]], uint i [[thread_position_in_grid]]) {
+    if(i>=p.rows*p.width)return;
+    uint row=i/p.width,col=i%p.width;
+    flint_bf16 module=flint_prefill_mixture(experts,permutation,weights,shared,row,col,p.width);
+    flint_bf16 residual=flint_bf16(float(hidden[i])+float(module));
+    hidden[i]=flint_bf16(float(residual)+p.epsilon*direction[col]);
+}
+
+// Capture the pre-edit residual of the final prompt token. pad selects project
+// (0) or add (1); no direction is read when scale is zero. Normal paths do not
+// allocate capture storage or perform readbacks.
+kernel void flint_prefill_add_capture(
+    constant FlintRows& p [[buffer(0)]], device const flint_bf16* x [[buffer(1)]],
+    device const flint_bf16* y [[buffer(2)]], device flint_bf16* out [[buffer(3)]],
+    device const float* direction [[buffer(4)]], device float* capture [[buffer(5)]],
+    uint row [[threadgroup_position_in_grid]], uint tid [[thread_index_in_threadgroup]],
+    uint lane [[thread_index_in_simdgroup]], uint sg [[simdgroup_index_in_threadgroup]]) {
+    threadgroup float partial[8];
+    flint_bf16 values[8];
+    for(uint j=0;j<8;++j) {
+        uint col=tid+j*256,i=row*2048+col;
+        values[j]=flint_bf16(float(x[i])+float(y[i]));
+        if(row+1==p.rows)capture[col]=float(values[j]);
+    }
+    float factor=p.epsilon;
+    if(p.epsilon!=0.0f && p.pad==0u)
+        factor*=-flint_prefill_steering_dot(values,direction,tid,lane,sg,partial);
+    for(uint j=0;j<8;++j) {
+        uint col=tid+j*256;
+        flint_bf16 edited=values[j];
+        if(p.epsilon!=0.0f)edited=flint_bf16(float(values[j])+factor*direction[col]);
+        out[row*2048+col]=edited;
+    }
+}
+
+kernel void flint_prefill_combine_capture(
+    constant FlintRows& p [[buffer(0)]], device const flint_bf16* experts [[buffer(1)]],
+    device const uint* permutation [[buffer(2)]], device const flint_bf16* weights [[buffer(3)]],
+    device const flint_bf16* shared [[buffer(4)]], device flint_bf16* hidden [[buffer(5)]],
+    device const float* direction [[buffer(6)]], device float* capture [[buffer(7)]],
+    uint row [[threadgroup_position_in_grid]], uint tid [[thread_index_in_threadgroup]],
+    uint lane [[thread_index_in_simdgroup]], uint sg [[simdgroup_index_in_threadgroup]]) {
+    threadgroup float partial[8];
+    flint_bf16 values[8];
+    for(uint j=0;j<8;++j) {
+        uint col=tid+j*256,i=row*2048+col;
+        flint_bf16 module=flint_prefill_mixture(experts,permutation,weights,shared,row,col,2048);
+        values[j]=flint_bf16(float(hidden[i])+float(module));
+        if(row+1==p.rows)capture[col]=float(values[j]);
+    }
+    float factor=p.epsilon;
+    if(p.epsilon!=0.0f && p.pad==0u)
+        factor*=-flint_prefill_steering_dot(values,direction,tid,lane,sg,partial);
+    for(uint j=0;j<8;++j) {
+        uint col=tid+j*256;
+        flint_bf16 edited=values[j];
+        if(p.epsilon!=0.0f)edited=flint_bf16(float(values[j])+factor*direction[col]);
+        hidden[row*2048+col]=edited;
+    }
+}
+
 // FullModel layout: each layer stores [K/V,4,capacity,128] BF16 elements.
 // Prefill leaves local rings chronological; global layers split every 65536.
 inline device flint_bf16* flint_kv_bank(uint block, device flint_bf16* b0,

@@ -7,6 +7,25 @@ pub const Weight = c.ds4_tensor;
 pub const Model = c.ds4_model;
 pub const Graph = c.ds4_glm_gpu_graph;
 
+/// Steering acts on the published residual, independently in each HC stream.
+/// Disabled steering keeps the established scalar/split kernels unchanged.
+pub fn hcExpand(graph: *const Graph, output: ?*Tensor, block: ?*Tensor, residual: ?*const Tensor, split: ?*const Tensor, layer: u32, scale: f32) bool {
+    const shape = &graph.config.shape;
+    if (scale == 0) return if (split != null)
+        c.ds4_gpu_hc_expand_split_tensor(output, block, residual, split, shape.n_embd, shape.n_hc) != 0
+    else
+        c.ds4_gpu_hc_expand_tensor(output, block, residual, graph.hc_post, graph.hc_comb, shape.n_embd, shape.n_hc) != 0;
+    if (graph.directional_steering_dirs_by_tier[0] == null) return false;
+    return if (split != null)
+        c.ds4_gpu_hc_expand_split_steering_tensor(output, block, residual, split, graph.directional_steering_dirs_by_tier[0], layer, shape.n_embd, shape.n_hc, effectiveScale(graph, scale), false, graph.directional_steering_mode) != 0
+    else
+        c.ds4_gpu_hc_expand_steering_tensor(output, block, residual, graph.hc_post, graph.hc_comb, graph.directional_steering_dirs_by_tier[0], layer, shape.n_embd, shape.n_hc, effectiveScale(graph, scale), graph.directional_steering_mode) != 0;
+}
+
+pub fn effectiveScale(graph: *const Graph, raw: f32) f32 {
+    return @import("../steering.zig").effectiveScale(raw, graph.directional_steering_mode, graph.directional_steering_layers);
+}
+
 pub fn denseQuant(kind: u32) bool {
     return switch (kind) {
         c.DS4_TENSOR_Q8_0, c.DS4_TENSOR_Q4_K, c.DS4_TENSOR_Q4_0, c.DS4_TENSOR_BF16 => true,

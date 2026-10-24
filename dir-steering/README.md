@@ -1,210 +1,164 @@
-# Directional Steering
+# Residual-stream steering
 
-Directional steering is a runtime activation edit for DS4. A steering file is a
-flat `f32` matrix with one normalized hidden-width direction per normal
-transformer layer. During inference, ds4 can apply the edit after attention
-outputs, FFN outputs, or both:
+A bank contains one hidden-width FP32 row per trunk layer. Capture the final
+prompt token's residual after the FFN/full transformer block (`residual`, the
+builder default), or after attention (`attn_residual`). For HC models, capture
+averages the four residual streams to learn one direction; runtime editing
+applies that direction independently to each stream. Flint has one stream.
+The residual convention is implemented for Metal inference.
 
-```text
-y = y - scale * direction[layer] * dot(direction[layer], y)
+Given a bank row `v`, residual `R` and configured strength `s`:
+
+| Mode | Runtime edit | Strength convention |
+| --- | --- | --- |
+| `project` (default) | `R -= s * d * dot(d, R)`, where `d = v / norm(v)` | Per selected layer |
+| `add` | `R += (s / L) * v` | Divided across `L` nonzero bank rows |
+
+Project mode normalizes every nonzero row at loading. Positive strength
+suppresses that direction; negative strength amplifies it. Add mode preserves
+learned vector magnitude. With a target-minus-control bank, positive additive
+strength moves toward the target residual; negative strength moves away.
+
+Zero rows select no layer. `L` counts the actual nonzero rows, so selecting
+fewer layers concentrates additive strength across those layers. The same
+`1/L` convention applies separately to attention and FFN strengths. Projection
+strength remains per layer as the selection changes.
+
+## Run a bank
+
+```bash
+./ds4 --model /path/to/model --dir-steering-file dir-steering/out/style.f32 \
+  --dir-steering-mode project --dir-steering-ffn 1 --dir-steering-attn 0 \
+  --temp 0 -n 128 -p 'Explain why databases use indexes.'
+
+./ds4 --model /path/to/model --dir-steering-file dir-steering/out/style-add.f32 \
+  --dir-steering-mode add --dir-steering-ffn 1 --dir-steering-attn 0 \
+  --temp 0 -n 128 -p 'Explain why databases use indexes.'
 ```
 
-Positive scale removes the represented direction. Negative scale amplifies it.
-With no steering file or zero scales, ds4 follows the normal inference path.
+File-only defaults are project mode, FFN strength 1 and attention strength 0.
+The FFN flag edits the residual after the full block; the attention flag edits
+its intermediate residual. Both can be enabled independently. A zero strength
+preserves the normal computation; a bank may be loaded at zero for later live
+FFN changes. Changes affect subsequent computation; existing KV retains the
+influence of its earlier settings.
 
-The file shape depends on the model:
+Mode and bank are chosen at engine startup; live `/steer` changes the FFN
+strength in the selected mode. DS4.1 and Flint edit the ordinary BF16 residual
+publication and round the edited result back to BF16. Disabled/zero steering
+uses the original computation.
 
-- GLM 5.3 Flash: `45 x 4096`. The separate MTP predictor layer is omitted.
-- Qwen3.8 Flash Next: `48 x 2560`. FFN steering is applied to each
-  hyper-connection branch of the residual; dumps average those branches
-  at the last prompt token.
+Automatic KV SSD/suffix reuse cannot be combined with a loaded steering bank,
+including a zero-strength preload. The agent disables that cache; the server
+rejects an incompatible cache setup. Start a steered server without
+`DS4_STATE_CACHE_DIR` and suffix-cache options. Expert-weight SSD streaming works.
+Per-token timing therefore does not quantify the loss of those KV cache hits
+for a persistent agent; cache compatibility is separate work.
 
-Original DeepSeek V4 Flash and GLM 5.2 are retired. V4.1 Flash steering is
-not implemented; do not reuse original Flash vectors with it.
+The runtime reads the raw `.f32` bank. Its JSON sidecar documents extraction;
+pass the desired runtime mode explicitly. The new recipes use residual banks.
+Rebuild directions learned at the previous module-output capture points.
 
-## Runtime Options
+## Build a bank
 
-```text
---dir-steering-file FILE   load one f32 direction per normal model layer
---dir-steering-ffn F       apply steering after FFN outputs; default is 1 when a file is provided
---dir-steering-attn F      apply steering after attention outputs; default is 0
-```
+The builder learns `mean(target residual) - mean(control residual)` from paired
+prompt lists. Project mode writes unit directions. Add mode writes the raw
+mean differences, preserving their magnitude; it performs no pair-wise
+normalization or orthogonalization.
 
-The FFN output is usually the best first target because it is late enough in
-each layer to represent behavior, style, and topic signals. Attention steering
-is available for experiments, but it can be more fragile.
+| Builder profile | Bank shape |
+| --- | --- |
+| `deepseek-v4.1-flash` | `40 x 5120` |
+| `flint` | `49 x 2048` |
+| `glm-5.3-flash` | `45 x 4096` |
+| `qwen3.8-flash-next` | `48 x 2560` |
 
-## GLM 5.3 Example
+Predictor layers are excluded. Retained V4 Pro uses `61 x 7168`; full GLM 5.3
+uses `78 x 6144`. Those two have no extraction profile here. Full GLM's runtime
+primitives/shape have been tested; its full checkpoint is not installed and
+live inference remains unqualified.
 
-Build a GLM 5.3 direction from paired target and control prompt lists:
-
-```sh
-python3 dir-steering/tools/build_direction.py \
-  --profile glm-5.3-flash \
-  --ds4 ./ds4 \
-  --model gguf/GLM-5.3-Flash-Q2.gguf \
-  --good-file /path/to/target-prompts.txt \
-  --bad-file /path/to/control-prompts.txt \
-  --out dir-steering/out/glm53-direction.json \
-  --component ffn_out \
-  --ctx 512
-```
-
-Generated `.f32` vectors are local artifacts and are not stored in the
-repository. GLM 5.3 steering works with `--mtp`, `ds4-server`, native session
-batching, and two-Mac tensor parallelism. For tensor parallelism, pass the same
-steering file and scales to both the worker and coordinator.
-
-## Verbosity Example
-
-The bundled example builds a style direction from 100 paired prompts. Each pair
-asks for the same information in two ways:
-
-- `examples/succinct.txt`: terse target prompts.
-- `examples/verbose.txt`: detailed contrast prompts.
-
-Because the extracted direction is `succinct - verbose`, negative FFN scales
-make answers shorter, while positive FFN scales tend to make answers longer and
-more explanatory.
-
-Build the vector:
-
-```sh
-python3 dir-steering/tools/build_direction.py \
-  --profile glm-5.3-flash \
-  --ds4 ./ds4 \
-  --model ds4flash.gguf \
+```bash
+python3 -B dir-steering/tools/build_direction.py \
+  --profile flint --ds4 ./ds4 --model /path/to/flint-int4 \
   --good-file dir-steering/examples/succinct.txt \
   --bad-file dir-steering/examples/verbose.txt \
-  --out dir-steering/out/verbosity.json \
-  --component ffn_out \
-  --ctx 512
+  --mode add --component residual --layers '12-23,30' \
+  --out dir-steering/out/flint-style-add.json --ctx 512
 ```
 
-This writes:
+Use `--mode project` for projection, or `--component attn_residual` to learn an
+attention-residual bank. `--layers all` is the default. Selection uses zero-based
+indices and inclusive ranges; unselected rows are written as zeros. Capture
+still gathers the full bank, making alternate selections possible offline.
+Apply an attention-residual bank with `--dir-steering-attn STRENGTH` and
+`--dir-steering-ffn 0`.
+Start with a small paired prompt list and grade held-out prompts before
+extracting a larger bank or choosing a strength.
 
-```text
-dir-steering/out/verbosity.json
-dir-steering/out/verbosity.f32
+Flint uses its automatic thinking template. The builder sends no forced
+thinking flag for it and rejects `--think`. Other profiles support `--think`
+or use their direct-answer prompt by default.
+
+Capture files are `dump_residual-L_pos0.bin` or
+`dump_attn_residual-L_pos0.bin`: one little-endian FP32 hidden-width row per
+layer. Here `pos0` labels the prompt capture. The final prompt row survives
+because extraction uses the existing prefill-only `--dump-logits` diagnostic
+and performs no decoding. Prompt files, stderr and raw captures remain beneath
+`.workspaces/steering-capture/`; `--work-dir DIR` selects another parent. Each
+unique workspace is printed and recorded in the sidecar.
+
+Capture subprocesses run from the repository root for Metal source discovery,
+including when `--ds4` names an isolated build. V4.1 uses a 32GB streaming expert
+cache with replay/resident approximations disabled. GLM Flash uses a 24GB cache,
+disables static decode mapping and receives no unsupported chunk override.
+GLM capture is bounded to `--ctx <= 2048` for its native chunk. Keep extraction
+separate from other heavy model jobs and retain the existing pressure guard.
+
+## Choose strengths and layers
+
+Use fixed-token timing and held-out behavioral tasks. Small measured overhead
+is acceptable; retain prefill, live-append and decode results separately. Sweep
+strength as well as layer selection, recording output quality and useful
+behavior. A synthetic bank establishes arithmetic correctness, not semantic
+control. Historical word counts from the retired original Flash model do not
+qualify the current residual hooks.
+
+```bash
+nu dir-steering/tools/run_sweep.nu --ds4 ./ds4 --model /path/to/flint-int4 \
+  --direction dir-steering/out/flint-style-add.f32 --mode add \
+  --prompts dir-steering/examples/eval_prompts.txt --scales '-1,0,0.5,1,2'
 ```
 
-Try a terse run:
+The sweep prints outputs for inspection. Use the
+[fixed-token driver](../speed-bench/experiments/steering-20261024/README.md)
+for latency and full-distribution comparisons. No current strength is a
+universal recommendation: layer selection, capture component and mode change
+what that number means.
 
-```sh
-./ds4 -m ds4flash.gguf --nothink --temp 0 -n 160 \
-  --dir-steering-file dir-steering/out/verbosity.f32 \
-  --dir-steering-ffn -1 \
-  -p "Explain why databases use indexes."
-```
+## Combining banks offline
 
-Try a verbose run:
+Additions at the same hook combine linearly. For banks `v_i` with nonzero-row
+counts `L_i` and desired strengths `s_i`, form
+`w = sum((s_i / L_i) * v_i)`. Save `w` as FP32 and run it in add mode with
+strength `L_w`, the nonzero-row count of the merged bank. This reproduces the
+summed additive edit mathematically, with ordinary FP32 rounding. Skip an
+all-zero result. Banks must have the same shape and capture hook.
 
-```sh
-./ds4 -m ds4flash.gguf --nothink --temp 0 -n 220 \
-  --dir-steering-file dir-steering/out/verbosity.f32 \
-  --dir-steering-ffn 2 \
-  -p "Explain why databases use indexes."
-```
+Projection banks generally cannot be merged exactly by summing directions.
+Several projections may remove a higher-dimensional subspace; projecting along
+the sum removes one direction. Sequential nonorthogonal projections also depend
+on order. Keep those as separate experiments.
 
-The same vector can be used in either direction. The sign is the important part:
+## Sources and conventions
 
-- negative scale amplifies the succinct target direction;
-- positive scale suppresses that direction and usually gives the model more room
-  to elaborate.
-
-## Evaluating Scales
-
-Use the sweep helper to test several strengths on a fixed prompt set:
-
-```sh
-python3 dir-steering/tools/run_sweep.py \
-  --ds4 ./ds4 \
-  --model ds4flash.gguf \
-  --direction dir-steering/out/verbosity.f32 \
-  --prompts dir-steering/examples/eval_prompts.txt \
-  --scales "-1,-0.5,0,0.5,1,2" \
-  --tokens 180 \
-  --nothink
-```
-
-Start with FFN scales between `-1` and `2`. If the model becomes repetitive,
-ignores the prompt, or starts losing factual content, the scale is too strong.
-For this example, `-1` is a good first terse setting and `2` is a good first
-verbose setting. Strong negative scales such as `-2` or `-3` can over-amplify
-the terse direction and collapse into repetition on some prompts.
-
-## Observed Effect
-
-These historical observations used the original V4 Flash model, which is now
-retired. They illustrate the technique; repeat the measurements for a new
-GLM or Qwen direction rather than expecting these word counts:
-
-- Prompt: `Explain why databases use indexes.`
-- `--dir-steering-ffn -1`: 67 words, one compact paragraph.
-- `--dir-steering-ffn 0`: 136 words, structured explanation.
-- `--dir-steering-ffn 1`: 140 words, structured explanation with more detail.
-
-On a prompt that the unsteered model already answered briefly, positive steering
-made the expansion more visible:
-
-- Prompt: `What does DNS do?`
-- `--dir-steering-ffn 0`: 44 words.
-- `--dir-steering-ffn 2`: 171 words, with sections and step-by-step detail.
-
-## Building Other Directions
-
-The extractor compares two prompt sets:
-
-- `good-file`: target prompts for the direction you want to represent.
-- `bad-file`: contrast prompts that should be separated from the target.
-
-It captures DS4 activations from the same local GPU graph used for inference,
-averages target minus contrast, normalizes one vector per layer, and writes both
-metadata JSON and the runtime `.f32` file.
-
-Concept removal:
-
-1. Put concept-heavy prompts in `good-file`.
-2. Put neutral prompts in `bad-file`.
-3. Run with a positive FFN scale.
-
-Concept amplification:
-
-1. Put desired concept prompts in `good-file`.
-2. Put neutral prompts in `bad-file`.
-3. Run with a negative FFN scale.
-
-Style control:
-
-1. Put prompts for the target style in `good-file`.
-2. Put contrasting style prompts in `bad-file`.
-3. Use negative scale to amplify the target style, positive scale to reduce it.
-
-The method is not a fine-tune. It is a low-rank runtime edit, so it works best
-for coarse behavior, topic, or style directions that are consistently present in
-the activation captures.
-
-## Qwen3.8 Flash Next
-
-Capture uses `--think` / `--nothink`
-(not `--think-high`). Dumps track the prompt phase explicitly, including
-one-token tails, and retain the last prompt token during ordinary and MTP
-decode. `attn_out` captures the output projection of both GDN and full-attention
-layers, giving one row for each of the 48 trunk layers:
-
-```sh
-python3 dir-steering/tools/build_direction.py \
-  --profile qwen3.8-flash-next \
-  --ds4 ./ds4 \
-  --model gguf/Qwen3.8-Flash-Next-Q4.gguf \
-  --good-file /path/to/target-prompts.txt \
-  --bad-file /path/to/control-prompts.txt \
-  --out dir-steering/out/qwen38-direction.json \
-  --component ffn_out \
-  --ctx 512
-```
-
-Qwen steering is Metal-only. `--mtp-model`, SSD streaming, and `--power`
-remain unsupported for this graph. The bank contains only the 48 trunk layers;
-the embedded MTP predictor remains unsteered. Its drafts are verified by the
-steered target trunk, so `--mtp` remains supported.
+- [Upstream ds4's original pipeline](https://github.com/antirez/ds4/commit/3f7e5c93ed46f47fc15d80d69f48763d50418149)
+  supplied the contrastive extraction and directional-steering foundation.
+  Its module-output intervention differs from this residual convention.
+- [Directional ablation](https://arxiv.org/abs/2406.11717) and
+  [activation addition](https://arxiv.org/abs/2308.10248) describe the underlying
+  interventions. A working hook alone does not validate a useful refusal/style
+  direction or reproduce either paper's complete experimental setup.
+- Layer-budgeted addition follows our oMLX implementation
+  (`omlx/patches/steering.py` in the local oMLX checkout). The complete formulas
+  and HC interpretation are specified above; oMLX is not a runtime dependency.

@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""Build a DS4 directional-steering vector from paired prompt sets.
+"""Build a residual-stream steering bank from paired target/control prompts.
 
-The extractor asks ds4 to dump one hidden activation row per normal transformer
-layer, averages the target and control rows, and writes a flat f32 file.
-At runtime ds4 applies:
-
-    y = y - scale * direction[layer] * dot(direction[layer], y)
-
-Positive scale suppresses the target direction.  Negative scale amplifies it.
+Project mode writes unit mean-difference directions. Add mode retains their
+learned magnitudes. Zero rows select no layer; runtime add strength is divided
+by the number of nonzero rows, while project strength remains per layer.
 """
 
 from __future__ import annotations
@@ -22,7 +18,10 @@ import tempfile
 from pathlib import Path
 
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
 MODEL_PROFILES = {
+    "deepseek-v4.1-flash": (40, 5120),
+    "flint": (49, 2048),
     "glm-5.3-flash": (45, 4096),
     "qwen3.8-flash-next": (48, 2560),
 }
@@ -49,8 +48,19 @@ def normalize(v: list[float]) -> list[float]:
     return [x * inv for x in v]
 
 
-def dot(a: list[float], b: list[float]) -> float:
-    return sum(x * y for x, y in zip(a, b))
+def selected_layers(text: str, count: int) -> set[int]:
+    """Zero-based indices and inclusive ranges, e.g. 8-15,24,32-39."""
+    if text == "all":
+        return set(range(count))
+    selected = set()
+    for item in text.split(","):
+        first, separator, last = item.partition("-")
+        start = int(first)
+        end = int(last) if separator else start
+        if start < 0 or end < start or end >= count:
+            raise ValueError(f"layer selection {item!r} is outside 0..{count - 1}")
+        selected.update(range(start, end + 1))
+    return selected
 
 
 def run_capture(
@@ -64,6 +74,8 @@ def run_capture(
     n_layer: int,
     n_embd: int,
     work: Path,
+    *,
+    profile: str = "qwen3.8-flash-next",
 ) -> list[list[float]]:
     """Run ds4 once and return the last prompt-row dump for every layer."""
     prompt_path = work / "prompt.txt"
@@ -74,7 +86,9 @@ def run_capture(
     env["DS4_METAL_GRAPH_DUMP_PREFIX"] = str(dump_prefix)
     env["DS4_METAL_GRAPH_DUMP_NAME"] = component
     env["DS4_METAL_GRAPH_DUMP_POS"] = "0"
-    env["DS4_QWEN4_PREFILL_CHUNK"] = str(max(ctx, 1024))
+    env["DS4_METAL_GRAPH_DUMP_LAYER"] = "all"
+    if profile == "qwen3.8-flash-next":
+        env["DS4_QWEN4_PREFILL_CHUNK"] = str(max(ctx, 1024))
 
     cmd = [
         str(ds4),
@@ -82,13 +96,32 @@ def run_capture(
         "--ctx", str(ctx),
         "--prompt-file", str(prompt_path),
         "-n", "1",
-        "--prefill-chunk", str(max(ctx, 1024)),
+        "--dump-logits", str(work / "prefill-logits.json"),
     ]
+    # GLM rejects the public chunk override. Its native 2048-row default covers
+    # the short prompt captures; the other profiles accept this CLI option.
+    if profile != "glm-5.3-flash":
+        cmd += ["--prefill-chunk", str(max(ctx, 1024))]
+    # Match the preceding qualification's memory/cache settings. Capturing a
+    # direction must not accidentally request a fully resident huge model.
+    if profile == "deepseek-v4.1-flash":
+        cmd += ["--ssd-streaming", "--ssd-streaming-cache-experts", "32GB"]
+        env.update(DS4_V41_DECODER_REPLAY_ROWS="0",
+                   DS4_METAL_V41_RESIDENT_ROUTE_GAP="0",
+                   DS4_METAL_V41_RESIDENT_PREFILL_GAP="0",
+                   DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS="0")
+    elif profile == "glm-5.3-flash":
+        cmd += ["--ssd-streaming", "--ssd-streaming-cache-experts", "24GB"]
+        env["DS4_METAL_DISABLE_STREAMING_STATIC_DECODE_MAP"] = "1"
     if system:
         cmd += ["--system", system]
-    cmd.append("--think" if think else "--nothink")
-    result = subprocess.run(cmd, cwd=ds4.parent, env=env, check=False,
+    # Flint's canonical template chooses when to reason and rejects forced
+    # thinking controls. The other profiles retain their explicit prompt mode.
+    if profile != "flint":
+        cmd.append("--think" if think else "--nothink")
+    result = subprocess.run(cmd, cwd=REPO_ROOT, env=env, check=False,
                             stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    (work / "stderr.log").write_bytes(result.stderr)
     if result.returncode != 0:
         error = result.stderr.decode("utf-8", errors="replace")
         raise RuntimeError(f"ds4 activation capture failed:\n{error}")
@@ -101,7 +134,10 @@ def run_capture(
             data.fromfile(f, path.stat().st_size // 4)
         if len(data) < n_embd or len(data) % n_embd != 0:
             raise RuntimeError(f"bad dump shape for {path}: {len(data)} floats")
-        rows.append(list(data[-n_embd:]))
+        row = list(data[-n_embd:])
+        if not all(math.isfinite(value) for value in row):
+            raise RuntimeError(f"nonfinite activation in {path}")
+        rows.append(row)
     return rows
 
 
@@ -116,7 +152,8 @@ def add_rows(total: list[list[float]], rows: list[list[float]], n_layer: int) ->
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ds4", default="./ds4", help="path to the ds4 CLI")
-    ap.add_argument("--model", default="ds4flash.gguf", help="GGUF model path")
+    ap.add_argument("--model", default="ds4flash.gguf",
+                    help="GGUF path, or Flint checkpoint directory")
     ap.add_argument("--profile", choices=MODEL_PROFILES,
                     default="glm-5.3-flash",
                     help="model shape and chat-template profile")
@@ -128,23 +165,35 @@ def main() -> None:
                     help="metadata JSON path; .f32 is written next to it")
     ap.add_argument("--source", default="",
                     help="optional corpus source or provenance note")
+    ap.add_argument("--work-dir", default=str(REPO_ROOT / ".workspaces" / "steering-capture"),
+                    help="parent for retained per-prompt activation captures")
     ap.add_argument("--ctx", type=int, default=512)
     ap.add_argument("--system", default="You are a helpful assistant.")
-    ap.add_argument("--component", default="ffn_out",
-                    choices=("ffn_out", "attn_out"),
-                    help="runtime-editable activation stream at the profile's embedding width")
+    ap.add_argument("--component", default="residual",
+                    choices=("residual", "attn_residual"),
+                    help="post-FFN residual (default), or post-attention residual")
+    ap.add_argument("--mode", choices=("project", "add"), default="project",
+                    help="unit projection direction, or raw mean-difference addition")
+    ap.add_argument("--layers", default="all",
+                    help="zero-based inclusive layer selection, e.g. 8-15,24,32-39")
     ap.add_argument("--think", action="store_true",
                     help="capture after <think>; default captures direct answers")
-    ap.add_argument("--pair-normalize", action="store_true",
-                    help="average normalized per-pair differences")
-    ap.add_argument("--no-orthogonalize", action="store_true",
-                    help="do not remove the component parallel to the control mean")
     args = ap.parse_args()
+    if args.ctx < 2:
+        ap.error("--ctx must be at least 2")
+    if args.profile == "flint" and args.think:
+        ap.error("Flint uses its automatic thinking template; omit --think")
+    if args.profile == "glm-5.3-flash" and args.ctx > 2048:
+        ap.error("GLM capture currently requires --ctx <= 2048 (one prefill chunk)")
 
     ds4 = Path(args.ds4).resolve()
     model_arg = Path(args.model)
     model = model_arg.resolve()
     n_layer, n_embd = MODEL_PROFILES[args.profile]
+    try:
+        selected = selected_layers(args.layers, n_layer)
+    except ValueError as error:
+        ap.error(str(error))
     good_prompts = read_prompt_file(Path(args.good_file))
     bad_prompts = read_prompt_file(Path(args.bad_file))
     n = min(len(good_prompts), len(bad_prompts))
@@ -153,66 +202,56 @@ def main() -> None:
 
     good_sum = [[0.0] * n_embd for _ in range(n_layer)]
     bad_sum = [[0.0] * n_embd for _ in range(n_layer)]
-    pair_sum = [[0.0] * n_embd for _ in range(n_layer)]
 
-    with tempfile.TemporaryDirectory(prefix="ds4-dir-steer-") as td:
-        root = Path(td)
-        for i, (good, bad) in enumerate(zip(good_prompts, bad_prompts), 1):
-            print(f"pair {i}/{n}", flush=True)
-            gw = root / f"good-{i}"
-            bw = root / f"bad-{i}"
-            gw.mkdir()
-            bw.mkdir()
-            good_rows = run_capture(ds4, model, good, args.system, args.think,
-                                    args.ctx, args.component, n_layer, n_embd, gw)
-            bad_rows = run_capture(ds4, model, bad, args.system, args.think,
-                                   args.ctx, args.component, n_layer, n_embd, bw)
-            add_rows(good_sum, good_rows, n_layer)
-            add_rows(bad_sum, bad_rows, n_layer)
-            if args.pair_normalize:
-                for layer in range(n_layer):
-                    diff = normalize([
-                        good_rows[layer][j] - bad_rows[layer][j]
-                        for j in range(n_embd)
-                    ])
-                    for j, value in enumerate(diff):
-                        pair_sum[layer][j] += value
+    work_parent = Path(args.work_dir).resolve()
+    work_parent.mkdir(parents=True, exist_ok=True)
+    root = Path(tempfile.mkdtemp(prefix=f"{args.profile}-", dir=work_parent))
+    print(f"capture workspace: {root}", flush=True)
+    for i, (good, bad) in enumerate(zip(good_prompts, bad_prompts), 1):
+        print(f"pair {i}/{n}", flush=True)
+        gw = root / f"good-{i}"
+        bw = root / f"bad-{i}"
+        gw.mkdir()
+        bw.mkdir()
+        good_rows = run_capture(ds4, model, good, args.system, args.think,
+                                args.ctx, args.component, n_layer, n_embd, gw,
+                                profile=args.profile)
+        bad_rows = run_capture(ds4, model, bad, args.system, args.think,
+                               args.ctx, args.component, n_layer, n_embd, bw,
+                               profile=args.profile)
+        add_rows(good_sum, good_rows, n_layer)
+        add_rows(bad_sum, bad_rows, n_layer)
 
     layers = []
     for layer in range(n_layer):
-        good_mean = [x / n for x in good_sum[layer]]
-        bad_mean = [x / n for x in bad_sum[layer]]
-        if args.pair_normalize:
-            direction = normalize([x / n for x in pair_sum[layer]])
-        else:
-            direction = normalize([
-                good_mean[i] - bad_mean[i]
-                for i in range(n_embd)
-            ])
-        if not args.no_orthogonalize:
-            base = normalize(bad_mean)
-            projection = dot(direction, base)
-            direction = normalize([
-                direction[i] - projection * base[i]
-                for i in range(n_embd)
-            ])
+        direction = [(good - bad) / n for good, bad in zip(good_sum[layer], bad_sum[layer])]
+        if layer not in selected:
+            direction = [0.0] * n_embd
+        elif args.mode == "project":
+            direction = normalize(direction)
         layers.append(direction)
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     payload = {
-        "format": "ds4-directional-steering-v1",
+        "format": "ds4-residual-steering-v1",
         "shape": [n_layer, n_embd],
         "profile": args.profile,
         "component": args.component,
+        "mode": args.mode,
+        "normalization": "unit-l2" if args.mode == "project" else "none",
+        "selected_layers": sorted(selected),
+        "nonzero_layers": [i for i, row in enumerate(layers) if any(row)],
+        "pairs": n,
         "thinking": bool(args.think),
-        "pair_normalize": bool(args.pair_normalize),
-        "orthogonalize_control_mean": not args.no_orthogonalize,
         "good_file": str(Path(args.good_file)),
         "bad_file": str(Path(args.bad_file)),
         "model": str(model_arg),
         "source": args.source,
-        "note": "runtime positive scale suppresses this direction; negative scale amplifies it",
+        "capture_workspace": str(root),
+        "note": ("positive strength suppresses the represented direction; strength is per layer"
+                 if args.mode == "project" else
+                 "positive strength adds the target-minus-control residual; runtime divides strength by the number of nonzero layers"),
     }
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 

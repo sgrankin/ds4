@@ -9,6 +9,12 @@ flint_engine *flint_engine_open(const char *directory, uint32_t chunk,
                                const char *profile,
                                char *error, size_t error_size);
 void flint_engine_close(flint_engine *engine);
+/* Startup-only immutable [49,2048] residual directions. mode0 projects unit
+ * rows; mode1 adds raw rows with strength divided across nonzero layers.
+ * Zero scales still preload vectors for independent live session changes. */
+bool flint_engine_load_steering(flint_engine *engine, const char *path,
+                                float attention, float ffn, int mode,
+                                char *error, size_t error_size);
 const flint_tokenizer *flint_engine_tokenizer(flint_engine *engine);
 uint32_t flint_engine_prefill_chunk(flint_engine *engine);
 uint64_t flint_engine_weight_bytes(flint_engine *engine);
@@ -35,4 +41,7 @@ int flint_session_packet(flint_session *session, int first_token,
                          float top_p, float min_p, uint64_t *rng, int *accepted,
                          char *error, size_t error_size);
 void flint_session_reset(flint_session *session);
+float flint_session_steering_ffn(flint_session *session);
+/* Future evaluation only; existing KV is retained. Return 0 on success. */
+int flint_session_set_steering_ffn(flint_session *session, float scale);
 #endif

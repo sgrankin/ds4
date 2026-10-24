@@ -65,12 +65,22 @@ pub const Lifecycle = struct {
         core.dspark_confidence_threshold_set = request.dspark_confidence_threshold_set;
         core.share_session_prefill_workspace = request.share_session_prefill_workspace;
         if (request.dspark and !hasText(request.mtp_path)) return fail("ds4: --dspark requires --mtp-model FILE\n");
+        return self.steering(request);
+    }
+
+    fn steering(self: *const Lifecycle, request: *const c.ds4_engine_options) bool {
+        const core = self.core;
+        if (request.directional_steering_mode != c.DS4_STEERING_PROJECT and request.directional_steering_mode != c.DS4_STEERING_ADD)
+            return fail("ds4: steering mode must be project or add\n");
+        if (!std.math.isFinite(request.directional_steering_attn) or !std.math.isFinite(request.directional_steering_ffn))
+            return fail("ds4: steering scales must be finite\n");
         if ((request.directional_steering_attn != 0 or request.directional_steering_ffn != 0) and !hasText(request.directional_steering_file))
             return fail("ds4: directional steering needs --dir-steering-file\n");
         if (hasText(request.directional_steering_file)) {
             core.directional_steering_file = duplicate(request.directional_steering_file);
             core.directional_steering_attn_scale = request.directional_steering_attn;
             core.directional_steering_ffn_scale = request.directional_steering_ffn;
+            core.directional_steering_mode = request.directional_steering_mode;
         }
         return true;
     }
@@ -80,6 +90,11 @@ pub const Lifecycle = struct {
         self.flint.* = c.flint_engine_open(request.model_path, request.prefill_chunk, request.flint_profile, &errors, errors.len);
         if (self.flint.* == null) {
             _ = c.fprintf(c.__stderrp, "ds4: Flint: %s\n", &errors);
+            return false;
+        }
+        if (!self.steering(request)) return false;
+        if (hasText(request.directional_steering_file) and !c.flint_engine_load_steering(self.flint.*, request.directional_steering_file, request.directional_steering_attn, request.directional_steering_ffn, @intCast(request.directional_steering_mode), &errors, errors.len)) {
+            _ = c.fprintf(c.__stderrp, "ds4: Flint steering: %s\n", &errors);
             return false;
         }
         const tokenizer = c.flint_engine_tokenizer(self.flint.*);
@@ -421,6 +436,7 @@ pub fn closeOwners(core: *c.ds4_engine_core, pool: *c.ds4_session_resource_pool,
         c.flint_engine_close(flint.*);
         flint.* = null;
         c.free(core.model_path);
+        c.free(core.directional_steering_file);
         core.* = std.mem.zeroes(c.ds4_engine_core);
         core.model.fd = -1;
         core.mtp_model.fd = -1;

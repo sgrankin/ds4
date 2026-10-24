@@ -3154,6 +3154,48 @@ int ds4_gpu_output_hc_weights_tensor(
         uint32_t                n_hc,
         float                   eps);
 
+/* Steer the complete published residual, independently per HC stream.
+ * mode0=project, mode1=add; callers divide additive scale by selected layers. */
+int ds4_gpu_hc_expand_split_steering_tensor(
+        ds4_gpu_tensor *out, ds4_gpu_tensor *block,
+        const ds4_gpu_tensor *residual, const ds4_gpu_tensor *split,
+        const ds4_gpu_tensor *directions, uint32_t layer,
+        uint32_t n_embd, uint32_t n_hc, float scale, bool bf16, int mode);
+int ds4_gpu_hc_expand_steering_tensor(
+        ds4_gpu_tensor *out, ds4_gpu_tensor *block,
+        const ds4_gpu_tensor *residual, const ds4_gpu_tensor *post,
+        const ds4_gpu_tensor *comb, const ds4_gpu_tensor *directions,
+        uint32_t layer, uint32_t n_embd, uint32_t n_hc, float scale, int mode);
+int ds4_gpu_qwen4_hc_combine_steering_tensor(
+        ds4_gpu_tensor *residual, ds4_gpu_tensor *block,
+        const ds4_gpu_tensor *injection, const ds4_gpu_tensor *directions,
+        uint32_t layer, uint32_t rows, uint32_t n_embd, uint32_t n_hc,
+        float scale, int mode);
+int ds4_gpu_qwen4_moe_reduce_steering_tensor(
+        ds4_gpu_tensor *out, const ds4_gpu_tensor *partials,
+        const ds4_gpu_tensor *weights, const ds4_gpu_tensor *shared_gate,
+        const ds4_gpu_tensor *shared, ds4_gpu_tensor *residual,
+        const ds4_gpu_tensor *injection, const ds4_gpu_tensor *directions,
+        uint32_t layer, uint32_t rows, uint32_t slots, uint32_t part_stride,
+        uint32_t n_embd, uint32_t n_hc, float scale, int mode);
+
+/* Plain residual counterpart; block_add is an optional shared-expert block. */
+int ds4_gpu_residual_steering_tensor(
+        ds4_gpu_tensor *out, ds4_gpu_tensor *block,
+        const ds4_gpu_tensor *block_add, const ds4_gpu_tensor *residual,
+        const ds4_gpu_tensor *directions, uint32_t layer,
+        uint32_t width, uint32_t rows, float scale, int mode);
+int ds4_gpu_residual_norm_steering_tensor(
+        ds4_gpu_tensor *norm_out, ds4_gpu_tensor *sum_out,
+        ds4_gpu_tensor *block, const ds4_gpu_tensor *residual,
+        const ds4_gpu_tensor *directions, const void *model_map,
+        uint64_t model_size, uint64_t norm_offset, uint32_t layer,
+        uint32_t width, uint32_t rows, float scale, float eps, int mode);
+
+int ds4_gpu_directional_steering_tensor(
+        ds4_gpu_tensor *values, const ds4_gpu_tensor *directions,
+        uint32_t layer, uint32_t width, uint32_t rows, float scale, int mode);
+
 int ds4_gpu_hc_expand_tensor(
         ds4_gpu_tensor       *out_hc,
         const ds4_gpu_tensor *block_out,

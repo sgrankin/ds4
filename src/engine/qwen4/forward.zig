@@ -83,12 +83,8 @@ pub fn run(graph: *Graph, model: *const Model, weights: *const Weights, tokens: 
         profile.mark(1);
         const linear = dimensions.isLinear(&graph.config, index);
         if (ok) ok = if (linear) attention.linear(graph, model, layer, index, count) else attention.run(graph, model, layer, index, position, count);
-        if (ok) {
-            if (graph.dump_prompt_rows) dumps.lastAttention(graph, index, count);
-            ok = resources.steerAttention(graph, index, count);
-        }
         profile.mark(if (linear) 2 else 3);
-        if (count == 1 and graph.mtp_R == null and shape.n_hc == 4 and c.ds4_gpu_qwen4_decode_fusions_enabled() != 0 and layer.hc_ffn_inject.*.type == c.DS4_TENSOR_F16) {
+        if (graph.steer_attn_scale == 0 and count == 1 and graph.mtp_R == null and shape.n_hc == 4 and c.ds4_gpu_qwen4_decode_fusions_enabled() != 0 and layer.hc_ffn_inject.*.type == c.DS4_TENSOR_F16) {
             ok = ok and c.ds4_gpu_qwen4_hc_combine_norm_tensor(graph.hc_u, graph.blk, graph.inj, graph.xn, graph.inj_alt, graph.R, model.map, model.size, layer.hc_ffn_norm.*.abs_offset, layer.hc_ffn_inject.*.abs_offset, layer.hc_ffn_inject.*.type, count, shape.n_embd, shape.n_hc, shape.n_hc, shape.rms_eps) != 0;
             if (ok) {
                 // Both residual buffers retain full prefill capacity. hc_u is
@@ -99,16 +95,16 @@ pub fn run(graph: *Graph, model: *const Model, weights: *const Weights, tokens: 
                     c.ds4_gpu_qwen4_hc_gate_mix_tensor(graph.mixed, graph.xn, graph.lo, model.map, model.size, layer.hc_ffn_up.*.abs_offset, layer.hc_ffn_up.*.type, count, shape.n_embd, shape.n_hc, shape.n_hc_lowrank) != 0;
             }
         } else {
-            ok = ok and c.ds4_gpu_qwen4_hc_combine_tensor(graph.R, graph.blk, graph.inj, count, shape.n_embd, shape.n_hc) != 0 and
+            ok = ok and resources.combineAttention(graph, index, count) and
                 ops.hcMix(graph, model, layer.hc_ffn_norm, layer.hc_ffn_down, layer.hc_ffn_up, layer.hc_ffn_inject, count);
         }
+        if (ok and graph.dump_prompt_rows) ok = dumps.lastAttention(graph, index, count);
         profile.mark(4);
-        ok = ok and moe.run(graph, model, layer, count);
+        ok = ok and moe.runSteered(graph, model, layer, index, count);
         if (ok and graph.dump_prompt_rows) {
             c.ds4_native_graph_debug_tensor("qwen_router", graph.router, @as(u64, count) * shape.n_expert, index, position);
-            dumps.lastFfn(graph, index, count);
+            ok = dumps.lastFfn(graph, index, count);
         }
-        ok = ok and resources.steerFfn(graph, index, count);
         profile.mark(5);
         if (ok and index + 1 == flush_layer) ok = c.ds4_gpu_flush_commands() != 0;
     }

@@ -85,6 +85,14 @@ typedef struct {
   int32_t out_dim;
   float eps;
 } ds4_gpu_hc_norm_mix_args;
+/* Residual steering is opt-in; mode0 projects, mode1 adds. */
+typedef struct {
+  uint32_t width, rows, hc, layer;
+  float scale;
+  uint32_t bf16, slots, part_stride, shared_src;
+  float norm_eps;
+  uint32_t has_add, mode;
+} ds4_gpu_hc_steering_args;
 enum {
   DS4_HC_SPLIT,
   DS4_HC_SUM,
@@ -103,7 +111,13 @@ enum {
   DS4_HC_OUTPUT_MUL,
   DS4_HC_OUTPUT_ADD,
   DS4_HC_OUTPUT_SIGMOID,
-  DS4_HC_OUTPUT_SCALE
+  DS4_HC_OUTPUT_SCALE,
+  DS4_HC_STEERING_EXPAND,
+  DS4_HC_STEERING_QWEN_COMBINE,
+  DS4_HC_STEERING_QWEN_MOE,
+  DS4_HC_STEERING_RESIDUAL,
+  DS4_HC_STEERING_RESIDUAL_NORM,
+  DS4_HC_STEERING_PROJECT
 };
 /* Named fixed binding sets. Native supplies every packet/PSO/grid decision. */
 typedef struct {
@@ -115,6 +129,7 @@ typedef struct {
   ds4_gpu_hc_split_weighted_sum_norm_args split_norm_args;
   ds4_gpu_hc_norm_mix_args norm_mix_args;
   ds4_gpu_hc_expand_args expand_args;
+  ds4_gpu_hc_steering_args steering_args;
   ds4_gpu_output_hc_weights4_args output4_args;
   ds4_metal_mv_args mv_args;
   ds4_gpu_bin_args mul_args, add_args;
@@ -124,6 +139,7 @@ typedef struct {
       block_add;
   ds4_metal_attention_view previous, post, comb, input, weights, scale, base,
       norm_weights;
+  ds4_metal_attention_view directions, router_weights, shared_gate, shared_output;
   ds4_metal_attention_view completion, barrier;
   uint32_t barrier_target;
   uint64_t gx, gy, gz, tx, ty, shared_bytes, mul_threads, add_threads,

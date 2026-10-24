@@ -46,9 +46,8 @@ pub const Core = struct {
                 options.distributed.role == c.DS4_DISTRIBUTED_NONE and
                 !options.load_slice and !options.glm_mtp and
                 !options.first_token_test and !options.metal_graph_test and
-                !hasText(options.directional_steering_file) and
                 state.power_percent == 100 and options.context_size <= 1048576;
-            if (!supported) return fail("ds4: V4.1 requires Metal, single-GPU CUDA or ROCm (network TP on Metal/CUDA); steering and legacy diagnostics are not supported (maximum context 1048576)\n");
+            if (!supported) return fail("ds4: native V4.1 requires local Metal without legacy diagnostics (maximum context 1048576)\n");
             // The agent can chdir before its first session. Engram readers
             // reopen this absolute path and compare it against model.fd.
             state.model_path = c.realpath(options.model_path, null);

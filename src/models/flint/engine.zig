@@ -6,7 +6,10 @@ const weights = @import("weights.zig");
 const decode = @import("decode.zig");
 const prefill = @import("prefill.zig");
 const profiles = @import("profile.zig");
+const Dump = @import("activation_dump.zig").Dump;
 const a = std.heap.c_allocator;
+
+pub const SteeringMode = enum(c_int) { project = 0, add = 1 };
 
 pub const Engine = struct {
     // Resident kernels require all threadgroups to be schedulable together.
@@ -17,6 +20,11 @@ pub const Engine = struct {
     tokenizer: *c.flint_tokenizer,
     chunk: u32,
     stops: [4]u32,
+    steering_attn: f32,
+    steering_ffn: f32,
+    // GPU scales are layer-budgeted only in add mode; API scales stay in user units.
+    steering_gain: f32,
+    dump: ?Dump,
 
     pub fn open(directory: []const u8, chunk: u32, requested_profile: ?[]const u8) !*Engine {
         const profile = selected: {
@@ -28,6 +36,10 @@ pub const Engine = struct {
         };
         const self = try a.create(Engine);
         errdefer a.destroy(self);
+        self.steering_attn = 0;
+        self.steering_ffn = 0;
+        self.steering_gain = 1;
+        self.dump = null;
         if (c.pthread_mutex_init(&self.mutex, null) != 0) return error.MutexInitialization;
         errdefer _ = c.pthread_mutex_destroy(&self.mutex);
         self.model = try weights.load(directory);
@@ -42,6 +54,8 @@ pub const Engine = struct {
         }
         self.decoder = try decode.Decoder.init(&self.model, profile);
         errdefer self.decoder.deinit();
+        self.dump = try Dump.init(self.model.gpu);
+        errdefer if (self.dump) |*dump| dump.deinit();
         const tokenizer_path = try std.fmt.allocPrintSentinel(a, "{s}/tokenizer.json", .{directory}, 0);
         defer a.free(tokenizer_path);
         self.tokenizer = c.flint_tokenizer_load(tokenizer_path) orelse return error.LoadTokenizer;
@@ -59,7 +73,49 @@ pub const Engine = struct {
         return self;
     }
 
+    /// Immutable residual directions, one per trunk layer. Projection uses unit
+    /// rows; additive mode preserves magnitudes and budgets scale across the
+    /// nonzero selected rows. Sessions retain independent scales in user units.
+    pub fn loadSteering(self: *Engine, path: []const u8, attention: f32, ffn: f32, mode: SteeringMode) !void {
+        if (!validScale(attention) or !validScale(ffn)) return error.InvalidSteeringScale;
+        if (self.decoder.steering != null) return error.SteeringAlreadyLoaded;
+        const bytes = try weights.readFile(a, path);
+        defer a.free(bytes);
+        if (bytes.len != decode.layers * 2048 * @sizeOf(f32)) return error.SteeringShape;
+        const directions = try a.alloc(f32, decode.layers * 2048);
+        defer a.free(directions);
+        var selected: usize = 0;
+        for (0..decode.layers) |layer| {
+            const row = directions[layer * 2048 ..][0..2048];
+            var norm_squared: f64 = 0;
+            for (row, 0..) |*out, col| {
+                const i = layer * 2048 + col;
+                const value: f32 = @bitCast(std.mem.readInt(u32, bytes[i * 4 ..][0..4], .little));
+                if (!std.math.isFinite(value)) return error.NonFiniteSteeringVector;
+                out.* = value;
+                norm_squared += @as(f64, value) * value;
+            }
+            if (norm_squared != 0) {
+                selected += 1;
+                if (mode == .project) {
+                    const norm = @sqrt(norm_squared);
+                    for (row) |*value| value.* = @floatCast(@as(f64, value.*) / norm);
+                }
+            }
+        }
+        if (mode == .add) try decode.compileAdditiveSteering(self.model.gpu, self.decoder.profile) else try decode.compileSteering(self.model.gpu, self.decoder.profile);
+        const buffer = c.flint_gpu_buffer(self.model.gpu, bytes.len) orelse return error.GpuAllocation;
+        @memcpy(decode.contents(f32, buffer, directions.len), directions);
+        self.decoder.steering = buffer;
+        self.decoder.additive_steering = mode == .add;
+        self.steering_gain = if (mode == .add and selected != 0) 1.0 / @as(f32, @floatFromInt(selected)) else 1;
+        self.steering_attn = attention;
+        self.steering_ffn = ffn;
+        std.debug.print("flint: residual steering {s}, {d}/{d} nonzero layers\n", .{ @tagName(mode), selected, decode.layers });
+    }
+
     pub fn close(self: *Engine) void {
+        if (self.dump) |*dump| dump.deinit();
         c.flint_tokenizer_free(self.tokenizer);
         self.decoder.deinit();
         self.model.deinit();
@@ -74,6 +130,7 @@ const local_bytes = @as(usize, 35) * 513 * 1024 * 2;
 pub const Session = struct {
     engine: *Engine,
     native: decode.Session,
+    steering_ffn_user: f32 = 0,
     tokens: std.ArrayList(c_int) = .empty,
     layout: prefill.Layout,
     scratch: ?*anyopaque = null,
@@ -98,6 +155,9 @@ pub const Session = struct {
             .logits = undefined,
         };
         errdefer self.native.deinit();
+        self.native.steering_attn = engine.steering_attn * engine.steering_gain;
+        self.native.steering_ffn = engine.steering_ffn * engine.steering_gain;
+        self.steering_ffn_user = engine.steering_ffn;
         self.inputs = c.flint_gpu_buffer(engine.model.gpu, @as(usize, self.layout.capacity) * 4) orelse return error.GpuAllocation;
         errdefer c.flint_gpu_buffer_free(self.inputs);
         self.logits = c.flint_gpu_buffer(engine.model.gpu, decode.vocab * 4) orelse return error.GpuAllocation;
@@ -188,7 +248,16 @@ pub const Session = struct {
             for (self.engine.model.banks, &bank_views) |buffer, *view| view.* = .{ .handle = buffer };
             var kv_views: [4]prefill.View = undefined;
             for (self.native.kv, &kv_views) |buffer, *view| view.* = .{ .handle = buffer };
-            prefill.encode(prefill.Encoder{ .context = @ptrCast(gpu), .command = command }, .{ .banks = bank_views, .metadata = &self.native.metadata, .backend = if (self.engine.decoder.profile.usesNax()) .nax else .simd }, .{ .banks = kv_views, .initial_position = self.native.initial_position }, self.layout.bind(.{ .handle = self.scratch }), .{ .handle = self.inputs }, begin, count, .{ .handle = self.logits }) catch |err| {
+            prefill.encode(prefill.Encoder{ .context = @ptrCast(gpu), .command = command }, .{
+                .banks = bank_views,
+                .metadata = &self.native.metadata,
+                .backend = if (self.engine.decoder.profile.usesNax()) .nax else .simd,
+                .steering = if (self.engine.decoder.steering) |buffer| .{ .handle = buffer } else null,
+                .steering_attn = self.native.steering_attn,
+                .steering_ffn = self.native.steering_ffn,
+                .additive = self.engine.decoder.additive_steering,
+                .capture = if (self.engine.dump) |*dump| dump.view() else null,
+            }, .{ .banks = kv_views, .initial_position = self.native.initial_position }, self.layout.bind(.{ .handle = self.scratch }), .{ .handle = self.inputs }, begin, count, .{ .handle = self.logits }) catch |err| {
                 _ = c.flint_gpu_command_end(gpu, command, true);
                 self.native.usable = false;
                 self.valid = false;
@@ -207,6 +276,7 @@ pub const Session = struct {
             if (progress) |callback| callback(progress_ud, "prefill_chunk", @intCast(self.native.position), @intCast(prompt.len));
         }
         if (cancel) |callback| if (callback(cancel_ud)) return false;
+        if (self.engine.dump) |*dump| try dump.write();
         return true;
     }
 
@@ -254,6 +324,10 @@ pub const Session = struct {
     }
 };
 
+fn validScale(value: f32) bool {
+    return std.math.isFinite(value) and value >= -100 and value <= 100;
+}
+
 fn getEngine(handle: *c.flint_engine) *Engine {
     return @ptrCast(@alignCast(handle));
 }
@@ -283,6 +357,21 @@ export fn flint_engine_open(directory: [*c]const u8, chunk: u32, requested_profi
 }
 export fn flint_engine_close(handle: ?*c.flint_engine) void {
     if (handle) |value| getEngine(value).close();
+}
+export fn flint_engine_load_steering(handle: *c.flint_engine, path: [*c]const u8, attention: f32, ffn: f32, mode: c_int, error_text: [*c]u8, error_size: usize) bool {
+    if (path == null or path[0] == 0) {
+        report(error_text, error_size, error.MissingSteeringFile);
+        return false;
+    }
+    const selected = std.enums.fromInt(SteeringMode, mode) orelse {
+        report(error_text, error_size, error.InvalidSteeringMode);
+        return false;
+    };
+    getEngine(handle).loadSteering(std.mem.span(path), attention, ffn, selected) catch |err| {
+        report(error_text, error_size, err);
+        return false;
+    };
+    return true;
 }
 export fn flint_engine_tokenizer(handle: *c.flint_engine) ?*const c.flint_tokenizer {
     return getEngine(handle).tokenizer;
@@ -377,4 +466,19 @@ export fn flint_session_reset(handle: *c.flint_session) void {
     _ = c.pthread_mutex_lock(&session.engine.mutex);
     defer _ = c.pthread_mutex_unlock(&session.engine.mutex);
     session.reset();
+}
+export fn flint_session_steering_ffn(handle: *c.flint_session) f32 {
+    return getSession(handle).steering_ffn_user;
+}
+export fn flint_session_set_steering_ffn(handle: *c.flint_session, scale: f32) c_int {
+    if (!validScale(scale)) return 1;
+    const session = getSession(handle);
+    _ = c.pthread_mutex_lock(&session.engine.mutex);
+    defer _ = c.pthread_mutex_unlock(&session.engine.mutex);
+    if (scale != 0 and session.engine.decoder.steering == null) return 1;
+    // Like the shared runtime API, this edits future evaluations. Existing KV
+    // and the saved prefill base deliberately retain their original influence.
+    session.native.steering_ffn = scale * session.engine.steering_gain;
+    session.steering_ffn_user = scale;
+    return 0;
 }

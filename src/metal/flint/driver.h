@@ -19,6 +19,8 @@ void flint_gpu_free(flint_gpu *gpu);
 const char *flint_gpu_device_name(flint_gpu *gpu);
 bool flint_gpu_compile(flint_gpu *gpu, const char *source, size_t length,
                        char *error, size_t error_size);
+/* Resolve and cache a PSO at startup, without encoding or running a command. */
+bool flint_gpu_prepare(flint_gpu *gpu, const char *kernel);
 void *flint_gpu_buffer(flint_gpu *gpu, size_t bytes);
 void *flint_gpu_contents(void *buffer);
 size_t flint_gpu_buffer_size(void *buffer);

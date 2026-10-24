@@ -31,6 +31,21 @@ fn sharedMid(graph: *Graph, model: *const Model, layer: *const Layer, tokens: u3
 }
 
 pub fn run(graph: *Graph, model: *const Model, layer: *const Layer, tokens: u32) bool {
+    return runLayer(graph, model, layer, null, tokens);
+}
+
+pub fn runSteered(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, tokens: u32) bool {
+    return runLayer(graph, model, layer, index, tokens);
+}
+
+fn reduce(graph: *Graph, shared: ?*const c.ds4_gpu_tensor, index: ?u32, tokens: u32, stride: u32) bool {
+    const shape = &graph.config.shape;
+    if (index != null and graph.steer_ffn_scale != 0)
+        return graph.steer_dirs != null and c.ds4_gpu_qwen4_moe_reduce_steering_tensor(graph.blk, graph.part, graph.weights, graph.sh_gate_logit, shared, graph.R, graph.inj, graph.steer_dirs, index.?, tokens, shape.n_expert_used, stride, shape.n_embd, shape.n_hc, @import("resources.zig").effectiveScale(graph, graph.steer_ffn_scale), graph.steer_mode) != 0;
+    return c.ds4_gpu_qwen4_moe_reduce_tensor(graph.blk, graph.part, graph.weights, graph.sh_gate_logit, shared, graph.R, graph.inj, tokens, shape.n_expert_used, stride, shape.n_embd, shape.n_hc) != 0;
+}
+
+fn runLayer(graph: *Graph, model: *const Model, layer: *const Layer, index: ?u32, tokens: u32) bool {
     const shape = &graph.config.shape;
     var profile = Profile{ .enabled = tokens > 8 and ops.present("DS4_QWEN4_MOE_PROFILE") };
     if (!profile.mark(0)) return false;
@@ -49,7 +64,7 @@ pub fn run(graph: *Graph, model: *const Model, layer: *const Layer, tokens: u32)
             profile.mark(2) and sharedMid(graph, model, layer, tokens) and profile.mark(3);
         ok = ok and c.ds4_gpu_qwen4_moe_mm_down_tensor(graph.part, graph.mid, graph.moe_lists, graph.moe_counts, model.map, model.size, layer.ffn_down_exps.*.abs_offset, layer.ffn_down_exps.*.type, shape.n_expert, tokens, shape.n_expert_used, shape.n_expert_used, shape.n_ff_exp, shape.n_embd, graph.cap_tokens) != 0 and
             profile.mark(4) and ops.dense(graph.sh_out, model, layer.ffn_down_shexp, graph.sh_mid, tokens) and profile.mark(5);
-        ok = ok and c.ds4_gpu_qwen4_moe_reduce_tensor(graph.blk, graph.part, graph.weights, graph.sh_gate_logit, graph.sh_out, graph.R, graph.inj, tokens, shape.n_expert_used, shape.n_expert_used, shape.n_embd, shape.n_hc) != 0 and profile.mark(6);
+        ok = ok and reduce(graph, graph.sh_out, index, tokens, shape.n_expert_used) and profile.mark(6);
         if (profile.enabled) _ = c.fprintf(c.__stderrp, "ds4: Qwen MoE ms pos=%u T=%u weight=%.*s ok=%d router=%.3f lists=%.3f mid=%.3f shared_mid=%.3f down=%.3f shared_down=%.3f reduce=%.3f\n", graph.pos, tokens, @as(c_int, @intCast(layer.ffn_gate_exps.*.name.len)), layer.ffn_gate_exps.*.name.ptr, @as(c_int, @intFromBool(ok)), profile.elapsed[0] * 1e3, profile.elapsed[1] * 1e3, profile.elapsed[2] * 1e3, profile.elapsed[3] * 1e3, profile.elapsed[4] * 1e3, profile.elapsed[5] * 1e3, profile.elapsed[6] * 1e3);
         return ok;
     }
@@ -70,5 +85,5 @@ pub fn run(graph: *Graph, model: *const Model, layer: *const Layer, tokens: u32)
         ok = ok and c.ds4_gpu_qwen4_moe_mid_tensor(graph.mid, graph.mixed, graph.selected, model.map, model.size, layer.ffn_gate_exps.*.abs_offset, layer.ffn_up_exps.*.abs_offset, layer.ffn_gate_exps.*.type, shape.n_expert, tokens, shape.n_expert_used, shape.n_embd, shape.n_ff_exp, if (shared_dense) 0 else layer.ffn_gate_shexp.*.abs_offset, if (shared_dense) 0 else layer.ffn_up_shexp.*.abs_offset, shared_kind) != 0 and
             c.ds4_gpu_qwen4_moe_down_tensor(graph.part, graph.mid, graph.selected, model.map, model.size, layer.ffn_down_exps.*.abs_offset, layer.ffn_down_exps.*.type, shape.n_expert, tokens, shape.n_expert_used, shape.n_ff_exp, shape.n_embd, if (shared_dense) 0 else layer.ffn_down_shexp.*.abs_offset, down_kind) != 0;
     }
-    return ok and c.ds4_gpu_qwen4_moe_reduce_tensor(graph.blk, graph.part, graph.weights, graph.sh_gate_logit, if (shared_dense) graph.sh_out else null, graph.R, graph.inj, tokens, shape.n_expert_used, shape.n_expert_used + @as(u32, if (shared_dense) 0 else 1), shape.n_embd, shape.n_hc) != 0;
+    return ok and reduce(graph, if (shared_dense) graph.sh_out else null, index, tokens, shape.n_expert_used + @as(u32, if (shared_dense) 0 else 1));
 }

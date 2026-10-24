@@ -16,7 +16,7 @@ pub fn generate(engine: *c.ds4_engine, core: *const c.ds4_engine_core, config: *
     defer c.free(memory);
     if (!c.ds4_native_qwen4_graph_alloc(graph, &core.weights, @intCast(context), c.ds4_native_qwen4_prefill_chunk(@intCast(context)), false, null, null, null, 0, config)) return 1;
     defer c.ds4_native_qwen4_graph_free(graph);
-    if (!c.ds4_native_qwen4_graph_load_steering(graph, core.directional_steering_file, core.directional_steering_attn_scale, core.directional_steering_ffn_scale)) return 1;
+    if (!c.ds4_native_qwen4_graph_load_steering(graph, core.directional_steering_file, core.directional_steering_attn_scale, core.directional_steering_ffn_scale, @intCast(core.directional_steering_mode))) return 1;
     c.ds4_native_qwen4_graph_reset(graph);
     const allocation = c.ds4_sampling_alloc(@as(usize, config.shape.n_vocab) * @sizeOf(f32)) orelse unreachable;
     defer c.free(allocation);

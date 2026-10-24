@@ -135,6 +135,8 @@ typedef struct ds4_qwen4_gpu_graph {
     ds4_gpu_tensor *steer_dirs;
     float steer_attn_scale;
     float steer_ffn_scale;
+    int steer_mode;
+    uint32_t steer_layers;
     bool dump_prompt_rows;
     /* Captured once at allocation; hot loops never read family globals. */
     ds4_qwen4_config config;
@@ -163,7 +165,7 @@ void ds4_native_qwen4_graph_transfer_scratch(ds4_qwen4_gpu_graph *destination,
     ds4_qwen4_gpu_graph *source);
 uint64_t ds4_native_qwen4_graph_scratch_bytes(const ds4_qwen4_gpu_graph *graph);
 bool ds4_native_qwen4_graph_load_steering(ds4_qwen4_gpu_graph *graph,
-    const char *path, float attention_scale, float ffn_scale);
+    const char *path, float attention_scale, float ffn_scale, int mode);
 bool ds4_native_qwen4_ngram_read(const ds4_model *model, const uint32_t *rows,
     size_t count, float *out);
 void ds4_native_qwen4_ple_step(const ds4_qwen4_config *config, int token,

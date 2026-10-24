@@ -80,6 +80,13 @@ typedef struct {
     uint32_t ctx, pos, prefill_cap, carry_cap, prefill_max;
     uint32_t decoder_replay_floor; /* Active only inside a bounded decoder sweep. */
     uint64_t allocation_bytes;
+    /* Immutable layer directions are session-owned; scales may change live.
+     * Row/workspace views borrow this pointer with the rest of the graph. */
+    ds4_gpu_tensor *steering_dirs;
+    float steering_attn_scale, steering_ffn_scale;
+    int steering_mode;
+    uint32_t steering_layers;
+    bool steering_capture_enabled, steering_capture_prompt;
     bool valid, streaming, encoder_resident, compact_carry, prefill_alias, quality, workspace_failed;
     bool compressed_kv_f16;
     uint32_t tp_world, tp_rank;

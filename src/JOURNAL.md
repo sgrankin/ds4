@@ -4,7 +4,73 @@ Last updated: 2026-10-24. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
-## Current state — model retirement and main publication, 2026-10-24
+## Completed — residual steering, 2026-10-24
+
+Private jj change `sysvyppyvons` adds selectable **project** (default) and **add**
+through `--dir-steering-mode` in CLI/agent/server/bench and engine options. The
+user accepts a few percent overhead, superseding the original zero-slowdown
+requirement. Old FFN-output vector compatibility is explicitly unnecessary.
+The default hook is the residual after FFN/full-block publication; the attention
+flag optionally edits its intermediate residual too. Each HC stream uses the
+same hidden-width direction independently. DS41/Flint preserve ordinary BF16
+publication, edit it, then round the result back to BF16.
+
+Project normalizes each nonzero row and uses full per-layer user strength.
+Add preserves learned magnitudes and divides strength over nonzero selected
+rows, matching our local oMLX convention (`omlx/patches/steering.py`). Zero rows
+mask layers. No runtime stacking: additive banks can combine offline with layer
+budgets accounted for; one summed vector generally cannot reproduce sequential
+projections. Mode/bank are immutable at startup; live strengths remain in user
+units, affect subsequent computation, and retain earlier KV influence.
+
+All four installed native models pass both modes: DS4.1 Flash 1017, Flint,
+Qwen3.8 Flash Next and GLM 5.3 Flash. Checks cover exact zero scalar logits,
+independent live settings, future-session defaults and mixed/homogeneous batches.
+DS41/Flint batch gaps are zero; Qwen/GLM MTP replay gaps stay below 0.00021 logit.
+Flint's full eight-token packets match scalar replay exactly in three cycles
+per mode. The shared GPU oracle passes 342 cases plus 18 weighted-norm checks
+with zero drift; three Flint hardware schedules pass math checks on M5 Max.
+Host/script/recovery checks pass, including a small builder contract test in
+`tests/verify.nu`. Localhost recovery required running outside the sandbox.
+Retained C Pro/full-GLM paths and legacy batch/mode dispatch are adapted and
+syntax-checked; their weights and physical Pro-device performance are unqualified.
+
+Fresh banks use four succinct/verbose prompt pairs for DS41/Flint and two for
+Qwen/GLM, captured from post-block residuals (HC mean for extraction). They
+qualify extraction and execution, not a useful refusal/style direction. Builder
+supports raw-add/unit-project output and layer masks; the strength sweep is Nu.
+
+Short mirrored screens, two samples per state, positive means more elapsed time:
+
+| Native model / mode | Prefill | Fixed decode |
+| --- | ---: | ---: |
+| Flint project, strength 0.1 | +0.41% | +2.43% |
+| Flint add, strength 1 | +7.42% (about 26ms) | +1.52% |
+| DS41 project, strength 0.1 | +4.73% | +5.12% |
+| DS41 add, strength 1 | -2.13% | -0.41% |
+
+Flint uses 256+256 tokens; DS41 uses 256+64, chunk 2048 and a 32GB expert cache.
+Controls vary by a few percent, so these are coarse screens, not universal
+speed promises; DS41's negative add point is not an established speedup. One
+bounded Flint additive condition-hoist is retained with preserved BF16 math;
+its earlier 5.47% decode screen is historical, not a precise causal comparison.
+Failed derived-row machinery is removed from the runtime, with source/evidence
+preserved locally. No further optimization loop is scheduled for this slice.
+
+Automatic KV SSD/suffix reuse stays excluded when a bank is loaded, even at zero;
+expert-weight SSD streaming remains available. New-hook long-append/context and
+Qwen/GLM latency, calibrated behavioral/quality curves and steering-aware cache
+identity/restoration remain separate future experiments. No automatic quality
+rejection based on NLL/KL is implied.
+
+All five root executables are installed byte-identically from
+`.workspaces/steering-20261024/residual-final/bin`; source/results/raw banks stay
+local below `.workspaces/steering-20261024/`. Main/origin remain at published
+`2e1502a322ec`; no steering push or main advancement.
+[Reproduction and results](../speed-bench/experiments/steering-20261024/README.md),
+[bank conventions and recipes](../dir-steering/README.md).
+
+## Published checkpoint — model retirement, 2026-10-24
 
 The user ended the ideas discussion and authorized retiring GLM 5.2 and original
 DeepSeek V4 Flash, then advancing and pushing main with the qualified native

@@ -3578,6 +3578,7 @@ static NSString *ds4_gpu_full_source(void) {
         @[@"DS4_METAL_BIN_SOURCE",        @"src/metal/bin.metal"],
         @[@"DS4_METAL_SET_ROWS_SOURCE",   @"src/metal/set_rows.metal"],
         @[@"DS4_METAL_QWEN4_SOURCE",      @"src/metal/qwen4.metal"],
+        @[@"DS4_METAL_STEERING_HC_SOURCE", @"src/metal/steering_hc.metal"],
         @[@"DS4_METAL_QWEN4_VISION_SOURCE", @"src/metal/qwen4_vision.metal"],
     ];
 

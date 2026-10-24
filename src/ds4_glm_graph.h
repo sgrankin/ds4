@@ -205,6 +205,8 @@ typedef struct ds4_glm_gpu_graph {
     ds4_gpu_tensor *directional_steering_dirs_by_tier[DS4_MAX_GPUS];
     float directional_steering_attn_scale;
     float directional_steering_ffn_scale;
+    int directional_steering_mode;
+    uint32_t directional_steering_layers;
     bool streaming_static_decode_map_current;
     /* Tensor parallelism (50/50 expert sharding): tp_world 2 means
      * this rank computes only its contiguous half of the routed experts

@@ -239,7 +239,7 @@ pub const Memory = struct {
     pub fn growWorkspace(self: *const Memory, graph: *c.ds41_gpu_graph, need: u32, remaining: u32, errors: []u8) bool {
         const old_bytes = graph.allocation_bytes;
         const plan = Layout.init(self.config, graph.ctx, need);
-        const new_bytes = plan.bytes();
+        const new_bytes = plan.bytes() +| resources.persistentBytes(graph);
         const old_budget = self.state.ssd_streaming_cache_experts;
         const old_cache_bytes = self.state.ssd_streaming_cache_bytes;
         if (c.ds4_gpu_synchronize() == 0) {

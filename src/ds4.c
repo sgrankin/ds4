@@ -14565,6 +14565,8 @@ typedef struct {
     ds4_gpu_tensor *directional_steering_dirs_by_tier[DS4_MAX_GPUS];
     float directional_steering_attn_scale;
     float directional_steering_ffn_scale;
+    int directional_steering_mode;
+    uint32_t directional_steering_layers;
     bool cuda_tp_decode;
     bool cuda_tp_attn;
     bool cuda_tp_attn_peer_read;
@@ -15271,16 +15273,17 @@ static bool metal_tensor_fill_f32(ds4_gpu_tensor *t, float v, uint64_t n) {
  * Directional Steering.
  * =========================================================================
  *
- * A steering file contains one normalized hidden-width direction per normal
+ * A steering file contains one hidden-width residual direction per normal
  * transformer layer.  The model's MTP predictor is not part of the file.  When
- * enabled, the GPU graph edits selected block outputs in-place:
+ * enabled, the Metal graph edits the residual after the selected sublayer:
  *
- *     y = y - scale * v * dot(v, y)
+ *     project: y -= scale * unit(v) * dot(unit(v), y)
+ *     add:     y += (scale / selected_layers) * v
  *
- * Positive scales remove the represented direction from the activation.
- * Negative scales add it.  This is deliberately explicit and opt-in; with zero
- * scales, the release graph does not allocate the direction tensor and follows
- * the normal inference path.
+ * Projection removes or amplifies the existing directional component; addition
+ * shifts by a fixed offset. Zero rows leave a layer unselected. With zero
+ * scales, the graph follows the normal inference path. An explicitly supplied
+ * bank is still loaded so a session can enable steering later.
  */
 
 /* directional_steering_dirs is Class P — replicated per tier.
@@ -15291,10 +15294,9 @@ static bool metal_graph_load_directional_steering(
         ds4_gpu_graph *g,
         const char      *path,
         float            attn_scale,
-        float            ffn_scale) {
-    if (attn_scale == 0.0f && ffn_scale == 0.0f) return true;
-
+        float            ffn_scale, int mode) {
     if (!path || !path[0]) {
+        if (attn_scale == 0.0f && ffn_scale == 0.0f) return true;
         fprintf(stderr, "ds4: directional steering needs --dir-steering-file\n");
         return false;
     }
@@ -15304,6 +15306,10 @@ static bool metal_graph_load_directional_steering(
     const uint64_t n = (uint64_t)n_layers * DS4_N_EMBD;
     float *dirs = xmalloc((size_t)n * sizeof(dirs[0]));
     bool ok = read_f32_binary_file(path, dirs, n);
+    const int selected = ok ? ds4_steering_prepare_f32(dirs, n_layers, DS4_N_EMBD, mode) : -1;
+    ok = selected >= 0;
+    g->directional_steering_mode = mode;
+    g->directional_steering_layers = selected >= 0 ? (uint32_t)selected : 0;
     if (ok) {
         /* Replicate the directions buffer onto every Class P tier slot that
          * has any other Class P scratch allocated (used_tier marker is the
@@ -15354,12 +15360,16 @@ static bool metal_graph_apply_directional_steering(
         uint32_t          rows,
         float             scale) {
     if (!g || !metal_graph_directional_steering_dirs(g) || scale == 0.0f) return true;
-    return ds4_gpu_directional_steering_project_tensor(x,
-                                            metal_graph_directional_steering_dirs(g),
-                                            il,
-                                            DS4_N_EMBD,
-                                            rows,
-                                            scale) != 0;
+    if (g->directional_steering_mode == DS4_STEERING_ADD)
+        scale /= (float)(g->directional_steering_layers ? g->directional_steering_layers : 1);
+#ifdef __APPLE__
+    return ds4_gpu_directional_steering_tensor(x, metal_graph_directional_steering_dirs(g),
+            il, DS4_N_EMBD, rows, scale, g->directional_steering_mode) != 0;
+#else
+    return g->directional_steering_mode == DS4_STEERING_PROJECT &&
+        ds4_gpu_directional_steering_project_tensor(x, metal_graph_directional_steering_dirs(g),
+            il, DS4_N_EMBD, rows, scale) != 0;
+#endif
 }
 
 static bool metal_graph_apply_directional_steering_attn(
@@ -23118,9 +23128,6 @@ static bool metal_graph_encode_decode_layer_phase(
     if (ok) {
         metal_graph_debug_dump_tensor("attn_out", metal_graph_attn_out(g), DS4_N_EMBD, il, pos);
     }
-    if (ok && metal_graph_directional_steering_attn_enabled(g)) {
-        ok = metal_graph_apply_directional_steering_attn(g, metal_graph_attn_out(g), il, 1);
-    }
     if (ok && !fuse_attn_out_hc && !cuda_tp_attn_hc_fused) {
         if (tp_attn_a) {
             if (metal_graph_hc_expand_fusion_eligible(g, decode_stage_profile)) {
@@ -23146,6 +23153,8 @@ static bool metal_graph_encode_decode_layer_phase(
                                             metal_graph_hc_post(g), metal_graph_hc_comb(g), DS4_N_EMBD, DS4_N_HC) != 0;
         }
     }
+    if (ok && metal_graph_directional_steering_attn_enabled(g))
+        ok = metal_graph_apply_directional_steering_attn(g, metal_graph_after_attn_hc(g), il, DS4_N_HC);
     DS4_METAL_PROFILE_DECODE_STAGE("attn_hc_post");
     if (ok) {
         metal_graph_debug_dump_tensor("hc_attn_post", metal_graph_after_attn_hc(g), hc_dim, il, pos);
@@ -24065,9 +24074,6 @@ static bool metal_graph_encode_decode_layer_phase(
             metal_graph_debug_dump_tensor("ffn_out", metal_graph_ffn_out(g), DS4_N_EMBD, il, pos);
         }
         if (ok && metal_graph_directional_steering_ffn_enabled(g)) {
-            ok = metal_graph_apply_directional_steering_ffn(g, metal_graph_ffn_out(g), il, 1);
-        }
-        if (ok && metal_graph_directional_steering_ffn_enabled(g)) {
             ok = ds4_gpu_hc_expand_tensor(metal_graph_after_ffn_hc(g),
                                             metal_graph_ffn_out(g),
                                             metal_graph_after_attn_hc(g),
@@ -24084,6 +24090,8 @@ static bool metal_graph_encode_decode_layer_phase(
                                                       DS4_N_EMBD,
                                                       DS4_N_HC) != 0;
         }
+        if (ok && metal_graph_directional_steering_ffn_enabled(g))
+            ok = metal_graph_apply_directional_steering_ffn(g, metal_graph_after_ffn_hc(g), il, DS4_N_HC);
         DS4_METAL_PROFILE_DECODE_STAGE("ffn_hc_post");
         if (ok) {
             metal_graph_debug_dump_tensor("hc_ffn_post", metal_graph_after_ffn_hc(g), hc_dim, il, pos);
@@ -24263,9 +24271,6 @@ static bool metal_graph_encode_decode_layer_phase(
             metal_graph_debug_dump_tensor("ffn_out", metal_graph_ffn_out(g), DS4_N_EMBD, il, pos);
         }
         if (ok && metal_graph_directional_steering_ffn_enabled(g)) {
-            ok = metal_graph_apply_directional_steering_ffn(g, metal_graph_ffn_out(g), il, 1);
-        }
-        if (ok && metal_graph_directional_steering_ffn_enabled(g)) {
             ok = ds4_gpu_hc_expand_tensor(metal_graph_after_ffn_hc(g),
                                             metal_graph_ffn_out(g),
                                             metal_graph_after_attn_hc(g),
@@ -24282,6 +24287,8 @@ static bool metal_graph_encode_decode_layer_phase(
                                                       DS4_N_EMBD,
                                                       DS4_N_HC) != 0;
         }
+        if (ok && metal_graph_directional_steering_ffn_enabled(g))
+            ok = metal_graph_apply_directional_steering_ffn(g, metal_graph_after_ffn_hc(g), il, DS4_N_HC);
         DS4_METAL_PROFILE_DECODE_STAGE("ffn_hc_post");
         if (ok) {
             metal_graph_debug_dump_tensor("hc_ffn_post", metal_graph_after_ffn_hc(g), hc_dim, il, pos);
@@ -24765,9 +24772,6 @@ static bool metal_graph_encode_decode_layer_phase(
         metal_graph_debug_dump_tensor("ffn_out", metal_graph_ffn_out(g), DS4_N_EMBD, il, pos);
     }
     if (ok && metal_graph_directional_steering_ffn_enabled(g)) {
-        ok = metal_graph_apply_directional_steering_ffn(g, metal_graph_ffn_out(g), il, 1);
-    }
-    if (ok && metal_graph_directional_steering_ffn_enabled(g)) {
         ok = ds4_gpu_hc_expand_tensor(metal_graph_after_ffn_hc(g),
                                         metal_graph_ffn_out(g),
                                         metal_graph_after_attn_hc(g),
@@ -24792,6 +24796,8 @@ static bool metal_graph_encode_decode_layer_phase(
                                                   DS4_N_EMBD,
                                                   DS4_N_HC) != 0;
     }
+    if (ok && metal_graph_directional_steering_ffn_enabled(g))
+        ok = metal_graph_apply_directional_steering_ffn(g, metal_graph_after_ffn_hc(g), il, DS4_N_HC);
     DS4_METAL_PROFILE_DECODE_STAGE("ffn_hc_post");
 #undef DS4_METAL_PROFILE_DECODE_STAGE
     if (ok) {
@@ -29986,9 +29992,6 @@ static bool metal_graph_encode_layer_attention_batch(
         ds4_gpu_tensor_free(recv_half);
         if (!ok) fprintf(stderr, "ds4: TP prefill attention row gate failed (layer %u)\n", il);
     }
-    if (ok && !attn_out_f16 && metal_graph_directional_steering_attn_enabled(g)) {
-        ok = metal_graph_apply_directional_steering_attn(g, metal_graph_batch_attn_out(g), il, n_tokens);
-    }
     if (ok && attn_out_f16) {
         ok = ds4_gpu_hc_expand_split_half_tensor(after_attn_hc_view,
                                                  g->batch_q_half,
@@ -30008,6 +30011,8 @@ static bool metal_graph_encode_layer_attention_batch(
         metal_graph_debug_dump_tensor("hc_attn_post", metal_graph_batch_after_attn_hc(g),
                                       (uint64_t)n_tokens * hc_dim, il, pos0);
     }
+    if (ok && metal_graph_directional_steering_attn_enabled(g))
+        ok = metal_graph_apply_directional_steering_attn(g, after_attn_hc_view, il, n_tokens * DS4_N_HC);
     DS4_METAL_PROFILE_ATTN_STAGE("hc_post");
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD) && !defined(DS4_NO_GPU)
     /* No-op once joined above; covers paths that skipped the attention. */
@@ -30703,9 +30708,6 @@ static bool metal_graph_encode_layer_ffn_batch(
                                       (uint64_t)n_tokens * DS4_N_EMBD, il, pos0);
     }
     if (ok && metal_graph_directional_steering_ffn_enabled(g)) {
-        ok = metal_graph_apply_directional_steering_ffn(g, metal_graph_batch_ffn_out(g), il, n_tokens);
-    }
-    if (ok && metal_graph_directional_steering_ffn_enabled(g)) {
         ok = ds4_gpu_hc_expand_split_tensor(next_hc_view,
                                               metal_graph_batch_ffn_out(g),
                                               metal_graph_batch_after_attn_hc(g),
@@ -30740,6 +30742,8 @@ static bool metal_graph_encode_layer_ffn_batch(
                                                   DS4_N_EMBD,
                                                   DS4_N_HC) != 0;
     }
+    if (ok && metal_graph_directional_steering_ffn_enabled(g))
+        ok = metal_graph_apply_directional_steering_ffn(g, next_hc_view, il, n_tokens * DS4_N_HC);
     DS4_METAL_PROFILE_FFN_STAGE("hc_post");
     if (ok) {
         metal_graph_debug_dump_tensor("hc_ffn_post", metal_graph_batch_next_hc(g),
@@ -39163,14 +39167,12 @@ static void cpu_directional_steering_project_rows(
 }
 
 static bool cpu_load_directional_steering(ds4_engine *e) {
-    if (!e ||
-        (e->core.directional_steering_attn_scale == 0.0f &&
-         e->core.directional_steering_ffn_scale == 0.0f)) {
-        return true;
-    }
+    if (!e) return true;
 
     const char *path = e->core.directional_steering_file;
     if (!path || !path[0]) {
+        if (e->core.directional_steering_attn_scale == 0.0f &&
+            e->core.directional_steering_ffn_scale == 0.0f) return true;
         fprintf(stderr, "ds4: directional steering needs --dir-steering-file\n");
         return false;
     }
@@ -39886,12 +39888,10 @@ static bool glm_graph_load_directional_steering(
         ds4_glm_gpu_graph *g,
         const char        *path,
         float              attn_scale,
-        float              ffn_scale) {
-    if (!g || (attn_scale == 0.0f && ffn_scale == 0.0f)) return g != NULL;
-    if (!g->glm53) {
-        fprintf(stderr, "ds4: directional steering is supported only for GLM 5.3\n");
-        return false;
-    }
+        float              ffn_scale, int mode) {
+    if (!g) return false;
+    if ((!path || !path[0]) && attn_scale == 0.0f && ffn_scale == 0.0f) return true;
+    if (!isfinite(attn_scale) || !isfinite(ffn_scale)) return false;
     if (!path || !path[0]) {
         fprintf(stderr, "ds4: directional steering needs --dir-steering-file\n");
         return false;
@@ -39902,6 +39902,11 @@ static bool glm_graph_load_directional_steering(
     const uint64_t n = (uint64_t)n_layers * DS4_N_EMBD;
     float *dirs = xmalloc((size_t)n * sizeof(dirs[0]));
     bool ok = read_f32_binary_file(path, dirs, n);
+    const int selected = ok ? ds4_steering_prepare_f32(dirs, n_layers, DS4_N_EMBD, mode) : -1;
+    ok = selected >= 0;
+    g->directional_steering_mode = mode;
+    g->directional_steering_layers = selected >= 0 ? (uint32_t)selected : 0;
+    for (uint64_t i = 0; ok && i < n; i++) ok = isfinite(dirs[i]);
     bool used_tier[DS4_MAX_GPUS] = {false};
     for (uint32_t il = g->layer_start; ok && il <= g->layer_end; il++) {
         const int tier = glm_graph_directional_steering_tier(g, il);
@@ -39947,6 +39952,13 @@ static bool glm_graph_apply_directional_steering(
     if (!g || !x || rows == 0 || scale == 0.0f) return true;
     const int tier = glm_graph_directional_steering_tier(g, il);
     if (tier < 0 || !g->directional_steering_dirs_by_tier[tier]) return false;
+    if (g->directional_steering_mode == DS4_STEERING_ADD)
+        scale /= (float)(g->directional_steering_layers ? g->directional_steering_layers : 1);
+#ifdef __APPLE__
+    return ds4_gpu_directional_steering_tensor(x,
+            g->directional_steering_dirs_by_tier[tier], il, DS4_N_EMBD, rows,
+            scale, g->directional_steering_mode) != 0;
+#else
     return ds4_gpu_directional_steering_project_tensor(
             x,
             g->directional_steering_dirs_by_tier[tier],
@@ -39954,6 +39966,7 @@ static bool glm_graph_apply_directional_steering(
             DS4_N_EMBD,
             rows,
             scale) != 0;
+#endif
 }
 
 static bool glm_graph_apply_directional_steering_attn(
@@ -39974,6 +39987,55 @@ static bool glm_graph_apply_directional_steering_ffn(
     return glm_graph_apply_directional_steering(
             g, x, il, rows,
             g ? g->directional_steering_ffn_scale : 0.0f);
+}
+
+/* Full GLM uses a plain residual, unlike Flash's HC publication. The separate
+ * nextn predictor remains unsteered, even when it reuses these FFN helpers. */
+static bool glm_graph_plain_steering_active(const ds4_glm_gpu_graph *g,
+                                           uint32_t il, bool ffn) {
+    return g && !g->glm53 && il < g->normal_layers &&
+           (ffn ? g->directional_steering_ffn_scale :
+                  g->directional_steering_attn_scale) != 0.0f;
+}
+
+static bool glm_graph_plain_steering_residual(
+        ds4_glm_gpu_graph *g, ds4_gpu_tensor *out,
+        const ds4_gpu_tensor *residual, ds4_gpu_tensor *block,
+        const ds4_gpu_tensor *block_add, uint32_t il, uint32_t rows, bool ffn) {
+    const int tier = glm_graph_directional_steering_tier(g, il);
+    if (tier < 0 || !g->directional_steering_dirs_by_tier[tier]) return false;
+#ifdef __APPLE__
+    float scale = ffn ? g->directional_steering_ffn_scale : g->directional_steering_attn_scale;
+    if (g->directional_steering_mode == DS4_STEERING_ADD)
+        scale /= (float)(g->directional_steering_layers ? g->directional_steering_layers : 1);
+    return ds4_gpu_residual_steering_tensor(out, block, block_add, residual,
+            g->directional_steering_dirs_by_tier[tier], il, DS4_N_EMBD, rows,
+            scale, g->directional_steering_mode) != 0;
+#else
+    (void)out; (void)residual; (void)block; (void)block_add;
+    (void)rows; (void)ffn;
+    return false; /* Full GLM steering admission currently requires Metal. */
+#endif
+}
+
+static bool glm_graph_plain_steering_attention_norm(
+        ds4_glm_gpu_graph *g, const ds4_model *model,
+        const ds4_layer_weights *weights, uint32_t il) {
+    const int tier = glm_graph_directional_steering_tier(g, il);
+    if (tier < 0 || !g->directional_steering_dirs_by_tier[tier]) return false;
+#ifdef __APPLE__
+    float scale = g->directional_steering_attn_scale;
+    if (g->directional_steering_mode == DS4_STEERING_ADD)
+        scale /= (float)(g->directional_steering_layers ? g->directional_steering_layers : 1);
+    return ds4_gpu_residual_norm_steering_tensor(g->ffn_norm, g->after_attn,
+            g->attn_out, g->cur, g->directional_steering_dirs_by_tier[tier],
+            model->map, model->size, weights->ffn_norm->abs_offset,
+            il, DS4_N_EMBD, 1, scale, DS4_RMS_EPS,
+            g->directional_steering_mode) != 0;
+#else
+    (void)model; (void)weights;
+    return false;
+#endif
 }
 
 static bool imatrix_collect_glm_one(
@@ -43530,7 +43592,10 @@ static bool glm_graph_encode_sparse_ffn_one(
                                              1,
                                              stage_t0);
     }
-    if (ok && add_residual && !glm_graph_disable_add3_residual()) {
+    if (ok && add_residual && glm_graph_plain_steering_active(g, il, true)) {
+        ok = glm_graph_plain_steering_residual(g, next, after_attn,
+                                               ffn_out, ffn_sum, il, 1, true);
+    } else if (ok && add_residual && !glm_graph_disable_add3_residual()) {
         ok = ds4_gpu_add3_tensor(next,
                                  after_attn,
                                  ffn_out,
@@ -43686,7 +43751,10 @@ static bool glm_graph_encode_ffn_one_normed_from(
                                              pos,
                                              1,
                                              stage_t0);
-        if (ok && add_residual) {
+        if (ok && add_residual && glm_graph_plain_steering_active(g, il, true)) {
+            ok = glm_graph_plain_steering_residual(g, next, after_attn,
+                                                   ffn_out, NULL, il, 1, true);
+        } else if (ok && add_residual) {
             ok = ds4_gpu_add_tensor(next,
                                     after_attn,
                                     ffn_out,
@@ -43764,7 +43832,6 @@ static bool glm53_graph_encode_ffn_tail_one(
                                       DS4_N_EMBD,
                                       il,
                                       pos);
-        ok = glm_graph_apply_directional_steering_ffn(g, g->next, il, 1);
     }
     if (ok) {
         ok = ds4_gpu_hc_expand_tensor(g->hc_next,
@@ -43775,6 +43842,7 @@ static bool glm53_graph_encode_ffn_tail_one(
                                       DS4_N_EMBD,
                                       DS4_N_HC) != 0;
     }
+    if (ok) ok = glm_graph_apply_directional_steering_ffn(g, g->hc_next, il, DS4_N_HC);
     return ok;
 }
 
@@ -44884,7 +44952,10 @@ static bool glm_graph_encode_sparse_ffn_indexed_batch_routed_moe(
                                     g->ffn_sum,
                                     DS4_N_EMBD) != 0;
         }
-        if (ok && !use_batch_residual) {
+        if (ok && !use_batch_residual && glm_graph_plain_steering_active(g, il, true)) {
+            ok = glm_graph_plain_steering_residual(g, next_view, after_attn_view,
+                                                   g->attn_out, NULL, il, 1, true);
+        } else if (ok && !use_batch_residual) {
             ok = ds4_gpu_add_tensor(next_view,
                                     after_attn_view,
                                     g->attn_out,
@@ -44907,7 +44978,10 @@ static bool glm_graph_encode_sparse_ffn_indexed_batch_routed_moe(
                                                   stage_t0);
     if (ok && use_batch_residual) {
         failed_stage = "residual";
-        if (!glm_graph_disable_add3_residual()) {
+        if (glm_graph_plain_steering_active(g, il, true)) {
+            ok = glm_graph_plain_steering_residual(g, next, after_attn,
+                    g->batch_ffn_out, g->batch_attn_out, il, n_tokens, true);
+        } else if (!glm_graph_disable_add3_residual()) {
             ok = ds4_gpu_add3_tensor(next,
                                      after_attn,
                                      g->batch_ffn_out,
@@ -45115,6 +45189,9 @@ static bool glm_graph_encode_ffn_batch(
                                      g->batch_ffn_out,
                                      0,
                                      residual_elems * sizeof(float)) != 0;
+        } else if (ok && glm_graph_plain_steering_active(g, il, true)) {
+            ok = glm_graph_plain_steering_residual(g, next, after_attn,
+                    g->batch_ffn_out, NULL, il, n_tokens, true);
         } else if (ok) {
             ok = ds4_gpu_add_tensor(next,
                                     after_attn,
@@ -45409,6 +45486,9 @@ static bool glm_graph_encode_ffn_batch(
                                 g->batch_ffn_out,
                                 g->batch_attn_out,
                                 (uint32_t)residual_elems) != 0;
+    } else if (ok && glm_graph_plain_steering_active(g, il, true)) {
+        ok = glm_graph_plain_steering_residual(g, next, after_attn,
+                g->batch_ffn_out, g->batch_attn_out, il, n_tokens, true);
     } else if (ok && !glm_graph_disable_add3_residual()) {
         ok = ds4_gpu_add3_tensor(next,
                                  after_attn,
@@ -47329,8 +47409,6 @@ glm53_batch_attention_done:
             metal_graph_debug_dump_tensor(
                     "attn_out", g->batch_attn_out,
                     (uint64_t)n_tokens * DS4_N_EMBD, il, pos0);
-            ok = glm_graph_apply_directional_steering_attn(
-                    g, g->batch_attn_out, il, n_tokens);
         }
         if (ok && g->glm53) {
             failed_stage = "attention mHC expand";
@@ -47340,6 +47418,8 @@ glm53_batch_attention_done:
                                                 g->batch_hc_split,
                                                 DS4_N_EMBD,
                                                 DS4_N_HC) != 0;
+            if (ok) ok = glm_graph_apply_directional_steering_attn(
+                    g, hc_after_attn_view, il, n_tokens * DS4_N_HC);
             if (ok) {
                 metal_graph_debug_dump_tensor(
                         "glm53_hc_after_attn", hc_after_attn_view,
@@ -47381,6 +47461,9 @@ glm53_batch_attention_done:
                             il, pos0);
                 }
             }
+        } else if (ok && glm_graph_plain_steering_active(g, il, false)) {
+            ok = glm_graph_plain_steering_residual(g, g->batch_after_attn, cur,
+                    g->batch_attn_out, NULL, il, n_tokens, false);
         } else if (ok) {
             ok = ds4_gpu_add_tensor(g->batch_after_attn,
                                     cur,
@@ -47409,8 +47492,6 @@ glm53_batch_attention_done:
             metal_graph_debug_dump_tensor(
                     "ffn_out", next,
                     (uint64_t)n_tokens * DS4_N_EMBD, il, pos0);
-            ok = glm_graph_apply_directional_steering_ffn(
-                    g, next, il, n_tokens);
         }
         if (ok && g->glm53) {
             failed_stage = "FFN mHC expand";
@@ -47420,6 +47501,8 @@ glm53_batch_attention_done:
                                                 g->batch_hc_split,
                                                 DS4_N_EMBD,
                                                 DS4_N_HC) != 0;
+            if (ok) ok = glm_graph_apply_directional_steering_ffn(
+                    g, hc_next, il, n_tokens * DS4_N_HC);
             if (ok) {
                 metal_graph_debug_dump_tensor(
                         "glm53_hc_after_ffn", hc_next,
@@ -49111,8 +49194,6 @@ glm53_indexed_attention_done:
             metal_graph_debug_dump_tensor(
                     "attn_out", g->batch_attn_out,
                     (uint64_t)n_tokens * DS4_N_EMBD, il, pos0);
-            ok = glm_graph_apply_directional_steering_attn(
-                    g, g->batch_attn_out, il, n_tokens);
         }
         if (ok && g->glm53) {
             ok = ds4_gpu_hc_expand_split_tensor(hc_after_attn_view,
@@ -49121,6 +49202,8 @@ glm53_indexed_attention_done:
                                                 g->batch_hc_split,
                                                 DS4_N_EMBD,
                                                 DS4_N_HC) != 0;
+            if (ok) ok = glm_graph_apply_directional_steering_attn(
+                    g, hc_after_attn_view, il, n_tokens * DS4_N_HC);
             if (ok) {
                 ok = glm53_graph_hc_pre_rows(g,
                                              model,
@@ -49136,6 +49219,9 @@ glm53_indexed_attention_done:
                                              g->batch_hc_split,
                                              n_tokens);
             }
+        } else if (ok && glm_graph_plain_steering_active(g, il, false)) {
+            ok = glm_graph_plain_steering_residual(g, g->batch_after_attn, cur,
+                    g->batch_attn_out, NULL, il, n_tokens, false);
         } else if (ok) {
             ok = ds4_gpu_add_tensor(g->batch_after_attn,
                                     cur,
@@ -49264,8 +49350,6 @@ glm53_indexed_attention_done:
             metal_graph_debug_dump_tensor(
                     "ffn_out", next,
                     (uint64_t)n_tokens * DS4_N_EMBD, il, pos0);
-            ok = glm_graph_apply_directional_steering_ffn(
-                    g, next, il, n_tokens);
         }
         if (ok && g->glm53) {
             ok = ds4_gpu_hc_expand_split_tensor(hc_next,
@@ -49274,6 +49358,8 @@ glm53_indexed_attention_done:
                                                 g->batch_hc_split,
                                                 DS4_N_EMBD,
                                                 DS4_N_HC) != 0;
+            if (ok) ok = glm_graph_apply_directional_steering_ffn(
+                    g, hc_next, il, n_tokens * DS4_N_HC);
             if (ok) {
                 ds4_gpu_tensor *tmp = hc_cur;
                 hc_cur = hc_next;
@@ -50845,8 +50931,6 @@ glm53_attention_done:
                                           DS4_N_EMBD,
                                           il,
                                           pos);
-            ok = glm_graph_apply_directional_steering_attn(
-                    g, g->attn_out, il, 1);
         }
         if (ok && g->glm53) {
             ok = ds4_gpu_hc_expand_tensor(g->hc_after_attn,
@@ -50856,6 +50940,8 @@ glm53_attention_done:
                                           g->hc_comb,
                                           DS4_N_EMBD,
                                           DS4_N_HC) != 0;
+            if (ok) ok = glm_graph_apply_directional_steering_attn(
+                    g, g->hc_after_attn, il, DS4_N_HC);
             if (ok) ok = glm53_graph_hc_pre(g,
                                             model,
                                             l->hc_ffn_fn,
@@ -50865,6 +50951,8 @@ glm53_attention_done:
                                             g->hc_after_attn,
                                             g->after_attn,
                                             g->ffn_norm);
+        } else if (ok && glm_graph_plain_steering_active(g, il, false)) {
+            ok = glm_graph_plain_steering_attention_norm(g, model, l, il);
         } else if (ok) {
             ok = ds4_gpu_add_rms_norm_weight_tensor(g->ffn_norm,
                                                     g->after_attn,
@@ -51627,6 +51715,7 @@ static int generate_glm_metal_argmax(
         const char          *directional_steering_file,
         float                directional_steering_attn,
         float                directional_steering_ffn,
+        int                  directional_steering_mode,
         ds4_token_emit_fn   emit,
         ds4_generation_done_fn done,
         void              * emit_ud,
@@ -51657,7 +51746,7 @@ static int generate_glm_metal_argmax(
     if (!glm_graph_load_directional_steering(&g,
                                              directional_steering_file,
                                              directional_steering_attn,
-                                             directional_steering_ffn)) {
+                                             directional_steering_ffn, directional_steering_mode)) {
         glm_graph_free(&g);
         return 1;
     }
@@ -51943,8 +52032,8 @@ static bool qwen4_graph_alloc(ds4_qwen4_gpu_graph *g, const ds4_weights *w, uint
 static bool qwen4_graph_load_steering(ds4_qwen4_gpu_graph *g,
                                       const char *path,
                                       float attn_scale,
-                                      float ffn_scale) {
-    return ds4_native_qwen4_graph_load_steering(g, path, attn_scale, ffn_scale);
+                                     float ffn_scale, int mode) {
+    return ds4_native_qwen4_graph_load_steering(g, path, attn_scale, ffn_scale, mode);
 }
 
 static void qwen4_graph_reset(ds4_qwen4_gpu_graph *g) {
@@ -51995,6 +52084,7 @@ static int generate_qwen4_metal_argmax(
         const char        * directional_steering_file,
         float               directional_steering_attn,
         float               directional_steering_ffn,
+        int                 directional_steering_mode,
         ds4_token_emit_fn   emit,
         ds4_generation_done_fn done,
         void              * emit_ud,
@@ -52010,7 +52100,7 @@ static int generate_qwen4_metal_argmax(
         return 1;
     }
     if (!qwen4_graph_load_steering(g, directional_steering_file,
-                                  directional_steering_attn, directional_steering_ffn)) {
+                                  directional_steering_attn, directional_steering_ffn, directional_steering_mode)) {
         qwen4_graph_free(g);
         free(g);
         return 1;
@@ -52088,6 +52178,7 @@ static int generate_metal_graph_raw_swa(
         const char        * directional_steering_file,
         float               directional_steering_attn,
         float               directional_steering_ffn,
+        int                 directional_steering_mode,
         ds4_token_emit_fn   emit,
         ds4_generation_done_fn done,
         void              * emit_ud,
@@ -52104,6 +52195,7 @@ static int generate_metal_graph_raw_swa(
         return generate_qwen4_metal_argmax(model, vocab, weights, prompt, n_predict, ctx_size,
                                            directional_steering_file,
                                            directional_steering_attn, directional_steering_ffn,
+                                           directional_steering_mode,
                                            emit, done, emit_ud, progress, progress_ud);
     }
 #endif
@@ -52133,6 +52225,7 @@ static int generate_metal_graph_raw_swa(
                                          directional_steering_file,
                                          directional_steering_attn,
                                          directional_steering_ffn,
+                                         directional_steering_mode,
                                          emit,
                                          done,
                                          emit_ud,
@@ -52166,7 +52259,7 @@ static int generate_metal_graph_raw_swa(
     if (!metal_graph_load_directional_steering(&g,
                                                directional_steering_file,
                                                directional_steering_attn,
-                                               directional_steering_ffn)) {
+                                               directional_steering_ffn, directional_steering_mode)) {
         metal_graph_free(&g);
         return 1;
     }
@@ -58505,6 +58598,7 @@ int ds4_engine_generate_argmax(
                                             e->core.directional_steering_file,
                                             e->core.directional_steering_attn_scale,
                                             e->core.directional_steering_ffn_scale,
+                                            e->core.directional_steering_mode,
                                             emit, done, emit_ud,
                                             progress, progress_ud);
 #else
@@ -64311,10 +64405,23 @@ static int ds4_engine_open_internal(ds4_engine **out,
         *out = NULL;
         return 1;
     }
+    if (opt->directional_steering_mode != DS4_STEERING_PROJECT && opt->directional_steering_mode != DS4_STEERING_ADD) {
+        fprintf(stderr, "ds4: steering mode must be project or add\n");
+        free(e); *out = NULL; return 1;
+    }
+    if (!isfinite(opt->directional_steering_attn) || !isfinite(opt->directional_steering_ffn)) {
+        fprintf(stderr, "ds4: steering scales must be finite\n");
+        free(e); *out = NULL; return 1;
+    }
+    if (opt->directional_steering_file && opt->directional_steering_file[0] && opt->backend != DS4_BACKEND_METAL) {
+        fprintf(stderr, "ds4: residual steering requires Metal\n");
+        free(e); *out = NULL; return 1;
+    }
     if (opt->directional_steering_file && opt->directional_steering_file[0]) {
         e->core.directional_steering_file = ds4_strdup(opt->directional_steering_file);
         e->core.directional_steering_attn_scale = opt->directional_steering_attn;
         e->core.directional_steering_ffn_scale = opt->directional_steering_ffn;
+        e->core.directional_steering_mode = opt->directional_steering_mode;
     }
     if (opt->n_threads > 0) g_requested_threads = (uint32_t)opt->n_threads;
     e->placement_ctx_hint = opt->placement_ctx_hint;
@@ -64674,11 +64781,11 @@ static int ds4_engine_open_internal(ds4_engine **out,
             *out = e;
             return 0;
         }
-        if (!ds4_model_is_glm53() &&
+        if (!ds4_model_is_glm53() && e->core.backend != DS4_BACKEND_METAL &&
             ((opt->directional_steering_file && opt->directional_steering_file[0]) ||
              opt->directional_steering_attn != 0.0f ||
              opt->directional_steering_ffn != 0.0f)) {
-            fprintf(stderr, "ds4: directional steering is not supported for full GLM 5.3 yet\n");
+            fprintf(stderr, "ds4: full GLM 5.3 directional steering requires Metal\n");
             ds4_engine_close(e);
             *out = NULL;
             return 1;
@@ -67085,7 +67192,7 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
         if (!qwen4_graph_load_steering(&s->qwen4.graph,
                                        e->core.directional_steering_file,
                                        e->core.directional_steering_attn_scale,
-                                       e->core.directional_steering_ffn_scale)) {
+                                       e->core.directional_steering_ffn_scale, e->core.directional_steering_mode)) {
             if (s->qwen4.slot >= 0) ds4_native_qwen4_pool_release(&e->session_resources.qwen4_pool, (uint32_t)s->qwen4.slot);
             qwen4_graph_free(&s->qwen4.graph);
             free(s);
@@ -67185,7 +67292,7 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
                     &s->glm.graph,
                     e->core.directional_steering_file,
                     e->core.directional_steering_attn_scale,
-                    e->core.directional_steering_ffn_scale)) {
+                    e->core.directional_steering_ffn_scale, e->core.directional_steering_mode)) {
             glm_graph_free(&s->glm.graph);
             free(s);
             return 1;
@@ -67333,7 +67440,7 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
     if (!metal_graph_load_directional_steering(&s->graph,
                                                e->core.directional_steering_file,
                                                e->core.directional_steering_attn_scale,
-                                               e->core.directional_steering_ffn_scale)) {
+                                               e->core.directional_steering_ffn_scale, e->core.directional_steering_mode)) {
         metal_graph_free(&s->graph);
         free(s);
         return 1;
@@ -71589,6 +71696,8 @@ static bool glm53_graph_native_session_batch_supported(
         (uint32_t)count > first->ctx_cap) {
         return false;
     }
+    // The shared HC publications use the first graph's immutable bank and
+    // strengths. Mixed settings decline to the caller's ordered scalar loop.
     for (int i = 0; i < count; i++) {
         ds4_session *s = items[i].session;
         ds4_glm_gpu_graph *g = &s->glm.graph;
@@ -71600,6 +71709,10 @@ static bool glm53_graph_native_session_batch_supported(
             g->layer_end != first->layer_end ||
             g->tp_world != first->tp_world ||
             g->tp_rank != first->tp_rank ||
+            g->directional_steering_mode != first->directional_steering_mode ||
+            g->directional_steering_layers != first->directional_steering_layers ||
+            g->directional_steering_attn_scale != first->directional_steering_attn_scale ||
+            g->directional_steering_ffn_scale != first->directional_steering_ffn_scale ||
             pos >= glm_graph_dense_compact_attention_limit(g)) {
             return false;
         }
@@ -72100,9 +72213,6 @@ static bool glm53_graph_encode_native_session_batch(
             ok = glm53_graph_encode_dsa_session_batch(
                     items, count, g, model, l, il);
         }
-        stage = "attention steering";
-        if (ok) ok = glm_graph_apply_directional_steering_attn(
-                g, g->batch_attn_out, il, rows);
         stage = "attention mHC expand";
         if (ok) ok = ds4_gpu_hc_expand_split_tensor(hc_after_attn,
                                                      g->batch_attn_out,
@@ -72110,6 +72220,9 @@ static bool glm53_graph_encode_native_session_batch(
                                                      g->batch_hc_split,
                                                      DS4_N_EMBD,
                                                      DS4_N_HC) != 0;
+        stage = "attention residual steering";
+        if (ok) ok = glm_graph_apply_directional_steering_attn(
+                g, hc_after_attn, il, rows * DS4_N_HC);
         stage = "FFN mHC pre";
         if (ok) ok = glm53_graph_hc_pre_rows(g,
                                              model,
@@ -72138,9 +72251,6 @@ static bool glm53_graph_encode_native_session_batch(
                                                 false,
                                                 false,
                                                 NULL);
-        stage = "FFN steering";
-        if (ok) ok = glm_graph_apply_directional_steering_ffn(
-                g, next, il, rows);
         stage = "FFN mHC expand";
         if (ok) ok = ds4_gpu_hc_expand_split_tensor(hc_next,
                                                      next,
@@ -72148,6 +72258,9 @@ static bool glm53_graph_encode_native_session_batch(
                                                      g->batch_hc_split,
                                                      DS4_N_EMBD,
                                                      DS4_N_HC) != 0;
+        stage = "FFN residual steering";
+        if (ok) ok = glm_graph_apply_directional_steering_ffn(
+                g, hc_next, il, rows * DS4_N_HC);
         if (ok) {
             ds4_gpu_tensor *tmp = hc_cur;
             hc_cur = hc_next;

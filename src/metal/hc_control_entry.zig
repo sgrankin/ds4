@@ -3,6 +3,34 @@ const h = @import("hc_control.zig");
 const p = @import("hc_producer.zig");
 const Tensor = h.Tensor;
 
+export fn ds4_gpu_hc_expand_split_steering_tensor(out: ?*Tensor, block: ?*Tensor, residual: ?*const Tensor, split: ?*const Tensor, directions: ?*const Tensor, layer: u32, width: u32, hc: u32, scale: f32, bf16: bool, mode: c_int) callconv(.c) c_int {
+    return h.expandSteered(.{ .out = out, .block = block, .residual = residual, .split = split }, .{ .width = width, .hc = hc }, true, directions, layer, scale, bf16, mode);
+}
+
+export fn ds4_gpu_hc_expand_steering_tensor(out: ?*Tensor, block: ?*Tensor, residual: ?*const Tensor, post: ?*const Tensor, comb: ?*const Tensor, directions: ?*const Tensor, layer: u32, width: u32, hc: u32, scale: f32, mode: c_int) callconv(.c) c_int {
+    return h.expandSteered(.{ .out = out, .block = block, .residual = residual, .post = post, .comb = comb }, .{ .width = width, .hc = hc }, false, directions, layer, scale, false, mode);
+}
+
+export fn ds4_gpu_qwen4_hc_combine_steering_tensor(residual: ?*Tensor, block: ?*Tensor, injection: ?*const Tensor, directions: ?*const Tensor, layer: u32, rows: u32, width: u32, hc: u32, scale: f32, mode: c_int) callconv(.c) c_int {
+    return h.qwenCombineSteered(residual, block, injection, directions, layer, rows, .{ .width = width, .hc = hc }, scale, mode);
+}
+
+export fn ds4_gpu_qwen4_moe_reduce_steering_tensor(out: ?*Tensor, partials: ?*const Tensor, weights: ?*const Tensor, shared_gate: ?*const Tensor, shared: ?*const Tensor, residual: ?*Tensor, injection: ?*const Tensor, directions: ?*const Tensor, layer: u32, rows: u32, slots: u32, stride: u32, width: u32, hc: u32, scale: f32, mode: c_int) callconv(.c) c_int {
+    return h.qwenReduceSteered(.{ .out = out, .partials = partials, .weights = weights, .shared_gate = shared_gate, .shared = shared, .residual = residual, .injection = injection, .directions = directions, .layer = layer, .rows = rows, .slots = slots, .stride = stride, .scale = scale, .mode = mode }, .{ .width = width, .hc = hc });
+}
+
+export fn ds4_gpu_residual_steering_tensor(out: ?*Tensor, block: ?*Tensor, block_add: ?*const Tensor, residual: ?*const Tensor, directions: ?*const Tensor, layer: u32, width: u32, rows: u32, scale: f32, mode: c_int) callconv(.c) c_int {
+    return h.residualSteered(.{ .out = out, .block = block, .block_add = block_add, .residual = residual, .directions = directions, .layer = layer, .width = width, .rows = rows, .scale = scale, .mode = mode }, .{}, null);
+}
+
+export fn ds4_gpu_residual_norm_steering_tensor(norm_out: ?*Tensor, sum_out: ?*Tensor, block: ?*Tensor, residual: ?*const Tensor, directions: ?*const Tensor, model_map: ?*const anyopaque, model_size: u64, norm_offset: u64, layer: u32, width: u32, rows: u32, scale: f32, eps: f32, mode: c_int) callconv(.c) c_int {
+    return h.residualSteered(.{ .out = sum_out, .norm_out = norm_out, .block = block, .residual = residual, .directions = directions, .layer = layer, .width = width, .rows = rows, .scale = scale, .mode = mode }, .{ .map = model_map, .size = model_size, .norm = norm_offset }, eps);
+}
+
+export fn ds4_gpu_directional_steering_tensor(values: ?*Tensor, directions: ?*const Tensor, layer: u32, width: u32, rows: u32, scale: f32, mode: c_int) callconv(.c) c_int {
+    return h.transformResidual(values, directions, layer, width, rows, scale, mode, false);
+}
+
 export fn ds4_gpu_hc_split_sinkhorn_tensor(
     out: ?*Tensor,
     mix: ?*const Tensor,

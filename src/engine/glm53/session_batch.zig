@@ -15,6 +15,14 @@ const Tensor = c.ds4_gpu_tensor;
 const Row = c.ds4_glm_session_row;
 const allocator = std.heap.c_allocator;
 
+pub fn sameSteering(a: *const Graph, b: *const Graph) bool {
+    return a.directional_steering_mode == b.directional_steering_mode and a.directional_steering_layers == b.directional_steering_layers and
+        a.directional_steering_attn_scale == b.directional_steering_attn_scale and
+        a.directional_steering_ffn_scale == b.directional_steering_ffn_scale and
+        ((a.directional_steering_attn_scale == 0 and a.directional_steering_ffn_scale == 0) or
+            (a.directional_steering_dirs_by_tier[0] != null and b.directional_steering_dirs_by_tier[0] != null));
+}
+
 fn view(tensor: ?*const Tensor, row: usize, width: u64) ?*Tensor {
     return c.ds4_gpu_tensor_view(tensor, row * width * @sizeOf(f32), width * @sizeOf(f32));
 }
@@ -146,14 +154,10 @@ fn dsa(batch: *Graph, model: *const Model, weights: *const Layer, layer: u32, se
     return Ops.matmul(batch.batch_attn_out, model, weights.attn_output, @intCast(batch.heads_dim), shape.n_embd, batch.batch_heads, rows);
 }
 
-fn steer(graph: *Graph, tensor: ?*Tensor, layer: u32, rows: u32, scale: f32) bool {
-    return scale == 0 or (graph.directional_steering_dirs_by_tier[0] != null and
-        c.ds4_gpu_directional_steering_project_tensor(tensor, graph.directional_steering_dirs_by_tier[0], layer, graph.config.shape.n_embd, rows, scale) != 0);
-}
-
 pub fn encode(model: *const Model, weights: *const Weights, sessions: []const Row, ablate: u32) bool {
     if (sessions.len < 2) return false;
     const graph: *Graph = sessions[0].graph;
+    for (sessions) |session| if (!sameSteering(graph, session.graph)) return false;
     const shape = &graph.config.shape;
     const rows: u32 = @intCast(sessions.len);
     if (!graph.glm53 or graph.ssd_streaming or graph.placement != null or graph.tp_world > 1 or graph.full_kv_cache or rows > graph.ctx_cap) return false;
@@ -187,12 +191,10 @@ pub fn encode(model: *const Model, weights: *const Weights, sessions: []const Ro
         const layer_weights = &weights.layer[layer];
         if (!Ops.hcPre(true, graph, model, layer_weights.hc_attn_fn, layer_weights.hc_attn_scale, layer_weights.hc_attn_base, layer_weights.attn_norm, current, work.cur, graph.batch_attn_norm, graph.batch_hc_flat, graph.batch_hc_mix, graph.batch_hc_split, rows)) return false;
         const attention_ok = if (Config.isKda(&graph.config, layer)) kda(graph, model, layer_weights, layer, sessions) else dsa(graph, model, layer_weights, layer, sessions);
-        if (!attention_ok or !steer(graph, graph.batch_attn_out, layer, rows, graph.directional_steering_attn_scale) or
-            c.ds4_gpu_hc_expand_split_tensor(work.hc_after, graph.batch_attn_out, current, graph.batch_hc_split, shape.n_embd, shape.n_hc) == 0 or
+        if (!attention_ok or !Ops.hcExpand(graph, work.hc_after, graph.batch_attn_out, current, graph.batch_hc_split, layer, graph.directional_steering_attn_scale) or
             !Ops.hcPre(true, graph, model, layer_weights.hc_ffn_fn, layer_weights.hc_ffn_scale, layer_weights.hc_ffn_base, layer_weights.ffn_norm, work.hc_after, work.after, graph.batch_ffn_norm, graph.batch_hc_flat, graph.batch_hc_mix, graph.batch_hc_split, rows) or
             !Moe.encodeRows(graph, model, layer_weights, layer, 0, rows, work.next, false, ablate) or
-            !steer(graph, work.next, layer, rows, graph.directional_steering_ffn_scale) or
-            c.ds4_gpu_hc_expand_split_tensor(next, work.next, work.hc_after, graph.batch_hc_split, shape.n_embd, shape.n_hc) == 0) return false;
+            !Ops.hcExpand(graph, next, work.next, work.hc_after, graph.batch_hc_split, layer, graph.directional_steering_ffn_scale)) return false;
         std.mem.swap(?*Tensor, &current, &next);
     }
     for (0..rows) |row| {

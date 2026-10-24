@@ -33,8 +33,8 @@ export fn ds4_native_qwen4_graph_scratch_bytes(graph: *const c.ds4_qwen4_gpu_gra
     return resources.scratchBytes(graph);
 }
 
-export fn ds4_native_qwen4_graph_load_steering(graph: ?*c.ds4_qwen4_gpu_graph, path: [*c]const u8, attention_scale: f32, ffn_scale: f32) bool {
-    return resources.loadSteering(graph orelse return false, path, attention_scale, ffn_scale);
+export fn ds4_native_qwen4_graph_load_steering(graph: ?*c.ds4_qwen4_gpu_graph, path: [*c]const u8, attention_scale: f32, ffn_scale: f32, mode: c_int) bool {
+    return resources.loadSteering(graph orelse return false, path, attention_scale, ffn_scale, mode);
 }
 
 export fn ds4_native_qwen4_graph_forward_tokens(graph: *c.ds4_qwen4_gpu_graph, model: *const c.ds4_model, weights: *const c.ds4_weights, tokens: [*c]const c_int, count: u32, output: [*c]f32, all_rows: bool) bool {

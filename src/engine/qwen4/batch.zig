@@ -5,6 +5,7 @@ const std = @import("std");
 const c = @import("gguf_c");
 const dimensions = @import("config.zig");
 const ops = @import("ops.zig");
+const resources = @import("resources.zig");
 const attention = @import("attention.zig");
 const moe = @import("moe.zig");
 const embeddings = @import("embedding.zig");
@@ -95,7 +96,7 @@ pub fn supported(optional_arena: ?*const Graph, members: []const Member, specula
         const frontier: *const c.ds4_session_frontier = member.frontier;
         if (!frontier.checkpoint_valid or graph.owns_scratch or graph.R != arena.R or graph.n_block_cap > arena.n_block_cap or
             graph.pos != frontier.checkpoint.len or graph.vis_span_count != 0 or (speculative and graph.mtp_R == null) or
-            graph.snap_after_first or graph.snap_after_second or graph.steer_attn_scale != 0 or graph.steer_ffn_scale != 0 or graph.dump_prompt_rows) return false;
+            graph.snap_after_first or graph.snap_after_second or !resources.sameSteering(members[0].graph, graph) or graph.dump_prompt_rows) return false;
     }
     return true;
 }
@@ -228,6 +229,8 @@ var timing: ?bool = null;
 
 pub fn encode(members: []const Member, arena: *Graph, pool: ?*const Pool, model: *const Model, weights: *const Weights) bool {
     if (members.len == 0 or members.len > maximum) return false;
+    const steering = resources.SteeringBorrow.begin(arena, members[0].graph);
+    defer steering.end();
     const count: u32 = @intCast(members.len);
     const rows = allocator.alloc(Row, members.len) catch c.ds4_engine_model_die("out of memory");
     defer allocator.free(rows);
@@ -270,10 +273,10 @@ pub fn encode(members: []const Member, arena: *Graph, pool: ?*const Pool, model:
         const is_linear = dimensions.isLinear(&arena.config, index);
         if (ok) ok = if (is_linear) linear(members, rows, arena, pool, model, layer, index, count) else attend(rows, arena, model, layer, index, count);
         profile.mark(if (is_linear) 3 else 4);
-        ok = ok and c.ds4_gpu_qwen4_hc_combine_tensor(arena.R, arena.blk, arena.inj, count, shape.n_embd, shape.n_hc) != 0 and
+        ok = ok and resources.combineAttention(arena, index, count) and
             ops.hcMix(arena, model, layer.hc_ffn_norm, layer.hc_ffn_down, layer.hc_ffn_up, layer.hc_ffn_inject, count);
         profile.mark(5);
-        ok = ok and moe.run(arena, model, layer, count);
+        ok = ok and moe.runSteered(arena, model, layer, index, count);
         profile.mark(6);
     }
     ok = ok and ops.hcMix(arena, model, weights.output_hc_norm, weights.output_hc_down, weights.output_hc_up, null, count) and
@@ -357,6 +360,8 @@ fn attentionEntry(graph: *const Graph, layer: u32, position: u32, sparse_at: u32
 
 pub fn encodeRagged(members: []const Member, count: u32, arena: *Graph, model: *const Model, weights: *const Weights) bool {
     if (members.len == 0 or members.len > maximum or count == 0 or count > maximum) return false;
+    const steering = resources.SteeringBorrow.begin(arena, members[0].graph);
+    defer steering.end();
     const rows = allocator.alloc(Row, members.len) catch c.ds4_engine_model_die("out of memory");
     defer allocator.free(rows);
     var built: usize = 0;
@@ -407,8 +412,8 @@ pub fn encodeRagged(members: []const Member, count: u32, arena: *Graph, model: *
             }
             ok = ok and attentionEntries(entries[0..count], arena, model, layer, index) and ops.dense(arena.blk, model, layer.attn_output, arena.attn_o, count);
         }
-        ok = ok and c.ds4_gpu_qwen4_hc_combine_tensor(arena.R, arena.blk, arena.inj, count, shape.n_embd, shape.n_hc) != 0 and
-            ops.hcMix(arena, model, layer.hc_ffn_norm, layer.hc_ffn_down, layer.hc_ffn_up, layer.hc_ffn_inject, count) and moe.run(arena, model, layer, count);
+        ok = ok and resources.combineAttention(arena, index, count) and
+            ops.hcMix(arena, model, layer.hc_ffn_norm, layer.hc_ffn_down, layer.hc_ffn_up, layer.hc_ffn_inject, count) and moe.runSteered(arena, model, layer, index, count);
     }
     return ok and ops.hcMix(arena, model, weights.output_hc_norm, weights.output_hc_down, weights.output_hc_up, null, count) and
         ops.dense(arena.batch_logits, model, weights.output, arena.mixed, count);

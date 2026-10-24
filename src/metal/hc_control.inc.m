@@ -51,6 +51,24 @@ ds4_metal_attention_pipeline ds4_metal_hc_control_pipeline(uint32_t kind) {
     case DS4_HC_OUTPUT_SCALE:
       p = g_unary_scale_pipeline;
       break;
+    case DS4_HC_STEERING_RESIDUAL:
+      p = ds4_gpu_get_pipeline("kernel_residual_steering");
+      break;
+    case DS4_HC_STEERING_RESIDUAL_NORM:
+      p = ds4_gpu_get_pipeline("kernel_residual_norm_steering");
+      break;
+    case DS4_HC_STEERING_PROJECT:
+      p = ds4_gpu_get_pipeline("kernel_residual_transform_steering");
+      break;
+    case DS4_HC_STEERING_EXPAND:
+      p = ds4_gpu_get_pipeline("kernel_hc_expand_steering");
+      break;
+    case DS4_HC_STEERING_QWEN_COMBINE:
+      p = ds4_gpu_get_pipeline("kernel_qwen4_hc_combine_steering");
+      break;
+    case DS4_HC_STEERING_QWEN_MOE:
+      p = ds4_gpu_get_pipeline("kernel_qwen4_moe_reduce_steering");
+      break;
     case DS4_HC_EXPAND:
       p = g_hc_expand_pipeline;
       break;
@@ -242,6 +260,56 @@ int ds4_metal_hc_control_encode(void *command,
       B(2, scale);
       B(3, base);
       B(4, out);
+      break;
+    case DS4_HC_STEERING_RESIDUAL:
+      A(0, steering_args);
+      B(1, block);
+      B(2, block_add);
+      B(3, residual);
+      B(4, directions);
+      B(5, out);
+      break;
+    case DS4_HC_STEERING_RESIDUAL_NORM:
+      A(0, steering_args);
+      B(1, block);
+      B(2, residual);
+      B(3, directions);
+      B(4, out);
+      B(5, norm_weights);
+      B(6, norm_out);
+      break;
+    case DS4_HC_STEERING_PROJECT:
+      A(0, steering_args);
+      B(1, block);
+      B(2, directions);
+      break;
+    case DS4_HC_STEERING_EXPAND:
+      A(0, expand_args);
+      A(1, steering_args);
+      B(2, block);
+      B(3, residual);
+      B(4, post);
+      B(5, comb);
+      B(6, directions);
+      B(7, out);
+      break;
+    case DS4_HC_STEERING_QWEN_COMBINE:
+      A(0, steering_args);
+      B(1, residual);
+      B(2, block);
+      B(3, post);
+      B(4, directions);
+      break;
+    case DS4_HC_STEERING_QWEN_MOE:
+      A(0, steering_args);
+      B(1, input);
+      B(2, router_weights);
+      B(3, shared_gate);
+      B(4, block);
+      B(5, residual);
+      B(6, post);
+      B(7, shared_output);
+      B(8, directions);
       break;
     case DS4_HC_EXPAND:
       A(0, expand_args);

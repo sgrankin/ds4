@@ -73,6 +73,7 @@ fn glmDenseBatch(rows: []const c.ds4_glm_session_row) bool {
     for (rows) |row| {
         const graph = row.graph;
         if (!graph.*.glm53 or graph.*.ssd_streaming or graph.*.placement != null or graph.*.full_kv_cache or
+            !GlmBatch.sameSteering(first, graph) or
             graph.*.compact_cache_cap != first.*.compact_cache_cap or graph.*.layer_start != first.*.layer_start or
             graph.*.layer_end != first.*.layer_end or graph.*.tp_world != first.*.tp_world or graph.*.tp_rank != first.*.tp_rank or
             row.position >= GlmPlanning.denseLimit(graph)) return false;

@@ -306,9 +306,11 @@ pub fn reset(graph: *Graph) void {
     graph.snap_after_second = false;
 }
 
-pub fn loadSteering(graph: *Graph, path: [*c]const u8, attention_scale: f32, ffn_scale: f32) bool {
-    if (attention_scale == 0 and ffn_scale == 0) return true;
+pub fn loadSteering(graph: *Graph, path: [*c]const u8, attention_scale: f32, ffn_scale: f32, mode: c_int) bool {
+    graph.steer_mode = mode;
+    graph.steer_layers = 0;
     if (path == null or path[0] == 0) {
+        if (attention_scale == 0 and ffn_scale == 0) return true;
         _ = c.fputs("ds4: directional steering needs --dir-steering-file\n", c.__stderrp);
         return false;
     }
@@ -327,6 +329,12 @@ pub fn loadSteering(graph: *Graph, path: [*c]const u8, attention_scale: f32, ffn
         } else ok = false;
     }
     if (ok) {
+        graph.steer_layers = @import("../steering.zig").prepare(vectors[0..@intCast(count)], graph.config.shape.n_embd, mode) orelse {
+            _ = c.fputs("ds4: invalid residual steering bank or mode\n", c.__stderrp);
+            return false;
+        };
+    }
+    if (ok) {
         graph.steer_dirs = c.ds4_gpu_tensor_alloc(count * @sizeOf(f32));
         ok = graph.steer_dirs != null and c.ds4_gpu_tensor_write(graph.steer_dirs, 0, vectors, count * @sizeOf(f32)) != 0;
     }
@@ -340,12 +348,47 @@ pub fn loadSteering(graph: *Graph, path: [*c]const u8, attention_scale: f32, ffn
     return true;
 }
 
-pub fn steerAttention(graph: *Graph, layer: u32, rows: u32) bool {
-    if (graph.steer_dirs == null or graph.steer_attn_scale == 0) return true;
-    return c.ds4_gpu_directional_steering_project_tensor(graph.blk, graph.steer_dirs, layer, graph.config.shape.n_embd, rows, graph.steer_attn_scale) != 0;
+pub fn combineAttention(graph: *Graph, layer: u32, rows: u32) bool {
+    const shape = &graph.config.shape;
+    if (graph.steer_attn_scale == 0)
+        return c.ds4_gpu_qwen4_hc_combine_tensor(graph.R, graph.blk, graph.inj, rows, shape.n_embd, shape.n_hc) != 0;
+    return graph.steer_dirs != null and c.ds4_gpu_qwen4_hc_combine_steering_tensor(graph.R, graph.blk, graph.inj, graph.steer_dirs, layer, rows, shape.n_embd, shape.n_hc, effectiveScale(graph, graph.steer_attn_scale), graph.steer_mode) != 0;
 }
 
-pub fn steerFfn(graph: *Graph, layer: u32, rows: u32) bool {
-    if (graph.steer_dirs == null or graph.steer_ffn_scale == 0) return true;
-    return c.ds4_gpu_directional_steering_project_tensor(graph.R, graph.steer_dirs, layer, graph.config.shape.n_embd, rows * graph.config.shape.n_hc, graph.steer_ffn_scale) != 0;
+pub fn effectiveScale(graph: *const Graph, raw: f32) f32 {
+    return @import("../steering.zig").effectiveScale(raw, graph.steer_mode, graph.steer_layers);
 }
+
+pub fn sameSteering(a: *const Graph, b: *const Graph) bool {
+    return a.steer_mode == b.steer_mode and a.steer_layers == b.steer_layers and a.steer_attn_scale == b.steer_attn_scale and a.steer_ffn_scale == b.steer_ffn_scale and
+        ((a.steer_attn_scale == 0 and a.steer_ffn_scale == 0) or (a.steer_dirs != null and b.steer_dirs != null));
+}
+
+/// Session vectors belong to their graph, while the shared batch arena only
+/// owns scratch. Borrow one homogeneous batch's steering for its encoded work.
+pub const SteeringBorrow = struct {
+    graph: *Graph,
+    directions: ?*Tensor,
+    attention: f32,
+    ffn: f32,
+    mode: c_int,
+    layers: u32,
+
+    pub fn begin(arena: *Graph, member: *const Graph) SteeringBorrow {
+        const saved = SteeringBorrow{ .graph = arena, .directions = arena.steer_dirs, .attention = arena.steer_attn_scale, .ffn = arena.steer_ffn_scale, .mode = arena.steer_mode, .layers = arena.steer_layers };
+        arena.steer_dirs = member.steer_dirs;
+        arena.steer_mode = member.steer_mode;
+        arena.steer_layers = member.steer_layers;
+        arena.steer_attn_scale = member.steer_attn_scale;
+        arena.steer_ffn_scale = member.steer_ffn_scale;
+        return saved;
+    }
+
+    pub fn end(self: SteeringBorrow) void {
+        self.graph.steer_dirs = self.directions;
+        self.graph.steer_mode = self.mode;
+        self.graph.steer_layers = self.layers;
+        self.graph.steer_attn_scale = self.attention;
+        self.graph.steer_ffn_scale = self.ffn;
+    }
+};

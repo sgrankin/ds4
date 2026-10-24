@@ -736,6 +736,9 @@ fn parseOptions(argv: [][*c]u8) Options {
             if (cfg.engine.power_percent > 100) fatal(2, "ds4: --power must be between 1 and 100\n", .{});
         } else if (same(arg, "--dir-steering-file")) {
             cfg.engine.directional_steering_file = args.value(arg).ptr;
+        } else if (same(arg, "--dir-steering-mode")) {
+            const value = args.value(arg);
+            cfg.engine.directional_steering_mode = if (same(value, "project")) c.DS4_STEERING_PROJECT else if (same(value, "add")) c.DS4_STEERING_ADD else fatal(2, "ds4: --dir-steering-mode must be project or add\n", .{});
         } else if (same(arg, "--expert-profile")) {
             cfg.engine.expert_profile_path = args.value(arg).ptr;
         } else if (same(arg, "--dir-steering-ffn")) {

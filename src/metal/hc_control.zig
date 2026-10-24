@@ -305,3 +305,207 @@ pub fn expand(inputs: Inputs, shape: Shape, split: bool, add: bool) c_int {
     }
     return run(launch, if (split) "HC expand add split" else if (add) "HC expand add" else "HC expand");
 }
+
+/// Steer each published HC residual independently. Project mode first uses
+/// the ordinary publication so its dot includes every incoming residual stream.
+/// Addition can share the HC publication; off callers keep the original APIs.
+pub fn expandSteered(inputs: Inputs, shape: Shape, split: bool, directions: ?*const Tensor, layer: u32, scale: f32, bf16: bool, mode: c_int) c_int {
+    if (!init() or (mode != 0 and mode != 1) or shape.hc != 4 or shape.width < 256 or inputs.block == null or
+        inputs.out == null or inputs.residual == null or directions == null or
+        (if (split) inputs.split == null else inputs.post == null or inputs.comb == null)) return 0;
+    const buffers = Buffers.from(inputs);
+    defer buffers.deinit();
+    const dirs = Buffer.tensor(directions);
+    defer dirs.deinit();
+    const row_bytes = @as(u64, shape.width) * 4;
+    const hc_bytes = row_bytes * shape.hc;
+    if (buffers.out.view.bytes == 0 or buffers.out.view.bytes % hc_bytes != 0) return fail("ds4: steered HC output is not a whole token row");
+    const rows = buffers.out.view.bytes / hc_bytes;
+    if (rows > max32 or !buffers.block.fits(rows * row_bytes) or
+        !buffers.residual.fits(rows * hc_bytes) or
+        !dirs.fits((@as(u64, layer) + 1) * row_bytes) or
+        (if (split) !buffers.split.fits(rows * shape.mix() * 4) else !buffers.post.fits(rows * shape.hc * 4) or !buffers.comb.fits(rows * shape.hc * shape.hc * 4)))
+        return fail("ds4: steered HC received undersized activation buffers");
+    if (mode == 0) {
+        if (expand(inputs, shape, split, false) == 0) return 0;
+        return transformResidual(inputs.out, directions, layer, shape.width, @intCast(rows * shape.hc), scale, mode, bf16);
+    }
+    const pso = pipeline(c.DS4_HC_STEERING_EXPAND);
+    if (pso.handle == null or pso.threads < 256) return 0;
+    var launch = plan(c.DS4_HC_STEERING_EXPAND, pso);
+    buffers.fill(&launch);
+    launch.expand_args = expandPacket(shape, rows, split, false);
+    launch.steering_args = steeringPacket(shape, @intCast(rows), layer, scale, mode);
+    launch.steering_args.bf16 = @intFromBool(bf16);
+    launch.directions = dirs.view;
+    if (split) {
+        launch.post = at(buffers.split.view, @as(u64, shape.hc) * 4);
+        launch.comb = at(buffers.split.view, @as(u64, 2 * shape.hc) * 4);
+    }
+    launch.gx = (rows * shape.width + 255) / 256;
+    launch.tx = 256;
+    return run(launch, "steered HC expand");
+}
+
+pub fn transformResidual(values: ?*const Tensor, directions: ?*const Tensor, layer: u32, width: u32, rows: u32, scale: f32, mode: c_int, bf16: bool) c_int {
+    if (!init() or width == 0 or rows == 0 or (mode != 0 and mode != 1)) return 0;
+    const x = Buffer.tensor(values);
+    defer x.deinit();
+    const dirs = Buffer.tensor(directions);
+    defer dirs.deinit();
+    const row_bytes = @as(u64, width) * 4;
+    if (!x.fits(row_bytes * rows) or !dirs.fits((@as(u64, layer) + 1) * row_bytes)) return 0;
+    const pso = pipeline(c.DS4_HC_STEERING_PROJECT);
+    if (pso.handle == null or pso.threads < 256) return 0;
+    var launch = plan(c.DS4_HC_STEERING_PROJECT, pso);
+    launch.block = x.view;
+    launch.directions = dirs.view;
+    launch.steering_args = steeringPacket(.{ .width = width, .hc = 1 }, rows, layer, scale, mode);
+    launch.steering_args.bf16 = @intFromBool(bf16);
+    launch.gx = rows;
+    launch.tx = 256;
+    launch.shared_bytes = 256 * 4;
+    return run(launch, "residual steering");
+}
+
+fn steeringPacket(shape: Shape, rows: u32, layer: u32, scale: f32, mode: c_int) c.ds4_gpu_hc_steering_args {
+    return .{ .width = shape.width, .rows = rows, .hc = shape.hc, .layer = layer, .scale = scale, .bf16 = 0, .slots = 0, .part_stride = 0, .shared_src = 0, .norm_eps = 0, .has_add = 0, .mode = @intCast(mode) };
+}
+
+pub fn qwenCombineSteered(residual: ?*Tensor, block: ?*Tensor, injection: ?*const Tensor, directions: ?*const Tensor, layer: u32, rows: u32, shape: Shape, scale: f32, mode: c_int) c_int {
+    if (!init() or (mode != 0 and mode != 1) or shape.hc != 4 or shape.width != 2560 or rows == 0) return 0;
+    const buffers = Buffers.from(.{ .residual = residual, .block = block, .post = injection });
+    defer buffers.deinit();
+    const dirs = Buffer.tensor(directions);
+    defer dirs.deinit();
+    const row_bytes = @as(u64, shape.width) * 4;
+    if (!buffers.residual.fits(rows * row_bytes * shape.hc) or !buffers.block.fits(rows * row_bytes) or
+        !buffers.post.fits(@as(u64, rows) * shape.hc * 8 * shape.hc * 4) or
+        !dirs.fits((@as(u64, layer) + 1) * row_bytes)) return fail("ds4: steered Qwen combine received undersized buffers");
+    const pso = pipeline(c.DS4_HC_STEERING_QWEN_COMBINE);
+    if (pso.handle == null or pso.threads < 256) return 0;
+    var launch = plan(c.DS4_HC_STEERING_QWEN_COMBINE, pso);
+    buffers.fill(&launch);
+    launch.steering_args = steeringPacket(shape, rows, layer, scale, mode);
+    launch.directions = dirs.view;
+    launch.gx = rows;
+    launch.tx = 256;
+    launch.shared_bytes = 256 * 4;
+    return run(launch, "steered Qwen attention combine");
+}
+
+pub const QwenReduction = struct {
+    out: ?*Tensor,
+    partials: ?*const Tensor,
+    weights: ?*const Tensor,
+    shared_gate: ?*const Tensor,
+    shared: ?*const Tensor,
+    residual: ?*Tensor,
+    injection: ?*const Tensor,
+    directions: ?*const Tensor,
+    layer: u32,
+    rows: u32,
+    slots: u32,
+    stride: u32,
+    scale: f32,
+    mode: c_int,
+};
+
+/// Qwen steers the updated residual independently in all four HC branches.
+/// Predictor callers use the original reduction and never enter this path.
+pub fn qwenReduceSteered(request: QwenReduction, shape: Shape) c_int {
+    if (!init() or (request.mode != 0 and request.mode != 1) or shape.width != 2560 or shape.hc != 4 or request.rows == 0 or request.slots == 0 or request.stride < request.slots) return 0;
+    const buffers = Buffers.from(.{ .block = request.out, .input = request.partials, .residual = request.residual, .post = request.injection });
+    defer buffers.deinit();
+    const weights = Buffer.tensor(request.weights);
+    defer weights.deinit();
+    const gate = Buffer.tensor(request.shared_gate);
+    defer gate.deinit();
+    const shared = Buffer.tensor(request.shared);
+    defer shared.deinit();
+    const dirs = Buffer.tensor(request.directions);
+    defer dirs.deinit();
+    const source: u32 = if (request.shared_gate == null) 0 else if (request.shared != null) 2 else 1;
+    const rows = @as(u64, request.rows);
+    const row_bytes = @as(u64, shape.width) * 4;
+    if ((source == 1 and request.stride == request.slots) or
+        !buffers.block.fits(rows * row_bytes) or !buffers.input.fits(rows * request.stride * row_bytes) or
+        !buffers.residual.fits(rows * shape.hc * row_bytes) or !buffers.post.fits(rows * shape.hc * 8 * shape.hc * 4) or
+        !weights.fits(rows * request.slots * 4) or !dirs.fits((@as(u64, request.layer) + 1) * row_bytes) or
+        (source != 0 and !gate.fits(rows * 4)) or (source == 2 and !shared.fits(rows * row_bytes)))
+        return fail("ds4: steered Qwen reduction received undersized buffers");
+    const pso = pipeline(c.DS4_HC_STEERING_QWEN_MOE);
+    if (pso.handle == null or pso.threads < 256) return 0;
+    var launch = plan(c.DS4_HC_STEERING_QWEN_MOE, pso);
+    buffers.fill(&launch);
+    launch.steering_args = steeringPacket(shape, request.rows, request.layer, request.scale, request.mode);
+    launch.steering_args.slots = request.slots;
+    launch.steering_args.part_stride = request.stride;
+    launch.steering_args.shared_src = source;
+    launch.router_weights = weights.view;
+    launch.shared_gate = if (source == 0) weights.view else gate.view;
+    launch.shared_output = if (source == 2) shared.view else buffers.input.view;
+    launch.directions = dirs.view;
+    launch.gx = rows;
+    launch.tx = 256;
+    launch.shared_bytes = 256 * 4;
+    return run(launch, "steered Qwen residual reduction");
+}
+
+pub const ResidualProjection = struct {
+    out: ?*Tensor,
+    norm_out: ?*Tensor = null,
+    block: ?*Tensor,
+    block_add: ?*const Tensor = null,
+    residual: ?*const Tensor,
+    directions: ?*const Tensor,
+    layer: u32,
+    width: u32,
+    rows: u32,
+    scale: f32,
+    mode: c_int,
+};
+
+/// Plain residual families use add/add3 rather than HC expansion. Steer the
+/// complete residual sum. The normalized
+/// variant retains the scalar attention add+RMSNorm's single dispatch.
+pub fn residualSteered(request: ResidualProjection, model: Model, norm_eps: ?f32) c_int {
+    const normalized = norm_eps != null;
+    if (!init() or (request.mode != 0 and request.mode != 1) or request.width < 1024 or request.rows == 0 or
+        (normalized and (request.norm_out == null or request.width % 4 != 0 or request.block_add != null))) return 0;
+    const buffers = Buffers.from(.{ .out = request.out, .norm_out = request.norm_out, .block = request.block, .block_add = request.block_add, .residual = request.residual });
+    defer buffers.deinit();
+    const dirs = Buffer.tensor(request.directions);
+    defer dirs.deinit();
+    const row_bytes = @as(u64, request.width) * 4;
+    const bytes = row_bytes * request.rows;
+    if (!buffers.out.fits(bytes) or !buffers.block.fits(bytes) or !buffers.residual.fits(bytes) or
+        !dirs.fits((@as(u64, request.layer) + 1) * row_bytes) or
+        (request.block_add != null and !buffers.block_add.fits(bytes)) or
+        (normalized and (!buffers.norm_out.fits(bytes) or !model.range(model.norm, row_bytes))))
+        return fail("ds4: steered residual received undersized buffers or norm weights");
+    const norm = if (normalized) model.buffer(model.norm, row_bytes) else null;
+    defer if (norm) |weight| weight.deinit();
+    if (normalized and norm == null) return 0;
+    const kind: u32 = if (normalized) c.DS4_HC_STEERING_RESIDUAL_NORM else c.DS4_HC_STEERING_RESIDUAL;
+    const pso = pipeline(kind);
+    var threads: u64 = 256;
+    if (normalized) {
+        // Match the existing weighted RMSNorm's float4 lane assignment.
+        while (threads < request.width / 4 and threads < 1024) threads *= 2;
+        threads = @min(threads, request.width / 4);
+    }
+    if (pso.handle == null or pso.threads < threads) return 0;
+    var launch = plan(kind, pso);
+    buffers.fill(&launch);
+    launch.steering_args = steeringPacket(.{ .width = request.width, .hc = 1 }, request.rows, request.layer, request.scale, request.mode);
+    launch.steering_args.has_add = @intFromBool(request.block_add != null);
+    launch.steering_args.norm_eps = norm_eps orelse 0;
+    launch.directions = dirs.view;
+    if (request.block_add == null) launch.block_add = buffers.block.view;
+    if (norm) |weight| launch.norm_weights = weight.view;
+    launch.gx = request.rows;
+    launch.tx = threads;
+    launch.shared_bytes = threads * 4;
+    return run(launch, if (normalized) "steered residual + RMSNorm" else "steered residual");
+}

@@ -128,6 +128,11 @@ typedef struct {
     int debug_hash;             /* cross-check hidden state every N tokens */
 } ds4_tp_options;
 
+typedef enum {
+    DS4_STEERING_PROJECT = 0,
+    DS4_STEERING_ADD = 1,
+} ds4_steering_mode;
+
 typedef struct {
     const char *model_path;
     const char *flint_profile;  /* NULL/auto detects the chip; explicit profiles qualify smaller schedules. */
@@ -144,6 +149,8 @@ typedef struct {
     const char *expert_profile_path;
     float directional_steering_attn;
     float directional_steering_ffn;
+    /* Residual-stream edit; addition divides strength over nonzero bank rows. */
+    ds4_steering_mode directional_steering_mode;
     int power_percent;
     uint32_t ssd_streaming_cache_experts;
     uint64_t ssd_streaming_cache_bytes;

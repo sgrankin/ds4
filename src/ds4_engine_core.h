@@ -60,6 +60,7 @@ typedef struct {
     float *directional_steering_dirs;
     float directional_steering_attn_scale;
     float directional_steering_ffn_scale;
+    ds4_steering_mode directional_steering_mode;
     int power_percent;
     uint32_t prefill_chunk;
     ds4_ssd_memory_lock simulated_memory;

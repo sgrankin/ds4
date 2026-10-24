@@ -33,11 +33,8 @@ fn embed(graph: *Graph, model: *const Model, weights: *const Weights) bool {
 fn prepareFfn(graph: *Graph, model: *const Model, weights: *const c.ds4_layer_weights, layer: u32, position: u32) bool {
     const shape = &graph.config.shape;
     c.ds4_native_graph_debug_tensor("attn_out", graph.attn_out, shape.n_embd, layer, position);
-    if (graph.directional_steering_attn_scale != 0) {
-        if (graph.directional_steering_dirs_by_tier[0] == null or
-            c.ds4_gpu_directional_steering_project_tensor(graph.attn_out, graph.directional_steering_dirs_by_tier[0], layer, shape.n_embd, 1, graph.directional_steering_attn_scale) == 0) return false;
-    }
-    return c.ds4_gpu_hc_expand_tensor(graph.hc_after_attn, graph.attn_out, graph.hc_cur, graph.hc_post, graph.hc_comb, shape.n_embd, shape.n_hc) != 0 and
+    return Ops.hcExpand(graph, graph.hc_after_attn, graph.attn_out, graph.hc_cur, null, layer, graph.directional_steering_attn_scale) and
+        @import("../steering_capture.zig").capture(graph.hc_after_attn, layer, 1, shape.n_embd, shape.n_hc, "attn_residual", position) and
         Ops.hcPre(false, graph, model, weights.hc_ffn_fn, weights.hc_ffn_scale, weights.hc_ffn_base, weights.ffn_norm, graph.hc_after_attn, graph.after_attn, graph.ffn_norm, graph.hc_flat, graph.hc_mix, graph.hc_split, 1);
 }
 

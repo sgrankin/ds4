@@ -23,11 +23,6 @@ pub fn report(pass: *const Pass, total_layers: u32, completed: u32) void {
     callback(pass.progress_user, "prefill_display", @intCast(pass.absolute_base + done), @intCast(@as(u64, pass.absolute_base) + pass.work_total));
 }
 
-fn steer(graph: *Graph, tensor: ?*Tensor, layer: u32, rows: u32, scale: f32) bool {
-    return scale == 0 or (graph.directional_steering_dirs_by_tier[0] != null and
-        c.ds4_gpu_directional_steering_project_tensor(tensor, graph.directional_steering_dirs_by_tier[0], layer, graph.config.shape.n_embd, rows, scale) != 0);
-}
-
 fn layers(graph: *Graph, model: *const Model, weights: *const Weights, pass: *Pass, ablate: u32) bool {
     if (!graph.glm53 or graph.placement != null or graph.tp_world > 1 or graph.imatrix != null or pass.rows == 0) return false;
     const shape = &graph.config.shape;
@@ -51,15 +46,15 @@ fn layers(graph: *Graph, model: *const Model, weights: *const Weights, pass: *Pa
             Attention.encode(graph, model, layer_weights, layer, pass.position, pass.rows, ablate);
         if (!attention_ok) return false;
         c.ds4_native_graph_debug_tensor("attn_out", graph.batch_attn_out, plain_elements, layer, pass.position);
-        if (!steer(graph, graph.batch_attn_out, layer, pass.rows, graph.directional_steering_attn_scale) or
-            c.ds4_gpu_hc_expand_split_tensor(pass.hc_after_attention, graph.batch_attn_out, pass.hc_current, graph.batch_hc_split, shape.n_embd, shape.n_hc) == 0 or
+        if (!Ops.hcExpand(graph, pass.hc_after_attention, graph.batch_attn_out, pass.hc_current, graph.batch_hc_split, layer, graph.directional_steering_attn_scale) or
+            !@import("../steering_capture.zig").capture(pass.hc_after_attention, layer, pass.rows, shape.n_embd, shape.n_hc, "attn_residual", pass.position) or
             !Ops.hcPre(true, graph, model, layer_weights.hc_ffn_fn, layer_weights.hc_ffn_scale, layer_weights.hc_ffn_base, layer_weights.ffn_norm, pass.hc_after_attention, pass.after_attention, graph.batch_ffn_norm, graph.batch_hc_flat, graph.batch_hc_mix, graph.batch_hc_split, pass.rows)) return false;
         c.ds4_native_graph_debug_tensor("glm_indexed_after_attn", graph.batch_after_attn, plain_elements, layer, pass.position);
         c.ds4_native_graph_debug_tensor("glm_indexed_attn_out", graph.batch_attn_out, plain_elements, layer, pass.position);
         if (!Moe.encodeRows(graph, model, layer_weights, layer, pass.position, pass.rows, pass.next, pass.full_layer_prefill, ablate)) return false;
         c.ds4_native_graph_debug_tensor("ffn_out", pass.next, plain_elements, layer, pass.position);
-        if (!steer(graph, pass.next, layer, pass.rows, graph.directional_steering_ffn_scale) or
-            c.ds4_gpu_hc_expand_split_tensor(pass.hc_next, pass.next, pass.hc_after_attention, graph.batch_hc_split, shape.n_embd, shape.n_hc) == 0) return false;
+        if (!Ops.hcExpand(graph, pass.hc_next, pass.next, pass.hc_after_attention, graph.batch_hc_split, layer, graph.directional_steering_ffn_scale) or
+            !@import("../steering_capture.zig").capture(pass.hc_next, layer, pass.rows, shape.n_embd, shape.n_hc, "residual", pass.position)) return false;
         std.mem.swap(?*Tensor, &pass.hc_current, &pass.hc_next);
 
         if (!graph.ssd_streaming and pass.flush_interval != 0 and

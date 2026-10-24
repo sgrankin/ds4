@@ -97,7 +97,7 @@ inline bfloat16_t exp(bfloat16_t x) {
 """
 
 
-def entry(name, body, packet=False):
+def entry(name, body, packet=False, steering=False):
     arguments = [f"    const device uchar* bank{i} [[buffer({i})]]" for i in range(13)]
     arguments += [
         "    const device uint* metadata [[buffer(13)]]",
@@ -115,6 +115,7 @@ def entry(name, body, packet=False):
         "    device float* partials [[buffer(27)]]",
         "    device float* statistics [[buffer(28)]]",
         "    device uint* routing [[buffer(29)]]",
+        *(["    const device float* steering [[buffer(30)]]"] if steering else []),
         "    uint thread_index_in_threadgroup [[thread_index_in_threadgroup]]",
         "    uint thread_index_in_simdgroup [[thread_index_in_simdgroup]]",
         "    uint simdgroup_index_in_threadgroup [[simdgroup_index_in_threadgroup]]",
@@ -136,6 +137,110 @@ kernel void flint_init_silu(device bfloat16_t* table [[buffer(0)]],
     table[i]=bfloat16_t(g*sig);
 }
 """
+
+
+STEERING_HELPER = r"""
+// Every resident group already owns all 2048 output coordinates. Project in
+// those registers, with a local reduction only: no new global phase or launch.
+inline void flint_steer(thread float* values, const device float* direction,
+                        float scale, uint tid, uint lane, uint sg,
+                        threadgroup float* partial) {
+    float dot=0.0f;
+    for(uint j=0;j<8;++j) {
+        uint i=(tid+(j/4)*256)*4+j%4;
+        dot+=values[j]*direction[i];
+    }
+    dot=simd_sum(dot);
+    if(lane==0)partial[sg]=dot;
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    dot=simd_sum(lane<8?partial[lane]:0.0f);
+    for(uint j=0;j<8;++j) {
+        uint i=(tid+(j/4)*256)*4+j%4;
+        values[j]=float(bfloat16_t(values[j]-scale*direction[i]*dot));
+    }
+    // Scratch belongs only to steering. Existing layer/phase barriers separate
+    // its next use; RMS uses its own reduction storage and cannot race this read.
+}
+
+// Model-free qualification uses the exact resident helper and coordinate map.
+kernel void flint_steering_fixture(constant float& scale [[buffer(0)]],
+    const device bfloat16_t* input [[buffer(1)]],
+    const device float* direction [[buffer(2)]], device bfloat16_t* output [[buffer(3)]],
+    uint tid [[thread_index_in_threadgroup]], uint lane [[thread_index_in_simdgroup]],
+    uint sg [[simdgroup_index_in_threadgroup]]) {
+    threadgroup float partial[8];
+    float values[8];
+    for(uint j=0;j<8;++j){uint i=(tid+(j/4)*256)*4+j%4;values[j]=float(input[i]);}
+    flint_steer(values,direction,scale,tid,lane,sg,partial);
+    for(uint j=0;j<8;++j){uint i=(tid+(j/4)*256)*4+j%4;output[i]=bfloat16_t(values[j]);}
+}
+"""
+
+
+def steer_body(body):
+    """Project the already-rounded residual after each selected sublayer."""
+    attention = "for(uint j=0;j<8;++j){uint i=(tid+(j/4)*256)*4+j%4;h[j]=bfloat16_t(float(h[j])+float(o[i]));}"
+    assert body.count(attention) == 1
+    body = body.replace(attention, attention + """
+            if(steering_scales[6]!=0.0f) {
+                float residual[8];
+                for(uint j=0;j<8;++j)residual[j]=float(h[j]);
+                flint_steer(residual,steering+layer*2048,steering_scales[6],tid,lane,simdgroup_index_in_threadgroup,steering_reduction);
+                for(uint j=0;j<8;++j)h[j]=bfloat16_t(residual[j]);
+            }""")
+    start = body.index("        {\n        if(sparse) {")
+    end = body.index("\n    }\n    {rms_256_w4", start)
+    block = body[start:end]
+    assert block.count("h[j]=bfloat16_t(float(h[j])+float(mlp));") == 2
+    block = block.replace("                if(group==0)trace[(layer+1)*2048+i]=h[j];\n", "")
+    block = block[:-len("        }")] + """        if(steering_scales[7]!=0.0f) {
+            float residual[8];
+            for(uint j=0;j<8;++j)residual[j]=float(h[j]);
+            flint_steer(residual,steering+layer*2048,steering_scales[7],tid,lane,simdgroup_index_in_threadgroup,steering_reduction);
+            for(uint j=0;j<8;++j)h[j]=bfloat16_t(residual[j]);
+        }
+        if(group==0)for(uint j=0;j<8;++j){uint i=(tid+(j/4)*256)*4+j%4;trace[(layer+1)*2048+i]=h[j];}
+        }"""
+    return body[:start] + block + body[end:]
+
+
+ADDITIVE_HELPER = r"""
+// Add a layer-budgeted direction to the already-rounded residual stream.
+inline bfloat16_t flint_additive(bfloat16_t value,float direction,float scale) {
+    return bfloat16_t(float(value)+scale*direction);
+}
+kernel void flint_additive_fixture(constant float& scale [[buffer(0)]],
+    const device bfloat16_t* input [[buffer(1)]], const device float* direction [[buffer(2)]],
+    device bfloat16_t* output [[buffer(3)]], uint i [[thread_position_in_grid]]) {
+    if(i<2048u)output[i]=flint_additive(input[i],direction[i],scale);
+}
+"""
+
+
+def additive_body(body):
+    """Preserve BF16 publication; test the uniform scale once per sublayer."""
+    attention = "for(uint j=0;j<8;++j){uint i=(tid+(j/4)*256)*4+j%4;h[j]=bfloat16_t(float(h[j])+float(o[i]));}"
+    assert body.count(attention) == 1
+    body = body.replace(attention, attention + """
+            const float attention_scale=steering_scales[6];
+            if(attention_scale!=0.0f)for(uint j=0;j<8;++j) {
+                uint i=(tid+(j/4)*256)*4+j%4;
+                h[j]=flint_additive(h[j],steering[layer*2048+i],attention_scale);
+            }""")
+    start = body.index("        {\n        if(sparse) {")
+    end = body.index("\n    }\n    {rms_256_w4", start)
+    block = body[start:end]
+    assert block.count("h[j]=bfloat16_t(float(h[j])+float(mlp));") == 2
+    assert block.count("                if(group==0)trace[(layer+1)*2048+i]=h[j];\n") == 2
+    block = block.replace("                if(group==0)trace[(layer+1)*2048+i]=h[j];\n", "")
+    block = block[:-len("        }")] + """        const float ffn_scale=steering_scales[7];
+        if(ffn_scale!=0.0f)for(uint j=0;j<8;++j) {
+            uint i=(tid+(j/4)*256)*4+j%4;
+            h[j]=flint_additive(h[j],steering[layer*2048+i],ffn_scale);
+        }
+        if(group==0)for(uint j=0;j<8;++j){uint i=(tid+(j/4)*256)*4+j%4;trace[(layer+1)*2048+i]=h[j];}
+        }"""
+    return body[:start] + block + body[end:]
 
 
 def export(original, transforms, profile):
@@ -178,8 +283,22 @@ def export(original, transforms, profile):
     )
     result = preamble + header + entry("flint_decode_scalar" + suffix, scalar)
     result += entry("flint_decode_greedy8" + suffix, packet, packet=True) + HELPERS
+    # Preserve the entire ordinary library, including its compilation cost.
+    # Load a separate active library only when vectors are supplied at startup.
+    active = preamble + header + STEERING_HELPER
+    scratch = "threadgroup float steering_reduction[8];\n"
+    active_scalar = scratch + "const device float* steering_scales=(const device float*)configuration;\n" + steer_body(scalar)
+    active_packet = scratch + "const device float* steering_scales=sampling;\n" + steer_body(packet)
+    active += entry("flint_decode_scalar_steer" + suffix, active_scalar, steering=True)
+    active += entry("flint_decode_greedy8_steer" + suffix, active_packet, packet=True, steering=True)
     assert "__WORKERS__" not in result and "__EPS__" not in result
-    return result
+    assert "__WORKERS__" not in active and "__EPS__" not in active
+    additive = preamble + header + ADDITIVE_HELPER
+    additive_scalar = "const device float* steering_scales=(const device float*)configuration;\n" + additive_body(scalar)
+    additive_packet = "const device float* steering_scales=sampling;\n" + additive_body(packet)
+    additive += entry("flint_decode_scalar_additive" + suffix, additive_scalar, steering=True)
+    additive += entry("flint_decode_greedy8_additive" + suffix, additive_packet, packet=True, steering=True)
+    return result, active, additive
 
 
 def main():
@@ -195,11 +314,17 @@ def main():
     transforms = load_transforms(directory)
     output_directory = Path(__file__).resolve().parents[1] / "src/metal/flint"
     for profile in PROFILES if args.profile == "all" else [args.profile]:
-        result = export(original, transforms, profile)
+        result, active, additive = export(original, transforms, profile)
         output = args.output or output_directory / PROFILES[profile][4]
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(result)
         print(f"{output}: {len(result.splitlines())} lines, {len(result)} bytes")
+        active_output = output.with_stem(output.stem + "-steer")
+        active_output.write_text(active)
+        print(f"{active_output}: {len(active.splitlines())} lines, {len(active)} bytes")
+        additive_output = output.with_stem(output.stem + "-additive")
+        additive_output.write_text(additive)
+        print(f"{additive_output}: {len(additive.splitlines())} lines, {len(additive)} bytes")
     # Preserve the source license alongside the derived shader.
     (output.parent / "LICENSE.rec").write_text((args.checkout / "LICENSE").read_text())
 

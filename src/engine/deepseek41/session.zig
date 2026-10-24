@@ -76,6 +76,8 @@ pub const Runtime = struct {
             message(errors, "V4.1 graph is not initialized");
             return 1;
         }
+        graph.steering_capture_prompt = graph.steering_capture_enabled;
+        defer graph.steering_capture_prompt = false;
         const frontier = Frontier{ .state = state };
         const tokens = prompt.v[0..@intCast(prompt.len)];
         if (!state.checkpoint_valid or !graph.valid or graph.pos != @as(u32, @intCast(state.checkpoint.len)) or

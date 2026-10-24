@@ -100,6 +100,39 @@ bool flint_gpu_command_end(flint_gpu *gpu, void *opaque, bool wait) {
     }
 }
 
+static inline id<MTLComputePipelineState> flint_pipeline(FlintMetalContext *ctx, NSString *name) {
+    id<MTLComputePipelineState> pipeline = ctx.pipelines[name];
+    if (!pipeline) {
+        id<MTLFunction> function = nil;
+        for (id<MTLLibrary> library in [ctx.libraries reverseObjectEnumerator]) {
+            function = [library newFunctionWithName:name];
+            if (function) break;
+        }
+        if (!function) {
+            ctx.error = [@"Missing Metal kernel: " stringByAppendingString:name];
+            fprintf(stderr, "flint: %s\n", ctx.error.UTF8String);
+            for (id<MTLLibrary> library in ctx.libraries)
+                fprintf(stderr, "flint: library functions: %s\n", [[library.functionNames componentsJoinedByString:@", "] UTF8String]);
+            return nil;
+        }
+        NSError *error = nil;
+        pipeline = [ctx.device newComputePipelineStateWithFunction:function error:&error];
+        if (!pipeline) {
+            ctx.error = error.localizedDescription;
+            fprintf(stderr, "flint: pipeline %s: %s\n", name.UTF8String, ctx.error.UTF8String);
+            return nil;
+        }
+        ctx.pipelines[name] = pipeline;
+    }
+    return pipeline;
+}
+
+bool flint_gpu_prepare(flint_gpu *gpu, const char *kernel) {
+    @autoreleasepool {
+        return flint_pipeline(context(gpu), [NSString stringWithUTF8String:kernel]) != nil;
+    }
+}
+
 bool flint_gpu_dispatch(flint_gpu *gpu, void *opaque, const char *kernel,
                         const void *params, size_t params_bytes,
                         const flint_gpu_binding *bindings, size_t count,
@@ -107,29 +140,8 @@ bool flint_gpu_dispatch(flint_gpu *gpu, void *opaque, const char *kernel,
     @autoreleasepool {
         FlintMetalContext *ctx = context(gpu);
         NSString *name = [NSString stringWithUTF8String:kernel];
-        id<MTLComputePipelineState> pipeline = ctx.pipelines[name];
-        if (!pipeline) {
-            id<MTLFunction> function = nil;
-            for (id<MTLLibrary> library in [ctx.libraries reverseObjectEnumerator]) {
-                function = [library newFunctionWithName:name];
-                if (function) break;
-            }
-            if (!function) {
-                ctx.error = [@"Missing Metal kernel: " stringByAppendingString:name];
-                fprintf(stderr, "flint: %s\n", ctx.error.UTF8String);
-                for (id<MTLLibrary> library in ctx.libraries)
-                    fprintf(stderr, "flint: library functions: %s\n", [[library.functionNames componentsJoinedByString:@", "] UTF8String]);
-                return false;
-            }
-            NSError *error = nil;
-            pipeline = [ctx.device newComputePipelineStateWithFunction:function error:&error];
-            if (!pipeline) {
-                ctx.error = error.localizedDescription;
-                fprintf(stderr, "flint: pipeline %s: %s\n", kernel, ctx.error.UTF8String);
-                return false;
-            }
-            ctx.pipelines[name] = pipeline;
-        }
+        id<MTLComputePipelineState> pipeline = flint_pipeline(ctx, name);
+        if (!pipeline) return false;
         if ((uint64_t)threads[0]*threads[1]*threads[2] > pipeline.maxTotalThreadsPerThreadgroup) {
             ctx.error = [@"Threadgroup too large: " stringByAppendingString:name];
             fprintf(stderr, "flint: %s (requested %u, maximum %lu)\n", ctx.error.UTF8String,

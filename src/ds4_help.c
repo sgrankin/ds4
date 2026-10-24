@@ -234,9 +234,10 @@ static void print_sampling(FILE *fp, const help_colors *c, bool full, ds4_help_t
 
 static void print_steering(FILE *fp, const help_colors *c) {
     title(fp, c, "Directional Steering");
-    opt(fp, c, "--dir-steering-file FILE", "Load one f32 direction vector per layer.");
-    opt(fp, c, "--dir-steering-ffn F", "Apply steering after FFN outputs. Default with file: 1");
-    opt(fp, c, "--dir-steering-attn F", "Apply steering after attention outputs. Default: 0");
+    opt(fp, c, "--dir-steering-file FILE", "Load residual directions; zero rows skip layers.");
+    opt(fp, c, "--dir-steering-mode MODE", "project (default) or add; add divides strength over selected layers.");
+    opt(fp, c, "--dir-steering-ffn F", "Steer the residual after each FFN. Default with file: 1");
+    opt(fp, c, "--dir-steering-attn F", "Steer the residual after each attention. Default: 0");
     fputc('\n', fp);
 }
 

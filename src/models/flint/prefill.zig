@@ -45,11 +45,19 @@ pub const Model = struct {
     metadata: *const [50][64]u32,
     routed_bits: u32 = 4,
     backend: Backend = .nax,
+    steering: ?View = null,
+    steering_attn: f32 = 0,
+    steering_ffn: f32 = 0,
+    additive: bool = false,
+    capture: ?Capture = null,
 
     fn tensor(self: Model, row: *const [64]u32, column: usize) View {
         return self.banks[row[0]].at(row[column]);
     }
 };
+
+pub const Component = enum { attention, ffn };
+pub const Capture = struct { component: Component, output: View };
 
 pub const Cache = struct {
     banks: [4]View,
@@ -177,6 +185,32 @@ fn groups(items: u32, width: u32) [3]u32 {
 fn elementwise(encoder: anytype, name: [:0]const u8, params: Rows, bindings: []const Binding) !void {
     try encoder.dispatch(name, params, bindings, groups(params.rows * params.width, 256), 256);
 }
+fn residual(encoder: anytype, model: Model, layer: usize, component: Component, scale: f32, scratch: Scratch, count: u32) !void {
+    const hidden = scratch.view(.hidden);
+    const output = scratch.view(.projection);
+    if (model.capture) |capture| if (capture.component == component) {
+        try encoder.dispatch("flint_prefill_add_capture", Rows{ .rows = count, .width = 2048, .epsilon = scale, .pad = @intFromBool(model.additive) }, &.{
+            hidden.binding(1),                                                                                         output.binding(2),                              hidden.binding(3),
+            (model.steering orelse capture.output).at(if (model.steering != null) layer * 2048 * 4 else 0).binding(4), capture.output.at(layer * 2048 * 4).binding(5),
+        }, .{ count, 1, 1 }, 256);
+        return;
+    };
+    if (scale != 0) if (model.steering) |directions| {
+        if (model.additive) {
+            try elementwise(encoder, "flint_prefill_add_additive", .{ .rows = count, .width = 2048, .epsilon = scale }, &.{
+                hidden.binding(1), output.binding(2), hidden.binding(3), directions.at(layer * 2048 * 4).binding(4),
+            });
+        } else {
+            try encoder.dispatch("flint_prefill_add_steer", Rows{ .rows = count, .width = 2048, .epsilon = scale }, &.{
+                hidden.binding(1), output.binding(2), hidden.binding(3), directions.at(layer * 2048 * 4).binding(4),
+            }, .{ count, 1, 1 }, 256);
+        }
+        return;
+    };
+    try elementwise(encoder, "flint_prefill_add", .{ .rows = count, .width = 2048 }, &.{
+        hidden.binding(1), output.binding(2), hidden.binding(3),
+    });
+}
 fn linear(encoder: anytype, model: Model, row: *const [64]u32, column: usize, input: View, output: View, count: u32) !void {
     const p = Matmul{ .m = @intCast(count), .n = @intCast(row[column + 3]), .k = @intCast(row[column + 4]) };
     const narrow = count <= 8;
@@ -240,7 +274,7 @@ pub fn encode(encoder: anytype, model: Model, cache: Cache, scratch: Scratch, to
         model.tensor(tail, 12).binding(4), scratch.view(.hidden).binding(5),
     }, groups(count * 2048, 256), 256);
 
-    for (model.metadata[0..49]) |*row| {
+    for (model.metadata[0..49], 0..) |*row, layer| {
         const is_global = row[1] != 0;
         try encoder.dispatch("flint_prefill_rms", Rows{ .rows = count, .width = 2048 }, &.{
             scratch.view(.hidden).binding(1), model.tensor(row, 3).binding(2), scratch.view(.norm).binding(3),
@@ -307,17 +341,13 @@ pub fn encode(encoder: anytype, model: Model, cache: Cache, scratch: Scratch, to
         }, .{ (count + attention_block - 1) / attention_block, 32, 1 }, 128);
         if (!is_global) try publishKv(encoder, kv, cache.banks, scratch);
         try linear(encoder, model, row, 25, scratch.view(.attention), scratch.view(.projection), count);
-        try elementwise(encoder, "flint_prefill_add", .{ .rows = count, .width = 2048 }, &.{
-            scratch.view(.hidden).binding(1), scratch.view(.projection).binding(2), scratch.view(.hidden).binding(3),
-        });
+        try residual(encoder, model, layer, .attention, model.steering_attn, scratch, count);
         try encoder.dispatch("flint_prefill_rms", Rows{ .rows = count, .width = 2048 }, &.{
             scratch.view(.hidden).binding(1), model.tensor(row, 4).binding(2), scratch.view(.norm).binding(3),
         }, .{ count, 1, 1 }, 256);
         if (row[2] == 0) {
             try mlp(encoder, model, row, 30, scratch, scratch.view(.projection), count);
-            try elementwise(encoder, "flint_prefill_add", .{ .rows = count, .width = 2048 }, &.{
-                scratch.view(.hidden).binding(1), scratch.view(.projection).binding(2), scratch.view(.hidden).binding(3),
-            });
+            try residual(encoder, model, layer, .ffn, model.steering_ffn, scratch, count);
         } else {
             try mlp(encoder, model, row, 45, scratch, scratch.view(.shared), count);
             const router_block: u32 = if (model.backend == .simd) 32 else 64;
@@ -344,10 +374,29 @@ pub fn encode(encoder: anytype, model: Model, cache: Cache, scratch: Scratch, to
                 scratch.view(.gate).binding(1), scratch.view(.up).binding(2), scratch.view(.activation).binding(3),
             });
             try gatherLinear(encoder, model, row, 40, scratch.view(.activation), scratch.view(.experts), scratch.view(.sorted_ids), count * 6);
-            try elementwise(encoder, "flint_prefill_combine", .{ .rows = count, .width = 2048 }, &.{
-                scratch.view(.experts).binding(1), scratch.view(.permutation).binding(2), scratch.view(.weights).binding(3),
-                scratch.view(.shared).binding(4),  scratch.view(.hidden).binding(5),
-            });
+            if (model.capture != null and model.capture.?.component == .ffn) {
+                const capture = model.capture.?.output;
+                try encoder.dispatch("flint_prefill_combine_capture", Rows{ .rows = count, .width = 2048, .epsilon = model.steering_ffn, .pad = @intFromBool(model.additive) }, &.{
+                    scratch.view(.experts).binding(1),       scratch.view(.permutation).binding(2), scratch.view(.weights).binding(3),
+                    scratch.view(.shared).binding(4),        scratch.view(.hidden).binding(5),      (model.steering orelse capture).at(if (model.steering != null) layer * 2048 * 4 else 0).binding(6),
+                    capture.at(layer * 2048 * 4).binding(7),
+                }, .{ count, 1, 1 }, 256);
+            } else if (model.additive and model.steering_ffn != 0 and model.steering != null) {
+                try elementwise(encoder, "flint_prefill_combine_additive", .{ .rows = count, .width = 2048, .epsilon = model.steering_ffn }, &.{
+                    scratch.view(.experts).binding(1), scratch.view(.permutation).binding(2), scratch.view(.weights).binding(3),
+                    scratch.view(.shared).binding(4),  scratch.view(.hidden).binding(5),      model.steering.?.at(layer * 2048 * 4).binding(6),
+                });
+            } else if (model.steering_ffn != 0 and model.steering != null) {
+                try encoder.dispatch("flint_prefill_combine_steer", Rows{ .rows = count, .width = 2048, .epsilon = model.steering_ffn }, &.{
+                    scratch.view(.experts).binding(1), scratch.view(.permutation).binding(2), scratch.view(.weights).binding(3),
+                    scratch.view(.shared).binding(4),  scratch.view(.hidden).binding(5),      model.steering.?.at(layer * 2048 * 4).binding(6),
+                }, .{ count, 1, 1 }, 256);
+            } else {
+                try elementwise(encoder, "flint_prefill_combine", .{ .rows = count, .width = 2048 }, &.{
+                    scratch.view(.experts).binding(1), scratch.view(.permutation).binding(2), scratch.view(.weights).binding(3),
+                    scratch.view(.shared).binding(4),  scratch.view(.hidden).binding(5),
+                });
+            }
         }
     }
     try encoder.dispatch("flint_prefill_rms", Rows{ .rows = 1, .width = 2048 }, &.{

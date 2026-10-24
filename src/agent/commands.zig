@@ -63,7 +63,7 @@ pub fn help() void {
         "  /history [N] Show N recent user turns from the current session.",
         "  /power N     Set GPU duty cycle percentage, 1..100.",
         "  /hints on|off Enable or disable brief programming hints; starts off.",
-        "  /steer [F]   Show or set FFN steering for subsequent tokens.",
+        "  /steer [F]   Show or set post-FFN residual steering for subsequent tokens.",
         "  /new         Start a fresh session from the system prompt.",
         "  /quit, /exit Exit.",
         "  Ctrl+C       Interrupt generation; clear edited text.",

@@ -19,6 +19,10 @@ const Options = struct {
     model_path: [:0]const u8 = "ds4flash.gguf",
     vision_path: ?[:0]const u8 = null,
     mtp_path: ?[:0]const u8 = null,
+    directional_steering_file: ?[:0]const u8 = null,
+    directional_steering_attn: f32 = 0,
+    directional_steering_ffn: f32 = 0,
+    directional_steering_mode: c.ds4_steering_mode = c.DS4_STEERING_PROJECT,
     prompt_path: ?[:0]const u8 = null,
     chat_prompt_path: ?[:0]const u8 = null,
     system: [:0]const u8 = "You are a helpful assistant.",
@@ -42,6 +46,7 @@ const Options = struct {
     simulate_used_memory_bytes: u64 = 0,
     step_mul: f64 = 1,
     dump_frontier_logits_dir: ?[:0]const u8 = null,
+    dump_decode_logits_dir: ?[:0]const u8 = null,
     dist: c.ds4_dist_options = std.mem.zeroes(c.ds4_dist_options),
     tp: c.ds4_tp_options = std.mem.zeroes(c.ds4_tp_options),
     warm_weights: bool = false,
@@ -61,6 +66,10 @@ const Options = struct {
         out.model_path = self.model_path.ptr;
         out.vision_path = cString(self.vision_path);
         out.mtp_path = cString(self.mtp_path);
+        out.directional_steering_file = cString(self.directional_steering_file);
+        out.directional_steering_attn = self.directional_steering_attn;
+        out.directional_steering_ffn = self.directional_steering_ffn;
+        out.directional_steering_mode = self.directional_steering_mode;
         out.backend = self.backend;
         out.n_threads = self.threads;
         out.context_size = self.ctx_alloc;
@@ -191,8 +200,15 @@ fn backend(text: [:0]const u8, option: [:0]const u8) c.ds4_backend {
     fatal(2, "ds4-bench: valid backends are: metal, cuda, cpu\n", .{});
 }
 
+fn steeringScale(text: [:0]const u8, option: [:0]const u8) f32 {
+    const value = decimal(text, option);
+    if (value < -100 or value > 100) fatal(2, "ds4-bench: %s must be between -100 and 100\n", .{option.ptr});
+    return @floatCast(value);
+}
+
 fn parseOptions(argv: [][*c]u8) Options {
     var options = Options{};
+    var steering_set = false;
     var args = Args{ .argv = argv };
     while (args.current()) |arg| : (args.index += 1) {
         if (same(arg, "-h") or same(arg, "--help")) {
@@ -213,6 +229,17 @@ fn parseOptions(argv: [][*c]u8) Options {
             options.model_path = args.value(arg);
         } else if (same(arg, "--mtp-model")) {
             options.mtp_path = args.value(arg);
+        } else if (same(arg, "--dir-steering-file")) {
+            options.directional_steering_file = args.value(arg);
+        } else if (same(arg, "--dir-steering-mode")) {
+            const value = args.value(arg);
+            options.directional_steering_mode = if (same(value, "project")) c.DS4_STEERING_PROJECT else if (same(value, "add")) c.DS4_STEERING_ADD else fatal(2, "ds4-bench: --dir-steering-mode must be project or add\n", .{});
+        } else if (same(arg, "--dir-steering-ffn")) {
+            options.directional_steering_ffn = steeringScale(args.value(arg), arg);
+            steering_set = true;
+        } else if (same(arg, "--dir-steering-attn")) {
+            options.directional_steering_attn = steeringScale(args.value(arg), arg);
+            steering_set = true;
         } else if (same(arg, "--dspark")) {
             options.dspark = true;
         } else if (same(arg, "--dspark-confidence")) {
@@ -245,6 +272,8 @@ fn parseOptions(argv: [][*c]u8) Options {
             options.csv_path = args.value(arg);
         } else if (same(arg, "--dump-frontier-logits-dir")) {
             options.dump_frontier_logits_dir = args.value(arg);
+        } else if (same(arg, "--dump-decode-logits-dir")) {
+            options.dump_decode_logits_dir = args.value(arg);
         } else if (same(arg, "--expert-profile")) {
             options.expert_profile_path = args.value(arg);
         } else if (same(arg, "-t") or same(arg, "--threads")) {
@@ -298,9 +327,11 @@ fn parseOptions(argv: [][*c]u8) Options {
         }
     }
 
+    if (options.directional_steering_file != null and !steering_set) options.directional_steering_ffn = 1;
     if ((options.prompt_path == null) == (options.chat_prompt_path == null)) fatal(2, "ds4-bench: specify exactly one of --prompt-file or --chat-prompt-file\n", .{});
     if (options.dspark and options.mtp_path == null) fatal(2, "ds4-bench: --dspark requires --mtp-model FILE\n", .{});
     if (options.dspark and options.teacher_forced_decode) fatal(2, "ds4-bench: --dspark cannot be combined with --teacher-forced-decode\n", .{});
+    if (options.dump_decode_logits_dir != null and (!options.teacher_forced_decode or options.gen_tokens == 0)) fatal(2, "ds4-bench: --dump-decode-logits-dir requires --teacher-forced-decode and positive --gen-tokens\n", .{});
     if (options.ctx_start > options.ctx_max) fatal(2, "ds4-bench: --ctx-start must be <= --ctx-max\n", .{});
     if (options.step_mul < 1) fatal(2, "ds4-bench: --step-mul must be >= 1\n", .{});
     if (options.step_mul == 1 and options.step_incr <= 0) fatal(2, "ds4-bench: --step-incr must be positive when --step-mul is 1\n", .{});
@@ -428,6 +459,47 @@ fn writeFrontier(cfg: *const Options, engine: *Engine, session: *Session, fronti
         return false;
     }
     return true;
+}
+
+// This diagnostic observes the current distribution BEFORE each forced eval.
+// Step zero is the prefill distribution; subsequent steps exercise decoding.
+// Native Apple float bytes are little-endian IEEE754 binary32. The JSON names
+// every file and target token; no private persistence format is involved.
+fn writeDecodeMetadata(cfg: *const Options, engine: *Engine, ids: []const c_int, frontier: c_int) bool {
+    const directory = cfg.dump_decode_logits_dir orelse return true;
+    var path: [c.PATH_MAX]u8 = undefined;
+    const count = c.snprintf(&path, path.len, "%s/decode_%06d.json", directory.ptr, frontier);
+    if (count <= 0 or @as(usize, @intCast(count)) >= path.len) return false;
+    const file = c.fopen(&path, "wb");
+    if (file == null) return false;
+    _ = c.fputs("{\"source\":\"ds4-bench\",\"model\":", file);
+    jsonString(file, cfg.model_path);
+    _ = c.fprintf(file, ",\"timed\":false,\"dtype\":\"float32\",\"byte_order\":\"little\",\"ctx\":%d,\"vocab\":%d,\"frontier_tokens\":%d,\"prompt_token_ids\":[", cfg.ctx_alloc, c.ds4_engine_vocab_size(engine), frontier);
+    for (ids[0..@intCast(frontier)], 0..) |id, index| {
+        if (index != 0) _ = c.fputc(',', file);
+        _ = c.fprintf(file, "%d", id);
+    }
+    _ = c.fputs("],\"steps\":[", file);
+    var step: c_int = 0;
+    while (step < cfg.gen_tokens) : (step += 1) {
+        if (step != 0) _ = c.fputc(',', file);
+        _ = c.fprintf(file, "{\"step\":%d,\"position\":%d,\"target\":%d,\"logits_file\":\"decode_%06d_%04d.f32\"}", step, frontier + step, ids[@intCast(frontier + step)], frontier, step);
+    }
+    _ = c.fputs("]}\n", file);
+    return c.fclose(file) == 0;
+}
+
+fn writeDecodeLogits(directory: [:0]const u8, session: *Session, frontier: c_int, step: c_int, values: []f32) bool {
+    const vocab: c_int = @intCast(values.len);
+    if (c.ds4_session_copy_logits(session, values.ptr, vocab) != vocab) return false;
+    var path: [c.PATH_MAX]u8 = undefined;
+    const count = c.snprintf(&path, path.len, "%s/decode_%06d_%04d.f32", directory.ptr, frontier, step);
+    if (count <= 0 or @as(usize, @intCast(count)) >= path.len) return false;
+    const file = c.fopen(&path, "wb");
+    if (file == null) return false;
+    const written = c.fwrite(values.ptr, @sizeOf(f32), values.len, file);
+    const closed = c.fclose(file);
+    return written == values.len and closed == 0;
 }
 
 fn nextFrontier(cfg: *const Options, current: c_int) c_int {
@@ -623,6 +695,12 @@ fn run(cfg: *Options) c_int {
     }
     // The C engine owns this allocation; slices below only borrow its tokens.
     const prompt_ids = prompt.v[0..@as(usize, @intCast(prompt.len))];
+    const decode_values: ?[]f32 = if (cfg.dump_decode_logits_dir != null)
+        allocator.alloc(f32, @intCast(c.ds4_engine_vocab_size(engine))) catch return 1
+    else
+        null;
+    defer if (decode_values) |values| allocator.free(values);
+    if (decode_values != null) report("ds4-bench: decoder quality dump is untimed; decode timing columns are zero\n", .{});
     var maybe_session: ?*Session = null;
     if (c.ds4_session_create(&maybe_session, engine, cfg.ctx_alloc) != 0) {
         report("ds4-bench: failed to create session\n", .{});
@@ -672,6 +750,10 @@ fn run(cfg: *Options) c_int {
         if (c.getenv("DS4_METAL_CB_TIMES") != null) report("ds4-bench: prefill window mono %.1f .. %.1f ms\n", .{ prefill_start * 1e3, prefill_end * 1e3 });
         const prefill_tokens: c_int = frontier - previous;
         if (!writeFrontier(cfg, engine, session, frontier, previous)) return 1;
+        if (!writeDecodeMetadata(cfg, engine, prompt_ids, frontier)) {
+            report("ds4-bench: failed to write decoder token metadata at %d\n", .{frontier});
+            return 1;
+        }
 
         // Saving/restoring must never enter either benchmark timing window.
         // Approximate/replay sessions report payload_bytes==0 and use re-sync.
@@ -710,6 +792,12 @@ fn run(cfg: *Options) c_int {
         var decode_ok = true;
 
         while (generated_count < cfg.gen_tokens and !stopped) {
+            if (decode_values) |values| {
+                if (!writeDecodeLogits(cfg.dump_decode_logits_dir.?, session, frontier, generated_count, values)) {
+                    report("ds4-bench: failed to dump decoder logits at %d step %d\n", .{ frontier, generated_count });
+                    return 1;
+                }
+            }
             if (c.ds4_session_pos(session) + 1 >= c.ds4_session_ctx(session)) {
                 report("ds4-bench: generation would exceed allocated context at frontier %d\n", .{frontier});
                 decode_ok = false;
@@ -789,7 +877,7 @@ fn run(cfg: *Options) c_int {
             return 1;
         }
 
-        const generation_seconds = generation_end - generation_start;
+        const generation_seconds = if (decode_values != null) 0 else generation_end - generation_start;
         const steady_tokens: c_int = @max(generated_count - first_tokens, 0);
         _ = c.fprintf(
             output,
@@ -799,9 +887,9 @@ fn run(cfg: *Options) c_int {
             if (prefill_seconds > 0) @as(f64, @floatFromInt(prefill_tokens)) / prefill_seconds else @as(f64, 0),
             generated_count,
             if (generation_seconds > 0) @as(f64, @floatFromInt(generated_count)) / generation_seconds else @as(f64, 0),
-            first_seconds * 1000.0,
+            if (decode_values != null) @as(f64, 0) else first_seconds * 1000.0,
             steady_tokens,
-            if (steady_seconds > 0) @as(f64, @floatFromInt(steady_tokens)) / steady_seconds else @as(f64, 0),
+            if (decode_values == null and steady_seconds > 0) @as(f64, @floatFromInt(steady_tokens)) / steady_seconds else @as(f64, 0),
             @as(c_ulonglong, if (have_snapshot) snapshot.len else 0),
         );
         _ = c.fflush(output);
