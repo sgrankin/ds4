@@ -344,34 +344,6 @@ out.mkdir(parents=True, exist_ok=True)
         self.run_download("ds41f-q4")
         self.assertEqual((self.out / Q4).read_bytes(), payload(Q4))
 
-    def test_curl_resume_and_sidecar(self):
-        name = "DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf"
-        self.out.mkdir()
-        partial = self.out / (name + ".part")
-        partial.write_bytes(payload(name)[:7])
-        curl = self.bin / "curl"
-        curl.write_text("""#!/usr/bin/env python3
-import json, os, sys
-from pathlib import Path
-args = sys.argv[1:]
-assert args[args.index('-C') + 1] == '-'
-assert args[args.index('-H') + 1] == 'Authorization: Bearer fixture secret'
-Path(os.environ['CURL_ARGS']).write_text(json.dumps(args))
-out = Path(args[args.index('-o') + 1])
-data = (args[-1].rsplit('/', 1)[-1] + '\\n').encode()
-with out.open('ab') as stream:
-    stream.write(data[out.stat().st_size:])
-""")
-        curl.chmod(0o755)
-        self.env.update(HF_TOKEN="fixture secret", CURL_ARGS=str(self.root / "curl.json"))
-        text = self.run_download("ds4f-q2")
-        self.assertNotIn("fixture secret", text)
-        self.assertEqual((self.out / name).read_bytes(), payload(name))
-        self.assertFalse(partial.exists())
-        self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / name)
-        (self.out / (name + ".aria2")).touch()
-        self.assertIn("aria2", self.run_download("ds4f-q2", ok=False))
-
     def test_hf_failure_preserves_code_and_hides_token(self):
         self.env["FAIL_DOWNLOAD"] = "1"
         result = subprocess.run(
@@ -388,6 +360,11 @@ with out.open('ab') as stream:
         self.assertIn("ds41f-mxfp4", help_text)
         self.assertIn("ds41f-vision", help_text)
         self.assertIn("ds41f-1017-vision", help_text)
+        for retired in ("ds4f-q2", "ds4f-vision-q2", "glm-antirez-q2", "glm-unsloth-q4"):
+            self.assertNotIn(retired, help_text)
+            self.assertIn("Unknown model", self.run_download(retired, ok=False))
+        self.assertIn("pro-q2-imatrix", help_text)
+        self.assertIn("glm53-full-q2", help_text)
         self.assertIn("Unknown model", self.run_download("nonexistent", ok=False))
         self.assertFalse(self.out.exists())
 

@@ -342,7 +342,7 @@ pub const Input = struct {
             else => c.API_OPENAI,
         };
         request.model_syntax = defaults.syntax;
-        request.model = duplicate("deepseek-v4-flash");
+        request.model = duplicate("deepseek-v4.1-flash");
         request.max_tokens = defaults.max_tokens;
         request.temperature = c.DS4_DEFAULT_TEMPERATURE;
         request.top_p = c.DS4_DEFAULT_TOP_P;

@@ -87,7 +87,7 @@ fn joyLettersEnd(text: []const u8, start: usize) usize {
     return position;
 }
 
-// DeepSeek V4 Flash declares tokenizer.ggml.pre="joyai-llm". Ordered rules:
+// DeepSeek's tokenizer.ggml.pre="joyai-llm" uses these ordered rules:
 //   \p{N}{1,3}; [CJK/Hiragana/Katakana]+; [P/S][A-Za-z]+;
 //   [^\r\n\p{L}\p{P}\p{S}]?[\p{L}\p{M}]+;
 //    ?[\p{P}\p{S}]+[\r\n]*; \s*[\r\n]+; \s+(?!\S); \s+.

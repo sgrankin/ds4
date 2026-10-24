@@ -130,8 +130,8 @@ pub const Lifecycle = struct {
                 return fail("ds4: Qwen3.8 requires Metal or single-GPU CUDA (or --cpu --first-token-test); tensor parallelism, pipeline execution, SSD streaming, DSpark, external MTP models and power throttling are not supported\n");
             return true;
         }
-        if (core.power_percent < 100) return fail("ds4: --power is not supported for GLM 5.2 yet\n");
-        if (request.prefill_chunk != 0) return fail("ds4: --prefill-chunk is not supported for GLM 5.2; GLM uses graph-selected prefill chunks\n");
+        if (core.power_percent < 100) return fail("ds4: --power is not supported for GLM 5.3 Flash yet\n");
+        if (request.prefill_chunk != 0) return fail("ds4: --prefill-chunk is not supported for GLM 5.3 Flash; GLM uses graph-selected prefill chunks\n");
         if (hasText(request.mtp_path)) return fail("ds4: --mtp-model is not supported for GLM yet\n");
         if (request.first_token_test) return fail("ds4: GLM first-token test is CPU-only; pass --cpu\n");
         return true;
@@ -195,8 +195,8 @@ pub const Lifecycle = struct {
         var context: u32 = 0;
         if (!c.ds4_native_glm_context_request(self.shape(), request.context_size, &context)) return false;
         const residency = self.placement(request);
-        // GLM53's compact cache keeps the complete logical context. Unlike the
-        // legacy GLM52 model there is no alternate expanded-cache geometry.
+        // GLM53's compact cache keeps the complete logical context; there is
+        // no alternate expanded-cache geometry.
         return c.ds4_native_engine_admit_glm(self.core, self.shape(), &residency, context, 0, "before GLM graph allocation");
     }
 

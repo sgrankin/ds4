@@ -147,8 +147,8 @@ pub fn seed(core: *const Core, shape: *const Shape) bool {
         if (profile) _ = c.fprintf(c.__stderrp, "ds4: streaming expert hotlist seed skipped preload=%u current=%u\n", count, current);
         return true;
     }
-    // Pro/Flash/GLM52 built-ins belong to legacy model routes. None of the
-    // native four model profiles selected here has one of those ranked lists.
+    // Pro's built-in belongs to its legacy model route. None of the four
+    // native profiles selected here has a built-in ranked list.
     if (!text(path)) return true;
     var list = std.mem.zeroes(Hotlist);
     if (!loadFile(&list, shape, @ptrCast(path), count)) return false;

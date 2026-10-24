@@ -47,9 +47,9 @@ typedef enum {
 } ds4_model_family;
 
 typedef enum {
-    DS4_VARIANT_FLASH = 0,
+    /* Value 0 is reserved for the retired original V4 Flash profile. */
     DS4_VARIANT_PRO   = 1,
-    DS4_VARIANT_GLM52 = 2,
+    DS4_VARIANT_GLM53_FULL = 2, /* Retained full DSA layout; preserve public variant ID. */
     DS4_VARIANT_GLM53 = 3,
     DS4_VARIANT_FLASH41 = 4,
     DS4_VARIANT_QWEN4_EXP = 5,

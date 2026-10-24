@@ -50,7 +50,7 @@ typedef struct {
  * remains fatal; DSpark fills its counters and lets Engine decide admission. */
 void ds4_native_support_summary(const ds4_model *, ds4_dspark_summary *);
 ds4_support_kind ds4_native_support_detect(const ds4_model *, uint32_t *, ds4_dspark_summary *);
-bool ds4_native_support_compatible(const ds4_model *, ds4_model_family family, bool vision_exp);
+bool ds4_native_support_compatible(const ds4_model *, ds4_model_family family);
 void ds4_native_support_bind(ds4_dspark_weights *, const ds4_model *,
     const ds4_dspark_summary *, const ds4_shape *);
 void ds4_native_support_bind_mtp(ds4_mtp_weights *, const ds4_model *, const ds4_shape *);

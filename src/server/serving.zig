@@ -382,10 +382,7 @@ fn models(srv: *c.server, fd: c_int, id: [*c]const u8, stop: [*c]const volatile 
                 modelValues(&out, &variant, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
             }
         } else {
-            for ([_][*:0]const u8{ "deepseek-v4-flash", "deepseek-v4-pro" }, 0..) |alias, index| {
-                if (index != 0) append(&out, ",");
-                modelValues(&out, alias, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
-            }
+            modelValues(&out, "deepseek-v4-pro", c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
         }
         append(&out, "]}\n");
     }

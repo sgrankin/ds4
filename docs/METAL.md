@@ -14,8 +14,8 @@ From the repository root:
 
 ```sh
 make
-./download-model.nu ds4f-q2
-./ds4
+./download-model.nu ds41f-q2
+./ds4 --ssd-streaming --ctx 32768
 ```
 
 The same build supports M3 and M5 Macs. Hardware-specific fast paths are
@@ -26,14 +26,13 @@ Leave other GPU and memory-heavy applications idle when comparing performance.
 
 | Memory | Starting point |
 | --- | --- |
-| 64 GB | Flash Q2 with `--ssd-streaming` |
-| 96 GB | Flash Q2; leave room for the context and other applications |
-| 128 GB | Flash Q2, or GLM 5.3 Flash Q2 with modest initial context |
-| 256 GB | Flash Q4/MXFP4 or GLM 5.3 Flash Q4 |
+| 64 GB | Qwen3.8 Flash Next Q2, starting with 8K context |
+| 96 GB | Qwen3.8 Flash Next Q2; use SSD streaming for larger models |
+| 128 GB | V4.1 Flash Q2 with SSD streaming, or GLM 5.3 Flash Q2 with modest context |
+| 256 GB | V4.1 Flash Q2 resident or GLM 5.3 Flash Q4 |
 | 512 GB | Larger models, including PRO Q2 |
 
-Here, Flash means DeepSeek V4 Flash. V4.1 Flash has different memory
-requirements; see its [model guide](MODELS.md#deepseek-v41-flash).
+See the [model guide](MODELS.md) for the complete file and memory requirements.
 
 These are starting points, not guarantees that every context or session count
 will fit. GLM 5.3 Flash Q2 is about 90 GiB before runtime allocations.
@@ -67,5 +66,5 @@ For more than two machines, use [pipeline parallelism](DISTRIBUTED.md#pipeline-p
 - [Batched serving](SERVER.md#multiple-sessions)
 - [Benchmarking](PERFORMANCE.md)
 
-For DeepSeek V4 Flash and PRO, `--power 70` trades throughput for lower
+For DeepSeek V4 PRO, `--power 70` trades throughput for lower
 sustained GPU load. V4.1 and GLM currently require `--power 100`.

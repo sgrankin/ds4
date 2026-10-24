@@ -10,47 +10,6 @@ It is opt-in. Gains depend on the prompt, model, backend, and context length;
 poor acceptance can make it slower. Measure your workload rather than assuming
 that a draft model always helps.
 
-## DeepSeek Flash: DSpark
-
-DSpark is a separate support GGUF, not a standalone language model. It proposes
-up to five future tokens. Match its checkpoint to the main model:
-
-| Main checkpoint | Download | Support file |
-| --- | --- | --- |
-| Flash 0731 | `ds4f-dspark` | `gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf` |
-| Flash Vision Experimental | `ds4f-vision-dspark` | `gguf/DeepSeek-V4-Flash-Vision-Exp-DSpark-support.gguf` |
-
-For the 0731 Q2 model:
-
-```sh
-./download-model.nu ds4f-q2
-./download-model.nu ds4f-dspark
-./ds4 --dspark --mtp-model gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf
-```
-
-For Vision Experimental, substitute its matching main model and support file.
-Do not mix the two checkpoints. DSpark is not supported for PRO.
-The same flags work in `ds4-agent` and non-batched `ds4-server` requests.
-
-The support file adds about 5.6 GiB of weights plus runtime state. The main
-model must be resident; external DSpark is not supported with SSD streaming.
-DSpark replaces the legacy one-stage MTP drafter for that run; the two are
-not stacked.
-
-Resident M5 paths batch supported verifier expert rows, including two-Mac TP.
-On DGX Spark, resident Flash 0731 Q2 and two-Spark MXFP4 also batch the seed
-with longer drafts and use small-batch Q8 and expert kernels. No extra flags
-are needed.
-Single-Spark Q2 uses a confidence-pruning threshold of 0.4. Two-Spark
-Flash 0731 Q2 and MXFP4 leave confidence pruning off and split the drafter
-over RDMA when both peers load its support file. `--dspark-confidence`
-overrides the threshold. Exact sampling keeps its default threshold of 0.8.
-The scheduler can back off when drafting is unproductive. Defaults select the
-fast paths; diagnostic environment variables are not needed for normal use.
-Recorded comparisons are in [the QA guide](../QA_BEFORE_RELEASES.md).
-
-For the tested Strix Halo coding configuration, use `--dspark --dspark-confidence 0.7` with the default five-token draft cap and scheduler. Client sampling is temperature `1.0`, `top_p=0.95`, `min_p=0`, and `top_k=0`; high reasoning was also checked on coding and tool-use requests. This uses opportunistic sampling as described below; exact-mode throughput is not qualified by these measurements. `--mtp-draft` controls legacy autoregressive MTP, not the DSpark draft width.
-
 ## DeepSeek V4.1 Flash: DSpark
 
 V4.1 has its own 8.04 GiB support GGUF. It retains the native MXFP4 experts
@@ -76,6 +35,12 @@ rule for V4.1. Restored sessions warm the draft window with 128 ordinary tokens
 before speculation resumes. Measure speed on your prompts: acceptance and SSD
 cache size both matter. V4.1 DSpark can still be slower than ordinary decoding,
 including in TP mode.
+
+The maintained native Metal regression fixture is built with
+`tools/zig-build dspark-native-oracle`; see the
+[DSpark qualification commands](../QA_BEFORE_RELEASES.md#dspark). It checks
+trained draft tensors and actual runtime commits without relying on the
+retired original-Flash acceptance driver's log counters.
 
 ## GLM: built-in MTP
 

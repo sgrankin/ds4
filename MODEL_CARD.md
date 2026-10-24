@@ -1,5 +1,9 @@
 # DeepSeek v4 model card synopsis
 
+Historical source synopsis: original V4 Flash is retired from this runtime.
+This document remains useful for the retained V4 PRO family; it does not
+describe the current V4.1 Flash checkpoint or serving graph.
+
 This document extracts the most important information from the official
 DeepSeek-V4-Flash Hugging Face model card, with emphasis on facts that matter
 for local inference, DS4 development, and benchmark interpretation.

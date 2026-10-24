@@ -31,7 +31,8 @@ that it fits before running it; do not accidentally load a large model on a
 single device during multi-GPU QA. ROCm has `make test-rocm`.
 
 Official-vector tests must use continuations from the same checkpoint as the
-GGUF. Flash 0731 and Vision Experimental are not interchangeable fixtures.
+GGUF. Historical original-Flash and GLM 5.2 fixtures are retained as records,
+not current release gates; they cannot qualify V4.1 Flash or GLM 5.3.
 See [test vectors](../tests/test-vectors/README.md) and
 [quality scoring](../gguf-tools/quality-testing/README.md).
 

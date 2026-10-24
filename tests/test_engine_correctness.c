@@ -3,10 +3,8 @@
  * single-tier and GPU-only multi-tier execution.
  *
  * Uses small ctx (1024) and short generation (16 tokens) so it fits in
- * tight VRAM environments. Sister test to test_engine_mgpu_runtime,
- * which compares logit deltas at a tighter tolerance (1e-4) — this
- * one asserts equivalence at the user-visible token level, which is
- * the actual correctness contract.
+ * tight VRAM environments. This test compares the user-visible token
+ * sequence; it does not establish full-logit numerical parity.
  *
  * Requires DS4_TEST_MODEL. Skips with PASS if < 2 CUDA devices visible.
  *
@@ -40,18 +38,9 @@
         }                                                                   \
     } while (0)
 
-/* Build a short prompt using the actual chat template
- * (BOS + user_id + <text> + assistant_id + think_end so the model skips
- * any reasoning trace and goes straight to the answer). With DS4_THINK_NONE
- * the model produces a clean short reply, which makes the token-ID compare
- * easy to read at a glance.
- *
- * Why not ds4_tokenize_rendered_chat: that function parses text that
- * ALREADY contains special tokens (it just looks for them inline). It adds
- * no scaffolding on its own, so the model sees raw text and continues it
- * like a completion ("What is the capital of France?...What is the capital
- * of France?<EOS>"). ds4_encode_chat_prompt adds the actual BOS / user /
- * assistant / think markers DeepSeek-V4-Flash is trained on. */
+/* Use the loaded model's chat template and request a direct answer.
+ * ds4_tokenize_rendered_chat only tokenizes already-rendered input;
+ * ds4_encode_chat_prompt adds the model-specific roles and control markers. */
 static void build_prompt(ds4_engine *e, ds4_tokens *out) {
     const char *prompt = "What is the capital of France?";
     ds4_encode_chat_prompt(e, /*system=*/NULL, prompt, DS4_THINK_NONE, out);

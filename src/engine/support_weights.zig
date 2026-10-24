@@ -105,7 +105,7 @@ pub fn detect(model: ?*const Model, stages: ?*u32, output: ?*Summary) c.ds4_supp
     }
     return c.DS4_SUPPORT_NONE;
 }
-pub fn compatible(model: *const Model, target_family: c.ds4_model_family, vision_exp: bool) bool {
+pub fn compatible(model: *const Model, target_family: c.ds4_model_family) bool {
     const family = string(model, "dspark.target_architecture");
     const arch = string(model, "general.architecture");
     // Released V4.1 files can omit the redundant family key. The distinct
@@ -119,15 +119,8 @@ pub fn compatible(model: *const Model, target_family: c.ds4_model_family, vision
         return false;
     }
     const variant = string(model, "deepseek4.checkpoint_variant");
-    if (vision_exp) {
-        if (variant == null or !std.mem.eql(u8, variant.?, "vision-exp") or
-            !isString(model, "general.source.revision", "e46e16bf6035c6f317eb2ac7458eb0362926d402"))
-        {
-            _ = c.fputs("ds4: DSpark support model does not match the pinned DeepSeek V4 Flash Vision-Exp checkpoint\n", c.__stderrp);
-            return false;
-        }
-    } else if (variant != null and std.mem.eql(u8, variant.?, "vision-exp")) {
-        _ = c.fputs("ds4: Vision-Exp DSpark support model cannot be used with this DeepSeek checkpoint\n", c.__stderrp);
+    if (variant != null and std.mem.eql(u8, variant.?, "vision-exp")) {
+        _ = c.fputs("ds4: retired V4 Flash Vision-Exp support model\n", c.__stderrp);
         return false;
     }
     return true;

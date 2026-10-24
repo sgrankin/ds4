@@ -70,62 +70,39 @@ def download-one [
         $file
     }
     let out = $directory | path join $local_name
-    let part = $"($out).part"
     mkdir ($out | path dirname)
-    if $model.transport == curl and ($"($out).aria2" | path exists) {
-        fail $"Found incomplete aria2 download sidecar: ($out).aria2. Finish or remove it before using this curl downloader."
-    }
     if (nonempty $out) {
         verify $catalog $file $out
         print $"Already downloaded: ($out)"
         return
     }
     print $"Downloading ($file)\nfrom https://huggingface.co/($model.repo)"
-    if $model.transport == hf {
-        if ($part | path exists) {
-            fail $"Found curl partial download: ($part). The Hugging Face downloader cannot resume curl .part files. Move or remove it before retrying."
-        }
-        let command = (find-hf)
-        print $"using ($command) download\nIf the download stops, run the same command again to resume it."
-        let auth = if $token == '' { [] } else { [--token $token] }
-        let revision = if ($model.revision? | default '') == '' { [] } else { [--revision $model.revision] }
-        (checked
-            $command
-            download
-            $model.repo
-            $file
-            --repo-type
-            model
-            --local-dir
-            $directory
-            ...$revision
-            ...$auth
-        )
-        let hf_out = $directory | path join $file
-        if $hf_out != $out and (nonempty $hf_out) {
-            mv $hf_out $out
-            try { ^rmdir ($hf_out | path dirname) err> /dev/null } catch { }
-        }
-        if not (nonempty $out) { fail $"Hugging Face download finished but expected file is missing: ($out)" }
-    } else {
-        print 'If the download stops, run the same command again to resume it.'
-        let auth = if $token == '' { [] } else { [-H $"Authorization: Bearer ($token)"] }
-        let revision = $model.revision? | default main
-        (checked
-            curl
-            -fL
-            --progress-meter
-            -C
-            -
-            ...$auth
-            -o
-            $part
-            $"https://huggingface.co/($model.repo)/resolve/($revision)/($file)"
-        )
-        verify $catalog $file $part
-        mv $part $out
-        return
+    let part = $"($out).part"
+    if ($part | path exists) {
+        fail $"Found curl partial download: ($part). The Hugging Face downloader cannot resume curl .part files. Move or remove it before retrying."
     }
+    let command = (find-hf)
+    print $"using ($command) download\nIf the download stops, run the same command again to resume it."
+    let auth = if $token == '' { [] } else { [--token $token] }
+    let revision = if ($model.revision? | default '') == '' { [] } else { [--revision $model.revision] }
+    (checked
+        $command
+        download
+        $model.repo
+        $file
+        --repo-type
+        model
+        --local-dir
+        $directory
+        ...$revision
+        ...$auth
+    )
+    let hf_out = $directory | path join $file
+    if $hf_out != $out and (nonempty $hf_out) {
+        mv $hf_out $out
+        try { ^rmdir ($hf_out | path dirname) err> /dev/null } catch { }
+    }
+    if not (nonempty $out) { fail $"Hugging Face download finished but expected file is missing: ($out)" }
     verify $catalog $file $out
 }
 
@@ -216,16 +193,12 @@ Pinned artifacts also receive size and SHA-256 checks.
     print "\nAliases: qwen38-iq2 -> qwen38-q2; flint -> flint-int4"
 }
 
-# Download model files with resumable HF/curl transfers and pinned size/SHA checks.
+# Download model files with resumable HF transfers and pinned size/SHA checks.
 # Use target "help" for detailed model descriptions.
 #
 # Targets:
-#   ds4f-q2, ds4f-q2-q4, ds4f-q4, ds4f-mxfp4, ds4f-dspark
-#   ds4f-vision-q2, ds4f-vision-q2-q4, ds4f-vision-mxfp4
-#   ds4f-vision-encoder, ds4f-vision-dspark
 #   ds41f-q2, ds41f-q4, ds41f-mxfp4, ds41f-vision, ds41f-1017-vision
 #   pro-q2-imatrix, pro-q4-layers00-30, pro-q4-layers31-output, pro-q4-split
-#   glm-unsloth-q4, glm-antirez-iq2xxs, glm-antirez-q2, glm-antirez-q4
 #   glm53-full-q2, glm53-q2, glm53-q4, glm53-fp8, glm53-vision
 #   qwen38-q2 (alias qwen38-iq2), qwen38-q4k, qwen38-vision
 #   flint-int4 (alias flint): complete native affine INT4 safetensors directory
@@ -272,8 +245,6 @@ def main [target?: string, --token: string] {
     print 'Done.'
     if $selected == flint-int4 {
         print $"Run ./ds4-local --server flint --model '($directory)'"
-    } else if $selected == ds4f-dspark or $selected == ds4f-vision-dspark {
-        print $"Enable DSpark explicitly with --dspark --mtp-model ($directory | path join $model.file); use only its matching language checkpoint."
     } else if $selected == qwen38-q2 {
         print 'Run ./ds4 --ctx 8192 --prefill-chunk 1024. Add --mtp to enable speculation.'
     } else if $selected == qwen38-q4k {

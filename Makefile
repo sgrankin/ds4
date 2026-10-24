@@ -13,8 +13,8 @@ PROGRAMS := ds4 ds4-server ds4-agent ds4-bench ds4-eval
 	q4k-dot-test mxfp4-dot-test test-quality-api test-download-model \
 	quantize quants-shared quality-score ds4_test ds4_agent_test
 
-# One Zig invocation builds all five programs, including the retained C Qwen/GLM
-# backends selected from GGUF metadata. Copy installed binaries for ./ds4-local.
+# One Zig invocation builds all five programs, including the retained C Pro/full
+# GLM 5.3 paths selected from GGUF metadata. Copy binaries for ./ds4-local.
 all:
 	./tools/zig-build $(ZIG_FLAGS)
 	cp $(addprefix zig-out/bin/,$(PROGRAMS)) .

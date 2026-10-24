@@ -45,6 +45,47 @@ static const ds4_shape DS4_SHAPE_GLM53 = {
     .kda_gate_lower_bound = -5.0f,
 };
 
+static void test_retained_model_identities(void) {
+    /* Exercise the real GGUF string reader without loading a checkpoint. */
+    uint8_t bytes[] = {3, 0, 0, 0, 0, 0, 0, 0, '5', '.', '3'};
+    ds4_kv version = {
+        .key = {"general.version", sizeof("general.version") - 1},
+        .type = GGUF_VALUE_STRING,
+        .value_pos = 0,
+    };
+    ds4_model model = {
+        .fd = -1,
+        .map = bytes,
+        .size = sizeof(bytes),
+        .n_kv = 1,
+        .kv = &version,
+    };
+    assert(config_glm53_full_identity(&model));
+    bytes[10] = '2';
+    assert(!config_glm53_full_identity(&model));
+    model.n_kv = 0;
+    assert(!config_glm53_full_identity(&model));
+
+    /* The retained V4 profile accepts Pro, not original Flash geometry. */
+    for (int original_flash = 0; original_flash < 2; original_flash++) {
+        ds4_shape incoming = DS4_SHAPE_PRO;
+        if (original_flash) {
+            incoming.n_layer = 43;
+            incoming.n_embd = 4096;
+        }
+        const bool matches = ds4_shape_matches_metadata(&DS4_SHAPE_PRO,
+            incoming.n_layer, incoming.n_embd, incoming.n_vocab,
+            incoming.n_head, incoming.n_head_kv, incoming.n_head_dim,
+            incoming.n_value_dim, incoming.n_rot, incoming.n_lora_q,
+            incoming.n_lora_o, incoming.n_out_group, incoming.n_expert,
+            incoming.n_expert_used, incoming.n_ff_exp, incoming.n_expert_shared,
+            incoming.n_hash_layer, incoming.n_swa, incoming.n_indexer_head,
+            incoming.n_indexer_head_dim, incoming.n_indexer_top_k,
+            incoming.n_hc, incoming.n_hc_sinkhorn_iter);
+        assert(matches == !original_flash);
+    }
+}
+
 static void test_vision_prefix(void) {
     ds4_session *s = calloc(1, sizeof(*s));
     assert(s);
@@ -274,7 +315,7 @@ static void test_payload_tokens(void) {
 static void test_snapshot_bytes(void) {
     const ds4_shape saved_shape = g_ds4_shape;
     const uint32_t saved_ratio = g_ds4_compress_ratios[0];
-    g_ds4_shape = DS4_SHAPE_FLASH;
+    g_ds4_shape = DS4_SHAPE_PRO;
     g_ds4_shape.n_layer = 1;
     g_ds4_shape.n_head_dim = 4;
     g_ds4_shape.n_vocab = 8;
@@ -364,7 +405,7 @@ static void test_text_observations(void) {
     v->tool_response_end_id = 259;
     const ds4_shape saved = g_ds4_shape;
     const ds4_shape shapes[] = {
-        DS4_SHAPE_FLASH, DS4_SHAPE_PRO, DS4_SHAPE_GLM53, DS4_SHAPE_FLASH41
+        DS4_SHAPE_PRO, DS4_SHAPE_GLM53, DS4_SHAPE_FLASH41
     };
     const char *roles[] = {"user", "tool", "function"};
     const char *parts[] = {"ok <x> & </tool_result> </tool_response>"};
@@ -584,149 +625,6 @@ static void test_glm_spec_rollback(void) {
 }
 #endif
 
-#if !defined(DS4_NO_GPU) && !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
-static void test_spark_dspark_policy(void) {
-    assert(ds4_gpu_init());
-    if (!ds4_gpu_device_is_spark()) {
-        ds4_gpu_cleanup();
-        return;
-    }
-    const ds4_shape saved_shape = g_ds4_shape;
-    const bool saved_vision = g_ds4_flash_vision_exp;
-    g_ds4_shape = DS4_SHAPE_FLASH;
-    g_ds4_flash_vision_exp = false;
-    ds4_engine *e = calloc(1, sizeof(*e));
-    ds4_session *s = calloc(1, sizeof(*s));
-    assert(e && s);
-    ds4_tensor gate = {.type = DS4_TENSOR_MXFP4};
-    ds4_tensor down = {.type = DS4_TENSOR_MXFP4};
-    e->core.backend = DS4_BACKEND_CUDA;
-    e->tp.active = true;
-    e->core.weights.layer[DS4_N_LEADING_DENSE].ffn_gate_exps = &gate;
-    e->core.weights.layer[DS4_N_LEADING_DENSE].ffn_down_exps = &down;
-    s->engine = e;
-    unsetenv("DS4_DSPARK_SCHEDULER_WINDOW");
-    unsetenv("DS4_DSPARK_SCHEDULER_MIN_AVG_MILLI");
-    unsetenv("DS4_DSPARK_SCHEDULER_TAIL_MIN_TOKENS");
-    unsetenv("DS4_DSPARK_SEED_BATCH");
-    assert(ds4_dspark_spark_tp_policy(e, true));
-    assert(ds4_dspark_scheduler_window(s) == 16);
-    assert(ds4_dspark_scheduler_min_avg_milli(s) == 1000);
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 4);
-    assert(ds4_dspark_scheduler_tail_min_tokens(NULL) == 10);
-    setenv("DS4_DSPARK_SCHEDULER_TAIL_MIN_TOKENS", "7", 1);
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 7);
-    setenv("DS4_DSPARK_SCHEDULER_TAIL_MIN_TOKENS", "0", 1);
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 0);
-    unsetenv("DS4_DSPARK_SCHEDULER_TAIL_MIN_TOKENS");
-    setenv("DS4_DSPARK_SEED_BATCH", "0", 1);
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-    unsetenv("DS4_DSPARK_SEED_BATCH");
-    setenv("DS4_DSPARK_SCHEDULER_WINDOW", "7", 1);
-    setenv("DS4_DSPARK_SCHEDULER_MIN_AVG_MILLI", "1800", 1);
-    assert(ds4_dspark_scheduler_window(s) == 7);
-    assert(ds4_dspark_scheduler_min_avg_milli(s) == 1800);
-    unsetenv("DS4_DSPARK_SCHEDULER_WINDOW");
-    unsetenv("DS4_DSPARK_SCHEDULER_MIN_AVG_MILLI");
-    e->tp.active = false;
-    assert(!ds4_dspark_spark_tp_policy(e, false));
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-    assert(ds4_dspark_scheduler_window(s) == 4);
-    assert(ds4_dspark_scheduler_min_avg_milli(s) == 1500);
-    e->tp.active = true;
-    e->core.ssd_streaming = true;
-    assert(!ds4_dspark_spark_tp_policy(e, true));
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-    e->core.ssd_streaming = false;
-    e->core.dspark_exact_sampling = true;
-    assert(!ds4_dspark_spark_tp_policy(e, true));
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-    e->core.dspark_exact_sampling = false;
-    g_ds4_flash_vision_exp = true;
-    assert(!ds4_dspark_spark_tp_policy(e, true));
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-    g_ds4_flash_vision_exp = false;
-    gate.type = DS4_TENSOR_IQ2_XXS;
-    down.type = DS4_TENSOR_Q2_K;
-    assert(ds4_dspark_spark_tp_policy(e, true));
-    assert(ds4_dspark_scheduler_window(s) == 16);
-    assert(ds4_dspark_scheduler_min_avg_milli(s) == 1000);
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 4);
-    e->core.ssd_streaming = true;
-    assert(!ds4_dspark_spark_tp_policy(e, true));
-    assert(ds4_dspark_scheduler_window(s) == 4);
-    assert(ds4_dspark_scheduler_min_avg_milli(s) == 1500);
-    e->core.ssd_streaming = false;
-    e->core.dspark_exact_sampling = true;
-    assert(!ds4_dspark_spark_tp_policy(e, true));
-    assert(ds4_dspark_scheduler_window(s) == 4);
-    e->core.dspark_exact_sampling = false;
-    g_ds4_flash_vision_exp = true;
-    assert(!ds4_dspark_spark_tp_policy(e, true));
-    g_ds4_flash_vision_exp = false;
-    down.type = DS4_TENSOR_Q8_0;
-    assert(!ds4_dspark_spark_tp_policy(e, true));
-    assert(ds4_dspark_scheduler_window(s) == 4);
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-
-    /* The support model can be split even when target experts are owned
-     * whole. Reject unmeasured policies before allocating optional halves. */
-    down.type = DS4_TENSOR_Q2_K;
-    ds4_tensor output = {.type = DS4_TENSOR_Q8_0, .dim = {4096, DS4_N_VOCAB}};
-    ds4_tensor draft_gate = {.type = DS4_TENSOR_IQ2_XXS, .ndim = 3,
-                             .dim = {4096, 2048, 256}};
-    ds4_tensor draft_down = {.type = DS4_TENSOR_Q2_K, .ndim = 3,
-                             .dim = {2048, 4096, 256}};
-    ds4_tensor dense = {.type = DS4_TENSOR_Q8_0, .dim = {4096, 2048}};
-    e->core.dspark = true;
-    e->core.support_kind = DS4_SUPPORT_DSPARK;
-    e->core.weights.output = &output;
-    e->core.dspark_weights.n_stages = 1;
-    e->core.dspark_weights.block_size = 6;
-    e->core.dspark_weights.markov_rank = 128;
-    e->core.dspark_weights.stage[0].markov_w1 = &dense;
-    e->core.dspark_weights.stage[0].markov_w2 = &dense;
-    ds4_layer_weights *draft = &e->core.dspark_weights.stage[0].block;
-    draft->ffn_gate_exps = draft->ffn_up_exps = &draft_gate;
-    draft->ffn_down_exps = &draft_down;
-    draft->attn_q_b = draft->attn_output_a = draft->attn_output_b = &dense;
-    draft->ffn_gate_shexp = draft->ffn_up_shexp = draft->ffn_down_shexp = &dense;
-    unsetenv("DS4_TP_DISABLE_DSPARK_SPLIT");
-    assert(!e->cuda_tp_expert_split);
-    assert(tp_dspark_split_eligible(e, true, true));
-    assert(tp_dspark_split_eligible(e, false, true));
-    assert(!tp_dspark_split_eligible(e, true, false));
-    e->core.dspark_confidence_threshold = 0.4f;
-    assert(!tp_dspark_split_eligible(e, true, true));
-    assert(tp_dspark_split_eligible(e, false, true));
-    e->core.dspark_confidence_threshold = 0;
-    e->core.dspark_exact_sampling = true;
-    assert(!tp_dspark_split_eligible(e, true, true));
-    e->core.dspark_exact_sampling = false;
-    e->core.ssd_streaming = true;
-    assert(!tp_dspark_split_eligible(e, true, true));
-    e->core.ssd_streaming = false;
-    g_ds4_flash_vision_exp = true;
-    assert(!tp_dspark_split_eligible(e, true, true));
-    g_ds4_flash_vision_exp = false;
-    down.type = DS4_TENSOR_Q8_0;
-    assert(!tp_dspark_split_eligible(e, true, true));
-    down.type = DS4_TENSOR_Q2_K;
-    setenv("DS4_TP_DISABLE_DSPARK_SPLIT", "1", 1);
-    assert(!tp_dspark_split_eligible(e, true, true));
-    unsetenv("DS4_TP_DISABLE_DSPARK_SPLIT");
-    e->core.backend = DS4_BACKEND_METAL;
-    assert(!tp_dspark_split_eligible(e, true, true));
-    assert(ds4_dspark_scheduler_tail_min_tokens(s) == 10);
-    free(s);
-    free(e);
-    g_ds4_shape = saved_shape;
-    g_ds4_flash_vision_exp = saved_vision;
-    ds4_gpu_cleanup();
-    puts("Spark DSpark policy: measured layout, exclusions and overrides: ok");
-}
-#endif
-
 /* Lockstep TP drafter VERIFY flags and the worker's proposal check. */
 static void test_dspark_tp_verify_flags(void) {
     const int proposal[5] = {11, 12, 13, 14, 15};
@@ -779,7 +677,7 @@ static void test_dspark_tp_verify_flags(void) {
 /* Memory kept for the hinted sessions before the TP drafter halves are built. */
 static void test_dspark_tp_split_reserve(void) {
     const ds4_shape saved_shape = g_ds4_shape;
-    g_ds4_shape = DS4_SHAPE_FLASH;
+    g_ds4_shape = DS4_SHAPE_PRO;
     const uint64_t gib = UINT64_C(1) << 30, mib = UINT64_C(1) << 20;
     ds4_dspark_weights dw;
     memset(&dw, 0, sizeof(dw));
@@ -790,9 +688,9 @@ static void test_dspark_tp_split_reserve(void) {
     memset(&mem, 0, sizeof(mem));
     mem.prefill_cap = 2048;
     mem.raw_cap = 2304;
-    /* The reference Flash capture state (about 111 MiB) bounds from above. */
+    /* The reference Pro capture state occupies about 186 MiB. */
     const uint64_t one = tp_dspark_split_reserve_bytes(&mem, &dw, 1);
-    assert(one >= 4 * gib + 111 * mib && one <= 4 * gib + 113 * mib);
+    assert(one >= 4 * gib + 185 * mib && one <= 4 * gib + 187 * mib);
     const uint64_t capture = one - 4 * gib;
     mem.total_bytes = 3 * gib;
     assert(tp_dspark_split_reserve_bytes(&mem, &dw, 1) == 7 * gib + capture);
@@ -937,6 +835,7 @@ static void test_session_sampling_families(void) {
 }
 
 int main(void) {
+    test_retained_model_identities();
     test_session_sampling_families();
     test_session_sampling_policy();
     test_dspark_tp_verify_flags();
@@ -951,9 +850,6 @@ int main(void) {
 #ifndef DS4_NO_GPU
     test_glm_attention_budget();
     test_glm_spec_rollback();
-#endif
-#if !defined(DS4_NO_GPU) && !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
-    test_spark_dspark_policy();
 #endif
     puts("session state tests: ok");
     return 0;

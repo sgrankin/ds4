@@ -10,17 +10,15 @@ def invoke-driver [script: path, args: list<string> = []] {
 def main [] {
     cd $ROOT
     for script in [
-        tests/dspark_acceptance_fixture.nu
         tests/glm_long_context_smoke.nu
         tests/test_gpu_args_cli.nu
         tests/vision-fixtures/jpeg/generate.nu
         speed-bench/concurrency_sweep.nu
         speed-bench/ideas/build_probe.nu
-        run-nvidia-tp-server.nu
     ] {
         assert (nu-check --debug ($ROOT | path join $script)) $'($script) did not parse'
     }
-    for script in [speed-bench/ideas/build_probe.nu run-nvidia-tp-server.nu] {
+    for script in [speed-bench/ideas/build_probe.nu] {
         let result = (invoke-driver $script ['--help'])
         assert equal $result.exit_code 0 $result.stderr
         assert ($result.stdout | str contains 'Usage:') $'($script) help was not shown'
@@ -32,17 +30,8 @@ def main [] {
     r##'#!/usr/bin/env nu
 use std/assert
 def --wrapped main [...args: string] {
-    {args: $args, stats: $env.DS4_DSPARK_STATS?, tail: $env.DS4_DSPARK_SCHEDULER_TAIL_MIN_TOKENS?} | to json --raw | $"($in)\n" | save --append --raw $env.DRIVER_LOG
+    {args: $args} | to json --raw | $"($in)\n" | save --append --raw $env.DRIVER_LOG
     match $env.DRIVER_MODE {
-        dspark => {
-            print 'same'
-            print --stderr 'ds4: prefill: 10.0 t/s, generation: 22.5 t/s'
-            if '--dspark' in $args {
-                let errors = ($env.DRIVER_ERRORS? | default '0')
-                let accepted = ($env.DRIVER_ACCEPTED? | default '16')
-                print --stderr $'ds4: DSpark stats cycles=4 first_tokens=4 proposed=20 accepted_draft=($accepted) partial=1 errors=($errors) seed_batches=2 direct_full=1 direct_partial=1'
-            }
-        }
         glm => {
             let at = ($args | enumerate | where item == '--prompt-file' | first | get index)
             let input = ($args | get ($at + 1))
@@ -63,42 +52,8 @@ def --wrapped main [...args: string] {
 '## | save --raw $child
     ^chmod +x $child
     let model = $work | path join 'model.gguf'
-    let support = $work | path join 'support.gguf'
     'fixture' | save $model
-    'fixture' | save $support
     let log = $work | path join 'calls.jsonl'
-    let settings = {
-        DS4_BIN: $child
-        DS4_DSPARK_MODEL: $model
-        DS4_DSPARK_SUPPORT: $support
-        DRIVER_LOG: $log
-        DS4_DSPARK_FIXTURE_TOKENS: '32'
-        DS4_DSPARK_FIXTURE_REQUIRE_PARTIAL: '1'
-        DS4_DSPARK_FIXTURE_REQUIRE_DIRECT_COMMIT: '1'
-        DS4_DSPARK_FIXTURE_REQUIRE_IDENTICAL: '1'
-        DS4_DSPARK_FIXTURE_REQUIRE_PROPOSAL_QUALITY: '1'
-        DS4_DSPARK_FIXTURE_C_ADD_MIN_ACCEPTED: '8'
-        DS4_DSPARK_FIXTURE_CONFIDENCE: '0.75'
-        DS4_DSPARK_FIXTURE_EXACT_SAMPLING: '1'
-        DRIVER_MODE: 'dspark'
-        DRIVER_ERRORS: '0'
-        DRIVER_ACCEPTED: '16'
-    }
-    let result = (with-env $settings { invoke-driver tests/dspark_acceptance_fixture.nu })
-    assert equal $result.exit_code 0 $result.stderr
-    let calls = open --raw $log | from json --objects
-    assert equal ($calls | length) 10
-    let draft = $calls | where stats == '1'
-    assert equal ($draft | length) 5
-    assert ($draft | all {|call| '--mtp-exact-sampling' in $call.args and '--dspark-confidence' in $call.args })
-    for change in [
-        {DRIVER_ERRORS: '1'}
-        {DRIVER_ACCEPTED: '21'}
-        {DRIVER_ACCEPTED: '1'}
-    ] {
-        let result = with-env ($settings | merge $change) { invoke-driver tests/dspark_acceptance_fixture.nu }
-        assert ($result.exit_code != 0) 'DSpark failure guard unexpectedly succeeded'
-    }
     let glm = {
         DS4_BIN: $child
         DRIVER_LOG: $log
@@ -142,5 +97,5 @@ def --wrapped main [...args: string] {
         assert equal ($args | last 2) ['-o' $output] 'C control output path lost its argument boundary'
         assert (($runtime | path join ds4_metal.o) in $args) 'C control object path was not preserved'
     }
-    print $'PASS: Nu driver parsing/help, DSpark/GLM guards, sweep and C-control argv/exit contracts; artifacts ($work)'
+    print $'PASS: Nu driver parsing/help, GLM guard, sweep and C-control argv/exit contracts; artifacts ($work)'
 }

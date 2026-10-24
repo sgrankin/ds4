@@ -53,7 +53,7 @@ def last-value [text: string, pattern: string] {
 
 def --wrapped main [model?: path, ...args: string] {
     let binary = $env.DS4_BIN? | default './ds4'
-    let model = $model | default ($env.DS4_GLM_MODEL? | default 'models/GLM-5.2-UD-Q4_K_XL.gguf')
+    let model = $model | default ($env.DS4_GLM_MODEL? | default 'gguf/GLM-5.3-UD-IQ2_XXS_RoutedIQ2XXS_blk78Q2K.gguf')
     let ctx = $env.DS4_GLM_LONG_CONTEXT_CTX? | default '100000' | into int
     let counts = (
         $env.DS4_GLM_LONG_CONTEXT_REPEATS?

@@ -30,8 +30,8 @@ export fn ds4_native_support_summary(model: *const c.ds4_model, out: *c.ds4_dspa
 export fn ds4_native_support_detect(model: ?*const c.ds4_model, stages: ?*u32, summary: ?*c.ds4_dspark_summary) c.ds4_support_kind {
     return support_owner.detect(model, stages, summary);
 }
-export fn ds4_native_support_compatible(model: *const c.ds4_model, family: c.ds4_model_family, vision_exp: bool) bool {
-    return support_owner.compatible(model, family, vision_exp);
+export fn ds4_native_support_compatible(model: *const c.ds4_model, family: c.ds4_model_family) bool {
+    return support_owner.compatible(model, family);
 }
 export fn ds4_native_support_bind(weights: *c.ds4_dspark_weights, model: ?*const c.ds4_model, summary: ?*const c.ds4_dspark_summary, shape: *const c.ds4_shape) void {
     support_owner.bind(weights, model, summary, shape);

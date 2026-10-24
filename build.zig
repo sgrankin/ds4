@@ -827,6 +827,10 @@ pub fn build(b: *std.Build) void {
     const sampling_test = executable(b, target, sdk, core, null, null, "test-sampling", sampling_frontend, optimize);
     sampling_test.root_module.addObjectFile(sampling_engine);
     b.step("sampling-test", "Build the unchanged sampler fixture with actual Make math policy").dependOn(&b.addInstallArtifact(sampling_test, .{}).step);
+    const placement_frontend = object(b, target, sdk, clang, "tests/test_engine_mgpu_placement.c", "test-engine-placement-main", optimize, test_flags);
+    const placement_test = executable(b, target, sdk, core, null, null, "test-engine-placement", placement_frontend, optimize);
+    placement_test.root_module.addObjectFile(sampling_engine);
+    b.step("engine-placement-test", "Build the model-free Pro/GLM/Qwen placement fixture").dependOn(&b.addInstallArtifact(placement_test, .{}).step);
     const session_test_frontend = object(b, target, sdk, clang, "tests/test_session_state.c", "test-session-state-main", optimize, sparse_base);
     const session_test = executable(b, target, sdk, core, null, null, "test-session-state", session_test_frontend, optimize);
     b.step("session-state-test", "Build the existing model-free session/chat fixture").dependOn(&b.addInstallArtifact(session_test, .{}).step);

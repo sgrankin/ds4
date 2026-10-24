@@ -6,13 +6,16 @@
 language models on consumer hardware (that is, hardware that people
 can actually own). To reach this goal, we are building
 a small native inference engine optimized first for
-**DeepSeek V4 Flash** (including the experimental vision model),
 **DeepSeek V4.1 Flash** (Metal, and text inference on CUDA),
-and additionally **GLM 5.2 and 5.3**, **GLM 5.3 Flash** and
+and additionally **GLM 5.3**, **GLM 5.3 Flash**, **Flint** and
 **DeepSeek V4 PRO**, and **Qwen3.8 Flash Next** (Metal and CUDA). The code is self-contained and
 deliberately narrow, not a general GGUF runner: you need to use the
 GGUF files the project produces, that are part of the project
 itself.
+
+Original DeepSeek V4 Flash and GLM 5.2 are retired. DeepSeek V4 PRO and full
+GLM 5.3 retain their legacy engines; the ordinary Metal engines for V4.1 Flash,
+GLM 5.3 Flash, Qwen3.8 Flash Next and Flint are native Zig.
 
 We test things in integration: model loading, prompt rendering,
 tool calls, KV state, the HTTP server, and the coding agent are built and tested together.
@@ -21,8 +24,7 @@ The repository also includes tools and data for GGUF, imatrix, quality, and spee
 ## Supported hardware
 
 * **Metal**, the primary target, on Macs with 64 GB (for Qwen Flash next) and 96 GB or more (for DeepSeek and GLM). Smaller machines can use SSD streaming. SSD streaming is also needed in order to run very large models such as full GLM 5.x (not Flash) on 128GB systems.
-* **NVIDIA CUDA**, the DGX Spark is our main gaol. DwarfStar also supports multi-GPU systems that are not supported by other backends, for instance it can run DeepSeek v4 Flash on Ada Lovelace cards.
-* **ROCm** on Strix Halo systems such as the Framework Desktop.
+* **NVIDIA CUDA** and **ROCm** implementations are retained upstream platform paths; the supported local build and qualification target is Metal.
 
 This project would not exist without **llama.cpp and GGML**, make sure to read
 the acknowledgements section, a big thank you to Georgi Gerganov and all the
@@ -35,14 +37,13 @@ workstations. A model may be removed when a better replacement arrives.
 # So, what can I do with this software?
 
 * You can run a very capable models in your consumer hardware, a MacBook, a DGX Spark, or a Strix Halo for example. Even if you have not enough RAM, with SSD streaming, you can run it at a decent speed.
-* You can use multiple CUDA cards as a multi-user LLM server. Ada Lovelace, including L40S, is supported: newer models can run here even when their other inference implementations require newer GPUs. Our eight-L40S Flash setup has reached about 126 t/s aggregate generation with 16 sessions.
-* Using two 128 GB Macs connected with RDMA, you can run 4-bit DeepSeek Flash or GLM 5.3 Flash with tensor parallelism. Larger GLM 5.2 quants need larger machines, such as Mac Studios.
+* Using two 128 GB Macs connected with RDMA, you can run DeepSeek V4.1 Flash Q2 or GLM 5.3 Flash Q4 with tensor parallelism. Larger quants need larger machines or SSD streaming.
 * You can also use pipeline paralellism to glue together multiple systems to sum their RAM and run larger models.
 
 ## Motivations
 
 * Capable open-weight models now fit on high-end personal machines.
-* DeepSeek V4 Flash and PRO, GLM 5.2, tolerate aggressive routed-expert quantization.
+* DeepSeek and GLM routed experts tolerate useful quantization tradeoffs.
 * Compressed KV caches and fast local SSDs make long contexts practical.
 * The idea of an inference system specialized for a few models.
 
@@ -95,15 +96,17 @@ and hardware-specific setups:
 | [Strix Halo / Framework Desktop](docs/STRIX_HALO.md) | `make strix-halo` |
 | [One or more CUDA cards, including Ada/L40S](docs/CUDA_MULTI_GPU.md) | `make cuda-generic` |
 
-This branch also offers a Metal build with handwritten Zig modules:
+The Metal build uses handwritten Zig modules:
 `tools/zig-build`, with programs in `zig-out/bin`. Maintained launchers and
 build/download wrappers use Nushell (tested with 0.116.1). See the
 [Zig module guide](src/README.md) for scope, model backends, presets and measurements.
 
-For a first run on a 96 or 128 GB machine, download DeepSeek V4 Flash Q2:
+For a first DeepSeek run on a 128 GB machine, download V4.1 Flash Q2 and use
+SSD streaming:
 
 ```sh
-./download-model.nu ds4f-q2
+./download-model.nu ds41f-q2
+./ds4 --ssd-streaming --ctx 32768
 ```
 
 Downloads go in `gguf/`. Repeat the command to resume an interrupted download.
@@ -445,9 +448,8 @@ the [client setup guide](docs/CLIENTS.md).
 ### Models, images, and speculation
 
 [Models and vision](docs/MODELS.md) lists the supported downloads and memory
-requirements. DeepSeek Vision Experimental uses a different checkpoint from
-Flash 0731; GLM 5.3 Flash and Qwen3.8 Flash Next add vision to the same text
-model through a separate encoder.
+requirements. DeepSeek V4.1 Flash, GLM 5.3 Flash and Qwen3.8 Flash Next add
+vision through a matching separate encoder.
 
 DeepSeek V4.1 Flash text and vision run on Metal; text also runs on a DGX Spark.
 Q2 runs with SSD streaming on one 128 GB Mac or Spark, or resident across two
@@ -476,7 +478,7 @@ Add `--mtp` for speculative decoding. The larger
 with `./download-model.nu qwen38-vision` and pass it with `--vision`.
 See [Qwen setup](docs/QWEN38_FLASH_NEXT.md) for details.
 
-Speculative decoding is opt-in. GLM and Qwen use `--mtp`; V4 Flash DSpark needs a matching
+Speculative decoding is opt-in. GLM and Qwen use `--mtp`; V4.1 Flash DSpark needs a matching
 support GGUF. It can improve generation, but not every workload benefits.
 Read [speculative decoding](docs/SPECULATIVE_DECODING.md) for setup and the
 difference between default opportunistic sampling and `--mtp-exact-sampling`.
@@ -492,10 +494,10 @@ Changing the level in a conversation rebuilds its cached prefix.
 The normal sampling defaults are temperature 1, top-p 1, and min-p 0.05;
 `--temp 0` selects greedy output.
 
-For DeepSeek V4, `--power N` trades throughput for lower sustained GPU load.
+For DeepSeek V4 PRO, `--power N` trades throughput for lower sustained GPU load.
 The default is 100. V4.1 and GLM currently require `--power 100`.
 
-DeepSeek V4 Flash and GLM 5.3 Flash also support directional steering. Load a
+GLM 5.3 Flash also supports directional steering. Load a
 vector with `--dir-steering-file FILE`; `/steer F` adjusts its scale for
 subsequent tokens in a local CLI or agent session, without rebuilding the
 existing KV cache. See [steering documentation](dir-steering/README.md).
@@ -523,9 +525,10 @@ For inference correctness and release checks, read [testing](docs/TESTING.md).
 
 ## Speed
 
-This recorded DeepSeek V4 Flash Q2 sweep uses an M5 Max with 128 GB RAM,
+This historical DeepSeek V4 Flash Q2 sweep uses an M5 Max with 128 GB RAM,
 2048-token continued-prefill intervals, and 128 greedy generation tokens per
-frontier. It is a baseline, not a fresh benchmark of every commit.
+frontier. That model is retired; this records the older baseline rather than
+current-model performance.
 
 ![M5 Max Flash Q2 throughput](speed-bench/m5_max_ts.svg)
 

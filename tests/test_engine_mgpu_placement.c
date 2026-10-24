@@ -89,9 +89,8 @@ int ds4_test_glm_memory_guard_disabled(void);
 int ds4_test_qwen4_placement(uint64_t budget, int sessions,
                               size_t *weights, size_t *runtime);
 
-/* DS4_N_LAYER constant is private to ds4.c; for the test we use
- * the same value. (The packer header doesn't expose it.) */
-#define DS4_N_LAYER_LOCAL 43
+/* The retained C default is V4 Pro: 61 layers plus embedding and head. */
+#define DS4_N_LAYER_LOCAL 61
 #define DS4_N_VOCAB_LOCAL 129280
 #define DS4_N_ENTRIES (DS4_N_LAYER_LOCAL + 2)
 
@@ -115,44 +114,44 @@ static void test_tensor_to_entry(void) {
     memcpy(buf, "blk.0.attn_norm.weight", 22);
     CHECK(ds4_test_tensor_to_entry(buf, 22) == 1, "blk.0.* -> entry 1");
 
-    /* "blk.42.ffn_norm.weight" -> entry 43 (layer 42 + 1). */
-    memcpy(buf, "blk.42.ffn_norm.weight", 22);
-    CHECK(ds4_test_tensor_to_entry(buf, 22) == 43, "blk.42.* -> entry 43");
+    /* "blk.60.ffn_norm.weight" -> entry 61 (layer 60 + 1). */
+    memcpy(buf, "blk.60.ffn_norm.weight", 22);
+    CHECK(ds4_test_tensor_to_entry(buf, 22) == 61, "blk.60.* -> entry 61");
 
-    /* "blk.43.x" — layer 43 is out of range (DS4_N_LAYER=43, layers are 0..42) */
-    memcpy(buf, "blk.43.x", 8);
-    CHECK(ds4_test_tensor_to_entry(buf, 8) == 0, "blk.43.* out of range");
+    /* "blk.61.x" is outside Pro's layers 0..60 */
+    memcpy(buf, "blk.61.x", 8);
+    CHECK(ds4_test_tensor_to_entry(buf, 8) == 0, "blk.61.* out of range");
 
-    /* "output.weight" -> entry 44 (head). */
+    /* "output.weight" -> entry 62 (head). */
     memcpy(buf, "output.weight", 13);
-    CHECK(ds4_test_tensor_to_entry(buf, 13) == 44, "output.weight -> entry 44");
+    CHECK(ds4_test_tensor_to_entry(buf, 13) == 62, "output.weight -> entry 62");
 
-    /* "output_norm.weight" -> entry 44. */
+    /* "output_norm.weight" -> entry 62. */
     memcpy(buf, "output_norm.weight", 18);
-    CHECK(ds4_test_tensor_to_entry(buf, 18) == 44, "output_norm.weight -> entry 44");
+    CHECK(ds4_test_tensor_to_entry(buf, 18) == 62, "output_norm.weight -> entry 62");
 
     /* "token_embd.weight" -> entry 0. */
     memcpy(buf, "token_embd.weight", 17);
     CHECK(ds4_test_tensor_to_entry(buf, 17) == 0, "token_embd.weight -> entry 0");
 
-    /* "mtp.0.foo" -> entry 44. */
+    /* "mtp.0.foo" -> entry 62. */
     memcpy(buf, "mtp.0.foo", 9);
-    CHECK(ds4_test_tensor_to_entry(buf, 9) == 44, "mtp.* -> head");
+    CHECK(ds4_test_tensor_to_entry(buf, 9) == 62, "mtp.* -> head");
 
-    /* "output_hc_*.weight" -> entry 44 (head bucket). Regression for review
+    /* "output_hc_*.weight" -> entry 62 (head bucket). Regression for review
      * finding that the three output_hc_ tensors were falling through to
      * entry 0 (embedding tier) instead of the head tier. */
     memcpy(buf, "output_hc_base.weight", 21);
-    CHECK(ds4_test_tensor_to_entry(buf, 21) == 44, "output_hc_base.weight -> head");
+    CHECK(ds4_test_tensor_to_entry(buf, 21) == 62, "output_hc_base.weight -> head");
     memcpy(buf, "output_hc_fn.weight", 19);
-    CHECK(ds4_test_tensor_to_entry(buf, 19) == 44, "output_hc_fn.weight -> head");
+    CHECK(ds4_test_tensor_to_entry(buf, 19) == 62, "output_hc_fn.weight -> head");
     memcpy(buf, "output_hc_scale.weight", 22);
-    CHECK(ds4_test_tensor_to_entry(buf, 22) == 44, "output_hc_scale.weight -> head");
+    CHECK(ds4_test_tensor_to_entry(buf, 22) == 62, "output_hc_scale.weight -> head");
     /* "output.weight" / "output_norm.weight" still classified to head. */
     memcpy(buf, "output.weight", 13);
-    CHECK(ds4_test_tensor_to_entry(buf, 13) == 44, "output.weight -> head");
+    CHECK(ds4_test_tensor_to_entry(buf, 13) == 62, "output.weight -> head");
     memcpy(buf, "output_norm.weight", 18);
-    CHECK(ds4_test_tensor_to_entry(buf, 18) == 44, "output_norm.weight -> head");
+    CHECK(ds4_test_tensor_to_entry(buf, 18) == 62, "output_norm.weight -> head");
     /* "token_embd.weight" stays at embedding (entry 0). */
     memcpy(buf, "token_embd.weight", 17);
     CHECK(ds4_test_tensor_to_entry(buf, 17) == 0, "token_embd.weight -> embedding");
@@ -186,7 +185,7 @@ static void test_null_config(void) {
     CHECK(n_entries == 0, "NULL cfg -> n_entries 0");
 }
 
-/* Build a synthetic, model-shaped tensor list: 1 embedding + 43 layers
+/* Build a synthetic, model-shaped tensor list: 1 embedding + 61 Pro layers
  * (each with 2 tensors of equal size) + 1 output head. Used by the
  * multi-tier tests to drive a realistic placement decision. */
 static int build_synthetic_model(ds4_test_fake_tensor *out, int cap) {
@@ -227,7 +226,7 @@ static void test_forced_two_tier_no_spill(void) {
     if (n <= 0) return;
 
     /* Sum approx total weights:
-     *   1 embed + 43 layers * 1024 MiB + 1 head ~ 43 GiB.
+     *   1 embed + 61 layers * 1024 MiB + 1 head ~ 61 GiB.
      * Pick budgets that force a transition. The packer also adds a
      * per-layer KV estimate that the engine computes; using equal
      * budgets sized below the total guarantees a transition without
@@ -237,12 +236,12 @@ static void test_forced_two_tier_no_spill(void) {
     cfg.n_gpus = 2;
     cfg.device_indices[0] = 0;
     cfg.device_indices[1] = 1;
-    /* Total synthetic weights ~ 44 GiB plus per-layer KV estimate from
+    /* Total synthetic weights ~ 61 GiB plus per-layer KV estimate from
      * ds4_context_memory_estimate(CUDA, 4096). Pick budgets near half
      * the total so the packer is forced to split across both tiers
      * but with enough headroom on each to avoid CPU spill. */
-    cfg.vram_bytes[0] = (size_t)28ull * 1024ull * 1024ull * 1024ull;
-    cfg.vram_bytes[1] = (size_t)40ull * 1024ull * 1024ull * 1024ull;
+    cfg.vram_bytes[0] = (size_t)40ull * 1024ull * 1024ull * 1024ull;
+    cfg.vram_bytes[1] = (size_t)56ull * 1024ull * 1024ull * 1024ull;
     cfg.safety_margin_bytes = 0;
 
     int placement[DS4_N_ENTRIES];
@@ -283,10 +282,12 @@ static void test_cpu_spill(void) {
     cfg.n_gpus = 2;
     cfg.device_indices[0] = 0;
     cfg.device_indices[1] = 1;
-    /* Tiny budgets: ~5 GiB each, but total weights are ~43 GiB +
-     * per-layer KV estimate, so most layers spill to CPU. */
-    cfg.vram_bytes[0] = (size_t)5ull * 1024ull * 1024ull * 1024ull;
-    cfg.vram_bytes[1] = (size_t)5ull * 1024ull * 1024ull * 1024ull;
+    /* Fit each tier's real Pro scratch, with room for only two GiB of
+     * weights. The remaining layers must spill rather than fail admission. */
+    const size_t small_budget = ds4_test_per_tier_graph_overhead_bytes(0) +
+        (size_t)2ull * 1024ull * 1024ull * 1024ull;
+    cfg.vram_bytes[0] = small_budget;
+    cfg.vram_bytes[1] = small_budget;
 
     int placement[DS4_N_ENTRIES];
     int multi_tier = 0;
@@ -335,7 +336,7 @@ static void test_placement_ctx_hint_scales(void) {
     int n = build_synthetic_model(tensors, 256);
     if (n <= 0) return;
 
-    /* Seed FLASH compress ratios so the planner sees ratio==4 on half
+    /* Seed Pro compress ratios so the planner sees ratio==4 on half
      * the layers; without this, min_ratio==est_ctx in test mode and the
      * per-layer KV / per-tier overhead don't scale meaningfully with
      * ctx. */
@@ -348,8 +349,8 @@ static void test_placement_ctx_hint_scales(void) {
     cfg.n_gpus = 2;
     cfg.device_indices[0] = 0;
     cfg.device_indices[1] = 1;
-    cfg.vram_bytes[0] = (size_t)24ull * 1024ull * 1024ull * 1024ull;
-    cfg.vram_bytes[1] = (size_t)24ull * 1024ull * 1024ull * 1024ull;
+    cfg.vram_bytes[0] = (size_t)36ull * 1024ull * 1024ull * 1024ull;
+    cfg.vram_bytes[1] = (size_t)36ull * 1024ull * 1024ull * 1024ull;
     cfg.safety_margin_bytes = 0;
 
     int placement_small[DS4_N_ENTRIES] = {0};
@@ -478,7 +479,7 @@ static void test_no_per_layer_scratch_double_count(void) {
      *   Scratch growth per layer (under bug): 2 * comp_cap * prefill_cap * 4
      *         ~ 2 * 16386 * 4096 * 4 = ~537 MB per layer at ctx=65536
      *         minus ~33 MB at ctx=4096 = ~504 MB delta per layer
-     *         x DS4_N_LAYER ~ ~21 GiB total.
+     *         x 61 Pro layers ~30 GiB total.
      *
      * 5 GiB bound discriminates cleanly: passes after fix, fails before. */
     const size_t small = ds4_test_compute_entry_bytes_sum(tensors, n, 4096);
@@ -608,8 +609,8 @@ static void test_cuda_tp_prefill_default_accounting(void) {
         ds4_test_planner_prefill_cap(100000, 0);
     const uint32_t cuda_tp_prefill =
         ds4_test_planner_prefill_cap(100000, 2048);
-    CHECK(ordinary_prefill == 4096,
-          "ordinary long-context prefill cap remains 4096");
+    CHECK(ordinary_prefill == 8192,
+          "ordinary Pro long-context prefill cap remains 8192");
     CHECK(cuda_tp_prefill == 2048,
           "CUDA TP long-context prefill cap is 2048");
     CHECK(ds4_test_planner_raw_cap(100000, cuda_tp_prefill) <
@@ -648,7 +649,9 @@ static int build_output_tp_head_move_model(ds4_test_fake_tensor *out, int cap) {
     for (int il = 0; il < DS4_N_LAYER_LOCAL; il++) {
         snprintf(names[n], sizeof(names[n]), "blk.%d.ffn_gate_exps.weight", il);
         out[n].name = names[n];
-        out[n].bytes = 3550ull * mib;
+        /* Preserve the former ~149 GiB total weight load over 61 layers;
+         * each blob is also divisible across Pro's 384 routed experts. */
+        out[n].bytes = 2502ull * mib;
         n++;
     }
 

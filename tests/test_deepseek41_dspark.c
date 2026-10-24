@@ -260,7 +260,7 @@ int main(int argc, char **argv) {
     model_open(&draft, argv[2], true, false);
     REQUIRE(support_model_checkpoint_compatible(&draft));
     const ds4_shape target_shape = g_ds4_shape;
-    g_ds4_shape = DS4_SHAPE_FLASH;
+    g_ds4_shape = DS4_SHAPE_PRO;
     fprintf(stderr, "Expected V4/V4.1 support-family rejection follows:\n");
     const bool wrong_family_rejected = !support_model_checkpoint_compatible(&draft);
     g_ds4_shape = target_shape;

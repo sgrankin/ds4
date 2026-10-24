@@ -23,7 +23,6 @@ pub const PrepareOptions = struct {
 
 pub const Model = struct {
     family: Family = .deepseek41,
-    legacy_pro: bool = false,
     max_effort_min_context: usize = 393216,
 
     pub fn id(self: Model) [:0]const u8 {
@@ -32,8 +31,8 @@ pub const Model = struct {
             .flint => "flint",
             .qwen => "qwen3.8-flash-next",
             .glm53 => "glm-5.3-flash",
-            .glm => "glm-5.2",
-            .deepseek => if (self.legacy_pro) "deepseek-v4-pro" else "deepseek-v4-flash",
+            .glm => "glm-5.3",
+            .deepseek => "deepseek-v4-pro",
         };
     }
 
@@ -96,15 +95,15 @@ fn aliasThinking(alias: ?[]const u8) ?bool {
     const name = alias orelse return null;
     const disabled = [_][]const u8{
         "deepseek-chat",              "qwen3.8-flash-next-chat",      "qwen3.8-flash-next-no-think",
-        "qwen3.8-flash-next-nothink", "qwen/qwen3.8-flash-next-chat", "glm-5.2-chat",
-        "glm-5.2-no-think",           "glm-5.2-nothink",              "zai/glm-5.2-chat",
+        "qwen3.8-flash-next-nothink", "qwen/qwen3.8-flash-next-chat", "glm-5.3-chat",
+        "glm-5.3-no-think",           "glm-5.3-nothink",              "zai/glm-5.3-chat",
         "glm-5.3-flash-chat",         "glm-5.3-flash-no-think",       "glm-5.3-flash-nothink",
         "zai/glm-5.3-flash-chat",
     };
     for (disabled) |candidate| if (std.mem.eql(u8, name, candidate)) return false;
     const enabled = [_][]const u8{
         "deepseek-reasoner",          "qwen3.8-flash-next-reasoner", "qwen/qwen3.8-flash-next-reasoner",
-        "glm-5.2-reasoner",           "zai/glm-5.2-reasoner",        "glm-5.3-flash-reasoner",
+        "glm-5.3-reasoner",           "zai/glm-5.3-reasoner",        "glm-5.3-flash-reasoner",
         "zai/glm-5.3-flash-reasoner",
     };
     for (enabled) |candidate| if (std.mem.eql(u8, name, candidate)) return true;
@@ -113,21 +112,20 @@ fn aliasThinking(alias: ?[]const u8) ?bool {
 
 pub fn knownModel(name: []const u8) bool {
     const names = [_][]const u8{
-        "flint",                            "flint-int4",
-        "deepseek-v4-flash",                "deepseek-v4.1-flash",
-        "deepseek-v4-pro",                  "qwen3.8-flash-next",
-        "qwen3.8-flash-next-chat",          "qwen3.8-flash-next-no-think",
-        "qwen3.8-flash-next-nothink",       "qwen3.8-flash-next-reasoner",
-        "qwen/qwen3.8-flash-next",          "qwen/qwen3.8-flash-next-chat",
-        "qwen/qwen3.8-flash-next-reasoner", "glm-5.2",
-        "glm-5.2-chat",                     "glm-5.2-no-think",
-        "glm-5.2-nothink",                  "glm-5.2-reasoner",
-        "zai/glm-5.2",                      "zai/glm-5.2-chat",
-        "zai/glm-5.2-reasoner",             "glm-5.3-flash",
-        "glm-5.3-flash-chat",               "glm-5.3-flash-no-think",
-        "glm-5.3-flash-nothink",            "glm-5.3-flash-reasoner",
-        "zai/glm-5.3-flash",                "zai/glm-5.3-flash-chat",
-        "zai/glm-5.3-flash-reasoner",
+        "flint",                        "flint-int4",
+        "deepseek-v4.1-flash",          "deepseek-v4-pro",
+        "qwen3.8-flash-next",           "qwen3.8-flash-next-chat",
+        "qwen3.8-flash-next-no-think",  "qwen3.8-flash-next-nothink",
+        "qwen3.8-flash-next-reasoner",  "qwen/qwen3.8-flash-next",
+        "qwen/qwen3.8-flash-next-chat", "qwen/qwen3.8-flash-next-reasoner",
+        "glm-5.3",                      "glm-5.3-chat",
+        "glm-5.3-no-think",             "glm-5.3-nothink",
+        "glm-5.3-reasoner",             "zai/glm-5.3",
+        "zai/glm-5.3-chat",             "zai/glm-5.3-reasoner",
+        "glm-5.3-flash",                "glm-5.3-flash-chat",
+        "glm-5.3-flash-no-think",       "glm-5.3-flash-nothink",
+        "glm-5.3-flash-reasoner",       "zai/glm-5.3-flash",
+        "zai/glm-5.3-flash-chat",       "zai/glm-5.3-flash-reasoner",
     };
     for (names) |candidate| if (std.mem.eql(u8, name, candidate)) return true;
     return false;

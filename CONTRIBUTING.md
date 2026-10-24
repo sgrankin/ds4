@@ -29,7 +29,6 @@ Useful narrower checks:
 
 ```sh
 ./ds4_test --server
-./ds4_test --logprob-vectors
 ./ds4_test --long-context
 ./ds4_test --tool-call-quality
 ./ds4_test --metal-kernels
@@ -40,9 +39,8 @@ What they cover:
 - `--server`: request parsing, chat rendering, streaming, tool-call parsing,
   thinking controls, KV disk-cache bookkeeping, and other server-side logic.
   This is the best quick check for API and prompt-rendering changes.
-- `--logprob-vectors`: compares local token bytes and top-logprob slices against
-  official DeepSeek V4 Flash continuation vectors. This catches tokenizer,
-  template, attention, and logits regressions.
+- Model-specific continuation fixtures catch tokenizer, template, attention
+  and logits regressions. Use the matching supported-model manifests below.
 - `--long-context`: runs a long-context story fact-recall regression from
   `tests/long_context_story_prompt.txt`. The model must retrieve spelled-out
   person-number assignments from a long prose prompt and return `Name=number`
@@ -54,8 +52,7 @@ What they cover:
 The runner defaults to `ds4flash.gguf`. Override paths when needed:
 
 ```sh
-DS4_TEST_MODEL=/path/to/model.gguf ./ds4_test --logprob-vectors
-DS4_TEST_VECTOR_FILE=/path/to/official.vec ./ds4_test --logprob-vectors
+DS4_TEST_MODEL=/path/to/model.gguf ./ds4_test --long-context
 DS4_TEST_LONG_PROMPT=/path/to/prompt.txt ./ds4_test --long-context
 ```
 
@@ -80,7 +77,10 @@ because of a kernel bug in macOS.
 
 For GGUF or quantization work, use the official-continuation scorer in
 `gguf-tools/quality-testing`. The test compares how much probability a local
-GGUF assigns to official DeepSeek V4 Flash continuations, token by token.
+GGUF assigns to matching official continuations, token by token. Original
+Flash and GLM 5.2 fixtures are historical; use the current model's manifest
+and checkpoint version. For example, the V4.1 commands below use its general
+continuation set.
 
 Build the scorer:
 
@@ -92,12 +92,12 @@ Then score old and new GGUFs against the same manifest and compare:
 
 ```sh
 gguf-tools/quality-testing/score_official OLD.gguf \
-  gguf-tools/quality-testing/data/manifest.tsv /tmp/old.tsv 4096
+  gguf-tools/quality-testing/deepseek-v4.1-flash-20260910-general/manifest.tsv .workspaces/old.tsv 4096
 
 gguf-tools/quality-testing/score_official NEW.gguf \
-  gguf-tools/quality-testing/data/manifest.tsv /tmp/new.tsv 4096
+  gguf-tools/quality-testing/deepseek-v4.1-flash-20260910-general/manifest.tsv .workspaces/new.tsv 4096
 
-python3 gguf-tools/quality-testing/compare_scores.py /tmp/old.tsv /tmp/new.tsv
+python3 gguf-tools/quality-testing/compare_scores.py .workspaces/old.tsv .workspaces/new.tsv
 ```
 
 Lower `avg_nll` is better. See

@@ -29,13 +29,13 @@ relative runtime files such as Metal kernels can be found.
 | `POST /v1/completions` | Text completions |
 | `POST /v1/messages` | Anthropic-style messages |
 
-The Flash and PRO names accepted by the model endpoints are compatibility
+The model names accepted by the model endpoints are compatibility
 aliases, not separate loaded models. The GGUF passed at startup selects the model.
 
 ```sh
 curl http://127.0.0.1:8000/v1/chat/completions \
   -H 'Content-Type: application/json' \
-  -d '{"model":"deepseek-v4-flash","messages":[{"role":"user","content":"Explain Redis streams."}],"stream":true}'
+  -d '{"model":"deepseek-v4.1-flash","messages":[{"role":"user","content":"Explain Redis streams."}],"stream":true}'
 ```
 
 Chat, Responses, and Anthropic support tools and SSE streaming. Reasoning is
@@ -68,14 +68,11 @@ The startup line reports both figures.
 
 | Backend/model | Decode execution |
 | --- | --- |
-| Metal, resident Flash | Native shared-expert/QKV batching where supported |
 | Metal, resident V4.1 Flash | Native decoding for 2-8 sessions |
 | Metal RDMA TP, V4.1 Flash | Native decoding for 3-8 sessions; ordered fallback for two |
 | Metal SSD streaming, V4.1 Flash | Ordered fallback |
-| Metal, GLM 5.2 | Ordered fallback |
 | Metal, GLM 5.3 | Native batching through 2051 visible tokens; ordered fallback afterward |
 | Metal, Qwen3.8 Flash Next | Native batching of the shared work; recurrent state, caches and PLE history stay per session |
-| CUDA, supported multi-GPU Flash TP layout | Native grouped decode and mixed prefill/decode |
 | Single-GPU CUDA, including Spark | Ordered fallback |
 
 Fallback executes the rows separately. It provides concurrency and scheduling
@@ -89,7 +86,8 @@ Session-batched serving uses ordinary target decoding, except Qwen3.8 on
 Metal, where `--mtp` also batches speculative decoding. Its
 `--mtp-exact-sampling` mode uses ordinary batches for nonzero-temperature
 requests. Other models do not use MTP/DSpark while session batching is active.
-For the eight-L40S example, see [CUDA GPUs](CUDA_MULTI_GPU.md#serve-multiple-users).
+For retained CUDA serving options, see
+[CUDA GPUs](CUDA_MULTI_GPU.md#serving-and-network-tensor-parallelism).
 
 ## Images
 

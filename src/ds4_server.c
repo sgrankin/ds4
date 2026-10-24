@@ -423,7 +423,7 @@ static void request_init(request *r, req_kind kind, int max_tokens) {
     r->kind = kind;
     r->api = API_OPENAI;
     r->model_syntax = SERVER_MODEL_SYNTAX_DEEPSEEK;
-    r->model = xstrdup("deepseek-v4-flash");
+    r->model = xstrdup("deepseek-v4.1-flash");
     r->max_tokens = max_tokens;
     r->top_k = 0;
     r->temperature = DS4_DEFAULT_TEMPERATURE;
@@ -633,10 +633,10 @@ static bool model_alias_disables_thinking(const char *model) {
             !strcmp(model, "qwen3.8-flash-next-no-think") ||
             !strcmp(model, "qwen3.8-flash-next-nothink") ||
             !strcmp(model, "qwen/qwen3.8-flash-next-chat") ||
-            !strcmp(model, "glm-5.2-chat") ||
-            !strcmp(model, "glm-5.2-no-think") ||
-            !strcmp(model, "glm-5.2-nothink") ||
-            !strcmp(model, "zai/glm-5.2-chat") ||
+            !strcmp(model, "glm-5.3-chat") ||
+            !strcmp(model, "glm-5.3-no-think") ||
+            !strcmp(model, "glm-5.3-nothink") ||
+            !strcmp(model, "zai/glm-5.3-chat") ||
             !strcmp(model, "glm-5.3-flash-chat") ||
             !strcmp(model, "glm-5.3-flash-no-think") ||
             !strcmp(model, "glm-5.3-flash-nothink") ||
@@ -648,8 +648,8 @@ static bool model_alias_enables_thinking(const char *model) {
            (!strcmp(model, "deepseek-reasoner") ||
             !strcmp(model, "qwen3.8-flash-next-reasoner") ||
             !strcmp(model, "qwen/qwen3.8-flash-next-reasoner") ||
-            !strcmp(model, "glm-5.2-reasoner") ||
-            !strcmp(model, "zai/glm-5.2-reasoner") ||
+            !strcmp(model, "glm-5.3-reasoner") ||
+            !strcmp(model, "zai/glm-5.3-reasoner") ||
             !strcmp(model, "glm-5.3-flash-reasoner") ||
             !strcmp(model, "zai/glm-5.3-flash-reasoner"));
 }
@@ -5095,15 +5095,16 @@ static void test_reasoning_effort_mapping(void) {
 
 static void test_model_alias_thinking_controls(void) {
     TEST_ASSERT(model_alias_disables_thinking("deepseek-chat"));
-    TEST_ASSERT(model_alias_disables_thinking("glm-5.2-chat"));
-    TEST_ASSERT(model_alias_disables_thinking("glm-5.2-no-think"));
-    TEST_ASSERT(model_alias_disables_thinking("zai/glm-5.2-chat"));
-    TEST_ASSERT(!model_alias_disables_thinking("glm-5.2"));
+    TEST_ASSERT(model_alias_disables_thinking("glm-5.3-chat"));
+    TEST_ASSERT(model_alias_disables_thinking("glm-5.3-no-think"));
+    TEST_ASSERT(model_alias_disables_thinking("zai/glm-5.3-chat"));
+    TEST_ASSERT(!model_alias_disables_thinking("glm-5.3"));
     TEST_ASSERT(model_alias_enables_thinking("deepseek-reasoner"));
-    TEST_ASSERT(model_alias_enables_thinking("glm-5.2-reasoner"));
-    TEST_ASSERT(model_alias_enables_thinking("zai/glm-5.2-reasoner"));
-    TEST_ASSERT(server_model_alias_known("glm-5.2-chat"));
-    TEST_ASSERT(server_model_alias_known("glm-5.2-reasoner"));
+    TEST_ASSERT(model_alias_enables_thinking("glm-5.3-reasoner"));
+    TEST_ASSERT(model_alias_enables_thinking("zai/glm-5.3-reasoner"));
+    TEST_ASSERT(server_model_alias_known("glm-5.3"));
+    TEST_ASSERT(server_model_alias_known("glm-5.3-chat"));
+    TEST_ASSERT(server_model_alias_known("glm-5.3-reasoner"));
     TEST_ASSERT(model_alias_disables_thinking("glm-5.3-flash-chat"));
     TEST_ASSERT(model_alias_disables_thinking("zai/glm-5.3-flash-chat"));
     TEST_ASSERT(model_alias_enables_thinking("glm-5.3-flash-reasoner"));
@@ -5111,6 +5112,12 @@ static void test_model_alias_thinking_controls(void) {
     TEST_ASSERT(server_model_alias_known("glm-5.3-flash"));
     TEST_ASSERT(server_model_alias_known("glm-5.3-flash-chat"));
     TEST_ASSERT(server_model_alias_known("glm-5.3-flash-reasoner"));
+    TEST_ASSERT(!server_model_alias_known("deepseek-v4-flash"));
+    TEST_ASSERT(!server_model_alias_known("glm-5.2"));
+    TEST_ASSERT(!server_model_alias_known("glm-5.2-chat"));
+    TEST_ASSERT(!server_model_alias_known("glm-5.2-reasoner"));
+    TEST_ASSERT(!model_alias_disables_thinking("glm-5.2-chat"));
+    TEST_ASSERT(!model_alias_enables_thinking("glm-5.2-reasoner"));
 }
 
 static void test_api_thinking_controls_parse(void) {
@@ -7777,7 +7784,7 @@ static void test_request_parsers_reject_malformed_duplicate_owned_fields(void) {
     char err[128];
     request r;
     bool ok = parse_anthropic_request(NULL, NULL,
-        "{\"model\":\"deepseek-v4-flash\",\"max_tokens\":1,"
+        "{\"model\":\"deepseek-v4.1-flash\",\"max_tokens\":1,"
         "\"system\":\"ok\",\"system\":\"bad\\q\","
         "\"messages\":[{\"role\":\"user\",\"content\":\"hello\"}]}",
         1, 100, &r, err, sizeof(err));
@@ -7785,7 +7792,7 @@ static void test_request_parsers_reject_malformed_duplicate_owned_fields(void) {
     if (ok) request_free(&r);
 
     ok = parse_chat_request(NULL, NULL,
-        "{\"model\":\"deepseek-v4-flash\",\"model\":\"bad\\q\","
+        "{\"model\":\"deepseek-v4.1-flash\",\"model\":\"bad\\q\","
         "\"max_tokens\":1,\"messages\":[{\"role\":\"user\","
         "\"content\":\"hello\"}]}",
         1, 100, &r, err, sizeof(err));
@@ -7793,7 +7800,7 @@ static void test_request_parsers_reject_malformed_duplicate_owned_fields(void) {
     if (ok) request_free(&r);
 
     ok = parse_responses_request(NULL, NULL,
-        "{\"model\":\"deepseek-v4-flash\",\"model\":\"bad\\q\","
+        "{\"model\":\"deepseek-v4.1-flash\",\"model\":\"bad\\q\","
         "\"max_output_tokens\":1,\"input\":\"hello\"}",
         1, 100, &r, err, sizeof(err));
     TEST_ASSERT(!ok);
@@ -7996,10 +8003,10 @@ static void test_tool_history_validation_handles_large_replays(void) {
 
 static void test_model_metadata_clamps_completion_to_context(void) {
     buf b = {0};
-    append_model_json_values(&b, "deepseek-v4-flash", "DeepSeek V4 Flash",
+    append_model_json_values(&b, "deepseek-v4.1-flash", "DeepSeek V4.1 Flash",
                              32768, 393216);
-    TEST_ASSERT(strstr(b.ptr, "\"id\":\"deepseek-v4-flash\"") != NULL);
-    TEST_ASSERT(strstr(b.ptr, "\"name\":\"DeepSeek V4 Flash\"") != NULL);
+    TEST_ASSERT(strstr(b.ptr, "\"id\":\"deepseek-v4.1-flash\"") != NULL);
+    TEST_ASSERT(strstr(b.ptr, "\"name\":\"DeepSeek V4.1 Flash\"") != NULL);
     TEST_ASSERT(strstr(b.ptr, "\"context_length\":32768") != NULL);
     TEST_ASSERT(strstr(b.ptr, "\"max_completion_tokens\":32768") != NULL);
     TEST_ASSERT(strstr(b.ptr, "\"ignore_eos\"") != NULL);

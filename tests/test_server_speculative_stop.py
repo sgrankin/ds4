@@ -221,7 +221,7 @@ def run_case(args, kind, records):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://127.0.0.1:8000")
-    parser.add_argument("--model", default="deepseek-v4-flash")
+    parser.add_argument("--model", default="deepseek-v4.1-flash")
     parser.add_argument("--temperature", type=float, default=0)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--case", choices=("all", "retrieval", "tool"), default="all")

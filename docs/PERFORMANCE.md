@@ -32,12 +32,12 @@ chunks, CUDA TP uses 2048, and long PRO prompts may use 8192. GLM chooses its
 own chunks and rejects `--prefill-chunk`. The strict DeepSeek API-vector test
 pins 2048; do not generalize that setting to every benchmark.
 
-## Recorded Flash Q2 baseline
+## Historical Original Flash Q2 baseline
 
-These existing sweeps use 2048-token intervals and 128 generation tokens per
-frontier. They are recorded baselines, not measurements of every subsequent
-commit. Full data: [M5 Max](../speed-bench/m5_max.csv) and
-[DGX Spark](../speed-bench/gb10.csv).
+These sweeps used the retired original Flash Q2 model, 2048-token intervals
+and 128 generation tokens per frontier. They are historical baselines, not
+current-model performance or release gates. Full data:
+[M5 Max](../speed-bench/m5_max.csv) and [DGX Spark](../speed-bench/gb10.csv).
 
 | Machine | Context | Prefill | Generation |
 | --- | ---: | ---: | ---: |

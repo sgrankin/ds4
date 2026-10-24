@@ -14,7 +14,6 @@ pub fn Backend(comptime c: type) type {
         pub fn model(self: Self) policy.Model {
             return .{
                 .family = if (c.ds4_engine_is_flint(self.engine)) .flint else if (c.ds4_engine_is_deepseek41(self.engine)) .deepseek41 else if (c.ds4_engine_is_qwen4(self.engine)) .qwen else if (c.ds4_engine_is_glm53(self.engine)) .glm53 else if (c.ds4_engine_is_glm_dsa(self.engine)) .glm else .deepseek,
-                .legacy_pro = c.ds4_engine_model_id(self.engine) == 1,
                 .max_effort_min_context = c.ds4_think_max_min_context(),
             };
         }

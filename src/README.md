@@ -136,8 +136,9 @@ private Engine/Session shells and borrow actual shared component addresses;
 Zig does not duplicate their layouts. These services are distinct from the
 separate C model implementations below.
 
-Original DeepSeek V4, GLM52, independent CPU references and explicit legacy or
-distributed diagnostic paths retain C implementations. Ordinary DS4.1, Flint,
+DeepSeek V4 Pro, full GLM 5.3 DSA, independent CPU references and explicit legacy
+or distributed diagnostic paths retain C implementations. Original V4 Flash and
+GLM 5.2 are retired. Ordinary DS4.1, Flint,
 Qwen and GLM53 Metal execution and prompt mapping have native owners.
 This build supports macOS Metal; other backend code still present for
 upstream correspondence is not a maintained alternate product. Migration

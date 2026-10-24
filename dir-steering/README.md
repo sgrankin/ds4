@@ -14,13 +14,13 @@ With no steering file or zero scales, ds4 follows the normal inference path.
 
 The file shape depends on the model:
 
-- DeepSeek V4 Flash: `43 x 4096`.
 - GLM 5.3 Flash: `45 x 4096`. The separate MTP predictor layer is omitted.
 - Qwen3.8 Flash Next: `48 x 2560`. FFN steering is applied to each
   hyper-connection branch of the residual; dumps average those branches
   at the last prompt token.
 
-GLM 5.2 steering is not implemented.
+Original DeepSeek V4 Flash and GLM 5.2 are retired. V4.1 Flash steering is
+not implemented; do not reuse original Flash vectors with it.
 
 ## Runtime Options
 
@@ -71,7 +71,7 @@ Build the vector:
 
 ```sh
 python3 dir-steering/tools/build_direction.py \
-  --profile deepseek-v4-flash \
+  --profile glm-5.3-flash \
   --ds4 ./ds4 \
   --model ds4flash.gguf \
   --good-file dir-steering/examples/succinct.txt \
@@ -135,8 +135,9 @@ the terse direction and collapse into repetition on some prompts.
 
 ## Observed Effect
 
-With the 100-pair vector built from the commands above, local greedy checks
-showed the expected behavior:
+These historical observations used the original V4 Flash model, which is now
+retired. They illustrate the technique; repeat the measurements for a new
+GLM or Qwen direction rather than expecting these word counts:
 
 - Prompt: `Explain why databases use indexes.`
 - `--dir-steering-ffn -1`: 67 words, one compact paragraph.

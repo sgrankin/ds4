@@ -8,7 +8,7 @@ experts from the GGUF. It trades speed for capacity; it does not remove the
 memory needed for other weights, activations, scratch, and the context.
 
 Metal supports streaming for DeepSeek and GLM. CUDA has streaming paths too,
-and ROCm supports GLM 5.2/5.3 streaming. Do not infer support for every model
+and ROCm supports GLM 5.3 streaming. Do not infer support for every model
 and tensor layout from the existence of the flag.
 
 ## Start with the automatic budget
@@ -24,8 +24,8 @@ local SSD and leave memory for the OS and other applications.
 Examples:
 
 ```sh
-# Flash Q2 on a smaller Mac.
-./download-model.nu ds4f-q2
+# V4.1 Flash Q2 on a 128 GB Mac.
+./download-model.nu ds41f-q2
 ./ds4 --ssd-streaming --ctx 32768 --nothink
 
 # GLM 5.3 Flash Q4 on a 128 GB Mac.
@@ -80,12 +80,9 @@ On a 128 GB M5 Max, with automatic cache sizing and no speculative decoding:
 | Model | Initial prefill | Continued prefill | Generation after each | Runs |
 | --- | ---: | ---: | ---: | --- |
 | GLM 5.3 Flash Q4_K, 177.77 GiB | 121 t/s | 104 t/s | 11.9 / 14.9 t/s | Three-run median |
-| DeepSeek Flash Vision Exp MXFP4, 145.26 GiB | 300 t/s | 263 t/s | 11.9 / 19.3 t/s | Single run |
 
-September 6, 2026. GLM used a 2K prompt and a 1K append; DeepSeek used 8K
-and a 4K append. Both generated 128 tokens at each frontier. DeepSeek's latest
-run uses an 86.2 GiB expert cache and updated eviction priorities; it is not
-directly comparable to the earlier 64-token measurement. Generation includes
+September 6, 2026. GLM used a 2K prompt and a 1K append, generating 128 tokens
+at each frontier. Generation includes
 the first-token wait. Cache reuse depends on the prompt, so these are
 workload references, not a speed
 guarantee for every model larger than RAM.

@@ -34,8 +34,7 @@ the container. Do not mix header versions as a general workaround.
 ## GPU-visible memory
 
 Check the memory pool reported by `rocminfo`. Some 128 GB configurations expose
-only about 62 GB to the GPU, which is insufficient for resident Flash Q2 plus
-runtime buffers. Firmware and kernel GTT/TTM settings control this limit.
+only about 62 GB to the GPU, which limits the model and runtime buffers that can remain resident. Firmware and kernel GTT/TTM settings control this limit.
 
 The native reference setup used these memory parameters:
 
@@ -49,18 +48,13 @@ before changing them. Keep RAM available for the OS even when the GPU can
 address most of it. Do not disable the IOMMU merely to copy another host's
 configuration; doing so changes device isolation.
 
-## Build and run Flash
+## Build
 
 ```sh
 make strix-halo
-./download-model.nu ds4f-q2
-./ds4 --rocm
 ```
 
-`make rocm` is an alias. Use the current 0731 Q2 download for a first run;
-larger mixed and Q4 models have substantially higher memory requirements.
-Flash's ROCm resident and pipeline paths should not be confused with the GLM
-SSD-streaming path.
+`make rocm` is an alias. Choose one of the model configurations below.
 
 ## DeepSeek V4.1 Flash
 
@@ -89,12 +83,10 @@ state. Begin with automatic cache sizing and a small context:
   --ssd-streaming --ctx 4096
 ```
 
-GLM 5.2 also supports ROCm streaming. Full-model GLM 5.2 inference requires it;
-distributed layer slices can be resident. See [SSD streaming](SSD_STREAMING.md)
-before adjusting the cache budget.
+Full GLM 5.3 also retains its ROCm streaming path. See
+[SSD streaming](SSD_STREAMING.md) before adjusting the cache budget.
 
-Both GLM 5.3 Flash and DeepSeek Flash Vision Experimental support images on
-ROCm. Add the matching encoder with `--vision FILE`, as described in
+GLM 5.3 Flash supports images on ROCm. Add the matching encoder with `--vision FILE`, as described in
 [models and vision](MODELS.md#vision).
 
 For a model-free routed-kernel check, use `make test-mxfp4-rocm`.

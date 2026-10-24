@@ -4,16 +4,46 @@ Last updated: 2026-10-24. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
-## Current task — model retirement and publication, authorized 2026-10-24
+## Current state — model retirement and main publication, 2026-10-24
 
 The user ended the ideas discussion and authorized retiring GLM 5.2 and original
 DeepSeek V4 Flash, then advancing and pushing main with the qualified native
 runtime stack. Keep V4 Pro in C and preserve shared full-GLM-5.3 DSA support.
-New constellation/voice implementations remain proposals. Cleanup and validation
-are in progress; publication has not happened yet. Origin main was fetched and
-is unchanged at `635d5d534e77f723ac3677e3840b783fddd24af4`. No model server was
-running at the start of this qualification. Preserve downloaded checkpoints and
-historical experiment evidence; remove retired active support and advertising.
+New constellation/voice implementations remain proposals. Source cleanup and
+qualification are complete. Main publication advances from
+`635d5d534e77f723ac3677e3840b783fddd24af4` through the qualified native runtime
+`06128389a665`, the separate design journal update and the cleanup commit
+containing this entry. Origin was fetched again with no divergence. Downloaded
+checkpoints and historical evidence are preserved; retired active support and
+advertising are removed. No model server was running at the start, and none
+is left running by qualification.
+
+Cleanup removes the old Flash profile, Flash-only scheduling/controllers and
+hotlist, GLM 5.2's builtin hotlist, retired download targets, request aliases and
+obsolete Flash-only launchers/fixtures. Shared DSA code is now explicitly the
+full GLM 5.3 profile: admission requires its GGUF `general.version="5.3"`,
+verified against the maintained converter and a 4 MiB header range from the
+catalog checkpoint. No full GLM 5.3 weights were downloaded or run. Pro's
+profile, hotlist and previous arithmetic fallback paths remain; neither Pro nor
+full GLM 5.3 has been hardware-qualified in this cleanup. Native DS4.1, Qwen,
+GLM 5.3 Flash and Flint arithmetic is unchanged.
+
+The placement fixture previously assumed 43 Flash layers; it now tests Pro's
+61 layers and is included in `tests/verify.nu` (132 checks pass). Host fixtures,
+server/agent tests, localhost recovery and download/launcher/driver checks pass.
+Raw logs stay under `.workspaces/model-retirement-20261024/`; a concise final
+report records scope and reproduction commands in
+[model retirement](../speed-bench/experiments/model-retirement-20261024/README.md).
+GPU state/kernels, Qwen/GLM state recovery, four repeated F16 suffix relocations
+and all 103 four-model Responses/WebSocket protocol checks pass. Qwen/GLM
+answer probes pass 14/14 each and Flint 16/16. DS4.1 remains 11/14, with complete
+check/answer records matching the frozen control's three existing disconnect
+answer failures. The trained DSpark admission/tensor oracle passes, including
+cross-family rejection, 49 finite tensors and exact repeated forward logits.
+All ten pressure-guarded children exit zero. `make all` is warning-free and all
+five root executables are byte-identical to the qualified installed binaries.
+Pro/full GLM 5.3 remain C paths; their native ports and new constellation/voice
+engines remain future work. GLM bounded-SSD performance remains backburnered.
 
 ## Native model constellation — direction clarified 2026-10-24
 
@@ -314,10 +344,11 @@ The user revised the cleanup direction after discussing V4.1 Pro:
 - Keep DeepSeek V4 Pro's existing C path for now, including helpers shared
   with it. Do not port it speculatively or remove it with old Flash support.
 - Retire V4 Flash and GLM 5.2-specific support where it can be separated from
-  retained models. No model code has been removed for this cleanup yet.
-- Full GLM 5.3 is a future native port target. Its possible legacy glm-dsa
-  compatibility shares the fixed79-layer GLM5.2 path; preserve useful shared
-  DSA code until its actual checkpoint/profile is qualified and ported.
+  retained models. The cleanup above implements this decision.
+- Full GLM 5.3 is a future native port target. Its legacy `glm-dsa` profile
+  shares the fixed 79-layer DSA layout; the cleanup preserves that C path and
+  verifies checkpoint identity/header admission, without claiming live-model
+  qualification.
 - Treat V4.1 Pro as a future model, with no guessed dimensions or promised
   compatibility. The native V4.1 family is the likely starting point; old
   Pro remains a useful reference for larger-model handling.
@@ -326,8 +357,8 @@ DeepSeek's [V4.1 announcement](https://api-docs.deepseek.com/news/news260910/)
 names a future V4.1-Pro. The later [API changelog](https://api-docs.deepseek.com/updates/)
 reverses V4 Pro's announced API retirement and keeps its service/billing.
 The user supplied [this release-status discussion](https://www.yottalabs.ai/post/deepseek-v4-1-pro-release-date-what-is-known-how-to-prepare-2026).
-These are retention decisions and future work, not implemented cleanup or
-support for an unreleased architecture. Main remains unchanged.
+These references explain the retention decisions; they do not establish support
+for an unreleased architecture. See the current task above for publication state.
 
 ## Shared runtime migration — completed 2026-10-24
 

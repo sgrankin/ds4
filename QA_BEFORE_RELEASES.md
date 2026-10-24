@@ -1,5 +1,10 @@
 # QA Before Releases
 
+Original DeepSeek V4 Flash (including Vision Experimental) and GLM 5.2 are
+retired. Their saved vectors and older performance results remain historical
+evidence, not current release gates. Use V4.1 Flash, GLM 5.3 Flash, Qwen, Flint,
+and the retained PRO/full GLM 5.3 paths for current qualification.
+
 This is the release gate for DwarfStar.  Run it before tagging or pushing a
 release build.  The goal is not to prove every code path exhaustively; it is to
 exercise the paths that have historically regressed: Metal graph inference,
@@ -76,15 +81,10 @@ in this system.
   release blocker. On CUDA, also start `ds4-server` once with
   `--gpu-vram auto` and the intended `--gpu-devices` list and preserve the
   resolved layout line.
-- Run the vector checks explicitly after any tokenizer, template, KV, kernel,
-  quantization, or prompt-rendering change:
-  `DS4_TEST_MODEL=/path/to/0731.gguf
-  DS4_TEST_VECTOR_FILE=tests/test-vectors/flash-0731/official.vec
-  ./ds4_test --logprob-vectors`
-  and
-  `DS4_TEST_MODEL=/path/to/0731.gguf
-  DS4_TEST_LOCAL_GOLDEN_FILE=tests/test-vectors/flash-0731/local-golden.vec
-  ./ds4_test --local-golden-vectors`.
+- After tokenizer, template, KV, kernel, quantization or prompt-rendering
+  changes, run the matching supported-model continuation fixtures described
+  below. Original Flash and GLM 5.2 vectors remain historical comparisons;
+  do not load their retired checkpoints as current release gates.
 - Run server tests when HTTP, SSE, prompt rendering, cache policy, or tool-call
   replay changed:
   `./ds4_test --server`.
@@ -133,24 +133,18 @@ numbers in the QA report so omissions are visible.
 9. Force a conversation past the in-memory KV threshold, restore the same disk
    checkpoint twice, and confirm the checkpoint file remains present after
    both successful loads. Corrupt checkpoints must still be rejected.
-10. Run `make dspark-verify-depth` with matching 0731 target and drafter files.
-    Strict capture must skip layers without a compressor and compare every
-    captured compressor layer. Repeat with the matching Vision Exp pair.
-    The test also verifies a six-token seed-plus-draft block and restores each
-    retained prefix, comparing compressor and index-cache row counts against
-    ordinary decode. Short output comparisons alone can miss stale frontiers.
-11. Send the same long GLM 5.2 prompt twice to one server session. The second
+10. Send the same long full GLM 5.3 prompt twice to one server session. The second
     request must report `cache_source: memory-rewind`, reuse through one token
     before the prompt boundary, and produce the same greedy output as a fresh
     session.
-12. Run `./ds4_test --think-tool-recovery`, then repeat through all three HTTP
+11. Run `./ds4_test --think-tool-recovery`, then repeat through all three HTTP
     APIs. A complete tool block inside unclosed reasoning must be recovered
     once, preceding prose must remain reasoning, and no synthetic continuation
     may be generated.
-13. Run `./ds4_agent_test` under ASan with agent-cache strings whose declared
+12. Run `./ds4_agent_test` under ASan with agent-cache strings whose declared
     lengths exceed the remaining file. Loading must fail without allocating
     the declared size, and a valid cache must still load.
-14. Run the server parser tests under UBSan with `NaN`, positive infinity, and
+13. Run the server parser tests under UBSan with `NaN`, positive infinity, and
     negative infinity where integer JSON fields are expected. Conversion must
     be defined and clamped, with no sanitizer report.
 
@@ -165,34 +159,9 @@ top-logprob slices, so do not replace them with one sampled chat answer.
   `make -C gguf-tools quality-score`.
 - Run `make test-quality-api` and
   `python3 tests/test_glm_reference_render.py` after scorer or fixture changes.
-- Match every Flash GGUF to the fixture captured from the same checkpoint.
-  The current release checkpoint is 0731 and uses
-  `tests/test-vectors/flash-0731/`; the older undated GGUF uses the preserved
-  `tests/test-vectors/flash-pre-0731/` fixture. Never report a cross-checkpoint
-  failure as a quality regression. New checkpoints require a new
-  `flash-CHECKPOINT/` directory before release QA; do not replace an older
-  fixture. Checkpoint-labelled GGUFs such as `-0731` must use the fixture with
-  the same label.
-- Run the tracked DeepSeek V4 Flash 0731 smoke vectors:
-  `DS4_TEST_MODEL=/path/to/0731.gguf
-  DS4_TEST_VECTOR_FILE=tests/test-vectors/flash-0731/official.vec
-  ./ds4_test --logprob-vectors`.
-  This covers short prompts and long-prompt attention cases. The runner defaults
-  to this fixture, but release logs should keep the path explicit.
-- Run the 100-case DeepSeek V4 Flash fixture for every released Flash GGUF:
-  `gguf-tools/quality-testing/score_official /path/to/deepseek-v4-flash.gguf gguf-tools/quality-testing/data/flash/manifest.tsv /tmp/flash.tsv 4096`.
-  This manifest is also for the 0731 checkpoint. A later checkpoint needs a
-  separately named 100-case fixture and must not be scored against this one.
-- Treat the native MXFP4 Flash GGUF as a separate release artifact. Run the
-  same 100-case fixture on Metal, resident CUDA, and CUDA SSD streaming when
-  those backends are advertised; compare each result with the Metal baseline.
-  For resident multi-GPU CUDA, pass the normal placement flags to the scorer,
-  for example `--gpu-vram auto --gpu-devices 0,2,4,6,1,3,5,7
-  --cuda-tensor-parallel`.
-- Run the 100-case GLM 5.2 OpenRouter fixture for every released GLM GGUF:
-  `gguf-tools/quality-testing/score_official models/GLM-5.2-UD-Q4_K_XL.gguf gguf-tools/quality-testing/data/glm52-openrouter-100/manifest.tsv /tmp/glm52-q4.tsv 4096`.
-  Current Q4 XL reference band: first-token match `95/100`, API top-1 agreement
-  about `0.942`, and API pair-order agreement about `0.880`.
+- Match every GGUF to its checkpoint-specific fixture. Original-Flash and
+  GLM 5.2 vectors are preserved for historical comparison only. V4.1 gates
+  and current checkpoint requirements are in section 17.
 - Run the 100-case GLM 5.3 Flash fixture separately for both release artifacts:
   `gguf-tools/quality-testing/score_official /path/to/GLM-5.3-Flash-Q2.gguf gguf-tools/quality-testing/data/glm53-flash-openrouter-zai-fp8-100/manifest.tsv /tmp/glm53-q2.tsv 4096`
   and repeat with `GLM-5.3-Flash-Q4_K.gguf`. The current Q2 reference is
@@ -211,10 +180,6 @@ top-logprob slices, so do not replace them with one sampled chat answer.
   Z.AI supplies no output logprobs; do not report zero logprob-error columns
   as API parity. The 100-case reference numbers above use a no-thinking
   prefix and are not directly comparable to rendered-prefix scores.
-- Run the GLM 5.2 fixture for reduced-precision GLM 5.2 release files. The Q2
-  routed reference is lower quality but should stay near first-token match
-  `92/100`, API top-1 agreement about `0.890`, and API pair-order agreement
-  about `0.800` unless the quantization changed deliberately.
 - Match every PRO GGUF to its checkpoint. The June preview uses
   `gguf-tools/quality-testing/data/pro/manifest.tsv`; the August 0813 release
   uses `gguf-tools/quality-testing/data/pro-0813/manifest.tsv`. Never interpret
@@ -232,12 +197,12 @@ top-logprob slices, so do not replace them with one sampled chat answer.
 - Keep the raw `summary` and `api_summary` lines in the release notes or QA log.
   Do not use stale manifests from `misc/` as release evidence.
 
-## 4. Metal Flash Path
+## 4. Metal DeepSeek Path
 
-Use the normal Flash GGUF that 128 GB users run.
+Use the supported V4.1 Flash GGUF and an admitted SSD cache/context.
 
 - One-shot CLI:
-  `./ds4 -m ds4flash.gguf --ctx 32768 --nothink -p "Explain C pointers in one paragraph."`
+  `./ds4 -m gguf/DeepSeek-V4.1-Flash-Q2.gguf --ssd-streaming --ctx 32768 --nothink -p "Explain C pointers in one paragraph."`
 - Thinking and max-thinking prompts:
   run one short coding prompt with default thinking and one with max thinking.
 - Long-context recall:
@@ -256,57 +221,10 @@ Use the normal Flash GGUF that 128 GB users run.
 
 ### DSpark / DeepSpec Runtime
 
-DSpark is opt-in, but it mutates the verifier, target-hidden capture, support
-model loading, and scheduler paths.  Run these whenever DSpark support,
-speculative verification, confidence/scheduler policy, target hidden capture,
-tiny routed-MoE verifier kernels, or shared `--mtp-model` support-model code changes:
-
-Use the 0731 DSpark support GGUF only with a Flash 0731 target. A support model
-from another checkpoint can have plausible acceptance statistics while
-producing a different greedy continuation.
-
-Normal DSpark runs commit accepted target-verifier state directly. The batched
-verifier and one-token decode use the same graph with different floating-point
-operation order, so `output_match=0` against the baseline is diagnostic rather
-than a failure. `--dspark-strict` remains the byte-identical target-only mode.
-
-- Default greedy acceptance fixture:
-  `DS4_DSPARK_MODEL=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf DS4_DSPARK_SUPPORT=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf make dspark-acceptance`.
-- 64-token guardrail:
-  `DS4_DSPARK_FIXTURE_TOKENS=64 DS4_DSPARK_MODEL=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf DS4_DSPARK_SUPPORT=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf make dspark-acceptance`.
-- Opportunistic sampled acceptance fixture:
-  `DS4_DSPARK_FIXTURE_TEMPERATURE=1 DS4_DSPARK_FIXTURE_TOP_P=0.95 DS4_DSPARK_FIXTURE_MIN_P=0.05 DS4_DSPARK_FIXTURE_SEED=12345 DS4_DSPARK_FIXTURE_TOKENS=32 DS4_DSPARK_MODEL=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf DS4_DSPARK_SUPPORT=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf make dspark-acceptance`.
-  Require proposals, a direct commit, and zero errors. Output identity with the
-  baseline is not expected: normally evaluated boundary tokens are sampled,
-  while verified DFlash/target greedy matches are committed without sampling.
-- Exact sampled acceptance fixture:
-  repeat the command above with `DS4_DSPARK_FIXTURE_EXACT_SAMPLING=1`.
-  This mode must preserve the requested target distribution. Seeded output
-  identity is not expected because speculative accept/reject decisions consume
-  additional random numbers.
-- `make test` includes a 100,000-draw distribution check for general `p/q`
-  correction and for the point-mass DFlash proposal used at runtime. Both
-  histograms must remain within the stated tolerance of the target
-  distribution.
-- Fixed-block direct partial commit:
-  `DS4_DSPARK_FIXTURE_CONFIDENCE=0 DS4_DSPARK_FIXTURE_TOKENS=8 DS4_DSPARK_FIXTURE_REQUIRE_PARTIAL=1 DS4_DSPARK_MODEL=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf DS4_DSPARK_SUPPORT=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf make dspark-acceptance`.
-- DSpark verifier invariant smoke:
-  `DS4_TEST_MODEL=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf DS4_DSPARK_SUPPORT=/Users/antirez/ds4/gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf make dspark-verify-depth`.
-- If shared support-model or verifier structures changed, also run legacy MTP:
-  `make mtp-verify-depth` with `DS4_TEST_MTP` set to a one-stage MTP support
-  GGUF, or confirm the target skips only because the optional file is missing.
-- Record `c_add` `accepted_draft`, `direct_full`, `direct_partial`,
-  `replay_fallbacks`, `errors=0`, `verify_layer`, `net_saved`, and
-  `output_match` for both 32-token and 64-token runs. At least one direct commit
-  must occur. A faster run with lower proposal quality is a regression unless
-  it was an intentional scheduler change.
-- If verifier MoE kernels changed, run one diagnostic `c_add` profile with
-  `DS4_DSPARK_VERIFY_SELECTED_PROFILE=1` or the Metal MoE stage profiler and
-  record the selected-expert footprint or stage timing in the DSpark log.
-- On Metal, benchmark predictable code and deliberately unpredictable prose at
-  temperature 1. Compare ordinary, opportunistic and exact-sampled decoding;
-  inspect output quality and acceptance as well as throughput. Low acceptance
-  can make speculation slower than ordinary decode.
+Use the V4.1 DSpark qualification matrix in section 17 with a checkpoint-matched
+support model. The retired 0731 and Vision Experimental support files are not
+current inputs. The model-free distribution and kernel tests remain useful
+shared regression checks.
 
 ### Session Microbatching And Metal TP
 
@@ -314,23 +232,16 @@ Run these gates whenever session scheduling, batched decode, mixed
 prefill/decode, QKV projection, shared or routed experts, tensor parallelism,
 or backend fallback selection changes.
 
-- On a single Metal machine, run the full-vocabulary exact-logit oracle with
-  2, 4, 8, and 16 sessions:
-  `DS4_TEST_MODEL=/path/to/ds4flash.gguf DS4_TEST_SESSION_COUNT=N make test-metal-session-batch`.
-  Compatible resident Q8 runs must report `native_shared=1 native_qkv=1` at
-  every tested count. The 16-session run covers row counts above the old
-  artificial eight-row limit.
-- Repeat the four-session oracle with
-  `DS4_METAL_SESSION_BATCH_SHARED=0` and with
-  `DS4_METAL_SESSION_BATCH_QKV=0`. The first run must use the complete fallback;
-  the second may batch the shared expert only. Both must remain bit-exact.
+- On a single Metal machine, run the model-specific full-vocabulary logit
+  oracle for supported session counts. V4.1, GLM 5.3 Flash and Qwen have
+  different native batching and fallback limits; use their sections below.
 - The oracle must cover reversed row ordering, at least six decode steps, and a
   mixed prefill/decode call. Any nonzero differing-logit count is a blocker
   unless the model-specific section below declares a measured full-logit
   tolerance; argmax-only agreement is insufficient. When
   `DS4_TEST_LIVE_CONTROLS=1` is used, its interleaved serial evaluations are a
   correctness stress and must remain excluded from the reported batch timing.
-- Benchmark 1, 2, 4, 8, and 16 simultaneous resident sessions on the same host
+- Benchmark the supported simultaneous resident session counts on the same host
   and model. Record model-step latency and aggregate decode tokens/second, not
   only request completion speed. The current Metal path batches QKV and part of
   the shared expert, but still runs attention, routed experts, shared down, and
@@ -369,8 +280,7 @@ or backend fallback selection changes.
   returns. Startup must report the default `gate-timeout=750ms`; both paused
   runs must fail the gate and invalidate all affected sessions without a Metal
   GPU watchdog error. Before accepting that deadline, run one normal
-  GLM-5.3 batch over each transport and one GLM-5.2 IQ2 RDMA prompt using the
-  larger 108 GiB shard. `DS4_TP_GATE_TIMEOUT_MS` is a diagnostic override, not
+  GLM-5.3 batch over each transport and a supported large-shard model prompt. `DS4_TP_GATE_TIMEOUT_MS` is a diagnostic override, not
   a setting required for normal inference.
 - Set `DS4_TEST_TP_IDENTITY_MISMATCH=1` on the test leader once and require both
   ranks to reject the hello before inference. Also reflect a leader hello from
@@ -378,7 +288,7 @@ or backend fallback selection changes.
   both claim the coordinator rank. Separately point a worker at an unused port
   with `DS4_TP_TIMEOUT_SEC=1`; it must return a connection error rather than
   retrying indefinitely.
-- Verify unsupported combinations explicitly. GLM 5.2, GLM 5.3 after the
+- Verify unsupported combinations explicitly. GLM 5.3 after the
   2,051-token dense-attention limit, DSpark support models, quality/reference modes,
   and CPU-router modes must use their established exact fallback or reject the
   combination before evaluation. GLM 5.3 below the boundary, including
@@ -397,29 +307,17 @@ PRO support is experimental, but release builds must not break it silently.
   touching model shape, tensor lookup, routed expert mapping, template logic,
   and KV payload compatibility.
 
-## 6. GLM 5.2 And GLM 5.3
+## 6. Full GLM 5.3 And GLM 5.3 Flash
 
 GLM has a different template, model shape, MTP block, attention layout,
 tensor-parallel gate width, and streaming policy. Flash or PRO success does not
 substitute for this matrix.
 
-- On a 512 GB Metal machine, run short greedy prompts with both the Q4 XL and
-  reduced-precision Q2 release GGUFs. Cover thinking and no-thinking templates,
-  and verify the server reports the GLM model family rather than a DeepSeek
-  alias internally.
-- Run the OpenRouter smoke vectors explicitly:
-  `DS4_TEST_MODEL=/path/to/glm.gguf
-  DS4_TEST_VECTOR_FILE=tests/test-vectors/glm-openrouter/official.vec
-  ./ds4_test --logprob-vectors`.
-  Preserve the report as a diagnostic. The hosted vectors include very
-  low-probability top-20 tails whose membership is not stable after GLM routed
-  expert quantization, so an individual `official top token missing locally`
-  assertion is not by itself a release blocker. Selected-token mismatches must
-  remain consistent with the model's 100-case first-token band, and the
-  section 3 scorer is the release gate for aggregate GLM quality.
-- Run the 100-case Q4 XL and Q2 official fixtures from section 3 and preserve
-  both `summary` and `api_summary` lines. Compare against the documented Q4 and
-  Q2 reference bands independently.
+- On a sufficiently large Metal machine, run short greedy prompts with the
+  retained full GLM 5.3 Q2 GGUF. Cover thinking and no-thinking templates,
+  and verify the server reports the GLM family rather than a DeepSeek alias.
+  Use a matching full-model fixture; the retired GLM 5.2 vectors do not
+  establish full GLM 5.3 numerical quality.
 - Run `tests/glm_long_context_smoke.nu` with the release-advertised context on
   the 512 GB Metal host. The generated continuation must begin with `>` and
   contain none of the known token-corruption markers.
@@ -428,7 +326,7 @@ substitute for this matrix.
   a non-MTP run, require clean speculative cycles, and record acceptance and
   timing. Also run once with MTP disabled to prove ordinary decode remains the
   default.
-- Run the Metal session oracle with 2 and 4 GLM 5.2 sessions. It must report
+- Run the Metal session oracle with 2 and 4 full GLM 5.3 sessions. It must report
   `family=glm native_shared=0 native_qkv=0` and remain exact, including mixed
   prefill/decode; the DeepSeek-only row-grid kernels must not activate.
 - Run resident and SSD-streaming GLM Q2 prompts with the same greedy input.
@@ -446,9 +344,6 @@ substitute for this matrix.
   match the accepted single-host graph. A routed type without ownership-aware
   kernels must still reject clearly before evaluation rather than loading a
   partial split or hanging.
-  The released GLM 5.2 IQ2_XXS file keeps `indexer.proj.weight` in FP32. Its
-  loader and Metal graph must accept that established layout; GLM 5.3 may use
-  its quantized or BF16 indexer projection instead.
 - With explicit permission for the current QA pass, run one resident GLM Q2
   prompt, a long-context prompt, integrated GLM MTP, and concurrent server
   requests on the eight-GPU CUDA host. Use ordinary eight-GPU layer placement
@@ -480,7 +375,7 @@ substitute for this matrix.
 ### GLM 5.3 Flash
 
 GLM 5.3 adds mHC, recurrent KDA, a pool-4 DSA indexer, and a different MTP
-block. A GLM 5.2 pass does not cover these paths.
+block. A full GLM 5.3 pass does not cover these Flash-specific paths.
 
 - Run the section 3 GLM 5.3 Q2 and Q4 100-case fixtures before and after any
   graph, quantization, attention, KDA, mHC, TP, or cache change.
@@ -686,13 +581,8 @@ the vision graph, multimodal prompt spans, or image-aware KV identity.
 
 SSD streaming is a capacity path, so test both correctness and user experience.
 
-- Flash q2/q2-q4 streaming:
-  `./ds4 -m ds4flash.gguf --ssd-streaming --ssd-streaming-cache-experts 32GB -p "..."`
-- Regression test mixed-quant Flash SSD streaming. Use the mixed q2/q4 GGUF
-  with boosted Q4 routed-expert layers and a prompt long enough to exercise the
-  selected-address prefill path; it must not fail with "model range is not
-  covered by mapped model views":
-  `./ds4 -m gguf/DeepSeek-V4-Flash-Layers37-42Q4KExperts-OtherExpertLayersIQ2XXSGateUp-Q2KDown-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-fixed-0731.gguf --ssd-streaming --ssd-streaming-cache-experts 16GB --ctx 4096 --tokens 1 --nothink --prompt-file /tmp/ds4_600tok_prompt.txt`.
+- V4.1 Flash Q2 streaming:
+  `./ds4 -m gguf/DeepSeek-V4.1-Flash-Q2.gguf --ssd-streaming --ssd-streaming-cache-experts 32GB -p "..."`.
 - Cold streaming measurement:
   run once with `--ssd-streaming-cold` and verify no deadlock, missing expert,
   or impossible slowdown.
@@ -909,15 +799,9 @@ Do not use high-performance Hugging Face Xet mode while a model is resident.
   invalid negative selections, and Q2 down assignments spanning several launch
   tiles. Deduplicated gate/up rows must match separate one-token calls exactly.
   Run the Q8 scratch test too: every small batch must equal its separate rows.
-  Repeat the section 4 greedy, opportunistic, exact-sampling and forced-partial
-  fixtures with matching 0731 weights. CUDA retains all five intermediate
-  prefixes of a six-token seed/draft block; ordinary partial accepts must not
-  need replay. Keep the scheduler's seed count separate from successful drafts.
-  Exercise a live speculative cache before and after continued prefill at
-  2K, 4K and 8K frontiers. Also compare the official continuation scorer with
-  `DS4_METAL_PREFILL_CHUNK=6` in both control and candidate builds: this shared
-  diagnostic override exercises the small CUDA batches, unlike ordinary
-  teacher-forced single-token scoring alone.
+  Keep these model-free arithmetic fixtures distinct from supported-model
+  qualification. Use the V4.1 checks in section 17 for live inference and
+  speculation; retired Flash support files are not substitutes.
 - For native MXFP4 changes, run
   `make test-mxfp4-cuda CUDA_ARCH=native` on the multi-GPU CUDA host only after
   receiving explicit permission for `192.168.60.250`, and
@@ -932,51 +816,9 @@ Do not use high-performance Hugging Face Xet mode while a model is resident.
   Run memcheck and racecheck when changing its shared-memory staging.
   For shared MMVQ changes, also run `make test-mmvq-rocm` on Strix Halo.
   These primitive tests do not replace full-model continuation scoring.
-- With that permission, run the native MXFP4 GGUF resident on the multi-GPU
-  host, and run it with `--ssd-streaming` on DGX Spark. Use the same greedy prompt and continuation
-  fixture on both. Record prefill and generation speed, require finite logits,
-  and compare quality with the Metal MXFP4 result. Both MMQ and MMVQ must keep
-  eight-bit activations. Compare ordinary scalar decoding with the actual
-  multi-row speculative verifier against checkpoint-matched official
-  continuations, reporting teacher-forced NLL and API top-token agreement.
-  A small prefill chunk alone does not exercise the verifier's cache commits.
-- Run a short CLI prompt with the Flash GGUF and record generation t/s.
-- Run a longer prompt that exercises routed experts past a few thousand tokens.
-- Run `tests/test_deepseek_indexer FLASH_Q2_GGUF` on one otherwise idle GPU.
-  It checks that decode selects the model's 512 highest-scoring compressed
-  rows across the attention boundaries, including continued prefill.
-- With explicit permission for this QA pass, run the full-vocabulary decode
-  oracle on the eight-GPU CUDA host:
-  `DS4_TEST_MODEL=/path/to/flash.gguf make test-cuda-session-batch`.
-  Preserve the per-batch timing for 2, 4, and 8 rows and require
-  `nonexact_logits=0`. Run the released Q4 file and the reduced-precision Q2
-  file: Q4 exercises grouped routed/shared stages, while unsupported Q2 native
-  MoE shapes must retain the ordered exact fallback.
-- With CUDA TP attention enabled, compatible Q4 runs must use grouped
-  attention-core, QKV, KV-store, and attention-post by default and remain
-  full-vocabulary exact against isolated decode. On the eight-L40S host, the
-  16-row decode step must remain above 110 aggregate tokens/s. Repeat once with
-  `DS4_CUDA_TP_ATTN=0` only as rollback coverage; it is not the production
-  configuration.
-- Run native mixed prefill/decode at the default frontier and at compressed
-  context:
-  `DS4_TEST_MODEL=/path/to/flash.gguf make test-cuda-mixed-batch` and
-  `DS4_TEST_CONTEXT=4096 DS4_TEST_MIXED_INITIAL=2048 DS4_TEST_MIXED_ROUNDS=8
-  DS4_TEST_MODEL=/path/to/flash.gguf make test-cuda-mixed-batch`.
-  Every round must report exact logits and `mode=native`; a serialized fallback
-  is a failure for the eight-GPU TP/EP topology. Under CUDA TP attention, the
-  native mixed step must use the same exact grouped decode stages when their
-  capability checks pass; record correctness and speedup separately. Also
-  force an 800-row prefill quantum with
-  `DS4_TEST_ALLOW_FALLBACK=1`; it must report the serialized safety fallback.
-- With explicit permission for the eight-GPU host, start `ds4-server` with 8
-  and 16 batched sessions and issue at least that many simultaneous requests
-  with mixed prompt lengths. Verify no session mix-up, deadlock, or starvation
-  and record aggregate generation throughput.
-- On DGX Spark, verify the same public batch API and server concurrency use the
-  single-GPU fallback without creating peer-only TP/EP state. The eight-GPU
-  native oracle is not a valid Spark test because its topology is intentionally
-  unavailable there.
+- Use section 17 for supported V4.1 CUDA inference and batching checks,
+  section 18 for Qwen, and section 6 for GLM. The retired original Flash
+  indexer and paired eight-GPU batching oracles are not current release gates.
 - For GLM 5.3, use the resident Q2 artifact only. Require the dedicated CUDA
   primitive and continuation gates in section 6, then record prefill,
   generation, MTP, continued-prefill, server aggregate throughput, and peak
@@ -1031,42 +873,18 @@ a substitute for CUDA or Metal release testing.
 - After MXFP4 or ROCm routed-MoE changes, run `make test-mxfp4-rocm`. Require
   zero `failures` for both `mid` and `out` at 1, 3, 32, 128, and 512 tokens,
   followed by `MXFP4 ROCm routed MoE: PASS`.
-- Use the q2 Flash imatrix GGUF for release smoke tests:
-  `DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf`.
-- Do not use the mixed q2-q4 or Q4 Flash GGUFs for routine Strix Halo QA yet.
-  They are dangerous on this machine for now because the ROCm path can hit
-  system OOM instead of failing cleanly.
-- Run a short CLI prompt:
-  `./ds4 -m gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf --ctx 4096 --nothink -p "Reply with exactly: OK"`.
-- For DeepSeek Flash and GLM 5.3 Flash decode, confirm the default path uses
+- For GLM 5.3 Flash decode, confirm the default path uses
   prequantized Q8 activations. Repeat the same greedy run with
   `DS4_ROCM_Q8_PREQUANT_DECODE=0` only as a diagnostic control. The default
   must be materially faster and must still pass the matching continuation-
   quality gate. `--quality` must stay on the full-FP32 activation path.
-- Test DSpark with the matched 0731 target and support files:
-  `DS4_BIN=./ds4 DS4_DSPARK_MODEL=gguf/DeepSeek-V4-Flash-IQ2XXS-w2Q2K-AProjQ8-SExpQ8-OutQ8-chat-v2-imatrix-0731.gguf DS4_DSPARK_SUPPORT=gguf/DeepSeek-V4-Flash-DSpark-support-0731.gguf DS4_DSPARK_FIXTURE_TOKENS=64 nu tests/dspark_acceptance_fixture.nu`.
-  Require proposals, accepted draft tokens, at least one direct state commit,
-  zero verifier errors, and no unexplained replay fallbacks. With
-  `DS4_DSPARK_SPEC_LOG=1`, a five-of-six commit may report `prefix-extended`:
-  ROCm retains four prefix snapshots and replays just the fifth token.
-  This bounded fallback is expected; other replays need investigation.
-  Record ordinary and DSpark
-  generation speed separately. When direct verifier-state handling changes,
-  also compare with a test-only build of its immediate replay predecessor; the
-  direct build must be faster. DSpark is not currently expected to beat
-  ordinary ROCm decode, so do not describe it as a ROCm speedup without a new
-  measurement.
-- Repeat one opportunistic DSpark run with
-  `--temp 1 --top-p 0.95 --min-p 0.05`, then repeat it with
-  `--mtp-exact-sampling`. The current 128-token code references are
-  16.26 t/s ordinary, 12.28 t/s opportunistic, and 13.52 t/s exact, with no
-  verifier errors. This is a correctness gate, not a ROCm speed claim; the
-  ROCm batched verifier is still too expensive.
+- Original Flash DSpark measurements are historical only. For V4.1, use its
+  matched support model and the model-specific qualification in section 17.
 - Run one longer prompt if ROCm kernels, backend hooks, tensor loading, model
   cache, KV cache, or graph prefill code changed.
 - Run the GLM Q2 release model through ROCm SSD streaming with at least four
   generated tokens:
-  `./ds4 --rocm -m gguf/GLM-5.2-UD-Q2_K_RoutedQ2K.gguf --ssd-streaming --ctx 4096 --nothink --tokens 4 -p "Reply with exactly: OK"`.
+  `./ds4 --rocm -m gguf/GLM-5.3-UD-IQ2_XXS_RoutedIQ2XXS_blk78Q2K.gguf --ssd-streaming --ctx 4096 --nothink --tokens 4 -p "Reply with exactly: OK"`.
   Startup must select a cache budget that passes the memory guard without an
   override, and both compact indexed prefill and decode must complete.
 - Repeat the ROCm GLM smoke with an overlarge byte target and with a one-expert
@@ -1120,7 +938,7 @@ Disk KV cache bugs are high impact for server users.
 The server must keep compatibility across OpenAI, Responses, and Anthropic
 clients.
 
-- `GET /v1/models/deepseek-v4-flash` and `GET /v1/models/deepseek-v4-pro`
+- `GET /v1/models/deepseek-v4.1-flash` and `GET /v1/models/deepseek-v4-pro`
   should both serve whichever GGUF is loaded.
 - Test OpenAI chat completion, OpenAI Responses, and Anthropic messages.
 - After tool-parser changes, run `make test-frontends` and
@@ -1183,10 +1001,6 @@ clients.
   at least twelve short four-request waves against the same four-slot server.
   Every pair must remain deterministic and the server must answer `/v1/models`
   after malformed JSON and an over-context request.
-- Only after receiving explicit permission for this QA pass, start
-  `ds4-server` on the eight-L40S CUDA TP target with the release TP options and
-  verify all 16 100k-context sessions allocate. Startup must report a
-  2048-token prefill cap; a silent fallback to 4096 is an OOM regression.
 - Test `--trace` and confirm rendered prompts, cache decisions, generated text,
   and tool-parser events are useful without leaking unrelated state.
 
@@ -1271,8 +1085,9 @@ does not establish that speculative cache reuse is efficient.
 
 - Test `download-model.nu` in a temporary directory so local weights are not
   overwritten.
-- Test one Flash target and one PRO target enough to verify URL, resume, Hugging
-  Face CLI/curl behavior, file naming, and symlink policy.
+- Run the offline downloader fixtures for V4.1, Qwen and Flint. Verify HF
+  resume, size/checksum checks, split assembly, file naming, and symlink policy.
+  Confirm PRO and full GLM 5.3 targets remain in the catalog.
 - Verify legacy removed targets fail clearly.
 - Verify README model names match the script and Hugging Face repository.
 
@@ -1320,11 +1135,12 @@ append about 68 t/s, decode at 6144 about 11.7 t/s. Repeat as three-run medians.
 The rendered long Z.AI fixture references are NLL 0.661721610 on ROCm and
 0.680093110 on CUDA, both 6/8 first-token matches. Use section 3's template.
 
-For Flash 0731 Q2 on ROCm, record cold and warm first-request costs separately.
-Reference warm 2K prefill/append is about 207 t/s and 4K decode about 14.7 t/s;
-required-buffer admission precedes optional weight expansion. Include that
-expansion in startup-to-first-response timing rather than hiding it in warmup.
-The matching 100-case reference is NLL 0.398181736, 56/100 first-token matches.
+### Historical Retired-Model Measurements
+
+These values describe retired original Flash checkpoints, not current release
+gates. Flash 0731 Q2 on ROCm had warm 2K prefill/append about 207 t/s and 4K
+decode about 14.7 t/s. Its matching 100-case reference was NLL 0.398181736,
+56/100 first-token matches; startup included optional weight expansion.
 
 Single-Spark resident Flash 0731 Q2, Promessi Sposi, 9216 allocated context,
 128 teacher-forced decode tokens, three-run medians:
@@ -1336,8 +1152,8 @@ Single-Spark resident Flash 0731 Q2, Promessi Sposi, 9216 allocated context,
 | 8192 | 931.17 t/s | 15.97 t/s |
 
 Single-Spark DSpark references use matched 0731 Q2 weights, 4096 allocated
-context, prefill chunk 512 and 256 output tokens. Use the C hash-table and
-unpredictable-prose prompts and sampling settings below:
+context, prefill chunk 512 and 256 output tokens, with the C hash-table and
+unpredictable-prose prompts:
 
 | Workload | Ordinary decode | DSpark |
 | --- | ---: | ---: |
@@ -1345,10 +1161,8 @@ unpredictable-prose prompts and sampling settings below:
 | C hash table, temperature 1 | 19.53 t/s | 29.98 t/s |
 | Unpredictable prose, temperature 1 | 19.53 t/s | 18.81 t/s |
 
-Temperature 1 here uses opportunistic sampling, not exact sampling. Repeat
-live-frontier sweeps at 2K/4K/8K as well; high short-code acceptance does not
-establish a general speedup. Use the six-token scorer and continued-state
-oracles in section 8 when changing small-batch CUDA kernels.
+Temperature 1 here used opportunistic sampling, not exact sampling. Short-code
+acceptance did not establish a general speedup.
 
 ### Metal Kernel And Speculation Gates
 
@@ -1361,49 +1175,15 @@ double-buffered TensorOps kernel needs 8 KiB, not 4 KiB.
 For M5 routed-prefill changes, run `make test-metal-moe-prefill`. It compares
 gate/up, FP16 intermediate, expert partials and final outputs against the
 unpacked path, including empty experts, tile tails and scratch reuse.
-Then build `make metal-prefill-variant-bench metal-decode-schedule-bench` and
-use a resident Flash Q2 or mixed Q2/Q4 model for interleaved full-logit checks:
 
-```sh
-speed-bench/metal_prefill_variant_bench -m "$MODEL" \
-  --prompt-file speed-bench/promessi_sposi.txt --prefix-tokens 2048 \
-  --warmup-tokens 2048 --candidate-env DS4_METAL_DISABLE_ROUTED_MPP_PACKED
-speed-bench/metal_prefill_variant_bench -m "$MODEL" \
-  --prompt-file speed-bench/promessi_sposi.txt --prefix-tokens 16384 \
-  --initial-tokens 12288 --warmup-tokens 2048 \
-  --candidate-env DS4_METAL_DISABLE_ROUTED_MPP_PACKED
-speed-bench/metal_decode_schedule_bench -m "$MODEL" \
-  --prompt-file speed-bench/promessi_sposi.txt --prefix-tokens 8192 \
-  --ctx 9216 --tokens 256 --candidate-env DS4_METAL_DISABLE_ROUTED_MPP_PACKED
-```
+Use section 17 for current V4.1 model-level timing and speculation checks.
+Do not retarget original Flash-specific benchmark executors merely by changing
+the GGUF filename.
 
-Here `control` is the default fast path; `candidate` disables packing.
-Require exact logits and no decode regression. Packing is an M5
-resident-prefill optimization; test streaming and conventional kernels
-separately when their dispatch or shared buffers change.
+### Historical Original Flash Metal Speculation
 
-For Metal DSpark changes, test matching 0731 and Vision Exp target/drafter
-pairs. Run the acceptance fixture at temperature 0, at temperature 1 with
-forced partial acceptance, and with `--mtp-exact-sampling`. Require zero
-verifier errors and consistent seed/draft counters. A batched seed is a
-normally chosen target token, not a successful draft prediction.
-
-Resident M5 Q2 uses seed batching for longer proposals; short proposals first
-decode the seed normally. Poor acceptance windows pause drafting for 32
-cycles before trying again. `DS4_DSPARK_SEED_BATCH=0` retains the previous
-schedule for diagnostic comparisons. This also applies to two-M5 TP with Q2,
-mixed Q2/Q4 and MXFP4 experts. Streaming, exact sampling and other device/weight
-combinations retain their existing defaults.
-
-Compare code and prose, not just a high-acceptance copy prompt. Use at least
-256 generated tokens at temperatures 0 and 1; also sweep 2K/4K/8K/16K live
-frontiers with continued prefill. Record ordinary decode, old DSpark and
-default DSpark separately. Seed batching must not make low-acceptance cases
-worse than the previous DSpark path. It does not promise to beat ordinary
-decode on every prompt. Run the six-session full-logit batch oracle too,
-since a six-row verifier shares routed kernels with session batching.
-
-M5 DSpark reference medians, 256 generated tokens, 4096 allocated context:
+M5 DSpark reference medians for the retired original Flash models, 256 generated
+tokens, 4096 allocated context:
 
 | Model and prompt | DSpark |
 | --- | ---: |
@@ -1412,15 +1192,15 @@ M5 DSpark reference medians, 256 generated tokens, 4096 allocated context:
 | Vision Exp mixed Q2/Q4, C hash table, temperature 0 | 48.86 t/s |
 | Vision Exp mixed Q2/Q4, C hash table, temperature 1 | 47.24 t/s |
 
-Use the matching drafter and `--nothink --top-p 0.95 --min-p 0.05 --seed 12345`.
-The C prompt is: "Write a complete C hash table implementation with string keys,
+These used the matching drafter and `--nothink --top-p 0.95 --min-p 0.05 --seed 12345`.
+The C prompt was: "Write a complete C hash table implementation with string keys,
 insert, find, delete, and a test main. Output only C code."
 
-For two-M5 TP, test the MXFP4 and mixed Q2/Q4 Vision Exp models with their
-matching drafter. Use the same sampling settings and 256-token C prompt above,
-plus the prompt "Write an unpredictable surreal scene with constantly changing
-imagery and no repeated phrases." Reference means of two reversed-order runs,
-explicit RDMA and 50/50 residency:
+Two-M5 TP measurements used the MXFP4 and mixed Q2/Q4 Vision Exp models with
+matching drafters, the same sampling settings and 256-token C prompt above,
+plus "Write an unpredictable surreal scene with constantly changing imagery
+and no repeated phrases." These are means of two reversed-order runs, explicit
+RDMA and 50/50 residency:
 
 | Model and prompt | TP DSpark |
 | --- | ---: |
@@ -1434,53 +1214,13 @@ explicit RDMA and 50/50 residency:
 Ordinary MXFP4 TP reference on the C prompt is 53.19/50.93 t/s at temperature
 0/1. Speculation need not beat ordinary decode on every prompt.
 
-Also compare ordinary MXFP4 TP with and without
-`DS4_METAL_DISABLE_ROUTED_MPP_PACKED=1`, using Promessi Sposi at 2K/4K/8K/16K
-live frontiers. Repeat in reversed order and compare full frontier logits.
-Investigate fresh-process variability with GPU/CPU clocks, temperature and
-concurrent activity recorded. Require repeatable controls before attributing
-small differences to a kernel. Include the matching official-continuation
-fixture, not just a timing prompt.
-
-Require `MTL_DEBUG_LAYER=1 make test-metal-moe-prefill` on both M5s. This covers
-packed MXFP4 prefill, both expert-ownership halves, tiny batches and the actual
-4096/2048/4096 static shapes. Static two-to-six-row outputs must be exact against
-per-row decode. The synthetic static-shape model uses about 3.2 GiB of memory.
-`DS4_METAL_DISABLE_TP_BATCH_MOE=1` restores per-row verifier experts for diagnosis;
-`DS4_METAL_DISABLE_M5_TP_MXFP4_STATIC=1` disables the static specialization.
-Neither is needed to enable the fast path.
-
-Build `make tests/test_metal_tp_spec`. With the worker connected as usual,
-run the coordinator with:
-
-```sh
-DS4_DSPARK_SCHEDULER=0 DS4_DSPARK_SPEC_LOG=1 \
-  ./tests/test_metal_tp_spec "$MODEL" "$DSPARK" 10.99.0.2 9991 rdma_en1
-```
-
-This checks committed tokens against serial target logits at 127- and
-4095-token prefixes, then appends to each live speculative cache. Require
-six-token commits and exercise partial prefixes, including five of six tokens.
-The test uses the verifier oracle's 2.0-logit near-argmax bound. Also run the acceptance checks with
-`--mtp-exact-sampling` and with forced low-confidence proposals. Both ranks must
-exit cleanly, with no verifier errors or unexplained replay fallbacks.
-Exact sampling under TP still intentionally replays partially rejected blocks;
-those replays are expected, and seed batching must remain disabled in this mode.
-Record transport failures even if retries pass; investigate them rather than
-hiding them by increasing timeouts.
-
-Repeat the physical TP session oracle with two, four and six sessions. Do not
-set `DS4_TEST_SKIP_MIXED`: ordinary decode and the mixed continued-prefill step
-must both match full serial logits exactly. Check that the final TP residual
-update is flushed before the output head; argmax agreement alone cannot catch
-a stale residual. Test mixed Q2/Q4 on both one host and physical TP.
-
 ### Other Hardware References
 
 These are comparison points for the stated model and workload, not portable
 throughput promises. Establish a fresh matched baseline where the checkpoint,
 prompt or settings are unavailable. Model-specific sections give additional
-context sweeps and memory limits.
+context sweeps and memory limits. Original Flash and GLM 5.2 rows are historical
+retired-model results only.
 
 | System and backend | Model and workload | Prefill | Decode |
 | --- | --- | ---: | ---: |
@@ -1493,10 +1233,9 @@ context sweeps and memory limits.
 | 8x L40S, CUDA TP | Flash Q4, 16-row decode oracle | - | 126.0 aggregate t/s |
 
 The 8x L40S values are retained from the last recorded run on `192.168.60.250`.
-They are historical references only: never connect to that host or interrupt
-its production server without explicit permission for the current QA pass. If
-permission is granted, the existing hard floor remains 110 aggregate t/s for
-the 16-row decode oracle.
+They are historical references for the retired Flash CUDA layout: never connect
+to that host or interrupt its production server without explicit permission for
+the current QA pass. They do not define a supported-model release floor.
 
 ## 17. DeepSeek V4.1 Flash
 
@@ -1643,7 +1382,7 @@ the long sparse-boundary tests; neither substitutes for the other.
   Run the server vision-cache suite with tool-result images, changed/reordered
   images, multiple sessions and thinking replay. An unchanged image must retain
   its prefix; a changed old image must invalidate the affected cache. Exercise
-  native agent image tools too. Keep the older Flash encoder regression gates.
+  native agent image tools too. Retired original Flash encoders are not inputs.
   Run `python3 tests/test_agent_vision.py --binary ./ds4-agent --model MODEL
   --vision VISION_GGUF --ssd-streaming --output /tmp/agent-vision-qa`, then
   repeat with `--ctx 73728 --archive-words 50000` and a fresh output directory.
@@ -1696,22 +1435,26 @@ pass the matching `--dspark --mtp-model DSPARK` options on both peers.
   --source-revision REVISION --out DSPARK --verify`. The source must be
   pinned and the three native draft shards
   present. Preserve MXFP4 experts and all source values; no extra quantization.
-- Build `tests/test_deepseek41_dspark` for the backend under test. Run
-  `tests/test_deepseek41_dspark --candidate-mask` to check the all-blocks
+- Build the maintained Metal fixture with
+  `tools/zig-build dspark-native-oracle` (source:
+  `tests/test_deepseek41_dspark.c`). Run
+  `zig-out/bin/dspark-native-oracle --candidate-mask` to check the all-blocks
   shortcut and both sides of the 16K candidate-selection boundary. Run
-  `tests/test_deepseek41_dspark TARGET DSPARK DUMP_DIRECTORY`, then
+  `zig-out/bin/dspark-native-oracle TARGET DSPARK DUMP_DIRECTORY`, then
   `python3 tests/deepseek41_dspark_reference.py SOURCE DUMP_DIRECTORY`.
   CUDA uses `--expert-activation q8-mmq`; ROCm uses `--expert-activation q8-k`
   for its existing expert activation policy. This independent native-weight oracle checks target
   feature capture, all three stages, Markov logits and confidence.
-- Run `tests/test_deepseek41_dspark TARGET DSPARK --runtime`. Require causal
+- Run `zig-out/bin/dspark-native-oracle TARGET DSPARK --runtime`. Require causal
   logits when rejected future tokens change, every retained prefix from zero
   through six, direct stop-boundary rewinds, continued decoding and save/load
-  after verification. Exercise opportunistic and exact sampling. Loading an
+  after verification. The single-host runtime fixture already uses bounded
+  SSD streaming; retain the pressure guard and do not overlap another model.
+  Exercise opportunistic and exact sampling. Loading an
   older target snapshot must warm missing draft features rather than reuse
   stale ones. Repeat the backend primitives, including 128-expert/top-3 routing.
 - Repeat the runtime test on physical Metal RDMA and CUDA RoCE pairs:
-  `tests/test_deepseek41_dspark TARGET DSPARK --runtime-tp HOST PORT DEVICE GID`.
+  `zig-out/bin/dspark-native-oracle TARGET DSPARK --runtime-tp HOST PORT DEVICE GID`.
   Start the normal `ds4` TP worker with context 2048 and the matching drafter.
   Require all prefix commits, correction rewinds, both sampling modes and
   cancellation to finish without a lost peer. Also reject mismatched DSpark
@@ -1869,7 +1612,6 @@ Never load this Q2 model resident on a 128 GB Spark. Its 341 GiB file includes
   resident mode rejects an oversized model before warming or allocating it.
   Include 8K prefill chunks with an automatic cache near 80 GiB: prefill must
   schedule the active experts, not every slot in the global decode cache.
-  Repeat older V4 Flash Q2 resident and SSD tests after shared CUDA changes.
 
 #### CUDA SSD Reference Workloads
 
@@ -1926,9 +1668,8 @@ subset or an older Flash fixture is not a substitute for these gates.
 
 ### CUDA Network Tensor Parallelism
 
-Use the two Sparks above with identical commits and matching Flash 0731 Q2,
-Flash 0731 MXFP4 or V4.1 Q2 files, one GPU per rank. Expert shards are resident;
-V4.1 Engram stays on disk. Do not combine
+Use the two Sparks above with identical commits and matching V4.1 Q2 files,
+one GPU per rank. Expert shards are resident; Engram stays on disk. Do not combine
 network TP with `--ssd-streaming`, `--cuda-tensor-parallel` or `--quality`.
 The Linux transport uses RoCEv2. Spark shares pinned host-visible exchange
 buffers with CUDA, with device/host staging as a fallback; this is not discrete
@@ -1936,55 +1677,8 @@ GPU GPUDirect. Both peers must use the same protocol version and agree on
 expert splitting, verification exchanges and vocabulary-head splitting.
 Incompatible peers must fail at the handshake, before inference.
 
-For Flash 0731, score the full matching 100-case continuation set and its
-continued-prefill variant against a single-host control. Run fresh 32K and
-appended 8K prefills and compare full frontier logits with the prior build.
-Use `tests/test_metal_tp_spec MODEL SUPPORT HOST PORT DEVICE GID --cuda`
-with a CUDA worker for short/continued speculative verification, and
-`tests/test_metal_tp_cancel MODEL PROMPT HOST PORT DEVICE GID --cuda` for
-cancellation/rebuild. Repeat speculative verification with `--tcp` and a TCP
-worker. Require no
-errors or unexpected accepted-token replay; report scalar/batch logit gaps
-rather than claiming exact greedy equality when the oracle allows a tolerance.
-Compare default DSpark settings as well as unpruned diagnostic runs, on short
-prose, code and a book continuation with at least a 4K prefix. Record accepted
-tokens per cycle and time spent proposing/verifying. Inspect the continuations
-for repetition; a changed passage is not a controlled throughput comparison.
-Check the independent scalar-target oracle on prose too, not just coding
-prompts. Report control failures and logit gaps without relaxing the tolerance
-to make a candidate pass.
-
-For default Q2 and MXFP4 DSpark over RDMA, pass `--dspark --mtp-model SUPPORT`
-on both ranks and require the `TP DSpark drafter split active` message when
-memory allows the optional halves. Repeat with
-`DS4_TP_DISABLE_DSPARK_SPLIT=1` to check the local-drafter fallback. Run
-`make test-dspark-history` for the shared cache-window and confidence inputs.
-The history check covers local and split-drafter maintenance separately.
-Run `make test-cuda-dspark-tp CUDA_ARCH=sm_121` and repeat its fixtures under
-Compute Sanitizer. The shared-expert overlap fixture must match the inline
-path bitwise at every supported batch width; run racecheck and initcheck too.
-Check sampled and exact-sampling modes, partial and
-seed-only commits, snapshot rebuild, continued prompts and server tool loops.
-Rank-state or proposal disagreement is a failure, even if local drafting
-later lets the request finish. Repeat without worker support, over TCP and
-with `DS4_CUDA_MOE_NO_DIRECT_DOWN_SUM6=1`: supported configurations must keep
-local drafting. Steering and tensor dumps also retain the local drafter.
-Check the extra expert-half allocation against requested contexts and session
-count; insufficient headroom must disable the optional split, not cause OOM.
-
-For verifier arithmetic changes, teacher-force official continuation tokens
-through the actual speculative verifier, not just the ordinary scorer's
-prefill path. Compare NLL and API top-token agreement per prompt against the
-prior build, with uncertainty intervals. A changed greedy prefix alone does
-not establish a quality regression; nor does coherent text establish parity.
-The speculative oracle also interleaves 256- and 8192-token sessions and
-frees/recreates workspace borrowers. Require exact isolated-session logits.
-In a multi-session server run, both peers must report shared prefill scratch;
-the CLI worker must not allocate a separate full workspace per session.
-Check memory headroom on both hosts, not just the coordinator's estimate.
-Flash network session batching currently uses the mirrored ordered fallback;
-its full logits must match isolated sessions, but do not report it as native
-batching. The native batching requirements below apply to V4.1.
+Use the V4.1 continuation, speculative-state and native batching checks below.
+Old Flash target/drafter pairs and their ordered fallback are retired.
 
 - Build `tests/test_tp_commands`, `tests/test_tp_tcp`, `tests/test_tp_rdma`,
   `tests/test_tp_link`, `tests/test_cuda_tp` and `tests/test_cuda_ssd_batch`.
@@ -2109,9 +1803,7 @@ batching. The native batching requirements below apply to V4.1.
   capture on both ranks, not silent fallback. Cover alternating batch/scalar
   decode, scratch growth after continued prefill, cancelled work, snapshots,
   and freeing/recreating sessions. Require exact logits and unchanged official
-  continuation scores. Repeat resident Flash 0731 regression checks because
-  the backends share graph infrastructure.
-  V4.1 captures three regions per layer: input projections, attention output,
+  continuation scores. V4.1 captures three regions per layer: input projections, attention output,
   and the FFN. Position-dependent attention and network gates stay outside
   capture. Require all 120 regions on each rank in the scalar diagnostic.
 - Monitor host memory and swap throughout startup, prefill and reload. Each
@@ -2291,9 +1983,10 @@ a physical pre-M5 device before advertising its performance or memory fit.
 
 Do not sign off until:
 
-- macOS Metal Flash passed.
-- GLM 5.2 Metal, official-quality, MTP, batching-fallback, and applicable TP or
-  CUDA gates passed.
+- The ordinary Metal paths passed for V4.1 Flash, GLM 5.3 Flash, Qwen and
+  Flint, with model-specific supported features exercised.
+- Retained PRO and full GLM 5.3 paths passed applicable checks, or their
+  unvalidated scope is stated explicitly.
 - Official continuation quality gates passed for every released model family.
 - CUDA was tested on the CUDA machine or the release notes explicitly say CUDA
   was not validated.
@@ -2306,7 +1999,8 @@ Do not sign off until:
 - Agent interruption and tool loops were exercised manually.
 - The speed-regression gate passed on every validated backend, with any skipped
   baseline or intentional slowdown documented.
-- Metal 2/4/8/16-session exactness and forced fallback gates passed.
+- Supported model-specific Metal session batching and forced fallback gates
+  passed; retired original Flash batch widths are not release requirements.
 - Physical Metal TP batching and CUDA native decode/mixed batching passed when
   those backends are part of the release.
 - Any skipped item is written down with the reason.

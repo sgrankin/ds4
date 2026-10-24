@@ -21,9 +21,8 @@ Routed experts are sharded; attention partitioning depends on the model. Both
 GPUs work on the same token and exchange partial results. This can reduce generation
 latency, but the gain depends on the model, link, and comparison setup.
 
-Two 128 GB Macs are useful for V4 Flash Q4/MXFP4 or GLM 5.3 Flash Q4.
-GLM 5.2 IQ2_XXS is another tested capacity setup. V4.1 Flash Q2 also runs
-on two 128 GB Macs, with disk-only Engram tables.
+Two 128 GB Macs can run GLM 5.3 Flash Q4 or V4.1 Flash Q2, with disk-only
+Engram tables for V4.1.
 A larger quant may need larger machines even though its tensor layout is supported.
 
 ### Link setup
@@ -99,9 +98,8 @@ See [speculation](SPECULATIVE_DECODING.md) and [serving](SERVER.md).
 
 ## Tensor parallelism between two Sparks
 
-V4 Flash 0731 Q2/MXFP4 and V4.1 Flash Q2 text inference support one GPU per rank,
-with a 50/50 expert split. Each Spark holds about 45 GiB of Flash 0731 Q2
-weights, 77 GiB of Flash MXFP4, or 81 GiB for V4.1, plus context and runtime
+V4.1 Flash Q2 text inference supports one GPU per rank with a 50/50 expert
+split. Each Spark holds about 81 GiB of main weights, plus context and runtime
 buffers. V4.1 Engram tables stay on disk. Do not add `--ssd-streaming` or
 `--cuda-tensor-parallel`: those select different memory/execution modes.
 
@@ -128,37 +126,19 @@ The link address selects the matching verbs device and GID. If selection is
 ambiguous, use `--rdma-device` and `--rdma-gid-index`. TCP is also available
 with `--transport tcp` on both peers.
 
-For Flash 0731, download `ds4f-q2` or `ds4f-mxfp4` on both hosts and use its
-GGUF path in the same commands. For DSpark, download `ds4f-dspark` on both and
-add `--dspark --mtp-model PATH` to both commands. With MXFP4 over RDMA, both
-GPUs also share the drafter work. This needs about 2.5 GiB extra per rank,
-beside the support model and context. If the worker has no drafter, or the
-configuration cannot use the split, drafting stays on the coordinator.
-Speed depends on the prompt.
-
 The coordinator can be `ds4-agent`, `ds4-server` or `ds4-bench`. Match context
 sizes and any `--prefill-chunk` overrides on both sides. For V4.1, five or more
 ready sessions use native batched decode; smaller groups run in order.
 Use `--batched-session 8` on the server and allow memory for all eight contexts.
-Flash 0731 network sessions currently run in order, without native batching.
 CUDA network TP does not support vision, V4.1 DSpark or other model/quant layouts.
 
 ## Pipeline parallelism
 
+The retained PRO engine supports split Q4 artifacts; see the commands below.
+
 Each process maps only its assigned layers, retaining that slice of the KV
 state. Layer ranges are inclusive. `N:output` includes the final layer and
 output head. Activations travel from one stage to the next over TCP.
-
-For Flash Q4 on two machines, download `ds4f-q4` on both, then start each side.
-Replace the example address with your coordinator's reachable address:
-
-```sh
-# Machine A.
-./ds4 --role coordinator --layers 0:19 --listen 10.99.0.2 9911
-
-# Machine B.
-./ds4 --role worker --layers 20:output --coordinator 10.99.0.2 9911
-```
 
 Normally give the output head to the final worker. With several workers,
 choose non-overlapping ranges covering the entire model. Workers register

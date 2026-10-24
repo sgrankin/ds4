@@ -231,7 +231,7 @@ pub const Core = struct {
         openModel(&state.mtp_model, options.mtp_path, !inspect, !inspect);
         var summary = std.mem.zeroes(c.ds4_dspark_summary);
         state.support_kind = Support.detect(&state.mtp_model, &state.support_stages, &summary);
-        if (!Support.compatible(&state.mtp_model, self.config.shape.family, false)) return false;
+        if (!Support.compatible(&state.mtp_model, self.config.shape.family)) return false;
         if (inspect) {
             if (state.support_kind == c.DS4_SUPPORT_DSPARK)
                 Support.bind(&state.dspark_weights, &state.mtp_model, &summary, &self.config.shape);

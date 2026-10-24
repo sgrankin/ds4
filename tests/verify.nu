@@ -5,6 +5,7 @@ const ROOT = path self ..
 const HOST = [
     [step, programs];
     [sampling-test, [test-sampling]]
+    [engine-placement-test, [test-engine-placement]]
     [engram-test, [test-engram]]
     [image-test, [test-image-decode]]
     [vision-image-test, [test-deepseek4-vision-image]]

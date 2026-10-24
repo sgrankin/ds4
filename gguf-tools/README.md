@@ -1,7 +1,9 @@
 # DS4 GGUF Tools
 
-This directory contains the offline tools used to build and evaluate DeepSeek
-V4 Flash GGUF files for `ds4`.
+This directory contains offline quantization, packing and evaluation tools.
+The original DeepSeek V4 Flash recipes below are retained as historical
+conversion references; current `ds4` no longer admits that model. Qwen and
+GLM tools have their own model-specific recipes here.
 
 The important pieces are:
 
@@ -115,6 +117,10 @@ safetensors loading, FP4/FP8 dequantization, and the quantizers used by our Q2
 and Q4 recipes live in this directory.
 
 ## Generate An Imatrix
+
+This recipe requires a revision from before original V4 Flash support was
+retired. Its checkpoint is not accepted by the current executable; use the
+supported-model documentation for current inference commands.
 
 First regenerate or inspect the calibration dataset:
 
