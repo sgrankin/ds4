@@ -60,6 +60,198 @@ process can start with an ordinary bounded queue and I/O workers; cross-process
 shared-memory machinery is unnecessary for that arrangement. Measure submission,
 copying and SSD wait costs before choosing a more elaborate queue.
 
+## Candidate serving features — discussion 2026-10-23
+
+Record these as a design palette: the user may want some, all, or a remix.
+This discussion does not authorize implementation or select a scripting runtime,
+memory database, or universal tool framework. Steering remains separately
+deferred with its zero-speed-regression acceptance requirement.
+Connectome-like context aging and CLM are reference ideas; no particular memory
+system or agent harness is selected.
+
+| Piece | Intended role and execution ownership |
+| --- | --- |
+| Server-side programmatic tool calling / code mode | Model-generated programs compose server-exposed capabilities within a response. OpenAI's current Responses API provides a precedent; our pinned OpenResponses core does not standardize it, but permits hosted extensions. Tool execution location remains explicit: a server-run program may still need results from client-owned tools. |
+| Client-side composition, like `functions.exec` | The external agent composes its own tools in its own runtime. This exists in our current client tooling; it is not an implemented DS4 server capability. Keep it compatible with, rather than dependent on, server-side composition. |
+| Direct tools and program bindings | Expose capabilities directly to the model and through code bindings when useful. Prefer the same names, schemas and result semantics in both surfaces; avoid divergent duplicate tool definitions. |
+| Server-side MCP | Let the serving process connect to MCP servers, discover their tools and execute calls. Those tools could be available directly and from server-side programs, enabling server plugins without moving the agent frontend into the model process. Not implemented yet. |
+| Explicit and automatic compaction | Support deliberate `/responses/compact` calls and separately consider request-configured thresholds and automatic/default policy. OpenResponses 2026-04-24 includes the standalone endpoint; OpenAI's current automatic `context_management` configuration goes beyond that pinned core. Our server implements neither compaction mode yet. |
+| Specific CLM/context edits | Operate on the server-owned working view using stable turn/item IDs, preserving the full journal and archived evidence. Offer inspect/archive/replace/remove primitives; programs may compose them, but an individual edit can also be structured arguments without code. Apply changes at a safe inference boundary and return a receipt. |
+| Cross-session memory | Keep useful facts, decisions and evidence in durable, checkable storage, available to later sessions through retrieval tools. This is distinct from response ancestry, prompt/KV caching and a compacted working context. No storage/index choice is selected. Qualification should retrieve an archived fact absent from the active prompt. |
+
+### Candidate memory and thread tools
+
+The user specifically suggested explicit memory, thread listing, archiving and
+search. Web/browser capabilities can come through server-side MCP; concentrate
+our own tools on state the serving process owns. Names below are sketches, not
+an implemented API or a commitment to separate tool schemas.
+
+| Capability | Useful contract |
+| --- | --- |
+| `memory.put/get/update/retract` | Curated cross-session notes: facts, decisions, constraints and evidence references, scoped to a project or user. Preserve source thread/item IDs and distinguish superseded notes from current ones. Start with explicit text records; indexing and automatic memory promotion remain undecided. |
+| `threads.list/open` | Discover threads by title, project, recency or status; inspect a bounded outline or selected messages instead of dumping full history into the active prompt. |
+| `recall.search/read` | Search notes, archived material and thread history with source filters; return small snippets and stable references, then fetch exact selected ranges. Keep search/read behavior consistent across these sources. |
+| `threads.archive/unarchive` | Remove completed work from the active thread list while retaining its history and searchability. This differs from deleting data or removing turns from working context. |
+| `context.inspect` | Report token budget, a bounded turn index and large context contributors so the model can decide what to retain or archive without rereading its entire context. |
+| `context.archive/replace/remove` | Archive selected older turns durably, then reduce the working view to a summary and references. Return an edit receipt and resulting token usage; suffix selection/recomputation stays runtime policy. |
+| `threads.fork` (later) | Explore an alternative from a selected turn without overwriting the original. Fork logical history and reuse KV opportunistically; do not imply that an exact approximate-state snapshot exists. |
+| `threads.ask` (later) | Run a bounded question against another thread and return an answer with source references, reducing how much unrelated history enters the current model context. This would spend additional inference; it is not just a search alias. |
+| `context.restore` (later) | Undo a bad working-context edit using a retained logical revision. Keep logical restoration distinct from exact restoration of approximate inference state. |
+
+Concrete qualification workflow: finish an investigation, archive its detailed
+turns, save the measured conclusion with source references, and leave a small
+pointer in working context. In a fresh session, find why a kernel variant was
+rejected and retrieve its actual measurement and command. Archive completion
+precedes removal of the only copy. For concurrent sessions, target edits at a
+known thread head/revision so stale changes fail visibly. Direct calls and code
+bindings should share these operations rather than grow parallel implementations.
+
+### Candidate server-side agent tasks
+
+The user added server-side agent tasks to the palette: delegate a bounded goal
+to a model/tool loop on the server; detached jobs may outlive the client or
+one response stream. Examples include investigating an archived thread,
+running a bounded experiment, and preparing an evidence-backed memory update.
+These are execution jobs, distinct from a todo-list record or a cron schedule.
+
+Clarified user intent: the central capability is **an agent as a server-hosted
+tool**, not only a separately submitted background job. A model (directly or
+through a server-side program) invokes something like `agent.run`; our server
+runs that child agent's model/tool loop and returns its result to the caller.
+The parent need not orchestrate the child's individual tool calls, and the
+external client need not execute that inner loop. The child has its own working
+context, explicit goal/tool scope and budget; return a concise result, artifacts
+and evidence references, with its detailed trace retained separately.
+
+The same runner can support two call policies: await a bounded child result and
+continue the parent within its response, or detach a longer job with a durable
+handle for later retrieval. These are invocation/lifetime choices around one
+implementation. An MCP adapter would expose the same runner to external agents;
+it is not a second executor. This remains a design clarification, not an
+instruction to start implementation.
+
+- Detached invocation sketch: submit a task with a source thread/context, goal,
+  allowed tools and budget; return a stable task ID promptly. Inspect progress/results, supply
+  requested input or cancel later. Task listing/discovery is also useful as our
+  own capability, regardless of whether a wire protocol has a list method.
+- A task may own its own conversation, working context and memory references.
+  Multiple logical jobs share the existing engine/scheduler; this does not imply
+  parallel GPU execution or a speedup. Keep explicit inference/tool budgets.
+- Detached task lifetime must be independent of the invoking socket; an awaited
+  child may instead follow parent cancellation. Current Responses
+  WebSocket disconnect cancellation does not implement this behavior. Persist
+  sufficient task/context/progress state for the recovery promise we choose;
+  returning an ID alone does not make execution restart-safe. Record completed
+  actions so recovery does not blindly repeat external side effects.
+- The MCP Tasks extension is a possible interoperability layer, not the agent
+  runtime itself. An MCP tool could start an agent job and return a task handle;
+  the host polls in protocol code instead of spending model turns on polling.
+  An optional MCP endpoint for our own agent tasks is distinct from the already
+  proposed outbound MCP client used to plug third-party tools into the server.
+- Reuse one job owner behind any hosted Responses tool and MCP adapter; do not
+  build two schedulers. Server-side MCP composition must also handle tasks
+  returned by downstream tools, with input requests and cancellation propagated.
+
+Protocol research on 2026-10-23: MCP introduced experimental Tasks in
+`2025-11-25`. The `2026-07-28` revision moved/redesigned them into the official
+`io.modelcontextprotocol/tasks` extension: polling/final results through
+`tasks/get`, input through `tasks/update`, cancellation through `tasks/cancel`.
+Do not copy the old `tasks/result` or `tasks/list` wire flow into a new adapter.
+The current [Claude Code documentation](https://code.claude.com/docs/en/mcp#mcp-tasks-that-run-on-the-server)
+describes public-beta support requiring v2.1.304+; that confirms support, not
+the exact day its rollout became visible. Protocol sources:
+[original experimental Tasks](https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/tasks),
+[2026-07-28 changelog](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/changelog.mdx),
+and the [current Tasks extension](https://modelcontextprotocol.github.io/ext-tasks/specification/2026-07-28/tasks.html).
+
+### Opportunistic background compaction — proposal
+
+The user suggested preparing compaction or Connectome-like memory consolidation
+while the server is otherwise idle. Treat computation and publication separately:
+an idle job can prepare a candidate without changing a completed response or the
+current working context. This is not implemented or scheduled for implementation.
+
+Proposed minimal flow:
+
+1. Response R completes. Freeze a useful older prefix and prepare one private
+   compaction candidate for that thread, retaining complete conversational/tool
+   boundaries. Summarization must not overwrite the live session or R's history.
+2. New input U arrives. Foreground work takes priority. Use a finished candidate
+   only when its source prefix and existing model/prompt/configuration checks
+   still match and the current request permits compaction. Otherwise use the
+   ordinary context; do not wait for speculative compaction when avoidable.
+3. At the start of response S, form the actual working context from the compacted
+   prefix, exact retained tail and all fresh user/tool input. Publish a replayable
+   compaction item covering that complete input frontier before S's assistant
+   output, and generate from that same view. Never append new output to completed R.
+4. Continue normal Responses chaining. Stateless clients retain/replay the new
+   checkpoint; stateful reconstruction recognizes it as replacing covered context,
+   not as another copy of the old history. Keep the previous recovery path until
+   the new checkpoint is durable or completely delivered as required by the mode.
+
+The checkpoint cannot merely contain the earlier background summary: if it is
+emitted after U and the client prunes everything before it, U and retained tail
+must still be recoverable. Each branch gets a checkpoint for its actual adopted
+context even if it shares an immutable prepared prefix with another branch.
+
+This is a proposed scheduling policy behind compaction, not a standardized idle
+maintenance command. OpenAI documents compaction output during an active response;
+our pinned OpenResponses core does not define unsolicited idle compaction output.
+No extra idle event is needed for the flow above. A future task/inspection surface
+could expose preparation status when useful. The Responses `background` field
+means asynchronous execution of a requested response, not general idle maintenance.
+
+Foreground priority needs bounded GPU work and yield/cancel checks; host-thread
+priority alone is insufficient. Preserve the interactive KV where practical and
+include session-switch/restoration cost in observed foreground latency. Run only
+when pressure/headroom and configured budgets permit; storage behavior must honor
+the session's persistence policy. Memory extraction/linking can be a separate
+idle task without rewriting the active context.
+
+Start with one candidate per thread and existing fallback/eligibility machinery.
+Measure foreground delay, candidate adoption, saved compaction/prefill time,
+wasted background work and practical retrieval/answer quality. Do not assume that
+idle compute is free or that a smaller prompt necessarily lowers whole-task time.
+Sources: [OpenAI compaction](https://developers.openai.com/api/docs/guides/compaction),
+[background responses](https://developers.openai.com/api/docs/guides/background),
+and the local [OpenResponses stream/extension contract](../.workspaces/openresponses-reference/src/specifications/2026-04-24.mdx).
+
+### Compaction and recovery contract
+
+Server-side compaction need not make the server the sole owner of recoverable
+state. The client need not receive a readable summary: automatic compaction can
+return an opaque `compaction` item in ordinary response output, and standalone
+compaction returns a replacement input window. Clients can retain and replay
+these items without interpreting their contents.
+
+- A client-held, self-contained compaction payload plus the retained window can
+  recover without durable per-session server history. The compatible decoder
+  and any decryption keys must survive; an opaque reference into server RAM is
+  not a self-contained checkpoint, nor does this imply cross-provider portability.
+- If the client keeps only response IDs/deltas and the server never returns
+  sufficient replay state, reliable restart recovery requires durable server
+  storage of the effective context and its referenced data.
+- Replaying the full original history is another fallback, but recompacting it
+  can produce a different working context. Keep that distinct from restoring
+  the previous compacted state.
+- Durable logical history/working-context state and optional inference snapshots
+  have different jobs. Ordinary KV can be rebuilt from effective tokens. An
+  approximate suffix graft may carry influence absent from the edited text;
+  restoring that particular state needs its snapshot or an explicit rebuild.
+- Account for disconnection before checkpoint delivery: retain enough old history
+  or a durable committed checkpoint to recover. Do not silently replace the only
+  recoverable state with an undelivered ephemeral compaction.
+
+Existing durable Responses storage is a starting mechanism, not proof that
+compaction recovery is already implemented. A possible arrangement is durable
+logical context plus replayable client checkpoints, with GPU/SSD inference caches
+managed independently. Keep the recovery choice explicit when later selecting
+features from this palette.
+
+Sources: [OpenAI programmatic tool calling](https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling),
+[OpenAI compaction](https://developers.openai.com/api/docs/guides/compaction),
+and the local [OpenResponses hosted-tool and compaction specification](../.workspaces/openresponses-reference/src/specifications/2026-04-24.mdx).
+
 ## Current implementation
 
 - `main`, `origin/main` and `flint-metal` identify the qualified Flint stack at
@@ -166,6 +358,13 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
 ## Progress log
 
 ### 2026-10-23
+
+- Recorded candidate server/client code composition, direct tool visibility,
+  server-side MCP, manual/automatic compaction, specific context edits and
+  cross-session memory in the design palette above. These are discussion notes,
+  not new implemented capabilities or authorization to start them. Recovery
+  requires sufficient state somewhere: client-carried replayable compaction,
+  durable server context, or an explicit full-history reconstruction fallback.
 
 - Planned, explicitly deferred: add native Metal V4.1/1017 activation steering,
   starting with FFN outputs. **Do not implement yet. Zero speed degradation is
