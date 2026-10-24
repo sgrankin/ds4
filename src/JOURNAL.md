@@ -4,6 +4,309 @@ Last updated: 2026-10-24. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## Current task — model retirement and publication, authorized 2026-10-24
+
+The user ended the ideas discussion and authorized retiring GLM 5.2 and original
+DeepSeek V4 Flash, then advancing and pushing main with the qualified native
+runtime stack. Keep V4 Pro in C and preserve shared full-GLM-5.3 DSA support.
+New constellation/voice implementations remain proposals. Cleanup and validation
+are in progress; publication has not happened yet. Origin main was fetched and
+is unchanged at `635d5d534e77f723ac3677e3840b783fddd24af4`. No model server was
+running at the start of this qualification. Preserve downloaded checkpoints and
+historical experiment evidence; remove retired active support and advertising.
+
+## Native model constellation — direction clarified 2026-10-24
+
+The user wants a constellation of generative, decision and extraction models:
+Clef, Clef-Flash, Clef-Omni and small specialists alongside the existing engines.
+DS4.1 + Flint was an example, not a limit on model choice. This records the
+desired scope and implementation constraints; the new specialist engines are
+not implemented or locally qualified. The cleanup/publication task above is
+separate from implementing those future capabilities.
+
+### Implementation policy
+
+- No production Python inference, Python sidecars or Python implementation
+  embedded behind a wrapper. Follow the Flint approach: study reference code,
+  learn its algorithms, packing, precision boundaries and optimized kernels,
+  then implement native model execution under our serving runtime. Python
+  remains useful for offline conversion, numerical oracles and measurements.
+- Reusing a C/C++ library is an option, not the boundary of what we can support.
+  Port or adapt useful kernels and execution schedules when that better serves
+  our Apple hardware. An existing implementation's memory/precision constraints
+  are not requirements for our implementation. In particular, cleffa's BF16
+  weights and large resident footprint do not prescribe our Clef layout.
+- Metal, CPU/Accelerate and Core ML/Neural Engine are all valid execution paths.
+  Choose by measured task latency, memory, quality and interference with other
+  loaded models. A CPU/ANE helper might overlap main-model GPU work; shared
+  memory bandwidth and actual accelerator placement still need measurement.
+- Keep native Zig ownership and model-specific execution components, with narrow
+  platform bridges where useful. Joint heads, encoders, tokenization and media
+  preprocessing are part of support: loading a compatible backbone alone does
+  not implement a decision model.
+- Expose the operations a model actually supports: generation, typed decisions
+  and/or extraction. Do not force encoder/head workloads through token sampling
+  or allocate conversational KV for a model that does not need it. Cache shared
+  input representations where the model permits; cross-model KV is not reusable.
+- Keep separate engine ownership, model-pinned conversational state, shared
+  scheduling and one combined memory/pressure budget. GPU transaction exclusion
+  must not unnecessarily serialize an independent CPU/ANE helper. Use actual
+  implementations to shape the common interface, not a speculative framework.
+- Reformatting, repacking, quantization and mixed precision remain first-class
+  choices for every model, including specialist heads and media encoders. Keep
+  sensitive tensors at useful precision when measurements justify it. Compare
+  end-to-end latency, working memory and quality, including conversion/load cost
+  and the cost imposed on the main model; record Pareto curves for tunable choices.
+
+### Candidate models and references
+
+These are researched candidates, not a promise that all checkpoints, modalities
+or reference-runtime features already work in our server. Smaller specialist
+selection remains subject to practical task measurements.
+
+| Candidate | Intended role and native input modalities | Implementation references |
+| --- | --- | --- |
+| Clef 27B | General typed decisions; text, images, video frames | [Official model](https://huggingface.co/Cloudflare/clef), [MLX backbone + joint head](https://huggingface.co/mlx-community/clef-4bit) |
+| Clef-Flash 9B | Lower-memory decisions; text, images, video frames | [Official model](https://huggingface.co/Cloudflare/clef-flash), [MLX implementation](https://huggingface.co/mlx-community/clef-flash-4bit) |
+| Clef-Omni 30B-A3B | Sparse decisions; text, images, audio, video with sound | [Official model](https://huggingface.co/Cloudflare/clef-omni), [complete quantized MLX implementation](https://huggingface.co/mlx-community/clef-omni-4bit) |
+| Laya family | Small text-only decisions; English/multilingual/task-tuned checkpoints | [Models](https://huggingface.co/convaiinnovations/laya), [MLX encoder and decision heads](https://github.com/mizorewww/laya-mlx) |
+| GLiNER2 base / GLiNER2.5-Decide | Text-only schema extraction / dynamic-label classification | [Base MLX port](https://github.com/Andrew-Chen-Wang/gliner2-mlx), [Decide MLX port](https://github.com/souuzaa/gliner2-mlx), [base Swift/MLX port](https://github.com/MacPaw/Gliner2Swift) |
+| GLiClass Edge Core ML | Very small text-only router/classifier, including CPU/ANE evaluation | [Application-tuned model and runtime](https://huggingface.co/FluidInference/gliclass-edge-apps-coreml), [measurements and limits](https://huggingface.co/FluidInference/gliclass-edge-apps-coreml/blob/main/RESULTS.md) |
+
+[Cleffa](https://github.com/zknpr/cleffa) is a particularly relevant C/Objective-C/
+Metal reference, explicitly derived from ds4's approach. It implements dense
+Clef variants and Omni with media processing; the head mostly uses CPU Accelerate,
+with large memory-side projections on GPU. Its BF16-only footprint and unfinished
+Omni long-context performance are opportunities to improve, not constraints to
+inherit. The MLX ports provide alternative quantized implementations and Apple
+measurements; their Python host code remains reference material only.
+
+Do not carry published runtime timings or numerical parity into our native port
+as achieved results. Measure ordinary and favorable cases, input processing and
+cache reuse; small-encoder short-input timings are not long-conversation timings.
+Evaluate actual decision/extraction accuracy, calibration and escalation behavior,
+not just output shape or agreement with another implementation.
+
+The emerging decision convention is TypeSafe-compatible `/v1/systemone`, already
+used by Clef and [llama.cpp](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md#post-v1systemone-typesafe-compatible-system-one-api).
+OpenAI's [Decisions API](https://developers.openai.com/api/docs/guides/decisions)
+uses similar predicate/choice/score concepts with different wire shapes.
+The user now wants both `/v1/systemone` and OpenAI-compatible `/v1/decisions`,
+sharing native decision execution and adapting request/result shapes at the
+protocol boundary. Preserve each contract's probability, confidence, refusal
+and supported-modality semantics; do not claim full equivalence from a common
+route name. This is the selected API direction, not implemented endpoints.
+[Clairic](https://developers.cloudflare.com/workers-ai/models/clairic/) has a
+separate typed-field extraction contract and currently hosted text/image input.
+OpenResponses does not currently standardize these operations. Keep internal
+decision/extraction semantics separate from compatibility adapters or hosted
+Responses tools. The extraction API and voice compatibility surface remain
+under discussion; multiple external APIs can use the same underlying runtime.
+
+## Voice frontends and backend task lifetime — discussion 2026-10-24
+
+The user is exploring voice support, particularly a continuous conversational
+frontend that delegates heavier work without canceling that work whenever the
+user interrupts speech. No voice engine, transport or model port is implemented
+by this discussion. The native-only production policy above also applies here.
+
+- Separate microphone/playback transport, speech processing, live conversation
+  state and backend task state. Duplex means simultaneous listening/speaking;
+  tool calling and continued conversation during backend work are additional
+  capabilities, not consequences of duplex alone.
+- OpenAI [Realtime](https://developers.openai.com/api/docs/guides/realtime)
+  (`/v1/realtime`) and [GPT-Live](https://developers.openai.com/api/docs/guides/live)
+  (`/v1/live/sessions`) are distinct APIs. Realtime exposes a voice/reasoning/tool
+  session; Live explicitly separates continuous spoken interaction from delegated
+  backend work. WebRTC carries audio tracks and a JSON data channel; a primary
+  WebSocket carries audio and events together. A sideband is another control
+  connection to the same voice session, not the reasoning-model connection.
+- Live client delegation can call our own agent/model/service. The application
+  owns transcript history and task state: a delegation-created event gives an
+  ID and timing metadata, not a ready-made user request. Build the backend request
+  from that state and return verified results/progress. Managed Responses
+  delegation instead selects a supported OpenAI backend; it is not an arbitrary
+  local Responses base-URL setting. [Delegation contract](https://developers.openai.com/api/docs/guides/live-delegation).
+- Treat interruption of playback, cancellation of speech generation, and
+  cancellation/revision of a backend job separately. Continuing useful backend
+  work is desirable; an explicit correction may update or supersede it. Keep
+  completed actions and stale-result handling in application-owned task state,
+  so an interrupted or replaced voice session does not lose work or repeat it.
+- CPU/Accelerate and Core ML/ANE recognition/synthesis are attractive on the
+  shared computer, but GPU voice models remain candidates. Measure combined
+  frame deadlines, backlog, audible continuity and main-model throughput, not
+  only isolated audio real-time factor. Bounded GPU submissions and audio-aware
+  scheduling are candidates, not a guarantee that all models coexist smoothly.
+- NemotronLabs VoiceChat 11B has a real native Apple
+  [implementation](https://github.com/soniqo/speech-swift/blob/main/docs/inference/voicechat.md),
+  using MLX throughout its current duplex path. Isolated INT5 M5 Pro runs report
+  about 73–75 ms compute for an 80 ms audio frame; this is not concurrent DS4
+  qualification or user-perceived first-audio latency. Its shared language KV
+  currently prevents free-form speech during function-channel work; microphone
+  perception/transcription continues and captured speech is replayed afterward.
+  Duplex support therefore does not establish the desired Live-style behavior.
+  Retain it as a model/kernel reference without inheriting this scheduling
+  limitation as a requirement. [Model boundaries](https://github.com/soniqo/speech-swift/blob/main/docs/models/voicechat.md).
+
+### Voice model and implementation references
+
+The reference shortlist is broader than one model or one accelerator. Python
+implementations are oracles/algorithm sources, and Swift/C++ implementations are
+also references rather than required production languages or linkage boundaries.
+
+| Workload | Candidate and reason to examine it | Existing Apple/native references and limits |
+| --- | --- | --- |
+| Fast transcription | Parakeet Ultra 0.6B, 25 European languages | [FluidAudio Core ML/ANE](https://github.com/FluidInference/FluidAudio/blob/main/Documentation/ASR/ParakeetUltra.md); file/window throughput is not live first-partial latency |
+| Streaming recognition | Nemotron streaming ASR | [Native cached streaming/latency tiers](https://github.com/FluidInference/FluidAudio/blob/main/Documentation/Benchmarks.md); language/accuracy varies by checkpoint and chunk size |
+| Multilingual recognition | Qwen3-ASR 0.6B/1.7B | [Models](https://github.com/QwenLM/Qwen3-ASR), [MLX encoder/decoder/alignment](https://github.com/moona3k/mlx-qwen3-asr); examined streaming path uses chunking and revisable text |
+| Mature recognition baseline | Whisper | [whisper.cpp Metal/Core ML](https://github.com/ggml-org/whisper.cpp), [WhisperKit](https://github.com/argmaxinc/argmax-oss-swift); repeated-window transcription is not a cached transducer |
+| Lightweight speech synthesis | PocketTTS 100M and October 20 tiny English 18M/7M/2M releases | [Official models](https://github.com/kyutai-labs/pocket-tts), [FluidAudio CPU/Core ML/ANE implementation](https://github.com/FluidInference/FluidAudio/blob/main/Documentation/TTS/PocketTTS.md); accelerator split differs by variant, tiny-model cloning is not wired in that port |
+| Expressive synthesis / cloning | Qwen3-TTS 0.6B/1.7B | [Models](https://github.com/QwenLM/Qwen3-TTS), [native MLX model/codec/streaming](https://github.com/Blaizzy/mlx-audio-swift/tree/main/Sources/MLXAudioTTS/Models/Qwen3TTS); Base, CustomVoice and VoiceDesign have different capabilities |
+| Long-form and streaming synthesis | VibeVoice | [Microsoft releases](https://github.com/microsoft/VibeVoice), [community fork](https://github.com/vibevoice-community/VibeVoice), [Apple implementation](https://github.com/soniqo/speech-swift/blob/main/docs/models/vibevoice.md); original long-form code was withdrawn September 2025, separate official Realtime-0.5B followed December 2025; examined native port still returns whole waveforms from its stream API |
+| Expressive synthesis comparison | Fish Audio S2 Pro | [Weights and architecture](https://huggingface.co/fishaudio/s2-pro); published headline latency is H200 evidence, not Apple performance |
+| Duplex conversation | Moshi / PersonaPlex | [Official MLX and Rust/Metal](https://github.com/kyutai-labs/moshi), [native PersonaPlex work](https://github.com/soniqo/speech-swift/blob/main/docs/models/personaplex.md); native duplex does not itself provide backend delegation |
+| Duplex with backend delegation | Realtime-Venus | [Project and models](https://realtime-venus.github.io/); architecture matches the frontend/backend split, Apple execution not verified |
+
+[0xShug0/audio.cpp](https://github.com/0xShug0/audio.cpp) is another useful native
+C++/ggml/Metal model and codec reference, including Qwen/Pocket/Vibe. Its remote
+release and published CUDA speed table were not equated to the installed
+`../audio.cpp` checkout or to Apple model qualification.
+
+For protocol research, [Hugging Face speech-to-speech](https://github.com/huggingface/speech-to-speech#realtime-api)
+demonstrates a tested core OpenAI Realtime subset over WebSocket/WebRTC on a
+cascaded ASR → language model → TTS pipeline. Original Moshi/PersonaPlex protocols
+are different; a `/v1/realtime` path alone does not establish client compatibility.
+Our existing Responses WebSocket and a future voice session adapter are distinct
+protocols over shared application state. Keep heard speech/playback state apart
+from generated-but-unplayed output and durable backend progress.
+
+Voice qualification should measure first useful audible response, interruption
+response, recognition errors on names/numbers and relevant languages, speech
+naturalness, frame p95/p99/backlog and coexistence with main-model decode/prefill.
+Real-time factor alone is insufficient. All candidate timings remain authors'
+measurements, and none of these voice models has been run by this discussion.
+
+## Multi-model composition and Flint lessons — discussion 2026-10-24
+
+The user wants these ideas retained before resuming execution. This entry records
+direction and source-based candidates, not implemented multi-model support or
+measured DS4.1 speedups. Runtime work in this design remains proposed; the later
+cleanup/publication authorization at the top supersedes the earlier main hold.
+
+### Multiple loaded models in one process
+
+- Initial example: DS4.1 remains the main agent model while a small, fast Flint
+  handles bounded subtasks in its own context. Both can retain weights and
+  sessions in memory; switching requests need not unload/reload either model.
+  A future server-hosted agent tool could use this arrangement, but that tool
+  and its agent loop are separate proposed features. The constellation above
+  broadens this example to other generative and non-generative models.
+- Prefer one Responses HTTP/WebSocket frontend with explicit model selection,
+  separate engine instances and a scheduler. Pin conversations, inference state
+  and `previous_response_id` ancestry to the appropriate model; resuming a
+  response must not silently send another model's KV/state to the new engine.
+  Same-process composition is the desired follow-up, superseding the earlier
+  initial preference for separate processes. Current boot still opens one engine.
+- No cross-model megakernel is required. Staying loaded, alternating GPU work
+  and executing simultaneously are separate capabilities. Same-model batching
+  can reuse weights; batching unrelated models does not create that reuse.
+  Megakernels are useful for launch/synchronization overhead and activation
+  locality within an execution pipeline, not a prerequisite for multi-model use.
+- Start with serialized GPU transactions: encode, submit and finish one engine's
+  work before another uses shared resources. Bound prefill chunks and decode
+  packets so other conversations can run and cancellation remains responsive.
+  Parallel host preparation/I/O may still overlap. Simultaneous GPU execution is
+  a later measured option; overlapping Flint's cooperative resident kernels can
+  violate their whole-grid progress assumptions.
+- Ownership should follow actual resources: process runtime owns the Metal
+  device/queue, shared services and total budget; an engine owns model identity,
+  weights/mappings, expert residency and model-specific execution state; a
+  session owns its continuation/KV/frontier. Share scratch through a scoped
+  lease when transactions serialize. Keep real records single-source, without
+  mirrored Engine/Session state or per-session copies of every scratch buffer.
+- Flint already owns most model buffers, pipelines and session state while
+  borrowing the shared Metal device/queue. That boundary was our native port's
+  implementation choice around upstream's kernel contract, not proof that two
+  engines currently compose safely. DS4.1 still has process-global Metal model
+  mappings/cache/scheduling state and shutdown paths. In particular,
+  [Core cleanup](engine/core.zig) shuts down shared threads/GPU services when one
+  model retires. Give shared services a runtime lifetime; do not merely bypass
+  the instance lock or assume strong Objective-C references make cleanup safe.
+  Derive shared interfaces from actual model components, including decision and
+  extraction engines, rather than a speculative plugin layer.
+- Admit the combined weights, expert caches, all sessions and shared scratch
+  under one pressure-aware budget. Earlier short-context estimates suggested
+  roughly 65–70 GiB for this pair, not a qualified simultaneous measurement;
+  Flint's two configured 262144-token sessions can materially increase that.
+  Preserve the pressure guard and account for shared allocations once.
+- Qualification should exercise A → B → A continuation/logits, two independent
+  conversations, model-pinned response references, cancellation, failed startup
+  and closing one engine while the survivor continues. Measure alternating task
+  latency and memory pressure before considering concurrent GPU kernels.
+
+### Execution lessons from Flint
+
+Source review: upstream `recursive-oss/rec` revision
+`e53663b262af4cb1ca498e596ca8b1a2d79e0800`, available in `../flint`.
+Our [native decoder notes](metal/flint/README.md) and
+[prefill notes](metal/flint/prefill/README.md) describe the preserved contracts.
+
+- Separate load-time packing, batched prefill and persistent decode. Flint's
+  M5 Max decoder uses a fixed 76 × 256 resident pool with phase-specific roles;
+  its small residual state stays in registers and normalized inputs are reused
+  from threadgroup memory. Other GPUs need their own qualified launch envelope.
+- Expert-local teams synchronize only their own gate/up → down dependency.
+  Six routed experts use eight groups each and the shared expert sixteen.
+  Teams redundantly find their assigned routing rank to avoid a global top-k
+  publication barrier. DS4.1 could borrow the scheduling idea while preserving
+  its own router transforms, correction biases and mixture normalization.
+- Compact layer descriptors and aligned packed weight banks reduce hot-path
+  decisions. Projection kernels reuse activation loads across output rows and
+  paired gate/up dots. DS4.1 already has packed GGUF dispatch, scratch layouts
+  and fused expert operations; measure the remaining traffic and barriers.
+- Greedy Flint generates up to eight tokens inside one resident launch;
+  filtered packets chain forward, GPU sampling and token handoff in one command
+  buffer. DS4.1's ordinary path still reads full logits to the host in
+  [Executor.logits](engine/deepseek41/executor.zig), then selects through
+  [Selection](engine/session_sampling.zig). The runtime has a GPU argmax primitive,
+  but that does not establish its use on this DS4.1 path. Device-side selection
+  is a concrete candidate before attempting longer GPU-only decode packets.
+- Tune dispatch to actual shapes. Flint uses packed matrix-vector kernels for
+  small row counts and tiled matrix multiplication for larger prefill batches.
+  DS4.1 already distinguishes scalar, batch and exact-small-row paths; examine
+  resumed prompts and rows per expert rather than copying Flint's thresholds.
+- DS4.1 SSD expert demand is a real host boundary. Its selected-load path already
+  overlaps some I/O with shared work. Larger persistent regions must respect
+  expert misses and yield/cancel boundaries; a fully resident Flint decoder
+  cannot simply replace a streamed DS4.1 pass. Prefer measured resident work
+  regions over an assumed whole-model megakernel win.
+
+The user explicitly wants model reformatting/repacking kept on the table for
+DeepSeek and other models. GGUF is not a required hot execution layout: a simple
+reproducible conversion or load-time packing step may enable better aligned
+expert reads, compact scales/metadata, activation reuse and shape-specific
+kernels. Compare total memory/cache capacity, SSD bytes, load/conversion cost,
+prefill, decode and end-to-end latency; a faster inner kernel alone is insufficient.
+For tunable layouts or precision, plot useful speed/memory/quality tradeoffs so
+we can choose measured Pareto points rather than assume one universal format.
+Distinguish lossless layout/packing changes from requantization or changed math.
+Preserve the source checkpoint, check lossless candidates against the baseline,
+and measure delta-NLL/KL plus practical output quality when arithmetic changes.
+Approximation is acceptable when the measured tradeoff is useful. Flint's INT4
+format, fixed shapes and BF16 rounding are examples to study, not DS4.1 defaults.
+
+Suggested bounded experiments, pending execution authorization: refresh DS4.1
+handoff/head timing; try device-side output selection; examine resident expert
+teams/activation reuse; tune small-prefill dispatch. Repacking can be a separate
+one-change experiment when profiling identifies a format/layout limitation.
+Use the existing one-hour baseline → change → measure → inspect → decide loop,
+retaining negative results; reconcile with the experiment queue before starting.
+
+GLM's low bounded-SSD qualification rate remains backburnered at the user's
+request. The persistent all-layer decode mapping is implemented and ported;
+`DS4_METAL_DISABLE_STREAMING_STATIC_DECODE_MAP=1` selects the bounded fallback
+used for qualification. This is a configuration choice, not missing native code.
+
 ## Model retention direction — 2026-10-24
 
 The user revised the cleanup direction after discussing V4.1 Pro:
@@ -332,18 +635,22 @@ M1 Max support. We follow upstream implementations and selectively copy or
 reimplement relevant model changes, kernels and fixes, retaining attribution.
 We do not need every upstream backend, frontend or deployment mode.
 
-- One agent-facing protocol family: Responses, ideally including its WebSocket
-  transport and incremental conversations. HTTP and WebSocket should use the
-  same request handling and output events.
+- Responses is the conversational protocol, including WebSocket transport and
+  incremental conversations. HTTP and WebSocket share request handling and
+  output events. Add both System One and OpenAI-compatible Decisions adapters
+  over shared decision execution; voice protocols are being explored separately.
 - Many independent conversations per engine. Durable history outlives sockets,
   active inference slots and cache eviction. Concurrent conversations need fair
   scheduling, cancellation and bounded prefill work.
-- One process per loaded model is the preferred initial arrangement. Two models
-  can run as two engines, optionally routed by model name. They share the host's
-  physical RAM and SSD bandwidth; configure their budgets accordingly.
+- Multiple loaded engines in one process are now the desired follow-up, with
+  model routing, separate ownership and a shared scheduler/budget as discussed
+  above. Current serving still opens one engine; separate processes remain a
+  usable deployment option. Configure combined physical RAM and SSD bandwidth.
 - Assemble a serving executable from protocol/conversation handling, scheduling,
-  a model implementation, Metal operations and RAM/SSD storage. Start with normal
-  linked modules and explicit composition; derive shared interfaces from actual
+  model implementations, platform compute and RAM/SSD storage. Choose Metal,
+  CPU/Accelerate or Core ML/ANE per workload; production inference stays native,
+  with Python implementations used as references. Start with normal linked
+  modules and explicit composition; derive shared interfaces from actual
   implementations rather than speculative plugin requirements.
 - Model implementations own tokenizer/prompt rendering, tool/reasoning and
   multimodal translation, execution, and saved-state semantics. Original DS4.1
