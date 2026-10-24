@@ -52,14 +52,15 @@ separate from the normal single-Metal ownership path; migrate it only for a
 concrete use. Cache capability extensions and I/O optimizations are subsequent
 experiments, after existing behavior has one clear owner.
 
-Slices 1–7 are qualified. Qwen/GLM preparation and Responses publication,
-payload I/O, snapshot envelopes, selected-load workers and page-in now have
-native owners. Existing host tests, real protocol checks and cross-binary state
-comparisons pass. Slice 8 shared session routing/control is active. The model
-span-selection leaf introduced by slice 7 closes in slice 10; it is recorded as
-an integration dependency, not called an OS primitive. Independent source prep
-continues for resources, admission/cache policy and complete engine lifecycle.
-[Progress and reproduction evidence](../experiments/native-runtime-20261024/README.md).
+Slices 1–9 plus common batch follow-up 8b are qualified. Slice 10 engine/cache/
+span policy is integrating; native engine lifecycle follows. Final route review
+found additional ordinary C policy despite native numerical leaves: common
+continuation/rewind, Qwen/GLM sampling history/logprobs, multimodal assembly,
+small canonical-rewrite/live-steering settings and stateless greedy generation.
+Treat these as separate bounded one-hour components before final combined
+qualification, with actual-record/opaque-public-API inputs and existing fixtures.
+Do not claim them complete from forwarding wrappers or count inactive legacy
+fallbacks as active. [Progress/evidence](../experiments/native-runtime-20261024/README.md).
 
 ## Deferred: V4.1/1017 activation steering — planned 2026-10-23
 

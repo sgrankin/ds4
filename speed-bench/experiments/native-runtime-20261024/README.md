@@ -196,6 +196,57 @@ execution remains unmeasured with this SSD-host setup. Evidence:
 and guards. An additional bounded continuation/rewind follow-up closes the
 small remaining common C policy found in final routing review.
 
+## 10. Engine admission/cache policy and shared spans — complete
+
+Native policy owns GLM admission, first-session cache fitting, hotlist seed,
+automatic/configured cache sizing and resident-layer choices. Shared model
+spans own full/static/runtime/token/output builders; DS41 and generic page-in
+reuse them. The temporary C span-selection callback is gone. Cold size/budget
+exports stay separate from hot initialization.
+
+Source differential checks match 50 original-C cache-policy cases, 3,240 span
+vectors and 972 seven-predicate cases. Maintained span and real-file page-in
+fixtures pass, as does the full host suite. Fully assembled `slice10-final`
+GLM/DS41 state bytes and fresh continuation logits match frozen controls. Real
+256-token runs complete every GLM45/DS4140 layer pread with matching decoded
+control text. The DS41 span-field dependency was corrected during assembly.
+Evidence: `slice10-build-qualified.log`, `slice10-host-final.log`,
+`slice10-final-{spans,pagein}.log`, `slice10-final-{glm,ds41}-payload/` and
+`slice10-{glm,ds41}-prefill.*`. Earlier partial-build attempts are not the
+qualification binaries. `model-spans-test` joins the normal host driver.
+
+Final routing review found additional actual common sampling, multimodal,
+continuation/rewind and stateless-generation controllers. Those get separate
+bounded migrations before combined qualification; existing model capabilities
+and numerical algorithms remain fixed.
+
+## 11. Native engine factory — complete
+
+One native factory composes DS41, Flint, Qwen and GLM model/config/weight/vocab/
+vision owners, options, cache admission, Metal setup/maps and retirement. The
+actual Core embeds its selected immutable configuration once; session/resource
+captures and basic metadata reads use it. C only allocates its private Engine
+shell, captures actual component addresses and publishes legacy snapshots.
+
+Review found early option failures could trigger global teardown before owning
+anything. The factory now publishes the actual ownership flag only after lock
+acquisition or Flint handle creation; unowned errors free only the shell. A real
+Qwen fixture rejects two early requests while retaining the first engine and
+then matches all logits from four eval_argmax calls.
+
+All five programs build; the full host suite passes after isolating a pending
+multimodal source draft from cold input linkage. DS41/GLM frozen canonical state
+and fresh-logit checks pass, Flint prefill/decode/teardown passes, and all three
+GGUF inspect modes return zero. Source review checks all 50 marker spellings and
+family tokenizer choices. Evidence: `slice11-build-isolated.log`,
+`slice11-host-final.log`, `slice11-qwen-owner.*`, `slice11-{glm,ds41}-payload/`,
+`slice11-flint.*` and `slice11-inspect/results.json`. The immutable qualification
+prefix is `slice11-final`; the small ownership regression is in the existing
+Qwen n-gram fixture.
+
+The remaining bounded ordinary controllers identified by route tracing are
+still pending integration/qualification; source preparation is not completion.
+
 Later slices remain pending integration/qualification. Payload I/O,
 snapshot-envelope, selected-worker and common-session preparations are retained
 separately until their preceding slices qualify.

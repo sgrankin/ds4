@@ -8,10 +8,7 @@ const Config = @import("../config.zig").ModelConfig;
 const experts = @import("expert_cache.zig");
 const Model = c.ds4_model;
 const Weights = c.ds4_weights;
-const Layer = c.ds4_layer_weights;
-const Weight = c.ds4_tensor;
 const allocator = std.heap.c_allocator;
-const max_u64 = std.math.maxInt(u64);
 
 fn outOfMemory() noreturn {
     c.ds4_engine_model_die("out of memory");
@@ -26,106 +23,7 @@ fn nowSeconds() f64 {
     const nanoseconds: f64 = @floatFromInt(time.tv_nsec);
     return seconds + nanoseconds * 1.0e-9;
 }
-fn groupViews() u32 {
-    const value = c.getenv("DS4_METAL_Q4_PRO_MAP_GROUPS");
-    if (value == null or value[0] == 0) return 1;
-    var end: [*c]u8 = null;
-    const groups = c.strtoul(value, &end, 10);
-    return if (end != value and end[0] == 0 and groups > 0 and groups <= 384 and 384 % groups == 0) @intCast(groups) else 1;
-}
-
-const Span = struct {
-    first: u64,
-    end: u64,
-    isolated: bool,
-
-    fn before(_: void, a: Span, b: Span) bool {
-        return a.first < b.first or (a.first == b.first and a.end < b.end);
-    }
-};
-
-pub const Spans = struct {
-    items: std.ArrayList(Span) = .empty,
-    max_tensor_bytes: u64 = 0,
-
-    pub fn deinit(self: *Spans) void {
-        self.items.deinit(allocator);
-    }
-    pub fn append(self: *Spans, first: u64, end: u64, isolated: bool) void {
-        if (first == max_u64 or end <= first) return;
-        self.items.append(allocator, .{ .first = first, .end = end, .isolated = isolated }) catch outOfMemory();
-    }
-    pub fn include(self: *Spans, pointer: [*c]const Weight) void {
-        if (pointer == null or pointer.*.bytes == 0) return;
-        const weight: *const Weight = @ptrCast(pointer);
-        const isolation_threshold = 2 * 1024 * 1024 * 1024;
-        const groups = groupViews();
-        if (weight.type == c.DS4_TENSOR_Q4_K and weight.ndim == 3 and weight.dim[2] == 384 and
-            weight.bytes >= isolation_threshold and weight.bytes % groups == 0)
-        {
-            // Large PRO Q4 expert blobs must not hide inside broad layer
-            // views. Optional stable groups avoid stacking giant aliases on
-            // the ordinary selected-expert path.
-            const bytes = weight.bytes / groups;
-            self.max_tensor_bytes = @max(self.max_tensor_bytes, bytes);
-            for (0..groups) |group| {
-                const first = weight.abs_offset +% (@as(u64, group) *% bytes);
-                self.append(first, first +% bytes, true);
-            }
-            return;
-        }
-        self.max_tensor_bytes = @max(self.max_tensor_bytes, weight.bytes);
-        const isolated = (weight.type == c.DS4_TENSOR_Q4_K or weight.type == c.DS4_TENSOR_MXFP4) and
-            weight.bytes >= isolation_threshold;
-        self.append(weight.abs_offset, weight.abs_offset +% weight.bytes, isolated);
-    }
-    pub fn includeLayer(self: *Spans, layer: *const Layer, decode: bool, size_class: ?u64) void {
-        // Every actual layer field is a borrowed tensor descriptor. The C
-        // collection order follows this same record; other-family fields are
-        // NULL in the validated V4.1 table.
-        inline for (comptime std.meta.fieldNames(Layer)) |name| {
-            const routed = comptime std.mem.eql(u8, name, "ffn_gate_exps") or
-                std.mem.eql(u8, name, "ffn_up_exps") or std.mem.eql(u8, name, "ffn_down_exps");
-            if (!decode or !routed) self.include(@field(layer, name));
-        }
-        if (decode) {
-            // A boosted/outlier layer cannot use the cache's dominant slab
-            // size class. Include its full experts for direct mapped reads.
-            const bytes = experts.layerBytes(layer);
-            if (bytes != null and size_class != null and bytes.? != size_class.?) {
-                self.include(layer.ffn_gate_exps);
-                self.include(layer.ffn_up_exps);
-                self.include(layer.ffn_down_exps);
-            }
-        }
-    }
-    pub fn includeOutput(self: *Spans, weights: *const Weights) void {
-        const tensors = [_][*c]const Weight{
-            weights.output_hc_base, weights.output_hc_fn, weights.output_hc_scale,
-            weights.output_norm,    weights.output,       weights.output_hc_norm,
-            weights.output_hc_down, weights.output_hc_up,
-        };
-        for (tensors) |tensor| self.include(tensor);
-        // N-gram rows remain on disk and never enter GPU weight views.
-    }
-    pub fn finish(self: *Spans) bool {
-        if (self.items.items.len == 0 or self.max_tensor_bytes == 0) return false;
-        std.mem.sortUnstable(Span, self.items.items, {}, Span.before);
-        var count: usize = 0;
-        for (self.items.items) |span| {
-            if (count == 0 or span.first > self.items.items[count - 1].end or
-                span.isolated or self.items.items[count - 1].isolated)
-            {
-                self.items.items[count] = span;
-                count += 1;
-            } else if (span.end > self.items.items[count - 1].end) {
-                self.items.items[count - 1].end = span.end;
-            }
-        }
-        self.items.items.len = count;
-        return count != 0;
-    }
-};
+pub const Spans = @import("../model_spans.zig").Spans;
 
 const Range = struct { first: u64, bytes: u64 };
 
@@ -187,7 +85,7 @@ const Job = struct {
         const threads = prepareThreads();
         const page: u64 = @intCast(c.sysconf(c._SC_PAGESIZE));
         for (spans.items.items) |span| {
-            const bytes = span.end - span.first;
+            const bytes = span.end - span.off;
             var consumed: u64 = 0;
             var chunk = bytes / threads;
             if (chunk > page) chunk = chunk / page * page;
@@ -195,7 +93,7 @@ const Job = struct {
             for (0..threads) |thread| {
                 if (consumed == bytes) break;
                 const take = if (thread + 1 == threads or bytes - consumed <= chunk) bytes - consumed else chunk;
-                self.ranges.append(allocator, .{ .first = span.first + consumed, .bytes = take }) catch outOfMemory();
+                self.ranges.append(allocator, .{ .first = span.off + consumed, .bytes = take }) catch outOfMemory();
                 consumed += take;
             }
             self.bytes +|= bytes;
@@ -279,8 +177,8 @@ pub const Streaming = struct {
         const sizes = allocator.alloc(u64, spans.items.items.len) catch outOfMemory();
         defer allocator.free(sizes);
         for (spans.items.items, offsets, sizes) |span, *offset, *bytes| {
-            offset.* = span.first;
-            bytes.* = span.end - span.first;
+            offset.* = span.off;
+            bytes.* = span.end - span.off;
         }
         const ok = c.ds4_gpu_set_model_map_spans(self.model.map, self.model.size, offsets.ptr, sizes.ptr, @intCast(offsets.len), spans.max_tensor_bytes) != 0;
         if (!ok) _ = c.fprintf(c.__stderrp, "ds4: Metal SSD streaming failed to map %s model spans\n", label);
@@ -398,6 +296,6 @@ pub fn staticBytes(config: *const Config, weights: *const Weights, include_token
     if (include_output) spans.includeOutput(weights);
     if (!spans.finish()) return null;
     var total: u64 = 0;
-    for (spans.items.items) |span| total +|= span.end - span.first;
+    for (spans.items.items) |span| total +|= span.end - span.off;
     return total;
 }

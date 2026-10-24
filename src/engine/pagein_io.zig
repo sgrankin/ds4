@@ -1,7 +1,7 @@
 //! File-cache preparation primitives shared by layer and selected-range jobs.
 //! These retain the current POSIX hints, page touches and bounded pread loop.
 const std = @import("std");
-const c = @import("pagein_c");
+const c = @import("gguf_c");
 const Model = c.ds4_model;
 const allocator = std.heap.c_allocator;
 const maximum = std.math.maxInt(u64);
@@ -19,7 +19,7 @@ pub fn now() f64 {
 const Aligned = struct { offset: u64, bytes: u64 };
 fn pageRange(model: [*c]const Model, offset: u64, bytes: u64) ?Aligned {
     if (model == null or model.*.map == null or offset > model.*.size or bytes == 0 or bytes > model.*.size - offset) return null;
-    const page: u64 = @intCast(c.getpagesize());
+    const page: u64 = @intCast(c.sysconf(c._SC_PAGESIZE));
     const first = offset & ~(page - 1);
     const leading = offset - first;
     if (bytes > maximum - leading or leading + bytes > maximum - (page - 1)) return null;
@@ -30,7 +30,7 @@ fn pageRange(model: [*c]const Model, offset: u64, bytes: u64) ?Aligned {
 
 pub fn touch(model: [*c]const Model, offset: u64, bytes: u64, touched: ?*u64, sink: ?*u8) bool {
     const range = pageRange(model, offset, bytes) orelse return false;
-    const page: u64 = @intCast(c.getpagesize());
+    const page: u64 = @intCast(c.sysconf(c._SC_PAGESIZE));
     const memory = model.*.map + range.offset;
     _ = c.posix_madvise(@constCast(memory), @intCast(range.bytes), c.POSIX_MADV_WILLNEED);
     const pointer: [*]const volatile u8 = @ptrCast(memory);

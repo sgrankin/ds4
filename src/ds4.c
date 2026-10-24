@@ -49,6 +49,8 @@
 #include "ds4_session_resources.h"
 #include "ds4_session_resource_pool.h"
 #include "engine/session_resources_api.h"
+#include "engine/engine_admission_api.h"
+#include "engine/engine_lifecycle_api.h"
 #include "ds4_engine_tp_state.h"
 #include "ds4_engine_memory.h"
 #include "ds4_engine_core.h"
@@ -65,6 +67,7 @@
 #include "engine/model_api.h"
 #include "engine/session_snapshot_api.h"
 #include "engine/pagein_api.h"
+#include "engine/model_spans_api.h"
 #include "engine/qwen4/model_api.h"
 #include "engine/glm53/model_api.h"
 #include "engine/qwen4/vision_api.h"
@@ -3972,102 +3975,22 @@ static DS4_MAYBE_UNUSED bool streaming_layer_gate_down_expert_bytes(
 }
 
 static bool ds4_streaming_routed_expert_bytes(
-        const ds4_weights *weights,
-        uint64_t          *per_expert_bytes_out) {
-    if (per_expert_bytes_out) *per_expert_bytes_out = 0;
-    if (!weights || !per_expert_bytes_out) return false;
-
-    /* Mixed-precision models can put an outlier quant at the first routed
-     * layer owned by a distributed slice.  Choosing that first layer as the
-     * slab class makes every ordinary layer bypass the cache.  Use the most
-     * common local size class instead (ties retain the earliest class). */
-    uint64_t best_bytes = 0;
-    uint32_t best_count = 0;
-    for (uint32_t il = 0; il < DS4_N_LAYER; il++) {
-        uint64_t candidate = 0;
-        if (!streaming_layer_routed_expert_bytes(&weights->layer[il],
-                                                 &candidate)) {
-            continue;
-        }
-        uint32_t count = 0;
-        for (uint32_t jl = 0; jl < DS4_N_LAYER; jl++) {
-            uint64_t bytes = 0;
-            if (streaming_layer_routed_expert_bytes(&weights->layer[jl],
-                                                    &bytes) &&
-                bytes == candidate) {
-                count++;
-            }
-        }
-        if (count > best_count) {
-            best_bytes = candidate;
-            best_count = count;
-        }
-    }
-    if (best_count == 0) return false;
-    *per_expert_bytes_out = best_bytes;
-    return true;
+        const ds4_weights *weights, uint64_t *bytes) {
+    if (bytes) *bytes = 0;
+    return weights && bytes && ds4_native_cache_per_expert(&g_ds4_shape, weights, bytes);
 }
 
-
 static bool ds4_streaming_cacheable_expert_count(
-        const ds4_weights *weights,
-        uint64_t          *experts_out,
-        uint32_t          *layers_out) {
-    if (experts_out) *experts_out = 0;
-    if (layers_out) *layers_out = 0;
-    if (!weights || !experts_out || DS4_N_EXPERT == 0) return false;
-
-    uint64_t slab_bytes = 0;
-    if (!ds4_streaming_routed_expert_bytes(weights, &slab_bytes)) return false;
-
-    uint32_t layers = 0;
-    for (uint32_t il = 0; il < DS4_N_LAYER; il++) {
-        uint64_t per_expert_bytes = 0;
-        if (!streaming_layer_routed_expert_bytes(&weights->layer[il],
-                                                 &per_expert_bytes)) {
-            continue;
-        }
-        if (per_expert_bytes == slab_bytes) layers++;
-    }
-
-    if (layers == 0 ||
-        (uint64_t)layers > UINT64_MAX / (uint64_t)DS4_N_EXPERT) {
-        return false;
-    }
-    *experts_out = (uint64_t)layers * (uint64_t)DS4_N_EXPERT;
-    if (layers_out) *layers_out = layers;
-    return true;
+        const ds4_weights *weights, uint64_t *experts, uint32_t *layers) {
+    if (experts) *experts = 0;
+    if (layers) *layers = 0;
+    return weights && experts && ds4_native_cacheable_count(&g_ds4_shape, weights, experts, layers);
 }
 
 static bool ds4_streaming_prefill_headroom_bytes(
-        const ds4_weights *weights,
-        uint64_t          *bytes_out) {
-    if (bytes_out) *bytes_out = 0;
-    if (!weights || !bytes_out) return false;
-
-    uint64_t per_expert_bytes = 0;
-    uint64_t cacheable_experts = 0;
-    uint32_t cacheable_layers = 0;
-    if (!ds4_streaming_routed_expert_bytes(weights, &per_expert_bytes) ||
-        !ds4_streaming_cacheable_expert_count(weights,
-                                              &cacheable_experts,
-                                              &cacheable_layers)) {
-        return false;
-    }
-    (void)cacheable_experts;
-    const uint32_t reserve_layers =
-        cacheable_layers < DS4_STREAMING_PREFILL_HEADROOM_LAYERS ?
-        cacheable_layers : DS4_STREAMING_PREFILL_HEADROOM_LAYERS;
-    if (per_expert_bytes > UINT64_MAX / (uint64_t)DS4_N_EXPERT) {
-        return false;
-    }
-    const uint64_t layer_bytes =
-        per_expert_bytes * (uint64_t)DS4_N_EXPERT;
-    if (reserve_layers != 0 &&
-        layer_bytes > UINT64_MAX / (uint64_t)reserve_layers) return false;
-
-    *bytes_out = layer_bytes * (uint64_t)reserve_layers;
-    return true;
+        const ds4_weights *weights, uint64_t *bytes) {
+    if (bytes) *bytes = 0;
+    return weights && bytes && ds4_native_cache_prefill_headroom(&g_ds4_shape, weights, bytes);
 }
 
 /*
@@ -4078,6 +4001,13 @@ static bool ds4_streaming_prefill_headroom_bytes(
  * expert weights through the mapped-model views instead. A layer is "uniform"
  * iff its per-expert bytes match the slab class.
  */
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_streaming_layer_experts_uniform(
+        const ds4_weights *w,
+        uint32_t           il) {
+    return ds4_native_model_spans_uniform(w, &g_ds4_shape, il);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_streaming_layer_experts_uniform(
         const ds4_weights *w,
         uint32_t           il) {
@@ -4089,6 +4019,7 @@ static DS4_MAYBE_UNUSED bool weights_streaming_layer_experts_uniform(
     if (!ds4_streaming_routed_expert_bytes(w, &base)) return true;
     return bytes == base;
 }
+#endif
 
 static uint32_t ds4_streaming_cache_experts_for_byte_budget(
         const ds4_weights *weights,
@@ -5300,6 +5231,8 @@ static void weights_bind(
 }
 
 
+/* Retained C collectors below serve the separate sharded/distributed planner.
+ * Ordinary single-Metal full/static/runtime builders use native model_spans. */
 static void model_map_span_include_tensor(
         const ds4_tensor *t,
         uint64_t *lo,
@@ -5369,6 +5302,7 @@ static void model_map_span_vec_include_one(ds4_model_map_span_vec *spans, const 
     model_map_span_vec_append(spans, lo, hi, isolate);
 }
 
+#ifndef __APPLE__
 static void model_map_span_vec_include_layer(ds4_model_map_span_vec *spans, const ds4_layer_weights *l) {
 #define DS4_INCLUDE_TENSOR(t_) model_map_span_vec_include_one(spans, (t_))
     DS4_INCLUDE_TENSOR(l->hc_attn_fn);
@@ -5476,6 +5410,7 @@ static void model_map_span_vec_include_layer(ds4_model_map_span_vec *spans, cons
     DS4_INCLUDE_TENSOR(l->nextn_hc_head_up);
 #undef DS4_INCLUDE_TENSOR
 }
+#endif
 
 static void model_map_span_vec_include_layer_decode_static(ds4_model_map_span_vec *spans, const ds4_layer_weights *l) {
 #define DS4_INCLUDE_TENSOR(t_) model_map_span_vec_include_one(spans, (t_))
@@ -5582,6 +5517,13 @@ static void model_map_span_vec_include_layer_decode_static(ds4_model_map_span_ve
 #undef DS4_INCLUDE_TENSOR
 }
 
+#ifdef __APPLE__
+static bool glm_stream_resident_decode_layer_supported(
+        const ds4_layer_weights *l,
+        uint32_t                 il) {
+    return ds4_native_model_spans_resident_supported(&g_ds4_shape, l, il);
+}
+#else
 static bool glm_stream_resident_decode_layer_supported(
         const ds4_layer_weights *l,
         uint32_t                 il) {
@@ -5604,11 +5546,21 @@ static bool glm_stream_resident_decode_layer_supported(
            (l->ffn_gate_exps->type == DS4_TENSOR_Q2_K ||
             l->ffn_gate_exps->type == DS4_TENSOR_Q4_K);
 }
+#endif
 
-static uint32_t g_glm_streaming_full_resident_start;
-static uint32_t g_glm_streaming_full_resident_layers;
-static bool g_glm_streaming_runtime_static_map_enabled;
+static ds4_streaming_policy g_ds4_streaming_policy;
+#define g_glm_streaming_full_resident_start (g_ds4_streaming_policy.resident_start)
+#define g_glm_streaming_full_resident_layers (g_ds4_streaming_policy.resident_layers)
+#define g_glm_streaming_runtime_static_map_enabled (g_ds4_streaming_policy.static_decode_map)
 
+#ifdef __APPLE__
+static bool glm_stream_resident_decode_layer_enabled(
+        const ds4_layer_weights *l,
+        uint32_t                 il) {
+    return ds4_native_model_spans_resident_layer(&g_ds4_shape,
+        &g_ds4_streaming_policy, l, il);
+}
+#else
 static bool glm_stream_resident_decode_layer_enabled(
         const ds4_layer_weights *l,
         uint32_t                 il) {
@@ -5618,7 +5570,16 @@ static bool glm_stream_resident_decode_layer_enabled(
            il - g_glm_streaming_full_resident_start <
                g_glm_streaming_full_resident_layers;
 }
+#endif
 
+#ifdef __APPLE__
+static bool glm_stream_expert_cache_addr_layout_supported(
+        const ds4_weights       *w,
+        const ds4_layer_weights *l,
+        uint32_t                 il) {
+    return ds4_native_model_spans_glm_addr_layout(w, &g_ds4_shape, l, il);
+}
+#else
 static bool glm_stream_expert_cache_addr_layout_supported(
         const ds4_weights       *w,
         const ds4_layer_weights *l,
@@ -5649,6 +5610,7 @@ static bool glm_stream_expert_cache_addr_layout_supported(
         l->ffn_down_exps->type == DS4_TENSOR_Q4_K;
     return q2_addr || q4_addr;
 }
+#endif
 
 static DS4_MAYBE_UNUSED bool glm_stream_expert_cache_addr_supported(
         const ds4_weights       *w,
@@ -5674,6 +5636,13 @@ static DS4_MAYBE_UNUSED bool glm_stream_expert_cache_addr_supported(
 #endif
 }
 
+#ifdef __APPLE__
+static bool glm_stream_selected_expert_cache_supported(
+        const ds4_layer_weights *l,
+        uint32_t                 il) {
+    return ds4_native_model_spans_glm_selected_layout(&g_ds4_shape, l, il);
+}
+#else
 static bool glm_stream_selected_expert_cache_supported(
         const ds4_layer_weights *l,
         uint32_t                 il) {
@@ -5715,7 +5684,16 @@ static bool glm_stream_selected_expert_cache_supported(
     }
     return false;
 }
+#endif
 
+#ifdef __APPLE__
+static bool glm_stream_decode_experts_are_streamed(
+        const ds4_weights       *w,
+        const ds4_layer_weights *l,
+        uint32_t                 il) {
+    return ds4_native_model_spans_glm_streamed(w, &g_ds4_shape, l, il);
+}
+#else
 static bool glm_stream_decode_experts_are_streamed(
         const ds4_weights       *w,
         const ds4_layer_weights *l,
@@ -5724,6 +5702,7 @@ static bool glm_stream_decode_experts_are_streamed(
     return glm_stream_expert_cache_addr_layout_supported(w, l, il) ||
            glm_stream_selected_expert_cache_supported(l, il);
 }
+#endif
 
 static bool glm_stream_decode_expert_cache_ready(
         const ds4_weights       *w,
@@ -5754,6 +5733,7 @@ static bool glm_stream_decode_expert_cache_ready(
  * undersized expert caches fall back to direct model-range reads. Include
  * those expert tensors so cache-hit prefill extension and decode are covered.
  */
+#ifndef __APPLE__
 static void model_map_span_vec_include_layer_decode(
         ds4_model_map_span_vec *spans,
         const ds4_weights      *w,
@@ -5769,7 +5749,14 @@ static void model_map_span_vec_include_layer_decode(
         model_map_span_vec_include_one(spans, l->ffn_down_exps);
     }
 }
+#endif
 
+#ifdef __APPLE__
+static bool weights_model_map_decode_static_supported(const ds4_weights *w) {
+    return ds4_native_model_spans_static_supported(w, &g_ds4_shape,
+        &g_ds4_streaming_policy);
+}
+#else
 static bool weights_model_map_decode_static_supported(const ds4_weights *w) {
     if (!w) return false;
     if (DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_GLM_DSA) {
@@ -5784,6 +5771,7 @@ static bool weights_model_map_decode_static_supported(const ds4_weights *w) {
     }
     return true;
 }
+#endif
 
 static void model_map_span_vec_include_output(ds4_model_map_span_vec *spans, const ds4_weights *w) {
     model_map_span_vec_include_one(spans, w->output_hc_base);
@@ -5826,6 +5814,17 @@ static bool model_map_span_vec_finish(ds4_model_map_span_vec *spans) {
     return spans->len != 0;
 }
 
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_model_map_spans(
+        const ds4_weights *w,
+        uint32_t layer_start,
+        uint32_t layer_end,
+        bool include_output,
+        ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_full(w, &g_ds4_shape, layer_start,
+        layer_end, include_output, spans);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_model_map_spans(
         const ds4_weights *w,
         uint32_t layer_start,
@@ -5845,6 +5844,7 @@ static DS4_MAYBE_UNUSED bool weights_model_map_spans(
     if (include_output) model_map_span_vec_include_output(spans, w);
     return model_map_span_vec_finish(spans);
 }
+#endif
 
 static const uint8_t *tensor_expert_bytes(
         const ds4_model  *m,
@@ -5900,6 +5900,15 @@ static DS4_MAYBE_UNUSED bool weights_model_map_sharded_spans(
     return model_map_span_vec_finish(spans);
 }
 
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_model_map_decode_layer_spans(
+        const ds4_weights *w,
+        uint32_t il,
+        ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_layer(w, &g_ds4_shape,
+        &g_ds4_streaming_policy, il, true, spans);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_model_map_decode_layer_spans(
         const ds4_weights *w,
         uint32_t il,
@@ -5909,7 +5918,18 @@ static DS4_MAYBE_UNUSED bool weights_model_map_decode_layer_spans(
     model_map_span_vec_include_layer_decode(spans, w, il);
     return model_map_span_vec_finish(spans);
 }
+#endif
 
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_model_map_decode_static_spans(
+        const ds4_weights *w,
+        bool include_token,
+        bool include_output,
+        ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_static(w, &g_ds4_shape, 0, UINT32_MAX,
+        include_token, include_output, spans);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_model_map_decode_static_spans(
         const ds4_weights *w,
         bool include_token,
@@ -5924,7 +5944,20 @@ static DS4_MAYBE_UNUSED bool weights_model_map_decode_static_spans(
     if (include_output) model_map_span_vec_include_output(spans, w);
     return model_map_span_vec_finish(spans);
 }
+#endif
 
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_model_map_decode_static_slice_spans(
+        const ds4_weights *w,
+        uint32_t layer_start,
+        uint32_t layer_end,
+        bool include_token,
+        bool include_output,
+        ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_static(w, &g_ds4_shape, layer_start,
+        layer_end, include_token, include_output, spans);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_model_map_decode_static_slice_spans(
         const ds4_weights *w,
         uint32_t layer_start,
@@ -5945,10 +5978,21 @@ static DS4_MAYBE_UNUSED bool weights_model_map_decode_static_slice_spans(
     if (include_output) model_map_span_vec_include_output(spans, w);
     return model_map_span_vec_finish(spans);
 }
+#endif
 
 /* Runtime static maps are built after the streaming cache and resident-layer
  * policy is configured. Unlike the guard-only static spans above, they must
  * include routed tensors for resident layers and cache-incompatible layouts. */
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_model_map_decode_runtime_spans(
+        const ds4_weights *w,
+        bool include_token,
+        bool include_output,
+        ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_runtime(w, &g_ds4_shape,
+        &g_ds4_streaming_policy, 0, UINT32_MAX, include_token, include_output, spans);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_model_map_decode_runtime_spans(
         const ds4_weights *w,
         bool include_token,
@@ -5963,7 +6007,20 @@ static DS4_MAYBE_UNUSED bool weights_model_map_decode_runtime_spans(
     if (include_output) model_map_span_vec_include_output(spans, w);
     return model_map_span_vec_finish(spans);
 }
+#endif
 
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_model_map_decode_runtime_slice_spans(
+        const ds4_weights *w,
+        uint32_t layer_start,
+        uint32_t layer_end,
+        bool include_token,
+        bool include_output,
+        ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_runtime(w, &g_ds4_shape,
+        &g_ds4_streaming_policy, layer_start, layer_end, include_token, include_output, spans);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_model_map_decode_runtime_slice_spans(
         const ds4_weights *w,
         uint32_t layer_start,
@@ -5984,7 +6041,14 @@ static DS4_MAYBE_UNUSED bool weights_model_map_decode_runtime_slice_spans(
     if (include_output) model_map_span_vec_include_output(spans, w);
     return model_map_span_vec_finish(spans);
 }
+#endif
 
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED uint64_t model_map_span_vec_total_bytes(
+        const ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_total(spans);
+}
+#else
 static DS4_MAYBE_UNUSED uint64_t model_map_span_vec_total_bytes(
         const ds4_model_map_span_vec *spans) {
     if (!spans) return 0;
@@ -5996,6 +6060,7 @@ static DS4_MAYBE_UNUSED uint64_t model_map_span_vec_total_bytes(
     }
     return total;
 }
+#endif
 
 static DS4_MAYBE_UNUSED bool weights_streaming_non_routed_bytes(
         const ds4_weights *w,
@@ -6017,6 +6082,13 @@ static DS4_MAYBE_UNUSED bool weights_streaming_non_routed_bytes(
     return true;
 }
 
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_model_map_token_spans(
+        const ds4_weights *w,
+        ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_token(w, spans);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_model_map_token_spans(
         const ds4_weights *w,
         ds4_model_map_span_vec *spans) {
@@ -6025,7 +6097,15 @@ static DS4_MAYBE_UNUSED bool weights_model_map_token_spans(
     model_map_span_vec_include_one(spans, w->token_embd);
     return model_map_span_vec_finish(spans);
 }
+#endif
 
+#ifdef __APPLE__
+static DS4_MAYBE_UNUSED bool weights_model_map_output_spans(
+        const ds4_weights *w,
+        ds4_model_map_span_vec *spans) {
+    return ds4_native_model_spans_output(w, spans);
+}
+#else
 static DS4_MAYBE_UNUSED bool weights_model_map_output_spans(
         const ds4_weights *w,
         ds4_model_map_span_vec *spans) {
@@ -6034,6 +6114,7 @@ static DS4_MAYBE_UNUSED bool weights_model_map_output_spans(
     model_map_span_vec_include_output(spans, w);
     return model_map_span_vec_finish(spans);
 }
+#endif
 
 static void mtp_weights_bind(ds4_mtp_weights *weights, const ds4_model *model) {
     ds4_native_support_bind_mtp(weights, model, &g_ds4_shape);
@@ -18377,7 +18458,8 @@ static bool metal_graph_stream_prefill_layer_pagein_start(
         (readahead_only ? DS4_STREAM_PREPARE_READAHEAD : 0u) |
         (decode_only ? DS4_STREAM_PREPARE_DECODE : 0u);
     return ds4_native_pagein_layer_start(model, weights, il, n_tokens, flags,
-        g != NULL, g && g->ssd_streaming, DS4_N_LAYER, job);
+        g != NULL, g && g->ssd_streaming, &g_ds4_shape,
+        &g_ds4_streaming_policy, job);
 }
 #else
 static bool metal_graph_stream_prefill_layer_pagein_start(
@@ -18648,7 +18730,8 @@ static bool metal_graph_stream_prepare_start_if_needed(
         (readahead_only ? DS4_STREAM_PREPARE_READAHEAD : 0u) |
         (decode_only ? DS4_STREAM_PREPARE_DECODE : 0u);
     return ds4_native_pagein_prepare_start(model, weights, layer, n_tokens,
-        flags, g != NULL, g && g->ssd_streaming, DS4_N_LAYER, slots, n_slots);
+        flags, g != NULL, g && g->ssd_streaming, &g_ds4_shape,
+        &g_ds4_streaming_policy, slots, n_slots);
 }
 #else
 static bool metal_graph_stream_prepare_start_if_needed(
@@ -18714,7 +18797,8 @@ static bool metal_graph_stream_prepare_join_layer(
         (readahead_only ? DS4_STREAM_PREPARE_READAHEAD : 0u) |
         (decode_only ? DS4_STREAM_PREPARE_DECODE : 0u);
     return ds4_native_pagein_prepare_join_layer(model, weights, layer, n_tokens,
-        flags, g != NULL, g && g->ssd_streaming, DS4_N_LAYER, slots, n_slots);
+        flags, g != NULL, g && g->ssd_streaming, &g_ds4_shape,
+        &g_ds4_streaming_policy, slots, n_slots);
 }
 #else
 static bool metal_graph_stream_prepare_join_layer(
@@ -39341,8 +39425,8 @@ static DS4_MAYBE_UNUSED bool ds41_graph_short_prefill(ds41_gpu_graph *g, const d
 struct ds4_engine {
     struct flint_engine *flint;
     ds4_engine_core core;
-    /* Select native cleanup only after the post-family startup dispatch.
-     * Earlier option failures and explicit placement retain C fallback. */
+    /* Actual factory ownership: early unowned errors free only the shell;
+     * acquired Core/Flint resources retire through the native transaction. */
     bool native_core;
     ds4_engine_tp_state tp;
     bool cuda_tp_expert_split;  /* Resident expert layout, independent of binding. */
@@ -39373,6 +39457,17 @@ struct ds4_engine {
     int            placement_session_count_hint;
     ds4_session_resource_pool session_resources;
 };
+
+/* Native models own immutable metadata in Core. The old DS41 TP finish can
+ * own cleanup without this configuration; only that legacy route reads globals. */
+static const ds4_engine_configuration *ds4_engine_native_config(const ds4_engine *e) {
+    return e && e->native_core && e->core.configuration.shape.n_layer
+        ? &e->core.configuration : NULL;
+}
+static const ds4_shape *ds4_engine_shape(const ds4_engine *e) {
+    const ds4_engine_configuration *config = ds4_engine_native_config(e);
+    return config ? &config->shape : &g_ds4_shape;
+}
 
 static DS4_MAYBE_UNUSED uint64_t ds4_engine_glm_graph_budget(
         const ds4_engine *e, uint64_t next_graph_bytes) {
@@ -39858,84 +39953,19 @@ char *ds4_token_text(ds4_engine *engine, int token, size_t *length) {
 /* Paper 2606.00206, Table 8: only exact leading-space vocabulary tokens.
  * Do not penalize the first subtoken of a split word: that would suppress
  * unrelated words sharing its prefix. Read configuration once per engine. */
-static int ds4_engine_map_overthink(ds4_engine *e) {
-    static const char *words[] = {
-        "perhaps", "maybe", "wait", "Wait", "actually", "hold", "Hmm", "hmm",
-        "Alternatively", "alternatively", "However", "however", "instead", "Instead",
-        "But", "but", "though", "although", "yet", "rather", "unless", "otherwise",
-        "nonetheless", "nevertheless", "regardless", "still", "anyway", "Or", "or",
-        "either", "whether", "uncertain", "unsure", "possibly", "might", "could",
-        "another", "different", "reconsider", "rethink", "backtrack", "retry",
-        "recheck", "revisit", "doubt", "confused", "wrong", "mistake", "error", "incorrect"
-    };
-    if (e->core.overthink.count || !e->core.vocab.n_vocab) return e->core.overthink.count;
-    for (size_t i = 0; i < sizeof(words) / sizeof(words[0]); i++) {
-        char text[32];
-        snprintf(text, sizeof(text), " %s", words[i]);
-        token_vec tokens = {0};
-        ds4_tokenize_text(e, text, &tokens);
-        if (tokens.len == 1) {
-            size_t len = 0;
-            char *decoded = ds4_token_text(e, tokens.v[0], &len);
-            if (len == strlen(text) && !memcmp(decoded, text, len)) {
-                e->core.overthink.ids[e->core.overthink.count++] = tokens.v[0];
-            }
-            free(decoded);
-        }
-        token_vec_free(&tokens);
-    }
-    return e->core.overthink.count;
-}
+
 
 bool ds4_engine_set_overthinking_penalty(ds4_engine *e, float penalty, bool think_only) {
-    uint32_t bits;
-    memcpy(&bits, &penalty, sizeof(bits));
-    if (!e || (bits & UINT32_C(0x7f800000)) == UINT32_C(0x7f800000) || penalty < 0.0f) return false;
-    if (penalty > 0.0f && !ds4_engine_map_overthink(e)) return false;
-    e->core.overthink.penalty = penalty;
-    e->core.overthink.think_only = think_only;
-    return true;
+    if (!e) return false;
+    const ds4_model_family family = ds4_engine_shape(e)->family;
+    const flint_tokenizer *tokenizer = e->flint ? flint_engine_tokenizer(e->flint) : NULL;
+    return ds4_native_engine_overthink_set(&e->core, family, tokenizer, penalty, think_only);
 }
 
 static bool ds4_engine_configure_overthink(ds4_engine *e) {
-    const char *after = getenv("DS4_OVERTHINK_AFTER");
-    if (after && after[0]) {
-        char *after_end = NULL;
-        errno = 0;
-        const unsigned long value = strtoul(after, &after_end, 10);
-        if (errno || after_end == after || *after_end ||
-            strspn(after, "0123456789") != strlen(after) || value > INT_MAX) {
-            fputs("ds4: DS4_OVERTHINK_AFTER must be a nonnegative integer\n", stderr);
-            return false;
-        }
-        e->core.overthink.after = (int)value;
-    }
-    const char *env = getenv("DS4_OVERTHINK_PENALTY");
-    if (!env || !env[0]) return true;
-    char *end = NULL;
-    errno = 0;
-    const double penalty = strtod(env, &end);
-    if (errno || end == env || *end ||
-        strspn(env, "0123456789.eE+-") != strlen(env) ||
-        !(penalty >= 0.0 && penalty <= FLT_MAX)) {
-        fprintf(stderr, "ds4: DS4_OVERTHINK_PENALTY must be a finite nonnegative number\n");
-        return false;
-    }
-    if (penalty == 0.0) return true;
-    const char *scope = getenv("DS4_OVERTHINK_SCOPE");
-    e->core.overthink.think_only = !scope || !strcmp(scope, "think");
-    if (!e->core.overthink.think_only && strcmp(scope, "all")) {
-        fprintf(stderr, "ds4: DS4_OVERTHINK_SCOPE must be think or all\n");
-        return false;
-    }
-    if (!e->core.vocab.n_vocab) return true; /* --inspect has no tokenizer. */
-    if (!ds4_engine_set_overthinking_penalty(e, (float)penalty, e->core.overthink.think_only)) {
-        fprintf(stderr, "ds4: no exact single-token overthinking markers in this vocabulary\n");
-        return false;
-    }
-    fprintf(stderr, "ds4: overthinking logit penalty %.6g, scope=%s, after=%d generated thinking tokens, mapped=%d/50; speculation disabled\n",
-            e->core.overthink.penalty, e->core.overthink.think_only ? "think" : "all", e->core.overthink.after, e->core.overthink.count);
-    return true;
+    const ds4_model_family family = ds4_engine_shape(e)->family;
+    const flint_tokenizer *tokenizer = e->flint ? flint_engine_tokenizer(e->flint) : NULL;
+    return ds4_native_engine_overthink_configure(&e->core, family, tokenizer);
 }
 
 static bool tokens_inside_thinking(const int *tokens, int n,
@@ -40323,50 +40353,14 @@ static bool glm_graph_memory_guard_disabled(void) {
 }
 
 static double glm_graph_memory_guard_default_reserve_gib(
-        uint64_t budget_base,
-        uint64_t model_bytes,
-        bool     glm53) {
-    const double base_gib = glm_graph_bytes_to_gib(budget_base);
-    const double model_gib = glm_graph_bytes_to_gib(model_bytes);
-    if (base_gib >= 480.0 &&
-        base_gib <= 640.0 &&
-        model_gib >= base_gib * 0.80) {
-        return 24.0;
-    }
-    if (glm53 &&
-        base_gib >= 108.0 &&
-        base_gib <= 160.0 &&
-        model_gib >= 70.0) {
-        /* A nominal 128 GB host reports less than 120 GiB, and ROCm further
-         * limits this base to currently available memory. Preserve the proven
-         * resident-Q2 budget without imposing it on larger machines. */
-        return 18.0;
-    }
-    return 32.0;
+        uint64_t budget_base, uint64_t model_bytes, bool glm53) {
+    return ds4_native_glm_guard_default_reserve(budget_base, model_bytes, glm53);
 }
 
 static uint64_t glm_graph_memory_guard_budget_bytes(
-        uint64_t budget_base,
-        uint64_t wired_limit,
-        double   fraction,
-        double   reserve_gib) {
-    const uint64_t fraction_budget =
-        (uint64_t)((double)budget_base * fraction);
-    const uint64_t reserve_bytes =
-        (uint64_t)(reserve_gib * 1024.0 * 1024.0 * 1024.0);
-    const uint64_t reserve_budget =
-        reserve_bytes >= budget_base ? 0 : budget_base - reserve_bytes;
-    uint64_t budget = fraction_budget;
-    if (reserve_bytes != 0 && reserve_budget < budget) budget = reserve_budget;
-    if (wired_limit != 0) {
-        /* An explicitly raised iogpu.wired_limit_mb is the user granting
-         * the GPU that much wired memory; it overrides the heuristics. */
-        const uint64_t margin = 2ull * 1024ull * 1024ull * 1024ull;
-        const uint64_t wired_budget =
-            wired_limit > margin ? wired_limit - margin : wired_limit;
-        if (wired_budget > budget) budget = wired_budget;
-    }
-    return budget;
+        uint64_t budget_base, uint64_t wired_limit,
+        double fraction, double reserve_gib) {
+    return ds4_native_glm_guard_budget(budget_base, wired_limit, fraction, reserve_gib);
 }
 #endif
 
@@ -48253,14 +48247,6 @@ static uint32_t glm_graph_prefill_chunk_tokens(uint32_t full_attention_cap) {
     return full_attention_cap ? full_attention_cap : DS4_GLM_METAL_FULL_ATTN_DEFAULT_CONTEXT;
 }
 
-/* Temporary model-specific selection leaf. Generic I/O partitions these
- * ranges and owns worker lifetimes; engine migration will retire this policy. */
-bool ds4_native_pagein_layer_spans(const ds4_weights *weights, uint32_t layer,
-        bool decode, ds4_model_map_span_vec *spans) {
-    return decode ? weights_model_map_decode_layer_spans(weights, layer, spans) :
-        weights_model_map_spans(weights, layer, layer, false, spans);
-}
-
 /* Shared storage actions; native owners decide their lifecycle and ordering. */
 bool ds4_native_stream_prepare_start(const ds4_model *model,
         const ds4_weights *weights, uint32_t layer, uint32_t rows, uint32_t flags,
@@ -54251,7 +54237,7 @@ static bool ds4_session_is_cpu(const ds4_session *s) {
 }
 
 static bool ds4_session_is_ds41(const ds4_session *s) {
-    return s && s->engine && !s->flint && DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41;
+    return s && s->engine && !s->flint && ds4_engine_shape(s->engine)->family == DS4_MODEL_FAMILY_DEEPSEEK41;
 }
 
 static void ds4_session_dspark_capture_invalidate(ds4_session *s) {
@@ -54284,11 +54270,11 @@ static void ds4_session_dspark_capture_note_checkpoint(ds4_session *s) {
 }
 
 static bool ds4_session_is_glm(const ds4_session *s) {
-    return s && s->engine && !s->flint && DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_GLM_DSA;
+    return s && s->engine && !s->flint && ds4_engine_shape(s->engine)->family == DS4_MODEL_FAMILY_GLM_DSA;
 }
 
 static bool ds4_session_is_qwen4(const ds4_session *s) {
-    return s && s->engine && !s->flint && ds4_model_is_qwen4();
+    return s && s->engine && !s->flint && ds4_engine_shape(s->engine)->family == DS4_MODEL_FAMILY_QWEN4_EXP;
 }
 
 #ifndef DS4_NO_GPU
@@ -54364,11 +54350,12 @@ static bool ds4_session_native_view(ds4_session *s, ds4_session_view *view,
     }
 #ifdef DS4_HAS_DEEPSEEK41_GPU
     if (ds4_session_is_ds41(s)) {
-        *config41 = ds41_native_config();
+        const ds4_engine_configuration *native = ds4_engine_native_config(e);
+        if (!native) *config41 = ds41_native_config();
         *memory41 = ds41_memory_inputs(e);
         view->kind = DS4_SESSION_DS41;
         view->ds41 = &s->ds41;
-        view->config41 = config41;
+        view->config41 = native ? &native->ds41 : config41;
         view->memory41 = memory41;
         view->exact41 = ds41_exact_prefill_rows;
         return true;
@@ -54381,7 +54368,7 @@ static bool ds4_session_native_view(ds4_session *s, ds4_session_view *view,
         return true;
     }
 #endif
-    if (ds4_model_is_glm53()) {
+    if (ds4_engine_shape(e)->variant == DS4_VARIANT_GLM53) {
         if (s->glm.ready && !glm_native_session_supported(s)) return false;
         const char *kv_dump = getenv("DS4_GLM_KV_DUMP");
         if (kv_dump && kv_dump[0]) return false;
@@ -61984,6 +61971,9 @@ static bool ds4_engine_configure_streaming_auto_cache(ds4_engine *e, int ctx_siz
     (void)ctx_size;
     return true;
 #else
+    if (e && e->core.backend == DS4_BACKEND_METAL && ds4_model_is_glm53() &&
+        !e->multi_tier && !e->tp.active && e->core.distributed.role == DS4_DISTRIBUTED_NONE)
+        return ds4_native_engine_auto_cache(&e->core, &g_ds4_shape, ctx_size, e->core.prefill_chunk);
     if (!e ||
         !e->core.ssd_streaming ||
         !ds4_backend_supports_ssd_streaming(e->core.backend) ||
@@ -62279,6 +62269,11 @@ static bool ds4_glm_streaming_resident_prefix_bytes(
 }
 
 static bool ds4_engine_configure_streaming_cache_budget(ds4_engine *e) {
+#ifndef DS4_NO_GPU
+    if (e && e->core.backend == DS4_BACKEND_METAL && ds4_model_is_glm53() &&
+        !e->multi_tier && !e->tp.active && e->core.distributed.role == DS4_DISTRIBUTED_NONE)
+        return ds4_native_engine_reserve_cache(&e->core, &g_ds4_shape, &g_ds4_streaming_policy);
+#endif
     g_glm_streaming_full_resident_start = 0;
     g_glm_streaming_full_resident_layers = 0;
     g_glm_streaming_runtime_static_map_enabled = false;
@@ -62607,6 +62602,18 @@ static void ds4_engine_fit_glm_streaming_budget(
     (void)load_output;
     (void)ctx_size;
 #else
+    if (e && e->core.backend == DS4_BACKEND_METAL && ds4_model_is_glm53() &&
+        !e->multi_tier && !e->tp.active && e->core.distributed.role == DS4_DISTRIBUTED_NONE) {
+        const ds4_model_residency_inputs placement = {
+            .load_slice = load_slice, .layer_start = load_layer_start,
+            .layer_end = load_layer_end, .load_output = load_output,
+            .context = ctx_size, .chunk = e->core.prefill_chunk,
+        };
+        ds4_native_engine_fit_glm_cache(&e->core, &e->session_resources,
+            &g_ds4_shape, &g_ds4_streaming_policy, &placement,
+            e->placement_session_count_hint);
+        return;
+    }
     if (!e || !e->core.ssd_streaming ||
         DS4_MODEL_FAMILY != DS4_MODEL_FAMILY_GLM_DSA ||
         ctx_size <= 0) {
@@ -64562,6 +64569,30 @@ void ds4_core_profile_init(const char *path, const char *hotlist) {
     ds4_expert_profile_init(path, hotlist);
 }
 void ds4_core_profile_close(void) { ds4_expert_profile_close(); }
+
+void ds4_core_acquire_instance_lock(int requested_threads) {
+    if (requested_threads > 0) g_requested_threads = (uint32_t)requested_threads;
+    ds4_acquire_instance_lock();
+}
+
+void ds4_core_publish_configuration(const ds4_engine_configuration *config) {
+    g_ds4_flash_vision_exp = false;
+    g_tp_shard_model_bytes = 0;
+    g_ds4_shape = config->shape;
+    if (config->shape.family == DS4_MODEL_FAMILY_QWEN4_EXP) {
+        memcpy(g_ds4_compress_ratios, config->qwen.compress_ratios, sizeof(g_ds4_compress_ratios));
+        g_ds4_qwen4_ple = config->qwen.ple;
+        memcpy(g_qwen4_rope_freq, config->qwen.rope_freq, sizeof(g_qwen4_rope_freq));
+        g_qwen4_rope_mscale = config->qwen.rope_mscale;
+        g_qwen4_native_ctx = config->qwen.native_ctx;
+        g_qwen4_rope_yarn = config->qwen.rope_yarn;
+    } else if (config->shape.family == DS4_MODEL_FAMILY_DEEPSEEK41) {
+        memcpy(g_ds4_compress_ratios, config->ds41.compress_ratios, sizeof(g_ds4_compress_ratios));
+    } else {
+        memset(g_ds4_compress_ratios, 0, sizeof(g_ds4_compress_ratios));
+    }
+}
+
 void ds4_core_threads_shutdown(void) { ds4_threads_shutdown(); }
 void ds4_core_release_instance_lock(void) { ds4_release_instance_lock(); }
 void ds4_core_warm_model(const ds4_model *model) { model_warm_weights(model); }
@@ -64717,6 +64748,24 @@ static int ds4_engine_open_internal(ds4_engine **out,
                                      const ds4_engine_options *opt,
                                      const ds4_gpu_config *gpu_cfg) {
     ds4_engine *e = xcalloc(1, sizeof(*e));
+
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+    if (opt->backend == DS4_BACKEND_METAL && gpu_cfg == NULL) {
+        e->placement_ctx_hint = opt->placement_ctx_hint;
+        e->placement_session_count_hint = opt->placement_session_count_hint;
+        const int result = ds4_native_engine_lifecycle_open(&e->core,
+            &e->core.configuration, &e->session_resources, &e->flint,
+            &g_ds4_streaming_policy, opt, &e->native_core);
+        if (result == DS4_ENGINE_OPEN_OK) { *out = e; return 0; }
+        if (result == DS4_ENGINE_OPEN_ERROR) {
+            if (e->native_core) ds4_engine_close(e); else free(e);
+            *out = NULL; return 1;
+        }
+        /* A different/explicit legacy route was retired and reset by native
+         * startup. Only that separate compatibility factory continues below. */
+        e->native_core = false;
+    }
+#endif
     if (flint_engine_detect(opt->model_path)) {
         if (opt->backend != DS4_BACKEND_METAL || opt->distributed.role != DS4_DISTRIBUTED_NONE || opt->tp.role != DS4_TP_NONE) {
             fprintf(stderr, "ds4: Flint requires a local Metal engine\n");
@@ -66253,32 +66302,30 @@ int ds4_engine_set_power(ds4_engine *e, int power_percent) {
 
 const char *ds4_engine_model_name(ds4_engine *e) {
     if (e && e->flint) return "Flint";
-    (void)e;
-    return DS4_MODEL_SHAPE_NAME;
+    return ds4_engine_shape(e)->name;
 }
 
 int ds4_engine_layer_count(ds4_engine *e) {
     if (e && e->flint) return 49;
-    (void)e;
-    if (DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_GLM_DSA) {
-        if (DS4_N_LAYER <= DS4_N_NEXTN_PREDICT) return 0;
-        return (int)(DS4_N_LAYER - DS4_N_NEXTN_PREDICT);
-    }
-    return (int)DS4_N_LAYER;
+    const ds4_shape *shape = ds4_engine_shape(e);
+    if (shape->family == DS4_MODEL_FAMILY_GLM_DSA)
+        return shape->n_layer > shape->n_nextn_predict ? (int)(shape->n_layer - shape->n_nextn_predict) : 0;
+    return (int)shape->n_layer;
 }
 
 uint32_t ds4_engine_layer_compress_ratio(ds4_engine *e, uint32_t layer) {
     if (e && e->flint) return 0;
-    (void)e;
-    if (layer >= DS4_N_LAYER) return 0;
+    const ds4_shape *shape = ds4_engine_shape(e);
+    if (layer >= shape->n_layer) return 0;
+    const ds4_engine_configuration *config = ds4_engine_native_config(e);
+    if (config) return shape->family == DS4_MODEL_FAMILY_DEEPSEEK41 ? config->ds41.compress_ratios[layer] : 0;
     return ds4_layer_compress_ratio(layer);
 }
 
 uint64_t ds4_engine_hidden_f32_values(ds4_engine *e) {
     if (e && e->flint) return 2048;
-    (void)e;
-    if (DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_GLM_DSA) return DS4_N_EMBD;
-    return (uint64_t)DS4_N_HC * DS4_N_EMBD;
+    const ds4_shape *shape = ds4_engine_shape(e);
+    return shape->family == DS4_MODEL_FAMILY_GLM_DSA ? shape->n_embd : (uint64_t)shape->n_hc * shape->n_embd;
 }
 
 bool ds4_engine_glm_layer_payload_bytes(ds4_engine *e,
@@ -66315,20 +66362,17 @@ bool ds4_engine_glm_layer_payload_bytes(ds4_engine *e,
 
 int ds4_engine_model_id(ds4_engine *e) {
     if (e && e->flint) return 100;
-    (void)e;
-    return (int)DS4_MODEL_VARIANT;
+    return (int)ds4_engine_shape(e)->variant;
 }
 
 bool ds4_engine_is_glm53(ds4_engine *e) {
     if (e && e->flint) return false;
-    (void)e;
-    return ds4_model_is_glm53();
+    return ds4_engine_shape(e)->variant == DS4_VARIANT_GLM53;
 }
 
 bool ds4_engine_is_qwen4(ds4_engine *e) {
     if (e && e->flint) return false;
-    (void)e;
-    return ds4_model_is_qwen4();
+    return ds4_engine_shape(e)->family == DS4_MODEL_FAMILY_QWEN4_EXP;
 }
 
 /* The official template's default effort is xhigh; medium adds no text. */
@@ -66394,8 +66438,7 @@ void ds4_engine_tp_gate_schedule(ds4_engine *e,
 
 int ds4_engine_embd_dim(ds4_engine *e) {
     if (e && e->flint) return 2048;
-    (void)e;
-    return (int)DS4_N_EMBD;
+    return (int)ds4_engine_shape(e)->n_embd;
 }
 
 uint64_t ds4_engine_model_bytes(ds4_engine *e) {
@@ -67195,19 +67238,26 @@ void ds4_engine_tp_unbind(ds4_engine *e) {
 
 bool ds4_engine_is_glm_dsa(ds4_engine *e) {
     if (e && e->flint) return false;
-    (void)e;
-    return DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_GLM_DSA;
+    return ds4_engine_shape(e)->family == DS4_MODEL_FAMILY_GLM_DSA;
 }
 
 bool ds4_engine_is_deepseek41(ds4_engine *e) {
     if (e && e->flint) return false;
-    return DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41;
+    return ds4_engine_shape(e)->family == DS4_MODEL_FAMILY_DEEPSEEK41;
 }
 
 bool ds4_engine_is_flint(ds4_engine *e) { return e && e->flint; }
 
 void ds4_engine_close(ds4_engine *e) {
     if (!e) return;
+#if defined(__APPLE__) && !defined(DS4_NO_GPU)
+    if (e->native_core) {
+        ds4_engine_tp_unbind(e);
+        ds4_native_engine_lifecycle_close(&e->core, &e->session_resources, &e->flint);
+        free(e);
+        return;
+    }
+#endif
     if (e->flint) {
         flint_engine_close(e->flint);
         free(e->core.model_path);
@@ -67398,38 +67448,14 @@ static int ds4_session_tp_register(ds4_session *s) {
 }
 
 #ifndef DS4_NO_GPU
-/* Engine/cache services retain their existing startup-policy implementation
- * until its own migration. Numerical graph construction stays native. */
-uint64_t ds4_session_resources_fit_glm_cache(ds4_engine *e, int context) {
-    const uint32_t layers = glm_graph_normal_layer_count();
-    ds4_engine_fit_glm_streaming_budget(e, true, 0, layers - 1u, true, context);
-    return ds4_engine_streaming_transient_guard_bytes(e);
-}
-
-bool ds4_session_resources_admit_glm(const ds4_engine_core *core,
-        uint32_t context, uint32_t last, uint64_t extra) {
-    return glm_graph_memory_guard_slice_with_transient(&core->model,
-        &core->weights, core->ssd_streaming, 0, last, true, true,
-        context, extra, "before GLM graph allocation");
-}
-
-bool ds4_session_resources_seed_glm(const ds4_engine_core *core) {
-    ds4_gpu_graph seed = {0};
-    seed.quality = core->quality;
-    seed.ssd_streaming = core->ssd_streaming;
-    seed.ssd_streaming_cold = core->ssd_streaming_cold;
-    seed.streaming_preload_experts = core->memory.ssd_streaming_preload_experts;
-    return metal_graph_seed_streaming_expert_cache_from_hotlist(&seed,
-        &core->model, &core->weights);
-}
-
 static bool ds4_session_native_resource_engine(const ds4_engine *e) {
     return e && e->core.backend == DS4_BACKEND_METAL &&
         !e->multi_tier && !e->tp.active &&
         e->core.distributed.role == DS4_DISTRIBUTED_NONE &&
         (e->flint || (e->core.metal_ready &&
-            (DS4_MODEL_FAMILY == DS4_MODEL_FAMILY_DEEPSEEK41 ||
-             ds4_model_is_qwen4() || ds4_model_is_glm53())));
+            (ds4_engine_shape(e)->family == DS4_MODEL_FAMILY_DEEPSEEK41 ||
+             ds4_engine_shape(e)->family == DS4_MODEL_FAMILY_QWEN4_EXP ||
+             ds4_engine_shape(e)->variant == DS4_VARIANT_GLM53)));
 }
 
 /* sizeof(Session) remains here because its CPU/reference/distributed members
@@ -67446,13 +67472,15 @@ static int ds4_session_create_native(ds4_session **out, ds4_engine *e, int conte
         return -1;
     }
     ds4_qwen4_config qwen = {0};
-    if (view.kind == DS4_SESSION_QWEN) qwen = qwen4_native_config();
+    const ds4_qwen4_config *qwen_config = &qwen;
+    if (view.kind == DS4_SESSION_QWEN) {
+        const ds4_engine_configuration *native = ds4_engine_native_config(e);
+        if (native) qwen_config = &native->qwen; else qwen = qwen4_native_config();
+    }
     const ds4_session_resource_inputs inputs = {
-        .engine = e, .flint = e->flint, .qwen_config = &qwen,
-        .shape = &g_ds4_shape,
+        .policy = &g_ds4_streaming_policy, .flint = e->flint, .qwen_config = qwen_config,
+        .shape = ds4_engine_shape(e),
         .session_count_hint = e->placement_session_count_hint,
-        .streaming_transient_guard_bytes = view.kind == DS4_SESSION_GLM53
-            ? ds4_engine_streaming_transient_guard_bytes(e) : 0,
     };
     if (!ds4_native_session_resources_init(&view, &e->session_resources,
             &inputs, context)) {

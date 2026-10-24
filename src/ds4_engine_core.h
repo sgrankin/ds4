@@ -2,6 +2,7 @@
 #define DS4_ENGINE_CORE_H
 #include "ds4.h"
 #include "ds4_engine_memory.h"
+#include "ds4_engine_configuration.h"
 #include "ds4_model_weights.h"
 #include "ds4_dspark_weights.h"
 #include "ds4_support_weights.h"
@@ -28,6 +29,7 @@ typedef enum {
  * A native Core is a borrowed owner view over this sole storage location. */
 typedef struct {
     char *model_path;
+    ds4_engine_configuration configuration;
     ds4_engine_memory memory;
     ds4_model model;
     ds4_model mtp_model;

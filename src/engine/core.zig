@@ -3,6 +3,7 @@
 //! transaction and retires the same actual common record after TP unbind.
 //! Other-family workspaces and explicit multi-GPU placement remain outside.
 const std = @import("std");
+const Tokens = @import("engine_lifecycle_tokens.zig");
 const c = @import("gguf_c");
 const Config = @import("config.zig").ModelConfig;
 const Mapping = @import("model.zig");
@@ -223,25 +224,7 @@ pub const Core = struct {
         return memory_.admit(layout.bytes() *| memory_.inputs.session_count, true);
     }
     fn loadVocab(self: *Core) void {
-        const model = &self.state.model;
-        var tokens = std.mem.zeroes(c.ds4_array_ref);
-        var merges = std.mem.zeroes(c.ds4_array_ref);
-        if (!c.ds4_gguf_get_array(model, "tokenizer.ggml.tokens", &tokens) or
-            tokens.type != c.GGUF_VALUE_STRING or tokens.len > std.math.maxInt(i32))
-            c.ds4_engine_model_die("GGUF tokenizer token table is missing or invalid");
-        if (!c.ds4_gguf_get_array(model, "tokenizer.ggml.merges", &merges) or merges.type != c.GGUF_VALUE_STRING)
-            c.ds4_engine_model_die("GGUF tokenizer merge table is missing or invalid");
-        const source = c.ds4_vocab_source{
-            .tokens = .{ .base = model.map, .size = model.size, .pos = tokens.data_pos, .@"error" = @splat(0) },
-            .merges = .{ .base = model.map, .size = model.size, .pos = merges.data_pos, .@"error" = @splat(0) },
-            .token_count = tokens.len,
-            .merge_count = merges.len,
-            .family = c.DS4_CHAT_DEEPSEEK41,
-            .glm_bos_id = -1,
-            .glm_eos_id = -1,
-        };
-        var error_text: [256]u8 = undefined;
-        if (!c.ds4_vocab_build(&self.state.vocab, &source, &error_text)) c.ds4_engine_model_die(&error_text);
+        Tokens.load(self.state, c.DS4_MODEL_FAMILY_DEEPSEEK41);
     }
     fn loadSupport(self: *Core, options: *const c.ds4_engine_options, inspect: bool) bool {
         const state = self.state;
@@ -284,72 +267,8 @@ pub const Core = struct {
         return true;
     }
 
-    // Paper 2606.00206, Table8: map only exact leading-space tokens. Applying
-    // a split word's first subtoken would suppress unrelated shared prefixes.
-    fn mapOverthink(self: *Core) c_int {
-        const state = self.state;
-        const policy = &state.overthink;
-        if (policy.count != 0 or state.vocab.n_vocab == 0) return policy.count;
-        const words = [_][]const u8{
-            "perhaps",       "maybe",         "wait",    "Wait",    "actually", "hold",      "Hmm",         "hmm",
-            "Alternatively", "alternatively", "However", "however", "instead",  "Instead",   "But",         "but",
-            "though",        "although",      "yet",     "rather",  "unless",   "otherwise", "nonetheless", "nevertheless",
-            "regardless",    "still",         "anyway",  "Or",      "or",       "either",    "whether",     "uncertain",
-            "unsure",        "possibly",      "might",   "could",   "another",  "different", "reconsider",  "rethink",
-            "backtrack",     "retry",         "recheck", "revisit", "doubt",    "confused",  "wrong",       "mistake",
-            "error",         "incorrect",
-        };
-        for (words) |word| {
-            var buffer: [32]u8 = undefined;
-            const spelling = std.mem.printSentinel(&buffer, " {s}", .{word}, 0) catch unreachable;
-            var tokens = std.mem.zeroes(c.ds4_tokens);
-            defer c.ds4_tokens_free(&tokens);
-            c.ds4_vocab_admit_text(spelling.len);
-            if (!c.ds4_pretokenize(c.DS4_PRETOKENIZER_JOYAI, state.vocab.token_to_id, state.vocab.merge_rank, spelling.ptr, spelling.len, &tokens))
-                c.ds4_engine_model_die("out of memory");
-            if (tokens.len != 1) continue;
-            var length: usize = 0;
-            const decoded = c.ds4_vocab_decode_token(&state.vocab, tokens.v[0], &length);
-            if (decoded == null) c.ds4_engine_model_die("out of memory");
-            defer c.free(decoded);
-            if (length == spelling.len and std.mem.eql(u8, decoded[0..length], spelling)) {
-                policy.ids[@intCast(policy.count)] = tokens.v[0];
-                policy.count += 1;
-            }
-        }
-        return policy.count;
-    }
     fn configureOverthink(self: *Core) bool {
-        const policy = &self.state.overthink;
-        const after = c.getenv("DS4_OVERTHINK_AFTER");
-        if (hasText(after)) {
-            var end: [*c]u8 = null;
-            c.__error().* = 0;
-            const value = c.strtoul(after, &end, 10);
-            if (c.__error().* != 0 or end == after or end[0] != 0 or
-                c.strspn(after, "0123456789") != c.strlen(after) or value > std.math.maxInt(c_int))
-                return fail("ds4: DS4_OVERTHINK_AFTER must be a nonnegative integer\n");
-            policy.after = @intCast(value);
-        }
-        const setting = c.getenv("DS4_OVERTHINK_PENALTY");
-        if (!hasText(setting)) return true;
-        var end: [*c]u8 = null;
-        c.__error().* = 0;
-        const penalty = c.strtod(setting, &end);
-        if (c.__error().* != 0 or end == setting or end[0] != 0 or
-            c.strspn(setting, "0123456789.eE+-") != c.strlen(setting) or
-            !(penalty >= 0 and penalty <= std.math.floatMax(f32)))
-            return fail("ds4: DS4_OVERTHINK_PENALTY must be a finite nonnegative number\n");
-        if (penalty == 0) return true;
-        const scope = c.getenv("DS4_OVERTHINK_SCOPE");
-        policy.think_only = scope == null or c.strcmp(scope, "think") == 0;
-        if (!policy.think_only and c.strcmp(scope, "all") != 0)
-            return fail("ds4: DS4_OVERTHINK_SCOPE must be think or all\n");
-        if (self.state.vocab.n_vocab == 0) return true; // inspect has no tokenizer.
-        if (self.mapOverthink() == 0) return fail("ds4: no exact single-token overthinking markers in this vocabulary\n");
-        policy.penalty = @floatCast(penalty);
-        _ = c.fprintf(c.__stderrp, "ds4: overthinking logit penalty %.6g, scope=%s, after=%d generated thinking tokens, mapped=%d/50; speculation disabled\n", @as(f64, policy.penalty), @as([*:0]const u8, if (policy.think_only) "think" else "all"), policy.after, policy.count);
-        return true;
+        return Tokens.configure(self.state, c.DS4_MODEL_FAMILY_DEEPSEEK41, null);
     }
 
     /// Retire the sole embedded record, not this borrowed view.

@@ -192,6 +192,15 @@ int main(int argc, char **argv) {
         .share_session_prefill_workspace = true, .placement_session_count_hint = 4};
     assert(ds4_engine_open(&engine, &opt) == 0);
     assert(ds4_engine_is_qwen4(engine) && engine->core.model.ngram_tensor);
+    /* An option error before ownership must leave an existing engine's GPU,
+     * threads and model resources alive. The real eval checks below use it. */
+    ds4_engine_options rejected = opt;
+    rejected.flint_profile = "auto";
+    ds4_engine *invalid = NULL;
+    assert(ds4_engine_open(&invalid, &rejected) != 0 && invalid == NULL);
+    rejected.flint_profile = NULL;
+    rejected.dspark = true;
+    assert(ds4_engine_open(&invalid, &rejected) != 0 && invalid == NULL);
     ds4_tokens prompt = {0};
     ds4_encode_chat_prompt(engine, NULL, "Count from one to ten.", DS4_THINK_NONE, &prompt);
     check_public_eval_argmax(engine, &prompt);

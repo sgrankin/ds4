@@ -1,27 +1,22 @@
 //! Real small files, mappings and pthread jobs. Only model-span selection and
 //! Metal tensor/view publication are stand-ins; no inference/device work runs.
 const std = @import("std");
-const c = @import("pagein_c");
+const c = @import("gguf_c");
 const pagein = @import("pagein");
 const IO = pagein.IO;
 const allocator = std.heap.c_allocator;
 var source_spans: [2]c.ds4_model_map_span = undefined;
-var spans_ok = true;
-var span_requests: u32 = 0;
-var last_decode = false;
 var map_ok = true;
 var mapped_count: u32 = 0;
 var mapped_offsets: [2]u64 = undefined;
 var mapped_sizes: [2]u64 = undefined;
 var ids: [6]i32 = .{ 0, 2, 2, 5, 5, 0 };
 
-export fn ds4_native_pagein_layer_spans(_: [*c]const c.ds4_weights, _: u32, decode: bool, out: [*c]c.ds4_model_map_span_vec) bool {
-    span_requests += 1;
-    last_decode = decode;
-    if (!spans_ok) return false;
-    const spans = allocator.dupe(c.ds4_model_map_span, &source_spans) catch unreachable;
-    out.* = .{ .v = spans.ptr, .len = @intCast(spans.len), .cap = @intCast(spans.len), .max_tensor_bytes = 65536 };
-    return true;
+export fn ds4_gguf_tensor_type(_: u32) [*c]const c.gguf_type_info {
+    @panic("unexpected routed format in dense page-in fixture");
+}
+export fn ds4_engine_model_die(message: [*c]const u8) noreturn {
+    std.debug.panic("unexpected model diagnostic: {s}", .{std.mem.span(message)});
 }
 export fn ds4_gpu_set_model_map_spans(_: ?*const anyopaque, _: u64, offsets: [*c]const u64, sizes: [*c]const u64, count: u32, _: u64) c_int {
     std.debug.assert(count == source_spans.len);
@@ -57,7 +52,7 @@ test "page-in real I/O, range partitioning, selected coalescing and slot joins" 
     try expect(fd >= 0);
     defer _ = c.close(fd);
     defer _ = c.unlink(&path);
-    const page: usize = @intCast(c.getpagesize());
+    const page: usize = @intCast(c.sysconf(c._SC_PAGESIZE));
     const bytes = page * 12;
     const contents = try allocator.alloc(u8, bytes);
     defer allocator.free(contents);
@@ -71,6 +66,9 @@ test "page-in real I/O, range partitioning, selected coalescing and slot joins" 
     model.map = @ptrCast(mapping);
     model.size = bytes;
     var weights = std.mem.zeroes(c.ds4_weights);
+    var shape = std.mem.zeroes(c.ds4_shape);
+    shape.n_layer = 4;
+    const policy = std.mem.zeroes(c.ds4_streaming_policy);
     var touched: u64 = 0;
     var sink: u8 = 0;
     try expect(IO.pread(&model, 7, page + 5, &touched, &sink));
@@ -98,6 +96,16 @@ test "page-in real I/O, range partitioning, selected coalescing and slot joins" 
         .{ .off = page + 17, .end = page * 5 + 13, .isolate = false },
         .{ .off = page * 8, .end = page * 9, .isolate = false },
     };
+    var first_weight = std.mem.zeroes(c.ds4_tensor);
+    var second_weight = std.mem.zeroes(c.ds4_tensor);
+    first_weight.abs_offset = source_spans[0].off;
+    first_weight.bytes = source_spans[0].end - source_spans[0].off;
+    second_weight.abs_offset = source_spans[1].off;
+    second_weight.bytes = source_spans[1].end - source_spans[1].off;
+    for (weights.layer[0..shape.n_layer]) |*layer_weights| {
+        layer_weights.attn_norm = &first_weight;
+        layer_weights.ffn_norm = &second_weight;
+    }
     const span_vec: c.ds4_model_map_span_vec = .{ .v = &source_spans, .len = 2, .cap = 2, .max_tensor_bytes = 65536 };
     try expect(pagein.install(&model, &span_vec, "fixture"));
     try equal(@as(u32, 2), mapped_count);
@@ -109,8 +117,8 @@ test "page-in real I/O, range partitioning, selected coalescing and slot joins" 
 
     setting("DS4_METAL_STREAMING_PREFILL_LAYER_PREPARE_THREADS", "4");
     var job = std.mem.zeroes(pagein.Job);
-    try expect(pagein.layerStart(&model, &weights, 0, 7, c.DS4_STREAM_PREPARE_PREAD | c.DS4_STREAM_PREPARE_DECODE, false, false, 4, &job));
-    try expect(job.started and last_decode);
+    try expect(pagein.layerStart(&model, &weights, 0, 7, c.DS4_STREAM_PREPARE_PREAD | c.DS4_STREAM_PREPARE_DECODE, false, false, &shape, &policy, &job));
+    try expect(job.started);
     try equal(@as(u32, 4), job.n_threads);
     try equal(@as(u32, 8), job.n_ranges);
     try equal(source_spans[0].off, job.ranges[0].off);
@@ -118,33 +126,32 @@ test "page-in real I/O, range partitioning, selected coalescing and slot joins" 
     try expect(pagein.join(&job, false));
     try expect(!job.started and job.ranges == null and job.workers == null and job.threads == null);
     setting("DS4_METAL_STREAMING_PREFILL_LAYER_PREPARE_THREADS", "1");
-    try expect(pagein.layerStart(&model, &weights, 0, 7, c.DS4_STREAM_PREPARE_PREAD, false, false, 4, &job));
-    try expect(job.started and !last_decode and job.n_threads == 1);
+    try expect(pagein.layerStart(&model, &weights, 0, 7, c.DS4_STREAM_PREPARE_PREAD, false, false, &shape, &policy, &job));
+    try expect(job.started and job.n_threads == 1);
     try expect(pagein.join(&job, false));
 
     var slots: [2]pagein.Slot = @splat(std.mem.zeroes(pagein.Slot));
     const flags = c.DS4_STREAM_PREPARE_PREAD;
-    const requests = span_requests;
-    try expect(pagein.prepareStart(&model, &weights, 0, 1, flags, false, false, 4, &slots));
-    try expect(pagein.prepareStart(&model, &weights, 0, 1, flags, false, false, 4, &slots));
-    try equal(requests + 1, span_requests);
-    try expect(pagein.prepareStart(&model, &weights, 1, 1, flags, false, false, 4, &slots));
-    try expect(!pagein.prepareStart(&model, &weights, 2, 1, flags, false, false, 4, &slots));
-    try expect(pagein.prepareJoin(&model, &weights, 0, 1, flags, false, false, 4, &slots));
-    try expect(pagein.prepareStart(&model, &weights, 2, 1, flags, false, false, 4, &slots));
+    try expect(pagein.prepareStart(&model, &weights, 0, 1, flags, false, false, &shape, &policy, &slots));
+    const first_ranges = slots[0].job.ranges;
+    try expect(pagein.prepareStart(&model, &weights, 0, 1, flags, false, false, &shape, &policy, &slots));
+    try expect(slots[0].job.ranges == first_ranges);
+    try expect(pagein.prepareStart(&model, &weights, 1, 1, flags, false, false, &shape, &policy, &slots));
+    try expect(!pagein.prepareStart(&model, &weights, 2, 1, flags, false, false, &shape, &policy, &slots));
+    try expect(pagein.prepareJoin(&model, &weights, 0, 1, flags, false, false, &shape, &policy, &slots));
+    try expect(pagein.prepareStart(&model, &weights, 2, 1, flags, false, false, &shape, &policy, &slots));
     try expect(pagein.prepareJoinAll(&slots));
     try expect(!slots[0].active and !slots[1].active);
-    try expect(pagein.prepareJoin(&model, &weights, 3, 1, flags, false, false, 4, &slots));
+    try expect(pagein.prepareJoin(&model, &weights, 3, 1, flags, false, false, &shape, &policy, &slots));
     model.fd = -1;
-    try expect(pagein.layerStart(&model, &weights, 0, 1, flags, false, false, 4, &job));
+    try expect(pagein.layerStart(&model, &weights, 0, 1, flags, false, false, &shape, &policy, &job));
     try expect(!pagein.join(&job, false));
     try expect(job.ranges == null and job.workers == null);
     model.fd = fd;
-    spans_ok = false;
-    try expect(!pagein.layerStart(&model, &weights, 0, 1, flags, false, false, 4, &job));
-    spans_ok = true;
+    const empty_weights = std.mem.zeroes(c.ds4_weights);
+    try expect(!pagein.layerStart(&model, &empty_weights, 0, 1, flags, false, false, &shape, &policy, &job));
     setting("DS4_METAL_DISABLE_STREAMING_PREFILL_LAYER_PREPARE", "1");
-    try expect(pagein.layerStart(null, null, 0, 1, flags, false, false, 4, &job));
+    try expect(pagein.layerStart(null, null, 0, 1, flags, false, false, &shape, &policy, &job));
     try expect(!job.started);
     _ = c.unsetenv("DS4_METAL_DISABLE_STREAMING_PREFILL_LAYER_PREPARE");
 

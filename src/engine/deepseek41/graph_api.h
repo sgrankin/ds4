@@ -5,6 +5,11 @@
  * input/config/weights when activating the graph owner; no SDK dump is kept. */
 #include "../model_api.h"
 #include "../core_api.h"
+#include "../engine_admission_api.h"
+#include "../engine_lifecycle_api.h"
+#include "../engine_cache_sizes_api.h"
+#include "../engine_admission_math_api.h"
+#include "../model_spans_api.h"
 #include "../diagnostics_api.h"
 #include "../payload_io.h"
 #include "../session_batch_api.h"

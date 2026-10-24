@@ -143,12 +143,24 @@ fn initGlm(view: *View, pool: *Pool, inputs: *const Inputs, context: c_int) bool
     const planned = c.ds4_native_glm_memory(shape, guard_context, work_context, guard_context, 0, last);
     const all_graphs = accounting.graphBudget(pool.glm_session_graph_bytes, pool.glm_session_count, inputs.session_count_hint, planned.total_bytes);
     const other_graphs = all_graphs - planned.total_bytes;
-    var transient = inputs.streaming_transient_guard_bytes;
+    const placement = c.ds4_model_residency_inputs{
+        .load_slice = true, .layer_start = 0, .layer_end = last,
+        .load_output = true, .context = context, .chunk = core.*.prefill_chunk,
+        .tp_shard = false, .tp_rank = 0,
+    };
     if (core.*.ssd_streaming and !core.*.memory.ssd_streaming_budget_finalized) {
-        transient = c.ds4_session_resources_fit_glm_cache(inputs.engine, context);
+        c.ds4_native_engine_fit_glm_cache(core, pool, shape, inputs.policy, &placement, inputs.session_count_hint);
         c.ds4_gpu_set_streaming_expert_cache_budget(core.*.memory.ssd_streaming_cache_experts);
         core.*.memory.ssd_streaming_budget_finalized = true;
     }
+    // Fitting can change both the dynamic cache and prefill/decode reserves.
+    // Measure the actual current owners after that transaction, not a borrow
+    // captured before it by the private shell.
+    const transient = if (core.*.ssd_streaming)
+        c.ds4_native_cache_dynamic_bytes(&core.*.memory, true, shape, &core.*.weights) +|
+            core.*.memory.ssd_streaming_prefill_headroom_bytes +| core.*.memory.ssd_streaming_decode_map_extra_bytes
+    else
+        0;
     const extra = transient +| other_graphs;
     const graph = &state.*.graph;
     graph.* = std.mem.zeroes(c.ds4_glm_gpu_graph);
@@ -157,7 +169,7 @@ fn initGlm(view: *View, pool: *Pool, inputs: *const Inputs, context: c_int) bool
     graph.ssd_streaming = core.*.ssd_streaming;
     graph.ssd_streaming_cold = core.*.ssd_streaming_cold;
     graph.ctx_size = guard_context;
-    if (!c.ds4_session_resources_admit_glm(core, guard_context, last, extra)) return false;
+    if (!c.ds4_native_engine_admit_glm(core, shape, &placement, guard_context, extra, "before GLM graph allocation")) return false;
     if (!c.ds4_native_glm_plan_allocation(graph, &core.*.model, &core.*.weights, 0, last, true, true) or
         !c.ds4_native_glm_allocate_tensors(graph)) return false;
     var keep = false;
@@ -169,7 +181,7 @@ fn initGlm(view: *View, pool: *Pool, inputs: *const Inputs, context: c_int) bool
     graph.quality = core.*.quality;
     if (!glmSteering(graph, core)) return false;
     if (core.*.ssd_streaming and c.getenv("DS4_METAL_GLM_DISABLE_STREAMING_SEED_BEFORE_PREFILL") == null and
-        !c.ds4_session_resources_seed_glm(core)) return false;
+        !c.ds4_native_engine_seed_hotlist(core, shape)) return false;
     hostBuffers(view, shape.*.n_vocab);
     state.*.ready = true;
     state.*.reserved_graph_bytes = planned.total_bytes;

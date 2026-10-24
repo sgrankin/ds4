@@ -2,8 +2,9 @@
 //! borrowed from the current planner; ranges, workers, joins and slot policy
 //! belong here. Join before retiring the borrowed model or a slot's storage.
 const std = @import("std");
-const c = @import("pagein_c");
+const c = @import("gguf_c");
 pub const IO = @import("pagein_io.zig");
+const ModelSpans = @import("model_spans.zig");
 const allocator = std.heap.c_allocator;
 pub const Job = c.metal_graph_stream_pagein_job;
 pub const Range = c.metal_graph_stream_pagein_range;
@@ -159,7 +160,7 @@ fn spawn(job: *Job, selected: bool) bool {
     return true;
 }
 
-pub fn layerStart(model: [*c]const Model, weights: [*c]const Weights, index: u32, rows: u32, flags: u32, have_graph: bool, streaming: bool, layer_count: u32, maybe_job: ?*Job) bool {
+pub fn layerStart(model: [*c]const Model, weights: [*c]const Weights, index: u32, rows: u32, flags: u32, have_graph: bool, streaming: bool, shape: *const c.ds4_shape, policy: *const c.ds4_streaming_policy, maybe_job: ?*Job) bool {
     const job = maybe_job orelse return false;
     job.* = std.mem.zeroes(Job);
     job.ok = true;
@@ -170,14 +171,15 @@ pub fn layerStart(model: [*c]const Model, weights: [*c]const Weights, index: u32
     job.layer = index;
     job.n_tokens = rows;
     if (!enabled(job, have_graph, streaming)) return true;
-    if (model == null or weights == null or index >= layer_count) return false;
+    if (model == null or weights == null or index >= shape.n_layer) return false;
     const threads = layerThreads();
     var spans = std.mem.zeroes(c.ds4_model_map_span_vec);
     defer c.free(spans.v);
-    if (!c.ds4_native_pagein_layer_spans(weights, index, flags & c.DS4_STREAM_PREPARE_DECODE != 0, &spans)) return false;
+    const decode = flags & c.DS4_STREAM_PREPARE_DECODE != 0;
+    if (!ModelSpans.build(weights, shape, policy, index, index, !decode and index == 0, false, if (decode) .runtime else .full, &spans)) return false;
     const ranges = alloc(Range, @as(usize, spans.len) * threads);
     var count: u32 = 0;
-    const page: u64 = @intCast(c.getpagesize());
+    const page: u64 = @intCast(c.sysconf(c._SC_PAGESIZE));
     for (spans.v[0..spans.len]) |span| {
         const bytes = span.end - span.off;
         var consumed: u64 = 0;
@@ -330,13 +332,13 @@ fn find(slots: []Slot, index: u32) ?*Slot {
     for (slots) |*slot| if (slot.active and slot.layer == index) return slot;
     return null;
 }
-pub fn prepareStart(model: [*c]const Model, weights: [*c]const Weights, index: u32, rows: u32, flags: u32, have_graph: bool, streaming: bool, layer_count: u32, slots: []Slot) bool {
-    if (index >= layer_count or find(slots, index) != null) return true;
+pub fn prepareStart(model: [*c]const Model, weights: [*c]const Weights, index: u32, rows: u32, flags: u32, have_graph: bool, streaming: bool, shape: *const c.ds4_shape, policy: *const c.ds4_streaming_policy, slots: []Slot) bool {
+    if (index >= shape.n_layer or find(slots, index) != null) return true;
     for (slots) |*slot| {
         if (slot.active) continue;
         slot.* = std.mem.zeroes(Slot);
         slot.layer = index;
-        if (!layerStart(model, weights, index, rows, flags, have_graph, streaming, layer_count, &slot.job)) {
+        if (!layerStart(model, weights, index, rows, flags, have_graph, streaming, shape, policy, &slot.job)) {
             slot.* = std.mem.zeroes(Slot);
             return false;
         }
@@ -346,14 +348,14 @@ pub fn prepareStart(model: [*c]const Model, weights: [*c]const Weights, index: u
     _ = c.fprintf(c.__stderrp, "ds4: Metal streaming prefill prepare queue is full before layer %u\n", index);
     return false;
 }
-pub fn prepareJoin(model: [*c]const Model, weights: [*c]const Weights, index: u32, rows: u32, flags: u32, have_graph: bool, streaming: bool, layer_count: u32, slots: []Slot) bool {
+pub fn prepareJoin(model: [*c]const Model, weights: [*c]const Weights, index: u32, rows: u32, flags: u32, have_graph: bool, streaming: bool, shape: *const c.ds4_shape, policy: *const c.ds4_streaming_policy, slots: []Slot) bool {
     if (find(slots, index)) |slot| {
         const ok = join(&slot.job, false);
         slot.* = std.mem.zeroes(Slot);
         return ok;
     }
     var job = std.mem.zeroes(Job);
-    return layerStart(model, weights, index, rows, flags, have_graph, streaming, layer_count, &job) and join(&job, false);
+    return layerStart(model, weights, index, rows, flags, have_graph, streaming, shape, policy, &job) and join(&job, false);
 }
 pub fn prepareJoinAll(slots: []Slot) bool {
     var ok = true;

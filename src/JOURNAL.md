@@ -56,7 +56,23 @@ fresh admission and exact decharge. Slice 8b is complete: common batch validatio
 pass Qwen full ordinary/MTP/failure recovery, host tests and all 28 Flint
 Responses checks. A final audit found single-session continuation/rewind policy
 still in C for Qwen/GLM/Flint; a bounded SessionView follow-up will close it.
-Slice 10 is active: engine admission, cache policy and shared model spans. Independent payload-I/O, snapshot-envelope,
+Slice 10 is complete: native admission/cache policy, shared spans and direct
+page-in selection pass host/CPU checks, frozen GLM/DS41 state+fresh logits and
+all 40/45-layer real pread runs. Slice 11 is complete: all five executables, full host suite, three GGUF inspect
+paths, Qwen unowned-error isolation, frozen DS41/GLM state+fresh logits and Flint
+ordinary inference/teardown pass. The actual Core configuration is authoritative;
+legacy globals are compatibility reads, with old DS41 TP ownership distinguished.
+The bounded continuation component is next, then sampling, multimodal and small
+rewrite/steering/generation controllers before combined qualification.
+
+Final routing audit identified additional actual ordinary controllers beyond the
+initial inventory: Qwen/GLM sampling gates/history/logprobs, common multimodal
+assembly/encode orchestration, small continuation/rewind/canonical-rewrite and
+live-steering policy, and stateless greedy generation. These get separate
+bounded one-hour components after engine composition, before combined slice 12;
+model arithmetic and capabilities stay fixed. This is additional migration work,
+not completed ownership or a reason to count inactive C fallbacks as runtime.
+ Independent payload-I/O, snapshot-envelope,
 selected-worker and session-control/resource source preparation overlaps; only
 root integrates shared files and schedules guarded model jobs. Frozen baseline
 binaries and original shared sources are under

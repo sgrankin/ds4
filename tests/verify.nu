@@ -19,6 +19,7 @@ const HOST = [
     [session-snapshot-test, [test-session-snapshot]]
     [stream-selected-test, [test-stream-selected]]
     [pagein-test, [test-pagein]]
+    [model-spans-test, [test-model-spans]]
     [serving-boundary-test, [test-serving-boundary]]
     [websocket-frames-test, [test-websocket-frames]]
     [resident-route-test, [test-resident-route test-resident-three test-resident-drop]]

@@ -55,7 +55,7 @@ pub const TargetResidency = struct {
         var failed: u64 = 0;
         var can_lock = true;
         for (spans.items.items) |span| {
-            const first = span.first / page * page;
+            const first = span.off / page * page;
             if (span.end > self.model.size or span.end <= first) continue;
             var offset = first;
             while (offset < span.end) {
@@ -148,7 +148,7 @@ pub const TargetResidency = struct {
         defer spans.deinit();
         if (!self.includeShard(&spans)) return 0;
         var total: u64 = 0;
-        for (spans.items.items) |span| total +|= span.end - span.first;
+        for (spans.items.items) |span| total +|= span.end - span.off;
         return total;
     }
 
@@ -219,8 +219,8 @@ pub const TargetResidency = struct {
             selection.count = @intCast(count);
             var total: u64 = 0;
             for (spans.items.items, offsets, sizes) |span, *offset, *size| {
-                offset.* = span.first;
-                size.* = span.end - span.first;
+                offset.* = span.off;
+                size.* = span.end - span.off;
                 total +%= size.*;
             }
             if (p.tp_shard and !streaming and !p.load_slice) self.memory.state.startup_model_span_bytes +|= total else self.memory.state.startup_model_span_bytes = total;
