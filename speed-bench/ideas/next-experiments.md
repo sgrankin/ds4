@@ -1,5 +1,17 @@
 # Next experiments: one hour each
 
+## DeepSeek code-mode matched follow-up — completed, 2026-10-25
+
+Start16:15UTC, cap17:15UTC, four requests finish16:21UTC. Same frozen runtime,
+fixed favorable queue and reasoning:none; ABBA main/code/code/main order.
+Main-only median55.73s versus code78.09s: code takes40.1% longer. Input drops
+4742 to1936 tokens, but generated tokens rise100 to458 and code adds two
+program rounds. Correct numeric fields/clean JSON in both arms; direct handoff
+also overstates refund status. No runtime/prompt changes to chase a win.
+The expected benefit for reasoning-heavy tasks remains unmeasured, not inferred
+from lower generator tokens/sec. See the
+[matched result](../experiments/ptc-decisions-20261025/RESULTS.md).
+
 ## Server-side code mode / PTC — authorized and qualified, 2026-10-25
 
 1. Native bounded QuickJS execution over bound data/templates, existing decision

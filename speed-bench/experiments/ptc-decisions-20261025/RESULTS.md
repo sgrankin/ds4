@@ -6,6 +6,9 @@ them without a user instruction naming a tool or supplying code. The favorable
 24-record task finishes **22.8% sooner** than main-only, with correct facts, but
 duplicates the final JSON. The four-record task is **2.20 times slower** because
 the model delegates work it could answer directly.
+The later matched DeepSeek run with reasoning disabled is **40.1% slower** with
+code mode: direct generation needs only 100 output tokens, versus 458 through
+two programs. A slower main decoder does not establish a general speedup.
 
 This is two repetitions of each fixed case, not a broad benchmark or an estimate
 of general task accuracy. Source is jj change `olqomykynxyr`, parent `944863ed`.
@@ -127,14 +130,14 @@ Final transport/replay qualification passes 56 checks, plus two real restart
 checks. Those establish execution and lifecycle behavior separately from the
 natural-task quality/performance observations above.
 
-## DeepSeek model-path check
+## Earlier DeepSeek qualification
 
 DeepSeek V4.1 Flash 1017 passes all eight explicit-code smoke checks. One natural
 favorable task also completes with correct IDs/count/maximum and clean JSON:
 76.385 seconds, 1,936 main input tokens, 458 main output tokens, two programs and
 one successful native call. The helper consumes 7,413 tokens in 3.065 seconds
-and again gives TP6/TN18/FP0/FN0. There is no matched DeepSeek main-only run,
-so this is a model-path result, not a speedup claim.
+and again gives TP6/TN18/FP0/FN0. This earlier unmatched observation remains a
+model-path qualification; it is excluded from the matched medians below.
 
 Its first program classifies the queue and emits choices/confidence; its second
 uses the returned IDs to calculate the maximum and construct the handoff.
@@ -142,6 +145,41 @@ The two-sentence handoff contains a weaker-grounded assertion: "No account has
 yet been locked and no refund has been issued." In particular, the source does
 not establish refund status for every ticket. Retain that semantic overstatement
 separately from correct numeric facts and clean JSON.
+
+## Matched DeepSeek follow-up
+
+Frozen source `4cf6eacf`, same M5 Max, fixture, binary and launch settings across
+all four requests. A is main-only; B is code mode. Requests ran sequentially in
+ABBA order with explicit `reasoning:{effort:"none"}` in both arms. The effective
+mode was none, temperature was zero, and the output budget remained 4,096.
+
+| Order | Arm | Wall seconds | Main input/output | Main cached tokens |
+|---|---|---:|---:|---:|
+| A0 | Main-only | 53.277 | 4,742 / 100 | 0 |
+| B0 | Code mode | 78.263 | 1,936 / 458 | 0 |
+| B1 | Code mode | 77.923 | 1,936 / 458 | 0 |
+| A1 | Main-only | 58.188 | 4,742 / 100 | 0 |
+
+The medians are **55.732 seconds direct versus 78.093 seconds through code**:
+22.361 seconds, or **40.1% more time**, despite 59.2% fewer main input tokens.
+Each B response uses two programs and one successful native helper call, with
+7,413 helper tokens and 3.079/3.476 seconds of helper time. The generated output
+is 4.58 times the direct path. Additional code generation and continuations
+outweigh the input savings on this fixture; exact attribution among those costs
+was not profiled. Reasoning-heavy tasks are a future hypothesis, not a result of
+this reasoning-disabled comparison.
+
+All four responses complete with clean JSON and correct ID sets, count six and
+maximum 119,900 cents. Both B native calls give TP6/TN18/FP0/FN0. Every handoff
+field has two sentences, but both direct and code answers assert that no refund
+has been issued, which the fixture does not establish. This semantic caveat
+therefore occurs in both arms. Code mode's first program emits labels/confidence;
+its second calculates the maximum and constructs the handoff. The full response
+is 157,327 bytes versus 1,586 direct, including bound-data/native-call audit.
+
+No code or prompt was tuned between A0/B0/B1/A1. The guard stayed at normal
+pressure with zero swap growth and exited cleanly. Four observations of one
+fixed task do not establish a hardware-wide or model-wide performance rule.
 
 ## Reproduce and inspect
 
@@ -183,3 +221,38 @@ their saved source/binary; changing only an output directory does not select an
 older implementation. [summarize.py](summarize.py) produces separate numerical
 summaries without modifying raw measurements; `--ordinary-clean` applies the
 documented replacement. Add `--plot` only after final model timing has stopped.
+
+For the matched DeepSeek launch, use a fresh directory and the same frozen
+binary. This text-only run loads no vision encoder:
+
+```nu
+let work = '.workspaces/ptc-ds4-matched-reproduce'
+mkdir $work ($work | path join responses)
+$env.DS4_CLEF_PREFIX_CACHE = '0'
+$env.DS4_V41_DECODER_REPLAY_ROWS = '0'
+$env.DS4_SERVER_CONTEXT_SUFFIX_REUSE = '0'
+$env.DS4_SERVER_RESPONSE_STORE_DIR = ($env.PWD | path join $work responses)
+$env.DS4_LOCK_FILE = ($env.PWD | path join $work server.lock)
+let server_args = [
+    --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
+    --decision-model gguf/clef-flash-int4 --ssd-streaming
+    --ssd-streaming-cache-experts 32GB --host 127.0.0.1 --port 19333
+    --ctx 16384 --tokens 4096 --prefill-chunk 2048
+    --mixed-prefill-quantum 2048 --mtp-draft 1 --batched-session 2
+    --trace ($work | path join trace.log)
+]
+^python3 speed-bench/ideas/pressure_run.py ($work | path join guard) -- ./zig-out/bin/ds4-server ...$server_args out+err> ($work | path join server.log)
+```
+
+Run the following in a second terminal; the existing driver sets reasoning none
+for DeepSeek and preserves each sample separately:
+
+```nu
+let root = '.workspaces/ptc-ds4-matched-reproduce'
+let runs = [[name arm]; [a0-main main_only] [b0-ptc ptc]
+    [b1-ptc ptc] [a1-main main_only]]
+for run in $runs {
+    nu tests/programmatic-decisions.nu --model deepseek-v4.1-flash --suite scenarios --case favorable --arm $run.arm --repeats 1 --output ($root | path join $run.name)
+    if $env.LAST_EXIT_CODE != 0 { exit $env.LAST_EXIT_CODE }
+}
+```

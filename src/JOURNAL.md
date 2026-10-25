@@ -4,6 +4,33 @@ Last updated: 2026-10-25. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## DeepSeek code-mode comparison — completed, 2026-10-25
+
+User expects stronger gains on the slower DeepSeek generator. Start16:15UTC,
+one-hour cap17:15UTC; all four requests finish16:21UTC. Reused the fixed favorable
+queue/driver and frozen `4cf6eacf` binary, main/code/code/main order, same DS41/Clef
+models/settings and one guarded server. No prompt/kernel/runtime changes or
+concurrent builds. Both arms explicitly use reasoning:none, temperature0 and
+4096 output tokens; helper prefix reuse and suffix reuse remain disabled.
+
+Main-only53.277/58.188s versus code78.263/77.923s; medians55.73 versus78.09s,
+so code mode takes40.1% longer on this fixture. Main input falls4742 to1936
+tokens, but generated output rises100 to458. Both code requests use two programs
+and one native helper call (3.079/3.476s), introducing extra generation and
+continuation prefill. Cached tokens are zero in all four requests. Correct
+IDs/count/maximum and clean JSON in both repeats/arms; retain manual handoff
+review separately. The direct answer also overstates that no refund was issued.
+
+This overturns the expected speedup for this easy, no-reasoning task, without
+establishing the result for reasoning-heavy or larger workflows. A slower
+generator amplifies both saved work and generated-code overhead; Flint's
+3353-token direct answer versus DeepSeek's100 tokens makes their earlier speed
+comparisons different workloads in practice. Do not tune the task until it wins.
+The runtime is unchanged; only this follow-up measurement is added. Raw runs:
+`.workspaces/ptc-decisions-20261025/ds4-matched/`.
+Owned server stopped cleanly, normal pressure throughout and zero swap growth.
+See [report](../speed-bench/experiments/ptc-decisions-20261025/RESULTS.md).
+
 ## Server-side code mode / PTC — completed, 2026-10-25
 
 User authorized implementation while AFK and explicitly selected QuickJS.
