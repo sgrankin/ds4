@@ -1,5 +1,50 @@
 # Next experiments: one hour each
 
+## Clef family, decisions and multi-model ownership — next sequence, 2026-10-24
+
+User requested a plan for native Clef-Flash/full/Omni, both decision APIs and
+multiple loaded engines. Steering is published through`ce3afb7999b7`; no Clef
+inference is implemented or qualified yet. See the
+[journal plan](../../src/JOURNAL.md#clef-family-and-decision-serving--plan-2026-10-24)
+for architecture, pinned artifacts, reference performance and scope.
+
+Each row is a **one-hour checkpoint budget**, including measurement and a short
+record. These are initial slices, not a promise that an unfamiliar backbone or
+media port fits an hour. If a slice remains incomplete, record its specific
+obstacle and split only that work; do not spend subsequent hours polishing a
+harness or building general infrastructure. Independent source/oracle work may
+overlap; heavy model jobs stay sequential under the pressure guard.
+
+| Order | Deliverable | Measurement/qualification before proceeding |
+| --- | --- | --- |
+|1| Pin/download Flash INT4 plus useful BF16 oracle tensors; add download targets; reference request set and small Decision Index subset | Actual bytes/head present, tokenizer/spans/oracle outputs, existing downloader checks; capture matched local reference latency |
+|2| Flash native loader, record preparation and dense hybrid execution | Actual model dimensions/quant layout, exact tokens/spans and first hidden-row comparison; no sampling loop |
+|3| Flash batched prefill and complete hidden-feature output | Real short/medium inputs versus reference, finite outputs, per-stage latency/memory |
+|4| Learned joint schema head and native text decision operation | Full probability distributions, top answers, score/noul examples; first end-to-end smoke quality/time |
+|5| SystemOne and OpenAI Decisions wire adapters over the same operation | Real HTTP requests through both; order/typed values/confidence; Decision Index HTTP smoke; visible unsupported features |
+|6| Full Clef using the dense executor | Matched full-model reference probabilities, smoke quality and latency; no duplicate model graph |
+|7| Runtime-owned shared services and scoped GPU transaction lease | Close/reopen and failed startup; existing single-engine control; no shared shutdown from engine free |
+|8| Loaded-model routing; compose Clef+Flint; model-pinned generative state | A→B→A, survivor after other closes, cancellation, wrong-model ancestry; mixed p50/p95 and pressure |
+|9| DS41 model-specific mappings, residency/I/O and scratch ownership | Frozen single-model control plus cache/streaming lifecycle fixtures; retain existing arithmetic |
+|10| DS41+helper composition and scheduling | Both stay loaded; bounded helper wait, main-model impact and swap; no concurrent resident-kernel deadlock |
+|11| Omni quantized text MoE backbone | Reference hidden rows and routes; profile actual sparse prefill shapes |
+|12| Omni text joint-head integration and measured optimization | Same-weight probabilities, Decision Index smoke, local reference latency |
+|13| Dense Clef/Flash image and sampled-video-frame decisions | Reference preprocessing/positions; real image decisions and public vision subset |
+|14| Omni DeepStack vision and audio frontend/encoder | Reference image/audio features and task answers; include preprocessing in wall latency |
+|15| Omni synchronized video+sound and documented media inputs | Timing/interleaving/position fixtures, real audiovisual task; actual end-to-end latency |
+|16| Measured caching/batching/packing candidate, one at a time | Shared state + changed questions requires features as well as backbone state; uncached/cached quality and latency, Pareto points |
+|17| Family qualification and defaults | Fixed~2000-request sample with edition stated, vision/media checks, all-model lifecycle/protocol regression and matched speed/memory report |
+
+Performance aim: match/beat applicable reference on this hardware with matched
+weights/shapes, investigate repeatable>5% gaps and existing-engine regressions.
+Quantization changes are measured tradeoffs, not automatic failures. Record
+per-task accuracy/F1, coverage, decision NLL/KL/Brier and latency by input/question
+count; do not compare generated tok/s or a sampled index with a full leaderboard.
+Reuse the Decision Index runner/scorers, a thin Nu driver and existing fixtures.
+Keep reference repos, weights and raw results ignored; commit code, concise
+reports and necessary small fixtures. Main publication after this plan is a
+separate checkpoint from the already-requested steering push.
+
 ## Next C-to-Zig migrations — authorized 2026-10-24
 
 The user approved the full sequence. Start from the qualified native

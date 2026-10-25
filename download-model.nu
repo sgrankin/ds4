@@ -21,8 +21,11 @@ def nonempty [file: path] {
     ($file | path exists) and ((file-size $file) > 0)
 }
 
-def verify [catalog: record, file: string, path: path] {
-    let identity = $catalog.artifacts | get --optional $file
+def verify [catalog: record, model: record, file: string, path: path] {
+    # Directory bundles share names such as config.json. Their identity belongs
+    # to that model, while older standalone artifacts retain the shared table.
+    let identity = $model.artifacts? | default {} | get --optional $file
+        | default ($catalog.artifacts | get --optional $file)
     if $identity == null { return }
     if (file-size $path) != $identity.bytes {
         fail $"Incorrect file size: ($path). Move the incomplete file aside and retry."
@@ -72,7 +75,7 @@ def download-one [
     let out = $directory | path join $local_name
     mkdir ($out | path dirname)
     if (nonempty $out) {
-        verify $catalog $file $out
+        verify $catalog $model $file $out
         print $"Already downloaded: ($out)"
         return
     }
@@ -103,7 +106,7 @@ def download-one [
         try { ^rmdir ($hf_out | path dirname) err> /dev/null } catch { }
     }
     if not (nonempty $out) { fail $"Hugging Face download finished but expected file is missing: ($out)" }
-    verify $catalog $file $out
+    verify $catalog $model $file $out
 }
 
 def download-split [
@@ -115,7 +118,7 @@ def download-split [
     let file = $catalog.split.file
     let out = $directory | path join $file
     if ($out | path exists) {
-        verify $catalog $file $out
+        verify $catalog $model $file $out
         print $"Already downloaded: ($out)"
         return
     }
@@ -138,7 +141,7 @@ def download-split [
 def download-mxfp4 [catalog: record, model: record, directory: path, token: string] {
     let out = $directory | path join $model.file
     if ($out | path exists) {
-        verify $catalog $model.file $out
+        verify $catalog $model $model.file $out
         print $"Already downloaded: ($out)"
         return
     }
@@ -183,14 +186,14 @@ def usage [catalog: record] {
     print 'DwarfStar model downloader
 Usage: ./download-model.nu TARGET [--token TOKEN]
 DS4_GGUF_DIR selects the download directory (default: ./gguf).
-Flint downloads a complete model directory at ./gguf/flint-int4.
-Main GGUF downloads update ./ds4flash.gguf after successful download; Flint leaves it unchanged.
+Flint and Clef targets download complete safetensors directories under ./gguf.
+Main GGUF downloads update ./ds4flash.gguf after successful download; directory bundles leave it unchanged.
 Pinned artifacts also receive size and SHA-256 checks.
 '
     for model in ($catalog.targets | transpose name configuration) {
         print $"($model.name): ($model.configuration.description? | default $model.configuration.file)"
     }
-    print "\nAliases: qwen38-iq2 -> qwen38-q2; flint -> flint-int4"
+    print "\nAliases: qwen38-iq2 -> qwen38-q2; flint -> flint-int4; clef/clef-flash/clef-omni -> corresponding -int4 targets"
 }
 
 # Download model files with resumable HF transfers and pinned size/SHA checks.
@@ -202,6 +205,7 @@ Pinned artifacts also receive size and SHA-256 checks.
 #   glm53-full-q2, glm53-q2, glm53-q4, glm53-fp8, glm53-vision
 #   qwen38-q2 (alias qwen38-iq2), qwen38-q4k, qwen38-vision
 #   flint-int4 (alias flint): complete native affine INT4 safetensors directory
+#   clef-int4, clef-flash-int4, clef-omni-int4: decision backbones and joint heads
 #
 # HF_TOKEN or the local HF token cache is used when --token is absent.
 # DS4_GGUF_DIR chooses the output directory (default: repository ./gguf).

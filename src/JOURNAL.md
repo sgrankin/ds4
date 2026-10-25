@@ -4,6 +4,120 @@ Last updated: 2026-10-24. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## Clef family and decision serving — plan, 2026-10-24
+
+At the user's request, published the qualified residual steering and behavioral/
+Zig-test commits through `ce3afb7999b7e97aa697dc3ec3520650c165a5f0` to `main`
+and `origin`. Remote main matched the starting revision before publication and
+the push was verified. The plan below is new work, not implemented support or
+achieved performance. No Clef model job has run in this checkout.
+
+Implement native Zig/Metal **Clef-Flash, Clef and Clef-Omni**, both decision APIs,
+and separate engine ownership for multiple loaded models in one process.
+Keep the existing policy: no Python/MLX production inference; use reference
+implementations, kernels, offline conversion and numerical oracles. Cleffa and
+Decision Index are cloned locally under ignored `.workspaces/clef-references/`.
+Use ordinary explicit engine records and a small loaded-model table; no plugin
+framework or all-engine rewrite before obtaining the first Flash result.
+
+### Execution and API boundaries
+
+- Start with Flash text: exact record/token/span preparation, affine INT4
+  backbone prefill and the learned joint schema head. Preserve all final hidden
+  rows, selected output-embedding rows and question/option pooling spans; this
+  is not last-token sampling, JSON generation or a full vocabulary projection.
+- Flash is Qwen3.5-9B (32 layers, hidden4096); full is card-described Qwen3.8-27B
+  with `qwen3_5` config (64 layers, hidden5120). Both have three GatedDeltaNet
+  layers per full-attention layer. Reuse appropriate Qwen/Flint operations after
+  checking their actual contracts; existing HC/PLE/indexed-attention graphs are
+  not drop-in dense Clef graphs. Full should reuse the dense executor.
+- Keep the joint head and media towers at their reference precision initially;
+  use the existing affine quantization layout where possible. Profile CPU/
+  Accelerate versus GPU head placement on real shapes. Repacking, mixed
+  precision and kernel changes are allowed when measured gains justify them.
+- One native decision request/result operation feeds `/v1/systemone` and
+  `/v1/decisions`. Keep question order and typed option values separately from
+  display names. Match each wire format's probabilities/score/confidence rules;
+  Clef's max-probability wrapper differs from current TypeSafe confidence, and
+  OpenAI does not publish a formula guaranteeing Luna-equivalent calibration.
+  State the local confidence policy. These decision endpoints are stateless,
+  non-streaming operations; existing Responses HTTP/WebSocket remains the
+  generative protocol. Do not invent conversation references for decisions.
+- Clef's supported primitives are noul/predicate, choice and score. Unsupported
+  box questions/media forms must fail visibly. Text first is an intermediate
+  milestone, not completed family support. Preserve each API's image placement
+  semantics when adding vision. Omni audio/video needs a documented local media
+  extension because neither decision contract covers its complete native input.
+- Runtime owns shared Metal device/queue and process services; engine owns
+  weights, pipelines, mappings/cache and execution state; request/session owns
+  bounded continuation/features. Start with serialized GPU leases and bounded
+  chunks/packets. CPU preparation/head work need not hold the GPU lease.
+  Closing one engine must not shut down another's services. DS4's model mappings,
+  expert residency/I/O and scheduling globals need real migration, not removal
+  of the single-instance lock. Pin generative ancestry and durable state to model.
+- Omni is a distinct Qwen3-Omni thinker: 48 layers, hidden2048,128 experts/top8,
+  plus DeepStack vision and a 16kHz audio/log-mel frontend. Implement text MoE,
+  images, audio, then synchronized video+sound separately. Skip unused talker/
+  code2wav weights. M5 Max is the performance target; do not claim M1 validation
+  from a fallback that only builds.
+
+### Evidence and qualification
+
+Use the [Decision Index kit](https://github.com/apolinario/decision-index/tree/25c6ec7b6b5f44a216c63c3a700de3a9c6d6699d)
+directly through its HTTP/SystemOne engine. First selectively rebuild API-Bank,
+BANKING77, CLINC150+OOS, CRUXEval and When2Call (plus BFCL when useful), run a
+fixed small smoke subset preserving case groups, then the built-in stratified
+~2000-request sample. Pin edition **0.2.1** for the published Clef card comparison;
+report current public0.3 separately. The live0.4 headline contains private tests
+and cannot be reproduced by this local run. A subset is never a full-suite score.
+Reuse its public vision suite after image support; audio/video also need matched
+reference fixtures and task checks. Keep downloaded evaluation data local.
+
+Measure end-to-end p50/p95 latency and decisions/s, including tokenization,
+preprocessing and head; separately record backbone/head/GPU time, queue delay,
+input tokens, number of questions/options, peak memory, pressure and swap.
+Compare cold input, repeated state with changed questions, long input, and mixed
+main-model/helper workloads. Avoid holding a blanket GPU lease across long CPU
+work. Qualify A→B→A continuation/probabilities, closing either engine, failed
+startup, cancellation and wrong-model ancestry rejection.
+
+Initial performance target: match or beat the fastest applicable local reference
+on matched weights/shapes/settings; investigate repeatable >5% deficits. Existing
+single-model latency should remain within ordinary measured variation (use5% as
+an investigation threshold, not permission to stack regressions). Report task
+accuracy/F1, coverage/errors, decision NLL/KL, Brier/calibration and top-choice
+agreement. First separate runtime drift from quantization loss using the same
+weights. Evaluate quantization tradeoffs rather than rejecting every changed
+answer. Plot quality/latency/memory Pareto points for tunable precision, caching,
+batching and packing; optimize the measured bottleneck only.
+
+External baselines, **not our results**: [Cleffa](https://github.com/zknpr/cleffa/tree/24fc91e28d154ff8dadfa58462a30b437413c3f4)
+reports M5 Max128GB warm engine time including its CPU head, excluding encoding/
+HTTP: Flash122ms/full439ms at346tokens;476ms/1580ms at1382tokens. Use matching
+local runs rather than treating hosted GPU/network times as an M5 speed target.
+The [Flash quant card](https://huggingface.co/mlx-community/clef-flash-4bit)
+reports a sampled0.2.1 index54.65 versus55.63 BF16,96.4% top-answer agreement;
+the [full quant card](https://huggingface.co/mlx-community/clef-4bit) reports
+57.02 versus57.96 INT8,98.1% agreement. Their sampled and full-card scores differ.
+
+Pinned references/download candidates (sizes are decimal on-disk, not RAM):
+
+| Model | Official revision | INT4 candidate and revision | Size |
+| --- | --- | --- | ---: |
+| Flash | `f0b7d3cd65296abfe459e6c228b618f5d8b26d2f` | `mlx-community/clef-flash-4bit` at`b5adbe2c3a95200d4bf04a0727c8ec457157d5e1` |6.194GB |
+| Full | `a30162b99d68a481d8bd75d38df069a0cf83df40` | `mlx-community/clef-4bit` at`b973b6f405d02f8e9b83208c7e82ddf43a742eb6` |16.311GB |
+| Omni | `df2d7c9505e62ba8a527b147513a4fa66a77dc5d` | `mlx-community/clef-omni-4bit` at`040a6e49d2e5d2f4f3ba68e70a6a0654833e23e1` |19.773GB |
+
+Official source/configs: [Flash](https://huggingface.co/Cloudflare/clef-flash),
+[full](https://huggingface.co/Cloudflare/clef), [Omni](https://huggingface.co/Cloudflare/clef-omni).
+Protocol sources: [TypeSafe OpenAPI](https://api.typesafe.ai/openapi.json),
+[TypeSafe confidence](https://docs.typesafe.ai/confidence),
+[OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions).
+Use CPU/high-precision reference outputs for Omni; the reference implementations
+document PyTorch MPS numerical problems. Preserve credit/licenses when adapting
+kernels. The executable sequence and hour budgets are at the top of
+[next experiments](../speed-bench/ideas/next-experiments.md).
+
 ## Completed follow-up — behavioral testing and Zig fixtures, 2026-10-24
 
 The user asked for actual behavioral evidence and consistent Zig tests after

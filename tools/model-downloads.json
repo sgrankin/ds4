@@ -129,11 +129,275 @@
       "directory": "flint-int4",
       "link": false,
       "description": "Recursive Flint affine INT4 with INT8 embeddings, about 22.6 GB. Downloads all five safetensors shards, tokenizer/config files and manifest into gguf/flint-int4. Native Metal serving on M5 Max; use ds4-local --server flint --model gguf/flint-int4. Leaves ds4flash.gguf unchanged."
+    },
+    "clef-flash-int4": {
+      "repo": "mlx-community/clef-flash-4bit",
+      "revision": "b5adbe2c3a95200d4bf04a0727c8ec457157d5e1",
+      "file": "config.json",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "chat_template.jinja",
+        "clef_mlx.py",
+        "config.json",
+        "generation_config.json",
+        "joint_head.safetensors",
+        "joint_head_config.json",
+        "model-00001-of-00002.safetensors",
+        "model-00002-of-00002.safetensors",
+        "model.safetensors.index.json",
+        "processor_config.json",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "directory": "clef-flash-int4",
+      "link": false,
+      "description": "Cloudflare Clef-Flash affine INT4 decision model with BF16 joint head and media towers, pinned complete safetensors directory. Downloads into gguf/clef-flash-int4; leaves ds4flash.gguf unchanged.",
+      "artifacts": {
+        "LICENSE": {
+          "bytes": 11544,
+          "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a"
+        },
+        "README.md": {
+          "bytes": 8408,
+          "sha256": "98c3712a002afd107eaad221499d9c086bd106445757fbfcd96d17bbf03daa1e"
+        },
+        "chat_template.jinja": {
+          "bytes": 7756,
+          "sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715"
+        },
+        "clef_mlx.py": {
+          "bytes": 33670,
+          "sha256": "852223c944819a32fad5cf798d9d1dff30419820eaf5ad1f10cb9698afec97d5"
+        },
+        "config.json": {
+          "bytes": 3722,
+          "sha256": "c323f36eb35fb9349b2bde60b3e16ee3d86316e20a5166c91f4a0585286f0ec1"
+        },
+        "generation_config.json": {
+          "bytes": 116,
+          "sha256": "45707f8467bf4e54e112c6095a1b2d1f2d63651cf86816344cfff21f02dda0d4"
+        },
+        "joint_head.safetensors": {
+          "bytes": 243538016,
+          "sha256": "19cdcec8c81dc9212be320fff47462ab342fbc1278be4368fb3da71241cf5ba0"
+        },
+        "joint_head_config.json": {
+          "bytes": 119,
+          "sha256": "77efe959a38b5b17b241543e129e695f3c77465ece55a25985279bd8176279a0"
+        },
+        "model-00001-of-00002.safetensors": {
+          "bytes": 5349769710,
+          "sha256": "39894f085d844004c8e5c2394e45b5ab66bce4637ecdf23d92bf7c85cb66238f"
+        },
+        "model-00002-of-00002.safetensors": {
+          "bytes": 600449850,
+          "sha256": "40258d3d4f7225a0acbb45f4d34693465b98c8e2c0a4b0a512e536750379fcf3"
+        },
+        "model.safetensors.index.json": {
+          "bytes": 123592,
+          "sha256": "4518e4d98baed265cb25c5adb45839d5b69e0b9700f4bd573533392097bbb874"
+        },
+        "processor_config.json": {
+          "bytes": 1191,
+          "sha256": "d89ef49ce9cd37fbf510158e13c1ef063d9286411c1ec9049932dbe0487143b1"
+        },
+        "tokenizer.json": {
+          "bytes": 19989339,
+          "sha256": "a5cd9732badce41de57e6efce8302930ded1c1188c5f81feb2bd6c24c4a1941f"
+        },
+        "tokenizer_config.json": {
+          "bytes": 1190,
+          "sha256": "7d884d6eaf8142a3343a933ca5ab6ccc2fa93d52591cdbbe2ea33559bb2b503a"
+        }
+      }
+    },
+    "clef-int4": {
+      "repo": "mlx-community/clef-4bit",
+      "revision": "b973b6f405d02f8e9b83208c7e82ddf43a742eb6",
+      "file": "config.json",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "chat_template.jinja",
+        "clef_mlx.py",
+        "config.json",
+        "generation_config.json",
+        "joint_head.safetensors",
+        "joint_head_config.json",
+        "model-00001-of-00003.safetensors",
+        "model-00002-of-00003.safetensors",
+        "model-00003-of-00003.safetensors",
+        "model.safetensors.index.json",
+        "processor_config.json",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "directory": "clef-int4",
+      "link": false,
+      "description": "Cloudflare Clef affine INT4 decision model with BF16 joint head and media towers, pinned complete safetensors directory. Downloads into gguf/clef-int4; leaves ds4flash.gguf unchanged.",
+      "artifacts": {
+        "LICENSE": {
+          "bytes": 11544,
+          "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a"
+        },
+        "README.md": {
+          "bytes": 8495,
+          "sha256": "87509ee2673e2702fa0e9a922b5fd5d334db644abef6b32e7d59cfe26a0fc35a"
+        },
+        "chat_template.jinja": {
+          "bytes": 8952,
+          "sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041"
+        },
+        "clef_mlx.py": {
+          "bytes": 33670,
+          "sha256": "852223c944819a32fad5cf798d9d1dff30419820eaf5ad1f10cb9698afec97d5"
+        },
+        "config.json": {
+          "bytes": 5031,
+          "sha256": "babed436c433c5498245d9a4660260a7fea7077def84b49be31087e52685eec1"
+        },
+        "generation_config.json": {
+          "bytes": 214,
+          "sha256": "dc36854b2b25176764cfeeda32a3d80fb4fcffbef2b00d55c6614079bf21eb9f"
+        },
+        "joint_head.safetensors": {
+          "bytes": 256125024,
+          "sha256": "a010ac04f078e699988e4049cbea5e62c962393f59fec366640b64e8d69a4953"
+        },
+        "joint_head_config.json": {
+          "bytes": 119,
+          "sha256": "890be585d75b981201eb96a35f98a9967afe37bc8d220cfdea2e72d56507534f"
+        },
+        "model-00001-of-00003.safetensors": {
+          "bytes": 5343268662,
+          "sha256": "6cc1508e96fb5d0865dfd5753a79f4ec60651bf3e2a82844a7e8ae9c60528c0d"
+        },
+        "model-00002-of-00003.safetensors": {
+          "bytes": 5354185130,
+          "sha256": "6b0933f831ddcfacd2ae4d4d1dc326db0578fddc5fcf48319eed20b202f9c962"
+        },
+        "model-00003-of-00003.safetensors": {
+          "bytes": 5357087557,
+          "sha256": "f97fd037229334ce55a1d74f401546279a43113fe8d01adf4213f0c98a546585"
+        },
+        "model.safetensors.index.json": {
+          "bytes": 218281,
+          "sha256": "13b840162b4cb35c66fef7df072f7dbb4717908204364f5e5d9f9655a2758fa8"
+        },
+        "processor_config.json": {
+          "bytes": 1191,
+          "sha256": "d89ef49ce9cd37fbf510158e13c1ef063d9286411c1ec9049932dbe0487143b1"
+        },
+        "tokenizer.json": {
+          "bytes": 19989339,
+          "sha256": "a5cd9732badce41de57e6efce8302930ded1c1188c5f81feb2bd6c24c4a1941f"
+        },
+        "tokenizer_config.json": {
+          "bytes": 1190,
+          "sha256": "7d884d6eaf8142a3343a933ca5ab6ccc2fa93d52591cdbbe2ea33559bb2b503a"
+        }
+      }
+    },
+    "clef-omni-int4": {
+      "repo": "mlx-community/clef-omni-4bit",
+      "revision": "040a6e49d2e5d2f4f3ba68e70a6a0654833e23e1",
+      "file": "config.json",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "chat_template.jinja",
+        "clef_mlx.py",
+        "config.json",
+        "generation_config.json",
+        "joint_head.safetensors",
+        "joint_head_config.json",
+        "model-00001-of-00004.safetensors",
+        "model-00002-of-00004.safetensors",
+        "model-00003-of-00004.safetensors",
+        "model-00004-of-00004.safetensors",
+        "model.safetensors.index.json",
+        "processor_config.json",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "directory": "clef-omni-int4",
+      "link": false,
+      "description": "Cloudflare Clef-Omni affine INT4 decision model with BF16 joint head and media towers, pinned complete safetensors directory. Downloads into gguf/clef-omni-int4; leaves ds4flash.gguf unchanged.",
+      "artifacts": {
+        "LICENSE": {
+          "bytes": 11544,
+          "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a"
+        },
+        "README.md": {
+          "bytes": 10483,
+          "sha256": "72e88e579f8809026f268896bf8831581f2cd9e6300466e12c9665257ffff24f"
+        },
+        "chat_template.jinja": {
+          "bytes": 6519,
+          "sha256": "45777d2e798aae1d1ce6844e69edcb23fc0c710009554711c78efab9044da2c8"
+        },
+        "clef_mlx.py": {
+          "bytes": 51059,
+          "sha256": "a42a9d85d8b450a2a3a88085bc7cd7f467e6f30de4cc8ccdf142bf7ed490b279"
+        },
+        "config.json": {
+          "bytes": 28764,
+          "sha256": "aea527683537ecb1a990b05d07f45494824f4d7c2c9844ef1592a1f764e8f1be"
+        },
+        "generation_config.json": {
+          "bytes": 146,
+          "sha256": "7fa40989be8e43c078907810c41c25d33747523afce3d5a34d5850f930c886cb"
+        },
+        "joint_head.safetensors": {
+          "bytes": 218364000,
+          "sha256": "d5ee8d7e75c9a503edce94400dda9074fc0f2f4d62729012bf0a827df947ba9c"
+        },
+        "joint_head_config.json": {
+          "bytes": 119,
+          "sha256": "96bc7dbf43ae9e42a34ce7bb3032d51769a29912c800df297b37300f41a69fe5"
+        },
+        "model-00001-of-00004.safetensors": {
+          "bytes": 5364482893,
+          "sha256": "e95279b64b686575f4c978efce6334f6972c24f070bde8cd29682ca806cef0ad"
+        },
+        "model-00002-of-00004.safetensors": {
+          "bytes": 5366654394,
+          "sha256": "b30703c88710b74ed0892366d35f16b9c3ed3c597280fd5e8143410f30e5f047"
+        },
+        "model-00003-of-00004.safetensors": {
+          "bytes": 5366654403,
+          "sha256": "302954ada5cfedeb90fea7e82705548fadeaa94bf92dc4abc8b55e37fb3e22f1"
+        },
+        "model-00004-of-00004.safetensors": {
+          "bytes": 3456831757,
+          "sha256": "1ac918a9b986c326028c857eb3293ccee77603d77f136a32e2ff7b4dca5b7986"
+        },
+        "model.safetensors.index.json": {
+          "bytes": 234560,
+          "sha256": "2b528a9fe9b73d1a0eb16de907282a492e96eab351b61786aa1f6850fee8e16b"
+        },
+        "processor_config.json": {
+          "bytes": 2356,
+          "sha256": "c72bd6e0a91b84eea5af48fee17b63a8e7f4a37fd5b8293dd5c32710cb1b98ad"
+        },
+        "tokenizer.json": {
+          "bytes": 11424262,
+          "sha256": "a7d41145c408f3062e824f965be1c29854cd809e111cdf8170aa8b0bcd5d1fab"
+        },
+        "tokenizer_config.json": {
+          "bytes": 907,
+          "sha256": "2602a7d7336bf7ad4cd3eb385ccf27040cc675081d4cd445b1aaa88b10b87ffb"
+        }
+      }
     }
   },
   "aliases": {
     "qwen38-iq2": "qwen38-q2",
-    "flint": "flint-int4"
+    "flint": "flint-int4",
+    "clef-flash": "clef-flash-int4",
+    "clef": "clef-int4",
+    "clef-omni": "clef-omni-int4"
   },
   "artifacts": {
     "Qwen3.8-Flash-Next-Q2.gguf": {

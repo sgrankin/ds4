@@ -22,6 +22,11 @@ VISION_1017 = "DeepSeek-V4.1-Flash-1017-vision-BF16.gguf"
 QWEN_Q2 = "Qwen3.8-Flash-Next-Q2.gguf"
 QWEN_Q4 = "Qwen3.8-Flash-Next-Q4.gguf"
 FLINT_REVISION = "3b93f9053b530488405ae9fca51d4900d6ce21f0"
+CLEF_TARGETS = {
+    "clef-flash-int4": ("mlx-community/clef-flash-4bit", "b5adbe2c3a95200d4bf04a0727c8ec457157d5e1"),
+    "clef-int4": ("mlx-community/clef-4bit", "b973b6f405d02f8e9b83208c7e82ddf43a742eb6"),
+    "clef-omni-int4": ("mlx-community/clef-omni-4bit", "040a6e49d2e5d2f4f3ba68e70a6a0654833e23e1"),
+}
 # recursive-oss/rec packaging/flint-int4-mlx.json, qualified INT4 checkpoint.
 FLINT_ARTIFACTS = {
     "chat_template.jinja": (2328, "7940f4ffa3275c36caa4a582f845aaad79da11018b3961e8fbcad6ae29733466"),
@@ -142,6 +147,16 @@ class DownloadTests(unittest.TestCase):
             (fixtures / name).write_bytes(data)
             catalog["artifacts"][name] = {
                 "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+        for target, (repo, revision) in CLEF_TARGETS.items():
+            model = catalog["targets"][target]
+            self.assertEqual((model["repo"], model["revision"]), (repo, revision))
+            bundle = fixtures / target
+            bundle.mkdir()
+            for name in model["files"]:
+                data = f"{target}/{name}\n".encode()
+                (bundle / name).write_bytes(data)
+                model["artifacts"][name] = {
+                    "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
         (tools / "model-downloads.json").write_text(json.dumps(catalog))
         hf = self.bin / "hf"
         hf.write_text("""#!/usr/bin/env python3
@@ -152,6 +167,10 @@ args = sys.argv[1:]
 assert args[0] == 'download'
 if args[1] == 'RecursiveSI/flint-int4':
     assert args[args.index('--revision') + 1] == '3b93f9053b530488405ae9fca51d4900d6ce21f0'
+elif args[1].startswith('mlx-community/clef'):
+    catalog = json.loads((Path(__file__).parent.parent / 'tools/model-downloads.json').read_text())
+    model = next(m for m in catalog['targets'].values() if m['repo'] == args[1])
+    assert args[args.index('--revision') + 1] == model['revision']
 else:
     assert args[1] == ('kyuz0/deepseek-v4.1-flash-gguf' if args[2] == 'DeepSeek-V4.1-Flash-1017-vision-BF16.gguf'
                        else 'antirez/qwen3.8-flash-next-gguf' if args[2].startswith('Qwen')
@@ -165,7 +184,10 @@ if os.environ.get('HF_CALLS'):
 if os.environ.get('FAIL_DOWNLOAD') or os.environ.get('FAIL_DOWNLOAD_FILE') == args[2]:
     sys.exit(7)
 out.mkdir(parents=True, exist_ok=True)
-(out / args[2]).write_bytes((Path(__file__).parent / "fixtures" / args[2]).read_bytes())
+fixture = Path(__file__).parent / "fixtures"
+if args[1].startswith('mlx-community/clef'):
+    fixture /= model['directory']
+(out / args[2]).write_bytes((fixture / args[2]).read_bytes())
 """)
         hf.chmod(0o755)
         self.env = dict(os.environ, HOME=str(self.root / "home"), HF_TOKEN="",
@@ -284,6 +306,32 @@ out.mkdir(parents=True, exist_ok=True)
         self.assertEqual((directory / missing).read_bytes(), payload(missing))
         records = [json.loads(line) for line in calls.read_text().splitlines()]
         self.assertEqual([row["file"] for row in records], [missing, missing])
+        self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / Q2)
+
+    def test_clef_pinned_bundles_scoped_metadata_and_existing(self):
+        self.run_download("ds41f-q2")
+        calls = self.root / "hf-calls.jsonl"
+        self.env["HF_CALLS"] = str(calls)
+        catalog = json.loads((self.root / "tools/model-downloads.json").read_text())
+        for alias in ("clef-flash", "clef", "clef-omni"):
+            target = catalog["aliases"][alias]
+            model = catalog["targets"][target]
+            self.assertIn("Verifying SHA-256", self.run_download(alias))
+            directory = self.out / target
+            self.assertEqual({p.name for p in directory.iterdir()}, set(model["files"]))
+            self.assertTrue((directory / "joint_head.safetensors").is_file())
+            for name in model["files"]:
+                self.assertEqual((directory / name).read_bytes(), f"{target}/{name}\n".encode())
+            self.assertEqual(self.run_download(target).count("Already downloaded"), len(model["files"]))
+        records = [json.loads(line) for line in calls.read_text().splitlines()]
+        for target, (repo, revision) in CLEF_TARGETS.items():
+            rows = [row for row in records if row["repo"] == repo]
+            self.assertEqual([row["file"] for row in rows], catalog["targets"][target]["files"])
+            self.assertTrue(all(row["revision"] == revision for row in rows))
+        # A correctly sized metadata file from another bundle must not pass.
+        flash_config = self.out / "clef-flash-int4/config.json"
+        flash_config.write_bytes(b"x" * flash_config.stat().st_size)
+        self.assertIn("Checksum mismatch", self.run_download("clef-flash", ok=False))
         self.assertEqual((self.root / "ds4flash.gguf").resolve(), self.out / Q2)
 
     def test_partial_requires_explicit_cleanup(self):
