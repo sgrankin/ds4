@@ -77,7 +77,10 @@ pub const Engine = struct {
         const prepared = if (self.timing) now() else 0;
         const injections = try media.embeddings(allocator, self.backend, &record, cancel, context);
         const towers = if (self.timing) now() else 0;
-        const hidden = try self.backend.inferMedia(record.ids, if (request.media.len != 0) record.positions else &.{}, injections, cancel, context);
+        const hidden = if (request.media.len == 0)
+            try self.backend.inferText(record.ids, record.schema_start, cancel, context)
+        else
+            try self.backend.inferMedia(record.ids, record.positions, injections, cancel, context);
         const inferred = if (self.timing) now() else 0;
         const lexical = try self.backend.embeddingRows(record.embedding_ids);
         defer a.free(lexical);

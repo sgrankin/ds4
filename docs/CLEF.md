@@ -45,6 +45,30 @@ not implemented. OpenAI confidence is the model's maximum answer probability;
 it does not reproduce a hosted model's calibration. SystemOne uses the current
 TypeSafe chance-corrected choice and score-dispersion formulas.
 
+## Fast paths and repeated state
+
+Dense Flash/full choose their fast kernels automatically. Short inputs use the
+quantized GEMM; at 2,048 processed tokens and above, each projection expands once
+into a reusable BF16 matrix before MPP multiplication with FP32 accumulation.
+This uses an additional 192 MiB of scratch for Flash or 340 MiB for full Clef,
+allocated on the first long request. The checkpoint stays INT4. The direct
+BF16 SwiGLU path also avoids an intermediate FP32 matrix.
+
+Named `ds4-local` profiles enable one in-memory text-prefix entry in each loaded
+Flash/full helper. Repeated state can answer changed questions without running
+the whole backbone again. Changed prefix tokens miss; the learned head still
+runs for every request. Short inputs, media and Omni use their ordinary paths.
+The measured entry retained about 321 MiB for Flash or 651 MiB for full Clef at
+the 2,881-token test size; larger contexts retain more memory.
+
+Direct `ds4-server` users enable this with `DS4_CLEF_PREFIX_CACHE=1`. Set it to
+`0` to disable it in a named profile. This entry belongs to the loaded engine
+and lives in RAM; it is not persisted into the DeepSeek SSD cache.
+
+See the [kernel measurements](../speed-bench/experiments/clef-native-20261024/KERNEL-PERFORMANCE.md)
+and [prefix replay results](../speed-bench/experiments/clef-native-20261024/PREFIX-CACHE.md)
+for quality, memory, timings and reproduction commands.
+
 ## Media
 
 PNG/JPEG sources may be HTTP(S) URLs, base64 data URLs or objects containing

@@ -12,6 +12,7 @@ const Vision = @import("vision.zig");
 const AudioEncoder = @import("audio_encoder.zig");
 const Audio = @import("audio.zig");
 const Media = @import("backend_media.zig");
+const Prefix = @import("prefix.zig");
 pub const Injection = Media.Injection;
 const a = std.heap.c_allocator;
 pub const Buffer = *anyopaque;
@@ -244,6 +245,16 @@ const Conv = extern struct { channels: u32, row: u32, kernel: u32 };
 const GdnPrep = extern struct { hk: u32, hv: u32, dk: u32, dv: u32, row: u32, channels: u32 };
 const Gdn = extern struct { hk: u32, hv: u32, dk: u32, dv: u32, channels: u32 };
 const GdnOut = extern struct { hv: u32, dv: u32, row: u32, offset: u32, epsilon: f32 };
+const DenseTile = enum { automatic, ordinary, wide, tall, rows_first, grouped, expanded };
+const dense_tiles = std.StaticStringMap(DenseTile).initComptime(.{
+    .{ "auto", .automatic },
+    .{ "64x64", .ordinary },
+    .{ "64x128", .wide },
+    .{ "128x64", .tall },
+    .{ "rows-first", .rows_first },
+    .{ "grouped", .grouped },
+    .{ "expanded", .expanded },
+});
 
 pub const Engine = struct {
     gpu: *c.flint_gpu,
@@ -262,6 +273,12 @@ pub const Engine = struct {
     audio: ?AudioEncoder.State = null,
     /// Experimental cooperative GPU groups; zero preserves one prefill command.
     layer_quantum: u32 = 0,
+    /// Diagnostic stage synchronization; ordinary execution stays one command.
+    profile: bool = false,
+    dense_tile: DenseTile = .automatic,
+    expanded_matrix: ?View = null,
+    ffn_bf16: bool = true,
+    prefix: ?Prefix.State = null,
 
     pub fn open(directory: []const u8) !*Engine {
         const self = try a.create(Engine);
@@ -284,6 +301,12 @@ pub const Engine = struct {
         if (c.getenv("DS4_CLEF_LAYER_QUANTUM")) |value| {
             self.layer_quantum = std.fmt.parseInt(u32, std.mem.span(value), 10) catch return error.InvalidLayerQuantum;
         }
+        if (c.getenv("DS4_CLEF_PROFILE")) |value| self.profile = std.mem.eql(u8, std.mem.span(value), "1");
+        if (c.getenv("DS4_CLEF_FFN_BF16")) |value| self.ffn_bf16 = std.mem.eql(u8, std.mem.span(value), "1");
+        if (c.getenv("DS4_CLEF_QMM_TILE")) |value| {
+            const tile = std.mem.span(value);
+            self.dense_tile = dense_tiles.get(tile) orelse return error.InvalidDenseTile;
+        }
         const quant_source = try shaders.source(a);
         defer a.free(quant_source);
         if (config.family == .omni) {
@@ -291,6 +314,11 @@ pub const Engine = struct {
             defer a.free(source);
             try self.compile(source);
             try self.compile(@embedFile("../../metal/clef/omni_ops.metal"));
+        } else if (self.dense_tile != .ordinary) {
+            const extra = if (self.dense_tile == .expanded or self.dense_tile == .automatic) @embedFile("../../metal/clef/dequant_gemm.metal") else @embedFile("../../metal/clef/dense_tiles.metal");
+            const source = try std.mem.concat(a, u8, &.{ quant_source, extra });
+            defer a.free(source);
+            try self.compile(source);
         } else try self.compile(quant_source);
         try self.compile(@embedFile("../../metal/clef/backbone.metal"));
         try self.compile(@embedFile("../../metal/clef/ops.metal"));
@@ -339,10 +367,14 @@ pub const Engine = struct {
                 layer.gated_norm = try self.vector(try std.fmt.allocPrint(allocator, "{s}linear_attn.norm.weight", .{base}), 0, false);
             }
         }
+        if (c.getenv("DS4_CLEF_PREFIX_CACHE")) |value| {
+            if (std.mem.eql(u8, std.mem.span(value), "1")) self.prefix = try Prefix.State.open(self);
+        }
         std.debug.print("clef: native affine INT4, {d} layers, hidden {d}\n", .{ config.layers, config.H });
         return self;
     }
     pub fn close(self: *Engine) void {
+        if (self.prefix) |*prefix| prefix.deinit();
         if (self.audio) |*audio| audio.deinit();
         if (self.vision) |*vision| vision.deinit();
         if (self.head_full) |*head| head.deinit();
@@ -534,6 +566,27 @@ pub const Engine = struct {
     pub fn inferCancelable(self: *Engine, ids: []const u32, cancel: Cancel, context: ?*anyopaque) ![]const f32 {
         return self.inferMedia(ids, &.{}, &.{}, cancel, context);
     }
+    pub fn inferText(self: *Engine, ids: []const u32, schema_start: usize, cancel: Cancel, context: ?*anyopaque) ![]const f32 {
+        if (self.prefix) |*prefix| {
+            prefix.last_reused = 0;
+            if (!self.profile and Prefix.boundary(schema_start) != 0) {
+                const hidden = try prefix.infer(self, ids, schema_start, cancel, context);
+                if (c.getenv("DS4_CLEF_TIMING")) |value| {
+                    if (std.mem.eql(u8, std.mem.span(value), "1")) std.debug.print("clef-cache: tokens={d} reused={d} retained={d} bytes={d}\n", .{ ids.len, prefix.last_reused, prefix.length, prefix.bytes(self.config) });
+                }
+                return hidden;
+            }
+        }
+        return self.inferCancelable(ids, cancel, context);
+    }
+    pub fn scratchFor(self: *Engine, rows: u32) !*Scratch {
+        if (self.scratch == null or self.scratch.?.capacity < rows) {
+            if (self.scratch) |*scratch| scratch.deinit();
+            self.scratch = null;
+            self.scratch = try Scratch.init(self.gpu, self.config, rows);
+        }
+        return &self.scratch.?;
+    }
     /// Positions are flattened [tokens,3], and each injection lists the token
     /// rows occupied by its vision/audio features. Empty media is ordinary text.
     pub fn inferMedia(self: *Engine, ids: []const u32, positions: []const u32, injections: []const Injection, cancel: Cancel, context: ?*anyopaque) ![]const f32 {
@@ -543,12 +596,7 @@ pub const Engine = struct {
         if (ids.len == 0 or ids.len > 16384) return error.InvalidContextLength;
         for (ids) |id| if (id >= self.config.vocab) return error.TokenOutOfRange;
         const T: u32 = @intCast(ids.len);
-        if (self.scratch == null or self.scratch.?.capacity < T) {
-            if (self.scratch) |*s| s.deinit();
-            self.scratch = null;
-            self.scratch = try Scratch.init(self.gpu, self.config, T);
-        }
-        const s = &self.scratch.?;
+        const s = try self.scratchFor(T);
         @memcpy(contents(u32, s.ids, T), ids);
         if (positions.len != 0) {
             @memcpy(contents(u32, s.position, T * 3), positions);
@@ -571,14 +619,18 @@ pub const Engine = struct {
         defer if (pending) {
             _ = c.flint_gpu_command_end(self.gpu, e.command, true);
         };
+        var profile = Profile{ .enabled = self.profile };
         const cfg = self.config;
         try e.dispatch("clef_embed", extern struct { rows: u32, width: u32, bits: u32, pad: u32 }{ .rows = T, .width = cfg.H, .bits = self.embedding.bits, .pad = 0 }, &.{ s.ids.bind(1), self.embedding.w.bind(2), self.embedding.scales.bind(3), self.embedding.biases.bind(4), s.hidden.bind(5) }, .{ ceil(cfg.H, 256), T, 1 }, 256);
         try media.inject(e, s.hidden, cfg.H, null);
+        try profile.mark(&e, &pending, .embedding, true);
         for (self.layer, 0..) |l, i| {
             if (cancel) |check| if (check(context)) return error.Cancelled;
             try self.norm(e, l.norm, s.hidden, s.normal, T);
+            try profile.mark(&e, &pending, .input_norm, true);
             try self.linear(e, l.in, s.normal, s.project16, T);
             try e.dispatch("clef_widen", Rows{ .rows = T, .width = l.in.rows }, &.{ s.project16.bind(1), s.project.bind(2) }, .{ ceil(T * l.in.rows, 256), 1, 1 }, 256);
+            try profile.mark(&e, &pending, .input_projection, true);
             if (cfg.full[i]) {
                 try e.dispatch("attn_prep", AttentionPrep{ .heads = cfg.heads, .kv = cfg.kv_heads, .dim = cfg.head_dim, .rotary = cfg.rotary, .row = l.in.rows, .epsilon = cfg.eps }, &.{ s.project.bind(1), l.qnorm.bind(2), l.knorm.bind(3), s.position.bind(4), self.inv_freq.bind(5), s.query.bind(6), s.key.bind(7), s.value.bind(8), s.gate.bind(9), s.length.bind(10) }, .{ T, cfg.heads + cfg.kv_heads, 1 }, 32);
                 // Kernels mask ragged tiles but require finite speculative tail loads.
@@ -588,6 +640,7 @@ pub const Engine = struct {
                 const long = T >= 1024;
                 const kernel: [:0]const u8 = if (long) "attention_prefetch_64" else "attention_fa";
                 try e.dispatch(kernel, Attention{ .heads = cfg.heads, .kv = cfg.kv_heads, .dim = cfg.head_dim, .rows = T, .scale = 1 / @sqrt(@as(f32, @floatFromInt(cfg.head_dim))) }, &.{ s.query.bind(1), s.key.bind(2), s.value.bind(3), s.gate.bind(4), s.starts.bind(5), s.activation.bind(6), s.act.bind(7), s.overflow.bind(8) }, if (long) .{ ceil(T, 32), cfg.heads, 1 } else .{ ceil(T, 8), cfg.kv_heads, 1 }, if (long) 128 else 32 * (cfg.heads / cfg.kv_heads));
+                try profile.mark(&e, &pending, .attention, true);
             } else {
                 try e.dispatch("ssm_conv", Conv{ .channels = cfg.C(), .row = l.in.rows, .kernel = cfg.conv }, &.{ s.project.bind(1), l.conv.bind(2), s.starts.bind(3), s.convolution.bind(4) }, .{ ceil(cfg.C(), 256), T, 1 }, 256);
                 try e.dispatch("gdn_prep", GdnPrep{ .hk = cfg.Hk, .hv = cfg.Hv, .dk = cfg.dk, .dv = cfg.dv, .row = l.in.rows, .channels = cfg.C() }, &.{ s.convolution.bind(1), s.project.bind(2), l.decay.bind(3), l.dt.bind(4), s.beta.bind(5), s.decay.bind(6) }, .{ T, 2 * cfg.Hk + cfg.Hv, 1 }, 32);
@@ -598,23 +651,36 @@ pub const Engine = struct {
                     try e.dispatch("gdn_chunk_scan_32_32", gp, binds, .{ cfg.Hv, 4, 1 }, 128);
                 } else try e.dispatch("gdn_scan_8", gp, &.{ s.convolution.bind(1), s.beta.bind(2), s.decay.bind(3), s.bounds.bind(4), s.output.bind(5), s.dummy.bind(6), s.dummy.bind(7), s.dummy.bind(8) }, .{ cfg.Hv, 32, 1 }, 32);
                 try e.dispatch("gdn_out", GdnOut{ .hv = cfg.Hv, .dv = cfg.dv, .row = l.in.rows, .offset = cfg.C(), .epsilon = cfg.eps }, &.{ s.output.bind(1), s.project.bind(2), l.gated_norm.bind(3), s.activation.bind(4), s.act.bind(5), s.starts.bind(6), s.overflow.bind(7) }, .{ T, cfg.Hv, 1 }, 32);
+                try profile.mark(&e, &pending, .gdn, true);
             }
             try self.linear(e, l.out, s.activation, s.project16, T);
+            try profile.mark(&e, &pending, .output_projection, true);
             try e.dispatch("clef_residual", Rows{ .rows = T, .width = cfg.H }, &.{ s.hidden.bind(1), s.project16.bind(2) }, .{ ceil(T * cfg.H, 256), 1, 1 }, 256);
+            try profile.mark(&e, &pending, .residual, true);
             try self.norm(e, l.ffn_norm, s.hidden, s.normal, T);
+            try profile.mark(&e, &pending, .ffn_norm, true);
             try self.linear(e, l.gate_up, s.normal, s.project16, T);
-            try e.dispatch("clef_widen", Rows{ .rows = T, .width = l.gate_up.rows }, &.{ s.project16.bind(1), s.project.bind(2) }, .{ ceil(T * l.gate_up.rows, 256), 1, 1 }, 256);
-            try e.dispatch("swiglu", extern struct { width: u32 }{ .width = cfg.ffn }, &.{ s.project.bind(1), s.activation.bind(2), s.act.bind(3), s.starts.bind(4), s.overflow.bind(5) }, .{ ceil(cfg.ffn, 256), T, 1 }, 256);
+            if (!self.ffn_bf16) try e.dispatch("clef_widen", Rows{ .rows = T, .width = l.gate_up.rows }, &.{ s.project16.bind(1), s.project.bind(2) }, .{ ceil(T * l.gate_up.rows, 256), 1, 1 }, 256);
+            try profile.mark(&e, &pending, .ffn_gate_up, true);
+            try e.dispatch(if (self.ffn_bf16) "clef_swiglu_bf16" else "swiglu", extern struct { width: u32 }{ .width = cfg.ffn }, &.{ (if (self.ffn_bf16) s.project16 else s.project).bind(1), s.activation.bind(2), s.act.bind(3), s.starts.bind(4), s.overflow.bind(5) }, .{ ceil(cfg.ffn, 256), T, 1 }, 256);
+            try profile.mark(&e, &pending, .ffn_activation, true);
             try self.linear(e, l.down, s.activation, s.project16, T);
+            try profile.mark(&e, &pending, .ffn_down, true);
             try e.dispatch("clef_residual", Rows{ .rows = T, .width = cfg.H }, &.{ s.hidden.bind(1), s.project16.bind(2) }, .{ ceil(T * cfg.H, 256), 1, 1 }, 256);
-            try self.yieldAfterLayer(&e, i, self.layer.len, &pending, cancel, context);
+            try profile.mark(&e, &pending, .residual, true);
+            if (!profile.enabled) try self.yieldAfterLayer(&e, i, self.layer.len, &pending, cancel, context);
         }
         try e.dispatch("rmsnorm_f32", Norm{ .width = cfg.H, .epsilon = cfg.eps }, &.{ s.hidden.bind(1), self.final_norm.bind(2), s.final.bind(3) }, .{ T, 1, 1 }, 256);
         try e.dispatch("clef_round", Rows{ .rows = T, .width = cfg.H }, &.{s.final.bind(1)}, .{ ceil(T * cfg.H, 256), 1, 1 }, 256);
-        pending = false;
-        if (!c.flint_gpu_command_end(self.gpu, e.command, true)) {
-            std.debug.print("clef: GPU execution {s}\n", .{std.mem.span(c.flint_gpu_error(self.gpu))});
-            return error.GpuExecution;
+        if (profile.enabled) {
+            try profile.mark(&e, &pending, .final_norm, false);
+            profile.report(T);
+        } else {
+            pending = false;
+            if (!c.flint_gpu_command_end(self.gpu, e.command, true)) {
+                std.debug.print("clef: GPU execution {s}\n", .{std.mem.span(c.flint_gpu_error(self.gpu))});
+                return error.GpuExecution;
+            }
         }
         if (cancel) |check| if (check(context)) return error.Cancelled;
         return contents(f32, s.final, @as(usize, T) * cfg.H);
@@ -630,13 +696,32 @@ pub const Engine = struct {
         encoder.command = c.flint_gpu_command_begin(self.gpu) orelse return error.GpuCommand;
         pending.* = true;
     }
-    fn norm(self: *Engine, e: Encoder, weight: View, input: View, output: View, T: u32) !void {
+    pub fn norm(self: *Engine, e: Encoder, weight: View, input: View, output: View, T: u32) !void {
         const s = &self.scratch.?;
         try e.dispatch("rmsnorm_act", Norm{ .width = self.config.H, .epsilon = self.config.eps }, &.{ input.bind(1), weight.bind(2), output.bind(3), s.act.bind(4), s.starts.bind(5), s.overflow.bind(6) }, .{ T, 1, 1 }, 256);
     }
-    fn linear(_: *Engine, e: Encoder, m: Matrix, input: View, output: View, T: u32) !void {
+    pub fn linear(self: *Engine, e: Encoder, m: Matrix, input: View, output: View, T: u32) !void {
         const p = Matmul{ .m = @intCast(T), .n = @intCast(m.rows), .k = @intCast(m.columns) };
         const narrow = T <= 8 and m.bits == 4;
+        // Expanding once pays off for long inputs; short requests avoid both
+        // that fixed cost and the extra scratch allocation.
+        const tile: DenseTile = if (self.dense_tile == .automatic) (if (T >= 2048) .expanded else .ordinary) else self.dense_tile;
+        if (m.bits == 4 and T >= 256 and tile != .ordinary) {
+            if (tile == .expanded) {
+                if (self.expanded_matrix == null) self.expanded_matrix = try self.buffer(@as(usize, self.config.ffn) * self.config.H * 4);
+                const weight = self.expanded_matrix.?;
+                if (c.flint_gpu_buffer_size(weight.buffer) < @as(usize, m.rows) * m.columns * 2) return error.MatrixShape;
+                try e.dispatch("clef_dequant_q4", p, &.{ m.w.bind(1), m.scales.bind(2), m.biases.bind(3), weight.bind(4) }, .{ ceil(m.rows * m.columns / 8, 256), 1, 1 }, 256);
+                try e.dispatch("clef_dequant_gemm_64x128", p, &.{ input.bind(1), weight.bind(2), output.bind(3) }, .{ ceil(m.rows, 128), ceil(T, 64), 1 }, 128);
+                return;
+            }
+            const wide = tile == .wide;
+            const rows_first = tile == .rows_first;
+            const kernel: [:0]const u8 = if (tile == .grouped) "clef_qmm4_grouped_rows" else if (rows_first) "clef_qmm4_rows_first" else if (wide) "clef_qmm4_64x128" else "clef_qmm4_128x64";
+            const grid: [3]u32 = if (rows_first) .{ ceil(T, 64), ceil(m.rows, 64), 1 } else .{ ceil(m.rows, if (wide) 128 else 64), ceil(T, if (tile == .tall) 128 else 64), 1 };
+            try e.dispatch(kernel, p, &.{ m.w.bind(1), m.scales.bind(2), m.biases.bind(3), input.bind(4), output.bind(5) }, grid, 128);
+            return;
+        }
         const kernel: [:0]const u8 = if (m.bits == 8) "flint_prefill_qmm8" else if (narrow) "flint_prefill_qmv4_packed" else "flint_prefill_qmm4";
         try e.dispatch(kernel, p, &.{ m.w.bind(1), m.scales.bind(2), m.biases.bind(3), input.bind(4), output.bind(5) }, if (narrow) .{ ceil(m.rows, 16), T, 1 } else .{ ceil(m.rows, 64), ceil(T, 64), 1 }, 128);
     }
@@ -669,7 +754,37 @@ pub const Encoder = struct {
         if (!c.flint_gpu_dispatch(self.gpu, self.command, name, &params, @sizeOf(@TypeOf(params)), binds.ptr, binds.len, &grid, &block)) return error.GpuDispatch;
     }
 };
-const Scratch = struct {
+
+/// This intentionally changes submission boundaries. GPU stage totals locate
+/// expensive arithmetic; use an unprofiled run for whole-request latency.
+const Profile = struct {
+    const Stage = enum { embedding, input_norm, input_projection, attention, gdn, output_projection, residual, ffn_norm, ffn_gate_up, ffn_activation, ffn_down, final_norm };
+    const count = @typeInfo(Stage).@"enum".field_names.len;
+    enabled: bool,
+    seconds: [count]f64 = @splat(0),
+    calls: [count]usize = @splat(0),
+
+    fn mark(self: *Profile, encoder: *Encoder, pending: *bool, stage: Stage, restart: bool) !void {
+        if (!self.enabled) return;
+        pending.* = false;
+        var seconds: f64 = 0;
+        if (!c.flint_gpu_command_end_profile(encoder.gpu, encoder.command, &seconds)) return error.GpuExecution;
+        self.seconds[@backingInt(stage)] += seconds;
+        self.calls[@backingInt(stage)] += 1;
+        if (restart) {
+            encoder.command = c.flint_gpu_command_begin(encoder.gpu) orelse return error.GpuCommand;
+            pending.* = true;
+        }
+    }
+
+    fn report(self: *const Profile, tokens: u32) void {
+        inline for (@typeInfo(Stage).@"enum".field_names, 0..) |name, index| {
+            if (self.calls[index] != 0) std.debug.print("clef-profile: tokens={d} stage={s} calls={d} gpu_ms={d:.3}\n", .{ tokens, name, self.calls[index], self.seconds[index] * 1000 });
+        }
+    }
+};
+
+pub const Scratch = struct {
     gpu: *c.flint_gpu,
     capacity: u32,
     buffers: std.ArrayList(Buffer) = .empty,

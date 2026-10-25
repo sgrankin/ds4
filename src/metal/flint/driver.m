@@ -111,6 +111,19 @@ bool flint_gpu_command_end(flint_gpu *gpu, void *opaque, bool wait) {
     }
 }
 
+bool flint_gpu_command_end_profile(flint_gpu *gpu, void *opaque, double *gpu_seconds) {
+    @autoreleasepool {
+        id<MTLCommandBuffer> command = CFBridgingRelease(opaque);
+        ds4_runtime_metal_commit((__bridge void *)command, gpu, true);
+        if (command.status == MTLCommandBufferStatusError) {
+            context(gpu).error = command.error.localizedDescription;
+            return false;
+        }
+        *gpu_seconds = command.GPUEndTime - command.GPUStartTime;
+        return true;
+    }
+}
+
 static inline id<MTLComputePipelineState> flint_pipeline(FlintMetalContext *ctx, NSString *name) {
     id<MTLComputePipelineState> pipeline = ctx.pipelines[name];
     if (!pipeline) {

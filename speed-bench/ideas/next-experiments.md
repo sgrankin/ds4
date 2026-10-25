@@ -1,5 +1,38 @@
 # Next experiments: one hour each
 
+## Clef performance pass — authorized 2026-10-25
+
+1. Dense backbone profile and one measured kernel change. Start09:28UTC, cap
+   10:28UTC including builds, real short/2881-token full-Clef measurements and
+   probability/task checks. Frozen control is the native final-build binary
+   documented in `clef-native-20261024/SPEED.md`; same-weight MLX long control
+   is3.147s vs native3.608s. Profile diagnostics are not headline timings.
+   Inspect matrix/GDN/attention costs before choosing the change; include Flash
+   short/long regression checks and retain unsuccessful candidates.
+2. Exact prefix/decision-feature reuse, one-hour cap after item1. Start from
+   the simplest useful in-memory owner, ordinary changing inputs plus favorable
+   repeated-state/changed-question cases and adverse changed-state cases.
+   Measure wall time, memory, cache hits and complete probabilities/task answers.
+   Preserve causal/token/media identities; avoid a general cache framework.
+3. Integrate qualified wins, ordinary serving/other-model checks and concise
+   reproduction report. Keep main unchanged pending publication request.
+
+Item1 completed10:14UTC: auto per-matrix BF16 expansion/MPP at2048+ rows and
+direct BF16 SwiGLU selected. Full long warm latency13.5–15.8% lower; Flash8.1–13.9%
+lower. All100 Flash quality responses are byte-value identical to frozen control;
+host checks pass. Alternative tiling/scheduling curves and first failures are
+retained. Item2 starts10:14UTC, one-hour cap11:14UTC.
+
+Item2 completed10:24UTC: exact one-entry text prefix reuse is qualified on
+full/Flash. Both27-request replays take44% less time, all36 decisions and every
+probability match uncached. Changed facts miss; media/ordinary bypass preserves
+state. Actual mixed HTTP/WS/SDK/cancellation checks pass. Named fast profiles
+enable this RAM cache for loaded dense helpers; direct server opt-in remains.
+The final build/install and concise reports complete item3. Main stays unchanged.
+
+Independent source analysis can overlap; root schedules the only guarded model
+job. Stop each item at its checkpoint and record the actual decision/results.
+
 ## Clef family, decisions and multi-model ownership — next sequence, 2026-10-24
 
 User requested a plan for native Clef-Flash/full/Omni, both decision APIs and

@@ -4,6 +4,51 @@ Last updated: 2026-10-25. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## Clef performance pass — completed, 2026-10-25
+
+User authorized a performance pass after the matched local-speed report. Begin
+09:28UTC: one-hour dense profile/kernel item, then a separate one-hour exact
+prefix/feature reuse item if concrete. Root owns guarded model scheduling;
+parallel source work owns profiling, dedicated kernel candidates and read-only
+cache review. Freeze current final-build control and record short/long full+
+Flash probabilities and elapsed time. Diagnostic synchronized stage timings
+must not become end-to-end claims. Main remains unchanged; work stays local.
+
+Dense item completed10:14UTC within its one-hour cap. Direct BF16 SwiGLU saves
+roughly2–3% on ordinary short requests. Auto dense dispatch now keeps the old
+quantized GEMM below2048 rows; at2048+ it expands each matrix once into one
+reused BF16 scratch and runs MPP with FP32 accumulation. Full2881-token warm
+time3633→3144ms (13.5%),6731-token10368→8730ms (15.8%); Flash947→870ms (8.1%)
+and2800→2410ms (13.9%). Scratch340MiB full/192MiB Flash, allocated only when
+needed. All32 repeated decision vectors per model are bit-identical; the fixed
+100-question Flash control/candidate also has100 identical complete responses,
+KL/delta-NLL0. Host/server/agent/recovery/script checks pass. Larger quantized
+tiles and traversal alternatives remain diagnostics, not automatic choices.
+[Kernel measurements and reproduction](../speed-bench/experiments/clef-native-20261024/KERNEL-PERFORMANCE.md).
+
+Exact-prefix item ran10:14–10:24UTC (one-hour cap11:14UTC). The fixed27-request
+screen covers changed schemas, early fact changes, shorter ordinary requests
+between hits and alternating states, using the same adopted kernels in both arms.
+
+Prefix item completes10:24UTC. Full and Flash each finish27 fixed requests,
+36/36 correct decisions, all full distributions identical to uncached (KL and
+delta-NLL0). Eleven hits per model; mixed replay39.07→21.92s full and11.21→6.32s
+Flash (44% lower). Long state plus changed schema3387→495ms /959→149ms. Early
+fact edits miss and reverse the answer; short ordinary requests between hits
+preserve the entry. Retained payload651.14MiB full/321.26MiB Flash at this size.
+Live HTTP confirms five media bypasses and later2752-token reuse; 18 composed
+Flint/helper HTTP/WS/SDK/cancellation checks pass. Guard exits0 after controlled
+shutdown, all pressure normal/no swap growth. Named fast presets enable one
+exact RAM prefix per dense helper; direct server remains opt-in, override0.
+The cache has no SSD persistence or multi-entry policy. Kernel defaults are
+ordinary automatic choices. [Cache results](../speed-bench/experiments/clef-native-20261024/PREFIX-CACHE.md).
+
+Final `make ZIG_FLAGS=-j3` installs all five root executables; launcher checks
+pass including default-on prefix caching and explicit override0. Full host
+qualification passed, and the owned test server is stopped. Raw plots/logs stay
+ignored. Kernel/quality results and a standalone tradeoff plot are recorded in
+the reports; no benchmark dumps are added to commits. Main is unchanged.
+
 ## Clef family — implemented and qualified, 2026-10-25
 
 On M5 Max128GB, native Zig/Metal now serves Clef-Flash, full Clef and Clef-Omni.
@@ -75,15 +120,16 @@ warnings. Flint's larger reported buffer estimate is an accounting correction
 for its existing65536-token allocation blocks, not newly allocated memory.
 [Existing-engine regression](../speed-bench/experiments/clef-native-20261024/ENGINE-REGRESSION.md).
 
-The final local stack is two coherent changes: model/download implementation
+The initial Clef stack was consolidated into model/download implementation
 `oxmmmnktsvnl` and runtime/serving integration `wzvyrkmkpkyn`. Earlier plan/download
-checkpoints were consolidated. Main stays at published steering`ce3afb7999b7`;
-new Clef work is local. Raw logs/weights/dumps/plots stay ignored, while concise
+checkpoints were consolidated. Subsequent speed comparison and performance-pass
+commits add the evidence and improvements above. Main stays at published
+steering`ce3afb7999b7`; new Clef work is local. Raw logs/weights/dumps/plots stay ignored, while concise
 reports, standard numerical recipes and necessary compact golden fixtures are
 tracked. No model/test server remains running after qualification.
 
 Remaining proposals: aggregate automatic model-memory reservations, a server
-registry for multiple generators, reusable decision features, broader task
+registry for multiple generators, multi-entry prefix and joint-head feature reuse, broader task
 coverage and additional hardware. Current GGUF automatic admission budgets one
 engine; qualified co-hosting commands use explicit cache budgets (32GiB main+
 Flash,8GiB each in the two-Core proof). Helper-first loading alone does not alter
@@ -98,7 +144,8 @@ normal pressure/no swap growth. Most time is dense backbone compute; the chart
 also includes contention. Local Flash is about3–8% behind MLX on short records;
 Omni about8–12% ahead. Hosted Cloudflare is substantially faster on different
 hardware/workloads. [Comparison/method/limits](../speed-bench/experiments/clef-native-20261024/SPEED.md).
-Long dense matmul profiling and reusable decision features remain proposals.
+The performance pass above completes long dense matmul profiling and one-entry
+state-prefix reuse. Joint-head feature caching remains a separate proposal.
 
 Source inspection found a practical remaining mixed-workload limit: Clef encodes
 its entire text backbone into one GPU command, so a long full-model request can

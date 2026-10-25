@@ -54,10 +54,15 @@ def --wrapped main [...arguments: string] {
         print 'persistent-fast combines left/right suffix reuse with decode and prefill resident substitutions for ds4-agent or ds4-server.'
         print 'flint is server-only: native resident decoding with durable Responses JSON; provide --model DIR.'
         print 'clef-flash, clef and clef-omni are server-only decision profiles; downloaded model directories are selected by default.'
+        print 'Profiles enable matching text-prefix reuse for loaded Clef/Flash helpers; DS4_CLEF_PREFIX_CACHE=0 disables it.'
         return
     }
     if $preset not-in ['context-fast' 'resident-fast' 'persistent-fast' 'flint' 'clef-flash' 'clef' 'clef-omni'] { usage-error }
     $args = ($args | skip 1)
+
+    # Named fast profiles retain one exact state prefix in each loaded dense
+    # Clef helper. Engines without this capability ignore the setting.
+    load-env {DS4_CLEF_PREFIX_CACHE: (env-or DS4_CLEF_PREFIX_CACHE '1')}
 
     if $preset in ['flint' 'clef-flash' 'clef' 'clef-omni'] {
         if not $server {

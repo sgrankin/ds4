@@ -27,6 +27,8 @@ size_t flint_gpu_buffer_size(void *buffer);
 void flint_gpu_buffer_free(void *buffer);
 void *flint_gpu_command_begin(flint_gpu *gpu);
 bool flint_gpu_command_end(flint_gpu *gpu, void *command, bool wait);
+/* Diagnostic synchronous completion, reporting Metal's GPU execution time. */
+bool flint_gpu_command_end_profile(flint_gpu *gpu, void *command, double *gpu_seconds);
 bool flint_gpu_dispatch(flint_gpu *gpu, void *command, const char *kernel,
                         const void *params, size_t params_bytes,
                         const flint_gpu_binding *bindings, size_t count,

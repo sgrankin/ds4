@@ -16,7 +16,7 @@ def --wrapped main [...args: string] {
         DS4_SERVER_CONTEXT_SUFFIX_RIGHT DS4_STATE_CACHE_DIR DS4_STATE_CACHE_HOT_MB
         DS4_STATE_CACHE_SSD_MB DS4_SERVER_RESPONSE_STORE_DIR
         DS4_METAL_DSV41_SOURCE DS4_V41_COMPRESSED_KV_F16
-        ZIG_GLOBAL_CACHE_DIR ZIG_LOCAL_CACHE_DIR]
+        ZIG_GLOBAL_CACHE_DIR ZIG_LOCAL_CACHE_DIR DS4_CLEF_PREFIX_CACHE]
     {program: $PROGRAM, args: $args, cwd: $env.PWD,
         env: ($env | select --optional ...$keys)} | to json | print
     exit ($env.DS4_TEST_EXIT? | default "0" | into int)
@@ -164,7 +164,11 @@ def main [] {
         assert equal $child.args [--host 127.0.0.1 --model ($ROOT | path join gguf $"($profile)-int4") --ctx (if $profile == clef-omni {'64000'} else {'16384'}) --port '9901']
         assert equal ($child.env | get --optional DS4_STATE_CACHE_DIR) null
         assert equal ($child.env | get --optional DS4_SERVER_CONTEXT_SUFFIX_REUSE) null
+        assert equal $child.env.DS4_CLEF_PREFIX_CACHE '1'
     }
+    let uncached = call $launcher (['--server'] ++ $leading ++ [clef-flash]) {DS4_CLEF_PREFIX_CACHE: '0'}
+    assert equal $uncached.exit_code 0 $uncached.stderr
+    assert equal ($uncached.stdout | from json | get env.DS4_CLEF_PREFIX_CACHE) '0'
     assert equal (call $launcher ($leading ++ [clef-flash])).exit_code 2
     print 'PASS: Nu launchers: profiles, quoted argv, overrides, shader paths, cache paths, help and child status'
 }
