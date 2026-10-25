@@ -131,7 +131,7 @@ const Session = struct {
     }
 
     /// Completion retires every callback before request/connection memory can
-    /// be released. Capture hidden logical replay before freeing the request.
+    /// be released. Capture logical replay before freeing the request.
     fn collect(self: *Session) void {
         const job = self.active orelse return;
         std.debug.assert(self.done());

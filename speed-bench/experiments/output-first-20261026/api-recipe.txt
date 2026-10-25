@@ -1,0 +1,1 @@
+If you use the helper, preserve the bound template with lib.questionsFor. Question choices are {value,description} objects, not strings. tools.ds4_decide returns an object whose answers field is the answer array.

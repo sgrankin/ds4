@@ -48,11 +48,10 @@ returned separately from visible text in each API's native form. Standard
 sampling and output-budget fields are supported; explicit request parameters
 take precedence over defaults.
 
-Responses can also execute the [hosted decision tool](HOSTED-TOOLS.md) against
-an already loaded Clef helper, then continue the main generator in one Response.
-Ordinary function tools remain client-executed.
-[Programmatic tool calling](PROGRAMMATIC-TOOLS.md) adds bounded server-side
-JavaScript over request-local bindings and native decision helpers.
+Function tools are executed by the client. Client orchestration can call the
+native decision APIs directly; the server owns model inference and conversation
+state. Embedded JavaScript, MCP execution and hosted decision tools were retired
+after the workflow experiments; concise historical results remain in speed-bench.
 
 The default sampling settings are temperature 1, top-p 1, and min-p 0.05.
 For DeepSeek, thinking is on by default. `reasoning_effort=max` selects Think

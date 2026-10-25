@@ -71,14 +71,6 @@ typedef struct {
     /* Distinguish the Responses hosted tool from a normal function that
      * happens to be named "tool_search". */
     bool responses_tool_search;
-    /* Non-NULL only for an explicitly enabled provider-hosted decision tool.
-     * Input is a bound Decisions input value encoded as JSON. */
-    char *responses_decision_model;
-    char *responses_decision_input;
-    bool responses_decision_direct;
-    bool responses_decision_programmatic;
-    bool responses_programmatic;
-    char *responses_program_bindings;
     char **prop;
     char **prop_schema;
     int len;
@@ -126,8 +118,9 @@ typedef struct {
 } stop_list;
 
 /* Optional borrowed transport for Responses semantic events. A connection owns
- * this sink until its job completes. load_parent returns libc-owned response
- * and logical replay strings (0 found, 1 missing); durable fallback is separate.
+ * this sink until its job completes. load_parent returns libc-owned response,
+ * and logical replay strings (0 found, 1 missing); durable
+ * fallback is separate.
  * HTTP leaves it NULL. Model and canonical input records do not depend on it. */
 typedef struct {
     void *context;
@@ -158,12 +151,6 @@ typedef struct {
     unsigned long long conversation_version;
     int responses_store_error_status;
     char *responses_replay; /* Private logical history, without top-level instructions. */
-    bool responses_hosted_tools;
-    bool responses_programmatic;
-    char *responses_program_bindings;
-    int max_tool_calls;
-    char *responses_output_prefix; /* Earlier public items, without array brackets. */
-    int responses_output_prefix_count;
     char responses_published_id[40];
     tool_schema_orders tool_orders;
     int max_tokens;

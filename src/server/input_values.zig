@@ -3,8 +3,6 @@
 //! schema unwrapping, namespace names, ordered properties and libc lifetimes.
 const std = @import("std");
 const c = @import("server_input_c");
-const HostedDecision = @import("hosted_decisions.zig");
-const HostedProgram = @import("hosted_programs.zig");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidJson};
 
@@ -120,9 +118,6 @@ fn freeOrder(order: *c.tool_schema_order) void {
     c.free(order.name);
     c.free(order.wire_name);
     c.free(order.namespace);
-    c.free(order.responses_decision_model);
-    c.free(order.responses_decision_input);
-    c.free(order.responses_program_bindings);
     for (items([*c]u8, order.prop, @intCast(order.len))) |property| c.free(property);
     for (items([*c]u8, order.prop_schema, @intCast(order.len))) |schema| c.free(schema);
     c.free(@ptrCast(order.prop));
@@ -320,17 +315,11 @@ fn namespaceSchemas(text: *Text, orders: [*c]c.tool_schema_orders, raw: [*c]cons
 /// directly. Render one raw function schema per line. Responses namespaces are
 /// flattened for DSML while their client-facing name/namespace remain in orders.
 pub fn parseTools(cursor: *[*c]const u8, output: *[*c]u8, orders: [*c]c.tool_schema_orders) bool {
-    return parseToolsAllowed(cursor, output, orders, false);
-}
-
-/// Provider execution is opt-in on this request, never enabled by a tool
-/// definition recovered from history or a tool-search result.
-pub fn parseRequestTools(cursor: *[*c]const u8, output: *[*c]u8, orders: [*c]c.tool_schema_orders) bool {
-    return parseToolsAllowed(cursor, output, orders, true);
+    return parseToolsAllowed(cursor, output, orders);
 }
 
 /// Reapply current declarations after historical discovery. Parse into a fresh
-/// list so provider-name collision checks concern this request's list alone.
+/// list so explicit declarations replace historical metadata at their original slot.
 pub fn overlayRequestTools(raw: [*c]const u8, orders: [*c]c.tool_schema_orders) bool {
     var current = std.mem.zeroes(c.tool_schema_orders);
     defer {
@@ -340,7 +329,7 @@ pub fn overlayRequestTools(raw: [*c]const u8, orders: [*c]c.tool_schema_orders) 
     var cursor = raw;
     var schemas: [*c]u8 = null;
     defer c.free(schemas);
-    if (!parseRequestTools(&cursor, &schemas, &current)) return false;
+    if (!parseTools(&cursor, &schemas, &current)) return false;
     if (orders != null) {
         for (items(c.tool_schema_order, current.v, @intCast(current.len))) |*order| {
             pushOrder(@ptrCast(orders), order.*);
@@ -350,32 +339,33 @@ pub fn overlayRequestTools(raw: [*c]const u8, orders: [*c]c.tool_schema_orders) 
     return true;
 }
 
-fn isType(raw: [*c]const u8, wanted: []const u8) bool {
-    const parsed = std.json.parseFromSlice(std.json.Value, allocator, bytes(raw), .{}) catch return false;
-    defer parsed.deinit();
-    if (parsed.value != .object) return false;
-    const kind = parsed.value.object.get("type") orelse return false;
-    return kind == .string and std.mem.eql(u8, kind.string, wanted);
-}
-
-// This slice does not suspend JavaScript for client-owned tools. Reject that
-// route explicitly instead of silently executing a function in the wrong place.
-fn directClient(value: std.json.Value) bool {
-    if (value != .object) return true;
-    const routes = HostedDecision.callers(value.object.get("allowed_callers")) catch return false;
-    if (!routes.direct or routes.programmatic) return false;
+// Server execution is absent. Ordinary client functions remain callable, but
+// declarations asking for the retired execution routes must fail explicitly.
+fn clientTool(value: std.json.Value) bool {
+    if (value != .object) return false;
+    if (value.object.get("type")) |kind| {
+        if (kind == .string and (std.mem.eql(u8, kind.string, "mcp") or
+            std.mem.eql(u8, kind.string, "programmatic_tool_calling") or
+            std.mem.eql(u8, kind.string, "ds4:decision"))) return false;
+    }
+    if (value.object.get("allowed_callers")) |callers| {
+        if (callers != .array) return false;
+        for (callers.array.items) |caller| {
+            if (caller != .string or !std.mem.eql(u8, caller.string, "direct")) return false;
+        }
+    }
     if (value.object.get("tools")) |children| if (children == .array) {
-        for (children.array.items) |child| if (!directClient(child)) return false;
+        for (children.array.items) |child| if (!clientTool(child)) return false;
     };
     return true;
 }
-fn directClientTool(raw: [*c]const u8) bool {
-    const parsed = std.json.parseFromSlice(std.json.Value, allocator, bytes(raw), .{}) catch return true;
+fn clientToolDeclaration(raw: [*c]const u8) bool {
+    const parsed = std.json.parseFromSlice(std.json.Value, allocator, bytes(raw), .{}) catch return false;
     defer parsed.deinit();
-    return directClient(parsed.value);
+    return clientTool(parsed.value);
 }
 
-fn parseToolsAllowed(cursor: *[*c]const u8, output: *[*c]u8, orders: [*c]c.tool_schema_orders, allow_decision: bool) bool {
+fn parseToolsAllowed(cursor: *[*c]const u8, output: *[*c]u8, orders: [*c]c.tool_schema_orders) bool {
     var reader = Reader{ .cursor = cursor.* };
     defer cursor.* = reader.cursor;
     _ = reader.peek();
@@ -386,79 +376,30 @@ fn parseToolsAllowed(cursor: *[*c]const u8, output: *[*c]u8, orders: [*c]c.tool_
     reader.consume('[') catch return false;
     var schemas = Text{};
     defer schemas.deinit();
-    var decision_declared = false;
-    var program_declared = false;
-    var needs_program = false;
     while (reader.more(']')) {
         const raw = reader.raw() catch return false;
         defer c.free(raw);
-        if (isType(raw, HostedProgram.tool_type)) {
-            if (!allow_decision or orders == null or program_declared) return false;
-            program_declared = true;
-            var binding = HostedProgram.Binding.parse(bytes(raw)) catch return false;
-            defer binding.deinit();
-            schemas.line(binding.schema.ptr);
-            const count = orders.*.len;
-            addOrder(orders, binding.schema.ptr, null, null, false);
-            if (orders.*.len != count + 1) return false;
-            const order = &orders.*.v[@intCast(count)];
-            order.responses_programmatic = true;
-            order.responses_program_bindings = duplicate(binding.config);
-        } else if (isType(raw, HostedDecision.tool_type)) {
-            if (!allow_decision or orders == null or decision_declared) return false;
-            decision_declared = true;
-            var binding = HostedDecision.Binding.parse(bytes(raw)) catch return false;
-            defer binding.deinit();
-            if (binding.direct) schemas.line(HostedDecision.schema.ptr);
-            needs_program = needs_program or binding.programmatic;
-            const count = orders.*.len;
-            addOrder(orders, HostedDecision.schema.ptr, null, null, false);
-            if (orders.*.len != count + 1) return false;
-            const order = &orders.*.v[@intCast(count)];
-            order.responses_decision_model = duplicate(binding.model);
-            order.responses_decision_input = if (binding.input) |input| duplicate(input) else null;
-            order.responses_decision_direct = binding.direct;
-            order.responses_decision_programmatic = binding.programmatic;
-        } else {
-            if (!directClientTool(raw)) return false;
-            const function = unwrappedFunction(raw);
-            defer c.free(function);
-            if (function != null) {
-                schemas.line(function);
-                addOrder(orders, function, null, null, false);
-            } else if (!namespaceSchemas(&schemas, orders, raw)) {
-                const special = hostedSchema(raw);
-                defer c.free(special);
-                if (special != null) {
-                    schemas.line(special);
-                    // Hosted tool_search differs from a function with that name.
-                    addOrder(orders, special, null, null, true);
-                } else {
-                    schemas.line(raw);
-                    addOrder(orders, raw, null, null, false);
-                }
+        if (!clientToolDeclaration(raw)) return false;
+        const function = unwrappedFunction(raw);
+        defer c.free(function);
+        if (function != null) {
+            schemas.line(function);
+            addOrder(orders, function, null, null, false);
+        } else if (!namespaceSchemas(&schemas, orders, raw)) {
+            const special = hostedSchema(raw);
+            defer c.free(special);
+            if (special != null) {
+                schemas.line(special);
+                // Client tool_search differs from a function with that name.
+                addOrder(orders, special, null, null, true);
+            } else {
+                schemas.line(raw);
+                addOrder(orders, raw, null, null, false);
             }
         }
         reader.separator();
     }
     reader.consume(']') catch return false;
-    // Reject an ambiguous name rather than intercepting an ordinary client
-    // function that happens to use the provider capability's spelling.
-    if (decision_declared) {
-        var marked: usize = 0;
-        for (items(c.tool_schema_order, orders.*.v, @intCast(orders.*.len))) |order| {
-            if (order.responses_decision_model != null) marked += 1;
-        }
-        if (marked != 1) return false;
-    }
-    if (needs_program and !program_declared) return false;
-    if (program_declared) {
-        var marked: usize = 0;
-        for (items(c.tool_schema_order, orders.*.v, @intCast(orders.*.len))) |order| if (order.responses_programmatic) {
-            marked += 1;
-        };
-        if (marked != 1) return false;
-    }
     output.* = schemas.take();
     return true;
 }

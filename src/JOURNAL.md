@@ -1,8 +1,718 @@
 # Serving project journal
 
-Last updated: 2026-10-25. This is the compact handoff for resumed work and context
+Last updated: 2026-10-27. This is the compact handoff for resumed work and context
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
+
+Execution authorized 2026-10-27: user accepted omitted strict as non-strict and
+said "if there's nothing else, start cranking." The discussion-only boundary
+below is historical and no longer pauses the selected sequence. First cleanup
+checkpoint starts04:03:52UTC, cap05:03:52UTC. Frozen qualified runtime binaries
+(aef775c29745) and hashes are under
+`.workspaces/interaction-catchup-20261027/baseline/` and `baseline.json`.
+Untested earlier cache work remains isolated at `breakpoint-implementation-draft`;
+reuse only after review. Main remains unchanged. Current work removes hosted
+orchestration while retaining ordinary client tools, native decisions and state.
+
+Cleanup checkpoint completes04:09UTC: removed hosted execution rounds, custom
+request/receipt/replay surfaces, immutable program ledger, QuickJS vendor/runtime
+and native MCP client/probes plus their dedicated tests/docs. Ordinary function
+calls, client tool_search and preexisting client-hosted-call history remain.
+Clef direct APIs, conversations, Responses/WS, logical replay and inference/cache
+owners remain. Explicit non-null max_tool_calls now fails clearly because this
+server no longer executes tools. No external-consumer migration layer retained.
+
+`nu tools/zig-build ds4-server server-test serving-boundary-test --prefix
+.workspaces/interaction-catchup-20261027/cleanup-build -j6` passes. Existing
+`ds4_test --server` and all7 native serving-boundary cases pass; diff whitespace
+check passes. Dedicated hosted tests were retired with their implementations.
+Real-model/restart/performance qualification is pending later aggregate checks,
+not implied by this source/model-free checkpoint. Raw build/server logs remain
+ignored under the same workspace. Input provenance is the next bounded slice.
+
+Selected escaping direction: user agrees to official raw parameter strings
+after token-aware rendering/parsing replaces the custom delimiter escape
+workaround. Preserve literal-data round-trip invariants/tests, then remove the
+extra model instructions; do not simply delete the protection first. No runtime
+work resumes during discussion.
+
+Selected historical-reasoning direction: user says follow recipe and explicitly
+notes suffix reuse makes cache busting less concerning. For ordinary completed
+history, use the current-tool-prompt rule rather than any-tool-history retention.
+Preserve correct live tool-exchange state, but do not retain a divergent logical
+transcript merely to avoid a cache miss. Suffix reuse is approximate and its
+availability does not itself establish equivalence; cache reuse must follow the
+chosen conversation policy. This remains a planning decision, not coding approval.
+
+Selected strict-schema direction: user agrees to honoring strict tool schemas,
+normalizing once for both prompt and grammar, preserving explicit non-strict
+semantics, and making unsupported guarantees fail clearly. Installed-client
+check: DSH0.2.1-rc.2 native DeepSeek Messages tools omit strict entirely. DSH's
+Pi adapter keeps only name/description/parameters; bundled pi-ai1.4.0 Responses
+and Chat emit strict:false when supported, otherwise omit it. Thus DSH does not
+request strict:true by default. A client change or an explicit server default
+policy would be needed for strict enforcement to benefit these declarations;
+explicit false should not silently be upgraded. Non-strict grammar framing and
+argument syntax constraints remain useful separately. Default policy is still
+under discussion; no source/runtime implementation begins here.
+
+Next discussion point: required/named tool selection. Recipe resolves named
+choices against declarations and narrows to the named tool; required needs a
+call. It explicitly rejects required/named choices in thinking mode. Current
+ds4 Responses rejects those unsupported choices; Chat/Anthropic can silently
+reduce them to none/auto. Recommended plan is consistent validation across APIs,
+recipe's thinking-mode restriction without silently disabling reasoning, and
+grammar enforcement for supported non-thinking required/named requests. This
+recommendation is not yet a user-selected decision. Plain auto/none remain
+distinct from strict argument-schema enforcement.
+
+User selects recipe's required/named tool-choice policy for the plan: consistent
+API validation, reject required/named with thinking enabled, support non-thinking
+requests via grammar, never silently downgrade or disable thinking. Still
+planning; "let's do that" selects this policy, not implementation start. Next
+discussion point is structured final-answer formats (JSON/schema, Chat regex).
+
+User selects recipe-style structured final-answer formats for the plan: JSON,
+JSON Schema and Chat regex via the shared grammar compiler, keeping reasoning
+separate and returning clear errors for unsupported formats/combinations.
+Initially preserve recipe's restriction against active strict tools combined
+with a response format. Still discussion only; namespaced tool mapping is next.
+
+User selects recipe's V4.1 namespace::name mapping for explicit namespace
+declarations, retaining separate client namespace/local name, namespace context,
+collision-safe mapping and consistent grammar/output/replay. Ordinary flat tool
+names (including mcp__ prefixes) remain unchanged. No compatibility framework
+for old bare-concatenated names is required. Next discussion is incremental
+Responses tool-argument streaming. Planning only.
+
+User selects incremental Responses tool-name/argument streaming, preserving
+stable IDs, exact final argument accumulation, UTF-8/delimiter handling and
+cancellation. During the later implementation phase, also inspect other
+Responses shortcuts and correct concrete deficiencies in claimed functionality;
+do not turn this into implementing every optional protocol feature or a generic
+hardening framework. Keep the review bounded and record unsupported features
+honestly. Sampling defaults are the next discussion point. No coding now.
+
+Sampling source/history findings for discussion: V4.1 recipe uses temperature1
+in thinking regardless of requested temperature, floors thinking top_p at0.95
+(default1), and fixes non-thinking top_p to1. ds4 uses temp1/top_p1 by default
+but honors explicit client values; it also defaults min_p to0.05 with no top-k
+cutoff. Commit613e9b2c deliberately introduced relative-probability filtering
+to exclude low-probability tails, with no fresh V4.1 quality comparison here.
+DeepInfer's shown sampler defaults have no min-p control; Flint reference
+defaults already match our model-specific1/.95/top_k20/min_p0.
+Selected sampling policy, 2026-10-27: retain DS41 temperature1/top_p1/min_p0.05
+defaults. The user wants min-p as an intentional quantization repair; do not
+remove it merely to match the reference sampler. Honor explicit client sampling
+overrides, including min_p0 and greedy temperature0 without disabling reasoning.
+We control our clients and do not need recipe's forced/clamped override policy.
+Keep Flint's reference defaults. The quantization rationale is the user's
+selected policy, not a fresh measured quality result. This supersedes the earlier
+recommendation to remove implicit min-p. No runtime edits during planning.
+
+## Consolidated execution sequence — proposed, 2026-10-27
+
+The user has authorized execution of the selected policies above. Use the
+ordered one-hour checkpoints in
+[next experiments](../speed-bench/ideas/next-experiments.md#interaction-catch-up--proposed-execution-order-2026-10-27).
+Each cap includes setup/build/measurement/reporting. A checkpoint is a limit on
+an iteration, not a promise that an unfamiliar integration fits an hour: record
+the concrete unfinished work and split only that work before continuing.
+
+Order: hosted-orchestration cleanup; token-aware input and official prompt
+semantics; token-aware output/raw strings/incremental Responses streaming;
+native grammar compiler plus shared schema/request contract; DS41 constraints;
+Flint constraints; actual explicit cache checkpoint policy; final retained-path
+qualification and bounded Responses shortcut review. Cache integration can move
+earlier after token provenance if the grammar bridge is blocked. Independent
+source review may overlap; only one heavy model job runs at once.
+
+Keep one normalized tool/schema contract for prompt and grammar. Preserve the
+unconstrained fast path and normal DeepSeek reasoning. Measure constraints on
+ordinary/free answers as well as tool/structured cases, recording validity,
+task results, prefill/decode/whole-request latency and cache reuse. Do not claim
+that changed templates or masks preserve outputs exactly. Reuse existing
+fixtures, drivers and pressure guard; preserve historical negative results.
+
+User selects omitted strict as non-strict, honoring explicit true/false. This
+matches current DSH declarations without silently strengthening their guarantees.
+No schema enforcement should be advertised for a non-strict request.
+
+## Interaction differences — discussion and history, 2026-10-26
+
+User wants the smaller differences discussed individually, including their
+historical reasons, before finalizing an AFK execution plan. Do not mechanically
+replace every deviation with official behavior or start runtime work mid-plan.
+
+First item, tools before initial system content, is a documented deliberate
+choice: commit `7b682344f112` ("prepend tool schemas to the rendered system
+prompt") puts tool schemas before client system content so a changing timestamp
+or agent ID at the system tail does not invalidate the large tool-schema prefix.
+Its message specifically explains interaction with
+`--kv-cache-boundary-trim-tokens`; it also adds an ordering fixture. V4.1 and the
+rewrite preserved that behavior. The official recipe appends the tool block
+after initial system content. Both use system role, but learned ordering may
+affect behavior; no quality comparison of these orders has run here.
+
+Recommendation for discussion: keep the cache-friendly order unless a bounded
+comparison establishes a useful reason to change it. Treat it as an intentional
+format variation, while fixing token provenance and missing constraint semantics
+independently. This recommendation is not yet a user-selected plan item.
+
+Current-code correction after tracing the trim flag: normal cold checkpoint
+creation prefers the last User marker before the first Assistant and saves that
+anchor exactly, without trim/alignment. Only the no-usable-anchor fallback
+subtracts boundary_trim_tokens (default32), then rounds down by
+boundary_align_tokens (default2048), subject to minimum512. Continued snapshots
+use their own interval. This changes only saved state length, never prompt text;
+remaining tokens are computed normally. Therefore the historical schemas-first
+rationale does not prove that today's ordinary chat policy benefits from trim.
+An embedded changing timestamp can still invalidate the untrimmed anchor.
+Reassess order with the actual save policy before choosing the plan default.
+See [cold checkpoint selection](server/generation.zig) and
+[store length/anchor selection](kvstore.zig).
+
+Protocol check2026-10-26: official OpenAI documentation supports explicit
+prompt_cache_breakpoint on content blocks plus prompt_cache_options.mode for
+GPT5.6 and later. The current OpenResponses2026-04-24 OpenAPI includes
+prompt_cache_key but not those breakpoint/options fields; optional documented
+provider extensions are permitted. ds4 has not implemented the breakpoint
+fields. They select reusable prefix endpoints, not independent chunks: an
+earlier changed timestamp still prevents exact reuse of later tool-schema KV.
+Potential follow-up is OpenAI-compatible explicit checkpoint positions alongside
+automatic boundaries, avoiding a new bespoke API. This remains proposed work.
+[OpenAI caching](https://developers.openai.com/api/docs/guides/prompt-caching),
+[OpenResponses schema](https://www.openresponses.org/openapi/openapi.json).
+
+Official-client check: installed DSH0.2.1-rc.2 does not place its changing clock
+in the initial system prompt. The shipped standard/PTC/Cordis Web presets use
+time-context, which appends a durable user-role reading initially and then at a
+default ten-minute minimum interval. Runtime facts such as cwd likewise become
+separate user snapshots only when changed. Equal system text causes no update;
+capable continuing routes can append changed system text in history, otherwise
+the first system node is replaced. Tools remain separate API declarations;
+server rendering decides their DSML prompt placement.
+
+The native DeepSeek Messages adapter sends no cache markers/options. Bundled
+pi-ai1.4.0 Responses sends a session-derived prompt_cache_key where enabled and
+can set cache options, but does not emit explicit prompt_cache_breakpoint.
+This is source inspection of the installed packages plus official upstream
+docs, not a live request capture or evaluation of custom profile overrides.
+The hypothetical changing-system-timestamp rationale does not fit DSH's normal
+time mechanism. Recommendation now favors official tool-prompt placement for
+the DSH reference unless measurement supplies a concrete benefit to the current
+deviation; qualify actual automatic anchors with DSH's multiple context messages
+instead of assuming older SDK behavior. User has not selected this decision yet.
+[Time context](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/context/time-context/README.md),
+[runtime/system projection](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/src/runtime-context.ts).
+
+Remaining history gathered for subsequent one-by-one discussion (not selected
+decisions): escaping is an intentional literal-data round-trip fix in
+`d108ae4e8d50`, inherited by V4.1; broad history-based reasoning retention is
+already in initial `d997b56c`, with no explicit rationale located. Live-tail
+reasoning retention is separately justified by `acb40bf5` and checkpoint misses
+in `091e5026`. Namespace prefix concatenation is documented in `f7e07f87` for
+DSML-safe internal names and Codex/Pi KV replay, but general separator/collision
+policy is not explained. Responses forced-choice rejection and whole-call
+argument emission are explicit initial supported-subset/worker integration
+choices in `bb697b3b`. Ignored strict/formats and silent Chat/Anthropic choice
+downgrading are inherited omissions, with no alternative-policy rationale found.
+Source/history review only; no runtime/test/model work during this discussion.
+
+## DS41 interaction audit against official recipe — source review, 2026-10-26
+
+User asks how far ds4's pre-DeepInfer interaction code is from the now-published
+official pipeline. Read-only comparison finds the architecture already present:
+canonical requests, model-owned V4.1 prompt rendering, native inference,
+incremental DSML parsing, API adapters and client tool-result continuation.
+Spaced V4.1 tags and normal high75/max100 effort values match. This is an
+interaction-layer catch-up, not a reason to rewrite kernels or serving ownership.
+
+Concrete gaps, beyond the previously known absence of grammar masks:
+- Full server prompts flatten template controls and payload into one string;
+  `chat.zig` then recognizes special spellings everywhere. Recipe preserves
+  special-token ranges and BPE-encodes ordinary payload separately. The simple
+  CLI encoding path already keeps user text ordinary; distinguish that from
+  server rendered-history tokenization.
+- Output converts sampled tokens to bytes before reasoning/tool recognition;
+  literal marker spellings assembled from ordinary tokens can gain control
+  meaning. Recipe's token-attached parser retains that distinction.
+- Tool schemas remain raw text/property-order metadata: strict normalization,
+  schema validation and a common typed inference constraint are absent.
+  Structured response formats are ignored; required/named choices are rejected
+  in Responses but can silently reduce to none/auto on other endpoints.
+- Tool schema placement is before initial system content in ds4, after it in
+  recipe. Custom escape instructions and historical-reasoning retention also
+  differ. These are real format/policy differences, not measured quality losses.
+- Responses namespace names use legacy prefix concatenation rather than
+  recipe's namespace::name. Sampling policy intentionally permits explicit
+  controls where recipe imposes defaults; review rather than label all choices
+  defects.
+- Chat/Anthropic stream names and argument fragments; Responses currently waits
+  for complete calls before emitting arguments. Keep the implemented UTF-8 and
+  partial-marker handling. Exact sampled-DSML replay remains a useful extension
+  for preserving live KV alignment.
+
+Evidence: [server tokenizer](chat.zig), [prompt](models/deepseek41/prompt.zig),
+[request decoder](server/input.zig), [tool definitions](server/input_values.zig),
+[output recognition](server/generation.zig), [Responses output](server/output.zig).
+Existing released-encoder fixtures cover ordinary effort/system cases and tool
+history, but not declared tool-schema placement or literal-marker provenance;
+old-vs-rewrite preservation is not full recipe parity. No tests or model jobs
+run in this audit, and no new speed/quality effect is claimed.
+
+Recommended prerequisite to XGrammar: align explicit template/payload token
+boundaries and the needed prompt/schema semantics against the local recipe,
+using existing fixtures with a few representative declared-tool/literal-marker
+cases. Then feed one normalized contract to both prompt and grammar compiler.
+Keep cleanup and XGrammar implementation as planned work; this audit changes
+the proposed order, not the runtime.
+
+## Native structured decoding and resident Flint — discussion, 2026-10-26
+
+User favors Flint as an always-present subagent generator with multiple
+sessions. Keep SSD-backed Flint KV/session state on the roadmap: spill inactive
+sessions while keeping active decode state resident. Weight eviction/reload to
+temporarily enlarge DS41's expert cache is a lower-priority experiment, not an
+adopted policy; its reload cost and contention with expert SSD I/O need evidence.
+Multi-generator routing and aggregate admission remain outstanding work.
+
+User proposes XGrammar for both DS41 and Flint next. Recommend one shared native
+grammar compiler/matcher integration with model-specific framing adapters,
+learning from DeepInfer and rec without embedding Python/MLX. Cache compiled
+grammars by tokenizer/model/schema/policy; mutable matcher state belongs to each
+active generation. Allow normal reasoning/text until tool constraints apply.
+Keep tool names/arguments constrained without forcing every response to call a
+tool. Standard JSON/schema responses and required/named tool choices can use
+the same core after their request semantics are implemented explicitly.
+
+Current upstream XGrammar documents `deepseek_v4_1` and `glm_4_7` structural
+formats. Its model-specific builders are Python definitions: adapt the needed
+builder logic into our native adapters and feed structural JSON to the native
+compiler; do not imply a native get_model_structural_tag API exists. The C++17
+library can build with Python bindings disabled, behind a small C ABI for Zig.
+Pin a revision with the needed definitions rather than assuming rec0.2.1 and
+DeepInfer0.2.2 are interchangeable. References:
+[tool/reasoning formats](https://xgrammar.mlc.ai/docs/latest/structural_tag/tool_calling_and_reasoning.html),
+[native build](https://github.com/mlc-ai/xgrammar/blob/main/CMakeLists.txt).
+
+Clarification after the user's format-source question: the local references are
+the primary implementation guides; adopting newer upstream format definitions
+is not a prerequisite. Rec carries its Flint-specific wrapper but delegates
+the GLM tool/schema subtree to XGrammar's get_model_structural_tag. DeepInfer
+carries matching/masking/speculation integration and compiles supplied JSON,
+regex or EBNF, not a complete DSML tool-schema builder. Reuse local behavior,
+and take only missing grammar construction/library functionality from XGrammar.
+Concrete schema-to-DSML reference: XGrammar's
+[`get_deepseek_v4_1_structural_tag`](https://github.com/mlc-ai/xgrammar/blob/main/python/xgrammar/builtin_structural_tag.py)
+wraps each tool schema with the `deepseek_v4_1_xml` style. Its spaced calls,
+invoke and parameter tags match the local official
+[V4.1 encoder](../../deepseek-recipe/deepseek-recipe-encoding/src/v4/dsv41.rs).
+This reference is outside the public DeepInfer checkout; do not present it as
+a DeepInfer-supplied tool-schema adapter.
+
+Recipe dataflow clarification: request conversion produces two sibling channels:
+`Conversation` with messages/tools for prompt rendering, and `InferenceOptions`
+with a declarative `OutputConstraint`. ToolCalls.schema() is still Chat-shaped
+tool-definition JSON, not compiled DSML grammar. Encoding renders DSML usage
+instructions plus plain JSON schemas into the prompt. The backend owns forward
+inference and optional constraint compilation/masking; generated DSML is parsed
+into name/argument events, then converted to API response chunks. The client
+executes the returned tool call. Example servers in recipe use mock inference.
+
+Implementation slices should each stop at an up-to-one-hour checkpoint:
+1. Minimal native bridge, actual vocabulary/byte handling and shared masks;
+   focused token/schema fixtures against the references, no custom grammar DSL.
+2. DS41 tool framing and sampler integration; account for draft-position masks
+   and matcher rollback, or use a correct target-only path for constrained calls
+   until speculation is qualified. Preserve ordinary DeepSeek reasoning.
+3. Flint framing and GPU sampler integration; update masks for every dependent
+   sampled token. Start with a correct constrained path, then overlap mask work
+   and forward execution following rec if timing justifies it. A static mask
+   shared by a whole packet is incorrect.
+4. Guarded ordinary/tool-heavy measurement, malformed-call/argument validity,
+   first-token and whole-task latency, cold/warm compile cost and concurrent
+   state isolation. Keep the existing no-constraint fast path; choose defaults
+   after constrained throughput/task reliability is measured. Use existing
+   serving drivers rather than building a new harness.
+
+This is design/roadmap work; no dependency installed, runtime implementation or
+model benchmark started here. Hosted-tool cleanup remains separately planned.
+
+## Hosted-tool cleanup — planned, 2026-10-26
+
+User agrees to remove generic server orchestration and asks for a cleanup plan,
+with decoding/memory questions answered before execution. Do not begin runtime
+deletion or new performance experiments during this discussion. Published main
+is not a compatibility constraint; preserve research reports, not dead runtime
+paths. Aim for one cohesive cleanup commit (or two if that makes review easier).
+
+1. Up to one hour: remove hosted decision/MCP/program declarations, execution
+   loops and model-visible hosting instructions. Keep native decision engines,
+   `/v1/decisions`, `/v1/systemone`, ordinary client function calls and their
+   streaming/replay. No replacement workflow abstraction.
+2. Up to one hour: remove program-value persistence and hosted-only receipt/
+   replay fields, QuickJS sources/build plumbing, MCP client plumbing and their
+   dedicated tests/active documentation. Check remaining libcurl users before
+   removing any shared dependency. Preserve ordinary Response/Conversation
+   durability, KV/SSD/suffix caches and historical experiment reproduction at its
+   recorded revision. Do not add legacy hosted-data migrations for a sole user.
+3. Up to one hour including analysis: build all frontends, run existing relevant
+   host/protocol tests, and reuse guarded real-model qualification for client
+   function calls, stateful HTTP/WS continuation/restart and native decision
+   endpoints. One heavy job at a time; check unchanged plain inference and keep
+   concise evidence. Stop after qualification rather than expanding the harness.
+
+Read-only source findings for the user's questions: current DeepSeek and native
+Flint sampling have no grammar/schema token masks. Greedy tool framing plus
+post-generation parsing is weaker. Flint's rec reference defaults to XGrammar
+tool constraints; DeepInfer applies XGrammar masks before sampling/draft
+verification. DeepSeek recipe exports Json/Regex/ToolCalls constraints for a
+backend to enforce. Structured decoding belongs in inference even when tool
+execution is client-owned; adding it is separate proposed work, not cleanup.
+Evidence: [current sampler](server/generation.zig),
+[rec grammar](../../flint/engine/src/rec_mlx/grammar.py),
+[DeepInfer sampler](../../DeepInfer/deepinfer/model_executor/layers/sampler.py).
+The original [Flint qualification](../speed-bench/experiments/flint-native-20261023/README.md)
+already records the reference empty-tool grammar/native unmasked difference;
+its speed comparison does not qualify constrained tool throughput.
+
+Memory boundary: server still opens one generator plus Clef decision helpers;
+two-generator DS41+Flint routing is not implemented. Engine ownership is ready
+for further composition, but aggregate model-memory reservation is also still
+proposed. Flint weights are fixed (21.11GiB in the current native layout);
+per-session KV is not (about1.784GiB first bank, then1.75GiB per additional
+65,536 tokens, plus scratch/checkpoints). Reserve all engines' weights,
+sessions, scratch and OS/app headroom before sizing DS41's variable expert cache.
+Separate processes need the same aggregate arithmetic with explicit coordinated
+budgets; per-engine auto sizing is not a machine-wide allocator. No model loaded,
+benchmark run or runtime changed for these source findings.
+See [DS41 admission](engine/deepseek41/memory.zig),
+[Flint per-context estimator](models/flint/engine.zig) and
+[current one-generator boot](server/boot.zig).
+
+## Orchestration boundary reassessment — 2026-10-26
+
+User questions the value of generic server-side tools given the recent planning
+results and reports that pi.dev PTC already supports decision models. There is
+one consumer: published main is not a compatibility obligation or a reason to
+retain machinery. Stop the proposed reusable composition experiment and further
+generic hosted-tool prompt/output tuning; no new model run in this discussion.
+
+The earlier favorable reasoning-on task improvement demonstrates the benefit of
+classification/reduction before returning bulk to DeepSeek. It does not isolate
+server execution from equivalent client PTC execution. Later MCP, reference and
+recipe screens do not establish a reliable general orchestration speed win.
+Keep those negative results and distinguish working execution/persistence from
+useful natural planning. Pi feature parity has not been independently checked in
+this discussion.
+
+Recommended boundary: agent owns PTC, MCP, tool results and workflow state; ds4
+owns native generation/decision APIs, co-resident models, scheduling, Responses
+sessions, inference caches and steering. Future context editing/compaction may
+need focused server operations because they touch server-owned state; that does
+not by itself justify a general tool executor. Removing QuickJS/hosted adapters,
+MCP hosting and program-value persistence is a proposed simplification, not yet
+implemented. Normal client-executed Responses function calls remain useful.
+Only this decision record/experiment queue changes now; binaries and runtime
+source remain unchanged. Do not start another server composition automatically.
+
+## Output-first workflow recipe — authorized 2026-10-26
+
+User approves testing the short recipe after the hard inline-boundary experiment.
+Start 03:33 UTC, one-hour checkpoint 04:33 including setup and analysis. Use the
+qualified frozen executable (`aef775c2`) under the existing pressure guard;
+no runtime changes and no max_inline_bytes field. Append only the generic recipe
+to the existing per-request PTC description: choose the small answer handoff
+first; keep payloads/questions/probabilities local; finish selection/reduction
+before text(); if inspection needs another turn, stash and emit a ref plus
+bounded structure, then load it. Helper/reference use stays optional and visible
+small inputs should still be answered directly.
+
+For each of the same three tasks, run control/recipe/recipe/control: 12 requests,
+normal DeepSeek reasoning, 4096 output tokens, eight shared native/program calls,
+unchanged source/schema/oracle. Review both native evidence and grounded final
+answers. Smaller emissions alone are not success. Scripts/report live in
+`speed-bench/experiments/output-first-20261026/`; raw output stays ignored under
+`.workspaces/output-first-20261026/`. Main and installed normal binaries stay
+unchanged while measuring. Do not add harness or library machinery.
+
+The 12-request ABBA screen finishes 04:02 UTC. All six controls succeed. The
+workflow recipe costs ~42% on ordinary (57.09 → 81.05 seconds), fails both
+favorable attempts (invalid string choices rather than choice objects, followed
+by the eight-call block), and is ~35% slower on unfamiliar (78.05 → 105.33),
+which still fetches twice and emits all notes. No stash/load adoption. Do not
+promote that recipe or describe failed attempt times as speedups.
+
+One final smaller candidate before 04:33: API-only clarification, replacing the
+long workflow suffix. Preserve bound templates with lib.questionsFor; choices
+are objects; the helper returns an object with an answers array. These are
+actual interface facts, aimed at the observed ExpectedObject mistake. Test all
+three cases twice, same binary/eight-call/4096-token budgets, no inline limit.
+This changes instruction content and length, so attribute any difference to the
+candidate as a whole, not separately to type information or removed prose.
+
+All 18 requests finish 04:16 UTC; guard stops cleanly 04:18, pressure level 1,
+zero swap growth and no adverse samples. API-only answers are correct/grounded
+in all six repeats, with native TP3/TN5 on both bulk layouts. Medians versus
+bracketed controls: ordinary 57.09 → 64.03 seconds (+12.2%); favorable
+109.45 → 98.51 (-10.0%); unfamiliar 78.05 → 151.24 (+93.8%). Favorable drops
+generated-question duplication/double encoding, reducing main input 4557→3488
+and emission 15264→11083 B. It still dumps source, refetches and emits all helper
+probabilities. Unfamiliar also adds a helper after inspecting/refetching and
+emits still more material (17564 B). It omits criteria from helper evidence,
+though original notes/charges/IDs are retained and all labels match here.
+Neither variant uses stash/load or establishes cache reuse.
+
+Decision: reject the long workflow suffix. Keep the factual API-only hint as a
+selective caller-side example, not a universal/default/persistent-fast setting.
+No runtime or installed binary change; main/mcp-tools stay unchanged. Preserve
+the scripts, both exact text files and full negative results on local
+`output-first`. Next candidate is a small reusable composition with a fixed
+input/output contract that preserves original evidence. This is a proposal,
+not an implemented workflow or new goal. Stop generic instruction tuning.
+
+## Reference-oriented output — authorized adjustment, 2026-10-26
+
+User asks to try adjustments after A/B/C. Start 02:20 UTC, one-hour checkpoint
+03:20 UTC including implementation and measurement. The observed failure is
+large `text(wholeResult)` emissions, not missing reference persistence. Try one
+optional per-emission inline threshold: `ds4.max_inline_bytes` (0/default keeps
+the existing contract). Larger JSON values are stashed exactly and replaced by
+bounded ref/type/size/shape metadata; load the ref for further work. No new tool
+executor, workflow DSL, parser relaxation or automatic tool authority.
+
+Compare 0/512/2048 bytes on the same ordinary/favorable/unfamiliar tasks, native
+DeepSeek reasoning and unchanged pressure guard. Inspect actual loads/refetches,
+program rounds, emitted bytes, native labels and final grounding. A lower inline
+size can cost extra rounds or quality; do not assume it improves latency. Retain
+the original direct-answer case. Frozen baseline is `aef775c2`, with the old
+binary preserved in the preceding experiment's c-build directory. Main stays
+unchanged; raw output is ignored under `.workspaces/reference-output-20261026/`.
+
+Initial nine-point sweep completes 02:43 UTC: disabled control reproduces the C
+token counts and succeeds on all three tasks. Both enabled budgets fail on both
+tool-heavy tasks, despite exact value loads and much less emitted data. Models
+re-emit loaded notes/question arrays, producing further references; 8 shared
+attempts run out. Native helper labels are correct where the original evidence
+is passed. Ordinary 512 also contains one unsupported status assertion.
+
+One isolated descriptor hint is tested next, preserving API/type/budgets. Four
+2048-byte/8-call repeats still fail, but reach useful smaller projections and
+native decisions earlier. One unfamiliar generated projection drops notes by
+changing a field from object to string, then reading its old path: native
+TP2/TN4/FP1/FN1. This is generated data-loss, not reference corruption.
+
+Final diagnostic starts 03:03 UTC: the same hinted binary and 2048-byte threshold,
+but max_tool_calls 12 instead of 8, two repeats on each tool-heavy case. Keep
+this resource change separate from output policy and grade native/final quality,
+not completion alone. No more runtime/prompt changes in this hour. Focused
+36 hosted/19 runtime tests pass and the existing full host suite passed the
+policy implementation. Default0 schema remains byte-identical to the baseline.
+
+Measurements finish 03:17 UTC within the announced hour. Under the 12-call
+allowance, favorable succeeds twice (159.16/141.26 seconds, native TP3/TN5 and
+grounded handoffs), with 4,556/3,039 emitted bytes versus disabled 15,264 and
+4557 main input tokens reduced to 2538/2251. Actual attempts are 8/7, so do not
+claim the higher cap caused success; random reference-dependent trajectories
+differ. Median latency ~150 seconds versus ~108 seconds is a context/latency
+tradeoff, not a speed win. Unfamiliar still fails twice at the larger cap
+(245.78/239.54 seconds), with extra inspection/re-emission and generated errors.
+
+Decision: leave normal serving and `mcp-tools` at the qualified C build. Keep
+the optional policy, reproduction scripts and negative results on a separate
+local `reference-output` bookmark; default0 remains unchanged and no preset is
+promoted. Candidate executables stay under `.workspaces/reference-output-20261026/hint-build/`.
+Both model guards exit0, no model job remains. Final plots retain failed points
+as failures. Next useful candidate is a small output-first workflow recipe or
+specific native composition, not more transport/storage hardening. No further
+tests or prompt tuning in this hour.
+
+## Planning A → B → C — authorized sequence, 2026-10-26
+
+User accepts the A/B/C sequence. Result references are worthwhile independently
+of whether inspection remains frequent: persistent VM state has proven useful,
+and serializable values are a useful subset. Treat C as selected, not conditional
+on A/B failing. Preserve data across programs and Responses with explicit scope
+and durable restoration; do not conflate JSON values with functions, native
+handles, MCP sessions or exact inference state.
+
+A starts 00:38 UTC, one-hour checkpoint 01:38 UTC: truthful coherent contracts and
+output-schema visibility, retaining the frozen ordinary/favorable tasks and
+adding one unfamiliar-output case. B follows as a separate one-hour helper
+experiment, then C as a one-hour persistent-reference implementation/qualification
+slice. Root owns the single guarded heavy job; normal DeepSeek reasoning stays
+enabled. Independent schema/fixture/design work can overlap, runtime changes and
+final latency measurements remain sequential. Frozen A control is the MCP binary
+from `f4f538102537`, copied under `.workspaces/planning-abc-20261026/a-baseline/`.
+Main remains published `be7f820f9ae5`; MCP and planning work stay local.
+
+A completes 01:09 UTC within its hour. Six control and six candidate requests,
+two repeats per case, normal reasoning. Median ordinary 67.93 → 62.64 seconds;
+favorable 105.70 → 98.88; unfamiliar 121.34 → 137.70. All final numeric answers
+and JSON are correct. This is a mixed tradeoff, not a general speed win. Both
+tool-heavy cases still fetch twice and dump bulk; emitted bytes increase.
+Unfamiliar A also overwrites its target instructions with the generic template:
+helper TP3/FP5, then the main model recovers from the dumped records. Keep this
+failure separate from final-answer correctness. Truthful contracts/output
+schemas remain useful, but prompting alone has not established efficient
+delegation. Focused host/runtime tests pass; guards stop cleanly.
+[Reproduction and detailed evidence](../speed-bench/experiments/planning-abc-20261026/RESULTS.md).
+
+B begins 01:11 UTC, with a one-hour cap at 02:11: one pure-JS targeted-question
+constructor, ordinary JS escape hatch, same fixed screen. C remains selected
+regardless. C's simpler design uses one bounded immutable JSON ledger per
+request, private Response persistence and connection-local WS ownership;
+Conversations reconstruct from retained public program receipts, avoiding a
+second Conversation store. References preserve data, not execution authority.
+
+B completes 01:29 UTC within its hour. The 28-line pure-JS
+`lib.questionsFor` constructs targeted questions and preserves typed templates;
+arbitrary JS remains available. Median ordinary 53.77 seconds (A 62.64), favorable
+108.14 (A 98.88), unfamiliar 128.15 (A 137.70). All final answers are correct.
+Both tool-heavy cases still fetch twice and expose bulk; this is not a general
+latency win. Keep the constructor as a small way to avoid the demonstrated
+selector-assembly bug, not as an automatic delegation policy. Executed tests:
+35 hosted and 13 QuickJS checks pass. Note `zig build` test targets build the
+fixtures; run the installed test binaries to execute them. B guard exits cleanly.
+
+C starts 01:32 UTC, checkpoint 02:32. Implementing explicit `values.stash/load`,
+8 MiB immutable JSON ledger; successful programs commit, failed programs discard
+partial stashes. Public program receipts carry only newly created values, outside
+the logical model result. Existing private Response records gain an optional
+`values` map; old records load as empty. Accepted parents and latest WS parent
+inherit ownership; Conversations rebuild from retained receipts. No persistent
+VM, global reference lookup, new database, GC or remote MCP-session persistence.
+Qualification must include actual restart, branch isolation and public replay;
+functional protocol checks can use fast Flint, then a DeepSeek smoke check.
+
+C checkpoint 01:50 UTC: implementation builds, all five executables built;
+executed 35 hosted and 16 runtime/ledger tests pass, complete host/script suite
+passes. One Debug u1 arithmetic overflow was caught/fixed before model testing.
+Flint seed 37 checks + actual process-restart 11 checks pass: fresh-copy loads,
+one fetch across programs, public replay, branch isolation, rollback, ephemeral
+HTTP/WS policy, durable Response/Conversation recovery and receipt-pair deletion.
+SDK Response round-trip preserves value receipts. Initial wire failures are
+retained: replacing system code confused turn ownership, then Flint produced a
+nested argument wrapper. Move supplied code to the current user turn and state
+the argument shape; do not relax the runtime parser. These forced-code checks
+are functionality evidence, not natural-planning speed evidence. DS4 smoke and
+the unchanged natural screen follow before the hour ends.
+
+By 02:05 UTC C qualification and measurement are complete, inside its hour.
+Natural medians ordinary 57.02 seconds, favorable 109.05, unfamiliar 75.43;
+all six numeric/JSON answers correct. No natural program calls stash/load.
+Favorable still fetches twice and dumps bulk; unfamiliar fetches once, dumps the
+export and lets the main model answer, without a helper. Attribute these timing
+changes to different generated plans, not reference reuse. The explicit 48 Flint
+and 10 DeepSeek checks establish reference functionality independently.
+
+All five executables are installed from the qualified build and byte-compared.
+All seven guards exit cleanly, pressure level 1 throughout and zero swap growth;
+no model process remains running. Complete host/script verification passes.
+Raw logs/results remain ignored under `.workspaces/planning-abc-20261026/`;
+concise reports/reproduction scripts are committed. Main remains unchanged;
+the MCP plus A/B/C stack stays local pending a publication request.
+
+Next proposed work is planner/data-handoff policy, not more reference plumbing:
+measure a narrowly reusable fetch→decide→reduce recipe or bounded inspection
+workflow against direct MCP, with generated token/round/output costs and native
+semantic labels. Preserve ordinary direct answering. Persistent refs are now
+available to explicit callers even though this natural screen does not use them.
+
+## Planning tradeoffs — prior proposals, 2026-10-25
+
+User requests Pareto candidates across multiple axes before implementation.
+Evaluate whole-task latency, grounded answer quality, generality/adaptivity,
+main-visible evidence, engineering/maintenance cost and additional RAM. Existing
+8-record direct MCP59.21s dominates natural code105.71s on measured time/tokens
+with the same numeric/format quality; new alternatives are hypotheses.
+
+Source review finds misleading shared instructions: globals claim full evidence
+even when only queue_name is bound, the generic helper example uses that first
+value as evidence and emits every answer, and MCP's compact-output instruction
+is appended after those examples. MCP outputSchema is not imported. Each fresh
+VM also loses fetched values after an inspection round. These are plausible
+contributors to the observed plan, not isolated causal measurements.
+
+Candidate frontier: (A) truthful shorter contracts/coherent examples with free
+JS; (B) a small callable workflow/helper library with JS escape hatch, avoiding
+a general DSL; (C) immutable response-local result references with bounded
+inspection and exact reads, avoiding refetches while allowing adaptive plans;
+(D) expose only useful tool surfaces using caller hints or a measured Clef
+router; (E) a generative helper such as Flint for planning/code, costing another
+resident generator, routing and potential correction rounds. These can compose.
+
+Recommended first one-hour experiment: A against the frozen MCP screen, retaining
+native DeepSeek reasoning and the ordinary already-visible case. Add an unfamiliar
+output/inspection case so single-program efficiency does not conceal brittleness.
+Measure reasoning/generated tokens, rounds/fetches, emitted bytes, whole-task
+time and source-grounded outcomes. Then compare one B helper; choose C if
+inspection remains useful. Sweep inspection/sample/output budgets for a measured
+quality/latency frontier; router thresholds need their own error/fallback curve.
+No runtime changes or benchmark runs are authorized by this discussion alone.
+
+## Server-side MCP bridge — completed, 2026-10-25
+
+User approved the next MCP slice and suggested anonymous Exa. Frozen baseline
+is published `be7f820f9ae5`. First clock checkpoint22:52UTC; one-hour checkpoint
+23:52UTC including builds and qualification. Native Zig/system-libcurl Streamable
+HTTP, one explicit allowlist and no credentials/approval workflow in this slice.
+The same discovered function names/schemas serve direct model calls and QuickJS
+programs. Standard public MCP receipts retain results; replay must not rerun calls.
+Current request declarations grant execution, never historical receipts.
+
+Exa's first urllib probe was blocked at its edge; one system-curl attempt succeeds
+anonymously. Actual initialization/list/search/fetch pass, using negotiated
+2025-06-18, session headers and SSE. Live search requires query AND objective;
+use tools/list rather than assumptions from its source README. These isolated
+network probes are not native-client/model integration claims.
+
+Implementation and qualification complete23:35UTC within the checkpoint.
+Actual native initialize/list/search/fetch negotiate2025-11-25. Discovery imports
+selected live schemas into direct model tools and named QuickJS functions.
+Standard MCP catalog/call receipts preserve logical replay; nested calls remain
+program audit, with only emitted values entering main context. Request authority
+is explicit: selected names and require_approval:never; historical receipts grant
+no execution. OAuth/headers, approval/resume, stdio, deferred discovery, task
+polling and session sharing remain outside this slice. Each import/invocation
+starts a fresh remote MCP session; stateful browser workflows are not qualified.
+
+Three real integration defects were found/fixed: empty Zig tuples serialized
+initialize capabilities/list parameters as arrays rather than JSON objects;
+ordinary JSON omitted its catalog because a streaming-only guard was reused;
+native errors require a catchable JS envelope while retaining native audit.
+Five transport CPU tests, ten QuickJS tests,33 focused host tests and the complete
+host/server/agent/recovery/script suite pass. Eleven actual DeepSeek direct/
+programmatic/WS/replay checks pass with normal reasoning; replay does not fetch
+again. All five root executables are rebuilt. Both guards stop cleanly, normal
+pressure and no swap growth; no model server remains running.
+
+The fixed4/8-record queue screen has two repeats/arm and normal DeepSeek thought.
+Ordinary medians39.79s main-only,92.24s direct MCP,69.69s code availability.
+The ordinary code arm invokes no tools; added deliberation still costs75.1%.
+Favorable57.93s preprovided main-only,59.21s direct MCP,105.71s code mode
+(78.5% longer than direct MCP). Code first dumps the queue, then refetches and
+returns all decision probabilities in a second program:2 programs/2 fetches/
+1 helper,10,887B emitted versus the intended compact result. No runtime error;
+all12 numeric answers/JSON are correct. The report retains a small handoff
+overgeneralization in main-only. Do not imply automatic code use saves time.
+
+Live Exa through Responses succeeds separately: one supplied program, two MCP
+calls totaling2.274s,1903B emitted from15.4KB source bodies. Fetch contains all
+four checked protocol/header terms; source snippets are faithful. Whole response
+106.34s is integration evidence, not a matched speed claim. Its final answer is
+Markdown-fenced JSON, an additional format observation.
+
+Runtime source froze at local change `wkzpplwxsunk` (snapshot`204d027670a0`);
+later edits are documentation only. Raw output remains ignored under
+`.workspaces/mcp-tools-20261025/`; concise contracts/results/scripts are tracked.
+[Usage](../docs/MCP-TOOLS.md),
+[measurements and reproduction](../speed-bench/experiments/mcp-tools-20261025/RESULTS.md).
+Main stays at the published baseline pending a separate publication request.
+Next proposed experiment: improve the generic single-program fetch→decide→reduce
+example and measure whether it avoids bulk emission/refetching. No such tuning
+was applied to this fixed screen.
 
 ## Main promotion — 2026-10-25
 

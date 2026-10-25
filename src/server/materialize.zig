@@ -4,7 +4,6 @@
 const std = @import("std");
 const c = @import("server_materialize_c");
 const ModelBackend = @import("model.zig").Backend(c);
-const HostedDecision = @import("hosted_decisions.zig");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidRequest};
 
@@ -422,6 +421,7 @@ const Transaction = struct {
         if (!parsed or cursor[0] != 0) return fail(self.errors, "previous response is incomplete or has invalid replay history");
         prependHistory(&self.messages, &parent);
     }
+
     fn chat(self: *Transaction) Invalid!void {
         if (!self.input.got_input) return fail(self.errors, "missing messages");
         if (self.req.ignore_eos and !(self.req.temperature_set and self.req.temperature == 0))
@@ -458,27 +458,6 @@ const Transaction = struct {
         if (synthetic) prependSystem(&self.messages, take(&self.instructions), true);
         const discovered = c.ds4_server_input_restore_discovered_tools(&self.messages, &self.req.tool_orders, self.input.tool_choice_none, self.input.explicit_tools);
         if (discovered < 0) return fail(self.errors, "invalid discovered tools in response history");
-        for (items(c.tool_schema_order, self.req.tool_orders.v, @intCast(self.req.tool_orders.len))) |*order| {
-            if (order.responses_programmatic and !self.input.tool_choice_none) {
-                self.req.responses_hosted_tools = true;
-                self.req.responses_programmatic = true;
-                c.free(self.req.responses_program_bindings);
-                self.req.responses_program_bindings = duplicate(text(order.responses_program_bindings));
-            }
-            if (order.responses_decision_model == null) continue;
-            HostedDecision.validateLoaded(c, if (self.runtime) |runtime| runtime.decision_models else null, text(order.responses_decision_model)) catch
-                return fail(self.errors, "hosted decision model is not loaded; use --decision-model DIR and its model id");
-            if (!self.input.tool_choice_none) {
-                self.req.responses_hosted_tools = true;
-                if (order.responses_decision_input == null) {
-                    const bound = HostedDecision.boundInput(c, &self.messages) catch {
-                        if (!order.responses_decision_direct) continue;
-                        return fail(self.errors, "hosted decisions need a user message or explicit bound input");
-                    };
-                    order.responses_decision_input = bound.ptr;
-                }
-            }
-        }
         var schemas: std.ArrayList(u8) = .empty;
         defer schemas.deinit(allocator);
         schemas.appendSlice(allocator, text(self.schemas)) catch fatal();
@@ -497,7 +476,7 @@ const Transaction = struct {
             return fail(self.errors, "ds4_reasoning_budget currently supports native DS4.1 text only");
         if (!validate(self.runtime, &self.messages, c.API_RESPONSES, self.req.think_mode, &self.req.responses_requires_live_tool_state, &self.req.responses_requires_live_reasoning, self.errors)) return error.InvalidRequest;
         self.attachTools();
-        if (self.req.responses_store or self.req.conversation_id != null or self.req.response_sink != null or self.req.responses_hosted_tools) {
+        if (self.req.responses_store or self.req.conversation_id != null or self.req.response_sink != null) {
             for (messageItems(&self.messages)) |message| {
                 if (message.images.len != 0 and (self.req.responses_store or self.req.conversation_id != null)) return fail(self.errors, "stored responses currently support text and function tools");
             }

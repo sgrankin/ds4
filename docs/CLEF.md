@@ -21,10 +21,8 @@ Both `POST /v1/systemone` and `POST /v1/decisions` call the same native engine.
 stream; Responses HTTP/WebSocket remains the conversational API for generative
 models such as DeepSeek and Flint.
 
-A generator can also invoke an already loaded helper inside a Response using
-the [hosted decision tool](HOSTED-TOOLS.md), with no client-side tool handler.
-[Server-side JavaScript](PROGRAMMATIC-TOOLS.md) can use bound evidence/question
-templates and return compact results from the same native helper.
+Clients can compose a conversational generator with these decision endpoints.
+Tool execution and program orchestration belong to the client.
 
 ```nu
 http post --content-type application/json http://127.0.0.1:8000/v1/decisions {

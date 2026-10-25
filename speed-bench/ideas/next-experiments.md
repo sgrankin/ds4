@@ -1,5 +1,171 @@
 # Next experiments: one hour each
 
+## Interaction catch-up — proposed execution order, 2026-10-27
+
+Execution authorized2026-10-27 at04:03:52UTC; first cleanup cap05:03:52UTC.
+Selected defaults: DS41 min_p=.05 remains enabled and explicit client sampling
+overrides win; Flint retains its reference defaults. Omitted strict is non-strict.
+The earlier min-p removal recommendation is superseded. Main stays unchanged.
+
+Each numbered item is an up-to-one-hour checkpoint, including builds, checks,
+measurement and a short record. If incomplete, report the concrete obstacle and
+continue only that work in another bounded slice. These are dependencies and
+budgets, not a claim that the whole plan is eight hours of known work.
+
+1. **Remove hosted orchestration.** Retire server QuickJS/PTC, hosted MCP and
+   decision adapters, program-value persistence and dedicated dependencies.
+   Preserve ordinary client function tools/replay, direct native decision APIs,
+   stateful Responses/WS, conversations and inference caches. Reuse retained-path
+   host/SDK checks; keep concise historical experiment reports.
+2. **Token-aware input and official prompt semantics.** Separate template
+   special tokens from literal payload, follow official initial-system/tool
+   ordering, current-tool reasoning retention and explicit namespace mapping.
+   Check representative tool histories, literal marker spellings and reference
+   tokenization using existing fixtures. Preserve content endpoints for cache
+   markers without putting metadata into model text.
+3. **Token-aware output and incremental Responses tools.** Recognize actual
+   control-token IDs, preserve literal payload, then remove custom parameter
+   escaping and instructions. Stream names/decoded argument fragments with
+   stable IDs; retain exact final accumulation, split-token/UTF-8 handling,
+   cancellation and raw DSML replay where appropriate.
+4. **Shared native grammar/schema contract.** Pin/build native XGrammar behind
+   a small bridge; share normalized schema/tool definitions with prompting.
+   Implement explicit strictness, response-format and tool-choice semantics,
+   returning clear errors for unsupported guarantees/combinations. Use standard
+   compiler facilities; do not build a parallel schema-validation framework.
+5. **DS41 constrained sampling.** Apply model-specific tool/answer constraints,
+   keep reasoning free, and align speculative masks/matcher rollback with actual
+   accepted tokens. Required/named choices obey the selected recipe restriction
+   on thinking. Validate ordinary answers, auto/none tools and structured output;
+   measure constrained cost separately from the unchanged no-constraint path.
+6. **Flint constrained sampling.** Reuse the compiler/contract with Flint's
+   framing. Advance masks for every dependent token in a resident packet;
+   establish correctness before optimizing CPU/GPU overlap. Compare validity,
+   task answers and latency with the local reference on matching settings.
+7. **Actual explicit prompt checkpoints.** Parse and carry client boundaries
+   through rendering/tokenization, replay and persistence. Qualify real RAM/SSD
+   hits, restart/continuation and implicit/explicit/no-marker policy across save
+   and load paths; logical Response history remains independent. Breakpoints
+   select prefix endpoints, not independently reusable suffix chunks. This item
+   can follow item3 if native grammar work is blocked.
+8. **Retained-path qualification and bounded shortcut review.** Correct concrete
+   Responses omissions found along the changed paths; do not expand to every
+   optional API feature. Run existing host/SDK/restart/cancellation checks and
+   guarded DS41/Flint task/latency comparisons, with DeepSeek reasoning enabled.
+   Report model/settings/revision, practical validity/quality, cache reuse,
+   prefill/decode/whole-request time and remaining limitations.
+
+Keep a small maintainable set of cohesive jj changes, not one commit per helper.
+Only one guarded heavy job at a time; raw artifacts stay ignored. Independent
+read-only source/fixture review can overlap. Main and installed binaries remain
+unchanged during planning.
+[Selected policies and evidence](../../src/JOURNAL.md).
+
+## DS41 official interaction alignment — proposed prerequisite, 2026-10-26
+
+Read-only audit finds token-boundary, prompt/schema and request-policy gaps in
+addition to absent masks. Before XGrammar, use one up-to-one-hour checkpoint to
+compare representative declared tools and literal control spellings against the
+local official recipe with existing fixtures. Fix explicit template/payload
+token provenance and align the shared schema contract in further bounded slices
+as needed. No broad harness or engine rewrite. Responses argument streaming and
+unused API features can remain separate slices. Source findings are not measured
+quality losses; no implementation/testing starts in this discussion.
+[Audit and evidence](../../src/JOURNAL.md#ds41-interaction-audit-against-official-recipe--source-review-2026-10-26).
+
+## Native XGrammar — proposed next feature, 2026-10-26
+
+Shared native integration for DS41 and Flint, with model-specific tool framing.
+Keep free reasoning and the no-constraint fast path; compile/cache grammars once
+and give each generation its own matcher. Up-to-one-hour checkpoints: native
+bridge/tokenizer fixtures; DS41 sampling/speculation; Flint per-token GPU masks;
+then existing guarded serving/task measurements. Preserve correctness when
+changing packet/speculation paths and report constrained throughput separately.
+No implementation/model run begins during this design discussion. Resident
+multi-session Flint and inactive-session KV spill remain later roadmap items.
+[Journal design](../../src/JOURNAL.md#native-structured-decoding-and-resident-flint--discussion-2026-10-26).
+
+## Hosted-tool cleanup — planned, questions first, 2026-10-26
+
+User approves the direction and requests a concrete cleanup plan, with current
+structured-decoding/memory questions discussed before execution. Three bounded
+slices (up to one hour each): remove hosted execution surfaces; remove their
+persistence/dependencies/tests/docs; qualify retained client tools, native
+decisions and stateful serving using existing checks. Prefer one cohesive jj
+cleanup change, preserve concise historical evidence and inference/cache owners.
+[Detailed boundary and sequence](../../src/JOURNAL.md#hosted-tool-cleanup--planned-2026-10-26).
+No runtime deletion or new model experiment is started by this plan.
+
+## Hosted orchestration — reassessed 2026-10-26
+
+Stop generic prompt/output tuning and the proposed reusable composition after
+the user's reassessment: pi.dev PTC reportedly already provides decision-model
+access, and recent screens do not establish reliable value from server hosting.
+Published main has no external-consumer compatibility obligation. Prefer agent
+orchestration plus native inference/decision and state/session operations in ds4.
+Runtime removal is proposed, not implemented; preserve measurements and do not
+resume the older "next candidate" suggestions below automatically. See the
+[journal](../../src/JOURNAL.md#orchestration-boundary-reassessment--2026-10-26).
+
+## Output-first recipe — completed 2026-10-26
+
+03:33–04:33 UTC. Qualified runtime, one short suffix on the PTC description;
+no hard inline limit, parser or tool changes. Control/recipe/recipe/control on
+each original ordinary/favorable/unfamiliar case, normal reasoning and unchanged
+eight-call/output budgets. Inspect selection/reduction, optional refs, repeat
+fetches, emitted evidence and native/final quality. Keep the disabled hard-cap
+experiment separate. [Reproduction](../experiments/output-first-20261026/README.md).
+
+All18 measurements finish04:16UTC. Long suffix is dominated: ordinary+42%,
+unfamiliar+35%, favorable fails twice. API-only factual clarification is mixed:
+ordinary+12.2%, favorable-10.0%, unfamiliar+93.8%, all six answers correct.
+No natural references/cache reuse. Keep existing defaults; save both caller-side
+examples/reports on a separate local bookmark, with no runtime promotion.
+Next candidate is a small reusable composition that preserves evidence and
+returns a compact result, rather than additional generic planning instructions.
+
+## Reference-oriented output — completed 2026-10-26
+
+User requests adjustments after the A/B/C screen. One-hour slice 02:20–03:20 UTC:
+optional per-emission inline budget, large text values become immutable refs
+with bounded shape metadata. Measure 0/512/2048 bytes on unchanged tasks, with
+normal reasoning. Count ref loads, repeat fetches, native/final quality, rounds,
+generated tokens and wall time; preserve failures and ordinary direct answers.
+Use existing drivers and pressure guard; no extra workflow or parser machinery.
+[Reproduction/results](../experiments/reference-output-20261026/README.md).
+
+Measured 17 requests, complete03:17UTC. Enabled budgets fail both tool-heavy
+tasks at8calls. Contextual feedback plus12calls gives two correct known-layout
+answers with ~75% less emitted data but ~39% more latency; unfamiliar still
+fails twice. Keep disabled by default, candidate on its own local bookmark;
+do not promote a fast preset. Explicit durable refs remain qualified. Next
+candidate is a small output-first composition recipe, with direct answering
+retained, not additional harness/transport machinery.
+
+## Server-side MCP — completed 2026-10-25
+
+1. One-hour implementation/qualification slice, clock checkpoint22:52UTC,
+   cap23:52UTC. Native Streamable HTTP, selected remote tools shared by direct
+   calls and QuickJS; standard catalog/call receipts and no execution on replay.
+   User suggested anonymous Exa; actual native discovery/search/fetch now work.
+2. Fixed ordinary/favorable MCP queue screen using the existing notes/oracle,
+   normal DeepSeek reasoning and one guarded server. Compare main-only,
+   direct MCP and code fetch→decision→filter. Keep live Exa integration separate
+   from fixed timing because web evidence changes. No runtime changes during
+   the final measurements; preserve failures and answer-format observations.
+3. Concise contract/report and local commit. OAuth, approval/resume, stdio,
+   deferred discovery, task polling and catalogue caching remain separate work.
+
+Complete23:35UTC within budget. Native Exa+Responses proof passes,11 wire checks
+and full host checks pass. Ordinary median39.79s preprovided main,92.24s direct
+MCP,69.69s unused code availability. Favorable57.93/59.21/105.71s respectively;
+code spills bulk data and refetches it, taking78.5% longer than direct MCP.
+All12 answers have correct numeric fields/clean JSON; handoff caveats are retained.
+The useful next bounded candidate is single-program fetch→decision→reduce tool
+guidance, not more transport machinery. First preserve this negative result;
+no prompt tuning was performed in the measured screen.
+See [report](../experiments/mcp-tools-20261025/RESULTS.md).
+
 ## DeepSeek native-thinking comparison — completed, 2026-10-25
 
 User directed: never silently disable DeepSeek reasoning for normal serving
