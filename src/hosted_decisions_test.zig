@@ -14,6 +14,58 @@ const descriptor =
 const ordinary =
     \\{"type":"function","name":"ds4_decide","parameters":{"type":"object","properties":{"ordinary":{"type":"string"}}}}
 ;
+const program =
+    \\{"type":"programmatic_tool_calling","ds4":{"inputs":{"queue":[{"id":"A","note":"SECRET_EVIDENCE"}]},"schemas":{"triage":{"type":"choice","instructions":"SECRET_POLICY","choices":[{"value":"active","description":"SECRET_CRITERIA"},{"value":"other","description":"other"}]}}}}
+;
+const program_helper =
+    \\{"type":"ds4:decision","model":"clef-flash","allowed_callers":["programmatic"]}
+;
+
+test "program exposes manifests and keeps bound evidence and criteria out of the model schema" {
+    var input = try decode("{\"input\":\"Review the queue\",\"tools\":[" ++ program ++ "," ++ program_helper ++ "]}");
+    defer c.ds4_server_input_deinit(&input);
+    try std.testing.expectEqual(@as(c_int, 2), input.req.tool_orders.len);
+    const schema = std.mem.span(input.tool_schemas);
+    try std.testing.expect(std.mem.indexOf(u8, schema, "SECRET_") == null);
+    var parsed = try std.json.parseFromSlice(std.json.Value, std.testing.allocator, schema, .{});
+    defer parsed.deinit();
+    try std.testing.expectEqualStrings("ds4_exec", parsed.value.object.get("name").?.string);
+    const execution = input.req.tool_orders.v[0];
+    const helper = input.req.tool_orders.v[1];
+    try std.testing.expect(execution.responses_programmatic);
+    try std.testing.expect(std.mem.indexOf(u8, std.mem.span(execution.responses_program_bindings), "SECRET_EVIDENCE") != null);
+    try std.testing.expect(helper.responses_decision_programmatic);
+    try std.testing.expect(!helper.responses_decision_direct);
+}
+
+test "programmatic routing requires the runtime and excludes client tool suspension" {
+    try std.testing.expectError(error.InvalidRequest, decode("{\"input\":\"x\",\"tools\":[" ++ program_helper ++ "]}"));
+    try std.testing.expectError(error.InvalidRequest, decode("{\"input\":\"x\",\"tools\":[" ++ program ++ ",{\"type\":\"function\",\"name\":\"client\",\"allowed_callers\":[\"programmatic\"]}]}"));
+    var input = try decode("{\"input\":\"x\",\"tools\":[" ++ program ++ ",{\"type\":\"ds4:decision\",\"model\":\"clef-flash\",\"allowed_callers\":[\"direct\",\"programmatic\"]}]}");
+    defer c.ds4_server_input_deinit(&input);
+    try std.testing.expect(input.req.tool_orders.v[1].responses_decision_direct);
+    try std.testing.expect(input.req.tool_orders.v[1].responses_decision_programmatic);
+}
+
+test "predicate templates describe probability outputs without inventing a choice field" {
+    var input = try decode("{\"input\":\"x\",\"tools\":[{\"type\":\"programmatic_tool_calling\",\"ds4\":{\"inputs\":{\"data\":{\"records\":[{\"id\":\"A\"}]}},\"schemas\":{\"check\":{\"type\":\"predicate\",\"instructions\":\"Is it active?\"}}}}]}");
+    defer c.ds4_server_input_deinit(&input);
+    const schema = std.mem.span(input.tool_schemas);
+    try std.testing.expect(std.mem.indexOf(u8, schema, "predicates return probability") != null);
+    try std.testing.expect(std.mem.indexOf(u8, schema, "choice:a.choice") == null);
+}
+
+test "program declaration cannot shadow a client function or be enabled by history" {
+    const client = "{\"type\":\"function\",\"name\":\"ds4_exec\",\"parameters\":{\"type\":\"object\"}}";
+    try std.testing.expectError(error.InvalidRequest, decode("{\"input\":\"x\",\"tools\":[" ++ program ++ "," ++ client ++ "]}"));
+    try std.testing.expectError(error.InvalidRequest, decode("{\"input\":\"x\",\"tools\":[" ++ client ++ "," ++ program ++ "]}"));
+    var req = std.mem.zeroes(c.request);
+    defer c.ds4_server_input_request_free(&req);
+    var schema: [*c]u8 = null;
+    defer c.free(schema);
+    var cursor: [*c]const u8 = "[" ++ program ++ "]";
+    try std.testing.expect(!c.ds4_server_json_tools(&cursor, &schema, &req.tool_orders));
+}
 
 fn decode(body: [:0]const u8) !c.ds4_server_input {
     const defaults = c.ds4_server_input_defaults{

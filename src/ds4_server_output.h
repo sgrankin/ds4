@@ -92,6 +92,10 @@ bool ds4_server_output_hosted_call(int fd, request *req, responses_stream *strea
     const tool_call *call, const tool_calls *group, responses_tool_item *item, const char *status,
     const char *model, const char *input_json, const char *result_json,
     const volatile sig_atomic_t *stop);
+bool ds4_server_output_program_call(int fd, request *req, responses_stream *stream,
+    const tool_call *call, const tool_calls *group, responses_tool_item *program_item,
+    responses_tool_item *output_item, const char *status, const char *bindings_json,
+    const char *result_json, const char *audit_json, const volatile sig_atomic_t *stop);
 bool ds4_server_output_external_call(int fd, request *req, responses_stream *stream,
     const tool_call *call, responses_tool_item *item, const char *finish,
     const volatile sig_atomic_t *stop);

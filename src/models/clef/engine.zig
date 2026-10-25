@@ -10,6 +10,23 @@ const Media = @import("media_prepare.zig").Plan;
 const types = @import("types.zig");
 const a = std.heap.c_allocator;
 
+fn lockCancelable(mutex: *c.pthread_mutex_t, cancel: Backend.Cancel, context: ?*anyopaque) !void {
+    const check = cancel orelse {
+        if (c.pthread_mutex_lock(mutex) != 0) return error.MutexLock;
+        return;
+    };
+    while (true) {
+        if (check(context)) return error.Cancelled;
+        const result = c.pthread_mutex_trylock(mutex);
+        if (result == 0) return;
+        if (result != @backingInt(std.c.E.BUSY)) return error.MutexLock;
+        // A queued native tool must still observe its request deadline while
+        // another request owns this engine. The uncontended path never sleeps.
+        const delay = c.struct_timespec{ .tv_sec = 0, .tv_nsec = 2_000_000 };
+        _ = c.nanosleep(&delay, null);
+    }
+}
+
 pub const Engine = struct {
     backend: *Backend.Engine,
     head: ?Head,
@@ -68,7 +85,7 @@ pub const Engine = struct {
         const started = if (self.timing) now() else 0;
         const media = try Media.prepare(allocator, request.media, self.backend.config.family == .omni, cancel, context);
         const queued = if (self.timing) now() else 0;
-        _ = c.pthread_mutex_lock(&self.mutex);
+        try lockCancelable(&self.mutex, cancel, context);
         defer _ = c.pthread_mutex_unlock(&self.mutex);
         const acquired = if (self.timing) now() else 0;
         if (cancel) |check| if (check(context)) return error.Cancelled;
@@ -112,4 +129,46 @@ fn now() f64 {
     var value: c.struct_timespec = undefined;
     _ = c.clock_gettime(c.CLOCK_MONOTONIC, &value);
     return @as(f64, @floatFromInt(value.tv_sec)) + @as(f64, @floatFromInt(value.tv_nsec)) / 1e9;
+}
+
+test "queued decision deadline cancels before the engine mutex is released" {
+    var mutex: c.pthread_mutex_t = undefined;
+    try std.testing.expectEqual(@as(c_int, 0), c.pthread_mutex_init(&mutex, null));
+    defer _ = c.pthread_mutex_destroy(&mutex);
+    const Waiter = struct {
+        mutex: *c.pthread_mutex_t,
+        deadline: f64,
+        finished: std.atomic.Value(bool) = .init(false),
+        failure: ?anyerror = null,
+
+        fn cancelled(context: ?*anyopaque) callconv(.c) bool {
+            const self: *@This() = @ptrCast(@alignCast(context.?));
+            return now() >= self.deadline;
+        }
+        fn run(self: *@This()) void {
+            defer self.finished.store(true, .release);
+            lockCancelable(self.mutex, cancelled, self) catch |err| {
+                self.failure = err;
+                return;
+            };
+            _ = c.pthread_mutex_unlock(self.mutex);
+        }
+    };
+    try std.testing.expectEqual(@as(c_int, 0), c.pthread_mutex_lock(&mutex));
+    var held = true;
+    defer {
+        if (held) _ = c.pthread_mutex_unlock(&mutex);
+    }
+    var waiter = Waiter{ .mutex = &mutex, .deadline = now() + 0.02 };
+    const thread = try std.Thread.spawn(.{}, Waiter.run, .{&waiter});
+    const delay = c.struct_timespec{ .tv_sec = 0, .tv_nsec = 200_000_000 };
+    _ = c.nanosleep(&delay, null);
+    const retired_while_locked = waiter.finished.load(.acquire);
+    // Release even on regression, so an unconditional blocking lock makes
+    // this test fail instead of hanging the complete host suite.
+    _ = c.pthread_mutex_unlock(&mutex);
+    held = false;
+    thread.join();
+    try std.testing.expect(retired_while_locked);
+    try std.testing.expectEqual(@as(anyerror, error.Cancelled), waiter.failure.?);
 }

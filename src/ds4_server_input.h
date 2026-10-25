@@ -75,6 +75,10 @@ typedef struct {
      * Input is a bound Decisions input value encoded as JSON. */
     char *responses_decision_model;
     char *responses_decision_input;
+    bool responses_decision_direct;
+    bool responses_decision_programmatic;
+    bool responses_programmatic;
+    char *responses_program_bindings;
     char **prop;
     char **prop_schema;
     int len;
@@ -155,6 +159,8 @@ typedef struct {
     int responses_store_error_status;
     char *responses_replay; /* Private logical history, without top-level instructions. */
     bool responses_hosted_tools;
+    bool responses_programmatic;
+    char *responses_program_bindings;
     int max_tool_calls;
     char *responses_output_prefix; /* Earlier public items, without array brackets. */
     int responses_output_prefix_count;

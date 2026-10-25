@@ -1,5 +1,29 @@
 # Next experiments: one hour each
 
+## Server-side code mode / PTC — authorized and qualified, 2026-10-25
+
+1. Native bounded QuickJS execution over bound data/templates, existing decision
+   registry, standard program receipts and replay. Start14:06UTC, cap15:06UTC;
+   actual native/transport qualification worked14:38UTC. No client-tool
+   suspension, OS modules or general agent framework in this first slice.
+2. One ordinary/favorable natural task screen. Start14:38UTC, cap15:38UTC.
+   Keep runtime correctness distinct from voluntary tool use, final formatting
+   and practical task quality. First failures led to two measured changes:
+   native-error feedback, then a generic bound-library usage example. Retain
+   both failures rather than hiding them behind the successful interface.
+3. Final shared host/SDK/restart checks, one DeepSeek smoke/natural check and
+   concise local commit. No additional model/prompt tuning in this item.
+
+Final Flint/Clef-Flash screen: ordinary5.48s main-only versus12.04s code mode;
+favorable17.85s versus13.78s (22.8% lower). Final task fields correct in both
+repeats of each case; favorable final text duplicates JSON. Six positive and
+eighteen negative helper classifications match the oracle. Request-select this
+tool for useful bulk workflows, rather than exposing it on every small task.
+See [results and limitations](../experiments/ptc-decisions-20261025/RESULTS.md).
+DeepSeek passes eight smoke checks. Its natural favorable task has correct
+IDs/count/maximum and clean JSON, with one handoff overstatement retained in
+the report. Main remains unchanged; raw runs stay ignored under `.workspaces/`.
+
 ## Clef performance pass — authorized 2026-10-25
 
 1. Dense backbone profile and one measured kernel change. Start09:28UTC, cap

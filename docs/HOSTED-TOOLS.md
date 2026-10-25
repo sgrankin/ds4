@@ -8,7 +8,9 @@ one Response. HTTP JSON, SSE and WebSocket share this behavior.
 This uses the [OpenResponses provider extension rules](https://www.openresponses.org/specification#extending-tools):
 `ds4:decision` and its corresponding `ds4:decision_call` receipt are local
 extensions. Ordinary `function` tools still return to the client for execution.
-Programmatic tool calling, MCP and background agent tasks remain separate work.
+[Programmatic tool calling](PROGRAMMATIC-TOOLS.md) can compose native decisions
+and reduce their results in server-side JavaScript. MCP and background agent
+tasks remain separate work.
 
 ## Start and discover
 
@@ -67,6 +69,8 @@ size. Existing durable Responses storage still excludes main-conversation images
 
 One hosted decision binding is supported per request. An unavailable model or
 a same-name ordinary function declaration is rejected before generation.
+`allowed_callers` defaults to direct invocation; programmatic or both-route
+bindings use the [code-mode declaration](PROGRAMMATIC-TOOLS.md#tool-routes-and-execution).
 `tool_choice: "auto"` permits calls; `"none"` disables them. Required and forced
 tool choices remain unsupported. The positive `max_tool_calls` defaults to four
 and counts hosted invocations across all internal rounds; `max_output_tokens`

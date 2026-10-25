@@ -4,6 +4,7 @@
 const std = @import("std");
 const c = @import("server_input_c");
 const HostedDecision = @import("hosted_decisions.zig");
+const HostedProgram = @import("hosted_programs.zig");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidJson};
 
@@ -121,6 +122,7 @@ fn freeOrder(order: *c.tool_schema_order) void {
     c.free(order.namespace);
     c.free(order.responses_decision_model);
     c.free(order.responses_decision_input);
+    c.free(order.responses_program_bindings);
     for (items([*c]u8, order.prop, @intCast(order.len))) |property| c.free(property);
     for (items([*c]u8, order.prop_schema, @intCast(order.len))) |schema| c.free(schema);
     c.free(@ptrCast(order.prop));
@@ -348,12 +350,29 @@ pub fn overlayRequestTools(raw: [*c]const u8, orders: [*c]c.tool_schema_orders) 
     return true;
 }
 
-fn isDecision(raw: [*c]const u8) bool {
+fn isType(raw: [*c]const u8, wanted: []const u8) bool {
     const parsed = std.json.parseFromSlice(std.json.Value, allocator, bytes(raw), .{}) catch return false;
     defer parsed.deinit();
     if (parsed.value != .object) return false;
     const kind = parsed.value.object.get("type") orelse return false;
-    return kind == .string and std.mem.eql(u8, kind.string, "ds4:decision");
+    return kind == .string and std.mem.eql(u8, kind.string, wanted);
+}
+
+// This slice does not suspend JavaScript for client-owned tools. Reject that
+// route explicitly instead of silently executing a function in the wrong place.
+fn directClient(value: std.json.Value) bool {
+    if (value != .object) return true;
+    const routes = HostedDecision.callers(value.object.get("allowed_callers")) catch return false;
+    if (!routes.direct or routes.programmatic) return false;
+    if (value.object.get("tools")) |children| if (children == .array) {
+        for (children.array.items) |child| if (!directClient(child)) return false;
+    };
+    return true;
+}
+fn directClientTool(raw: [*c]const u8) bool {
+    const parsed = std.json.parseFromSlice(std.json.Value, allocator, bytes(raw), .{}) catch return true;
+    defer parsed.deinit();
+    return directClient(parsed.value);
 }
 
 fn parseToolsAllowed(cursor: *[*c]const u8, output: *[*c]u8, orders: [*c]c.tool_schema_orders, allow_decision: bool) bool {
@@ -368,22 +387,40 @@ fn parseToolsAllowed(cursor: *[*c]const u8, output: *[*c]u8, orders: [*c]c.tool_
     var schemas = Text{};
     defer schemas.deinit();
     var decision_declared = false;
+    var program_declared = false;
+    var needs_program = false;
     while (reader.more(']')) {
         const raw = reader.raw() catch return false;
         defer c.free(raw);
-        if (isDecision(raw)) {
+        if (isType(raw, HostedProgram.tool_type)) {
+            if (!allow_decision or orders == null or program_declared) return false;
+            program_declared = true;
+            var binding = HostedProgram.Binding.parse(bytes(raw)) catch return false;
+            defer binding.deinit();
+            schemas.line(binding.schema.ptr);
+            const count = orders.*.len;
+            addOrder(orders, binding.schema.ptr, null, null, false);
+            if (orders.*.len != count + 1) return false;
+            const order = &orders.*.v[@intCast(count)];
+            order.responses_programmatic = true;
+            order.responses_program_bindings = duplicate(binding.config);
+        } else if (isType(raw, HostedDecision.tool_type)) {
             if (!allow_decision or orders == null or decision_declared) return false;
             decision_declared = true;
             var binding = HostedDecision.Binding.parse(bytes(raw)) catch return false;
             defer binding.deinit();
-            schemas.line(HostedDecision.schema.ptr);
+            if (binding.direct) schemas.line(HostedDecision.schema.ptr);
+            needs_program = needs_program or binding.programmatic;
             const count = orders.*.len;
             addOrder(orders, HostedDecision.schema.ptr, null, null, false);
             if (orders.*.len != count + 1) return false;
             const order = &orders.*.v[@intCast(count)];
             order.responses_decision_model = duplicate(binding.model);
             order.responses_decision_input = if (binding.input) |input| duplicate(input) else null;
+            order.responses_decision_direct = binding.direct;
+            order.responses_decision_programmatic = binding.programmatic;
         } else {
+            if (!directClientTool(raw)) return false;
             const function = unwrappedFunction(raw);
             defer c.free(function);
             if (function != null) {
@@ -412,6 +449,14 @@ fn parseToolsAllowed(cursor: *[*c]const u8, output: *[*c]u8, orders: [*c]c.tool_
         for (items(c.tool_schema_order, orders.*.v, @intCast(orders.*.len))) |order| {
             if (order.responses_decision_model != null) marked += 1;
         }
+        if (marked != 1) return false;
+    }
+    if (needs_program and !program_declared) return false;
+    if (program_declared) {
+        var marked: usize = 0;
+        for (items(c.tool_schema_order, orders.*.v, @intCast(orders.*.len))) |order| if (order.responses_programmatic) {
+            marked += 1;
+        };
         if (marked != 1) return false;
     }
     output.* = schemas.take();

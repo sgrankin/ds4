@@ -119,6 +119,7 @@ fn freeOrders(orders: *c.tool_schema_orders) void {
         c.free(order.namespace);
         c.free(order.responses_decision_model);
         c.free(order.responses_decision_input);
+        c.free(order.responses_program_bindings);
         for (ownedItems([*c]u8, order.prop, @intCast(order.len))) |property| c.free(property);
         for (ownedItems([*c]u8, order.prop_schema, @intCast(order.len))) |schema| c.free(schema);
         c.free(@ptrCast(order.prop));
@@ -139,7 +140,7 @@ pub fn freeRequest(request: *Request) void {
     for (ownedItems(c.ds4_vision_span, request.images, request.image_count)) |*image| c.ds4_vision_embedding_free(&image.embedding);
     c.free(request.images);
     c.free(request.image_markers);
-    inline for (.{ "model", "raw_body", "prompt_text", "prompt_cache_key", "previous_response_id", "responses_replay", "responses_output_prefix", "conversation_id", "conversation_input", "responses_live_suffix_text", "anthropic_live_suffix_text" }) |field|
+    inline for (.{ "model", "raw_body", "prompt_text", "prompt_cache_key", "previous_response_id", "responses_replay", "responses_output_prefix", "responses_program_bindings", "conversation_id", "conversation_input", "responses_live_suffix_text", "anthropic_live_suffix_text" }) |field|
         c.free(@field(request, field));
     freeStrings(&request.stops);
     freeStrings(&request.responses_live_call_ids);

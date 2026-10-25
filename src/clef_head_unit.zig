@@ -3,4 +3,5 @@ test {
     _ = @import("models/clef/head.zig");
     _ = @import("models/clef/record.zig");
     _ = @import("models/clef/vision.zig");
+    _ = @import("models/clef/engine.zig");
 }

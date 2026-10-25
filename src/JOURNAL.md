@@ -4,6 +4,73 @@ Last updated: 2026-10-25. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## Server-side code mode / PTC — completed, 2026-10-25
+
+User authorized implementation while AFK and explicitly selected QuickJS.
+Implementation began 14:06 UTC with a one-hour cap at 15:06; native execution
+and transport qualification worked by 14:38. The separate usefulness screen
+ran from 14:38 with a 15:38 checkpoint. Uses pinned
+QuickJS-NG v0.17.0 as a vendored C dependency, with native Zig ownership; no
+Python runtime, ambient OS/network/filesystem modules or persistent JS state.
+
+The first slice accepts OpenAI's `programmatic_tool_calling` declaration and
+emits `program`/`program_output` items for entirely server-owned programs.
+Client-owned tools remain direct: suspending/resuming JS for their results is
+explicitly unsupported. `ds4:decision.allowed_callers` controls direct versus
+programmatic helper use. A virtual `ds4_exec(code)` uses the existing model tool
+renderer; its name is not a public OpenAI model-native contract.
+
+Provider extension `tool.ds4` binds `inputs`, reusable `schemas` and a short
+description. The model sees names/shapes/template labels; QuickJS sees values.
+Programs call `tools.ds4_decide` and emit compact `text(value)` results. Full
+binding snapshots and native helper call audit remain in public/durable
+receipts while only original code and compact emitted result enter the main
+logical transcript. Completed replay never reruns programs or native helpers.
+
+Fixed bounds: 64 MiB JS heap, 512 KiB stack, 10 seconds including native helper
+work, 64 KiB final result, 8 MiB native arguments and 16 MiB raw audit accounting.
+Shared max_tool_calls counts outer programs plus native helper attempts. Native
+calls are synchronous; await works but Promise.all does not parallelize
+inference. Cancellation is cooperative at VM/native boundaries, including while
+waiting for a helper engine. No new ambient OS capabilities are installed.
+
+The natural Flint/Clef-Flash screen exposed two concrete interface failures:
+native errors were silently treated as successful JS values, and the generator
+rebuilt hidden data/templates from their manifest. Native errors now throw
+catchable messages; a generic library example explains populated globals,
+template spreading, record selectors in instructions and text() emission.
+Error feedback alone exhausted its budget; the documented interface completed
+both ordinary/favorable tasks. Retain those failures in the report.
+
+Final two-repeat fixed screen: ordinary main-only 5.48s versus code mode 12.04s;
+favorable main-only 17.85s versus code mode 13.78s (22.8% less time). The favorable
+generator input fell 4745 to 1375 tokens; its helper identified all six positive
+and eighteen negative records correctly. Final fields were correct, but Flint
+duplicated JSON across its closing reasoning tag in both favorable repeats.
+Ordinary final JSON was clean. Larger public/durable audits still include bulk
+data; context savings do not imply smaller HTTP responses. This is a small
+synthetic data-placement screen, not a general model-quality benchmark. Keep
+code mode request-selected: ordinary unnecessary delegation is a measured loss.
+
+All eight QuickJS CPU tests, five Clef CPU tests and 28 focused host tests pass;
+the full existing verify suite passes. Flint passes 56 final live protocol/SDK,
+replay, disconnect, pure-JS and authority checks plus two actual-restart checks.
+DeepSeek V4.1 Flash 1017 passes eight end-to-end smoke checks: generated code,
+one native call, direct probability parity, server filter/join and correct JSON
+continuation. The natural favorable DeepSeek task also completes with correct
+IDs/count/maximum and clean JSON: two programs, one successful native call,
+458 main output tokens and 76.38s wall time. Its handoff overstates the evidence
+with a blanket claim that no refund has been issued; numeric/format success
+does not erase that semantic caveat. No matched DeepSeek speed claim is made.
+
+Root owns all guarded heavy jobs. Local jj change `olqomykynxyr`, parent
+`944863ed3c7f` on clef-serving; main remains `ce3afb7999b7`.
+All five owned guard runs ended cleanly, pressure stayed normal and swap did
+not grow. All test servers are stopped. `make ZIG_FLAGS=-j3` installs all five
+root executables; final focused tests and Zig formatting checks pass.
+[Contract and usage](../docs/PROGRAMMATIC-TOOLS.md),
+[settings, results and limitations](../speed-bench/experiments/ptc-decisions-20261025/RESULTS.md).
+
 ## Responses hosted decision tools — completed, 2026-10-25
 
 User requested server-side tools with an invocation of loaded decision models.

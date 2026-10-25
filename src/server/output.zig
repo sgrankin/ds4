@@ -242,6 +242,56 @@ pub fn appendDecisionReceipt(buffer: *c.buf, call: *const c.tool_call, group: ?*
     decisionItem(&out, call, group, item, item_status, model, input_json, result_json);
     appendBuffer(buffer, out.list.items);
 }
+fn programCode(out: *Text, arguments: []const u8) void {
+    const parsed = std.json.parseFromSlice(std.json.Value, allocator, arguments, .{}) catch {
+        out.quoted("");
+        return;
+    };
+    defer parsed.deinit();
+    const code = if (parsed.value == .object) parsed.value.object.get("code") else null;
+    if (code != null and code.? == .string) {
+        // Unlike a borrowed C string, decoded JavaScript may contain a NUL;
+        // let the standard JSON encoder preserve the complete source bytes.
+        const encoded = std.json.Stringify.valueAlloc(allocator, code.?.string, .{}) catch fatal();
+        defer allocator.free(encoded);
+        out.append(encoded);
+    } else out.quoted("");
+}
+fn programItem(out: *Text, call: *const c.tool_call, group: ?*const c.tool_calls, item: *const Item, bindings_json: []const u8) void {
+    out.append("{\"id\":");
+    out.quoted(text(&item.fc_id));
+    out.append(",\"type\":\"program\",\"call_id\":");
+    out.quoted(text(&item.call_id));
+    out.append(",\"code\":");
+    programCode(out, text(call.arguments));
+    out.append(",\"fingerprint\":");
+    out.quoted(text(&item.fc_id));
+    out.append(",\"ds4\":{\"arguments\":");
+    out.quoted(text(call.arguments));
+    out.append(",\"call_ids\":[");
+    if (group) |_| {
+        for (callSlice(group), 0..) |member, index| {
+            if (index != 0) out.byte(',');
+            out.quoted(text(member.id));
+        }
+    } else out.quoted(text(&item.call_id));
+    out.append("],\"bindings\":");
+    out.append(if (bindings_json.len == 0) "{}" else bindings_json);
+    out.append("}}");
+}
+fn programOutputItem(out: *Text, item: *const Item, item_status: []const u8, result_json: []const u8, audit_json: []const u8) void {
+    out.append("{\"id\":");
+    out.quoted(text(&item.fc_id));
+    out.append(",\"type\":\"program_output\",\"call_id\":");
+    out.quoted(text(&item.call_id));
+    out.append(",\"status\":");
+    out.quoted(item_status);
+    out.append(",\"result\":");
+    out.quoted(result_json);
+    out.append(",\"ds4\":{\"calls\":");
+    out.append(if (audit_json.len == 0) "[]" else audit_json);
+    out.append("}}");
+}
 fn canonicalArguments(arguments: [*c]const u8) [*c]u8 {
     return c.ds4_server_output_object_json(arguments);
 }
@@ -464,7 +514,7 @@ fn responsePrefix(out: *Text, request: *const Request, id: []const u8, created_a
     out.append(",\"max_output_tokens\":");
     if (request.max_tokens >= 0) out.number(request.max_tokens) else out.append("null");
     out.append(",\"max_tool_calls\":");
-    if (request.responses_hosted_tools) out.number(request.max_tool_calls) else out.append("null");
+    if (request.responses_hosted_tools or request.responses_programmatic) out.number(request.max_tool_calls) else out.append("null");
     out.append(",\"background\":false,\"service_tier\":\"default\"");
     options.append(out, "metadata", "{}");
     options.append(out, "safety_identifier", "null");
@@ -865,6 +915,29 @@ pub const Output = struct {
         appendItem(&out, call, item, itemStatus(finish), true, &request.tool_orders);
         rememberItem(request, out.list.items);
         return true;
+    }
+    fn programEvent(self: Output, stream: *Stream, item: *const Item, raw: []const u8, is_added: bool) bool {
+        var out = event(if (is_added) "response.output_item.added" else "response.output_item.done");
+        defer out.deinit();
+        out.append(",\"output_index\":");
+        out.number(item.output_index);
+        out.append(",\"item\":");
+        out.append(raw);
+        out.byte('}');
+        return self.emit(stream, &out);
+    }
+    pub fn programCall(self: Output, request: *Request, stream: *Stream, call: *const c.tool_call, group: ?*const c.tool_calls, program_item: *Item, output_item: *Item, item_status: []const u8, bindings_json: []const u8, result_json: []const u8, audit_json: []const u8) bool {
+        if (stream.response_id[0] == 0) init(request, stream);
+        const starting = std.mem.eql(u8, item_status, "in_progress");
+        const identity = if (starting) program_item else output_item;
+        initializeItem(call, identity, stream.next_output_index, if (starting) "prog_" else "prog_out_");
+        stream.next_output_index += 1;
+        var item = Text{};
+        defer item.deinit();
+        if (starting) programItem(&item, call, group, identity, bindings_json) else programOutputItem(&item, identity, if (std.mem.eql(u8, item_status, "completed")) "completed" else "incomplete", result_json, audit_json);
+        rememberItem(request, item.list.items);
+        if (!stream.active) return true;
+        return self.programEvent(stream, identity, item.list.items, true) and self.programEvent(stream, identity, item.list.items, false);
     }
     pub fn finishLive(self: Output, request: *Request, stream: *Stream, raw: ?[]const u8, recovered: bool, calls: ?*const c.tool_calls, finish: []const u8, input: c_int, output: c_int, created_at: c_long) bool {
         if (!self.closeVisible(request, stream, raw, recovered, finish)) return false;

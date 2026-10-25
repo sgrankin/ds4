@@ -60,6 +60,8 @@ fn nativeObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
     m.root_source_file = b.path(source);
     m.addImport(api_name, api);
     if (std.mem.startsWith(u8, source, "src/server/") or std.mem.eql(u8, source, "src/models/flint/tokenizer.zig")) servingImports(b, m, target, optimize);
+    if (std.mem.startsWith(u8, source, "src/server/"))
+        m.addImport("quickjs_c", generatedApi(b, target, sdk, optimize, "src/server/program_runtime_api.h"));
     if (std.mem.eql(u8, source, "src/server/serving_entry.zig"))
         m.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "src/server/http_api.h"));
     return b.addObject(.{ .name = std.fs.path.stem(source), .root_module = m }).getEmittedBin();
@@ -145,6 +147,25 @@ pub fn build(b: *std.Build) void {
     const c_api = generatedApi(b, target, sdk, optimize, "src/c_api.h");
 
     const core_module = module(b, target, sdk, .fast);
+    // Programs are CPU-side orchestration: preserve JavaScript number behavior
+    // instead of inheriting the inference kernels' fast-math compilation flags.
+    const quickjs_module = module(b, target, sdk, .fast);
+    const quickjs_flags: []const []const u8 = &.{ "-O2", "-fno-fast-math", "-g", "-std=c11", "-D_GNU_SOURCE", "-DNDEBUG" };
+    for ([_][]const u8{ "quickjs.c", "dtoa.c", "libregexp.c", "libunicode.c" }) |name| {
+        const source = b.fmt("src/vendor/quickjs/{s}", .{name});
+        quickjs_module.addObjectFile(object(b, target, sdk, clang, source, b.fmt("program-{s}", .{std.fs.path.stem(name)}), .fast, quickjs_flags));
+    }
+    const quickjs = b.addLibrary(.{ .name = "ds4-quickjs", .root_module = quickjs_module });
+    core_module.linkLibrary(quickjs);
+    {
+        const runtime_module = module(b, target, sdk, .debug);
+        runtime_module.root_source_file = b.path("src/server/program_runtime.zig");
+        runtime_module.addImport("quickjs_c", generatedApi(b, target, sdk, .debug, "src/server/program_runtime_api.h"));
+        runtime_module.linkLibrary(quickjs);
+        const runtime_tests = b.addTest(.{ .name = "test-program-runtime", .root_module = runtime_module });
+        b.step("program-runtime-test", "Build bounded CPU JavaScript execution and native callback checks")
+            .dependOn(&b.addInstallArtifact(runtime_tests, .{}).step);
+    }
     const suffix_match_module = matcher: {
         const m = module(b, target, sdk, optimize);
         m.root_source_file = b.path("src/suffix_match.zig");

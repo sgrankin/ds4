@@ -41,6 +41,8 @@ fn modelValue(value: Value) ![]const u8 {
 pub const Binding = struct {
     model: [:0]u8,
     input: ?[:0]u8 = null,
+    direct: bool = true,
+    programmatic: bool = false,
 
     pub fn parse(raw: []const u8) !Binding {
         var arena = std.heap.ArenaAllocator.init(allocator);
@@ -52,6 +54,9 @@ pub const Binding = struct {
         const name = try modelValue(root.object.get("model") orelse return error.MissingDecisionModel);
         var result = Binding{ .model = try allocator.dupeSentinel(u8, name, 0) };
         errdefer result.deinit();
+        const routes = try callers(root.object.get("allowed_callers"));
+        result.direct = routes.direct;
+        result.programmatic = routes.programmatic;
         if (root.object.get("input")) |input| result.input = try jsonOwned(try inputValue(input));
         return result;
     }
@@ -61,6 +66,19 @@ pub const Binding = struct {
         if (self.input) |input| allocator.free(input);
     }
 };
+
+pub const Callers = struct { direct: bool = true, programmatic: bool = false };
+pub fn callers(value: ?Value) !Callers {
+    const selected = value orelse return .{};
+    if (selected == .null) return .{};
+    if (selected != .array or selected.array.items.len == 0) return error.InvalidAllowedCallers;
+    var result = Callers{ .direct = false };
+    for (selected.array.items) |route| {
+        if (route != .string) return error.InvalidAllowedCallers;
+        if (std.mem.eql(u8, route.string, "direct")) result.direct = true else if (std.mem.eql(u8, route.string, "programmatic")) result.programmatic = true else return error.InvalidAllowedCallers;
+    }
+    return result;
+}
 
 /// Verify a request's pinned model without loading, unloading or running one.
 pub fn validateLoaded(comptime c: type, registry: ?*c.ds4_decision_registry, model: []const u8) !void {

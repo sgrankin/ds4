@@ -351,12 +351,14 @@ fn normalize(raw: [*c]const u8) Invalid![*c]u8 {
         defer c.free(role);
         const message = equal(kind, "message");
         const decision = equal(kind, "ds4:decision_call");
-        const supported = message or equal(kind, "function_call") or equal(kind, "function_call_output") or equal(kind, "reasoning") or decision;
+        const program = equal(kind, "program");
+        const program_output = equal(kind, "program_output");
+        const supported = message or equal(kind, "function_call") or equal(kind, "function_call_output") or equal(kind, "reasoning") or decision or program or program_output;
         if (!supported or (role != null and !equal(role, "user") and !equal(role, "assistant") and !equal(role, "system") and !equal(role, "developer"))) return error.InvalidItems;
         if (id != null and !identifier(text(id), 128)) return error.InvalidItems;
         if (id == null) {
             var generated: [48]u8 = undefined;
-            const prefix: [*c]const u8 = if (message) "msg_" else if (equal(kind, "function_call")) "fc_" else if (equal(kind, "function_call_output")) "fco_" else if (decision) "dc_" else "rs_";
+            const prefix: [*c]const u8 = if (message) "msg_" else if (equal(kind, "function_call")) "fc_" else if (equal(kind, "function_call_output")) "fco_" else if (decision) "dc_" else if (program) "prog_" else if (program_output) "prog_out_" else "rs_";
             c.ds4_server_output_random_id(&generated, generated.len, prefix);
             id = duplicate(text(&generated));
         }

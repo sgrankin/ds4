@@ -7,6 +7,7 @@ const Canonical = @import("canonical.zig");
 const QwenPrompt = @import("qwen_prompt");
 const ModelBackend = @import("model.zig").Backend(c);
 const HostedDecisions = @import("hosted_decisions.zig");
+const HostedPrograms = @import("hosted_programs.zig");
 const allocator = std.heap.c_allocator;
 
 fn zero(comptime T: type) T {
@@ -658,7 +659,7 @@ fn appendReplay(req: *c.request, content: [*c]const u8, reasoning: [*c]const u8,
 fn hostedOrder(req: *const c.request, call: *const c.tool_call) ?*const c.tool_schema_order {
     if (!req.responses_hosted_tools or req.api != c.API_RESPONSES) return null;
     for (items(c.tool_schema_order, req.tool_orders.v, @intCast(req.tool_orders.len))) |*order| {
-        if (order.responses_decision_model != null and same(order.name, text(call.name))) return order;
+        if ((order.responses_decision_model != null or order.responses_programmatic) and same(order.name, text(call.name))) return order;
     }
     return null;
 }
@@ -845,6 +846,44 @@ pub const Generation = struct {
                 }
                 continue;
             };
+            if (binding.responses_programmatic) {
+                var result_item = zero(c.responses_tool_item);
+                if (!c.ds4_server_output_program_call(self.job.fd, req, output, call, calls, &item, &result_item, "in_progress", req.responses_program_bindings, null, null, self.stop)) {
+                    markCancelled(self.job);
+                    return .cancelled;
+                }
+                var invocation = if (used.* >= req.max_tool_calls) blk: {
+                    break :blk HostedPrograms.Invocation{ .status = .failed, .output = allocator.dupeSentinel(u8, "{\"output\":[],\"error\":{\"code\":\"max_tool_calls_exceeded\",\"message\":\"Response exhausted its hosted tool-call budget\"}}", 0) catch fatal(), .audit = allocator.dupeSentinel(u8, "[]", 0) catch fatal(), .limit_exceeded = true };
+                } else blk: {
+                    used.* += 1;
+                    var helper: [*c]const c.tool_schema_order = null;
+                    for (items(c.tool_schema_order, req.tool_orders.v, @intCast(req.tool_orders.len))) |*candidate| {
+                        if (candidate.responses_decision_model != null) {
+                            helper = candidate;
+                            break;
+                        }
+                    }
+                    break :blk HostedPrograms.invoke(c, self.runtime.decision_models, text(req.responses_program_bindings), if (helper == null) null else helper.*.responses_decision_model, if (helper == null) null else helper.*.responses_decision_input, helper != null and helper.*.responses_decision_programmatic, text(call.arguments), used, req.max_tool_calls, hostedCancelled, &cancellation) catch fatal();
+                };
+                defer invocation.deinit();
+                if (!c.ds4_server_output_program_call(self.job.fd, req, output, call, calls, &item, &result_item, if (invocation.status == .completed) "completed" else "failed", req.responses_program_bindings, invocation.output.ptr, invocation.audit.ptr, self.stop)) {
+                    markCancelled(self.job);
+                    return .cancelled;
+                }
+                if (invocation.status == .cancelled or hostedCancelled(&cancellation)) return .cancelled;
+                if (invocation.limit_exceeded) {
+                    limit_exceeded = true;
+                    report(errors, "program exhausted max_tool_calls=%d", .{req.max_tool_calls});
+                }
+                var result = zero(c.chat_msg);
+                result.role = @constCast("tool");
+                result.tool_call_id = call.id;
+                result.content = duplicate(invocation.output);
+                result_messages[result_count] = result;
+                result_count += 1;
+                appendReplayMessage(req, &result);
+                continue;
+            }
             if (!c.ds4_server_output_hosted_call(self.job.fd, req, output, call, calls, &item, "in_progress", binding.responses_decision_model, null, null, self.stop)) {
                 markCancelled(self.job);
                 return .cancelled;
@@ -858,6 +897,7 @@ pub const Generation = struct {
                 };
             } else blk: {
                 used.* += 1;
+                if (!binding.responses_decision_direct) break :blk HostedDecisions.Invocation{ .status = 403, .output = allocator.dupeSentinel(u8, "{\"error\":{\"code\":\"tool_route_not_allowed\",\"message\":\"This decision helper is available only inside a program\"},\"status\":403}", 0) catch fatal() };
                 break :blk HostedDecisions.invoke(c, self.runtime.decision_models, text(binding.responses_decision_model), if (binding.responses_decision_input != null) text(binding.responses_decision_input) else null, text(call.arguments), hostedCancelled, &cancellation) catch fatal();
             };
             defer invocation.deinit();

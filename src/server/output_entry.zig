@@ -62,6 +62,9 @@ export fn ds4_server_output_hosted_call(fd: c_int, request: *c.request, stream: 
 export fn ds4_server_output_external_call(fd: c_int, request: *c.request, stream: *c.responses_stream, call: *const c.tool_call, item: *c.responses_tool_item, finish: [*c]const u8, stop: Stop) bool {
     return output(fd, stop).externalCall(request, stream, call, item, text(finish));
 }
+export fn ds4_server_output_program_call(fd: c_int, request: *c.request, stream: *c.responses_stream, call: *const c.tool_call, group: ?*const c.tool_calls, program_item: *c.responses_tool_item, output_item: *c.responses_tool_item, item_status: [*c]const u8, bindings_json: [*c]const u8, result_json: [*c]const u8, audit_json: [*c]const u8, stop: Stop) bool {
+    return output(fd, stop).programCall(request, stream, call, group, program_item, output_item, text(item_status), text(bindings_json), text(result_json), text(audit_json));
+}
 export fn ds4_server_output_append_decision_item(buffer: *c.buf, call: *const c.tool_call, group: ?*const c.tool_calls, item: *const c.responses_tool_item, status: [*c]const u8, model: [*c]const u8, input_json: [*c]const u8, result_json: [*c]const u8) void {
     owner.appendDecisionReceipt(buffer, call, group, item, text(status), text(model), text(input_json), text(result_json));
 }

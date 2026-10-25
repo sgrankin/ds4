@@ -286,3 +286,178 @@ test "two hosted rounds retain all text and receipt items in final output" {
     try std.testing.expectEqual(@as(i64, 5), next_added);
     try std.testing.expectEqual(@as(i64, 5), next_done);
 }
+
+fn programPair(call_id: [:0]const u8, arguments: [:0]const u8, group: ?*const c.tool_calls, item_status: [:0]const u8, result: [:0]const u8) ![:0]u8 {
+    var request = std.mem.zeroes(c.request);
+    defer c.free(request.responses_output_prefix);
+    var stream = std.mem.zeroes(c.responses_stream);
+    defer c.ds4_server_output_free(&stream);
+    const call = c.tool_call{ .id = @constCast(call_id.ptr), .name = @constCast("ds4_exec"), .arguments = @constCast(arguments.ptr) };
+    var program = std.mem.zeroes(c.responses_tool_item);
+    var output = std.mem.zeroes(c.responses_tool_item);
+    var stop: c.sig_atomic_t = 0;
+    const bindings = "{\"inputs\":{\"invoice\":\"BULK_SENTINEL\"},\"schemas\":{}}";
+    const audit = "[{\"name\":\"ds4_decide\",\"result\":{\"hidden\":\"INTERMEDIATE_SENTINEL\"}}]";
+    try std.testing.expect(c.ds4_server_output_program_call(-1, &request, &stream, &call, group, &program, &output, "in_progress", bindings, null, null, &stop));
+    try std.testing.expect(c.ds4_server_output_program_call(-1, &request, &stream, &call, group, &program, &output, item_status.ptr, bindings, result.ptr, audit, &stop));
+    return std.fmt.allocPrintSentinel(a, "[{s}]", .{text(request.responses_output_prefix)}, 0);
+}
+
+test "program receipts retain code and audit while logical replay keeps only compact result" {
+    const arguments = "{ \"code\": \"text({answer:7});\\n\" }";
+    const result = "{\"answer\":7}";
+    const raw = try programPair("call_program", arguments, null, "completed", result);
+    defer a.free(raw);
+    const parsed = try std.json.parseFromSlice(std.json.Value, a, raw, .{});
+    defer parsed.deinit();
+    const items = parsed.value.array.items;
+    try std.testing.expectEqual(@as(usize, 2), items.len);
+    const program = items[0].object;
+    const output = items[1].object;
+    try std.testing.expectEqualStrings("program", program.get("type").?.string);
+    try std.testing.expectEqualStrings("text({answer:7});\n", program.get("code").?.string);
+    try std.testing.expectEqualStrings(program.get("id").?.string, program.get("fingerprint").?.string);
+    const metadata = program.get("ds4").?.object;
+    try std.testing.expectEqualStrings(arguments, metadata.get("arguments").?.string);
+    try std.testing.expectEqualStrings("call_program", metadata.get("call_ids").?.array.items[0].string);
+    try std.testing.expectEqualStrings("BULK_SENTINEL", metadata.get("bindings").?.object.get("inputs").?.object.get("invoice").?.string);
+    try std.testing.expectEqualStrings("program_output", output.get("type").?.string);
+    try std.testing.expectEqualStrings("completed", output.get("status").?.string);
+    try std.testing.expectEqualStrings(result, output.get("result").?.string);
+    try std.testing.expectEqualStrings("INTERMEDIATE_SENTINEL", output.get("ds4").?.object.get("calls").?.array.items[0].object.get("result").?.object.get("hidden").?.string);
+    var cursor: [*c]const u8 = raw.ptr;
+    var messages = std.mem.zeroes(c.chat_msgs);
+    defer c.ds4_server_input_messages_free(&messages);
+    try std.testing.expect(c.ds4_server_json_responses_input(&cursor, &messages, null, null, false));
+    try std.testing.expectEqual(@as(c_int, 2), messages.len);
+    try std.testing.expectEqualStrings("ds4_exec", text(messages.v[0].calls.v[0].name));
+    try std.testing.expectEqualStrings(arguments, text(messages.v[0].calls.v[0].arguments));
+    try std.testing.expectEqualStrings(result, text(messages.v[1].content));
+}
+
+test "terminated program errors replay but missing or orphan outputs reject" {
+    const result = "{\"error\":{\"code\":\"interrupted\"}}";
+    const raw = try programPair("call_program", "{\"code\":\"while(true){}\"}", null, "failed", result);
+    defer a.free(raw);
+    const parsed = try std.json.parseFromSlice(std.json.Value, a, raw, .{});
+    defer parsed.deinit();
+    try std.testing.expectEqualStrings("incomplete", parsed.value.array.items[1].object.get("status").?.string);
+    var cursor: [*c]const u8 = raw.ptr;
+    var messages = std.mem.zeroes(c.chat_msgs);
+    defer c.ds4_server_input_messages_free(&messages);
+    try std.testing.expect(c.ds4_server_json_responses_input(&cursor, &messages, null, null, false));
+    try std.testing.expectEqualStrings(result, text(messages.v[1].content));
+    for (parsed.value.array.items) |item| {
+        const encoded = try std.json.Stringify.valueAlloc(a, &[_]std.json.Value{item}, .{});
+        defer a.free(encoded);
+        const input = try a.dupeSentinel(u8, encoded, 0);
+        defer a.free(input);
+        var single = std.mem.zeroes(c.chat_msgs);
+        defer c.ds4_server_input_messages_free(&single);
+        var current: [*c]const u8 = input.ptr;
+        try std.testing.expect(!c.ds4_server_json_responses_input(&current, &single, null, null, false));
+    }
+}
+
+test "silent program pairs preserve sequential versus parallel native call groups" {
+    const first_call = c.tool_call{ .id = @constCast("call_one"), .name = @constCast("ds4_exec"), .arguments = @constCast("{\"code\":\"text(1)\"}") };
+    const second_call = c.tool_call{ .id = @constCast("call_two"), .name = @constCast("ds4_exec"), .arguments = @constCast("{\"code\":\"text(2)\"}") };
+    var calls = [_]c.tool_call{ first_call, second_call };
+    const group = c.tool_calls{ .v = &calls, .len = 2, .cap = 2, .raw_tool_text = null };
+    for ([_]bool{ false, true }) |parallel| {
+        const first = try programPair("call_one", "{\"code\":\"text(1)\"}", if (parallel) &group else null, "completed", "1");
+        defer a.free(first);
+        const second = try programPair("call_two", "{\"code\":\"text(2)\"}", if (parallel) &group else null, "completed", "2");
+        defer a.free(second);
+        const raw = try std.fmt.allocPrintSentinel(a, "[{s},{s}]", .{ first[1 .. first.len - 1], second[1 .. second.len - 1] }, 0);
+        defer a.free(raw);
+        var cursor: [*c]const u8 = raw.ptr;
+        var messages = std.mem.zeroes(c.chat_msgs);
+        defer c.ds4_server_input_messages_free(&messages);
+        try std.testing.expect(c.ds4_server_json_responses_input(&cursor, &messages, null, null, false));
+        try std.testing.expectEqual(@as(c_int, if (parallel) 3 else 4), messages.len);
+        try std.testing.expectEqual(@as(c_int, if (parallel) 2 else 1), messages.v[0].calls.len);
+        try std.testing.expectEqualStrings("1", text(messages.v[1].content));
+        try std.testing.expectEqualStrings("2", text(messages.v[if (parallel) @as(usize, 2) else 3].content));
+    }
+}
+
+test "program pairs preserve mixed client call source order" {
+    const external = "{\"type\":\"function_call\",\"id\":\"fc_client\",\"status\":\"completed\",\"call_id\":\"call_client\",\"name\":\"lookup_record\",\"arguments\":\"{}\"}";
+    const external_result = "{\"type\":\"function_call_output\",\"call_id\":\"call_client\",\"output\":\"client result\"}";
+    for ([_]bool{ false, true }) |client_first| {
+        const program = c.tool_call{ .id = @constCast("call_program"), .name = @constCast("ds4_exec"), .arguments = @constCast("{\"code\":\"text(7)\"}") };
+        const client = c.tool_call{ .id = @constCast("call_client"), .name = @constCast("lookup_record"), .arguments = @constCast("{}") };
+        var calls = [_]c.tool_call{ if (client_first) client else program, if (client_first) program else client };
+        const group = c.tool_calls{ .v = &calls, .len = 2, .cap = 2, .raw_tool_text = null };
+        const pair = try programPair("call_program", "{\"code\":\"text(7)\"}", &group, "completed", "7");
+        defer a.free(pair);
+        const pair_items = pair[1 .. pair.len - 1];
+        const raw = try std.fmt.allocPrintSentinel(a, "[{s},{s},{s}]", .{ if (client_first) external else pair_items, if (client_first) pair_items else external, external_result }, 0);
+        defer a.free(raw);
+        var cursor: [*c]const u8 = raw.ptr;
+        var messages = std.mem.zeroes(c.chat_msgs);
+        defer c.ds4_server_input_messages_free(&messages);
+        try std.testing.expect(c.ds4_server_json_responses_input(&cursor, &messages, null, null, false));
+        try std.testing.expectEqual(@as(c_int, 3), messages.len);
+        try std.testing.expectEqual(@as(c_int, 2), messages.v[0].calls.len);
+        try std.testing.expectEqualStrings(if (client_first) "lookup_record" else "ds4_exec", text(messages.v[0].calls.v[0].name));
+        try std.testing.expectEqualStrings("7", text(messages.v[1].content));
+        try std.testing.expectEqualStrings("client result", text(messages.v[2].content));
+    }
+}
+
+test "program pair stream identities and final output stay aligned" {
+    var capture = Capture{};
+    defer capture.deinit();
+    const sink = c.server_response_sink{ .context = &capture, .emit = Capture.emit, .load_parent = null };
+    var request = std.mem.zeroes(c.request);
+    request.api = c.API_RESPONSES;
+    request.model_syntax = c.SERVER_MODEL_SYNTAX_FLINT;
+    request.response_sink = &sink;
+    request.stream = true;
+    request.model = @constCast("fixture");
+    defer c.free(request.responses_output_prefix);
+    var stream = std.mem.zeroes(c.responses_stream);
+    c.ds4_server_output_init(&request, &stream);
+    stream.active = true;
+    defer c.ds4_server_output_free(&stream);
+    const response_id = stream.response_id;
+    var stop: c.sig_atomic_t = 0;
+    try std.testing.expect(c.ds4_server_output_created(-1, &request, &stream, 1, &stop));
+    const call = c.tool_call{ .id = @constCast("call_program"), .name = @constCast("ds4_exec"), .arguments = @constCast("{\"code\":\"text({answer:7});\"}") };
+    var program = std.mem.zeroes(c.responses_tool_item);
+    var output = std.mem.zeroes(c.responses_tool_item);
+    try std.testing.expect(c.ds4_server_output_program_call(-1, &request, &stream, &call, null, &program, &output, "in_progress", "{}", null, null, &stop));
+    try std.testing.expect(c.ds4_server_output_program_call(-1, &request, &stream, &call, null, &program, &output, "completed", "{}", "{\"answer\":7}", "[]", &stop));
+    try std.testing.expectEqual(@as(c_int, 2), request.responses_output_prefix_count);
+    c.ds4_server_output_round_reset(&request, &stream);
+    try std.testing.expect(c.ds4_server_output_finish(-1, &request, &stream, "Done.", 5, null, null, "stop", 42, 12, 1, &stop));
+    const terminal = try std.json.parseFromSlice(std.json.Value, a, capture.events.items[capture.events.items.len - 1], .{});
+    defer terminal.deinit();
+    const response = terminal.value.object.get("response").?.object;
+    try std.testing.expectEqualStrings(text(&response_id), response.get("id").?.string);
+    const items = response.get("output").?.array.items;
+    try std.testing.expectEqual(@as(usize, 3), items.len);
+    try std.testing.expectEqualStrings(text(&program.fc_id), items[0].object.get("id").?.string);
+    try std.testing.expectEqualStrings(text(&output.fc_id), items[1].object.get("id").?.string);
+    var added: i64 = 0;
+    var done: i64 = 0;
+    for (capture.events.items, 0..) |raw_event, index| {
+        const event = try std.json.parseFromSlice(std.json.Value, a, raw_event, .{});
+        defer event.deinit();
+        const object = event.value.object;
+        try std.testing.expectEqual(@as(i64, @intCast(index)), object.get("sequence_number").?.integer);
+        const kind = object.get("type").?.string;
+        if (std.mem.eql(u8, kind, "response.output_item.added") or std.mem.eql(u8, kind, "response.output_item.done")) {
+            const output_index = object.get("output_index").?.integer;
+            const counter = if (std.mem.eql(u8, kind, "response.output_item.added")) &added else &done;
+            try std.testing.expectEqual(counter.*, output_index);
+            counter.* += 1;
+            try std.testing.expectEqualStrings(items[@intCast(output_index)].object.get("id").?.string, object.get("item").?.object.get("id").?.string);
+        }
+        if (index + 1 < capture.events.items.len) try std.testing.expect(!std.mem.eql(u8, kind, "response.completed"));
+    }
+    try std.testing.expectEqual(@as(i64, 3), added);
+    try std.testing.expectEqual(@as(i64, 3), done);
+}

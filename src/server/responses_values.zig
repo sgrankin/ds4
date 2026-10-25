@@ -108,6 +108,40 @@ fn replaceMultimodal(reader: *Reader, target: *[*c]u8, images: *c.server_image_i
     target.* = replacement;
 }
 
+const ProgramMetadata = struct {
+    arguments: [*c]u8 = null,
+    call_ids: ?std.json.Parsed([]const []const u8) = null,
+    has_bindings: bool = false,
+
+    fn deinit(self: *ProgramMetadata) void {
+        c.free(self.arguments);
+        if (self.call_ids) |group| group.deinit();
+    }
+    fn read(self: *ProgramMetadata, reader: *Reader) Invalid!void {
+        try reader.consume('{');
+        while (reader.more('}')) {
+            const key = try reader.key();
+            defer c.free(key);
+            if (equal(key, "arguments")) {
+                try reader.replace(&self.arguments, false);
+            } else if (equal(key, "call_ids")) {
+                const raw = try reader.raw();
+                defer c.free(raw);
+                if (self.call_ids) |group| group.deinit();
+                self.call_ids = null;
+                self.call_ids = std.json.parseFromSlice([]const []const u8, allocator, bytes(raw), .{ .allocate = .alloc_always }) catch return error.InvalidJson;
+            } else if (equal(key, "bindings")) {
+                self.has_bindings = reader.peek() == '{';
+                // The public item retains the binding snapshot. Native logical
+                // replay needs only the original invocation and compact result.
+                try reader.skip();
+            } else try reader.skip();
+            reader.separator();
+        }
+        try reader.consume('}');
+    }
+};
+
 const Item = struct {
     kind: [*c]u8 = null,
     role: [*c]u8 = null,
@@ -126,6 +160,10 @@ const Item = struct {
     tools_json: [*c]u8 = null,
     status: [*c]u8 = null,
     model: [*c]u8 = null,
+    code: [*c]u8 = null,
+    fingerprint: [*c]u8 = null,
+    program: ProgramMetadata = .{},
+    code_string: bool = false,
     arguments_json: bool = false,
     input_json: bool = false,
     result_json: bool = false,
@@ -133,8 +171,9 @@ const Item = struct {
     output_images: c.server_image_inputs = std.mem.zeroes(c.server_image_inputs),
 
     fn deinit(self: *Item) void {
-        inline for (.{ "kind", "role", "content", "name", "namespace", "call_id", "id", "arguments", "output", "input", "summary", "action", "result", "tools_json", "status", "model" }) |field|
+        inline for (.{ "kind", "role", "content", "name", "namespace", "call_id", "id", "arguments", "output", "input", "summary", "action", "result", "tools_json", "status", "model", "code", "fingerprint" }) |field|
             c.free(@field(self, field));
+        self.program.deinit();
         messages.freeImages(&self.content_images);
         messages.freeImages(&self.output_images);
         if (self.call_ids) |group| group.deinit();
@@ -191,6 +230,13 @@ const Item = struct {
                 try reader.replace(&self.status, false);
             } else if (equal(key, "model")) {
                 try reader.replace(&self.model, false);
+            } else if (equal(key, "code")) {
+                self.code_string = reader.peek() == '"';
+                try reader.replace(&self.code, true);
+            } else if (equal(key, "fingerprint")) {
+                try reader.replace(&self.fingerprint, false);
+            } else if (equal(key, "ds4")) {
+                try self.program.read(reader);
             } else if (equal(key, "tools")) {
                 // Declarations stay separate from the visible result body;
                 // malformed lists must never become ordinary tool output.
@@ -207,7 +253,22 @@ const Item = struct {
         // Provider failures are terminal receipts with model-visible results;
         // ordinary partial/failed items remain unconfirmed history.
         const kind = self.typeName();
-        if (equal(kind, "ds4:decision_call")) {
+        if (equal(kind, "program")) {
+            if (bytes(self.id).len == 0 or bytes(self.call_id).len == 0 or !self.code_string or
+                bytes(self.fingerprint).len == 0 or self.program.arguments == null or
+                !self.program.has_bindings or
+                (bytes(self.status).len != 0 and !equal(self.status, "completed"))) return error.InvalidJson;
+            const group = self.program.call_ids orelse return error.InvalidJson;
+            var contains_call = false;
+            for (group.value) |id| {
+                if (id.len == 0) return error.InvalidJson;
+                if (std.mem.eql(u8, id, bytes(self.call_id))) contains_call = true;
+            }
+            if (!contains_call) return error.InvalidJson;
+        } else if (equal(kind, "program_output")) {
+            if (bytes(self.id).len == 0 or bytes(self.call_id).len == 0 or self.result == null or self.result_json or
+                (!equal(self.status, "completed") and !equal(self.status, "incomplete"))) return error.InvalidJson;
+        } else if (equal(kind, "ds4:decision_call")) {
             if (!equal(self.status, "completed") and !equal(self.status, "failed")) return error.InvalidJson;
             if (bytes(self.id).len == 0 or bytes(self.call_id).len == 0 or bytes(self.model).len == 0 or
                 self.arguments == null or self.arguments_json or self.input == null or
@@ -254,6 +315,7 @@ const Decoder = struct {
     // parallel assistant-call group as the private live transcript.
     pending_results: std.ArrayList(c.chat_msg) = .empty,
     pending_call_ids: std.ArrayList([]u8) = .empty,
+    pending_program: [*c]u8 = null,
 
     fn deinit(self: *Decoder) void {
         self.pending_reasoning.deinit();
@@ -261,6 +323,7 @@ const Decoder = struct {
         self.pending_results.deinit(allocator);
         self.clearCallIds();
         self.pending_call_ids.deinit(allocator);
+        c.free(self.pending_program);
     }
     fn clearCallIds(self: *Decoder) void {
         for (self.pending_call_ids.items) |id| allocator.free(id);
@@ -333,19 +396,40 @@ const Decoder = struct {
         // function-call-shaped history when clients replay their output items.
         self.appendCall(call);
     }
-    fn decisionReceipt(self: *Decoder, item: *const Item) Invalid!void {
-        const group = item.call_ids.?.value;
-        if (self.pending_results.items.len == 0) {
+    fn selectCallGroup(self: *Decoder, group: []const []const u8) Invalid!void {
+        if (self.pending_call_ids.items.len == 0) {
             for (group) |id| self.pending_call_ids.append(allocator, allocator.dupe(u8, id) catch fatal()) catch fatal();
         } else {
             if (group.len != self.pending_call_ids.items.len) return error.InvalidJson;
             for (group, self.pending_call_ids.items) |id, pending| if (!std.mem.eql(u8, id, pending)) return error.InvalidJson;
         }
+    }
+    fn decisionReceipt(self: *Decoder, item: *const Item) Invalid!void {
+        try self.selectCallGroup(item.call_ids.?.value);
         var call = std.mem.zeroes(c.tool_call);
         call.id = duplicate(bytes(item.call_id));
         call.name = duplicate("ds4_decide");
         call.arguments = duplicate(bytes(item.arguments));
         self.appendCall(call);
+        var message = std.mem.zeroes(c.chat_msg);
+        message.role = duplicate("tool");
+        message.content = duplicate(bytes(item.result));
+        messages.addCallId(&message, item.call_id);
+        self.pending_results.append(allocator, message) catch fatal();
+    }
+    fn programCall(self: *Decoder, item: *const Item) Invalid!void {
+        try self.selectCallGroup(item.program.call_ids.?.value);
+        var call = std.mem.zeroes(c.tool_call);
+        call.id = duplicate(bytes(item.call_id));
+        call.name = duplicate("ds4_exec");
+        call.arguments = duplicate(bytes(item.program.arguments));
+        self.appendCall(call);
+        self.pending_program = duplicate(bytes(item.call_id));
+    }
+    fn programOutput(self: *Decoder, item: *const Item) Invalid!void {
+        if (self.pending_program == null or !equal(self.pending_program, bytes(item.call_id))) return error.InvalidJson;
+        c.free(self.pending_program);
+        self.pending_program = null;
         var message = std.mem.zeroes(c.chat_msg);
         message.role = duplicate("tool");
         message.content = duplicate(bytes(item.result));
@@ -403,13 +487,18 @@ const Decoder = struct {
     fn accept(self: *Decoder, item: *Item) Invalid!void {
         try item.validate();
         const kind = item.typeName();
+        const program_call = equal(kind, "program");
+        const program_output = equal(kind, "program_output");
+        // Native programs complete before yielding. A missing output or nested
+        // client suspension cannot be silently rehydrated as completed work.
+        if (self.pending_program != null and !program_output) return error.InvalidJson;
         const decision_call = equal(kind, "ds4:decision_call");
         const hosted_call = equal(kind, "local_shell_call") or equal(kind, "web_search_call") or equal(kind, "tool_search_call") or equal(kind, "image_generation_call");
         const ordinary_call = equal(kind, "function_call") or equal(kind, "custom_tool_call");
-        if ((!decision_call and !hosted_call and !ordinary_call) or
+        if ((!decision_call and !hosted_call and !ordinary_call and !program_call and !program_output) or
             (self.pending_results.items.len != 0 and !self.sameCallGroup(item.callId()))) self.flushResults();
         const bookkeeping = equal(kind, "compaction") or equal(kind, "context_compaction");
-        const consumes_reasoning = (equal(kind, "message") and equal(item.role, "assistant")) or ordinary_call or hosted_call or decision_call;
+        const consumes_reasoning = (equal(kind, "message") and equal(item.role, "assistant")) or ordinary_call or hosted_call or decision_call or program_call or program_output;
         // User/tool/other items flush in-position. Bookkeeping is transparent.
         // This also preserves the old boundary between consecutive reasoning
         // items rather than coalescing them into a different history shape.
@@ -427,6 +516,10 @@ const Decoder = struct {
             self.ordinaryCall(item);
         } else if (decision_call) {
             try self.decisionReceipt(item);
+        } else if (program_call) {
+            try self.programCall(item);
+        } else if (program_output) {
+            try self.programOutput(item);
         } else if (equal(kind, "function_call_output") or equal(kind, "custom_tool_call_output")) {
             self.toolOutput(item);
         } else if (equal(kind, "reasoning")) {
@@ -454,6 +547,7 @@ const Decoder = struct {
             reader.separator();
         }
         try reader.consume(']');
+        if (self.pending_program != null) return error.InvalidJson;
         self.flushResults();
         // Reasoning-only tails still need an assistant <think> block.
         self.flushReasoning();
