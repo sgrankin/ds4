@@ -91,6 +91,15 @@ that planner. These proposals do not become claims of implemented support.
 
 ## Cooperative helper scheduling — measured opt-in, 2026-10-25
 
+Follow-up speed comparison: a fresh solo, same-weight full-Clef/MLX screen on
+the exact2881-token scheduling input gives3608/3147ms (+14.7% native), with
+short157–266-token cases within6% either way. All seven decisions agree;
+normal pressure/no swap growth. Most time is dense backbone compute; the chart
+also includes contention. Local Flash is about3–8% behind MLX on short records;
+Omni about8–12% ahead. Hosted Cloudflare is substantially faster on different
+hardware/workloads. [Comparison/method/limits](../speed-bench/experiments/clef-native-20261024/SPEED.md).
+Long dense matmul profiling and reusable decision features remain proposals.
+
 Source inspection found a practical remaining mixed-workload limit: Clef encodes
 its entire text backbone into one GPU command, so a long full-model request can
 hold the device for seconds. A bounded experiment adds `DS4_CLEF_LAYER_QUANTUM`
