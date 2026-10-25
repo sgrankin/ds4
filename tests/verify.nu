@@ -18,6 +18,7 @@ const HOST = [
     [session-state-test, [test-session-state]]
     [steering-bank-test, [test-steering-banks]]
     [decisions-test, [test-decisions]]
+    [hosted-decisions-test, [test-hosted-decisions]]
     [clef-unit-test, [test-clef-unit]]
     [media-source-test, [test-media-source]]
     [runtime-lease-test, [test-runtime-lease]]

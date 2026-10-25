@@ -390,6 +390,8 @@ static void tool_schema_order_free(tool_schema_order *o) {
     free(o->name);
     free(o->wire_name);
     free(o->namespace);
+    free(o->responses_decision_model);
+    free(o->responses_decision_input);
     for (int i = 0; i < o->len; i++) {
         free(o->prop[i]);
         free(o->prop_schema[i]);
@@ -459,6 +461,7 @@ static void request_free(request *r) {
     free(r->prompt_cache_key);
     free(r->previous_response_id);
     free(r->responses_replay);
+    free(r->responses_output_prefix);
     free(r->conversation_id);
     free(r->conversation_input);
     stop_list_clear(&r->responses_live_call_ids);

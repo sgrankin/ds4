@@ -492,6 +492,23 @@ pub fn build(b: *std.Build) void {
     const image_library = b.addLibrary(.{ .name = "ds4-image", .linkage = .dynamic, .root_module = image_library_module });
     b.step("image-library", "Build a libc-only library from the selected production image objects").dependOn(&b.addInstallArtifact(image_library, .{}).step);
     const core = b.addLibrary(.{ .name = "ds4-metal-c", .root_module = core_module });
+    const hosted_test_api = generatedApi(b, target, sdk, .debug, "src/server/output_api.h");
+    const decision_registry_test_stub = nativeObject(b, target, sdk, .debug, "tests/decision_registry_test_stub.zig", "hosted_test_c", hosted_test_api);
+    {
+        const hosted_module = module(b, target, sdk, .debug);
+        hosted_module.root_source_file = b.path("src/hosted_decisions_test.zig");
+        hosted_module.addImport("hosted_test_c", hosted_test_api);
+        hosted_module.addObjectFile(decision_registry_test_stub);
+        hosted_module.addObjectFile(nativeObject(b, target, sdk, .debug, "tests/hosted_tools_support_stub.zig", "hosted_test_c", hosted_test_api));
+        hosted_module.linkLibrary(core);
+        hosted_module.linkFramework("Foundation", .{});
+        hosted_module.linkFramework("Metal", .{});
+        hosted_module.linkFramework("Accelerate", .{});
+        hosted_module.linkSystemLibrary("icucore", .{});
+        const hosted_test = b.addTest(.{ .name = "test-hosted-decisions", .root_module = hosted_module });
+        b.step("hosted-decisions-test", "Build model-free hosted decision binding and replay checks")
+            .dependOn(&b.addInstallArtifact(hosted_test, .{}).step);
+    }
     {
         const boundary_module = module(b, target, sdk, optimize);
         boundary_module.root_source_file = b.path("src/serving/boundary_test.zig");
@@ -921,6 +938,7 @@ pub fn build(b: *std.Build) void {
     // This C fixture includes ds4_server.c; do not link a second server object.
     const server_test_frontend = object(b, target, sdk, clang, "tests/ds4_test.c", "ds4_test-main", optimize, server_test_base);
     const server_test = executable(b, target, sdk, core, cache, kvstore, "ds4_test", server_test_frontend, optimize);
+    server_test.root_module.addObjectFile(decision_registry_test_stub);
     b.step("server-test", "Build the existing C server fixture against selected host modules").dependOn(&b.addInstallArtifact(server_test, .{}).step);
     const family_payload_frontend = object(b, target, sdk, clang, "speed-bench/experiments/model-family-ports-20261023/payload_exchange.c", "model-payload-exchange-main", optimize, strict_flags);
     const family_payload_test = executable(b, target, sdk, core, null, null, "model-payload-exchange", family_payload_frontend, optimize);

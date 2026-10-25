@@ -4,6 +4,64 @@ Last updated: 2026-10-25. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
+## Responses hosted decision tools — completed, 2026-10-25
+
+User requested server-side tools with an invocation of loaded decision models.
+The first slice is Responses HTTP/SSE/WS only: explicit
+`tools:[{type:"ds4:decision",model:"clef-flash",input?:...}]` binds a loaded
+helper to model-facing `ds4_decide(questions,input?)`. Default evidence is the
+latest resolved user message, including its images; client-bound input avoids
+making the generator copy a long context. Invokes the existing native registry,
+without loopback HTTP or a new model runtime. Ordinary function tools remain
+client-owned, even if named ds4_decide. Unavailable bindings fail before work.
+
+Provider receipt `ds4:decision_call` retains stable id/status/call_id/model,
+original arguments, resolved input and native result. Ordered `call_ids` retain
+the original assistant batch so silent sequential rounds do not merge during
+replay. Intermediate rounds append logical call/result history and continue
+within cumulative output and hosted-call budgets. Mixed client calls yield for
+their results after executing hosted calls. Receipt replay does not execute it
+again; previous_response_id, conversation references, restart and full-output
+replay retain the results.
+Required/forced tool choices remain explicitly unsupported in this first slice.
+
+Implementation began 12:57 UTC with a one-hour initial cap. Native adapter,
+generation/output/replay integration and DeepSeek/image qualification completed
+13:45 UTC. A final SDK dump/replay correction completed 13:51 UTC, still within
+the initial hour.
+Source owners worked in parallel on independent files; root retained all guarded
+model scheduling. No JS runtime, MCP client, compaction or background-agent
+framework was added. Main remains unchanged; the local jj change is
+`txuyttmkpsxy` on parent `44f89b15` / clef-serving.
+
+All 19 focused Zig tests and existing compiled host/server/agent checks pass;
+the sandbox-blocked web listener and remaining script checks passed separately
+with network access. Flint passes 49 final primary transport/replay checks, 29 edge
+checks and three real-restart checks. DeepSeek V4.1 Flash 1017 passes 47 primary
+checks, 14 real parallel-batch checks in both orders and five latest-user image
+checks. These include official SDK HTTP/WS, conversation publication, evidence
+binding, both budgets and disconnect recovery. Helper results match direct
+native Decisions JSON exactly, including probabilities. Image continuation
+uses the existing multimodal synchronizer, retaining original vision spans.
+The real SDK adds null optional message fields when dumping an unknown receipt;
+nullable role decoding and a focused regression now allow unmodified SDK output
+replay, verified through the actual SDK and server.
+
+Flint currently yields at the first closed XML invocation, so client-first
+mixed work resumes in another Response. Hosted-first work can complete its
+helper and yield a client call in one Response. DeepSeek produces real grouped
+calls. One Flint prompt emitted duplicated JSON/closing tags equally in ordinary
+client-managed and hosted paths; a simpler primary instruction was clean, while
+the longer client-first edge retained this format defect. DeepSeek returned the
+correct plain department on three replay follow-ups despite requesting JSON.
+These quality observations are separate from helper parity and protocol checks.
+No output sanitizer or grammar work was added.
+
+All owned test servers stopped cleanly; all guard runs had normal pressure and
+zero swap growth. `make ZIG_FLAGS=-j3` installs all five root executables.
+[Contract and usage](../docs/HOSTED-TOOLS.md),
+[settings, results and limitations](../speed-bench/experiments/hosted-decisions-20261025/RESULTS.md).
+
 ## Clef performance pass — completed, 2026-10-25
 
 User authorized a performance pass after the matched local-speed report. Begin

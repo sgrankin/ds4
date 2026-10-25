@@ -131,12 +131,39 @@ pub fn init(request: *const Request, stream: *Stream) void {
     randomId(&stream.message_id, "msg_");
     stream.reasoning_index = -1;
     stream.message_index = -1;
+    stream.next_output_index = request.responses_output_prefix_count;
 }
 pub fn deinit(stream: *Stream) void {
     c.free(stream.reasoning_text.ptr);
     c.free(stream.message_text.ptr);
     stream.reasoning_text = std.mem.zeroes(c.buf);
     stream.message_text = std.mem.zeroes(c.buf);
+}
+pub fn resetRound(request: *const Request, stream: *Stream) void {
+    const response_id = stream.response_id;
+    const sequence = stream.sequence;
+    const next = stream.next_output_index;
+    const active = stream.active;
+    deinit(stream);
+    init(request, stream);
+    if (response_id[0] != 0) stream.response_id = response_id;
+    stream.sequence = sequence;
+    stream.next_output_index = @max(next, request.responses_output_prefix_count);
+    stream.active = active;
+}
+
+fn rememberItem(request: *Request, item: []const u8) void {
+    const length = text(request.responses_output_prefix).len;
+    var prefix = c.buf{ .ptr = request.responses_output_prefix, .len = length, .cap = if (request.responses_output_prefix == null) 0 else length + 1 };
+    if (length != 0) appendBuffer(&prefix, ",");
+    appendBuffer(&prefix, item);
+    request.responses_output_prefix = prefix.ptr;
+    request.responses_output_prefix_count += 1;
+}
+fn outputPrefix(out: *Text, request: *const Request) bool {
+    const prefix = text(request.responses_output_prefix);
+    out.append(prefix);
+    return prefix.len != 0;
 }
 fn status(finish: []const u8) []const u8 {
     if (std.mem.eql(u8, finish, "length")) return "incomplete";
@@ -182,11 +209,48 @@ fn schema(orders: ?*const c.tool_schema_orders, name: [*c]const u8) ?*const c.to
 fn toolSearch(call: *const c.tool_call, order: ?*const c.tool_schema_order) bool {
     return call.name != null and std.mem.eql(u8, text(call.name), "tool_search") and (order == null or order.?.responses_tool_search);
 }
+fn decisionItem(out: *Text, call: *const c.tool_call, group: ?*const c.tool_calls, item: *const Item, item_status: []const u8, model: []const u8, input_json: []const u8, result_json: []const u8) void {
+    out.append("{\"id\":");
+    out.quoted(text(&item.fc_id));
+    out.append(",\"type\":\"ds4:decision_call\",\"status\":");
+    out.quoted(item_status);
+    out.append(",\"call_id\":");
+    out.quoted(text(&item.call_id));
+    // Public receipts must distinguish sequential rounds even when neither
+    // round emits text. Every receipt names its complete assistant call batch.
+    out.append(",\"call_ids\":[");
+    if (group) |_| {
+        for (callSlice(group), 0..) |member, index| {
+            if (index != 0) out.byte(',');
+            out.quoted(text(member.id));
+        }
+    } else out.quoted(text(&item.call_id));
+    out.byte(']');
+    out.append(",\"model\":");
+    out.quoted(model);
+    out.append(",\"arguments\":");
+    out.quoted(text(call.arguments));
+    out.append(",\"input\":");
+    out.append(if (input_json.len == 0) "null" else input_json);
+    out.append(",\"result\":");
+    out.append(if (result_json.len == 0) "null" else result_json);
+    out.byte('}');
+}
+pub fn appendDecisionReceipt(buffer: *c.buf, call: *const c.tool_call, group: ?*const c.tool_calls, item: *const Item, item_status: []const u8, model: []const u8, input_json: []const u8, result_json: []const u8) void {
+    var out = Text{};
+    defer out.deinit();
+    decisionItem(&out, call, group, item, item_status, model, input_json, result_json);
+    appendBuffer(buffer, out.list.items);
+}
 fn canonicalArguments(arguments: [*c]const u8) [*c]u8 {
     return c.ds4_server_output_object_json(arguments);
 }
 fn appendItem(out: *Text, call: *const c.tool_call, item: *const Item, item_status: []const u8, with_args: bool, orders: ?*const c.tool_schema_orders) void {
     const order = schema(orders, call.name);
+    if (order != null and order.?.responses_decision_model != null) {
+        decisionItem(out, call, null, item, item_status, text(order.?.responses_decision_model), "", "");
+        return;
+    }
     out.append("{\"id\":");
     out.quoted(text(&item.fc_id));
     if (toolSearch(call, order)) {
@@ -232,21 +296,24 @@ pub fn appendFunctionCall(out: *c.buf, call: *const c.tool_call, item: *const It
     appendItem(&json, call, item, item_status, with_args, orders);
     appendBuffer(out, json.list.items);
 }
+fn initializeItem(call: *const c.tool_call, item: *Item, index: c_int, prefix: []const u8) void {
+    item.* = std.mem.zeroes(Item);
+    randomId(&item.fc_id, prefix);
+    const id = text(call.id);
+    if (id.len != 0) {
+        const length = @min(id.len, item.call_id.len - 1);
+        @memcpy(item.call_id[0..length], id[0..length]);
+    } else randomId(&item.call_id, "call_");
+    item.output_index = index;
+}
 fn buildItems(calls: ?*const c.tool_calls, starting_index: c_int) []Item {
     const values = callSlice(calls);
     const items = allocator.alloc(Item, values.len) catch fatal();
     for (values, items, 0..) |call, *item, index| {
-        item.* = std.mem.zeroes(Item);
-        randomId(&item.fc_id, "fc_");
-        const id = text(call.id);
-        if (id.len != 0) {
-            const length = @min(id.len, item.call_id.len - 1);
-            @memcpy(item.call_id[0..length], id[0..length]);
-        } else randomId(&item.call_id, "call_");
+        initializeItem(&call, item, starting_index + @as(c_int, @intCast(index)), "fc_");
         // The internal call has no custom/function discriminator. Preserve the
         // original default while retaining client IDs and stable fc_ identity.
         item.is_custom = false;
-        item.output_index = starting_index + @as(c_int, @intCast(index));
     }
     return items;
 }
@@ -396,7 +463,9 @@ fn responsePrefix(out: *Text, request: *const Request, id: []const u8, created_a
     reasoningField(out, request, &options);
     out.append(",\"max_output_tokens\":");
     if (request.max_tokens >= 0) out.number(request.max_tokens) else out.append("null");
-    out.append(",\"max_tool_calls\":null,\"background\":false,\"service_tier\":\"default\"");
+    out.append(",\"max_tool_calls\":");
+    if (request.responses_hosted_tools) out.number(request.max_tool_calls) else out.append("null");
+    out.append(",\"background\":false,\"service_tier\":\"default\"");
     options.append(out, "metadata", "{}");
     options.append(out, "safety_identifier", "null");
     out.append(",\"prompt_cache_key\":");
@@ -546,7 +615,7 @@ pub const Output = struct {
         // The model emits a complete invoke before the worker identifies the
         // tool. Send its arguments as one delta + done between item added/done.
         const order = schema(orders, call.name);
-        if (item.is_custom or toolSearch(call, order)) return true;
+        if (item.is_custom or toolSearch(call, order) or (order != null and order.?.responses_decision_model != null)) return true;
         const arguments = canonicalArguments(call.arguments);
         defer c.free(arguments);
         var out = event("response.function_call_arguments.delta");
@@ -577,8 +646,9 @@ pub const Output = struct {
         defer body.deinit();
         responsePrefix(&body, request, text(&stream.response_id), created_at, status(finish), finish);
         body.append(",\"output\":[");
-        var wrote = false;
+        var wrote = outputPrefix(&body, request);
         if (stream.reasoning_emitted_any) {
+            if (wrote) body.byte(',');
             reasonItem(&body, text(&stream.reasoning_id), if (stream.reasoning_closed_naturally) "completed" else "incomplete", bufferText(&stream.reasoning_text));
             wrote = true;
         }
@@ -699,7 +769,7 @@ pub const Output = struct {
         }
         return true;
     }
-    pub fn finishLive(self: Output, request: *Request, stream: *Stream, raw: ?[]const u8, recovered: bool, calls: ?*const c.tool_calls, finish: []const u8, input: c_int, output: c_int, created_at: c_long) bool {
+    fn closeVisible(self: Output, request: *const Request, stream: *Stream, raw: ?[]const u8, recovered: bool, finish: []const u8) bool {
         if (raw) |value| if (!self.update(request, stream, value, true)) return false;
         // Close summary parts before later message/tool items and completion.
         if (stream.reasoning_item_opened and !stream.reasoning_item_closed) {
@@ -729,6 +799,75 @@ pub const Output = struct {
             if (!self.done(stream, false, finish)) return false;
             stream.message_item_closed = true;
         }
+        return true;
+    }
+    pub fn closeRound(self: Output, request: *Request, stream: *Stream, raw: ?[]const u8, content: []const u8, reasoning: []const u8, recovered: bool, finish: []const u8) bool {
+        if (stream.response_id[0] == 0) init(request, stream);
+        if (stream.active and !self.closeVisible(request, stream, raw, recovered, finish)) return false;
+        var item = Text{};
+        defer item.deinit();
+        if (stream.active) {
+            if (stream.reasoning_emitted_any) {
+                reasonItem(&item, text(&stream.reasoning_id), if (stream.reasoning_closed_naturally) "completed" else "incomplete", bufferText(&stream.reasoning_text));
+                rememberItem(request, item.list.items);
+                item.list.clearRetainingCapacity();
+            }
+            if (stream.message_emitted_any) {
+                messageItem(&item, text(&stream.message_id), itemStatus(finish), bufferText(&stream.message_text));
+                rememberItem(request, item.list.items);
+            }
+        } else {
+            if (reasoning.len != 0 and request.reasoning_summary_emit) {
+                reasonItem(&item, text(&stream.reasoning_id), itemStatus(finish), reasoning);
+                rememberItem(request, item.list.items);
+                stream.next_output_index += 1;
+                item.list.clearRetainingCapacity();
+            }
+            if (content.len != 0) {
+                messageItem(&item, text(&stream.message_id), itemStatus(finish), content);
+                rememberItem(request, item.list.items);
+                stream.next_output_index += 1;
+            }
+        }
+        resetRound(request, stream);
+        return true;
+    }
+    pub fn hostedCall(self: Output, request: *Request, stream: *Stream, call: *const c.tool_call, group: ?*const c.tool_calls, item: *Item, item_status: []const u8, model: []const u8, input_json: []const u8, result_json: []const u8) bool {
+        const starting = std.mem.eql(u8, item_status, "in_progress");
+        if (starting) {
+            if (stream.response_id[0] == 0) init(request, stream);
+            initializeItem(call, item, stream.next_output_index, "dc_");
+            stream.next_output_index += 1;
+        }
+        var receipt = Text{};
+        defer receipt.deinit();
+        decisionItem(&receipt, call, group, item, item_status, model, input_json, result_json);
+        if (!starting) rememberItem(request, receipt.list.items);
+        if (!stream.active) return true;
+        var out = event(if (starting) "response.output_item.added" else "response.output_item.done");
+        defer out.deinit();
+        out.append(",\"output_index\":");
+        out.number(item.output_index);
+        out.append(",\"item\":");
+        out.append(receipt.list.items);
+        out.byte('}');
+        return self.emit(stream, &out);
+    }
+    pub fn externalCall(self: Output, request: *Request, stream: *Stream, call: *const c.tool_call, item: *Item, finish: []const u8) bool {
+        if (stream.response_id[0] == 0) init(request, stream);
+        initializeItem(call, item, stream.next_output_index, "fc_");
+        stream.next_output_index += 1;
+        if (stream.active and (!self.toolEvent(stream, call, item, &request.tool_orders, finish, false) or
+            !self.argumentsDone(stream, call, item, &request.tool_orders) or
+            !self.toolEvent(stream, call, item, &request.tool_orders, finish, true))) return false;
+        var out = Text{};
+        defer out.deinit();
+        appendItem(&out, call, item, itemStatus(finish), true, &request.tool_orders);
+        rememberItem(request, out.list.items);
+        return true;
+    }
+    pub fn finishLive(self: Output, request: *Request, stream: *Stream, raw: ?[]const u8, recovered: bool, calls: ?*const c.tool_calls, finish: []const u8, input: c_int, output: c_int, created_at: c_long) bool {
+        if (!self.closeVisible(request, stream, raw, recovered, finish)) return false;
         const items = buildItems(calls, stream.next_output_index);
         defer allocator.free(items);
         if (items.len != 0) stream.next_output_index += @intCast(items.len);
@@ -746,16 +885,17 @@ pub const Output = struct {
         randomId(&response_id, "resp_");
         randomId(&reasoning_id, "rs_");
         randomId(&message_id, "msg_");
-        const items = buildItems(calls, 0);
+        const items = buildItems(calls, request.responses_output_prefix_count);
         defer allocator.free(items);
         var body: Text = .{};
         defer body.deinit();
         responsePrefix(&body, request, text(&response_id), c.time(null), status(finish), finish);
         body.append(",\"output\":[");
-        var wrote = false;
+        var wrote = outputPrefix(&body, request);
         // Worker post-processing supplies parsed reasoning; retain response
         // finish-status rules here, distinct from live natural-close tracking.
         if (reasoning.len != 0 and request.reasoning_summary_emit) {
+            if (wrote) body.byte(',');
             reasonItem(&body, text(&reasoning_id), itemStatus(finish), reasoning);
             wrote = true;
         }

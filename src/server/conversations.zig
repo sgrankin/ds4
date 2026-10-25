@@ -350,12 +350,13 @@ fn normalize(raw: [*c]const u8) Invalid![*c]u8 {
         const role = stringField(item.*, "role");
         defer c.free(role);
         const message = equal(kind, "message");
-        const supported = message or equal(kind, "function_call") or equal(kind, "function_call_output") or equal(kind, "reasoning");
+        const decision = equal(kind, "ds4:decision_call");
+        const supported = message or equal(kind, "function_call") or equal(kind, "function_call_output") or equal(kind, "reasoning") or decision;
         if (!supported or (role != null and !equal(role, "user") and !equal(role, "assistant") and !equal(role, "system") and !equal(role, "developer"))) return error.InvalidItems;
         if (id != null and !identifier(text(id), 128)) return error.InvalidItems;
         if (id == null) {
             var generated: [48]u8 = undefined;
-            const prefix: [*c]const u8 = if (message) "msg_" else if (equal(kind, "function_call")) "fc_" else if (equal(kind, "function_call_output")) "fco_" else "rs_";
+            const prefix: [*c]const u8 = if (message) "msg_" else if (equal(kind, "function_call")) "fc_" else if (equal(kind, "function_call_output")) "fco_" else if (decision) "dc_" else "rs_";
             c.ds4_server_output_random_id(&generated, generated.len, prefix);
             id = duplicate(text(&generated));
         }
@@ -419,7 +420,7 @@ pub fn inputItems(raw: [*c]const u8, normalized: *[*c]u8, errors: []u8) bool {
     normalized.* = null;
     if (raw == null) return false;
     normalized.* = normalize(raw) catch {
-        _ = fail(errors, 400, "conversation items require supported text/function items");
+        _ = fail(errors, 400, "conversation items require supported messages, calls or completed hosted receipts");
         return false;
     };
     return true;

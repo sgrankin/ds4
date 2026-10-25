@@ -82,6 +82,23 @@ bool ds4_server_output_final(int fd, bool cors, request *req,
     const char *finish, int input_tokens, int output_tokens,
     const volatile sig_atomic_t *stop);
 
+/* Hosted rounds remain inside one Response. Closed round items are appended
+ * to req->responses_output_prefix; reset retains response identity/sequence. */
+void ds4_server_output_round_reset(const request *req, responses_stream *stream);
+bool ds4_server_output_round_close(int fd, request *req, responses_stream *stream,
+    const char *raw, size_t length, const char *content, const char *reasoning,
+    bool recovered, const char *finish, const volatile sig_atomic_t *stop);
+bool ds4_server_output_hosted_call(int fd, request *req, responses_stream *stream,
+    const tool_call *call, const tool_calls *group, responses_tool_item *item, const char *status,
+    const char *model, const char *input_json, const char *result_json,
+    const volatile sig_atomic_t *stop);
+bool ds4_server_output_external_call(int fd, request *req, responses_stream *stream,
+    const tool_call *call, responses_tool_item *item, const char *finish,
+    const volatile sig_atomic_t *stop);
+void ds4_server_output_append_decision_item(buf *out, const tool_call *call,
+    const tool_calls *group, const responses_tool_item *item, const char *status, const char *model,
+    const char *input_json, const char *result_json);
+
 /* Native compatibility entries, not callbacks. Canonical arguments use the
  * existing tolerant object codec; the returned string is libc-owned. Durable
  * publication retains Conversations version checks, store files and locking.

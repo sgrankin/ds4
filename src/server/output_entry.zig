@@ -50,3 +50,18 @@ export fn ds4_server_output_finish(fd: c_int, request: *c.request, stream: *c.re
 export fn ds4_server_output_final(fd: c_int, cors: bool, request: *c.request, content: [*c]const u8, reasoning: [*c]const u8, calls: ?*const c.tool_calls, finish: [*c]const u8, input: c_int, completion: c_int, stop: Stop) bool {
     return output(fd, stop).respond(cors, request, text(content), text(reasoning), calls, text(finish), input, completion);
 }
+export fn ds4_server_output_round_reset(request: *const c.request, stream: *c.responses_stream) void {
+    owner.resetRound(request, stream);
+}
+export fn ds4_server_output_round_close(fd: c_int, request: *c.request, stream: *c.responses_stream, raw: [*c]const u8, length: usize, content: [*c]const u8, reasoning: [*c]const u8, recovered: bool, finish: [*c]const u8, stop: Stop) bool {
+    return output(fd, stop).closeRound(request, stream, if (raw == null) null else raw[0..length], text(content), text(reasoning), recovered, text(finish));
+}
+export fn ds4_server_output_hosted_call(fd: c_int, request: *c.request, stream: *c.responses_stream, call: *const c.tool_call, group: ?*const c.tool_calls, item: *c.responses_tool_item, status: [*c]const u8, model: [*c]const u8, input_json: [*c]const u8, result_json: [*c]const u8, stop: Stop) bool {
+    return output(fd, stop).hostedCall(request, stream, call, group, item, text(status), text(model), text(input_json), text(result_json));
+}
+export fn ds4_server_output_external_call(fd: c_int, request: *c.request, stream: *c.responses_stream, call: *const c.tool_call, item: *c.responses_tool_item, finish: [*c]const u8, stop: Stop) bool {
+    return output(fd, stop).externalCall(request, stream, call, item, text(finish));
+}
+export fn ds4_server_output_append_decision_item(buffer: *c.buf, call: *const c.tool_call, group: ?*const c.tool_calls, item: *const c.responses_tool_item, status: [*c]const u8, model: [*c]const u8, input_json: [*c]const u8, result_json: [*c]const u8) void {
+    owner.appendDecisionReceipt(buffer, call, group, item, text(status), text(model), text(input_json), text(result_json));
+}

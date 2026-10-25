@@ -6,6 +6,7 @@
 const std = @import("std");
 const c = @import("server_input_c");
 const MessageValues = @import("message_values.zig");
+const ToolValues = @import("input_values.zig");
 const allocator = std.heap.c_allocator;
 const Record = c.ds4_server_input;
 const Request = c.request;
@@ -116,6 +117,8 @@ fn freeOrders(orders: *c.tool_schema_orders) void {
         c.free(order.name);
         c.free(order.wire_name);
         c.free(order.namespace);
+        c.free(order.responses_decision_model);
+        c.free(order.responses_decision_input);
         for (ownedItems([*c]u8, order.prop, @intCast(order.len))) |property| c.free(property);
         for (ownedItems([*c]u8, order.prop_schema, @intCast(order.len))) |schema| c.free(schema);
         c.free(@ptrCast(order.prop));
@@ -136,7 +139,7 @@ pub fn freeRequest(request: *Request) void {
     for (ownedItems(c.ds4_vision_span, request.images, request.image_count)) |*image| c.ds4_vision_embedding_free(&image.embedding);
     c.free(request.images);
     c.free(request.image_markers);
-    inline for (.{ "model", "raw_body", "prompt_text", "prompt_cache_key", "previous_response_id", "responses_replay", "conversation_id", "conversation_input", "responses_live_suffix_text", "anthropic_live_suffix_text" }) |field|
+    inline for (.{ "model", "raw_body", "prompt_text", "prompt_cache_key", "previous_response_id", "responses_replay", "responses_output_prefix", "conversation_id", "conversation_input", "responses_live_suffix_text", "anthropic_live_suffix_text" }) |field|
         c.free(@field(request, field));
     freeStrings(&request.stops);
     freeStrings(&request.responses_live_call_ids);
@@ -344,6 +347,7 @@ pub const Input = struct {
         request.model_syntax = defaults.syntax;
         request.model = duplicate("deepseek-v4.1-flash");
         request.max_tokens = defaults.max_tokens;
+        request.max_tool_calls = 4;
         request.temperature = c.DS4_DEFAULT_TEMPERATURE;
         request.top_p = c.DS4_DEFAULT_TOP_P;
         request.min_p = c.DS4_DEFAULT_MIN_P;
@@ -430,13 +434,19 @@ pub const Input = struct {
             c.free(input.tool_schemas);
             input.tool_schemas = null;
             const start = reader.cursor;
-            try require(c.ds4_server_json_tools(&reader.cursor, &input.tool_schemas, &request.tool_orders));
+            try require(if (responses) ToolValues.parseRequestTools(&reader.cursor, &input.tool_schemas, &request.tool_orders) else c.ds4_server_json_tools(&reader.cursor, &input.tool_schemas, &request.tool_orders));
             if (responses) {
                 c.free(input.explicit_tools);
                 input.explicit_tools = duplicate(start[0 .. @intFromPtr(reader.cursor) - @intFromPtr(start)]);
             }
         } else if (!completion and std.mem.eql(u8, key, "tool_choice")) {
             try toolChoice(reader, endpoint, input, error_text);
+        } else if (responses and std.mem.eql(u8, key, "max_tool_calls")) {
+            try reader.readInt(&request.max_tool_calls);
+            if (request.max_tool_calls <= 0) {
+                message(error_text, "max_tool_calls must be positive");
+                return error.Policy;
+            }
         } else if (std.mem.eql(u8, key, "model")) {
             try reader.replaceString(&request.model);
             request.model_from_request = true;

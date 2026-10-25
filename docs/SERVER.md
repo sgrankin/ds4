@@ -48,6 +48,10 @@ returned separately from visible text in each API's native form. Standard
 sampling and output-budget fields are supported; explicit request parameters
 take precedence over defaults.
 
+Responses can also execute the [hosted decision tool](HOSTED-TOOLS.md) against
+an already loaded Clef helper, then continue the main generator in one Response.
+Ordinary function tools remain client-executed.
+
 The default sampling settings are temperature 1, top-p 1, and min-p 0.05.
 For DeepSeek, thinking is on by default. `reasoning_effort=max` selects Think
 Max only with sufficient context; otherwise it falls back to normal thinking.

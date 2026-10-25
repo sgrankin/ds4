@@ -115,6 +115,7 @@ const Item = struct {
     name: [*c]u8 = null,
     namespace: [*c]u8 = null,
     call_id: [*c]u8 = null,
+    call_ids: ?std.json.Parsed([]const []const u8) = null,
     id: [*c]u8 = null,
     arguments: [*c]u8 = null,
     output: [*c]u8 = null,
@@ -124,14 +125,19 @@ const Item = struct {
     result: [*c]u8 = null,
     tools_json: [*c]u8 = null,
     status: [*c]u8 = null,
+    model: [*c]u8 = null,
+    arguments_json: bool = false,
+    input_json: bool = false,
+    result_json: bool = false,
     content_images: c.server_image_inputs = std.mem.zeroes(c.server_image_inputs),
     output_images: c.server_image_inputs = std.mem.zeroes(c.server_image_inputs),
 
     fn deinit(self: *Item) void {
-        inline for (.{ "kind", "role", "content", "name", "namespace", "call_id", "id", "arguments", "output", "input", "summary", "action", "result", "tools_json", "status" }) |field|
+        inline for (.{ "kind", "role", "content", "name", "namespace", "call_id", "id", "arguments", "output", "input", "summary", "action", "result", "tools_json", "status", "model" }) |field|
             c.free(@field(self, field));
         messages.freeImages(&self.content_images);
         messages.freeImages(&self.output_images);
+        if (self.call_ids) |group| group.deinit();
     }
     fn read(self: *Item, reader: *Reader) Invalid!void {
         try reader.consume('{');
@@ -141,7 +147,12 @@ const Item = struct {
             if (equal(key, "type")) {
                 try reader.replace(&self.kind, false);
             } else if (equal(key, "role")) {
-                try reader.replace(&self.role, false);
+                // The SDK may type an unknown provider receipt as a message
+                // and include its absent optional role as null when dumping.
+                if (reader.literal("null")) {
+                    c.free(self.role);
+                    self.role = null;
+                } else try reader.replace(&self.role, false);
             } else if (equal(key, "content")) {
                 try replaceMultimodal(reader, &self.content, &self.content_images);
             } else if (equal(key, "name")) {
@@ -150,25 +161,36 @@ const Item = struct {
                 try reader.replace(&self.namespace, false);
             } else if (equal(key, "call_id")) {
                 try reader.replace(&self.call_id, false);
+            } else if (equal(key, "call_ids")) {
+                const raw = try reader.raw();
+                defer c.free(raw);
+                if (self.call_ids) |group| group.deinit();
+                self.call_ids = null;
+                self.call_ids = std.json.parseFromSlice([]const []const u8, allocator, bytes(raw), .{ .allocate = .alloc_always }) catch return error.InvalidJson;
             } else if (equal(key, "id")) {
                 try reader.replace(&self.id, false);
             } else if (equal(key, "arguments")) {
-                try reader.replace(&self.arguments, reader.peek() != '"');
+                self.arguments_json = reader.peek() != '"';
+                try reader.replace(&self.arguments, self.arguments_json);
             } else if (equal(key, "output")) {
                 messages.freeImages(&self.output_images);
                 if (reader.peek() == '[') {
                     try replaceMultimodal(reader, &self.output, &self.output_images);
                 } else try reader.replace(&self.output, reader.peek() != '"');
             } else if (equal(key, "input")) {
-                try reader.replace(&self.input, reader.peek() != '"');
+                self.input_json = reader.peek() != '"';
+                try reader.replace(&self.input, self.input_json);
             } else if (equal(key, "summary")) {
                 try replaceContent(reader, &self.summary);
             } else if (equal(key, "action")) {
                 try reader.replace(&self.action, true);
             } else if (equal(key, "result")) {
-                try reader.replace(&self.result, reader.peek() != '"');
+                self.result_json = reader.peek() != '"';
+                try reader.replace(&self.result, self.result_json);
             } else if (equal(key, "status")) {
                 try reader.replace(&self.status, false);
+            } else if (equal(key, "model")) {
+                try reader.replace(&self.model, false);
             } else if (equal(key, "tools")) {
                 // Declarations stay separate from the visible result body;
                 // malformed lists must never become ordinary tool output.
@@ -182,10 +204,23 @@ const Item = struct {
         return if (self.kind != null) self.kind else "message";
     }
     fn validate(self: *const Item) Invalid!void {
-        // Only terminal completed items are replayable. Partial/failed output
-        // has not been confirmed by the client as history that actually ran.
-        if (bytes(self.status).len != 0 and !equal(self.status, "completed")) return error.InvalidJson;
+        // Provider failures are terminal receipts with model-visible results;
+        // ordinary partial/failed items remain unconfirmed history.
         const kind = self.typeName();
+        if (equal(kind, "ds4:decision_call")) {
+            if (!equal(self.status, "completed") and !equal(self.status, "failed")) return error.InvalidJson;
+            if (bytes(self.id).len == 0 or bytes(self.call_id).len == 0 or bytes(self.model).len == 0 or
+                self.arguments == null or self.arguments_json or self.input == null or
+                !self.result_json or !std.mem.startsWith(u8, bytes(self.result), "{")) return error.InvalidJson;
+            const group = self.call_ids orelse return error.InvalidJson;
+            var contains_call = false;
+            for (group.value) |id| {
+                if (id.len == 0) return error.InvalidJson;
+                if (std.mem.eql(u8, id, bytes(self.call_id))) contains_call = true;
+            }
+            if (!contains_call) return error.InvalidJson;
+            if (equal(self.status, "completed") and self.input_json and !std.mem.startsWith(u8, bytes(self.input), "[")) return error.InvalidJson;
+        } else if (bytes(self.status).len != 0 and !equal(self.status, "completed")) return error.InvalidJson;
         if (self.content_images.len != 0 and (!equal(kind, "message") or (self.role != null and !equal(self.role, "user")))) return error.InvalidJson;
         if (self.output_images.len != 0 and !equal(kind, "function_call_output") and !equal(kind, "custom_tool_call_output")) return error.InvalidJson;
     }
@@ -214,9 +249,31 @@ const Decoder = struct {
     orders: [*c]c.tool_schema_orders,
     incremental_schemas: bool,
     pending_reasoning: Text = .{},
+    // A provider receipt combines invocation and result in one public item.
+    // Hold its result until adjacent call items finish, preserving the same
+    // parallel assistant-call group as the private live transcript.
+    pending_results: std.ArrayList(c.chat_msg) = .empty,
+    pending_call_ids: std.ArrayList([]u8) = .empty,
 
     fn deinit(self: *Decoder) void {
         self.pending_reasoning.deinit();
+        for (self.pending_results.items) |*message| messages.freeMessage(message);
+        self.pending_results.deinit(allocator);
+        self.clearCallIds();
+        self.pending_call_ids.deinit(allocator);
+    }
+    fn clearCallIds(self: *Decoder) void {
+        for (self.pending_call_ids.items) |id| allocator.free(id);
+        self.pending_call_ids.clearRetainingCapacity();
+    }
+    fn sameCallGroup(self: *const Decoder, call_id: [*c]const u8) bool {
+        for (self.pending_call_ids.items) |id| if (std.mem.eql(u8, id, bytes(call_id))) return true;
+        return false;
+    }
+    fn flushResults(self: *Decoder) void {
+        for (self.pending_results.items) |message| pushResult(self.list, message);
+        self.pending_results.clearRetainingCapacity();
+        self.clearCallIds();
     }
     fn flushReasoning(self: *Decoder) void {
         if (self.pending_reasoning.list.items.len == 0) return;
@@ -276,6 +333,25 @@ const Decoder = struct {
         // function-call-shaped history when clients replay their output items.
         self.appendCall(call);
     }
+    fn decisionReceipt(self: *Decoder, item: *const Item) Invalid!void {
+        const group = item.call_ids.?.value;
+        if (self.pending_results.items.len == 0) {
+            for (group) |id| self.pending_call_ids.append(allocator, allocator.dupe(u8, id) catch fatal()) catch fatal();
+        } else {
+            if (group.len != self.pending_call_ids.items.len) return error.InvalidJson;
+            for (group, self.pending_call_ids.items) |id, pending| if (!std.mem.eql(u8, id, pending)) return error.InvalidJson;
+        }
+        var call = std.mem.zeroes(c.tool_call);
+        call.id = duplicate(bytes(item.call_id));
+        call.name = duplicate("ds4_decide");
+        call.arguments = duplicate(bytes(item.arguments));
+        self.appendCall(call);
+        var message = std.mem.zeroes(c.chat_msg);
+        message.role = duplicate("tool");
+        message.content = duplicate(bytes(item.result));
+        messages.addCallId(&message, item.call_id);
+        self.pending_results.append(allocator, message) catch fatal();
+    }
     fn toolOutput(self: *Decoder, item: *Item) void {
         var message = std.mem.zeroes(c.chat_msg);
         message.role = duplicate("tool");
@@ -327,10 +403,13 @@ const Decoder = struct {
     fn accept(self: *Decoder, item: *Item) Invalid!void {
         try item.validate();
         const kind = item.typeName();
+        const decision_call = equal(kind, "ds4:decision_call");
         const hosted_call = equal(kind, "local_shell_call") or equal(kind, "web_search_call") or equal(kind, "tool_search_call") or equal(kind, "image_generation_call");
         const ordinary_call = equal(kind, "function_call") or equal(kind, "custom_tool_call");
+        if ((!decision_call and !hosted_call and !ordinary_call) or
+            (self.pending_results.items.len != 0 and !self.sameCallGroup(item.callId()))) self.flushResults();
         const bookkeeping = equal(kind, "compaction") or equal(kind, "context_compaction");
-        const consumes_reasoning = (equal(kind, "message") and equal(item.role, "assistant")) or ordinary_call or hosted_call;
+        const consumes_reasoning = (equal(kind, "message") and equal(item.role, "assistant")) or ordinary_call or hosted_call or decision_call;
         // User/tool/other items flush in-position. Bookkeeping is transparent.
         // This also preserves the old boundary between consecutive reasoning
         // items rather than coalescing them into a different history shape.
@@ -346,6 +425,8 @@ const Decoder = struct {
             messages.pushMessage(self.list, message);
         } else if (ordinary_call) {
             self.ordinaryCall(item);
+        } else if (decision_call) {
+            try self.decisionReceipt(item);
         } else if (equal(kind, "function_call_output") or equal(kind, "custom_tool_call_output")) {
             self.toolOutput(item);
         } else if (equal(kind, "reasoning")) {
@@ -373,6 +454,7 @@ const Decoder = struct {
             reader.separator();
         }
         try reader.consume(']');
+        self.flushResults();
         // Reasoning-only tails still need an assistant <think> block.
         self.flushReasoning();
     }
@@ -431,11 +513,7 @@ pub fn restoreDiscovered(list: *c.chat_msgs, orders: [*c]c.tool_schema_orders, t
         index += 1;
     }
     if (explicit_tools != null) {
-        var cursor = explicit_tools;
-        var schemas: [*c]u8 = null;
-        const valid = tools.parseTools(&cursor, &schemas, orders);
-        c.free(schemas);
-        if (!valid) return -1;
+        if (!tools.overlayRequestTools(explicit_tools, orders)) return -1;
     }
     return found;
 }

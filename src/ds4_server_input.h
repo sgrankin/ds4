@@ -71,6 +71,10 @@ typedef struct {
     /* Distinguish the Responses hosted tool from a normal function that
      * happens to be named "tool_search". */
     bool responses_tool_search;
+    /* Non-NULL only for an explicitly enabled provider-hosted decision tool.
+     * Input is a bound Decisions input value encoded as JSON. */
+    char *responses_decision_model;
+    char *responses_decision_input;
     char **prop;
     char **prop_schema;
     int len;
@@ -150,6 +154,10 @@ typedef struct {
     unsigned long long conversation_version;
     int responses_store_error_status;
     char *responses_replay; /* Private logical history, without top-level instructions. */
+    bool responses_hosted_tools;
+    int max_tool_calls;
+    char *responses_output_prefix; /* Earlier public items, without array brackets. */
+    int responses_output_prefix_count;
     char responses_published_id[40];
     tool_schema_orders tool_orders;
     int max_tokens;

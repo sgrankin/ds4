@@ -5,6 +5,8 @@ const std = @import("std");
 const c = @import("server_generation_c");
 const Canonical = @import("canonical.zig");
 const QwenPrompt = @import("qwen_prompt");
+const ModelBackend = @import("model.zig").Backend(c);
+const HostedDecisions = @import("hosted_decisions.zig");
 const allocator = std.heap.c_allocator;
 
 fn zero(comptime T: type) T {
@@ -131,6 +133,14 @@ fn slotCancelled(slot: *c.server_slot) bool {
 }
 fn stopped(stop: [*c]const volatile c.sig_atomic_t) bool {
     return stop.* != 0;
+}
+const HostedCancellation = struct {
+    job: *c.job,
+    stop: [*c]const volatile c.sig_atomic_t,
+};
+fn hostedCancelled(context: ?*anyopaque) callconv(.c) bool {
+    const state: *const HostedCancellation = @ptrCast(@alignCast(context orelse return false));
+    return stopped(state.stop) or cancelled(state.job);
 }
 fn randomBytes(destination: []u8) bool {
     const descriptor = c.open("/dev/urandom", c.O_RDONLY);
@@ -621,22 +631,43 @@ pub fn streamSafe(stops: *const c.stop_list, length: usize) usize {
 pub fn structuredStream(req: *const c.request) bool {
     return req.stream and (req.api == c.API_ANTHROPIC or req.api == c.API_RESPONSES or (req.api == c.API_OPENAI and req.kind == c.REQ_CHAT));
 }
-fn appendReplay(req: *c.request, content: [*c]const u8, reasoning: [*c]const u8, calls: *const c.tool_calls, finish: [*c]const u8) void {
-    if ((!req.responses_store and req.conversation_id == null and req.response_sink == null) or req.responses_replay == null or same(finish, "error") or same(finish, "length")) return;
+fn appendReplayMessage(req: *c.request, message: *const c.chat_msg) void {
+    if (req.responses_replay == null) return;
     const history = text(req.responses_replay);
     if (history.len == 0 or history[history.len - 1] != ']') return;
     var out = zero(c.buf);
     append(&out, history[0 .. history.len - 1]);
     if (history.len > 2) append(&out, ",");
+    c.ds4_server_render_replay_message(&out, message);
+    append(&out, "]");
+    c.free(req.responses_replay);
+    req.responses_replay = take(&out);
+}
+fn appendReplay(req: *c.request, content: [*c]const u8, reasoning: [*c]const u8, calls: *const c.tool_calls, finish: [*c]const u8) void {
+    if ((!req.responses_store and req.conversation_id == null and req.response_sink == null and !req.responses_hosted_tools) or same(finish, "error") or same(finish, "length")) return;
     var assistant = zero(c.chat_msg);
     assistant.role = @constCast("assistant");
     assistant.content = @constCast(ptr(content));
     assistant.reasoning = @constCast(reasoning);
     assistant.calls = calls.*;
-    c.ds4_server_render_replay_message(&out, &assistant);
-    append(&out, "]");
-    c.free(req.responses_replay);
-    req.responses_replay = take(&out);
+    appendReplayMessage(req, &assistant);
+}
+
+// Dispatch is bound to an explicit provider declaration, never to the name
+// of a client function that happens to be spelled ds4_decide.
+fn hostedOrder(req: *const c.request, call: *const c.tool_call) ?*const c.tool_schema_order {
+    if (!req.responses_hosted_tools or req.api != c.API_RESPONSES) return null;
+    for (items(c.tool_schema_order, req.tool_orders.v, @intCast(req.tool_orders.len))) |*order| {
+        if (order.responses_decision_model != null and same(order.name, text(call.name))) return order;
+    }
+    return null;
+}
+fn containsHosted(req: *const c.request, calls: *const c.tool_calls) bool {
+    if (!req.responses_hosted_tools or req.api != c.API_RESPONSES) return false;
+    for (items(c.tool_call, calls.v, @intCast(calls.len))) |*call| {
+        if (hostedOrder(req, call) != null) return true;
+    }
+    return false;
 }
 
 pub const Generation = struct {
@@ -731,6 +762,124 @@ pub const Generation = struct {
         const ok = sync(self.runtime, self.slot, &target, null, errors, self.stop) == 0;
         if (ok) appended.* = @max(@as(c_int, 0), c.ds4_session_pos(self.slot.session) - before);
         return ok;
+    }
+    fn continueHosted(self: Generation, content: [*c]const u8, reasoning: [*c]const u8, calls: *const c.tool_calls, results: []c.chat_msg, appended: *c_int, errors: []u8) bool {
+        const req = &self.job.req;
+        const order = allocator.alloc([*c]u8, @intCast(calls.len)) catch fatal();
+        defer allocator.free(order);
+        for (items(c.tool_call, calls.v, order.len), order) |call, *id| id.* = call.id;
+        const ids: c.stop_list = .{ .v = order.ptr, .len = calls.len, .cap = calls.len, .max_len = 0 };
+        const messages: c.chat_msgs = .{ .v = results.ptr, .len = @intCast(results.len), .cap = @intCast(results.len) };
+        const backend: ModelBackend = .{ .engine = self.runtime.engine };
+        const suffix = backend.render(req, &messages, 0, null, true, &ids, @intCast(c.ds4_session_ctx(self.slot.session)));
+        defer c.free(suffix);
+        const live = c.ds4_session_tokens(self.slot.session);
+        if (live == null) {
+            report(errors, "hosted tool continuation has no live session", .{});
+            return false;
+        }
+        var target = zero(c.ds4_tokens);
+        defer c.ds4_tokens_free(&target);
+        c.ds4_kvstore_build_prompt_from_exact_prefix_and_text_suffix(self.runtime.engine, live, suffix, &target);
+        const before = c.ds4_session_pos(self.slot.session);
+        if (syncMultimodal(self.runtime, self.slot, &target, req.images, req.image_count, errors, self.stop) != 0) return false;
+        appended.* = @max(@as(c_int, 0), c.ds4_session_pos(self.slot.session) - before);
+
+        // The sampled frontier stops before its turn terminator. Native live
+        // tails supply that terminator; the logical assistant suffix already
+        // includes it, so retain it once in the visible cache key.
+        const assistant = assistantSuffix(req, content, reasoning, calls, true);
+        defer c.free(assistant);
+        var visible_tail = text(suffix);
+        const boundary: []const u8 = switch (req.model_syntax) {
+            c.SERVER_MODEL_SYNTAX_QWEN => "<|im_end|>\n",
+            c.SERVER_MODEL_SYNTAX_DEEPSEEK, c.SERVER_MODEL_SYNTAX_DEEPSEEK41 => "<｜end▁of▁sentence｜>",
+            else => "",
+        };
+        if (boundary.len != 0 and std.mem.endsWith(u8, text(assistant), boundary) and std.mem.startsWith(u8, visible_tail, boundary)) visible_tail = visible_tail[boundary.len..];
+        var visible = zero(c.buf);
+        puts(&visible, req.prompt_text);
+        puts(&visible, assistant);
+        append(&visible, visible_tail);
+        c.free(req.prompt_text);
+        req.prompt_text = take(&visible);
+        clearLive(self.runtime, self.slot);
+        return true;
+    }
+
+    const HostedOutcome = enum { continued, client_calls, failed, cancelled };
+
+    /// One assistant batch is archived once. Hosted results enter the logical
+    /// transcript immediately; client calls remain pending for the caller.
+    fn hostedRound(self: Generation, output: *c.responses_stream, raw: *const c.buf, content: [*c]const u8, reasoning: [*c]const u8, recovered: bool, calls: *const c.tool_calls, used: *c_int, appended: *c_int, errors: []u8) HostedOutcome {
+        const req = &self.job.req;
+        const result_messages = allocator.alloc(c.chat_msg, @intCast(calls.len)) catch fatal();
+        var result_count: usize = 0;
+        defer {
+            for (result_messages[0..result_count]) |message| c.free(message.content);
+            allocator.free(result_messages);
+        }
+        if (!req.stream and req.responses_output_prefix_count == 0) c.ds4_server_output_init(req, output);
+        if (!c.ds4_server_output_round_close(self.job.fd, req, output, ptr(raw.ptr), raw.len, content, reasoning, recovered, "tool_calls", self.stop)) {
+            markCancelled(self.job);
+            return .cancelled;
+        }
+        var assistant = zero(c.chat_msg);
+        assistant.role = @constCast("assistant");
+        assistant.content = @constCast(ptr(content));
+        assistant.reasoning = @constCast(reasoning);
+        assistant.calls = calls.*;
+        appendReplayMessage(req, &assistant);
+
+        var client_calls: usize = 0;
+        var limit_exceeded = false;
+        var cancellation: HostedCancellation = .{ .job = self.job, .stop = self.stop };
+        for (items(c.tool_call, calls.v, @intCast(calls.len))) |*call| {
+            if (hostedCancelled(&cancellation)) return .cancelled;
+            var item = zero(c.responses_tool_item);
+            const binding = hostedOrder(req, call) orelse {
+                client_calls += 1;
+                if (!c.ds4_server_output_external_call(self.job.fd, req, output, call, &item, "tool_calls", self.stop)) {
+                    markCancelled(self.job);
+                    return .cancelled;
+                }
+                continue;
+            };
+            if (!c.ds4_server_output_hosted_call(self.job.fd, req, output, call, calls, &item, "in_progress", binding.responses_decision_model, null, null, self.stop)) {
+                markCancelled(self.job);
+                return .cancelled;
+            }
+            var invocation = if (used.* >= req.max_tool_calls) blk: {
+                limit_exceeded = true;
+                report(errors, "hosted tool call limit exceeded (max_tool_calls=%d)", .{req.max_tool_calls});
+                break :blk HostedDecisions.Invocation{
+                    .status = 429,
+                    .output = allocator.dupeSentinel(u8, "{\"error\":{\"code\":\"max_tool_calls_exceeded\",\"message\":\"The response exhausted its hosted tool call budget\"},\"status\":429}", 0) catch fatal(),
+                };
+            } else blk: {
+                used.* += 1;
+                break :blk HostedDecisions.invoke(c, self.runtime.decision_models, text(binding.responses_decision_model), if (binding.responses_decision_input != null) text(binding.responses_decision_input) else null, text(call.arguments), hostedCancelled, &cancellation) catch fatal();
+            };
+            defer invocation.deinit();
+            const call_status: [*:0]const u8 = if (invocation.status == 200) "completed" else "failed";
+            if (!c.ds4_server_output_hosted_call(self.job.fd, req, output, call, calls, &item, call_status, binding.responses_decision_model, if (invocation.input) |input| input.ptr else null, invocation.output.ptr, self.stop)) {
+                markCancelled(self.job);
+                return .cancelled;
+            }
+            if (invocation.status == 499 or hostedCancelled(&cancellation)) return .cancelled;
+            var result = zero(c.chat_msg);
+            result.role = @constCast("tool");
+            result.tool_call_id = call.id;
+            result.content = duplicate(invocation.output);
+            result_messages[result_count] = result;
+            result_count += 1;
+            appendReplayMessage(req, &result);
+        }
+        if (limit_exceeded) return .failed;
+        if (client_calls != 0) return .client_calls;
+        if (!self.continueHosted(content, reasoning, calls, result_messages[0..result_count], appended, errors)) return if (hostedCancelled(&cancellation)) .cancelled else .failed;
+        c.ds4_server_output_round_reset(req, output);
+        return .continued;
     }
     fn rememberVisible(self: Generation, context: [*c]const u8, trace_id: u64, content: [*c]const u8, continued: bool) void {
         const visible = thinkingVisible(&self.job.req, content);
@@ -949,6 +1098,8 @@ pub const Generation = struct {
         }
         var recovered_once = false;
         var recovery_completion: c_int = 0;
+        var hosted_calls_used: c_int = 0;
+        var hosted_prompt_tokens: c_int = 0;
         var rng = req.seed;
         if (rng == 0 and !randomBytes(std.mem.asBytes(&rng))) rng = (@as(u64, @bitCast(@as(i64, @intCast(c.time(null))))) << 32) ^ @intFromPtr(job);
         if (rng == 0) rng = 0x9e3779b97f4a7c15;
@@ -956,9 +1107,9 @@ pub const Generation = struct {
         var deferred: c_int = 0;
         var forced = false;
         const close_token: c_int = if (req.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) 150007 else 128822;
-        // A non-streaming invalid tool can inject one model-visible error and
-        // retry inside the same total output budget. Each attempt owns its text
-        // and parsed result, while RNG and reasoning counters stay continuous.
+        // Tool recovery and hosted-tool rounds share the total output budget.
+        // Each round owns its text and parsed calls; RNG and reasoning counters
+        // stay continuous throughout the one public Response.
         while (true) {
             var sampled = zero(c.buf);
             defer freeBuffer(&sampled);
@@ -1355,6 +1506,30 @@ pub const Generation = struct {
                     final_finish = "tool_calls";
                 } else if (req.api == c.API_RESPONSES) c.ds4_server_reuse_clear(srv, slot, c.API_RESPONSES);
             }
+            var round_archived = false;
+            if (calls.len != 0 and !same(finish, "error") and containsHosted(req, &calls)) {
+                var appended: c_int = 0;
+                const outcome = self.hostedRound(&output, &sampled, content, reasoning, parse_recovered, &calls, &hosted_calls_used, &appended, errors);
+                round_archived = true;
+                switch (outcome) {
+                    .continued => {
+                        recovery_completion += completion;
+                        hosted_prompt_tokens += appended;
+                        // A new reasoning block still obeys the cumulative
+                        // reasoning count, even after closing an earlier one.
+                        forced = false;
+                        self.trace(trace_id, "hosted tool round continued: calls=%d used=%d appended=%d", .{ calls.len, hosted_calls_used, appended });
+                        continue;
+                    },
+                    .client_calls => {},
+                    .failed => final_finish = "error",
+                    .cancelled => {
+                        clearLive(srv, slot);
+                        self.trace(trace_id, "cancelled during hosted tool execution", .{});
+                        return;
+                    },
+                }
+            }
             if (cancelled(job)) {
                 clearLive(srv, slot);
                 self.trace(trace_id, "cancelled before publishing response state", .{});
@@ -1385,11 +1560,17 @@ pub const Generation = struct {
                 if (!self.rememberQwen(context, finish, thinking.inside, ptr(content), &calls)) c.ds4_server_reuse_clear(srv, slot, c.API_OPENAI);
             } else if (rememberThinking(req, &thinking, final_finish)) self.rememberVisible(context, trace_id, ptr(content), thinking_continued or disk_flags & c.DS4_KVSTORE_EXT_THINKING_VISIBLE != 0) else c.ds4_server_reuse_clear(srv, slot, c.API_OPENAI);
             var response_ok = !cancelled(job);
-            if (req.api == c.API_RESPONSES and response_ok) appendReplay(req, content, reasoning, &calls, final_finish);
+            if (req.api == c.API_RESPONSES and response_ok and !round_archived) appendReplay(req, content, reasoning, &calls, final_finish);
             const final_content = if (content != null) @as([*c]const u8, content) else ptr(sampled.ptr);
+            const public_calls: [*c]const c.tool_calls = if (round_archived) null else &calls;
+            const public_raw: [*c]const u8 = if (round_archived) "" else ptr(sampled.ptr);
+            const public_length: usize = if (round_archived) 0 else sampled.len;
+            const public_content: [*c]const u8 = if (round_archived) "" else final_content;
+            const public_reasoning: [*c]const u8 = if (round_archived) null else reasoning;
+            const final_prompt_tokens = prompt_tokens + hosted_prompt_tokens;
             if (response_ok and req.stream) {
-                if (req.api == c.API_ANTHROPIC) response_ok = c.ds4_server_anthropic_finish(job.fd, memory, mutex, req, &id, &anthropic, ptr(sampled.ptr), sampled.len, &calls, final_finish, completion, self.stop) else if (openai_chat) response_ok = c.ds4_server_openai_finish(job.fd, memory, mutex, req, &id, &openai, ptr(sampled.ptr), sampled.len, &calls, final_finish, prompt_tokens, completion, self.stop) else if (responses_chat) response_ok = c.ds4_server_output_finish(job.fd, req, &output, ptr(sampled.ptr), sampled.len, if (parse_recovered) content else null, &calls, final_finish, prompt_tokens, completion, created, self.stop) else if (structured) response_ok = c.ds4_server_openai_chat_finish(job.fd, req, &id, final_content, reasoning, &calls, final_finish, prompt_tokens, completion, self.stop) else response_ok = c.ds4_server_openai_chunk(job.fd, req, &id, null, final_finish, self.stop) and c.ds4_server_openai_done(job.fd, req, &id, prompt_tokens, completion, self.stop);
-            } else if (response_ok and req.api == c.API_ANTHROPIC) response_ok = c.ds4_server_anthropic_final(job.fd, srv.enable_cors, req, &id, final_content, reasoning, &calls, final_finish, prompt_tokens, completion, self.stop) else if (response_ok and req.api == c.API_RESPONSES) response_ok = c.ds4_server_output_final(job.fd, srv.enable_cors, req, final_content, reasoning, &calls, final_finish, prompt_tokens, completion, self.stop) else if (response_ok) response_ok = c.ds4_server_openai_final(job.fd, srv.enable_cors, req, &id, final_content, reasoning, &calls, final_finish, prompt_tokens, completion, self.stop);
+                if (req.api == c.API_ANTHROPIC) response_ok = c.ds4_server_anthropic_finish(job.fd, memory, mutex, req, &id, &anthropic, ptr(sampled.ptr), sampled.len, &calls, final_finish, completion, self.stop) else if (openai_chat) response_ok = c.ds4_server_openai_finish(job.fd, memory, mutex, req, &id, &openai, ptr(sampled.ptr), sampled.len, &calls, final_finish, prompt_tokens, completion, self.stop) else if (responses_chat) response_ok = c.ds4_server_output_finish(job.fd, req, &output, public_raw, public_length, if (!round_archived and parse_recovered) content else null, public_calls, final_finish, final_prompt_tokens, completion, created, self.stop) else if (structured) response_ok = c.ds4_server_openai_chat_finish(job.fd, req, &id, final_content, reasoning, &calls, final_finish, prompt_tokens, completion, self.stop) else response_ok = c.ds4_server_openai_chunk(job.fd, req, &id, null, final_finish, self.stop) and c.ds4_server_openai_done(job.fd, req, &id, prompt_tokens, completion, self.stop);
+            } else if (response_ok and req.api == c.API_ANTHROPIC) response_ok = c.ds4_server_anthropic_final(job.fd, srv.enable_cors, req, &id, final_content, reasoning, &calls, final_finish, prompt_tokens, completion, self.stop) else if (response_ok and req.api == c.API_RESPONSES) response_ok = c.ds4_server_output_final(job.fd, srv.enable_cors, req, public_content, public_reasoning, public_calls, final_finish, final_prompt_tokens, completion, self.stop) else if (response_ok) response_ok = c.ds4_server_openai_final(job.fd, srv.enable_cors, req, &id, final_content, reasoning, &calls, final_finish, prompt_tokens, completion, self.stop);
             if (cancelled(job)) response_ok = false;
             if (req.api == c.API_RESPONSES) {
                 _ = c.pthread_mutex_lock(&srv.tool_mu);
