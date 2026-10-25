@@ -129,6 +129,8 @@ These wire tests require the already loaded Flint/Clef-Flash pair and the same
 WebSocket/SDK environment as `tests/mixed-serving.nu`. Model-free Zig tests cover
 declaration ownership, replay and stream invariants. Raw requests, events and
 responses stay under `.workspaces/`.
+The maintained wire drivers leave reasoning settings unset and inherit native
+server/model defaults, including DeepSeek's enabled reasoning.
 
 The [qualification report](../speed-bench/experiments/hosted-decisions-20261025/RESULTS.md)
 records the tested revisions/settings, both generator paths, image binding and

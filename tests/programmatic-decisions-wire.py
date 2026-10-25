@@ -80,13 +80,15 @@ def main():
             "instructions": "Call ds4_exec exactly once with this code, unchanged:\n" + CODE +
                 "\nAfter the program result, return exactly its emitted JSON object. Do not run another program.",
             "tools": ptc_tools(case)}
-        if args.model not in {"flint", "flint-int4"}:
-            body["reasoning"] = {"effort": "none"}
+        # Inherit the engine's normal reasoning policy. In particular, do not
+        # turn off DeepSeek thinking to make a qualification run shorter.
         return body | options
 
     def post(name, body):
         started = time.monotonic()
-        response = http(args.url, args.output, name, "POST", "/v1/responses", body)
+        # A full thinking response on the SSD-backed generator can take longer
+        # than the shared wire helper's three-minute default.
+        response = http(args.url, args.output, name, "POST", "/v1/responses", body, timeout=600)
         return response, time.monotonic() - started
 
     def programs(response):
@@ -231,6 +233,7 @@ def main():
         usage = response.get("usage", {})
         return {"name": name, "wall_seconds": elapsed, "status": response["status"],
             "main_input_tokens": usage.get("input_tokens"), "main_output_tokens": usage.get("output_tokens"),
+            "main_reasoning_tokens": usage.get("output_tokens_details", {}).get("reasoning_tokens"),
             "main_cached_tokens": usage.get("input_tokens_details", {}).get("cached_tokens"),
             "program_calls": len(programs(response)), "native_calls": len(nested) + len(direct),
             "program_errors": sum(json.loads(item["result"])["error"] is not None for item in outputs),

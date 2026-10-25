@@ -198,6 +198,13 @@ program/output pair restores its result and never executes the program again.
 A terminal `incomplete` output replays as the recorded tool error. Orphaned
 outputs, missing outputs and suspended client-tool programs are rejected.
 
+With DeepSeek's normal reasoning enabled and its public summary omitted, durable
+`previous_response_id` restores the parent's private logical reasoning text.
+Public-output-only replay retains the recorded program results without execution,
+but lacks hidden reasoning: a cold recovery can recompute visible history with a
+different reasoning context. Restoring logical reasoning and reusing exact KV
+state are separate concerns; KV reuse follows the existing cache policy.
+
 Run `nu tests/programmatic-decisions.nu` against an already loaded server for
 protocol checks; its `--suite scenarios` compares ordinary and favorable cases.
 On a fixed Flint/Clef-Flash queue screen, code mode reduced the larger task's

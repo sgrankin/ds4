@@ -52,8 +52,7 @@ def main():
     def request(**options):
         return {"model": args.model, "input": EVIDENCE, "instructions": ONCE, "temperature": 0,
                 "store": False, "max_output_tokens": 1536,
-                "tools": [{"type": "ds4:decision", "model": args.helper}]} | (
-                    {} if args.model in {"flint", "flint-int4"} else {"reasoning": {"effort": "none"}}) | options
+                "tools": [{"type": "ds4:decision", "model": args.helper}]} | options
 
     def post(name, body):
         return http(args.url, args.output, name, "POST", "/v1/responses", body)

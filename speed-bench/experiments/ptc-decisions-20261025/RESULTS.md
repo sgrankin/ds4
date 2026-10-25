@@ -6,9 +6,11 @@ them without a user instruction naming a tool or supplying code. The favorable
 24-record task finishes **22.8% sooner** than main-only, with correct facts, but
 duplicates the final JSON. The four-record task is **2.20 times slower** because
 the model delegates work it could answer directly.
-The later matched DeepSeek run with reasoning disabled is **40.1% slower** with
-code mode: direct generation needs only 100 output tokens, versus 458 through
-two programs. A slower main decoder does not establish a general speedup.
+With DeepSeek's native reasoning retained, the matched favorable task finishes
+**32.5% sooner** through code mode: 86.366 seconds versus 127.862 direct. Both
+arms complete with correct facts, clean JSON and grounded handoffs. An earlier
+run silently disabled reasoning; its opposite result is retained as historical
+evidence, not the result for ordinary DeepSeek use.
 
 This is two repetitions of each fixed case, not a broad benchmark or an estimate
 of general task accuracy. Source is jj change `olqomykynxyr`, parent `944863ed`.
@@ -130,6 +132,50 @@ Final transport/replay qualification passes 56 checks, plus two real restart
 checks. Those establish execution and lifecycle behavior separately from the
 natural-task quality/performance observations above.
 
+## Matched DeepSeek with native reasoning
+
+The server binary is frozen at source `4cf6eacf`. The corrected client driver
+omits `reasoning`, `reasoning_effort` and any `ds4` reasoning budget. Native
+DeepSeek reasoning defaults to high, confirmed by the server trace and nonzero
+reasoning-token usage. Both arms keep temperature zero and the same 4,096-token
+output budget, which includes reasoning. No separate reasoning cap was added.
+Future DeepSeek comparisons retain native reasoning unless the user explicitly
+requests a different mode; the driver no longer silently forces none.
+
+The fixture, generic tool documentation, binary and launch settings stay fixed
+across sequential ABBA requests. A is main-only; B is code mode. Raw artifacts
+are in `ds4-reasoning-on/` beneath the ignored work directory.
+
+| Order | Arm | Wall seconds | Main input/output | Of output: reasoning | Cached tokens |
+|---|---|---:|---:|---:|---:|
+| A0 | Main-only | 127.380 | 4,767 / 1,078 | 948 | 0 |
+| B0 | Code mode | 86.060 | 1,813 / 641 | 392 | 0 |
+| B1 | Code mode | 86.673 | 1,813 / 641 | 392 | 0 |
+| A1 | Main-only | 128.344 | 4,767 / 1,078 | 948 | 0 |
+
+Median wall time falls from **127.862 to 86.366 seconds**, saving 41.496 seconds
+or **32.5%**. Main input falls 62.0%, output 40.5% and reasoning tokens 58.6%.
+Each B response uses one program and one successful native call; helper time is
+3.189/3.395 seconds for 7,413 helper input tokens. No program error or retry
+occurs. Both arms complete comfortably within the shared output budget; none
+is marked incomplete or loses its final answer to reasoning-budget exhaustion.
+
+The program batches 24 targeted questions using the bound queue and template,
+then emits all 24 labels and confidences (1,565 bytes). It does not filter and
+aggregate the result inside JavaScript; the main model calculates the count and
+maximum using the visible charge manifest. Native labels are TP6/TN18/FP0/FN0
+in each repeat. All four final answers have the correct six IDs, count six and
+maximum 119,900 cents, clean JSON and exactly two grounded handoff sentences.
+Unlike the earlier reasoning-disabled answers, they do not assert unsupported
+refund or containment status. The B handoff says those actions have not been
+confirmed here, without claiming they never occurred.
+
+The full HTTP response remains larger: 127,972 bytes through code mode versus
+1,652 direct, including bound-data/native-call audit. The favorable data-placement
+inequality described above still applies. These are two repeats of one fixed
+synthetic task, not a general DeepSeek or hardware performance claim. The guard
+stayed at normal pressure with zero swap growth; model work ran sequentially.
+
 ## Earlier DeepSeek qualification
 
 DeepSeek V4.1 Flash 1017 passes all eight explicit-code smoke checks. One natural
@@ -137,7 +183,8 @@ favorable task also completes with correct IDs/count/maximum and clean JSON:
 76.385 seconds, 1,936 main input tokens, 458 main output tokens, two programs and
 one successful native call. The helper consumes 7,413 tokens in 3.065 seconds
 and again gives TP6/TN18/FP0/FN0. This earlier unmatched observation remains a
-model-path qualification; it is excluded from the matched medians below.
+model-path qualification with reasoning disabled; it is excluded from both
+matched comparisons.
 
 Its first program classifies the queue and emits choices/confidence; its second
 uses the returned IDs to calculate the maximum and construct the handoff.
@@ -146,12 +193,14 @@ yet been locked and no refund has been issued." In particular, the source does
 not establish refund status for every ticket. Retain that semantic overstatement
 separately from correct numeric facts and clean JSON.
 
-## Matched DeepSeek follow-up
+## Historical DeepSeek run with reasoning disabled
 
 Frozen source `4cf6eacf`, same M5 Max, fixture, binary and launch settings across
 all four requests. A is main-only; B is code mode. Requests ran sequentially in
-ABBA order with explicit `reasoning:{effort:"none"}` in both arms. The effective
-mode was none, temperature was zero, and the output budget remained 4,096.
+ABBA order with `reasoning:{effort:"none"}` inserted by the old client driver in
+both arms. This was an unintended benchmark policy, corrected for the native-
+reasoning comparison above. The effective mode was none, temperature was zero,
+and the output budget remained 4,096. Raw artifacts remain in `ds4-matched/`.
 
 | Order | Arm | Wall seconds | Main input/output | Main cached tokens |
 |---|---|---:|---:|---:|
@@ -166,8 +215,8 @@ Each B response uses two programs and one successful native helper call, with
 7,413 helper tokens and 3.079/3.476 seconds of helper time. The generated output
 is 4.58 times the direct path. Additional code generation and continuations
 outweigh the input savings on this fixture; exact attribution among those costs
-was not profiled. Reasoning-heavy tasks are a future hypothesis, not a result of
-this reasoning-disabled comparison.
+was not profiled. This measures the reasoning-disabled setting only and does
+not describe ordinary DeepSeek operation.
 
 All four responses complete with clean JSON and correct ID sets, count six and
 maximum 119,900 cents. Both B native calls give TP6/TN18/FP0/FN0. Every handoff
@@ -244,8 +293,10 @@ let server_args = [
 ^python3 speed-bench/ideas/pressure_run.py ($work | path join guard) -- ./zig-out/bin/ds4-server ...$server_args out+err> ($work | path join server.log)
 ```
 
-Run the following in a second terminal; the existing driver sets reasoning none
-for DeepSeek and preserves each sample separately:
+Run the following in a second terminal. The maintained driver preserves native
+DeepSeek reasoning by omitting overrides and keeps each sample separately.
+The historical reasoning-disabled result requires its old driver/request files;
+the commands below reproduce the native-reasoning comparison:
 
 ```nu
 let root = '.workspaces/ptc-ds4-matched-reproduce'

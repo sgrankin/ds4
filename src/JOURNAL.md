@@ -4,7 +4,49 @@ Last updated: 2026-10-25. This is the compact handoff for resumed work and conte
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
 
-## DeepSeek code-mode comparison — completed, 2026-10-25
+## Main promotion — 2026-10-25
+
+User approved publishing the qualified Clef-serving stack to main. Origin fetch
+confirms main still at `ce3afb7999b7`; this is a fast-forward of eight local
+changes covering native Clef models/ownership, prefill and prefix reuse, hosted
+decisions, QuickJS code mode and the normal-reasoning correction. No new runtime
+changes are introduced for publication. The working tree is clean; model jobs
+are stopped. Raw measurements, model weights and generated binaries stay local.
+Keep native DeepSeek reasoning enabled for subsequent qualification and serving.
+
+## DeepSeek reasoning policy and corrected comparison — completed, 2026-10-25
+
+User directed: do not disable DeepSeek reasoning. Keep native reasoning enabled
+for normal serving/qualification/performance work. The server already defaults
+to normal HIGH thinking; the maintained hosted-decision/PTC wire drivers had
+silently overridden it with none. Remove those overrides rather than changing
+the engine. Explicit API unit tests and historical disabled-reasoning controls
+remain valid tests of that mode, not representative performance evidence.
+
+Start16:27UTC, cap17:27UTC; four requests finish16:37UTC. Reran the fixed
+favorable ABBA comparison with native thinking, unchanged frozen runtime/model
+settings and shared4096 output budget; no separate reasoning budget or forced
+exit. Slow JSON requests may take up to ten minutes rather than suppressing
+thought to fit a short timeout. Metrics now retain actual reasoning-token usage.
+
+Direct127.380/128.344s versus code86.060/86.673s; medians127.86 to86.37s,
+**32.45% less time**, saving41.50s on this fixed task. Main input4767 to1813,
+total generated1078 to641, reasoning948 to392. Code uses one program and one
+native helper invocation (3.189/3.395s); cached tokens are zero throughout.
+All four answers complete with correct numeric fields, clean JSON and grounded
+two-sentence handoffs; none hits the output limit or makes the earlier refund
+claim. The helper classifies all six positives/eighteen negatives correctly.
+
+This is the representative DS4 result for normal thinking; the off-mode result
+below is a historical control. No engine/kernel/prompt tuning was needed: remove
+the test-driver override. Native defaults also make the model choose one program
+instead of two. One task/two repeats per arm does not establish general accuracy.
+Owned server stopped cleanly, normal pressure and no swap growth. Python syntax
+and Nushell driver parsing pass; no inference source changed or rebuild needed.
+Raw runs: `.workspaces/ptc-decisions-20261025/ds4-reasoning-on/`.
+See [report](../speed-bench/experiments/ptc-decisions-20261025/RESULTS.md).
+
+## DeepSeek code-mode comparison with reasoning disabled — historical control, 2026-10-25
 
 User expects stronger gains on the slower DeepSeek generator. Start16:15UTC,
 one-hour cap17:15UTC; all four requests finish16:21UTC. Reused the fixed favorable

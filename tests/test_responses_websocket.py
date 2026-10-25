@@ -53,13 +53,13 @@ def stop(process):
     return {"returncode": process.returncode if process is not None else None, "forced_kill": forced}
 
 
-def http(base, output, name, method, path, payload=None, expected=200):
+def http(base, output, name, method, path, payload=None, expected=200, timeout=180):
     save(output / (name + ".request.json"), {"method": method, "path": path, "body": payload})
     request = urllib.request.Request(base + path, method=method,
         data=json.dumps(payload).encode() if payload is not None else None,
         headers={"Content-Type": "application/json", "Authorization": "Bearer local"})
     try:
-        with urllib.request.urlopen(request, timeout=180) as reply:
+        with urllib.request.urlopen(request, timeout=timeout) as reply:
             status, raw = reply.status, reply.read()
     except urllib.error.HTTPError as error:
         status, raw = error.code, error.read()
