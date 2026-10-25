@@ -73,21 +73,26 @@ typedef struct {
     int32_t selected_ids[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SELECTED];
 } ds4_gpu_glm_stream_selected_prefetch;
 
+typedef struct ds4_metal_expert_pread_pool ds4_metal_expert_pread_pool;
 typedef struct {
     ds4_gpu_stream_expert_pread_task *tasks;
     uint32_t n_tasks;
     uint32_t worker_index;
     uint32_t n_workers;
+    ds4_metal_expert_pread_pool *pool;
+    ds4_metal_expert_cache_state *cache;
+    int model_fd;
 } ds4_gpu_stream_expert_pread_worker_args;
 
 #undef DS4_LOAD_STRONG
 /* Original persistent pool fields, grouped once with the two actual records.
  * C initializes these SDK mutex/condition objects with their real constants. */
-typedef struct {
+struct ds4_metal_expert_pread_pool {
     pthread_mutex_t mutex;
     pthread_cond_t start_cond;
     pthread_cond_t done_cond;
     pthread_t threads[18];
+    ds4_gpu_stream_expert_pread_worker_args workers[18];
     uint32_t thread_count;
     uint32_t active_workers;
     uint32_t remaining_workers;
@@ -95,9 +100,11 @@ typedef struct {
     uint32_t next_task;
     uint64_t generation;
     ds4_gpu_stream_expert_pread_task *tasks;
+    ds4_metal_expert_cache_state *cache;
+    int model_fd;
     int initialized;
     int stopping;
-} ds4_metal_expert_pread_pool;
+};
 typedef struct {
     ds4_gpu_stream_expert_pending_load pending;
     ds4_gpu_glm_stream_selected_prefetch prefetch;

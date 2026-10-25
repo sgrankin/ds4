@@ -81,13 +81,13 @@ fn backend(text: [:0]const u8) c.ds4_backend {
     if (same(text, "cpu")) return c.DS4_BACKEND_CPU;
     fatal(2, "ds4: invalid backend: %s\nds4: valid backends are: metal, cuda, cpu\n", .{text.ptr});
 }
-fn warnThink(gen: *const Generation, name: [*:0]const u8) void {
-    if (gen.think_mode == c.DS4_THINK_MAX and shared.effectiveThink(gen) != c.DS4_THINK_MAX)
+fn warnThink(engine: *Engine, gen: *const Generation, name: [*:0]const u8) void {
+    if (gen.think_mode == c.DS4_THINK_MAX and shared.effectiveThink(engine, gen) != c.DS4_THINK_MAX)
         c.ds4_log(c.__stderrp, c.DS4_LOG_WARNING, "ds4: warning: %s needs --ctx >= %u; ctx=%d uses normal thinking instead\n", name, c.ds4_think_max_min_context(), gen.ctx_size);
 }
-fn logMemory(cfg: *const Options, chunk: u32) void {
+fn logMemory(engine: *Engine, cfg: *const Options) void {
     @setFloatMode(.optimized);
-    const memory = c.ds4_context_memory_estimate_with_prefill_mode(cfg.engine.backend, cfg.gen.ctx_size, chunk, cfg.engine.ssd_streaming);
+    const memory = c.ds4_engine_context_memory_estimate(engine, cfg.gen.ctx_size);
     const kv = memory.raw_bytes +% memory.compressed_bytes;
     const total = kv +% memory.scratch_bytes;
     const color = c.ds4_log_is_tty(c.__stderrp);
@@ -108,7 +108,7 @@ fn renderedPrompt(prompt: ?[:0]const u8) bool {
     return false;
 }
 fn buildPrompt(engine: *Engine, gen: *const Generation, out: *c.ds4_tokens) void {
-    const mode = shared.effectiveThink(gen);
+    const mode = shared.effectiveThink(engine, gen);
     if (gen.raw_prompt) {
         c.ds4_tokenize_text(engine, cString(gen.prompt) orelse "", out);
     } else if (renderedPrompt(gen.prompt)) {
@@ -295,7 +295,7 @@ fn sampledGeneration(engine: *Engine, cfg: *const Options, prompt: *const c.ds4_
     if (!shared.waitRoute(cfg, session.?)) return 1;
     // Pay first-submission GPU cost before the prefill timer, matching workers.
     c.ds4_session_gpu_warmup(session);
-    const mode = shared.effectiveThink(&cfg.gen);
+    const mode = shared.effectiveThink(engine, &cfg.gen);
     var printer = Printer.init(engine, mode);
     var progress = shared.Progress{ .input_tokens = prompt.len, .use_color = c.ds4_log_is_tty(c.__stderrp) };
     var message: [160]u8 = undefined;
@@ -345,7 +345,7 @@ fn generation(engine: *Engine, cfg: *const Options) c_int {
         c.getenv("DS4_CLI_FORCE_SESSION") != null or c.ds4_engine_overthinking_penalty_enabled(engine) or
         cfg.gen.temperature > 0 or c.ds4_engine_decode_packet_size(engine) > 1)
         return sampledGeneration(engine, cfg, &prompt);
-    var printer = Printer.init(engine, shared.effectiveThink(&cfg.gen));
+    var printer = Printer.init(engine, shared.effectiveThink(engine, &cfg.gen));
     var progress = shared.Progress{ .input_tokens = prompt.len, .use_color = c.ds4_log_is_tty(c.__stderrp) };
     return c.ds4_engine_generate_argmax(engine, &prompt, cfg.gen.n_predict, cfg.gen.ctx_size, printToken, generationDone, &printer, shared.progressCallback, &progress);
 }
@@ -378,7 +378,7 @@ fn chatInit(engine: *Engine, chat: *c.ds4_cli_chat, cfg: *const Options) bool {
     chat.initial_system_text = if (cfg.gen.system) |system| system.len != 0 else false;
     c.ds4_chat_begin(engine, &chat.transcript);
     chat.think_prefix_pos = chat.transcript.len;
-    _ = c.ds4_cli_chat_apply_think_prefix(engine, chat, shared.effectiveThink(&cfg.gen));
+    _ = c.ds4_cli_chat_apply_think_prefix(engine, chat, shared.effectiveThink(engine, &cfg.gen));
     if (cfg.gen.system) |system| if (system.len != 0) {
         c.ds4_chat_append_message(engine, &chat.transcript, "system", system.ptr);
     };
@@ -413,7 +413,7 @@ fn chatTurn(engine: *Engine, cfg: *Options, chat: *c.ds4_cli_chat, user: [:0]con
         report("ds4: no active interactive KV cache\n", .{});
         return 1;
     };
-    const mode = c.ds4_think_mode_for_context(cfg.gen.think_mode, chat.ctx_size);
+    const mode = c.ds4_engine_think_mode_for_context(engine, cfg.gen.think_mode, chat.ctx_size);
     if (!c.ds4_cli_chat_apply_think_prefix(engine, chat, mode)) return 1;
     const rollback_len = chat.transcript.len;
     const rollback_images = chat.image_count;
@@ -533,10 +533,10 @@ fn repl(engine: *Engine, cfg: *Options) c_int {
                 report("ds4: Flint chooses when to reason; thinking controls are unsupported\n", .{});
                 continue;
             }
-            const active = c.ds4_think_mode_for_context(c.DS4_THINK_MAX, chat.ctx_size) == c.DS4_THINK_MAX;
+            const active = c.ds4_engine_think_mode_for_context(engine, c.DS4_THINK_MAX, chat.ctx_size) == c.DS4_THINK_MAX;
             if (c.ds4_cli_chat_apply_think_prefix(engine, &chat, if (active) c.DS4_THINK_MAX else c.DS4_THINK_HIGH)) {
                 cfg.gen.think_mode = c.DS4_THINK_MAX;
-                warnThink(&cfg.gen, "/think-max");
+                warnThink(engine, &cfg.gen, "/think-max");
                 _ = c.printf("Thinking mode: %s.\n", @as([*:0]const u8, if (active) "max" else "high (ctx below 393216)"));
             }
         } else if (same(command, "/nothink")) {
@@ -582,11 +582,11 @@ fn repl(engine: *Engine, cfg: *Options) c_int {
                 report("ds4: /ctx needs a positive integer\n", .{});
             } else {
                 cfg.gen.ctx_size = integer(arg, "/ctx", false);
-                logMemory(cfg, c.ds4_engine_prefill_chunk(engine));
+                logMemory(engine, cfg);
                 result = c.ds4_cli_chat_set_ctx(engine, &chat, cfg.gen.ctx_size);
                 if (result != 0) break;
-                _ = c.ds4_cli_chat_apply_think_prefix(engine, &chat, c.ds4_think_mode_for_context(cfg.gen.think_mode, chat.ctx_size));
-                warnThink(&cfg.gen, "/ctx");
+                _ = c.ds4_cli_chat_apply_think_prefix(engine, &chat, c.ds4_engine_think_mode_for_context(engine, cfg.gen.think_mode, chat.ctx_size));
+                warnThink(engine, &cfg.gen, "/ctx");
             }
         } else if (same(command, "/quit") or same(command, "/exit")) {
             break;
@@ -936,8 +936,8 @@ fn run(cfg: *Options) c_int {
         return c.ds4_dist_run(engine, dist, &gen);
     };
     if (!cfg.inspect) {
-        logMemory(cfg, c.ds4_engine_prefill_chunk(engine));
-        warnThink(&cfg.gen, "--think-max");
+        logMemory(engine, cfg);
+        warnThink(engine, &cfg.gen, "--think-max");
     }
     if (cfg.inspect) {
         c.ds4_engine_summary(engine);

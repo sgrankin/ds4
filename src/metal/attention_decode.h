@@ -192,4 +192,9 @@ void ds4_gpu_set_decode_attn_rope_fuse(uint32_t head_dim, uint32_t n_rot,
     float freq_scale, float ext_factor, float attn_factor,
     float beta_fast, float beta_slow);
 int ds4_gpu_decode_attn_rope_fuse_used(void);
+typedef struct {
+    ds4_metal_attention_rope_args args;
+    bool pending, used, warned;
+} ds4_metal_deferred_rope;
+ds4_metal_deferred_rope *ds4_metal_attention_rope_state(void);
 #endif

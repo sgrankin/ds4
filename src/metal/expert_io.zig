@@ -30,11 +30,13 @@ pub fn poolEnabled() bool {
     return !(raw != null and c.strcmp(raw, "0") == 0);
 }
 pub fn readInto(offset: u64, length: u64, destination: [*c]u8, read_bytes: [*c]u64, elapsed: [*c]f64) bool {
+    const view = c.ds4_metal_expert_load_driver();
+    return readSource(@ptrCast(view.cache), view.model_fd, offset, length, destination, read_bytes, elapsed);
+}
+fn readSource(state: *Cache.State, fd: c_int, offset: u64, length: u64, destination: [*c]u8, read_bytes: [*c]u64, elapsed: [*c]f64) bool {
     if (read_bytes != null) read_bytes[0] = 0;
     if (elapsed != null) elapsed[0] = 0;
-    const view = c.ds4_metal_expert_load_driver();
-    const state: *Cache.State = @ptrCast(view.cache);
-    if (view.model_fd < 0 or
+    if (fd < 0 or
         destination == null or
         length == 0 or
         offset > std.math.maxInt(c.off_t) or
@@ -50,7 +52,7 @@ pub fn readInto(offset: u64, length: u64, destination: [*c]u8, read_bytes: [*c]u
                 _ = @atomicRmw(u64, &state.io_pread_calls, .Add, 1, .monotonic);
                 _ = @atomicRmw(u64, &state.io_requested_bytes, .Add, wanted, .monotonic);
             }
-            received = c.pread(view.model_fd, destination + @as(usize, @intCast(position)), wanted, @intCast(offset + position));
+            received = c.pread(fd, destination + @as(usize, @intCast(position)), wanted, @intCast(offset + position));
             if (received >= 0 or c.__error().* != c.EINTR) break;
         }
         if (received <= 0) {
@@ -74,14 +76,14 @@ fn worker(raw: ?*anyopaque) callconv(.c) ?*anyopaque {
     var index = args.worker_index;
     while (index < args.n_tasks) : (index +%= args.n_workers) {
         const task: *Task = @ptrCast(&args.tasks[index]);
-        task.ok = @intFromBool(readInto(task.offset, task.len, task.dst, &task.read_bytes, &task.ms));
+        task.ok = @intFromBool(readSource(@ptrCast(args.cache), args.model_fd, task.offset, task.len, task.dst, &task.read_bytes, &task.ms));
     }
     return null;
 }
 fn poolWorker(raw: ?*anyopaque) callconv(.c) ?*anyopaque {
-    const index: u32 = @truncate(@intFromPtr(raw));
-    const view = c.ds4_metal_expert_load_driver();
-    const pool: *Pool = @ptrCast(&view.load.*.pool);
+    const args: *Worker = @ptrCast(@alignCast(raw.?));
+    const index = args.worker_index;
+    const pool: *Pool = @ptrCast(args.pool);
     var generation: u64 = 0;
     while (true) {
         _ = c.pthread_mutex_lock(&pool.mutex);
@@ -100,8 +102,10 @@ fn poolWorker(raw: ?*anyopaque) callconv(.c) ?*anyopaque {
             pool.next_task +%= 1;
             if (task_index >= pool.n_tasks) break;
             const task: *Task = @ptrCast(&pool.tasks[task_index]);
+            const source: *Cache.State = @ptrCast(pool.cache);
+            const fd = pool.model_fd;
             _ = c.pthread_mutex_unlock(&pool.mutex);
-            task.ok = @intFromBool(readInto(task.offset, task.len, task.dst, &task.read_bytes, &task.ms));
+            task.ok = @intFromBool(readSource(source, fd, task.offset, task.len, task.dst, &task.read_bytes, &task.ms));
             _ = c.pthread_mutex_lock(&pool.mutex);
             task.done = 1;
             if (task.gate_stage != 0) _ = c.pthread_cond_broadcast(&pool.done_cond);
@@ -135,7 +139,12 @@ pub fn init(pool: *Pool, requested: u32) bool {
     _ = c.pthread_mutex_unlock(&pool.mutex);
     var started: u32 = 0;
     while (started < count) : (started += 1) {
-        const result = c.pthread_create(&pool.threads[started], null, poolWorker, @ptrFromInt(started));
+        // Capture the actual owner on the submitting thread. Persistent
+        // workers never ask a process/global selector which model to read.
+        pool.workers[started] = std.mem.zeroes(Worker);
+        pool.workers[started].worker_index = started;
+        pool.workers[started].pool = pool;
+        const result = c.pthread_create(&pool.threads[started], null, poolWorker, &pool.workers[started]);
         if (result == 0) continue;
         _ = c.fprintf(c.__stderrp, "ds4: Metal streaming expert pread pool thread creation failed: %s\n", c.strerror(result));
         _ = c.pthread_mutex_lock(&pool.mutex);
@@ -160,6 +169,9 @@ pub fn begin(pool: *Pool, tasks: [*c]Task, count: u32, requested: u32) bool {
     if (pool.initialized == 0 or pool.stopping != 0 or pool.thread_count == 0) return false;
     const workers = @min(requested, pool.thread_count);
     if (workers == 0 or pool.remaining_workers != 0 or pool.tasks != null) return false;
+    const view = c.ds4_metal_expert_load_driver();
+    pool.cache = view.cache;
+    pool.model_fd = view.model_fd;
     pool.tasks = tasks;
     pool.n_tasks = count;
     pool.next_task = 0;
@@ -227,15 +239,16 @@ pub fn readTasks(pool: *Pool, input: [*c]Task, count: u32, total: [*c]u64, elaps
     const workers = threadCount(count);
     const start = now();
     var ok = true;
+    const view = c.ds4_metal_expert_load_driver();
     if (workers <= 1) {
-        var args = Worker{ .tasks = input, .n_tasks = count, .worker_index = 0, .n_workers = 1 };
+        var args = Worker{ .tasks = input, .n_tasks = count, .worker_index = 0, .n_workers = 1, .pool = pool, .cache = view.cache, .model_fd = view.model_fd };
         _ = worker(&args);
     } else if (!(begin(pool, input, count, workers) and wait(pool))) {
         var threads: [18]c.pthread_t = undefined;
         var args: [18]Worker = undefined;
         var started: u32 = 0;
         while (started < workers) : (started += 1) {
-            args[started] = .{ .tasks = input, .n_tasks = count, .worker_index = started, .n_workers = workers };
+            args[started] = .{ .tasks = input, .n_tasks = count, .worker_index = started, .n_workers = workers, .pool = pool, .cache = view.cache, .model_fd = view.model_fd };
             const result = c.pthread_create(&threads[started], null, worker, &args[started]);
             if (result == 0) continue;
             _ = c.fprintf(c.__stderrp, "ds4: Metal streaming expert pread thread creation failed: %s\n", c.strerror(result));

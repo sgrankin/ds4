@@ -28,6 +28,10 @@ fn object(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, clan
     compile.addArgs(&.{ "-isysroot", sdk, "-target", clang_target, "-I", ".", "-I", "src", "-MMD", "-MF" });
     // Run parses Clang's discovered project-header dependencies for cache reuse.
     _ = compile.addDepFileOutputArg2(b.fmt("{s}.d", .{name}), .{});
+    if (std.mem.eql(u8, source, "src/models/clef/media_codec.c")) {
+        const pkg = b.addSystemCommand(&.{ "pkg-config", "--cflags", "libavformat", "libavcodec", "libavutil", "libswresample", "libswscale" });
+        compile.addPrefixedFileArg("@", pkg.captureStdOut(.{}));
+    }
     compile.addArg("-c");
     compile.addFileArg2(b.path(source), .{});
     compile.addArg("-o");
@@ -59,6 +63,27 @@ fn nativeObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
     if (std.mem.eql(u8, source, "src/server/serving_entry.zig"))
         m.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "src/server/http_api.h"));
     return b.addObject(.{ .name = std.fs.path.stem(source), .root_module = m }).getEmittedBin();
+}
+
+fn clefModule(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, optimize: std.builtin.Optimize, source: []const u8) *std.Build.Module {
+    const m = module(b, target, sdk, optimize);
+    m.root_source_file = b.path(source);
+    m.addImport("clef_c", generatedApi(b, target, sdk, optimize, "src/models/clef/backend_api.h"));
+    m.addImport("clef_tokenizer_c", generatedApi(b, target, sdk, optimize, "src/models/clef/tokenizer_api.h"));
+    m.addImport("clef_runtime_c", generatedApi(b, target, sdk, optimize, "src/clef_runtime_api.h"));
+    m.addImport("image_c", generatedApi(b, target, sdk, optimize, "src/image_api.h"));
+    m.addImport("clef_media_c", generatedApi(b, target, sdk, optimize, "src/models/clef/media_source_api.h"));
+    m.addImport("clef_codec_c", generatedApi(b, target, sdk, optimize, "src/models/clef/media_codec.h"));
+    return m;
+}
+
+fn clefObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, optimize: std.builtin.Optimize, source: []const u8) std.Build.LazyPath {
+    return b.addObject(.{ .name = std.fs.path.stem(source), .root_module = clefModule(b, target, sdk, optimize, source) }).getEmittedBin();
+}
+
+fn mediaLibraries(m: *std.Build.Module) void {
+    for ([_][]const u8{ "avformat", "avcodec", "avutil", "swresample", "swscale" }) |name|
+        m.linkSystemLibrary(name, .{ .use_pkg_config = .force });
 }
 
 // Protocol bridges and model implementations share native types, rather than
@@ -99,6 +124,7 @@ fn executable(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, 
     m.linkLibrary(core);
     m.linkFramework("Foundation", .{});
     m.linkFramework("Metal", .{});
+    m.linkFramework("Accelerate", .{});
     m.linkSystemLibrary("icucore", .{});
     return b.addExecutable(.{ .name = name, .root_module = m });
 }
@@ -131,6 +157,9 @@ pub fn build(b: *std.Build) void {
     const web_data = object(b, target, sdk, clang, "src/ds4_web_data.c", "web-data", .fast, c_flags);
     core_module.addObjectFile(web_data);
     core_module.addObjectFile(native_web);
+    const gpu_runtime_api = generatedApi(b, target, sdk, optimize, "src/runtime/api.h");
+    core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/runtime/gpu.zig", "runtime_c", gpu_runtime_api));
+    core_module.addObjectFile(object(b, target, sdk, clang, "src/runtime/metal.m", "metal-runtime", .fast, objc_flags));
     for ([_][]const u8{
         "src/ds4.c",      "src/ds4_distributed.c", "src/ds4_tp.c",             "src/ds4_layer_pack.c",
         "src/ds4_help.c", "src/ds4_eval_cases.c",  "src/ds4_gpu_args.c",       "src/linenoise.c",
@@ -181,6 +210,19 @@ pub fn build(b: *std.Build) void {
     steering_bank_module.root_source_file = b.path("src/engine/steering.zig");
     const steering_bank_test = b.addTest(.{ .name = "test-steering-banks", .root_module = steering_bank_module });
     b.step("steering-bank-test", "Build host-only steering bank normalization checks").dependOn(&b.addInstallArtifact(steering_bank_test, .{}).step);
+    const decisions_module = module(b, target, sdk, .debug);
+    decisions_module.root_source_file = b.path("src/decisions_test.zig");
+    const decisions_test = b.addTest(.{ .name = "test-decisions", .root_module = decisions_module });
+    b.step("decisions-test", "Build decision wire adapter checks").dependOn(&b.addInstallArtifact(decisions_test, .{}).step);
+    const clef_unit_module = clefModule(b, target, sdk, .debug, "src/clef_head_unit.zig");
+    const clef_unit_test = b.addTest(.{ .name = "test-clef-unit", .root_module = clef_unit_module });
+    b.step("clef-unit-test", "Build host-only Clef numerical and record helpers").dependOn(&b.addInstallArtifact(clef_unit_test, .{}).step);
+    const media_source_module = module(b, target, sdk, .debug);
+    media_source_module.root_source_file = b.path("src/models/clef/media_source.zig");
+    media_source_module.addImport("clef_media_c", generatedApi(b, target, sdk, .debug, "src/models/clef/media_source_api.h"));
+    media_source_module.linkSystemLibrary("curl", .{});
+    const media_source_test = b.addTest(.{ .name = "test-media-source", .root_module = media_source_module });
+    b.step("media-source-test", "Build standard encoded media source checks").dependOn(&b.addInstallArtifact(media_source_test, .{}).step);
     const payload_api = generatedApi(b, target, sdk, optimize, "src/engine/payload_io.h");
     const payload_file = nativeObject(b, target, sdk, optimize, "src/engine/payload_io_entry.zig", "payload_io_c", payload_api);
     const payload_tensor = nativeObject(b, target, sdk, optimize, "src/engine/payload_tensor_entry.zig", "payload_io_c", payload_api);
@@ -538,6 +580,9 @@ pub fn build(b: *std.Build) void {
     };
     const agent_main = nativeObject(b, target, sdk, optimize, "src/agent/main.zig", "agent_runtime_c", agent_runtime_api);
     const server_support = object(b, target, sdk, clang, "src/ds4_server.c", "server-support", .fast, c_flags);
+    const clef_entry = clefObject(b, target, sdk, optimize, "src/clef_entry.zig");
+    const clef_normalizer = object(b, target, sdk, clang, "src/models/clef/tokenizer_apple.m", "clef-normalizer", .fast, objc_flags);
+    const clef_codec = object(b, target, sdk, clang, "src/models/clef/media_codec.c", "clef-media-codec", .fast, c_flags);
     const agent_support = object(b, target, sdk, clang, "src/ds4_agent.c", "agent-support", .fast, c_flags);
     inline for (.{
         .{ "ds4", native_cli },
@@ -549,7 +594,14 @@ pub fn build(b: *std.Build) void {
         const uses_cache = std.mem.eql(u8, program[0], "ds4-server") or std.mem.eql(u8, program[0], "ds4-agent");
         const frontend = program[1];
         const exe = executable(b, target, sdk, core, if (uses_cache) cache else null, if (uses_cache) kvstore else null, program[0], frontend, .fast);
-        if (std.mem.eql(u8, program[0], "ds4-server")) exe.root_module.addObjectFile(server_support);
+        if (std.mem.eql(u8, program[0], "ds4-server")) {
+            exe.root_module.addObjectFile(server_support);
+            exe.root_module.addObjectFile(clef_entry);
+            exe.root_module.addObjectFile(clef_normalizer);
+            exe.root_module.linkSystemLibrary("curl", .{});
+            exe.root_module.addObjectFile(clef_codec);
+            mediaLibraries(exe.root_module);
+        }
         if (std.mem.eql(u8, program[0], "ds4-agent")) {
             exe.root_module.addObjectFile(agent_support);
             exe.root_module.addObjectFile(native_agent_context);
@@ -722,6 +774,51 @@ pub fn build(b: *std.Build) void {
     const flint_tokenizer_test = executable(b, target, sdk, core, null, null, "test-flint-tokenizer", flint_tokenizer_frontend, optimize);
     b.step("flint-tokenizer-test", "Build the native Flint tokenizer parity fixture").dependOn(&b.addInstallArtifact(flint_tokenizer_test, .{}).step);
     const flint_api = generatedApi(b, target, sdk, optimize, "src/models/flint/api.h");
+    const clef_api = generatedApi(b, target, sdk, optimize, "src/models/clef/backend_api.h");
+    const clef_smoke_frontend = nativeObject(b, target, sdk, optimize, "src/clef_backend_smoke.zig", "clef_c", clef_api);
+    const clef_smoke = executable(b, target, sdk, core, null, null, "clef-backend-smoke", clef_smoke_frontend, optimize);
+    b.step("clef-backend-smoke", "Build native Clef hidden-feature oracle executable").dependOn(&b.addInstallArtifact(clef_smoke, .{}).step);
+    const clef_request_frontend = clefObject(b, target, sdk, optimize, "src/clef_smoke.zig");
+    const clef_request_smoke = executable(b, target, sdk, core, null, null, "clef-smoke", clef_request_frontend, optimize);
+    clef_request_smoke.root_module.addObjectFile(clef_entry);
+    clef_request_smoke.root_module.addObjectFile(clef_normalizer);
+    clef_request_smoke.root_module.linkSystemLibrary("curl", .{});
+    clef_request_smoke.root_module.addObjectFile(clef_codec);
+    mediaLibraries(clef_request_smoke.root_module);
+    b.step("clef-smoke", "Build native Clef repeated decision executable").dependOn(&b.addInstallArtifact(clef_request_smoke, .{}).step);
+    const clef_record_frontend = clefObject(b, target, sdk, optimize, "src/clef_record_test.zig");
+    const clef_record_test = executable(b, target, sdk, core, null, null, "test-clef-record", clef_record_frontend, optimize);
+    clef_record_test.root_module.addObjectFile(clef_normalizer);
+    b.step("clef-record-test", "Build native Clef token and span parity fixture").dependOn(&b.addInstallArtifact(clef_record_test, .{}).step);
+    const clef_head_frontend = clefObject(b, target, sdk, optimize, "src/clef_head_oracle.zig");
+    const clef_head_test = executable(b, target, sdk, core, null, null, "test-clef-head", clef_head_frontend, optimize);
+    clef_head_test.root_module.addObjectFile(clef_normalizer);
+    b.step("clef-head-test", "Build native Clef saved-feature head comparison").dependOn(&b.addInstallArtifact(clef_head_test, .{}).step);
+    const clef_media_frontend = clefObject(b, target, sdk, optimize, "src/clef_media_test.zig");
+    const clef_media_test = executable(b, target, sdk, core, null, null, "test-clef-media", clef_media_frontend, optimize);
+    clef_media_test.root_module.addObjectFile(clef_codec);
+    mediaLibraries(clef_media_test.root_module);
+    b.step("clef-media-test", "Build native image/audio/video preparation oracle fixture").dependOn(&b.addInstallArtifact(clef_media_test, .{}).step);
+    const clef_vision_frontend = clefObject(b, target, sdk, optimize, "src/clef_vision_smoke.zig");
+    const clef_vision_smoke = executable(b, target, sdk, core, null, null, "clef-vision-smoke", clef_vision_frontend, optimize);
+    b.step("clef-vision-smoke", "Build native vision feature oracle executable").dependOn(&b.addInstallArtifact(clef_vision_smoke, .{}).step);
+    const clef_audio_frontend = clefObject(b, target, sdk, optimize, "src/clef_audio_smoke.zig");
+    const clef_audio_smoke = executable(b, target, sdk, core, null, null, "clef-audio-smoke", clef_audio_frontend, optimize);
+    b.step("clef-audio-smoke", "Build native Omni audio feature oracle executable").dependOn(&b.addInstallArtifact(clef_audio_smoke, .{}).step);
+    const runtime_lease_frontend = nativeObject(b, target, sdk, optimize, "src/runtime/lease_test.zig", "runtime_c", gpu_runtime_api);
+    const runtime_lease_test = executable(b, target, sdk, core, null, null, "test-runtime-lease", runtime_lease_frontend, optimize);
+    b.step("runtime-lease-test", "Build cross-engine GPU submission exclusion fixture").dependOn(&b.addInstallArtifact(runtime_lease_test, .{}).step);
+    const runtime_test_api = generatedApi(b, target, sdk, optimize, "src/runtime/test_api.h");
+    const runtime_host_frontend = nativeObject(b, target, sdk, optimize, "src/runtime/host_test.zig", "runtime_c", runtime_test_api);
+    const runtime_host_test = executable(b, target, sdk, core, null, null, "test-runtime-host", runtime_host_frontend, optimize);
+    b.step("runtime-host-test", "Build actual host configuration and CPU-pool ownership fixture").dependOn(&b.addInstallArtifact(runtime_host_test, .{}).step);
+    const runtime_lifecycle_frontend = nativeObject(b, target, sdk, optimize, "src/runtime/lifecycle_test.zig", "runtime_c", runtime_test_api);
+    const runtime_lifecycle_test = executable(b, target, sdk, core, null, null, "test-runtime-lifecycle", runtime_lifecycle_frontend, optimize);
+    b.step("runtime-lifecycle-test", "Build actual Metal shared-lifetime fixture").dependOn(&b.addInstallArtifact(runtime_lifecycle_test, .{}).step);
+    const runtime_engine_api = generatedApi(b, target, sdk, optimize, "src/runtime/two_engine_test_api.h");
+    const runtime_two_engine_frontend = nativeObject(b, target, sdk, optimize, "src/runtime/two_engine_test.zig", "runtime_engine_c", runtime_engine_api);
+    const runtime_two_engine_test = executable(b, target, sdk, core, null, null, "test-runtime-two-engines", runtime_two_engine_frontend, optimize);
+    b.step("runtime-two-engine-test", "Build public-API two-native-engine lifecycle fixture").dependOn(&b.addInstallArtifact(runtime_two_engine_test, .{}).step);
     const flint_smoke_frontend = nativeObject(b, target, sdk, optimize, "src/flint_smoke_entry.zig", "flint_c", flint_api);
     const flint_smoke = executable(b, target, sdk, core, null, null, "flint-smoke", flint_smoke_frontend, optimize);
     b.step("flint-smoke", "Build the native Flint driver/model qualification executable").dependOn(&b.addInstallArtifact(flint_smoke, .{}).step);

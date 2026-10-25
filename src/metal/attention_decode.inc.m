@@ -1,3 +1,4 @@
+ds4_metal_deferred_rope *ds4_metal_attention_rope_state(void) { return &ds4_metal_context_current()->deferred_rope; }
 /* Driver/ARC leaves only; native chooses stages, policy, packets and grids. */
 #include "attention_decode.h"
 static ds4_metal_attention_view ds4_metal_attention_retain_view(id<MTLBuffer> buffer,

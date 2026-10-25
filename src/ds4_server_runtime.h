@@ -5,6 +5,7 @@
 #include "ds4_kvstore.h"
 #include "ds4_state_cache.h"
 #include "ds4_tp.h"
+#include "clef.h"
 #include <pthread.h>
 #include <signal.h>
 #include <stdio.h>
@@ -157,6 +158,7 @@ typedef struct {
 
 struct server {
     ds4_engine *engine;
+    ds4_decision_registry *decision_models;
     ds4_tp *tp_leader;
     server_slot *slots;
     int slot_count;

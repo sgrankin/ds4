@@ -9,11 +9,9 @@ const Model = h.Model;
 const Shape = h.Shape;
 const max32 = std.math.maxInt(u32);
 const max64 = std.math.maxInt(u64);
-var norm_mix_available: ?bool = null;
 pub fn available() c_int {
     if (!h.init()) return 0;
-    if (norm_mix_available == null) norm_mix_available = h.pipeline(c.DS4_HC_NORM_MIX).handle != null;
-    return @intFromBool(norm_mix_available.?);
+    return @intFromBool(h.pipeline(c.DS4_HC_NORM_MIX).handle != null);
 }
 // The fused reduction reproduces standalone RMSNorm/matvec reduction trees
 // bit-exactly (src/metal/dsv4_hc.metal); this only removes a dispatch boundary.

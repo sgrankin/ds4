@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 # Opt-in local profiles. Later arguments override the program's CLI defaults.
 const ROOT = path self .
-const USAGE = 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast|flint [binary arguments]'
+const USAGE = 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast|flint|clef-flash|clef|clef-omni [binary arguments]'
 
 def env-or [name: string, fallback: string] {
     $env | get --optional $name | default --empty $fallback
@@ -53,18 +53,22 @@ def --wrapped main [...arguments: string] {
         print $USAGE
         print 'persistent-fast combines left/right suffix reuse with decode and prefill resident substitutions for ds4-agent or ds4-server.'
         print 'flint is server-only: native resident decoding with durable Responses JSON; provide --model DIR.'
+        print 'clef-flash, clef and clef-omni are server-only decision profiles; downloaded model directories are selected by default.'
         return
     }
-    if $preset not-in ['context-fast' 'resident-fast' 'persistent-fast' 'flint'] { usage-error }
+    if $preset not-in ['context-fast' 'resident-fast' 'persistent-fast' 'flint' 'clef-flash' 'clef' 'clef-omni'] { usage-error }
     $args = ($args | skip 1)
 
-    if $preset == 'flint' {
+    if $preset in ['flint' 'clef-flash' 'clef' 'clef-omni'] {
         if not $server {
-            print --stderr 'ds4-agent does not yet support Flint tool formatting. Use ds4-local --server flint --model DIR, or ds4 --model DIR for the plain CLI.'
+            print --stderr (if $preset == flint {
+                'ds4-agent does not yet support Flint tool formatting. Use ds4-local --server flint --model DIR, or ds4 --model DIR for the plain CLI.'
+            } else {
+                'Clef profiles require --server and expose the decision APIs.'
+            })
             exit 2
         }
-        # A Flint process has its own KV layout. Do not inherit DeepSeek-only
-        # substitutions, suffix relocation or SSD GPU-state cache settings.
+        # These models do not use DeepSeek's cache layout or route policy.
         let incompatible = ($env | columns | where {|key| (
             ($key | str starts-with 'DS4_METAL_V41_') or
             ($key | str starts-with 'DS4_V41_') or
@@ -75,6 +79,10 @@ def --wrapped main [...arguments: string] {
         )
         })
         hide-env --ignore-errors ...$incompatible
+        if $preset != flint {
+            let model = $ROOT | path join gguf $"($preset)-int4"
+            exec ($bin_dir | path join 'ds4-server') --host 127.0.0.1 --model $model --ctx (if $preset == clef-omni { '64000' } else { '16384' }) ...$args
+        }
         let store = env-or DS4_SERVER_RESPONSE_STORE_DIR ($ROOT | path join '.workspaces/response-store')
         mkdir ($store | path dirname)
         load-env {DS4_SERVER_RESPONSE_STORE_DIR: $store}

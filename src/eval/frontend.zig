@@ -9,8 +9,8 @@ const Trace = @import("trace.zig");
 const Terminal = @import("ui.zig");
 const Runtime = @import("runtime.zig");
 const allocator = std.heap.c_allocator;
-fn logMemory(config: *const c.eval_config) void {
-    const memory = c.ds4_context_memory_estimate_with_prefill_mode(config.backend, config.ctx_size, config.prefill_chunk, config.ssd_streaming);
+fn logMemory(engine: *c.ds4_engine, config: *const c.eval_config) void {
+    const memory = c.ds4_engine_context_memory_estimate(engine, config.ctx_size);
     _ = c.fprintf(
         c.__stderrp,
         "ds4-eval: context buffers %.2f MiB (ctx=%d, backend=%s, prefill_chunk=%u, raw_kv_rows=%u, compressed_kv_rows=%u)\n",
@@ -122,9 +122,9 @@ pub fn main(argc: c_int, argv: [*c][*c]u8) c_int {
         Prompts.warn(&config, largest, max_generation);
     }
     _ = c.fprintf(c.__stderrp, "ds4-eval: model shape %s\n", c.ds4_engine_model_name(engine.?));
-    Prompts.warnThink(&config);
+    Prompts.warnThink(engine.?, &config);
     Trace.header(trace, &config, c.ds4_engine_model_name(engine.?), count, largest.tokens, max_generation);
-    logMemory(&config);
+    logMemory(engine.?, &config);
     if (config.tp.role == c.DS4_TP_LEADER) {
         var identity = std.mem.zeroes(c.ds4_tp_identity);
         identity.gguf_bytes = c.ds4_engine_model_bytes(engine.?);

@@ -115,7 +115,7 @@ pub fn runOne(engine: *c.ds4_engine, session: *c.ds4_session, config: *const c.e
     const case = &ui.cases[index];
     const tty = ui.enabled;
     const use_color = !tty and c.isatty(c.STDOUT_FILENO) != 0;
-    const think = c.ds4_think_mode_for_context(config.think_mode, config.ctx_size);
+    const think = c.ds4_engine_think_mode_for_context(engine, config.think_mode, config.ctx_size);
     const question = Prompts.question(case);
     defer allocator.free(question);
     var prompt = std.mem.zeroes(c.ds4_tokens);

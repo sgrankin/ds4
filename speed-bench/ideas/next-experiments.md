@@ -3,8 +3,8 @@
 ## Clef family, decisions and multi-model ownership — next sequence, 2026-10-24
 
 User requested a plan for native Clef-Flash/full/Omni, both decision APIs and
-multiple loaded engines. Steering is published through`ce3afb7999b7`; no Clef
-inference is implemented or qualified yet. See the
+multiple loaded engines. Steering is published through`ce3afb7999b7`; native
+Clef text, both APIs and Flint/helper mixed serving are qualified locally. See the
 [journal plan](../../src/JOURNAL.md#clef-family-and-decision-serving--plan-2026-10-24)
 for architecture, pinned artifacts, reference performance and scope.
 
@@ -14,6 +14,16 @@ media port fits an hour. If a slice remains incomplete, record its specific
 obstacle and split only that work; do not spend subsequent hours polishing a
 harness or building general infrastructure. Independent source/oracle work may
 overlap; heavy model jobs stay sequential under the pressure guard.
+
+Completed (2026-10-25): the three native models, both APIs, actual media paths,
+shared runtime and independent DS41 Host/Metal owners are qualified. Two actual
+DS41 engines interleave/close safely with exact logits; four existing families'
+32 full-vocabulary rows match frozen controls. Flash2000 and all three BLINK28
+samples finish without errors. Head and sparse/audio tiling are measured fast
+defaults. The cooperative layer-group screen has a recorded Pareto curve and
+remains opt-in; no decision feature-cache framework was added. Aggregate memory
+reservations, multiple generators in the server registry and other-family
+concurrency remain separate proposals. See the journal/reports for exact scope.
 
 | Order | Deliverable | Measurement/qualification before proceeding |
 | --- | --- | --- |

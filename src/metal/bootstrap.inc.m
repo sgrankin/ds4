@@ -2,16 +2,24 @@
  * sequencing. Literal PSO and strong-reference catalogues stay here rather
  * than becoming mechanically copied pointer assignments in Zig. */
 #include "bootstrap.h"
+
+
 ds4_metal_bootstrap_context ds4_metal_bootstrap_driver(void) {
     return (ds4_metal_bootstrap_context){ &g_bootstrap, &g_schedule,
         &g_expert_cache, &g_expert_load, g_ssd_streaming_mode != 0 };
 }
 void ds4_metal_bootstrap_reset_fast_cache(void) { ds4_gpu_decode_pipeline_fast_cache_reset(); }
 bool ds4_metal_bootstrap_device(void) {
-    g_device = MTLCreateSystemDefaultDevice();
-    if (g_device) return true;
-    fprintf(stderr, "ds4: Metal device not available\n");
-    return false;
+    if (g_runtime_owned) return g_device && g_queue;
+    void *device = NULL, *queue = NULL;
+    if (!ds4_runtime_metal_acquire(&device, &queue)) {
+        fprintf(stderr, "ds4: Metal device/queue not available\n");
+        return false;
+    }
+    g_device = (__bridge id<MTLDevice>)device;
+    g_queue = (__bridge id<MTLCommandQueue>)queue;
+    g_runtime_owned = true;
+    return true;
 }
 void ds4_metal_bootstrap_diagnostics(void) {
     ds4_gpu_timeline_probe(g_device);
@@ -33,13 +41,7 @@ ds4_metal_bootstrap_features ds4_metal_bootstrap_features_query(bool disabled) {
 }
 int ds4_metal_bootstrap_tensor_probe(void) { return ds4_gpu_compile_tensor_probe(); }
 bool ds4_metal_bootstrap_queue(void) {
-    g_queue = [g_device newCommandQueueWithMaxCommandBufferCount:256];
-    if (!g_queue) {
-        fprintf(stderr, "ds4: failed to create Metal command queue\n");
-        g_device = nil;
-        return 0;
-    }
-    return true;
+    return g_queue != nil;
 }
 
 bool ds4_metal_bootstrap_bookkeeping(void) {
@@ -2363,8 +2365,7 @@ bool ds4_metal_bootstrap_remaining_pipelines(void) {
 void ds4_metal_bootstrap_stop_keepalive(void) { ds4_gpu_queue_keepalive_stop_thread(); }
 void ds4_metal_bootstrap_commit_wait(void *command) {
     id<MTLCommandBuffer> cb = (__bridge id<MTLCommandBuffer>)command;
-    [cb commit];
-    [cb waitUntilCompleted];
+    ds4_runtime_metal_commit((__bridge void *)cb, &g_bootstrap, true);
 }
 void ds4_metal_bootstrap_memory_report(void) { ds4_gpu_print_memory_report("at cleanup"); }
 void ds4_metal_bootstrap_retire_readback(void) {
@@ -2688,6 +2689,7 @@ void ds4_metal_bootstrap_retire_maps(void) {
 }
 
 void ds4_metal_bootstrap_retire_bookkeeping(void) {
+    ds4_native_metal_selected_diagnostics_cleanup();
     ds4_gpu_model_residency_clear();
     ds4_gpu_model_views_clear();
     [g_pipeline_cache removeAllObjects];
@@ -2702,5 +2704,9 @@ void ds4_metal_bootstrap_retire_bookkeeping(void) {
     g_library = nil;
     g_queue = nil;
     g_device = nil;
+    if (g_runtime_owned) {
+        g_runtime_owned = false;
+        ds4_runtime_metal_release();
+    }
 }
 

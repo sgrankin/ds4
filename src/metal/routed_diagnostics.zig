@@ -1,5 +1,5 @@
 //! Optional selected-route binary replay/recording and merged hotlist files.
-//! Process state lives only in RoutedSingle's sole entry. These diagnostics do
+//! Per-model state lives in RoutedSingle's selected Metal owner. These diagnostics do
 //! not change expert selection, cache ownership or shader arithmetic.
 const std = @import("std");
 const c = @import("metal_c");
@@ -151,7 +151,7 @@ pub const State = struct {
         if (!self.hotlist_initialized) {
             self.hotlist_initialized = true;
             if (!self.merge(path)) return false;
-            _ = c.atexit(c.ds4_native_metal_selected_hotlist_close);
+            if (c.ds4_metal_context_selected() == null) _ = c.atexit(c.ds4_native_metal_selected_hotlist_close);
         }
         if (layer >= max_layers) return true;
         self.hotlist_records +%= 1;
@@ -187,7 +187,7 @@ pub const State = struct {
                 return false;
             }
             _ = c.setvbuf(self.record_file, null, c._IOFBF, 1 << 20);
-            _ = c.atexit(c.ds4_native_metal_selected_trace_close);
+            if (c.ds4_metal_context_selected() == null) _ = c.atexit(c.ds4_native_metal_selected_trace_close);
         }
         if (c.fwrite(ids, @sizeOf(i32), count, self.record_file) != count) {
             _ = c.fprintf(c.__stderrp, "ds4: failed to write selected-id record file %s\n", path);

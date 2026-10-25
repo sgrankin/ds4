@@ -440,9 +440,9 @@ export fn ds4_resident_route_metrics_read(output: ?*c.ds4_resident_route_metrics
 // Append to the ONE existing graph facade. Runtime/execution constructors and
 // configuration() are reused; pure owner imports instantiate no C exports.
 const SessionCoordinator = @import("deepseek41/coordinator.zig");
-var prefill_logit_dumped = false;
+
 export fn ds4_native_session_prefill_logit_dump(logits: [*c]const f32, vocabulary: u32) void {
-    SessionCoordinator.dumpPrefillLogits(&prefill_logit_dumped, logits, vocabulary);
+    SessionCoordinator.dumpPrefillLogits(RouteServices.dumpedFlag(), logits, vocabulary);
 }
 fn coordinator(state: *c.ds4_session_frontier, device: *c.ds4_deepseek41_session_device, core: *c.ds4_engine_core, transport: *c.ds4_engine_tp_state, control: *c.ds4_session_control, config: *const Config, inputs: *const c.ds4_engine_memory_inputs, exact: bool) SessionCoordinator.Coordinator {
     return .{
@@ -450,7 +450,7 @@ fn coordinator(state: *c.ds4_session_frontier, device: *c.ds4_deepseek41_session
         .core = core,
         .transport = transport,
         .control = control,
-        .dump_recorded = &prefill_logit_dumped,
+        .dump_recorded = RouteServices.dumpedFlag(),
     };
 }
 export fn ds4_native_session_request_sync41(state: *c.ds4_session_frontier, device: *c.ds4_deepseek41_session_device, core: *c.ds4_engine_core, transport: *c.ds4_engine_tp_state, control: *c.ds4_session_control, raw: *const c.ds4_model_config, inputs: *const c.ds4_engine_memory_inputs, prompt: ?*const c.ds4_tokens, exact: bool, errors: [*c]u8, capacity: usize) c_int {

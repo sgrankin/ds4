@@ -14,21 +14,42 @@ const max_bytes = std.math.maxInt(usize);
 // One mutex also serializes live/peak accounting; views are live handles but
 // do not count their shared backing allocation twice. Other operations still
 // require the caller to retain its handle, just as the public C API does.
-var mutex: c.pthread_mutex_t = c.ds4_metal_resource_mutex_init;
-var handles: std.AutoHashMapUnmanaged(usize, void) = .empty;
-var allocation_stats: Stats = .{ .live_bytes = 0, .peak_bytes = 0 };
-var trace_allocations: ?bool = null;
+const State = struct {
+    mutex: c.pthread_mutex_t = c.ds4_metal_resource_mutex_init,
+    handles: std.AutoHashMapUnmanaged(usize, void) = .empty,
+    allocation_stats: Stats = .{ .live_bytes = 0, .peak_bytes = 0 },
+    trace_allocations: ?bool = null,
+};
+fn peek() ?*State {
+    const value = c.ds4_metal_resource_state_slot().* orelse return null;
+    return @ptrCast(@alignCast(value));
+}
+fn state() *State {
+    const slot = c.ds4_metal_resource_state_slot();
+    if (slot.* == null) {
+        const value = allocator.create(State) catch {
+            c.perror("ds4: resource state");
+            c.exit(1);
+        };
+        value.* = .{};
+        slot.* = value;
+    }
+    return @ptrCast(@alignCast(slot.*.?));
+}
 
 fn lock() void {
-    _ = c.pthread_mutex_lock(&mutex);
+    const self = state();
+    _ = c.pthread_mutex_lock(&self.mutex);
 }
 fn unlock() void {
-    _ = c.pthread_mutex_unlock(&mutex);
+    const self = state();
+    _ = c.pthread_mutex_unlock(&self.mutex);
 }
 fn traceEnabledLocked() bool {
-    if (trace_allocations == null)
-        trace_allocations = c.getenv("DS4_METAL_TRACE_ALLOCS") != null;
-    return trace_allocations.?;
+    const self = state();
+    if (self.trace_allocations == null)
+        self.trace_allocations = c.getenv("DS4_METAL_TRACE_ALLOCS") != null;
+    return self.trace_allocations.?;
 }
 fn logAllocation(action: [*:0]const u8, bytes: u64, snapshot: Stats) void {
     @setFloatMode(.optimized);
@@ -38,32 +59,37 @@ fn logAllocation(action: [*:0]const u8, bytes: u64, snapshot: Stats) void {
 
 const Tracked = struct { snapshot: Stats, trace: bool };
 fn track(tensor: *Tensor, owned_bytes: u64) ?Tracked {
+    const self = state();
     const key = @intFromPtr(tensor);
     if (key == std.math.maxInt(usize)) return null;
     lock();
     defer unlock();
-    const entry = handles.getOrPut(allocator, key) catch return null;
+    const entry = self.handles.getOrPut(allocator, key) catch return null;
     if (entry.found_existing) return null;
     // Allocation sizes are already admitted by the Metal device. Preserve the
     // original unsigned diagnostic counter rather than adding a new budget.
-    allocation_stats.live_bytes +%= owned_bytes;
-    allocation_stats.peak_bytes = @max(allocation_stats.peak_bytes, allocation_stats.live_bytes);
-    return .{ .snapshot = allocation_stats, .trace = owned_bytes != 0 and traceEnabledLocked() };
+    self.allocation_stats.live_bytes +%= owned_bytes;
+    self.allocation_stats.peak_bytes = @max(self.allocation_stats.peak_bytes, self.allocation_stats.live_bytes);
+    return .{ .snapshot = self.allocation_stats, .trace = owned_bytes != 0 and traceEnabledLocked() };
 }
 
 pub fn stats() Stats {
+    const self = peek() orelse return .{ .live_bytes = 0, .peak_bytes = 0 };
     lock();
     defer unlock();
-    return allocation_stats;
+    return self.allocation_stats;
 }
 pub fn resetTracking() void {
+    const self = peek() orelse return;
     lock();
-    defer unlock();
-    if (handles.count() != 0)
-        _ = c.fprintf(c.__stderrp, "ds4: Metal cleanup discarded %zu live tensor handles\n", @as(usize, handles.count()));
-    handles.clearAndFree(allocator);
-    allocation_stats = .{ .live_bytes = 0, .peak_bytes = 0 };
-    // Like the C static environment cache, trace policy survives GPU cleanup.
+    if (self.handles.count() != 0)
+        _ = c.fprintf(c.__stderrp, "ds4: Metal cleanup discarded %zu live tensor handles\n", @as(usize, self.handles.count()));
+    self.handles.clearAndFree(allocator);
+    self.allocation_stats = .{ .live_bytes = 0, .peak_bytes = 0 };
+    unlock();
+    c.ds4_metal_resource_state_slot().* = null;
+    _ = c.pthread_mutex_destroy(&self.mutex);
+    allocator.destroy(self);
 }
 
 pub fn alloc(bytes: u64) ?*Tensor {
@@ -98,16 +124,20 @@ pub fn view(base: ?*const Tensor, offset: u64, bytes: u64) ?*Tensor {
 }
 pub fn free(tensor: ?*Tensor) void {
     const handle = tensor orelse return;
+    const self = peek() orelse {
+        _ = c.fprintf(c.__stderrp, "ds4: Metal tensor free ignored for unknown handle %p\n", handle);
+        return;
+    };
     lock();
-    if (!handles.remove(@intFromPtr(handle))) {
+    if (!self.handles.remove(@intFromPtr(handle))) {
         unlock();
         _ = c.fprintf(c.__stderrp, "ds4: Metal tensor free ignored for unknown handle %p\n", handle);
         return;
     }
     const region = c.ds4_metal_resource_region(handle);
     if (region.owner != 0)
-        allocation_stats.live_bytes -|= region.bytes;
-    const snapshot = allocation_stats;
+        self.allocation_stats.live_bytes -|= region.bytes;
+    const snapshot = self.allocation_stats;
     const trace = region.owner != 0 and traceEnabledLocked();
     unlock();
     if (trace) logAllocation("free", region.bytes, snapshot);

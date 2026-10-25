@@ -14,6 +14,8 @@ const Residency = @import("deepseek41/target_residency.zig");
 const Record = c.ds4_engine_core;
 const Support = @import("support_weights.zig");
 const VisionWeights = @import("vision_weights.zig");
+const Scope = @import("metal_scope.zig").Scope(c);
+const RouteServices = @import("deepseek41/route_services.zig");
 
 fn hasText(value: [*c]const u8) bool {
     return value != null and value[0] != 0;
@@ -41,6 +43,16 @@ pub const Core = struct {
     pub fn finishOpen(self: *Core, options: *const c.ds4_engine_options, shard_model_bytes: *u64) bool {
         @setFloatMode(.optimized);
         const state = self.state;
+        if (state.host_context == null) {
+            state.host_context = c.ds4_host_context_create(@intCast(@max(options.n_threads, 0)));
+            if (state.host_context == null) return fail("ds4: cannot allocate host engine owner\n");
+        }
+        if (state.backend == c.DS4_BACKEND_METAL and state.metal_context == null) {
+            state.metal_context = c.ds4_metal_context_create();
+            if (state.metal_context == null) return fail("ds4: cannot allocate Metal engine owner\n");
+        }
+        const scope = Scope.enter(state);
+        defer scope.leave();
         if (!options.inspect_only) {
             const supported = state.backend == c.DS4_BACKEND_METAL and
                 options.distributed.role == c.DS4_DISTRIBUTED_NONE and
@@ -284,16 +296,30 @@ fn mapModel(model: *const c.ds4_model) bool {
 /// their Model maps. Preserve cleanup even when init never reached GPU init:
 /// inspect/manual-cap startup may already have initialized Metal.
 pub fn freeRecord(state: *Record) void {
+    const metal_context = state.metal_context;
+    const host_context = state.host_context;
+    const previous_host = c.ds4_host_context_select(host_context);
+    const previous = c.ds4_metal_context_select(metal_context);
+    defer {
+        _ = c.ds4_host_context_select(if (previous_host == host_context) null else previous_host);
+        _ = c.ds4_metal_context_select(if (previous == metal_context) null else previous);
+        c.ds4_metal_context_destroy(metal_context);
+        c.ds4_host_context_destroy(host_context);
+    }
     c.ds4_core_profile_close();
     state.weights = std.mem.zeroes(c.ds4_weights);
     c.ds4_vocab_release(&state.vocab);
     c.ds4_core_threads_shutdown();
+    RouteServices.cleanup();
+    // Submitted commands and expert readers borrow the mapped weights/fds.
+    // Drain and retire their views before releasing the underlying mappings.
+    c.ds4_gpu_cleanup();
     if (state.mtp_model.map != null) Mapping.closeRecordPointer(&state.mtp_model);
     if (state.vision_model.map != null) Mapping.closeRecordPointer(&state.vision_model);
     Mapping.closeRecordPointer(&state.model);
-    c.ds4_gpu_cleanup();
     c.ds4_ssd_memory_lock_release(&state.simulated_memory);
-    c.ds4_core_release_instance_lock();
+    if (state.instance_lock_owned) c.ds4_core_release_instance_lock();
+    if (state.native_admission_owned) c.ds4_core_native_admission_release();
     c.free(@ptrCast(state.directional_steering_dirs));
     c.free(state.directional_steering_file);
     c.free(state.model_path);

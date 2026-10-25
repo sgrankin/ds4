@@ -52,6 +52,9 @@ fn preM5(name: []const u8) bool {
 pub fn init(context: *const Context) bool {
     const s = state(context);
     if (s.initialized != 0) return true;
+    // A failed partial startup owns no surviving model resources or runtime borrow.
+    var complete = false;
+    defer if (!complete) cleanup(context);
     c.ds4_metal_bootstrap_reset_fast_cache();
     if (!c.ds4_metal_bootstrap_device()) return false;
     c.ds4_metal_bootstrap_diagnostics();
@@ -77,9 +80,8 @@ pub fn init(context: *const Context) bool {
     schedule.commands.static_head_norm = preM5(std.mem.sliceTo(&s.device_name, 0)) and
         !present("DS4_METAL_DISABLE_PRE_M5_HEAD_RMS_ROPE_PIPELINE_STATIC");
     if (!c.ds4_metal_bootstrap_remaining_pipelines()) return false;
-    // A failed init deliberately has no general unwind: original partial ARC
-    // resources survive, and cleanup remains a no-op until this publication.
     s.initialized = 1;
+    complete = true;
     return true;
 }
 /// Stop the thread outside the public cleanup autorelease scope, as in C.

@@ -291,7 +291,7 @@ pub const Turn = struct {
     pub fn run(self: Turn, user: [*c]const u8) c_int {
         const worker = self.worker;
         const options = self.config();
-        const think = c.ds4_think_mode_for_context(options.gen.think_mode, options.gen.ctx_size);
+        const think = c.ds4_engine_think_mode_for_context(worker.engine, options.gen.think_mode, options.gen.ctx_size);
         self.begin();
         var compact_error: [160]u8 = @splat(0);
         if (prerope() and c.ds4_session_enable_suffix_prerope(worker.session, &compact_error, compact_error.len) != 0)

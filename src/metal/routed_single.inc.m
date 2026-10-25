@@ -1,3 +1,5 @@
+void **ds4_metal_single_diagnostics_slot(void) { return &ds4_metal_context_current()->native_diagnostics; }
+ds4_metal_selected_override *ds4_metal_single_override_state(void) { return &ds4_metal_context_current()->selected_override; }
 /* ARC resource leaves for the complete native single-token routed owner.
  * Cache/table operations are explicit existing whole libraries. This file
  * contains no routed-path selection or old encode-controller forwarding. */

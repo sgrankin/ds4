@@ -1,3 +1,4 @@
+void **ds4_metal_resource_state_slot(void) { return &ds4_metal_context_current()->native_resources; }
 /* True ARC/Metal leaves for the native resource owner. Included at the end of
  * ds4_metal.m; the public handle remains a retained DS4MetalTensor instance. */
 #include "resources.h"

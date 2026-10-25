@@ -1,5 +1,5 @@
 //! Diagnostic future-route tape. Native-endian headers and rows remain exact;
-//! this adds no prediction to model arithmetic. One process/session owns the
+//! this adds no prediction to model arithmetic. One engine/scalar session owns the
 //! files, borrowed graph identity and optional libc-backed replay words.
 const std = @import("std");
 const c = @import("gguf_c");
@@ -32,8 +32,8 @@ pub const Oracle = struct {
     position: u32 = 0,
     token: u32 = 0,
     checked: u32 = 0,
-    // The supported oracle contract admits exactly one graph/model. Retain
-    // its immutable layer count for the process-exit report, not a Config borrow.
+    // The supported oracle contract admits one scalar graph per engine. Keep
+    // its layer count for retirement reporting, not a borrowed Config pointer.
     layers: u32 = 0,
     predicted: [c.DS4_MAX_EXPERT_USED]i32 = @splat(0),
     probe_calls: [c.DS4_MAX_LAYER]u64 = @splat(0),
@@ -63,6 +63,7 @@ pub const Oracle = struct {
             }
             allocator.free(words);
         }
+        self.* = .{};
     }
     pub fn begin(self: *Oracle, ops: Ops, graph: *Graph, token: u32, on_exit: *const fn () callconv(.c) void) void {
         const shape = &ops.config.shape;
@@ -119,10 +120,10 @@ pub const Oracle = struct {
             self.enabled = true;
             self.owner = graph;
             self.layers = shape.n_layer;
-            _ = c.atexit(on_exit);
+            if (c.ds4_host_context_selected() == null) _ = c.atexit(on_exit);
         }
         if (!self.enabled) return;
-        if (self.owner != graph) die("oracle supports one scalar session per process");
+        if (self.owner != graph) die("oracle supports one scalar session per engine");
         if (!graph.streaming or graph.quality or graph.imatrix != null or graph.image_count != 0 or graph.tp_world != 1 or
             present("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") or present("DS4_METAL_V41_ASYNC_EXPERT_LOAD") or
             present("DS4_METAL_DISABLE_STREAMING_EXPERT_EARLY_LOAD")) die("oracle requires ordinary single-rank text SSD early loading");

@@ -87,6 +87,16 @@ pub fn decodeWithSink(engine: ?*c.ds4_engine, runtime: ?*c.server, endpoint: c.d
         return false;
     }
     defer c.ds4_server_input_deinit(&input);
+    if (engine != null and input.req.model_from_request and !backend.model().accepts(text(input.req.model))) {
+        const reason = "requested model is not a loaded generative model; use the matching model and endpoint";
+        if (errors.len != 0) {
+            const n = @min(errors.len - 1, reason.len);
+            @memcpy(errors[0..n], reason[0..n]);
+            errors[n] = 0;
+        }
+        out.* = zero(c.request);
+        return false;
+    }
     input.req.response_sink = sink;
     return c.ds4_server_materialize(engine, runtime, endpoint, &input, context, incremental, out, errors.ptr, errors.len);
 }
@@ -362,6 +372,27 @@ pub fn modelValues(out: *c.buf, id: [*c]const u8, name: [*c]const u8, context: c
 fn models(srv: *c.server, fd: c_int, id: [*c]const u8, stop: [*c]const volatile c.sig_atomic_t) void {
     var out = zero(c.buf);
     defer freeBuffer(&out);
+    const decisions = if (srv.decision_models != null) c.ds4_decision_registry_models(srv.decision_models, id) else null;
+    defer c.free(decisions);
+    if (id != null and decisions != null) {
+        response(srv, fd, 200, decisions, stop);
+        return;
+    }
+    if (id != null and (srv.engine == null or !(ModelBackend{ .engine = srv.engine }).model().accepts(text(id)))) {
+        httpError(srv, fd, 404, "model is not loaded", stop);
+        return;
+    }
+    if (srv.engine == null) {
+        if (id != null) {
+            httpError(srv, fd, 404, "model is not loaded", stop);
+            return;
+        }
+        append(&out, "{\"object\":\"list\",\"data\":");
+        append(&out, if (decisions != null) text(decisions) else "[]");
+        append(&out, "}");
+        response(srv, fd, 200, out.ptr, stop);
+        return;
+    }
     if (id != null) {
         modelValues(&out, id, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
         append(&out, "\n");
@@ -384,9 +415,34 @@ fn models(srv: *c.server, fd: c_int, id: [*c]const u8, stop: [*c]const volatile 
         } else {
             modelValues(&out, "deepseek-v4-pro", c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
         }
+        if (decisions != null and text(decisions).len > 2) {
+            append(&out, ",");
+            append(&out, text(decisions)[1 .. text(decisions).len - 1]);
+        }
         append(&out, "]}\n");
     }
     response(srv, fd, 200, out.ptr, stop);
+}
+
+const DecisionCancel = struct { fd: c_int, stop: [*c]const volatile c.sig_atomic_t };
+fn decisionCancelled(context: ?*anyopaque) callconv(.c) bool {
+    const state: *const DecisionCancel = @ptrCast(@alignCast(context.?));
+    return state.stop.* != 0 or c.ds4_server_http_disconnected(state.fd);
+}
+fn decision(srv: *c.server, fd: c_int, body: [*c]const u8, openai: bool, stop: [*c]const volatile c.sig_atomic_t) void {
+    if (srv.decision_models == null) {
+        httpError(srv, fd, 404, "no decision model is loaded; use --model CLEF_DIR or --decision-model CLEF_DIR", stop);
+        return;
+    }
+    var output: [*c]u8 = null;
+    defer c.free(output);
+    var errors: [256]u8 = @splat(0);
+    var cancellation = DecisionCancel{ .fd = fd, .stop = stop };
+    // The shared runtime excludes other engines only while their GPU work is
+    // in flight. Model-local scratch/CPU head remains under its engine mutex.
+    const status = c.ds4_decision_registry_request(srv.decision_models, body, openai, &output, &errors, errors.len, decisionCancelled, &cancellation);
+    if (status == 499) return;
+    if (status >= 400) httpError(srv, fd, status, &errors, stop) else response(srv, fd, status, output, stop);
 }
 
 /// One connection owns its socket until every backend use of its stack Job is
@@ -409,7 +465,19 @@ pub fn client(srv: *c.server, fd: c_int, stop: [*c]const volatile c.sig_atomic_t
         _ = c.ds4_server_http_response(fd, srv.enable_cors, 204, null, "", stop);
         return;
     }
+    if (same(&http.method, "GET") and same(&http.path, "/health")) {
+        response(srv, fd, 200, "{\"status\":\"ok\"}", stop);
+        return;
+    }
+    if (same(&http.method, "POST") and (same(&http.path, "/v1/systemone") or same(&http.path, "/v1/decisions"))) {
+        decision(srv, fd, http.body, same(&http.path, "/v1/decisions"), stop);
+        return;
+    }
     if (same(&http.method, "GET") and same(&http.path, "/v1/responses")) {
+        if (srv.engine == null) {
+            httpError(srv, fd, 400, "loaded models support decisions; no generative model is loaded", stop);
+            return;
+        }
         WebSocket.serve(srv, fd, &http, @ptrCast(stop));
         return;
     }
@@ -454,7 +522,7 @@ pub fn client(srv: *c.server, fd: c_int, stop: [*c]const volatile c.sig_atomic_t
     const model_prefix = "/v1/models/";
     if (same(&http.method, "GET") and std.mem.startsWith(u8, text(&http.path), model_prefix)) {
         const id: [*c]const u8 = @as([*c]const u8, @ptrCast(&http.path)) + model_prefix.len;
-        if (knownModel(id)) {
+        if (srv.decision_models != null or (srv.engine != null and (ModelBackend{ .engine = srv.engine }).model().accepts(text(id)))) {
             models(srv, fd, id, stop);
             return;
         }
@@ -463,6 +531,10 @@ pub fn client(srv: *c.server, fd: c_int, stop: [*c]const volatile c.sig_atomic_t
         httpError(srv, fd, 404, "unknown endpoint", stop);
         return;
     };
+    if (srv.engine == null) {
+        httpError(srv, fd, 400, "loaded models support decisions; no generative model is loaded", stop);
+        return;
+    }
     var req = zero(c.request);
     var errors: [160]u8 = undefined;
     const ok = decodeInput(srv.engine, if (endpoint == c.DS4_SERVER_INPUT_COMPLETION) null else srv, endpoint, http.body, srv.default_tokens, srv.ctx_size, &req, &errors);

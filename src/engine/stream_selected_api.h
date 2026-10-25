@@ -2,6 +2,7 @@
 #define DS4_ENGINE_STREAM_SELECTED_API_H
 
 #include "stream_io.h"
+#include "metal/context.h"
 #include <stdio.h>
 #include <string.h>
 

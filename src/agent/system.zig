@@ -10,7 +10,7 @@ const allocator = std.heap.c_allocator;
 pub fn build(worker: *c.agent_worker, output: *c.ds4_tokens) void {
     const config: *const c.agent_config = @ptrCast(worker.cfg);
     c.ds4_chat_begin(worker.engine, output);
-    const thinking = c.ds4_think_mode_for_context(config.gen.think_mode, config.gen.ctx_size);
+    const thinking = c.ds4_engine_think_mode_for_context(worker.engine, config.gen.think_mode, config.gen.ctx_size);
     if (c.ds4_engine_is_qwen4(worker.engine)) {
         const effort = c.ds4_qwen4_reasoning_effort_text(thinking);
         if (effort != null) c.ds4_chat_append_message(worker.engine, output, "system", effort);

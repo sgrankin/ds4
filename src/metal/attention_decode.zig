@@ -15,10 +15,16 @@ const VecArgs = c.ds4_metal_attention_vec_args;
 const max_u32 = std.math.maxInt(u32);
 const max_u64 = std.math.maxInt(u64);
 
-const DeferredRope = struct { args: RopeArgs, pending: bool = false, used: bool = false };
-var deferred_rope: DeferredRope = .{ .args = std.mem.zeroes(RopeArgs) };
-var nwg_environment: c_int = -1;
-var warned_unconsumed = false;
+fn ropeState() *c.ds4_metal_deferred_rope {
+    return c.ds4_metal_attention_rope_state();
+}
+var nwg_environment: c_int = 0;
+var nwg_once: c.pthread_once_t = c.ds4_metal_policy_once_init;
+fn initializeNwg() callconv(.c) void {
+    const value = c.getenv("DS4_METAL_FLASH_NWG");
+    nwg_environment = if (value == null) 0 else c.atoi(value);
+}
+
 fn narrow(value: u32) i32 {
     return @bitCast(value);
 }
@@ -34,7 +40,7 @@ fn alignUp(value: u64, alignment: u64) u64 {
 
 pub fn setRope(width: u32, dimensions: u32, position: u32, original_context: u32, inverse: bool, base: f32, scale: f32, ext: f32, attention: f32, fast: f32, slow: f32) void {
     const row_bytes = @as(u64, width) * 4;
-    deferred_rope = .{ .args = .{
+    ropeState().* = .{ .args = .{
         .row_bytes = row_bytes,
         .token_bytes = row_bytes,
         .head_dim = narrow(width),
@@ -49,10 +55,10 @@ pub fn setRope(width: u32, dimensions: u32, position: u32, original_context: u32
         .attn_factor = attention,
         .beta_fast = fast,
         .beta_slow = slow,
-    }, .pending = true, .used = false };
+    }, .pending = true, .used = false, .warned = ropeState().warned };
 }
 pub fn ropeUsed() c_int {
-    return @intFromBool(deferred_rope.used);
+    return @intFromBool(ropeState().used);
 }
 
 pub const Buffer = struct {
@@ -319,20 +325,17 @@ fn attend(command: *const Command, request: Request, q: View, raw: View, comp: V
     const keys = request.raw_rows + request.comp_rows;
     var nwg: u32 = 32;
     if (gathered) {
-        if (nwg_environment < 0) {
-            const value = c.getenv("DS4_METAL_FLASH_NWG");
-            nwg_environment = if (value == null) 0 else c.atoi(value);
-        }
+        _ = c.pthread_once(&nwg_once, initializeNwg);
         // Keep 32 by default: reducing short-context groups saved 1 us here but
         // made the following concurrent FFN block about 50 us slower in testing.
         if (nwg_environment > 0) nwg = @intCast(nwg_environment);
         nwg = @min(@max(nwg, @as(u32, 1)), @as(u32, 32));
     }
     const nsg = simdgroups(keys, nwg);
-    const rope = &deferred_rope.args;
+    const rope = &ropeState().args;
     const packed_cache = request.use_mask == 0 and request.comp_half != 0 and request.comp_rows != 0 and keys <= 1024;
     const packed_geometry = request.n_head == 64 and request.width == 512 and nsg == 1 and nwg == 32;
-    const compatible_rope = deferred_rope.pending and rope.head_dim == 512 and rope.n_dims == 64 and rope.row_bytes == 2048 and rope.inverse != 0;
+    const compatible_rope = ropeState().pending and rope.head_dim == 512 and rope.n_dims == 64 and rope.row_bytes == 2048 and rope.inverse != 0;
     const packed_shape = gathered and packedFeature(facts) and !fact(facts, c.DS4_ATTN_QUALITY) and packed_cache and packed_geometry and compatible_rope;
     var persistent = false;
     if (gathered) {
@@ -394,8 +397,8 @@ fn attend(command: *const Command, request: Request, q: View, raw: View, comp: V
     const args = vecArgs(keys, request.n_head, request.width);
     if (use_packed) {
         if (c.ds4_metal_attention_vec(command.token.?, packed_pso, &args, q, kv.view, mask.view, sinks, pad.view, heads, rope, request.n_head, 1, 1, packed_threads, 1, packed_shared) == 0) return false;
-        deferred_rope.pending = false;
-        deferred_rope.used = true;
+        ropeState().pending = false;
+        ropeState().used = true;
         return true;
     }
     const shared_elems = (alignUp(request.width, 128) + 4 * 32 + 2 * alignUp(request.width, 128)) * nsg;
@@ -403,10 +406,10 @@ fn attend(command: *const Command, request: Request, q: View, raw: View, comp: V
     if (c.ds4_metal_attention_vec(command.token.?, vec_pso, &args, q, kv.view, mask.view, sinks, pad.view, tmp.view, null, 1, request.n_head, nwg, 32, nsg, shared_bytes) == 0) return false;
     // Raw-only never consumes a deferred inverse tail. Gathered consumes at
     // the reduction boundary even if the fused PSO subsequently fails lookup.
-    const fuse_rope = gathered and deferred_rope.pending;
-    if (gathered) deferred_rope.pending = false;
+    const fuse_rope = gathered and ropeState().pending;
+    if (gathered) ropeState().pending = false;
     if (fuse_rope) {
-        deferred_rope.used = true;
+        ropeState().used = true;
         reduce_pso = pipeline(c.DS4_ATTN_ROPE_PSO, request.width, nsg, nwg, has_pad, shared_pad);
         if (reduce_pso.handle == null) return false;
     }
@@ -444,8 +447,8 @@ pub fn run(request: Request) c_int {
     const sinks_view = View{ .buffer = sinks, .offset = inner, .bytes = sink_bytes };
     if (!attend(&command, request, q.view, raw.view, comp.view, heads.view, mask.view, sinks_view, c.ds4_metal_attention_get_facts())) return 0;
     if (request.comp_rows != 0 and c.ds4_gpu_kv_norm_task_pending() != 0) {
-        if (!warned_unconsumed) {
-            warned_unconsumed = true;
+        if (!ropeState().warned) {
+            ropeState().warned = true;
             _ = api.reportError("ds4: deferred kv norm task was not consumed by the attention path");
         }
         if (c.ds4_gpu_kv_norm_task_flush() == 0) return 0;

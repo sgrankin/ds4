@@ -118,6 +118,7 @@ ds4_metal_table_ref ds4_metal_tables_create(const ds4_metal_table_key *key,
                                             ds4_metal_argument_ref encoder, uint32_t capacity) {
     @autoreleasepool {
         DS4MetalQ4ExpertTable *table = [DS4MetalQ4ExpertTable new];
+        table.ownerQueue = g_queue;
         uint64_t size =
             key->address ? (uint64_t)key->experts * sizeof(uint64_t) : key->encoded_bytes;
         id<MTLBuffer> buffer = [g_device newBufferWithLength:(NSUInteger)size
@@ -244,6 +245,7 @@ void ds4_metal_tables_layer_publish(ds4_metal_table_ref gate, ds4_metal_table_re
                                     bool queue) {
     @autoreleasepool {
         DS4MetalQ4LayerResidency *entry = [DS4MetalQ4LayerResidency new];
+        entry.ownerQueue = g_queue;
         entry.residencySet = residency;
 #if TARGET_OS_OSX
         if (@available(macOS 15.0, *)) {

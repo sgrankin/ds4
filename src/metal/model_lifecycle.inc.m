@@ -84,7 +84,7 @@ int ds4_metal_model_view_warm_encode(const ds4_metal_model_views *state,
                  threadsPerThreadgroup:MTLSizeMake(256, 1, 1)];
         }
         ds4_gpu_end_compute_encoder(cb, enc);
-        [cb commit];
+        ds4_runtime_metal_commit((__bridge void *)cb, &g_bootstrap, false);
         [cb waitUntilCompleted];
         if (cb.status == MTLCommandBufferStatusError) {
             fprintf(stderr, "ds4: Metal model warmup failed: %s\n",

@@ -1,9 +1,9 @@
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
 #include "driver.h"
+#include "runtime/api.h"
 
-/* Borrow the runtime's device/queue, keeping ARC at this existing boundary. */
-extern bool ds4_gpu_metal_shared_context(void **device, void **queue);
+/* Each context owns a runtime borrow independently of its model objects. */
 
 @interface FlintMetalContext : NSObject
 @property(strong) id<MTLDevice> device;
@@ -13,6 +13,9 @@ extern bool ds4_gpu_metal_shared_context(void **device, void **queue);
 @property(strong) NSString *error;
 @end
 @implementation FlintMetalContext
+- (void)dealloc {
+    ds4_runtime_metal_release();
+}
 @end
 
 static FlintMetalContext *context(flint_gpu *gpu) {
@@ -22,8 +25,9 @@ static FlintMetalContext *context(flint_gpu *gpu) {
 flint_gpu *flint_gpu_create(void) {
     @autoreleasepool {
         void *device = NULL, *queue = NULL;
-        if (!ds4_gpu_metal_shared_context(&device, &queue)) return NULL;
+        if (!ds4_runtime_metal_acquire(&device, &queue)) return NULL;
         FlintMetalContext *ctx = [FlintMetalContext new];
+        if (!ctx) { ds4_runtime_metal_release(); return NULL; }
         ctx.device = (__bridge id<MTLDevice>)device;
         ctx.queue = (__bridge id<MTLCommandQueue>)queue;
         ctx.libraries = [NSMutableArray array];
@@ -90,8 +94,15 @@ void *flint_gpu_command_begin(flint_gpu *gpu) {
 bool flint_gpu_command_end(flint_gpu *gpu, void *opaque, bool wait) {
     @autoreleasepool {
         id<MTLCommandBuffer> command = CFBridgingRelease(opaque);
-        [command commit];
-        if (wait) [command waitUntilCompleted];
+        // An asynchronous command retains its owner identity until completion.
+        // Ordinary model calls wait synchronously and need no extra callback.
+        if (!wait) {
+            FlintMetalContext *owner = context(gpu);
+            [command addCompletedHandler:^(id<MTLCommandBuffer> completed) {
+                (void)completed; (void)owner;
+            }];
+        }
+        ds4_runtime_metal_commit((__bridge void *)command, gpu, wait);
         if (command.status == MTLCommandBufferStatusError) {
             context(gpu).error = command.error.localizedDescription;
             return false;

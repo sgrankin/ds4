@@ -8,6 +8,8 @@
 #include "ds4_support_weights.h"
 #include "ds4_vocab.h"
 #include "ds4_session_sampling.h"
+#include "metal/context.h"
+#include "engine/host_context.h"
 #ifndef DS4_NO_GPU
 #include "ds4_gpu.h"
 #include "ds4_qwen4_vision.h"
@@ -29,6 +31,8 @@ typedef enum {
  * A native Core is a borrowed owner view over this sole storage location. */
 typedef struct {
     char *model_path;
+    ds4_metal_context *metal_context;
+    ds4_host_context *host_context;
     ds4_engine_configuration configuration;
     ds4_engine_memory memory;
     ds4_model model;
@@ -78,6 +82,8 @@ typedef struct {
     bool ssd_streaming_static_decode_map;
     ds4_distributed_options distributed;
     bool metal_ready;
+    bool instance_lock_owned;
+    bool native_admission_owned;
     bool mtp_ready;
     bool vision_ready;
     bool vision_map_ready;

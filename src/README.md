@@ -7,7 +7,8 @@ input and the DS4.1 preparation path, including its remaining compatibility edge
 the supported OpenResponses contract.
 
 `src/` contains handwritten Zig model implementations for DeepSeek V4.1 Flash,
-Flint, Qwen 3.8 Flash Next and GLM-5.3 Flash on Metal, plus the Agent, server,
+Flint, Qwen 3.8 Flash Next, GLM-5.3 Flash and the Clef decision family on Metal,
+plus the Agent, server,
 CLI, benchmark and evaluation frontends. The optional Web client is a separate
 Zig library. All five program entry points are Zig. Shared engine/session,
 startup/admission, continuation/batch, payload and SSD map/page-in policy have
@@ -31,6 +32,8 @@ have their own top-level directories.
 | [Server](server/) | HTTP/input/JSON, request materialization, OpenAI/Anthropic/Responses output, conversations and tool memory, image resources, batching, cache reuse/publication, generation, routing and serving lifecycle. |
 | Frontends | Complete `ds4`, `ds4-bench` and `ds4-eval` controllers; the optional Web/CDP transport and recovery client. |
 | Shared libraries | GGUF metadata/directory parsing, vocabulary/BPE/pretokenization/chat, numeric sampling, Engram, images, state cache/KV store, SSD configuration and response-file storage. Shared tokenizer/chat utilities also serve GLM and Qwen callers. |
+| [Clef](models/clef/) | Dense hybrid and Omni MoE backbones, native tokenizer/record, learned GPU joint head, image/audio towers and model-specific media placement. [Usage and qualification](../docs/CLEF.md). |
+| [Shared runtime](runtime/) | Process Metal device/queue lifetime and owner-aware in-flight submission groups. Clef/Flint model resources are independent; per-GGUF DS4 globals remain a separate migration. |
 
 Algorithms live in ordinary Zig owners with typed borrowed inputs and explicit
 allocation/resource lifetimes. Small entry modules expose each existing C ABI

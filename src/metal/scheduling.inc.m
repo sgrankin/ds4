@@ -41,7 +41,7 @@ bool ds4_metal_schedule_timeline_active(void) { return g_timeline_enabled && g_t
 void ds4_metal_schedule_timeline_attach(void *cb) {
     ds4_gpu_timeline_attach((__bridge id<MTLCommandBuffer>)cb);
 }
-void ds4_metal_schedule_commit(void *cb) { [(__bridge id<MTLCommandBuffer>)cb commit]; }
+void ds4_metal_schedule_commit(void *cb) { ds4_runtime_metal_commit(cb, &g_bootstrap, false); }
 uint64_t ds4_metal_schedule_pending_count(void) { return [g_schedule.commands.pending count]; }
 void *ds4_metal_schedule_pending_at(uint64_t index) {
     return (__bridge_retained void *)g_schedule.commands.pending[(NSUInteger)index];

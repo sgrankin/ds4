@@ -2,6 +2,8 @@
 #define DS4_METAL_EXACT_CACHE_H
 #include <stdbool.h>
 #include <stdint.h>
+#include <pthread.h>
+static const pthread_once_t ds4_metal_exact_once_init = PTHREAD_ONCE_INIT;
 
 /* The existing lifetime alternatives, shared with the native range owner.
  * Cached views retain one native-cache reference. The other two transfer one
@@ -27,4 +29,5 @@ uint64_t ds4_metal_model_view_max_buffer_length(void);
 void *ds4_metal_exact_view_create(const void *address, uint64_t bytes,
     ds4_gpu_exact_view_lifetime lifetime);
 void ds4_metal_exact_view_release(void *handle);
+void **ds4_metal_exact_cache_state_slot(void);
 #endif

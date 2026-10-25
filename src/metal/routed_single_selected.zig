@@ -1,5 +1,5 @@
 //! Selected-ID acquisition and expert-resource preparation. Per-call masks and
-//! offsets are native locals; the actual global cache/pending-load owns bytes.
+//! offsets are native locals; the actual model cache/pending-load owns bytes.
 const std = @import("std");
 const c = @import("metal_c");
 const Batch = @import("routed_batch.zig");
@@ -7,21 +7,22 @@ const Dispatch = @import("routed_single_dispatch.zig");
 const Execution = Dispatch.Execution;
 const present = Batch.present;
 const absent = Batch.absent;
-var override_ids: [8]i32 = @splat(0);
-var override_count: u32 = 0;
+fn overrideState() *c.ds4_metal_selected_override {
+    return c.ds4_metal_single_override_state();
+}
 pub fn setOverride(ids: [*c]const i32, count: u32) c_int {
     if (count > 8 or (ids == null and count != 0)) return 0;
-    for (0..count) |slot| override_ids[slot] = ids[slot];
-    override_count = count;
+    for (0..count) |slot| overrideState().ids[slot] = ids[slot];
+    overrideState().count = count;
     return 1;
 }
 pub fn clearOverride() void {
-    override_count = 0;
+    overrideState().count = 0;
 }
 fn takeOverride(ids: *[8]i32, count: u32) bool {
-    if (override_count != count) return false;
-    @memcpy(ids[0..count], override_ids[0..count]);
-    override_count = 0;
+    if (overrideState().count != count) return false;
+    @memcpy(ids[0..count], overrideState().ids[0..count]);
+    overrideState().count = 0;
     return true;
 }
 fn now() f64 {

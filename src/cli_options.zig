@@ -70,8 +70,8 @@ pub fn fatal(status: c_int, comptime format: [*:0]const u8, args: anytype) noret
     report(format, args);
     c.exit(status);
 }
-pub fn effectiveThink(gen: *const Generation) c.ds4_think_mode {
-    return c.ds4_think_mode_for_context(gen.think_mode, gen.ctx_size);
+pub fn effectiveThink(engine: *c.ds4_engine, gen: *const Generation) c.ds4_think_mode {
+    return c.ds4_engine_think_mode_for_context(engine, gen.think_mode, gen.ctx_size);
 }
 pub fn nowSeconds() f64 {
     @setFloatMode(.optimized);

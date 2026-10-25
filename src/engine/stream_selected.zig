@@ -20,21 +20,29 @@ const Service = struct {
     done: bool = false,
     job: Job = std.mem.zeroes(Job),
     counts: Counts = .{ .experts = 0, .selected = 0 },
+    metal_context: @TypeOf(c.ds4_metal_context_selected()) = null,
+    host_context: @TypeOf(c.ds4_host_context_selected()) = null,
 
     fn worker(context: ?*anyopaque) callconv(.c) ?*anyopaque {
         const self: *Service = @ptrCast(@alignCast(context.?));
         // Cache paths must not wait for command buffers here while the main
         // thread is encoding. Such waits become load failures, retried by the
         // caller synchronously after finish instead of deadlocking the encoder.
-        c.ds4_gpu_stream_expert_cache_note_service_thread();
         while (true) {
             _ = c.pthread_mutex_lock(&self.mutex);
             while (!self.has_job) _ = c.pthread_cond_wait(&self.ready, &self.mutex);
             var job = self.job;
             const counts = self.counts;
+            const metal_context = self.metal_context;
+            const host_context = self.host_context;
             _ = c.pthread_mutex_unlock(&self.mutex);
 
+            const previous_host = c.ds4_host_context_select(host_context);
+            const previous = c.ds4_metal_context_select(metal_context);
+            c.ds4_gpu_stream_expert_cache_note_service_thread();
             run(&job, counts);
+            _ = c.ds4_metal_context_select(previous);
+            _ = c.ds4_host_context_select(previous_host);
 
             _ = c.pthread_mutex_lock(&self.mutex);
             self.job = job;
@@ -125,6 +133,8 @@ pub fn start(maybe_job: ?*Job, selected: ?*Tensor, model: [*c]const Model, layer
     service.job = job.*;
     service.job.ok = false;
     service.counts = .{ .experts = expert_count, .selected = selected_count };
+    service.metal_context = c.ds4_metal_context_selected();
+    service.host_context = c.ds4_host_context_selected();
     service.has_job = true;
     _ = c.pthread_cond_signal(&service.ready);
     _ = c.pthread_mutex_unlock(&service.mutex);

@@ -168,6 +168,8 @@ speed-bench/ideas/artifacts/
 !/speed-bench/experiments/upstream-selected-read-20261023/candidate.patch
 !/speed-bench/experiments/model-family-ports-20261023/PAYLOAD.md
 !/speed-bench/experiments/qwen-glm-zig-20261024/*.md
+!/speed-bench/experiments/clef-native-20261024/*.md
+!/speed-bench/experiments/clef-native-20261024/requests.jsonl
 !/speed-bench/experiments/*/corpus/*.txt
 !/speed-bench/experiments/*/corpus/manifest.json
 !/speed-bench/experiments/zig-qualified-20261022/evidence/*.py

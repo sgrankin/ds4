@@ -52,7 +52,7 @@ fn runSelected(argc: c_int, argv: [*][*:0]u8, requested_profile: ?[:0]const u8) 
         }
         std.debug.print("flint: native prefill shader compiled on {s}\n", .{c.flint_gpu_device_name(gpu)});
         try kv_test.run(gpu);
-        if (!profile.usesNax()) try prefill_test.run(gpu);
+        if (profile.usesNax()) try prefill_test.longGather(gpu) else try prefill_test.run(gpu);
     }
     try decode.compile(gpu, profile);
     std.debug.print("flint: native decode profile {s} compiled\n", .{profile.name()});

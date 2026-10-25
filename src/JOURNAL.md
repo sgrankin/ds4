@@ -1,16 +1,150 @@
 # Serving project journal
 
-Last updated: 2026-10-24. This is the compact handoff for resumed work and context
+Last updated: 2026-10-25. This is the compact handoff for resumed work and context
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
+
+## Clef family — implemented and qualified, 2026-10-25
+
+On M5 Max128GB, native Zig/Metal now serves Clef-Flash, full Clef and Clef-Omni.
+All three pinned INT4 bundles are downloaded/verified; their scoped artifact
+identities and22 downloader checks prevent metadata-name collisions. Production
+has no Python/MLX dependency. Flash/full share a dense hybrid executor; Omni
+has a sparse thinker, DeepStack vision and audio encoder. Record/tokenizer,
+learned GPU joint head, CPU media and actual serving are connected. See
+[setup/APIs/limits](../docs/CLEF.md) and [component sources](models/clef/README.md).
+
+Both `/v1/systemone` and `/v1/decisions` share one native operation. Decision
+models are stateless/non-streaming; the generator retains Responses HTTP/WS
+and multiple conversations. `--decision-model DIR` adds independent helpers;
+`--model CLEF_DIR` is decisions-only. Named `ds4-local --server` profiles select
+all three bundles. Models discovery reports actual loaded capabilities/media.
+
+The complete GPU head is the ordinary default:11–14% lower short Flash request
+time than its CPU head, about67/108/68/90ms on four records. CPU matrices are not
+expanded for this path, and head pipelines prepare before readiness. Omni's
+one-expert tile map is also default,40–46% lower ordinary whole-decision time,
+bit-identical to the corrected old gather on controlled short/3388/6472-token
+cases. Audio16-row GEMM saves44%, reaching22.4ms vs local MLX21.5ms on the short
+component; longer34.1ms vs28.2ms remains a measured gap. Diagnostic fallbacks
+remain, not a requirement to enable the ordinary fast paths.
+[Head](../speed-bench/experiments/clef-native-20261024/HEAD.md),
+[Omni](../speed-bench/experiments/clef-native-20261024/OMNI.md),
+[media](../speed-bench/experiments/clef-native-20261024/MEDIA.md).
+
+Numerical qualification exposed/fixed actual implementation defects: already
+folded RMSNorm1+w, packed QMV's invalid K768 tail, and cast-before-clamp overflow
+above32767 routed rows. The latter left unwritten outputs beyond4095 Omni text
+tokens; the model-free regression and corrected old/new long comparison pass.
+These are distinct from acceptable quantization/approximation tradeoffs.
+Thirty tokenizer/record cases and eight media-placement cases match exact IDs,
+spans and positions; tower cosine comparisons are recorded separately.
+
+Flash completes2,000/2,000 fixed Decision Index0.2.1 requests (500 each): API-Bank
+91.0%accuracy, BANKING77 92.75%macro-F1, CLINC150+OOS87.20%macro-F1, When2Call
+63.8%accuracy. NLL0.59825 nats/decision, Brier0.25068, ECE0.09340. Its first100
+preserve all same-weight MLX top choices (KL8.57e-5, delta-NLL+0.000158).
+Full and Omni each complete the same100-request smoke. Public BLINK samples
+complete84/84: Flash18/28, full22/28, Omni19/28. These are four-task text and
+seven-subtask vision samples, never full-index scores. Vision task parity against
+MLX remains unmeasured; component math and actual task quality are distinct.
+[Broader quality](../speed-bench/experiments/clef-native-20261024/BROAD_QUALITY.md).
+
+Controlled native HTTP media tests pass5 requests each for Flash/full and11 for
+Omni: image contrast, question-specific OpenAI images, explicit/encoded video;
+Omni also follows spoken three/seven and explicit/encoded soundtracks while
+answering the video's final color. Combined three-model/tower RSS76.9GiB is an
+observation, not minimum RAM. Pressure stays normal with no swap growth.
+[Media tasks](../speed-bench/experiments/clef-native-20261024/MEDIA-TASKS.md).
+
+Shared runtime owns Metal device/queue and owner-aware submitted groups. DS41
+Core owns actual Host/Metal state, including caches, pipelines, pools and
+profiling; workers capture their owners explicitly. Two actual DS41 engines
+preserve nine full-vocabulary logit comparisons exactly through interleaving,
+closing A and continuing/fresh-graph B. They share a referencecounted process
+file lock, so one Core's close cannot drop the surviving Core's protection.
+Other GGUF/TP/CPU paths retain previous admission. Final DS41 controls/candidate
+are788.23/787.68/783.09ms; all28 mixed protocol/SDK/cancellation checks pass.
+[Ownership](../speed-bench/experiments/clef-native-20261024/OWNERSHIP.md).
+
+All four existing native model families match frozen control on32 full-vocabulary
+FP32 rows byte for byte (KL/delta-NLL0). Engine-aware thinking/memory callers
+replace ambient shape assumptions; ten metadata-only CLI token streams match.
+Full host/server/agent/recovery/script checks pass, with no production build
+warnings. Flint's larger reported buffer estimate is an accounting correction
+for its existing65536-token allocation blocks, not newly allocated memory.
+[Existing-engine regression](../speed-bench/experiments/clef-native-20261024/ENGINE-REGRESSION.md).
+
+The final local stack is two coherent changes: model/download implementation
+`oxmmmnktsvnl` and runtime/serving integration `wzvyrkmkpkyn`. Earlier plan/download
+checkpoints were consolidated. Main stays at published steering`ce3afb7999b7`;
+new Clef work is local. Raw logs/weights/dumps/plots stay ignored, while concise
+reports, standard numerical recipes and necessary compact golden fixtures are
+tracked. No model/test server remains running after qualification.
+
+Remaining proposals: aggregate automatic model-memory reservations, a server
+registry for multiple generators, reusable decision features, broader task
+coverage and additional hardware. Current GGUF automatic admission budgets one
+engine; qualified co-hosting commands use explicit cache budgets (32GiB main+
+Flash,8GiB each in the two-Core proof). Helper-first loading alone does not alter
+that planner. These proposals do not become claims of implemented support.
+
+## Cooperative helper scheduling — measured opt-in, 2026-10-25
+
+Source inspection found a practical remaining mixed-workload limit: Clef encodes
+its entire text backbone into one GPU command, so a long full-model request can
+hold the device for seconds. A bounded experiment adds `DS4_CLEF_LAYER_QUANTUM`
+(default0, unchanged one-command behavior; test1/4/8), splitting only at complete
+layers. The same weights, buffers and arithmetic remain; completed groups provide
+other models/cancellation a scheduling point. Runtime submission admission now
+queues new owner groups behind already waiting owners, while allowing dependent
+same-owner submissions to avoid resident/streaming deadlock. The actual CPU
+lease fixture passes that invariant. The actual full-Clef2881-token helper screen
+is complete: q0/1/4/8/0 with two repeats per point. Main completion4.14→0.885s at
+q1, helper3.99→4.20s (+5%); observable main gap3.92→.323s. All25 helper probability
+vectors are bit-identical (KL/delta-NLL0), main answer remains57 tokens. Closing
+control matches opening. q4 main2.17s/helper4.16s; q8 main3.98s/helper4.00s.
+Keep default0: short-helper overhead and other contention patterns are outside
+this screen. [Measured tradeoff/reproduction](../speed-bench/experiments/clef-native-20261024/SCHEDULING.md).
+
+Reuse `tests/mixed-serving.nu --mixed-timing-only --helper-repeat 250` with Flint
+and full Clef for a realistic long-helper pause. Existing WebSocket event logs
+already record delta timestamps; no new timing harness is needed. Compare whole
+main/helper latency, longest delta gap, ordinary Flash/full/Omni overhead and
+unchanged decisions. Plot the measured group-size tradeoff and choose a default
+only if the responsiveness gain justifies solo cost. Source/private builds are
+under `.workspaces/clef-native-20261024/scheduling-build/`. The standalone Pareto
+PNG/SVG and JSON summary are in `.workspaces/clef-scheduling-20261025/`; only the
+concise report and plotting recipe are tracked. The slice completes within its
+one-hour checkpoint. GPU was explicitly returned to broad quality at03:37UTC
+with340 Flash rows remaining.
+
+Final ownership hardware gates are also complete: actual two initialized Metal
+owners survive A cleanup; two actual nativeDS41 Core engines preserve nine frozen
+full-vocabulary logit comparisons exactly, including A close/B continuation and
+fresh B graph. Host pools pass concurrent5120/4096 shapes. NativeDS41 engines
+share a referencecounted process file lock, preserving accidental second-process
+admission protection; other GGUF/TP/CPU paths retain their previous guard. Final
+DS41 control/candidate/closing medians788.23/787.68/783.09ms, all28 mixed checks
+pass, pressure normal/no swap growth. [Ownership report](../speed-bench/experiments/clef-native-20261024/OWNERSHIP.md).
+All five frontends build; engine-aware thinking/memory calls replace old ambient
+shape assumptions, and ten metadata-only CLI token streams match frozen controls.
+Full host/server/agent/recovery/script suite passes. The final four-family frozen
+logit regression now passes all32 full-vocabulary rows byte for byte.
+
+Automatic cache admission remains a per-GGUF-engine planner, not an aggregate
+allocator. Merely loading helpers first would not reserve them: it uses device
+recommended capacity rather than current other-owner allocations. This slice
+documents explicit co-hosting cache budgets (qualified32GiB main+Flash,8GiB each
+in the two-Core proof); an explicit other-owner reservation is future work.
 
 ## Clef family and decision serving — plan, 2026-10-24
 
 At the user's request, published the qualified residual steering and behavioral/
 Zig-test commits through `ce3afb7999b7e97aa697dc3ec3520650c165a5f0` to `main`
 and `origin`. Remote main matched the starting revision before publication and
-the push was verified. The plan below is new work, not implemented support or
-achieved performance. No Clef model job has run in this checkout.
+the push was verified. This is the historical approved plan; the execution
+checkpoint above records what is now implemented and actually qualified.
 
 Implement native Zig/Metal **Clef-Flash, Clef and Clef-Omni**, both decision APIs,
 and separate engine ownership for multiple loaded models in one process.

@@ -4,6 +4,8 @@ const c = @import("stream_selected_c");
 const selected = @import("stream_selected");
 
 const Mock = struct {
+    owner: ?*c.ds4_metal_context = null,
+    host: ?*c.ds4_host_context = null,
     service_notes: u32 = 0,
     wait_ok: bool = true,
     read_ok: bool = true,
@@ -26,8 +28,29 @@ const Mock = struct {
 var mock: Mock = .{};
 var gate: c.pthread_mutex_t = c.ds4_stream_selected_mutex_init;
 var gate_changed: c.pthread_cond_t = c.ds4_stream_selected_cond_init;
+threadlocal var current_owner: ?*c.ds4_metal_context = null;
+threadlocal var current_host: ?*c.ds4_host_context = null;
+
+export fn ds4_host_context_selected() ?*c.ds4_host_context {
+    return current_host;
+}
+export fn ds4_host_context_select(owner: ?*c.ds4_host_context) ?*c.ds4_host_context {
+    const previous = current_host;
+    current_host = owner;
+    return previous;
+}
+
+export fn ds4_metal_context_selected() ?*c.ds4_metal_context {
+    return current_owner;
+}
+export fn ds4_metal_context_select(owner: ?*c.ds4_metal_context) ?*c.ds4_metal_context {
+    const previous = current_owner;
+    current_owner = owner;
+    return previous;
+}
 
 export fn ds4_gpu_stream_expert_cache_note_service_thread() void {
+    std.debug.assert(current_owner == mock.owner and current_host == mock.host);
     mock.service_notes += 1;
 }
 export fn ds4_gpu_wait_selected_readback_ready(event: u64, label: [*c]const u8) c_int {
@@ -60,6 +83,7 @@ export fn ds4_gpu_stream_expert_cache_begin_selected_load(table: [*c]const c.ds4
     return @intFromBool(mock.load_ok);
 }
 export fn ds4_gpu_routed_moe_set_selected_override(ids: [*c]const i32, count: u32) c_int {
+    std.debug.assert(current_owner == mock.owner and current_host == mock.host);
     std.debug.assert(count == mock.ids.len);
     mock.overrides += 1;
     @memcpy(&mock.override_ids, ids[0..count]);
@@ -70,13 +94,23 @@ fn reset() void {
     // Called only after finish: the mailbox's mutex/condition handoff makes
     // worker writes visible, and it cannot read another job until start.
     const notes = mock.service_notes;
-    mock = .{ .service_notes = notes };
+    mock = .{ .service_notes = notes, .owner = current_owner, .host = current_host };
 }
 
 test "selected worker owns one mailbox and retains IDs through failures" {
     const expect = std.testing.expect;
     const equal = std.testing.expectEqual;
     const tensor: *c.ds4_gpu_tensor = @ptrFromInt(0x1000);
+    const owner_a: *c.ds4_metal_context = @ptrFromInt(0x8000);
+    const owner_b: *c.ds4_metal_context = @ptrFromInt(0x9000);
+    const host_a: *c.ds4_host_context = @ptrFromInt(0xa000);
+    const host_b: *c.ds4_host_context = @ptrFromInt(0xb000);
+    _ = ds4_metal_context_select(owner_a);
+    _ = ds4_host_context_select(host_a);
+    defer _ = ds4_metal_context_select(null);
+    defer _ = ds4_host_context_select(null);
+    mock.owner = owner_a;
+    mock.host = host_a;
     var model = std.mem.zeroes(c.ds4_model);
     model.map = @ptrFromInt(0x4000);
     model.size = 65536;
@@ -112,6 +146,8 @@ test "selected worker owns one mailbox and retains IDs through failures" {
     _ = c.pthread_cond_signal(&gate_changed);
     _ = c.pthread_mutex_unlock(&gate);
     try expect(selected.finish(&job));
+    try equal(owner_a, ds4_metal_context_selected());
+    try equal(host_a, ds4_host_context_selected());
     try expect(!job.active and job.ok and job.ids_ok);
     try equal(@as(u32, 1), mock.service_notes);
     try equal(@as(u64, 11), mock.event);
@@ -132,6 +168,8 @@ test "selected worker owns one mailbox and retains IDs through failures" {
     try equal(model.size, mock.table.model_size);
     try expect(!selected.finish(&job));
 
+    _ = ds4_metal_context_select(owner_b);
+    _ = ds4_host_context_select(host_b);
     reset();
     mock.wait_ok = false;
     try expect(selected.start(&job, tensor, &model, &layer, 4, 21, 1024, 2048, 16, 3));
@@ -182,5 +220,8 @@ test "selected worker owns one mailbox and retains IDs through failures" {
     reset();
     try expect(selected.start(&job, tensor, &model, &layer, 5, 27, 1024, 2048, 16, 3));
     try expect(selected.finish(&job));
-    try equal(@as(u32, 1), mock.service_notes);
+    // Each accepted job selects its own model, including failed I/O jobs.
+    try equal(@as(u32, 8), mock.service_notes);
+    try equal(owner_b, ds4_metal_context_selected());
+    try equal(host_b, ds4_host_context_selected());
 }

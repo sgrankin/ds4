@@ -7,6 +7,7 @@ const c = @import("gguf_c");
 const Mapping = @import("model.zig");
 const Core41 = @import("core.zig");
 const Tokens = @import("engine_lifecycle_tokens.zig");
+const Scope = @import("metal_scope.zig").Scope(c);
 
 fn hasText(value: [*c]const u8) bool {
     return value != null and value[0] != 0;
@@ -368,10 +369,18 @@ pub const Lifecycle = struct {
             return c.DS4_ENGINE_OPEN_ERROR;
         }
         if (!self.options(request)) return c.DS4_ENGINE_OPEN_ERROR;
-        c.ds4_core_acquire_instance_lock(request.n_threads);
         // Prior validation errors own only the caller's shell. They must not
         // shut down process-global GPU/thread/profile state or release its lock.
         owned.* = true;
+        self.core.host_context = c.ds4_host_context_create(@intCast(@max(request.n_threads, 0)));
+        self.core.metal_context = c.ds4_metal_context_create();
+        if (self.core.host_context == null or self.core.metal_context == null) {
+            _ = fail("ds4: cannot allocate engine context\n");
+            return c.DS4_ENGINE_OPEN_ERROR;
+        }
+        const scope = Scope.enter(self.core);
+        defer scope.leave();
+        self.streaming = c.ds4_host_context_streaming(self.core.host_context);
         if (request.simulate_used_memory_bytes != 0 and !c.ds4_ssd_memory_lock_acquire(&self.core.simulated_memory, request.simulate_used_memory_bytes)) return c.DS4_ENGINE_OPEN_ERROR;
         Mapping.openRecord(&self.core.model, request.model_path, true, !request.inspect_only);
         if (!self.readConfiguration()) {
@@ -380,11 +389,22 @@ pub const Lifecycle = struct {
             return c.DS4_ENGINE_OPEN_LEGACY;
         }
         if (self.shape().family == c.DS4_MODEL_FAMILY_DEEPSEEK41) {
+            if (request.tp.role != c.DS4_TP_NONE) {
+                c.ds4_core_acquire_instance_lock(request.n_threads);
+                self.core.instance_lock_owned = true;
+            } else {
+                c.ds4_core_native_admission_acquire();
+                self.core.native_admission_owned = true;
+            }
             const config = &self.configuration.ds41;
             var owner = Core41.Core{ .state = self.core, .config = .{ .shape = config.shape, .compress_ratios = config.compress_ratios } };
             var shard_bytes: u64 = 0;
             return if (owner.finishOpen(request, &shard_bytes)) c.DS4_ENGINE_OPEN_OK else c.DS4_ENGINE_OPEN_ERROR;
         }
+        // The selected DS4.1 owner path no longer shares model state. Retained
+        // families keep the existing admission guard until separately tested.
+        c.ds4_core_acquire_instance_lock(request.n_threads);
+        self.core.instance_lock_owned = true;
         if (!self.supported(request)) return c.DS4_ENGINE_OPEN_ERROR;
         if (request.warm_weights and !request.inspect_only and !request.ssd_streaming) c.ds4_core_warm_model(&self.core.model);
         self.bindVision(request);

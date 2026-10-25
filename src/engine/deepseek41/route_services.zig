@@ -1,6 +1,6 @@
-//! Process-owned optional route diagnostics and resident-cache transactions.
+//! Model-owned optional route diagnostics and resident-cache transactions.
 //! Actual graph settings/snapshots remain in Graph; all metrics, files and tape
-//! state have ONE native owner here. Pure route math is imported directly.
+//! state belong to the selected HostContext. Pure route math is imported directly.
 const std = @import("std");
 const c = @import("gguf_c");
 const route = @import("resident_route");
@@ -69,6 +69,7 @@ const State = struct {
     route_stats: RouteStats = .{},
     prefill_stats: PrefillStats = .{},
     noop_weights: [c.DS4_MAX_EXPERT_USED]f32 = @splat(0),
+    prefill_logit_dumped: bool = false,
     profile_checked: bool = false,
     profile_enabled: bool = false,
     fn profile(self: *State) bool {
@@ -82,32 +83,51 @@ const State = struct {
     fn registerReport(self: *State) void {
         if (!self.route_stats.registered) {
             self.route_stats.registered = true;
-            _ = c.atexit(report);
+            if (c.ds4_host_context_selected() == null) _ = c.atexit(report);
         }
     }
 };
-// These features were process-wide in C and admit one scalar oracle Session.
-// There is no duplicate state in Core, Graph, a C shim or another export object.
-var process: State = .{};
+// The actual diagnostics live once in the selected HostContext. Native Core
+// retirement closes them; bare legacy callers retain their atexit report.
+fn current() *State {
+    const slot = c.ds4_host_context_routes_slot();
+    if (slot.* == null) {
+        const state = std.heap.c_allocator.create(State) catch die("cannot allocate route service owner");
+        state.* = .{};
+        slot.* = state;
+    }
+    return @ptrCast(@alignCast(slot.*.?));
+}
+pub fn cleanup() void {
+    const slot = c.ds4_host_context_routes_slot();
+    const state: *State = @ptrCast(@alignCast(slot.* orelse return));
+    if (state.route_stats.registered) report();
+    state.oracle.close();
+    slot.* = null;
+    std.heap.c_allocator.destroy(state);
+}
+pub fn dumpedFlag() *bool {
+    return &current().prefill_logit_dumped;
+}
 fn closeOracle() callconv(.c) void {
-    process.oracle.close();
+    current().oracle.close();
 }
 fn mean(total: f64, count: u64) f64 {
     return if (count != 0) total / @as(f64, @floatFromInt(count)) else 0;
 }
 fn report() callconv(.c) void {
-    const s = &process.route_stats;
+    const s = &current().route_stats;
     _ = c.fprintf(c.__stderrp, "ds4: resident-route layers=%llu substitutions=%llu native_misses=%llu skipped_loads=%llu skipped_bytes=%llu mean_mass=%.8f mean_score_gap=%.8f mean_affinity_ratio=%.8f mean_rank=%.3f full_snapshots=%llu double_layers=%llu planned_substitutions=%llu drops=%llu triple_layers=%llu\n", s.layers, s.substitutions, s.native_misses, s.skipped_loads, s.skipped_bytes, mean(s.replaced_mass, s.substitutions), mean(s.score_gap, s.substitutions), mean(s.affinity_ratio, s.substitutions), mean(s.rank, s.substitutions), s.full_snapshots, s.double_layers, s.planned, s.drops, s.triple_layers);
     if (s.native_weights_requested)
         _ = c.fprintf(c.__stderrp, "ds4: resident-route-native-weights requested=1 substitutions=%llu\n", s.native_substitutions);
-    const p = &process.prefill_stats;
+    const p = &current().prefill_stats;
     if (p.calls != 0 or p.fallbacks != 0)
         _ = c.fprintf(c.__stderrp, "ds4: resident-prefill calls=%llu fallbacks=%llu frozen_residents=%llu row_layers=%llu native_misses=%llu planned_substitutions=%llu substitutions=%llu skipped_bytes=%llu double_layers=%llu triple_layers=%llu mean_mass=%.8f native_weights=1\n", p.calls, p.fallbacks, p.frozen, p.row_layers, p.native_misses, p.planned, p.substitutions, p.skipped_bytes, p.double_layers, p.triple_layers, mean(p.replaced_mass, p.substitutions));
 }
 pub fn metricsRead(output: ?*c.ds4_resident_route_metrics) void {
     const out = output orelse return;
-    out.* = process.metrics;
-    out.enabled = process.profile();
+    out.* = current().metrics;
+    out.enabled = current().profile();
 }
 fn positiveGap(value: [*c]const u8) bool {
     if (value == null or value[0] == 0) return false;
@@ -137,7 +157,7 @@ pub const Transaction = struct {
         g.resident_route_max_subs = 1;
         g.resident_route_max_total_mass = 0.20;
         g.resident_route_mode = apply_mode;
-        g.resident_route_profile = decode and process.profile();
+        g.resident_route_profile = decode and current().profile();
         g.resident_route_drop_weak = false;
         g.resident_route_native_weights = false;
         const native = g.resident_prefill_active or nativeWeights(c.getenv("DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS"));
@@ -158,7 +178,7 @@ pub const Transaction = struct {
         }
         if (!g.streaming or g.quality or g.imatrix != null or g.image_count != 0 or g.tp_world != 1 or
             present("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") or present("DS4_METAL_V41_ASYNC_EXPERT_LOAD") or
-            present("DS4_METAL_V41_GATE_PREFETCH") or process.oracle.active or
+            present("DS4_METAL_V41_GATE_PREFETCH") or current().oracle.active or
             present("DS4_METAL_DISABLE_STREAMING_EXPERT_EARLY_LOAD")) die("resident routing requires ordinary scalar text SSD early loading");
         value = c.getenv("DS4_METAL_V41_RESIDENT_ROUTE_POLICY");
         if (value != null and value[0] != 0) {
@@ -188,32 +208,32 @@ pub const Transaction = struct {
         if (g.resident_route_max_subs >= 2 and value != null and value[0] != 0) g.resident_route_max_total_mass = mass(value, "resident route maximum total mass must be in [0,1]");
         g.resident_route_gap = if (g.resident_route_mode == native_mode) 0 else gap;
         g.resident_route_native_weights = native;
-        process.route_stats.native_weights_requested = process.route_stats.native_weights_requested or native;
-        process.registerReport();
+        current().route_stats.native_weights_requested = current().route_stats.native_weights_requested or native;
+        current().registerReport();
     }
     pub fn beginToken(self: Transaction, token: u32, decode: bool) bool {
-        process.oracle.begin(self.ops, self.graph, token, closeOracle);
+        current().oracle.begin(self.ops, self.graph, token, closeOracle);
         self.graph.resident_prefill_active = false;
         self.configure(decode);
-        return process.oracle.active;
+        return current().oracle.active;
     }
     pub fn endToken(self: Transaction, success: bool) bool {
-        return process.oracle.end(self.ops, self.graph, success);
+        return current().oracle.end(self.ops, self.graph, success);
     }
     pub fn snapshot(self: Transaction, index: u32) c.ds4_native_moe_services {
-        return .{ .profile = if (self.graph.resident_route_profile) &process.metrics.layer[index] else null, .oracle_deferred = process.oracle.active and process.oracle.defer_check };
+        return .{ .profile = if (self.graph.resident_route_profile) &current().metrics.layer[index] else null, .oracle_deferred = current().oracle.active and current().oracle.defer_check };
     }
     pub fn probe(self: Transaction, layer: *const Layer, token: u32) bool {
-        return process.oracle.probeRoutes(self.ops, self.graph, layer, token);
+        return current().oracle.probeRoutes(self.ops, self.graph, layer, token);
     }
     pub fn oraclePrefetch(self: Transaction, layer: *const Layer, index: u32) bool {
-        return process.oracle.prefetch(self.ops, layer, index);
+        return current().oracle.prefetch(self.ops, layer, index);
     }
     pub fn captureDeferred(self: Transaction, index: u32, selected: []i32) bool {
-        return process.oracle.captureDeferred(self.ops, self.graph, index, selected);
+        return current().oracle.captureDeferred(self.ops, self.graph, index, selected);
     }
     pub fn observe(self: Transaction, table: *const c.ds4_gpu_stream_expert_table, index: u32, token: u32, selected: []const i32) void {
-        process.oracle.observe(self.ops, table, index, token, selected);
+        current().oracle.observe(self.ops, table, index, token, selected);
     }
     /// Predicted IDs only warm the cache. Exact router IDs still determine
     /// every expert and coefficient used by model arithmetic.
@@ -235,9 +255,9 @@ pub const Transaction = struct {
         if (value == null or value[0] == 0) return true;
         const gap = mass(value, "resident prefill gap must be in [0,1]");
         if (gap == 0) return true;
-        process.registerReport();
+        current().registerReport();
         if (!selected) {
-            process.prefill_stats.fallbacks +%= 1;
+            current().prefill_stats.fallbacks +%= 1;
             return true;
         }
         if (present("DS4_METAL_DISABLE_V41_BATCH_MOE") or present("DS4_METAL_DISABLE_V41_SELECTED_SMALL_MOE")) die("resident prefill routing requires selected batch MoE");
@@ -246,9 +266,9 @@ pub const Transaction = struct {
         for (weights.layer[0..self.ops.config.shape.n_layer], 0..) |*layer, index| {
             const table = cache.table(self.ops.config, self.ops.model, layer, @intCast(index), cache.rowBytes(@ptrCast(layer.ffn_gate_exps)) *% self.ops.config.shape.n_ff_exp, cache.rowBytes(@ptrCast(layer.ffn_down_exps)) *% self.ops.config.shape.n_embd);
             if (c.ds4_gpu_stream_expert_cache_snapshot(&table, &g.resident_prefill_snapshot[index]) == 0) return false;
-            for (g.resident_prefill_snapshot[index][0..self.ops.config.shape.n_expert]) |resident| process.prefill_stats.frozen +%= @intFromBool(resident != 0);
+            for (g.resident_prefill_snapshot[index][0..self.ops.config.shape.n_expert]) |resident| current().prefill_stats.frozen +%= @intFromBool(resident != 0);
         }
-        process.prefill_stats.calls +%= 1;
+        current().prefill_stats.calls +%= 1;
         return true;
     }
     fn bias(self: Transaction, layer: *const Layer) ?[*]const f32 {
@@ -272,28 +292,28 @@ pub const Transaction = struct {
         const expert_bytes = 2 *% cache.rowBytes(@ptrCast(layer.ffn_gate_exps)) *% shape.n_ff_exp +% cache.rowBytes(@ptrCast(layer.ffn_down_exps)) *% shape.n_embd;
         for (0..count) |row| {
             const selected = ids[row * shape.n_expert_used ..][0..shape.n_expert_used];
-            process.prefill_stats.row_layers +%= 1;
+            current().prefill_stats.row_layers +%= 1;
             for (selected) |id| {
                 if (id < 0 or @as(u32, @intCast(id)) >= shape.n_expert) return false;
-                process.prefill_stats.native_misses +%= @intFromBool(resident[@intCast(id)] == 0);
+                current().prefill_stats.native_misses +%= @intFromBool(resident[@intCast(id)] == 0);
             }
             if (g.resident_route_mode == lookup_mode) continue;
             var row_plan: Plan = undefined;
             if (!route.ds4_resident_route_choose_plan(selected.ptr, affinity + row * shape.n_expert, bias_, resident, shape.n_expert, shape.n_expert_used, g.resident_route_gap, g.resident_route_max_rank, g.resident_route_max_mass, g.resident_route_max_subs, g.resident_route_max_total_mass, &row_plan)) continue;
-            process.prefill_stats.planned +%= row_plan.count;
+            current().prefill_stats.planned +%= row_plan.count;
             if (g.resident_route_mode == noop_mode) continue;
             for (row_plan.changes[0..row_plan.count]) |change| selected[change.slot] = @intCast(change.new_expert);
             substitutions +%= row_plan.count;
-            process.prefill_stats.replaced_mass += row_plan.total_mass;
-            process.prefill_stats.double_layers +%= @intFromBool(row_plan.count == 2);
-            process.prefill_stats.triple_layers +%= @intFromBool(row_plan.count == 3);
+            current().prefill_stats.replaced_mass += row_plan.total_mass;
+            current().prefill_stats.double_layers +%= @intFromBool(row_plan.count == 2);
+            current().prefill_stats.triple_layers +%= @intFromBool(row_plan.count == 3);
         }
-        process.prefill_stats.substitutions +%= substitutions;
-        process.prefill_stats.skipped_bytes +%= substitutions *% expert_bytes;
+        current().prefill_stats.substitutions +%= substitutions;
+        current().prefill_stats.skipped_bytes +%= substitutions *% expert_bytes;
         return c.ds4_gpu_begin_commands() != 0;
     }
     fn profile(self: Transaction, index: u32) ?*Metrics {
-        return if (self.graph.resident_route_profile) &process.metrics.layer[index] else null;
+        return if (self.graph.resident_route_profile) &current().metrics.layer[index] else null;
     }
     const Decision = struct { plan: Plan, drop: c.ds4_resident_drop_change, affinity: [*]const f32 };
     fn plan(self: Transaction, layer: *const Layer, index: u32, table: *const c.ds4_gpu_stream_expert_table, selected: []const i32) error{Unavailable}!?Decision {
@@ -308,8 +328,8 @@ pub const Transaction = struct {
         const bias_ = self.bias(layer) orelse return error.Unavailable;
         if (c.ds4_gpu_stream_expert_cache_snapshot_selected(table, selected.ptr, shape.n_expert_used, &selected_resident) == 0) return error.Unavailable;
         if (metrics) |p| p.lookup_ms += now() - started;
-        process.route_stats.layers +%= 1;
-        for (selected_resident[0..shape.n_expert_used]) |present_| process.route_stats.native_misses +%= @intFromBool(present_ == 0);
+        current().route_stats.layers +%= 1;
+        for (selected_resident[0..shape.n_expert_used]) |present_| current().route_stats.native_misses +%= @intFromBool(present_ == 0);
         started = if (metrics != null) now() else 0;
         var eligible = false;
         var drop = std.mem.zeroes(c.ds4_resident_drop_change);
@@ -340,7 +360,7 @@ pub const Transaction = struct {
                 p.snapshot_ms += now() - started;
                 p.snapshots +%= 1;
             }
-            process.route_stats.full_snapshots +%= 1;
+            current().route_stats.full_snapshots +%= 1;
         }
         var proposed: Plan = std.mem.zeroes(Plan);
         started = if (metrics != null) now() else 0;
@@ -356,11 +376,11 @@ pub const Transaction = struct {
             p.planned_substitutions +%= proposed.count;
         }
         if (!planned) return null;
-        process.route_stats.planned +%= proposed.count;
+        current().route_stats.planned +%= proposed.count;
         return .{ .plan = proposed, .drop = drop, .affinity = affinity };
     }
     fn noteCommit(self: Transaction, index: u32, table: *const c.ds4_gpu_stream_expert_table, proposed: Plan, native: bool) void {
-        const s = &process.route_stats;
+        const s = &current().route_stats;
         s.substitutions +%= proposed.count;
         if (native) s.native_substitutions +%= proposed.count;
         s.per_layer[index] +%= proposed.count;
@@ -398,7 +418,7 @@ pub const Transaction = struct {
         // computes the same arithmetic and makes every coefficient observable,
         // without changing the native IDs/weights or loader/cache behavior.
         if (self.graph.resident_route_mode == noop_mode) {
-            for (weights[0..selected.len], 0..) |weight, slot| @as(*volatile f32, &process.noop_weights[slot]).* = weight;
+            for (weights[0..selected.len], 0..) |weight, slot| @as(*volatile f32, &current().noop_weights[slot]).* = weight;
             if (metrics) |p| p.commit_ms += now() - started;
             return true;
         }

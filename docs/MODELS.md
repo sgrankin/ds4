@@ -17,6 +17,12 @@ Some downloads require the Hugging Face CLI; the script prints installation
 instructions when needed. Authentication is optional for public weights;
 your cached Hugging Face token or `HF_TOKEN` is used when present.
 
+## Clef decision models
+
+The **Clef-Flash, Clef and Clef-Omni** learned decision models have a separate
+[native setup and API guide](CLEF.md), including pinned downloads and measured
+scope. They use decision endpoints rather than conversational generation.
+
 ## Flint
 
 Flint uses its original affine INT4 safetensors directory and a native M5 Max

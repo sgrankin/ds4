@@ -17,8 +17,13 @@ const q4 = c.DS4_METAL_TENSOR_Q4_K;
 const mx = c.DS4_METAL_TENSOR_MXFP4;
 const q8 = c.DS4_METAL_TENSOR_Q8_0;
 const q8k = c.DS4_METAL_TENSOR_Q8_K;
-var mxfp4_mpp: ?bool = null;
-var q4_mpp: ?bool = null;
+var mxfp4_mpp = false;
+var q4_mpp = false;
+var policy_once: c.pthread_once_t = c.ds4_metal_policy_once_init;
+fn initializePolicy() callconv(.c) void {
+    mxfp4_mpp = absent("DS4_METAL_DISABLE_MXFP4_MM_ID_MPP");
+    q4_mpp = absent("DS4_METAL_DISABLE_Q4_K_MM_ID_MPP");
+}
 fn zero(comptime T: type) T {
     return std.mem.zeroes(T);
 }
@@ -450,25 +455,25 @@ fn programs(q: *const Request, f: *const Facts, p: Policy, gate_mv: *const Pipel
         }
     }
     // Preserve these two per-process settings' original first-use boundary.
-    if (mxfp4_mpp == null) mxfp4_mpp = absent("DS4_METAL_DISABLE_MXFP4_MM_ID_MPP");
-    if (mpp and mxfp4_mpp.? and q.gate_type == mx) {
+    _ = c.pthread_once(&policy_once, initializePolicy);
+    if (mpp and mxfp4_mpp and q.gate_type == mx) {
         if (dynamic(2, "kernel_mul_mm_id_mxfp4_f32_mpp", 0)) |pipeline| {
             out.gate_mm = pipeline;
             out.up_mm = pipeline;
         }
     }
-    if (q4_mpp == null) q4_mpp = absent("DS4_METAL_DISABLE_Q4_K_MM_ID_MPP");
-    if (mpp and q4_mpp.? and q.gate_type == q4) {
+
+    if (mpp and q4_mpp and q.gate_type == q4) {
         if (dynamic(2, "kernel_mul_mm_id_q4_K_f32_dbuf_mpp", 0)) |pipeline| {
             out.gate_mm = pipeline;
             out.up_mm = pipeline;
             out.mm_mpp = true;
         }
     }
-    if (mpp and mxfp4_mpp.? and p.half and q.down_type == mx) {
+    if (mpp and mxfp4_mpp and p.half and q.down_type == mx) {
         if (dynamic(2, "kernel_mul_mm_id_mxfp4_f16_mpp", 0)) |pipeline| out.down_mm = pipeline;
     }
-    if (mpp and q4_mpp.? and p.half and q.down_type == q4) {
+    if (mpp and q4_mpp and p.half and q.down_type == q4) {
         if (dynamic(2, "kernel_mul_mm_id_q4_K_f16_dbuf_mpp", 0)) |pipeline| {
             out.down_mm = pipeline;
             out.mm_mpp = true;

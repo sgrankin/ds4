@@ -10,10 +10,14 @@ pub fn state() *c.ds4_metal_scheduling {
 fn present(name: [*:0]const u8) bool {
     return c.getenv(name) != null;
 }
-var use_unretained: ?bool = null;
+var use_unretained = false;
+var policy_once: c.pthread_once_t = c.ds4_metal_policy_once_init;
+fn initializePolicy() callconv(.c) void {
+    use_unretained = present("DS4_METAL_UNRETAINED_COMMAND_BUFFERS");
+}
 pub fn newCommand() ?*anyopaque {
-    if (use_unretained == null) use_unretained = present("DS4_METAL_UNRETAINED_COMMAND_BUFFERS");
-    return c.ds4_metal_schedule_new_command(use_unretained.?);
+    _ = c.pthread_once(&policy_once, initializePolicy);
+    return c.ds4_metal_schedule_new_command(use_unretained);
 }
 pub fn drop(object: ?*anyopaque) void {
     if (object) |value| c.ds4_metal_schedule_drop(value);

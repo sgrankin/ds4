@@ -1,14 +1,16 @@
 #ifndef DS4_METAL_BOOTSTRAP_H
 #define DS4_METAL_BOOTSTRAP_H
 #include "bridge_types.h"
+#include "context.h"
+#include "runtime/api.h"
 #include "scheduling.h"
 #include "expert_load.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/* The original process flags and device-name storage, shared once with the
- * remaining C selectors. ARC device/queue/library/PSO storage stays ObjC. */
+/* Feature flags and device-name storage for one Metal owner; native policy
+ * and remaining C selectors borrow this same record. ARC device/queue/library/PSO storage stays ObjC. */
 typedef struct {
     int initialized;
     int runtime_available, family_supported, queue_supported;

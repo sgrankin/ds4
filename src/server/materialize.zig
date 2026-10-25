@@ -405,6 +405,12 @@ const Transaction = struct {
             if (status == 1) report(self.errors, "previous_response_id was not found");
             return error.InvalidRequest;
         }
+        if (self.backend.engine != null) {
+            const parent_model = stringField(response, "model");
+            defer c.free(parent_model);
+            if (parent_model == null or !self.backend.model().accepts(text(parent_model)))
+                return fail(self.errors, "previous_response_id belongs to a different model");
+        }
         const status_text = stringField(response, "status");
         defer c.free(status_text);
         var parent = std.mem.zeroes(c.chat_msgs);

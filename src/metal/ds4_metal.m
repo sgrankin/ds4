@@ -51,6 +51,8 @@
 #include "routed_single.h"
 #include "resources.h"
 #include "ds4_image.h"
+#include "context.h"
+#include <assert.h>
 
 /*
  * Objective-C Metal glue for the native engine.
@@ -67,10 +69,7 @@
 
 @class DS4MetalQ4ExpertTable;
 
-static id<MTLDevice> g_device;
-static id<MTLCommandQueue> g_queue;
-static id<MTLLibrary> g_library;
-static ds4_metal_scheduling g_schedule;
+#include "context.inc.m"
 #define g_batch_cb g_schedule.commands.batch
 #define g_batch_enc g_schedule.commands.encoder
 #define g_batch_encoder_concurrent g_schedule.commands.concurrent
@@ -108,7 +107,7 @@ typedef struct {
 static BOOL g_timeline_enabled;
 static FILE *g_timeline_file;
 static pthread_mutex_t g_timeline_mutex = PTHREAD_MUTEX_INITIALIZER;
-static DS4TimelineBatch *g_timeline_batch;
+
 static uint64_t g_timeline_seq;
 static NSMutableDictionary<NSNumber *, NSString *> *g_timeline_pso_names;
 static id<MTLCounterSet> g_timeline_counter_set;
@@ -393,8 +392,8 @@ static id<MTLBlitCommandEncoder> ds4_gpu_blit_encoder(id<MTLCommandBuffer> cb, c
 
 static void ds4_gpu_parallel_ffn_reset_state(BOOL close_encoder);
 #define g_pending_cbs g_schedule.commands.pending
-static id<MTLSharedEvent> g_selected_readback_event;
-static ds4_metal_tp_policy g_tp_native_policy;
+
+
 #define g_tp_seq (g_tp_native_policy.row_sequence)
 #define g_tp_batch_seq (g_tp_native_policy.batch_sequence)
 #define g_tp_flag_prepublished_seq (g_tp_native_policy.prepublished_sequence)
@@ -410,324 +409,275 @@ static ds4_metal_tp_policy g_tp_native_policy;
 #define g_tp_fold_req_gate (g_tp_native_policy.fold_gate)
 #define g_selected_readback_event_value (g_tp_native_policy.selected_sequence)
 
-static id<MTLComputePipelineState> g_set_rows_f32_i32_pipeline;
-static id<MTLComputePipelineState> g_get_rows_f32_pipeline;
-static id<MTLComputePipelineState> g_get_rows_f16_pipeline;
-static id<MTLComputePipelineState> g_get_rows_i32_pipeline;
-static id<MTLComputePipelineState> g_get_rows_q8_0_pipeline;
-static id<MTLComputePipelineState> g_get_rows_q4_0_pipeline;
-static id<MTLComputePipelineState> g_get_rows_q4_K_pipeline;
-static id<MTLComputePipelineState> g_repeat_f32_pipeline;
-static id<MTLComputePipelineState> g_concat_pipeline;
-static id<MTLComputePipelineState> g_cpy_f32_f32_pipeline;
-static id<MTLComputePipelineState> g_cpy_f32_f16_pipeline;
-static id<MTLComputePipelineState> g_cpy_contig_f32_f16_pipeline;
-static id<MTLComputePipelineState> g_cpy_f16_f32_pipeline;
-static id<MTLComputePipelineState> g_cpy_f16_f16_pipeline;
-static id<MTLComputePipelineState> g_cpy_contig_f16_f32_pipeline;
-static id<MTLComputePipelineState> g_cpy_contig_f16_f16_pipeline;
-static id<MTLComputePipelineState> g_flash_kv_stage_f16_pipeline;
-static id<MTLComputePipelineState> g_swiglu_pipeline;
-static id<MTLComputePipelineState> g_swiglu_flat_pipeline;
-static id<MTLComputePipelineState> g_add_pipeline;
-static id<MTLComputePipelineState> g_add2_pipeline;
-static id<MTLComputePipelineState> g_add3_pipeline;
-static id<MTLComputePipelineState> g_moe_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_sum8_pipeline;
-static id<MTLComputePipelineState> g_mul_pipeline;
-static id<MTLComputePipelineState> g_rms_norm_pipeline;
-static id<MTLComputePipelineState> g_rms_norm_plain_pipeline;
-static id<MTLComputePipelineState> g_add_rms_norm_pipeline;
-static id<MTLComputePipelineState> g_rms_norm_scale_pipeline;
-static id<MTLComputePipelineState> g_dsv4_qkv_rms_norm_pipeline;
-static id<MTLComputePipelineState> g_dsv4_head_rms_norm_rope_tail_pipeline;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #define g_use_dsv4_head_rms_norm_rope_tail_pipeline g_schedule.commands.static_head_norm
-static id<MTLComputePipelineState> g_hc_split_sinkhorn_pipeline;
-static id<MTLComputePipelineState> g_hc_split_weighted_sum_pipeline;
-static id<MTLComputePipelineState> g_hc_split_weighted_sum_norm_pipeline;
-static id<MTLComputePipelineState> g_dsv4_hc_producer_pre_norm_pipeline;
-static id<MTLComputePipelineState> g_dsv4_hc_expand_producer_pre_norm_pipeline;
-static NSMutableDictionary<NSString *, id<MTLBuffer>> *g_dsv4_hc_barrier_cache;
-static NSMutableDictionary<NSString *, NSNumber *> *g_dsv4_hc_barrier_gen;
-static id<MTLComputePipelineState> g_hc_weighted_sum_pipeline;
-static id<MTLComputePipelineState> g_output_hc_weights4_pipeline;
-static uint32_t g_test_flags;
-static id<MTLComputePipelineState> g_hc_expand_pipeline;
-static id<MTLComputePipelineState> g_unary_sigmoid_pipeline;
-static id<MTLComputePipelineState> g_unary_silu_pipeline;
-static id<MTLComputePipelineState> g_unary_softplus_pipeline;
-static id<MTLComputePipelineState> g_unary_sqrt_pipeline;
-static id<MTLComputePipelineState> g_unary_clamp_pipeline;
-static id<MTLComputePipelineState> g_unary_scale_pipeline;
-static id<MTLComputePipelineState> g_unary_fill_pipeline;
-static id<MTLComputePipelineState> g_unary_fill_f16_pipeline;
-static id<MTLComputePipelineState> g_bin_mul_scalar_pipeline;
-static id<MTLComputePipelineState> g_bin_div_row_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_iq2_xxs_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_iq2_xxs_pair_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_iq2_xxs_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_iq2_xxs_pair_swiglu_pack2_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_q2_k_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_q2_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_iq2_xxs_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_q4_k_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_q4_k_pair_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_q4_k_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_q4_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_group_q4_k_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_group_q4_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_group6_q4_k_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_group6_q4_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_group8_q4_k_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_group8_q4_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_group24_q4_k_id_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_group24_q4_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_slots6_iq2_xxs_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_slots6_q2_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_slots6_q4_k_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_slots6_q4_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_pair_swiglu_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_sum6_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_pair_swiglu_pipeline_nsg1_tg_multiple;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_sum6_pipeline_nsg1_tg_multiple;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_pair_swiglu_fixed_route_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_sum6_fixed_route_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_sum6_fixed_route_full_rows_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_pair_swiglu_fixed_route_static_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_sum6_fixed_route_full_rows_static_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_pair_swiglu_tp_static_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_id_mxfp4_sum6_tp_full_rows_static_pipeline_nsg1;
-static id<MTLComputePipelineState> g_moe_mul_mv_slots6_mxfp4_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_slots6_mxfp4_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_addr_iq2_xxs_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_addr_q2_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_masked_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_addr_q2_k_sum6_masked_pipeline;
-static id<MTLComputePipelineState> g_moe_stream_expert_cache_validate_pipeline;
-static id<MTLComputePipelineState> g_moe_q4_gather_slots6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_table_q4_k_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_table_q4_k_sum6_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_addr_q4_k_pair_swiglu_pipeline;
-static id<MTLComputePipelineState> g_moe_mul_mv_addr_q4_k_sum6_pipeline;
-static id<MTLArgumentEncoder> g_moe_table_q4_pair_gate_encoder;
-static id<MTLArgumentEncoder> g_moe_table_q4_pair_up_encoder;
-static id<MTLArgumentEncoder> g_moe_table_q4_sum_down_encoder;
-static id<MTLComputePipelineState> g_rope_tail_batch_pipeline;
-static id<MTLComputePipelineState> g_rope_tail_inplace_pair_pipeline;
-static id<MTLComputePipelineState> g_rope_tail_inplace_pair_shared4_pipeline;
-static id<MTLComputePipelineState> g_rope_tail_inplace_pair_affine_pipeline;
-static id<MTLComputePipelineState> g_dsv4_fp8_kv_quantize_pipeline;
-static id<MTLComputePipelineState> g_dsv4_indexer_qat_pipeline;
-static id<MTLComputePipelineState> g_dsv4_kv_fp8_store_pipeline;
-static id<MTLComputePipelineState> g_dsv4_kv_rope_fp8_store_pipeline;
-static id<MTLComputePipelineState> g_dsv4_ratio4_shift_pipeline;
-static id<MTLComputePipelineState> g_dsv4_compressor_pack_ratio4_pipeline;
-static id<MTLComputePipelineState> g_dsv4_compressor_pack_ratio4_decode_ggml_pipeline;
-static id<MTLComputePipelineState> g_dsv4_compressor_exact_softmax_product_pipeline;
-static id<MTLComputePipelineState> g_dsv4_compressor_exact_pool_ratio4_pipeline;
-static id<MTLComputePipelineState> g_dsv4_softmax_pool_ratio4_direct_pipeline;
-static id<MTLComputePipelineState> g_dsv4_softmax_pool_pipeline;
-static id<MTLComputePipelineState> g_soft_max_f32_pipeline;
-static id<MTLComputePipelineState> g_soft_max_f32_4_pipeline;
-static id<MTLComputePipelineState> g_argsort_f32_i32_desc_pipeline;
-static id<MTLComputePipelineState> g_argsort_merge_f32_i32_desc_pipeline;
-static id<MTLComputePipelineState> g_sum_rows_f32_f32_pipeline;
-static id<MTLComputePipelineState> g_dsv4_topk_mask_pipeline;
-static id<MTLComputePipelineState> g_dsv4_topk_mask_scatter_pipeline;
-static id<MTLComputePipelineState> g_dsv4_indexer_weighted_sum_pipeline;
-static id<MTLComputePipelineState> g_dsv4_indexer_score_one_direct_pipeline;
-static id<MTLComputePipelineState> g_dsv4_compressor_store_one_pipeline;
-static id<MTLComputePipelineState> g_dsv4_sort_i32_rows_asc_pipeline;
-static id<MTLComputePipelineState> g_dsv4_indexed_attention_heads8_pipeline;
-static id<MTLComputePipelineState> g_dsv4_indexed_attention_heads8_rb16_pipeline;
-static id<MTLComputePipelineState> g_dsv4_indexed_attention_heads16_dual_pipeline;
-static id<MTLComputePipelineState> g_dsv4_indexed_attention_heads8_split_pipeline;
-static id<MTLComputePipelineState> g_dsv4_indexed_attention_heads8_split_reduce_pipeline;
-static id<MTLComputePipelineState> g_dsv4_softplus_sqrt_pipeline;
-static id<MTLComputePipelineState> g_dsv4_router_finalize_one_pipeline;
-static id<MTLComputePipelineState> g_dsv4_router_finalize_one_simd_pipeline;
-static id<MTLComputePipelineState> g_dsv4_router_finalize_weights_one_simd_pipeline;
-static id<MTLComputePipelineState> g_dsv4_router_transform_finalize_weights_one_simd_pipeline;
-static id<MTLComputePipelineState> g_dsv4_router_select_visual_batch_pipeline;
-static NSCache<NSString *, id<MTLBuffer>> *g_dsv4_completion_cache;
-static __weak id<MTLBuffer> g_dsv4_hc_producer_last_mix_buffer;
-static NSUInteger g_dsv4_hc_producer_last_mix_offset;
-static id<MTLBuffer> g_dsv4_hc_producer_last_completion;
-static id<MTLComputePipelineState> g_dsv4_router_weights_one_pipeline;
-static id<MTLComputePipelineState> g_glm_router_select_one_pipeline;
-static id<MTLComputePipelineState> g_glm_kv_lora_rms_norm_pipeline;
-static id<MTLComputePipelineState> g_glm_k_b_project_pipeline;
-static id<MTLComputePipelineState> g_glm_store_compact_kv_pipeline;
-static id<MTLComputePipelineState> g_glm_qkv_norm_store_compact_kv_pipeline;
-static id<MTLComputePipelineState> g_glm_store_indexer_k_pipeline;
-static id<MTLComputePipelineState> g_glm53_indexer_pool_update_pipeline;
-static id<MTLComputePipelineState> g_glm_build_kv_cache_pipeline;
-static id<MTLComputePipelineState> g_glm_build_kv_cache_decode_group4_pipeline;
-static id<MTLComputePipelineState> g_glm_build_kv_cache_flash_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_full_pipeline;
-static id<MTLComputePipelineState> g_glm_fill_selected_range_pipeline;
-static id<MTLComputePipelineState> g_glm_fill_selected_range_batch_pipeline;
-static id<MTLComputePipelineState> g_glm53_expand_pool_selection_pipeline;
-static id<MTLComputePipelineState> g_glm_indexer_rope_tail_pipeline;
-static id<MTLComputePipelineState> g_glm_indexer_score_one_pipeline;
-static id<MTLComputePipelineState> g_glm_indexer_score_one_direct_pipeline;
-static id<MTLComputePipelineState> g_glm_indexer_scores_batch_pipeline;
-static id<MTLComputePipelineState> g_glm_indexer_scores_tiled_pipeline;
-static id<MTLComputePipelineState> g_glm_indexer_scores_tiled_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_qk_lowrank_pipeline;
-static id<MTLComputePipelineState> g_glm_qk_lowrank_glm52_pipeline;
-static id<MTLComputePipelineState> g_glm_qk_lowrank_glm52_sg_pipeline;
-static id<MTLComputePipelineState> g_glm_qk_lowrank_batch_pipeline;
-static id<MTLComputePipelineState> g_glm_qk_lowrank_batch_glm52_t4_pipeline;
-static id<MTLComputePipelineState> g_glm_value_project_q8_0_pipeline;
-static id<MTLComputePipelineState> g_glm_value_project_q8_0_batch_heads_pipeline;
-static id<MTLComputePipelineState> g_glm_value_project_q8_0_batch_heads_mma_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_decode_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_decode_split_group8_partial_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_decode_split_group8_partial_valid_fullheads_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_decode_split_group8_reduce_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_decode_split_group8_reduce16_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_group2_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_q2_group4_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_group8_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_lora_group8_vec_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_lora_group8_vec_valid_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_lora_group8_vec_valid_fullheads_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_lora_group8_vec_causal_pipeline;
-static id<MTLComputePipelineState> g_glm_attention_indexed_batch_lora_group8_vec_causal_fullheads_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_pair_swiglu_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_pair_swiglu2_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_pair_swiglu4_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_pair_swiglu2_mapped_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_pair_swiglu2_mapped_row_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q2_k_pair_swiglu_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q2_k_addr_pair_swiglu2_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q2_k_addr_pair_swiglu2_masked_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_addr_pair_swiglu_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_addr_pair_swiglu_masked_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q2_k_down_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_down_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q2_k_addr_down_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q4_k_addr_down_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q5_k_pair_swiglu_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q5_k_pair_swiglu_mapped_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q5_k_pair_swiglu_mapped_row_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q5_k_down_f32_pipeline;
-static id<MTLComputePipelineState> g_glm_q6_k_down_f32_pipeline;
-static id<MTLComputePipelineState> g_dsv4_router_weights_batch_pipeline;
-static id<MTLComputePipelineState> g_dsv4_hc_expand4_pipeline;
-static NSMutableDictionary<NSString *, id<MTLComputePipelineState>> *g_pipeline_cache;
 
-enum {
-    DS4_METAL_DECODE_PIPELINE_FAST_CACHE_SLOTS = 64,
-    DS4_METAL_DECODE_PIPELINE_FAST_NAME_BYTES = 96,
-};
-/*
- * Sentinel nxpsg stored by the single-constant ds4_gpu_get_mul_mv_pipeline
- * path, which has no second SIMD-group constant. The extended
- * ds4_gpu_get_mul_mv_ext_pipeline path derives nxpsg as a positive divisor of
- * the 32-row output tile, so INT16_MIN can never collide with a real value.
- */
-#define DS4_METAL_DECODE_PIPELINE_FAST_NXPSG_NONE INT16_MIN
-_Static_assert(
-    (DS4_METAL_DECODE_PIPELINE_FAST_CACHE_SLOTS &
-     (DS4_METAL_DECODE_PIPELINE_FAST_CACHE_SLOTS - 1u)) == 0,
-    "decode pipeline fast cache slot count must be a power of two");
 
-typedef struct {
-    id<MTLComputePipelineState> __strong pipeline;
-    uint64_t hash;
-    int16_t nsg;
-    int16_t nxpsg;
-    uint16_t name_len;
-    bool used;
-    char name[DS4_METAL_DECODE_PIPELINE_FAST_NAME_BYTES];
-} ds4_gpu_decode_pipeline_fast_cache_entry;
 
-static ds4_gpu_decode_pipeline_fast_cache_entry
-    g_decode_pipeline_fast_cache[DS4_METAL_DECODE_PIPELINE_FAST_CACHE_SLOTS];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Command encoding and the existing NSMutableDictionary pipeline cache are
  * backend-serialized; this hot-path mirror intentionally shares that model. */
-static bool g_decode_pipeline_fast_lookup_active;
-static uint32_t g_decode_pipeline_fast_cache_entries;
-static NSMutableDictionary<NSString *, DS4MetalQ4ExpertTable *> *g_q4_expert_table_cache;
-static NSMutableDictionary<NSString *, id> *g_q4_expert_layer_residency_cache;
-static NSMutableArray<id<MTLBuffer>> *g_transient_buffers;
 
-typedef struct {
-    id<MTLBuffer> __strong mask;
-    id<MTLBuffer> __strong blk;
-    NSUInteger mask_bytes;
-    NSUInteger blk_bytes;
-    uint32_t kind;
-    uint32_t n_tokens;
-    uint32_t n_comp;
-    uint32_t n_keys;
-    uint32_t window;
-    uint32_t ratio;
-    uint32_t nqptg;
-    uint32_t ncpsg;
-    bool has_kvpad;
-    bool bc_mask;
-    bool valid;
-    bool blk_ready;
-} ds4_gpu_zero_prefix_prefill_mask_cache_entry;
+
+
+
+
 
 /* Actual cache kinds live once in attention_batch.h. */
 
-static ds4_gpu_zero_prefix_prefill_mask_cache_entry
-    g_zero_prefix_prefill_mask_cache[DS4_GPU_PREFILL_MASK_CACHE_SLOTS];
-static void ds4_gpu_invalidate_zero_prefix_prefill_block_maps(void);
-static id<MTLBuffer> g_flash_attn_mask_buffer;
-static id<MTLBuffer> g_flash_attn_zero_mask_buffer;
-static id<MTLBuffer> g_flash_attn_pad_buffer;
-static id<MTLBuffer> g_flash_attn_tmp_buffer;
-static id<MTLBuffer> g_flash_attn_blk_buffer;
-static id<MTLBuffer> g_flash_attn_ring_buffer;
-static id<MTLBuffer> g_flash_attn_kv_buffer;
-static id<MTLBuffer> g_glm_flash_attn_mask_buffer;
-static id<MTLBuffer> g_compressor_pool_kv_buffer;
-static id<MTLBuffer> g_compressor_pool_score_buffer;
-static id<MTLBuffer> g_compressor_pool_score_cont_buffer;
-static id<MTLBuffer> g_compressor_pool_softmax_buffer;
-static id<MTLBuffer> g_compressor_pool_product_buffer;
-static id<MTLBuffer> g_compressor_store_ape_buffer;
-static id<MTLBuffer> g_compressor_store_score_buffer;
-static id<MTLBuffer> g_embed_rows_buffer;
-static id<MTLBuffer> g_router_selection_buffer;
-static id<MTLBuffer> g_router_weight_sum_buffer;
-static id<MTLBuffer> g_indexer_head_scores_buffer;
-static id<MTLBuffer> g_indexer_topk_buffer;
-static id<MTLBuffer> g_indexed_topk_buffer;
-static id<MTLBuffer> g_f16_round_scratch_buffer;
-static id<MTLBuffer> g_q8_prefill_scratch_buffer;
-static id<MTLBuffer> g_qwen4_conv_halo_buffer;
-static NSUInteger g_qwen4_conv_halo_bytes;
-static id<MTLBuffer> g_raw_store_round_buffer;
-static id<MTLBuffer> g_moe_gate_scratch_buffer;
-static id<MTLBuffer> g_moe_down_scratch_buffer;
-static id<MTLBuffer> g_moe_id_map_buffer;
-static id<MTLBuffer> g_moe_packed_rhs_buffer;
-static NSUInteger g_moe_packed_rhs_bytes;
-static id<MTLBuffer> g_moe_q4_gate_slots_buffer;
-static id<MTLBuffer> g_moe_q4_up_slots_buffer;
-static id<MTLBuffer> g_moe_q4_down_slots_buffer;
-static id<MTLBuffer> g_attn_out_group_ids_buffer;
-static int g_model_fd = -1;
 
-static int g_stream_prefill_batch_selected_addr_building;
-static const ds4_gpu_tensor *g_stream_expert_batch_ready;
-static int g_glm_stream_expert_addr_table_building;
+static void ds4_gpu_invalidate_zero_prefix_prefill_block_maps(void);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include "expert_cache.h"
 #include "expert_tables.h"
-static ds4_metal_expert_cache_state g_expert_cache = {
-    .cache_first_decode_layer = UINT32_MAX,
-};
+
 #define g_stream_expert_cache_bytes (g_expert_cache.cache_bytes)
 #define g_stream_expert_cache_expert_bytes (g_expert_cache.cache_expert_bytes)
 #define g_stream_expert_cache_entry_count (g_expert_cache.cache_entry_count)
@@ -838,10 +788,10 @@ static ds4_metal_expert_cache_state g_expert_cache = {
 #define g_stream_selected_id_buffers (g_expert_cache.selected_id_buffers)
 #define g_stream_expert_validate_status_buffer (g_expert_cache.validate_status_buffer)
 
-static int g_glm_model_mode;
-static int g_ssd_streaming_mode;
-static int g_glm_streaming_prefill_full_layer_runtime;
-static ds4_metal_bootstrap_state g_bootstrap;
+
+
+
+
 #define g_initialized (g_bootstrap.initialized)
 #define g_metal4_runtime_available (g_bootstrap.runtime_available)
 #define g_metal4_family_supported (g_bootstrap.family_supported)
@@ -863,8 +813,8 @@ static int ds4_gpu_stream_expert_timing_summary_enabled(void);
 /* The async selected-load worker registers itself so cache paths that would
  * flush/wait on command buffers (a race against the encoding thread) fail
  * the load instead; the caller then retries on the main thread. */
-static pthread_t g_stream_expert_service_thread;
-static int g_stream_expert_service_thread_set;
+
+
 
 void ds4_gpu_stream_expert_cache_note_service_thread(void) {
     g_stream_expert_service_thread = pthread_self();
@@ -875,43 +825,43 @@ static int ds4_gpu_stream_expert_cache_on_service_thread(void) {
     return g_stream_expert_service_thread_set &&
            pthread_equal(pthread_self(), g_stream_expert_service_thread);
 }
-static NSUInteger g_flash_attn_mask_bytes;
-static NSUInteger g_flash_attn_zero_mask_bytes;
-static NSUInteger g_flash_attn_pad_bytes;
-static NSUInteger g_flash_attn_tmp_bytes;
-static NSUInteger g_flash_attn_blk_bytes;
-static NSUInteger g_flash_attn_ring_bytes;
-static NSUInteger g_flash_attn_kv_bytes;
-static NSUInteger g_glm_flash_attn_mask_bytes;
-static uint32_t g_glm_flash_attn_mask_pos0;
-static uint32_t g_glm_flash_attn_mask_tokens;
-static uint32_t g_glm_flash_attn_mask_cache_len;
-static int g_glm_flash_attn_mask_valid;
-static NSUInteger g_compressor_pool_kv_bytes;
-static NSUInteger g_compressor_pool_score_bytes;
-static NSUInteger g_compressor_pool_score_cont_bytes;
-static NSUInteger g_compressor_pool_softmax_bytes;
-static NSUInteger g_compressor_pool_product_bytes;
-static NSUInteger g_compressor_store_ape_bytes;
-static NSUInteger g_compressor_store_score_bytes;
-static NSUInteger g_embed_rows_bytes;
-static NSUInteger g_router_selection_bytes;
-static NSUInteger g_router_weight_sum_bytes;
-static NSUInteger g_indexer_head_scores_bytes;
-static NSUInteger g_indexer_topk_bytes;
-static NSUInteger g_indexed_topk_bytes;
-static NSUInteger g_f16_round_scratch_bytes;
-static NSUInteger g_q8_prefill_scratch_bytes;
-static NSUInteger g_raw_store_round_bytes;
-static NSUInteger g_moe_gate_scratch_bytes;
-static NSUInteger g_moe_down_scratch_bytes;
-static NSUInteger g_moe_id_map_bytes;
-static NSUInteger g_moe_q4_gate_slots_bytes;
-static NSUInteger g_moe_q4_up_slots_bytes;
-static NSUInteger g_moe_q4_down_slots_bytes;
-static NSUInteger g_attn_out_group_ids_bytes;
-static int g_quality_mode;
-static int g_mpp_invalid_env_reported;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 static double ds4_gpu_gib(uint64_t bytes);
 
@@ -936,7 +886,7 @@ static void ds4_gpu_print_device_summary(void) {
 /* Compatibility fallback for callers that cannot provide a parsed GGUF tensor
  * span. The normal DS4 engine passes the exact maximum tensor byte size. */
 
-static ds4_metal_model_views g_model_views;
+
 
 
 
@@ -968,6 +918,7 @@ static ds4_metal_model_views g_model_views;
 @property(nonatomic, strong) NSMutableArray<id<MTLBuffer>> *expertBuffers;
 @property(nonatomic, strong) id residencySet;
 @property(nonatomic, assign) BOOL residencySetAddedToQueue;
+@property(nonatomic, strong) id<MTLCommandQueue> ownerQueue;
 @property(nonatomic, assign) uint32_t nExpert;
 @property(nonatomic, assign) uint64_t expertBytes;
 @end
@@ -978,9 +929,9 @@ static ds4_metal_model_views g_model_views;
     if (@available(macOS 15.0, *)) {
         if (_residencySet) {
             if (_residencySetAddedToQueue &&
-                g_queue &&
-                [g_queue respondsToSelector:@selector(removeResidencySet:)]) {
-                [g_queue removeResidencySet:_residencySet];
+                _ownerQueue &&
+                [_ownerQueue respondsToSelector:@selector(removeResidencySet:)]) {
+                [_ownerQueue removeResidencySet:_residencySet];
             }
             [_residencySet endResidency];
         }
@@ -992,6 +943,7 @@ static ds4_metal_model_views g_model_views;
 @interface DS4MetalQ4LayerResidency : NSObject
 @property(nonatomic, strong) id residencySet;
 @property(nonatomic, assign) BOOL addedToQueue;
+@property(nonatomic, strong) id<MTLCommandQueue> ownerQueue;
 @end
 
 @implementation DS4MetalQ4LayerResidency
@@ -1000,9 +952,9 @@ static ds4_metal_model_views g_model_views;
     if (@available(macOS 15.0, *)) {
         if (_residencySet) {
             if (_addedToQueue &&
-                g_queue &&
-                [g_queue respondsToSelector:@selector(removeResidencySet:)]) {
-                [g_queue removeResidencySet:_residencySet];
+                _ownerQueue &&
+                [_ownerQueue respondsToSelector:@selector(removeResidencySet:)]) {
+                [_ownerQueue removeResidencySet:_residencySet];
             }
             [_residencySet endResidency];
         }
@@ -1055,8 +1007,8 @@ static void ds4_gpu_close_batch_encoder(void) {
     ds4_native_metal_close_encoder();
 }
 
-static double g_gpu_busy_accum;
-static uint64_t g_gpu_busy_cbs;
+
+
 
 /* A failed command buffer can leave a cross-threadgroup arrival counter at an
  * arbitrary partial value.  Drop cached ownership instead of CPU-resetting
@@ -3804,7 +3756,7 @@ static ds4_gpu_mv_dispatch ds4_gpu_make_plain_mv_dispatch(
 /* Row-exact geometry for the 3-row speculative verify: the few-row matvec
  * and routed-expert dispatches keep the lane maps and kernel choices of the
  * T <= 2 decode paths, so every committed row stays byte-identical. */
-static bool g_qwen4_verify_rows_exact;
+
 void ds4_gpu_qwen4_set_verify_rows_exact(bool on) {
     g_qwen4_verify_rows_exact = on;
 }
@@ -4278,17 +4230,6 @@ int ds4_gpu_init(void) {
     }
 }
 
-/* Model-independent Metal access. A Flint-only process needs the same device
- * and queue, without compiling the DeepSeek pipeline catalogue. */
-bool ds4_gpu_metal_shared_context(void **device, void **queue) {
-    @autoreleasepool {
-        if (!g_device && !ds4_metal_bootstrap_device()) return false;
-        if (!g_queue && !ds4_metal_bootstrap_queue()) return false;
-        *device = (__bridge void *)g_device;
-        *queue = (__bridge void *)g_queue;
-        return true;
-    }
-}
 
 int ds4_gpu_test_mxfp4_down_half_lut(uint16_t *legacy_bits,
                                      uint16_t *lut_bits) {
@@ -4318,7 +4259,7 @@ int ds4_gpu_test_mxfp4_down_half_lut(uint16_t *legacy_bits,
         [enc dispatchThreadgroups:MTLSizeMake((count + 255u) / 256u, 1, 1)
              threadsPerThreadgroup:MTLSizeMake(256u, 1, 1)];
         [enc endEncoding];
-        [cb commit];
+        ds4_runtime_metal_commit((__bridge void *)cb, &g_bootstrap, false);
         if (!ds4_gpu_wait_command_buffer(cb, "MXFP4 half-LUT raw-bit test")) {
             return 0;
         }
@@ -4621,21 +4562,21 @@ static int ds4_gpu_stream_expert_cache_wait_inflight(const char *label) {
 
 /* Transport constants live once in tp_control.h. */
 
-static id<MTLSharedEvent> g_tp_gpu_event;   /* GPU -> service thread */
-static id<MTLSharedEvent> g_tp_cpu_event;   /* service thread -> GPU */
+   /* GPU -> service thread */
+   /* service thread -> GPU */
 /* Batch (verify-block) gates run on their own sequence space and release
  * event: the row-gate seq feeds the RDMA pre-posted recv accounting, which
  * requires consecutive values, and a shared release event would make a
  * small batch value satisfy waits armed against the larger row seq. */
-static id<MTLSharedEvent> g_tp_batch_gpu_event;
-static id<MTLSharedEvent> g_tp_batch_cpu_event;
+
+
 
 /* Batch flag values are tagged so a stale row-gate seq in the reused FFN
  * flag word can never satisfy a batch arrival spin (and vice versa). */
 /* Expert-ownership split parameters for routed kernels. World 1 means TP is
  * not bound; world 2 assigns each rank one contiguous expert range. */
-static int32_t g_tp_split_rank;
-static int32_t g_tp_split_world = 1;
+
+
 
 
 static int ds4_gpu_tp_world_is_two(void) {
@@ -4665,7 +4606,7 @@ static void ds4_gpu_tp_expert_range(uint32_t n_total_expert,
  * value-project batch kernels; the caller zeroes the unowned head range
  * of the heads buffer and combines the attn-output partials over the
  * TP big-gate exchange. */
-static int32_t g_tp_attn_head_split;
+
 
 void ds4_gpu_tp_set_attn_head_split(int enabled) {
     g_tp_attn_head_split = enabled ? 1 : 0;
@@ -4693,15 +4634,15 @@ static void ds4_gpu_tp_attn_head_range(uint32_t n_head,
  * probing fresh cache lines at the head of a new command buffer instead of
  * parking on g_tp_cpu_event. See kernel_dsv4_tp_poll_release. */
 
-static id<MTLBuffer> g_tp_poll_buffer;         /* release region + status words */
-static volatile uint32_t *g_tp_poll_region;   /* CPU view of the release lines */
-static volatile uint32_t *g_tp_poll_status;   /* per-slot poll result, GPU-written */
-static int g_tp_poll_prev_valid;
-static uint32_t g_tp_poll_prev_slot;
-static uint64_t g_tp_poll_prev_seq;
+         /* release region + status words */
+   /* CPU view of the release lines */
+   /* per-slot poll result, GPU-written */
+
+
+
 /* Gate-time prefetch: the poll wait leaves the memory bus idle, so the next
  * phase's weights are streamed into the cache first (see the notebook). */
-static ds4_metal_tp_prefetch_policy g_tp_native_prefetch;
+
 #define g_tp_exchange_ewma_us (g_tp_native_prefetch.exchange_ewma_us)
 #define g_tp_prefetch_plan (g_tp_native_prefetch.plan)
 #define g_tp_prefetch_count (g_tp_native_prefetch.count)
@@ -4716,72 +4657,72 @@ static ds4_metal_tp_prefetch_policy g_tp_native_prefetch;
  * flag for the sequence number the next gate encode will use, and the gate
  * encode skips its own flag kernel. */
 
-static id<MTLBuffer> g_tp_fold_ctl;
 
 
 
-static id<MTLBuffer> g_tp_prefetch_scratch;
 
-static uint64_t g_tp_stat_poll_lines;      /* sum of poll hit lines (profile) */
-static uint64_t g_tp_stat_poll_max_line;
-static uint64_t g_tp_stat_poll_count;
-static uint64_t g_tp_stat_encode_lead;     /* sum of (encoded seq - gate seq) at arrival */
-static double g_tp_stat_release_ms;        /* time spent writing poll releases */
-static double g_tp_stat_cbwait_ms;         /* flag seen -> payload verified in memory */
+
+
+      /* sum of poll hit lines (profile) */
+
+
+     /* sum of (encoded seq - gate seq) at arrival */
+        /* time spent writing poll releases */
+         /* flag seen -> payload verified in memory */
               /* slab offset of out slot 0 */
             /* partial vector bytes per slot */
-static id<MTLBuffer> g_tp_check_buffer;    /* per-slot payload checksums */
-static volatile uint32_t *g_tp_check_words;
-static volatile uint8_t *g_tp_slab_cpu;   /* CPU view of the slab base */
+    /* per-slot payload checksums */
+
+   /* CPU view of the slab base */
 /* Bound on gate command buffers in flight: the GPU only needs a few
  * segments of runway and a deep backlog costs command-buffer memory. */
-static id<MTLBuffer> g_tp_slab_buffer;
-
-static volatile uint32_t *g_tp_gpu_flags;   /* CPU view of the flag words */
 
 
-static ds4_gpu_tp_exchange_fn g_tp_exchange_fn;
-static ds4_gpu_tp_batch_exchange_fn g_tp_batch_exchange_fn;
-static ds4_gpu_tp_big_exchange_fn g_tp_big_exchange_fn;
+   /* CPU view of the flag words */
+
+
+
+
+
 
 void ds4_gpu_tp_set_big_exchange(ds4_gpu_tp_big_exchange_fn fn) {
     g_tp_big_exchange_fn = fn;
 }
 
-static void *g_tp_exchange_ud;
-static pthread_t g_tp_thread;
-static int g_tp_thread_running;
-static int g_tp_shutdown;
-static int g_tp_failed_flag;
-static pthread_mutex_t g_tp_mutex = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t g_tp_cond = PTHREAD_COND_INITIALIZER;
-static ds4_gpu_tp_request g_tp_queue[DS4_GPU_TP_QUEUE];
-static uint32_t g_tp_queue_head;
-static uint32_t g_tp_queue_count;
 
-static uint64_t g_tp_stat_gates;
-static uint64_t g_tp_stat_batch_gates;      /* verify-block batch gates */
-static double g_tp_stat_batch_gpu_wait_ms;   /* arrival spin (GPU compute + park) */
-static double g_tp_stat_batch_exchange_ms;   /* exchange callback (peer wait + wire) */
-static double g_tp_stat_batch_release_ms;    /* exchange end -> cpu event signaled */
-static double g_tp_stat_gpu_wait_ms;
-static double g_tp_stat_exchange_ms;
+
+
+
+
+
+
+
+
+
+
+
+      /* verify-block batch gates */
+   /* arrival spin (GPU compute + park) */
+   /* exchange callback (peer wait + wire) */
+    /* exchange end -> cpu event signaled */
+
+
 /* Gate constants live once in tp_control.h. */
-static uint64_t g_tp_stat_gate_count[DS4_GPU_TP_GATES_PER_LAYER];
-static double g_tp_stat_gate_gpu_wait_ms[DS4_GPU_TP_GATES_PER_LAYER];
-static double g_tp_stat_gate_exchange_ms[DS4_GPU_TP_GATES_PER_LAYER];
+
+
+
 
 /* GPU keep-alive (see kernel_dsv4_tp_keepalive): its own queue and thread,
  * alive exactly as long as the TP gate machinery. */
-static id<MTLCommandQueue> g_tp_keepalive_queue;
-static id<MTLBuffer> g_tp_keepalive_buffer;
-static pthread_t g_tp_keepalive_thread;
-static int g_tp_keepalive_running;
+
+
+
+
 
 /* Nonzero while a verify block runs: the GPU is genuinely busy
  * there, so the keep-alive is a pure parasite (~2.3ms per 5-row block
  * measured against the single-machine verify). */
-static volatile int g_tp_keepalive_paused;
+
 
 void ds4_gpu_tp_keepalive_pause(int paused) {
     g_tp_keepalive_paused = paused;
@@ -4811,6 +4752,7 @@ static uint32_t ds4_gpu_tp_keepalive_tgs_from_env(void) {
 }
 
 static void *ds4_gpu_tp_keepalive_thread(void *arg) {
+    DS4_METAL_THREAD_SCOPE(arg);
     (void)arg;
     /* Swept on the M5 Max pair: too few iterations lets clocks sag.  Current
      * TP split-resident Flash runs show 1.2M is a small Q4/Q2 decode win over
@@ -4843,7 +4785,7 @@ static void *ds4_gpu_tp_keepalive_thread(void *arg) {
             [enc dispatchThreadgroups:MTLSizeMake((NSUInteger)ka_tgs, 1, 1)
                  threadsPerThreadgroup:MTLSizeMake(256, 1, 1)];
             [enc endEncoding];
-            [cb commit];
+            ds4_runtime_metal_commit((__bridge void *)cb, &g_bootstrap, false);
             [cb waitUntilCompleted];
         }
     }
@@ -4851,6 +4793,7 @@ static void *ds4_gpu_tp_keepalive_thread(void *arg) {
 }
 
 static void *ds4_gpu_tp_service_thread(void *arg) {
+    DS4_METAL_THREAD_SCOPE(arg);
     (void)arg;
     const bool profile = getenv("DS4_TP_GATE_PROFILE") != NULL;
     while (1) {
@@ -5161,7 +5104,9 @@ int ds4_gpu_tp_init(uint32_t rank,
     pthread_attr_t attr;
     pthread_attr_init(&attr);
     pthread_attr_set_qos_class_np(&attr, QOS_CLASS_USER_INTERACTIVE, 0);
-    if (pthread_create(&g_tp_thread, &attr, ds4_gpu_tp_service_thread, NULL) != 0) {
+    DS4MetalContext *thread_owner = ds4_metal_context_current();
+    thread_owner->tp_thread_owners = ds4_metal_thread_capture();
+    if (pthread_create(&g_tp_thread, &attr, ds4_gpu_tp_service_thread, &thread_owner->tp_thread_owners) != 0) {
         pthread_attr_destroy(&attr);
         fprintf(stderr, "ds4: failed to start TP gate service thread\n");
         return 0;
@@ -5173,9 +5118,10 @@ int ds4_gpu_tp_init(uint32_t rank,
         g_tp_keepalive_queue = [g_device newCommandQueue];
         g_tp_keepalive_buffer = [g_device newBufferWithLength:(NSUInteger)ka_tgs * 256u * sizeof(float)
                                                       options:MTLResourceStorageModeShared];
+        thread_owner->tp_keepalive_owners = ds4_metal_thread_capture();
         if (g_tp_keepalive_queue && g_tp_keepalive_buffer &&
             pthread_create(&g_tp_keepalive_thread, NULL,
-                           ds4_gpu_tp_keepalive_thread, NULL) == 0) {
+                           ds4_gpu_tp_keepalive_thread, &thread_owner->tp_keepalive_owners) == 0) {
             g_tp_keepalive_running = 1;
         } else {
             fprintf(stderr, "ds4: TP keep-alive setup failed (continuing without)\n");
@@ -5274,7 +5220,7 @@ int ds4_gpu_warm_command_queue(void) {
         [enc setBytes:&iters length:sizeof(iters) atIndex:1];
         [enc dispatchThreadgroups:MTLSizeMake(1, 1, 1) threadsPerThreadgroup:MTLSizeMake(256, 1, 1)];
         [enc endEncoding];
-        [cb commit];
+        ds4_runtime_metal_commit((__bridge void *)cb, &g_bootstrap, false);
         [cb waitUntilCompleted];
         if (cb.status != MTLCommandBufferStatusCompleted) return 0;
     }
@@ -5291,11 +5237,12 @@ int ds4_gpu_warm_command_queue(void) {
  * other queues does not prevent it.  One 1 KB kernel per second on this
  * queue keeps the mappings alive at no measurable cost.
  * DS4_METAL_DISABLE_QUEUE_KEEPALIVE=1 opts out. */
-static pthread_t g_queue_keepalive_thread;
-static volatile int g_queue_keepalive_running;
-static volatile int g_queue_keepalive_stop;
+
+
+
 
 static void *ds4_gpu_queue_keepalive_thread(void *arg) {
+    DS4_METAL_THREAD_SCOPE(arg);
     (void)arg;
     id<MTLComputePipelineState> pipeline = ds4_gpu_get_pipeline("kernel_dsv4_tp_keepalive");
     id<MTLBuffer> scratch = [g_device newBufferWithLength:256u * sizeof(float)
@@ -5313,7 +5260,7 @@ static void *ds4_gpu_queue_keepalive_thread(void *arg) {
             [enc setBytes:&iters length:sizeof(iters) atIndex:1];
             [enc dispatchThreadgroups:MTLSizeMake(1, 1, 1) threadsPerThreadgroup:MTLSizeMake(256, 1, 1)];
             [enc endEncoding];
-            [cb commit];
+            ds4_runtime_metal_commit((__bridge void *)cb, &g_bootstrap, false);
         }
         for (uint64_t slept = 0; slept < period_ms && !g_queue_keepalive_stop; slept += 50)
             usleep(50000);
@@ -5325,7 +5272,9 @@ static void ds4_gpu_queue_keepalive_start(void) {
     if (g_queue_keepalive_running) return;
     if (getenv("DS4_METAL_DISABLE_QUEUE_KEEPALIVE")) return;
     g_queue_keepalive_stop = 0;
-    if (pthread_create(&g_queue_keepalive_thread, NULL, ds4_gpu_queue_keepalive_thread, NULL) == 0)
+    DS4MetalContext *thread_owner = ds4_metal_context_current();
+    thread_owner->queue_thread_owners = ds4_metal_thread_capture();
+    if (pthread_create(&g_queue_keepalive_thread, NULL, ds4_gpu_queue_keepalive_thread, &thread_owner->queue_thread_owners) == 0)
         g_queue_keepalive_running = 1;
 }
 
@@ -5778,11 +5727,7 @@ static void ds4_gpu_stream_expert_timing_note_cache_class(
 
 /* SAME actual pending/prefetch/pool state for C and native selection. ARC
  * initializes strong fields; SDK constants initialize real pthread records. */
-static ds4_metal_expert_load_state g_expert_load = {
-    .pool = { .mutex = PTHREAD_MUTEX_INITIALIZER,
-              .start_cond = PTHREAD_COND_INITIALIZER,
-              .done_cond = PTHREAD_COND_INITIALIZER }
-};
+
 #define g_stream_expert_pending_load (g_expert_load.pending)
 #define g_glm_stream_selected_prefetch (g_expert_load.prefetch)
 
@@ -11557,7 +11502,7 @@ int ds4_gpu_glm_routed_moe_one_tensor(
             const int resident_owned = owned;
             if (owned) {
                 resident_cb = cb;
-                [resident_cb commit];
+                ds4_runtime_metal_commit((__bridge void *)resident_cb, &g_bootstrap, false);
                 cb = nil;
             } else {
                 ok = ds4_gpu_flush_commands();
@@ -13985,110 +13930,7 @@ static bool qwen4_bind_weight(qwen4_bind *b, const void *map, uint64_t size,
     return b->buf != nil;
 }
 
-enum {
-    QWEN4_K_HC_NORM_F16 = 0,
-    QWEN4_K_HC_NORM_F32,
-    QWEN4_K_HC_NORM_Q8,
-    QWEN4_K_HC_NORM_REUSE_F16,
-    QWEN4_K_HC_NORM_REUSE_F32,
-    QWEN4_K_HC_NORM_REUSE_Q8,
-    QWEN4_K_HC_GATE_MIX_F16,
-    QWEN4_K_HC_GATE_MIX_F16_PF,
-    QWEN4_K_HC_GATE_MIX_F32,
-    QWEN4_K_HC_GATE_MIX_Q8,
-    QWEN4_K_HC_GATE_MIX_PAIR_F16,
-    QWEN4_K_HC_GATE_MIX_PAIR_F16_PF,
-    QWEN4_K_HC_GATE_MIX_PAIR_F32,
-    QWEN4_K_HC_GATE_MIX_PAIR_Q8,
-    QWEN4_K_MULTI_GEMV,
-    QWEN4_K_HC_COMBINE,
-    QWEN4_K_CONV_STREAM,
-    QWEN4_K_GDN_PREP,
-    QWEN4_K_GDN_SCAN,
-    QWEN4_K_GDN_SCAN_R4,
-    QWEN4_K_GDN_OUT,
-    QWEN4_K_PLE_GATE,
-    QWEN4_K_PLE_CONV,
-    QWEN4_K_ROUTER,
-    QWEN4_K_ATTN_PREP,
-    QWEN4_K_IDX_BLOCK_KEY,
-    QWEN4_K_IDX_SCORE,
-    QWEN4_K_IDX_SCORE_VEC,
-    QWEN4_K_IDX_SELECT,
-    QWEN4_K_IDX_SELECT_PRE,
-    QWEN4_K_IDX_SCORE_MM,
-    QWEN4_K_IDX_EXPAND,
-    QWEN4_K_ATTN_DECODE_NPT8,
-    QWEN4_K_ATTN_DECODE_NPT4,
-    QWEN4_K_ATTN_DECODE_NPT1,
-    QWEN4_K_ATTN_MERGE_NPT8,
-    QWEN4_K_ATTN_MERGE_NPT4,
-    QWEN4_K_ATTN_MERGE_NPT1,
-    QWEN4_K_ATTN_MERGE_WIDE_NPT8,
-    QWEN4_K_ATTN_MERGE_WIDE_NPT4,
-    QWEN4_K_ATTN_MM,
-    QWEN4_K_MOE_MID,
-    QWEN4_K_MOE_MID_Q4K,
-    QWEN4_K_MOE_MID_Q4K_NR1,
-    QWEN4_K_MOE_DOWN,
-    QWEN4_K_MOE_DOWN_MXFP4_PF,
-    QWEN4_K_MOE_MID_Q4K_GROUPED,
-    QWEN4_K_MOE_DOWN_MXFP4_GROUPED,
-    QWEN4_K_MOE_REDUCE,
-    QWEN4_K_HC_COMBINE_NORM,
-    QWEN4_K_ARGMAX,
-    QWEN4_K_MTP_STAGE,
-    QWEN4_K_MTP_COMBINE,
-    QWEN4_K_GDN_FRONT,
-    QWEN4_K_MOE_BUILD_LISTS,
-    QWEN4_K_MOE_MM_MID,
-    QWEN4_K_MOE_MM_MID_NT1,
-    QWEN4_K_MOE_MM_MID_NT2,
-    QWEN4_K_MOE_MM_DOWN,
-    QWEN4_K_MOE_MM_DOWN_NT1,
-    QWEN4_K_MOE_MM_DOWN_NT2,
-    QWEN4_K_MOE_MM_DOWN_NT8,
-    QWEN4_K_MOE_MM_MID_NT8,
-    QWEN4_K_MOE_MM_MID_NAX,
-    QWEN4_K_MOE_MM_DOWN_NAX,
-    QWEN4_K_MOE_MM_MID_NAX64,
-    QWEN4_K_MOE_MM_DOWN_NAX64,
-    QWEN4_K_MOE_MM_MID_NAXF,
-    QWEN4_K_MOE_MM_DOWN_NAXF,
-    QWEN4_K_MOE_MM_MID_NAXF64,
-    QWEN4_K_MOE_MM_DOWN_NAXF64,
-    QWEN4_K_MOE_MM_MID_NAXC,
-    QWEN4_K_MOE_MM_DOWN_NAXC,
-    QWEN4_K_MOE_MM_MID_NAXC64,
-    QWEN4_K_MOE_MM_DOWN_NAXC64,
-    QWEN4_K_ROWS_F32_TO_F16,
-    QWEN4_K_DENSE_MM,
-    QWEN4_K_DENSE_MM_REDUCE,
-    QWEN4_K_BATCH_MM_Q8_T1,
-    QWEN4_K_BATCH_MM_Q8_T2,
-    QWEN4_K_GDN_SCAN_ROWS,
-    QWEN4_K_CONV_STREAM_ROWS,
-    QWEN4_K_GDN_SCAN_ROWS2,
-    QWEN4_K_CONV_STREAM_ROWS2,
-    QWEN4_K_ATTN_PREP_ROWS,
-    QWEN4_K_IDX_BLOCK_KEY_ROWS,
-    QWEN4_K_IDX_SCORE_ROWS,
-    QWEN4_K_IDX_SELECT_ROWS,
-    QWEN4_K_IDX_EXPAND_ROWS,
-    QWEN4_K_ATTN_DECODE_ROWS_NPT8,
-    QWEN4_K_ATTN_DECODE_ROWS_NPT4,
-    QWEN4_K_ATTN_MERGE_ROWS_NPT8,
-    QWEN4_K_ATTN_MERGE_ROWS_NPT4,
-    QWEN4_K_HC_LO_ACT,
-    QWEN4_K_HC_MIX_ROWS,
-    QWEN4_K_VIS_PATCH_FINISH,
-    QWEN4_K_VIS_LAYERNORM,
-    QWEN4_K_VIS_QKV_ROPE,
-    QWEN4_K_VIS_ATTENTION,
-    QWEN4_K_VIS_BIAS_RESIDUAL,
-    QWEN4_K_VIS_BIAS_ACT,
-    QWEN4_K_COUNT,
-};
+
 
 static const char *const qwen4_kernel_names[QWEN4_K_COUNT] = {
     "kernel_qwen4_hc_norm_f16",
@@ -14213,7 +14055,7 @@ static MTLSize qwen4_moe_mm_grid(uint32_t row_blocks, uint32_t n_expert, uint32_
                         : MTLSizeMake(row_blocks, n_expert, tiles);
 }
 
-static id<MTLComputePipelineState> g_qwen4_pipelines[QWEN4_K_COUNT];
+
 #define QWEN4_ATTN_NSG 4
 #define QWEN4_ATTN_MAX_SPLITS 64
 #define QWEN4_ATTN_ROWS_MAX 64     /* decode batch rows the attention rows kernels take */
@@ -14648,7 +14490,7 @@ int ds4_gpu_qwen4_gdn_scan_tensor(
                           MTLSizeMake(head_dim, n_v_head, 1), MTLSizeMake(32, 1, 1), 0);
 }
 
-static ds4_gpu_tensor *g_qwen4_gdn_slots;
+
 
 /* One decode step for every row of a batch against its own slot of the state
  * pool.  The grid keeps the per-row kernel's shape and simd-group grouping, so
@@ -14937,9 +14779,9 @@ int ds4_gpu_qwen4_router_topk_tensor(
                           MTLSizeMake(n_tokens, 1, 1), MTLSizeMake(256, 1, 1), 0);
 }
 
-static float g_qwen4_rope_freq[32];
-static float g_qwen4_rope_mscale = 1.0f;
-static bool g_qwen4_rope_set = false;
+
+
+
 
 void ds4_gpu_qwen4_set_rope(const float *freq, uint32_t n_pairs, float mscale) {
     memset(g_qwen4_rope_freq, 0, sizeof(g_qwen4_rope_freq));
@@ -15719,10 +15561,10 @@ static bool qwen4_moe_mm_nax_comp(uint32_t type) {
     return n == 5 || n == 6;
 }
 
-static ds4_gpu_tensor *g_qwen4_nax_half_x, *g_qwen4_nax_half_mid, *g_qwen4_nax_half_midr;
-static uint64_t g_qwen4_nax_half_x_bytes, g_qwen4_nax_half_mid_bytes, g_qwen4_nax_half_midr_bytes;
-static const ds4_gpu_tensor *g_qwen4_nax_half_mid_for;
-static uint64_t g_qwen4_nax_half_mid_count;
+
+
+
+
 static void qwen4_nax_release_scratch(void) {
     if (g_qwen4_nax_half_x) ds4_gpu_tensor_free(g_qwen4_nax_half_x);
     if (g_qwen4_nax_half_mid) ds4_gpu_tensor_free(g_qwen4_nax_half_mid);
@@ -16110,8 +15952,8 @@ int ds4_gpu_qwen4_multi_gemv_tensor(
                           MTLSizeMake((total + 7) / 8, n_tokens, 1), MTLSizeMake(128, 1, 1), 0);
 }
 
-static ds4_gpu_tensor *g_qwen4_dense_mm_partials;
-static uint64_t g_qwen4_dense_mm_partials_bytes;
+
+
 
 static void qwen4_batch_release_scratch(void) {
     ds4_gpu_tensor_free(g_qwen4_dense_mm_partials);

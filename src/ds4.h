@@ -333,9 +333,12 @@ const char *ds4_think_mode_name(ds4_think_mode mode);
 const char *ds4_think_max_prefix(void);
 const char *ds4_glm_reasoning_effort_text(ds4_think_mode mode);
 uint32_t ds4_think_max_min_context(void);
+/* Legacy selected-shape helper. Native callers should pass their engine below. */
 ds4_think_mode ds4_think_mode_for_context(ds4_think_mode mode, int ctx_size);
-/* Uses the active model shape selected by ds4_engine_open(); call after opening
- * the GGUF so Flash/Pro dimensions are known. */
+ds4_think_mode ds4_engine_think_mode_for_context(ds4_engine *engine,
+    ds4_think_mode mode, int ctx_size);
+/* Legacy selected-shape estimates. Native multi-model callers should use
+ * ds4_engine_context_memory_estimate(), which binds the engine's configuration. */
 ds4_context_memory ds4_context_memory_estimate(ds4_backend backend, int ctx_size);
 ds4_context_memory ds4_context_memory_estimate_with_prefill(
         ds4_backend backend,

@@ -94,10 +94,12 @@ inline void flint_gather_impl(constant FlintMatmul& p, device const bfloat16_t* 
   const short tm = SM * (simd_group_id / WN);
   const short tn = SN * (simd_group_id % WN);
 
+  // Clamp while still int: a long MoE prefill can have more than 32767
+  // routed rows, although each NAX fragment holds only 32 rows/columns.
   const short sgp_sm =
-      align_M ? SM : min(SM, short(max(0, (M - (y_row + tm)))));
+      align_M ? SM : short(clamp(M - (y_row + tm), 0, int(SM)));
   const short sgp_sn =
-      align_N ? SN : min(SN, short(max(0, (N - (y_col + tn)))));
+      align_N ? SN : short(clamp(N - (y_col + tn), 0, int(SN)));
 
   const bool is_unaligned_sm = align_M ? false : (sgp_sm != SM);
   const bool is_unaligned_bn = align_N ? false : (tgp_bn != BN);

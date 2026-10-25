@@ -111,7 +111,7 @@ void ds4_metal_tp_signal_detached(void *command, uint64_t sequence) {
 }
 void ds4_metal_tp_commit(void *command) {
   @autoreleasepool {
-    [(__bridge id<MTLCommandBuffer>)command commit];
+    ds4_runtime_metal_commit(command, &g_bootstrap, false);
     ds4_gpu_stream_expert_cache_note_batch_committed();
   }
 }

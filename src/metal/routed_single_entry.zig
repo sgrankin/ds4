@@ -70,22 +70,42 @@ export fn ds4_gpu_routed_moe_set_selected_override(ids: [*c]const i32, count: u3
     return @import("routed_single_selected.zig").setOverride(ids, count);
 }
 
-// One process owner. Shared pure imports do not instantiate another trace.
+// The selected model owns its optional trace/hotlist data.
 const Diagnostics = @import("routed_diagnostics.zig");
-var diagnostics: Diagnostics.State = .{};
+fn diagnostics() *Diagnostics.State {
+    const slot = c.ds4_metal_single_diagnostics_slot();
+    if (slot.* == null) {
+        const state = @import("std").heap.c_allocator.create(Diagnostics.State) catch {
+            _ = c.fputs("ds4: cannot allocate selected-route diagnostic owner\n", c.__stderrp);
+            c.exit(1);
+        };
+        state.* = .{};
+        slot.* = state;
+    }
+    return @ptrCast(@alignCast(slot.*.?));
+}
+export fn ds4_native_metal_selected_diagnostics_cleanup() void {
+    const slot = c.ds4_metal_single_diagnostics_slot();
+    const state: *Diagnostics.State = @ptrCast(@alignCast(slot.* orelse return));
+    state.closeHotlist();
+    state.closeTrace();
+    @import("std").heap.c_allocator.free(state.replay_ids);
+    slot.* = null;
+    @import("std").heap.c_allocator.destroy(state);
+}
 export fn ds4_metal_single_trace_replay(ids: [*c]i32, count: u32) c_int {
-    return diagnostics.replay(ids, count);
+    return diagnostics().replay(ids, count);
 }
 export fn ds4_metal_single_trace_record(layer: u32, ids: [*c]const i32, count: u32, total: u32) bool {
     c.ds4_metal_single_note_selected_hotness(layer, ids, count);
-    return diagnostics.recordTrace(ids, count) and diagnostics.recordHotlist(layer, ids, count, total);
+    return diagnostics().recordTrace(ids, count) and diagnostics().recordHotlist(layer, ids, count, total);
 }
 export fn ds4_native_metal_selected_hotlist_record(layer: u32, ids: [*c]const i32, count: u32, total: u32) bool {
-    return diagnostics.recordHotlist(layer, ids, count, total);
+    return diagnostics().recordHotlist(layer, ids, count, total);
 }
 export fn ds4_native_metal_selected_hotlist_close() void {
-    diagnostics.closeHotlist();
+    diagnostics().closeHotlist();
 }
 export fn ds4_native_metal_selected_trace_close() void {
-    diagnostics.closeTrace();
+    diagnostics().closeTrace();
 }

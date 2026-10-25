@@ -57,7 +57,7 @@ pub fn maxBudget(config: *const c.eval_config, cases: []const c.eval_case) c_int
 pub const Largest = struct { tokens: c_int = 0, index: c_int = -1 };
 pub fn maxPrompt(engine: *c.ds4_engine, config: *const c.eval_config, cases: []const c.eval_case, context: c_int) Largest {
     var largest: Largest = .{};
-    const think = c.ds4_think_mode_for_context(config.think_mode, context);
+    const think = c.ds4_engine_think_mode_for_context(engine, config.think_mode, context);
     for (cases, 0..) |*case, index| {
         const text = question(case);
         defer allocator.free(text);
@@ -115,8 +115,8 @@ pub fn warn(config: *const c.eval_config, largest: Largest, max_generation: c_in
         );
     }
 }
-pub fn warnThink(config: *const c.eval_config) void {
-    if (config.think_mode == c.DS4_THINK_MAX and c.ds4_think_mode_for_context(config.think_mode, config.ctx_size) != c.DS4_THINK_MAX)
+pub fn warnThink(engine: *c.ds4_engine, config: *const c.eval_config) void {
+    if (config.think_mode == c.DS4_THINK_MAX and c.ds4_engine_think_mode_for_context(engine, config.think_mode, config.ctx_size) != c.DS4_THINK_MAX)
         _ = c.fprintf(
             c.__stderrp,
             "ds4-eval: warning: --think-max needs --ctx >= %u; ctx=%d uses normal thinking instead\n",

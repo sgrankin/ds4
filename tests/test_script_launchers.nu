@@ -153,5 +153,18 @@ def main [] {
         PATH: ([$bin] ++ $env.PATH)
         DS4_TEST_EXIT: '9'
     }).exit_code 9
-    print 'PASS: Nu launchers (11 cases): profiles, quoted argv, overrides, shader paths, cache paths, help and child status'
+    for profile in [clef-flash clef clef-omni] {
+        let result = call $launcher (['--server'] ++ $leading ++ [$profile '--port' '9901']) {
+            DS4_STATE_CACHE_DIR: 'incompatible-cache'
+            DS4_SERVER_CONTEXT_SUFFIX_REUSE: '1'
+        }
+        assert equal $result.exit_code 0 $result.stderr
+        let child = $result.stdout | from json
+        assert equal $child.program ds4-server
+        assert equal $child.args [--host 127.0.0.1 --model ($ROOT | path join gguf $"($profile)-int4") --ctx (if $profile == clef-omni {'64000'} else {'16384'}) --port '9901']
+        assert equal ($child.env | get --optional DS4_STATE_CACHE_DIR) null
+        assert equal ($child.env | get --optional DS4_SERVER_CONTEXT_SUFFIX_REUSE) null
+    }
+    assert equal (call $launcher ($leading ++ [clef-flash])).exit_code 2
+    print 'PASS: Nu launchers: profiles, quoted argv, overrides, shader paths, cache paths, help and child status'
 }

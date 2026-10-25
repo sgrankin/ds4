@@ -3,6 +3,8 @@
 
 #include "../ds4_gpu.h"
 #include <stddef.h>
+#include <pthread.h>
+static const pthread_once_t ds4_metal_policy_once_init = PTHREAD_ONCE_INIT;
 
 /* The existing copy shader's argument packet. Keep the C encoder and Zig
  * controller on this same declaration when the native controller is enabled. */

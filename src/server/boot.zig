@@ -111,6 +111,11 @@ pub fn parse(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend) c.se
 
         if (is(option, "-m") or is(option, "--model")) {
             cfg.engine.model_path = args.value(option);
+        } else if (is(option, "--decision-model")) {
+            const path = args.value(option);
+            if (cfg.decision_model_count == cfg.decision_model_paths.len) invalid(option, path);
+            cfg.decision_model_paths[@intCast(cfg.decision_model_count)] = path;
+            cfg.decision_model_count += 1;
         } else if (is(option, "--vision")) {
             cfg.engine.vision_path = args.value(option);
         } else if (is(option, "--mtp")) {
@@ -269,6 +274,8 @@ pub fn parse(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend) c.se
 }
 
 pub fn close(srv: *c.server) void {
+    c.ds4_decision_registry_free(srv.decision_models);
+    srv.decision_models = null;
     if (srv.trace != null) {
         _ = c.fclose(srv.trace);
         srv.trace = null;
@@ -402,7 +409,17 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
     cfg.engine.placement_session_count_hint = if (cfg.batched_sessions > 0) cfg.batched_sessions else 1;
     cfg.engine.share_session_prefill_workspace = cfg.batched_sessions > 0;
     var engine: ?*c.ds4_engine = null;
-    if (cfg.gpu_vram_arg != null or cfg.gpu_devices_arg != null) {
+    const decision_only = c.ds4_decision_engine_detect(cfg.engine.model_path);
+    if (decision_only and (cfg.engine.backend != c.DS4_BACKEND_METAL or cfg.engine.directional_steering_file != null or cfg.engine.tp.role != c.DS4_TP_NONE or cfg.engine.distributed.role != c.DS4_DISTRIBUTED_NONE)) {
+        log(c.DS4_LOG_DEFAULT, "ds4-server: Clef requires native Metal; steering and distributed options are not supported by this decision path", .{});
+        return 2;
+    }
+    if (decision_only) {
+        if (cfg.gpu_vram_arg != null or cfg.gpu_devices_arg != null) {
+            log(c.DS4_LOG_DEFAULT, "ds4-server: Clef uses the local Metal device", .{});
+            return 2;
+        }
+    } else if (cfg.gpu_vram_arg != null or cfg.gpu_devices_arg != null) {
         var gpu = zero(c.ds4_gpu_config);
         var skip_cuda = false;
         var errors: [256]u8 = undefined;
@@ -450,14 +467,14 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
         }
     }
     if (c.ds4_engine_is_flint(engine) and !cfg.mixed_prefill_quantum_set) cfg.mixed_prefill_quantum = 1024;
-    const slot_count = if (cfg.batched_sessions > 0) cfg.batched_sessions else 1;
-    contextMemory(&cfg, engine, slot_count);
+    const slot_count = if (decision_only) 0 else if (cfg.batched_sessions > 0) cfg.batched_sessions else 1;
+    if (engine != null) contextMemory(&cfg, engine, slot_count);
     var srv = zero(c.server);
     srv.engine = engine;
     srv.tp_leader = leader;
     srv.ctx_size = cfg.ctx_size;
     srv.slot_count = slot_count;
-    srv.batched_mode = cfg.batched_sessions > 0;
+    srv.batched_mode = engine != null and cfg.batched_sessions > 0;
     srv.qwen4_batch_mtp = cfg.engine.backend == c.DS4_BACKEND_METAL and c.ds4_engine_is_qwen4(engine) and c.ds4_engine_mtp_draft_tokens(engine) > 1;
     srv.mixed_prefill_quantum = cfg.mixed_prefill_quantum;
     srv.last_prefill_slot = slot_count - 1;
@@ -465,7 +482,7 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
     srv.disable_exact_dsml_tool_replay = cfg.disable_exact_dsml_tool_replay;
     srv.tool_mem.max_entries = cfg.tool_memory_max_ids;
     srv.enable_cors = cfg.enable_cors;
-    srv.slots = allocate(c.server_slot, @intCast(slot_count)).ptr;
+    srv.slots = if (slot_count > 0) allocate(c.server_slot, @intCast(slot_count)).ptr else null;
     if (srv.batched_mode) srv.slot_threads = allocate(c.pthread_t, @intCast(slot_count)).ptr;
     _ = c.pthread_mutex_init(&srv.mu, null);
     _ = c.pthread_cond_init(&srv.cv, null);
@@ -481,6 +498,21 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
     _ = c.pthread_cond_init(&srv.model_cv, null);
     _ = c.pthread_mutex_init(&srv.trace_mu, null);
     defer close(&srv);
+    if (decision_only or cfg.decision_model_count > 0) {
+        srv.decision_models = c.ds4_decision_registry_create() orelse return 1;
+        var errors: [256]u8 = @splat(0);
+        if (decision_only and !c.ds4_decision_registry_add(srv.decision_models, cfg.engine.model_path, @intCast(cfg.ctx_size), &errors, errors.len)) {
+            log(c.DS4_LOG_DEFAULT, "ds4-server: decision model: %s", .{@as([*c]const u8, &errors)});
+            return 1;
+        }
+        for (cfg.decision_model_paths[0..@intCast(cfg.decision_model_count)]) |path| {
+            if (!c.ds4_decision_registry_add(srv.decision_models, path, @intCast(cfg.ctx_size), &errors, errors.len)) {
+                log(c.DS4_LOG_DEFAULT, "ds4-server: decision model: %s", .{@as([*c]const u8, &errors)});
+                return 1;
+            }
+        }
+        log(c.DS4_LOG_DEFAULT, "ds4-server: loaded %zu decision models", .{c.ds4_decision_registry_count(srv.decision_models)});
+    }
     for (0..@intCast(slot_count)) |index| {
         const slot = &srv.slots[index];
         slot.srv = &srv;
@@ -495,7 +527,7 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
         }
     }
     const state_dir = c.getenv("DS4_STATE_CACHE_DIR");
-    if (state_dir != null and state_dir[0] != 0) {
+    if (engine != null and state_dir != null and state_dir[0] != 0) {
         var errors: [160]u8 = @splat(0);
         srv.state_cache = c.ds4_state_cache_runtime_open(engine, &cfg.engine, cfg.ctx_size, &srv.state_cache_profile, &errors, errors.len);
         if (srv.state_cache == null) {
@@ -550,7 +582,7 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
             @as(c_int, @intFromBool(srv.context_suffix_right)),
         });
     }
-    if (cfg.kv_disk_dir != null) _ = c.ds4_kvstore_open(&srv.kv, cfg.kv_disk_dir, cfg.kv_disk_space_mb, cfg.kv_cache_reject_different_quant, cfg.kv_cache, "ds4-server", cacheLog, null);
+    if (engine != null and cfg.kv_disk_dir != null) _ = c.ds4_kvstore_open(&srv.kv, cfg.kv_disk_dir, cfg.kv_disk_space_mb, cfg.kv_cache_reject_different_quant, cfg.kv_cache, "ds4-server", cacheLog, null);
     if (srv.disable_exact_dsml_tool_replay) log(c.DS4_LOG_DEFAULT, "ds4-server: exact DSML tool replay disabled; tool history uses canonical JSON rendering", .{});
     if (srv.batched_mode) {
         log(c.DS4_LOG_DEFAULT, "ds4-server: batched mode enabled resident_sessions=%d prefill_quantum=%d mixed_prefill_quantum=%d decode_coalesce_us=%ld", .{

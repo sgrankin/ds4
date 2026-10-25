@@ -37,4 +37,5 @@ int ds4_metal_resource_blit(ds4_gpu_tensor *dst, uint64_t absolute_dst,
 ds4_metal_tensor_stats ds4_native_metal_tensor_stats(void);
 void ds4_native_metal_tensor_tracking_reset(void);
 
+void **ds4_metal_resource_state_slot(void);
 #endif

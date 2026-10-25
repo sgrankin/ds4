@@ -516,9 +516,9 @@ fn nextFrontier(cfg: *const Options, current: c_int) c_int {
     return @min(next, cfg.ctx_max);
 }
 
-fn logContextMemory(cfg: *const Options, prefill_chunk: u32) void {
+fn logContextMemory(engine: *Engine, cfg: *const Options) void {
     @setFloatMode(.optimized);
-    const memory = c.ds4_context_memory_estimate_with_prefill_mode(cfg.backend, cfg.ctx_alloc, prefill_chunk, cfg.ssd_streaming);
+    const memory = c.ds4_engine_context_memory_estimate(engine, cfg.ctx_alloc);
     report("ds4-bench: context buffers %.2f MiB (ctx=%d, backend=%s, prefill_chunk=%u, raw_kv_rows=%u, compressed_kv_rows=%u)\n", .{
         @as(f64, @floatFromInt(memory.total_bytes)) / (1024.0 * 1024.0),
         cfg.ctx_alloc,
@@ -671,7 +671,7 @@ fn run(cfg: *Options) c_int {
         c.ds4_tp_free(tp_leader);
     }
     if (cfg.tp.role == c.DS4_TP_LEADER and !bindTensorParallel(engine, cfg, &tp_leader)) return 1;
-    logContextMemory(cfg, c.ds4_engine_prefill_chunk(engine));
+    logContextMemory(engine, cfg);
 
     var prompt = std.mem.zeroes(c.ds4_tokens);
     defer c.ds4_tokens_free(&prompt);

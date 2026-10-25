@@ -43,6 +43,21 @@ pub const Model = struct {
         };
     }
 
+    /// Aliases select policy within the loaded family, never another engine.
+    pub fn accepts(self: Model, name: []const u8) bool {
+        if (std.mem.eql(u8, name, self.id())) return true;
+        if (self.family == .deepseek or self.family == .deepseek41)
+            return std.mem.eql(u8, name, "deepseek-chat") or std.mem.eql(u8, name, "deepseek-reasoner");
+        if (!knownModel(name)) return false;
+        return switch (self.family) {
+            .flint => std.mem.eql(u8, name, "flint-int4"),
+            .qwen => std.mem.startsWith(u8, name, "qwen3.8-") or std.mem.startsWith(u8, name, "qwen/qwen3.8-"),
+            .glm53 => std.mem.startsWith(u8, name, "glm-5.3-flash") or std.mem.startsWith(u8, name, "zai/glm-5.3-flash"),
+            .glm => (std.mem.startsWith(u8, name, "glm-5.3") or std.mem.startsWith(u8, name, "zai/glm-5.3")) and std.mem.indexOf(u8, name, "-flash") == null,
+            .deepseek, .deepseek41 => false,
+        };
+    }
+
     pub fn incrementalTools(self: Model) bool {
         return self.family == .deepseek41;
     }

@@ -153,7 +153,7 @@ bool ds4_metal_single_parallel_second(void *command);
 bool ds4_metal_single_encode(ds4_metal_single_resources *resources, void *command,
                              const ds4_metal_single_launch *launch);
 /* The same selected-route diagnostic transaction also serves a C batch caller.
- * Close actions are registered with libc atexit by the sole native owner. */
+ * Native model retirement closes it; bare legacy callers retain libc atexit. */
 void ds4_metal_single_note_selected_hotness(uint32_t layer,
                                            const int32_t *ids,
                                            uint32_t count);
@@ -163,4 +163,11 @@ bool ds4_native_metal_selected_hotlist_record(uint32_t layer,
                                              uint32_t total);
 void ds4_native_metal_selected_hotlist_close(void);
 void ds4_native_metal_selected_trace_close(void);
+typedef struct {
+    int32_t ids[8];
+    uint32_t count;
+} ds4_metal_selected_override;
+ds4_metal_selected_override *ds4_metal_single_override_state(void);
+void **ds4_metal_single_diagnostics_slot(void);
+void ds4_native_metal_selected_diagnostics_cleanup(void);
 #endif

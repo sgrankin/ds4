@@ -25,6 +25,8 @@ typedef struct {
     int batched_sessions;
     int mixed_prefill_quantum;
     bool mixed_prefill_quantum_set;
+    const char *decision_model_paths[8];
+    int decision_model_count;
 } server_config;
 
 server_config ds4_server_boot_parse(int argc, char **argv,

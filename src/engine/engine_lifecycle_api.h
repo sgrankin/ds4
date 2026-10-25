@@ -31,6 +31,8 @@ bool ds4_native_engine_overthink_configure(ds4_engine_core *, ds4_model_family,
  * plan lives behind these leaves. Compatibility publication only writes the
  * old global snapshots used by explicit legacy/reference paths. */
 void ds4_core_acquire_instance_lock(int requested_threads);
+void ds4_core_native_admission_acquire(void);
+void ds4_core_native_admission_release(void);
 void ds4_core_publish_configuration(const ds4_engine_configuration *);
 
 #endif

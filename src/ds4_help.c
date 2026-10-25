@@ -132,7 +132,7 @@ static const char *tool_summary(ds4_help_tool tool) {
     case DS4_HELP_DS4:
         return "Chat with a local DwarfStar model, run one-shot prompts, inspect models, or coordinate distributed inference.";
     case DS4_HELP_SERVER:
-        return "Serve one loaded DwarfStar model through OpenAI, Responses, Anthropic, and completion-compatible HTTP APIs.";
+        return "Serve a generator and learned decision models through Responses and compatible HTTP APIs.";
     case DS4_HELP_AGENT:
         return "Run the native terminal coding agent with live tools, session save/restore, and a responsive prompt while the model works.";
     case DS4_HELP_BENCH:
@@ -146,7 +146,9 @@ static const char *tool_summary(ds4_help_tool tool) {
 static void print_model_runtime(FILE *fp, const help_colors *c,
                                 ds4_help_tool tool, bool full) {
     title(fp, c, "Model And Runtime");
-    opt(fp, c, "-m, --model FILE", "GGUF model path. Default: ds4flash.gguf");
+    opt(fp, c, "-m, --model FILE", tool == DS4_HELP_SERVER ?
+        "GGUF model path or Flint/Clef directory. Default: ds4flash.gguf" :
+        "GGUF model path. Default: ds4flash.gguf");
     if (tool == DS4_HELP_DS4 || tool == DS4_HELP_AGENT || tool == DS4_HELP_SERVER ||
         tool == DS4_HELP_BENCH) {
         opt(fp, c, "--vision FILE", "Vision encoder GGUF for the selected model.");
@@ -357,9 +359,11 @@ static void print_server_api(FILE *fp, const help_colors *c) {
     opt(fp, c, "--cors", "Add Access-Control-Allow-* headers for browser JS clients.");
     opt(fp, c, "--trace FILE", "Write prompts, cache decisions, output, and tool calls.");
     opt(fp, c, "--batched-session N", "Keep N resident sessions and batch decode-ready requests.");
+    opt(fp, c, "--decision-model DIR", "Also load a Clef decision model; repeat for additional decision models.");
     opt(fp, c, "--mixed-prefill-quantum N", "Prefill chunk while generations are active. Default: 128; GLM-5.3 minimum: 1024");
     para(fp, c, "Endpoints: /v1/chat/completions, /v1/responses, /v1/completions, and /v1/messages.");
-    para(fp, c, "Model endpoint aliases include deepseek-v4.1-flash and deepseek-v4-pro. The server serves one loaded model.");
+    para(fp, c, "The server loads one generative model and optional Clef decision models. A Clef directory passed through --model runs decision-only serving.");
+    para(fp, c, "Clef models use POST /v1/systemone or /v1/decisions; GET /v1/models lists the loaded models and their capabilities.");
     fputc('\n', fp);
 }
 

@@ -112,6 +112,48 @@ fn quantized(gpu: *c.flint_gpu, bits: u32, gather: bool, narrow: bool) !void {
     };
 }
 
+/// A routed batch can exceed int16 even with a modest prompt. Every row must
+/// be written: narrowing the remaining global rows before clamping skipped
+/// the first NAX fragments once M reached 32768.
+pub fn longGather(gpu: *c.flint_gpu) !void {
+    const m = 32769;
+    const n = 64;
+    const k = 64;
+    const weight = try allocate(gpu, n * k / 2);
+    defer c.flint_gpu_buffer_free(weight);
+    const scales = try allocate(gpu, n * 2);
+    defer c.flint_gpu_buffer_free(scales);
+    const biases = try allocate(gpu, n * 2);
+    defer c.flint_gpu_buffer_free(biases);
+    const x = try allocate(gpu, m * k * 2);
+    defer c.flint_gpu_buffer_free(x);
+    const y = try allocate(gpu, m * n * 2);
+    defer c.flint_gpu_buffer_free(y);
+    const ids = try allocate(gpu, m * 4);
+    defer c.flint_gpu_buffer_free(ids);
+    @memset(values(u8, weight, n * k / 2), 0x44);
+    @memset(values(u16, scales, n), bf16(0.125));
+    @memset(values(u16, biases, n), bf16(0));
+    @memset(values(u16, x, m * k), bf16(1));
+    @memset(values(u16, y, m * n), 0x7fc0); // NaN sentinel exposes unwritten rows.
+    @memset(values(u32, ids, m), 0);
+    const params = p.Matmul{ .m = m, .n = n, .k = k };
+    const bindings = [_]c.flint_gpu_binding{
+        .{ .handle = x, .offset = 0, .index = 1 },      .{ .handle = weight, .offset = 0, .index = 2 },
+        .{ .handle = scales, .offset = 0, .index = 3 }, .{ .handle = biases, .offset = 0, .index = 4 },
+        .{ .handle = ids, .offset = 0, .index = 5 },    .{ .handle = y, .offset = 0, .index = 6 },
+    };
+    const command = c.flint_gpu_command_begin(gpu) orelse return error.PrefillFixtureCommand;
+    try finish(gpu, command, c.flint_gpu_dispatch(gpu, command, "flint_prefill_gather_qmm4", &params, @sizeOf(p.Matmul), &bindings, bindings.len, &[_]u32{ 1, (m + 63) / 64, 1 }, &[_]u32{ 128, 1, 1 }));
+    for (values(u16, y, m * n), 0..) |observed, i| {
+        if (observed != bf16(32)) {
+            std.debug.print("long NAX gather row={d} col={d}: {d} != 32\n", .{ i / n, i % n, float(observed) });
+            return error.PrefillFixtureLongGather;
+        }
+    }
+    std.debug.print("flint: NAX gathered rows beyond int16 and final ragged row passed\n", .{});
+}
+
 fn attention(gpu: *c.flint_gpu, window: i32) !void {
     const queries = 33;
     const keys = 70;

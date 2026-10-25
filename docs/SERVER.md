@@ -28,9 +28,14 @@ relative runtime files such as Metal kernels can be found.
 | `POST /v1/responses` | Responses-style requests and continuations |
 | `POST /v1/completions` | Text completions |
 | `POST /v1/messages` | Anthropic-style messages |
+| `POST /v1/systemone` | Clef SystemOne decisions |
+| `POST /v1/decisions` | Clef OpenAI Decisions |
 
-The model names accepted by the model endpoints are compatibility
-aliases, not separate loaded models. The GGUF passed at startup selects the model.
+The generative model names are aliases within the loaded family. The GGUF or
+Flint directory passed at startup selects that engine. Add independently loaded
+Clef helpers with `--decision-model DIR`, or pass a Clef directory as `--model`
+for decisions-only serving. See the [Clef guide](CLEF.md). The decision endpoints
+are stateless and do not stream.
 
 ```sh
 curl http://127.0.0.1:8000/v1/chat/completions \
