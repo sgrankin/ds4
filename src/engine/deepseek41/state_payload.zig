@@ -1,5 +1,6 @@
-//! Canonical V4.1 graph payloads: fixed little-endian DSV4 v2 header/tokens,
-//! F32 logits and live cache spans. HTTP/agent persistence, DRP1/DSSD wrappers
+//! Canonical V4.1 graph payloads: fixed little-endian DSV4 header/tokens,
+//! F32 logits and live cache spans. Version 3 stores packed FP4 index rows;
+//! version 2 remains readable through bounded conversion. DRP1/DSSD wrappers
 //! and session provenance remain with their callers. In particular, this
 //! numerical state owner does not decide whether an approximate session may
 //! use a canonical API.
@@ -12,6 +13,7 @@ const c = @import("gguf_c");
 const Config = @import("../config.zig").ModelConfig;
 const resources = @import("resources.zig");
 const draft_checkpoint = @import("draft_checkpoint.zig");
+const format = @import("state_format.zig");
 const Graph = c.ds41_gpu_graph;
 const Tensor = c.ds4_gpu_tensor;
 const allocator = std.heap.c_allocator;
@@ -21,8 +23,10 @@ pub const Failure = error{ InvalidFrontier, InvalidDimensions, InvalidToken, Tru
 
 pub const Span = struct {
     tensor: ?*Tensor,
-    wire_bytes: u64, // Canonical F32 bytes, including packed-F16 main cache.
+    wire_bytes: u64,
     packed_f16: bool = false,
+    index_fp4: bool = false,
+    wire_fp4: bool = false,
 };
 
 // The existing public token vector retains libc allocation/guard semantics.
@@ -88,6 +92,9 @@ pub const Payload = struct {
     // their existing layout and never acquire a draft-feature appendix.
     include_draft: bool = false,
     allow_draft: bool = false,
+    // Private replay/diagnostic writers retain version 2. Canonical ownership
+    // opts into version 3 when its actual graph stores packed index rows.
+    index_wire_fp4: bool = false,
 
     pub fn spans(self: *const Payload, position: u32, storage: *[54]Span) []Span {
         const graph = self.graph;
@@ -101,7 +108,12 @@ pub const Payload = struct {
         for (0..4) |owner| {
             const live = position / @as(u32, if (owner < 3) 2 else 1);
             storage[count] = .{ .tensor = graph.compressed[owner], .wire_bytes = @as(u64, live) * shape.n_head_dim * 4, .packed_f16 = graph.compressed_kv_f16 };
-            storage[count + 1] = .{ .tensor = graph.index_cache[owner], .wire_bytes = @as(u64, live) * shape.n_indexer_head_dim * 4 };
+            storage[count + 1] = .{
+                .tensor = graph.index_cache[owner],
+                .wire_bytes = @as(u64, live) * format.indexRowBytes(self.index_wire_fp4),
+                .index_fp4 = graph.index_fp4,
+                .wire_fp4 = self.index_wire_fp4,
+            };
             count += 2;
             if (owner < 3 and position & 1 != 0) {
                 storage[count] = .{ .tensor = graph.previous_kv[owner], .wire_bytes = @as(u64, shape.n_head_dim) * 4 };
@@ -150,7 +162,7 @@ pub const Payload = struct {
         const graph = self.graph;
         const shape = &self.config.shape;
         return .{
-            c.DS4_SESSION_PAYLOAD_MAGIC, c.DS4_SESSION_PAYLOAD_VERSION,
+            c.DS4_SESSION_PAYLOAD_MAGIC, if (self.index_wire_fp4) format.fp4_version else format.f32_version,
             graph.ctx,                   1,
             128,                         128,
             graph.ctx + 1,               graph.pos,
@@ -185,13 +197,16 @@ pub const Payload = struct {
         const graph = self.graph;
         const shape = &self.config.shape;
         const position = saved[7];
-        const base_bytes = if (blocks_only) self.blockBytes(position) else self.baseBodyBytes(position);
+        var source = self.*;
+        source.index_wire_fp4 = saved[1] == format.fp4_version;
+        const base_bytes = if (blocks_only) source.blockBytes(position) else source.baseBodyBytes(position);
         const draft_bytes = draft_checkpoint.wireBytes(position, shape.n_embd);
         const has_draft = !blocks_only and self.allow_draft and body_bytes == base_bytes + draft_bytes;
         mutated.* = false;
         // The generic facade has checked magic/version before family dispatch.
         // A smaller current context is allowed when all live rows still fit.
-        if (position == 0 or position >= graph.ctx or position >= saved[2] or saved[2] > 1048576 or
+        if (!format.validVersion(saved[1]) or (blocks_only and source.index_wire_fp4) or
+            position == 0 or position >= graph.ctx or position >= saved[2] or saved[2] > 1048576 or
             saved[3] != 1 or saved[4] != 128 or saved[5] != 128 or saved[6] != saved[2] + 1 or
             saved[8] != shape.n_layer or saved[9] != shape.n_head_dim or saved[10] != shape.n_indexer_head_dim or
             saved[11] != shape.n_vocab or saved[12] != 0x413431 or (body_bytes != base_bytes and !has_draft) or logits.len != shape.n_vocab)
@@ -220,7 +235,7 @@ pub const Payload = struct {
         const scratch = allocator.alignedAlloc(u8, .@"8", io_chunk) catch c.ds4_engine_model_die("out of memory");
         defer allocator.free(scratch);
         var storage: [54]Span = undefined;
-        const spans_ = self.spans(position, &storage);
+        const spans_ = source.spans(position, &storage);
         for (spans_[(if (blocks_only) shape.n_layer else 0)..]) |span| try readSpan(file, span, scratch, &remaining);
         resources.resetRecord(graph);
         // resetRecord clears drafter tags. Restore them only after every
@@ -315,7 +330,12 @@ fn checkSpan(file: File, span: Span) Failure!void {
         "session tensor is smaller than the F16 payload"
     else
         "session tensor is smaller than the payload");
-    const storage_bytes = if (span.packed_f16) span.wire_bytes / 2 else span.wire_bytes;
+    const wire_row = format.indexRowBytes(span.wire_fp4);
+    const storage_bytes = if (span.index_fp4 or span.wire_fp4)
+        span.wire_bytes / wire_row * format.indexRowBytes(span.index_fp4)
+    else if (span.packed_f16) span.wire_bytes / 2 else span.wire_bytes;
+    if ((span.index_fp4 or span.wire_fp4) and span.wire_bytes % wire_row != 0)
+        return file.fail(error.InvalidDimensions, "invalid packed index row size");
     if (span.wire_bytes % 4 != 0 or storage_bytes > c.ds4_gpu_tensor_bytes(tensor))
         return file.fail(error.InvalidDimensions, if (span.packed_f16)
             "session tensor is smaller than the F16 payload"
@@ -326,6 +346,7 @@ fn checkSpan(file: File, span: Span) Failure!void {
 fn writeSpan(file: File, span: Span, scratch: []align(8) u8) Failure!void {
     @setFloatMode(.strict);
     try checkSpan(file, span);
+    if (span.index_fp4 != span.wire_fp4) return transferIndex(true, file, span, scratch, null);
     if (!span.packed_f16) {
         var done: u64 = 0;
         while (done < span.wire_bytes) {
@@ -358,6 +379,7 @@ fn writeSpan(file: File, span: Span, scratch: []align(8) u8) Failure!void {
 fn readSpan(file: File, span: Span, scratch: []align(8) u8, remaining: *u64) Failure!void {
     @setFloatMode(.strict);
     try checkSpan(file, span);
+    if (span.index_fp4 != span.wire_fp4) return transferIndex(false, file, span, scratch, remaining);
     if (!span.packed_f16) {
         var done: u64 = 0;
         while (done < span.wire_bytes) {
@@ -381,6 +403,48 @@ fn readSpan(file: File, span: Span, scratch: []align(8) u8, remaining: *u64) Fai
         for (0..count) |index| half[index] = @bitCast(@as(f16, @floatCast(full[index])));
         if (c.ds4_gpu_tensor_write(span.tensor, done * 2, half, count * 2) == 0)
             return file.fail(error.Device, "failed to restore Metal F16 session tensor");
+        done += count;
+    }
+}
+
+// The temporary holds only one wire-format tile. There is no persistent F32
+// mirror of packed graph state, and ordinary version-3 saves copy bytes directly.
+fn transferIndex(comptime writing: bool, file: File, span: Span, scratch: []align(8) u8, remaining: ?*u64) Failure!void {
+    if (span.wire_bytes == 0) return;
+    const capacity = scratch.len / format.f32_index_bytes;
+    if (capacity == 0) return file.fail(error.ConversionBuffer, "index conversion buffer is too small");
+    const wire_row = format.indexRowBytes(span.wire_fp4);
+    const stored_row = format.indexRowBytes(span.index_fp4);
+    const temporary = c.ds4_gpu_tensor_alloc(capacity * wire_row) orelse
+        return file.fail(error.Device, "cannot allocate bounded index conversion tile");
+    defer c.ds4_gpu_tensor_free(temporary);
+    const rows = span.wire_bytes / wire_row;
+    var done: u64 = 0;
+    while (done < rows) {
+        const count: u32 = @intCast(@min(rows - done, capacity));
+        const bytes: usize = @intCast(@as(u64, count) * wire_row);
+        const view = c.ds4_gpu_tensor_view(span.tensor, done * stored_row, @as(u64, count) * stored_row) orelse
+            return file.fail(error.Device, "cannot view index conversion rows");
+        defer c.ds4_gpu_tensor_free(view);
+        if (writing) {
+            const converted = if (span.wire_fp4)
+                c.ds4_gpu_dsv41_indexer_pack_fp4(temporary, view, count)
+            else
+                c.ds4_gpu_dsv41_indexer_unpack_fp4(temporary, view, count);
+            if (converted == 0 or c.ds4_gpu_tensor_read(temporary, 0, scratch.ptr, bytes) == 0)
+                return file.fail(error.Device, "failed to encode session index rows");
+            try file.write(scratch[0..bytes]);
+        } else {
+            try file.read(scratch[0..bytes], remaining.?);
+            if (c.ds4_gpu_tensor_write(temporary, 0, scratch.ptr, bytes) == 0)
+                return file.fail(error.Device, "failed to upload session index rows");
+            const converted = if (span.index_fp4)
+                c.ds4_gpu_dsv41_indexer_pack_fp4(view, temporary, count)
+            else
+                c.ds4_gpu_dsv41_indexer_unpack_fp4(view, temporary, count);
+            if (converted == 0 or c.ds4_gpu_synchronize() == 0)
+                return file.fail(error.Device, "failed to restore session index rows");
+        }
         done += count;
     }
 }

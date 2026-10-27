@@ -1635,13 +1635,37 @@ int ds4_gpu_dsv41_indexer_score_candidates(
         uint32_t              n_candidate_blocks);
 
 
-/* Experimental local68B index row, not the upstream block-wide wire layout. */
+/* Local 68-byte index row, distinct from the upstream block-wide wire layout. */
 int ds4_gpu_dsv41_indexer_pack_fp4(ds4_gpu_tensor *packed,
         const ds4_gpu_tensor *original_post_rope, uint32_t rows);
+int ds4_gpu_dsv41_indexer_unpack_fp4(ds4_gpu_tensor *plain,
+        const ds4_gpu_tensor *packed, uint32_t rows);
 int ds4_gpu_dsv41_indexer_score_fp4(ds4_gpu_tensor *scores,
         const ds4_gpu_tensor *q, const ds4_gpu_tensor *weights,
         const ds4_gpu_tensor *packed, const ds4_gpu_tensor *candidate_blocks,
         uint32_t rows, uint32_t candidate_count);
+
+/* 32x128 index scorer: one SIMDgroup per key, four keys per 128-thread
+ * group. F32 keys require 16-byte alignment; packed keys use the 68B FP4 rows
+ * above and require 2-byte alignment. Null candidates selects dense scoring;
+ * sparse scoring writes selected global rows only, then requires filtering. */
+int ds4_gpu_dsv41_indexer_score_simd(ds4_gpu_tensor *scores,
+        const ds4_gpu_tensor *q, const ds4_gpu_tensor *weights,
+        const ds4_gpu_tensor *keys, const ds4_gpu_tensor *candidate_blocks,
+        uint32_t rows, uint32_t candidate_count, bool packed_fp4);
+
+/* Packed-cache prefill. Queries are already mode-2 quantized/BF16-exact.
+ * Prepare reuses the ordinary indexer_packed_bytes BF16 workspace; scores uses
+ * it with Metal tensor operations, or a null workspace for the SIMD fallback.
+ * Query views cover rows; packed_rows/offset locate them in prepared storage. */
+int ds4_gpu_dsv41_indexer_prepare_fp4(ds4_gpu_tensor *workspace,
+        const ds4_gpu_tensor *q, const ds4_gpu_tensor *packed_keys,
+        uint32_t source_rows, uint32_t query_rows);
+int ds4_gpu_dsv41_indexer_scores_batch_fp4(ds4_gpu_tensor *scores,
+        const ds4_gpu_tensor *q, const ds4_gpu_tensor *weights,
+        const ds4_gpu_tensor *packed_keys, const ds4_gpu_tensor *workspace,
+        uint32_t source_rows, uint32_t rows, uint32_t start, uint32_t ratio,
+        uint32_t packed_rows, uint32_t offset);
 
 int ds4_gpu_glm_indexer_scores_batch_tensor(
         ds4_gpu_tensor       *scores,

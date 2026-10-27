@@ -32,6 +32,7 @@ result blocks, not relabelled historical measurements.
 | [Incremental tool schemas](11-incremental-tool-schemas.md) | Announce discovered schemas once at their history position; preserve reusable prefixes | V4.1 Responses default, explicit `0` legacy escape hatch; Item49 favorable workflow 57.45% faster, ordinary 4.00% slower; all eight first workflows pass |
 | [Bounded decoder replay](12-bounded-decoder-replay.md) | Replay a fixed decoder tail while retaining complete compressed/index state | Opt-in 128/selected1 with typed SSD restart persistence; 7.03% unbatched HTTP workflow saving includes shorter search output; separate direct fixtures save 34.32–38.17%; presets unchanged |
 | [Packed compressed KV](13-packed-compressed-kv.md) | Store existing quantized main-cache values in F16; keep canonical F32 I/O | Main allocation halves; F16 suffix/cross-layout and SSD restart pass; small graft diagnostic +6.55% time; fixture logits and odd-frontier round trip exact; latency neutral/unresolved; default GPU-suite failure reproduces on parent; presets unchanged |
+| [Packed index cache](14-packed-index-cache.md) | Retain original FP4 codes/scales in 68-byte index rows; use register scoring and compact v3 checkpoints | Enabled in DeepSeek fast profiles: index owners 86.72% smaller; v2/v3/DSP1 SSD, four suffix moves and Responses/streaming/restart pass; five fresh 32K tasks per layout are roughly speed-neutral (mean −0.76%, median paired −0.12%); F32 SIMD saves 0.523%/1.936% at 32K/64K |
 
 [Not-adopted summary](not-adopted/README.md) collects short reasons and links
 for rejected policies and candidates that still lack serving evidence. The
@@ -60,7 +61,10 @@ They are different workloads, not percentages to add or general speed promises.
 `context-fast` retains native expert routing while enabling context reuse.
 `resident-fast` enables resident decoder routing and disables suffix reuse.
 `persistent-fast` combines decoder/selected-prefill routing and left/right
-suffix reuse. Inspect [ds4-local](../ds4-local): all use context 8192, an explicit
+suffix reuse. All DeepSeek fast profiles default packed index storage and
+SIMD index scoring on; `persistent-packed` is an alias for `persistent-fast`.
+Explicit `DS4_V41_INDEX_FP4=0` or
+`DS4_V41_INDEX_SIMD=0` overrides are honored. Inspect [ds4-local](../ds4-local): all use context 8192, an explicit
 chunk 512 and a requested 64 GB expert cache, with later CLI arguments overriding
 CLI defaults. Presets leave thinking policy unchanged. These settings are a
 tested combination, not an established startup optimum.

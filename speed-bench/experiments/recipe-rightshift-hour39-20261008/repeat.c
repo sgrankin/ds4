@@ -148,6 +148,7 @@ int main(int argc, char **argv) {
     double started = ms(); CHECK(ds4_session_sync(s, &original, err, sizeof(err)) == 0);
     CHECK(ds4_session_capture_suffix_cache(s, &source, err, sizeof(err)) == 0);
     CHECK(!source.approximate && source.state.len && (!prerope || source.prerope_bytes));
+    CHECK(ds4_session_suffix_cache_bytes(s) == source.state.len + source.prerope_bytes);
     uint64_t state_bytes = source.state.len, pre_bytes = source.prerope_bytes;
     uint64_t state_hash = hash_bytes(source.state.ptr, state_bytes);
     uint64_t pre_hash = hash_bytes(source.prerope, pre_bytes);

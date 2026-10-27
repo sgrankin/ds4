@@ -116,6 +116,31 @@ pub fn packIndexFp4(packed_tensor: ?*Tensor, original: ?*const Tensor, rows: u32
     return scoreDispatch(&launch, "V4.1 physical FP4 index producer");
 }
 
+/// Bounded canonical-state/suffix conversion; callers may pass row views.
+pub fn unpackIndexFp4(plain: ?*Tensor, packed_tensor: ?*const Tensor, rows: u32) c_int {
+    if (api.init() == 0 or rows == 0) return 0;
+    if (!fits(plain, @as(u64, rows) * 128 * 4) or !fits(packed_tensor, @as(u64, rows) * 68))
+        return api.reportError("ds4: packed index decoder received undersized buffers");
+    var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
+    args.one = .{ .n_rows = rows, .n_head = 32, .head_dim = 128, .cache_f16 = 0, .scale = 1.0 / 64.0 };
+    const launch = c.ds4_metal_index_score_launch{
+        .pipeline = c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_FP4_UNPACK),
+        .batch = false,
+        .args = args,
+        .q = packed_tensor,
+        .weights = null,
+        .keys = null,
+        .candidate_blocks = null,
+        .scores = plain,
+        .groups_x = rows,
+        .groups_y = 1,
+        .threads_x = 32,
+        .threads_y = 4,
+        .shared_bytes = 0,
+    };
+    return scoreDispatch(&launch, "V4.1 physical FP4 index decode");
+}
+
 /// Same scalar score reduction as scoreOne/scoreCandidates, replacing only
 /// the key reader. Null blocks selects dense scoring; a list selects sparse.
 pub fn scoreIndexFp4(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, packed_tensor: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
@@ -149,6 +174,42 @@ pub fn scoreIndexFp4(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tenso
         .shared_bytes = (128 + 4) * 4,
     };
     return scoreDispatch(&launch, "V4.1 physical FP4 index score");
+}
+
+/// F32/FP4 SIMD scoring: one SIMDgroup retains each key in
+/// registers. Four independent keys share a 128-thread group, without barriers.
+pub fn scoreSimd(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32, packed_fp4: bool) c_int {
+    if (api.init() == 0 or rows == 0 or
+        (blocks == null and block_count != 0) or
+        (blocks != null and (block_count == 0 or block_count > (@as(u64, rows) + 7) / 8))) return 0;
+    const key_row_bytes: u64 = if (packed_fp4) 68 else 128 * 4;
+    if (!fits(scores, @as(u64, rows) * 4) or !fits(q, 32 * 128 * 4) or
+        !fits(weights, 32 * 4) or !fits(keys, @as(u64, rows) * key_row_bytes) or
+        (blocks != null and !fits(blocks, @as(u64, block_count) * 4)))
+        return api.reportError("ds4: SIMD index scorer received undersized buffers");
+    const key_alignment: u64 = if (packed_fp4) 2 else 16;
+    if (api.tensorOffset(q) % 16 != 0 or api.tensorOffset(keys) % key_alignment != 0)
+        return api.reportError("ds4: SIMD index scorer received misaligned buffers");
+    var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
+    // The fixed scorer packet uses field 4 to select candidate row mapping.
+    args.one = .{ .n_rows = rows, .n_head = 32, .head_dim = 128, .cache_f16 = @intFromBool(blocks != null), .scale = 1.0 / 64.0 };
+    const work_rows: u64 = if (blocks != null) @as(u64, block_count) * 8 else rows;
+    const launch = c.ds4_metal_index_score_launch{
+        .pipeline = c.ds4_metal_index_get_pipeline(if (packed_fp4) c.DS4_METAL_INDEX_SIMD_FP4 else c.DS4_METAL_INDEX_SIMD_F32),
+        .batch = false,
+        .args = args,
+        .q = q,
+        .weights = weights,
+        .keys = keys,
+        .candidate_blocks = if (blocks != null) blocks else q,
+        .scores = scores,
+        .groups_x = (work_rows + 3) / 4,
+        .groups_y = 1,
+        .threads_x = 32,
+        .threads_y = 4,
+        .shared_bytes = 0,
+    };
+    return scoreDispatch(&launch, if (packed_fp4) "V4.1 SIMD FP4 index score" else "V4.1 SIMD F32 index score");
 }
 
 pub fn scoreBatch(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, rows: u32, tokens: u32, start: u32, ratio: u32, heads: u32, width: u32, scale: f32, half: bool, tiled_f32: bool) c_int {
@@ -265,6 +326,98 @@ pub fn scorePacked(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor,
         .shared_bytes = 32 * 64 * 4,
     };
     return packDispatch(&launch, "V4.1 packed index scores");
+}
+
+/// Expand the physical cache directly to the existing transient BF16 matrix
+/// tiles. There is no persistent F32 key array, nor an intermediate F32 copy.
+pub fn prepareIndexFp4(workspace: ?*Tensor, q: ?*const Tensor, packed_keys: ?*const Tensor, source_rows: u32, query_rows: u32) c_int {
+    if (source_rows == 0 or source_rows > max_i32 or query_rows == 0 or query_rows > max_i32 or
+        c.ds4_gpu_dsv41_tensor_ops_available() == 0) return 0;
+    if (!fits(q, @as(u64, query_rows) * 32 * 128 * 4) or !fits(packed_keys, @as(u64, source_rows) * 68) or
+        !fits(workspace, packedBytes(source_rows, query_rows)))
+        return api.reportError("ds4: packed index preparation received undersized buffers");
+    const flags = flagsBytes(source_rows, query_rows);
+    const launch = c.ds4_metal_index_pack_launch{
+        .pipeline = c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_FP4_PREPARE),
+        .scores = false,
+        .args = .{ source_rows, query_rows, 0, 0 },
+        .range = .{ 0, 0 },
+        .q = q,
+        .keys = packed_keys,
+        .weights = null,
+        .output = workspace,
+        .packed_source = workspace,
+        .flags_offset = flags,
+        .keys_offset = flags + @as(u64, query_rows) * 8192,
+        .groups_x = @as(u64, query_rows) + (@as(u64, source_rows) + 63) / 64,
+        .groups_y = 1,
+        .shared_bytes = 16,
+    };
+    return packDispatch(&launch, "V4.1 FP4 index matrix preparation");
+}
+
+pub fn scoreBatchFp4(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, packed_keys: ?*const Tensor, workspace: ?*const Tensor, source_rows: u32, rows: u32, start: u32, ratio: u32, packed_rows: u32, offset: u32) c_int {
+    if (api.init() == 0 or (ratio != 1 and ratio != 2) or source_rows == 0 or source_rows > max_i32 or
+        rows == 0 or rows > max_i32 or rows > max_u32 - start or (start + rows) / ratio > source_rows) return 0;
+    if (!fits(q, @as(u64, rows) * 32 * 128 * 4) or !fits(weights, @as(u64, rows) * 32 * 4) or
+        !fits(packed_keys, @as(u64, source_rows) * 68) or !fits(scores, @as(u64, rows) * source_rows * 4))
+        return api.reportError("ds4: packed index batch scorer received undersized buffers");
+    if (workspace != null) {
+        if (packed_rows == 0 or packed_rows > max_i32 or offset > packed_rows or rows > packed_rows - offset or
+            !fits(workspace, packedBytes(source_rows, packed_rows)) or c.ds4_gpu_dsv41_tensor_ops_available() == 0) return 0;
+        const flags = flagsBytes(source_rows, packed_rows);
+        const launch = c.ds4_metal_index_pack_launch{
+            .pipeline = c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_FP4_BATCH_SCORE),
+            .scores = true,
+            .args = .{ source_rows, rows, start, ratio },
+            .range = .{ packed_rows, offset },
+            .q = q,
+            .weights = weights,
+            .keys = packed_keys,
+            .output = scores,
+            .packed_source = workspace,
+            .flags_offset = flags,
+            .keys_offset = flags + @as(u64, packed_rows) * 8192,
+            .groups_x = (@as(u64, source_rows) + 63) / 64,
+            .groups_y = rows,
+            .shared_bytes = 32 * 64 * 4,
+        };
+        return packDispatch(&launch, "V4.1 physical FP4 batch index scores");
+    }
+    if (api.tensorOffset(q) % 16 != 0 or api.tensorOffset(packed_keys) % 2 != 0)
+        return api.reportError("ds4: packed index batch scorer received misaligned buffers");
+    var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
+    args.batch = .{
+        .n_rows = source_rows,
+        .n_tokens = rows,
+        .n_head = 32,
+        .head_dim = 128,
+        .pos0 = start,
+        .cache_f16 = 0,
+        .row_group_size = ratio,
+        .pad0 = 0,
+        .q_token_stride = 32 * 128 * 4,
+        .q_head_stride = 128 * 4,
+        .weights_token_stride = 32 * 4,
+        .score_token_stride = @as(u64, source_rows) * 4,
+        .scale = 1.0 / 64.0,
+    };
+    const launch = c.ds4_metal_index_score_launch{
+        .pipeline = c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_FP4_BATCH_SIMD),
+        .batch = true,
+        .args = args,
+        .q = q,
+        .weights = weights,
+        .keys = packed_keys,
+        .candidate_blocks = null,
+        .scores = scores,
+        .groups_x = (@as(u64, source_rows) + 3) / 4,
+        .groups_y = rows,
+        .threads_x = 32,
+        .threads_y = 4,
+        .shared_bytes = 0,
+    };
+    return scoreDispatch(&launch, "V4.1 physical FP4 SIMD batch index scores");
 }
 
 pub fn topk(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, k: u32, start: u32, ratio: u32) c_int {

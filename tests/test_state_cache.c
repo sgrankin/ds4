@@ -93,6 +93,67 @@ static void equal_source(ds4_state_cache *c, const char *key, const fixture *f,
     ds4_state_cache_blob_free(&b);
 }
 
+static void check_packed_formats(const char *parent) {
+    const uint32_t n = 257;
+    const uint64_t base = fixture_size(n) - (uint64_t)(3 * (n / 2) + n) * (512 - 68);
+    const uint64_t stage = 128u * 5120u * 2u;
+    fixture f = {.n = n, .bytes = base + 32 + 3 * stage};
+    f.p = malloc((size_t)f.bytes); assert(f.p);
+    /* Host storage treats cache values opaquely; use identifiable bytes. */
+    for (uint64_t i = 0; i < f.bytes; i++) f.p[i] = (uint8_t)(i * 37u + i / 65536u);
+    const uint32_t h[13] = {0x34565344u, 3, 8192, 1, 128, 128, 8193, n,
+                            40, 512, 128, 129280, 0x413431u};
+    for (unsigned i = 0; i < 13; i++) ds4_kvstore_le_put32(f.p + i * 4u, h[i]);
+    for (uint32_t i = 0; i < n; i++) ds4_kvstore_le_put32(f.p + 52 + i * 4u, i);
+    const uint32_t draft[8] = {0x31505344u, 1, n, 128, 5120, 37, 38, 39};
+    for (unsigned i = 0; i < 8; i++) ds4_kvstore_le_put32(f.p + base + i * 4u, draft[i]);
+    char dir[4096], err[256] = {0}, key[41], invalid_key[41], path[4096];
+    assert(snprintf(dir, sizeof(dir), "%s/packed-formats", parent) < (int)sizeof(dir));
+    ds4_state_cache *cache = ds4_state_cache_open(dir, 0, 96u << 20, err, sizeof(err)); assert(cache);
+    assert(ds4_state_cache_put(cache, "packed-formats", f.p, f.bytes, NULL, 0, false, key, err, sizeof(err)) == 0);
+    equal_source(cache, key, &f, DS4_STATE_CACHE_NATIVE);
+
+    /* The manifest must split each 68-byte index region and the DSP1 tail at
+     * their actual boundaries, rather than using the old 512-byte row size. */
+    assert(snprintf(path, sizeof(path), "%s/ds4sc-%s.manifest", dir, key) < (int)sizeof(path));
+    FILE *fp = fopen(path, "rb"); assert(fp);
+    uint8_t manifest[96], record[64];
+    assert(fread(manifest, 1, sizeof(manifest), fp) == sizeof(manifest));
+    assert(!fseek(fp, (long)ds4_kvstore_le_get32(manifest + 20), SEEK_CUR));
+    uint64_t index_offset[4], index_bytes[4], offset = 52 + ((uint64_t)n + 129280) * 4 + 40u * 128u * 2048u;
+    for (unsigned owner = 0; owner < 4; owner++) {
+        const uint64_t rows = n / (owner < 3 ? 2u : 1u);
+        index_offset[owner] = offset + rows * 2048;
+        index_bytes[owner] = rows * 68;
+        offset = index_offset[owner] + index_bytes[owner] + (owner < 3 ? 4096 : 0);
+    }
+    assert(offset == base);
+    unsigned found = 0; offset = 0;
+    for (uint32_t i = 0; i < ds4_kvstore_le_get32(manifest + 40); i++) {
+        assert(fread(record, 1, sizeof(record), fp) == sizeof(record));
+        const uint64_t start = ds4_kvstore_le_get32(record + 8) | ((uint64_t)ds4_kvstore_le_get32(record + 12) << 32);
+        const uint32_t bytes = ds4_kvstore_le_get32(record + 4);
+        assert(ds4_kvstore_le_get32(record) == 0 && start == offset);
+        for (unsigned owner = 0; owner < 4; owner++) if (start == index_offset[owner]) { assert(bytes == index_bytes[owner]); found++; }
+        if (start == base) { assert(bytes == 32); found++; }
+        for (unsigned j = 0; j < 3; j++) if (start == base + 32 + j * stage) { assert(bytes == stage); found++; }
+        offset += bytes;
+    }
+    assert(offset == f.bytes && found == 8 && !fclose(fp));
+
+    /* A compact-length buffer labelled v2 used to reach a reversed tail slice.
+     * Reject it cleanly before examining bytes at the larger F32 base offset. */
+    ds4_kvstore_le_put32(f.p + 4, 2);
+    assert(ds4_state_cache_put(cache, "wrong-version", f.p, base, NULL, 0, false, invalid_key, err, sizeof(err)) != 0);
+    ds4_kvstore_le_put32(f.p + 4, 3);
+    assert(ds4_state_cache_close(cache, err, sizeof(err)) == 0);
+    cache = ds4_state_cache_open(dir, 0, 96u << 20, err, sizeof(err)); assert(cache);
+    equal_source(cache, key, &f, DS4_STATE_CACHE_NATIVE);
+    assert(ds4_state_cache_close(cache, err, sizeof(err)) == 0);
+    free(f.p);
+    puts("state-cache: packed v3 DSP1 extents/restart and v2 compact-length rejection PASS");
+}
+
 int main(int argc, char **argv) {
     if (argc != 2 || mkdir(argv[1], 0700)) {
         fprintf(stderr, "usage: test-state-cache NEW_PERSISTENT_DIRECTORY\n"); return 2;
@@ -233,6 +294,7 @@ int main(int argc, char **argv) {
     assert(two.ssd_bytes <= first.ssd_bytes + 65536u);
     assert(ds4_state_cache_close(c, err, sizeof(err)) == 0);
     free(ids); free(a.p); free(a.pre); free(b.p); free(b.pre); free(replay.p);
+    check_packed_formats(argv[1]);
     puts("state-cache: dedup, RAM spill, SSD restart, native/suffix/replay kinds, discovery and budgets PASS");
     return 0;
 }

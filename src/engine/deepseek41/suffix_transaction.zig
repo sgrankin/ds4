@@ -79,7 +79,11 @@ pub const Transaction = struct {
     pub fn cacheBytes(self: *const Transaction) u64 {
         if (!self.supported()) return 0;
         const device = self.session.runtime.prefill.executor.graph;
-        return c.DS4_SESSION_PAYLOAD_U32_FIELDS * 4 + self.payload().bodyBytes(device.pos) +
+        // Exact captures use the canonical physical layout. Approximate
+        // recaptures retain the private v2 diagnostic representation.
+        var body = self.payload();
+        body.index_wire_fp4 = device.index_fp4 and !self.session.runtime.state.approximate_suffix;
+        return c.DS4_SESSION_PAYLOAD_U32_FIELDS * 4 + body.bodyBytes(device.pos) +
             (if (device.prerope != null) suffix.archiveBytes(device.pos) else @as(u64, 0));
     }
     pub fn capture(self: *const Transaction, maybe_cache: ?*Cache, errors: []u8) c_int {

@@ -9,16 +9,23 @@ The user subsequently authorized its bounded convergence experiments. See the
 [execution report](../speed-bench/experiments/deepinfer-alignment-20261027/README.md)
 for current outcomes. Candidate-only scalar scoring is implemented opt-in:
 exact distributions/outputs on the32K/64K probes, a small warm-decode benefit,
-and no reliable first-answer improvement. The table below retains the pinned
-source-audit comparison; it is not a claim that these later experiments were
-already present in its baseline.
+and no reliable first-answer improvement. The source references remain pinned;
+status notes below include the subsequently qualified local implementations.
 The subsequent block-only128-row prototype also validates bounded recovery and
 small measured baseline-trace changes, with a size/latency tradeoff. It rebuilds
 all40 rings through a direct diagnostic API; ordinary cache policy and isolated
 encoder-only recovery remain absent. See the report for scope and measurements.
 The index-FP4 producer/reader pilot now also verifies68B rows against the old
-GPU quantizer/scorer. Dense readers cost modestly more; candidate readers are
-near neutral. Actual model-cache and SSD packing remain absent.
+GPU quantizer/scorer. The initial shared-tile reader costs modestly more.
+A [matched register/SIMD follow-up](../speed-bench/experiments/index-simd-20261027/README.md)
+keeps exact fixture scores/IDs and cuts dense256K FP4 scoring GPU time39.2%;
+its packed/F32 gap is now about 2%. The subsequent
+[serving integration](../speed-bench/experiments/index-serving-20261027/README.md)
+completes physical index allocation, scalar/batch inference, v3 SSD checkpoints,
+v2 imports and suffix conversion. DeepSeek fast profiles enable packed index
+storage and SIMD scoring; `persistent-packed` aliases `persistent-fast`. Whole-model paired
+F32 decode improves 0.523% at32K and 1.936% at64K. Packed whole-request timings
+are mixed; the isolated kernel percentage is not an inference speed claim.
 Canonical DSpark history is now implemented opt-in as DSP1: exact BF16 raw
 target features survive SSD restart and enable immediate verified drafting.
 Short restored replies improve in the measured eager-MTP cases; full replies
@@ -74,18 +81,18 @@ DeepInfer's truncation also defaults off, with keep 0 until explicitly configure
 
 | ID | Technique | DeepInfer and current DS4 comparison |
 |---|---|---|
-| C1 | Encoder bounded recovery | **Missing locally.** Public `swa_valid_start` metadata can restrict raw visibility, but no public nonzero-setting caller implements the complete documented cache-hit policy. DS4 imports complete endpoints. [DI][di-prepare], [DS4][ds-payload]. |
+| C1 | Encoder bounded recovery | **Diagnostic prototype; ordinary policy missing.** A direct SWB1 importer rebuilds all40 raw rings from128 scalar rows while preserving immutable blocks; it is not the isolated encoder-only policy or ordinary SSD-cache admission. Public `swa_valid_start` metadata is narrower than the documented production cache-hit policy. [DI][di-prepare], [DS4][ds-payload]. |
 | C2 | Decoder/YOCO query compaction | **Partial.** DeepInfer can physically remove discarded decoder queries while still publishing full shared compressed KV. DS4 has exact reduced suffixes plus optional wide replay, with the restrictions above. Both keep full encoder/global-cache publication. [DI][di-yoco-code], [DS4][ds-prefill]. |
 | C3 | Shared compressed/index owners | **Have for the validated architecture.** Our KV sources 2/8/14/20 and index sources 2/8/14/20/24/28/32/36 implement the trained sharing topology. DeepInfer derives a more general topology from checkpoint metadata. [DI][di-cross-layer], [DS4][ds-config]. |
 | C4 | Inherited candidate-block hierarchy | **Have.** Later indexers inherit source-layer candidates. Our layer 20 selects up to 2,048 blocks of 8. This is model structure, not the optional resident-expert approximation. [DI][di-cross-layer], [DS4][ds-attention]. |
-| C5 | Score only candidate keys | **Missing optimization.** DeepInfer's consumer score kernels operate on inherited candidates. We score the full compressed prefix, mask excluded blocks, then top-k. Shared storage does not reduce those discarded dot products. [DI][di-index], [DS4][ds-attention]. |
+| C5 | Score only candidate keys | **Partial, opt-in scalar path.** `DS4_V41_CANDIDATE_INDEX=1` skips excluded keys after layer20 once more than16K keys exist, for F32 and packed index storage. Batch prefill still scores the dense prefix before filtering/top-k. DeepInfer also scores inherited candidates in its consumer kernels. [DI][di-index], [DS4][ds-attention]. |
 | C6 | Bounded selection scratch | **Have, different implementation.** DeepInfer sizes score chunks from row bytes/memory budget and caps them at 8,192 queries. We retain 32 live score rows and use Metal partition/merge top-k, causal bounds and prefix optimizations. Replacing a supposedly naive sort is not the first gap. [DI][di-index], [DS4][ds-batch-attention]. |
-| C7 | Packed low-precision KV | **Numerics present; physical packing missing.** We round through the reference-like low-precision formats but generally store expanded floats. See the byte table below. [DI][di-cache-format], [DS4][ds-kv-layout]. |
+| C7 | Packed low-precision KV | **Partial physical packing.** Index keys now use optional68B GPU rows and v3 SSD rows, with native producer/consumer, v2 conversion and suffix/MTP qualification. Raw/SWA remains F32; main compressed storage is F32 or optionalF16. Full reference FP8/FP4 packing of those arrays is still absent. See the byte table below. [DI][di-cache-format], [DS4][ds-kv-layout]. |
 | C8 | Bounded speculative rollback | **Have, different design.** DeepInfer enlarges SWA/compressor rings for backtracking. Our verifier saves overwritten raw/feature slots and compressor carries, then restores rejected positions; committed lengths hide unaccepted compressed rows. Larger rings are not inherently required. [DI][di-cache-engine], [DS4][ds-dspark]. |
 | C9 | Separate durable blocks from disposable state | **Partial.** DeepInfer separates paged block KV from fixed state slots and can regenerate dropped consumer state. Our content-addressed SSD chunks deduplicate arrays, but endpoint payloads still retain all 40 raw rings and odd-boundary compression carries. [DI][di-cache-engine], [DS4][ds-payload]. |
 | C10 | GPU paging and copy-on-write forks | **Missing.** DeepInfer reference-counts paged GPU blocks and clones state slots. We have immutable SSD chunks, pins and shared stored bytes, but each restored graph has private context-sized mutable GPU arrays. SSD chunking is not GPU paging. [DI][di-block-manager], [DS4][ds-resources]. |
 | C11 | Asynchronous cache fetching/import | **Partial elsewhere, absent at checkpoint import.** Our expert and Engram I/O can overlap compute; KV materialization currently assembles the whole endpoint synchronously before importing it. Unified memory removes a separate H2D tier, not the SSD/materialization work. [DS4 store][ds-state-cache], [import][ds-persist]. |
-| C12 | Usable draft state across restore | **Partial.** DeepInfer projects target features into drafter attention KV during forward. Our DSV4 payload omits the DSpark feature window, resets the drafter on restore and warms 128 future positions. Persisting raw features and persisting projected drafter KV are different implementations. [DI][di-dflash], [DS4][ds-speculative]. |
+| C12 | Usable draft state across restore | **Implemented opt-in, different representation.** `DS4_V41_CHECKPOINT_DRAFT_FEATURES=1` persists raw BF16 target-feature windows as DSP1 in v2/v3 and restores immediate verified drafting after SSD restart; projected drafter KV is rebuilt on first use. DeepInfer stores projected drafter attention KV during forward. Both avoid128 future scalar warmup tokens, through different stored state. [DI][di-dflash], [DS4][ds-speculative]. |
 | C13 | Approximation-aware persistence | **Deliberate local extension.** Our typed DRP1 checkpoints retain replay policy/approximate identity, resume matching prefixes and exclude canonical export/suffix grafts. This is not an accidental exact-cache leak. Upstream's documented decoder replay cache policy is stricter. [Local policy][ds-checkpoint], [recipe](../recipes/12-bounded-decoder-replay.md). |
 
 The physical row formats are particularly concrete:
@@ -94,13 +101,15 @@ The physical row formats are particularly concrete:
 |---|---:|---:|
 | Raw/SWA, 512 values, E4M3 + per32 UE8M0 scales | 528 B | 2048 B F32 |
 | Main compressed, 512 values, E2M1 + per16 E4M3 scales | 288 B | 2048 B F32;1024 B optional F16 |
-| Index, 128 values, E2M1 + per32 UE8M0 scales | 68 B | 512 B F32 |
+| Index, 128 values, E2M1 + per32 UE8M0 scales | 68 B | 512 B F32;68 B optional physical FP4 |
 
 `DS4_V41_COMPRESSED_KV_F16=1` enables the existing F16 main storage; repository
-defaults and `ds4-local` do not currently enable it. Disk payload values remain
-F32. Packing the current rounded values is a promising storage experiment, but
-losslessness still requires checking scale generation and rounding; do not infer
-it from matching dtype names. For 262,144 context, the four cumulative owners
+defaults and `ds4-local` do not currently enable it. Main/raw disk values remain
+F32. The index producer retains original group32 scales and mode2 rounding;
+packedv3 snapshots retain those bytes, while oldv2 imports preserve decoded
+values through bounded conversion. DeepSeek fast profiles enable this index
+layout; legacy private diagnostic/replay bodies remainv2 through conversion.
+For 262,144 context, the four cumulative owners
 represent about 655,360 rows: main+index arrays are approximately1.5625 GiB F32,
 0.9375 GiB with F16 main, or0.2173 GiB at the reference packed sizes, before
 alignment/scratch. These are byte calculations, not measured speedups.
@@ -112,7 +121,7 @@ KV gets smaller; the freed headroom must actually reach its admission budget.
 | ID | Technique | DeepInfer and current DS4 comparison |
 |---|---|---|
 | K1 | Sparse attention kernels | **Have, different backend.** FlashMLA is integrated upstream; ours uses raw/gathered/indexed Metal attention and typed F16 readers. CUDA SASS/TMA details do not port literally. [DI interface][di-attention-backend], [DS4][ds-attention]. |
-| K2 | Norm/RoPE/quantize/store fusion | **Partial.** DeepInfer combines transforms with final cache publication. Our scalar path generally dispatches normalization, rounding, RoPE and stores separately. Fuse one publication boundary while preserving rounding locations. V4.1 has no indexer Hadamard; do not import a generic transform accidentally. [DI][di-attn], [DS4 quantization](../src/metal/dsv41.metal). |
+| K2 | Norm/RoPE/quantize/store fusion | **Partial.** DeepInfer combines transforms with final cache publication. Physical FP4 index publication now combines quantization and store in one kernel; normalization and RoPE remain separate, as do most other cache boundaries. Fuse one publication boundary while preserving rounding locations. V4.1 has no indexer Hadamard; do not import a generic transform accidentally. [DI][di-attn], [DS4 quantization](../src/metal/dsv41.metal). |
 | K3 | Producer-to-consumer layout and attention-boundary fusion | **Partial.** Upstream can merge Q transforms, sparse attention, inverse RoPE and quantization, with one-time projection-weight permutation. Our staging/gather, transforms and projection are more separate. Preferred output layout and fewer intermediate writes are portable lessons. [DI][di-attention-backend], [DS4][ds-attention]. |
 | K4 | Merge independent same-input projections | **Missing fusion opportunity.** Upstream merges compatible Q-A/raw-KV and Q-B/index-Q projections; shared-hidden cases explicitly prevent invalid fusion. Our projections are generally separate. Weight types and publication dependencies determine safe combinations. [DI][di-attn], [DS4][ds-attention]. |
 | K5 | Lazy mHC and mega_mhc | **Model semantics present; fusion partial.** We implement four residual streams and Sinkhorn mixing, including some fused batch RMS/project work. Upstream carries prior post-mix lazily and can fuse post+next pre+norm+cast directly into MoE buffers. Engram, steering and capture points constrain fusion. [DI][di-hc], [DS4][ds-ops]. |

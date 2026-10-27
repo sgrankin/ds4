@@ -186,6 +186,11 @@ ranges, with no invented interpolation/frontier.
 
 ## 3. Physical index-FP4 producer and reader
 
+The later [register/SIMD follow-up](../index-simd-20261027/README.md) improves
+both formats and reduces the packed/F32 dense-scoring gap to about1–2%, with
+exact fixture scores/IDs. The measurements below retain the initial shared-tile
+reader result and its narrower10-minute experiment scope.
+
 Completed14:14–14:24UTC, parent`0363cb40`. One local row stores64 nibble bytes
 and4 UE8M0 scale bytes,68B versus512B F32 (**86.72% smaller**). Even lanes use
 low nibbles; sign bit3 retains negative zero. This interleaved row is a Metal

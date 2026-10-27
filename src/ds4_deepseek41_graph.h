@@ -90,6 +90,7 @@ typedef struct {
     bool steering_capture_enabled, steering_capture_prompt;
     bool valid, streaming, encoder_resident, compact_carry, prefill_alias, quality, workspace_failed;
     bool compressed_kv_f16;
+    bool index_fp4; /* Physical 68-byte index rows; scratch queries remain F32. */
     uint32_t tp_world, tp_rank;
     ds4_gpu_tensor *tp_logits_half;
     ds4_gpu_tensor **tp_out, **tp_in;

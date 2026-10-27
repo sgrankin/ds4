@@ -11,6 +11,9 @@ distinguish completed work from proposals and retain relevant evidence links.
 
 - Use a short loop: fixed baseline, one change, measure, inspect, decide.
   Record the revision, command, settings and results; reuse existing tools.
+- Performance comparisons require at least five measured samples per side.
+  Alternate run order, retain all samples and report variation. One-off runs
+  are for smoke checks or diagnostics, not comparative performance claims.
 - Work sequentially from `speed-bench/ideas/next-experiments.md`, with a
   one-hour budget per item. Measure ordinary and favorable cases as well as
   stress cases; plot tradeoffs for tunable features.

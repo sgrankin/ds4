@@ -1,6 +1,63 @@
 # Next experiments: one hour each
 
+Performance comparisons now require at least five measured samples per side,
+alternating order and retaining all samples/variation. Single runs are smoke
+checks or diagnostics, not comparative performance evidence. Packed index
+storage is accepted and enabled in all DeepSeek fast presets; explicit0 remains
+available and `persistent-packed` is a compatibility alias for `persistent-fast`.
+
+## Five samples per index layout — completed 2026-10-27
+
+Within18:59–19:59UTC budget: same current binary/frozen shaders and SIMD1,
+onlyFP4 0/1 differs. Ten fresh32K favorable tasks in five alternating-order
+pairs, normalreasoning/chunk8192/cache48GiB. Mean answer-prefill-plus-generation
+48.730s F32 versus48.362s packed (−0.756%); median paired−0.122%, packed wins3/5.
+Order effects remain; call this roughly speed-neutral. The earlier+3.80% penalty
+did not reproduce. All ten42-token traces and80 teacher rows exact, all correct.
+Every packed aggregate phase mean is lower and no repeated meaningful phase
+penalty appears, so the conditional profile is not run. Guard normal, swap+0.5MiB.
+No runtime/default/binary/main changes. [Report and reproduction](../experiments/index-five-samples-20261027/README.md).
+
+## Actual packed-index serving integration — authorized 2026-10-27
+
+Completed18:13UTC: actual index caches, optimized prefill/decode, v3 SSD and
+v2 conversion, suffix/MTP and Responses restart/streaming qualified. All five
+executables installed; main unchanged. Fast profiles enable F32 SIMD; the new
+persistent-packed profile makes the capacity/time tradeoff explicit. F32 warm
+decode−0.523%/−1.936% at32K/64K; initial packed32K warm replay+1.58% and whole
+reply+3.80% were noisy observations, with the whole-reply penalty superseded by
+the five-sample follow-up above. Actual index tensors are86.72% smaller and
+canonical files are smaller.
+[Report and reproduction](../experiments/index-serving-20261027/README.md).
+Next separate correctness item remains DSML incomplete length finalization;
+no more kernel micro-tuning is needed for this completed integration.
+
+F32 serving item completed 17:19 UTC: same-process paired decode reduction
+0.523% at32K and about1.5% at64K; initial full32K teacher/answer IDs exact.
+Packed-cache qualification starts17:19UTC, cap18:19UTC, continuing through fresh
+model tasks, repeated suffix, realSSD/MTP/Responses and installation. Physical
+68B allocations plus v3 persistence and v2conversion are built; no F32 owner
+shadow. Main unchanged. Preserve the initial live-shader control failure.
+
+First item starts16:47UTC, cap17:47UTC: fixed641cfaa5 baseline, wire F32 SIMD
+into decode and measure whole inference. Then continue with a fresh one-hour
+item for packed68B model allocations, original-scale publication, batched
+prefill, MTP, canonical/SSD and suffix integration plus actual inference/RAM
+qualification. Do not stop at another unused API or retain a full F32 shadow.
+Main remains unchanged; the user explicitly asked to finish the integration.
+
 ## DeepInfer alignment — execution authorized, 2026-10-27
+
+Follow-up completed 15:46 UTC: exact fixture scores/IDs, dense 256K FP4 GPU
+scoring −39.2% and full chain −32.1%; matched packed/F32 gap now ~2%. Tiny 37-key
+work regresses. Retain explicit kernels and old controls; actual cache storage
+integration remains a separate slice. Five builds/help checks pass; no main or
+installed-binary change. [Report](../experiments/index-simd-20261027/README.md).
+
+User-selected follow-up starts15:30UTC, cap16:30UTC, baseline06fb1a64:
+matched register/SIMD F32 and physical-FP4 index scoring, separated score and
+selection timings, original score/ID oracle. No runtime/default promotion or
+whole-cache integration. This takes priority over the queued DSML repair.
 
 The [49-entry source comparison](../../docs/DEEPINFER_ALIGNMENT.md) is pinned to
 current upstream5537415 and local runtimee2a38f6e. The user authorized this

@@ -43,6 +43,7 @@ pub const Graph = struct {
         graph.compact_carry = plan.compact;
         graph.prefill_alias = plan.alias;
         graph.compressed_kv_f16 = plan.compressed_f16;
+        graph.index_fp4 = plan.index_fp4;
         graph.allocation_bytes = plan.bytes();
         graph.streaming = streaming;
         graph.steering_capture_enabled = @import("steering_capture.zig").enabled();
@@ -83,7 +84,7 @@ pub const Graph = struct {
         for (0..4) |owner| {
             const rows = @as(u64, context) / @as(u64, if (owner < 3) 2 else 1) + 1;
             graph.compressed[owner] = tensorAlloc(rows * 512 * @as(u64, if (plan.compressed_f16) 2 else 4), false) orelse return error.AllocationFailed;
-            graph.index_cache[owner] = tensorAlloc(rows * 128 * 4, false) orelse return error.AllocationFailed;
+            graph.index_cache[owner] = tensorAlloc(rows * @as(u64, if (plan.index_fp4) 68 else 512), false) orelse return error.AllocationFailed;
             graph.previous_kv[owner] = tensorAlloc(512 * 4, false) orelse return error.AllocationFailed;
             graph.previous_score[owner] = tensorAlloc(512 * 4, false) orelse return error.AllocationFailed;
         }
@@ -297,7 +298,7 @@ pub fn growRecord(graph: *Record, config: *const Config, capacity: u32) bool {
 }
 fn logAllocation(graph: *const Record, plan: *const Layout) void {
     _ = c.fprintf(c.__stderrp, "ds4: V4.1 static context buffers %.2f MiB (ctx=%u), Engram disk-only\n", @as(f64, @floatFromInt(plan.bytes())) / 1048576.0, graph.ctx);
-    if (!layout.present("DS4_V41_COMPRESSED_KV_F16")) return;
+    if (!layout.present("DS4_V41_COMPRESSED_KV_F16") and !graph.index_fp4) return;
     var main: u64 = 0;
     var index: u64 = 0;
     var raw: u64 = 0;
@@ -305,5 +306,6 @@ fn logAllocation(graph: *const Record, plan: *const Layout) void {
     for (graph.index_cache) |tensor| index += c.ds4_gpu_tensor_bytes(tensor);
     for (graph.window) |tensor| raw += c.ds4_gpu_tensor_bytes(tensor);
     const storage: [*:0]const u8 = if (graph.compressed_kv_f16) "f16" else "f32";
-    _ = c.fprintf(c.__stderrp, "ds4: V4.1 KV allocated main=%s main_bytes=%llu index_bytes=%llu raw_bytes=%llu\n", storage, @as(c_ulonglong, main), @as(c_ulonglong, index), @as(c_ulonglong, raw));
+    const index_storage: [*:0]const u8 = if (graph.index_fp4) "fp4" else "f32";
+    _ = c.fprintf(c.__stderrp, "ds4: V4.1 KV allocated main=%s main_bytes=%llu index_bytes=%llu raw_bytes=%llu index_format=%s\n", storage, @as(c_ulonglong, main), @as(c_ulonglong, index), @as(c_ulonglong, raw), index_storage);
 }

@@ -1,5 +1,154 @@
 # Serving project journal
 
+2026-10-27: user requires at least five measured samples per side for future
+performance comparisons; no comparative timing conclusions from one-off runs.
+Recorded in AGENTS.md: alternate order, preserve all samples, report variation.
+User accepts packed index storage after the five-pair check. DeepSeek fast
+profiles now default DS4_V41_INDEX_FP4=1 alongside SIMD1; explicit0 wins.
+`persistent-packed` remains an alias for `persistent-fast`, so existing names
+and commands work. Other model presets remain outside these DeepSeek settings.
+This is a launcher default change using the already qualified binaries, not
+new kernel math or new performance evidence. Model-free launcher checks cover
+defaults and overrides. Main remains unchanged.
+
+Five-sample packing comparison completed 2026-10-27 within its 18:59–19:59 UTC
+budget. All ten fresh processes completed; five per layout, alternating
+AB/BA/AB/BA/AB, same da31a6be3913 binary/shaders and SIMD1 in both arms, only
+FP4 0/1 differs. This isolates packing against current F32 SIMD; the original
+noisy bracket used the older SIMD0 control. At 32K/context40960/chunk8192 and
+48GiB cache, answer-prefill-plus-generation means are 48.730242s F32 versus
+48.361612s packed (−0.756%); median paired change −0.122%, packed wins3/5.
+Packed wins all F32-first pairs and loses both packed-first pairs; retain the
+first pair and call this roughly speed-neutral, not a demonstrated speedup.
+The earlier +3.80% whole-task penalty did not reproduce and is superseded as
+a general conclusion. All ten correct/stopped42-token traces and all80 teacher
+rows match exactly (ΔNLL/KL0). Every packed aggregate phase mean is lower, with
+no repeated meaningful phase penalty, so conditional profiling is not triggered.
+Pressure remains normal; swap grows0.5MiB. No runtime/default/binary/main change.
+Raw outputs remain ignored under `.workspaces/index-five-samples-20261027/`.
+[Five-sample report and reproduction](../speed-bench/experiments/index-five-samples-20261027/README.md).
+The separately queued DSML length-finalization repair remains future work.
+
+Five-sample packing comparison starts 2026-10-27 18:59 UTC, first cap19:59UTC.
+User requests five fresh samples per layout and profiling if packed is slower.
+Use the same qualified current binary and frozen shaders, SIMD1 in both arms,
+FP4 0/1 as the only layout change, exact32K favorable task/context40960/chunk8192,
+48GiB cache, native routing and normal reasoning. Alternate paired order AB/BA
+for ten fresh processes; retain every result and compare matching token traces.
+Primary sample is second fresh prefill + free-answer time, matching the earlier
+3.8% observation; first teacher prefill is reported separately. Profile the same
+32K task if repeated measurements show a slowdown, rather than substituting an
+8K raw prompt. No runtime/default/main changes. One model job under the unchanged
+pressure guard; raw outputs `.workspaces/index-five-samples-20261027/` ignored.
+
+Actual index-serving integration completed 18:13 UTC; both bounded items finish
+within their one-hour caps (F32 serving 16:47–17:19, packed qualification 17:19–18:13).
+Installed all five checked executables in root and zig-out/bin; hashes match the
+qualified packed/bin artifacts and all help checks pass. Main stays unchanged.
+Fast DeepSeek presets enable F32 SIMD scoring; persistent-packed adds physical
+FP4 index owners and compact canonical SSD state, honoring explicit 0 overrides.
+The measured dispatch crossover is 1024 keys (128/256 favor the old layout).
+
+Real 8K tasks pass 3/3 in all arms, with 22/22 teacher distributions and every
+generated reasoning/answer ID exact; 32K passes 8/8 and all 42 IDs exact. Paired
+F32 warm decode improves 0.523% at 32K and 1.936% at 64K. The initial noisy packed
+32K bracket showed full replies 3.80% slower including prefill, and warm replay
+1.58% slower versus averaged controls. The five-sample follow-up above
+supersedes the whole-task penalty claim; do not advertise the isolated kernel's
+39% as inference throughput.
+A paired 8K GPU-timeline diagnostic does not reproduce a packed-prefill penalty:
+425.18→429.39t/s; index prepare 1.977→1.911ms, scoring 24.745→23.263ms. No further
+loader tuning is justified by that diagnostic. Keep capacity choice explicit.
+
+Actual index tensors ctx=16384 fall 20,973,568→2,785,552B; ctx=40960 fall 52,430,848→
+6,963,472B (86.72% less). Existing BF16 prefill scratch remains; no full F32 owner
+shadow is retained. Actual 8K canonical payloads 63,464,500→54,371,380B. Real HOT0
+SSD v2/v3/DSP1 cross-import/restart passes; at the same 263-token prefix matched
+stored bytes 16,627,824→16,336,560B. Immediate T1 verification passes; subsequent
+cross-import teacher maximum 2.86e-6 is recorded rather than called bit-exact.
+Four pre-RoPE suffix moves (right/left/right/zero) with main F32→F16 preserve source
+state/tape hashes and recapture invariants; 16 teachers give ΔNLL+0.0000372,
+KL 0.0000284 and 0 argmax flips. This is stale-suffix quality, not isolated FP4 error.
+
+Responses passes 7/7 semantic probes plus 27 streamed argument deltas. After a
+clean restart, previous_response_id recovers a fact omitted from the new input
+through durable history (0 KV hits); separately the strict tool restores 392/392
+input tokens from SSD and preserves typed arguments. Both owned servers exit 0;
+the user's reference Flint server remains untouched. Host/server/agent/SSD and
+scripts pass; a localhost sandbox denial was resolved by rerunning the affected
+web fixture with network permission. Initial source-order shader failure and
+all raw results remain ignored/local. Reports/scripts and recipe 14 are tracked.
+[Integration report](../speed-bench/experiments/index-serving-20261027/README.md).
+The separately queued DSML length-finalization repair remains future work.
+
+F32 serving item completed 17:19 UTC, within its first-hour cap. The 64K
+same-process paired sweep also passes the task and shows 1.936% lower
+warmed decode time; exact paired analysis is local. Start the packed-cache
+qualification item now, cap 18:19 UTC: fresh normal-reasoning tasks through
+8K/32K with frozen controls, repeated suffix relocation, SSD/MTP cross-import,
+Responses streaming/restart, host checks and named-preset/root installation.
+Implementation is already built; next work is measured integration/qualification,
+not another unused API. Keep main unchanged and preserve every first failure.
+
+Index-serving checkpoint 17:15 UTC: real 32K F32/SIMD teacher rows and generated
+42-token reasoning/answer traces agree exactly. Between-process controls drift,
+so the added simple alternating loop restores one prefix and replays one trace
+in one process: seven measured pairs give 0.523% mean / 0.381% median decode-time
+reduction, not the isolated 39% kernel figure. A 64K paired check is running.
+Packed allocation/publication, BF16-tile prefill, scalar/batch fallbacks, v3
+canonical SSD, v2 cross-import and bounded suffix conversion are implemented.
+GPU pack/import/unpack checks through 256K and all 32 batch tensor/fallback
+cases pass. Real HOT0 v2/v3/DSP1/MTP cross-import passes; actual ctx2048 index
+buffers fall 2,623,488→348,432 B, no F32 owner shadow. The cross-import MTP
+teacher maximum is 2.86e-6 (initial cycle0); preserve this measured difference.
+Pending before completion: fresh packed-model tasks/latency, repeated suffix
+moves, Responses restart/streaming, host checks and user-facing enablement.
+Initial closing control failed because the frozen executable read a live shader
+while a new kernel declaration was incomplete. Corrected source-order typing;
+froze all Metal sources beside each binary; kept the failed attempt and a
+passing closing retry. Pressure stayed normal with unchanged swap. Source is
+uncommitted; main/root executables still unchanged.
+
+Actual index-serving integration authorized 2026-10-27 16:47 UTC. Continue
+through end-to-end inference and real packed allocations/persistence rather
+than stopping at kernel qualification. First item, cap 17:47 UTC: freeze parent
+641cfaa5, wire measured F32 SIMD decode behind DS4_V41_INDEX_SIMD=1, measure
+normal-reasoning teacher/task and whole prefill/decode. Prepare packed storage
+in parallel only after the F32 binary is frozen. Next bounded item: physical
+68 B caches through scalar/batch publication, optimized BF16-tile prefill,
+MTP, canonical/SSD and suffix conversions, actual allocation proof and task
+latency/quality. No persistent F32 shadow; old payloads must remain readable.
+Keep main and root executables unchanged until qualified. Raw artifacts under
+`.workspaces/index-serving-20261027/`; one heavy guarded model job at a time.
+
+SIMD index follow-up completed 15:46 UTC within its 15:30–16:30 budget.
+Matched F32/FP4 register readers use one SIMDgroup per key, four keys per
+128-thread group, with no shared tile or threadgroup barriers. Two full sweeps
+and four individually profiled shapes preserve exact score bits and selected
+IDs, including ties, signed zero, nonzero offsets and partial blocks. At 256K
+keys, dense GPU scoring takes 33.9% less time in F32 / 39.2% less in FP4;
+score+filter+top-k takes 27.9% / 32.1% less. Matched new FP4 costs about 1–2%
+more dense GPU score time for 86.72% smaller buffers. At 256K this is 128 MiB /
+.977 ms F32 versus 17 MiB / .997 ms FP4. Sparse full chains improve 8–11%.
+Tiny 37-key scoring regresses (20.4→36.2 us F32; 21.5→37.2 us FP4); retain old
+controls and measure a crossover before integrating. No counters isolate a
+single dominant hardware cause. All five ReleaseFast binaries build/help0;
+four guarded campaigns finish with level1 pressure and unchanged 21.514 GiB
+swap. Root executables/main remain unchanged. This still exposes explicit
+pilot APIs: actual model-cache/prefill/SSD packing and removing F32 shadows
+remain future work, as does the separately queued DSML length repair.
+[Report, reproduction and local comparison plot](../speed-bench/experiments/index-simd-20261027/README.md).
+
+SIMD index follow-up starts2026-10-27 15:30UTC, cap16:30UTC, baseline06fb1a64.
+The user selected this experiment ahead of the queued DSML length repair.
+Compare matched F32/FP4 readers using one SIMDgroup per key and four keys per
+128-thread group, retaining float4 keys in registers and removing shared tiles
+and threadgroup barriers. Check original score/global-ID order and measure
+score-only separately from filter/top-k with batched command buffers. Keep old
+controls, all prototype APIs explicit, installed binaries and main unchanged.
+Raw artifacts: `.workspaces/index-simd-20261027/`. Actual cache integration,
+batched prefill and SSD conversion remain outside this kernel slice.
+
 DeepInfer four-item sequence completed15:08UTC. Candidate scalar scoring and
 canonical DSP1 remain opt-in; block-only recovery and physical FP4 indexing
 remain explicit prototypes. No preset, root executable or main promotion.

@@ -12,8 +12,20 @@ export fn ds4_gpu_dsv41_indexer_score_candidates(scores: ?*Tensor, q: ?*const Te
 export fn ds4_gpu_dsv41_indexer_pack_fp4(packed_tensor: ?*Tensor, original: ?*const Tensor, rows: u32) c_int {
     return Index.packIndexFp4(packed_tensor, original, rows);
 }
+export fn ds4_gpu_dsv41_indexer_unpack_fp4(plain: ?*Tensor, packed_tensor: ?*const Tensor, rows: u32) c_int {
+    return Index.unpackIndexFp4(plain, packed_tensor, rows);
+}
 export fn ds4_gpu_dsv41_indexer_score_fp4(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, packed_tensor: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
     return Index.scoreIndexFp4(scores, q, weights, packed_tensor, blocks, rows, block_count);
+}
+export fn ds4_gpu_dsv41_indexer_score_simd(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32, packed_fp4: bool) c_int {
+    return Index.scoreSimd(scores, q, weights, keys, blocks, rows, block_count, packed_fp4);
+}
+export fn ds4_gpu_dsv41_indexer_prepare_fp4(workspace: ?*Tensor, q: ?*const Tensor, packed_keys: ?*const Tensor, source_rows: u32, query_rows: u32) c_int {
+    return Index.prepareIndexFp4(workspace, q, packed_keys, source_rows, query_rows);
+}
+export fn ds4_gpu_dsv41_indexer_scores_batch_fp4(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, packed_keys: ?*const Tensor, workspace: ?*const Tensor, source_rows: u32, rows: u32, start: u32, ratio: u32, packed_rows: u32, offset: u32) c_int {
+    return Index.scoreBatchFp4(scores, q, weights, packed_keys, workspace, source_rows, rows, start, ratio, packed_rows, offset);
 }
 export fn ds4_gpu_glm_indexer_scores_batch_tensor(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, rows: u32, tokens: u32, start: u32, heads: u32, width: u32, scale: f32, half: bool) c_int {
     return Index.scoreBatch(scores, q, weights, keys, rows, tokens, start, 1, heads, width, scale, half, false);

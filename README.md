@@ -168,6 +168,16 @@ routing weights. All use a 64 GB expert-cache target, context 8192 and prefill
 chunk 512. Later CLI arguments override those defaults. The script contains
 the environment settings explicitly and leaves thinking mode unchanged.
 
+The DeepSeek fast profiles use physical FP4 index caches, compact version-3 SSD
+checkpoints and SIMD index scoring above the measured small-key crossover.
+This stores the existing quantized index values in less space; repeated 32K
+tasks were roughly speed-neutral. `persistent-packed` remains an alias for
+`persistent-fast`.
+The [packed-index recipe](recipes/14-packed-index-cache.md) records the format,
+measurements and reproduction steps. Explicit `DS4_V41_INDEX_SIMD=0` and
+`DS4_V41_INDEX_FP4=0` overrides are honored. Existing version-2 checkpoints
+remain readable; older executables cannot read the new version-3 format.
+
 The direct agent compacts automatically under context pressure, or on `/compact`:
 it generates a task-state summary and keeps a recent verbatim tail. With
 `context-fast` or `persistent-fast`, it attempts suffix reuse during that rebuild

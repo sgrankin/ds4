@@ -15,7 +15,7 @@ def --wrapped main [...args: string] {
         DS4_SERVER_CONTEXT_SUFFIX_REUSE DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL
         DS4_SERVER_CONTEXT_SUFFIX_RIGHT DS4_STATE_CACHE_DIR DS4_STATE_CACHE_HOT_MB
         DS4_STATE_CACHE_SSD_MB DS4_SERVER_RESPONSE_STORE_DIR
-        DS4_METAL_DSV41_SOURCE DS4_V41_COMPRESSED_KV_F16
+        DS4_METAL_DSV41_SOURCE DS4_V41_COMPRESSED_KV_F16 DS4_V41_INDEX_SIMD DS4_V41_INDEX_FP4
         ZIG_GLOBAL_CACHE_DIR ZIG_LOCAL_CACHE_DIR DS4_CLEF_PREFIX_CACHE]
     {program: $PROGRAM, args: $args, cwd: $env.PWD,
         env: ($env | select --optional ...$keys)} | to json | print
@@ -64,6 +64,7 @@ def main [] {
         DS4_STATE_CACHE_DIR: '' DS4_STATE_CACHE_HOT_MB: '' DS4_STATE_CACHE_SSD_MB: ''
         DS4_AGENT_CONTEXT_SUFFIX_PREROPE: '' DS4_AGENT_CONTEXT_SUFFIX_RIGHT: ''
         DS4_METAL_V41_RESIDENT_PREFILL_GAP: '' DS4_V41_COMPRESSED_KV_F16: '1'
+        DS4_V41_INDEX_SIMD: '' DS4_V41_INDEX_FP4: ''
     })
     assert equal $agent_result.exit_code 0 $agent_result.stderr
     let agent = $agent_result.stdout | from json
@@ -73,6 +74,25 @@ def main [] {
     assert equal $agent.env.DS4_STATE_CACHE_DIR ($ROOT | path join '.workspaces/context-cache')
     assert equal $agent.env.DS4_STATE_CACHE_HOT_MB '512'
     assert equal $agent.env.DS4_STATE_CACHE_SSD_MB '8192'
+    assert equal $agent.env.DS4_V41_INDEX_SIMD '1'
+    assert equal $agent.env.DS4_V41_INDEX_FP4 '1'
+    for profile in [context-fast resident-fast persistent-fast persistent-packed] {
+        let packed_result = (call $launcher ($leading ++ [$profile] ++ $requested) {
+            DS4_V41_INDEX_FP4: '' DS4_V41_INDEX_SIMD: ''
+        })
+        assert equal $packed_result.exit_code 0 $packed_result.stderr
+        let packed = $packed_result.stdout | from json
+        assert equal $packed.args ($defaults ++ $requested)
+        assert equal $packed.env.DS4_V41_INDEX_FP4 '1' $profile
+        assert equal $packed.env.DS4_V41_INDEX_SIMD '1' $profile
+        let unpacked_result = (call $launcher ($leading ++ [$profile] ++ $requested) {
+            DS4_V41_INDEX_FP4: '0' DS4_V41_INDEX_SIMD: '0'
+        })
+        assert equal $unpacked_result.exit_code 0 $unpacked_result.stderr
+        let unpacked = $unpacked_result.stdout | from json
+        assert equal $unpacked.env.DS4_V41_INDEX_FP4 '0' $profile
+        assert equal $unpacked.env.DS4_V41_INDEX_SIMD '0' $profile
+    }
     assert equal $agent.env.DS4_AGENT_CONTEXT_SUFFIX_PREROPE '1'
     assert equal $agent.env.DS4_AGENT_CONTEXT_SUFFIX_RIGHT '1'
     assert equal $agent.env.DS4_AGENT_CONTEXT_SUFFIX_FRESH_TAIL '128'
@@ -88,6 +108,7 @@ def main [] {
         DS4_STATE_CACHE_HOT_MB: '' DS4_STATE_CACHE_SSD_MB: ''
         DS4_SERVER_RESPONSE_STORE_DIR: ($work | path join 'custom store/responses')
         DS4_METAL_DSV41_SOURCE: 'shader override with spaces.metal'
+        DS4_V41_INDEX_FP4: '' DS4_V41_INDEX_SIMD: ''
     })
     assert equal $server_result.exit_code 0 $server_result.stderr
     let server = $server_result.stdout | from json
@@ -98,27 +119,55 @@ def main [] {
     assert equal $server.env.DS4_STATE_CACHE_HOT_MB '0'
     assert equal $server.env.DS4_STATE_CACHE_SSD_MB '4096'
     assert equal $server.env.DS4_METAL_DSV41_SOURCE 'shader override with spaces.metal'
+    assert equal $server.env.DS4_V41_INDEX_FP4 '1'
+    assert equal $server.env.DS4_V41_INDEX_SIMD '1'
     assert (($work | path join 'custom cache') | path exists)
     assert (($work | path join 'custom store') | path exists)
 
-    let flint_args = ['--model' 'models with spaces/flint' '--ctx' '32768' '--prefill-chunk' '1024']
+    let flint_args = [
+        '--model'
+        'models with spaces/flint'
+        '--ctx'
+        '32768'
+        '--prefill-chunk'
+        '1024'
+    ]
     let flint_result = (call $launcher (['--server'] ++ $leading ++ ['flint'] ++ $flint_args) {
         DS4_STATE_CACHE_DIR: ($work | path join 'incompatible state')
         DS4_STATE_CACHE_HOT_MB: '512' DS4_STATE_CACHE_SSD_MB: '8192'
         DS4_METAL_V41_SELECTED_TILE: '128' DS4_METAL_V41_RESIDENT_ROUTE_GAP: '.90'
         DS4_SERVER_CONTEXT_SUFFIX_REUSE: '1' DS4_AGENT_CONTEXT_SUFFIX_REUSE: '1'
         DS4_V41_COMPRESSED_KV_F16: '1'
+        DS4_V41_INDEX_FP4: '1' DS4_V41_INDEX_SIMD: '1'
         DS4_SERVER_RESPONSE_STORE_DIR: ($work | path join 'flint store/responses')
     })
     assert equal $flint_result.exit_code 0 $flint_result.stderr
     let flint = $flint_result.stdout | from json
     assert equal $flint.program 'ds4-server'
-    assert equal $flint.args (['--host' '127.0.0.1' '--batched-session' '2' '--ctx' '262144' '--prefill-chunk' '4096'] ++ $flint_args)
+    assert equal $flint.args ([
+        '--host'
+        '127.0.0.1'
+        '--batched-session'
+        '2'
+        '--ctx'
+        '262144'
+        '--prefill-chunk'
+        '4096'
+    ] ++ $flint_args)
     assert equal $flint.cwd $work
     assert equal $flint.env.DS4_SERVER_RESPONSE_STORE_DIR ($work | path join 'flint store/responses')
-    for key in [DS4_STATE_CACHE_DIR DS4_STATE_CACHE_HOT_MB DS4_STATE_CACHE_SSD_MB
-        DS4_METAL_V41_SELECTED_TILE DS4_METAL_V41_RESIDENT_ROUTE_GAP
-        DS4_SERVER_CONTEXT_SUFFIX_REUSE DS4_AGENT_CONTEXT_SUFFIX_REUSE DS4_V41_COMPRESSED_KV_F16] {
+    for key in [
+        DS4_STATE_CACHE_DIR
+        DS4_STATE_CACHE_HOT_MB
+        DS4_STATE_CACHE_SSD_MB
+        DS4_METAL_V41_SELECTED_TILE
+        DS4_METAL_V41_RESIDENT_ROUTE_GAP
+        DS4_SERVER_CONTEXT_SUFFIX_REUSE
+        DS4_AGENT_CONTEXT_SUFFIX_REUSE
+        DS4_V41_COMPRESSED_KV_F16
+        DS4_V41_INDEX_FP4
+        DS4_V41_INDEX_SIMD
+    ] {
         assert equal ($flint.env | get --optional $key) null $'Flint inherited ($key)'
     }
     let flint_agent = call $launcher ($leading ++ ['flint'] ++ $flint_args)
@@ -154,14 +203,24 @@ def main [] {
         DS4_TEST_EXIT: '9'
     }).exit_code 9
     for profile in [clef-flash clef clef-omni] {
-        let result = call $launcher (['--server'] ++ $leading ++ [$profile '--port' '9901']) {
-            DS4_STATE_CACHE_DIR: 'incompatible-cache'
-            DS4_SERVER_CONTEXT_SUFFIX_REUSE: '1'
-        }
+        let result = (call
+            $launcher
+            (['--server'] ++ $leading ++ [$profile '--port' '9901'])
+            {DS4_STATE_CACHE_DIR: 'incompatible-cache', DS4_SERVER_CONTEXT_SUFFIX_REUSE: '1'}
+        )
         assert equal $result.exit_code 0 $result.stderr
         let child = $result.stdout | from json
         assert equal $child.program ds4-server
-        assert equal $child.args [--host 127.0.0.1 --model ($ROOT | path join gguf $"($profile)-int4") --ctx (if $profile == clef-omni {'64000'} else {'16384'}) --port '9901']
+        assert equal $child.args [
+            --host
+            127.0.0.1
+            --model
+            ($ROOT | path join gguf $"($profile)-int4")
+            --ctx
+            (if $profile == clef-omni { '64000' } else { '16384' })
+            --port
+            '9901'
+        ]
         assert equal ($child.env | get --optional DS4_STATE_CACHE_DIR) null
         assert equal ($child.env | get --optional DS4_SERVER_CONTEXT_SUFFIX_REUSE) null
         assert equal $child.env.DS4_CLEF_PREFIX_CACHE '1'

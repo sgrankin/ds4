@@ -84,6 +84,7 @@ Use the existing presets with an explicit binary directory:
 ```sh
 ./ds4-local --bin-dir "$PWD/zig-out/bin" persistent-fast --model MODEL
 ./ds4-local --bin-dir "$PWD/zig-out/bin" --server persistent-fast --model MODEL
+./ds4-local --bin-dir "$PWD/zig-out/bin" persistent-packed --model MODEL
 ```
 
 Make delegates to this same Zig build and copies the five executables to the
@@ -92,6 +93,11 @@ native Metal model implementation; no separate frontend is needed. Historical
 C implementations remain available in version history for comparison. Resident
 substitution, decoder replay and suffix relocation retain their existing
 preset/opt-in rules.
+
+DeepSeek fast profiles use compact index storage; `persistent-packed` aliases
+`persistent-fast`. See the
+[recipe](../recipes/14-packed-index-cache.md) for capacity, runtime tradeoffs
+and checkpoint compatibility. Fast profiles use the measured SIMD index path.
 
 ## Project scripts
 

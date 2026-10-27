@@ -9,6 +9,12 @@ ds4_metal_index_pipeline ds4_metal_index_get_pipeline(uint32_t kind) {
             case DS4_METAL_INDEX_CANDIDATE_DIRECT: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_score_candidates"); break;
             case DS4_METAL_INDEX_FP4_PACK: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_pack_fp4"); break;
             case DS4_METAL_INDEX_FP4_SCORE: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_score_fp4"); break;
+            case DS4_METAL_INDEX_SIMD_F32: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_score_simd_f32"); break;
+            case DS4_METAL_INDEX_SIMD_FP4: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_score_simd_fp4"); break;
+            case DS4_METAL_INDEX_FP4_UNPACK: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_unpack_fp4"); break;
+            case DS4_METAL_INDEX_FP4_PREPARE: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_prepare_fp4"); break;
+            case DS4_METAL_INDEX_FP4_BATCH_SCORE: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_scores_batch_fp4"); break;
+            case DS4_METAL_INDEX_FP4_BATCH_SIMD: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_scores_simd_fp4"); break;
             case DS4_METAL_INDEX_BATCH: pipeline = ds4_gpu_hot_pipeline(g_glm_indexer_scores_batch_pipeline, "kernel_glm_indexer_scores_batch"); break;
             case DS4_METAL_INDEX_TILED: pipeline = ds4_gpu_hot_pipeline(g_glm_indexer_scores_tiled_pipeline, "kernel_glm_indexer_scores_tiled"); break;
             case DS4_METAL_INDEX_TILED_F32: pipeline = ds4_gpu_hot_pipeline(g_glm_indexer_scores_tiled_f32_pipeline, "kernel_glm_indexer_scores_tiled_f32"); break;

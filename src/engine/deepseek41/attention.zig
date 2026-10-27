@@ -85,6 +85,19 @@ pub const Attention = struct {
         return c.ds4_gpu_tensor_copy(self.graph.compressed[owner], @as(u64, first) * width * 4, source, 0, values * 4) != 0;
     }
 
+    /// Publish original post-RoPE keys directly to their physical cache. FP4
+    /// retains the original scale; no full-sized rounded F32 shadow is kept.
+    pub fn storeIndex(self: *const Attention, owner: usize, first: u32, source: ?*Tensor, rows: u32) bool {
+        if (rows == 0) return true;
+        if (self.graph.index_fp4) {
+            const destination = c.ds4_gpu_tensor_view(self.graph.index_cache[owner], @as(u64, first) * 68, @as(u64, rows) * 68);
+            defer c.ds4_gpu_tensor_free(destination);
+            return destination != null and c.ds4_gpu_dsv41_indexer_pack_fp4(destination, source, rows) != 0;
+        }
+        return c.ds4_gpu_dsv41_quantize(source, 128, rows, c.DS4_V41_FP4_E8M0) != 0 and
+            c.ds4_gpu_tensor_copy(self.graph.index_cache[owner], @as(u64, first) * 512, source, 0, @as(u64, rows) * 512) != 0;
+    }
+
     fn packedGather(self: *const Attention) bool {
         const value = c.getenv("DS4_METAL_V41_PACKED_F16_GATHER");
         return self.graph.compressed_kv_f16 and (value == null or c.strcmp(value, "0") != 0);
@@ -128,8 +141,7 @@ pub const Attention = struct {
             self.archivePublished(owner, graph.index_k, count - 1, 1, true) and
             self.archivePublished(owner, graph.latent, count - 1, 1, false) and
             op.rope(graph.index_k, 1, self.config.shape.n_indexer_head_dim, index, rope_position, false) and
-            c.ds4_gpu_dsv41_quantize(graph.index_k, 128, 1, c.DS4_V41_FP4_E8M0) != 0 and
-            c.ds4_gpu_tensor_copy(graph.index_cache[owner], @as(u64, count - 1) * 128 * 4, graph.index_k, 0, 128 * 4) != 0 and
+            self.storeIndex(owner, count - 1, graph.index_k, 1) and
             op.rope(graph.latent, 1, 512, index, rope_position, false) and
             c.ds4_gpu_dsv41_quantize(graph.latent, 512, 1, c.DS4_V41_FP4_E4M3) != 0 and
             self.storeCompressed(owner, count - 1, graph.latent, 1);
@@ -170,7 +182,16 @@ pub const Attention = struct {
                 !op.rope(graph.index_q, shape.n_indexer_head, 128, index, graph.pos, false) or
                 c.ds4_gpu_dsv41_quantize(graph.index_q, 128, shape.n_indexer_head, c.DS4_V41_FP4_E8M0) == 0 or
                 !op.matmul(graph.index_weights, knownWeight(layer.indexer_proj), graph.norm, true)) return false;
-            const scored = if (candidate_only)
+            const simd_setting = c.getenv("DS4_V41_INDEX_SIMD");
+            // The register layout wins at the measured 1K+ key points; the
+            // old layout wins at 128/256 keys. Keep small work on that path.
+            const simd_enabled = if (simd_setting == null) graph.index_fp4 else c.strcmp(simd_setting, "1") == 0;
+            const simd = count >= 1024 and simd_enabled;
+            const scored = if (simd)
+                c.ds4_gpu_dsv41_indexer_score_simd(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], if (candidate_only) graph.block_selected else null, count, if (candidate_only) 2048 else 0, graph.index_fp4)
+            else if (graph.index_fp4)
+                c.ds4_gpu_dsv41_indexer_score_fp4(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], if (candidate_only) graph.block_selected else null, count, if (candidate_only) 2048 else 0)
+            else if (candidate_only)
                 c.ds4_gpu_dsv41_indexer_score_candidates(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], graph.block_selected, count, 2048)
             else
                 c.ds4_gpu_glm_indexer_score_one_tensor(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], count, shape.n_indexer_head, 128, 1.0 / 64.0, false);

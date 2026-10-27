@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 # Opt-in local profiles. Later arguments override the program's CLI defaults.
 const ROOT = path self .
-const USAGE = 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast|flint|clef-flash|clef|clef-omni [binary arguments]'
+const USAGE = 'Usage: ds4-local [--server] [--bin-dir DIR] [--preset] context-fast|resident-fast|persistent-fast|persistent-packed|flint|clef-flash|clef|clef-omni [binary arguments]'
 
 def env-or [name: string, fallback: string] {
     $env | get --optional $name | default --empty $fallback
@@ -48,16 +48,27 @@ def --wrapped main [...arguments: string] {
             _ => { break }
         }
     }
-    let preset = $args | get --optional 0 | default ''
-    if $preset in ['--help' '-h'] {
+    let requested_preset = $args | get --optional 0 | default ''
+    if $requested_preset in ['--help' '-h'] {
         print $USAGE
         print 'persistent-fast combines left/right suffix reuse with decode and prefill resident substitutions for ds4-agent or ds4-server.'
+        print 'DeepSeek fast profiles use packed index caches and compact SSD checkpoints; persistent-packed is an alias for persistent-fast.'
         print 'flint is server-only: native resident decoding with durable Responses JSON; provide --model DIR.'
         print 'clef-flash, clef and clef-omni are server-only decision profiles; downloaded model directories are selected by default.'
         print 'Profiles enable matching text-prefix reuse for loaded Clef/Flash helpers; DS4_CLEF_PREFIX_CACHE=0 disables it.'
         return
     }
-    if $preset not-in ['context-fast' 'resident-fast' 'persistent-fast' 'flint' 'clef-flash' 'clef' 'clef-omni'] { usage-error }
+    if $requested_preset not-in [
+        'context-fast'
+        'resident-fast'
+        'persistent-fast'
+        'persistent-packed'
+        'flint'
+        'clef-flash'
+        'clef'
+        'clef-omni'
+    ] { usage-error }
+    let preset = if $requested_preset == 'persistent-packed' { 'persistent-fast' } else { $requested_preset }
     $args = ($args | skip 1)
 
     # Named fast profiles retain one exact state prefix in each loaded dense
@@ -94,7 +105,12 @@ def --wrapped main [...arguments: string] {
         exec ($bin_dir | path join 'ds4-server') --host 127.0.0.1 --batched-session 2 --ctx 262144 --prefill-chunk 4096 ...$args
     }
 
-    mut settings = {DS4_METAL_V41_SELECTED_TILE: '64', DS4_METAL_V41_SELECTED_LIMIT: '1024'}
+    mut settings = {
+        DS4_METAL_V41_SELECTED_TILE: '64'
+        DS4_METAL_V41_SELECTED_LIMIT: '1024'
+        DS4_V41_INDEX_SIMD: (env-or DS4_V41_INDEX_SIMD '1')
+        DS4_V41_INDEX_FP4: (env-or DS4_V41_INDEX_FP4 '1')
+    }
     if $preset in ['context-fast' 'persistent-fast'] {
         $settings = ($settings | merge {
             DS4_METAL_V41_RESIDENT_ROUTE_GAP: '0'

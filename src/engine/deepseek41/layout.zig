@@ -74,6 +74,10 @@ pub fn compressedF16() bool {
     const value = c.getenv("DS4_V41_COMPRESSED_KV_F16");
     return value != null and c.strcmp(value, "1") == 0;
 }
+pub fn indexFp4() bool {
+    const value = c.getenv("DS4_V41_INDEX_FP4");
+    return value != null and c.strcmp(value, "1") == 0;
+}
 pub fn ceiling(context: u32, chunk: u32) u32 {
     // An explicit chunk bounds scratch independently of context. Preserve the
     // default 2K/4K/8K choices and the supported 8192-row ceiling.
@@ -95,6 +99,7 @@ pub const Layout = struct {
     alias: bool,
     compact: bool,
     compressed_f16: bool,
+    index_fp4: bool,
 
     pub fn init(config: *const Config, context: u32, chunk: u32) Layout {
         var plan = Layout{
@@ -106,6 +111,7 @@ pub const Layout = struct {
             .alias = !present("DS4_METAL_DISABLE_V41_PREFILL_ALIAS"),
             .compact = !present("DS4_METAL_DISABLE_V41_COMPACT_CARRY"),
             .compressed_f16 = compressedF16(),
+            .index_fp4 = indexFp4(),
         };
         var words: u64 = 0;
         inline for (carry_fields) |field| words += plan.carryWidth(field);
@@ -128,6 +134,7 @@ pub const Layout = struct {
             .alias = graph.prefill_alias,
             .compact = graph.compact_carry,
             .compressed_f16 = graph.compressed_kv_f16,
+            .index_fp4 = graph.index_fp4,
         };
     }
 
@@ -187,7 +194,7 @@ pub const Layout = struct {
         var floats: u64 = 40 * 128 * 512;
         for (0..4) |owner| {
             const rows = @as(u64, self.context) / @as(u64, if (owner < 3) 2 else 1) + 1;
-            floats += rows * (@as(u64, if (self.compressed_f16) 256 else 512) + 128) + 2 * 512;
+            floats += rows * (@as(u64, if (self.compressed_f16) 256 else 512) + @as(u64, if (self.index_fp4) 17 else 128)) + 2 * 512;
         }
         floats += @as(u64, 2) * 2 * self.shape.n_embd * self.shape.n_hc;
         inline for (comptime std.meta.fieldNames(Scratch)) |name| floats += self.scratchWidth(@field(Scratch, name));
@@ -214,7 +221,7 @@ pub const Layout = struct {
         result.raw_bytes = 40 * 128 * 512 * 4;
         for (0..4) |owner| {
             const rows = @as(u64, self.context) / @as(u64, if (owner < 3) 2 else 1) + 1;
-            result.compressed_bytes += rows * (@as(u64, 512) * @as(u64, if (self.compressed_f16) 2 else 4) + 128 * 4);
+            result.compressed_bytes += rows * (@as(u64, 512) * @as(u64, if (self.compressed_f16) 2 else 4) + @as(u64, if (self.index_fp4) 68 else 512));
         }
         result.total_bytes = self.bytes();
         result.scratch_bytes = result.total_bytes - result.raw_bytes - result.compressed_bytes;

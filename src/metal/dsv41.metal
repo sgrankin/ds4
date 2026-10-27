@@ -11,6 +11,15 @@ struct ds4_metal_args_dsv41_index_candidates {
     float scale;
 };
 
+// Same72-byte packet as ds4_metal_index_batch_args. Keep its declaration local:
+// this shader source is concatenated before the generic indexer definitions.
+struct ds4_metal_args_dsv41_index_batch {
+    uint n_rows, n_tokens, n_head, head_dim;
+    uint pos0, cache_f16, row_group_size, pad0;
+    ulong q_token_stride, q_head_stride, weights_token_stride, score_token_stride;
+    float scale;
+};
+
 // Same32-head/128-column dot and head accumulation as the dense scalar
 // indexer. Only the row address changes; selected scores keep their global ID.
 kernel void kernel_dsv41_indexer_score_candidates(
@@ -472,3 +481,215 @@ kernel void kernel_dsv41_indexer_score_fp4(
     }
     if (tid == 0) scores[row] = acc;
 }
+
+// One SIMDgroup owns each key. Its 32 lanes retain four consecutive values
+// apiece, so scoring needs neither a shared key tile nor threadgroup barriers.
+// Keep dot, SIMD reduction and head accumulation order matched to the controls.
+static inline void dsv41_indexer_simd_score(
+        constant ds4_metal_args_dsv41_index_candidates &args,
+        device const float *q,
+        device const float *weights,
+        device float *scores,
+        float4 key,
+        uint row,
+        ushort lane) {
+    float acc = 0.0f;
+    for (uint head = 0; head < 32u; head++) {
+        device const float4 *q4 = (device const float4 *)(q + (ulong)head * 128u);
+        const float s = simd_sum(dot(q4[lane], key));
+        if (lane == 0) {
+#pragma clang fp contract(off) reassociate(off)
+            // The old shared psum store rounds this product before adding it.
+            // Do not contract the register-only equivalent into an FMA.
+            const float contribution = max(s * args.scale, 0.0f) * weights[head];
+            acc += contribution;
+        }
+    }
+    if (lane == 0) scores[row] = acc;
+}
+
+static inline uint dsv41_indexer_simd_row(
+        constant ds4_metal_args_dsv41_index_candidates &args,
+        device const int *blocks,
+        uint work) {
+    if (!args.cache_f16) return work;
+    const int block = blocks[work / 8u];
+    if (block < 0 || uint(block) >= (args.n_rows + 7ul) / 8ul) return 0xffffffffu;
+    return uint(block) * 8u + work % 8u;
+}
+
+kernel void kernel_dsv41_indexer_score_simd_f32(
+        constant ds4_metal_args_dsv41_index_candidates &args,
+        device const float *q,
+        device const float *weights,
+        device const float *keys,
+        device float *scores,
+        device const int *blocks,
+        uint group [[threadgroup_position_in_grid]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]]) {
+    const uint row = dsv41_indexer_simd_row(args, blocks, group * 4u + sg);
+    if (row >= args.n_rows) return; // Uniform within each independent SIMDgroup.
+    const float4 key = ((device const float4 *)(keys + (ulong)row * 128u))[lane];
+    dsv41_indexer_simd_score(args, q, weights, scores, key, row, lane);
+}
+
+static inline float dsv41_indexer_fp4_value(uint code, float scale) {
+    const float sign = as_type<float>((code & 8u) ? 0x80000000u : 0u);
+    return dsv41_bf16(copysign(dsv4_e2m1fn_values[code & 7u], sign) * scale);
+}
+
+static inline float4 dsv41_indexer_fp4_key(device const uchar *packed, uint row, ushort lane) {
+    const ulong base = (ulong)row * 68u;
+    const uint codes = *((device const ushort *)(packed + base + uint(lane) * 2u));
+    const float scale = as_type<float>(uint(packed[base + 64u + lane / 8u]) << 23u);
+    return float4(
+        dsv41_indexer_fp4_value(codes & 15u, scale),
+        dsv41_indexer_fp4_value((codes >> 4u) & 15u, scale),
+        dsv41_indexer_fp4_value((codes >> 8u) & 15u, scale),
+        dsv41_indexer_fp4_value((codes >> 12u) & 15u, scale));
+}
+
+kernel void kernel_dsv41_indexer_score_simd_fp4(
+        constant ds4_metal_args_dsv41_index_candidates &args,
+        device const float *q,
+        device const float *weights,
+        device const uchar *packed,
+        device float *scores,
+        device const int *blocks,
+        uint group [[threadgroup_position_in_grid]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]]) {
+    const uint row = dsv41_indexer_simd_row(args, blocks, group * 4u + sg);
+    if (row >= args.n_rows) return;
+    // Every local row is 2-byte aligned. Each lane loads four codes once; the
+    // eight consecutive lanes in each scale group cover 32 original values.
+    const float4 key = dsv41_indexer_fp4_key(packed, row, lane);
+    dsv41_indexer_simd_score(args, q, weights, scores, key, row, lane);
+}
+
+kernel void kernel_dsv41_indexer_unpack_fp4(
+        constant ds4_metal_args_dsv41_index_candidates &args,
+        device const uchar *packed,
+        device const float *unused_weights,
+        device const float *unused_keys,
+        device float *plain,
+        uint row [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]]) {
+    (void)unused_weights; (void)unused_keys;
+    if (row >= args.n_rows) return;
+    const ulong base = (ulong)row * 68u;
+    const uint pair = packed[base + tid / 2u];
+    const uint code = (pair >> ((tid & 1u) * 4u)) & 15u;
+    const float scale = as_type<float>(uint(packed[base + 64u + tid / 32u]) << 23u);
+    plain[(ulong)row * 128u + tid] = dsv41_indexer_fp4_value(code, scale);
+}
+
+// Small-batch/non-tensor fallback: one grid dimension per query, with explicit
+// causal publication bounds and the same SIMD score arithmetic as decode.
+kernel void kernel_dsv41_indexer_scores_simd_fp4(
+        constant ds4_metal_args_dsv41_index_batch &args,
+        device const float *q,
+        device const float *weights,
+        device const uchar *packed,
+        device float *scores,
+        uint2 group [[threadgroup_position_in_grid]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]]) {
+    const uint row = group.x * 4u + sg, token = group.y;
+    if (row >= args.n_rows || token >= args.n_tokens) return;
+    const ulong output = (ulong)token * args.n_rows + row;
+    const uint visible = (args.pos0 + token + 1u) / args.row_group_size;
+    if (row >= visible) {
+        if (lane == 0) scores[output] = -INFINITY;
+        return;
+    }
+    const float4 key = dsv41_indexer_fp4_key(packed, row, lane);
+    float acc = 0.0f;
+    for (uint head = 0; head < 32u; head++) {
+        device const float4 *q4 = (device const float4 *)(q + ((ulong)token * 32u + head) * 128u);
+        const float s = simd_sum(dot(q4[lane], key));
+        if (lane == 0) {
+#pragma clang fp contract(off) reassociate(off)
+            const float contribution = max(s * args.scale, 0.0f) * weights[(ulong)token * 32u + head];
+            acc += contribution;
+        }
+    }
+    if (lane == 0) scores[output] = acc;
+}
+
+#ifdef DS4_METAL_HAS_TENSOR
+// Decode the physical cache straight into the existing transient BF16 tiles;
+// no persistent or intermediate F32 key array is needed.
+kernel void kernel_dsv41_indexer_prepare_fp4(
+        constant uint4 &args,
+        device const float *q, device const uchar *keys,
+        device uint *flags, device bfloat *packed_q, device bfloat *packed_keys,
+        threadgroup uint *valid [[threadgroup(0)]],
+        uint group [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]]) {
+    const bool query = group < args.y;
+    const uint count = query ? 32u * 128u : 64u * 128u;
+    const ulong offset = query ? (ulong)group * count : (ulong)(group - args.y) * count;
+    bool exact = true;
+    for (uint i = tid; i < count; i += 128u) {
+        float value = 0.0f;
+        if (query) value = q[offset + i];
+        else if (offset + i < (ulong)args.x * 128u) {
+            const uint row = uint((offset + i) / 128u), col = uint((offset + i) % 128u);
+            const ulong base = (ulong)row * 68u;
+            const uint pair = keys[base + col / 2u];
+            const uint code = (pair >> ((col & 1u) * 4u)) & 15u;
+            const float scale = as_type<float>(uint(keys[base + 64u + col / 32u]) << 23u);
+            value = dsv41_indexer_fp4_value(code, scale);
+        }
+        const bfloat converted = bfloat(value);
+        if (query) packed_q[offset + i] = converted;
+        else packed_keys[offset + i] = converted;
+        exact = exact && float(converted) == value;
+    }
+    const bool same = simd_all(exact);
+    if (!(tid % 32u)) valid[tid / 32u] = same;
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    if (!tid) flags[group] = valid[0] && valid[1] && valid[2] && valid[3];
+}
+
+kernel void kernel_dsv41_indexer_scores_batch_fp4(
+        constant uint4 &args, constant uint2 &range,
+        device const float *unused_q, device const float *weights,
+        device const uchar *unused_keys, device float *scores,
+        device const uint *unused_flags, device const bfloat *packed_q,
+        device const bfloat *packed_keys,
+        threadgroup float *scratch [[threadgroup(0)]],
+        uint2 group [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]]) {
+    (void)unused_q; (void)unused_keys; (void)unused_flags;
+    constexpr int HEADS = 32, KEYS = 64, DIM = 128;
+    const uint width = args.x, token = group.y, row0 = group.x * KEYS;
+    const uint visible = (args.z + token + 1u) / args.w;
+    if (row0 >= visible) {
+        if (tid < KEYS && row0 + tid < width)
+            scores[(ulong)token * width + row0 + tid] = -INFINITY;
+        return;
+    }
+    matmul2d<matmul2d_descriptor(HEADS, KEYS, DIM, false, true, false,
+        matmul2d_descriptor::mode::multiply_accumulate), execution_simdgroups<4>> mm;
+    auto result = tensor(scratch, dextents<int32_t, 2>(KEYS, HEADS));
+    auto query = tensor((device bfloat *)packed_q + (ulong)(range.y + token) * HEADS * DIM,
+                        dextents<int32_t, 2>(DIM, HEADS));
+    auto key = tensor((device bfloat *)packed_keys + (ulong)row0 * DIM,
+                      dextents<int32_t, 2>(DIM, KEYS));
+    auto dots = mm.template get_destination_cooperative_tensor<decltype(query), decltype(key), float>();
+    for (uint16_t i = 0; i < dots.get_capacity(); i++)
+        if (dots.is_valid_element(i)) dots[i] = 0;
+    mm.run(query, key, dots);
+    dots.store(result);
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    if (tid < KEYS && row0 + tid < width) {
+        float sum = 0;
+        for (uint h = 0; h < HEADS; h++)
+            sum += max(scratch[h * KEYS + tid] * (1.0f / 64.0f), 0.0f) * weights[token * HEADS + h];
+        scores[(ulong)token * width + row0 + tid] = row0 + tid < visible ? sum : -INFINITY;
+    }
+}
+#endif

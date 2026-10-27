@@ -80,8 +80,7 @@ pub const BatchAttention = struct {
             originals.archivePublished(owner, batch.index_k, first, rows, true) and
             originals.archivePublished(owner, batch.latent, first, rows, false) and
             c.ds4_gpu_dsv41_rope_stride(batch.index_k, shape.n_indexer_head_dim, 1, rows, first * ratio, ratio, true, false) != 0 and
-            c.ds4_gpu_dsv41_quantize(batch.index_k, shape.n_indexer_head_dim, rows, c.DS4_V41_FP4_E8M0) != 0 and
-            c.ds4_gpu_tensor_copy(graph.index_cache[owner], @as(u64, first) * shape.n_indexer_head_dim * 4, batch.index_k, 0, @as(u64, rows) * shape.n_indexer_head_dim * 4) != 0 and
+            originals.storeIndex(owner, first, batch.index_k, rows) and
             c.ds4_gpu_dsv41_rope_stride(batch.latent, shape.n_head_dim, 1, rows, first * ratio, ratio, true, false) != 0 and
             c.ds4_gpu_dsv41_quantize(batch.latent, shape.n_head_dim, rows, c.DS4_V41_FP4_E4M3) != 0 and
             originals.storeCompressed(owner, first, batch.latent, rows);
@@ -97,7 +96,9 @@ pub const BatchAttention = struct {
         defer c.ds4_gpu_tensor_free(weights);
         defer c.ds4_gpu_tensor_free(queries);
         if (queries == null or weights == null) return false;
-        return if (packed_scores)
+        return if (graph.index_fp4)
+            c.ds4_gpu_dsv41_indexer_scores_batch_fp4(graph.index_scores, queries, weights, graph.index_cache[owner], if (packed_scores) graph.index_packed else null, compressed, rows, graph.pos + offset, ratio, count, offset) != 0
+        else if (packed_scores)
             c.ds4_gpu_dsv41_indexer_scores_packed(graph.index_scores, queries, weights, graph.index_cache[owner], graph.index_packed, compressed, rows, graph.pos + offset, ratio, count, offset) != 0
         else
             c.ds4_gpu_dsv41_indexer_scores_batch(graph.index_scores, queries, weights, graph.index_cache[owner], compressed, rows, graph.pos + offset, ratio) != 0;
@@ -130,7 +131,13 @@ pub const BatchAttention = struct {
         var row = graph.*;
         const packed_scores = count >= 8 and c.ds4_gpu_dsv41_tensor_ops_available() != 0 and
             !present("DS4_METAL_DISABLE_V41_PACKED_INDEX");
-        if (packed_scores and c.ds4_gpu_dsv41_indexer_pack(graph.index_packed, batch.index_q, graph.index_cache[owner], compressed, count) == 0) return false;
+        if (packed_scores) {
+            const prepared = if (graph.index_fp4)
+                c.ds4_gpu_dsv41_indexer_prepare_fp4(graph.index_packed, batch.index_q, graph.index_cache[owner], compressed, count)
+            else
+                c.ds4_gpu_dsv41_indexer_pack(graph.index_packed, batch.index_q, graph.index_cache[owner], compressed, count);
+            if (prepared == 0) return false;
+        }
         var offset: u32 = 0;
         while (offset < count) : (offset += score_rows) {
             const rows: u32 = @min(count - offset, score_rows);

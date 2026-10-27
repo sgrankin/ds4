@@ -143,12 +143,12 @@ static bool answer_equal(const char *text, const char *expected) {
 int main(int argc, char **argv) {
     const char *model = NULL, *out = NULL, *selected = "all";
     int rows = 0, wanted = 8192, chunk = 8192, ctx = CONTEXT, compressed_f16 = 0;
-    int thinking = 0, max_new = MAX_NEW, cache_gb = 64, candidate_sweep = 0;
+    int thinking = 0, max_new = MAX_NEW, cache_gb = 64, candidate_sweep = 0, simd_sweep = 0;
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--help")) {
             puts("decoder_replay_bench --model MODEL --out EXISTING_DIR --rows 0|128|256 "
                  "[--tokens 8192] [--chunk 8192] [--ctx 16384] [--compressed-kv-f16 0|1] "
-                 "[--case all|ordinary|favorable|changed] [--thinking 0|1] [--max-new 48] [--cache-gb 64] [--candidate-sweep 0|1]");
+                 "[--case all|ordinary|favorable|changed] [--thinking 0|1] [--max-new 48] [--cache-gb 64] [--candidate-sweep 0|1] [--simd-sweep 0|1]");
             return 0;
         }
         if (++i >= argc) return 2;
@@ -165,6 +165,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(key, "--max-new")) max_new = number(value);
         else if (!strcmp(key, "--cache-gb")) cache_gb = number(value);
         else if (!strcmp(key, "--candidate-sweep")) candidate_sweep = number(value);
+        else if (!strcmp(key, "--simd-sweep")) simd_sweep = number(value);
         else return 2;
     }
     bool chosen[CASES] = {0}; int count = 0;
@@ -176,6 +177,7 @@ int main(int argc, char **argv) {
         wanted < 2048 || max_new < 1 || wanted + max_new >= ctx || chunk < 1 || chunk > 8192 ||
         (thinking != 0 && thinking != 1) || cache_gb < 1 || cache_gb > 128 ||
         (candidate_sweep != 0 && candidate_sweep != 1) ||
+        (simd_sweep != 0 && simd_sweep != 1) || (candidate_sweep && simd_sweep) ||
         (compressed_f16 != 0 && compressed_f16 != 1)) return 2;
     int rc = 1; char err[256] = {0}, setting[16];
     ds4_engine *e = NULL; ds4_session *s = NULL;
@@ -193,9 +195,9 @@ int main(int argc, char **argv) {
     timings = output(out, "timings.csv", "wx"); tokens = output(out, "tokens.json", "wx");
     answers = output(out, "answers.jsonl", "wx");
     CHECK(raw && csv && timings && tokens && answers);
-    if (candidate_sweep) {
-        sweep = output(out, "candidate-sweep.csv", "wx"); CHECK(sweep);
-        fprintf(sweep, "case,repeat,candidate,tokens,eval_ms\n");
+    if (candidate_sweep || simd_sweep) {
+        sweep = output(out, simd_sweep ? "simd-sweep.csv" : "candidate-sweep.csv", "wx"); CHECK(sweep);
+        fprintf(sweep, "case,repeat,%s,tokens,eval_ms\n", simd_sweep ? "simd" : "candidate");
     }
     ds4_engine_options opt = {.model_path = model, .backend = DS4_BACKEND_METAL,
         .context_size = (uint32_t)ctx, .prefill_chunk = (uint32_t)chunk, .mtp_draft_tokens = 1,
@@ -259,7 +261,7 @@ int main(int argc, char **argv) {
         start = now_ms();
         CHECK(ds4_session_sync(s, &prompt, err, sizeof(err)) == 0);
         double greedy_sync_ms = now_ms() - start;
-        if (candidate_sweep)
+        if (candidate_sweep || simd_sweep)
             CHECK(ds4_session_save_snapshot(s, &sweep_snapshot, err, sizeof(err)) == 0);
         size_t answer_len = 0; answer = malloc(1); CHECK(answer); answer[0] = '\0';
         bool stopped = false, in_thinking = thinking;
@@ -296,12 +298,15 @@ int main(int argc, char **argv) {
             fixtures[which].name, rows, sync_ms, teacher_ms, greedy_sync_ms,
             greedy_ms, generated.len, stopped, exact, answer);
         CHECK(fflush(raw) == 0 && fflush(csv) == 0 && fflush(timings) == 0 && fflush(answers) == 0);
-        if (candidate_sweep) {
-            const char *original = getenv("DS4_V41_CANDIDATE_INDEX");
+        if (candidate_sweep || simd_sweep) {
+            const char *flag = simd_sweep ? "DS4_V41_INDEX_SIMD" : "DS4_V41_CANDIDATE_INDEX";
+            const char *original = getenv(flag);
             bool original_on = original && !strcmp(original, "1");
-            for (int repeat = 0; repeat < 5; repeat++) for (int turn = 0; turn < 2; turn++) {
+            /* Repeat0 is retained warmup; alternate order on one exact trace. */
+            const int repeats = simd_sweep ? 8 : 5;
+            for (int repeat = 0; repeat < repeats; repeat++) for (int turn = 0; turn < 2; turn++) {
                 int enabled = turn ^ (repeat & 1);
-                CHECK(setenv("DS4_V41_CANDIDATE_INDEX", enabled ? "1" : "0", 1) == 0);
+                CHECK(setenv(flag, enabled ? "1" : "0", 1) == 0);
                 CHECK(ds4_session_load_snapshot(s, &sweep_snapshot, err, sizeof(err)) == 0);
                 start = now_ms();
                 for (int i = 0; i < generated.len; i++)
@@ -310,7 +315,8 @@ int main(int argc, char **argv) {
                     enabled, generated.len, now_ms() - start);
                 CHECK(fflush(sweep) == 0);
             }
-            CHECK(setenv("DS4_V41_CANDIDATE_INDEX", original_on ? "1" : "0", 1) == 0);
+            if (simd_sweep && !original) CHECK(unsetenv(flag) == 0);
+            else CHECK(setenv(flag, original_on ? "1" : "0", 1) == 0);
             ds4_session_snapshot_free(&sweep_snapshot);
         }
         free(answer); answer = NULL;

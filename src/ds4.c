@@ -55838,7 +55838,11 @@ static int ds4_session_load_payload_internal(ds4_session *s, FILE *fp, uint64_t 
     for (uint32_t i = 0; i < DS4_SESSION_PAYLOAD_U32_FIELDS; i++) {
         if (payload_read_u32(fp, &h[i], &remaining, err, errlen) != 0) return 1;
     }
-    if (h[0] != DS4_SESSION_PAYLOAD_MAGIC || h[1] != DS4_SESSION_PAYLOAD_VERSION) {
+    /* Version 3 changes only native DS41's physical index rows. */
+    const bool packed_index41 = h[1] == 3u && h[12] == 0x413431u &&
+                                ds4_engine_is_deepseek41(s->engine);
+    if (h[0] != DS4_SESSION_PAYLOAD_MAGIC ||
+        (h[1] != DS4_SESSION_PAYLOAD_VERSION && !packed_index41)) {
         payload_set_err(err, errlen, "unsupported session payload version");
         return 1;
     }

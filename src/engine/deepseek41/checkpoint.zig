@@ -7,6 +7,7 @@ const std = @import("std");
 const c = @import("gguf_c");
 const Config = @import("../config.zig").ModelConfig;
 const payload = @import("state_payload.zig");
+const format = @import("state_format.zig");
 const policy = @import("prefill_policy.zig");
 const Snapshot = c.ds4_session_snapshot;
 const buffers = @import("../snapshot_buffer.zig");
@@ -49,7 +50,7 @@ fn readHeader(stream: *c.FILE, remaining: *u64, header: *payload.Header, errors:
         remaining.* -= 4;
         value.* = std.mem.readInt(u32, &bytes, .little);
     }
-    if (header[0] != c.DS4_SESSION_PAYLOAD_MAGIC or header[1] != c.DS4_SESSION_PAYLOAD_VERSION) {
+    if (header[0] != c.DS4_SESSION_PAYLOAD_MAGIC or !format.validVersion(header[1]) or header[12] != 0x413431) {
         _ = fail(errors, "unsupported session payload version");
         return false;
     }
@@ -78,7 +79,13 @@ pub const Checkpoint = struct {
     }
     fn canonicalState(self: *const Checkpoint) payload.Payload {
         const flag = c.getenv("DS4_V41_CHECKPOINT_DRAFT_FEATURES");
-        return .{ .graph = self.graph, .config = self.config, .allow_draft = true, .include_draft = flag != null and c.strcmp(flag, "1") == 0 };
+        return .{
+            .graph = self.graph,
+            .config = self.config,
+            .allow_draft = true,
+            .include_draft = flag != null and c.strcmp(flag, "1") == 0,
+            .index_wire_fp4 = self.graph.index_fp4,
+        };
     }
     fn tokens(self: *const Checkpoint) []const c_int {
         const checkpoint = &self.frontier.checkpoint;

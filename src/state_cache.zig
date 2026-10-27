@@ -6,7 +6,7 @@
 //!
 //! The caller's profile identifies model weights/tokenizer and the fixed forward
 //! policy. Rendered text is never an exact-prefix key. DS4SC01 manifests and the
-//! DSV4/DSSD/DRP1 checkpoint bytes retain their existing C formats.
+//! DSV4 supports F32 v2 and packed-index v3. Private DSSD/DRP1 remain v2.
 //!
 //! The exported functions and Blob/Stats records are the C ABI. Cache and Ref
 //! are opaque handles to C callers. Allocations use libc so ownership can cross
@@ -15,6 +15,7 @@ const std = @import("std");
 const c = std.c;
 const api = @import("state_cache_c");
 const draft_checkpoint = @import("engine/deepseek41/draft_checkpoint.zig");
+const state_format = @import("engine/deepseek41/state_format.zig");
 const FILE = opaque {};
 extern "c" fn malloc(usize) ?*anyopaque;
 extern "c" fn calloc(usize, usize) ?*anyopaque;
@@ -175,18 +176,22 @@ fn findEndpoint(cache: *Cache, key: [*c]const u8) ?*Endpoint {
     }
     return null;
 }
-fn stateBytes(n: u32) u64 {
-    const raw: u64 = @min(n, 128);
-    var size: u64 = 52 + (@as(u64, n) + vocab) * 4 + 40 * raw * 512 * 4;
-    for (0..4) |i| {
-        size += @as(u64, n / @as(u32, if (i < 3) 2 else 1)) * (512 + 128) * 4;
-        if (i < 3 and n & 1 != 0) size += 2 * 512 * 4;
-    }
-    return size;
+fn stateBytes(n: u32, packed_index: bool) u64 {
+    return state_format.baseBytes(n, packed_index, vocab);
 }
 fn stateSizeValid(n: u32, bytes: u64, kind: c_int) bool {
-    const base = stateBytes(n) + @as(u64, if (kind == replay) 32 else 0);
-    return bytes == base or (kind == native and bytes == base + draft_checkpoint.wireBytes(n, 5120));
+    const base = stateBytes(n, false) + @as(u64, if (kind == replay) 32 else 0);
+    if (bytes == base) return true;
+    if (kind != native) return false;
+    const packed_base = stateBytes(n, true);
+    const draft = draft_checkpoint.wireBytes(n, 5120);
+    return bytes == packed_base or bytes == base + draft or bytes == packed_base + draft;
+}
+fn hasDraft(e: *const Endpoint) bool {
+    if (e.kind != native) return false;
+    const draft = draft_checkpoint.wireBytes(e.tokens, 5120);
+    return e.state_bytes == stateBytes(e.tokens, false) + draft or
+        e.state_bytes == stateBytes(e.tokens, true) + draft;
 }
 fn snapshotHeaderBytes(kind: c_int) u64 {
     // Replay adds a 32-byte DRP1 envelope before the unchanged 52-byte DSV4 header.
@@ -205,14 +210,19 @@ fn stateValid(initial: [*c]const u8, initial_bytes: u64, kind: c_int, ctx: *u32,
         p += 32;
         bytes -= 32;
     }
-    if (u32at(p) != @as(u32, if (kind == suffix) 0x44535344 else 0x34565344) or u32at(p + 4) != 2) return false;
+    const version = u32at(p + 4);
+    if (u32at(p) != @as(u32, if (kind == suffix) 0x44535344 else 0x34565344) or
+        !state_format.validVersion(version) or (kind != native and version != state_format.f32_version)) return false;
     var h: [13]u32 = undefined;
     for (&h, 0..) |*word, i| word.* = u32at(p + i * 4);
     if (h[2] == 0 or h[2] > 1048576 or h[7] == 0 or h[7] >= h[2] or h[3] != 1 or
         h[4] != 128 or h[5] != 128 or h[6] != h[2] + 1 or h[8] != 40 or h[9] != 512 or
         h[10] != 128 or h[11] != vocab or h[12] != 0x413431 or !stateSizeValid(h[7], initial_bytes, kind)) return false;
-    const base = stateBytes(h[7]);
-    if (bytes != base and (kind != native or !draft_checkpoint.validBytes(p[@intCast(base)..@intCast(bytes)], h[7], 5120))) return false;
+    const base = stateBytes(h[7], version == state_format.fp4_version);
+    if (bytes != base) {
+        if (kind != native or bytes != base + draft_checkpoint.wireBytes(h[7], 5120)) return false;
+        if (!draft_checkpoint.validBytes(p[@intCast(base)..@intCast(bytes)], h[7], 5120)) return false;
+    }
     for (0..h[7]) |i| if (u32at(p + 52 + i * 4) >= vocab) return false;
     ctx.* = h[2];
     tokens.* = h[7];
@@ -272,10 +282,11 @@ fn split(e: *Endpoint, p: [*c]const u8, pre: [*c]const u8) bool {
         !pages(e, p, 0, &off, vocab * 4, vocab * 4)) return false;
     const raw: u64 = @min(e.tokens, 128);
     if (!pages(e, p, 0, &off, 40 * raw * 512 * 4, raw * 512 * 4)) return false;
+    const index_row = state_format.indexRowBytes(u32at(p + (if (e.kind == replay) @as(usize, 32) else 0) + 4) == state_format.fp4_version);
     for (0..4) |i| {
         const ratio: u32 = if (i < 3) 2 else 1;
         if (!pages(e, p, 0, &off, @as(u64, e.tokens / ratio) * 512 * 4, (page / ratio) * 512 * 4) or
-            !pages(e, p, 0, &off, @as(u64, e.tokens / ratio) * 128 * 4, (page / ratio) * 128 * 4)) return false;
+            !pages(e, p, 0, &off, @as(u64, e.tokens / ratio) * index_row, (page / ratio) * index_row)) return false;
         if (i < 3 and e.tokens & 1 != 0 and !pages(e, p, 0, &off, 2 * 512 * 4, 512 * 4)) return false;
     }
     if (off < e.state_bytes and e.kind == native) {
@@ -710,9 +721,7 @@ export fn ds4_state_cache_find_prefix(maybe_cache: ?*Cache, profile: [*c]const u
         // A base-only and DSP1 endpoint can describe the same target prefix.
         // Prefer useful draft history regardless of manifest traversal order.
         if (best == null or best.?.tokens < e.tokens or
-            (e.kind == native and best.?.kind == native and
-                e.state_bytes == stateBytes(e.tokens) + draft_checkpoint.wireBytes(e.tokens, 5120) and
-                best.?.state_bytes == stateBytes(e.tokens))) best = e;
+            (hasDraft(e) and !hasDraft(best.?))) best = e;
     }
     const e = best orelse return null;
     const ref = acquire(cache, e);
