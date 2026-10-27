@@ -1,0 +1,111 @@
+diff --git a/src/metal/routed_batch.zig b/src/metal/routed_batch.zig
+--- a/src/metal/routed_batch.zig
++++ b/src/metal/routed_batch.zig
+@@ -685,7 +685,7 @@
+         if (args.ne00 <= 0 or args.ne0 <= 0) return false;
+         const w = work(args) orelse return false;
+         const tile: u64 = if (self.p.packed_m32) 32 else 64;
+-        const ok = self.launch(c.DS4_ROUTED_MM, pipeline, .{ .mm = args }, .{ .x = w.capacity, .y = (@as(u64, @intCast(args.ne0)) + tile - 1) / tile, .threads = 128, .shared = if (self.p.packed_act_i8 and weight != 2) 12288 else if (self.p.packed_m32) 16384 else if (programs_used.mm_mpp) 12288 else 8192 }, .{ .source = source, .destination = destination, .weight = weight, .counts = w.counts, .work = w.offset, .cached = self.p.cached_iq2 });
++        const ok = self.launch(c.DS4_ROUTED_MM, pipeline, .{ .mm = args }, .{ .x = w.capacity, .y = (@as(u64, @intCast(args.ne0)) + tile - 1) / tile, .threads = 128, .shared = if (self.p.packed_act_i8 and weight != 2) 8192 else if (self.p.packed_m32) 16384 else if (programs_used.mm_mpp) 12288 else 8192 }, .{ .source = source, .destination = destination, .weight = weight, .counts = w.counts, .work = w.offset, .cached = self.p.cached_iq2 });
+         if (ok and self.p.packed_act_i8 and weight == 0 and @atomicRmw(u8, &packed_activation_logged, .Xchg, 1, .monotonic) == 0) {
+             _ = c.fprintf(c.__stderrp, "ds4: compressed activation FP prefill kernel=kernel_mul_mm_id_iq2_xxs_mpp_act_i8 tokens=%u input=%u middle=%u experts=%u selected=%u\n", self.q.rows, self.q.input_width, self.q.middle_width, self.q.total_experts, self.q.used_experts);
+         }
+diff --git a/src/metal/moe.metal b/src/metal/moe.metal
+--- a/src/metal/moe.metal
++++ b/src/metal/moe.metal
+@@ -9156,7 +9156,8 @@
+ 
+ // Read a compact activation pack but keep the established floating-point
+ // matrix multiplication: IQ2 weights become the same half tiles, activations
+-// become small half tiles, and the F32 accumulator spans the complete K loop.
++// decode directly into half cooperative registers, and the F32 accumulator
++// spans the complete K loop. Four SIMD groups each own eight activation rows.
+ // Neither weights nor the full RHS are expanded into persistent half owners.
+ kernel void kernel_mul_mm_id_iq2_xxs_mpp_act_i8(
+         constant ds4_metal_args_mul_mm_id &args,
+@@ -9186,13 +9187,10 @@
+         return;
+     }
+ 
+-    // Two half weight tiles followed by two half activation tiles: 12 KiB.
++    // Two half weight tiles: 8 KiB. Activations never enter shared memory.
+     threadgroup half *weights = (threadgroup half *)shmem;
+-    threadgroup half *activations = weights + 2*M*K;
+     auto w0 = tensor(weights, dextents<int32_t, 2>(K, M));
+     auto w1 = tensor(weights + M*K, dextents<int32_t, 2>(K, M));
+-    auto x0 = tensor(activations, dextents<int32_t, 2>(K, N));
+-    auto x1 = tensor(activations + N*K, dextents<int32_t, 2>(K, N));
+     device const uint *offsets = (device const uint *)src1;
+     device const int8_t *codes = (device const int8_t *)(offsets + ((args.ne02 + 31u) & ~31u));
+     const uint64_t elements = (uint64_t)args.ne20*args.ne21*args.ne00;
+@@ -9202,10 +9200,19 @@
+         (uint64_t)packed_row*groups;
+     codes += (uint64_t)packed_row*args.ne00;
+ 
+-    matmul2d<matmul2d_descriptor(N, M, K, false, true, false,
+-                                matmul2d_descriptor::mode::multiply_accumulate),
+-             execution_simdgroups<4>> mm;
+-    auto acc = mm.template get_destination_cooperative_tensor<decltype(x0), decltype(w0), float>();
++    constexpr int rows_per_simdgroup = N/4;
++    const int row_base = (tid/32)*rows_per_simdgroup;
++    using matmul_type = matmul2d<
++        matmul2d_descriptor(rows_per_simdgroup, M, K, false, true, false,
++                            matmul2d_descriptor::mode::multiply_accumulate),
++        execution_simdgroup>;
++    matmul_type mm;
++    // Use the public unqualified operand type: decltype(x) includes Metal's
++    // thread address space, which the destination factory's trait rejects.
++    using activation_fragment = matmul_type::cooperative_tensor_left_input_t<half, half, float>;
++    auto x = mm.template get_left_input_cooperative_tensor<half, half, float>();
++    auto acc = mm.template get_destination_cooperative_tensor<activation_fragment, decltype(w0), float>();
++    #pragma clang loop unroll(full)
+     for (uint16_t i = 0; i < acc.get_capacity(); ++i)
+         if (acc.is_valid_element(i)) acc[i] = 0;
+ 
+@@ -9222,23 +9229,24 @@
+             dequantize_iq2_xxs(w + col/(16*QK_NL), (col/16)%QK_NL, values);
+             *((threadgroup half4x4 *)(wt + (tid/2)*K + 16*(tid%2))) = values;
+         }
+-        threadgroup half *xt = activations + buffer*N*K;
+-        for (uint vector = tid; vector < N*K/4; vector += 128) {
+-            const uint row = vector/(K/4), col = 4*(vector%(K/4));
+-            half4 value = half4(0);
+-            if (row < (uint)nr1) {
+-                const char4 q = *((device const char4 *)(codes + (uint64_t)row*args.ne00 + k + col));
+-                const float scale = scales[(uint64_t)row*groups + k/32];
+-                value = half4(float4(q)*scale);
+-            }
+-            *((threadgroup half4 *)(xt + row*K + col)) = value;
+-        }
+     };
+     stage(0, 0);
+     threadgroup_barrier(mem_flags::mem_threadgroup);
+     uint buffer = 0;
+     for (int k = 0; k < args.ne00; k += K) {
+-        auto x = (buffer ? x1 : x0).slice(0, 0);
++        #pragma clang loop unroll(full)
++        for (uint16_t i = 0; i < x.get_capacity(); ++i) {
++            if (!x.is_valid_element(i)) continue;
++            const auto coordinate = x.get_multidimensional_index(i);
++            const int row = row_base + coordinate[1];
++            half value = 0;
++            if (row < nr1) {
++                const int8_t q = codes[(uint64_t)row*args.ne00 + k + coordinate[0]];
++                const float scale = scales[(uint64_t)row*groups + k/32];
++                value = half(float(q)*scale);
++            }
++            x[i] = value;
++        }
+         auto w = (buffer ? w1 : w0).slice(0, 0);
+         mm.run(x, w, acc);
+         if (k + K < args.ne00) {
+@@ -9248,7 +9256,8 @@
+         threadgroup_barrier(mem_flags::mem_threadgroup);
+     }
+     // The 8 KiB output tile reuses weight staging after its last read retires.
+-    auto out = tensor((threadgroup float *)shmem, dextents<int32_t, 2>(M, N));
++    auto out = tensor((threadgroup float *)shmem + row_base*M,
++                      dextents<int32_t, 2>(M, rows_per_simdgroup));
+     acc.store(out);
+     threadgroup_barrier(mem_flags::mem_threadgroup);
+     for (int i = tid; i < nr1*nr0; i += 128) {

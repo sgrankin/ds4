@@ -1,0 +1,475 @@
+diff --git a/build.zig b/build.zig
+--- a/build.zig
++++ b/build.zig
+@@ -767,6 +767,7 @@
+         .{ "steering-hc-test", "test-metal-steering-hc", "tests/test_metal_steering_hc.zig", "tests/steering_gpu_api.h", "steering_gpu_c" },
+         .{ "session-steering-test", "test-session-steering", "tests/test_session_steering.zig", "src/ds4.h", "steering_c" },
+         .{ "dspark-checkpoint-test", "test-dspark-checkpoint", "tests/test_dspark_checkpoint.zig", "tests/checkpoint_api.h", "checkpoint_c" },
++        .{ "packed-activation-test", "test-packed-activation", "tests/test_packed_activation.zig", "src/ds4_gpu.h", "packed_activation_gpu_c" },
+     }) |fixture| {
+         const root = module(b, target, sdk, optimize);
+         root.root_source_file = b.path(fixture[2]);
+diff --git a/tests/test_packed_activation.zig b/tests/test_packed_activation.zig
+new file mode 100644
+--- /dev/null
++++ b/tests/test_packed_activation.zig
+@@ -0,0 +1,232 @@
++//! Compressed activation storage with the existing floating-point IQ2 GEMM.
++//! Small cases qualify tails, zero inputs and output boundaries; the bounded
++//! production shape records five alternating warm timing pairs after two warmups.
++const std = @import("std");
++const c = @import("packed_activation_gpu_c");
++const a = std.heap.c_allocator;
++extern "c" fn setenv([*:0]const u8, [*:0]const u8, c_int) c_int;
++extern "c" fn posix_memalign(*?*anyopaque, usize, usize) c_int;
++extern "c" fn free(?*anyopaque) void;
++
++const Shape = struct { input: usize, middle: usize, output: usize, experts: usize };
++const Timespec = extern struct { seconds: isize, nanoseconds: isize };
++extern "c" fn clock_gettime(c_int, *Timespec) c_int;
++
++fn nanoseconds() !u64 {
++    var t: Timespec = undefined;
++    // Darwin CLOCK_MONOTONIC; this fixture links the macOS Metal runtime.
++    try require(clock_gettime(6, &t) == 0, "read monotonic clock");
++    return @as(u64, @intCast(t.seconds)) * 1_000_000_000 + @as(u64, @intCast(t.nanoseconds));
++}
++const S = 6;
++const Iq = extern struct { d: u16, qs: [32]u16 };
++const Q2 = extern struct { scales: [16]u8, qs: [64]u8, d: u16, dmin: u16 };
++const Tensor = *c.ds4_gpu_tensor;
++var seed: u32 = 137;
++
++fn random() u32 {
++    seed ^= seed << 13;
++    seed ^= seed >> 17;
++    seed ^= seed << 5;
++    return seed;
++}
++fn require(ok: bool, message: []const u8) !void {
++    if (!ok) {
++        std.debug.print("packed activation: {s}\n", .{message});
++        return error.CheckFailed;
++    }
++}
++fn allocTensor(bytes: usize) !Tensor {
++    return c.ds4_gpu_tensor_alloc(bytes) orelse error.OutOfMemory;
++}
++fn runCase(shape: Shape, model: []const u8, gate_bytes: usize, down_bytes: usize, rows: u32, zero: bool, benchmark: bool) !void {
++    const D = shape.input;
++    const H = shape.middle;
++    const O = shape.output;
++    const E = shape.experts;
++    const pairs: usize = @as(usize, rows) * S;
++    const x = try a.alloc(f32, @as(usize, rows) * D);
++    defer a.free(x);
++    const ids = try a.alloc(i32, pairs);
++    defer a.free(ids);
++    const weights = try a.alloc(f32, pairs);
++    defer a.free(weights);
++    for (x) |*value| {
++        const n: i32 = @intCast(random() % 101);
++        value.* = if (zero) 0 else @as(f32, @floatFromInt(n - 50)) / 256;
++    }
++    for (0..rows) |t| {
++        ids[t * S] = 0; // A hot expert plus uneven groups and unused experts.
++        for (1..S) |s| ids[t * S + s] = if (benchmark) @intCast(s) else @intCast(1 + (t * 7 + s * 19) % (E - 17));
++    }
++    @memset(weights, 1.0 / @as(f32, S));
++    const xt = try allocTensor(x.len * 4);
++    defer c.ds4_gpu_tensor_free(xt);
++    const it = try allocTensor(ids.len * 4);
++    defer c.ds4_gpu_tensor_free(it);
++    const wt = try allocTensor(weights.len * 4);
++    defer c.ds4_gpu_tensor_free(wt);
++    try require(c.ds4_gpu_tensor_write(xt, 0, x.ptr, x.len * 4) != 0, "write activations");
++    try require(c.ds4_gpu_tensor_write(it, 0, ids.ptr, ids.len * 4) != 0, "write routes");
++    try require(c.ds4_gpu_tensor_write(wt, 0, weights.ptr, weights.len * 4) != 0, "write route weights");
++    const counts = [_]usize{ pairs * H, pairs * H, pairs * H, pairs * O, @as(usize, rows) * O };
++    var tensors: [5]?Tensor = @splat(null);
++    defer for (tensors) |tensor| if (tensor) |t| c.ds4_gpu_tensor_free(t);
++    for (&tensors, counts) |*tensor, count| tensor.* = try allocTensor((count + 1) * 4);
++    const reference = try a.alloc(f32, counts[4]);
++    defer a.free(reference);
++    var max_count: usize = 0;
++    for (counts) |count| max_count = @max(max_count, count);
++    const actual = try a.alloc(f32, max_count + 1);
++    defer a.free(actual);
++    // First control/candidate calls warm both pipelines. Every subsequent call
++    // is retained: AB, BA, AB, BA, AB. Inputs and model stay fixed across arms.
++    const calls: usize = if (benchmark) 12 else 2;
++    for (0..calls) |call| {
++        const measured = benchmark and call >= 2;
++        const sample = if (measured) (call - 2) / 2 else 0;
++        const arm = if (measured) ((call - 2) % 2) ^ (sample % 2) else call;
++        try require(setenv("DS4_METAL_ROUTED_PACKED_ACT_I8", if (arm == 0) "0" else "1", 1) == 0, "set storage arm");
++        // Refresh activation storage before timing, so both arms consume the
++        // same newly uploaded input. Allocation, uploads and checks are untimed.
++        try require(c.ds4_gpu_tensor_write(xt, 0, x.ptr, x.len * 4) != 0, "refresh activations");
++        for (tensors, counts) |tensor, count|
++            try require(c.ds4_gpu_tensor_fill_f32(tensor.?, std.math.nan(f32), count + 1) != 0, "fill output sentinel");
++        try require(c.ds4_gpu_synchronize() != 0, "finish setup before timing");
++        var half_mid = false;
++        const start = try nanoseconds();
++        try require(c.ds4_gpu_routed_moe_batch_tensor(
++            tensors[4],
++            tensors[0],
++            tensors[1],
++            tensors[2],
++            tensors[3],
++            model.ptr,
++            model.len,
++            0,
++            gate_bytes * E,
++            gate_bytes * E * 2,
++            16,
++            10,
++            gate_bytes,
++            D / 256 * @sizeOf(Iq),
++            down_bytes,
++            H / 256 * @sizeOf(Q2),
++            @intCast(D),
++            @intCast(H),
++            @intCast(O),
++            it,
++            wt,
++            @intCast(E),
++            S,
++            7,
++            xt,
++            0,
++            rows,
++            &half_mid,
++            true,
++        ) != 0, "routed prefill succeeds");
++        try require(c.ds4_gpu_synchronize() != 0, "finish GPU call before timing ends");
++        const elapsed_ms = @as(f64, @floatFromInt((try nanoseconds()) - start)) / 1_000_000;
++        if (benchmark) std.debug.print("packed_activation_leaf,{s},{d},{s},{d},{d},{d},{d},{d:.6}\n", .{
++            if (measured) "sample" else "warmup",      sample + 1,
++            if (arm == 0) "control" else "compressed", rows,
++            D,                                         H,
++            E,                                         elapsed_ms,
++        });
++        try require(half_mid, "prefill uses the established F16 middle buffer");
++        for (tensors, counts, 0..) |tensor, count, index| {
++            // Gate/up and final values are all materialized by this packed path.
++            // The middle is F16 in the first half of its allocated F32 space.
++            const used_bytes = count * (if (index == 2) @as(usize, 2) else 4);
++            try require(c.ds4_gpu_tensor_read(tensor.?, 0, actual.ptr, used_bytes) != 0, "read consumed output");
++            for (0..count) |i| {
++                const value: f32 = if (index == 2) @as([*]const f16, @ptrCast(actual.ptr))[i] else actual[i];
++                try require(std.math.isFinite(value), "all consumed outputs finite");
++                if (zero) try require(value == 0, "zero activations remain zero");
++            }
++            var sentinel: f32 = 0;
++            try require(c.ds4_gpu_tensor_read(tensor.?, count * 4, &sentinel, 4) != 0, "read output boundary sentinel");
++            try require(std.math.isNan(sentinel), "output boundary preserved");
++        }
++        try require(c.ds4_gpu_tensor_read(tensors[4].?, 0, actual.ptr, counts[4] * 4) != 0, "read final mixture");
++        if (arm == 0) {
++            @memcpy(reference, actual[0..reference.len]);
++        } else {
++            var maximum: f64 = 0;
++            var error_square: f64 = 0;
++            var old_square: f64 = 0;
++            var new_square: f64 = 0;
++            var cross: f64 = 0;
++            for (reference, actual[0..reference.len]) |old, new| {
++                const delta = @as(f64, new) - old;
++                maximum = @max(maximum, @abs(delta));
++                error_square += delta * delta;
++                old_square += @as(f64, old) * old;
++                new_square += @as(f64, new) * new;
++                cross += @as(f64, old) * new;
++            }
++            const n: f64 = @floatFromInt(reference.len);
++            const cosine = if (old_square == 0 and new_square == 0) @as(f64, 1) else cross / @sqrt(old_square * new_square);
++            const relative_rms = if (old_square == 0) @as(f64, 0) else @sqrt(error_square / old_square);
++            std.debug.print("packed activation rows={d} input={d} zero={} max_abs={d} rms={d} relative_rms={d} cosine={d}\n", .{ rows, D, zero, maximum, @sqrt(error_square / n), relative_rms, cosine });
++            // A very loose structural bound catches indexing/scaling failures;
++            // quality is judged by the real-model teacher/task measurements.
++            try require(zero or (std.math.isFinite(cosine) and cosine > 0.9), "mixture direction is coherent");
++        }
++    }
++}
++
++fn runShape(shape: Shape, benchmark: bool) !void {
++    const D = shape.input;
++    const H = shape.middle;
++    const O = shape.output;
++    const E = shape.experts;
++    const gate_bytes = H * (D / 256) * @sizeOf(Iq);
++    const down_bytes = O * (H / 256) * @sizeOf(Q2);
++    const model_bytes = (2 * gate_bytes * E + down_bytes * E + 16383) / 16384 * 16384;
++    var owner: ?*anyopaque = null;
++    try require(posix_memalign(&owner, 16384, model_bytes) == 0, "allocate aligned fake model");
++    defer free(owner);
++    const model = @as([*]u8, @ptrCast(owner.?))[0..model_bytes];
++    @memset(model, 0);
++    const iq = @as([*]Iq, @ptrCast(@alignCast(model.ptr)))[0 .. 2 * gate_bytes * E / @sizeOf(Iq)];
++    for (iq) |*block| {
++        block.d = @bitCast(@as(f16, 0.001));
++        for (&block.qs) |*q| q.* = @truncate(random());
++    }
++    const q2 = @as([*]Q2, @ptrCast(@alignCast(model.ptr + 2 * gate_bytes * E)))[0 .. down_bytes * E / @sizeOf(Q2)];
++    for (q2) |*block| {
++        block.d = @bitCast(@as(f16, 0.001));
++        block.dmin = @bitCast(@as(f16, 0.0005));
++        for (&block.scales) |*value| value.* = @truncate(random());
++        for (&block.qs) |*value| value.* = @truncate(random());
++    }
++    try require(c.ds4_gpu_init() != 0, "initialize Metal");
++    defer c.ds4_gpu_cleanup(); // No-copy model views retire before owner memory.
++    try require(c.ds4_gpu_set_model_map(model.ptr, model.len) != 0, "map fake quantized weights");
++    c.ds4_gpu_set_quality(false);
++    c.ds4_gpu_set_ssd_streaming(false);
++    std.debug.print("packed activation model_bytes={d} input={d} middle={d} output={d} experts={d}\n", .{ model_bytes, D, H, O, E });
++    if (benchmark) {
++        try runCase(shape, model, gate_bytes, down_bytes, 512, false, true);
++    } else {
++        try runCase(shape, model, gate_bytes, down_bytes, 512, false, false);
++        try runCase(shape, model, gate_bytes, down_bytes, 513, false, false);
++        try runCase(shape, model, gate_bytes, down_bytes, 1024, false, false);
++        try runCase(shape, model, gate_bytes, down_bytes, 512, true, false);
++    }
++}
++
++pub fn main() !void {
++    comptime {
++        if (@sizeOf(Iq) != 66 or @sizeOf(Q2) != 84) @compileError("quantized block layout mismatch");
++    }
++    try require(setenv("DS4_METAL_DISABLE_V41_PACKED_M32N128", "1", 1) == 0, "hold M64 tile fixed");
++    try runShape(.{ .input = 256, .middle = 512, .output = 260, .experts = 256 }, false);
++    std.debug.print("packed_activation_leaf,phase,pair,arm,rows,input,middle,experts,milliseconds\n", .{});
++    // Six fixed routed experts; roughly 60 MiB of weights. This exercises the
++    // production widths without a second full model or hundreds of experts.
++    try runShape(.{ .input = 5120, .middle = 2304, .output = 5120, .experts = 6 }, true);
++    std.debug.print("packed activation finite/tails/zero/sentinel qualification: PASS\n", .{});
++}
+diff --git a/src/metal/routed_batch.zig b/src/metal/routed_batch.zig
+--- a/src/metal/routed_batch.zig
++++ b/src/metal/routed_batch.zig
+@@ -20,6 +20,7 @@
+ var mxfp4_mpp = false;
+ var q4_mpp = false;
+ var policy_once: c.pthread_once_t = c.ds4_metal_policy_once_init;
++var packed_activation_logged: u8 = 0;
+ fn initializePolicy() callconv(.c) void {
+     mxfp4_mpp = absent("DS4_METAL_DISABLE_MXFP4_MM_ID_MPP");
+     q4_mpp = absent("DS4_METAL_DISABLE_Q4_K_MM_ID_MPP");
+@@ -174,6 +175,7 @@
+     mm: bool = false,
+     packed_rhs: bool = false,
+     packed_m32: bool = false,
++    packed_act_i8: bool = false,
+     tiny_pair: bool = false,
+     tiny_swi: bool = false,
+     tp_static: bool = false,
+@@ -275,6 +277,10 @@
+         ((q.gate_type == iq2 and q.down_type == q2) or (f.world == 2 and q.gate_type == mx and q.down_type == mx and absent("DS4_METAL_DISABLE_MXFP4_MM_ID_MPP"))) and
+         absent("DS4_METAL_DISABLE_ROUTED_MPP_PACKED");
+     p.packed_m32 = p.packed_rhs and q.rows >= 8192 and v41 and q.gate_type == iq2 and q.down_type == q2 and absent("DS4_METAL_DISABLE_V41_PACKED_M32N128");
++    const packed_activation = c.getenv("DS4_METAL_ROUTED_PACKED_ACT_I8");
++    p.packed_act_i8 = p.packed_rhs and has(f, c.DS4_ROUTED_M5) and q.gate_type == iq2 and q.down_type == q2 and packed_activation != null and packed_activation[0] == '1' and packed_activation[1] == 0;
++    // The compressed-activation experiment retains the M64/N32 floating GEMM.
++    if (p.packed_act_i8) p.packed_m32 = false;
+     // Through eight rows V4.1 must keep scalar reduction order before BF16/router.
+     p.v41_decode =
+         q.rows <= 8 and
+@@ -483,7 +489,7 @@
+         if (dynamic(2, if (q.down_type == q2) "kernel_mul_mm_id_q2_K_f16_mpp" else "kernel_mul_mm_id_iq2_xxs_f16_mpp", 0)) |pipeline| out.down_mm = pipeline;
+     }
+     if (p.packed_rhs) {
+-        out.gate_mm = dynamic(0, if (q.gate_type == mx) "kernel_mul_mm_id_mxfp4_mpp_packed" else if (p.packed_m32) "kernel_mul_mm_id_iq2_xxs_mpp_packed_m32n128" else "kernel_mul_mm_id_iq2_xxs_mpp_packed", 0);
++        out.gate_mm = dynamic(0, if (p.packed_act_i8) "kernel_mul_mm_id_iq2_xxs_mpp_act_i8" else if (q.gate_type == mx) "kernel_mul_mm_id_mxfp4_mpp_packed" else if (p.packed_m32) "kernel_mul_mm_id_iq2_xxs_mpp_packed_m32n128" else "kernel_mul_mm_id_iq2_xxs_mpp_packed", 0);
+         out.up_mm = out.gate_mm;
+         out.down_mm = dynamic(0, if (q.down_type == mx) "kernel_mul_mm_id_mxfp4_mpp_packed" else if (p.packed_m32) "kernel_mul_mm_id_q2_K_mpp_packed_m32n128" else "kernel_mul_mm_id_q2_K_mpp_packed", 0);
+         out.mm_mpp = false;
+@@ -679,18 +685,24 @@
+         if (args.ne00 <= 0 or args.ne0 <= 0) return false;
+         const w = work(args) orelse return false;
+         const tile: u64 = if (self.p.packed_m32) 32 else 64;
+-        return self.launch(c.DS4_ROUTED_MM, pipeline, .{ .mm = args }, .{ .x = w.capacity, .y = (@as(u64, @intCast(args.ne0)) + tile - 1) / tile, .threads = 128, .shared = if (self.p.packed_m32) 16384 else if (programs_used.mm_mpp) 12288 else 8192 }, .{ .source = source, .destination = destination, .weight = weight, .counts = w.counts, .work = w.offset, .cached = self.p.cached_iq2 });
++        const ok = self.launch(c.DS4_ROUTED_MM, pipeline, .{ .mm = args }, .{ .x = w.capacity, .y = (@as(u64, @intCast(args.ne0)) + tile - 1) / tile, .threads = 128, .shared = if (self.p.packed_act_i8 and weight != 2) 12288 else if (self.p.packed_m32) 16384 else if (programs_used.mm_mpp) 12288 else 8192 }, .{ .source = source, .destination = destination, .weight = weight, .counts = w.counts, .work = w.offset, .cached = self.p.cached_iq2 });
++        if (ok and self.p.packed_act_i8 and weight == 0 and @atomicRmw(u8, &packed_activation_logged, .Xchg, 1, .monotonic) == 0) {
++            _ = c.fprintf(c.__stderrp, "ds4: compressed activation FP prefill kernel=kernel_mul_mm_id_iq2_xxs_mpp_act_i8 tokens=%u input=%u middle=%u experts=%u selected=%u\n", self.q.rows, self.q.input_width, self.q.middle_width, self.q.total_experts, self.q.used_experts);
++        }
++        return ok;
+     }
+     fn pack(self: *Execution, args: Mm, half: bool) bool {
+         if (args.ne00 <= 0) return false;
+         const w = work(args) orelse return false;
+         const rows = @as(u64, @intCast(args.ne20)) * @as(u64, @intCast(args.ne21));
+         const header = (@as(u64, @intCast(args.ne02)) + 31) / 32 * 32 * 4;
+-        const row_bytes = @as(u64, @intCast(args.ne00)) * 2;
++        const width: u64 = @intCast(args.ne00);
++        const compressed = self.p.packed_act_i8 and !half;
++        const row_bytes = if (compressed) width + width / 32 * 4 else width * 2;
+         if (rows > (std.math.maxInt(u64) - header) / row_bytes) return false;
+         const size = header + rows * row_bytes;
+         if (size > self.p.packed_limit or !c.ds4_metal_routed_scratch(self.resource, 2, size)) return false;
+-        const program = dynamic(0, if (half) "kernel_moe_pack_rhs_f16" else "kernel_moe_pack_rhs_f32", 0) orelse return false;
++        const program = dynamic(0, if (compressed) "kernel_moe_pack_rhs_i8" else if (half) "kernel_moe_pack_rhs_f16" else "kernel_moe_pack_rhs_f32", 0) orelse return false;
+         const offsets = dynamic(0, "kernel_moe_packed_offsets", 0) orelse return false;
+         return self.launch(c.DS4_ROUTED_PACK_OFFSETS, offsets, .{ .count = @intCast(args.ne02) }, .{ .x = 1 }, .{}) and self.launch(c.DS4_ROUTED_PACK_RHS, program, .{ .mm = args }, .{ .x = w.capacity * 32, .threads = 128 }, .{ .source = if (half) c.DS4_ROUTED_MID else c.DS4_ROUTED_X, .counts = w.counts, .work = w.offset });
+     }
+diff --git a/src/metal/moe.metal b/src/metal/moe.metal
+--- a/src/metal/moe.metal
++++ b/src/metal/moe.metal
+@@ -9029,6 +9029,44 @@
+ template [[host_name("kernel_moe_pack_rhs_f32")]] kernel moe_pack_rhs_t kernel_moe_pack_rhs<float>;
+ template [[host_name("kernel_moe_pack_rhs_f16")]] kernel moe_pack_rhs_t kernel_moe_pack_rhs<half>;
+ 
++// Compact only the gate/up activation pack. Values retain the old F32 -> half
++// boundary before group-of-32 INT8 quantization. Layout: expert offsets, all
++// code rows, then one F32 scale per 32 codes. The two projections share it.
++kernel void kernel_moe_pack_rhs_i8(
++        constant ds4_metal_args_mul_mm_id &args,
++        device const char *src,
++        device const uint *counts,
++        device const int *ids,
++        device const uint *work,
++        device char *dst,
++        uint row [[threadgroup_position_in_grid]],
++        uint tid [[thread_index_in_threadgroup]]) {
++    const uint wi = row/32;
++    if (wi >= work[0]) return;
++    const uint2 item = ((device const uint2 *)(work + 2))[wi];
++    if (!ds4_tp_owns_expert(item.x, args.ne02, args.tp_rank, args.tp_world)) return;
++    const uint ri = item.y + row%32;
++    if (ri >= counts[item.x]) return;
++    device const uint *offsets = (device const uint *)dst;
++    const uint packed_row = offsets[item.x] + ri;
++    const uint width = args.ne00, groups = width/32;
++    const uint64_t elements = (uint64_t)args.ne20*args.ne21*width;
++    device int8_t *codes = (device int8_t *)((device uint *)dst + ((args.ne02 + 31u) & ~31u));
++    device float *scales = (device float *)(codes + elements);
++    const int id = ids[item.x*args.ne21 + ri];
++    device const float *x = (device const float *)(src +
++        args.nb12*(id/args.ne20) + args.nb11*((id%args.ne20)%args.ne11));
++    const uint lane = tid%32, simdgroup = tid/32;
++    for (uint block = simdgroup; block < groups; block += 4) {
++        const float value = (float)(half)x[block*32 + lane];
++        const float maximum = simd_max(abs(value));
++        const float scale = maximum > 0 ? maximum/127.0f : 1.0f;
++        if (lane == 0) scales[(uint64_t)packed_row*groups + block] = scale;
++        codes[(uint64_t)packed_row*width + block*32 + lane] =
++            (int8_t)clamp(rint(value/scale), -127.0f, 127.0f);
++    }
++}
++
+ template<typename block_q, short nl,
+          void (*dequantize_func)(device const block_q *, short, thread half4x4 &),
+          int TileM = 64, int TileN = 32>
+@@ -9116,6 +9154,111 @@
+ template [[host_name("kernel_mul_mm_id_iq2_xxs_mpp_packed_m32n128")]] kernel mm_id_packed_t kernel_mul_mm_id_mpp_packed<block_iq2_xxs, QK_NL, dequantize_iq2_xxs, 32, 128>;
+ template [[host_name("kernel_mul_mm_id_q2_K_mpp_packed_m32n128")]] kernel mm_id_packed_t kernel_mul_mm_id_mpp_packed<block_q2_K, QK_NL, dequantize_q2_K, 32, 128>;
+ 
++// Read a compact activation pack but keep the established floating-point
++// matrix multiplication: IQ2 weights become the same half tiles, activations
++// become small half tiles, and the F32 accumulator spans the complete K loop.
++// Neither weights nor the full RHS are expanded into persistent half owners.
++kernel void kernel_mul_mm_id_iq2_xxs_mpp_act_i8(
++        constant ds4_metal_args_mul_mm_id &args,
++        device const char *src0,
++        device const half *src1,
++        device const uint *counts,
++        device const int *ids,
++        device float *dst,
++        device const uint *work,
++        threadgroup char *shmem [[threadgroup(0)]],
++        uint2 group [[threadgroup_position_in_grid]],
++        ushort tid [[thread_index_in_threadgroup]]) {
++    constexpr int M = 64, N = 32, K = 32;
++    if (group.x >= work[0]) return;
++    const uint2 item = ((device const uint2 *)(work + 2))[group.x];
++    if (item.y % N) return;
++    const int expert = item.x, r0 = group.y*M, r1 = item.y;
++    const int nr0 = min(M, args.ne0 - r0);
++    const int nr1 = min(N, (int)counts[expert] - r1);
++    if (nr0 <= 0 || nr1 <= 0) return;
++    if (!ds4_tp_owns_expert(expert, args.ne02, args.tp_rank, args.tp_world)) {
++        for (int i = tid; i < nr1*nr0; i += 128) {
++            const int id = ids[expert*args.ne21 + r1 + i/nr0];
++            dst[(uint64_t)(id/args.ne20)*args.ne1*args.ne0 +
++                (id%args.ne20)*args.ne0 + r0 + i%nr0] = 0;
++        }
++        return;
++    }
++
++    // Two half weight tiles followed by two half activation tiles: 12 KiB.
++    threadgroup half *weights = (threadgroup half *)shmem;
++    threadgroup half *activations = weights + 2*M*K;
++    auto w0 = tensor(weights, dextents<int32_t, 2>(K, M));
++    auto w1 = tensor(weights + M*K, dextents<int32_t, 2>(K, M));
++    auto x0 = tensor(activations, dextents<int32_t, 2>(K, N));
++    auto x1 = tensor(activations + N*K, dextents<int32_t, 2>(K, N));
++    device const uint *offsets = (device const uint *)src1;
++    device const int8_t *codes = (device const int8_t *)(offsets + ((args.ne02 + 31u) & ~31u));
++    const uint64_t elements = (uint64_t)args.ne20*args.ne21*args.ne00;
++    const uint groups = args.ne00/32;
++    const uint packed_row = offsets[expert] + r1;
++    device const float *scales = (device const float *)(codes + elements) +
++        (uint64_t)packed_row*groups;
++    codes += (uint64_t)packed_row*args.ne00;
++
++    matmul2d<matmul2d_descriptor(N, M, K, false, true, false,
++                                matmul2d_descriptor::mode::multiply_accumulate),
++             execution_simdgroups<4>> mm;
++    auto acc = mm.template get_destination_cooperative_tensor<decltype(x0), decltype(w0), float>();
++    for (uint16_t i = 0; i < acc.get_capacity(); ++i)
++        if (acc.is_valid_element(i)) acc[i] = 0;
++
++    auto stage = [&](int k, uint buffer) {
++        threadgroup half *wt = weights + buffer*M*K;
++        // Preserve the old IQ2 decoder and its half-rounding boundary.
++        if (tid < M*2) {
++            const int row = min((int)tid/2, nr0 - 1);
++            const int col = k + 16*(tid%2);
++            device const block_iq2_xxs *w = (device const block_iq2_xxs *)(src0 +
++                (uint64_t)(expert - args.tp_expert_base)*args.nb02 +
++                (r0 + row)*args.nb01);
++            half4x4 values;
++            dequantize_iq2_xxs(w + col/(16*QK_NL), (col/16)%QK_NL, values);
++            *((threadgroup half4x4 *)(wt + (tid/2)*K + 16*(tid%2))) = values;
++        }
++        threadgroup half *xt = activations + buffer*N*K;
++        for (uint vector = tid; vector < N*K/4; vector += 128) {
++            const uint row = vector/(K/4), col = 4*(vector%(K/4));
++            half4 value = half4(0);
++            if (row < (uint)nr1) {
++                const char4 q = *((device const char4 *)(codes + (uint64_t)row*args.ne00 + k + col));
++                const float scale = scales[(uint64_t)row*groups + k/32];
++                value = half4(float4(q)*scale);
++            }
++            *((threadgroup half4 *)(xt + row*K + col)) = value;
++        }
++    };
++    stage(0, 0);
++    threadgroup_barrier(mem_flags::mem_threadgroup);
++    uint buffer = 0;
++    for (int k = 0; k < args.ne00; k += K) {
++        auto x = (buffer ? x1 : x0).slice(0, 0);
++        auto w = (buffer ? w1 : w0).slice(0, 0);
++        mm.run(x, w, acc);
++        if (k + K < args.ne00) {
++            buffer ^= 1;
++            stage(k + K, buffer);
++        }
++        threadgroup_barrier(mem_flags::mem_threadgroup);
++    }
++    // The 8 KiB output tile reuses weight staging after its last read retires.
++    auto out = tensor((threadgroup float *)shmem, dextents<int32_t, 2>(M, N));
++    acc.store(out);
++    threadgroup_barrier(mem_flags::mem_threadgroup);
++    for (int i = tid; i < nr1*nr0; i += 128) {
++        const int id = ids[expert*args.ne21 + r1 + i/nr0];
++        dst[(uint64_t)(id/args.ne20)*args.ne1*args.ne0 +
++            (id%args.ne20)*args.ne0 + r0 + i%nr0] =
++            ((threadgroup float *)shmem)[(i/nr0)*M + i%nr0];
++    }
++}
++
+ // Routed-expert grouped matmul on the Metal4 TensorOps/MPP pipeline. The
+ // barrier after mm.run prevents the next K iteration from replacing staged
+ // tiles while the cooperative matmul still reads them.

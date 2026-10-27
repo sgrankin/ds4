@@ -1,0 +1,156 @@
+diff --git a/src/metal/moe.metal b/src/metal/moe.metal
+index 5c15cf8e..ab1280b0 100644
+--- a/src/metal/moe.metal
++++ b/src/metal/moe.metal
+@@ -9029,6 +9029,44 @@ typedef decltype(kernel_moe_pack_rhs<float>) moe_pack_rhs_t;
+ template [[host_name("kernel_moe_pack_rhs_f32")]] kernel moe_pack_rhs_t kernel_moe_pack_rhs<float>;
+ template [[host_name("kernel_moe_pack_rhs_f16")]] kernel moe_pack_rhs_t kernel_moe_pack_rhs<half>;
+ 
++// Quantize each packed activation once, rather than once per output tile and
++// again for up. Keep the previous F32 -> half boundary before INT8 rounding.
++// Layout: aligned expert offsets, all INT8 rows, then one F32 scale per 32 codes.
++kernel void kernel_moe_pack_rhs_i8(
++        constant ds4_metal_args_mul_mm_id &args,
++        device const char *src,
++        device const uint *counts,
++        device const int *ids,
++        device const uint *work,
++        device char *dst,
++        uint row [[threadgroup_position_in_grid]],
++        uint tid [[thread_index_in_threadgroup]]) {
++    const uint wi = row/32;
++    if (wi >= work[0]) return;
++    const uint2 item = ((device const uint2 *)(work + 2))[wi];
++    if (!ds4_tp_owns_expert(item.x, args.ne02, args.tp_rank, args.tp_world)) return;
++    const uint ri = item.y + row%32;
++    if (ri >= counts[item.x]) return;
++    device const uint *offsets = (device const uint *)dst;
++    const uint packed_row = offsets[item.x] + ri;
++    const uint width = args.ne00, groups = width/32;
++    const uint64_t elements = (uint64_t)args.ne20*args.ne21*width;
++    device int8_t *codes = (device int8_t *)((device uint *)dst + ((args.ne02 + 31u) & ~31u));
++    device float *scales = (device float *)(codes + elements);
++    const int id = ids[item.x*args.ne21 + ri];
++    device const float *x = (device const float *)(src +
++        args.nb12*(id/args.ne20) + args.nb11*((id%args.ne20)%args.ne11));
++    const uint lane = tid%32, simdgroup = tid/32;
++    for (uint block = simdgroup; block < groups; block += 4) {
++        const float value = (float)(half)x[block*32 + lane];
++        const float maximum = simd_max(abs(value));
++        const float scale = maximum > 0 ? maximum/127.0f : 1.0f;
++        if (lane == 0) scales[(uint64_t)packed_row*groups + block] = scale;
++        codes[(uint64_t)packed_row*width + block*32 + lane] =
++            (int8_t)clamp(rint(value/scale), -127.0f, 127.0f);
++    }
++}
++
+ template<typename block_q, short nl,
+          void (*dequantize_func)(device const block_q *, short, thread half4x4 &),
+          int TileM = 64, int TileN = 32>
+@@ -9117,9 +9155,9 @@ template [[host_name("kernel_mul_mm_id_iq2_xxs_mpp_packed_m32n128")]] kernel mm_
+ template [[host_name("kernel_mul_mm_id_q2_K_mpp_packed_m32n128")]] kernel mm_id_packed_t kernel_mul_mm_id_mpp_packed<block_q2_K, QK_NL, dequantize_q2_K, 32, 128>;
+ 
+ // Experimental IQ2 prefill: retain the original 66-byte weight blocks, decode
+-// their exact signed grid values into a small INT8 tile, and quantize only the
+-// current activation tile. Each 32-column group has its own original weight
+-// scale and dynamic activation scale. Integer products accumulate in INT32;
++// their exact signed grid values into a small INT8 tile, and consume activations
++// quantized once by kernel_moe_pack_rhs_i8. Each 32-column group has its own
++// original weight scale and dynamic activation scale. Products accumulate in INT32;
+ // group results are rescaled into private F32 accumulators. This is not a
+ // persistent INT8 weight cache. The W8A8 arithmetic follows the same approach
+ // as Draw Things' NAInt8MatMulKernel; IQ2's per-group scales stay explicit here.
+@@ -9151,21 +9189,25 @@ kernel void kernel_mul_mm_id_iq2_xxs_mpp_i8(
+     }
+ 
+     threadgroup int8_t *weights = (threadgroup int8_t *)shmem;
+-    threadgroup int8_t *activations = weights + M*K;
+-    threadgroup float *weight_scales = (threadgroup float *)(activations + N*K);
+-    threadgroup float *activation_scales = weight_scales + M;
++    threadgroup float *weight_scales = (threadgroup float *)(weights + M*K);
+     device const uint *offsets = (device const uint *)src1;
+-    device const half *rhs = (device const half *)(offsets + ((args.ne02 + 31u) & ~31u));
+-    rhs += (uint64_t)(offsets[expert] + r1)*args.ne00;
+-
+-    auto a = tensor(activations, dextents<int32_t, 2>(K, N));
++    // TensorOps requires an unqualified INT8 element type. This view only reads.
++    device int8_t *codes = (device int8_t *)(offsets + ((args.ne02 + 31u) & ~31u));
++    const uint64_t elements = (uint64_t)args.ne20*args.ne21*args.ne00;
++    const uint groups = args.ne00/32;
++    const uint packed_row = offsets[expert] + r1;
++    device const float *activation_scales = (device const float *)(codes + elements) +
++        (uint64_t)packed_row*groups;
++    device int8_t *rhs = codes + (uint64_t)packed_row*args.ne00;
++
++    auto a = tensor(rhs, dextents<int32_t, 2>(args.ne00, nr1));
+     auto b = tensor(weights, dextents<int32_t, 2>(K, M));
+     matmul2d<matmul2d_descriptor(N, M, K, false, true, false,
+                                 matmul2d_descriptor::mode::multiply_accumulate),
+              execution_simdgroups<4>> mm;
+     auto partial = mm.template get_destination_cooperative_tensor<decltype(a), decltype(b), int32_t>();
+-    // At most one SIMDgroup can own the complete tile. The compiler eliminates
+-    // unused slots when specializing the cooperative tensor distribution.
++    // Conservative private capacity; the cooperative tensor distributes the
++    // output tile across the participating SIMDgroups.
+     float total[M*N/32];
+     #pragma clang loop unroll(full)
+     for (uint16_t i = 0; i < partial.get_capacity(); ++i)
+@@ -9200,30 +9242,23 @@ kernel void kernel_mul_mm_id_iq2_xxs_mpp_i8(
+                 for (int j = 0; j < K; ++j) weights[row*K + j] = 0;
+             }
+         }
+-        // One SIMDgroup quantizes a row, with one input value per lane.
+-        // All groups cover N rows without private 32-value staging arrays.
+-        const int lane = tid % 32, simdgroup = tid / 32;
+-        for (int row = simdgroup; row < N; row += 4) {
+-            const float value = row < nr1 ? (float)rhs[(uint64_t)row*args.ne00 + k + lane] : 0;
+-            const float maximum = simd_max(abs(value));
+-            const float scale = maximum > 0 ? maximum / 127.0f : 1.0f;
+-            if (lane == 0) activation_scales[row] = scale;
+-            activations[row*K + lane] = (int8_t)clamp(rint(value / scale), -127.0f, 127.0f);
+-        }
+         threadgroup_barrier(mem_flags::mem_threadgroup);
+         #pragma clang loop unroll(full)
+         for (uint16_t i = 0; i < partial.get_capacity(); ++i)
+             if (partial.is_valid_element(i)) partial[i] = 0;
+-        mm.run(a, b, partial);
++        auto activation = a.slice(k, 0);
++        mm.run(activation, b, partial);
+         #pragma clang loop unroll(full)
+         for (uint16_t i = 0; i < partial.get_capacity(); ++i) {
+             if (partial.is_valid_element(i)) {
+                 const auto position = partial.get_multidimensional_index(i);
+-                total[i] += (float)partial[i] * weight_scales[position[0]] * activation_scales[position[1]];
++                if (position[0] < nr0 && position[1] < nr1)
++                    total[i] += (float)partial[i] * weight_scales[position[0]] *
++                        activation_scales[(uint64_t)position[1]*groups + k/32];
+             }
+         }
+         // Matmul and rescaling must finish before the next K group replaces
+-        // either integer tile or its scales.
++        // the weight tile or its scales. Packed activations stay immutable.
+         threadgroup_barrier(mem_flags::mem_threadgroup);
+     }
+     #pragma clang loop unroll(full)
+diff --git a/src/metal/routed_batch.zig b/src/metal/routed_batch.zig
+index 7fa43f58..f192597b 100644
+--- a/src/metal/routed_batch.zig
++++ b/src/metal/routed_batch.zig
+@@ -698,11 +698,15 @@ pub const Execution = struct {
+         const w = work(args) orelse return false;
+         const rows = @as(u64, @intCast(args.ne20)) * @as(u64, @intCast(args.ne21));
+         const header = (@as(u64, @intCast(args.ne02)) + 31) / 32 * 32 * 4;
+-        const row_bytes = @as(u64, @intCast(args.ne00)) * 2;
++        const width: u64 = @intCast(args.ne00);
++        const integer = self.p.packed_i8 and !half;
++        // The INT8 gate/up pack contains one code per value plus one F32
++        // scale per 32. Down keeps its original half-precision pack.
++        const row_bytes = if (integer) width + width / 32 * 4 else width * 2;
+         if (rows > (std.math.maxInt(u64) - header) / row_bytes) return false;
+         const size = header + rows * row_bytes;
+         if (size > self.p.packed_limit or !c.ds4_metal_routed_scratch(self.resource, 2, size)) return false;
+-        const program = dynamic(0, if (half) "kernel_moe_pack_rhs_f16" else "kernel_moe_pack_rhs_f32", 0) orelse return false;
++        const program = dynamic(0, if (integer) "kernel_moe_pack_rhs_i8" else if (half) "kernel_moe_pack_rhs_f16" else "kernel_moe_pack_rhs_f32", 0) orelse return false;
+         const offsets = dynamic(0, "kernel_moe_packed_offsets", 0) orelse return false;
+         return self.launch(c.DS4_ROUTED_PACK_OFFSETS, offsets, .{ .count = @intCast(args.ne02) }, .{ .x = 1 }, .{}) and self.launch(c.DS4_ROUTED_PACK_RHS, program, .{ .mm = args }, .{ .x = w.capacity * 32, .threads = 128 }, .{ .source = if (half) c.DS4_ROUTED_MID else c.DS4_ROUTED_X, .counts = w.counts, .work = w.offset });
+     }

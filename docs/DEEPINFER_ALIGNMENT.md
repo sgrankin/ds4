@@ -1,9 +1,11 @@
 # DeepInfer technique inventory and local alignment
 
-Source audit, 2026-10-27. DeepInfer revision
-`553741557a57df44a46fb3ab72b6aafeaf945337` matches upstream HEAD, verified with
-read-only `git ls-remote`. DS4 baseline is `e2a38f6e2bf4`. No runtime changes,
-builds or model experiments were made for this inventory.
+Source audit, 2026-10-27, pinned to DeepInfer revision
+`553741557a57df44a46fb3ab72b6aafeaf945337` (upstream HEAD when audited) and
+DS4 baseline `e2a38f6e2bf4`. Local status refreshed 2026-10-28 against cleaned
+stack tip `a9593e124f53`; this refresh did not fetch upstream, build or run
+models. Original measured revisions remain reachable from
+`archive/pre-stack-cleanup-20261028`.
 
 The user subsequently authorized its bounded convergence experiments. See the
 [execution report](../speed-bench/experiments/deepinfer-alignment-20261027/README.md)
@@ -23,9 +25,11 @@ its packed/F32 gap is now about 2%. The subsequent
 [serving integration](../speed-bench/experiments/index-serving-20261027/README.md)
 completes physical index allocation, scalar/batch inference, v3 SSD checkpoints,
 v2 imports and suffix conversion. DeepSeek fast profiles enable packed index
-storage and SIMD scoring; `persistent-packed` aliases `persistent-fast`. Whole-model paired
-F32 decode improves 0.523% at32K and 1.936% at64K. Packed whole-request timings
-are mixed; the isolated kernel percentage is not an inference speed claim.
+storage and SIMD scoring; `persistent-packed` aliases `persistent-fast`.
+The subsequent [five-pair serving comparison](../speed-bench/experiments/index-five-samples-20261027/README.md)
+found the packed layout roughly speed-neutral at32K, with exact teacher/output
+IDs. Its established benefit is86.72% smaller index owners, not a claimed
+whole-model speedup from the isolated kernel percentage.
 Canonical DSpark history is now implemented opt-in as DSP1: exact BF16 raw
 target features survive SSD restart and enable immediate verified drafting.
 Short restored replies improve in the measured eager-MTP cases; full replies
@@ -51,9 +55,9 @@ There are three distinct windows:
 
 | Window | What it reconstructs | Local status |
 |---|---|---|
-| Encoder replay, 128 tokens | Missing sliding-window attention (SWA) state after a compressed/index block-cache hit | **Missing** |
+| Encoder replay, 128 tokens | Missing sliding-window attention (SWA) state after a compressed/index block-cache hit | **Diagnostic SWB1 prototype; ordinary cache policy absent** |
 | Decoder/YOCO retained tail; example 140 | Decoder local state after encoder prefill | **Partial/opt-in** |
-| DSpark target-feature history, 128 positions | The drafter's input history after restoring target KV | **Missing from persistence** |
+| DSpark target-feature history, 128 positions | The drafter's input history after restoring target KV | **Implemented opt-in as DSP1; projected drafter KV rebuilt on use** |
 
 The first is the remembered restore technique. Keep the cached compressed/index
 blocks; replay the preceding 128 tokens to rebuild local attention state. At
@@ -64,7 +68,7 @@ has the replay-floor metadata, but its complete cache-hit controller is omitted.
 
 For example, with a compressed prefix ending at 32,768, recovery can begin
 at 32,640 and then process the new suffix. This is not suffix relocation or a
-logical context edit. Our current loader instead requires a complete checkpoint
+logical context edit. Our ordinary loader still requires a complete checkpoint
 with raw rings, cumulative arrays, pending compression state and logits.
 
 Decoder replay is a separate approximation. Our exact shrinking dependency
@@ -109,10 +113,11 @@ F32. The index producer retains original group32 scales and mode2 rounding;
 packedv3 snapshots retain those bytes, while oldv2 imports preserve decoded
 values through bounded conversion. DeepSeek fast profiles enable this index
 layout; legacy private diagnostic/replay bodies remainv2 through conversion.
-For 262,144 context, the four cumulative owners
-represent about 655,360 rows: main+index arrays are approximately1.5625 GiB F32,
-0.9375 GiB with F16 main, or0.2173 GiB at the reference packed sizes, before
-alignment/scratch. These are byte calculations, not measured speedups.
+For 262,144 context, the four cumulative owners represent about 655,360 rows.
+Main+index arrays are approximately1.5625 GiB with both F32,1.2915 GiB with
+F32 main plus the current packed index,0.6665 GiB with F16 main plus packed
+index, or0.2173 GiB at the reference fully packed sizes, before alignment/scratch.
+These are byte calculations, not measured speedups or whole-process RAM.
 An expert cache with an explicit fixed budget does not automatically grow when
 KV gets smaller; the freed headroom must actually reach its admission budget.
 
@@ -177,15 +182,38 @@ it does not substitute a different expert that happens to be resident.
 | V4 | Teacher-forced numerical and semantic regressions | **Have, different baselines.** Upstream supplies PPL/logprob/top-k, YOCO mask-vs-compact comparisons and AIME/GPQA/HLE drivers. We have teacher-forced ΔNLL/KL probes, practical tool/coding cases and protocol tests. Compatible subset fixtures are reusable; their model/hardware scores are not local quant scores. [DI](../../DeepInfer/examples/README.md), [local recipes](../recipes/README.md). |
 | V5 | Profile-based sweeps and throughput/latency curves | **Have locally.** Both separate profiler traces from steady-state timing and retain fixed-setting sweeps. Continue one-hour baseline/change/measure decisions, including ordinary/favorable/adverse cases, rather than importing a broad benchmark framework. [DI](../../DeepInfer/examples/sweep/plot_pareto.py), [local work order](../speed-bench/ideas/next-experiments.md). |
 
-## Recommended alignment sequence — proposals, not implementation
+## Initial convergence sequence — completed
 
-| Order | Bounded first experiment | What would justify continuing |
+| Item | Current outcome |
+|---|---|
+| Candidate-only decode scoring | Implemented opt-in, preserving selected/global IDs and distributions on the probes. A five-pair end-to-end promotion comparison remains worthwhile if long-context decode is the target. Batch prefill remains dense. |
+| Block-only restore | SWB1 diagnostic import plus128 scalar reconstruction rows works. It rebuilds all40 rings; batched recovery and an ordinary cache-retention/admission policy remain open. Full-state hits are the faster existing path. |
+| Packed index producer/reader | Completed beyond the pilot: physical GPU owners, scalar/batch consumers, SIMD, v3 SSD, old-format imports and suffix/MTP. Enabled in fast presets with five-pair speed-neutral qualification. |
+| Useful drafter history | DSP1 raw BF16 target-feature persistence works across canonical/SSD restore. It remains opt-in; ordinary confidence settings and capacity costs need five-pair qualification before preset promotion. |
+
+## Next bounded candidates — proposals, not execution authorization
+
+The queued correctness repair is **DSML length finalization**: preserve typed
+partial calls and already-streamed IDs as incomplete at token limits, without
+canonicalizing/executing partial arguments or leaking raw DSML as text.
+Budget exhaustion must remain distinct from malformed model output.
+
+After that, choose the objective and give each experiment an initial one-hour
+cap, including preparation/builds/analysis. Performance comparisons need five
+samples per side, alternating order; keep normal reasoning and actual task quality.
+
+| Objective | Concrete next experiment | Gate for continuing |
 |---|---|---|
-| 1 | **One hour: candidate-only decode scoring.** Leave layer 20 selection unchanged; fill scores with `-inf`, compute only existing selected blocks and scatter to original IDs before the existing top-k. Keep the current path when all keys survive. | Same selected/global-ID semantics (including causal tails and tie order), measured index-kernel savings at 16K/64K/256K and an actual long-context decode improvement. At 256K at most 16,384 candidate keys gives an approximate 1/16 dot-product work bound, not a TPS prediction. Treat prefill separately. |
-| 2 | **One hour: block-only restore prototype.** Keep compressed/index blocks, discard encoder SWA and replay 128 rows with an explicit raw floor. Do not change general cache policy until this can be measured. | Bounded128-row recovery rather than a full miss; per-row global attention/index work can still grow with context; ordinary/retrieved-fact/adverse quality cases plus ΔNLL/KL and restore latency. Suppress writes to old compressed rows, preserve absolute RoPE/Engram history, and retain approximate identity. |
-| 3 | **One hour: packed-KV producer/reader pilot.** Choose one format/owner and compare real-row round trips and one consuming kernel. | Actual allocation reduction and acceptable latency/quality; SSD bytes only shrink if their encoding also changes. Match scales and rounding before calling it storage-only or lossless. Do not combine all cache formats and kernel fusion in the first change. |
-| 4 | **One hour: restore useful drafter history.** Compare an optional saved feature/projected-KV section against the current 128-step warmup on short continuations. | Real speculative blocks after restore and a whole-request benefit; our recent default-depth results were near neutral, so enabling speculation is not itself a speed result. |
-| 5 | **Further bounded checkpoints:** generalize decoder compaction to ordinary chunking and DFlash rollback; profile one norm/RoPE/store fusion; then consider same-input projections, DS41 GPU sampling/mask reuse, position-based seeds and exposed CPU/GPU idle gaps. | Profiled costs and representative end-to-end gains. Async grammar compilation, full ZOS or a large Mega MoE port need evidence that their costs matter here. |
+| Restored-agent latency | Qualify existing DSP1 at ordinary confidence/depth settings on short and complete restored replies. | Actual verified draft cycles, correct output, cache-byte cost and five-pair request latency before any default promotion. Existing eager-drafting observations are not that qualification. |
+| More concurrent-session capacity | Physical **main FP4** publication plus one consumer, then raw FP8 separately. Existing modes3/1 already quantize and expand into BF16-rounded F32; retain original scales at publication, as for the index. Main rows2048→288B; raw2048→528B. | Target existing decoded-value parity, measure any deviations, demonstrate real smaller allocation and measure consumer/whole-inference cost. No claim of faster attention from byte size alone. This is distinct from adding new INT8 activation quantization. |
+| Ordinary prefill latency | Extend decoder query compaction from wide≥8K sweeps to ordinary2K chunks, initially without DSpark; handle speculative rollback in a separate slice. | Full encoder/global-cache publication, explicit replay floor/approximate identity, practical tasks and ΔNLL/KL, five-pair whole-request savings. Do not infer benefit from the old wide-only branch. |
+| Fewer intermediate writes/launches | First profile direct SwiGLU→existing packed F16 down input, eliminating HALF MID→HALF PACKED copy; alternatively fuse V4.1 collapse→BF16→weighted RMSNorm→BF16 using the previous PRE mix. | Preserve rounding and old consumers. The matched activation experiment measured only~39ms total down-pack GPU time, so this one copy alone is a modest target. Legacy HC compound kernels apply the newly computed PRE and are not drop-ins. |
+| Better cold-cache retention | Batch the128-row SWB1 reconstruction and test block-only fallback under a bounded SSD working set. | Demonstrate that dropping disposable state actually improves retention/miss cost. Do not replace faster exact hits with recovery. Ordinary cache policy remains a separate integration step. |
+
+Later candidates remain same-input projection fusion, DS41 GPU sampling and
+grammar-mask reuse, position-based seeds, asynchronous checkpoint import and
+CPU/GPU scheduling overlap. GPU paging/COW and full Mega MoE/ZOS are larger
+projects; distributed RDMA/3FS transport has no direct one-process benefit here.
 
 Encoder restore needs special care with shared owner publication counts,
 candidate epochs, original positions, pending C2 pairs at odd anchors and the

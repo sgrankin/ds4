@@ -6,6 +6,7 @@ not every possible version of the idea.
 
 | Idea | Why it was not adopted | Detail |
 |---|---|---|
+| Transient INT8 IQ2 prefill | Five samples per side: first version adds 34.06% prefill/35.09% task time; activation reuse saves 105 MiB scratch but still adds 18.49% prefill/34.70% task time. All 40 answers pass; the rejection is performance, not exactness. Runtime hooks removed; patches retained. | [Integer arithmetic experiment](integer-prefill.md) |
 | Segmented LRU expert eviction | A.73% replay gain became 6.45% fresh/1.77% restored actual-agent regressions. Runtime support was removed; the offline simulator is not a deployable flag. | [Cache-policy chapter](../06-cache-policy-and-dead-ends.md#route-frequency-aging) |
 | Two-layer prefetch lookahead |87–94 tokens/s versus 128–130 controls despite exact logits; reduced explicit wait did not mean lower completion time. | [Other scheduling directions](../06-cache-policy-and-dead-ends.md#other-tested-directions-not-promoted) |
 | Automatic demand-workspace default | Useful small-session gains, but growth regressed 25–63% in the combination and 30% with workspace alone. Cause unresolved; opt-in remains. | [Workspace resizing](../06-cache-policy-and-dead-ends.md#workspace-demand-and-safe-cache-trimming) |

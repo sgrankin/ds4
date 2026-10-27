@@ -166,6 +166,8 @@ speed-bench/ideas/artifacts/
 !/speed-bench/experiments/*/*.nu
 !/speed-bench/experiments/*/*.c
 !/speed-bench/experiments/upstream-selected-read-20261023/candidate.patch
+!/speed-bench/experiments/integer-prefill-20261027/*.patch
+!/speed-bench/experiments/packed-activation-20261028/*.patch
 !/speed-bench/experiments/model-family-ports-20261023/PAYLOAD.md
 !/speed-bench/experiments/qwen-glm-zig-20261024/*.md
 !/speed-bench/experiments/clef-native-20261024/*.md

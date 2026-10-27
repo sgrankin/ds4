@@ -1,0 +1,42 @@
+diff --git a/src/metal/routed_batch.zig b/src/metal/routed_batch.zig
+--- a/src/metal/routed_batch.zig
++++ b/src/metal/routed_batch.zig
+@@ -685,7 +685,7 @@
+         if (args.ne00 <= 0 or args.ne0 <= 0) return false;
+         const w = work(args) orelse return false;
+         const tile: u64 = if (self.p.packed_m32) 32 else 64;
+-        const ok = self.launch(c.DS4_ROUTED_MM, pipeline, .{ .mm = args }, .{ .x = w.capacity, .y = (@as(u64, @intCast(args.ne0)) + tile - 1) / tile, .threads = 128, .shared = if (self.p.packed_act_i8 and weight != 2) 12288 else if (self.p.packed_m32) 16384 else if (programs_used.mm_mpp) 12288 else 8192 }, .{ .source = source, .destination = destination, .weight = weight, .counts = w.counts, .work = w.offset, .cached = self.p.cached_iq2 });
++        const ok = self.launch(c.DS4_ROUTED_MM, pipeline, .{ .mm = args }, .{ .x = w.capacity, .y = (@as(u64, @intCast(args.ne0)) + tile - 1) / tile, .threads = 128, .shared = if (self.p.packed_act_i8 and weight != 2) 16384 else if (self.p.packed_m32) 16384 else if (programs_used.mm_mpp) 12288 else 8192 }, .{ .source = source, .destination = destination, .weight = weight, .counts = w.counts, .work = w.offset, .cached = self.p.cached_iq2 });
+         if (ok and self.p.packed_act_i8 and weight == 0 and @atomicRmw(u8, &packed_activation_logged, .Xchg, 1, .monotonic) == 0) {
+             _ = c.fprintf(c.__stderrp, "ds4: compressed activation FP prefill kernel=kernel_mul_mm_id_iq2_xxs_mpp_act_i8 tokens=%u input=%u middle=%u experts=%u selected=%u\n", self.q.rows, self.q.input_width, self.q.middle_width, self.q.total_experts, self.q.used_experts);
+         }
+diff --git a/src/metal/moe.metal b/src/metal/moe.metal
+--- a/src/metal/moe.metal
++++ b/src/metal/moe.metal
+@@ -9169,7 +9169,7 @@
+         threadgroup char *shmem [[threadgroup(0)]],
+         uint2 group [[threadgroup_position_in_grid]],
+         ushort tid [[thread_index_in_threadgroup]]) {
+-    constexpr int M = 64, N = 32, K = 32;
++    constexpr int M = 64, N = 64, K = 32;
+     if (group.x >= work[0]) return;
+     const uint2 item = ((device const uint2 *)(work + 2))[group.x];
+     if (item.y % N) return;
+@@ -9186,7 +9186,7 @@
+         return;
+     }
+ 
+-    // Two half weight tiles followed by two half activation tiles: 12 KiB.
++    // Two half weight tiles followed by two half activation tiles: 16 KiB.
+     threadgroup half *weights = (threadgroup half *)shmem;
+     threadgroup half *activations = weights + 2*M*K;
+     auto w0 = tensor(weights, dextents<int32_t, 2>(K, M));
+@@ -9247,7 +9247,7 @@
+         }
+         threadgroup_barrier(mem_flags::mem_threadgroup);
+     }
+-    // The 8 KiB output tile reuses weight staging after its last read retires.
++    // The 16 KiB output tile reuses input staging after its last read retires.
+     auto out = tensor((threadgroup float *)shmem, dextents<int32_t, 2>(M, N));
+     acc.store(out);
+     threadgroup_barrier(mem_flags::mem_threadgroup);

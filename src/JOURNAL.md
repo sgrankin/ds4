@@ -1,5 +1,216 @@
 # Serving project journal
 
+DeepInfer convergence status refresh, 2026-10-28: reconciled the inventory's
+stale look-back table and original proposed sequence with completed work.
+Official interaction/native constrained speculation and fast-preset physical
+index storage are implemented. Candidate scoring, DSP1, F16 main storage and
+decoder replay remain opt-in; SWB1 bounded restore remains diagnostic. The
+comparison is pinned to checked-out DeepInfer `5537415`, not a new upstream audit.
+
+The next queued correctness task is still typed incomplete DSML at token limits.
+Further proposals, not execution authorization: qualify DSP1 at ordinary
+confidence settings; pilot physical main FP4 storage before raw FP8; extend
+decoder compaction to ordinary chunks; profile direct packed-down publication
+or V4.1 HC collapse/norm fusion; batch SWB1 recovery and measure actual cache
+retention before changing ordinary policy. Main/raw values are already
+quantized then expanded into F32, so physical packing can target existing
+decoded values; consumer cost must be measured. The down-pack profile is a
+small target (~39 ms total), not a promised large gain. HC fusion must use the
+previous half-layer PRE and preserve BF16 boundaries. No builds/model runs or
+runtime changes in this review. Current summary and proposals:
+[DeepInfer alignment](../docs/DEEPINFER_ALIGNMENT.md).
+
+Commit-stack cleanup, 2026-10-28: consolidated the 21 changes above main
+(`be7f820f9ae5`) into eight coherent commits. Combined hosted-tool additions
+with their retirement, official interaction with native constraint completion,
+the DeepInfer inventory with candidate scoring, SIMD/native packed-index
+integration with its measurements/defaults, and the rejected quantized-prefill
+experiments. Kept attention recovery, GPU index primitives and canonical
+DSpark persistence as distinct reviewable changes; avoided reordering them.
+
+The original tip `5d5f0858e14c` remains at
+`archive/pre-stack-cleanup-20261028`, preserving measured baseline IDs,
+reproduction patches and all original experiment bookmarks. The consolidated
+tip had an identical tree before three comment updates and historical-runner
+README notes. No runtime logic changed; no model runs or rebuilds are needed.
+Main and installed executables remain unchanged. Fresh working change follows
+the eight commits; raw outputs and binaries remain local and ignored.
+
+Compressed activation experiment decision, 2026-10-28 00:53 UTC: **not adopted**.
+The 105 MiB saving survives floating-point arithmetic, but the best tested
+full-model version adds 4.04% prefill and 8.07% combined task time. All five
+aggregate pairs are slower (+6.43–10.19%); all 30 answers pass. A matching
+8K favorable diagnostic captures 220 packed IQ2 calls at 3.643→5.250 s,
+while activation packing is nearly unchanged (316.063→319.638 ms). This
+locates the extra cost in the consumer, without proving an occupancy or
+physical execution-unit cause. Direct register decoding passes numerics but
+costs +141.59% in five leaf pairs. A final N64 staged tile also passes but
+costs +24.47%; both stop at the leaf screen. Original staged leaf is +21.64%.
+
+Restored `build.zig`, `moe.metal` and `routed_batch.zig` exactly to baseline
+`19c63b1b26da`; removed the temporary fixture/build target. Complete staged,
+register and N64 patches retain the native Zig fixture and passed standard
+sequential application plus exact source-byte checks. Installed executables,
+main and approved packed-index defaults remain unchanged. The guarded model
+campaign recorded 1,380 normal-pressure samples and no swap growth; the
+diagnostic profile had 96 normal samples and 1.81 MiB maximum swap growth.
+No GPU/model jobs remain. Report, all concise results and reproduction:
+[compressed activation experiment](../speed-bench/experiments/packed-activation-20261028/README.md).
+Raw artifacts stay ignored under `.workspaces/packed-activation-20261028/`.
+Close this item within its one-hour cap; next separate queued work remains
+DSML length finalization. No further kernel tuning under this experiment.
+
+Compressed activation model checkpoint, 2026-10-28 00:46 UTC: all five fresh
+pairs across all three 8K cases finished normally; all 30 answers pass.
+Staged float-math storage saves 105 MiB in every process (267.59→162.59 MiB
+scratch; expert cache stays 40.88 GiB). Summed answer prefill averages
+62.5427→65.0676 s (+4.037%); summed prefill+generation 74.1025→80.0842 s
+(+8.072%, all five pairs slower, +6.43–10.19%). Per-case whole-time changes:
+ordinary −5.00%, favorable +23.46%, changed +6.68%. Reasoning stays enabled;
+generated lengths repeat 87→61 / 31→98 / 26→32 in every pair. Teacher ΔNLL
+is +0.22832 / +0.19756 / −0.10646 nats, KL 0.013787 / 0.002298 / 0.007970,
+no argmax flips; these are only 7/8/7 forced final-answer positions, not a
+broad quality score. The register variant's first runtime compile caught an
+accumulator-factory API mismatch, under repair. The frozen staged artifact is
+profiling the matching 8K favorable workload. Adoption remains undecided;
+installed executables/main remain unchanged. Evidence and all samples:
+`.workspaces/packed-activation-20261028/samples-staged/summary.json`.
+
+Compressed activation experiment, checkpoint 2026-10-28 00:25 UTC:
+the staged floating-point kernel passes finite, zero, tail and sentinel checks.
+Five alternating production-shaped MoE pairs (512 rows, input/output 5120,
+middle 2304, six experts) average 8.0046 ms control versus 9.7368 ms compressed
+(+21.64%, all five slower; paired range +19.62–22.88%). Explicit pipeline
+warmups are recorded separately. Relative RMS error is 0.5426%, cosine
+0.99998535; zero remains exact. Frozen staged binary/shaders are now running
+the five-pair, three-case model campaign. No adoption decision yet.
+
+A second consumer decodes directly into half cooperative registers, avoiding
+the first version's extra 4 KiB of shared activation staging. It uses four
+single-SIMD-group matmuls and needs fresh numerical/performance qualification.
+Source/builds for it must not interfere with the frozen full-model campaign.
+The expected 105 MiB saving is explained by the actual 4096-row batch: gate/up
+RHS shrinks from 240 to 135 MiB; Q2 down reuses that same owner and needs only
+108 MiB. This frees scratch; the configured expert cache does not grow.
+
+Authorized 00:15–01:15 UTC, including preparation/builds. Baseline
+`19c63b1b26da`; installed executables and main remain unchanged. User asks
+whether the earlier scratch saving can survive without integer arithmetic.
+Keep per-32 INT8 codes plus F32 scales, decode bounded half tiles and retain
+long F32 accumulation. Q2 down and expert SSD/cache bytes stay unchanged; no
+full F16 activation shadow. Exact `DS4_METAL_ROUTED_PACKED_ACT_I8=1` opt-in,
+M64 control. Measure ordinary, favorable and changed-fact 8K tasks with normal
+reasoning, fixed 48 GiB request, packed index/SIMD and native expert routing.
+Use the unchanged pressure guard and one GPU/model job. Raw artifacts:
+`.workspaces/packed-activation-20261028/`; retained scripts/report:
+`speed-bench/experiments/packed-activation-20261028/`.
+
+Integer-prefill experiment closes2026-10-27 23:59UTC: do not adopt either
+prototype. V1 (fivepairs/allthree8Kcases) adds34.06%prefill/35.09%whole time;
+V2 (fivefreshpairs/standalone8Kfavorable) adds18.49%prefill/34.70%whole time,
+slower inallfivepairs. These are separate campaigns with owncontrols. All40
+measured answers pass; normal reasoning stayson, favorabletrace31→98tokens.
+V2favorableteacherΔNLL−0.011413nats/KL0.005585/noargmaxflips; rejection is
+performance, not numerical identity. Acrossallfivepairs, V1/V2 favorable
+teacherbytes andgeneratedIDs match within eacharm. GPUfixture errors likewise
+match. V2scratch267.59→162.59MiBinallfivepairs saves105MiB; expertlive40.88GiB
+unchanged. V2guard487normal samples/zeroswapgrowth. Both matching profiles
+finishnormally; captured220IQ2launches are3.618→17.583sV1 and3.641→11.018sV2.
+These diagnostic captures establish kernelcost, not individual instruction
+attribution or physical NAXcounterproof. Group32scales, rescaling/staging and
+barriers remain optimization candidates. No general low-bit-arithmetic rejection.
+
+Restored build.zig/moe.metal/routed_batch.zig/testtarget exactly to9fdb8bf27dd7;
+no installed executable/default/main change. CompleteV1 andactivation-reuse
+patches, nativeZigfixture andfive-pair reproduction retained in the
+[report](../speed-bench/experiments/integer-prefill-20261027/README.md) and
+[not-adopted recipe](../recipes/not-adopted/integer-prefill.md). Standardgitapply
+checks pass sequentially on the baseline; resultingV2shader byte-matches the
+frozen tested artifact. Raw artifacts remainignored/local. Keep the new
+five-sample rule and approved packed-index presets. For future kernel work,
+screen production-shaped leaves with five samples first, then whole tasks.
+The separately queued DSML length-finalization repair remains future work.
+
+Integer V1 five-pair campaign completes23:39UTC. All30 task answers pass;
+normal reasoning retained. Five samples per arm/eachcase, all retained: summed
+answer-prefill+generation73.7501→99.6283s (+35.09%, all5slower), answerprefill
++34.06%. Per-case whole time ordinary+22.26%, favorable+46.79%, changed+36.99%.
+Generatedtokens87→86/31→98/26→28 repeat within eacharm. TeacherΔNLL is
+−0.11249/−0.01141/−0.13139nats and KL0.00654/0.00558/0.01255 with noargmaxflips;
+this is neither an exactness rejection nor evidence of a broad quality gain.
+Whole-process application pread56.97→74.17GiB includes the extra reasoning and
+OS file-cache hits; do not call it physical SSD traffic. Expertlive40.88GiB
+both. Guard1556normal samples, maxswapgrowth2.44MiB. Runtimef7c93c0c3993 and
+frozen artifacts retained. Same8K favorable GPU/host/I/O profile running now.
+Prepared V2 removes repeated activation quantization: pack once and reuse
+device INT8 rows/scales, retaining original expert bytes and old Q2down. V2
+still needs build, numerical qualification and five fresh paired measurements.
+
+Integer numerical qualification passes23:11UTC on the actual M5 Max. Four
+bounded Zig cases cover512/513/1024rows, uneven routes, zero inputs and output
+sentinels. Final-mixture relative RMS error is0.5307–0.5344%, cosine>=0.9999857;
+zero inputs stay exactlyzero, all consumed outputs finite and bounds intact.
+Actual native INT8 gate/up invocation is logged; down remains old Q2. The first
+fixture compile exposed a comptime-float/integer division coercion; corrected
+its route-weight literal and preserved the failed log. No exact-logit claim.
+Start five fresh pairs across all three real task cases with the same frozen
+binary/shaders, M64 both,48GiB cache and common expert-I/O summary counters.
+No other build/model jobs during primary latency collection.
+
+Integer-prefill resumes 2026-10-27 23:07 UTC, cap00:07UTC. The kernel/selector
+and probe build completed around21:04, but execution was interrupted before
+numerical or model comparisons; no samples were collected during the gap.
+The user asks status; continue authorized qualification from saved artifacts.
+New Metal source compiled and the router smoke passed under the guard. Probe
+exists in `.workspaces/integer-prefill-20261027/candidate/bin/`; freeze adjacent
+shaders before tests. Qualify bounded native numerical behavior, then collect
+all ten fresh model runs; no speed claim from source readiness or compilation.
+
+Integer-prefill experiment authorized 2026-10-27 20:59 UTC, first cap21:59UTC
+including preparation/builds. Keep installed executables/main unchanged and
+Q2 SSD/shared-cache bytes unchanged. Compare a small native INT8 MPP prefill
+variant with current half-tile MPP using the same binary/frozen shaders,
+fixed tile choice, packed index/SIMD and native expert routing. Integer tiles
+and activation quantization are transient; no whole-expert INT8 shadow.
+Qualify actual native execution and finite/error behavior first, then five
+fresh alternating pairs per arm on ordinary/favorable/adverse cases if budget
+permits, normal reasoning. Reuse decoder-replay teacher/task probes and the
+unchanged pressure guard; keep raw outputs ignored under
+`.workspaces/integer-prefill-20261027/`. Approximate numerical changes are
+measured with delta-NLL/KL and task answers, not rejected for nonidentity.
+Current work is opt-in preparation, not a speed claim or default promotion.
+
+2026-10-27 quantized-arithmetic discussion (source review only; no new timings):
+user clarifies the priorities are SSD bandwidth, RAM capacity, then some RAM
+bandwidth. Current IQ2_XXS gate/up is66B/256weights (2.0625bpw), Q2_K down84B
+(2.625bpw), averaging2.25bpw across equal-sized matrices. One routed expert is
+9,953,280B. SSD reads retain those bytes in the shared Metal cache; decode
+unpacks locally and prefill expands small half tiles, not whole expert owners.
+There is no index-style F32 weight shadow or block padding to reclaim. Separate
+scale/code planes could improve alignment without reducing bytes; CUDA MMQ
+already provides relevant IQ2/Q2 repacking examples. MXS3's sampled Q2 rejection
+remains specific to that dictionary scheme, not all lossless compression.
+
+User's examples are [ConvRot](https://huggingface.co/Merserk/MiniMax-H3-INT4-ConvRot)
+and Draw Things8-bitS. [ConvRot](https://arxiv.org/html/2512.03673v1) uses grouped
+regular Hadamard rotations to improve low-bit weight/activation quantization;
+it is a quantization method rather than lossless packing or a Metal guarantee.
+[Draw Things](https://releases.drawthings.ai/p/metal-quantized-attention-pulling)
+uses row-wise INT8 weights, dynamic activation quantization, actual INT8xINT8
+MPP matmul with INT32 accumulation, and floating rescaling. Its
+[open kernel](https://github.com/liuliu/ccv/blob/unstable/lib/nnc/mfa/kernels/NAInt8MatMulKernel.cpp)
+is a concrete M5 reference; its reported media speedups are not our measurements.
+Apple's [WWDC26 TensorOps reference](https://developer.apple.com/videos/play/wwdc2026/330/)
+adds FP4/INT2/E8M0 formats in macOS27; local SDK headers contain them. IQ2
+codebooks and Q2 affine scales/mins are not directly those native types.
+Proposal, not implementation: retain compact SSD/RAM experts, test temporary
+integer compute tiles and activation quantization on actual prefill shapes,
+alongside lossless alignment/repacking and measured read-amplification work.
+Do not expand the full expert cache to4/8bits merely for native arithmetic.
+Future comparisons require at least five samples per side, fixed cache budgets,
+actual SSD bytes/waits, GPU time, whole-task time and practical quality. No
+runtime/default/main change or heavy model job during this discussion.
+
 2026-10-27: user requires at least five measured samples per side for future
 performance comparisons; no comparative timing conclusions from one-off runs.
 Recorded in AGENTS.md: alternate order, preserve all samples, report variation.

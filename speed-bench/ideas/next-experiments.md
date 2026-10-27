@@ -6,6 +6,51 @@ checks or diagnostics, not comparative performance evidence. Packed index
 storage is accepted and enabled in all DeepSeek fast presets; explicit0 remains
 available and `persistent-packed` is a compatibility alias for `persistent-fast`.
 
+## Compressed activations with floating-point matmul — completed, not adopted
+
+2026-10-28, within the authorized 00:15–01:15 UTC window; baseline
+`19c63b1b26da`. Three consumers pass finite/zero/tail/boundary checks. Five
+alternating production-shaped leaf pairs per variant: original staged +21.64%,
+direct registers +141.59%, wider N64 staged +24.47%, each against its own
+controls. The original staged consumer also completed five fresh full-model
+pairs across all three 8K cases with normal reasoning: 105 MiB less scratch
+in every process, +4.04% combined prefill and +8.07% combined task time
+(all five aggregate pairs slower, +6.43–10.19%). All 30 answers pass. Reasoning
+lengths change 87→61 / 31→98 / 26→32. Matched diagnostic: 220 IQ2 consumers
+3.643→5.250 s, while pack time is nearly unchanged. No physical-unit or
+occupancy attribution without counters. Other variants stopped at the leaf
+screen; no unsupported model-performance claims for them.
+
+Runtime hooks/fixture/build target removed; complete checked patches and
+reproduction retained in the [report](../experiments/packed-activation-20261028/README.md).
+Expert SSD/cache bytes and live budget stay unchanged. Installed executables,
+main and approved packed-index presets remain unchanged. Guard pressure normal;
+raw outputs `.workspaces/packed-activation-20261028/`. The next separate item
+remains DSML length finalization; no further kernel tuning under this item.
+
+## Integer prefill — completed, not adopted, 2026-10-27
+
+Implementation/build began20:59UTC, interruptedafter21:04; qualificationand
+measurements resumed23:07UTC andclosed23:59UTC. Fivefreshpairs perarm ineach
+campaign: V1allthree8Kcases +34.06%prefill/+35.09%whole; V2standalone8Kfavorable
++18.49%prefill/+34.70%whole,all5slower. All40answerspass. V2saves105MiBscratch,
+but expertcache40.88GiBstaysfixed. MatchingprofileslocatecostinIQ2GEMM;
+V2stilltakes~3×kernelGPUtime. Runtimehooksremoved, code/fixture/repropatches
+retained. [Report](../experiments/integer-prefill-20261027/README.md) and
+[lessons](../../recipes/not-adopted/integer-prefill.md). Packed-index approval
+andfive-sample rule remain. Nextseparatecorrectnessitem isDSMLlengthfinalization.
+
+Original authorization:
+
+Try transient INT8 MPP tiles with Q2 expert SSD/cache storage unchanged. Qualify
+native execution and numerical error, then five alternating fresh pairs per arm
+using the existing normal-reasoning teacher/task probe and unchanged pressure
+guard. Hold tile selection, expert budget, packed index and native routing fixed.
+Measure ordinary/favorable/adverse cases, prefill/whole time and delta-NLL/KL.
+Keep experimental behavior opt-in and installed binaries/main unchanged. Raw
+outputs: `.workspaces/integer-prefill-20261027/`. This item precedes the queued
+DSML length repair at the user's request; no speedup assumed from media kernels.
+
 ## Five samples per index layout — completed 2026-10-27
 
 Within18:59–19:59UTC budget: same current binary/frozen shaders and SIMD1,
