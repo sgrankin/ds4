@@ -1634,6 +1634,15 @@ int ds4_gpu_dsv41_indexer_score_candidates(
         uint32_t              n_rows,
         uint32_t              n_candidate_blocks);
 
+
+/* Experimental local68B index row, not the upstream block-wide wire layout. */
+int ds4_gpu_dsv41_indexer_pack_fp4(ds4_gpu_tensor *packed,
+        const ds4_gpu_tensor *original_post_rope, uint32_t rows);
+int ds4_gpu_dsv41_indexer_score_fp4(ds4_gpu_tensor *scores,
+        const ds4_gpu_tensor *q, const ds4_gpu_tensor *weights,
+        const ds4_gpu_tensor *packed, const ds4_gpu_tensor *candidate_blocks,
+        uint32_t rows, uint32_t candidate_count);
+
 int ds4_gpu_glm_indexer_scores_batch_tensor(
         ds4_gpu_tensor       *scores,
         const ds4_gpu_tensor *q,

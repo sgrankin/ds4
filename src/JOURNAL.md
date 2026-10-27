@@ -1,5 +1,25 @@
 # Serving project journal
 
+Packed-index pilot completed14:24UTC (~10-minute execution after preparation).
+All quantizer-bit/score/ID/tie/tail/offset checks pass through256K. Local row
+68B vs512B,86.72% smaller relative to existing mode2 values. Dense readers cost
+~3–13% extra in the measured32K–256K chains; candidate readers near neutral.
+Whole256K pack~.504ms. One bit-construction unpack variant also passes but
+doesn't improve timing; reverted to simpler arithmetic reader. Keep this as a
+producer/reader capacity pilot, with no whole-model speed/quality/SSD/default
+claim. Future integration must cover batched prefill plus canonical conversions
+and actually remove the F32 cache. Report/reproduction in the shared experiment
+folder; raw output and rejected variant stay ignored. Next: useful DSpark
+feature persistence across canonical/SSD restore, including restart selection.
+
+Packed-index pilot starts14:14UTC, cap15:14UTC, parent0363cb40. Apply one
+68-byte index-key producer and dense/candidate scorer pair; no model-cache,
+prefill, persistence or preset integration yet. Record original mode2 scale
+at publication, verify decoded F32 bits and scorer/global-ID agreement against
+the current GPU quantizer, including signed zero/ties/tails. Measure packing
+and consuming chains separately through256K. The local interleaved row layout
+has DeepInfer's numerical target/logical row size, not its block-wire layout.
+
 Block-only recovery completed14:13UTC (40-minute execution plus prepared patch).
 Actual baseline reasoning/answer traces (145tokens across3cases) give mean
 ΔNLL−.00113/KL.00596; adverse+.00102nats/token (~+.10%perplexity). All free

@@ -8,6 +8,13 @@ export fn ds4_gpu_glm_indexer_score_one_tensor(scores: ?*Tensor, q: ?*const Tens
 export fn ds4_gpu_dsv41_indexer_score_candidates(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
     return Index.scoreCandidates(scores, q, weights, keys, blocks, rows, block_count);
 }
+
+export fn ds4_gpu_dsv41_indexer_pack_fp4(packed_tensor: ?*Tensor, original: ?*const Tensor, rows: u32) c_int {
+    return Index.packIndexFp4(packed_tensor, original, rows);
+}
+export fn ds4_gpu_dsv41_indexer_score_fp4(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, packed_tensor: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
+    return Index.scoreIndexFp4(scores, q, weights, packed_tensor, blocks, rows, block_count);
+}
 export fn ds4_gpu_glm_indexer_scores_batch_tensor(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, rows: u32, tokens: u32, start: u32, heads: u32, width: u32, scale: f32, half: bool) c_int {
     return Index.scoreBatch(scores, q, weights, keys, rows, tokens, start, 1, heads, width, scale, half, false);
 }

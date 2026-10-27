@@ -29,6 +29,14 @@ than exact hits. Actual baseline traces giveΔNLL−.00113/KL.00596 and3/3 corre
 at32K one case gives61.3% less time than miss. Keep diagnostic/cold-recovery
 direction; batch it and measure retention before ordinary cache integration.
 Proceed to the packed-index producer/reader pilot.
+Item3 starts14:14UTC, cap15:14UTC, parent0363cb40:68B physical index producer
+and one consuming scorer, original-scale/rounding checks and measured memory/
+latency points. No whole-cache/model/SSD integration is claimed by this pilot.
+Item3 completed14:24UTC. Exact current-quantizer value/scorer/ID parity with
+86.72% smaller rows; dense scoring~3–13% slower, candidates near neutral. A
+bit-based unpack variant gives no win and was reverted. Retain capacity pilot;
+whole-model/prefill/SSD integration remains future measured work. Proceed to
+DSpark useful-history persistence.
 
 ## Constrained packets/MTP — completed with limits, 2026-10-27
 

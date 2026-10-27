@@ -184,11 +184,61 @@ The last command needs Matplotlib (the existing local
 remain local and ignored. The plot shows measured points and exact-control
 ranges, with no invented interpolation/frontier.
 
-## Remaining authorized experiments
+## 3. Physical index-FP4 producer and reader
 
-3. One real packed producer/reader, initially128-wide index FP4 with UE8M0 scales
-   (68B versus512B per row). Verify numerical ABI and measure the whole boundary,
-   rather than claiming savings from dtype names or CPU-only repacking.
+Completed14:14–14:24UTC, parent`0363cb40`. One local row stores64 nibble bytes
+and4 UE8M0 scale bytes,68B versus512B F32 (**86.72% smaller**). Even lanes use
+low nibbles; sign bit3 retains negative zero. This interleaved row is a Metal
+pilot, not byte-compatible with DeepInfer's block-wide data/scales layout.
+It preserves the values of our existing mode2 quantizer; that is lossless
+storage relative to today's quantized values, not lossless quantization of the
+original activations.
+
+The producer reads original post-RoPE values and retains the original group32
+scale and ties-even E2M1 code. Scales are not reconstructed from rounded output:
+the fixture checks a6.03125 transition where that could choose a different
+encoding. Dense and candidate readers decode into the same128-float shared tile
+and keep the old32-head dot/reduction and global-ID order. Candidate readers
+write selected rows, then the existing filter initializes excluded rows.
+
+The production-linked GPU fixture passes bit-exact roundtrip against the old
+GPU quantizer, signed codes/zero, ties, exponent boundaries/tiny inputs,
+nonzero offsets/canaries, dense/candidate scores and selected IDs. Shapes37,
+8192,32768,32771,65536,262144 include partial eight-key tails. Warmed rotating
+read chains (score+filter+top-k) and separate whole-array publication timings:
+
+| Keys | F32 / packed MiB | Pack ms | Dense F32 / FP4 ms | Candidates F32 / FP4 ms |
+|---:|---:|---:|---:|---:|
+|8,192|4 / .531|.490|.691 / .682|.894 / .830|
+|32,768|16 /2.125|.237|.689 / .712|.468 / .478|
+|65,536|32 /4.250|.281|.791 / .897|.475 / .453|
+|262,144|128 /17.000|.504|1.957 /2.151|.570 / .558|
+
+The8K point selects every key and is not a reason to enable the sparse path.
+Dense reads cost~3–13% more at32K–256K in this sample; candidate reads are near
+neutral. Packing cost is for the entire array, not a one-row decode-publication
+measurement. Preserve this capacity result without a whole-model speed claim.
+
+One bounded variant constructed normal FP4 values directly from their F32
+sign/exponent/mantissa bits, retaining old arithmetic for exceptional ranges.
+All GPU checks still pass, but timings show no useful improvement (e.g.256K
+dense FP4 2.168ms versus F32 1.960ms; candidate.579/.579ms). Reverted it and kept
+the simpler arithmetic reader. Original and variant raw evidence/patch remain
+local. No further micro-tuning was attempted in this slice.
+
+Only explicit GPU APIs/fixture are added: no graph cache allocation, batched
+prefill, payload, SSD format, model-default or preset change. Whole-model
+quality and speed remain unmeasured. A next integration needs a packed→BF16
+prefill consumer and canonical import/export conversion; do not leave a full
+F32 shadow cache and call it a memory saving.
+
+```sh
+nu tools/zig-build metal-test --prefix .workspaces/index-fp4-build -j6
+python3 speed-bench/ideas/pressure_run.py .workspaces/index-fp4-guard -- .workspaces/index-fp4-build/bin/test-deepseek41-metal --index-fp4
+```
+
+## Remaining authorized experiment
+
 4. Preserve useful128-position DSpark target features across canonical/SSD
    restore so short cached requests need not warm128 future scalar tokens.
    Measure first-cycle activation and persistence/rebuild cost separately.

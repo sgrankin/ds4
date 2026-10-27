@@ -389,3 +389,86 @@ kernel void kernel_dsv41_indexer_scores_packed(
     }
 }
 #endif
+
+
+// Physical index-FP4 pilot. The local68B row has64 code bytes then4 exponent
+// bytes; upstream index cache data/scales are block-wide, a different layout.
+kernel void kernel_dsv41_indexer_pack_fp4(
+        constant ds4_metal_args_dsv41_index_candidates &args,
+        device const float *original,
+        device const float *unused_weights,
+        device const float *unused_keys,
+        device uchar *packed,
+        uint row [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]]) {
+    (void)unused_weights; (void)unused_keys;
+    if (row >= args.n_rows) return;
+    const float value = dsv41_bf16(original[(ulong)row * 128u + tid]);
+    const float amax = simd_max(abs(value));
+    // Keep the existing mode2 multiply/scale/codebook operations, including
+    // BF16 publication and signed zero; record the original scale here.
+    const float scale = dsv41_pow2_ceil(max(amax, 7.052966104933725e-38f) * (1.0f / 6.0f));
+    const float x = min(abs(value) / scale, 6.0f);
+    uint code = 0;
+    float best = abs(x - dsv4_e2m1fn_values[0]);
+    for (uint i = 1; i < 8; i++) {
+        const float error = abs(x - dsv4_e2m1fn_values[i]);
+        if (error < best || (error == best && !(i & 1u) && (code & 1u))) {
+            code = i;
+            best = error;
+        }
+    }
+    code |= (as_type<uint>(value) >> 28u) & 8u;
+    const uint neighbor = simd_shuffle_xor(code, 1u);
+    if (!(lane & 1u)) packed[(ulong)row * 68u + tid / 2u] = uchar(code | (neighbor << 4u));
+    if (!lane) packed[(ulong)row * 68u + 64u + sg] = uchar(as_type<uint>(scale) >> 23u);
+}
+
+kernel void kernel_dsv41_indexer_score_fp4(
+        constant ds4_metal_args_dsv41_index_candidates &args,
+        device const float *q,
+        device const float *weights,
+        device const uchar *packed,
+        device float *scores,
+        device const int *blocks,
+        threadgroup float *shared [[threadgroup(0)]],
+        uint work [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]]) {
+    uint row = work;
+    if (args.cache_f16) { // Fixed pilot packet: this field selects candidates.
+        const int block = blocks[work / 8u];
+        if (block < 0 || uint(block) >= (args.n_rows + 7ul) / 8ul) return;
+        row = uint(block) * 8u + work % 8u;
+    }
+    if (row >= args.n_rows) return;
+    threadgroup float *ktg = shared;
+    threadgroup float *psum = ktg + 128u;
+    if (tid < 128u) {
+        const ulong base = (ulong)row * 68u;
+        const uint pair = packed[base + tid / 2u];
+        const uint code = (pair >> ((tid & 1u) * 4u)) & 15u;
+        const float scale = as_type<float>(uint(packed[base + 64u + tid / 32u]) << 23u);
+        const float sign = as_type<float>((code & 8u) ? 0x80000000u : 0u);
+        ktg[tid] = dsv41_bf16(copysign(dsv4_e2m1fn_values[code & 7u], sign) * scale);
+    }
+    float acc = 0.0f;
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    for (uint head0 = 0; head0 < 32u; head0 += 4u) {
+        const uint head = head0 + uint(sg);
+        device const float4 *q4 = (device const float4 *)(q + (ulong)head * 128u);
+        threadgroup const float4 *k4 = (threadgroup const float4 *)ktg;
+        float s = dot(q4[lane], k4[lane]);
+        s = simd_sum(s);
+        if (lane == 0) psum[sg] = max(s * args.scale, 0.0f) * weights[head];
+        threadgroup_barrier(mem_flags::mem_threadgroup);
+        if (tid == 0) {
+            acc += psum[0]; acc += psum[1]; acc += psum[2]; acc += psum[3];
+        }
+        threadgroup_barrier(mem_flags::mem_threadgroup);
+    }
+    if (tid == 0) scores[row] = acc;
+}

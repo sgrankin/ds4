@@ -90,6 +90,67 @@ pub fn scoreCandidates(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Ten
     return scoreDispatch(&launch, "V4.1 candidate indexer score");
 }
 
+/// Experimental local [64 nibble bytes][4 UE8M0 scales] index row. Publish
+/// from original post-RoPE values, before the ordinary in-place quantizer.
+pub fn packIndexFp4(packed_tensor: ?*Tensor, original: ?*const Tensor, rows: u32) c_int {
+    if (api.init() == 0 or rows == 0) return 0;
+    if (!fits(original, @as(u64, rows) * 128 * 4) or !fits(packed_tensor, @as(u64, rows) * 68))
+        return api.reportError("ds4: packed index producer received undersized buffers");
+    var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
+    args.one = .{ .n_rows = rows, .n_head = 32, .head_dim = 128, .cache_f16 = 0, .scale = 1.0 / 64.0 };
+    const launch = c.ds4_metal_index_score_launch{
+        .pipeline = c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_FP4_PACK),
+        .batch = false,
+        .args = args,
+        .q = original,
+        .weights = null,
+        .keys = null,
+        .candidate_blocks = null,
+        .scores = packed_tensor,
+        .groups_x = rows,
+        .groups_y = 1,
+        .threads_x = 32,
+        .threads_y = 4,
+        .shared_bytes = 0,
+    };
+    return scoreDispatch(&launch, "V4.1 physical FP4 index producer");
+}
+
+/// Same scalar score reduction as scoreOne/scoreCandidates, replacing only
+/// the key reader. Null blocks selects dense scoring; a list selects sparse.
+pub fn scoreIndexFp4(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, packed_tensor: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
+    if (api.init() == 0 or rows == 0 or
+        (blocks == null and block_count != 0) or
+        (blocks != null and (block_count == 0 or block_count > (@as(u64, rows) + 7) / 8))) return 0;
+    if (!fits(scores, @as(u64, rows) * 4) or !fits(q, 32 * 128 * 4) or
+        !fits(weights, 32 * 4) or !fits(packed_tensor, @as(u64, rows) * 68) or
+        (blocks != null and !fits(blocks, @as(u64, block_count) * 4)))
+        return api.reportError("ds4: packed index scorer received undersized buffers");
+    const pipeline = c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_FP4_SCORE);
+    if (pipeline.handle == null) return 0;
+    var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
+    // This fixed pilot reuses the20-byte scorer packet: field4 selects sparse
+    // rows rather than an F16 source. The packed reader always uses68B rows.
+    args.one = .{ .n_rows = rows, .n_head = 32, .head_dim = 128, .cache_f16 = @intFromBool(blocks != null), .scale = 1.0 / 64.0 };
+    const launch = c.ds4_metal_index_score_launch{
+        .pipeline = pipeline,
+        .batch = false,
+        .args = args,
+        .q = q,
+        .weights = weights,
+        .keys = packed_tensor,
+        // Dense mode binds an unused valid buffer at the same fixed slot.
+        .candidate_blocks = if (blocks != null) blocks else q,
+        .scores = scores,
+        .groups_x = if (blocks != null) @as(u64, block_count) * 8 else rows,
+        .groups_y = 1,
+        .threads_x = 32,
+        .threads_y = 4,
+        .shared_bytes = (128 + 4) * 4,
+    };
+    return scoreDispatch(&launch, "V4.1 physical FP4 index score");
+}
+
 pub fn scoreBatch(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, rows: u32, tokens: u32, start: u32, ratio: u32, heads: u32, width: u32, scale: f32, half: bool, tiled_f32: bool) c_int {
     if (api.init() == 0) return 0;
     if (scores == null or q == null or weights == null or keys == null or rows == 0 or

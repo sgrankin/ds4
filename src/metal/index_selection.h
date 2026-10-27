@@ -55,6 +55,7 @@ enum {
     DS4_METAL_INDEX_MERGE, DS4_METAL_INDEX_MERGE_CAUSAL, DS4_METAL_INDEX_MERGE_PREFIX,
     DS4_METAL_INDEX_MASK_FILL, DS4_METAL_INDEX_MASK_SCATTER, DS4_METAL_INDEX_ROW_SORT,
     DS4_METAL_INDEX_CANDIDATE_DIRECT,
+    DS4_METAL_INDEX_FP4_PACK, DS4_METAL_INDEX_FP4_SCORE,
 };
 ds4_metal_index_pipeline ds4_metal_index_get_pipeline(uint32_t kind);
 ds4_metal_index_facts ds4_metal_index_get_facts(void);

@@ -16,6 +16,9 @@ The subsequent block-only128-row prototype also validates bounded recovery and
 small measured baseline-trace changes, with a size/latency tradeoff. It rebuilds
 all40 rings through a direct diagnostic API; ordinary cache policy and isolated
 encoder-only recovery remain absent. See the report for scope and measurements.
+The index-FP4 producer/reader pilot now also verifies68B rows against the old
+GPU quantizer/scorer. Dense readers cost modestly more; candidate readers are
+near neutral. Actual model-cache and SSD packing remain absent.
 
 This covers the material techniques in the public engine, its kernel integration
 and the separately documented production service. It is not a claim that every
