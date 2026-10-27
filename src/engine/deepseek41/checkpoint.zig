@@ -76,6 +76,10 @@ pub const Checkpoint = struct {
     fn state(self: *const Checkpoint) payload.Payload {
         return .{ .graph = self.graph, .config = self.config };
     }
+    fn canonicalState(self: *const Checkpoint) payload.Payload {
+        const flag = c.getenv("DS4_V41_CHECKPOINT_DRAFT_FEATURES");
+        return .{ .graph = self.graph, .config = self.config, .allow_draft = true, .include_draft = flag != null and c.strcmp(flag, "1") == 0 };
+    }
     fn tokens(self: *const Checkpoint) []const c_int {
         const checkpoint = &self.frontier.checkpoint;
         return if (checkpoint.len == 0) &.{} else checkpoint.v[0..@intCast(checkpoint.len)];
@@ -88,11 +92,12 @@ pub const Checkpoint = struct {
         const frontier = self.frontier;
         if (frontier.approximate_suffix or !frontier.checkpoint_valid or !self.ready or !self.graph.valid or
             self.graph.pos != @as(u32, @bitCast(frontier.checkpoint.len))) return 0;
-        return header_bytes + self.state().bodyBytes(@intCast(frontier.checkpoint.len));
+        return header_bytes + self.canonicalState().bodyBytes(@intCast(frontier.checkpoint.len));
     }
-    fn saveWire(self: *const Checkpoint, stream: *c.FILE, errors: []u8) c_int {
+    fn saveWire(self: *const Checkpoint, comptime canonical: bool, stream: *c.FILE, errors: []u8) c_int {
         if (!self.ready) return fail(errors, "V4.1 graph has no complete frontier to save");
-        self.state().save(stream, self.tokens(), self.logits(), errors) catch return 1;
+        const body = if (canonical) self.canonicalState() else self.state();
+        body.save(stream, self.tokens(), self.logits(), errors) catch return 1;
         return 0;
     }
     pub fn saveCanonical(self: *const Checkpoint, maybe_stream: ?*c.FILE, errors: []u8) c_int {
@@ -100,15 +105,16 @@ pub const Checkpoint = struct {
             return fail(errors, "private approximate suffix state cannot be exported as canonical KV");
         const stream = maybe_stream orelse return fail(errors, "session has no valid checkpoint to save");
         if (!self.frontier.checkpoint_valid) return fail(errors, "session has no valid checkpoint to save");
-        return self.saveWire(stream, errors);
+        return self.saveWire(true, stream, errors);
     }
-    fn loadWire(self: *const Checkpoint, stream: *c.FILE, bytes: u64, errors: []u8) c_int {
+    fn loadWire(self: *const Checkpoint, comptime canonical: bool, stream: *c.FILE, bytes: u64, errors: []u8) c_int {
         var remaining = bytes;
         var header: payload.Header = undefined;
         if (!readHeader(stream, &remaining, &header, errors)) return 1;
         if (!self.ready) return fail(errors, "invalid V4.1 snapshot dimensions or size");
         var mutated = false;
-        var loaded = self.state().load(stream, &header, remaining, self.logits(), &mutated, errors) catch {
+        const body = if (canonical) self.canonicalState() else self.state();
+        var loaded = body.load(stream, &header, remaining, self.logits(), &mutated, errors) catch {
             // Invalid headers/tokens preserve the old frontier. Once device
             // writes can occur, no old checkpoint may remain exportable.
             if (mutated) self.frontier.checkpoint_valid = false;
@@ -121,7 +127,7 @@ pub const Checkpoint = struct {
     }
     pub fn loadCanonical(self: *const Checkpoint, maybe_stream: ?*c.FILE, bytes: u64, errors: []u8) c_int {
         const stream = maybe_stream orelse return fail(errors, "invalid session payload load");
-        const result = self.loadWire(stream, bytes, errors);
+        const result = self.loadWire(true, stream, bytes, errors);
         if (result == 0) {
             self.frontier.overthink_prompt_len = self.frontier.checkpoint.len;
             self.frontier.approximate_suffix = false;
@@ -170,7 +176,7 @@ pub const Checkpoint = struct {
         };
         const stream = openMemory(snapshot.ptr, bytes + 1, "wb") orelse
             return fail(errors, "cannot open decoder replay checkpoint");
-        var result: c_int = if (writeReplayHeader(stream, header, errors)) self.saveWire(stream, errors) else 1;
+        var result: c_int = if (writeReplayHeader(stream, header, errors)) self.saveWire(false, stream, errors) else 1;
         if (c.fclose(stream) != 0 and result == 0) result = fail(errors, "cannot finalize decoder replay checkpoint");
         if (result == 0) snapshot.len = bytes;
         return result;
@@ -204,7 +210,7 @@ pub const Checkpoint = struct {
         self.frontier.decoder_replay_rows = header[3];
         self.frontier.decoder_replay_selected = header[4] != 0;
         invalidate.* = true;
-        var result = self.loadWire(stream, body, errors);
+        var result = self.loadWire(false, stream, body, errors);
         if (c.fclose(stream) != 0 and result == 0) result = fail(errors, "cannot close decoder replay checkpoint restore");
         if (result != 0) return 1;
         invalidate.* = false;

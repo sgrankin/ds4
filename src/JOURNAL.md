@@ -1,5 +1,58 @@
 # Serving project journal
 
+DeepInfer four-item sequence completed15:08UTC. Candidate scalar scoring and
+canonical DSP1 remain opt-in; block-only recovery and physical FP4 indexing
+remain explicit prototypes. No preset, root executable or main promotion.
+The source/report/scripts form four cohesive local experiment commits; raw
+outputs, checkpoints, benchmark logs and rejected bit-reader variant stay ignored.
+
+Draft persistence completion: actual restored32/96-token HTTP replies perform
+8/25 q verification cycles versus0/0 control, with97SSDcachedtokens. Latency
+2.251→1.890s (−16.0%) and6.079→5.383s (−11.4%). Complete T0 strict-tool and
+schema replies improve10.2%/8.5%, ordinary slows3.9%; normalized reasoning/
+output content and counts match exactly. Both eager-confidence0 arms pass7/7
+complete quality cases and27-delta streaming accumulation. T1 passes but has
+different unseeded lengths; don't claim a stochastic throughput gain. Cache
+files34,721,352→45,566,376B for the3small endpoints, with real DSP1 headers/
+extents verified. Full `nu tests/verify.nu -j6` passes; all5 final executables
+build/help0 at `.workspaces/deepinfer-alignment-20261027/item4/final-build/`.
+Both owned servers exit0. The report records compatibility, commands and limits.
+
+Concrete next correctness repair: length-truncated DSML currently becomes
+failed output. Preserve typed partial arguments and streamed IDs as incomplete,
+avoid replay/canonicalization of partial calls, and retain malformed-output
+errors. A one-line suppressed parser error would leak raw DSML. This was a
+control-arm diagnostic, not a new DSP1 failure, and remains a separate task.
+
+User reminder: explicit SIMD/vector layouts are available; don't rely solely
+on auto-vectorization. Existing scorers use float4/simd sums/shuffles. The
+rejected bit-only unpack change did not test a different SIMD work layout;
+multi-code loads/scale broadcasts remain a future bounded kernel experiment.
+
+Draft-history persistence starts14:26UTC, cap15:26UTC, parented9210a0. DSP1
+canonical-only trailer is opt-in viaDS4_V41_CHECKPOINT_DRAFT_FEATURES=1 and stores
+three chronological BF16 target-feature tails (max3,932,192B); projected draft
+KV is rebuilt on first use. Old base payloads and flag-off receivers remain
+valid target-only restores. Keep suffix/DRP1/SWB1 base formats unchanged.
+Update SSD validation/manifest/splitting and prefer useful DSP1 over base at
+equal native prefix length. Qualify actual HOT0 close/reopen/materialization,
+immediate positive-temperature constrained verification and scalar teacher
+agreement, then short cached-request latency/quality with reasoning retained.
+
+Draft checkpoint14:33UTC: wire2/2 and existing state-cache regressions pass.
+BF16 compact-carry fixture preserves every16-bit pattern and boundary widths.
+Installed-model oracle at wrapped257-token frontier saves12,657,208B base and
+16,589,400B DSP1 (+3,932,192B). HOT0 admission/materialization before and after
+restart prefers DSP1 despite publishing base last, with exact bytes. Oldbase
+and flag-off fallback work. The very first enabled restored T1 constrained
+cycle performs10 matcher masks, proposes5/accepts4 and commits6 inclcorrection;
+fresh scalar teacher logits match byte-for-byte (maxerror0). No future128-token
+warmup is needed. First HTTP control passes7/7 complete cases plus streaming;
+first32/96 caps are being measured separately after context switches. The
+capped96-token tool diagnostic finds an existing length-finalization error
+(failed instead of incomplete), retained for a separate small repair. Use
+ordinary reasoning for the checkpoint latency comparison.
+
 Packed-index pilot completed14:24UTC (~10-minute execution after preparation).
 All quantizer-bit/score/ID/tie/tail/offset checks pass through256K. Local row
 68B vs512B,86.72% smaller relative to existing mode2 values. Dense readers cost

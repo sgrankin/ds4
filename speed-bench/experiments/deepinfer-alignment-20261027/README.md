@@ -200,6 +200,12 @@ the fixture checks a6.03125 transition where that could choose a different
 encoding. Dense and candidate readers decode into the same128-float shared tile
 and keep the old32-head dot/reduction and global-ID order. Candidate readers
 write selected rows, then the existing filter initializes excluded rows.
+Concretely: BF16-RNE inputs; take per32 absolute maximum; choose the power-of-two
+ceiling of`max(amax,6*2^-126)*(1.0f/6.0f)` using the existing rounded-F32
+operations; choose nearest magnitude in`{0,.5,1,1.5,2,3,4,6}` with ties to an even
+code index. Store sign in bit3 and the scale's biased exponent in its UE8M0
+byte. Decode the signed code times scale, then BF16-RNE. This specifies the
+numerical boundary independently of our harness.
 
 The production-linked GPU fixture passes bit-exact roundtrip against the old
 GPU quantizer, signed codes/zero, ties, exponent boundaries/tiny inputs,
@@ -237,8 +243,109 @@ nu tools/zig-build metal-test --prefix .workspaces/index-fp4-build -j6
 python3 speed-bench/ideas/pressure_run.py .workspaces/index-fp4-guard -- .workspaces/index-fp4-build/bin/test-deepseek41-metal --index-fp4
 ```
 
-## Remaining authorized experiment
+## 4. Useful DSpark history across canonical and SSD restore
 
-4. Preserve useful128-position DSpark target features across canonical/SSD
-   restore so short cached requests need not warm128 future scalar tokens.
-   Measure first-cycle activation and persistence/rebuild cost separately.
+Completed14:26–15:08UTC, parent`ed9210a0`. Enable save/restore with
+`DS4_V41_CHECKPOINT_DRAFT_FEATURES=1` on a DSpark-enabled engine. Normal/default
+configuration is unchanged. The canonical DSV4v2 base remains intact, followed
+by one optional DSP1v1 trailer:
+
+```text
+8 little-endian u32 words:
+  magic="DSP1", version=1, absolute_position=P, rows=min(P,128),
+  hidden_width=5120, target_layer_0, target_layer_1, target_layer_2
+then three chronological [rows,5120] arrays of little-endian BF16 bits
+```
+
+The target features were already rounded to BF16 at capture; their packing is
+lossless. The existing GPU compact-carry kernel converts two ring segments per
+stage rather than a CPU element loop. Restore rebuilds absolute-position tags
+and leaves projected draft KV invalid; the existing seed operation reconstructs
+it on the very next draft. This uses more stored bytes than projected-only KV,
+but preserves the current readiness/rollback contract and avoids tying cached
+target features to projection-weight identity.
+
+Maximum extra bytes are3,932,192 (3.75MiB plus32B header). Old base payloads
+remain accepted. Flag-off, missing-drafter or different-layer receivers consume
+the valid appendix and retain target-only fallback. Old binaries reject extended
+payloads. Private suffix/DRP1/SWB1 formats remain base-only. SSD admission,
+manifest discovery and segment splitting accept DSP1. At equal native-prefix
+length, lookup prefers useful DSP1 over an old base entry regardless of list
+or restart directory order; it does not change the target-cache profile.
+
+The native Zig installed-model oracle uses two sessions and a wrapped257-token
+frontier. Base12,657,208B becomes16,589,400B. It publishes DSP1 then base, proves
+DSP1 wins that tie, closes/reopens HOT0 cache, checks exact materialized bytes,
+then restores it. **The first T1 constrained cycle** performs10 matcher masks,
+proposes5/accepts4, commits6 tokens including correction, and matches scalar
+teacher logits exactly (max absolute error0). Old-base and flag-off cases
+perform no draft masks. Pure wire2/2, existing cache regressions and the GPU
+BF16 compact-carry bit/bounds fixture pass.
+
+Matched HTTP servers use the same1017 trunk/support files,32GiB expert cache,
+ctx8192/chunk512, HOT0, no suffix reuse, full five-proposal DSpark verification
+(`--dspark-confidence 0 --mtp-draft 6 --mtp-exact-sampling`). This is an eager
+verification experiment, not a measurement of the default confidence gate.
+Both servers pass7/7 complete ordinary/tool/schema checks plus streaming;
+T0 reasoning/output content and token counts match exactly after excluding IDs.
+
+| Cached request | Tokens | Base seconds | DSP1 seconds | Time change |
+|---|---:|---:|---:|---:|
+| Ordinary complete |260|17.855|18.552|+3.9%|
+| Strict tool complete |169|10.212|9.167|−10.2%|
+| Schema answer complete |183|11.301|10.337|−8.5%|
+| Ordinary first32 |32|2.251|1.890|−16.0%|
+| Ordinary first96 |96|6.079|5.383|−11.4%|
+
+The short-cap probes switch to a different context first, then restore the
+97-token prefix from SSD; both end as`incomplete` at the exact token limit.
+Actual q verification cycles change0→8 and0→25, proving restored execution,
+not just cache credits or feature flags. Full streams retain27 argument deltas
+with exact final accumulation and correct literal marker strings/types. T1
+outputs both pass, but have different lengths (167/181); no stochastic whole-time
+speed comparison is claimed. These few samples establish a practical small
+benefit on short restored replies and mixed whole-request results, not a broad
+throughput improvement.
+
+The three prompt endpoints occupy34,721,352B versus45,566,376B physical cache
+files, including manifests/chunks. Actual DSP1 headers and extents are verified
+for97/172/392-token endpoints. Keep the feature opt-in; compare the normal
+confidence policy and projected-state alternatives before default promotion.
+
+All host/script regressions pass, all five final executables build and exit0
+on help. Qualified builds stay in the ignored item4/final-build folder; root
+executables and main are not advanced. Both owned benchmark servers exit0;
+the user's separate reference Flint service is left running.
+
+```sh
+nu tools/zig-build ds4-server dspark-checkpoint-test draft-checkpoint-wire-test metal-test --prefix .workspaces/draft-build -j6
+python3 speed-bench/ideas/pressure_run.py .workspaces/draft-oracle-guard -- .workspaces/draft-build/bin/test-dspark-checkpoint gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf gguf/DeepSeek-V4.1-Flash-1017-DSpark-MXFP4.gguf .workspaces/draft-oracle-cache
+# Foreground server in one terminal; use a fresh output directory per arm:
+python3 speed-bench/ideas/pressure_run.py .workspaces/draft-off-guard -- nu speed-bench/experiments/deepinfer-alignment-20261027/serve-draft-checkpoint.nu .workspaces/draft-build/bin/ds4-server .workspaces/draft-http/http-off --features 0 --port 18341
+# In another terminal, with that server ready:
+nu speed-bench/experiments/constrained-packets-20261027/qualify.nu http://127.0.0.1:18341 deepseek-v4.1-flash .workspaces/draft-http/http-off/http --family deepseek --repeats 1 --stream
+nu speed-bench/experiments/deepinfer-alignment-20261027/cached-caps.nu http://127.0.0.1:18341 .workspaces/draft-http/http-off/http .workspaces/draft-http/http-off/caps-ordinary
+```
+
+Terminate the owned server cleanly before the second arm. Repeat with fresh
+`http-on`, features1 and port18342, then
+`python3 speed-bench/experiments/deepinfer-alignment-20261027/analyze-draft-http.py .workspaces/draft-http`.
+The analysis joins actual requests/usage to verification phases and checks
+native SSD trailer bytes. Raw output remains ignored.
+
+## Concrete follow-ups
+
+The original strict-tool96-token cap exposes a length-finalization issue:
+cutting inside DSML returns`failed` instead of typed incomplete output. Its raw
+request/response is preserved separately; it is not counted as a successful
+cap measurement. Complete strict-tool responses pass. A coherent repair must
+retain partial typed name/argument bytes and already-streamed IDs, keep finish
+`length`, and avoid replaying/canonicalizing incomplete calls. Merely suppressing
+the parser error would leak raw DSML as assistant text. Repair this separately
+before returning to larger kernel/cache integrations.
+
+Explicit SIMD remains an option, as the user reminded us. The discarded bit-only
+FP4 variant did not change lane/work mapping; vectorized multi-code loads and
+scale broadcasts remain untested. Current scorers already use float4 dots,
+SIMD sums and shuffles. Do not interpret the rejected scalar arithmetic change
+as evidence against SIMD layouts.

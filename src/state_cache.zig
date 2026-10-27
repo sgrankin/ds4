@@ -14,6 +14,7 @@
 const std = @import("std");
 const c = std.c;
 const api = @import("state_cache_c");
+const draft_checkpoint = @import("engine/deepseek41/draft_checkpoint.zig");
 const FILE = opaque {};
 extern "c" fn malloc(usize) ?*anyopaque;
 extern "c" fn calloc(usize, usize) ?*anyopaque;
@@ -183,6 +184,10 @@ fn stateBytes(n: u32) u64 {
     }
     return size;
 }
+fn stateSizeValid(n: u32, bytes: u64, kind: c_int) bool {
+    const base = stateBytes(n) + @as(u64, if (kind == replay) 32 else 0);
+    return bytes == base or (kind == native and bytes == base + draft_checkpoint.wireBytes(n, 5120));
+}
 fn snapshotHeaderBytes(kind: c_int) u64 {
     // Replay adds a 32-byte DRP1 envelope before the unchanged 52-byte DSV4 header.
     return if (kind == replay) 84 else 52;
@@ -205,7 +210,9 @@ fn stateValid(initial: [*c]const u8, initial_bytes: u64, kind: c_int, ctx: *u32,
     for (&h, 0..) |*word, i| word.* = u32at(p + i * 4);
     if (h[2] == 0 or h[2] > 1048576 or h[7] == 0 or h[7] >= h[2] or h[3] != 1 or
         h[4] != 128 or h[5] != 128 or h[6] != h[2] + 1 or h[8] != 40 or h[9] != 512 or
-        h[10] != 128 or h[11] != vocab or h[12] != 0x413431 or stateBytes(h[7]) != bytes) return false;
+        h[10] != 128 or h[11] != vocab or h[12] != 0x413431 or !stateSizeValid(h[7], initial_bytes, kind)) return false;
+    const base = stateBytes(h[7]);
+    if (bytes != base and (kind != native or !draft_checkpoint.validBytes(p[@intCast(base)..@intCast(bytes)], h[7], 5120))) return false;
     for (0..h[7]) |i| if (u32at(p + 52 + i * 4) >= vocab) return false;
     ctx.* = h[2];
     tokens.* = h[7];
@@ -271,6 +278,12 @@ fn split(e: *Endpoint, p: [*c]const u8, pre: [*c]const u8) bool {
             !pages(e, p, 0, &off, @as(u64, e.tokens / ratio) * 128 * 4, (page / ratio) * 128 * 4)) return false;
         if (i < 3 and e.tokens & 1 != 0 and !pages(e, p, 0, &off, 2 * 512 * 4, 512 * 4)) return false;
     }
+    if (off < e.state_bytes and e.kind == native) {
+        // DSP1 is a fixed optional appendix, admitted by stateValid before
+        // splitting. Keep its header and chronological BF16 stages bounded.
+        if (!pages(e, p, 0, &off, draft_checkpoint.header_bytes, draft_checkpoint.header_bytes) or
+            !pages(e, p, 0, &off, e.state_bytes - off, @as(u64, @min(e.tokens, 128)) * 5120 * 2)) return false;
+    }
     if (off != e.state_bytes) return false;
     off = 0;
     return e.pre_bytes == 0 or pages(e, pre, 1, &off, e.pre_bytes, pre_page);
@@ -331,7 +344,7 @@ fn parseManifest(p: [*c]const u8, bytes: u64, key: [*c]const u8) ?*Endpoint {
     e.profile = @ptrCast(calloc(1, @as(usize, plen) + 1));
     e.seg = @ptrCast(@alignCast(calloc(nseg, @sizeOf(Segment))));
     if (e.profile == null or e.seg == null or !keyValid(&e.prefix) or e.ctx == 0 or e.ctx > 1048576 or
-        e.tokens == 0 or e.tokens >= e.ctx or e.state_bytes != stateBytes(e.tokens) + snapshotHeaderBytes(e.kind) - 52 or
+        e.tokens == 0 or e.tokens >= e.ctx or !stateSizeValid(e.tokens, e.state_bytes, e.kind) or
         e.pre_bytes > std.math.maxInt(usize) or (e.kind == suffix and e.pre_bytes == 0) or
         (e.kind == replay and e.pre_bytes != 0)) return null;
     copy(e.profile, p + header, plen);
@@ -691,9 +704,15 @@ export fn ds4_state_cache_find_prefix(maybe_cache: ?*Cache, profile: [*c]const u
     var best: ?*Endpoint = null;
     var it = cache.endpoints;
     while (it) |e| : (it = e.next) {
-        if (e.kind == suffix or e.ctx != ctx or e.tokens > n or !sameCString(e.profile, profile) or (best != null and best.?.tokens >= e.tokens)) continue;
+        if (e.kind == suffix or e.ctx != ctx or e.tokens > n or !sameCString(e.profile, profile) or (best != null and best.?.tokens > e.tokens)) continue;
         var key: [41]u8 = undefined;
-        if (prefixKey(profile, ctx, @ptrCast(ids), e.tokens, true, &key) and sameCString(&key, &e.prefix)) best = e;
+        if (!prefixKey(profile, ctx, @ptrCast(ids), e.tokens, true, &key) or !sameCString(&key, &e.prefix)) continue;
+        // A base-only and DSP1 endpoint can describe the same target prefix.
+        // Prefer useful draft history regardless of manifest traversal order.
+        if (best == null or best.?.tokens < e.tokens or
+            (e.kind == native and best.?.kind == native and
+                e.state_bytes == stateBytes(e.tokens) + draft_checkpoint.wireBytes(e.tokens, 5120) and
+                best.?.state_bytes == stateBytes(e.tokens))) best = e;
     }
     const e = best orelse return null;
     const ref = acquire(cache, e);

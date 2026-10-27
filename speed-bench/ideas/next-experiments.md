@@ -37,6 +37,17 @@ Item3 completed14:24UTC. Exact current-quantizer value/scorer/ID parity with
 bit-based unpack variant gives no win and was reverted. Retain capacity pilot;
 whole-model/prefill/SSD integration remains future measured work. Proceed to
 DSpark useful-history persistence.
+Item4 starts14:26UTC, cap15:26UTC, parented9210a0: canonical DSP1 raw BF16
+feature tail, SSD restart/tie selection, first-cycle proof and short request
+timing. Keep old payloads/flag-off fallback and private formats unchanged.
+Item4 completed15:08UTC. HOT0restart/firstT1cycle/teacherexactness pass. Actual
+HTTPrestores execute0→8/25 qcycles on32/96token caps,16.0%/11.4% less time;
+fullT0tool/schema−10.2%/−8.5%, ordinary+3.9%. Both7/7 complete quality cases
+and streaming pass; outputs/counts match. Cache bytes+~10.8MB across3prompts.
+Fullhost/scripts and all5builds/help pass. Keep opt-in and no main promotion.
+The four-item sequence is complete. Next correctness task is typed incomplete
+DSML finalization at length limits, discovered in the control; do not suppress
+errors into rawtext. Then choose further cache/kernel integration from evidence.
 
 ## Constrained packets/MTP — completed with limits, 2026-10-27
 

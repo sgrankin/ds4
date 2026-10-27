@@ -17,6 +17,7 @@ const HOST = [
     [prompt-prefix-test, [test-prompt-prefix]]
     [session-state-test, [test-session-state]]
     [steering-bank-test, [test-steering-banks]]
+    [draft-checkpoint-wire-test, [test-draft-checkpoint-wire]]
     [decisions-test, [test-decisions]]
     [grammar-test, [test-grammar]]
     [prompt-tokens-test, [test-prompt-tokens]]

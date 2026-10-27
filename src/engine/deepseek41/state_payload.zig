@@ -11,6 +11,7 @@ const std = @import("std");
 const c = @import("gguf_c");
 const Config = @import("../config.zig").ModelConfig;
 const resources = @import("resources.zig");
+const draft_checkpoint = @import("draft_checkpoint.zig");
 const Graph = c.ds41_gpu_graph;
 const Tensor = c.ds4_gpu_tensor;
 const allocator = std.heap.c_allocator;
@@ -83,6 +84,10 @@ const File = struct {
 pub const Payload = struct {
     graph: *Graph,
     config: *const Config,
+    // Only canonical checkpoints opt in; private suffix/replay bodies retain
+    // their existing layout and never acquire a draft-feature appendix.
+    include_draft: bool = false,
+    allow_draft: bool = false,
 
     pub fn spans(self: *const Payload, position: u32, storage: *[54]Span) []Span {
         const graph = self.graph;
@@ -107,11 +112,30 @@ pub const Payload = struct {
         return storage[0..count];
     }
 
-    pub fn bodyBytes(self: *const Payload, position: u32) u64 {
+    pub fn baseBodyBytes(self: *const Payload, position: u32) u64 {
         var storage: [54]Span = undefined;
         var bytes = (@as(u64, position) + self.config.shape.n_vocab) * 4;
         for (self.spans(position, &storage)) |span| bytes += span.wire_bytes;
         return bytes;
+    }
+
+    pub fn bodyBytes(self: *const Payload, position: u32) u64 {
+        const extra = if (self.draftReady(position)) draft_checkpoint.wireBytes(position, self.config.shape.n_embd) else 0;
+        return self.baseBodyBytes(position) + extra;
+    }
+
+    fn draftReady(self: *const Payload, position: u32) bool {
+        if (!self.include_draft or position == 0) return false;
+        const state: *c.ds41_dspark = @ptrCast(self.graph.dspark orelse return false);
+        const weights: *const c.ds4_dspark_weights = @ptrCast(state.weights);
+        if (weights.target_layer_count != 3) return false;
+        for (weights.target_layers[0..3]) |layer| if (layer >= self.config.shape.n_layer) return false;
+        const start = position - draft_checkpoint.rows(position);
+        for (state.positions, state.target) |tags, target| {
+            if (target == null) return false;
+            for (start..position) |p| if (tags[p % 128] != p) return false;
+        }
+        return true;
     }
 
     pub fn blockBytes(self: *const Payload, position: u32) u64 {
@@ -147,6 +171,7 @@ pub const Payload = struct {
         defer allocator.free(scratch);
         var storage: [54]Span = undefined;
         for (self.spans(self.graph.pos, &storage)) |span| try writeSpan(file, span, scratch);
+        if (self.draftReady(self.graph.pos)) try self.writeDraft(file, scratch);
     }
 
     pub fn load(self: *const Payload, stream: *c.FILE, saved: *const Header, body_bytes: u64, logits: []f32, mutated: *bool, error_text: []u8) Failure!OwnedTokens {
@@ -160,13 +185,16 @@ pub const Payload = struct {
         const graph = self.graph;
         const shape = &self.config.shape;
         const position = saved[7];
+        const base_bytes = if (blocks_only) self.blockBytes(position) else self.baseBodyBytes(position);
+        const draft_bytes = draft_checkpoint.wireBytes(position, shape.n_embd);
+        const has_draft = !blocks_only and self.allow_draft and body_bytes == base_bytes + draft_bytes;
         mutated.* = false;
         // The generic facade has checked magic/version before family dispatch.
         // A smaller current context is allowed when all live rows still fit.
         if (position == 0 or position >= graph.ctx or position >= saved[2] or saved[2] > 1048576 or
             saved[3] != 1 or saved[4] != 128 or saved[5] != 128 or saved[6] != saved[2] + 1 or
             saved[8] != shape.n_layer or saved[9] != shape.n_head_dim or saved[10] != shape.n_indexer_head_dim or
-            saved[11] != shape.n_vocab or saved[12] != 0x413431 or body_bytes != (if (blocks_only) self.blockBytes(position) else self.bodyBytes(position)) or logits.len != shape.n_vocab)
+            saved[11] != shape.n_vocab or saved[12] != 0x413431 or (body_bytes != base_bytes and !has_draft) or logits.len != shape.n_vocab)
             return file.fail(error.InvalidDimensions, "invalid V4.1 snapshot dimensions or size");
         var tokens = OwnedTokens{};
         errdefer tokens.deinit();
@@ -183,6 +211,7 @@ pub const Payload = struct {
         if (c.ds4_gpu_synchronize() == 0) return error.Device;
         mutated.* = true;
         graph.valid = false;
+        errdefer graph.valid = false;
         if (!blocks_only) {
             try file.read(std.mem.sliceAsBytes(logits), &remaining);
             if (c.ds4_gpu_tensor_write(graph.logits, 0, logits.ptr, @as(u64, shape.n_vocab) * 4) == 0)
@@ -194,13 +223,92 @@ pub const Payload = struct {
         const spans_ = self.spans(position, &storage);
         for (spans_[(if (blocks_only) shape.n_layer else 0)..]) |span| try readSpan(file, span, scratch, &remaining);
         resources.resetRecord(graph);
+        // resetRecord clears drafter tags. Restore them only after every
+        // accepted target row has been installed, never the transient draft KV.
+        if (has_draft) try self.readDraft(file, position, scratch, &remaining);
         const values = tokens.items();
         for (0..@min(@as(u32, 3), position)) |index|
             graph.history.tail[index] = @intCast(graph.token_map[@intCast(values[position - 1 - index])]);
         graph.pos = position;
         return tokens;
     }
+
+    fn writeDraft(self: *const Payload, file: File, scratch: []align(8) u8) Failure!void {
+        const state: *c.ds41_dspark = @ptrCast(self.graph.dspark.?);
+        const weights: *const c.ds4_dspark_weights = @ptrCast(state.weights);
+        const position = self.graph.pos;
+        const width = self.config.shape.n_embd;
+        const rows = draft_checkpoint.rows(position);
+        const layers: [3]u32 = weights.target_layers[0..3].*;
+        for (draft_checkpoint.header(position, width, layers)) |word| try file.writeU32(word);
+        const bytes = @as(u64, rows) * width * 2;
+        const encoded = c.ds4_gpu_tensor_alloc(bytes) orelse return file.fail(error.Device, "cannot allocate draft feature packing tensor");
+        defer c.ds4_gpu_tensor_free(encoded);
+        for (state.target) |target| {
+            try transferDraft(file, encoded, target, position, width, true);
+            if (bytes > scratch.len or c.ds4_gpu_tensor_read(encoded, 0, scratch.ptr, bytes) == 0)
+                return file.fail(error.Device, "failed to read packed draft features");
+            try file.write(scratch[0..@intCast(bytes)]);
+        }
+    }
+
+    fn readDraft(self: *const Payload, file: File, position: u32, scratch: []align(8) u8, remaining: *u64) Failure!void {
+        const width = self.config.shape.n_embd;
+        var header_: draft_checkpoint.Header = undefined;
+        for (&header_) |*word| word.* = try file.readU32(remaining);
+        if (!draft_checkpoint.validHeader(header_, position, width))
+            return file.fail(error.InvalidDimensions, "invalid V4.1 draft-feature appendix");
+        const state: ?*c.ds41_dspark = if (self.graph.dspark) |draft| @ptrCast(draft) else null;
+        var restore = self.include_draft and state != null;
+        if (state) |draft| {
+            const weights: *const c.ds4_dspark_weights = @ptrCast(draft.weights);
+            restore = restore and weights.target_layer_count == 3 and std.mem.eql(u32, header_[5..8], weights.target_layers[0..3]);
+        }
+        const bytes = @as(u64, draft_checkpoint.rows(position)) * width * 2;
+        if (bytes > scratch.len) return file.fail(error.ConversionBuffer, "draft-feature conversion buffer is too small");
+        const encoded = if (restore) c.ds4_gpu_tensor_alloc(bytes) else null;
+        if (restore and encoded == null) return file.fail(error.Device, "cannot allocate draft feature restore tensor");
+        defer c.ds4_gpu_tensor_free(encoded);
+        for (0..3) |stage| {
+            try file.read(scratch[0..@intCast(bytes)], remaining);
+            if (restore) {
+                if (c.ds4_gpu_tensor_write(encoded, 0, scratch.ptr, bytes) == 0)
+                    return file.fail(error.Device, "failed to upload packed draft features");
+                try transferDraft(file, encoded, state.?.target[stage], position, width, false);
+            }
+        }
+        if (restore) {
+            const start = position - draft_checkpoint.rows(position);
+            for (&state.?.positions) |*tags| {
+                for (start..position) |p| tags[p % 128] = @intCast(p);
+            }
+            // Projected keys are cheap to rebuild from these exact BF16
+            // features on the very next draft; stale verify/rewind state stays reset.
+            state.?.kv_valid = false;
+            state.?.kv_end = 0;
+        }
+    }
 };
+
+// Convert the two ring segments into one chronological BF16 stage (or back).
+// capture() already rounds target features to BF16; bit packing is lossless.
+fn transferDraft(file: File, encoded: ?*Tensor, target: ?*Tensor, position: u32, width: u32, pack: bool) Failure!void {
+    const rows = draft_checkpoint.rows(position);
+    const start = position - rows;
+    const slot = start % 128;
+    const first = @min(rows, 128 - slot);
+    const row_bytes = @as(u64, width) * 4;
+    const head = c.ds4_gpu_tensor_view(target, @as(u64, slot) * row_bytes, @as(u64, first) * row_bytes);
+    defer c.ds4_gpu_tensor_free(head);
+    if (head == null or c.ds4_gpu_dsv41_carry_copy(encoded, 0, head, width, first, c.DS4_V41_CARRY_BF16, pack) == 0)
+        return file.fail(error.Device, "failed to convert draft feature ring");
+    if (first != rows) {
+        const tail = c.ds4_gpu_tensor_view(target, 0, @as(u64, rows - first) * row_bytes);
+        defer c.ds4_gpu_tensor_free(tail);
+        if (tail == null or c.ds4_gpu_dsv41_carry_copy(encoded, first, tail, width, rows - first, c.DS4_V41_CARRY_BF16, pack) == 0)
+            return file.fail(error.Device, "failed to convert wrapped draft feature ring");
+    }
+}
 
 fn checkSpan(file: File, span: Span) Failure!void {
     const tensor = span.tensor orelse return file.fail(error.InvalidDimensions, if (span.packed_f16)

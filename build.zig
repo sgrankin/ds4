@@ -264,6 +264,10 @@ pub fn build(b: *std.Build) void {
     steering_bank_module.root_source_file = b.path("src/engine/steering.zig");
     const steering_bank_test = b.addTest(.{ .name = "test-steering-banks", .root_module = steering_bank_module });
     b.step("steering-bank-test", "Build host-only steering bank normalization checks").dependOn(&b.addInstallArtifact(steering_bank_test, .{}).step);
+    const draft_wire_module = module(b, target, sdk, .debug);
+    draft_wire_module.root_source_file = b.path("src/engine/deepseek41/draft_checkpoint.zig");
+    const draft_wire_test = b.addTest(.{ .name = "test-draft-checkpoint-wire", .root_module = draft_wire_module });
+    b.step("draft-checkpoint-wire-test", "Build canonical draft-history wire checks").dependOn(&b.addInstallArtifact(draft_wire_test, .{}).step);
     const decisions_module = module(b, target, sdk, .debug);
     decisions_module.root_source_file = b.path("src/decisions_test.zig");
     const decisions_test = b.addTest(.{ .name = "test-decisions", .root_module = decisions_module });
@@ -762,16 +766,21 @@ pub fn build(b: *std.Build) void {
     inline for (.{
         .{ "steering-hc-test", "test-metal-steering-hc", "tests/test_metal_steering_hc.zig", "tests/steering_gpu_api.h", "steering_gpu_c" },
         .{ "session-steering-test", "test-session-steering", "tests/test_session_steering.zig", "src/ds4.h", "steering_c" },
+        .{ "dspark-checkpoint-test", "test-dspark-checkpoint", "tests/test_dspark_checkpoint.zig", "tests/checkpoint_api.h", "checkpoint_c" },
     }) |fixture| {
         const root = module(b, target, sdk, optimize);
         root.root_source_file = b.path(fixture[2]);
         root.addImport(fixture[4], generatedApi(b, target, sdk, optimize, fixture[3]));
         root.linkLibrary(core);
+        if (std.mem.eql(u8, fixture[0], "dspark-checkpoint-test")) {
+            root.addObjectFile(cache);
+            root.addObjectFile(kvstore);
+        }
         root.linkFramework("Foundation", .{});
         root.linkFramework("Metal", .{});
         root.linkSystemLibrary("icucore", .{});
         const fixture_exe = b.addExecutable(.{ .name = fixture[1], .root_module = root });
-        b.step(fixture[0], "Build the native Zig steering qualification fixture (run separately)")
+        b.step(fixture[0], "Build the native Zig model qualification fixture (run separately)")
             .dependOn(&b.addInstallArtifact(fixture_exe, .{}).step);
     }
     const vision_encoder_step = b.step("vision-encoder-test", "Build existing native Qwen/GLM encoder fixtures");
