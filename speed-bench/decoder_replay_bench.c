@@ -58,7 +58,8 @@ static bool pad_to(ds4_tokens *dst, const ds4_tokens *filler, int wanted) {
 }
 
 static bool make_prompt(ds4_engine *e, int which, int wanted, ds4_tokens *prompt,
-                        ds4_tokens *teacher, int *record_start, int *query_start) {
+                        ds4_tokens *teacher, int *record_start, int *query_start,
+                        bool thinking) {
     const fixture *f = &fixtures[which];
     ds4_tokens filler = {0}, tail = {0};
     const char *notes =
@@ -81,7 +82,7 @@ static bool make_prompt(ds4_engine *e, int which, int wanted, ds4_tokens *prompt
     int query_offset = tail.len;
     ds4_chat_append_message(e, &tail, "user",
         "What is the current Boreal access code? Return only CODE= followed by the complete code.");
-    ds4_chat_append_assistant_prefix(e, &tail, DS4_THINK_NONE);
+    ds4_chat_append_assistant_prefix(e, &tail, thinking ? DS4_THINK_HIGH : DS4_THINK_NONE);
     bool ok = filler.len && wanted > tail.len + prompt->len + 1024;
     if (ok && f->old_record) {
         ok = pad_to(prompt, &filler, wanted / 8);
@@ -142,11 +143,12 @@ static bool answer_equal(const char *text, const char *expected) {
 int main(int argc, char **argv) {
     const char *model = NULL, *out = NULL, *selected = "all";
     int rows = 0, wanted = 8192, chunk = 8192, ctx = CONTEXT, compressed_f16 = 0;
+    int thinking = 0, max_new = MAX_NEW, cache_gb = 64, candidate_sweep = 0;
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--help")) {
             puts("decoder_replay_bench --model MODEL --out EXISTING_DIR --rows 0|128|256 "
                  "[--tokens 8192] [--chunk 8192] [--ctx 16384] [--compressed-kv-f16 0|1] "
-                 "[--case all|ordinary|favorable|changed]");
+                 "[--case all|ordinary|favorable|changed] [--thinking 0|1] [--max-new 48] [--cache-gb 64] [--candidate-sweep 0|1]");
             return 0;
         }
         if (++i >= argc) return 2;
@@ -159,6 +161,10 @@ int main(int argc, char **argv) {
         else if (!strcmp(key, "--chunk")) chunk = number(value);
         else if (!strcmp(key, "--ctx")) ctx = number(value);
         else if (!strcmp(key, "--compressed-kv-f16")) compressed_f16 = number(value);
+        else if (!strcmp(key, "--thinking")) thinking = number(value);
+        else if (!strcmp(key, "--max-new")) max_new = number(value);
+        else if (!strcmp(key, "--cache-gb")) cache_gb = number(value);
+        else if (!strcmp(key, "--candidate-sweep")) candidate_sweep = number(value);
         else return 2;
     }
     bool chosen[CASES] = {0}; int count = 0;
@@ -167,12 +173,15 @@ int main(int argc, char **argv) {
         count += chosen[i];
     }
     if (!model || !out || !count || (rows != 0 && rows != 128 && rows != 256) ||
-        wanted < 2048 || wanted + MAX_NEW >= ctx || chunk < 1 || chunk > 8192 ||
+        wanted < 2048 || max_new < 1 || wanted + max_new >= ctx || chunk < 1 || chunk > 8192 ||
+        (thinking != 0 && thinking != 1) || cache_gb < 1 || cache_gb > 128 ||
+        (candidate_sweep != 0 && candidate_sweep != 1) ||
         (compressed_f16 != 0 && compressed_f16 != 1)) return 2;
     int rc = 1; char err[256] = {0}, setting[16];
     ds4_engine *e = NULL; ds4_session *s = NULL;
     ds4_tokens prompt = {0}, teacher = {0}, generated = {0};
-    FILE *raw = NULL, *csv = NULL, *timings = NULL, *tokens = NULL, *answers = NULL;
+    FILE *raw = NULL, *csv = NULL, *timings = NULL, *tokens = NULL, *answers = NULL, *sweep = NULL;
+    ds4_session_snapshot sweep_snapshot = {0};
     float *logits = NULL; char *answer = NULL;
     snprintf(setting, sizeof(setting), "%d", rows);
     CHECK(setenv("DS4_V41_DECODER_REPLAY_ROWS", setting, 1) == 0);
@@ -184,9 +193,13 @@ int main(int argc, char **argv) {
     timings = output(out, "timings.csv", "wx"); tokens = output(out, "tokens.json", "wx");
     answers = output(out, "answers.jsonl", "wx");
     CHECK(raw && csv && timings && tokens && answers);
+    if (candidate_sweep) {
+        sweep = output(out, "candidate-sweep.csv", "wx"); CHECK(sweep);
+        fprintf(sweep, "case,repeat,candidate,tokens,eval_ms\n");
+    }
     ds4_engine_options opt = {.model_path = model, .backend = DS4_BACKEND_METAL,
         .context_size = (uint32_t)ctx, .prefill_chunk = (uint32_t)chunk, .mtp_draft_tokens = 1,
-        .ssd_streaming = true, .ssd_streaming_cache_bytes = UINT64_C(64) << 30,
+        .ssd_streaming = true, .ssd_streaming_cache_bytes = (uint64_t)cache_gb << 30,
         .power_percent = 100};
     double open_started = now_ms();
     CHECK(ds4_engine_open(&e, &opt) == 0 && ds4_engine_is_deepseek41(e));
@@ -198,15 +211,16 @@ int main(int argc, char **argv) {
     fprintf(timings, "case,rows,prompt_tokens,teacher_tokens,sync_ms,teacher_ms,greedy_sync_ms,greedy_ms,generated_tokens,stopped,exact,approximate,payload_bytes,suffix_cache_bytes\n");
     ds4_context_memory memory = ds4_context_memory_estimate_with_prefill(DS4_BACKEND_METAL, ctx, chunk);
     fprintf(tokens, "{\"rows\":%d,\"vocab\":%d,\"context\":%d,\"chunk\":%d,\"compressed_kv_f16\":%d,"
-        "\"planned_raw_bytes\":%llu,\"planned_compressed_bytes\":%llu,\"planned_total_bytes\":%llu,\"ssd_cache_gib\":64,"
-        "\"mtp\":false,\"native_routing\":true,\"logits_dtype\":\"float32_le\",\"engine_open_ms\":%.6f,\"cases\":[",
+        "\"planned_raw_bytes\":%llu,\"planned_compressed_bytes\":%llu,\"planned_total_bytes\":%llu,\"ssd_cache_gib\":%d,"
+        "\"mtp\":false,\"thinking\":%s,\"max_new\":%d,\"native_routing\":true,\"logits_dtype\":\"float32_le\",\"engine_open_ms\":%.6f,\"cases\":[",
         rows, vocab, ctx, chunk, compressed_f16, (unsigned long long)memory.raw_bytes,
-        (unsigned long long)memory.compressed_bytes, (unsigned long long)memory.total_bytes, open_ms);
+        (unsigned long long)memory.compressed_bytes, (unsigned long long)memory.total_bytes, cache_gb,
+        thinking ? "true" : "false", max_new, open_ms);
     int row_start = 0, emitted = 0;
     for (int which = 0; which < CASES; which++) {
         if (!chosen[which]) continue;
         int record_start = 0, query_start = 0;
-        CHECK(make_prompt(e, which, wanted, &prompt, &teacher, &record_start, &query_start));
+        CHECK(make_prompt(e, which, wanted, &prompt, &teacher, &record_start, &query_start, thinking));
         fprintf(tokens, "%s{\"name\":", emitted++ ? "," : ""); json_text(tokens, fixtures[which].name);
         fprintf(tokens, ",\"logit_row_start\":%d,\"record_start\":%d,\"query_start\":%d,\"expected\":",
             row_start, record_start, query_start); json_text(tokens, fixtures[which].expected);
@@ -245,13 +259,20 @@ int main(int argc, char **argv) {
         start = now_ms();
         CHECK(ds4_session_sync(s, &prompt, err, sizeof(err)) == 0);
         double greedy_sync_ms = now_ms() - start;
+        if (candidate_sweep)
+            CHECK(ds4_session_save_snapshot(s, &sweep_snapshot, err, sizeof(err)) == 0);
         size_t answer_len = 0; answer = malloc(1); CHECK(answer); answer[0] = '\0';
-        bool stopped = false;
+        bool stopped = false, in_thinking = thinking;
         start = now_ms();
-        for (int step = 0; step < MAX_NEW; step++) {
+        for (int step = 0; step < max_new; step++) {
             int token = ds4_session_argmax(s); CHECK(token >= 0 && token < vocab);
             if (ds4_token_is_stop(e, token)) { stopped = true; break; }
             ds4_tokens_push(&generated, token);
+            if (in_thinking) {
+                if (ds4_token_is_thinking_control(e, token)) in_thinking = false;
+                CHECK(ds4_session_eval(s, token, err, sizeof(err)) == 0);
+                continue;
+            }
             size_t n = 0; char *piece = ds4_token_text(e, token, &n); CHECK(piece);
             char *grown = realloc(answer, answer_len + n + 1);
             if (!grown) { free(piece); CHECK(grown); }
@@ -275,6 +296,23 @@ int main(int argc, char **argv) {
             fixtures[which].name, rows, sync_ms, teacher_ms, greedy_sync_ms,
             greedy_ms, generated.len, stopped, exact, answer);
         CHECK(fflush(raw) == 0 && fflush(csv) == 0 && fflush(timings) == 0 && fflush(answers) == 0);
+        if (candidate_sweep) {
+            const char *original = getenv("DS4_V41_CANDIDATE_INDEX");
+            bool original_on = original && !strcmp(original, "1");
+            for (int repeat = 0; repeat < 5; repeat++) for (int turn = 0; turn < 2; turn++) {
+                int enabled = turn ^ (repeat & 1);
+                CHECK(setenv("DS4_V41_CANDIDATE_INDEX", enabled ? "1" : "0", 1) == 0);
+                CHECK(ds4_session_load_snapshot(s, &sweep_snapshot, err, sizeof(err)) == 0);
+                start = now_ms();
+                for (int i = 0; i < generated.len; i++)
+                    CHECK(ds4_session_eval(s, generated.v[i], err, sizeof(err)) == 0);
+                fprintf(sweep, "%s,%d,%d,%d,%.6f\n", fixtures[which].name, repeat,
+                    enabled, generated.len, now_ms() - start);
+                CHECK(fflush(sweep) == 0);
+            }
+            CHECK(setenv("DS4_V41_CANDIDATE_INDEX", original_on ? "1" : "0", 1) == 0);
+            ds4_session_snapshot_free(&sweep_snapshot);
+        }
         free(answer); answer = NULL;
         ds4_tokens_free(&prompt); ds4_tokens_free(&teacher); ds4_tokens_free(&generated);
     }
@@ -285,6 +323,8 @@ done:
     if (timings && fclose(timings)) rc = 1;
     if (tokens && fclose(tokens)) rc = 1;
     if (answers && fclose(answers)) rc = 1;
+    if (sweep && fclose(sweep)) rc = 1;
+    ds4_session_snapshot_free(&sweep_snapshot);
     free(logits); free(answer);
     ds4_tokens_free(&prompt); ds4_tokens_free(&teacher); ds4_tokens_free(&generated);
     ds4_session_free(s); ds4_engine_close(e);

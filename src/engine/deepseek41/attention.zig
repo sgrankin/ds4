@@ -158,11 +158,21 @@ pub const Attention = struct {
         const count = if (policy.compression_ratio != 0) (graph.pos + 1) / policy.compression_ratio else 0;
         if (count != 0 and policy.publishes_index) {
             const op = self.ops();
+            const candidate_setting = c.getenv("DS4_V41_CANDIDATE_INDEX");
+            // Layer20 still scores every key to choose the trained candidate
+            // set, including its forced newest block. Later source layers can
+            // skip discarded dot products once that set excludes any keys.
+            const candidate_only = index > 20 and count > 2048 * 8 and
+                candidate_setting != null and c.strcmp(candidate_setting, "1") == 0;
             if (!op.matmul(graph.index_q, knownWeight(layer.indexer_attn_q_b), graph.qr, true) or
                 !op.rope(graph.index_q, shape.n_indexer_head, 128, index, graph.pos, false) or
                 c.ds4_gpu_dsv41_quantize(graph.index_q, 128, shape.n_indexer_head, c.DS4_V41_FP4_E8M0) == 0 or
-                !op.matmul(graph.index_weights, knownWeight(layer.indexer_proj), graph.norm, true) or
-                c.ds4_gpu_glm_indexer_score_one_tensor(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], count, shape.n_indexer_head, 128, 1.0 / 64.0, false) == 0) return false;
+                !op.matmul(graph.index_weights, knownWeight(layer.indexer_proj), graph.norm, true)) return false;
+            const scored = if (candidate_only)
+                c.ds4_gpu_dsv41_indexer_score_candidates(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], graph.block_selected, count, 2048)
+            else
+                c.ds4_gpu_glm_indexer_score_one_tensor(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], count, shape.n_indexer_head, 128, 1.0 / 64.0, false);
+            if (scored == 0) return false;
         }
         return self.pick(index);
     }

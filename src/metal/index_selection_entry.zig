@@ -5,6 +5,9 @@ const Tensor = c.ds4_gpu_tensor;
 export fn ds4_gpu_glm_indexer_score_one_tensor(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, rows: u32, heads: u32, width: u32, scale: f32, half: bool) c_int {
     return Index.scoreOne(scores, q, weights, keys, rows, heads, width, scale, half);
 }
+export fn ds4_gpu_dsv41_indexer_score_candidates(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
+    return Index.scoreCandidates(scores, q, weights, keys, blocks, rows, block_count);
+}
 export fn ds4_gpu_glm_indexer_scores_batch_tensor(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, rows: u32, tokens: u32, start: u32, heads: u32, width: u32, scale: f32, half: bool) c_int {
     return Index.scoreBatch(scores, q, weights, keys, rows, tokens, start, 1, heads, width, scale, half, false);
 }

@@ -1,5 +1,79 @@
 # Serving project journal
 
+DeepInfer convergence execution authorized 2026-10-27, first slice12:50–13:50UTC.
+The user prefers aligning the DeepSeek implementation with DeepInfer unless a
+specific Apple/SSD benefit justifies a difference. Work sequentially through
+candidate-only scalar index scoring, bounded block-cache recovery, one packed
+KV producer/reader, then useful DSpark-state persistence. Each first slice has
+a one-hour budget including preparation, builds and measurements. Retain the
+fixed control, ordinary/favorable/adverse observations and concrete limits;
+keep experimental runtime behavior opt-in and main unchanged. Candidate scoring
+is first; independent agents prepare later slices without changing their runtime.
+Control binaries/hashes are retained under
+`.workspaces/deepinfer-alignment-20261027/item1/baseline/` (runtimee2a38f6e2bf4).
+
+Candidate experiment completed13:33UTC (43minutes). Final64K distributions and
+all27 generated tokens also match exactly. Whole-answer bracket is neutral
+(3.224/3.257/3.289s dense/candidate/dense-repeat). Alternating one checkpoint's
+27 fixed tokens gives1.208→1.188s after warmup,1.68% less warm evaluation time,
+all4 pairs positive (1.0–2.2%). Ordinary8K bypass gives3.663→3.670s for87tokens,
+0.17% variation on the same unchanged path. Keep candidate scoring opt-in:
+useful small cache-resident benefit, not a broad first-answer speedup; no preset
+promotion. GPU source/fixture and recorded reproduction remain in the local
+commit. Main/installed executables are unchanged. Next is the bounded block-only
+restore prototype; apply its prepared patch and start a separate one-hour slice.
+
+Earlier candidate checkpoint13:17UTC: actual32K dense/candidate/dense-repeat runs pass
+all3 reasoning-enabled retrieval tasks, with identical generated token streams
+and all22 common full-vocabulary teacher rows byte-equal (ΔNLL=KL=0). First
+candidate version is2.8–4.3% slower than the mean opening/closing control, amid
+9–12.5% control drift; no whole-model speed claim. The production-linked GPU
+score/filter/top-k fixture is exact on finite/tied scores, global IDs and tails
+through256K and benefits at long contexts. Removed a redundant clear: the
+existing filter already initializes every excluded score. Its numerical fixture
+still passes, and a64K matched bracket is running. Keep the original measurements.
+The initial64GiB model-cache attempt triggered pressurelevel2 and was stopped;
+48GiB retry stays at level1 with stable swap. Do not weaken the guard.
+Evidence/reproduction: `speed-bench/experiments/deepinfer-alignment-20261027/`.
+
+DeepInfer alignment inventory, 2026-10-27 12:16UTC: completed the requested
+source audit without runtime edits, builds or model jobs. Upstream HEAD is
+553741557a57df44a46fb3ab72b6aafeaf945337, verified read-only and matching the
+local checkout; comparison baseline is DS4e2a38f6e2bf4. The49-entry inventory,
+default/activation distinctions, source pointers and proposed bounded sequence
+are in [docs/DEEPINFER_ALIGNMENT.md](../docs/DEEPINFER_ALIGNMENT.md).
+
+The remembered cache recovery is **encoder SWA bounded replay**: keep compressed
+and index blocks, rebuild missing local state from the preceding128 tokens with
+a clipped raw-attention floor, and suppress writes into existing exact blocks.
+We do not have that block-only restore/controller. Public DeepInfer exposes the
+floor metadata but omits the complete KV management policy. Distinguish it from
+our opt-in **decoder** replay (wide>=8192, noDSpark/images; normal512/2048chunks
+do not reach it), DeepInfer's configured consumer keep140 (minimum134 with5
+drafts/backtracking6, truncation defaults off), and the separate128-position
+DSpark target-feature history absent from our persistent payloads.
+
+Other concrete gaps: consumer indexers currently score the full shared prefix
+before candidate filtering, whereas DeepInfer scores inherited candidate keys
+directly; our FP8/FP4-like quantization math stores expanded F32 values (main
+optionalF16, defaultoff), versus physical528/288/68-byte raw/main/index rows;
+and synchronous whole-endpoint import lacks per-layer cache-fetch overlap.
+Existing cross-layer sharing, exact shrinking decoder work, DSpark/grammar
+rollback, Engram lookup/prefetch and many Metal fusions are present. Full ZOS,
+GPU paging/COW, cost-based cross-request verification lengths, position-based
+DS41 RNG, and broad batch invariance are partial/absent. Wide EP/CP/EPLB/3FS
+transport are cluster-specific; EPLB duplicates identical experts, unlike our
+optional approximate resident substitution. KV packing alone does not imply
+smaller SSD payloads or automatically enlarge a fixed expert-cache budget.
+
+Proposed next order, not yet implementation-authorized by this inventory ask:
+one-hour candidate-only decode scoring; one-hour encoder restore prototype;
+one-hour packed-KV producer/consumer pilot; one-hour useful draft-state restore.
+Then evaluate decoder compaction on ordinary chunks/MTP and selected fusion or
+scheduling costs. Preserve practical task grades and ΔNLL/KL for approximations;
+do not demand perfect replication or copy cluster headline speedups. Main and
+installed binaries remain unchanged by this audit.
+
 Execution resumed 2026-10-27 10:53UTC: user says "Then finish the work please"
 after comparing constrained acceleration with DeepInfer and Flint. Restore
 Flint's up-to-eight sequential masked decode packets with CPU/GPU overlap, then

@@ -1,5 +1,26 @@
 # Next experiments: one hour each
 
+## DeepInfer alignment — execution authorized, 2026-10-27
+
+The [49-entry source comparison](../../docs/DEEPINFER_ALIGNMENT.md) is pinned to
+current upstream5537415 and local runtimee2a38f6e. The user authorized this
+sequence with DeepInfer alignment preferred unless our environment benefits
+from a difference. First budget12:50–13:50UTC, including preparation and builds.
+Order: candidate-only decode index scoring; block-only restore with
+encoder128-row SWA recovery; one packed-KV producer/reader; useful drafter-state
+restore. Give each first experiment one hour, inspect its measurements, then
+decide. Decoder compaction on ordinary chunks/MTP and selected boundary fusion
+follow if justified. Run one item at a time; preparation for later items must
+not change the measured runtime. The inventory records activation/default limits and
+separates public code from unreleased production infrastructure.
+
+Item1 completed12:50–13:33UTC. Candidate-only scalar scoring is exact on32K/64K
+teacher/output probes and through256K kernel checks. Whole first-answer decode
+is neutral; a warmed alternating64K replay improves1.68%. Short8K bypass varies
+0.17% on the same path. Keep opt-in; no preset promotion. Removed a redundant
+clear before the existing filter. Item2 starts next with its own one-hour cap.
+[Measurements and reproduction](../experiments/deepinfer-alignment-20261027/README.md).
+
 ## Constrained packets/MTP — completed with limits, 2026-10-27
 
 The fixed scalar grammar control is `13ecfcd39cd9`. Flint now advances masks

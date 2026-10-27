@@ -54,6 +54,7 @@ enum {
     DS4_METAL_INDEX_SORT, DS4_METAL_INDEX_SORT_CAUSAL, DS4_METAL_INDEX_SORT_SHUFFLE,
     DS4_METAL_INDEX_MERGE, DS4_METAL_INDEX_MERGE_CAUSAL, DS4_METAL_INDEX_MERGE_PREFIX,
     DS4_METAL_INDEX_MASK_FILL, DS4_METAL_INDEX_MASK_SCATTER, DS4_METAL_INDEX_ROW_SORT,
+    DS4_METAL_INDEX_CANDIDATE_DIRECT,
 };
 ds4_metal_index_pipeline ds4_metal_index_get_pipeline(uint32_t kind);
 ds4_metal_index_facts ds4_metal_index_get_facts(void);
@@ -68,6 +69,7 @@ typedef struct {
     bool batch;
     ds4_metal_index_score_packet args;
     const ds4_gpu_tensor *q, *weights, *keys;
+    const ds4_gpu_tensor *candidate_blocks;
     ds4_gpu_tensor *scores;
     uint64_t groups_x, groups_y, threads_x, threads_y, shared_bytes;
 } ds4_metal_index_score_launch;

@@ -1622,6 +1622,18 @@ int ds4_gpu_glm_indexer_score_one_tensor(
         float                 scale,
         bool                  cache_f16);
 
+/* V4.1 scalar32x128 index scoring for inherited eight-key candidate blocks.
+ * Writes selected rows only. Caller must filter untouched rows before top-k;
+ * selected output positions remain global. */
+int ds4_gpu_dsv41_indexer_score_candidates(
+        ds4_gpu_tensor       *scores,
+        const ds4_gpu_tensor *q,
+        const ds4_gpu_tensor *weights,
+        const ds4_gpu_tensor *indexer_key_cache,
+        const ds4_gpu_tensor *candidate_blocks,
+        uint32_t              n_rows,
+        uint32_t              n_candidate_blocks);
+
 int ds4_gpu_glm_indexer_scores_batch_tensor(
         ds4_gpu_tensor       *scores,
         const ds4_gpu_tensor *q,

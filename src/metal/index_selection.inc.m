@@ -6,6 +6,7 @@ ds4_metal_index_pipeline ds4_metal_index_get_pipeline(uint32_t kind) {
         switch (kind) {
             case DS4_METAL_INDEX_SCORE: pipeline = ds4_gpu_hot_pipeline(g_glm_indexer_score_one_pipeline, "kernel_glm_indexer_score_one"); break;
             case DS4_METAL_INDEX_DIRECT: pipeline = ds4_gpu_hot_pipeline(g_glm_indexer_score_one_direct_pipeline, "kernel_glm_indexer_score_one_direct"); break;
+            case DS4_METAL_INDEX_CANDIDATE_DIRECT: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_score_candidates"); break;
             case DS4_METAL_INDEX_BATCH: pipeline = ds4_gpu_hot_pipeline(g_glm_indexer_scores_batch_pipeline, "kernel_glm_indexer_scores_batch"); break;
             case DS4_METAL_INDEX_TILED: pipeline = ds4_gpu_hot_pipeline(g_glm_indexer_scores_tiled_pipeline, "kernel_glm_indexer_scores_tiled"); break;
             case DS4_METAL_INDEX_TILED_F32: pipeline = ds4_gpu_hot_pipeline(g_glm_indexer_scores_tiled_f32_pipeline, "kernel_glm_indexer_scores_tiled_f32"); break;
@@ -53,7 +54,11 @@ int ds4_metal_index_score_encode(void *command, const ds4_metal_index_score_laun
         const ds4_gpu_tensor *tensors[] = {launch->q, launch->weights, launch->keys, launch->scores};
         for (NSUInteger i = 0; i < 4; i++)
             [enc setBuffer:ds4_gpu_tensor_buffer(tensors[i]) offset:ds4_gpu_tensor_offset(tensors[i]) atIndex:i + 1];
-        [enc setThreadgroupMemoryLength:(NSUInteger)launch->shared_bytes atIndex:0];
+        if (launch->candidate_blocks)
+            [enc setBuffer:ds4_gpu_tensor_buffer(launch->candidate_blocks)
+                offset:ds4_gpu_tensor_offset(launch->candidate_blocks) atIndex:5];
+        if (launch->shared_bytes)
+            [enc setThreadgroupMemoryLength:(NSUInteger)launch->shared_bytes atIndex:0];
         [enc dispatchThreadgroups:MTLSizeMake(launch->groups_x, launch->groups_y, 1)
             threadsPerThreadgroup:MTLSizeMake(launch->threads_x, launch->threads_y, 1)];
         ds4_gpu_end_compute_encoder(cb, enc);

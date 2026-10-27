@@ -812,6 +812,9 @@ pub fn build(b: *std.Build) void {
     const replay_checkpoint_frontend = object(b, target, sdk, clang, "speed-bench/replay_checkpoint_bench.c", "replay-checkpoint-main", optimize, test_flags);
     const replay_checkpoint = executable(b, target, sdk, core, cache, kvstore, "replay-checkpoint-bench", replay_checkpoint_frontend, optimize);
     b.step("replay-checkpoint-bench", "Build the existing private replay SSD/F16 probe (run separately)").dependOn(&b.addInstallArtifact(replay_checkpoint, .{}).step);
+    const decoder_replay_frontend = object(b, target, sdk, clang, "speed-bench/decoder_replay_bench.c", "decoder-replay-main", optimize, test_flags);
+    const decoder_replay = executable(b, target, sdk, core, null, null, "decoder-replay-bench", decoder_replay_frontend, optimize);
+    b.step("decoder-replay-bench", "Build the existing teacher-logit/task probe (run separately)").dependOn(&b.addInstallArtifact(decoder_replay, .{}).step);
     const payload_frontend = object(b, target, sdk, clang, "speed-bench/experiments/zig-engine-payload-20261022/payload_roundtrip.c", "payload-roundtrip-main", optimize, test_flags);
     const payload_test = executable(b, target, sdk, core, cache, kvstore, "payload-roundtrip", payload_frontend, optimize);
     b.step("payload-test", "Build the public canonical-payload exchange fixture (run separately)").dependOn(&b.addInstallArtifact(payload_test, .{}).step);

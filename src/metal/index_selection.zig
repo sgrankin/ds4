@@ -49,6 +49,7 @@ pub fn scoreOne(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, ke
         .q = q,
         .weights = weights,
         .keys = keys,
+        .candidate_blocks = null,
         .scores = scores,
         .groups_x = rows,
         .groups_y = 1,
@@ -57,6 +58,36 @@ pub fn scoreOne(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, ke
         .shared_bytes = if (direct) (128 + 4) * 4 else threads * 4,
     };
     return scoreDispatch(&launch, if (direct) "GLM indexer direct score" else "GLM indexer score");
+}
+
+/// Write layer20's inherited blocks in the global score/index space. The caller
+/// filters untouched rows before top-k. Keep the dense scalar reduction order.
+pub fn scoreCandidates(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
+    if (api.init() == 0 or rows == 0 or block_count == 0 or block_count > (@as(u64, rows) + 7) / 8) return 0;
+    if (!fits(scores, @as(u64, rows) * 4) or !fits(q, 32 * 128 * 4) or
+        !fits(weights, 32 * 4) or !fits(keys, @as(u64, rows) * 128 * 4) or
+        !fits(blocks, @as(u64, block_count) * 4))
+        return api.reportError("ds4: Metal candidate indexer score received undersized buffers");
+    const pipeline = c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_CANDIDATE_DIRECT);
+    if (pipeline.handle == null) return 0;
+    var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
+    args.one = .{ .n_rows = rows, .n_head = 32, .head_dim = 128, .cache_f16 = 0, .scale = 1.0 / 64.0 };
+    const launch = c.ds4_metal_index_score_launch{
+        .pipeline = pipeline,
+        .batch = false,
+        .args = args,
+        .q = q,
+        .weights = weights,
+        .keys = keys,
+        .candidate_blocks = blocks,
+        .scores = scores,
+        .groups_x = @as(u64, block_count) * 8,
+        .groups_y = 1,
+        .threads_x = 32,
+        .threads_y = 4,
+        .shared_bytes = (128 + 4) * 4,
+    };
+    return scoreDispatch(&launch, "V4.1 candidate indexer score");
 }
 
 pub fn scoreBatch(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, rows: u32, tokens: u32, start: u32, ratio: u32, heads: u32, width: u32, scale: f32, half: bool, tiled_f32: bool) c_int {
@@ -99,6 +130,7 @@ pub fn scoreBatch(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, 
         .q = q,
         .weights = weights,
         .keys = keys,
+        .candidate_blocks = null,
         .scores = scores,
         .groups_x = if (tiled) (@as(u64, rows) + 31) / 32 else rows,
         .groups_y = if (tiled) (@as(u64, tokens) + 7) / 8 else tokens,

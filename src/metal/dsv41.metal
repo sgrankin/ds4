@@ -6,6 +6,53 @@ struct ds4_metal_args_dsv41_quantize {
     uint mode;
 };
 
+struct ds4_metal_args_dsv41_index_candidates {
+    uint n_rows, n_head, head_dim, cache_f16;
+    float scale;
+};
+
+// Same32-head/128-column dot and head accumulation as the dense scalar
+// indexer. Only the row address changes; selected scores keep their global ID.
+kernel void kernel_dsv41_indexer_score_candidates(
+        constant ds4_metal_args_dsv41_index_candidates &args,
+        device const float *q,
+        device const float *weights,
+        device const float *keys,
+        device float *scores,
+        device const int *blocks,
+        threadgroup float *shared [[threadgroup(0)]],
+        uint candidate [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]]) {
+    const int block = blocks[candidate / 8u];
+    if (block < 0 || uint(block) >= (args.n_rows + 7ul) / 8ul) return;
+    const uint row = uint(block) * 8u + candidate % 8u;
+    if (row >= args.n_rows) return;
+    threadgroup float *ktg = shared;
+    threadgroup float *psum = ktg + 128u;
+    if (tid < 128u) ktg[tid] = keys[(ulong)row * 128u + tid];
+    float acc = 0.0f;
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    for (uint head0 = 0; head0 < 32u; head0 += 4u) {
+        const uint head = head0 + uint(sg);
+        device const float4 *q4 = (device const float4 *)(q + (ulong)head * 128u);
+        threadgroup const float4 *k4 = (threadgroup const float4 *)ktg;
+        float s = dot(q4[lane], k4[lane]);
+        s = simd_sum(s);
+        if (lane == 0) psum[sg] = max(s * args.scale, 0.0f) * weights[head];
+        threadgroup_barrier(mem_flags::mem_threadgroup);
+        if (tid == 0) {
+            acc += psum[0];
+            acc += psum[1];
+            acc += psum[2];
+            acc += psum[3];
+        }
+        threadgroup_barrier(mem_flags::mem_threadgroup);
+    }
+    if (tid == 0) scores[row] = acc;
+}
+
 static inline float dsv41_bf16(float x) {
     uint bits = as_type<uint>(x);
     if ((bits & 0x7f800000u) != 0x7f800000u)
