@@ -35,6 +35,7 @@ typedef struct {
     bool checkpoint_valid;
     bool approximate_suffix;
     bool approximate_decoder_replay; /* Not a relocatable suffix-cache source. */
+    bool approximate_swa_replay; /* Experimental block-only recovery; never a suffix/replay-cache source. */
     uint32_t decoder_replay_rows;
     bool decoder_replay_selected;
     bool mtp_draft_valid;

@@ -1,5 +1,43 @@
 # Serving project journal
 
+Block-only recovery completed14:13UTC (40-minute execution plus prepared patch).
+Actual baseline reasoning/answer traces (145tokens across3cases) give mean
+ΔNLL−.00113/KL.00596; adverse+.00102nats/token (~+.10%perplexity). All free
+answers pass, but reasoning lengths differ; keep both this trace and the old
+short-teacher metrics.32K recent-fact bracket also passes:21.95/29.16/75.37/
+21.58s exact/recover/miss/exact-repeat; recovery61.3% faster than miss,34.0%
+slower than exact hits. Checkpoints220,849,204→209,846,324B,4.98% smaller.
+Decide: retain the explicit diagnostic prototype; keep full SWA for recent
+exact hits, investigate batched recovery/cold retention later. This does not
+wire ordinary SSD-cache policy or claim isolated encoder-only semantics.
+Measured size/time/quality scatter plots and reproduction are local/ignored;
+scripts and concise report are in the experiment folder. No default, installed
+binary or main change. Next: one68B index-key producer/reader pilot.
+
+Block-only recovery experiment starts13:33UTC, cap14:33UTC. Baseline parent is
+candidate experiment56ebae95. Apply the prepared direct SWB1 import prototype:
+unchanged durable compressed/index arrays, clipped raw visibility and128 scalar
+recovery rows. This first pilot rebuilds all40 raw rings, not isolated official
+encoder-only recovery or an optimized cache controller. Check immutable blocks,
+missing-ring poison independence, approximate/export identity, practical task
+answers/ΔNLL/KL, emitted bytes and warm-file recovery versus exact restore and
+full miss. One guarded model job at a time,48GiB expert cache, normal reasoning.
+
+Recovery checkpoint13:54UTC: source builds;2048-prefix poison/no-poison runs
+give identical recovered-frontier and continuation logits, immutable block/
+unused-carry hashes pass, and approximate canonical/suffix exports are blocked.
+At8192 prefix, actual checkpoint63,464,500→52,461,620B (17.34% smaller).
+All4 arms (exact/recover/fresh/exact-repeat) pass all3 reasoning-enabled tasks.
+Recovery whole-answer total82.70s versus exact bracket63.30s and miss127.59s:
+~30.7% slower than full-state hits,35.2% faster than misses. Per-case results
+and reproduction are retained. Short answer-only forced teachers give mean
+ΔNLL+.193/KL.0101 (all22 fresh-miss/control distributions match exactly).
+Those teachers start CODE where normal reasoning begins; a separate actual
+baseline reasoning+answer token-trace quality pair is running, preserving both
+metrics rather than replacing the first. The driver completed all model arms
+then hit a Nushell path-self parse-time postprocessing error; changed it to a
+top-level const and ran analysis on existing outputs, without model reruns.
+
 DeepInfer convergence execution authorized 2026-10-27, first slice12:50–13:50UTC.
 The user prefers aligning the DeepSeek implementation with DeepInfer unless a
 specific Apple/SSD benefit justifies a difference. Work sequentially through

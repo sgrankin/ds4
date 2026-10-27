@@ -11,6 +11,7 @@ pub const Frontier = struct {
     pub fn clearApproximation(self: Frontier) void {
         self.state.approximate_suffix = false;
         self.state.approximate_decoder_replay = false;
+        self.state.approximate_swa_replay = false;
         self.state.decoder_replay_rows = 0;
         self.state.decoder_replay_selected = false;
     }

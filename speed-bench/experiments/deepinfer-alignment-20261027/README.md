@@ -88,12 +88,104 @@ python3 speed-bench/experiments/deepinfer-alignment-20261027/compare.py .workspa
 python3 speed-bench/ideas/pressure_run.py .workspaces/alignment-loop-guard -- nu speed-bench/experiments/deepinfer-alignment-20261027/candidate-index.nu .workspaces/alignment-build/bin/decoder-replay-bench .workspaces/alignment-loop --tokens 65536 --case favorable --hot-loop
 ```
 
+## 2. Block-only checkpoint and bounded attention recovery
+
+Completed13:33–14:13UTC within its initial budget, baseline parent`56ebae95`. A direct
+diagnostic API loads a private SWB1 file and replays128 tokens at their original
+absolute positions. Raw visibility is clipped to the replay start, old
+compressed/index publication is suppressed, and Engram's preceding token
+history is retained. This first scalar prototype rebuilds all40 raw rings;
+it combines encoder/decoder recovery rather than isolating the documented
+DeepInfer encoder-only policy or implementing an optimized cache controller.
+It requires an endpoint>=256 aligned to128, native single-GPU text, no drafter,
+steering, archive, images or decoder-replay policy. Ordinary paths/defaults stay
+unchanged; the direct diagnostic API is its only activation.
+
+SWB1 v1 reuses the13-u32 dimensions/token-header layout with a distinct tag,
+then exact tokens and F32 main/index owner arrays. It omits all40 raw rings and
+saved logits. The probe slices its own exact checkpoint; canonical DSV4 loaders
+reject SWB1. No general SSD-cache kind/controller is added. Recovered state is
+marked approximate and excluded from canonical/suffix/replay export. At even
+aligned endpoints pending C2 carries are absent/unused; odd endpoints remain
+unqualified.
+
+The2048-prefix qualification verifies unchanged cumulative blocks and unused
+carry scratch. Ordinary recovery versus NaN-poisoned missing raw rings gives
+byte-identical fresh frontier logits and all shared continuation logits. This
+checks actual reconstruction/masking, not imported saved logits. Both answer
+correctly. Verification overhead is excluded from measured arms.
+
+At8192 prefix, actual files are63,464,500B exact versus52,461,620B blocks:
+**11,002,880B (17.34%) smaller**. Every arm first prepares identical prefix
+files; that setup is excluded. Files are reread without flushing the OS cache,
+so these are warm-file restore measurements, not cold physical-SSD bandwidth.
+All cases append the same256 uncached tokens and keep normal reasoning.
+
+| Case | Exact restore, bracket mean | Block recovery | Full miss | Answer grades |
+|---|---:|---:|---:|---:|
+| Ordinary |21.19s|26.54s|41.98s|All pass|
+| Recent fact inside replay tail |22.80s|29.45s|43.94s|All pass|
+| Correction outside replay tail |19.31s|26.72s|41.67s|All pass|
+
+Times include restore/recovery/recompute, append and the first free answer.
+Across these tasks recovery is35.2% faster than a full miss and30.7% slower
+than full-state hits. A256-token append itself takes~17s here. Do not attribute
+that shared cost to recovery alone. Cache tokens are identical in every arm;
+the correction was already present in the cached prefix. Editing cached prefix
+tokens must miss rather than reuse its old blocks.
+
+Quality uses two explicitly retained measurements. The old short forced teacher
+begins with answer tokens at a reasoning frontier:22 rows give meanΔNLL+.193,
+KL.0101, with per-caseΔNLL−.0139/+.3422/+.2286. That is a valid distribution
+probe but poorly matches the model's normal continuation. The second comparison
+forces the exact control's **actual reasoning and answer tokens plus EOS**:
+
+| Case | Trace tokens | MeanΔNLL (nats/token) | KL | Teacher perplexity change |
+|---|---:|---:|---:|---:|
+| Ordinary |39|−.00425|.00550|−.42%|
+| Recent fact |79|−.00033|.00550|−.03%|
+| Correction |27|+.00102|.00799|+.10%|
+
+Weighted meanΔNLL−.00113 and KL.00596; all free answers remain correct.
+Recovery changes reasoning lengths (38→29,78→63,26→26 generated tokens), so
+whole-answer timing includes that behavioral difference. Fresh misses and
+repeated exact controls have byte-identical distributions/outputs. These three
+retrieval tasks do not establish broad coding/reasoning quality equivalence.
+
+The32K-prefix recent-fact check also passes every arm. Whole-answer times are
+21.95/29.16/75.37/21.58s (exact/recover/miss/exact-repeat): recovery is61.3%
+faster than a miss and34.0% slower than the exact bracket mean. Full checkpoint
+220,849,204B versus block209,846,324B, a4.98% reduction; the omitted11MB is
+constant, so its percentage shrinks with context. Its short forced teacher
+givesΔNLL−.05993/KL.00679. This is an additional longer-context case, not a
+new baseline reasoning-trace quality suite.
+
+Keep full SWA for recent/exact hits; this supports exploring smaller cold
+checkpoints with bounded recovery. Batch the128-row reconstruction and measure
+real cache-retention benefit before wiring ordinary cache policy. The first
+driver finished all model arms then failed its postprocessing `path self`
+runtime use; fixed to a top-level Nushell const and analyzed retained outputs.
+The subsequent trace driver completes cleanly. No model rerun was required
+to repair reporting.
+
+Reproduction (all model commands under the existing pressure guard):
+
+```sh
+nu tools/zig-build swa-restore-probe --prefix .workspaces/swa-build -j6
+python3 speed-bench/ideas/pressure_run.py .workspaces/swa-poison-guard -- nu speed-bench/experiments/deepinfer-alignment-20261027/swa-restore.nu .workspaces/swa-build/bin/swa-restore-probe .workspaces/swa-poison --poison-check
+python3 speed-bench/ideas/pressure_run.py .workspaces/swa-guard -- nu speed-bench/experiments/deepinfer-alignment-20261027/swa-restore.nu .workspaces/swa-build/bin/swa-restore-probe .workspaces/swa-measured
+nu speed-bench/experiments/deepinfer-alignment-20261027/make-teachers.nu .workspaces/swa-measured/exact/answers.jsonl .workspaces/swa-teachers
+python3 speed-bench/ideas/pressure_run.py .workspaces/swa-trace-guard -- nu speed-bench/experiments/deepinfer-alignment-20261027/swa-restore.nu .workspaces/swa-build/bin/swa-restore-probe .workspaces/swa-trace --teacher-dir .workspaces/swa-teachers
+python3 speed-bench/experiments/deepinfer-alignment-20261027/plot-swa.py .workspaces/swa-measured/summary.json .workspaces/swa-figures
+```
+
+The last command needs Matplotlib (the existing local
+`.workspaces/bench-plots-venv/bin/python` has it). Generated figures/raw data
+remain local and ignored. The plot shows measured points and exact-control
+ranges, with no invented interpolation/frontier.
+
 ## Remaining authorized experiments
 
-2. Block-only cache hit plus128-row bounded attention recovery. Start with a
-   direct aligned-frontier prototype, keeping durable compressed/index blocks
-   immutable. Measure quality, bytes and restore cost; distinguish an all-layer
-   prototype from upstream's encoder-only controller.
 3. One real packed producer/reader, initially128-wide index FP4 with UE8M0 scales
    (68B versus512B per row). Verify numerical ABI and measure the whole boundary,
    rather than claiming savings from dtype names or CPU-only repacking.

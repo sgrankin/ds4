@@ -102,6 +102,8 @@ pub const Attention = struct {
     pub fn publish(self: *const Attention, layer: *const Layer, index: u32) bool {
         const graph = self.graph;
         const position = graph.pos;
+        // Cached cumulative state and C2 carries remain immutable during raw-only replay.
+        if (position < graph.immutable_cache_end) return true;
         const policy = self.config.layerPolicy(index).?;
         if (!policy.publishes_kv) return true;
         const owner = cacheOwner(index);

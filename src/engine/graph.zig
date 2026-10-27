@@ -599,3 +599,10 @@ export fn ds4_native_graph_route_batch41(graph: *c.ds41_gpu_graph, model: *const
     const owner = @import("deepseek41/moe.zig").Moe{ .graph = graph, .ops = .{ .config = &config, .model = model } };
     return @intFromBool(owner.routeBatch(layer, count));
 }
+
+// Direct experimental SWB1 recovery; ordinary checkpoint/cache routes are unchanged.
+export fn ds4_native_session_swa_recover41(state: *c.ds4_session_frontier, device: *c.ds4_deepseek41_session_device, core: *c.ds4_engine_core, transport: *c.ds4_engine_tp_state, control: *c.ds4_session_control, raw: *const c.ds4_model_config, inputs: *const c.ds4_engine_memory_inputs, exact: bool, snapshot: *const c.ds4_session_snapshot, verify: bool, errors: [*c]u8, capacity: usize) c_int {
+    const config = configuration(raw);
+    const owner = coordinator(state, device, core, transport, control, &config, inputs, exact);
+    return @import("deepseek41/swa_recovery.zig").run(&owner, snapshot, verify, errorBuffer(errors, capacity));
+}

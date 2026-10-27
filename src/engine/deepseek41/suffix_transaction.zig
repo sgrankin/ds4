@@ -55,7 +55,7 @@ pub const Transaction = struct {
         const device = session.runtime.prefill.executor.graph;
         const has_mtp = core.backend != c.DS4_BACKEND_CPU and
             core.distributed.role == c.DS4_DISTRIBUTED_NONE and core.mtp_ready;
-        return !state.approximate_decoder_replay and !session.transport.active and
+        return !state.approximate_decoder_replay and !state.approximate_swa_replay and !session.transport.active and
             core.directional_steering_dirs == null and !core.dspark and !has_mtp and
             session.runtime.ready and !device.workspace_failed and device.image_count == 0 and
             device.imatrix == null and !device.predict_active and !device.predict_load.active and

@@ -114,6 +114,14 @@ pub const Payload = struct {
         return bytes;
     }
 
+    pub fn blockBytes(self: *const Payload, position: u32) u64 {
+        var storage: [54]Span = undefined;
+        var bytes = @as(u64, position) * 4;
+        const spans_ = self.spans(position, &storage);
+        for (spans_[self.config.shape.n_layer..]) |span| bytes += span.wire_bytes;
+        return bytes;
+    }
+
     pub fn header(self: *const Payload) Header {
         const graph = self.graph;
         const shape = &self.config.shape;
@@ -142,6 +150,12 @@ pub const Payload = struct {
     }
 
     pub fn load(self: *const Payload, stream: *c.FILE, saved: *const Header, body_bytes: u64, logits: []f32, mutated: *bool, error_text: []u8) Failure!OwnedTokens {
+        return self.loadMode(false, stream, saved, body_bytes, logits, mutated, error_text);
+    }
+    pub fn loadBlocks(self: *const Payload, stream: *c.FILE, saved: *const Header, body_bytes: u64, logits: []f32, mutated: *bool, error_text: []u8) Failure!OwnedTokens {
+        return self.loadMode(true, stream, saved, body_bytes, logits, mutated, error_text);
+    }
+    fn loadMode(self: *const Payload, comptime blocks_only: bool, stream: *c.FILE, saved: *const Header, body_bytes: u64, logits: []f32, mutated: *bool, error_text: []u8) Failure!OwnedTokens {
         const file = File{ .stream = stream, .error_text = error_text };
         const graph = self.graph;
         const shape = &self.config.shape;
@@ -152,7 +166,7 @@ pub const Payload = struct {
         if (position == 0 or position >= graph.ctx or position >= saved[2] or saved[2] > 1048576 or
             saved[3] != 1 or saved[4] != 128 or saved[5] != 128 or saved[6] != saved[2] + 1 or
             saved[8] != shape.n_layer or saved[9] != shape.n_head_dim or saved[10] != shape.n_indexer_head_dim or
-            saved[11] != shape.n_vocab or saved[12] != 0x413431 or body_bytes != self.bodyBytes(position) or logits.len != shape.n_vocab)
+            saved[11] != shape.n_vocab or saved[12] != 0x413431 or body_bytes != (if (blocks_only) self.blockBytes(position) else self.bodyBytes(position)) or logits.len != shape.n_vocab)
             return file.fail(error.InvalidDimensions, "invalid V4.1 snapshot dimensions or size");
         var tokens = OwnedTokens{};
         errdefer tokens.deinit();
@@ -169,13 +183,16 @@ pub const Payload = struct {
         if (c.ds4_gpu_synchronize() == 0) return error.Device;
         mutated.* = true;
         graph.valid = false;
-        try file.read(std.mem.sliceAsBytes(logits), &remaining);
-        if (c.ds4_gpu_tensor_write(graph.logits, 0, logits.ptr, @as(u64, shape.n_vocab) * 4) == 0)
-            return file.fail(error.Device, "failed to restore V4.1 device logits");
+        if (!blocks_only) {
+            try file.read(std.mem.sliceAsBytes(logits), &remaining);
+            if (c.ds4_gpu_tensor_write(graph.logits, 0, logits.ptr, @as(u64, shape.n_vocab) * 4) == 0)
+                return file.fail(error.Device, "failed to restore V4.1 device logits");
+        }
         const scratch = allocator.alignedAlloc(u8, .@"8", io_chunk) catch c.ds4_engine_model_die("out of memory");
         defer allocator.free(scratch);
         var storage: [54]Span = undefined;
-        for (self.spans(position, &storage)) |span| try readSpan(file, span, scratch, &remaining);
+        const spans_ = self.spans(position, &storage);
+        for (spans_[(if (blocks_only) shape.n_layer else 0)..]) |span| try readSpan(file, span, scratch, &remaining);
         resources.resetRecord(graph);
         const values = tokens.items();
         for (0..@min(@as(u32, 3), position)) |index|

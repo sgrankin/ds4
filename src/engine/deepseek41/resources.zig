@@ -223,6 +223,7 @@ pub fn freePrerope(maybe_archive: [*c]Archive) void {
 pub fn resetRecord(graph: *Record) void {
     graph.pos = 0;
     graph.decoder_replay_floor = 0;
+    graph.immutable_cache_end = 0;
     graph.valid = !graph.workspace_failed;
     c.ds4_engram_history_reset(&graph.history);
     c.ds4_native_graph_dspark_reset(graph.dspark);

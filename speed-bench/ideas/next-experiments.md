@@ -20,6 +20,15 @@ is neutral; a warmed alternating64K replay improves1.68%. Short8K bypass varies
 0.17% on the same path. Keep opt-in; no preset promotion. Removed a redundant
 clear before the existing filter. Item2 starts next with its own one-hour cap.
 [Measurements and reproduction](../experiments/deepinfer-alignment-20261027/README.md).
+Item2 starts13:33UTC, cap14:33UTC, from56ebae95; direct aligned SWB1 import plus
+128 scalar rows, with explicit all40-ring prototype scope and no cache-policy
+or default change. First qualify immutable owner state and poisoned raw rings.
+Item2 completed14:13UTC. Poison independence/immutable owner checks pass. At8K,
+17.34% smaller checkpoints,35.2% less whole-answer time than misses,30.7% more
+than exact hits. Actual baseline traces giveΔNLL−.00113/KL.00596 and3/3 correct;
+at32K one case gives61.3% less time than miss. Keep diagnostic/cold-recovery
+direction; batch it and measure retention before ordinary cache integration.
+Proceed to the packed-index producer/reader pilot.
 
 ## Constrained packets/MTP — completed with limits, 2026-10-27
 

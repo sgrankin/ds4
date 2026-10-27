@@ -12,6 +12,10 @@ exact distributions/outputs on the32K/64K probes, a small warm-decode benefit,
 and no reliable first-answer improvement. The table below retains the pinned
 source-audit comparison; it is not a claim that these later experiments were
 already present in its baseline.
+The subsequent block-only128-row prototype also validates bounded recovery and
+small measured baseline-trace changes, with a size/latency tradeoff. It rebuilds
+all40 rings through a direct diagnostic API; ordinary cache policy and isolated
+encoder-only recovery remain absent. See the report for scope and measurements.
 
 This covers the material techniques in the public engine, its kernel integration
 and the separately documented production service. It is not a claim that every

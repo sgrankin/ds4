@@ -56504,6 +56504,24 @@ int ds4_session_load_snapshot(ds4_session *s, const ds4_session_snapshot *snap, 
     return ds4_native_session_load_snapshot(s, snap, err, errlen);
 }
 
+int ds4_session_load_blocks_snapshot_replay128(ds4_session *s,
+        const ds4_session_snapshot *snapshot, bool verify, char *error, size_t error_size) {
+    DS4_SESSION_SCOPE(s);
+#if defined(DS4_HAS_DEEPSEEK41_GPU)
+    if (ds41_native_checkpoint_session(s) && s->engine->core.backend == DS4_BACKEND_METAL && snapshot) {
+        const ds4_model_config config = ds41_native_config();
+        const ds4_engine_memory_inputs inputs = ds41_memory_inputs(s->engine);
+        return ds4_native_session_swa_recover41(&s->frontier, &s->ds41,
+            &s->engine->core, &s->engine->tp, &s->control, &config, &inputs,
+            ds41_exact_prefill_rows, snapshot, verify, error, error_size);
+    }
+#else
+    (void)s; (void)snapshot; (void)verify;
+#endif
+    payload_set_err(error, error_size, "SWA recovery prototype requires native Metal DS41");
+    return 1;
+}
+
 bool ds4_session_is_approximate(const ds4_session *s) {
     DS4_SESSION_SCOPE(s);
     return s && s->frontier.approximate_suffix;

@@ -78,7 +78,8 @@ typedef struct {
 
 typedef struct {
     uint32_t ctx, pos, prefill_cap, carry_cap, prefill_max;
-    uint32_t decoder_replay_floor; /* Active only inside a bounded decoder sweep. */
+    uint32_t decoder_replay_floor; /* Active inside a bounded raw replay. */
+    uint32_t immutable_cache_end; /* Experimental SWA recovery: suppress publication before this endpoint. */
     uint64_t allocation_bytes;
     /* Immutable layer directions are session-owned; scales may change live.
      * Row/workspace views borrow this pointer with the rest of the graph. */

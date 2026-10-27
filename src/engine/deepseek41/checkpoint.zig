@@ -126,6 +126,7 @@ pub const Checkpoint = struct {
             self.frontier.overthink_prompt_len = self.frontier.checkpoint.len;
             self.frontier.approximate_suffix = false;
             self.frontier.approximate_decoder_replay = false;
+            self.frontier.approximate_swa_replay = false;
             self.frontier.decoder_replay_rows = 0;
             self.frontier.decoder_replay_selected = false;
         }

@@ -726,6 +726,10 @@ int ds4_session_save_payload(ds4_session *s, FILE *fp, char *err, size_t errlen)
 int ds4_session_load_payload(ds4_session *s, FILE *fp, uint64_t payload_bytes, char *err, size_t errlen);
 int ds4_session_save_snapshot(ds4_session *s, ds4_session_snapshot *snap, char *err, size_t errlen);
 int ds4_session_load_snapshot(ds4_session *s, const ds4_session_snapshot *snap, char *err, size_t errlen);
+/* Experimental direct block-only import, fixed128 raw recovery; not ordinary cache lookup.
+ * verify enables byte-preservation/NaN-poison checks and must be excluded from timing. */
+int ds4_session_load_blocks_snapshot_replay128(ds4_session *s,
+    const ds4_session_snapshot *snapshot, bool verify, char *error, size_t error_size);
 void ds4_session_snapshot_free(ds4_session_snapshot *snap);
 
 /* Private decoder-replay checkpoint: a 32-byte little-endian DRP1 envelope

@@ -192,6 +192,11 @@ void ds4_native_encoder_acquire41(ds41_encoder_residency *lease,
 void ds4_native_encoder_release41(ds41_encoder_residency *lease,
     ds41_gpu_graph *graph, const ds4_model *model);
 
+int ds4_native_session_swa_recover41(ds4_session_frontier *, ds4_deepseek41_session_device *,
+    ds4_engine_core *, ds4_engine_tp_state *, ds4_session_control *,
+    const ds4_model_config *, const ds4_engine_memory_inputs *, bool exact,
+    const ds4_session_snapshot *, bool verify, char *, size_t);
+
 /* Canonical local V4.1 checkpoints and private DRP1 replay envelopes. */
 uint64_t ds4_native_checkpoint_bytes41(ds4_session_frontier *frontier,
     ds41_gpu_graph *graph, const ds4_model_config *config, bool ready);
