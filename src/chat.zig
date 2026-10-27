@@ -174,6 +174,26 @@ const Chat = struct {
         }
         try self.emit(bytes[span..]);
     }
+    fn promptSpan(self: Chat, bytes: []const u8, start_byte: usize, end: usize, ranges: []const c.ds4_prompt_range) !void {
+        if (start_byte > end or end > bytes.len) return error.InvalidPromptRange;
+        var plain = start_byte;
+        for (ranges) |range| {
+            if (range.end <= start_byte) continue;
+            if (range.begin >= end) break;
+            // A sliced control is plain text, matching the recipe's split
+            // behavior. Complete controls keep the explicit token identity.
+            if (range.begin < start_byte or range.end > end) continue;
+            if (range.begin < plain or range.begin >= range.end) return error.InvalidPromptRange;
+            try self.emit(bytes[plain..range.begin]);
+            const spelling = bytes[range.begin..range.end];
+            var token: c_int = -1;
+            if (!c.ds4_token_map_get(self.vocab.token_to_id, spelling.ptr, spelling.len, &token) or token < 0)
+                return error.UnknownPromptControl;
+            self.push(token);
+            plain = range.end;
+        }
+        try self.emit(bytes[plain..end]);
+    }
     fn systemMarker(self: Chat) void {
         // Initial system text may be built in pieces after the effort prefix.
         // Later system messages must introduce their own role token.
@@ -295,6 +315,11 @@ export fn ds4_vocab_encode_chat(vocab: *const Vocab, family: Family, system: [*c
 }
 export fn ds4_vocab_tokenize_rendered(vocab: *const Vocab, family: Family, input: [*c]const u8, out: *Tokens) bool {
     chat(vocab, family, out).rendered(text(input)) catch return false;
+    return true;
+}
+export fn ds4_vocab_tokenize_prompt_span(vocab: *const Vocab, family: Family, input: [*c]const u8, begin: usize, end: usize, specials: [*c]const c.ds4_prompt_range, special_count: usize, out: *Tokens) bool {
+    const ranges: []const c.ds4_prompt_range = if (special_count == 0) &.{} else specials[0..special_count];
+    chat(vocab, family, out).promptSpan(text(input), begin, end, ranges) catch return false;
     return true;
 }
 export fn ds4_vocab_chat_append(vocab: *const Vocab, family: Family, role: [*c]const u8, content: [*c]const u8, out: *Tokens) bool {

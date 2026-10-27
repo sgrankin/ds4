@@ -1,0 +1,6 @@
+#include "server/output_api.h"
+#include "ds4_server_reply.h"
+#include "ds4_server_protocol.h"
+#include "ds4_server_tool_memory.h"
+#include "ds4_server_generation.h"
+#include "ds4_server_decode.h"

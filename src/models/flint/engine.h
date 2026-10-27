@@ -35,11 +35,28 @@ int flint_session_eval(flint_session *session, int token,
                        char *error, size_t error_size);
 /* Return committed input tokens: first_token, then predictions which were fed
  * back through the model. The final uncommitted prediction remains in logits.
- * Greedy uses a resident packet; filtered sampling may return a scalar step. */
+ * Greedy and supported filters use a resident packet. */
 int flint_session_packet(flint_session *session, int first_token,
                          uint32_t max_tokens, float temperature, int top_k,
                          float top_p, float min_p, uint64_t *rng, int *accepted,
                          char *error, size_t error_size);
+/* Same committed-token contract. first_token has already been accepted by the
+ * matcher. Accept/mask callbacks run serially on a private CPU queue while GPU
+ * forwards execute. -2 requests scalar constrained fallback and leaves model,
+ * matcher and RNG untouched; -1 is an error. */
+int flint_session_packet_constrained(flint_session *session, int first_token,
+                         uint32_t max_tokens, float temperature, int top_k,
+                         float top_p, float min_p, uint64_t *rng,
+                         const ds4_token_constraint *constraint, int *accepted,
+                         char *error, size_t error_size);
+/* Sample the current GPU logits without advancing KV. Mask bit one permits a
+ * token, before all sampling filters. Counter RNG matches resident sampling.
+ * -1 is failure; -2 requests CPU fallback for unsupported filter settings. */
+int flint_session_sample_masked(flint_session *session,
+                                const uint32_t *words, size_t word_count,
+                                float temperature, int top_k, float top_p,
+                                float min_p, uint64_t *rng,
+                                char *error, size_t error_size);
 void flint_session_reset(flint_session *session);
 float flint_session_steering_ffn(flint_session *session);
 /* Future evaluation only; existing KV is retained. Return 0 on success. */

@@ -1,11 +1,54 @@
 # Next experiments: one hour each
 
-## Interaction catch-up — proposed execution order, 2026-10-27
+## Constrained packets/MTP — completed with limits, 2026-10-27
+
+The fixed scalar grammar control is `13ecfcd39cd9`. Flint now advances masks
+between up-to-eight sequential GPU decode steps, overlapping CPU matcher work
+with the following forward. DS41 now verifies actual DSpark drafts against
+per-prefix grammar masks, including positive-temperature exact p/q correction
+and matcher rollback. Normal reasoning remains enabled. Main stays unchanged.
+
+Matched baseline/disabled/enabled runs retain logical T0 answers and token
+counts. Flint's schema case takes about 5% less total time than disabled, with
+399 actual multi-token packets and passing incremental arguments. Ordinary
+timings vary, so there is no broad speed claim. DS41 is mixed/near neutral:
+strict-tool time improves about 3.4% versus disabled while schema time worsens
+about 1.6%. The cap2 point (maximum 3 tokens versus default 6) passes but gives no
+clear improvement; keep the default. A small measured tradeoff plot is retained.
+
+Source/model-free checks, full host verification, fresh Flint WebSocket/SDK/
+restart/cancellation, DS41 concurrent strict sessions and cancellation/retry
+all pass. A fresh-cache-disabled T1 DS41 probe exercises 22 real exact
+verification cycles with both partial and full acceptance. Preserve the
+baseline Flint T1 schema-valid wrong enum as a task-quality failure; these
+small unseeded probes cannot establish quality equivalence statistically.
+
+Concrete remaining tradeoff: target-only SSD restores lose the 128-row DSpark
+feature window, so short cached continuations execute 128 scalar tokens before
+drafting. Saving/rebuilding draft features is a separate future experiment,
+not part of this completed checkpoint. No additional harness framework is
+needed. [Measurements, plot and reproduction](../experiments/constrained-packets-20261027/README.md).
+
+## Interaction catch-up — completed with limits, 2026-10-27
 
 Execution authorized2026-10-27 at04:03:52UTC; first cleanup cap05:03:52UTC.
 Selected defaults: DS41 min_p=.05 remains enabled and explicit client sampling
 overrides win; Flint retains its reference defaults. Omitted strict is non-strict.
 The earlier min-p removal recommendation is superseded. Main stays unchanged.
+
+Final status: cleanup, token-aware DS41/Flint I/O, shared native grammar,
+constrained sampling and DS41 explicit SSD checkpoint policy are implemented.
+Guarded HTTP/WS/SDK/restart checks and retained Clef decision APIs pass. DS41's
+optional answer screen remains12/15 with the same3 failures on the frozen
+control; Flint passes17/17. Cache policy fixes pass fresh/repeat/changed-prefix
+and restart checks. The narrow Flint schema-coercion adapter passes its live
+three-type probe and ambiguous-schema rejection. All five qualified executables
+are installed with matching hashes and passing help checks; main stays unchanged.
+At this earlier checkpoint, formal matched latency comparisons and constrained
+packet/MTP optimization had not run. The subsequent completed checkpoint above
+adds matched measurements while retaining the user's idle reference server and
+their timing limitations. GLM/Qwen retain their previous Responses streaming path.
+[Qualification and reproduction](../experiments/interaction-catchup-20261027/README.md).
 
 Each numbered item is an up-to-one-hour checkpoint, including builds, checks,
 measurement and a short record. If incomplete, report the concrete obstacle and
@@ -1000,7 +1043,7 @@ Item35 finished early **22:55 UTC**. [Fresh WRITE-budget curve](../experiments/f
 
 Item36 starts **22:56 UTC**, deadline **22:59:30 UTC**, including45 seconds source preparation. Run unchanged installedSDK/Pi provider smoke from17 through actual persistent-fast wrapper: streamedResponses/parentGET/ConversationsCRUD/realtools. Outer120-second lifecycle bound, owncache/store/hot0SSD4096. Compatibility only, no latency/graft claim.
 
-Item36 finished **22:58:30 UTC**. [Actual SDK preset report](../experiments/sdk-preset-hour36-20261004/README.md):unchanged SDK/Pi/Conversations checks allpass/errorsnone, realLIME/COVEreads, storedparentGET exact andCRUD200. Actualwrapper/profile/nativeweights2789/drops0 confirmed; no short-context graft/latencyclaim. All40 guard samples normal/zero swap growth, serverexit0; independent audit passed. Finalprocess check finds no ds4-server/agent. All planned measurements/reports committed before19Eastern reset.
+Item36 finished **22:58:30 UTC**. [Actual SDK preset report](../experiments/sdk-preset-hour36-20261004/README.md):unchanged SDK/Pi/Conversations checks allpass/errorsnone, realLIME/COVEreads, storedparentGET exact andCRUD200. Actualwrapper/profile/nativeweights2789/drops0 confirmed; no short-context graft/latencyclaim. All40 guard samples normal/zero swap growth, serverexit 0; independent audit passed. Finalprocess check finds no ds4-server/agent. All planned measurements/reports committed before19Eastern reset.
 
 Item42 starts **2026-10-09 14:54 UTC**, deadline **15:54 UTC**, including source review and preparation. Fix the observed live-context read/edit loop with explicit no-dump instructions, stable turn IDs, short code recipes, and concise edit receipts. Labels remain mirror metadata and never enter model tokens/KV. Retain IDs after edits/deletions and preserve original token identities for untouched turns. Run focused model-free checks and one guarded actual-agent editing screen if no user model is active; preserve the first outcome rather than tuning the harness or retrying generation. This item does not change prefill-chunk defaults.
 

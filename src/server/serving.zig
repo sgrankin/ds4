@@ -98,7 +98,14 @@ pub fn decodeWithSink(engine: ?*c.ds4_engine, runtime: ?*c.server, endpoint: c.d
         return false;
     }
     input.req.response_sink = sink;
-    return c.ds4_server_materialize(engine, runtime, endpoint, &input, context, incremental, out, errors.ptr, errors.len);
+    if (!c.ds4_server_materialize(engine, runtime, endpoint, &input, context, incremental, out, errors.ptr, errors.len)) return false;
+    if (runtime) |server| {
+        if (engine != null and !@import("grammar_runtime.zig").preflight(c, server, out, errors)) {
+            c.ds4_server_input_request_free(out);
+            return false;
+        }
+    }
+    return true;
 }
 pub fn exceedsContext(req: [*c]const c.request, context: c_int) bool {
     return req != null and req.*.prompt.len >= context;

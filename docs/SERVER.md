@@ -59,6 +59,87 @@ Max only with sufficient context; otherwise it falls back to normal thinking.
 `xhigh` maps to normal thinking, not Think Max. Use `think:false`, a disabled
 thinking object, or a non-thinking model alias for direct answers.
 
+## Constrained output and client tools
+
+DeepSeek4.1 and Flint use a native XGrammar compiler and per-generation matcher
+for declared function-tool framing. `strict:true` additionally enforces the
+supported argument schema; omitted strict and `strict:false` leave argument
+schemas non-strict. Strict normalization lists every property as required and
+forbids extra object properties. Prompting and grammar use the same normalized
+schema. Explicit namespaces map to `namespace::name` for model output while the
+Responses wire retains separate namespace and local name.
+
+Responses `text.format` and Chat `response_format` accept JSON objects and JSON
+schemas. Chat also accepts regex. Reasoning remains separate from the constrained
+answer. Unsupported schema constraints or combinations return an error before
+prefill; this is XGrammar's supported subset, not every JSON Schema feature.
+Required/named tool choices in DeepSeek thinking mode are rejected; clients can
+explicitly choose non-thinking for those requests. `parallel_tool_calls:false`
+limits the grammar to one call. Custom stop strings cannot combine with a
+constraint because they could cut a valid structure partway through.
+Flint's XML argument syntax cannot reliably distinguish a constrained string
+from a non-null JSON value in some union schemas. Strict parameters combining
+those types with pattern, format or string-length constraints are rejected;
+nullable strings and finite enum/const type selection remain supported.
+
+Grammar constraints preserve native decode acceleration: Flint encodes up to
+eight sequential forwards per packet, overlapping CPU mask preparation with the
+following GPU forward. With DS41 DSpark support loaded, draft and target masks
+apply before sampling filters and speculative verification; tentative matcher
+advances roll back before accepted tokens are committed. Unsupported Flint
+packet filters retain constrained scalar sampling. Explicit reasoning budgets
+and ignore-EOS requests retain their existing scalar path. Setting
+`DS4_MTP_SPEC_DISABLE=1` selects the scalar control for either model.
+
+Custom tool declarations, background Responses, automatic input truncation and
+nonzero presence/frequency penalties or top_logprobs are unsupported and return
+clear errors. Ordinary functions and client-executed tool_search remain usable.
+Responses, Chat and Anthropic stream DS41/Flint tool names and argument fragments;
+completed arguments preserve the same bytes as the accumulated deltas.
+
+## Prompt cache boundaries
+
+DS4.1 text requests accept OpenAI-style explicit checkpoint hints on text
+content blocks in Chat Completions and Responses:
+
+```json
+{
+  "model": "deepseek-v4.1-flash",
+  "prompt_cache_options": {"mode": "explicit"},
+  "input": [{
+    "role": "developer",
+    "content": [{
+      "type": "input_text",
+      "text": "Stable project context goes here.",
+      "prompt_cache_breakpoint": {"mode": "explicit"}
+    }]
+  }, {"role": "user", "content": "What should we change next?"}]
+}
+```
+
+The default `implicit` mode retains automatic caching and honors marked ends.
+`explicit` mode permits inference-cache reads only at marked prefix endpoints
+and writes at the last four marked ends. Historical marks remain eligible for
+lookup; more than four marks are accepted. With no marks in the resolved
+conversation, explicit mode disables inference-cache reuse and writes. Logical
+Response/Conversation storage remains independent, including `store:true` and
+`previous_response_id` recovery. Private replay preserves marked blocks.
+
+A boundary ends a prefix; changed earlier text still prevents exact reuse of
+later state. It does not independently cache a suffix. The metadata adds no
+model-visible text. Encoding splits at marked ends so stored token IDs are
+actual prefixes of the complete encoded request; moving a mark can change a
+token merge at that boundary. SSD restoration also verifies the restored IDs
+against the current encoded prompt before accepting the hit.
+
+Cache budgets and minimum checkpoint sizes still apply. Explicit controls
+currently require DS4.1 text; marked images and other model families return a
+clear unsupported error. Ordinary Flint caching is unchanged. A tool-result-only
+request using explicit controls needs full replay, `previous_response_id`, or a
+Conversation reference so it can recover without unmarked live KV. TTL/prewarm
+options are not implemented. These breakpoint fields are documented provider
+extensions to core OpenResponses.
+
 ## Multiple sessions
 
 ```sh
@@ -95,7 +176,9 @@ tokens. `--mixed-prefill-quantum N` changes that interval for testing.
 Session-batched serving uses ordinary target decoding, except Qwen3.8 on
 Metal, where `--mtp` also batches speculative decoding. Its
 `--mtp-exact-sampling` mode uses ordinary batches for nonzero-temperature
-requests. Other models do not use MTP/DSpark while session batching is active.
+requests. DS41 constrained requests can instead take bounded exclusive
+speculative turns between other sessions' model work. Other ordinary native
+batches do not use MTP/DSpark while session batching is active.
 For retained CUDA serving options, see
 [CUDA GPUs](CUDA_MULTI_GPU.md#serving-and-network-tensor-parallelism).
 
@@ -148,7 +231,7 @@ part of the prefix.
 
 `--tool-memory-max-ids` bounds this map.
 `--disable-exact-dsml-tool-replay` disables it for diagnostic comparisons.
-Use `--trace /tmp/ds4-trace.txt` to record prompt rendering, cache decisions,
+Use `--trace .workspaces/ds4-trace.txt` to record prompt rendering, cache decisions,
 generated text, and tool-parser events. Traces can contain sensitive content.
 
 Cache formats are implementation details. The current header and extension

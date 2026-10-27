@@ -6,12 +6,56 @@
 const std = @import("std");
 const c = @import("server_input_c");
 const MessageValues = @import("message_values.zig");
+const CacheControls = @import("cache_controls.zig");
 const allocator = std.heap.c_allocator;
 const Record = c.ds4_server_input;
 const Request = c.request;
 const Messages = c.chat_msgs;
 const Endpoint = c.ds4_server_input_endpoint;
 const Failure = error{ InvalidJson, Policy };
+
+fn containsNul(value: std.json.Value) bool {
+    switch (value) {
+        .string => |text| return std.mem.findScalar(u8, text, 0) != null,
+        .array => |array| for (array.items) |child| {
+            if (containsNul(child)) return true;
+        },
+        .object => |object| {
+            var fields = object.iterator();
+            while (fields.next()) |field| {
+                if (std.mem.findScalar(u8, field.key_ptr.*, 0) != null or containsNul(field.value_ptr.*)) return true;
+            }
+        },
+        else => {},
+    }
+    return false;
+}
+
+fn argumentsContainNul(value: std.json.Value) bool {
+    switch (value) {
+        .array => |array| for (array.items) |child| {
+            if (argumentsContainNul(child)) return true;
+        },
+        .object => |object| {
+            const kind = object.get("type");
+            const custom = if (kind) |v| v == .string and std.mem.eql(u8, v.string, "custom_tool_call") else false;
+            var fields = object.iterator();
+            while (fields.next()) |field| {
+                const argument = std.mem.eql(u8, field.key_ptr.*, "arguments") or (custom and std.mem.eql(u8, field.key_ptr.*, "input"));
+                if (argument and field.value_ptr.* == .string) {
+                    // Function arguments can be JSON encoded inside an API
+                    // string. The parameter codec decodes that extra layer.
+                    const parsed = std.json.parseFromSlice(std.json.Value, allocator, field.value_ptr.string, .{}) catch continue;
+                    defer parsed.deinit();
+                    if (containsNul(parsed.value)) return true;
+                }
+                if (argumentsContainNul(field.value_ptr.*)) return true;
+            }
+        },
+        else => {},
+    }
+    return false;
+}
 
 fn fatal() noreturn {
     _ = c.fprintf(c.__stderrp, "ds4-server: out of memory\n");
@@ -116,6 +160,7 @@ fn freeOrders(orders: *c.tool_schema_orders) void {
         c.free(order.name);
         c.free(order.wire_name);
         c.free(order.namespace);
+        c.free(order.parameters_json);
         for (ownedItems([*c]u8, order.prop, @intCast(order.len))) |property| c.free(property);
         for (ownedItems([*c]u8, order.prop_schema, @intCast(order.len))) |schema| c.free(schema);
         c.free(@ptrCast(order.prop));
@@ -133,10 +178,15 @@ pub fn freeMessages(messages: *Messages) void {
 
 pub fn freeRequest(request: *Request) void {
     c.ds4_tokens_free(&request.prompt);
+    c.ds4_tokens_free(&request.cache_breakpoint_bytes);
+    c.ds4_tokens_free(&request.cache_breakpoints);
+    c.free(request.prompt_special_ranges);
+    c.free(request.responses_live_special_ranges);
+    c.free(request.anthropic_live_special_ranges);
     for (ownedItems(c.ds4_vision_span, request.images, request.image_count)) |*image| c.ds4_vision_embedding_free(&image.embedding);
     c.free(request.images);
     c.free(request.image_markers);
-    inline for (.{ "model", "raw_body", "prompt_text", "prompt_cache_key", "previous_response_id", "responses_replay", "conversation_id", "conversation_input", "responses_live_suffix_text", "anthropic_live_suffix_text" }) |field|
+    inline for (.{ "tool_choice_json", "response_format_json", "constraint_json", "model", "raw_body", "prompt_text", "prompt_cache_key", "previous_response_id", "responses_replay", "conversation_id", "conversation_input", "responses_live_suffix_text", "anthropic_live_suffix_text" }) |field|
         c.free(@field(request, field));
     freeStrings(&request.stops);
     freeStrings(&request.responses_live_call_ids);
@@ -275,37 +325,27 @@ fn responsesReasoning(reader: *Reader, input: *Record) Failure!void {
     }
 }
 fn toolChoice(reader: *Reader, endpoint: Endpoint, input: *Record, error_text: []u8) Failure!void {
-    if (endpoint == c.DS4_SERVER_INPUT_ANTHROPIC) {
-        if (reader.peek() != '{') return reader.skip();
-        try reader.consume('{');
-        while (try reader.nextField()) |key| {
-            defer c.free(key);
-            if (equal(key, "type")) {
-                const choice = try reader.readString();
-                defer c.free(choice);
-                input.tool_choice_none = equal(choice, "none");
-            } else try reader.skip();
-            reader.separator();
-        }
-        return reader.consume('}');
-    }
-    if (reader.peek() == '"') {
-        const choice = try reader.readString();
-        defer c.free(choice);
-        if (endpoint != c.DS4_SERVER_INPUT_RESPONSES) {
-            input.tool_choice_none = equal(choice, "none");
-        } else if (equal(choice, "none")) {
-            input.tool_choice_none = true;
-        } else if (!equal(choice, "auto")) {
-            if (error_text.len != 0) _ = c.snprintf(error_text.ptr, error_text.len, "tool_choice=%s not supported", choice);
-            return error.Policy;
-        }
-    } else if (endpoint == c.DS4_SERVER_INPUT_RESPONSES and reader.peek() == '{') {
-        // Forced/required targets require constrained decoding. Report this
-        // supported-subset limit instead of silently downgrading to auto.
-        message(error_text, "forced tool_choice not supported");
-        return error.Policy;
-    } else try reader.skip();
+    _ = endpoint;
+    _ = error_text;
+    const raw = try reader.readRaw();
+    errdefer c.free(raw);
+    const parsed = std.json.parseFromSlice(std.json.Value, allocator, string(raw), .{}) catch return error.InvalidJson;
+    defer parsed.deinit();
+    const value = parsed.value;
+    // Full choice validation happens after model thinking is resolved. Keep
+    // none available here for historical tool-discovery suppression.
+    input.tool_choice_none = if (value == .string)
+        std.mem.eql(u8, value.string, "none")
+    else if (value == .object) blk: {
+        const kind = value.object.get("type") orelse break :blk false;
+        break :blk kind == .string and std.mem.eql(u8, kind.string, "none");
+    } else false;
+    if (value == .object) if (value.object.get("disable_parallel_tool_use")) |disabled| {
+        if (disabled != .bool) return error.InvalidJson;
+        input.req.parallel_tool_calls = !disabled.bool;
+    };
+    c.free(input.req.tool_choice_json);
+    input.req.tool_choice_json = raw;
 }
 fn objectString(raw: [*c]const u8, wanted: []const u8) [*c]u8 {
     var reader = Reader{ .cursor = raw };
@@ -331,6 +371,15 @@ pub const Input = struct {
     }
 
     pub fn decode(endpoint: Endpoint, body: [:0]const u8, defaults: *const c.ds4_server_input_defaults, error_text: []u8) Failure!Input {
+        // Validate the complete public envelope with the standard parser;
+        // tolerant legacy value codecs below no longer accept broken JSON.
+        const envelope = std.json.parseFromSlice(std.json.Value, allocator, body, .{ .duplicate_field_behavior = .use_last }) catch return error.InvalidJson;
+        defer envelope.deinit();
+        if (envelope.value != .object) return error.InvalidJson;
+        if (containsNul(envelope.value) or argumentsContainNul(envelope.value)) {
+            message(error_text, "NUL bytes in decoded strings and tool arguments are unsupported");
+            return error.Policy;
+        }
         var result = Input{ .value = std.mem.zeroes(Record) };
         errdefer result.deinit();
         const input = &result.value;
@@ -358,6 +407,7 @@ pub const Input = struct {
             // clients opt into a separate summary or effort control.
             request.reasoning_summary_emit = endpoint == c.DS4_SERVER_INPUT_RESPONSES;
         }
+        request.parallel_tool_calls = true;
         request.think_mode = c.DS4_THINK_HIGH;
         input.thinking_enabled = true;
         input.reasoning_effort = c.DS4_THINK_HIGH;
@@ -373,8 +423,8 @@ pub const Input = struct {
             try result.decodeField(&reader, endpoint, string(key), defaults, error_text);
             reader.separator();
         }
-        // The old API decoder stops at the closing brace. It does not impose
-        // end-of-document validation or change partial malformed-input cursors.
+        // The shared value cursor stops at the closing brace; the public
+        // envelope was already validated completely above.
         if (reader.peek() != '}') return error.InvalidJson;
         if (defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT) {
             // Match Flint's reference server: accept unsupported reasoning
@@ -430,13 +480,62 @@ pub const Input = struct {
             c.free(input.tool_schemas);
             input.tool_schemas = null;
             const start = reader.cursor;
-            try require(c.ds4_server_json_tools(&reader.cursor, &input.tool_schemas, &request.tool_orders));
+            if (!c.ds4_server_json_tools(&reader.cursor, &input.tool_schemas, &request.tool_orders)) {
+                message(error_text, "Unsupported or invalid tools: use client function tools, valid names and explicit namespaces");
+                return error.Policy;
+            }
             if (responses) {
                 c.free(input.explicit_tools);
                 input.explicit_tools = duplicate(start[0 .. @intFromPtr(reader.cursor) - @intFromPtr(start)]);
             }
         } else if (!completion and std.mem.eql(u8, key, "tool_choice")) {
             try toolChoice(reader, endpoint, input, error_text);
+        } else if ((chat and std.mem.eql(u8, key, "response_format")) or (responses and std.mem.eql(u8, key, "text"))) {
+            const raw = try reader.readRaw();
+            defer c.free(raw);
+            const parsed = std.json.parseFromSlice(std.json.Value, allocator, string(raw), .{}) catch return error.InvalidJson;
+            defer parsed.deinit();
+            if (parsed.value != .object) return error.InvalidJson;
+            const format = if (responses) parsed.value.object.get("format") else parsed.value;
+            if (format) |value| {
+                if (responses and value == .object) {
+                    if (value.object.get("type")) |kind| if (kind == .string and std.mem.eql(u8, kind.string, "regex")) {
+                        message(error_text, "Regex response formats are supported by Chat only");
+                        return error.Policy;
+                    };
+                }
+                if (value != .null) {
+                    const encoded = std.json.Stringify.valueAlloc(allocator, value, .{}) catch fatal();
+                    defer allocator.free(encoded);
+                    c.free(request.response_format_json);
+                    request.response_format_json = duplicate(encoded);
+                }
+            }
+        } else if (!completion and std.mem.eql(u8, key, "parallel_tool_calls")) {
+            try reader.readBool(&request.parallel_tool_calls);
+            if (!request.parallel_tool_calls and defaults.syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and defaults.syntax != c.SERVER_MODEL_SYNTAX_FLINT) {
+                message(error_text, "parallel_tool_calls:false currently requires DeepSeek4.1 or Flint constraints");
+                return error.Policy;
+            }
+        } else if (responses and std.mem.eql(u8, key, "background")) {
+            var background = false;
+            try reader.readBool(&background);
+            if (background) {
+                message(error_text, "Background Responses are not supported");
+                return error.Policy;
+            }
+        } else if (responses and std.mem.eql(u8, key, "truncation")) {
+            const value = try reader.readString();
+            defer c.free(value);
+            if (!equal(value, "disabled")) {
+                message(error_text, "Automatic input truncation is not supported");
+                return error.Policy;
+            }
+        } else if (responses and (std.mem.eql(u8, key, "presence_penalty") or std.mem.eql(u8, key, "frequency_penalty") or std.mem.eql(u8, key, "top_logprobs"))) {
+            if (try reader.readNumber() != 0) {
+                message(error_text, "Nonzero presence/frequency penalties and top_logprobs are not supported by Responses");
+                return error.Policy;
+            }
         } else if (responses and std.mem.eql(u8, key, "max_tool_calls")) {
             if (!reader.literal("null")) {
                 message(error_text, "max_tool_calls requires server-side tool execution, which is not supported");
@@ -453,10 +552,10 @@ pub const Input = struct {
         } else if (std.mem.eql(u8, key, "top_p")) {
             request.top_p = @floatCast(try reader.readNumber());
             request.top_p_set = true;
-        } else if ((chat or completion or defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT) and std.mem.eql(u8, key, "min_p")) {
+        } else if (std.mem.eql(u8, key, "min_p")) {
             request.min_p = @floatCast(try reader.readNumber());
             request.min_p_set = true;
-        } else if ((!responses or defaults.syntax == c.SERVER_MODEL_SYNTAX_FLINT) and std.mem.eql(u8, key, "top_k")) {
+        } else if (std.mem.eql(u8, key, "top_k")) {
             try reader.readInt(&request.top_k);
             request.top_k_set = true;
         } else if ((chat or completion) and std.mem.eql(u8, key, "seed")) {
@@ -489,6 +588,14 @@ pub const Input = struct {
             try responsesReasoning(reader, input);
         } else if ((chat or responses) and std.mem.eql(u8, key, "prompt_cache_key")) {
             try reader.replaceString(&request.prompt_cache_key);
+        } else if ((chat or responses) and std.mem.eql(u8, key, "prompt_cache_options")) {
+            request.prompt_cache_controls_set = true;
+            const raw = try reader.readRaw();
+            defer c.free(raw);
+            request.prompt_cache_explicit = CacheControls.explicitMode(string(raw)) catch |err| {
+                message(error_text, if (err == error.UnsupportedCacheControl) "unsupported prompt_cache_options field" else "invalid prompt_cache_options");
+                return error.Policy;
+            };
         } else if (responses and std.mem.eql(u8, key, "store")) {
             try reader.readBool(&request.responses_store);
         } else if (responses and std.mem.eql(u8, key, "previous_response_id")) {

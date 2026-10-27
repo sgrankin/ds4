@@ -109,12 +109,11 @@ pub const View = struct {
         for (items(c.chat_msg, source.v, result.len), result) |message, *out| {
             const calls = try arena.alloc(types.ToolCall, @intCast(message.calls.len));
             const raw_tool_text = text(message.calls.raw_tool_text);
-            const raw_replay = if (raw_tool_text) |raw| raw.len != 0 else false;
             for (items(c.tool_call, message.calls.v, calls.len), calls) |call, *converted| converted.* = .{
                 .id = text(call.id),
                 .name = text(call.name),
                 .arguments = text(call.arguments),
-                .parameters = if (raw_replay) null else try self.parameters(c, call.arguments),
+                .parameters = try self.parameters(c, call.arguments),
             };
             const images = try arena.alloc(types.Image, message.images.len);
             for (items(c.server_image_input, message.images.v, images.len), images) |*image, *converted| converted.* = .{
@@ -131,6 +130,7 @@ pub const View = struct {
             out.* = .{
                 .role = text(message.role),
                 .content = text(message.content),
+                .cache_breakpoints = items(usize, message.cache_breakpoints, @intCast(message.cache_breakpoints_len)),
                 .reasoning = text(message.reasoning),
                 .discovered_tools = text(message.discovered_tools),
                 .images = images,
@@ -138,6 +138,12 @@ pub const View = struct {
                 .tool_call_ids = try self.stringViews(message.tool_call_ids, @intCast(message.tool_call_ids_len)),
                 .calls = calls,
                 .raw_tool_text = raw_tool_text,
+                .raw_tool_special_ranges = if (message.calls.raw_special_count != 0) block: {
+                    const ranges = try arena.alloc(types.ByteRange, message.calls.raw_special_count);
+                    for (items(c.ds4_prompt_range, message.calls.raw_special_ranges, ranges.len), ranges) |range, *converted|
+                        converted.* = .{ .begin = range.begin, .end = range.end };
+                    break :block ranges;
+                } else null,
                 .tool_results = results,
             };
         }
@@ -157,6 +163,7 @@ pub const View = struct {
                 .name = text(order.name),
                 .wire_name = text(order.wire_name),
                 .namespace = text(order.namespace),
+                .parameters_json = text(order.parameters_json),
                 .responses_tool_search = order.responses_tool_search,
                 .properties = properties,
             };

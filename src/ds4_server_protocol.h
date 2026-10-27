@@ -51,6 +51,7 @@ typedef struct {
     bool guard_second_reasoning;
     bool sent_reasoning;
     bool sent_content;
+    size_t reasoning_sent, content_sent;
     openai_tool_stream tool;
 } openai_stream;
 
@@ -105,6 +106,7 @@ typedef struct {
     bool guard_second_reasoning;
     bool sent_thinking;
     bool sent_text;
+    size_t reasoning_sent, content_sent;
     anthropic_tool_stream tool;
 } anthropic_stream;
 

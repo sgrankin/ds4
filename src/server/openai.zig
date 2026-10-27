@@ -330,9 +330,47 @@ pub const Output = struct {
         }
         return true;
     }
+    fn updateTyped(self: Output, request: *const c.request, id: []const u8, stream: *Stream, sampled: []const u8, final: bool) bool {
+        const DS41 = shared.TokenOutput;
+        const ranges: []const DS41.Range = if (request.sampled_special_count == 0) &.{} else @as([*]const DS41.Range, @ptrCast(request.sampled_special_ranges))[0..request.sampled_special_count];
+        const view = DS41.View{ .raw = sampled, .ranges = ranges };
+        var projected = if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) shared.FlintOutput.project(std.heap.c_allocator, view, &request.tool_orders, final) catch shared.fatal() else DS41.project(std.heap.c_allocator, view, c.ds4_think_mode_enabled(request.think_mode), final) catch shared.fatal();
+        defer projected.deinit(std.heap.c_allocator);
+        if (projected.reasoning.len > stream.reasoning_sent) {
+            if (!self.delta(request, id, "reasoning_content", projected.reasoning[stream.reasoning_sent..])) return false;
+            stream.sent_reasoning = true;
+            stream.reasoning_sent = projected.reasoning.len;
+        }
+        if (projected.content.len > stream.content_sent) {
+            if (!self.delta(request, id, "content", projected.content[stream.content_sent..])) return false;
+            stream.sent_content = true;
+            stream.content_sent = projected.content.len;
+        }
+        if (!request.has_tools) return true;
+        for (projected.calls.items, 0..) |call, index| {
+            if (index < @as(usize, @intCast(stream.tool.index))) continue;
+            if (!stream.tool.active) {
+                stream.tool.index = @intCast(index);
+                if (!self.toolStart(request, id, stream.tool.index, self.toolId(&stream.tool, stream.tool.index), call.name)) return false;
+                stream.tool.active = true;
+                stream.tool.emitted_any = true;
+                stream.tool.parse_pos = 0;
+            }
+            if (call.arguments.len > stream.tool.parse_pos) {
+                if (!self.arguments(request, id, stream.tool.index, call.arguments[stream.tool.parse_pos..])) return false;
+                stream.tool.parse_pos = call.arguments.len;
+            }
+            if (call.complete) {
+                stream.tool.active = false;
+                stream.tool.index += 1;
+            }
+        }
+        return true;
+    }
     pub fn update(self: Output, request: *const c.request, id: []const u8, stream: *Stream, raw: ?[]const u8, final: bool) bool {
         const sampled = raw orelse return true;
         if (!stream.active) return true;
+        if (request.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) return self.updateTyped(request, id, stream, sampled, final);
         if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT and !stream.checked_think_prefix) {
             if (!final and sampled.len < 7 and std.mem.startsWith(u8, "<think>", sampled)) return true;
             stream.checked_think_prefix = true;

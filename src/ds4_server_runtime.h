@@ -41,6 +41,8 @@ typedef struct {
 struct tool_memory_entry {
     char *id;
     tool_memory_block *block;
+    ds4_prompt_range *special_ranges;
+    size_t special_count;
     size_t bytes;
     uint64_t stamp;
     tool_memory_source source;
@@ -111,6 +113,9 @@ struct server_slot {
     live_tool_state anthropic_live;
     visible_live_state thinking_live;
     int continued_last_store_tokens;
+    bool prompt_cache_explicit;
+    ds4_tokens cache_breakpoints;
+    int cache_written_tokens; /* Highest successfully published explicit end. */
     /* Wall time of the last completed job on this slot, stamped by the slot
      * worker; drives the staleness tiers in job_slot_score(). */
     time_t last_used;
@@ -159,6 +164,7 @@ typedef struct {
 struct server {
     ds4_engine *engine;
     ds4_decision_registry *decision_models;
+    void *grammar; /* Lazy vocabulary compiler; immutable grammar cache, no KV. */
     ds4_tp *tp_leader;
     server_slot *slots;
     int slot_count;

@@ -1,6 +1,22 @@
 //! Logical serving input, independent of a wire protocol, model or C ABI.
 //! Slices borrow input storage. Their owner must keep that storage alive until
 //! model preparation returns; model code must not retain these views.
+const std = @import("std");
+
+pub const ByteRange = struct { begin: usize, end: usize };
+
+/// Rendering records explicit controls; identical spellings in payload stay
+/// ordinary text. Endpoints are byte offsets, before tokenization.
+pub const PromptMap = struct {
+    special_ranges: std.ArrayList(ByteRange) = .empty,
+    cache_breakpoints: std.ArrayList(usize) = .empty,
+
+    pub fn deinit(self: *PromptMap, allocator: std.mem.Allocator) void {
+        self.special_ranges.deinit(allocator);
+        self.cache_breakpoints.deinit(allocator);
+        self.* = .{};
+    }
+};
 
 pub const Endpoint = enum { chat, responses, anthropic, completion };
 
@@ -25,6 +41,14 @@ pub const ReasoningControls = struct {
     /// Null means the client left the model's default enabled state unchanged.
     enabled: ?bool = null,
     effort: Reasoning = .high,
+};
+
+pub const ResponseFormat = union(enum) {
+    text,
+    json_object,
+    /// Model-visible schema, before strict compiler normalization.
+    json_schema: []const u8,
+    regex,
 };
 
 pub const Parameter = struct {
@@ -57,6 +81,7 @@ pub const Image = struct {
 pub const Message = struct {
     role: ?[]const u8 = null,
     content: ?[]const u8 = null,
+    cache_breakpoints: []const usize = &.{},
     reasoning: ?[]const u8 = null,
     discovered_tools: ?[]const u8 = null,
     images: []const Image = &.{},
@@ -64,6 +89,9 @@ pub const Message = struct {
     tool_call_ids: []const []const u8 = &.{},
     calls: []const ToolCall = &.{},
     raw_tool_text: ?[]const u8 = null,
+    /// Null means old replay lacks token provenance and must be reconstructed
+    /// from logical calls instead of recognizing control spellings in payload.
+    raw_tool_special_ranges: ?[]const ByteRange = null,
     tool_results: []const ToolResultSpan = &.{},
 };
 
@@ -76,6 +104,7 @@ pub const ToolSchema = struct {
     name: ?[]const u8 = null,
     wire_name: ?[]const u8 = null,
     namespace: ?[]const u8 = null,
+    parameters_json: ?[]const u8 = null,
     responses_tool_search: bool = false,
     properties: []const Property = &.{},
 };
@@ -86,4 +115,5 @@ pub const Request = struct {
     tools: []const ToolSchema = &.{},
     tool_schemas: ?[]const u8 = null,
     reasoning: ReasoningControls = .{},
+    response_format: ResponseFormat = .text,
 };

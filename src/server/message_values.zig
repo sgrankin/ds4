@@ -3,6 +3,7 @@
 //! remains a C service. Partial messages, tool boundaries and cleanup live here.
 const std = @import("std");
 const c = @import("server_input_c");
+const CacheControls = @import("cache_controls.zig");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidJson};
 
@@ -136,6 +137,7 @@ fn freeCall(call: *c.tool_call) void {
 fn freeCalls(calls: *c.tool_calls) void {
     for (items(c.tool_call, calls.v, @intCast(calls.len))) |*call| freeCall(call);
     c.free(calls.raw_tool_text);
+    c.free(calls.raw_special_ranges);
     c.free(calls.v);
     calls.* = std.mem.zeroes(c.tool_calls);
 }
@@ -155,6 +157,7 @@ pub fn freeMessage(message: *c.chat_msg) void {
         c.free(result.content);
     }
     c.free(message.tool_results);
+    freeBreakpoints(message);
     message.* = std.mem.zeroes(c.chat_msg);
 }
 pub fn pushCall(calls: *c.tool_calls, call: c.tool_call) void {
@@ -163,6 +166,20 @@ pub fn pushCall(calls: *c.tool_calls, call: c.tool_call) void {
     calls.v = list.items.ptr;
     calls.len = @intCast(list.items.len);
     calls.cap = @intCast(list.capacity);
+}
+
+pub fn freeBreakpoints(message: *c.chat_msg) void {
+    c.free(message.cache_breakpoints);
+    message.cache_breakpoints = null;
+    message.cache_breakpoints_len = 0;
+    message.cache_breakpoints_cap = 0;
+}
+pub fn addBreakpoint(message: *c.chat_msg, offset: usize) void {
+    var offsets = adopted(usize, message.cache_breakpoints, message.cache_breakpoints_len, message.cache_breakpoints_cap);
+    offsets.append(allocator, offset) catch fatal();
+    message.cache_breakpoints = offsets.items.ptr;
+    message.cache_breakpoints_len = @intCast(offsets.items.len);
+    message.cache_breakpoints_cap = @intCast(offsets.capacity);
 }
 pub fn pushMessage(messages: *c.chat_msgs, message: c.chat_msg) void {
     var list = adopted(c.chat_msg, messages.v, messages.len, messages.cap);
@@ -284,6 +301,7 @@ fn openaiObject(reader: *Reader, message: *c.chat_msg) Invalid!void {
     var kind: [*c]u8 = null;
     var text: [*c]u8 = null;
     var url: [*c]u8 = null;
+    var breakpoint = false;
     defer c.free(kind);
     defer c.free(text);
     defer c.free(url);
@@ -298,15 +316,21 @@ fn openaiObject(reader: *Reader, message: *c.chat_msg) Invalid!void {
             c.free(url);
             url = null;
             try imageUrl(reader, &url);
+        } else if (equal(key, "prompt_cache_breakpoint")) {
+            const raw = try reader.raw();
+            defer c.free(raw);
+            breakpoint = CacheControls.breakpoint(bytes(raw)) catch return error.InvalidJson;
         } else try reader.skip();
         reader.separator();
     }
     try reader.consume('}');
+    if (breakpoint and ((!equal(kind, "text") and !equal(kind, "input_text") and !equal(kind, "output_text")) or text == null)) return error.InvalidJson;
     if (equal(kind, "image_url") or equal(kind, "input_image")) {
         var marker: [c.SERVER_IMAGE_MARKER_BYTES]u8 = undefined;
         if (!c.ds4_server_image_data_uri(&message.images, url, &marker)) return error.InvalidJson;
         appendOwned(&message.content, std.mem.sliceTo(&marker, 0));
     } else if (text != null) appendOwned(&message.content, bytes(text));
+    if (breakpoint) addBreakpoint(message, bytes(message.content).len);
 }
 fn openaiContent(reader: *Reader, message: *c.chat_msg) Invalid!void {
     if (reader.peek() == '"') {
@@ -479,6 +503,18 @@ fn anthropicContent(reader: *Reader, message: *c.chat_msg, allow_tools: bool) In
     if (message.content == null) message.content = duplicate("");
 }
 
+fn rawSpecialRanges(reader: *Reader, calls: *c.tool_calls) Invalid!void {
+    const raw = try reader.raw();
+    defer c.free(raw);
+    const parsed = std.json.parseFromSlice([][2]usize, allocator, bytes(raw), .{}) catch return error.InvalidJson;
+    defer parsed.deinit();
+    const ranges = allocator.alloc(c.ds4_prompt_range, parsed.value.len) catch fatal();
+    for (parsed.value, ranges) |pair, *range| range.* = .{ .begin = pair[0], .end = pair[1] };
+    c.free(calls.raw_special_ranges);
+    calls.raw_special_ranges = if (ranges.len == 0) null else ranges.ptr;
+    calls.raw_special_count = ranges.len;
+}
+
 fn readMessage(reader: *Reader, anthropic: bool, trusted_store: bool) Invalid!c.chat_msg {
     try reader.consume('{');
     var message = std.mem.zeroes(c.chat_msg);
@@ -497,6 +533,7 @@ fn readMessage(reader: *Reader, anthropic: bool, trusted_store: bool) Invalid!c.
                 c.free(message.content);
                 message.content = null;
                 freeImages(&message.images);
+                freeBreakpoints(&message);
                 try openaiContent(reader, &message);
             }
         } else if (!anthropic and equal(key, "reasoning_content")) {
@@ -510,6 +547,8 @@ fn readMessage(reader: *Reader, anthropic: bool, trusted_store: bool) Invalid!c.
             try toolCalls(reader, &message.calls);
         } else if (!anthropic and trusted_store and equal(key, "raw_tool_text")) {
             try reader.replace(&message.calls.raw_tool_text, false);
+        } else if (!anthropic and trusted_store and equal(key, "raw_special_ranges")) {
+            try rawSpecialRanges(reader, &message.calls);
         } else if (!anthropic and trusted_store and equal(key, "ds4_discovered_tools")) {
             try reader.replace(&message.discovered_tools, true);
         } else try reader.skip();
@@ -518,6 +557,11 @@ fn readMessage(reader: *Reader, anthropic: bool, trusted_store: bool) Invalid!c.
     try reader.consume('}');
     if (message.role == null) message.role = duplicate("user");
     if (message.content == null) message.content = duplicate("");
+    var previous_end: usize = 0;
+    for (items(c.ds4_prompt_range, message.calls.raw_special_ranges, message.calls.raw_special_count)) |range| {
+        if (range.begin < previous_end or range.begin >= range.end or range.end > bytes(message.calls.raw_tool_text).len) return error.InvalidJson;
+        previous_end = range.end;
+    }
     if (message.images.len != 0 and !equal(message.role, "user")) return error.InvalidJson;
     return message;
 }

@@ -5,6 +5,11 @@ const std = @import("std");
 const c = @import("server_persist_c");
 const allocator = std.heap.c_allocator;
 const match = @import("suffix_match");
+const CachePolicy = @import("prompt_cache_policy.zig");
+
+fn breakpoints(slot: *const c.server_slot) []const c_int {
+    return items(c_int, slot.cache_breakpoints.v, @intCast(slot.cache_breakpoints.len));
+}
 
 fn fatal() noreturn {
     _ = c.fprintf(c.__stderrp, "ds4-server: out of memory\n");
@@ -70,6 +75,7 @@ fn hooks(runtime: *c.server) c.ds4_kvstore_trailer_hooks {
 pub fn store(optional_runtime: ?*c.server, optional_slot: ?*c.server_slot, tokens: [*c]const c.ds4_tokens, length: c_int, reason: [*c]const u8, visible: [*c]const u8, extension: u8, key: [*c]const u8) bool {
     const runtime = optional_runtime orelse return false;
     const slot = optional_slot orelse return false;
+    if (!CachePolicy.allowsWrite(slot.prompt_cache_explicit, breakpoints(slot), length)) return false;
     var errors = std.mem.zeroes([160]u8);
     const trailer = hooks(runtime);
     _ = c.pthread_mutex_lock(&runtime.inference_mu);
@@ -79,7 +85,9 @@ pub fn store(optional_runtime: ?*c.server, optional_slot: ?*c.server_slot, token
     if (c.ds4_session_has_vision_state(slot.session) or c.ds4_session_is_approximate(slot.session)) return false;
     _ = c.pthread_mutex_lock(&runtime.kv_mu);
     defer _ = c.pthread_mutex_unlock(&runtime.kv_mu);
-    return c.ds4_kvstore_store_live_prefix_text(&runtime.kv, runtime.engine, slot.session, tokens, length, reason, visible, extension, key, &trailer, &errors, errors.len);
+    const published = c.ds4_kvstore_store_live_prefix_text(&runtime.kv, runtime.engine, slot.session, tokens, length, reason, visible, extension, key, &trailer, &errors, errors.len);
+    if (published and slot.prompt_cache_explicit) slot.cache_written_tokens = @max(slot.cache_written_tokens, length);
+    return published;
 }
 pub fn storeCurrent(optional_runtime: ?*c.server, optional_slot: ?*c.server_slot, reason: [*c]const u8) void {
     const runtime = optional_runtime orelse return;
@@ -111,6 +119,7 @@ pub fn storeCurrent(optional_runtime: ?*c.server, optional_slot: ?*c.server_slot
 pub fn continuedTarget(optional_runtime: ?*c.server, optional_slot: ?*c.server_slot, live: c_int) c_int {
     const runtime = optional_runtime orelse return 0;
     const slot = optional_slot orelse return 0;
+    if (slot.prompt_cache_explicit) return 0;
     var view = runtime.kv;
     view.continued_last_store_tokens = slot.continued_last_store_tokens;
     return c.ds4_kvstore_continued_store_target(&view, live);
@@ -164,6 +173,11 @@ pub fn load(optional_runtime: ?*c.server, optional_slot: ?*c.server_slot, prompt
     const slot = optional_slot orelse return 0;
     if (path) |out| out.* = null;
     if (extension) |out| out.* = 0;
+    const canonical: ?*const c.ds4_tokens = if (c.ds4_engine_is_deepseek41(runtime.engine)) mapped: {
+        const running = slot.running;
+        if (running == null or running.*.req.prompt_text != prompt) return 0;
+        break :mapped &running.*.req.prompt;
+    } else null;
     var result = std.mem.zeroes(c.ds4_kvstore_load_result);
     defer c.ds4_kvstore_load_result_free(&result);
     const trailer = hooks(runtime);
@@ -173,6 +187,8 @@ pub fn load(optional_runtime: ?*c.server, optional_slot: ?*c.server_slot, prompt
         if (c.ds4_session_has_vision_state(slot.session)) c.ds4_session_invalidate(slot.session);
         _ = c.pthread_mutex_lock(&runtime.kv_mu);
         defer _ = c.pthread_mutex_unlock(&runtime.kv_mu);
+        if (canonical) |tokens|
+            break :loaded c.ds4_kvstore_try_load_text_mapped(&runtime.kv, runtime.engine, slot.session, prompt, tokens, if (slot.prompt_cache_explicit) &slot.cache_breakpoints else null, effective, &result, &trailer, responses);
         break :loaded c.ds4_kvstore_try_load_text(&runtime.kv, runtime.engine, slot.session, prompt, effective, &result, &trailer, responses);
     };
     if (loaded > 0) {
@@ -236,7 +252,21 @@ pub fn loadState(runtime: *c.server, slot: *c.server_slot, prompt: *const c.ds4_
     const common = c.ds4_session_common_prefix(slot.session, prompt);
     const usable = if (common == live and prompt.len >= live) live else 0;
     var matched: u32 = 0;
-    const reference = c.ds4_state_cache_find_prefix(runtime.state_cache, &runtime.state_cache_profile, @intCast(runtime.ctx_size), prompt.v, @intCast(prompt.len), &matched) orelse return 0;
+    const reference = reference: {
+        if (!slot.prompt_cache_explicit)
+            break :reference c.ds4_state_cache_find_prefix(runtime.state_cache, &runtime.state_cache_profile, @intCast(runtime.ctx_size), prompt.v, @intCast(prompt.len), &matched) orelse return 0;
+        const positions = breakpoints(slot);
+        var index = positions.len;
+        while (index > 0) {
+            index -= 1;
+            const position = positions[index];
+            if (position <= 0 or position > prompt.len) continue;
+            const candidate = c.ds4_state_cache_find_prefix(runtime.state_cache, &runtime.state_cache_profile, @intCast(runtime.ctx_size), prompt.v, @intCast(position), &matched) orelse continue;
+            if (matched == @as(u32, @intCast(position))) break :reference candidate;
+            c.ds4_state_cache_release(candidate);
+        }
+        return 0;
+    };
     defer c.ds4_state_cache_release(reference);
     if (matched <= @as(u32, @intCast(usable))) return 0;
     var blob = std.mem.zeroes(c.ds4_state_cache_blob);
@@ -270,6 +300,7 @@ pub fn loadState(runtime: *c.server, slot: *c.server_slot, prompt: *const c.ds4_
 }
 pub fn endpoint(runtime: *c.server, slot: *c.server_slot) void {
     if (runtime.state_cache == null or cancelled(slot) or c.ds4_session_has_vision_state(slot.session)) return;
+    if (!CachePolicy.allowsWrite(slot.prompt_cache_explicit, breakpoints(slot), c.ds4_session_pos(slot.session))) return;
     const replay = c.ds4_session_is_decoder_replay(slot.session);
     const approximate = c.ds4_session_is_approximate(slot.session);
     if (approximate and !replay and (!runtime.context_suffix_reuse or slot.context_cache_profile[0] == 0)) return;
@@ -282,6 +313,7 @@ pub fn endpoint(runtime: *c.server, slot: *c.server_slot) void {
     if (replay) {
         var status = c.ds4_session_save_replay_snapshot(slot.session, &captured.state, &errors, errors.len);
         if (status == 0) status = c.ds4_state_cache_put_kind(runtime.state_cache, &runtime.state_cache_profile, captured.state.ptr, captured.state.len, null, 0, c.DS4_STATE_CACHE_REPLAY, &key, &errors, errors.len);
+        if (status == 0 and slot.prompt_cache_explicit) slot.cache_written_tokens = @max(slot.cache_written_tokens, tokens.*.len);
         log(if (status != 0) c.DS4_LOG_WARNING else c.DS4_LOG_KVCACHE, "ds4-server: state cache replay store %s slot=%d tokens=%d%s%s", .{
             @as([*:0]const u8, if (status != 0) "skipped" else "ok"), slot.id, tokens.*.len,
             @as([*:0]const u8, if (errors[0] != 0) ": " else ""),     &errors,
@@ -295,13 +327,14 @@ pub fn endpoint(runtime: *c.server, slot: *c.server_slot) void {
     if (status == 0 and !approximate) status = c.ds4_state_cache_put(runtime.state_cache, &runtime.state_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, false, &key, &errors, errors.len);
     if (status == 0 and runtime.context_suffix_reuse and slot.context_cache_profile[0] != 0)
         status = c.ds4_state_cache_put(runtime.state_cache, &slot.context_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, approximate, &key, &errors, errors.len);
+    if (status == 0 and slot.prompt_cache_explicit) slot.cache_written_tokens = @max(slot.cache_written_tokens, tokens.*.len);
     if (status != 0) log(c.DS4_LOG_WARNING, "ds4-server: state cache store skipped slot=%d: %s", .{ slot.id, &errors });
 }
 
 /// A failed graft discards its mutated graph; ordinary prefill rebuilds it.
 /// No undo snapshot or pointer to a mutable source survives this transaction.
 pub fn suffix(runtime: *c.server, slot: *c.server_slot, original_prompt: *const c.ds4_tokens, padded_out: *c.ds4_tokens, stats: *c.ds4_suffix_relocation_stats, stop: *const volatile c.sig_atomic_t) c_int {
-    if (!runtime.context_suffix_reuse or runtime.state_cache == null or slot.context_cache_profile[0] == 0 or
+    if (slot.prompt_cache_explicit or !runtime.context_suffix_reuse or runtime.state_cache == null or slot.context_cache_profile[0] == 0 or
         original_prompt.len <= runtime.context_suffix_fresh) return 0;
     const user_id = c.ds4_token_user(runtime.engine);
     var latest_user: c_int = -1;

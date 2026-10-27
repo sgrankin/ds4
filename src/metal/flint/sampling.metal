@@ -203,3 +203,110 @@ FLINT_PARTIAL(flint_sample_partial20_f32,20,float)
 FLINT_PARTIAL(flint_sample_partial128_f32,128,float)
 FLINT_FINISH(flint_sample_finish20,20)
 FLINT_FINISH(flint_sample_finish128,128)
+
+// Constrained entrypoints are separate: ordinary decode keeps its original
+// bindings and kernels. Mask before both candidate selection and normalization.
+template<uint K,typename T>
+inline void flint_sample_masked_partial(constant FlintSampleConfig& p,
+    const device T* logits,device FlintCandidate* candidates,
+    device float* normalizers,const device uint* parameters,const device uint* mask,
+    uint tid,uint lane,uint simd,uint group,
+    threadgroup float* shared_values,threadgroup uint* shared_ids) {
+    if(parameters[3]==0u)return;
+    float values[5];uint ids[5];
+    float maximum=-INFINITY;
+    for(uint i=0;i<5u;++i) {
+        uint word=(group*256u+tid)+i*32768u;
+        bool allowed=word<150144u && ((mask[word>>5u]>>(word&31u))&1u);
+        float value=allowed?float(logits[word]):-INFINITY;
+        if(!isfinite(value))value=-INFINITY;
+        maximum=max(maximum,value);
+        ids[i]=isfinite(value)?word:0xffffffffu;
+        if(p.top_k==0u && isfinite(value))
+            value=value/p.temperature+flint_gumbel(word,parameters[1]+1u,p);
+        values[i]=value;
+    }
+    float sum=0.0f;
+    if(isfinite(maximum)) {
+        for(uint i=0;i<5u;++i) {
+            uint word=(group*256u+tid)+i*32768u;
+            bool allowed=word<150144u && ((mask[word>>5u]>>(word&31u))&1u);
+            float value=allowed?float(logits[word]):-INFINITY;
+            if(isfinite(value))sum+=metal::precise::exp(value-maximum);
+        }
+    }
+    float simd_maximum=simd_max(maximum);
+    float simd_total=simd_sum(isfinite(maximum)?sum*metal::precise::exp(maximum-simd_maximum):0.0f);
+    if(lane==0u){shared_values[simd]=simd_maximum;shared_values[8u+simd]=simd_total;}
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    if(simd==0u) {
+        float m=simd_max(lane<8u?shared_values[lane]:-INFINITY);
+        float z=simd_sum(lane<8u && isfinite(shared_values[lane])?
+            shared_values[8u+lane]*metal::precise::exp(shared_values[lane]-m):0.0f);
+        if(lane==0u){normalizers[2u*group]=m;normalizers[2u*group+1u]=z;}
+    }
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    for(uint i=1u;i<5u;++i) {
+        float value=values[i];uint id=ids[i],j=i;
+        while(j>0u && (value>values[j-1u] || (value==values[j-1u] && id<ids[j-1u]))) {
+            values[j]=values[j-1u];ids[j]=ids[j-1u];--j;
+        }
+        values[j]=value;ids[j]=id;
+    }
+    uint front=0u,count=p.top_k?p.top_k:1u;
+    for(uint rank=0u;rank<count;++rank) {
+        float best=front<5u?values[front]:-INFINITY;
+        uint word=front<5u?ids[front]:0xffffffffu;
+        float peak=simd_max(best);
+        uint choice=simd_min(best==peak?word:0xffffffffu);
+        if(lane==0u){shared_values[simd]=peak;shared_ids[simd]=choice;}
+        threadgroup_barrier(mem_flags::mem_threadgroup);
+        if(simd==0u) {
+            float value=lane<8u?shared_values[lane]:-INFINITY;
+            uint id=lane<8u?shared_ids[lane]:0xffffffffu;
+            float top=simd_max(value);
+            uint chosen=simd_min(value==top?id:0xffffffffu);
+            if(lane==0u){candidates[group*K+rank]={top,chosen};shared_ids[8]=chosen;}
+        }
+        threadgroup_barrier(mem_flags::mem_threadgroup);
+        if(front<5u && ids[front]==shared_ids[8])++front;
+    }
+}
+
+#define FLINT_MASKED_PARTIAL(NAME,K,TYPE) \
+kernel void NAME(constant FlintSampleConfig& p [[buffer(0)]], \
+    const device TYPE* logits [[buffer(1)]],device FlintCandidate* candidates [[buffer(2)]], \
+    device float* normalizers [[buffer(3)]],const device uint* parameters [[buffer(4)]], \
+    const device uint* mask [[buffer(5)]], \
+    uint tid [[thread_index_in_threadgroup]],uint lane [[thread_index_in_simdgroup]], \
+    uint simd [[simdgroup_index_in_threadgroup]],uint group [[threadgroup_position_in_grid]]) { \
+    threadgroup float shared_values[16];threadgroup uint shared_ids[10]; \
+    flint_sample_masked_partial<K>(p,logits,candidates,normalizers,parameters,mask,tid,lane,simd,group,shared_values,shared_ids); \
+}
+
+// Sparse grammars leave most groups empty. Zero-mass groups have m=-inf,z=0;
+// at least one finite group is required before the ordinary merge can run.
+#define FLINT_MASKED_FINISH(NAME,K) \
+kernel void NAME(constant FlintSampleConfig& p [[buffer(0)]], \
+    const device FlintCandidate* candidates [[buffer(1)]],const device float* normalizers [[buffer(2)]], \
+    const device uint* current [[buffer(3)]],device uint* next [[buffer(4)]], \
+    device uint* record [[buffer(5)]],const device uint* diagnostic [[buffer(6)]], \
+    uint tid [[thread_index_in_threadgroup]],uint lane [[thread_index_in_simdgroup]], \
+    uint simd [[simdgroup_index_in_threadgroup]]) { \
+    threadgroup float shared_values[16],top_values[K];threadgroup uint shared_ids[11],top_ids[K]; \
+    if(tid==0u) { \
+        uint valid=0u; \
+        if(current[3])for(uint i=0;i<128u;++i)valid|=uint(isfinite(normalizers[2u*i]) && normalizers[2u*i+1u]>0.0f); \
+        shared_ids[10]=valid; \
+        if(!valid){next[0]=current[0];next[1]=current[1];next[2]=current[2];next[3]=0u;} \
+    } \
+    threadgroup_barrier(mem_flags::mem_threadgroup); \
+    if(!shared_ids[10])return; \
+    flint_sample_finish<K>(p,candidates,normalizers,current,next,record,diagnostic,tid,lane,simd,shared_values,shared_ids,top_values,top_ids); \
+}
+FLINT_MASKED_PARTIAL(flint_sample_masked_partial20_bf16,20,bfloat16_t)
+FLINT_MASKED_PARTIAL(flint_sample_masked_partial128_bf16,128,bfloat16_t)
+FLINT_MASKED_PARTIAL(flint_sample_masked_partial20_f32,20,float)
+FLINT_MASKED_PARTIAL(flint_sample_masked_partial128_f32,128,float)
+FLINT_MASKED_FINISH(flint_sample_masked_finish20,20)
+FLINT_MASKED_FINISH(flint_sample_masked_finish128,128)

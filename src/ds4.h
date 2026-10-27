@@ -50,6 +50,9 @@ typedef struct {
     int cap;
 } ds4_tokens;
 
+/* Half-open byte ranges of actual template controls in a rendered prompt. */
+typedef struct { size_t begin, end; } ds4_prompt_range;
+
 typedef struct {
     int id;
     float logit;
@@ -392,6 +395,9 @@ bool ds4_tokens_starts_with(const ds4_tokens *tokens, const ds4_tokens *prefix);
 
 void ds4_tokenize_text(ds4_engine *e, const char *text, ds4_tokens *out);
 void ds4_tokenize_rendered_chat(ds4_engine *e, const char *text, ds4_tokens *out);
+void ds4_tokenize_prompt_span(ds4_engine *e, const char *text, size_t begin,
+        size_t end, const ds4_prompt_range *specials, size_t special_count,
+        ds4_tokens *out);
 void ds4_chat_begin(ds4_engine *e, ds4_tokens *tokens);
 void ds4_encode_chat_prompt(
         ds4_engine *e,
@@ -513,6 +519,11 @@ int ds4_session_argmax_ignoring_eos(ds4_session *s,
 int ds4_sample_logits(const float *logits, int n_vocab, float temperature,
                       int top_k, float top_p, float min_p, uint64_t *rng);
 int ds4_session_sample(ds4_session *s, float temperature, int top_k, float top_p, float min_p, uint64_t *rng);
+/* Mask bits apply before all sampling filters. -2 asks the caller to use its
+ * CPU masked fallback; -1 is an actual error. Sampling does not advance KV. */
+int ds4_session_sample_masked(ds4_session *s, const uint32_t *words, size_t word_count,
+                             float temperature, int top_k, float top_p, float min_p,
+                             uint64_t *rng, char *error, size_t error_size);
 #ifdef DS4_TEST_HOOKS
 /* Teacher-force a V4.1 verification block, returning logits after each token. */
 int ds4_test_ds41_verify_tokens(ds4_session *s, const int *tokens, int count,
@@ -612,6 +623,27 @@ int ds4_session_eval_speculative(ds4_session *s, int first_token,
                                  int max_tokens, int eos_token,
                                  float temperature, int top_k,
                                  float top_p, float min_p, uint64_t *rng,
+                                 int *accepted, int accepted_cap,
+                                 char *err, size_t errlen);
+/* Borrowed for one constrained cycle. mask fills ceil(vocab/32) words, with
+ * bit one meaning allowed. All callbacks return 0 on success, -1 on failure.
+ * The caller already accepted first_token into the matcher; the backend only
+ * advances subsequent committed tokens, and rolls its own advances back on
+ * failure. It never accepts a final prediction that was not committed to KV. */
+typedef struct {
+    void *context;
+    int (*mask)(void *context, uint32_t *words, size_t word_count);
+    int (*accept)(void *context, int token);
+    int (*rollback)(void *context, size_t token_count);
+} ds4_token_constraint;
+/* DS41 Metal and Flint native packets. A null constraint uses the existing
+ * unconstrained API. -2 means an unsupported packet sampling policy, without
+ * mutating KV or the matcher, so the caller may evaluate first_token normally. */
+int ds4_session_eval_speculative_constrained(ds4_session *s, int first_token,
+                                 int max_tokens, int eos_token,
+                                 float temperature, int top_k,
+                                 float top_p, float min_p, uint64_t *rng,
+                                 const ds4_token_constraint *constraint,
                                  int *accepted, int accepted_cap,
                                  char *err, size_t errlen);
 /* TP worker side of a mirrored speculative-verify block: run its half of the

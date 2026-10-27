@@ -322,6 +322,46 @@ pub const Session = struct {
         for (self.native.lastLogits(), self.logitValues()) |bits, *value| value.* = @bitCast(@as(u32, bits) << 16);
         return result.len;
     }
+
+    pub fn sampleMasked(self: *Session, words: []const u32, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: ?*u64) !u32 {
+        if (!self.valid or !self.native.usable) return error.InvalidatedSession;
+        if (self.sampling_seed == null) self.sampling_seed = if (rng) |state| state.* else 0;
+        const prefilling = self.native.position == self.prefill_position;
+        const logits = if (prefilling) self.logits else self.native.outputs[0];
+        const offset: u64 = if (prefilling) 0 else self.native.last_logits_offset * 2;
+        return self.native.sampleMaskedLogits(logits, offset, prefilling, .{
+            .temperature = temperature,
+            .top_k = if (temperature == 0) 1 else if (top_k < 0) 0 else @intCast(top_k),
+            .top_p = top_p,
+            .min_p = min_p,
+            .seed = self.sampling_seed.?,
+            .eos = &self.engine.stops,
+        }, words);
+    }
+
+    pub fn packetConstrained(self: *Session, first: c_int, maximum: u32, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: ?*u64, constraint: *const c.ds4_token_constraint, accepted: []c_int) !u32 {
+        if (!self.valid or first < 0 or first >= decode.vocab or maximum == 0 or maximum > decode.packet_width or accepted.len < maximum) return error.InvalidPacket;
+        const count = @min(maximum, self.native.limit - self.native.position);
+        if (count == 0) return error.ContextLimit;
+        try self.tokens.ensureUnusedCapacity(a, count);
+        if (self.sampling_seed == null) self.sampling_seed = if (rng) |state| state.* else 0;
+        const result = self.native.sampledConstrained(@intCast(first), count, .{
+            .temperature = temperature,
+            .top_k = if (temperature == 0) 1 else if (top_k < 0) 0 else @intCast(top_k),
+            .top_p = top_p,
+            .min_p = min_p,
+            .seed = self.sampling_seed.?,
+            .eos = &self.engine.stops,
+        }, constraint) catch |err| {
+            self.valid = false;
+            return err;
+        };
+        accepted[0] = first;
+        for (1..result.len) |i| accepted[i] = @intCast(result.tokens[i - 1]);
+        self.tokens.appendSliceAssumeCapacity(accepted[0..result.len]);
+        for (self.native.lastLogits(), self.logitValues()) |bits, *value| value.* = @bitCast(@as(u32, bits) << 16);
+        return result.len;
+    }
 };
 
 fn validScale(value: f32) bool {
@@ -456,6 +496,37 @@ export fn flint_session_packet(handle: *c.flint_session, first: c_int, maximum: 
         return -1;
     }
     const count = session.packet(first, maximum, temperature, top_k, top_p, min_p, if (rng == null) null else @ptrCast(rng), accepted[0..maximum]) catch |err| {
+        report(error_text, error_size, err);
+        return -1;
+    };
+    return @intCast(count);
+}
+export fn flint_session_sample_masked(handle: *c.flint_session, words: [*c]const u32, word_count: usize, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: [*c]u64, error_text: [*c]u8, error_size: usize) c_int {
+    if (temperature != 0 and (top_k < 0 or top_k > 128 or (top_k == 0 and ((top_p > 0 and top_p < 1) or min_p > 0)))) return -2;
+    if (words == null or word_count != decode.mask_words) {
+        report(error_text, error_size, error.InvalidGrammarMask);
+        return -1;
+    }
+    const session = getSession(handle);
+    _ = c.pthread_mutex_lock(&session.engine.mutex);
+    defer _ = c.pthread_mutex_unlock(&session.engine.mutex);
+    const selected = session.sampleMasked(words[0..word_count], temperature, top_k, top_p, min_p, if (rng == null) null else @ptrCast(rng)) catch |err| {
+        report(error_text, error_size, err);
+        return -1;
+    };
+    return @intCast(selected);
+}
+export fn flint_session_packet_constrained(handle: *c.flint_session, first: c_int, maximum: u32, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: [*c]u64, constraint: [*c]const c.ds4_token_constraint, accepted: [*c]c_int, error_text: [*c]u8, error_size: usize) c_int {
+    // Unsupported policy is the only fallback return, before any state change.
+    if (temperature != 0 and (top_k < 0 or top_k > 128 or (top_k == 0 and ((top_p > 0 and top_p < 1) or min_p > 0)))) return -2;
+    if (constraint == null or accepted == null or maximum == 0 or maximum > decode.packet_width) {
+        report(error_text, error_size, error.InvalidPacket);
+        return -1;
+    }
+    const session = getSession(handle);
+    _ = c.pthread_mutex_lock(&session.engine.mutex);
+    defer _ = c.pthread_mutex_unlock(&session.engine.mutex);
+    const count = session.packetConstrained(first, maximum, temperature, top_k, top_p, min_p, if (rng == null) null else @ptrCast(rng), @ptrCast(constraint), accepted[0..maximum]) catch |err| {
         report(error_text, error_size, err);
         return -1;
     };

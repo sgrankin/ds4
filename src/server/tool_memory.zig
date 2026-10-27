@@ -31,6 +31,15 @@ fn callSlice(calls: *const c.tool_calls) []const c.tool_call {
     return if (calls.len == 0) &.{} else @as([*]const c.tool_call, @ptrCast(calls.v))[0..@intCast(calls.len)];
 }
 
+fn sameRanges(entry: *const Entry, ranges: []const c.ds4_prompt_range) bool {
+    if (entry.special_count != ranges.len) return false;
+    for (ranges, 0..) |range, index| {
+        const old = entry.special_ranges[index];
+        if (range.begin != old.begin or range.end != old.end) return false;
+    }
+    return true;
+}
+
 pub const Memory = struct {
     state: *Record,
     // Only quiescent deinit lacks a mutex; all live actions borrow tool_mu.
@@ -121,6 +130,7 @@ pub const Memory = struct {
         self.state.bytes -|= entry.bytes;
         if (self.state.entries > 0) self.state.entries -= 1;
         c.free(entry.id);
+        c.free(entry.special_ranges);
         if (entry.block != null) self.releaseBlock(@ptrCast(entry.block));
         allocator.destroy(entry);
     }
@@ -128,11 +138,11 @@ pub const Memory = struct {
         while ((self.state.entries > maxEntries(self.state) or self.state.bytes > maxBytes(self.state)) and self.state.tail != null)
             self.remove(@ptrCast(self.state.tail));
     }
-    fn putLocked(self: Memory, id: []const u8, text: []const u8, source: Source) void {
+    fn putLocked(self: Memory, id: []const u8, text: []const u8, source: Source, ranges: []const c.ds4_prompt_range) void {
         if (id.len == 0 or text.len == 0) return;
         self.initLocked();
         if (self.findEntry(id)) |old| {
-            if (old.block != null and std.mem.eql(u8, old.block.*.dsml[0..old.block.*.len], text)) {
+            if (old.block != null and std.mem.eql(u8, old.block.*.dsml[0..old.block.*.len], text) and sameRanges(old, ranges)) {
                 // Disk replay must not demote an ID already sampled in RAM.
                 if (source == c.TOOL_MEMORY_RAM) old.source = c.TOOL_MEMORY_RAM;
                 self.touch(old);
@@ -146,7 +156,9 @@ pub const Memory = struct {
         entry.* = std.mem.zeroes(Entry);
         entry.id = duplicate(id).ptr;
         entry.block = block;
-        entry.bytes = id.len + 1 + @sizeOf(Entry);
+        entry.special_ranges = if (ranges.len == 0) null else (allocator.dupe(c.ds4_prompt_range, ranges) catch fatal()).ptr;
+        entry.special_count = ranges.len;
+        entry.bytes = id.len + 1 + @sizeOf(Entry) + ranges.len * @sizeOf(c.ds4_prompt_range);
         self.state.clock +%= 1;
         entry.stamp = self.state.clock;
         entry.source = source;
@@ -156,6 +168,7 @@ pub const Memory = struct {
         if (c.raxInsert(self.state.by_id, entry.id, id.len, entry, null) == 0) {
             unlinkBlockEntry(block, entry);
             c.free(entry.id);
+            c.free(entry.special_ranges);
             allocator.destroy(entry);
             self.releaseBlock(block);
             fatal();
@@ -184,14 +197,15 @@ pub const Memory = struct {
         if (id.len == 0 or text.len == 0) return;
         self.lock();
         defer self.unlock();
-        self.putLocked(id, text, source);
+        self.putLocked(id, text, source, &.{});
     }
     pub fn remember(self: Memory, calls: *const c.tool_calls) void {
         const text = string(calls.raw_tool_text);
         if (text.len == 0) return;
         self.lock();
         defer self.unlock();
-        for (callSlice(calls)) |call| self.putLocked(string(call.id), text, c.TOOL_MEMORY_RAM);
+        const ranges: []const c.ds4_prompt_range = if (calls.raw_special_count == 0) &.{} else calls.raw_special_ranges[0..calls.raw_special_count];
+        for (callSlice(calls)) |call| self.putLocked(string(call.id), text, c.TOOL_MEMORY_RAM, ranges);
     }
     pub fn attach(self: Memory, messages: *c.chat_msgs, stats: ?*c.tool_replay_stats) void {
         self.lock();
@@ -202,6 +216,7 @@ pub const Memory = struct {
             if (calls.len == 0 or calls.raw_tool_text != null) continue;
             var matched: ?*Block = null;
             var matched_source: Source = c.TOOL_MEMORY_DISK;
+            var matched_entry: ?*Entry = null;
             var exact = true;
             var missing: c_int = 0;
             for (callSlice(calls)) |call| {
@@ -217,13 +232,20 @@ pub const Memory = struct {
                 if (matched == null) {
                     matched = block;
                     matched_source = found.source;
-                } else if (matched != block) exact = false;
+                    matched_entry = found;
+                } else if (matched != block or !sameRanges(matched_entry.?, if (found.special_count == 0) &.{} else found.special_ranges[0..found.special_count])) exact = false;
                 if (found.source == c.TOOL_MEMORY_RAM) matched_source = c.TOOL_MEMORY_RAM;
             }
             // All IDs must identify the same immutable sampled block. Matching
             // each ID separately is insufficient for a multi-call assistant turn.
             if (exact and matched != null) {
                 calls.raw_tool_text = duplicate(matched.?.dsml[0..matched.?.len]).ptr;
+                const found = matched_entry.?;
+                if (found.special_count != 0) {
+                    const copied = allocator.dupe(c.ds4_prompt_range, found.special_ranges[0..found.special_count]) catch fatal();
+                    calls.raw_special_ranges = copied.ptr;
+                    calls.raw_special_count = copied.len;
+                }
                 if (stats) |value| {
                     if (matched_source == c.TOOL_MEMORY_RAM) value.mem += 1 else value.disk += 1;
                 }
@@ -244,7 +266,7 @@ pub const Memory = struct {
                 const id_length = string(current.*.id).len;
                 if (id_length > std.math.maxInt(u32) or block.len > std.math.maxInt(u32)) continue;
                 if (result.count == std.math.maxInt(u32)) return null;
-                result.bytes = std.math.add(u64, result.bytes, 8 + @as(u64, id_length) + block.len) catch return null;
+                result.bytes = std.math.add(u64, result.bytes, 12 + @as(u64, id_length) + block.len + 16 * @as(u64, current.*.special_count)) catch return null;
                 result.count += 1;
             }
         }
@@ -273,12 +295,20 @@ pub const Memory = struct {
             while (current != null) : (current = current.*.block_next) {
                 const id = string(current.*.id);
                 if (id.len > std.math.maxInt(u32) or block.len > std.math.maxInt(u32)) continue;
-                var lengths: [8]u8 = undefined;
+                var lengths: [12]u8 = undefined;
                 std.mem.writeInt(u32, lengths[0..4], @intCast(id.len), .little);
                 std.mem.writeInt(u32, lengths[4..8], @intCast(block.len), .little);
+                std.mem.writeInt(u32, lengths[8..12], @intCast(current.*.special_count), .little);
                 if (c.fwrite(&lengths, 1, lengths.len, file) != lengths.len or
                     c.fwrite(id.ptr, 1, id.len, file) != id.len or
                     c.fwrite(block.dsml, 1, block.len, file) != block.len) return false;
+                for (0..current.*.special_count) |index| {
+                    const range = current.*.special_ranges[index];
+                    var encoded_range: [16]u8 = undefined;
+                    std.mem.writeInt(u64, encoded_range[0..8], range.begin, .little);
+                    std.mem.writeInt(u64, encoded_range[8..16], range.end, .little);
+                    if (c.fwrite(&encoded_range, 1, encoded_range.len, file) != encoded_range.len) return false;
+                }
             }
         }
         if (written) |value| value.* = measured.bytes;
@@ -292,21 +322,38 @@ pub const Memory = struct {
         if (@as(u64, count) > @as(u64, @intCast(maxEntries(self.state))) * 4) return 0;
         var loaded: c_int = 0;
         for (0..count) |_| {
-            var lengths: [8]u8 = undefined;
+            var lengths: [12]u8 = undefined;
             if (c.fread(&lengths, 1, lengths.len, file) != lengths.len) return loaded;
             const id_length = std.mem.readInt(u32, lengths[0..4], .little);
             const text_length = std.mem.readInt(u32, lengths[4..8], .little);
+            const range_count = std.mem.readInt(u32, lengths[8..12], .little);
+            if (range_count > text_length) return loaded;
             if (id_length == 0 or id_length > 256 or text_length == 0 or text_length > c.DS4_TOOL_MEMORY_MAX_BYTES) return loaded;
+            if (@as(u64, id_length) + text_length + 16 * @as(u64, range_count) > maxBytes(self.state)) return loaded;
             const id = allocator.allocSentinel(u8, id_length, 0) catch fatal();
             defer allocator.free(id);
             const text = allocator.allocSentinel(u8, text_length, 0) catch fatal();
             defer allocator.free(text);
             if (c.fread(id.ptr, 1, id.len, file) != id.len or c.fread(text.ptr, 1, text.len, file) != text.len) return loaded;
+            const ranges = allocator.alloc(c.ds4_prompt_range, range_count) catch fatal();
+            defer allocator.free(ranges);
+            var previous: usize = 0;
+            for (ranges) |*range| {
+                var encoded_range: [16]u8 = undefined;
+                if (c.fread(&encoded_range, 1, encoded_range.len, file) != encoded_range.len) return loaded;
+                const begin = std.mem.readInt(u64, encoded_range[0..8], .little);
+                const end = std.mem.readInt(u64, encoded_range[8..16], .little);
+                if (begin < previous or end <= begin or end > text_length) return loaded;
+                range.* = .{ .begin = @intCast(begin), .end = @intCast(end) };
+                previous = range.end;
+            }
             // The historical format accepts embedded NULs: insertion and wanted
             // matching use the C string prefix, though fread consumes all bytes.
             const id_string = string(id.ptr);
             if (wanted == null or wantedContains(wanted.?, id_string)) {
-                self.put(id_string, string(text.ptr), c.TOOL_MEMORY_DISK);
+                self.lock();
+                self.putLocked(id_string, string(text.ptr), c.TOOL_MEMORY_DISK, ranges);
+                self.unlock();
                 loaded += 1; // Counts accepted records even if LRU immediately prunes.
             }
         }
@@ -323,46 +370,28 @@ fn wantedContains(wanted: *const c.stop_list, id: []const u8) bool {
     return false;
 }
 
-const Forms = [_]struct { start: []const u8, end: []const u8 }{
-    .{ .start = "\n\n<｜DSML｜ calls>", .end = "</｜DSML｜ calls>" },
-    .{ .start = "<｜DSML｜ calls>", .end = "</｜DSML｜ calls>" },
-    .{ .start = "\n\n<｜DSML｜tool_calls>", .end = "</｜DSML｜tool_calls>" },
-    .{ .start = "<｜DSML｜tool_calls>", .end = "</｜DSML｜tool_calls>" },
-    .{ .start = "\n\n<DSML｜tool_calls>", .end = "</DSML｜tool_calls>" },
-    .{ .start = "<DSML｜tool_calls>", .end = "</DSML｜tool_calls>" },
-    .{ .start = "\n\n<tool_calls>", .end = "</tool_calls>" },
-    .{ .start = "<tool_calls>", .end = "</tool_calls>" },
-};
-
-/// Preserve earliest-start and first-form ties, including a preceding blank
-/// line when present. Only complete blocks occur in saved trailer selection.
+// Do not rediscover a block's closing delimiter from text: literal parameters
+// can contain the same spelling. Match the complete immutable sampled block.
 const Blocks = struct {
     memory: Memory,
     text: []const u8,
-    offset: usize = 0,
+    current: [*c]Entry,
     scan: u64,
 
     fn init(memory: Memory, text: []const u8) Blocks {
         memory.state.scan_clock +%= 1;
-        return .{ .memory = memory, .text = text, .scan = memory.state.scan_clock };
+        return .{ .memory = memory, .text = text, .current = memory.state.head, .scan = memory.state.scan_clock };
     }
     fn next(self: *Blocks) ?*Block {
-        while (true) {
-            var best: ?usize = null;
-            var end: usize = 0;
-            for (Forms) |form| {
-                const start = std.mem.findPos(u8, self.text, self.offset, form.start) orelse continue;
-                if (best != null and start >= best.?) continue;
-                const close = std.mem.findPos(u8, self.text, start, form.end) orelse continue;
-                best = start;
-                end = close + form.end.len;
-            }
-            const start = best orelse return null;
-            self.offset = end;
-            const block = self.memory.findBlock(self.text[start..end]) orelse continue;
+        while (self.current != null) {
+            const entry = self.current;
+            self.current = entry.*.next;
+            if (entry.*.block == null) continue;
+            const block: *Block = @ptrCast(entry.*.block);
             if (block.seen == self.scan) continue;
             block.seen = self.scan;
-            return block;
+            if (std.mem.indexOf(u8, self.text, block.dsml[0..block.len]) != null) return block;
         }
+        return null;
     }
 };

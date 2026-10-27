@@ -19,6 +19,7 @@ pub const PrepareOptions = struct {
     start: usize = 0,
     live_tail: bool = false,
     initial_tool_order: []const []const u8 = &.{},
+    prompt_map: ?*serving.PromptMap = null,
 };
 
 pub const Model = struct {
@@ -68,6 +69,7 @@ pub const Model = struct {
         if (self.family == .flint) return flint.render(allocator, request.messages, .{
             .start = options.start,
             .schemas = request.tool_schemas,
+            .prompt_map = options.prompt_map,
         });
         if (self.family == .qwen) return qwen.render(allocator, request.messages, .{
             .start = options.start,
@@ -90,6 +92,8 @@ pub const Model = struct {
             .initial_tool_order = options.initial_tool_order,
             .schemas = request.tool_schemas,
             .reasoning = self.reasoning(request.reasoning, request.model, context),
+            .prompt_map = options.prompt_map,
+            .response_format = request.response_format,
         };
         return ds41.render(allocator, request.messages, selected);
     }

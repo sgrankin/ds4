@@ -55,6 +55,8 @@ typedef struct {
     int len;
     int cap;
     char *raw_tool_text;
+    ds4_prompt_range *raw_special_ranges;
+    size_t raw_special_count;
 } tool_calls;
 
 typedef struct {
@@ -68,6 +70,9 @@ typedef struct {
     char *name;
     char *wire_name;
     char *namespace;
+    /* Whole parameter schema retains local definitions used by Flint's XML
+     * value-to-JSON type selection. Property slices remain the common fast path. */
+    char *parameters_json;
     /* Distinguish the Responses hosted tool from a normal function that
      * happens to be named "tool_search". */
     bool responses_tool_search;
@@ -91,6 +96,10 @@ typedef struct {
 typedef struct {
     char *role;
     char *content;
+    /* Byte endpoints of explicitly marked text blocks, never model text. */
+    size_t *cache_breakpoints;
+    int cache_breakpoints_len;
+    int cache_breakpoints_cap;
     /* Original Responses declarations, kept privately for durable replay. */
     char *discovered_tools;
     server_image_inputs images;
@@ -142,7 +151,16 @@ typedef struct {
     stop_list stops;
     char *raw_body;
     char *prompt_text;
+    ds4_prompt_range *prompt_special_ranges;
+    size_t prompt_special_count;
+    /* Borrowed during generation; copied when sampled tool replay is retained. */
+    const ds4_prompt_range *sampled_special_ranges;
+    size_t sampled_special_count;
     char *prompt_cache_key; /* Client affinity hint; never enables approximation. */
+    bool prompt_cache_explicit;
+    bool prompt_cache_controls_set;
+    ds4_tokens cache_breakpoint_bytes;
+    ds4_tokens cache_breakpoints;
     const char *responses_store_dir; /* Borrowed immutable server configuration. */
     bool responses_store;
     char *previous_response_id;
@@ -150,6 +168,10 @@ typedef struct {
     char *conversation_input; /* New public items; history is loaded separately. */
     unsigned long long conversation_version;
     int responses_store_error_status;
+    char *tool_choice_json; /* Client selection, resolved after thinking/model policy. */
+    char *response_format_json; /* Shared structured-answer request. */
+    char *constraint_json; /* Normalized prompt/compiler contract; not model text. */
+    bool parallel_tool_calls;
     char *responses_replay; /* Private logical history, without top-level instructions. */
     char responses_published_id[40];
     tool_schema_orders tool_orders;
@@ -198,9 +220,13 @@ typedef struct {
     bool responses_requires_live_reasoning;
     stop_list responses_live_call_ids;
     char *responses_live_suffix_text;
+    ds4_prompt_range *responses_live_special_ranges;
+    size_t responses_live_special_count;
     bool anthropic_requires_live_tool_state;
     stop_list anthropic_live_call_ids;
     char *anthropic_live_suffix_text;
+    ds4_prompt_range *anthropic_live_special_ranges;
+    size_t anthropic_live_special_count;
     tool_replay_stats tool_replay;
 } request;
 

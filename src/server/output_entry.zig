@@ -27,6 +27,9 @@ export fn ds4_server_output_init(request: *const c.request, stream: *c.responses
 export fn ds4_server_output_free(stream: ?*c.responses_stream) void {
     owner.deinit(stream orelse return);
 }
+export fn ds4_server_output_apply_ids(calls: *c.tool_calls, stream: *const c.responses_stream) void {
+    owner.applyIds(calls, stream);
+}
 export fn ds4_server_output_append_item(buffer: *c.buf, call: *const c.tool_call, item: *const c.responses_tool_item, status: [*c]const u8, with_args: bool, orders: ?*const c.tool_schema_orders) void {
     owner.appendFunctionCall(buffer, call, item, text(status), with_args, orders);
 }

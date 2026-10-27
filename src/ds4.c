@@ -39462,10 +39462,8 @@ void ds4_chat_append_message(ds4_engine *engine, ds4_tokens *out,
                               const char *role, const char *content) {
     DS4_ENGINE_SCOPE(engine);
     if (engine->flint) {
-        char *rendered = flint_render_message(role, content ? content : "");
-        if (!rendered) ds4_die("Flint prompt allocation failed");
-        ds4_tokenize_text(engine, rendered, out);
-        free(rendered);
+        if (!flint_tokenizer_encode_message(flint_engine_tokenizer(engine->flint), role, content ? content : "", out))
+            ds4_die("Flint message tokenization failed");
         return;
     }
     if (!ds4_vocab_chat_append(&engine->core.vocab, current_chat_family(), role, content, out))
@@ -39542,6 +39540,21 @@ void ds4_tokenize_rendered_chat(ds4_engine *e, const char *text, ds4_tokens *out
     tokenize_rendered_chat_vocab(&e->core.vocab, text, out);
 }
 
+void ds4_tokenize_prompt_span(ds4_engine *e, const char *text, size_t begin,
+        size_t end, const ds4_prompt_range *specials, size_t special_count,
+        ds4_tokens *out) {
+    DS4_ENGINE_SCOPE(e);
+    if (e->flint) {
+        if (!flint_tokenizer_encode_prompt_span(flint_engine_tokenizer(e->flint),
+                text, begin, end, specials, special_count, out))
+            ds4_die("invalid Flint prompt controls or tokenization failure");
+        return;
+    }
+    if (!ds4_vocab_tokenize_prompt_span(&e->core.vocab, current_chat_family(),
+            text, begin, end, specials, special_count, out))
+        ds4_die("invalid rendered prompt controls or tokenization failure");
+}
+
 void ds4_chat_begin(ds4_engine *e, ds4_tokens *tokens) {
     DS4_ENGINE_SCOPE(e);
     if (e->flint) return;
@@ -39556,10 +39569,8 @@ void ds4_encode_chat_prompt(
         ds4_tokens *out) {
     DS4_ENGINE_SCOPE(e);
     if (e->flint) {
-        char *rendered = flint_render_chat(system, prompt ? prompt : "");
-        if (!rendered) ds4_die("Flint prompt allocation failed");
-        ds4_tokenize_text(e, rendered, out);
-        free(rendered);
+        if (!flint_tokenizer_encode_chat(flint_engine_tokenizer(e->flint), system, prompt ? prompt : "", out))
+            ds4_die("Flint chat tokenization failed");
         return;
     }
     encode_chat_prompt(&e->core.vocab, system, prompt ? prompt : "", think_mode, out);
@@ -57477,28 +57488,31 @@ void ds4_engine_dump_tokens(ds4_engine *e, const ds4_tokens *tokens) {
     dump_tokens(&e->core.vocab, tokens);
 }
 
-int ds4_dump_text_tokenization(const char *model_path, const char *text, FILE *fp) {
-    if (flint_engine_detect(model_path)) {
-        char *path = xmalloc(strlen(model_path) + sizeof("/tokenizer.json"));
-        sprintf(path, "%s/tokenizer.json", model_path);
-        flint_tokenizer *tokenizer = flint_tokenizer_load(path);
-        free(path);
-        if (!tokenizer) return 1;
-        ds4_tokens tokens = {0};
-        bool ok = flint_tokenizer_encode(tokenizer, text, text ? strlen(text) : 0, &tokens);
-        if (!fp) fp = stdout;
-        fprintf(fp, "[");
-        for (int i = 0; i < tokens.len; i++) fprintf(fp, "%s%d", i ? ", " : "", tokens.v[i]);
-        fprintf(fp, "]\n");
-        for (int i = 0; i < tokens.len; i++) {
-            size_t length = 0;
-            const char *piece = flint_tokenizer_piece(tokenizer, tokens.v[i], &length);
-            fprintf(fp, "%6d  %.*s\n", tokens.v[i], (int)length, piece);
-        }
-        ds4_tokens_free(&tokens);
-        flint_tokenizer_free(tokenizer);
-        return ok ? 0 : 1;
+static int flint_dump_tokenization(const char *model_path, const char *system,
+    const char *text, bool chat, FILE *fp) {
+    char *path = xmalloc(strlen(model_path) + sizeof("/tokenizer.json"));
+    sprintf(path, "%s/tokenizer.json", model_path);
+    flint_tokenizer *tokenizer = flint_tokenizer_load(path);
+    free(path);
+    if (!tokenizer) return 1;
+    ds4_tokens tokens = {0};
+    bool ok = chat ? flint_tokenizer_encode_chat(tokenizer, system, text ? text : "", &tokens) : flint_tokenizer_encode(tokenizer, text, text ? strlen(text) : 0, &tokens);
+    if (!fp) fp = stdout;
+    fprintf(fp, "[");
+    for (int i = 0; i < tokens.len; i++) fprintf(fp, "%s%d", i ? ", " : "", tokens.v[i]);
+    fprintf(fp, "]\n");
+    for (int i = 0; i < tokens.len; i++) {
+        size_t length = 0;
+        const char *piece = flint_tokenizer_piece(tokenizer, tokens.v[i], &length);
+        fprintf(fp, "%6d  %.*s\n", tokens.v[i], (int)length, piece);
     }
+    ds4_tokens_free(&tokens);
+    flint_tokenizer_free(tokenizer);
+    return ok ? 0 : 1;
+}
+
+int ds4_dump_text_tokenization(const char *model_path, const char *text, FILE *fp) {
+    if (flint_engine_detect(model_path)) return flint_dump_tokenization(model_path, NULL, text, false, fp);
     ds4_host_context *inspection = ds4_host_context_create(0);
     if (!inspection) return 1;
     ds4_host_context *previous_host = ds4_host_context_select(inspection);
@@ -57530,11 +57544,7 @@ int ds4_dump_chat_tokenization(const char *model_path,
                                int ctx_size,
                                FILE *fp) {
     if (flint_engine_detect(model_path)) {
-        char *rendered = flint_render_chat(system, prompt ? prompt : "");
-        if (!rendered) return 1;
-        int status = ds4_dump_text_tokenization(model_path, rendered, fp);
-        free(rendered);
-        return status;
+        return flint_dump_tokenization(model_path, system, prompt, true, fp);
     }
     ds4_host_context *inspection = ds4_host_context_create(0);
     if (!inspection) return 1;
@@ -70748,6 +70758,17 @@ int ds4_session_sample(ds4_session *s, float temperature, int top_k, float top_p
                               top_p, min_p, rng, s->frontier.sample_probs);
 }
 
+int ds4_session_sample_masked(ds4_session *s, const uint32_t *words, size_t word_count,
+                             float temperature, int top_k, float top_p, float min_p,
+                             uint64_t *rng, char *error, size_t error_size) {
+    DS4_SESSION_SCOPE(s);
+    if (!s || !s->frontier.checkpoint_valid || !words) return -1;
+    if (s->flint && !ds4_engine_overthinking_penalty_enabled(s->engine))
+        return flint_session_sample_masked(s->flint, words, word_count,
+            temperature, top_k, top_p, min_p, rng, error, error_size);
+    return -2;
+}
+
 int ds4_session_top_logprobs(ds4_session *s, ds4_token_score *out, int k) {
     DS4_SESSION_SCOPE(s);
     if (!s || !out || k <= 0) return 0;
@@ -77642,6 +77663,58 @@ int ds4_session_eval_speculative_argmax_ignoring_eos(
     return ds4_session_eval_speculative_argmax_impl(
         s, first_token, max_tokens, eos_token, true, think_mode,
         accepted, accepted_cap, err, errlen);
+}
+
+int ds4_session_eval_speculative_constrained(ds4_session *s, int first_token,
+                                 int max_tokens, int eos_token,
+                                 float temperature, int top_k,
+                                 float top_p, float min_p, uint64_t *rng,
+                                 const ds4_token_constraint *constraint,
+                                 int *accepted, int accepted_cap,
+                                 char *err, size_t errlen) {
+    if (!constraint) return ds4_session_eval_speculative(s, first_token,
+        max_tokens, eos_token, temperature, top_k, top_p, min_p, rng,
+        accepted, accepted_cap, err, errlen);
+    DS4_SESSION_SCOPE(s);
+    if (!s || !accepted || max_tokens <= 0 || accepted_cap <= 0) return 0;
+    if (!constraint->mask || !constraint->accept || !constraint->rollback) {
+        payload_set_err(err, errlen, "constrained decode requires mask, accept and rollback callbacks");
+        return -1;
+    }
+    if (s->flint) {
+        int limit = max_tokens < accepted_cap ? max_tokens : accepted_cap;
+        const int room = s->frontier.ctx_size - s->frontier.checkpoint.len;
+        if (limit > room) limit = room;
+        if (limit > 8) limit = 8;
+        if (ds4_engine_overthinking_penalty_enabled(s->engine)) limit = 1;
+        if (!s->frontier.checkpoint_valid || limit < 1 || first_token < 0 ||
+            first_token >= s->engine->core.vocab.n_vocab) {
+            payload_set_err(err, errlen, "invalid Flint packet frontier/token");
+            return -1;
+        }
+        const int count = flint_session_packet_constrained(s->flint, first_token,
+            (uint32_t)limit, temperature, top_k, top_p, min_p, rng, constraint,
+            accepted, err, errlen);
+        if (count == -2) return -2; /* No backend or matcher mutation. */
+        if (count < 1 || count > limit) { ds4_session_invalidate(s); return -1; }
+        for (int i = 0; i < count; i++) token_vec_push(&s->frontier.checkpoint, accepted[i]);
+        flint_commit_logits(s);
+        return count;
+    }
+#if defined(DS4_HAS_DEEPSEEK41_GPU)
+    if (s->engine && ds4_session_is_ds41(s) &&
+        s->engine->core.backend == DS4_BACKEND_METAL) {
+        const ds4_session_batch_view view = ds41_native_batch_view(s, 0);
+        const ds4_model_config config = ds41_native_config();
+        const ds4_engine_memory_inputs inputs = ds41_memory_inputs(s->engine);
+        return ds4_native_session_speculate_constrained41(&view, &s->engine->core,
+            &s->engine->tp, &config, &inputs, g_tp_block_ctx,
+            first_token, max_tokens, eos_token, temperature, top_k, top_p, min_p,
+            rng, constraint, accepted, accepted_cap, ds41_exact_prefill_rows, err, errlen);
+    }
+#endif
+    payload_set_err(err, errlen, "constrained packets require native DS41 Metal or Flint");
+    return -2;
 }
 
 int ds4_session_eval_speculative(ds4_session *s, int first_token,

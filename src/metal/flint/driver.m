@@ -18,6 +18,18 @@
 }
 @end
 
+@interface FlintMetalHandoff : NSObject
+@property(strong) id<MTLSharedEvent> tokens;
+@property(strong) id<MTLSharedEvent> masks;
+@property(strong) MTLSharedEventListener *listener;
+@property(strong) dispatch_group_t callbacks;
+@property(atomic) BOOL cancelled;
+@property void *context;
+@property flint_gpu_handoff_fn callback;
+@end
+@implementation FlintMetalHandoff
+@end
+
 static FlintMetalContext *context(flint_gpu *gpu) {
     return (__bridge FlintMetalContext *)gpu;
 }
@@ -121,6 +133,56 @@ bool flint_gpu_command_end_profile(flint_gpu *gpu, void *opaque, double *gpu_sec
         }
         *gpu_seconds = command.GPUEndTime - command.GPUStartTime;
         return true;
+    }
+}
+
+flint_gpu_handoff *flint_gpu_handoff_create(flint_gpu *gpu, void *user,
+                                            flint_gpu_handoff_fn callback) {
+    @autoreleasepool {
+        FlintMetalHandoff *handoff = [FlintMetalHandoff new];
+        handoff.tokens = [context(gpu).device newSharedEvent];
+        handoff.masks = [context(gpu).device newSharedEvent];
+        dispatch_queue_t queue = dispatch_queue_create("ds4.flint.grammar", DISPATCH_QUEUE_SERIAL);
+        handoff.listener = [[MTLSharedEventListener alloc] initWithDispatchQueue:queue];
+        handoff.callbacks = dispatch_group_create();
+        handoff.context = user;
+        handoff.callback = callback;
+        if (!handoff.tokens || !handoff.masks || !handoff.listener) return NULL;
+        return (flint_gpu_handoff *)CFBridgingRetain(handoff);
+    }
+}
+
+void flint_gpu_handoff_signal(flint_gpu_handoff *opaque, void *command,
+                              uint32_t step) {
+    FlintMetalHandoff *handoff = (__bridge FlintMetalHandoff *)opaque;
+    uint64_t value = (uint64_t)step + 1;
+    dispatch_group_enter(handoff.callbacks);
+    [handoff.tokens notifyListener:handoff.listener atValue:value
+                            block:^(id<MTLSharedEvent> event, uint64_t reached) {
+        (void)event; (void)reached;
+        if (!handoff.cancelled) handoff.callback(handoff.context, step);
+        handoff.masks.signaledValue = value;
+        dispatch_group_leave(handoff.callbacks);
+    }];
+    [(__bridge id<MTLCommandBuffer>)command encodeSignalEvent:handoff.tokens value:value];
+}
+
+void flint_gpu_handoff_wait(flint_gpu_handoff *opaque, void *command,
+                            uint32_t step) {
+    FlintMetalHandoff *handoff = (__bridge FlintMetalHandoff *)opaque;
+    [(__bridge id<MTLCommandBuffer>)command encodeWaitForEvent:handoff.masks
+                                                     value:(uint64_t)step + 1];
+}
+
+void flint_gpu_handoff_free(flint_gpu_handoff *opaque) {
+    if (!opaque) return;
+    @autoreleasepool {
+        FlintMetalHandoff *handoff = CFBridgingRelease(opaque);
+        handoff.cancelled = YES;
+        // A GPU error may prevent a token signal. Release pending notifications
+        // without invoking user callbacks before their stack context disappears.
+        handoff.tokens.signaledValue = UINT64_MAX;
+        dispatch_group_wait(handoff.callbacks, DISPATCH_TIME_FOREVER);
     }
 }
 

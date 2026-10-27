@@ -4,6 +4,7 @@
 const std = @import("std");
 const c = @import("flint_tokenizer_c");
 const prompt = @import("flint_prompt");
+const types = @import("serving_types");
 const icu = c;
 const allocator = std.heap.c_allocator;
 const Handle = c.flint_tokenizer;
@@ -162,6 +163,21 @@ const Encoding = struct {
     patterns: [3]Regex,
     out: *c.ds4_tokens,
 
+    fn init(tokenizer: *const Tokenizer, out: *c.ds4_tokens) !Encoding {
+        var result = Encoding{ .tokenizer = tokenizer, .patterns = undefined, .out = out };
+        var cloned: usize = 0;
+        errdefer for (result.patterns[0..cloned]) |pattern| icu.uregex_close(pattern);
+        for (tokenizer.patterns, 0..) |pattern, index| {
+            var status: icu.UErrorCode = icu.U_ZERO_ERROR;
+            result.patterns[index] = icu.uregex_clone(pattern, &status) orelse return error.OutOfMemory;
+            cloned += 1;
+            if (status > icu.U_ZERO_ERROR) return error.InvalidRegex;
+        }
+        return result;
+    }
+    fn deinit(self: *Encoding) void {
+        for (self.patterns) |pattern| icu.uregex_close(pattern);
+    }
     fn split(self: *const Encoding, text: []const u8, stage: usize) !void {
         if (text.len == 0) return;
         if (stage == self.patterns.len) {
@@ -188,15 +204,8 @@ const Encoding = struct {
 };
 
 fn encode(tokenizer: *const Tokenizer, text: []const u8, out: *c.ds4_tokens) !void {
-    var encoding = Encoding{ .tokenizer = tokenizer, .patterns = undefined, .out = out };
-    var cloned: usize = 0;
-    defer for (encoding.patterns[0..cloned]) |pattern| icu.uregex_close(pattern);
-    for (tokenizer.patterns, 0..) |pattern, index| {
-        var status: icu.UErrorCode = icu.U_ZERO_ERROR;
-        encoding.patterns[index] = icu.uregex_clone(pattern, &status) orelse return error.OutOfMemory;
-        cloned += 1;
-        if (status > icu.U_ZERO_ERROR) return error.InvalidRegex;
-    }
+    var encoding = try Encoding.init(tokenizer, out);
+    defer encoding.deinit();
     var begin: usize = 0;
     var position: usize = 0;
     while (position < text.len) {
@@ -216,6 +225,60 @@ fn encode(tokenizer: *const Tokenizer, text: []const u8, out: *c.ds4_tokens) !vo
         } else position += 1;
     }
     try encoding.split(text[begin..], 0);
+}
+
+fn encodeSpan(tokenizer: *const Tokenizer, text: []const u8, begin: usize, end: usize, ranges: []const c.ds4_prompt_range, out: *c.ds4_tokens) !void {
+    if (begin > end or end > text.len) return error.InvalidPromptSpan;
+    var encoding = try Encoding.init(tokenizer, out);
+    defer encoding.deinit();
+    var cursor = begin;
+    var previous: usize = 0;
+    for (ranges) |range| {
+        if (range.begin < previous or range.end <= range.begin or range.end > text.len) return error.InvalidPromptControl;
+        previous = range.end;
+        if (range.end <= begin or range.begin >= end) continue;
+        if (range.begin < begin or range.end > end) return error.SplitPromptControl;
+        try encoding.split(text[cursor..range.begin], 0);
+        var id: ?c_int = null;
+        for (tokenizer.added) |added| if (std.mem.eql(u8, text[range.begin..range.end], added.content)) {
+            id = added.id;
+            break;
+        };
+        c.ds4_tokens_push(out, id orelse return error.UnknownPromptControl);
+        cursor = range.end;
+    }
+    try encoding.split(text[cursor..end], 0);
+}
+
+/// Rendering supplies the only control ranges. Added-token spellings in plain
+/// portions go directly through normal byte BPE and cannot become controls.
+export fn flint_tokenizer_encode_prompt_span(handle: *const Handle, raw: [*:0]const u8, begin: usize, end: usize, ranges: [*c]const c.ds4_prompt_range, count: usize, out: *c.ds4_tokens) bool {
+    encodeSpan(get(handle), std.mem.span(raw), begin, end, if (count == 0) &.{} else ranges[0..count], out) catch return false;
+    return true;
+}
+
+fn encodeMessages(handle: *const Handle, messages: []const types.Message, generation_prompt: bool, out: *c.ds4_tokens) !void {
+    var map: types.PromptMap = .{};
+    defer map.deinit(allocator);
+    const rendered = try prompt.render(allocator, messages, .{ .prompt_map = &map, .add_generation_prompt = generation_prompt });
+    defer allocator.free(rendered);
+    const ranges = try allocator.alloc(c.ds4_prompt_range, map.special_ranges.items.len);
+    defer allocator.free(ranges);
+    for (map.special_ranges.items, ranges) |range, *target| target.* = .{ .begin = range.begin, .end = range.end };
+    try encodeSpan(get(handle), rendered, 0, rendered.len, ranges, out);
+}
+
+export fn flint_tokenizer_encode_message(handle: *const Handle, role: [*:0]const u8, content: [*:0]const u8, out: *c.ds4_tokens) bool {
+    encodeMessages(handle, &.{.{ .role = std.mem.span(role), .content = std.mem.span(content) }}, false, out) catch return false;
+    return true;
+}
+export fn flint_tokenizer_encode_chat(handle: *const Handle, system: [*c]const u8, user: [*:0]const u8, out: *c.ds4_tokens) bool {
+    const messages = [_]types.Message{
+        .{ .role = "system", .content = if (system == null) null else std.mem.span(system) },
+        .{ .role = "user", .content = std.mem.span(user) },
+    };
+    encodeMessages(handle, messages[if (system == null or system[0] == 0) @as(usize, 1) else 0..], true, out) catch return false;
+    return true;
 }
 
 export fn flint_tokenizer_encode(handle: *const Handle, raw: [*c]const u8, len: usize, out: *c.ds4_tokens) bool {
@@ -248,18 +311,4 @@ export fn flint_tokenizer_is_stop(handle: *const Handle, id: c_int) bool {
         if (flint_tokenizer_special_id(handle, spelling) == id) return true;
     }
     return false;
-}
-
-export fn flint_render_message(role: [*:0]const u8, content: [*:0]const u8) [*c]u8 {
-    const rendered = prompt.render(allocator, &.{.{ .role = std.mem.span(role), .content = std.mem.span(content) }}, .{ .add_generation_prompt = false }) catch return null;
-    return rendered.ptr;
-}
-
-export fn flint_render_chat(system: [*c]const u8, user: [*:0]const u8) [*c]u8 {
-    const messages = [_]@import("serving_types").Message{
-        .{ .role = "system", .content = if (system == null) null else std.mem.span(system) },
-        .{ .role = "user", .content = std.mem.span(user) },
-    };
-    const rendered = prompt.render(allocator, messages[if (system == null or system[0] == 0) @as(usize, 1) else 0..], .{}) catch return null;
-    return rendered.ptr;
 }

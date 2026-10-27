@@ -61,6 +61,9 @@ const char *ds4_vocab_encode_chat(const ds4_vocab *vocab, ds4_chat_family family
                                  ds4_think_mode mode, ds4_tokens *out);
 bool ds4_vocab_tokenize_rendered(const ds4_vocab *vocab, ds4_chat_family family,
                                  const char *text, ds4_tokens *out);
+bool ds4_vocab_tokenize_prompt_span(const ds4_vocab *vocab, ds4_chat_family family,
+        const char *text, size_t begin, size_t end,
+        const ds4_prompt_range *specials, size_t special_count, ds4_tokens *out);
 bool ds4_vocab_chat_append(const ds4_vocab *vocab, ds4_chat_family family,
                           const char *role, const char *content, ds4_tokens *out);
 bool ds4_vocab_assistant_prefix(const ds4_vocab *vocab, ds4_chat_family family,

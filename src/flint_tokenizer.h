@@ -22,8 +22,14 @@ int flint_tokenizer_vocab_size(const flint_tokenizer *tokenizer);
 int flint_tokenizer_special_id(const flint_tokenizer *tokenizer,
                                const char *spelling);
 bool flint_tokenizer_is_stop(const flint_tokenizer *tokenizer, int id);
-/* libc-owned canonical prompt text for CLI callers. */
-char *flint_render_message(const char *role, const char *content);
-char *flint_render_chat(const char *system, const char *user);
+/* Mapped prompt encoding. Only marked added-token ranges are controls; all
+ * intervening bytes use ordinary BPE. Ranges refer to the complete text. */
+bool flint_tokenizer_encode_prompt_span(const flint_tokenizer *tokenizer,
+    const char *text, size_t begin, size_t end,
+    const ds4_prompt_range *ranges, size_t count, ds4_tokens *out);
+bool flint_tokenizer_encode_message(const flint_tokenizer *tokenizer,
+    const char *role, const char *content, ds4_tokens *out);
+bool flint_tokenizer_encode_chat(const flint_tokenizer *tokenizer,
+    const char *system, const char *user, ds4_tokens *out);
 
 #endif

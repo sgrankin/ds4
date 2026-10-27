@@ -20,6 +20,17 @@ typedef enum {
     RESP_STREAM_SUPPRESS,
 } responses_stream_mode;
 
+/* Item identity is stable across added/done/completed. */
+typedef struct {
+    char fc_id[40];
+    char call_id[64];
+    bool is_custom;
+    int output_index;
+    size_t arguments_sent;
+    bool arguments_closed;
+    bool token_aware;
+} responses_tool_item;
+
 typedef struct {
     responses_stream_mode mode;
     const server_response_sink *sink;
@@ -44,15 +55,9 @@ typedef struct {
     int message_index;     /* output_index of the assistant message item */
     int next_output_index; /* monotonic counter for upcoming output items */
     int sequence;          /* monotonic per-event sequence_number Codex consumes */
+    responses_tool_item *tool_items;
+    size_t tool_count, tool_capacity;
 } responses_stream;
-
-/* Item identity is stable across added/done/completed. */
-typedef struct {
-    char fc_id[40];
-    char call_id[64];
-    bool is_custom;
-    int output_index;
-} responses_tool_item;
 
 /* Complete output actions; sockets and request/state records are borrowed.
  * IDs remain stable across added/done/terminal events; sequence_number advances
@@ -60,6 +65,7 @@ typedef struct {
 void ds4_server_output_random_id(char *dst, size_t capacity, const char *prefix);
 void ds4_server_output_init(const request *req, responses_stream *stream);
 void ds4_server_output_free(responses_stream *stream);
+void ds4_server_output_apply_ids(tool_calls *calls, const responses_stream *stream);
 void ds4_server_output_append_item(buf *out, const tool_call *call,
     const responses_tool_item *item, const char *status, bool with_args,
     const tool_schema_orders *orders);

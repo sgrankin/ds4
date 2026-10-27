@@ -4,6 +4,10 @@
 const std = @import("std");
 const c = @import("server_generation_c");
 const Canonical = @import("canonical.zig");
+const DS41 = @import("ds41_output.zig");
+const Flint = @import("flint_output.zig");
+const Grammar = @import("grammar_runtime.zig");
+const CachePolicy = @import("prompt_cache_policy.zig");
 const QwenPrompt = @import("qwen_prompt");
 const allocator = std.heap.c_allocator;
 
@@ -107,6 +111,7 @@ fn freeCalls(calls: *c.tool_calls) void {
     }
     c.free(calls.v);
     c.free(calls.raw_tool_text);
+    c.free(calls.raw_special_ranges);
     calls.* = zero(c.tool_calls);
 }
 fn clearLive(runtime: *c.server, slot: *c.server_slot) void {
@@ -183,6 +188,12 @@ pub fn thinkingFromPrompt(request: [*c]const c.request) c.thinking_state {
     var state = zero(c.thinking_state);
     if (request != null and request.*.prompt_text != null) feedThinking(&state, request.*.prompt_text, text(request.*.prompt_text).len) else if (request != null and c.ds4_think_mode_enabled(request.*.think_mode)) state.inside = true;
     return state;
+}
+fn specialToken(engine: ?*c.ds4_engine, spelling: [*:0]const u8) c_int {
+    var tokens = zero(c.ds4_tokens);
+    defer c.ds4_tokens_free(&tokens);
+    c.ds4_tokenize_rendered_chat(engine, spelling, &tokens);
+    return if (tokens.len == 1) tokens.v[0] else -1;
 }
 fn checkpointInside(engine: ?*c.ds4_engine, session: ?*c.ds4_session, close: c_int) bool {
     const tokens = c.ds4_session_tokens(session);
@@ -660,6 +671,15 @@ pub const Generation = struct {
         var count: c_int = undefined;
         return c.ds4_server_coordinator_eval(self.runtime, self.slot, token, false, &accepted, &count, errors.ptr, errors.len, self.stop);
     }
+    fn constrainedPacket(self: Generation, active: *Grammar.Session, first: c_int, maximum: c_int, eos: c_int, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: *u64, accepted: []c_int, errors: []u8) c_int {
+        // A mutable matcher belongs to this request, so its bounded packet takes
+        // an exclusive model turn through the existing admission coordinator.
+        // Scalar batches and other sessions can run between these turns.
+        if (!c.ds4_server_coordinator_prefill_enter(self.runtime, self.slot, self.stop)) return -1;
+        defer c.ds4_server_coordinator_prefill_leave(self.runtime);
+        const callbacks = active.callbacks(c);
+        return c.ds4_session_eval_speculative_constrained(self.slot.session, first, maximum, eos, temperature, top_k, top_p, min_p, rng, &callbacks, accepted.ptr, @intCast(accepted.len), errors.ptr, errors.len);
+    }
     fn httpError(self: Generation, status: c_int, message: [*c]const u8) void {
         var out = zero(c.buf);
         defer freeBuffer(&out);
@@ -959,15 +979,39 @@ pub const Generation = struct {
         var generated_thinking: c_int = 0;
         var deferred: c_int = 0;
         var forced = false;
+        const ds41 = req.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41;
+        const flint = req.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT;
+        const token_aware = ds41 or flint;
+        const marker_spellings = [_][*:0]const u8{ "<think>", "</think>", "｜DSML｜", "<tool_call>", "</tool_call>", "<arg_key>", "</arg_key>", "<arg_value>", "</arg_value>" };
+        var control_tokens: [marker_spellings.len]c_int = @splat(-1);
+        if (token_aware) for (marker_spellings, 0..) |spelling, index| {
+            if ((ds41 and index <= 2) or (flint and index != 2)) control_tokens[index] = specialToken(srv.engine, spelling);
+        };
+        const think_start_token = control_tokens[0];
+        const think_end_token = control_tokens[1];
         const close_token: c_int = if (req.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) 150007 else 128822;
         // Recovery shares the total output budget and keeps RNG/reasoning
         // counters continuous throughout the one public Response.
         while (true) {
             var sampled = zero(c.buf);
             defer freeBuffer(&sampled);
+            var sampled_specials: std.ArrayList(c.ds4_prompt_range) = .empty;
+            defer {
+                req.sampled_special_ranges = null;
+                req.sampled_special_count = 0;
+                sampled_specials.deinit(allocator);
+            }
             var plain_position: usize = 0;
             var stop_cursor: usize = 0;
             var finish: [*c]const u8 = "length";
+            var constraint_failed = false;
+            var constraint = Grammar.Session.init(c, srv, req, errors) catch |failure| blk: {
+                constraint_failed = true;
+                finish = "error";
+                if (errors.len == 0 or errors[0] == 0) report(errors, "output constraint preparation failed: %s", .{@errorName(failure).ptr});
+                break :blk null;
+            };
+            defer if (constraint) |*active| active.deinit();
             var completion: c_int = 0;
             const room = c.ds4_session_ctx(slot.session) - c.ds4_session_pos(slot.session);
             const maximum = decodeBudget(req.max_tokens, recovery_completion, room);
@@ -985,6 +1029,7 @@ pub const Generation = struct {
             var last_log_time = decode_started;
             var last_log_completion: c_int = 0;
             var thinking = thinkingFromPrompt(req);
+            if (token_aware) thinking.inside = ds41 and c.ds4_think_mode_enabled(req.think_mode);
             const gate_markers = c.ds4_think_mode_enabled(req.think_mode);
             var wait_for_close = gate_markers and thinking.inside;
             var recovery_cursor: usize = 0;
@@ -992,7 +1037,7 @@ pub const Generation = struct {
             c.ds4_server_decode_init(&tracker);
             tracker.model_syntax = req.model_syntax;
             c.ds4_server_coordinator_generation_enter(srv);
-            while (!stopped(self.stop) and !cancelled(job) and completion < maximum and c.ds4_session_pos(slot.session) < c.ds4_session_ctx(slot.session)) {
+            while (!constraint_failed and !stopped(self.stop) and !cancelled(job) and completion < maximum and c.ds4_session_pos(slot.session) < c.ds4_session_ctx(slot.session)) {
                 const state = if (req.kind == c.REQ_CHAT and req.has_tools) tracker.decode else c.DSML_DECODE_OUTSIDE;
                 const in_call = c.ds4_server_decode_is_tool(state);
                 if (!(req.kind == c.REQ_CHAT and req.has_tools and (saw_start or in_call))) {
@@ -1011,7 +1056,7 @@ pub const Generation = struct {
                 }
                 const greedy_syntax = !thinking.inside and in_call and !c.ds4_server_decode_is_payload(state);
                 const payload_temperature = temperature;
-                if (greedy_syntax) temperature = 0;
+                if (greedy_syntax and constraint == null) temperature = 0;
                 const eos = c.ds4_token_eos(srv.engine);
                 const eligible = req.reasoning_budget > 0 and generated_thinking >= req.reasoning_budget and !forced and thinking.inside;
                 const force_close = reasoningDue(req.reasoning_budget, generated_thinking, forced, thinking.inside, maximum - completion, c.ds4_session_ctx(slot.session) - c.ds4_session_pos(slot.session), !eligible or c.ds4_server_decode_boundary_safe(&sampled, &tracker));
@@ -1027,7 +1072,11 @@ pub const Generation = struct {
                         break;
                     }
                 }
-                var token = if (force_close) close_token else if (req.ignore_eos) c.ds4_session_argmax_ignoring_eos(slot.session, req.think_mode) else c.ds4_session_sample(slot.session, temperature, top_k, top_p, min_p, &rng);
+                var token = if (constraint) |*active| active.sample(c, slot.session, temperature, top_k, top_p, min_p, &rng, if (force_close) close_token else null, req.ignore_eos, srv.engine, req.think_mode) catch |failure| {
+                    finish = "error";
+                    report(errors, "constrained sampling failed: %s (%s)", .{ @errorName(failure).ptr, active.diagnostic.bytes[0..].ptr });
+                    break;
+                } else if (force_close) close_token else if (req.ignore_eos) c.ds4_session_argmax_ignoring_eos(slot.session, req.think_mode) else c.ds4_session_sample(slot.session, temperature, top_k, top_p, min_p, &rng);
                 if (token < 0) {
                     finish = "error";
                     report(errors, "failed to select a non-EOS token", .{});
@@ -1042,13 +1091,28 @@ pub const Generation = struct {
                 var tokens: [17]c_int = undefined;
                 var count: c_int = 0;
                 const block_start = c.ds4_session_pos(slot.session);
-                if (req.reasoning_budget == 0 and (!srv.batched_mode or c.ds4_engine_is_flint(srv.engine)) and c.ds4_engine_decode_packet_size(srv.engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
+                if (constraint != null and req.reasoning_budget == 0 and !req.ignore_eos and !force_close and c.ds4_engine_decode_packet_size(srv.engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
+                    count = self.constrainedPacket(&constraint.?, token, maximum - completion, eos, temperature, top_k, top_p, min_p, &rng, &tokens, errors);
+                    if (count == -2) {
+                        // An unsupported packet filter policy leaves the
+                        // already-sampled first token and matcher untouched.
+                        if (self.eval(token, errors) != 0) {
+                            finish = "error";
+                            break;
+                        }
+                        tokens[0] = token;
+                        count = 1;
+                    } else if (count < 0) {
+                        finish = "error";
+                        break;
+                    } else self.trace(trace_id, "constrained block: tokens=%d", .{count});
+                } else if (constraint == null and req.reasoning_budget == 0 and (!srv.batched_mode or c.ds4_engine_is_flint(srv.engine)) and c.ds4_engine_decode_packet_size(srv.engine) > 1 and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
                     count = if (req.ignore_eos) c.ds4_session_eval_speculative_argmax_ignoring_eos(slot.session, token, maximum - completion, eos, req.think_mode, &tokens, tokens.len, errors.ptr, errors.len) else c.ds4_session_eval_speculative(slot.session, token, maximum - completion, eos, temperature, top_k, top_p, min_p, &rng, &tokens, tokens.len, errors.ptr, errors.len);
                     if (count < 0) {
                         finish = "error";
                         break;
                     }
-                } else if (req.reasoning_budget == 0 and srv.batched_mode and srv.qwen4_batch_mtp and maximum - completion >= 2 and !req.ignore_eos and (!c.ds4_engine_mtp_exact_sampling(srv.engine) or temperature == 0) and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
+                } else if (constraint == null and req.reasoning_budget == 0 and srv.batched_mode and srv.qwen4_batch_mtp and maximum - completion >= 2 and !req.ignore_eos and (!c.ds4_engine_mtp_exact_sampling(srv.engine) or temperature == 0) and c.getenv("DS4_MTP_SPEC_DISABLE") == null) {
                     if (c.ds4_server_coordinator_eval(srv, slot, token, true, &tokens, &count, errors.ptr, errors.len, self.stop) != 0) {
                         finish = "error";
                         break;
@@ -1101,18 +1165,35 @@ pub const Generation = struct {
                     completion += 1;
                     kept += 1;
                     c.ds4_server_generation_trace_piece(srv, trace_id, piece, length);
+                    const piece_begin = sampled.len;
                     append(&sampled, items(u8, piece, length));
+                    if (token_aware and std.mem.findScalar(c_int, &control_tokens, token) != null) {
+                        sampled_specials.append(allocator, .{ .begin = piece_begin, .end = sampled.len }) catch fatal();
+                        req.sampled_special_ranges = sampled_specials.items.ptr;
+                        req.sampled_special_count = sampled_specials.items.len;
+                    }
+                    const sampled_view = DS41.View{
+                        .raw = sampled.ptr[0..sampled.len],
+                        .ranges = if (sampled_specials.items.len == 0) &.{} else @as([*]const DS41.Range, @ptrCast(sampled_specials.items.ptr))[0..sampled_specials.items.len],
+                    };
+                    var projection = if (ds41) DS41.projectState(allocator, sampled_view, c.ds4_think_mode_enabled(req.think_mode), false) catch fatal() else if (flint) Flint.projectState(allocator, sampled_view, &req.tool_orders, false) catch fatal() else DS41.Snapshot{};
+                    defer projection.deinit(allocator);
                     const was_thinking = thinking.inside;
                     if (was_thinking and !c.ds4_token_is_thinking_control(srv.engine, token)) generated_thinking += 1;
                     req.generated_thinking_tokens = generated_thinking;
-                    if (!c.ds4_server_decode_is_tool(tracker.decode)) feedThinking(&thinking, piece, length);
+                    if (token_aware) {
+                        if (projection.tool_start == null) {
+                            if (token == think_start_token) thinking.inside = true;
+                            if (token == think_end_token) thinking.inside = false;
+                        }
+                    } else if (!c.ds4_server_decode_is_tool(tracker.decode)) feedThinking(&thinking, piece, length);
                     if (force_close and thinking.inside) {
                         finish = "error";
                         report(errors, "reasoning stream did not leave thinking", .{});
                         stop_decode = true;
                         break;
                     }
-                    if (req.kind == c.REQ_CHAT and req.has_tools) {
+                    if (req.kind == c.REQ_CHAT and req.has_tools and !token_aware) {
                         if (thinking.inside) {
                             c.ds4_server_decode_init(&tracker);
                             tracker.model_syntax = req.model_syntax;
@@ -1125,6 +1206,7 @@ pub const Generation = struct {
                             c.ds4_server_decode_update(&tracker, sampled.ptr, sampled.len);
                         }
                     }
+                    if (token_aware and req.has_tools) tracker.decode = if (projection.tool_start == null or projection.tool_end != null) c.DSML_DECODE_OUTSIDE else if (projection.in_payload) c.DSML_DECODE_STRING_BODY else c.DSML_DECODE_STRUCTURAL;
                     const stop_position = stopPosition(&req.stops, sampled.ptr, stop_cursor);
                     var stream_length = @min(stop_position orelse streamSafe(&req.stops, sampled.len), sampled.len);
                     stream_length = c.ds4_server_protocol_utf8_limit(sampled.ptr, plain_position, stream_length, stop_position != null);
@@ -1152,7 +1234,10 @@ pub const Generation = struct {
                         stop_decode = true;
                         break;
                     }
-                    if (req.kind == c.REQ_CHAT and req.has_tools) {
+                    if (token_aware and req.kind == c.REQ_CHAT and req.has_tools) {
+                        saw_start = projection.tool_start != null;
+                        saw_end = projection.tool_end != null and !projection.invalid;
+                    } else if (req.kind == c.REQ_CHAT and req.has_tools) {
                         if (gate_markers and thinking.inside) {
                             // A complete tool block inside unclosed reasoning is
                             // recoverable. A quoted opening marker alone is not.
@@ -1211,7 +1296,7 @@ pub const Generation = struct {
                         stop_decode = true;
                         break;
                     }
-                    if (req.kind == c.REQ_CHAT and req.has_tools and saw_end) {
+                    if (!flint and req.kind == c.REQ_CHAT and req.has_tools and saw_end) {
                         finish = "tool_calls";
                         stop_decode = true;
                         break;
@@ -1220,10 +1305,17 @@ pub const Generation = struct {
                     // Exact sampled packets must restart when entering/leaving
                     // greedy tool syntax. Flint packets contain sampled tokens
                     // directly rather than opportunistic greedy drafts.
-                    if (offset + 1 < count and (c.ds4_engine_mtp_exact_sampling(srv.engine) or c.ds4_engine_is_flint(srv.engine)) and payload_temperature > 0 and next_greedy != greedy_syntax) {
+                    if (constraint == null and offset + 1 < count and (c.ds4_engine_mtp_exact_sampling(srv.engine) or c.ds4_engine_is_flint(srv.engine)) and payload_temperature > 0 and next_greedy != greedy_syntax) {
                         resample = true;
                         break;
                     }
+                }
+                if (constraint) |*active| {
+                    if (kept < count) active.rollback(@intCast(count - kept)) catch |failure| {
+                        finish = "error";
+                        report(errors, "constrained boundary rollback failed: %s", .{@errorName(failure).ptr});
+                        stop_decode = true;
+                    };
                 }
                 if (kept < count and !text_stop and !cancelled(job) and !same(finish, "error")) {
                     const position = block_start + kept;
@@ -1250,7 +1342,7 @@ pub const Generation = struct {
                 log(c.DS4_LOG_WARNING, "ds4-server: incomplete %s tool call: stop=%s token=%d generated=%d limit=%d room=%d", .{ @as([*:0]const u8, if (req.model_syntax == c.SERVER_MODEL_SYNTAX_GLM) "GLM" else "DeepSeek"), stop_detail, stop_token, completion, maximum, room });
                 self.trace(trace_id, "incomplete tool call: stop=%s token=%d generated=%d limit=%d room=%d", .{ stop_detail, stop_token, completion, maximum, room });
             }
-            if (req.kind == c.REQ_CHAT and req.has_tools and saw_start and !saw_end and !same(finish, "error") and !same(finish, "length") and !client_stop) {
+            if (req.kind == c.REQ_CHAT and req.has_tools and saw_start and !saw_end and !same(finish, "error") and !same(finish, "length") and !client_stop and !token_aware) {
                 var repaired = zero(c.buf);
                 defer freeBuffer(&repaired);
                 var complete = false;
@@ -1318,7 +1410,12 @@ pub const Generation = struct {
             var final_finish = finish;
             var parse_recovered = false;
             if (req.kind == c.REQ_CHAT) {
-                const parsed = c.ds4_server_reply_for_response(req.model_syntax, ptr(sampled.ptr), req.has_tools, saw_start, c.ds4_think_mode_enabled(req.think_mode), &final_finish, errors.ptr, errors.len, &content, &reasoning, &calls, &parse_recovered, &req.tool_orders);
+                const parsed = c.ds4_server_reply_for_sampled_response(req, ptr(sampled.ptr), saw_start, &final_finish, errors.ptr, errors.len, &content, &reasoning, &calls, &parse_recovered);
+                if (!parsed and constraint != null) {
+                    final_finish = "error";
+                    parse_recovered = false;
+                    report(errors, "constrained output could not be decoded", .{});
+                }
                 if (!parsed and parse_recovered and req.has_tools and saw_start) {
                     // Do not semantically repair rejected arguments. The model
                     // owns the next action after one explicit tool error.
@@ -1352,6 +1449,7 @@ pub const Generation = struct {
                 }
                 if (calls.len != 0) {
                     if (openai_chat) c.ds4_server_openai_apply_ids(&calls, &openai);
+                    if (responses_chat) c.ds4_server_output_apply_ids(&calls, &output);
                     if (req.api == c.API_ANTHROPIC and req.stream) c.ds4_server_anthropic_apply_ids(&calls, &anthropic);
                     assignIds(srv, &calls, req.api);
                     if (!srv.disable_exact_dsml_tool_replay) c.ds4_server_tool_memory_remember(&srv.tool_mem, &srv.tool_mu, &calls);
@@ -1437,6 +1535,23 @@ pub const Generation = struct {
         const req = &job.req;
         var errors: [160]u8 = @splat(0);
         const multimodal = req.image_count != 0;
+        if (slot.prompt_cache_explicit) {
+            _ = c.pthread_mutex_lock(&srv.inference_mu);
+            const source_position = c.ds4_session_pos(slot.session);
+            const source_reusable = CachePolicy.allowsRead(true, items(c_int, slot.cache_breakpoints.v, @intCast(slot.cache_breakpoints.len)), source_position);
+            _ = c.pthread_mutex_unlock(&srv.inference_mu);
+            if (!source_reusable) {
+                // A prior explicit-only request cannot export an unmarked live
+                // frontier to a later implicit request through Session.sync.
+                if (!multimodal and srv.kv.enabled and source_position >= srv.kv.opt.min_tokens)
+                    c.ds4_server_persist_store_current(srv, slot, "evict");
+                _ = c.pthread_mutex_lock(&srv.inference_mu);
+                c.ds4_session_invalidate(slot.session);
+                _ = c.pthread_mutex_unlock(&srv.inference_mu);
+                clearLive(srv, slot);
+                c.ds4_server_reuse_refresh(srv, slot);
+            }
+        }
         _ = c.pthread_mutex_lock(&srv.inference_mu);
         var profile: [41]u8 = undefined;
         c.ds4_server_reuse_profile(srv, req, &profile);
@@ -1465,7 +1580,20 @@ pub const Generation = struct {
         var response_ids: c_int = 0;
         var anthropic_ids: c_int = 0;
         // Routing and execution share one probe and exactly the same tier order.
-        const reuse = c.ds4_server_reuse_probe(srv, slot, req);
+        var reuse = c.ds4_server_reuse_probe(srv, slot, req);
+        const marked = items(c_int, req.cache_breakpoints.v, @intCast(req.cache_breakpoints.len));
+        if (!CachePolicy.allowsRead(req.prompt_cache_explicit, marked, reuse.reuse_tokens)) {
+            // Retire the previous request under its own write policy before
+            // installing the incoming explicit-only boundary selection.
+            if (!multimodal and srv.kv.enabled and old_position >= srv.kv.opt.min_tokens)
+                c.ds4_server_persist_store_current(srv, slot, "evict");
+            _ = c.pthread_mutex_lock(&srv.inference_mu);
+            c.ds4_session_invalidate(slot.session);
+            _ = c.pthread_mutex_unlock(&srv.inference_mu);
+            clearLive(srv, slot);
+            c.ds4_server_reuse_refresh(srv, slot);
+            reuse = zero(c.slot_reuse);
+        }
         _ = c.pthread_mutex_lock(&srv.tool_mu);
         slot.last_response_id[0] = 0;
         _ = c.pthread_mutex_unlock(&srv.tool_mu);
@@ -1548,6 +1676,9 @@ pub const Generation = struct {
         if (cached == 0) slot.continued_last_store_tokens = 0;
         // Preserve the newer live checkpoint before replacing it from disk.
         if (!multimodal and srv.kv.enabled and cached == 0 and old_position >= srv.kv.opt.min_tokens) c.ds4_server_persist_store_current(srv, slot, "evict");
+        slot.prompt_cache_explicit = req.prompt_cache_explicit;
+        c.ds4_tokens_copy(&slot.cache_breakpoints, &req.cache_breakpoints);
+        slot.cache_written_tokens = 0;
         if (!multimodal and cached == 0 and !c.ds4_server_reuse_canonical(srv, req)) {
             disk_cached = c.ds4_server_persist_load(srv, slot, req.prompt_text, &effective, &disk_path, &disk_flags, responses);
             if (disk_cached > 0) {
@@ -1615,36 +1746,53 @@ pub const Generation = struct {
         }
         var credits: c_int = 0;
         var cold_length: c_int = 0;
-        if (!multimodal and cached == 0 and srv.kv.enabled and prompt.len >= srv.kv.opt.min_tokens and srv.kv.opt.cold_max_tokens > 0 and prompt.len <= srv.kv.opt.cold_max_tokens) {
-            const anchor = c.ds4_kvstore_chat_anchor_pos(&srv.kv, prompt, c.ds4_token_user(srv.engine), c.ds4_token_assistant(srv.engine));
-            cold_length = if (anchor >= srv.kv.opt.min_tokens) anchor else c.ds4_kvstore_store_len(&srv.kv, prompt.len);
+        var checkpoints: [5]c_int = undefined;
+        var checkpoint_count: usize = 0;
+        if (!multimodal and (srv.kv.enabled or srv.state_cache != null)) {
+            for (CachePolicy.writes(marked)) |position| {
+                if (position <= cached or position <= 0 or position > prompt.len) continue;
+                checkpoints[checkpoint_count] = position;
+                checkpoint_count += 1;
+            }
         }
+        if (!req.prompt_cache_explicit and !multimodal and cached == 0 and srv.kv.enabled and prompt.len >= srv.kv.opt.min_tokens and srv.kv.opt.cold_max_tokens > 0 and prompt.len <= srv.kv.opt.cold_max_tokens) {
+            const anchor = c.ds4_kvstore_chat_anchor_pos(&srv.kv, prompt, c.ds4_token_user(srv.engine), c.ds4_token_assistant(srv.engine));
+            const automatic = if (anchor >= srv.kv.opt.min_tokens) anchor else c.ds4_kvstore_store_len(&srv.kv, prompt.len);
+            if (!CachePolicy.contains(checkpoints[0..checkpoint_count], automatic)) {
+                checkpoints[checkpoint_count] = automatic;
+                checkpoint_count += 1;
+            }
+        }
+        std.mem.sort(c_int, checkpoints[0..checkpoint_count], {}, std.sort.asc(c_int));
         var suppressed: c_int = -1;
-        // Suppress a duplicate continued write at the intentional cold stop;
-        // failed cold publication restores the old continuation schedule.
-        if (cold_length >= srv.kv.opt.min_tokens) suppressed = c.ds4_server_persist_suppress(srv, slot, cold_length);
-        if (srv.kv.enabled and cold_length >= srv.kv.opt.min_tokens and cold_length < prompt.len) {
-            var prefix = zero(c.ds4_tokens);
-            c.ds4_kvstore_tokens_copy_prefix(&prefix, prompt, cold_length);
-            const result = sync(srv, slot, &prefix, &credits, &errors, self.stop);
-            c.ds4_tokens_free(&prefix);
-            if (result != 0) {
-                clearProgress(slot.session);
-                c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);
-                c.ds4_server_persist_discard(srv, slot, disk_path);
-                c.free(disk_path);
-                disk_path = null;
-                if (cancelled(job)) {
-                    clearLive(srv, slot);
-                    self.trace(trace_id, "cancelled during prefill", .{});
+        for (checkpoints[0..checkpoint_count]) |checkpoint| {
+            cold_length = checkpoint;
+            // Suppress a duplicate continued write at the intentional cold stop;
+            // failed cold publication restores the old continuation schedule.
+            if (cold_length >= srv.kv.opt.min_tokens) suppressed = c.ds4_server_persist_suppress(srv, slot, cold_length);
+            if (cold_length > 0 and cold_length < prompt.len) {
+                var prefix = zero(c.ds4_tokens);
+                c.ds4_kvstore_tokens_copy_prefix(&prefix, prompt, cold_length);
+                const result = sync(srv, slot, &prefix, &credits, &errors, self.stop);
+                c.ds4_tokens_free(&prefix);
+                if (result != 0) {
+                    clearProgress(slot.session);
+                    c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);
+                    c.ds4_server_persist_discard(srv, slot, disk_path);
+                    c.free(disk_path);
+                    disk_path = null;
+                    if (cancelled(job)) {
+                        clearLive(srv, slot);
+                        self.trace(trace_id, "cancelled during prefill", .{});
+                        return;
+                    }
+                    self.trace(trace_id, "prefill failed: %s", .{&errors});
+                    self.prefillFailure(p, &context, &request_flags, &errors);
                     return;
                 }
-                self.trace(trace_id, "prefill failed: %s", .{&errors});
-                self.prefillFailure(p, &context, &request_flags, &errors);
-                return;
+                if (c.ds4_server_persist_store(srv, slot, prompt, cold_length, "cold", null, 0, null)) c.ds4_server_persist_note_store(slot, cold_length) else c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);
+                suppressed = -1;
             }
-            if (c.ds4_server_persist_store(srv, slot, prompt, cold_length, "cold", null, 0, null)) c.ds4_server_persist_note_store(slot, cold_length) else c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);
-            suppressed = -1;
         }
         const synchronized = if (multimodal) syncMultimodal(srv, slot, prompt, req.images, req.image_count, &errors, self.stop) else sync(srv, slot, prompt, &credits, &errors, self.stop);
         if (synchronized != 0) {
@@ -1688,6 +1836,8 @@ pub const Generation = struct {
         if (cold_length == prompt.len) {
             if (!multimodal and c.ds4_server_persist_store(srv, slot, prompt, cold_length, "cold", null, 0, null)) c.ds4_server_persist_note_store(slot, cold_length) else c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);
         }
+        if (req.prompt_cache_explicit)
+            req.cache_write_tokens = @max(@as(c_int, 0), slot.cache_written_tokens - req.cache_read_tokens);
         self.decode(prompt_tokens, &context, &request_flags, &progress_context, responses, thinking_continued, disk_flags, started, trace_id, &errors);
     }
 };

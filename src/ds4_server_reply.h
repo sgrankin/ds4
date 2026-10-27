@@ -47,5 +47,10 @@ bool ds4_server_reply_for_response(server_model_syntax syntax, const char *text,
     const char **finish, char *error, size_t error_capacity,
     char **content, char **reasoning, tool_calls *calls, bool *recovered,
     const tool_schema_orders *orders);
+/* Generated V4.1 controls retain token identity through the request's borrowed
+ * sampled_special_ranges. Other model families use their existing parser. */
+bool ds4_server_reply_for_sampled_response(const request *req, const char *text,
+    bool saw_tool_start, const char **finish, char *error, size_t error_capacity,
+    char **content, char **reasoning, tool_calls *calls, bool *recovered);
 
 #endif

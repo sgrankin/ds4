@@ -46,9 +46,12 @@ const Text = struct {
         self.append(bytes(value));
     }
     fn quoted(self: *Text, value: [*c]const u8) void {
+        self.quotedBytes(bytes(value));
+    }
+    fn quotedBytes(self: *Text, value: []const u8) void {
         const hex = "0123456789abcdef";
         self.byte('"');
-        for (bytes(value)) |value_byte| switch (value_byte) {
+        for (value) |value_byte| switch (value_byte) {
             '"', '\\' => self.append(&.{ '\\', value_byte }),
             '\n' => self.append("\\n"),
             '\r' => self.append("\\r"),
@@ -352,7 +355,26 @@ fn replayMessage(out: *Text, message: *const c.chat_msg) void {
     out.append("{\"role\":");
     out.quoted(if (message.role == null) "user" else message.role);
     out.append(",\"content\":");
-    out.quoted(if (message.content == null) "" else message.content);
+    if (message.cache_breakpoints_len == 0) {
+        out.quoted(if (message.content == null) "" else message.content);
+    } else {
+        out.byte('[');
+        const content = bytes(message.content);
+        var begin: usize = 0;
+        for (items(usize, message.cache_breakpoints, @intCast(message.cache_breakpoints_len)), 0..) |end, index| {
+            if (index != 0) out.byte(',');
+            out.append("{\"type\":\"input_text\",\"text\":");
+            out.quotedBytes(content[begin..end]);
+            out.append(",\"prompt_cache_breakpoint\":{\"mode\":\"explicit\"}}");
+            begin = end;
+        }
+        if (begin < content.len) {
+            out.append(",{\"type\":\"input_text\",\"text\":");
+            out.quotedBytes(content[begin..]);
+            out.byte('}');
+        }
+        out.byte(']');
+    }
     if (bytes(message.reasoning).len != 0) {
         out.append(",\"reasoning_content\":");
         out.quoted(message.reasoning);
@@ -378,6 +400,15 @@ fn replayMessage(out: *Text, message: *const c.chat_msg) void {
     if (message.calls.raw_tool_text != null) {
         out.append(",\"raw_tool_text\":");
         out.quoted(message.calls.raw_tool_text);
+        if (message.calls.raw_special_count != 0) {
+            out.append(",\"raw_special_ranges\":[");
+            for (items(c.ds4_prompt_range, message.calls.raw_special_ranges, message.calls.raw_special_count), 0..) |range, index| {
+                if (index != 0) out.byte(',');
+                var buffer: [64]u8 = undefined;
+                out.append(std.fmt.bufPrint(&buffer, "[{d},{d}]", .{ range.begin, range.end }) catch unreachable);
+            }
+            out.byte(']');
+        }
     }
     if (message.discovered_tools != null) {
         out.append(",\"ds4_discovered_tools\":");

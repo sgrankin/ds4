@@ -6,6 +6,8 @@
 const std = @import("std");
 const c = @import("server_output_c");
 const Publication = @import("publication.zig");
+const DS41 = @import("ds41_output.zig");
+const Flint = @import("flint_output.zig");
 const allocator = std.heap.c_allocator;
 pub const Stream = c.responses_stream;
 pub const Item = c.responses_tool_item;
@@ -138,6 +140,18 @@ pub fn deinit(stream: *Stream) void {
     c.free(stream.message_text.ptr);
     stream.reasoning_text = std.mem.zeroes(c.buf);
     stream.message_text = std.mem.zeroes(c.buf);
+    c.free(stream.tool_items);
+    stream.tool_items = null;
+    stream.tool_count = 0;
+    stream.tool_capacity = 0;
+}
+pub fn applyIds(calls: *c.tool_calls, stream: *const Stream) void {
+    for (callSlice(calls), 0..) |_, index| {
+        if (index >= stream.tool_count) break;
+        const call = &calls.v[index];
+        c.free(call.id);
+        call.id = (allocator.dupeSentinel(u8, text(&stream.tool_items[index].call_id), 0) catch fatal()).ptr;
+    }
 }
 fn status(finish: []const u8) []const u8 {
     if (std.mem.eql(u8, finish, "length")) return "incomplete";
@@ -183,7 +197,10 @@ fn schema(orders: ?*const c.tool_schema_orders, name: [*c]const u8) ?*const c.to
 fn toolSearch(call: *const c.tool_call, order: ?*const c.tool_schema_order) bool {
     return call.name != null and std.mem.eql(u8, text(call.name), "tool_search") and (order == null or order.?.responses_tool_search);
 }
-fn canonicalArguments(arguments: [*c]const u8) [*c]u8 {
+fn canonicalArguments(arguments: [*c]const u8, token_aware: bool) [*c]u8 {
+    // The typed parser already emits valid JSON. Re-decoding via C strings
+    // would lose embedded NUL values and can change streamed byte spelling.
+    if (token_aware) return (allocator.dupeSentinel(u8, text(arguments), 0) catch fatal()).ptr;
     return c.ds4_server_output_object_json(arguments);
 }
 fn appendItem(out: *Text, call: *const c.tool_call, item: *const Item, item_status: []const u8, with_args: bool, orders: ?*const c.tool_schema_orders) void {
@@ -200,7 +217,7 @@ fn appendItem(out: *Text, call: *const c.tool_call, item: *const Item, item_stat
         out.byte('"');
         out.append(",\"execution\":\"client\",\"arguments\":");
         if (with_args) {
-            const arguments = canonicalArguments(call.arguments);
+            const arguments = canonicalArguments(call.arguments, item.token_aware);
             defer c.free(arguments);
             out.append(text(arguments));
         } else out.append("{}");
@@ -221,7 +238,7 @@ fn appendItem(out: *Text, call: *const c.tool_call, item: *const Item, item_stat
     out.quoted(text(&item.call_id));
     out.append(if (item.is_custom) ",\"input\":" else ",\"arguments\":");
     if (!with_args) out.quoted("") else if (item.is_custom) out.quoted(text(call.arguments)) else {
-        const arguments = canonicalArguments(call.arguments);
+        const arguments = canonicalArguments(call.arguments, item.token_aware);
         defer c.free(arguments);
         out.quoted(text(arguments));
     }
@@ -248,6 +265,7 @@ fn buildItems(calls: ?*const c.tool_calls, starting_index: c_int) []Item {
     const items = allocator.alloc(Item, values.len) catch fatal();
     for (values, items, 0..) |call, *item, index| {
         initializeItem(&call, item, starting_index + @as(c_int, @intCast(index)), "fc_");
+        item.token_aware = calls != null and calls.?.raw_special_count != 0;
         // The internal call has no custom/function discriminator. Preserve the
         // original default while retaining client IDs and stable fc_ identity.
         item.is_custom = false;
@@ -393,7 +411,11 @@ fn responsePrefix(out: *Text, request: *const Request, id: []const u8, created_a
     toolsField(out, &options);
     options.append(out, "tool_choice", "\"auto\"");
     // Report fixed policies honestly rather than echoing ignored options.
-    out.append(",\"truncation\":\"disabled\",\"parallel_tool_calls\":true,\"text\":{\"format\":{\"type\":\"text\"}},\"top_p\":");
+    out.append(",\"truncation\":\"disabled\",\"parallel_tool_calls\":");
+    out.append(if (request.parallel_tool_calls) "true" else "false");
+    out.append(",\"text\":{\"format\":");
+    out.append(if (request.response_format_json != null) text(request.response_format_json) else "{\"type\":\"text\"}");
+    out.append("},\"top_p\":");
     out.number(request.top_p);
     out.append(",\"presence_penalty\":0,\"frequency_penalty\":0,\"top_logprobs\":0,\"temperature\":");
     out.number(request.temperature);
@@ -547,20 +569,23 @@ pub const Output = struct {
         out.byte('}');
         return self.emit(stream, &out);
     }
-    fn argumentsDone(self: Output, stream: *Stream, call: *const c.tool_call, item: *const Item, orders: *const c.tool_schema_orders) bool {
+    fn argumentsDone(self: Output, stream: *Stream, call: *const c.tool_call, item: *const Item, orders: *const c.tool_schema_orders, emit_delta: bool) bool {
         // The model emits a complete invoke before the worker identifies the
         // tool. Send its arguments as one delta + done between item added/done.
         const order = schema(orders, call.name);
         if (item.is_custom or toolSearch(call, order)) return true;
-        const arguments = canonicalArguments(call.arguments);
+        const arguments = canonicalArguments(call.arguments, item.token_aware);
         defer c.free(arguments);
-        var out = event("response.function_call_arguments.delta");
+        var out = Text{};
         defer out.deinit();
-        itemIdentity(&out, text(&item.fc_id), item.output_index);
-        out.append(",\"delta\":");
-        out.quoted(text(arguments));
-        out.byte('}');
-        if (!self.emit(stream, &out)) return false;
+        if (emit_delta) {
+            out.append("{\"type\":\"response.function_call_arguments.delta\"");
+            itemIdentity(&out, text(&item.fc_id), item.output_index);
+            out.append(",\"delta\":");
+            out.quoted(text(arguments));
+            out.byte('}');
+            if (!self.emit(stream, &out)) return false;
+        }
         out.list.clearRetainingCapacity();
         out.append("{\"type\":\"response.function_call_arguments.done\"");
         itemIdentity(&out, text(&item.fc_id), item.output_index);
@@ -618,8 +643,91 @@ pub const Output = struct {
         }
         return self.emit(stream, &framed);
     }
+    fn updateTyped(self: Output, request: *const Request, stream: *Stream, raw: []const u8, final: bool) bool {
+        const ranges: []const DS41.Range = if (request.sampled_special_count == 0) &.{} else @as([*]const DS41.Range, @ptrCast(request.sampled_special_ranges))[0..request.sampled_special_count];
+        const view = DS41.View{ .raw = raw, .ranges = ranges };
+        var projected = if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) Flint.project(allocator, view, &request.tool_orders, final) catch fatal() else DS41.project(allocator, view, c.ds4_think_mode_enabled(request.think_mode), final) catch fatal();
+        defer projected.deinit(allocator);
+        if (request.reasoning_summary_emit and projected.reasoning.len > stream.reasoning_text.len) {
+            if (!stream.reasoning_item_opened) {
+                stream.reasoning_index = stream.next_output_index;
+                stream.next_output_index += 1;
+                if (!self.added(stream, true) or !self.partAdded(stream, true)) return false;
+                stream.reasoning_item_opened = true;
+                stream.reasoning_summary_started = true;
+            }
+            const fragment = projected.reasoning[stream.reasoning_text.len..];
+            if (!self.delta(stream, true, fragment)) return false;
+            appendBuffer(&stream.reasoning_text, fragment);
+            stream.reasoning_emitted_any = true;
+        }
+        stream.reasoning_closed_naturally = projected.reasoning_closed;
+        if ((projected.reasoning_closed or projected.tool_start != null) and stream.reasoning_item_opened and !stream.reasoning_item_closed) {
+            if (!self.done(stream, true, "stop")) return false;
+            stream.reasoning_item_closed = true;
+        }
+        if (projected.content.len > stream.message_text.len) {
+            if (!stream.message_item_opened) {
+                stream.message_index = stream.next_output_index;
+                stream.next_output_index += 1;
+                if (!self.added(stream, false) or !self.partAdded(stream, false)) return false;
+                stream.message_item_opened = true;
+                stream.message_text_part_open = true;
+            }
+            const fragment = projected.content[stream.message_text.len..];
+            if (!self.delta(stream, false, fragment)) return false;
+            appendBuffer(&stream.message_text, fragment);
+            stream.message_emitted_any = true;
+        }
+        if (projected.tool_start != null and stream.message_item_opened and !stream.message_item_closed) {
+            if (!self.done(stream, false, "stop")) return false;
+            stream.message_item_closed = true;
+        }
+        if (!request.has_tools) return true;
+        for (projected.calls.items, 0..) |call, index| {
+            const name = allocator.dupeSentinel(u8, call.name, 0) catch fatal();
+            defer allocator.free(name);
+            const arguments = allocator.dupeSentinel(u8, call.arguments, 0) catch fatal();
+            defer allocator.free(arguments);
+            var transient = c.tool_call{ .id = null, .name = name.ptr, .arguments = arguments.ptr };
+            if (index >= stream.tool_count) {
+                var list: std.ArrayList(Item) = .empty;
+                if (stream.tool_items != null) list.items = stream.tool_items[0..stream.tool_count];
+                list.capacity = stream.tool_capacity;
+                var identity: Item = undefined;
+                initializeItem(&transient, &identity, stream.next_output_index, "fc_");
+                identity.token_aware = true;
+                stream.next_output_index += 1;
+                list.append(allocator, identity) catch fatal();
+                stream.tool_items = list.items.ptr;
+                stream.tool_count = list.items.len;
+                stream.tool_capacity = list.capacity;
+                if (!self.toolEvent(stream, &transient, @ptrCast(&stream.tool_items[index]), &request.tool_orders, "stop", false)) return false;
+            }
+            const item: *Item = @ptrCast(&stream.tool_items[index]);
+            if (item.arguments_closed) continue;
+            const client_search = toolSearch(&transient, schema(&request.tool_orders, transient.name));
+            if (!client_search and call.arguments.len > item.arguments_sent) {
+                var argument_event = event("response.function_call_arguments.delta");
+                defer argument_event.deinit();
+                itemIdentity(&argument_event, text(&item.fc_id), item.output_index);
+                argument_event.append(",\"delta\":");
+                argument_event.quoted(call.arguments[item.arguments_sent..]);
+                argument_event.byte('}');
+                if (!self.emit(stream, &argument_event)) return false;
+                item.arguments_sent = call.arguments.len;
+            }
+            if (call.complete) {
+                if (!self.argumentsDone(stream, &transient, item, &request.tool_orders, false) or
+                    !self.toolEvent(stream, &transient, item, &request.tool_orders, "stop", true)) return false;
+                item.arguments_closed = true;
+            }
+        }
+        return true;
+    }
     pub fn update(self: Output, request: *const Request, stream: *Stream, raw: []const u8, final: bool) bool {
         if (!stream.active) return true;
+        if (request.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) return self.updateTyped(request, stream, raw, final);
         if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT and !stream.checked_think_prefix) {
             // Flint emits its own optional opening tag; its prompt does not
             // place every answer inside reasoning before generation starts.
@@ -739,13 +847,16 @@ pub const Output = struct {
     }
     pub fn finishLive(self: Output, request: *Request, stream: *Stream, raw: ?[]const u8, recovered: bool, calls: ?*const c.tool_calls, finish: []const u8, input: c_int, output: c_int, created_at: c_long) bool {
         if (!self.closeVisible(request, stream, raw, recovered, finish)) return false;
-        const items = buildItems(calls, stream.next_output_index);
-        defer allocator.free(items);
-        if (items.len != 0) stream.next_output_index += @intCast(items.len);
+        const live_tools = (request.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) and stream.tool_count == callSlice(calls).len;
+        const items: []Item = if (live_tools) (if (stream.tool_count == 0) &.{} else stream.tool_items[0..stream.tool_count]) else buildItems(calls, stream.next_output_index);
+        defer if (!live_tools) allocator.free(items);
+        if (!live_tools and items.len != 0) stream.next_output_index += @intCast(items.len);
         for (callSlice(calls), items) |*call, *item| {
-            if (!self.toolEvent(stream, call, item, &request.tool_orders, finish, false) or
-                !self.argumentsDone(stream, call, item, &request.tool_orders) or
+            if (live_tools and item.arguments_closed) continue;
+            if ((!live_tools and !self.toolEvent(stream, call, item, &request.tool_orders, finish, false)) or
+                !self.argumentsDone(stream, call, item, &request.tool_orders, !live_tools) or
                 !self.toolEvent(stream, call, item, &request.tool_orders, finish, true)) return false;
+            item.arguments_closed = true;
         }
         return self.completed(request, stream, calls, items, finish, input, output, created_at);
     }

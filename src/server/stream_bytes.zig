@@ -1,6 +1,8 @@
 //! Byte visibility and owned wire text shared by the protocol projections.
 //! These operate on already-sampled text; they never alter its model transcript.
 const std = @import("std");
+pub const TokenOutput = @import("ds41_output.zig");
+pub const FlintOutput = @import("flint_output.zig");
 pub const c = @import("server_protocol_c");
 pub const allocator = std.heap.c_allocator;
 

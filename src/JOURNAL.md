@@ -1,5 +1,65 @@
 # Serving project journal
 
+Execution resumed 2026-10-27 10:53UTC: user says "Then finish the work please"
+after comparing constrained acceleration with DeepInfer and Flint. Restore
+Flint's up-to-eight sequential masked decode packets with CPU/GPU overlap, then
+DS41's real grammar-aware draft-block verification and matcher rollback. The
+prior single-token integration is the fixed control, revision13ecfcd39cd9;
+binaries and hashes are frozen in `.workspaces/constrained-packets-20261027/`.
+Use one-hour checkpoints and one guarded model job at a time, retaining normal
+DeepSeek reasoning. Load the installed DSpark support explicitly in MTP tests;
+the prior HTTP/WS launcher used draft1 without support and cannot prove MTP.
+Root owns server/matcher integration and tests, independent agents own the two
+backends. Main stays unchanged. The user-owned reference Flint server remains
+running; compare matched settings and preserve timing limitations.
+
+Constrained acceleration checkpoint11:13UTC: both backends and all5 executables
+build. Release/Debug synthetic Flint GPU fixtures pass1/8-step packets, actual
+forward/mask overlap, EOS and callback-failure rollback. Native grammar12/12
+includes18-token rollback through EOS; two borrowed-walk tests protect draft
+rollback and legal finite masks. Actual Flint tools/schema preserve literal
+markers and JSON types. Three-arm measurements use the same INT4 weights:
+887-token T0 schema answer216–219→230tok/s and4.11–4.15→3.90s. Enabled trace
+proves399 multi-token packets and exact streaming-argument accumulation. All
+T0 task answers match; unseeded T1 baseline selected allowed enum"x" instead
+of requested1 (preserved6/7 grade), disabled7/7 and enabled11/11. No broad
+speed/quality claim from these few samples or run-order variation. Fresh Flint
+WS/SDK/restart suite passes29/29 protocol and17/17quality, including cancellation
+and >4096-token prefill/continuation.
+Raw outputs are local; concise report/reproduction live at
+`speed-bench/experiments/constrained-packets-20261027/README.md`.
+
+Constrained checkpoint completes11:31UTC, within the one-hour budget. DS41
+frozen/disabled/enabled arms each pass7/7 semantic checks, T0 answers/token counts
+match, and enabled streaming27deltas matches final arguments. Actual constrained
+blocks reach6. Cached T0 tool169tokens improves15.61→16.16tok/s (10.87→10.49s),
+while schema183tokens changes16.03→15.78tok/s (11.45→11.64s): mixed/near-neutral,
+not a general speed win. One smaller verify-cap2 point (max3committed tokens)
+passes7/7 without a clear improvement, so preserve existing DSpark settings.
+The report includes the three-point measured curve and reproducible plot code.
+
+Important measured limit: target-only KV restoration discards the128-row drafter
+feature window. Cached continuations therefore warm128 scalar tokens before
+drafting; the first exact T1 probe122tokens was entirely scalar, despite its
+flag and successful answer. A targeted fresh-prefill T1 exact probe fixes that
+qualification gap: no KV read/write credit,119generated/32reasoning tokens,
+22actual p/q verification cycles with partial/full proposal acceptance and
+correction; correct literal text, integer1 and null, clean exit. Preserve both
+observations. Storing/restoring draft features is separate future work, not a
+reason to grow the harness or claim that cache-hit flags prove MTP execution.
+
+DS41 two-session WebSocket smoke also passes with DSpark loaded: overlapping
+distinct strict-schema requests, previous-response retrieval with both markers
+allowed (no constant forcing the expected answer), cancellation after a real
+reasoning delta, survivor and retry. Trace78blocks, max6; clean exit. Full
+`nu tests/verify.nu -j6` passes, as do final Debug grammar12/walk2/server checks.
+All5 qualified final executables are installed at root/zig-out with matching
+hashes and help exits0; manifest/logs remain under the same ignored workspace.
+Implementation is one cohesive local jj change wmwltqnm after13ecfcd39cd9.
+Main stays be7f820f9ae5; no push. Explicit reasoning budgets, ignore-EOS and
+unsupported Flint packet filters retain their existing constrained scalar
+policies. The blanket grammar/MTP bypass is removed on supported paths.
+
 Last updated: 2026-10-27. This is the compact handoff for resumed work and context
 compactions. Keep the current state accurate and append short decision/progress
 entries at meaningful checkpoints. Raw experiment output stays local.
@@ -29,6 +89,97 @@ check passes. Dedicated hosted tests were retired with their implementations.
 Real-model/restart/performance qualification is pending later aggregate checks,
 not implied by this source/model-free checkpoint. Raw build/server logs remain
 ignored under the same workspace. Input provenance is the next bounded slice.
+
+Interaction implementation checkpoint04:30UTC (work in progress): native
+XGrammar0.2.8 is vendored from97787376faee, with a small C++17 ABI and Zig owner;
+no Python/MLX runtime. Eight native fixtures pass ReleaseFast and Debug, including
+mask/accept/rollback, byte pieces and literal closing delimiters in raw strings,
+enums and referenced constants. The stock XML converter is reused through a
+narrow token-aware AST adapter, preserving payload-value subgraphs. Native
+special IDs remain distinct from ordinary tokens spelling the same delimiters.
+
+Input boundary fixtures cover official ordering, tool-dependent reasoning,
+literal-marker provenance, annotated raw replay/fallback and structured-answer
+instructions (10cases). Shared request normalization keeps omitted strict false,
+uses one normalized schema for prompt/compiler, retains standard $defs and
+rejects concrete ignored constraints; three focused tests pass. Prompt schemas
+omit the compiler-only strict flag. Explicit namespaces use namespace::name and
+prepend namespace context to function descriptions; ordinary flat names remain.
+
+Production typed DS41/Flint output, incremental tool streaming and raw replay
+metadata are integrated but combined qualification is ongoing. The initial
+constrained decoder uses one accepted token per step; unconstrained packets are
+unchanged. Grammar compilation is checked before queueing/prefill, with a lazy
+per-engine bounded compiler cache and per-generation matcher. This is source and
+fixture progress, not a model quality/performance claim. Explicit cache mapping
+and all-path policy are the next active checkpoint. A user-owned reference Flint
+server on11500 is present; permission to pause/restart it for isolated model
+measurements has been requested. Continue model-free work while that is pending.
+
+Real qualification checkpoint05:26UTC: source checkpointe2420dae builds all5
+executables; all focused and full host/Agent/script checks pass. Web recovery
+needed its normal loopback permission, then passed. Debug server/output/cache
+fixtures now link the actual production decision registry instead of an
+incomplete stub; all pass. Native grammar11 ReleaseFast/Debug, cache/API11,
+serving boundary12, native DS41 token4 and installed-Flint-tokenizer/replay
+fixtures pass; existing47 HF tokenizer cases retain exact IDs/bytes.
+
+Guarded HTTP model checks pass on installed DS41-1017 IQ2 and Flint INT4:
+ordinary answers, strict function calls and JSON-schema answers preserve literal
+think/DSML/XML markers exactly. DeepSeek normal quality cases retain high
+reasoning; explicit non-thinking is used only for named-choice conformance.
+Unsupported strict+format/choice/background/truncation/custom declarations fail
+clearly. Both servers close cleanly. Reference Flint on11500 was not stopped;
+its health showed busy:false/queued:0. These are correctness observations,
+not isolated latency comparisons. Pressure stays normal with stable swap.
+
+Real WS/SDK/restart qualification: DeepSeek26/26 protocol checks and12/15
+optional quality grades; all3 failures are the same non-thinking JSON-copy
+output {"surived":false}. The frozenaef775c29745 control reproduces the same
+26/26 and identical3 failures, including the ordinary pre-disconnect control.
+Flint29/29 protocol checks and17/17 quality grades pass, including >4096-token
+prefill, post-decode continuation and cache credit. Preserve negative grades;
+do not call DeepSeek's optional quality screen perfect or blame cancellation.
+
+First explicit-cache run proved1469-token SSD reuse with HOT_MB0. It exposed
+wrong write-token accounting and a source-policy hole allowing a later implicit
+request to reuse unmarked live KV. Fixed both, retaining old-policy retirement
+and recording only successful published endpoints. Rebuilt targeted run passes:
+fresh explicit/no marks read0/write0; next implicit read0/write49; implicit
+repeat read49/write0; marked first read0/write605; repeat read605/write0;
+changed earlier prefix read0/write608; explicit/no marks read0/write0. Reopening
+server/store restores the marked605-token prefix, read605/write0. Actual outputs
+and guard logs stay ignored under `.workspaces/interaction-catchup-20261027/`.
+
+Final qualification checkpoint05:41UTC: Flint XML→JSON now selects representation
+using the declared property schema, including local refs and finite const/enum
+values. Actual strict named-tool inference returns exactly
+{"ref":"true","mixed":1,"nullable":null}; native reasoning remains enabled.
+Typed stream fixtures verify identical accumulated deltas and final arguments.
+String/non-null-JSON unions combined with pattern/format/string-length limits
+are conservatively rejected before generation rather than adding another schema
+validator. The actual API rejection and2 pure schema cases pass. No sampler/core
+changes were needed for this adapter. Both retained direct Clef decision APIs
+also pass their existing model checks.
+
+All5 final executables build and are installed in the repo root and zig-out/bin;
+installed hashes match the qualified-build prefix, and every --help exits0.
+Latest Debug server/output fixtures and all directly affected Debug boundary,
+token, contract and cache fixtures pass. Useful evidence and binary manifests
+remain under `.workspaces/interaction-catchup-20261027/`; concise reproducible
+results are in `speed-bench/experiments/interaction-catchup-20261027/README.md`.
+Implementation lives in local jj changes vvmtvsts (cleanup) and mspplnqm
+(interaction). Main remains be7f820f9ae5; no publication authorized this turn.
+
+Remaining limits at05:41 (the packet/MTP limit is superseded above):
+constrained generation accepts one token per step, disabling
+speculative packets/MTP only on constrained requests. GLM/Qwen Responses still
+use their older final-only argument path. Isolated matched latency is deferred
+while the user-owned reference Flint server remains resident; no permission to
+stop it was received. Non-isolated timings in the report are observations, not
+performance comparisons. Do not spend another broad harness/audit cycle here;
+the selected interaction catch-up is implemented and qualified within these
+documented limits. Next performance work should be a bounded matched experiment.
 
 Selected escaping direction: user agrees to official raw parameter strings
 after token-aware rendering/parsing replaces the custom delimiter escape

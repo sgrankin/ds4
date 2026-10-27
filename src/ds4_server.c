@@ -328,6 +328,7 @@ static void tool_call_free(tool_call *tc) {
 static void tool_calls_free(tool_calls *calls) {
     for (int i = 0; i < calls->len; i++) tool_call_free(&calls->v[i]);
     free(calls->raw_tool_text);
+    free(calls->raw_special_ranges);
     free(calls->v);
     memset(calls, 0, sizeof(*calls));
 }
@@ -357,6 +358,7 @@ static void chat_msg_add_tool_call_id(chat_msg *m, const char *id) {
 static void chat_msg_free(chat_msg *m) {
     free(m->role);
     free(m->content);
+    free(m->cache_breakpoints);
     free(m->discovered_tools);
     server_image_inputs_free(&m->images);
     free(m->reasoning);
@@ -390,6 +392,7 @@ static void tool_schema_order_free(tool_schema_order *o) {
     free(o->name);
     free(o->wire_name);
     free(o->namespace);
+    free(o->parameters_json);
     for (int i = 0; i < o->len; i++) {
         free(o->prop[i]);
         free(o->prop_schema[i]);
@@ -430,6 +433,7 @@ static void request_init(request *r, req_kind kind, int max_tokens) {
     r->top_p = DS4_DEFAULT_TOP_P;
     r->min_p = DS4_DEFAULT_MIN_P;
     r->think_mode = DS4_THINK_HIGH;
+    r->parallel_tool_calls = true;
 }
 
 static bool parse_ignore_eos_value(const char **p, request *r) {
@@ -447,6 +451,11 @@ static bool request_validate_ignore_eos(const request *r,
 
 static void request_free(request *r) {
     ds4_tokens_free(&r->prompt);
+    ds4_tokens_free(&r->cache_breakpoint_bytes);
+    ds4_tokens_free(&r->cache_breakpoints);
+    free(r->prompt_special_ranges);
+    free(r->responses_live_special_ranges);
+    free(r->anthropic_live_special_ranges);
     for (size_t i = 0; i < r->image_count; i++)
         ds4_vision_embedding_free(&r->images[i].embedding);
     free(r->images);
@@ -459,6 +468,9 @@ static void request_free(request *r) {
     free(r->prompt_cache_key);
     free(r->previous_response_id);
     free(r->responses_replay);
+    free(r->tool_choice_json);
+    free(r->response_format_json);
+    free(r->constraint_json);
     free(r->conversation_id);
     free(r->conversation_input);
     stop_list_clear(&r->responses_live_call_ids);
@@ -3311,11 +3323,12 @@ static void test_responses_namespace_tool_schemas_restore_wire_namespace(void) {
     char *schemas = NULL;
     tool_schema_orders orders = {0};
     TEST_ASSERT(parse_tools_value(&p, &schemas, &orders));
-    TEST_ASSERT(schemas && strstr(schemas, "\"name\":\"mcp__perplexity__perplexity_search\""));
+    TEST_ASSERT(schemas && strstr(schemas, "\"name\":\"mcp__perplexity__::perplexity_search\""));
     TEST_ASSERT(schemas && strstr(schemas, "\"name\":\"perplexity_search\"") == NULL);
+    TEST_ASSERT(schemas && strstr(schemas, "Perplexity tools\\nSearch the web"));
 
     const tool_schema_order *order =
-        tool_schema_orders_find(&orders, "mcp__perplexity__perplexity_search");
+        tool_schema_orders_find(&orders, "mcp__perplexity__::perplexity_search");
     TEST_ASSERT(order != NULL);
     TEST_ASSERT(order && order->namespace && !strcmp(order->namespace, "mcp__perplexity__"));
     TEST_ASSERT(order && order->wire_name && !strcmp(order->wire_name, "perplexity_search"));
@@ -3324,7 +3337,7 @@ static void test_responses_namespace_tool_schemas_restore_wire_namespace(void) {
     tool_calls calls = {0};
     tool_call tc = {0};
     tc.id = xstrdup("call_ns");
-    tc.name = xstrdup("mcp__perplexity__perplexity_search");
+    tc.name = xstrdup("mcp__perplexity__::perplexity_search");
     tc.arguments = xstrdup("{\"query\":\"deepseek\",\"recency\":7}");
     tool_calls_push(&calls, tc);
     responses_tool_item item = {
@@ -3338,7 +3351,7 @@ static void test_responses_namespace_tool_schemas_restore_wire_namespace(void) {
                                         "completed", true, &orders);
     TEST_ASSERT(strstr(out.ptr, "\"name\":\"perplexity_search\"") != NULL);
     TEST_ASSERT(strstr(out.ptr, "\"namespace\":\"mcp__perplexity__\"") != NULL);
-    TEST_ASSERT(strstr(out.ptr, "mcp__perplexity__perplexity_search") == NULL);
+    TEST_ASSERT(strstr(out.ptr, "mcp__perplexity__::perplexity_search") == NULL);
 
     buf_free(&out);
     tool_calls_free(&calls);
@@ -3365,9 +3378,9 @@ static void test_responses_input_tool_search_output_loads_tools(void) {
     buf loaded = {0};
     tool_schema_orders orders = {0};
     TEST_ASSERT(parse_responses_input(&p, &msgs, &loaded, &orders, false));
-    TEST_ASSERT(loaded.ptr && strstr(loaded.ptr, "\"name\":\"mcp__perplexity__perplexity_search\""));
+    TEST_ASSERT(loaded.ptr && strstr(loaded.ptr, "\"name\":\"mcp__perplexity__::perplexity_search\""));
     const tool_schema_order *order =
-        tool_schema_orders_find(&orders, "mcp__perplexity__perplexity_search");
+        tool_schema_orders_find(&orders, "mcp__perplexity__::perplexity_search");
     TEST_ASSERT(order != NULL);
     TEST_ASSERT(order && order->namespace && !strcmp(order->namespace, "mcp__perplexity__"));
     TEST_ASSERT(order && order->wire_name && !strcmp(order->wire_name, "perplexity_search"));
@@ -3417,7 +3430,7 @@ static void test_responses_incremental_tool_schemas(void) {
         "{\"type\":\"namespace\",\"name\":\"notes__\",\"tools\":["
         "{\"type\":\"function\",\"name\":\"read_note\",\"parameters\":{\"type\":\"object\","
         "\"properties\":{\"path\":{\"type\":\"string\"},\"limit\":{\"type\":\"number\"}}}}]},"
-        "{\"type\":\"custom\",\"name\":\"apply_patch\",\"description\":\"Apply a patch\"}]},"
+        "{\"type\":\"function\",\"name\":\"apply_patch\",\"description\":\"Apply a patch\",\"parameters\":{\"type\":\"object\",\"properties\":{\"patch\":{\"type\":\"string\"}}}}]},"
         "{\"type\":\"function_call_output\",\"call_id\":\"b\",\"output\":\"PROBE OK\"}]";
     const char *initial_tools = "{\"name\":\"tool_search\",\"parameters\":{}}";
     chat_msgs msgs = {0};
@@ -3440,8 +3453,8 @@ static void test_responses_incremental_tool_schemas(void) {
     const char *search_result = strstr(after, "<tool_result>Tool discovery complete.</tool_result>");
     const char *update = strstr(after, "<｜System｜>\n\n### Updated Tool Schemas");
     TEST_ASSERT(result && search_result && update && result < search_result && search_result < update);
-    const char *schema = strstr(after, "\"name\":\"notes__read_note\"");
-    TEST_ASSERT(schema && !strstr(schema + 1, "\"name\":\"notes__read_note\""));
+    const char *schema = strstr(after, "\"name\":\"notes__::read_note\"");
+    TEST_ASSERT(schema && !strstr(schema + 1, "\"name\":\"notes__::read_note\""));
     TEST_ASSERT(!strstr(after, "\"type\":\"namespace\""));
 
     request r;
@@ -3465,18 +3478,20 @@ static void test_responses_incremental_tool_schemas(void) {
     p = replay;
     TEST_ASSERT(parse_messages_ex(&p, &restored, true));
     TEST_ASSERT(responses_restore_discovered_tools(&restored, &restored_orders, false, NULL) == 1);
-    const tool_schema_order *order = tool_schema_orders_find(&restored_orders, "notes__read_note");
+    const tool_schema_order *order = tool_schema_orders_find(&restored_orders, "notes__::read_note");
     TEST_ASSERT(order && order->namespace && !strcmp(order->namespace, "notes__"));
     TEST_ASSERT(order && order->wire_name && !strcmp(order->wire_name, "read_note"));
     TEST_ASSERT(order && order->len == 2 && !strcmp(order->prop[0], "path") &&
                 !strcmp(order->prop[1], "limit"));
     TEST_ASSERT(tool_schema_orders_find(&restored_orders, "apply_patch"));
-    const char *current = "[{\"type\":\"function\",\"name\":\"notes__read_note\","
+    const char *current = "[{\"type\":\"namespace\",\"name\":\"notes__\",\"tools\":[{"
+        "\"type\":\"function\",\"name\":\"read_note\","
         "\"parameters\":{\"type\":\"object\",\"properties\":{"
-        "\"limit\":{\"type\":\"number\"},\"path\":{\"type\":\"string\"}}}}]";
+        "\"limit\":{\"type\":\"number\"},\"path\":{\"type\":\"string\"}}}}]}]";
     TEST_ASSERT(responses_restore_discovered_tools(&restored, &restored_orders, false, current) == 1);
-    order = tool_schema_orders_find(&restored_orders, "notes__read_note");
-    TEST_ASSERT(order && !order->namespace && !order->wire_name);
+    order = tool_schema_orders_find(&restored_orders, "notes__::read_note");
+    TEST_ASSERT(order && order->namespace && !strcmp(order->namespace, "notes__"));
+    TEST_ASSERT(order && order->wire_name && !strcmp(order->wire_name, "read_note"));
     TEST_ASSERT(order && order->len == 2 && !strcmp(order->prop[0], "limit") &&
                 !strcmp(order->prop[1], "path"));
     char *restored_prompt = render_deepseek41_chat(&restored, 0, initial_tools, DS4_THINK_NONE, false);
@@ -3552,12 +3567,12 @@ static void test_responses_input_function_call_namespace_round_trips_to_dsml(voi
     TEST_ASSERT(msgs.len == 1);
     TEST_ASSERT(msgs.v[0].calls.len == 1);
     TEST_ASSERT(!strcmp(msgs.v[0].calls.v[0].name,
-                        "mcp__perplexity__perplexity_search"));
+                        "mcp__perplexity__::perplexity_search"));
 
     char *prompt = render_chat_prompt_text(&msgs, schemas, &orders, DS4_THINK_HIGH);
     TEST_ASSERT(prompt != NULL);
     TEST_ASSERT(strstr(prompt,
-        "<｜DSML｜invoke name=\"mcp__perplexity__perplexity_search\">") != NULL);
+        "<｜DSML｜invoke name=\"mcp__perplexity__::perplexity_search\">") != NULL);
     TEST_ASSERT(strstr(prompt, "<｜DSML｜invoke name=\"perplexity_search\">") == NULL);
 
     free(prompt);
@@ -9715,6 +9730,23 @@ static void test_server_image_embedding_cache(void) {
     server_image_cache_clear(&cache);
 }
 
+/* Sampled-token provenance for these fixed DSML fixtures. The last parameter
+ * close is markup; an identical earlier spelling in its string is plain data. */
+static size_t test_ds41_control_ranges(const char *raw, ds4_prompt_range *ranges) {
+    size_t count = 0;
+    const char *think = strstr(raw, "</think>");
+    if (think) ranges[count++] = (ds4_prompt_range){think - raw, think - raw + 8};
+    const char *tags[] = {DS41_TOOL_CALLS_START, DS41_INVOKE_START,
+        DS41_PARAM_START, DS41_PARAM_END, DS41_INVOKE_END, DS41_TOOL_CALLS_END};
+    for (size_t i = 0; i < sizeof(tags) / sizeof(*tags); i++) {
+        const char *tag = i == 3 ? ds4_server_reply_last_substring(raw, tags[i]) : strstr(raw, tags[i]);
+        if (!tag) continue;
+        size_t begin = (size_t)(tag - raw) + (tags[i][1] == '/' ? 2 : 1);
+        ranges[count++] = (ds4_prompt_range){begin, begin + strlen("｜DSML｜")};
+    }
+    return count;
+}
+
 /* The actual V4.1 projector retains its syntax between updates and must hold
  * an incomplete UTF-8 value rather than exposing corrupt text to the client. */
 static void test_deepseek41_anthropic_stream(void) {
@@ -9733,14 +9765,17 @@ static void test_deepseek41_anthropic_stream(void) {
     const char *raw = "Before.\n\n" DS41_TOOL_CALLS_START
         DS41_INVOKE_START " name=\"write\">"
         DS41_PARAM_START " name=\"content\" string=\"true\">caf\xc3\xa9";
+    ds4_prompt_range controls[7];
+    r.sampled_special_ranges = controls;
+    r.sampled_special_count = test_ds41_control_ranges(raw, controls);
     TEST_ASSERT(anthropic_sse_stream_update(sv[0], NULL, &r, "msg_v41", &st,
         raw, strlen(raw) - 1, false));
-    TEST_ASSERT(st.tool.active && st.tool.syn != NULL);
-    if (st.tool.syn) TEST_ASSERT(!strcmp(st.tool.syn->param_end, DS41_PARAM_END));
+    TEST_ASSERT(st.tool.active && st.tool.emitted_any);
     const char *complete = "Before.\n\n" DS41_TOOL_CALLS_START
         DS41_INVOKE_START " name=\"write\">"
         DS41_PARAM_START " name=\"content\" string=\"true\">caf\xc3\xa9 done"
         DS41_PARAM_END DS41_INVOKE_END DS41_TOOL_CALLS_END;
+    r.sampled_special_count = test_ds41_control_ranges(complete, controls);
     TEST_ASSERT(anthropic_sse_stream_update(sv[0], NULL, &r, "msg_v41", &st,
         complete, strlen(complete), false));
     char *content = NULL, *reasoning = NULL;
@@ -9756,8 +9791,23 @@ static void test_deepseek41_anthropic_stream(void) {
     shutdown(sv[0], SHUT_WR);
     char *out = read_socket_text(sv[1]);
     TEST_ASSERT(strstr(out, "\"text\":\"Before.\"") != NULL);
-    TEST_ASSERT(strstr(out, "\"partial_json\":\"caf\"") != NULL);
-    TEST_ASSERT(strstr(out, "\"partial_json\":\"\xc3\xa9 done\"") != NULL);
+    buf arguments = {0};
+    const char *fragment = out;
+    while ((fragment = strstr(fragment, "\"partial_json\":")) != NULL) {
+        fragment += strlen("\"partial_json\":");
+        char *delta = NULL;
+        TEST_ASSERT(json_string(&fragment, &delta));
+        if (!delta) break;
+        buf_puts(&arguments, delta);
+        free(delta);
+    }
+    json_args args = {0};
+    TEST_ASSERT(arguments.ptr && json_args_parse(arguments.ptr, &args));
+    int content_index = json_args_find_unused(&args, "content");
+    TEST_ASSERT(content_index >= 0 && !strcmp(args.v[content_index].value, "caf\xc3\xa9 done"));
+    TEST_ASSERT(strstr(out, "caf") && strstr(out, "\xc3\xa9 done"));
+    TEST_ASSERT(strstr(out, "\xef\xbf\xbd") == NULL);
+    json_args_free(&args); buf_free(&arguments);
     TEST_ASSERT(strstr(out, DS41_TOOL_CALLS_START) == NULL);
     TEST_ASSERT(strstr(out, "event: message_stop") != NULL);
     int tools = 0;
@@ -9778,7 +9828,7 @@ static void test_deepseek41_server_stream(void) {
     const char *raw = "Plan.</think>\n\n" DS41_TOOL_CALLS_START "\n"
         DS41_INVOKE_START " name=\"write\">\n"
         DS41_PARAM_START " name=\"content\" string=\"true\">"
-        "literal </think> &lt;/｜DSML｜ parameter> caf\xc3\xa8" DS41_PARAM_END "\n"
+        "literal </think> </｜DSML｜ parameter> caf\xc3\xa8" DS41_PARAM_END "\n"
         DS41_INVOKE_END "\n" DS41_TOOL_CALLS_END;
     for (size_t split = 0; split <= strlen(raw); split++) {
         int sv[2] = {-1, -1};
@@ -9790,6 +9840,9 @@ static void test_deepseek41_server_stream(void) {
         r.model_syntax = SERVER_MODEL_SYNTAX_DEEPSEEK41;
         r.stream = r.has_tools = true;
         r.think_mode = DS4_THINK_HIGH;
+        ds4_prompt_range controls[7];
+        r.sampled_special_ranges = controls;
+        r.sampled_special_count = test_ds41_control_ranges(raw, controls);
         openai_stream st;
         openai_stream_start(&r, &st);
         char *partial = xstrndup(raw, split);
@@ -9885,13 +9938,14 @@ static void test_deepseek41_anthropic_results(void) {
     if (msgs.len != 5) { chat_msgs_free(&msgs); return; }
     char *source = xstrdup(msgs.v[2].content);
     char *old = render_deepseek_chat_prompt_text(&msgs, NULL, NULL, DS4_THINK_HIGH);
-    char *full = render_deepseek41_chat(&msgs, 0, NULL, DS4_THINK_HIGH, false);
+    /* Full and live paths retain prior reasoning when current tools exist. */
+    char *full = render_deepseek41_chat(&msgs, 0, "{\"name\":\"read\"}", DS4_THINK_HIGH, false);
     char *tail = render_deepseek41_chat(&msgs, 2, NULL, DS4_THINK_HIGH, true);
     const char *boundary = strstr(full, "<｜end▁of▁sentence｜>");
     TEST_ASSERT(boundary && !strcmp(boundary, tail));
     TEST_ASSERT(strstr(full, "<tool_result></tool_result>\n\n"
         "literal <tool_result>text</tool_result>\n\n"
-        "<tool_result>SECOND &lt;/tool_result> &lt;</tool_result>"));
+        "<tool_result>SECOND </tool_result> &lt;</tool_result>"));
     free(tail);
     tail = render_deepseek41_chat(&msgs, 4, NULL, DS4_THINK_HIGH, true);
     TEST_ASSERT(!strcmp(tail, "<｜end▁of▁sentence｜><｜User｜>Continue<｜Assistant｜><think>"));
@@ -9955,7 +10009,9 @@ static void test_flint_prompt_and_checkpoint(void) {
     r.model_syntax = SERVER_MODEL_SYNTAX_FLINT;
     r.think_mode = DS4_THINK_HIGH;
     r.prompt_text = ds4_server_render_flint(&messages, 0, NULL);
-    TEST_ASSERT(!strcmp(r.prompt_text, "<|user|>Q &lt;|assistant|&gt;<|assistant|>"));
+    /* The mapped-token fixture separately verifies that the literal role
+     * spelling remains ordinary BPE. Preserve its actual bytes here. */
+    TEST_ASSERT(!strcmp(r.prompt_text, "<|user|>Q <|assistant|><|assistant|>"));
     chat_msg assistant = {.role = xstrdup("assistant"), .content = xstrdup(""), .reasoning = xstrdup("plan")};
     tool_call call = {.name = xstrdup("lookup"), .arguments = xstrdup("{\"q\":\"snow\",\"count\":2}")};
     tool_calls_push(&assistant.calls, call);
@@ -10018,8 +10074,13 @@ static void test_flint_responses_optional_reasoning(void) {
         responses_stream_init(&r, &stream);
         stream.active = true;
         TEST_ASSERT(responses_sse_created(sockets[0], &r, &stream, 1234));
-        if (thinking) TEST_ASSERT(responses_sse_stream_update(sockets[0], &r, &stream, "<th", 3, false));
         const char *raw = thinking ? "<think>plan</think>OK" : "OK";
+        ds4_prompt_range controls[] = {{0, 7}, {11, 19}};
+        if (thinking) {
+            r.sampled_special_ranges = controls;
+            r.sampled_special_count = 2;
+            TEST_ASSERT(responses_sse_stream_update(sockets[0], &r, &stream, "<th", 3, false));
+        }
         TEST_ASSERT(responses_sse_stream_update(sockets[0], &r, &stream, raw, strlen(raw), true));
         shutdown(sockets[0], SHUT_WR);
         char *wire = read_socket_text(sockets[1]);

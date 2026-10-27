@@ -274,6 +274,8 @@ pub fn parse(argc: c_int, argv: [*c][*c]u8, default_backend: c.ds4_backend) c.se
 }
 
 pub fn close(srv: *c.server) void {
+    @import("grammar_runtime.zig").close(srv.grammar);
+    srv.grammar = null;
     c.ds4_decision_registry_free(srv.decision_models);
     srv.decision_models = null;
     if (srv.trace != null) {
@@ -306,6 +308,7 @@ pub fn close(srv: *c.server) void {
         c.ds4_server_reuse_tool_free(&slot.responses_live);
         c.ds4_server_reuse_tool_free(&slot.anthropic_live);
         c.ds4_server_reuse_visible_free(&slot.thinking_live);
+        c.ds4_tokens_free(&slot.cache_breakpoints);
         c.free(slot.live_text);
         if (slot.session != null) c.ds4_session_free(slot.session);
     }
@@ -591,7 +594,12 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
             c.ds4_server_coordinator_quantum_for(&srv, true),
             c.ds4_server_coordinator_coalesce_us(),
         });
-        if (c.ds4_engine_mtp_draft_tokens(engine) > 1 and !srv.qwen4_batch_mtp) log(c.DS4_LOG_DEFAULT, "ds4-server: MTP speculative decoding is disabled while native session batching is active", .{});
+        if (c.ds4_engine_mtp_draft_tokens(engine) > 1 and !srv.qwen4_batch_mtp) {
+            if (c.ds4_engine_is_deepseek41(engine))
+                log(c.DS4_LOG_DEFAULT, "ds4-server: DS4.1 constrained requests use bounded speculative turns; ordinary native batches use scalar decode", .{})
+            else
+                log(c.DS4_LOG_DEFAULT, "ds4-server: MTP speculative decoding is disabled while native session batching is active", .{});
+        }
     }
     if (cfg.trace_path != null) {
         srv.trace = c.fopen(cfg.trace_path, "w");

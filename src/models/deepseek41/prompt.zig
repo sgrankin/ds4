@@ -12,11 +12,14 @@ pub const Options = struct {
     reasoning: types.Reasoning = .high,
     live_tail: bool = false,
     initial_tool_order: []const []const u8 = &.{},
+    prompt_map: ?*types.PromptMap = null,
+    response_format: types.ResponseFormat = .text,
 };
 
 const Text = struct {
     allocator: Allocator,
     list: std.ArrayList(u8) = .empty,
+    map: ?*types.PromptMap = null,
 
     fn append(self: *Text, value: []const u8) Allocator.Error!void {
         try self.list.appendSlice(self.allocator, value);
@@ -26,6 +29,85 @@ const Text = struct {
     }
     fn string(self: *Text, value: ?[]const u8) Allocator.Error!void {
         try self.append(value orelse "");
+    }
+    fn control(self: *Text, value: []const u8) Allocator.Error!void {
+        const begin = self.list.items.len;
+        try self.append(value);
+        if (self.map) |map| try map.special_ranges.append(self.allocator, .{ .begin = begin, .end = self.list.items.len });
+    }
+    /// Only template-owned fragments enter this scanner. Payload is appended
+    /// with string/body/attribute and never gains control meaning by spelling.
+    fn template(self: *Text, value: []const u8) Allocator.Error!void {
+        const markers = [_][]const u8{
+            "<｜begin▁of▁sentence｜>",
+            "<｜end▁of▁sentence｜>",
+            "<｜System｜>",
+            "<｜User｜>",
+            "<｜Assistant｜>",
+            "<think>",
+            "</think>",
+            "｜DSML｜",
+        };
+        var position: usize = 0;
+        var plain: usize = 0;
+        while (position < value.len) {
+            var matched = false;
+            for (markers) |marker| {
+                if (!std.mem.startsWith(u8, value[position..], marker)) continue;
+                try self.append(value[plain..position]);
+                try self.control(marker);
+                position += marker.len;
+                plain = position;
+                matched = true;
+                break;
+            }
+            if (!matched) position += 1;
+        }
+        try self.append(value[plain..]);
+    }
+    fn assistant(self: *Text, value: ?[]const u8) Allocator.Error!void {
+        const source = value orelse return;
+        const grounding = [_][]const u8{
+            "<｜ref｜>",
+            "<｜/ref｜>",
+            "<｜box｜>",
+            "<｜/box｜>",
+            "<｜point｜>",
+            "<｜/point｜>",
+            "<｜polygon｜>",
+            "<｜/polygon｜>",
+        };
+        var position: usize = 0;
+        var plain: usize = 0;
+        while (position < source.len) {
+            var matched = false;
+            for (grounding) |marker| {
+                if (!std.mem.startsWith(u8, source[position..], marker)) continue;
+                try self.append(source[plain..position]);
+                try self.control(marker);
+                position += marker.len;
+                plain = position;
+                matched = true;
+                break;
+            }
+            if (!matched) position += 1;
+        }
+        try self.append(source[plain..]);
+    }
+    fn content(self: *Text, message: *const Message, assistant_mode: bool) Allocator.Error!void {
+        const source = message.content orelse "";
+        var begin: usize = 0;
+        for (message.cache_breakpoints) |end| {
+            std.debug.assert(end >= begin and end <= source.len);
+            if (assistant_mode) try self.assistant(source[begin..end]) else try self.append(source[begin..end]);
+            if (self.map) |map| {
+                const position = self.list.items.len;
+                if (map.cache_breakpoints.items.len == 0 or map.cache_breakpoints.items[map.cache_breakpoints.items.len - 1] != position)
+                    try map.cache_breakpoints.append(self.allocator, position);
+            }
+            begin = end;
+        }
+        if (assistant_mode) try self.assistant(source[begin..]) else try self.append(source[begin..]);
     }
 };
 
@@ -41,14 +123,6 @@ fn userLike(message: *const Message) bool {
 fn systemLike(message: *const Message) bool {
     return equal(message.role, "system") or equal(message.role, "developer");
 }
-fn toolContext(messages: []const Message, schemas: ?[]const u8) bool {
-    if (nonempty(schemas)) return true;
-    for (messages) |message| {
-        if ((equal(message.role, "assistant") and message.calls.len > 0) or equal(message.role, "tool") or equal(message.role, "function")) return true;
-    }
-    return false;
-}
-
 const Views = struct {
     messages: []const Message,
     start: usize,
@@ -134,32 +208,6 @@ fn orderedMessages(allocator: Allocator, messages: []const Message, initial: []c
     return ordered;
 }
 
-fn escapedClose(tail: []const u8, end: []const u8) bool {
-    if (tail.len == 0 or tail[0] != '&') return false;
-    var remaining = tail[1..];
-    while (std.mem.startsWith(u8, remaining, "amp;")) remaining = remaining[4..];
-    return std.mem.startsWith(u8, remaining, "lt;") and std.mem.startsWith(u8, remaining[3..], end[1..]);
-}
-fn body(out: *Text, source: []const u8, end: []const u8) Allocator.Error!void {
-    // Escape the closing sentinel and spellings that collide with that escape;
-    // ordinary ampersands and HTML entities remain literal model input.
-    for (source, 0..) |value, position| {
-        const tail = source[position..];
-        if (std.mem.startsWith(u8, tail, end) or escapedClose(tail, end)) {
-            try out.append(if (value == '<') "&lt;" else "&amp;");
-        } else try out.byte(value);
-    }
-}
-fn attribute(out: *Text, value: ?[]const u8) Allocator.Error!void {
-    for (value orelse "") |byte| switch (byte) {
-        '&' => try out.append("&amp;"),
-        '<' => try out.append("&lt;"),
-        '>' => try out.append("&gt;"),
-        '"' => try out.append("&quot;"),
-        else => try out.byte(byte),
-    };
-}
-
 const calls_open = "<｜DSML｜ calls>";
 const calls_close = "</｜DSML｜ calls>";
 const invoke_open = "<｜DSML｜ invoke";
@@ -168,60 +216,85 @@ const parameter_open = "<｜DSML｜ parameter";
 const parameter_close = "</｜DSML｜ parameter>";
 
 fn parameter(out: *Text, argument: types.Parameter) Allocator.Error!void {
-    try out.append(parameter_open ++ " name=\"");
-    try attribute(out, argument.name);
+    try out.template(parameter_open ++ " name=\"");
+    try out.append(argument.name);
     try out.append(if (argument.is_string) "\" string=\"true\">" else "\" string=\"false\">");
-    if (argument.is_string) {
-        try body(out, argument.value, parameter_close);
-    } else {
-        for (argument.value, 0..) |byte, position| {
-            if (std.mem.startsWith(u8, argument.value[position..], parameter_close)) {
-                try out.append("\\u003c");
-            } else try out.byte(byte);
-        }
-    }
-    try out.append(parameter_close ++ "\n");
+    try out.append(argument.value);
+    try out.template(parameter_close ++ "\n");
 }
 
-fn calls(out: *Text, values: []const types.ToolCall, raw_tool_text: ?[]const u8) Allocator.Error!void {
+fn calls(out: *Text, values: []const types.ToolCall, raw_tool_text: ?[]const u8, raw_ranges: ?[]const types.ByteRange) Allocator.Error!void {
     if (values.len == 0) return;
-    if (nonempty(raw_tool_text)) {
+    if (nonempty(raw_tool_text) and raw_ranges != null) {
+        const base = out.list.items.len;
         try out.string(raw_tool_text);
+        if (out.map) |map| for (raw_ranges.?) |range| {
+            try map.special_ranges.append(out.allocator, .{ .begin = base + range.begin, .end = base + range.end });
+        };
         return;
     }
-    try out.append("\n\n" ++ calls_open ++ "\n");
+    try out.template("\n\n" ++ calls_open ++ "\n");
     for (values) |call| {
-        try out.append(invoke_open ++ " name=\"");
-        try attribute(out, call.name);
+        try out.template(invoke_open ++ " name=\"");
+        try out.string(call.name);
         try out.append("\">\n");
         if (call.parameters) |parameters| {
             for (parameters) |argument| try parameter(out, argument);
+            if (parameters.len == 0) try out.append("\n");
         } else {
-            try out.append(parameter_open ++ " name=\"arguments\" string=\"true\">");
-            try body(out, call.arguments orelse "", parameter_close);
-            try out.append(parameter_close ++ "\n");
+            try out.template(parameter_open ++ " name=\"arguments\" string=\"true\">");
+            try out.string(call.arguments);
+            try out.template(parameter_close ++ "\n");
         }
-        try out.append(invoke_close ++ "\n");
+        try out.template(invoke_close ++ "\n");
     }
-    try out.append(calls_close);
+    try out.template(calls_close);
 }
 
+// Reference instruction text: DeepSeek's MIT-licensed recipe encoder,
+// deepseek-recipe-encoding/src/v4/dsv41.rs and v4/mod.rs. See LICENSE.recipe.
 pub const tools_preamble =
-    "## Tools\n\n" ++
-    "You can invoke tools using this format:\n\n" ++
-    "<｜DSML｜ calls>\n" ++
-    "<｜DSML｜ invoke name=\"$TOOL_NAME\">\n" ++
-    "<｜DSML｜ parameter name=\"$PARAMETER_NAME\" string=\"true|false\">$PARAMETER_VALUE</｜DSML｜ parameter>\n" ++
-    "</｜DSML｜ invoke>\n" ++
-    "</｜DSML｜ calls>\n\n" ++
-    "String values use string=\"true\"; all other values use JSON and string=\"false\". " ++
-    "Inside string values only, escape a literal </｜DSML｜ parameter> as &lt;/｜DSML｜ parameter>. " ++
-    "To write that escaped spelling literally, use &amp;lt;/｜DSML｜ parameter>. Other HTML entities are unchanged.\n\n" ++
-    "Finish reasoning with </think> before tool calls or a final response.\n\n" ++
-    "### Available Tool Schemas\n\n";
-pub const tools_footer =
-    "\n\nYou MUST strictly follow the above defined tool name and parameter schemas to invoke tool calls. " ++
-    "Use the exact parameter names from the schemas.";
+    \\## Tools
+    \\
+    \\You have access to a set of tools to help answer the user's question. You can invoke tools by writing a "<｜DSML｜ calls>" block like the following:
+    \\
+    \\<｜DSML｜ calls>
+    \\<｜DSML｜ invoke name="$TOOL_NAME">
+    \\<｜DSML｜ parameter name="$PARAMETER_NAME" string="true|false">$PARAMETER_VALUE</｜DSML｜ parameter>
+    \\...
+    \\</｜DSML｜ invoke>
+    \\<｜DSML｜ invoke name="$TOOL_NAME2">
+    \\...
+    \\</｜DSML｜ invoke>
+    \\</｜DSML｜ calls>
+    \\
+    \\String parameters should be specified as is and set `string="true"`. For all other types (numbers, booleans, arrays, objects), pass the value in JSON format and set `string="false"`.
+    \\
+    \\If thinking_mode is enabled (triggered by <think>), you MUST output your complete reasoning inside <think>...</think> BEFORE any tool calls or final response.
+    \\
+    \\Otherwise, output directly after </think> with tool calls or final response.
+    \\
+    \\### Available Tool Schemas
+    \\
+    \\
+;
+pub const tools_footer = "\n\nYou MUST strictly follow the above defined tool name and parameter schemas to invoke tool calls.\n";
+
+fn extras(out: *Text, schemas: ?[]const u8, format: types.ResponseFormat) Allocator.Error!void {
+    if (nonempty(schemas)) {
+        try out.append("\n\n");
+        try out.template(tools_preamble);
+        try out.string(schemas);
+        try out.append(tools_footer);
+    }
+    const schema = switch (format) {
+        .json_object => "{\"type\": \"json_object\"}",
+        .json_schema => |value| value,
+        else => return,
+    };
+    try out.append("\n\n## Response Format:\n\nYou MUST strictly adhere to the following schema to reply:\n");
+    try out.append(schema);
+}
 
 pub fn render(allocator: Allocator, messages: []const Message, options: Options) Allocator.Error![:0]u8 {
     var arena = std.heap.ArenaAllocator.init(allocator);
@@ -233,35 +306,32 @@ pub fn render(allocator: Allocator, messages: []const Message, options: Options)
         .level => |level| level > 0,
         else => true,
     };
-    const keep_reasoning = options.live_tail or toolContext(views.messages, options.schemas);
+    const keep_reasoning = options.live_tail or nonempty(options.schemas);
     const level = switch (options.reasoning) {
+        .low => @as(u8, 50),
         .high => @as(u8, 75),
         .max => @as(u8, 100),
         .level => |value| value,
         else => @as(u8, 0),
     };
-    var out = Text{ .allocator = allocator };
+    if (options.prompt_map) |map| {
+        map.special_ranges.clearRetainingCapacity();
+        map.cache_breakpoints.clearRetainingCapacity();
+    }
+    var out = Text{ .allocator = allocator, .map = options.prompt_map };
     errdefer out.list.deinit(allocator);
     var initial_system = false;
     var pending = false;
     var user_open = false;
-    var last_user: ?usize = null;
-    for (views.messages, 0..) |*message, position| {
-        if (userLike(message) or (position > 0 and systemLike(message))) last_user = position;
-    }
     if (options.live_tail) {
-        try out.append("<｜end▁of▁sentence｜>");
+        try out.control("<｜end▁of▁sentence｜>");
     } else {
-        try out.append("<｜begin▁of▁sentence｜>");
-        if (level > 0 or nonempty(options.schemas)) {
-            try out.append("<｜System｜>");
+        try out.control("<｜begin▁of▁sentence｜>");
+        if (level > 0 or nonempty(options.schemas) or options.response_format == .json_object or options.response_format == .json_schema) {
+            try out.control("<｜System｜>");
             initial_system = true;
             if (level > 0) try out.list.print(allocator, "Reasoning Effort: {d} (range 1-100, the higher the value, the more thorough the reasoning)\n\n", .{level});
-            if (nonempty(options.schemas)) {
-                try out.append(tools_preamble);
-                try out.string(options.schemas);
-                try out.append(tools_footer);
-            }
+            if (views.messages.len == 0 or !systemLike(&views.messages[0])) try extras(&out, options.schemas, options.response_format);
         }
     }
     // Full requests and live tails use the same separator transitions at the
@@ -269,40 +339,37 @@ pub fn render(allocator: Allocator, messages: []const Message, options: Options)
     for (views.start..ordered.len) |position| {
         const message = ordered[position];
         if (systemLike(message)) {
-            if (position == 0 and initial_system) {
-                if (nonempty(options.schemas)) try out.append("\n\n");
-            } else try out.append("<｜System｜>");
-            try out.string(message.content);
-            pending = position > 0 or options.live_tail;
+            if (!(position == 0 and initial_system)) try out.control("<｜System｜>");
+            try out.content(message, false);
+            if (position == 0 and !options.live_tail) try extras(&out, options.schemas, options.response_format);
+            pending = true;
             user_open = false;
         } else if (userLike(message)) {
-            try out.append(if (user_open) "\n\n" else "<｜User｜>");
+            try out.template(if (user_open) "\n\n" else "<｜User｜>");
             if (!equal(message.role, "user")) {
                 try out.append("<tool_result>");
-                try body(&out, message.content orelse "", "</tool_result>");
+                try out.content(message, false);
                 try out.append("</tool_result>");
-            } else try out.string(message.content);
+            } else try out.content(message, false);
             pending = true;
             user_open = true;
         } else if (equal(message.role, "assistant")) {
-            if (pending) {
-                try out.append("<｜Assistant｜>");
-                if (think and (keep_reasoning or last_user == null or position > last_user.?)) {
-                    try out.append("<think>");
-                    try out.string(message.reasoning);
-                }
-                try out.append("</think>");
+            try out.control("<｜Assistant｜>");
+            if (think and keep_reasoning) {
+                try out.control("<think>");
+                try out.assistant(message.reasoning);
             }
-            try out.string(message.content);
-            try calls(&out, message.calls, message.raw_tool_text);
-            try out.append("<｜end▁of▁sentence｜>");
+            try out.control("</think>");
+            try out.content(message, true);
+            try calls(&out, message.calls, message.raw_tool_text, message.raw_tool_special_ranges);
+            try out.control("<｜end▁of▁sentence｜>");
             pending = false;
             user_open = false;
         }
     }
     if (pending) {
-        try out.append("<｜Assistant｜>");
-        try out.append(if (think) "<think>" else "</think>");
+        try out.control("<｜Assistant｜>");
+        try out.control(if (think) "<think>" else "</think>");
     }
     return out.list.toOwnedSliceSentinel(allocator, 0);
 }

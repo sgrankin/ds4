@@ -2,6 +2,8 @@
 //! stays literal data; executable calls are taken from the post-reasoning surface.
 //! All strings/call vectors use libc ownership and the actual server records.
 const std = @import("std");
+const DS41 = @import("ds41_output.zig");
+const Flint = @import("flint_output.zig");
 const c = @import("server_reply_c");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidToolCall};
@@ -413,47 +415,9 @@ fn parseDeepseek(text: []const u8, require_closed: bool, out: Outputs) Invalid!v
     }
 }
 
-fn schemaAccepts(schema: std.json.Value, kind: []const u8) bool {
-    if (schema != .object) return false;
-    if (schema.object.get("type")) |value| {
-        if (value == .string and std.mem.eql(u8, value.string, kind)) return true;
-        if (value == .array) for (value.array.items) |item| {
-            if (item == .string and std.mem.eql(u8, item.string, kind)) return true;
-        };
-    }
-    if (std.mem.eql(u8, kind, "string")) {
-        if (schema.object.get("enum")) |value| {
-            if (value == .array) for (value.array.items) |item| if (item == .string) return true;
-        }
-    }
-    for ([_][]const u8{ "anyOf", "oneOf" }) |key| {
-        if (schema.object.get(key)) |value| {
-            if (value == .array) for (value.array.items) |item| if (schemaAccepts(item, kind)) return true;
-        }
-    }
-    return false;
-}
-
 fn flintString(orders: [*c]const c.tool_schema_orders, name: [*c]const u8, key: [*c]const u8, value: [*c]const u8) bool {
-    // Flint's XML strings are raw; other arguments attempt JSON decoding.
-    // Nullable string schemas give the exact spelling "null" its JSON meaning.
-    if (orders != null and name != null) {
-        for (items(c.tool_schema_order, orders.*.v, @intCast(orders.*.len))) |order| {
-            if (order.name == null or !std.mem.eql(u8, bytes(order.name), bytes(name))) continue;
-            for (items([*c]u8, order.prop, @intCast(order.len)), 0..) |property, index| {
-                if (!std.mem.eql(u8, bytes(property), bytes(key))) continue;
-                const schema = std.json.parseFromSlice(std.json.Value, allocator, bytes(order.prop_schema[index]), .{}) catch break;
-                defer schema.deinit();
-                if (std.mem.eql(u8, bytes(value), "null") and schemaAccepts(schema.value, "null")) return false;
-                if (schemaAccepts(schema.value, "string")) return true;
-                break;
-            }
-            break;
-        }
-    }
-    const parsed = std.json.parseFromSlice(std.json.Value, allocator, bytes(value), .{}) catch return true;
-    parsed.deinit();
-    return false;
+    if (orders == null) return Flint.isString(allocator, null, bytes(name), bytes(key), bytes(value));
+    return Flint.isString(allocator, @as(*const c.tool_schema_orders, @ptrCast(orders)), bytes(name), bytes(key), bytes(value));
 }
 
 fn parseXml(text: []const u8, require_closed: bool, out: Outputs, flint: bool, orders: [*c]const c.tool_schema_orders) Invalid!void {
@@ -680,6 +644,7 @@ fn freeCalls(calls: *c.tool_calls) void {
     }
     c.free(@ptrCast(calls.v));
     c.free(calls.raw_tool_text);
+    c.free(calls.raw_special_ranges);
     calls.* = std.mem.zeroes(c.tool_calls);
 }
 pub fn parseForResponse(syntax: c.server_model_syntax, text: [*c]const u8, has_tools: bool, saw_tool_start: bool, require_closed: bool, finish_io: [*c][*c]const u8, error_text: [*c]u8, error_capacity: usize, content: *[*c]u8, reasoning: *[*c]u8, calls: *c.tool_calls, recovered: [*c]bool, orders: [*c]const c.tool_schema_orders) bool {
@@ -704,4 +669,61 @@ pub fn parseForResponse(syntax: c.server_model_syntax, text: [*c]const u8, has_t
         if (recovered != null) recovered.* = true;
     }
     return false;
+}
+
+pub fn parseSampled(request: *const c.request, raw: [*c]const u8, saw_start: bool, finish: [*c][*c]const u8, errors: [*c]u8, error_capacity: usize, content: *[*c]u8, reasoning: *[*c]u8, calls: *c.tool_calls, recovered: [*c]bool) bool {
+    if (request.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and request.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT) return parseForResponse(request.model_syntax, raw, request.has_tools, saw_start, c.ds4_think_mode_enabled(request.think_mode), finish, errors, error_capacity, content, reasoning, calls, recovered, &request.tool_orders);
+    if (recovered != null) recovered.* = false;
+    const ranges: []const DS41.Range = if (request.sampled_special_count == 0) &.{} else @as([*]const DS41.Range, @ptrCast(request.sampled_special_ranges))[0..request.sampled_special_count];
+    const view = DS41.View{ .raw = bytes(raw), .ranges = ranges };
+    var parsed = if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) Flint.project(allocator, view, &request.tool_orders, true) catch fatal() else DS41.project(allocator, view, c.ds4_think_mode_enabled(request.think_mode), true) catch fatal();
+    defer parsed.deinit(allocator);
+    var valid = !parsed.invalid and (parsed.tool_start == null or (parsed.tool_end != null and parsed.calls.items.len != 0));
+    for (parsed.calls.items) |call| {
+        if (!call.complete) valid = false;
+        const json = std.json.parseFromSlice(std.json.Value, allocator, call.arguments, .{}) catch {
+            valid = false;
+            continue;
+        };
+        json.deinit();
+    }
+    if (!valid) {
+        content.* = duplicate(bytes(raw));
+        reasoning.* = null;
+        if (request.has_tools and saw_start) {
+            if (recovered != null) recovered.* = true;
+            if (finish != null and !std.mem.eql(u8, bytes(finish.*), "error") and !std.mem.eql(u8, bytes(finish.*), "length")) finish.* = "stop";
+            if (errors != null and error_capacity > 0) {
+                const message = "invalid tool call";
+                const length = @min(message.len, error_capacity - 1);
+                @memcpy(errors[0..length], message[0..length]);
+                errors[length] = 0;
+            }
+        }
+        return false;
+    }
+    content.* = duplicate(parsed.content);
+    reasoning.* = if (parsed.reasoning.len != 0) duplicate(parsed.reasoning) else null;
+    for (parsed.calls.items) |call| {
+        var list: std.ArrayList(c.tool_call) = .empty;
+        list.items = items(c.tool_call, calls.v, @intCast(calls.len));
+        list.capacity = @intCast(calls.cap);
+        list.append(allocator, .{ .id = null, .name = duplicate(call.name), .arguments = duplicate(call.arguments) }) catch fatal();
+        calls.v = list.items.ptr;
+        calls.len = @intCast(list.items.len);
+        calls.cap = @intCast(list.capacity);
+    }
+    if (parsed.tool_start) |start| {
+        const begin = DS41.textEnd(bytes(raw), start);
+        const end = parsed.tool_end.?;
+        calls.raw_tool_text = duplicate(bytes(raw)[begin..end]);
+        var replay: std.ArrayList(c.ds4_prompt_range) = .empty;
+        for (ranges) |range| if (range.begin >= begin and range.end <= end) {
+            replay.append(allocator, .{ .begin = range.begin - begin, .end = range.end - begin }) catch fatal();
+        };
+        const owned = replay.toOwnedSlice(allocator) catch fatal();
+        calls.raw_special_ranges = owned.ptr;
+        calls.raw_special_count = owned.len;
+    }
+    return true;
 }

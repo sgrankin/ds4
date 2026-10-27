@@ -6,6 +6,7 @@ const std = @import("std");
 const c = @import("server_input_c");
 const messages = @import("message_values.zig");
 const tools = @import("input_values.zig");
+const CacheControls = @import("cache_controls.zig");
 const Reader = messages.Reader;
 const Text = messages.Text;
 const allocator = std.heap.c_allocator;
@@ -28,10 +29,18 @@ fn records(list: *c.chat_msgs) []c.chat_msg {
     return if (list.len == 0) &.{} else @as([*]c.chat_msg, @ptrCast(list.v))[0..@intCast(list.len)];
 }
 
+fn transferBreakpoints(message: *c.chat_msg, source: *std.ArrayList(usize)) void {
+    message.cache_breakpoints = if (source.capacity == 0) null else source.items.ptr;
+    message.cache_breakpoints_len = @intCast(source.items.len);
+    message.cache_breakpoints_cap = @intCast(source.capacity);
+    source.* = .empty;
+}
+
 const ContentBlock = struct {
     kind: [*c]u8 = null,
     text: [*c]u8 = null,
     url: [*c]u8 = null,
+    cache_breakpoint: bool = false,
 
     fn deinit(self: *ContentBlock) void {
         c.free(self.kind);
@@ -55,6 +64,10 @@ const ContentBlock = struct {
                 c.free(self.url);
                 self.url = null;
                 if (!messages.ds4_server_json_image_url(&reader.cursor, &self.url)) return error.InvalidJson;
+            } else if (equal(key, "prompt_cache_breakpoint")) {
+                const raw = try reader.raw();
+                defer c.free(raw);
+                self.cache_breakpoint = CacheControls.breakpoint(bytes(raw)) catch return error.InvalidJson;
             } else try reader.skip();
             reader.separator();
         }
@@ -65,7 +78,7 @@ const ContentBlock = struct {
 /// Fail closed on unknown/missing block types or text, rather than silently
 /// discard replay context. A bare string/null or an array of strings/recognized
 /// typed blocks is admitted; primitive/array elements and other shapes reject.
-fn contentValue(reader: *Reader, images: [*c]c.server_image_inputs) Invalid![*c]u8 {
+fn contentValue(reader: *Reader, images: [*c]c.server_image_inputs, breakpoints: ?*std.ArrayList(usize)) Invalid![*c]u8 {
     if (reader.peek() == '"') return reader.string();
     if (reader.literal("null")) return duplicate("");
     try reader.consume('[');
@@ -82,6 +95,7 @@ fn contentValue(reader: *Reader, images: [*c]c.server_image_inputs) Invalid![*c]
             try block.read(reader);
             const text_block = equal(block.kind, "input_text") or equal(block.kind, "output_text") or
                 equal(block.kind, "text") or equal(block.kind, "summary_text") or equal(block.kind, "reasoning_text");
+            if (block.cache_breakpoint and (breakpoints == null or (!equal(block.kind, "input_text") and !equal(block.kind, "output_text") and !equal(block.kind, "text")))) return error.InvalidJson;
             if (equal(block.kind, "input_image")) {
                 var marker: [c.SERVER_IMAGE_MARKER_BYTES]u8 = undefined;
                 if (images == null or !c.ds4_server_image_data_uri(images, block.url, &marker)) return error.InvalidJson;
@@ -89,6 +103,7 @@ fn contentValue(reader: *Reader, images: [*c]c.server_image_inputs) Invalid![*c]
             } else if (!text_block or block.text == null) {
                 return error.InvalidJson;
             } else text.append(bytes(block.text));
+            if (block.cache_breakpoint) breakpoints.?.append(allocator, text.list.items.len) catch fatal();
         } else return error.InvalidJson;
         reader.separator();
     }
@@ -96,14 +111,16 @@ fn contentValue(reader: *Reader, images: [*c]c.server_image_inputs) Invalid![*c]
     return text.take();
 }
 fn replaceContent(reader: *Reader, target: *[*c]u8) Invalid!void {
-    const replacement = try contentValue(reader, null);
+    const replacement = try contentValue(reader, null, null);
     c.free(target.*);
     target.* = replacement;
 }
-fn replaceMultimodal(reader: *Reader, target: *[*c]u8, images: *c.server_image_inputs) Invalid!void {
+fn replaceMultimodal(reader: *Reader, target: *[*c]u8, images: *c.server_image_inputs, breakpoints: *std.ArrayList(usize)) Invalid!void {
     messages.freeImages(images);
     errdefer messages.freeImages(images);
-    const replacement = try contentValue(reader, images);
+    breakpoints.deinit(allocator);
+    breakpoints.* = .empty;
+    const replacement = try contentValue(reader, images, breakpoints);
     c.free(target.*);
     target.* = replacement;
 }
@@ -126,12 +143,16 @@ const Item = struct {
     status: [*c]u8 = null,
     content_images: c.server_image_inputs = std.mem.zeroes(c.server_image_inputs),
     output_images: c.server_image_inputs = std.mem.zeroes(c.server_image_inputs),
+    content_breakpoints: std.ArrayList(usize) = .empty,
+    output_breakpoints: std.ArrayList(usize) = .empty,
 
     fn deinit(self: *Item) void {
         inline for (.{ "kind", "role", "content", "name", "namespace", "call_id", "id", "arguments", "output", "input", "summary", "action", "result", "tools_json", "status" }) |field|
             c.free(@field(self, field));
         messages.freeImages(&self.content_images);
         messages.freeImages(&self.output_images);
+        self.content_breakpoints.deinit(allocator);
+        self.output_breakpoints.deinit(allocator);
     }
     fn read(self: *Item, reader: *Reader) Invalid!void {
         try reader.consume('{');
@@ -148,7 +169,7 @@ const Item = struct {
                     self.role = null;
                 } else try reader.replace(&self.role, false);
             } else if (equal(key, "content")) {
-                try replaceMultimodal(reader, &self.content, &self.content_images);
+                try replaceMultimodal(reader, &self.content, &self.content_images, &self.content_breakpoints);
             } else if (equal(key, "name")) {
                 try reader.replace(&self.name, false);
             } else if (equal(key, "namespace")) {
@@ -161,8 +182,10 @@ const Item = struct {
                 try reader.replace(&self.arguments, reader.peek() != '"');
             } else if (equal(key, "output")) {
                 messages.freeImages(&self.output_images);
+                self.output_breakpoints.deinit(allocator);
+                self.output_breakpoints = .empty;
                 if (reader.peek() == '[') {
-                    try replaceMultimodal(reader, &self.output, &self.output_images);
+                    try replaceMultimodal(reader, &self.output, &self.output_images, &self.output_breakpoints);
                 } else try reader.replace(&self.output, reader.peek() != '"');
             } else if (equal(key, "input")) {
                 try reader.replace(&self.input, reader.peek() != '"');
@@ -194,6 +217,8 @@ const Item = struct {
         if (bytes(self.status).len != 0 and !equal(self.status, "completed")) return error.InvalidJson;
         if (self.content_images.len != 0 and (!equal(kind, "message") or (self.role != null and !equal(self.role, "user")))) return error.InvalidJson;
         if (self.output_images.len != 0 and !equal(kind, "function_call_output") and !equal(kind, "custom_tool_call_output")) return error.InvalidJson;
+        if (self.content_breakpoints.items.len != 0 and !equal(kind, "message")) return error.InvalidJson;
+        if (self.output_breakpoints.items.len != 0 and !equal(kind, "function_call_output") and !equal(kind, "custom_tool_call_output")) return error.InvalidJson;
     }
     fn callId(self: *const Item) [*c]const u8 {
         return if (self.call_id != null) self.call_id else if (self.id != null) self.id else "";
@@ -266,6 +291,7 @@ const Decoder = struct {
             var qualified = Text{};
             defer qualified.deinit();
             qualified.append(bytes(item.namespace));
+            qualified.append("::");
             qualified.append(bytes(item.name));
             call.name = qualified.take();
         } else call.name = duplicate(bytes(item.name));
@@ -288,6 +314,7 @@ const Decoder = struct {
         item.output = null;
         message.images = item.output_images;
         item.output_images = std.mem.zeroes(c.server_image_inputs);
+        transferBreakpoints(&message, &item.output_breakpoints);
         if (item.call_id != null or item.id != null) messages.addCallId(&message, item.callId());
         pushResult(self.list, message);
     }
@@ -347,6 +374,7 @@ const Decoder = struct {
             item.content = null;
             message.images = item.content_images;
             item.content_images = std.mem.zeroes(c.server_image_inputs);
+            transferBreakpoints(&message, &item.content_breakpoints);
             if (equal(message.role, "assistant") and self.pending_reasoning.list.items.len != 0) message.reasoning = self.pending_reasoning.take();
             messages.pushMessage(self.list, message);
         } else if (ordinary_call) {
@@ -447,7 +475,7 @@ pub fn ds4_server_json_responses_input(cursor: *[*c]const u8, list: *c.chat_msgs
 pub fn ds4_server_json_responses_content(cursor: *[*c]const u8, output: *[*c]u8, images: [*c]c.server_image_inputs) bool {
     var reader = Reader{ .cursor = cursor.* };
     defer cursor.* = reader.cursor;
-    output.* = contentValue(&reader, images) catch return false;
+    output.* = contentValue(&reader, images, null) catch return false;
     return true;
 }
 pub fn ds4_server_input_restore_discovered_tools(list: *c.chat_msgs, orders: [*c]c.tool_schema_orders, tool_choice_none: bool, explicit_tools: [*c]const u8) c_int {

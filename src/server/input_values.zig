@@ -92,7 +92,16 @@ const Text = struct {
         const text = bytes(value);
         if (text.len == 0) return;
         if (self.list.items.len != 0) self.byte('\n');
-        self.append(text);
+        // The shared contract is JSON Lines. Request JSON may be pretty-
+        // printed, so produce each record with the standard serializer.
+        const parsed = std.json.parseFromSlice(std.json.Value, allocator, text, .{ .duplicate_field_behavior = .use_last }) catch {
+            self.append(text); // Invalid legacy helper input fails at contract preparation.
+            return;
+        };
+        defer parsed.deinit();
+        const compact = std.json.Stringify.valueAlloc(allocator, parsed.value, .{}) catch fatal();
+        defer allocator.free(compact);
+        self.append(compact);
     }
     fn quoted(self: *Text, value: []const u8) void {
         // Match json_escape's byte policy, including non-UTF8 strings and the
@@ -118,6 +127,7 @@ fn freeOrder(order: *c.tool_schema_order) void {
     c.free(order.name);
     c.free(order.wire_name);
     c.free(order.namespace);
+    c.free(order.parameters_json);
     for (items([*c]u8, order.prop, @intCast(order.len))) |property| c.free(property);
     for (items([*c]u8, order.prop_schema, @intCast(order.len))) |schema| c.free(schema);
     c.free(@ptrCast(order.prop));
@@ -182,7 +192,8 @@ fn readOrder(reader: *Reader, order: *c.tool_schema_order) Invalid!void {
             try reader.replace(&order.name, false);
         } else if (equal(key, "input_schema") or equal(key, "parameters")) {
             const schema = try reader.raw();
-            defer c.free(schema);
+            c.free(order.parameters_json);
+            order.parameters_json = schema;
             properties(schema, order) catch {};
         } else try reader.skip();
         reader.separator();
@@ -224,6 +235,7 @@ const Definition = struct {
     description: [*c]u8 = null,
     parameters: [*c]u8 = null,
     tools: [*c]u8 = null,
+    strict: ?bool = null,
 
     const Form = enum { hosted, function, namespace };
 
@@ -240,10 +252,14 @@ const Definition = struct {
                 try reader.replace(&self.kind, false);
             } else if (form != .hosted and equal(key, "name")) {
                 try reader.replace(&self.name, false);
-            } else if (form != .namespace and equal(key, "description")) {
+            } else if (equal(key, "description")) {
                 try reader.replace(&self.description, false);
             } else if (form != .namespace and (equal(key, "parameters") or (form == .function and equal(key, "input_schema")))) {
                 try reader.replace(&self.parameters, true);
+            } else if (form == .function and equal(key, "strict")) {
+                var flag = false;
+                if (!c.ds4_server_json_bool(&reader.cursor, &flag)) return error.InvalidJson;
+                self.strict = flag;
             } else if (form == .namespace and equal(key, "tools")) {
                 try reader.replace(&self.tools, true);
             } else try reader.skip();
@@ -259,6 +275,7 @@ const Definition = struct {
         text.quoted(if (self.description != null) bytes(self.description) else default_description);
         text.append(",\"parameters\":");
         text.append(if (self.parameters != null) bytes(self.parameters) else "{\"type\":\"object\",\"properties\":{}}");
+        if (self.strict) |flag| text.append(if (flag) ",\"strict\":true" else ",\"strict\":false");
         text.byte('}');
         return text.take();
     }
@@ -271,15 +288,21 @@ fn hostedSchema(raw: [*c]const u8) [*c]u8 {
     if (!equal(definition.kind, "tool_search")) return null;
     return definition.schema("tool_search", "Search available tools.");
 }
-fn namespaceFunction(raw: [*c]const u8, namespace: [*c]const u8, wire_name: *[*c]u8) [*c]u8 {
+fn namespaceFunction(raw: [*c]const u8, namespace: [*c]const u8, context: [*c]const u8, wire_name: *[*c]u8) [*c]u8 {
     var definition = Definition{};
     defer definition.deinit();
     definition.read(raw, .function) catch return null;
     if (definition.kind != null and !equal(definition.kind, "function")) return null;
     if (namespace == null or bytes(definition.name).len == 0) return null;
+    if (bytes(context).len != 0) {
+        const description = std.fmt.allocPrintSentinel(allocator, "{s}\n{s}", .{ bytes(context), bytes(definition.description) }, 0) catch fatal();
+        c.free(definition.description);
+        definition.description = description.ptr;
+    }
     var prompt_name = Text{};
     defer prompt_name.deinit();
     prompt_name.append(bytes(namespace));
+    prompt_name.append("::");
     prompt_name.append(bytes(definition.name));
     const schema = definition.schema(prompt_name.list.items, "");
     wire_name.* = duplicate(bytes(definition.name));
@@ -298,7 +321,7 @@ fn namespaceSchemas(text: *Text, orders: [*c]c.tool_schema_orders, raw: [*c]cons
         defer c.free(tool);
         var wire_name: [*c]u8 = null;
         defer c.free(wire_name);
-        const schema = namespaceFunction(tool, definition.name, &wire_name);
+        const schema = namespaceFunction(tool, definition.name, definition.description, &wire_name);
         defer c.free(schema);
         if (schema != null) {
             text.line(schema);
@@ -343,10 +366,18 @@ pub fn overlayRequestTools(raw: [*c]const u8, orders: [*c]c.tool_schema_orders) 
 // declarations asking for the retired execution routes must fail explicitly.
 fn clientTool(value: std.json.Value) bool {
     if (value != .object) return false;
+    if (value.object.get("name")) |name| {
+        if (name != .string or name.string.len == 0 or name.string.len > 128) return false;
+        for (name.string) |byte| if (!std.ascii.isAlphanumeric(byte) and byte != '_' and byte != '-') return false;
+    }
+    if (value.object.get("function")) |function| if (!clientTool(function)) return false;
     if (value.object.get("type")) |kind| {
         if (kind == .string and (std.mem.eql(u8, kind.string, "mcp") or
             std.mem.eql(u8, kind.string, "programmatic_tool_calling") or
-            std.mem.eql(u8, kind.string, "ds4:decision"))) return false;
+            std.mem.eql(u8, kind.string, "ds4:decision") or std.mem.eql(u8, kind.string, "custom"))) return false;
+    }
+    if (value.object.get("execution")) |execution| {
+        if (execution != .string or !std.mem.eql(u8, execution.string, "client")) return false;
     }
     if (value.object.get("allowed_callers")) |callers| {
         if (callers != .array) return false;

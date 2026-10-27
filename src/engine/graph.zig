@@ -559,6 +559,11 @@ export fn ds4_native_session_speculate_sample41(view: *const c.ds4_session_batch
     const owner = sessionSpeculation(view, core, transport, &config, inputs, verify_transport, exact);
     return owner.sample(first, maximum, eos, temperature, top_k, top_p, min_p, rng, accepted, capacity, errorBuffer(errors, error_capacity));
 }
+export fn ds4_native_session_speculate_constrained41(view: *const c.ds4_session_batch_view, core: *c.ds4_engine_core, transport: *c.ds4_engine_tp_state, raw: *const c.ds4_model_config, inputs: *const c.ds4_engine_memory_inputs, verify_transport: ?*c.ds4_tp, first: c_int, maximum: c_int, eos: c_int, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: ?*u64, constraint: *const c.ds4_token_constraint, accepted: [*c]c_int, capacity: c_int, exact: bool, errors: [*c]u8, error_capacity: usize) c_int {
+    const config = configuration(raw);
+    const owner = sessionSpeculation(view, core, transport, &config, inputs, verify_transport, exact);
+    return owner.constrained(first, maximum, eos, temperature, top_k, top_p, min_p, rng, constraint, accepted, capacity, errorBuffer(errors, error_capacity));
+}
 export fn ds4_native_session_restore_prefix41(view: *const c.ds4_session_batch_view, core: *c.ds4_engine_core, transport: *c.ds4_engine_tp_state, raw: *const c.ds4_model_config, inputs: *const c.ds4_engine_memory_inputs, verify_transport: ?*c.ds4_tp, position: c_int, exact: bool) c_int {
     const config = configuration(raw);
     const owner = sessionSpeculation(view, core, transport, &config, inputs, verify_transport, exact);

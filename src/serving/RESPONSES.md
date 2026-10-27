@@ -63,8 +63,10 @@ OpenResponses requires sequential sockets. Newer OpenAI `stream_id`
 multiplexing, `generate:false` warmup and client `response.cancel`/steering events
 are outside this version and return explicit unsupported-feature errors. Do not
 send HTTP-only `stream`, `stream_options` or `background` fields in a WebSocket
-create message. Standalone compaction, hosted tools and constrained output
-formats are not implemented by this transport work. Stored/connection-local
+create message. Standalone compaction and hosted execution are unsupported.
+DS41/Flint structured output and function-tool constraints use the shared
+[request implementation](../../docs/SERVER.md#constrained-output-and-client-tools)
+on HTTP and WebSocket alike. Stored/connection-local
 continuation currently targets text and function tools; image continuation is
 not qualified.
 

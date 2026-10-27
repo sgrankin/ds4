@@ -202,12 +202,32 @@ fn encode(runtime: *c.server, input: *const Input, out: *Embedding, errors: []u8
     c.ds4_server_persist_log(c.DS4_LOG_KVCACHE, &line);
     return true;
 }
+fn tokenizeSpan(engine: ?*c.ds4_engine, request: *c.request, begin: usize, end: usize) void {
+    if (request.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) {
+        var cursor = begin;
+        for (values(c_int, request.cache_breakpoint_bytes.v, @intCast(request.cache_breakpoint_bytes.len))) |offset| {
+            const position: usize = @intCast(offset);
+            if (position < cursor or position > end) continue;
+            c.ds4_tokenize_prompt_span(engine, request.prompt_text, cursor, position, request.prompt_special_ranges, request.prompt_special_count, &request.prompt);
+            if (request.cache_breakpoints.len == 0 or request.cache_breakpoints.v[@intCast(request.cache_breakpoints.len - 1)] != request.prompt.len)
+                c.ds4_tokens_push(&request.cache_breakpoints, request.prompt.len);
+            cursor = position;
+        }
+        c.ds4_tokenize_prompt_span(engine, request.prompt_text, cursor, end, request.prompt_special_ranges, request.prompt_special_count, &request.prompt);
+    } else {
+        const piece = allocator.dupeSentinel(u8, text(request.prompt_text)[begin..end], 0) catch fatal();
+        defer allocator.free(piece);
+        c.ds4_tokenize_rendered_chat(engine, piece.ptr, &request.prompt);
+    }
+}
+
 pub fn tokenize(engine: ?*c.ds4_engine, runtime: ?*c.server, request: *c.request, optional_messages: ?*const c.chat_msgs, errors: []u8) bool {
+    request.cache_breakpoints.len = 0;
     const messages: []const c.chat_msg = if (optional_messages) |m| (if (m.len <= 0) &.{} else values(c.chat_msg, m.v, @intCast(m.len))) else &.{};
     var count: usize = 0;
     for (messages) |message| count +%= message.images.len;
     if (count == 0) {
-        c.ds4_tokenize_rendered_chat(engine, request.prompt_text, &request.prompt);
+        tokenizeSpan(engine, request, 0, text(request.prompt_text).len);
         return true;
     }
     if (count > 16) return fail(errors, "too many images; at most 16 are allowed");
@@ -249,10 +269,7 @@ pub fn tokenize(engine: ?*c.ds4_engine, runtime: ?*c.server, request: *c.request
                     success = fail(errors, "image marker was lost while rendering the request");
                     break;
                 }
-                const size = @intFromPtr(found) - @intFromPtr(cursor);
-                const prefix = allocator.dupeSentinel(u8, cursor[0..size], 0) catch fatal();
-                c.ds4_tokenize_rendered_chat(engine, prefix.ptr, &request.prompt);
-                allocator.free(prefix);
+                tokenizeSpan(engine, request, @intFromPtr(cursor) - @intFromPtr(request.prompt_text), @intFromPtr(found) - @intFromPtr(request.prompt_text));
                 if (c.ds4_prompt_append_vision(engine, &request.prompt, &spans[i], embedding, if (errors.len == 0) null else errors.ptr, errors.len) == 0) {
                     success = false;
                     break;
@@ -261,7 +278,7 @@ pub fn tokenize(engine: ?*c.ds4_engine, runtime: ?*c.server, request: *c.request
                 markers[i] = input.marker;
                 cursor = found + c.strlen(&input.marker);
             }
-            if (success) c.ds4_tokenize_rendered_chat(engine, cursor, &request.prompt);
+            if (success) tokenizeSpan(engine, request, @intFromPtr(cursor) - @intFromPtr(request.prompt_text), text(request.prompt_text).len);
         }
         break :transaction success;
     };

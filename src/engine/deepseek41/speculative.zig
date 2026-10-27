@@ -7,6 +7,7 @@ const Executor = @import("executor.zig").Executor;
 const Drafter = @import("dspark.zig").Drafter;
 const dspark = @import("dspark.zig");
 const PrefillPolicy = @import("prefill_policy.zig").Policy;
+const ConstraintWalk = @import("../token_constraint.zig").Walk;
 const Model = c.ds4_model;
 const Stats = c.ds4_dspark_spec_stats;
 const verify_rows = c.DS41_VERIFY_ROWS;
@@ -183,6 +184,16 @@ pub const Cycle = struct {
     /// Context is a typed Session primitive: supported callers compose the
     /// native Coordinator/Selection directly, with no controller callbacks.
     pub fn run(self: *const Cycle, context: anytype, model: *const Model, first_token: c_int, requested_cap: c_int, eos: c_int, ignore_eos: bool, think_mode: c.ds4_think_mode, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: ?*u64, accepted: []c_int, error_text: []u8) c_int {
+        return self.runImpl(false, context, model, first_token, requested_cap, eos, ignore_eos, think_mode, temperature, top_k, top_p, min_p, rng, null, accepted, error_text);
+    }
+
+    pub fn runConstrained(self: *const Cycle, context: anytype, model: *const Model, first_token: c_int, requested_cap: c_int, eos: c_int, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: ?*u64, constraint: *const c.ds4_token_constraint, accepted: []c_int, error_text: []u8) c_int {
+        return self.runImpl(true, context, model, first_token, requested_cap, eos, false, c.DS4_THINK_HIGH, temperature, top_k, top_p, min_p, rng, constraint, accepted, error_text);
+    }
+
+    // Specialize away every callback, allocation and mask operation for the
+    // existing unconstrained entry point. Both use the same real block verifier.
+    fn runImpl(self: *const Cycle, comptime constrained: bool, context: anytype, model: *const Model, first_token: c_int, requested_cap: c_int, eos: c_int, ignore_eos: bool, think_mode: c.ds4_think_mode, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: ?*u64, constraint: ?*const c.ds4_token_constraint, accepted: []c_int, error_text: []u8) c_int {
         const graph = self.executor.graph;
         if (accepted.len == 0 or requested_cap < 1 or !self.checkpoint_valid.* or !graph.valid or
             graph.pos != @as(u32, @bitCast(self.checkpoint.len))) return -1;
@@ -218,6 +229,19 @@ pub const Cycle = struct {
         const state = self.draftState().?;
         const draft_owner = self.drafter(model).?;
         const vocabulary = self.executor.ops.config.shape.n_vocab;
+        const allocator = std.heap.c_allocator;
+        const masked = if (constrained) allocator.alloc(f32, vocabulary) catch return self.fail(stats, error_text) else &.{};
+        defer if (constrained) allocator.free(masked);
+        const words = if (constrained) allocator.alloc(u32, (@as(usize, vocabulary) + 31) / 32) catch return self.fail(stats, error_text) else &.{};
+        defer if (constrained) allocator.free(words);
+        var walk: ConstraintWalk = undefined;
+        if (constrained) walk = .{ .callbacks = constraint.? };
+        var published = false;
+        defer if (constrained and !published) {
+            // The caller owns its already-accepted seed; undo only our trial
+            // draft walk or failed committed-prefix/correction advances.
+            _ = walk.rewind();
+        };
         const exact = temperature > 0 and self.policy.exact_sampling;
         const started = nowSeconds();
         if (!self.draft(model, first_token)) return self.fail(stats, error_text);
@@ -229,7 +253,13 @@ pub const Cycle = struct {
             var confidence: f32 = undefined;
             if (!draft_owner.markov(row, tokens[row], &confidence)) return self.fail(stats, error_text);
             if (self.policy.confidence_threshold > 0 and sigmoid(confidence) < self.policy.confidence_threshold) break;
-            const proposal = state.host_logits + @as(u64, row) * vocabulary;
+            var proposal: [*]const f32 = state.host_logits + @as(u64, row) * vocabulary;
+            if (constrained) {
+                // Draft q and target p must apply the mask before top-k/p/min-p.
+                // Trial advancement gives the next draft its own grammar state.
+                if (!walk.mask(proposal[0..vocabulary], masked, words)) return self.fail(stats, error_text);
+                proposal = masked.ptr;
+            }
             if (exact) {
                 const probabilities = state.draft_probs + @as(u64, row) * vocabulary;
                 const random = rng orelse return self.fail(stats, error_text);
@@ -238,11 +268,15 @@ pub const Cycle = struct {
                 tokens[count] = c.ds4_sampling_probabilities(probabilities, vocabulary, random);
             } else tokens[count] = c.ds4_sampling_argmax(proposal, vocabulary);
             if (ignore_eos and context.stop(tokens[count], think_mode)) break;
+            if (constrained and !walk.accept(tokens[count])) return self.fail(stats, error_text);
             if (tokens[count] == eos) {
                 count += 1;
                 break;
             }
         }
+        // Target verification starts from the caller's seed and walks only the
+        // prefix actually accepted by the masked target distributions.
+        if (constrained and !walk.rewind()) return self.fail(stats, error_text);
         if (count == 1) {
             if (stats) |counters| {
                 counters.no_draft +%= 1;
@@ -266,7 +300,11 @@ pub const Cycle = struct {
         var keep: u32 = 1;
         var correction: c_int = -1;
         while (keep < count) : (keep += 1) {
-            const target = state.host_verified + @as(u64, keep - 1) * vocabulary;
+            var target: [*]const f32 = state.host_verified + @as(u64, keep - 1) * vocabulary;
+            if (constrained) {
+                if (!walk.mask(target[0..vocabulary], masked, words)) return self.fail(stats, error_text);
+                target = masked.ptr;
+            }
             if (!exact) {
                 if (c.ds4_sampling_argmax(target, vocabulary) != tokens[keep]) break;
             } else {
@@ -279,6 +317,7 @@ pub const Cycle = struct {
                     break;
                 }
             }
+            if (constrained and !walk.accept(tokens[keep])) return self.fail(stats, error_text);
         }
         if (!self.commit(tokens[0..count], keep)) return self.fail(stats, error_text);
         @memcpy(accepted[0..keep], tokens[0..keep]);
@@ -296,6 +335,7 @@ pub const Cycle = struct {
             }
         }
         if (correction >= 0) {
+            if (constrained and !walk.accept(correction)) return self.fail(stats, error_text);
             if (context.eval(correction, error_text) != 0) return -1;
             accepted[keep] = correction;
             keep += 1;
@@ -305,6 +345,7 @@ pub const Cycle = struct {
         }
         if (c.getenv("DS4_DSPARK_SPEC_LOG") != null) _ = c.fprintf(c.__stderrp, "ds4: V4.1 DSpark proposed=%u accepted=%u draft=%.3f ms verify=%.3f ms\n", count - 1, accepted_drafts, (proposed - started) * 1000, (nowSeconds() - proposed) * 1000);
         if (stats) |counters| counters.total_ms += (nowSeconds() - started) * 1000;
+        published = true;
         return @intCast(keep);
     }
 };

@@ -43,6 +43,36 @@ pub fn Backend(comptime c: type) type {
         }
 
         pub fn render(self: Self, req: *const c.request, messages: *const c.chat_msgs, start: usize, schemas: [*c]const u8, live: bool, order: ?*const c.stop_list, context: usize) [*c]u8 {
+            return self.renderMapped(req, messages, start, schemas, live, order, context, null);
+        }
+
+        pub fn renderTracked(self: Self, req: *c.request, messages: *const c.chat_msgs, start: usize, schemas: [*c]const u8, live: bool, order: ?*const c.stop_list, context: usize) [*c]u8 {
+            var map: types.PromptMap = .{};
+            defer map.deinit(std.heap.c_allocator);
+            const rendered = self.renderMapped(req, messages, start, schemas, live, order, context, &map);
+            if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and req.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT) return rendered;
+            const ranges = std.heap.c_allocator.alloc(c.ds4_prompt_range, map.special_ranges.items.len) catch fatal();
+            for (map.special_ranges.items, ranges) |range, *target| target.* = .{ .begin = range.begin, .end = range.end };
+            const pointer: [*c]c.ds4_prompt_range = if (ranges.len == 0) null else ranges.ptr;
+            if (!live) {
+                c.free(req.prompt_special_ranges);
+                req.prompt_special_ranges = pointer;
+                req.prompt_special_count = ranges.len;
+                req.cache_breakpoint_bytes.len = 0;
+                for (map.cache_breakpoints.items) |position| c.ds4_tokens_push(&req.cache_breakpoint_bytes, @intCast(position));
+            } else if (req.api == c.API_RESPONSES) {
+                c.free(req.responses_live_special_ranges);
+                req.responses_live_special_ranges = pointer;
+                req.responses_live_special_count = ranges.len;
+            } else {
+                c.free(req.anthropic_live_special_ranges);
+                req.anthropic_live_special_ranges = pointer;
+                req.anthropic_live_special_count = ranges.len;
+            }
+            return rendered;
+        }
+
+        fn renderMapped(self: Self, req: *const c.request, messages: *const c.chat_msgs, start: usize, schemas: [*c]const u8, live: bool, order: ?*const c.stop_list, context: usize, map: ?*types.PromptMap) [*c]u8 {
             _ = self;
             if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and req.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT and req.model_syntax != c.SERVER_MODEL_SYNTAX_QWEN and req.model_syntax != c.SERVER_MODEL_SYNTAX_GLM)
                 return c.ds4_server_materialize_render_other(req.model_syntax, messages, @intCast(start), schemas, &req.tool_orders, req.think_mode, live);
@@ -58,6 +88,7 @@ pub fn Backend(comptime c: type) type {
                 // Reasoning has already been resolved before continuation
                 // validation. Preserve that exact decision at rendering.
                 .reasoning = .{ .enabled = true, .effort = Canonical.reasoning(c, req.think_mode) },
+                .response_format = responseFormat(view.arena.allocator(), optional(req.response_format_json)),
             };
             const target: policy.Model = .{ .family = switch (req.model_syntax) {
                 c.SERVER_MODEL_SYNTAX_FLINT => .flint,
@@ -65,7 +96,7 @@ pub fn Backend(comptime c: type) type {
                 c.SERVER_MODEL_SYNTAX_GLM => .glm53,
                 else => .deepseek41,
             } };
-            const rendered = target.prepare(std.heap.c_allocator, request, .{ .start = start, .live_tail = live, .initial_tool_order = initial }, context) catch fatal();
+            const rendered = target.prepare(std.heap.c_allocator, request, .{ .start = start, .live_tail = live, .initial_tool_order = initial, .prompt_map = map }, context) catch fatal();
             return rendered.ptr;
         }
 
@@ -79,6 +110,20 @@ pub fn Backend(comptime c: type) type {
 
         fn optional(value: [*c]const u8) ?[]const u8 {
             return if (value == null) null else std.mem.span(value);
+        }
+
+        fn responseFormat(arena: std.mem.Allocator, raw: ?[]const u8) types.ResponseFormat {
+            const source = raw orelse return .text;
+            // The common contract already validated the request. Keep the
+            // original answer schema in the prompt, as the recipe does.
+            const value = std.json.parseFromSliceLeaky(std.json.Value, arena, source, .{}) catch fatal();
+            const kind = value.object.get("type").?.string;
+            if (std.mem.eql(u8, kind, "json_object")) return .json_object;
+            if (std.mem.eql(u8, kind, "regex")) return .regex;
+            if (!std.mem.eql(u8, kind, "json_schema")) return .text;
+            const object = value.object.get("json_schema") orelse value;
+            const schema = object.object.get("schema").?;
+            return .{ .json_schema = std.json.Stringify.valueAlloc(arena, schema, .{}) catch fatal() };
         }
 
         fn fatal() noreturn {

@@ -8,7 +8,7 @@
 #define KV_TOOL_MAP_MAGIC0 'K'
 #define KV_TOOL_MAP_MAGIC1 'T'
 #define KV_TOOL_MAP_MAGIC2 'M'
-#define KV_TOOL_MAP_VERSION 1u
+#define KV_TOOL_MAP_VERSION 2u
 #define KV_TOOL_MAP_HEADER 8u
 
 /* Exact sampled DSML is immutable and shared by all IDs in one tool block.
@@ -29,7 +29,7 @@ void ds4_server_tool_memory_remember(tool_memory *memory,
 void ds4_server_tool_memory_attach(tool_memory *memory, pthread_mutex_t *mutex,
     chat_msgs *messages, tool_replay_stats *stats);
 
-/* KTM1 is the existing optional KV trailer. Only blocks present verbatim in
+/* KTM2 includes sampled special-token ranges. Only blocks present verbatim in
  * saved text are written. Empty maps write no header. A truncated load keeps
  * and counts earlier complete, wanted records; it does not roll them back.
  * FILE streams and wanted IDs are borrowed; a NULL wanted list means all IDs.

@@ -25,6 +25,7 @@ const additive_source = @embedFile("../../metal/flint/decode-additive.metal");
 const m4_pro_additive_source = @embedFile("../../metal/flint/decode-m4-pro-additive.metal");
 const m5_pro_additive_source = @embedFile("../../metal/flint/decode-m5-pro-additive.metal");
 pub const sampling_source = @embedFile("../../metal/flint/sampling.metal");
+pub const mask_words: usize = (vocab + 31) / 32;
 const metadata_bytes: usize = 50 * 64 * 4;
 const parameters_bytes: usize = (packet_width + 1) * 4 * 4;
 const control_bytes: usize = packet_width * 1024 * 4;
@@ -44,7 +45,7 @@ pub const output_bytes = [_]usize{
 /// Everything owned by a decode session except KV. Model-shared SiLU and the
 /// serving facade's prefill/checkpoint allocations are accounted separately.
 pub const session_scratch_bytes: usize = blk: {
-    var bytes = metadata_bytes + parameters_bytes + control_bytes + sampling_bytes;
+    var bytes = metadata_bytes + parameters_bytes + control_bytes + sampling_bytes + mask_words * packet_width * 4;
     for (output_bytes) |size| bytes += size;
     break :blk bytes;
 };
@@ -282,6 +283,87 @@ pub fn encodeSampling(gpu: *c.flint_gpu, command: *anyopaque, buffers: SampleBuf
     return c.flint_gpu_dispatch(gpu, command, if (small) "flint_sample_finish20" else "flint_sample_finish128", config, @sizeOf(SampleConfig), &second, second.len, &[_]u32{ 1, 1, 1 }, &[_]u32{ 256, 1, 1 });
 }
 
+/// The constrained sampler has distinct entrypoints/bindings. Ordinary resident
+/// packets keep their original encoder and generated kernels.
+pub fn encodeMaskedSampling(gpu: *c.flint_gpu, command: *anyopaque, buffers: SampleBuffers, mask: *anyopaque, config: *const SampleConfig, logits: *anyopaque, offset: u64, fp32: bool) bool {
+    return encodeMaskedSamplingAt(gpu, command, buffers, mask, 0, config, logits, offset, fp32);
+}
+
+pub fn encodeMaskedSamplingAt(gpu: *c.flint_gpu, command: *anyopaque, buffers: SampleBuffers, mask: *anyopaque, mask_offset: u64, config: *const SampleConfig, logits: *anyopaque, offset: u64, fp32: bool) bool {
+    const small = config.top_k <= 20;
+    const partial: [*:0]const u8 = if (fp32)
+        (if (small) "flint_sample_masked_partial20_f32" else "flint_sample_masked_partial128_f32")
+    else
+        (if (small) "flint_sample_masked_partial20_bf16" else "flint_sample_masked_partial128_bf16");
+    const first = [_]c.flint_gpu_binding{
+        .{ .handle = logits, .offset = offset, .index = 1 },
+        .{ .handle = buffers.candidates, .offset = 0, .index = 2 },
+        .{ .handle = buffers.normalizers, .offset = 0, .index = 3 },
+        .{ .handle = buffers.parameters, .offset = @as(u64, config.step) * 16, .index = 4 },
+        .{ .handle = mask, .offset = mask_offset, .index = 5 },
+    };
+    if (!c.flint_gpu_dispatch(gpu, command, partial, config, @sizeOf(SampleConfig), &first, first.len, &[_]u32{ 128, 1, 1 }, &[_]u32{ 256, 1, 1 })) return false;
+    const second = [_]c.flint_gpu_binding{
+        .{ .handle = buffers.candidates, .offset = 0, .index = 1 },
+        .{ .handle = buffers.normalizers, .offset = 0, .index = 2 },
+        .{ .handle = buffers.parameters, .offset = @as(u64, config.step) * 16, .index = 3 },
+        .{ .handle = buffers.parameters, .offset = @as(u64, config.step + 1) * 16, .index = 4 },
+        .{ .handle = buffers.record, .offset = 0, .index = 5 },
+        .{ .handle = buffers.diagnostic, .offset = @as(u64, config.step) * workers * 4, .index = 6 },
+    };
+    return c.flint_gpu_dispatch(gpu, command, if (small) "flint_sample_masked_finish20" else "flint_sample_masked_finish128", config, @sizeOf(SampleConfig), &second, second.len, &[_]u32{ 1, 1, 1 }, &[_]u32{ 256, 1, 1 });
+}
+
+/// A packet owns one mask per step. Token-ready notifications run serially on
+/// the driver's CPU queue while the GPU evaluates the following forward pass.
+/// The first input was accepted by the caller; the last prediction is never
+/// accepted because it has not been fed through the model.
+pub const ConstraintPacket = struct {
+    constraint: *const c.ds4_token_constraint,
+    parameters: []const u32,
+    record: []const u32,
+    masks: []u32,
+    advanced: usize = 0,
+    failure: ?anyerror = null,
+
+    pub fn fill(self: *ConstraintPacket, step: usize) !void {
+        const words = self.masks[step * mask_words ..][0..mask_words];
+        @memset(words, 0);
+        if (self.constraint.mask.?(self.constraint.context, words.ptr, words.len) != 0) return error.GrammarMaskCallback;
+        for (words) |word| if (word != 0) return;
+        return error.EmptyGrammarMask;
+    }
+
+    pub fn ready(raw: ?*anyopaque, sampled_step: u32) callconv(.c) void {
+        const self: *ConstraintPacket = @ptrCast(@alignCast(raw.?));
+        if (self.failure != null) return;
+        const next: usize = sampled_step + 1;
+        // EOS and a failed sampler disable subsequent forwards. They must not
+        // advance the matcher or require another legal continuation mask.
+        if (self.parameters[next * 4 + 3] == 0) return;
+        if (self.record[16] != next or self.record[2 * sampled_step + 1] >= vocab) {
+            self.failure = error.InvalidResidentPacket;
+            return;
+        }
+        const token: c_int = @intCast(self.record[2 * sampled_step + 1]);
+        if (self.constraint.accept.?(self.constraint.context, token) != 0) {
+            self.failure = error.GrammarAcceptCallback;
+            return;
+        }
+        self.advanced += 1;
+        self.fill(next) catch |err| {
+            @memset(self.masks[next * mask_words ..][0..mask_words], 0);
+            self.failure = err;
+        };
+    }
+
+    pub fn rollback(self: *ConstraintPacket) !void {
+        if (self.advanced == 0) return;
+        if (self.constraint.rollback.?(self.constraint.context, self.advanced) != 0) return error.GrammarRollbackCallback;
+        self.advanced = 0;
+    }
+};
+
 pub const Session = struct {
     decoder: *Decoder,
     /// KV layout is public so prefill can write the same buffers directly.
@@ -300,6 +382,7 @@ pub const Session = struct {
     parameters: *anyopaque,
     control: *anyopaque,
     sampling: *anyopaque,
+    grammar_mask: ?*anyopaque = null,
     // Binding22..29: logits, trace, diagnostics, packet/profile, workspace,
     // attention partials/statistics and expert routing handoff flags.
     outputs: [8]*anyopaque,
@@ -374,6 +457,7 @@ pub const Session = struct {
         c.flint_gpu_buffer_free(self.parameters);
         c.flint_gpu_buffer_free(self.control);
         c.flint_gpu_buffer_free(self.sampling);
+        if (self.grammar_mask) |buffer| c.flint_gpu_buffer_free(buffer);
         self.* = undefined;
     }
 
@@ -551,6 +635,74 @@ pub const Session = struct {
         return self.finishPacket(token, count);
     }
 
+    /// One command buffer, up to eight resident forwards. A shared-event fence
+    /// exposes each sampled token to the CPU matcher; the next forward runs
+    /// concurrently with accept/mask, waiting only at the masked sampler.
+    pub fn sampledConstrained(self: *Session, token: u32, count: u32, options: SampleOptions, constraint: *const c.ds4_token_constraint) !Packet {
+        if (token >= vocab) return error.InvalidToken;
+        if (count == 0 or count > packet_width) return error.InvalidPacket;
+        if (constraint.mask == null or constraint.accept == null or constraint.rollback == null) return error.InvalidGrammarCallbacks;
+        _ = try SampleConfig.init(options, 0, count);
+        try self.grow(self.position + count);
+        const gpu = self.decoder.model.gpu;
+        if (self.grammar_mask == null) self.grammar_mask = try allocation(gpu, mask_words * packet_width * 4);
+        const params = contents(u32, self.parameters, (packet_width + 1) * 4);
+        @memset(params, 0);
+        params[0..4].* = .{ token, self.position, self.initial_position, layers };
+        @memset(contents(u32, self.control, packet_width * 1024), 0);
+        @memset(contents(u32, self.outputs[2], packet_width * workers), 0);
+        @memset(contents(u32, self.outputs[3], 17), 0);
+        const masks = contents(u32, self.grammar_mask.?, mask_words * packet_width);
+        @memset(masks, 0);
+        var grammar: ConstraintPacket = .{
+            .constraint = constraint,
+            .parameters = params,
+            .record = contents(u32, self.outputs[3], 17),
+            .masks = masks,
+        };
+        try grammar.fill(0);
+        self.publishSteering();
+        const handoff = c.flint_gpu_handoff_create(gpu, &grammar, ConstraintPacket.ready) orelse return error.GpuHandoff;
+        var handoff_live = true;
+        defer if (handoff_live) c.flint_gpu_handoff_free(handoff);
+        const command = c.flint_gpu_command_begin(gpu) orelse return error.GpuCommand;
+        var dispatched = true;
+        for (0..count) |i| {
+            const step: u32 = @intCast(i);
+            const bound = self.bindings(step);
+            const active = self.steeringActive();
+            dispatched = c.flint_gpu_dispatch(gpu, command, self.decoder.scalarKernel(active), null, 0, &bound, if (active) 31 else 30, &[_]u32{ self.decoder.profile.workerCount(), 1, 1 }, &[_]u32{ 256, 1, 1 });
+            if (!dispatched) break;
+            if (step != 0) c.flint_gpu_handoff_wait(handoff, command, step - 1);
+            const config = try SampleConfig.init(options, step, count);
+            dispatched = encodeMaskedSamplingAt(gpu, command, .{
+                .parameters = self.parameters,
+                .candidates = self.outputs[5],
+                .normalizers = self.outputs[6],
+                .record = self.outputs[3],
+                .diagnostic = self.outputs[2],
+            }, self.grammar_mask.?, @as(u64, step) * mask_words * 4, &config, self.outputs[0], @as(u64, step) * vocab * 2, false);
+            if (!dispatched) break;
+            if (step + 1 < count) c.flint_gpu_handoff_signal(handoff, command, step);
+        }
+        const completed = c.flint_gpu_command_end(gpu, command, true);
+        c.flint_gpu_handoff_free(handoff);
+        handoff_live = false;
+        errdefer {
+            self.usable = false;
+            grammar.rollback() catch |err| std.debug.print("flint: {s}\n", .{@errorName(err)});
+        }
+        if (!dispatched or !completed) {
+            gpuError(gpu, "constrained resident packet");
+            return error.GpuDispatch;
+        }
+        if (grammar.failure) |err| return err;
+        try self.checkDiagnostics(count);
+        const result = try self.finishPacket(token, count);
+        if (grammar.advanced != result.len - 1) return error.InvalidGrammarPacket;
+        return result;
+    }
+
     /// Sample the FP32 logits produced by prefill without advancing the cache.
     /// Its selected token is the input to the first resident decode packet.
     pub fn sampleLogits(self: *Session, logits: *anyopaque, offset: u64, options: SampleOptions) !u32 {
@@ -571,6 +723,38 @@ pub const Session = struct {
         }
         const record = contents(u32, self.outputs[3], 17);
         if (record[16] != 1 or record[1] >= vocab) return error.InvalidResidentPacket;
+        return record[1];
+    }
+
+    /// Sample the current frontier without advancing KV. The counter seed and
+    /// logical position are identical to the resident packet sampler's policy.
+    pub fn sampleMaskedLogits(self: *Session, logits: *anyopaque, offset: u64, fp32: bool, options: SampleOptions, words: []const u32) !u32 {
+        if (!self.usable) return error.InvalidatedSession;
+        if (words.len != mask_words) return error.InvalidGrammarMask;
+        var any = false;
+        for (words) |word| any = any or word != 0;
+        if (!any) return error.EmptyGrammarMask;
+        const config = try SampleConfig.init(options, 0, 1);
+        const gpu = self.decoder.model.gpu;
+        if (self.grammar_mask == null) self.grammar_mask = try allocation(gpu, mask_words * packet_width * 4);
+        @memcpy(contents(u32, self.grammar_mask.?, mask_words), words);
+        const params = contents(u32, self.parameters, 8);
+        @memset(params, 0);
+        params[0..4].* = .{ 0, self.position -| 1, self.initial_position, layers };
+        @memset(contents(u32, self.outputs[2], workers), 0);
+        @memset(contents(u32, self.outputs[3], 17), 0);
+        const command = c.flint_gpu_command_begin(gpu) orelse return error.GpuCommand;
+        const dispatched = encodeMaskedSampling(gpu, command, .{
+            .parameters = self.parameters,
+            .candidates = self.outputs[5],
+            .normalizers = self.outputs[6],
+            .record = self.outputs[3],
+            .diagnostic = self.outputs[2],
+        }, self.grammar_mask.?, &config, logits, offset, fp32);
+        const completed = c.flint_gpu_command_end(gpu, command, true);
+        if (!dispatched or !completed) return error.GpuDispatch;
+        const record = contents(u32, self.outputs[3], 17);
+        if (record[16] != 1 or record[1] >= vocab) return error.InvalidMaskedSample;
         return record[1];
     }
 };

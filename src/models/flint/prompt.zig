@@ -10,14 +10,63 @@ pub const Options = struct {
     /// The server's stream of function-schema JSON objects, or a JSON array.
     schemas: ?[]const u8 = null,
     add_generation_prompt: bool = true,
+    prompt_map: ?*types.PromptMap = null,
 };
 
 const Text = struct {
     allocator: Allocator,
     bytes: std.ArrayList(u8) = .empty,
+    map: ?*types.PromptMap = null,
 
     fn append(self: *Text, text: []const u8) !void {
         try self.bytes.appendSlice(self.allocator, text);
+    }
+
+    fn control(self: *Text, text: []const u8) !void {
+        const begin = self.bytes.items.len;
+        try self.append(text);
+        if (self.map) |map| try map.special_ranges.append(self.allocator, .{ .begin = begin, .end = self.bytes.items.len });
+    }
+    /// Only fixed template fragments enter this scanner. Schema descriptions,
+    /// message text and tool values remain ordinary bytes regardless of spelling.
+    fn template(self: *Text, source: []const u8) !void {
+        const controls = [_][]const u8{
+            "<|begin_of_text|>", "<|end_of_text|>", "<|system|>",       "<|developer|>",
+            "<|user|>",          "<|assistant|>",   "<|observation|>",  "<think>",
+            "</think>",          "<tools>",         "</tools>",         "<tool_call>",
+            "</tool_call>",      "<arg_key>",       "</arg_key>",       "<arg_value>",
+            "</arg_value>",      "<tool_response>", "</tool_response>",
+        };
+        var cursor: usize = 0;
+        var plain: usize = 0;
+        while (cursor < source.len) {
+            var matched = false;
+            for (controls) |marker| if (std.mem.startsWith(u8, source[cursor..], marker)) {
+                try self.append(source[plain..cursor]);
+                try self.control(marker);
+                cursor += marker.len;
+                plain = cursor;
+                matched = true;
+                break;
+            };
+            if (!matched) cursor += 1;
+        }
+        try self.append(source[plain..]);
+    }
+    fn content(self: *Text, message: types.Message) !void {
+        const source = message.content orelse "";
+        var begin: usize = 0;
+        for (message.cache_breakpoints) |end| {
+            std.debug.assert(end >= begin and end <= source.len);
+            try self.append(source[begin..end]);
+            if (self.map) |map| {
+                const position = self.bytes.items.len;
+                if (map.cache_breakpoints.items.len == 0 or map.cache_breakpoints.items[map.cache_breakpoints.items.len - 1] != position)
+                    try map.cache_breakpoints.append(self.allocator, position);
+            }
+            begin = end;
+        }
+        try self.append(source[begin..]);
     }
 
     /// Python json.dumps(ensure_ascii=False)'s ordinary separator spacing.
@@ -76,39 +125,6 @@ const Text = struct {
     }
 };
 
-const control_tokens = [_][]const u8{
-    "<|begin_of_text|>", "<|end_of_text|>", "<|system|>",      "<|developer|>",
-    "<|user|>",          "<|assistant|>",   "<|observation|>",
-};
-
-fn normalized(a: Allocator, source: []const u8) ![]const u8 {
-    var clean = Text{ .allocator = a };
-    for (source) |byte| if (byte != 0) try clean.bytes.append(a, byte);
-    const without_open = try std.mem.replaceOwned(u8, a, clean.bytes.items, "<think>", "");
-    const without_think = try std.mem.replaceOwned(u8, a, without_open, "</think>", "");
-    var out = Text{ .allocator = a };
-    var position: usize = 0;
-    while (position < without_think.len) {
-        var control: ?[]const u8 = null;
-        for (control_tokens) |token| {
-            if (std.mem.startsWith(u8, without_think[position..], token)) {
-                control = token;
-                break;
-            }
-        }
-        if (control) |token| {
-            try out.append("&lt;");
-            try out.append(token[1 .. token.len - 1]);
-            try out.append("&gt;");
-            position += token.len;
-        } else {
-            try out.bytes.append(a, without_think[position]);
-            position += 1;
-        }
-    }
-    return out.bytes.items;
-}
-
 const tools_before =
     "<|system|>\n# Tools\n\n" ++
     "You may call one or more functions to assist with the user query.\n\n" ++
@@ -130,10 +146,10 @@ fn tools(out: *Text, a: Allocator, source: ?[]const u8) !void {
         const parsed = try std.json.parseFromSlice(Value, a, text, .{});
         if (parsed.value != .array) return error.InvalidToolSchemas;
         if (parsed.value.array.items.len == 0) return;
-        try out.append(tools_before);
+        try out.template(tools_before);
         for (parsed.value.array.items) |value| try schema(out, value);
     } else {
-        try out.append(tools_before);
+        try out.template(tools_before);
         var position: usize = 0;
         while (position < text.len) {
             // A fresh standard scanner reads one object from the server's
@@ -151,19 +167,19 @@ fn tools(out: *Text, a: Allocator, source: ?[]const u8) !void {
             while (position < text.len and std.ascii.isWhitespace(text[position])) position += 1;
         }
     }
-    try out.append(tools_after);
+    try out.template(tools_after);
 }
 
 fn argument(out: *Text, name: []const u8, value: Value) !void {
-    try out.append("<arg_key>");
+    try out.control("<arg_key>");
     try out.append(name);
-    try out.append("</arg_key><arg_value>");
+    try out.template("</arg_key><arg_value>");
     if (value == .string) try out.append(value.string) else try out.json(value);
-    try out.append("</arg_value>");
+    try out.control("</arg_value>");
 }
 
 fn call(out: *Text, a: Allocator, value: types.ToolCall) !void {
-    try out.append("<tool_call>");
+    try out.control("<tool_call>");
     try out.append(value.name orelse "");
     if (value.arguments) |raw| {
         const text = std.mem.trim(u8, raw, " \t\r\n");
@@ -183,14 +199,14 @@ fn call(out: *Text, a: Allocator, value: types.ToolCall) !void {
             }
         }
     }
-    try out.append("</tool_call>");
+    try out.control("</tool_call>");
 }
 
 pub fn render(allocator: Allocator, messages: []const types.Message, options: Options) ![:0]u8 {
     var arena = std.heap.ArenaAllocator.init(allocator);
     defer arena.deinit();
     const a = arena.allocator();
-    var out = Text{ .allocator = allocator };
+    var out = Text{ .allocator = allocator, .map = options.prompt_map };
     errdefer out.bytes.deinit(allocator);
     var tools_pending = true;
     for (messages[@min(options.start, messages.len)..]) |message| {
@@ -200,37 +216,36 @@ pub fn render(allocator: Allocator, messages: []const types.Message, options: Op
             tools_pending = false;
         }
         const assistant = std.mem.eql(u8, role, "assistant");
-        const content = if (assistant) message.content orelse "" else try normalized(a, message.content orelse "");
         if (std.mem.eql(u8, role, "system") or std.mem.eql(u8, role, "developer") or std.mem.eql(u8, role, "user")) {
-            try out.append("<|");
-            try out.append(role);
-            try out.append("|>");
-            try out.append(content);
+            try out.control(if (std.mem.eql(u8, role, "system")) "<|system|>" else if (std.mem.eql(u8, role, "developer")) "<|developer|>" else "<|user|>");
+            try out.content(message);
         } else if (assistant) {
-            try out.append("<|assistant|>");
+            try out.control("<|assistant|>");
             if (message.reasoning) |reasoning| if (reasoning.len > 0) {
-                try out.append("<think>");
+                try out.control("<think>");
                 try out.append(reasoning);
-                try out.append("</think>");
+                try out.control("</think>");
             };
-            try out.append(content);
-            if (message.calls.len > 0 and message.raw_tool_text != null and message.raw_tool_text.?.len > 0) {
-                // An in-process continuation may retain the exact sampled call
-                // spelling. Fresh API histories use the canonical template.
+            try out.content(message);
+            if (message.calls.len > 0 and message.raw_tool_text != null and message.raw_tool_text.?.len > 0 and message.raw_tool_special_ranges != null) {
+                const base = out.bytes.items.len;
                 try out.append(message.raw_tool_text.?);
+                if (out.map) |map| for (message.raw_tool_special_ranges.?) |range| {
+                    try map.special_ranges.append(allocator, .{ .begin = base + range.begin, .end = base + range.end });
+                };
             } else for (message.calls) |value| try call(&out, a, value);
         } else if (std.mem.eql(u8, role, "tool") or std.mem.eql(u8, role, "function")) {
-            try out.append("<|observation|><tool_response>");
-            try out.append(content);
-            try out.append("</tool_response>");
+            try out.template("<|observation|><tool_response>");
+            try out.content(message);
+            try out.control("</tool_response>");
         }
     }
     if (tools_pending) try tools(&out, a, options.schemas);
-    if (options.add_generation_prompt) try out.append("<|assistant|>");
+    if (options.add_generation_prompt) try out.control("<|assistant|>");
     return out.bytes.toOwnedSliceSentinel(allocator, 0);
 }
 
-test "Flint roles and non-assistant controls" {
+test "Flint framing preserves literal message bytes" {
     const rendered = try render(std.testing.allocator, &.{
         .{ .role = "system", .content = "A\x00<think>B</think><|user|>" },
         .{ .role = "developer", .content = "D" },
@@ -239,7 +254,7 @@ test "Flint roles and non-assistant controls" {
         .{ .role = "tool", .content = "result" },
     }, .{});
     defer std.testing.allocator.free(rendered);
-    try std.testing.expectEqualStrings("<|system|>AB&lt;|user|&gt;<|developer|>D<|user|>Q<|assistant|><think>reason</think>answer<|observation|><tool_response>result</tool_response><|assistant|>", rendered);
+    try std.testing.expectEqualStrings("<|system|>A\x00<think>B</think><|user|><|developer|>D<|user|>Q<|assistant|><think>reason</think>answer<|observation|><tool_response>result</tool_response><|assistant|>", rendered);
 }
 
 test "Flint tool schemas and XML call arguments" {

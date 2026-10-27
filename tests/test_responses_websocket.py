@@ -69,7 +69,8 @@ def http(base, output, name, method, path, payload=None, expected=200, timeout=1
 
 
 class Server:
-    def __init__(self, binary, model, output, store, cache, flint_profile=None, family="deepseek"):
+    def __init__(self, binary, model, output, store, cache, flint_profile=None, family="deepseek",
+                 extra_args=(), env_overrides=None, batched_sessions=2):
         self.process = None
         self.output = output
         self.flint = model.is_dir() and (model / "flint-int4.json").is_file()
@@ -104,8 +105,10 @@ class Server:
             # native DS4.1, even for families with public snapshot payloads.
             env = {key: value for key, value in env.items() if not key.startswith("DS4_STATE_CACHE_")}
         command = [str(binary), "--model", str(model), "--host", "127.0.0.1", "--port", str(port),
-            "--ctx", "8192", "--batched-session", "2",
+            "--ctx", "8192",
             "--mtp-draft", "1", "--tokens", "1024" if self.flint else "128", "--trace", str(output / "trace.log")]
+        if batched_sessions:
+            command += ["--batched-session", str(batched_sessions)]
         if self.family == "flint":
             command += ["--prefill-chunk", "4096"]
         elif self.family == "deepseek":
@@ -117,6 +120,8 @@ class Server:
             command += ["--ssd-streaming", "--ssd-streaming-cache-experts", "24GB"]
         if flint_profile is not None:
             command += ["--flint-profile", flint_profile]
+        command += list(extra_args)
+        env.update(env_overrides or {})
         save(output / "execution.json", {"command": command, "cwd": str(ROOT), "family": self.family,
             "env": {k: v for k, v in env.items() if k.startswith("DS4")},
             "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest()})

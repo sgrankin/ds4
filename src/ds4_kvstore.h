@@ -158,6 +158,13 @@ void ds4_kvstore_evict(ds4_kvstore *kc, const ds4_tokens *live,
                        const ds4_kvstore_eviction_context *incoming);
 int ds4_kvstore_find_text_prefix(ds4_kvstore *kc, const char *prompt_text,
                                  int model_id, int quant_bits, int ctx_size);
+/* The mapped path verifies restored IDs against the actual rendered prompt;
+ * allowed==NULL permits automatic endpoints, otherwise only listed token ends. */
+int ds4_kvstore_try_load_text_mapped(ds4_kvstore *kc, ds4_engine *engine,
+    ds4_session *session, const char *prompt_text, const ds4_tokens *canonical,
+    const ds4_tokens *allowed, ds4_tokens *effective_prompt,
+    ds4_kvstore_load_result *result, const ds4_kvstore_trailer_hooks *hooks,
+    bool responses_protocol);
 
 bool ds4_kvstore_store_live_prefix_text(ds4_kvstore *kc,
                                         ds4_engine *engine,

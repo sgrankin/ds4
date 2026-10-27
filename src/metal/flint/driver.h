@@ -29,6 +29,19 @@ void *flint_gpu_command_begin(flint_gpu *gpu);
 bool flint_gpu_command_end(flint_gpu *gpu, void *command, bool wait);
 /* Diagnostic synchronous completion, reporting Metal's GPU execution time. */
 bool flint_gpu_command_end_profile(flint_gpu *gpu, void *command, double *gpu_seconds);
+/* One packet's CPU grammar work runs on a serial queue. Signal a sampled token,
+ * run its callback while the next forward executes, then wait immediately
+ * before that forward's sampler reads the newly filled mask. Free drains all
+ * callbacks, including when command execution failed. */
+typedef struct flint_gpu_handoff flint_gpu_handoff;
+typedef void (*flint_gpu_handoff_fn)(void *context, uint32_t step);
+flint_gpu_handoff *flint_gpu_handoff_create(flint_gpu *gpu, void *context,
+                                            flint_gpu_handoff_fn callback);
+void flint_gpu_handoff_signal(flint_gpu_handoff *handoff, void *command,
+                              uint32_t step);
+void flint_gpu_handoff_wait(flint_gpu_handoff *handoff, void *command,
+                            uint32_t step);
+void flint_gpu_handoff_free(flint_gpu_handoff *handoff);
 bool flint_gpu_dispatch(flint_gpu *gpu, void *command, const char *kernel,
                         const void *params, size_t params_bytes,
                         const flint_gpu_binding *bindings, size_t count,

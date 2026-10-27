@@ -123,9 +123,22 @@ barriers require exclusive execution. The default mixed-prefill quantum is
   local-ring/logit prefill checkpoint. After generation, extending or rewinding
   within that continuation restores the checkpoint and recomputes the tail
   through prefill, following the original harness's arithmetic distinction.
-- Flint does not yet have model-state SSD checkpoints, suffix relocation,
-  vision, or grammar/schema masking. Durable Responses history is independent
-  of these tensor-cache capabilities.
+- Function tools and structured answers use native XGrammar masks. Constrained
+  requests use packets of up to eight forwards for supported filtering settings;
+  CPU grammar updates overlap the next GPU forward using shared-event handoffs.
+  Unsupported packet filters retain constrained scalar sampling. Ordinary
+  requests retain their existing kernels and packet encoder.
+  See the [shared request contract](SERVER.md#constrained-output-and-client-tools).
+- Prompt tokenization distinguishes template framing from literal marker text.
+  Message/schema text, tool arguments and results use ordinary BPE; saved raw
+  calls retain their sampled control ranges through replay. Older calls without
+  those ranges render from their logical fields. This intentionally differs
+  from the reference template's stripping/escaping of literal markers, so text
+  such as `</arg_value>` or `<|user|>` survives a tool turn as data. Ordinary
+  framing and the tokenizer's explicit raw/special-token encoding retain their
+  existing IDs; this is not a claim of byte-for-byte parity for sanitized inputs.
+- Flint does not yet have model-state SSD checkpoints, suffix relocation or
+  vision. Durable Responses history is independent of tensor-cache support.
 
 Weights are resident. Global KV allocates in 65,536-token banks, with about
 1.78 GiB for the first bank per active session; prefill scratch and the local
@@ -189,8 +202,13 @@ Quality capture uses positions 16/32/64/96 in each reference greedy continuation
 It measures the same target token and full vocabulary at each fixed prefix;
 delta-NLL and KL do not depend on whether free-running replies later diverge.
 Eight positions from two prompts are a focused numerical probe, not a broad
-coding-quality or long-context evaluation. Native serving parses tool output
-but does not reproduce the reference grammar masks or MLX's random sequence.
+coding-quality or long-context evaluation. That original qualification used
+native tool parsing without grammar masks; it does not measure the later native
+XGrammar integration. The native random stream still differs from MLX's keys.
+The [masked sampler fixture](../speed-bench/experiments/flint-masked-sampling-20261027/README.md)
+qualifies filtering behavior; real constrained model throughput remains a
+separate measurement in the
+[constrained-packet qualification](../speed-bench/experiments/constrained-packets-20261027/README.md).
 
 The [prefill source notes](../src/metal/flint/prefill/README.md) and
 [resident decoder notes](../src/metal/flint/README.md) document the kernel

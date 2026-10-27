@@ -59,10 +59,42 @@ fn nativeObject(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8
     const m = module(b, target, sdk, optimize);
     m.root_source_file = b.path(source);
     m.addImport(api_name, api);
+    if (std.mem.startsWith(u8, source, "src/server/"))
+        m.addImport("grammar", grammarModule(b, target, sdk, optimize));
     if (std.mem.startsWith(u8, source, "src/server/") or std.mem.eql(u8, source, "src/models/flint/tokenizer.zig")) servingImports(b, m, target, optimize);
     if (std.mem.eql(u8, source, "src/server/serving_entry.zig"))
         m.addImport("server_http_c", generatedApi(b, target, sdk, optimize, "src/server/http_api.h"));
     return b.addObject(.{ .name = std.fs.path.stem(source), .root_module = m }).getEmittedBin();
+}
+
+fn grammarModule(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, optimize: std.builtin.Optimize) *std.Build.Module {
+    const m = module(b, target, sdk, optimize);
+    m.root_source_file = b.path("src/grammar.zig");
+    m.addImport("grammar_c", generatedApi(b, target, sdk, optimize, "src/grammar.h"));
+    return m;
+}
+
+fn grammarLibrary(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, clang: []const u8) *std.Build.Step.Compile {
+    const m = module(b, target, sdk, .fast);
+    m.linkSystemLibrary("c++", .{});
+    const flags: []const []const u8 = &.{
+        "-O3",                                         "-g",                                 "-mcpu=native", "-std=c++17",                  "-Wall", "-Wextra",                               "-Wno-unused-parameter",
+        "-DXGRAMMAR_ENABLE_CPPTRACE=0",                "-DXGRAMMAR_ENABLE_INTERNAL_CHECK=0", "-I",           "src/vendor/xgrammar/include", "-I",    "src/vendor/xgrammar/3rdparty/picojson", "-I",
+        "src/vendor/xgrammar/3rdparty/dlpack/include",
+    };
+    // Pin the native source set. No Python/TVM FFI or generated binary dependency.
+    for ([_][]const u8{
+        "compiled_grammar",      "config",                "earley_parser",            "fsm",                  "fsm_builder",            "grammar",
+        "grammar_builder",       "grammar_compiler",      "grammar_functor",          "grammar_matcher",      "grammar_parser",         "grammar_printer",
+        "json_schema_converter", "lark_converter",        "regex_converter",          "structural_tag",       "suffix_automata",        "testing",
+        "tokenizer_info",        "support/logging",       "support/recursion_guard",  "converter_ext/cohere", "converter_ext/deepseek", "converter_ext/glm",
+        "converter_ext/kimi_k3", "converter_ext/minimax", "converter_ext/minimax_m3", "converter_ext/qwen",
+    }) |name| {
+        m.addObjectFile(object(b, target, sdk, clang, b.fmt("src/vendor/xgrammar/cpp/{s}.cc", .{name}), b.fmt("xgrammar-{s}", .{std.fs.path.basename(name)}), .fast, flags));
+    }
+    m.addObjectFile(object(b, target, sdk, clang, "src/grammar_bridge.cc", "grammar-bridge", .fast, flags));
+    m.addObjectFile(object(b, target, sdk, clang, "src/grammar_xml.cc", "grammar-xml", .fast, flags));
+    return b.addLibrary(.{ .name = "ds4-grammar", .root_module = m });
 }
 
 fn clefModule(b: *std.Build, target: std.Build.ResolvedTarget, sdk: []const u8, optimize: std.builtin.Optimize, source: []const u8) *std.Build.Module {
@@ -144,7 +176,28 @@ pub fn build(b: *std.Build) void {
     // Shared public declarations/layouts for the handwritten host modules.
     const c_api = generatedApi(b, target, sdk, optimize, "src/c_api.h");
 
+    const grammar_library = grammarLibrary(b, target, sdk, clang);
+    const grammar_test_module = module(b, target, sdk, optimize);
+    grammar_test_module.root_source_file = b.path("src/grammar_test.zig");
+    grammar_test_module.addImport("grammar", grammarModule(b, target, sdk, optimize));
+    grammar_test_module.linkLibrary(grammar_library);
+    const grammar_test = b.addTest(.{ .name = "test-grammar", .root_module = grammar_test_module });
+    b.step("grammar-test", "Build native grammar compiler/mask/rollback fixtures without a model")
+        .dependOn(&b.addInstallArtifact(grammar_test, .{}).step);
+    const constraint_test_module = module(b, target, sdk, optimize);
+    constraint_test_module.root_source_file = b.path("src/server/constraint_contract.zig");
+    const constraint_test = b.addTest(.{ .name = "test-constraint-contract", .root_module = constraint_test_module });
+    b.step("constraint-contract-test", "Build the shared prompt/grammar request-contract fixture")
+        .dependOn(&b.addInstallArtifact(constraint_test, .{}).step);
+    const constraint_walk_module = module(b, target, sdk, optimize);
+    constraint_walk_module.root_source_file = b.path("src/engine/token_constraint.zig");
+    constraint_walk_module.addImport("gguf_c", generatedApi(b, target, sdk, optimize, "src/ds4.h"));
+    const constraint_walk_test = b.addTest(.{ .name = "test-token-constraint", .root_module = constraint_walk_module });
+    b.step("token-constraint-test", "Build speculative grammar mask/accept/rollback fixtures")
+        .dependOn(&b.addInstallArtifact(constraint_walk_test, .{}).step);
+
     const core_module = module(b, target, sdk, .fast);
+    core_module.linkLibrary(grammar_library);
     core_module.linkSystemLibrary("curl", .{});
     const suffix_match_module = matcher: {
         const m = module(b, target, sdk, optimize);
@@ -493,8 +546,18 @@ pub fn build(b: *std.Build) void {
     const image_library = b.addLibrary(.{ .name = "ds4-image", .linkage = .dynamic, .root_module = image_library_module });
     b.step("image-library", "Build a libc-only library from the selected production image objects").dependOn(&b.addInstallArtifact(image_library, .{}).step);
     const core = b.addLibrary(.{ .name = "ds4-metal-c", .root_module = core_module });
+    const prompt_tokens_module = module(b, target, sdk, optimize);
+    prompt_tokens_module.root_source_file = b.path("tests/test_prompt_tokens.zig");
+    prompt_tokens_module.addImport("prompt_tokens_c", generatedApi(b, target, sdk, optimize, "src/ds4_vocab.h"));
+    prompt_tokens_module.linkLibrary(core);
+    prompt_tokens_module.linkFramework("Foundation", .{});
+    prompt_tokens_module.linkFramework("Metal", .{});
+    prompt_tokens_module.linkFramework("Accelerate", .{});
+    prompt_tokens_module.linkSystemLibrary("icucore", .{});
+    const prompt_tokens_test = b.addExecutable(.{ .name = "test-prompt-tokens", .root_module = prompt_tokens_module });
+    b.step("prompt-tokens-test", "Build actual native BPE prompt-control provenance checks")
+        .dependOn(&b.addInstallArtifact(prompt_tokens_test, .{}).step);
     const hosted_test_api = generatedApi(b, target, sdk, .debug, "src/server/output_api.h");
-    const decision_registry_test_stub = nativeObject(b, target, sdk, .debug, "tests/decision_registry_test_stub.zig", "hosted_test_c", hosted_test_api);
     {
         const boundary_module = module(b, target, sdk, optimize);
         boundary_module.root_source_file = b.path("src/serving/boundary_test.zig");
@@ -825,6 +888,17 @@ pub fn build(b: *std.Build) void {
     const flint_smoke_frontend = nativeObject(b, target, sdk, optimize, "src/flint_smoke_entry.zig", "flint_c", flint_api);
     const flint_smoke = executable(b, target, sdk, core, null, null, "flint-smoke", flint_smoke_frontend, optimize);
     b.step("flint-smoke", "Build the native Flint driver/model qualification executable").dependOn(&b.addInstallArtifact(flint_smoke, .{}).step);
+    const masked_sampler_module = module(b, target, sdk, optimize);
+    masked_sampler_module.root_source_file = b.path("src/flint_masked_sampling_test.zig");
+    masked_sampler_module.addImport("flint_c", flint_api);
+    masked_sampler_module.linkLibrary(core);
+    masked_sampler_module.linkFramework("Foundation", .{});
+    masked_sampler_module.linkFramework("Metal", .{});
+    masked_sampler_module.linkFramework("Accelerate", .{});
+    masked_sampler_module.linkSystemLibrary("icucore", .{});
+    const masked_sampler_test = b.addExecutable(.{ .name = "test-flint-masked-sampling", .root_module = masked_sampler_module });
+    b.step("flint-masked-sampling-test", "Build the no-model GPU mask/filter/RNG qualification and sampler microbenchmark")
+        .dependOn(&b.addInstallArtifact(masked_sampler_test, .{}).step);
     // This fixture includes ds4_cli.c and opens a model; build only here.
     const cli_test_frontend = object(b, target, sdk, clang, "tests/test_deepseek41_cli.c", "test-deepseek41-cli-main", optimize, test_flags);
     const cli_test = executable(b, target, sdk, core, null, null, "test-deepseek41-cli", cli_test_frontend, optimize);
@@ -924,8 +998,41 @@ pub fn build(b: *std.Build) void {
     // This C fixture includes ds4_server.c; do not link a second server object.
     const server_test_frontend = object(b, target, sdk, clang, "tests/ds4_test.c", "ds4_test-main", optimize, server_test_base);
     const server_test = executable(b, target, sdk, core, cache, kvstore, "ds4_test", server_test_frontend, optimize);
-    server_test.root_module.addObjectFile(decision_registry_test_stub);
+    for ([_]std.Build.LazyPath{ clef_entry, clef_normalizer, clef_codec }) |object_file|
+        server_test.root_module.addObjectFile(object_file);
+    mediaLibraries(server_test.root_module);
     b.step("server-test", "Build the existing C server fixture against selected host modules").dependOn(&b.addInstallArtifact(server_test, .{}).step);
+    const ds41_output_frontend = nativeObject(b, target, sdk, optimize, "src/server/ds41_output_test.zig", "ds41_test_c", generatedApi(b, target, sdk, optimize, "src/server/ds41_output_test_api.h"));
+    const ds41_output_test = executable(b, target, sdk, core, cache, kvstore, "test-ds41-output", ds41_output_frontend, optimize);
+    ds41_output_test.root_module.addObjectFile(server_support);
+    for ([_]std.Build.LazyPath{ clef_entry, clef_normalizer, clef_codec }) |object_file|
+        ds41_output_test.root_module.addObjectFile(object_file);
+    mediaLibraries(ds41_output_test.root_module);
+    b.step("ds41-output-test", "Build production-linked token provenance and Responses streaming fixtures")
+        .dependOn(&b.addInstallArtifact(ds41_output_test, .{}).step);
+    {
+        const fixture_module = module(b, target, sdk, optimize);
+        fixture_module.root_source_file = b.path("src/server_cache_breakpoints_test.zig");
+        fixture_module.addImport("hosted_test_c", hosted_test_api);
+        fixture_module.linkLibrary(core);
+        fixture_module.addObjectFile(cache);
+        fixture_module.addObjectFile(kvstore);
+        fixture_module.addObjectFile(server_support);
+        for ([_]std.Build.LazyPath{ clef_entry, clef_normalizer, clef_codec }) |object_file|
+            fixture_module.addObjectFile(object_file);
+        mediaLibraries(fixture_module);
+        fixture_module.linkFramework("Foundation", .{});
+        fixture_module.linkFramework("Metal", .{});
+        fixture_module.linkFramework("Accelerate", .{});
+        fixture_module.linkSystemLibrary("icucore", .{});
+        const fixture = b.addTest(.{ .name = "test-server-cache-breakpoints", .root_module = fixture_module });
+        b.step("server-cache-breakpoints-test", "Build actual cache-boundary wire and replay checks")
+            .dependOn(&b.addInstallArtifact(fixture, .{}).step);
+    }
+    const flint_prompt_frontend = nativeObject(b, target, sdk, optimize, "src/server/flint_prompt_test.zig", "flint_prompt_test_c", generatedApi(b, target, sdk, optimize, "src/flint_tokenizer.h"));
+    const flint_prompt_fixture = executable(b, target, sdk, core, null, null, "test-flint-prompt", flint_prompt_frontend, optimize);
+    b.step("flint-prompt-test", "Build CPU-only Flint prompt token provenance and replay fixture")
+        .dependOn(&b.addInstallArtifact(flint_prompt_fixture, .{}).step);
     const family_payload_frontend = object(b, target, sdk, clang, "speed-bench/experiments/model-family-ports-20261023/payload_exchange.c", "model-payload-exchange-main", optimize, strict_flags);
     const family_payload_test = executable(b, target, sdk, core, null, null, "model-payload-exchange", family_payload_frontend, optimize);
     b.step("model-payload-test", "Build public-API Qwen/GLM payload exchange qualification (run separately)").dependOn(&b.addInstallArtifact(family_payload_test, .{}).step);

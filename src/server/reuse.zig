@@ -3,6 +3,7 @@
 //! suffix and refresh cached text only after mutating the session.
 const std = @import("std");
 const c = @import("server_reuse_c");
+const CachePolicy = @import("prompt_cache_policy.zig");
 const allocator = std.heap.c_allocator;
 
 fn fatal() noreturn {
@@ -82,6 +83,7 @@ pub fn profile(optional_runtime: ?*const c.server, optional_req: ?*const c.reque
     const runtime = optional_runtime orelse return;
     const req = optional_req orelse return;
     if (req.kind != c.REQ_CHAT or req.image_count != 0) return;
+    if (req.prompt_cache_explicit) return;
     var rows: [*c]const u8 = null;
     if (runtime.context_suffix_reuse) {
         if (text(req.prompt_cache_key).len == 0) return;
@@ -246,6 +248,8 @@ pub fn probeLocked(optional_runtime: ?*c.server, optional_slot: ?*c.server_slot,
     const live_pointer = c.ds4_session_tokens(slot.session);
     if (live_pointer == null or live_pointer.*.len <= 0) return none;
     const live: *const c.ds4_tokens = @ptrCast(live_pointer);
+    if (!CachePolicy.allowsRead(slot.prompt_cache_explicit, items(c_int, slot.cache_breakpoints.v, @intCast(slot.cache_breakpoints.len)), live.len)) return none;
+    if (!CachePolicy.allowsRead(req.prompt_cache_explicit, items(c_int, req.cache_breakpoints.v, @intCast(req.cache_breakpoints.len)), live.len)) return none;
     if (!c.ds4_session_vision_fingerprint_prefix_matches(slot.session, req.images, req.image_count)) return none;
     const is_canonical = canonical(runtime, req);
 
@@ -295,6 +299,27 @@ pub fn probe(runtime: *c.server, slot: ?*c.server_slot, req: ?*const c.request) 
 /// Retain sampled prefix token IDs and tokenize only the visible suffix. New
 /// images reuse their exact wrapper/embedding tokens with rebased positions;
 /// committing output waits for a complete image-prefix identity check.
+fn tokenizeSuffix(runtime: *c.server, req: *const c.request, source: [*c]const u8, begin: usize, end: usize, out: *c.ds4_tokens) bool {
+    if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and req.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT) {
+        const piece = allocator.dupeSentinel(u8, text(source)[begin..end], 0) catch fatal();
+        defer allocator.free(piece);
+        c.ds4_tokenize_rendered_chat(runtime.engine, piece.ptr, out);
+        return true;
+    }
+    if (source == req.responses_live_suffix_text) {
+        c.ds4_tokenize_prompt_span(runtime.engine, source, begin, end, req.responses_live_special_ranges, req.responses_live_special_count, out);
+    } else if (source == req.anthropic_live_suffix_text) {
+        c.ds4_tokenize_prompt_span(runtime.engine, source, begin, end, req.anthropic_live_special_ranges, req.anthropic_live_special_count, out);
+    } else {
+        const base = @intFromPtr(req.prompt_text);
+        const address = @intFromPtr(source);
+        if (address < base or address - base > text(req.prompt_text).len) return false;
+        const offset = address - base;
+        c.ds4_tokenize_prompt_span(runtime.engine, req.prompt_text, offset + begin, offset + end, req.prompt_special_ranges, req.prompt_special_count, out);
+    }
+    return true;
+}
+
 pub fn suffix(runtime: *c.server, slot: *c.server_slot, req: *const c.request, suffix_text: [*c]const u8, out: *c.ds4_tokens) bool {
     const live = c.ds4_session_tokens(slot.session);
     if (live == null or suffix_text == null or req.image_count > 16) return false;
@@ -319,15 +344,13 @@ pub fn suffix(runtime: *c.server, slot: *c.server_slot, req: *const c.request, s
         const start: i64 = @as(i64, req.images[position].token_start) - wrapper;
         const end = @as(u64, req.images[position].token_start) + req.images[position].embedding.token_count + @as(u64, @intCast(wrapper));
         if (start < 0 or end > @as(u64, @intCast(req.prompt.len))) return false;
-        const prefix = allocator.dupeSentinel(u8, raw[cursor..found], 0) catch fatal();
-        defer allocator.free(prefix);
-        c.ds4_tokenize_rendered_chat(runtime.engine, prefix.ptr, &prompt);
+        if (!tokenizeSuffix(runtime, req, suffix_text, cursor, found, &prompt)) return false;
         spans[position].token_start = @intCast(prompt.len + wrapper);
         var token = start;
         while (token < @as(i64, @intCast(end))) : (token += 1) c.ds4_tokens_push(&prompt, req.prompt.v[@intCast(token)]);
         cursor = found + spelling.len;
     }
-    c.ds4_tokenize_rendered_chat(runtime.engine, suffix_text + cursor, &prompt);
+    if (!tokenizeSuffix(runtime, req, suffix_text, cursor, raw.len, &prompt)) return false;
     if (!c.ds4_session_vision_prefix_matches(slot.session, &spans, req.image_count)) return false;
     for (0..req.image_count) |position| req.images[position].token_start = spans[position].token_start;
     c.ds4_tokens_free(out);

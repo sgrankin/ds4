@@ -95,6 +95,25 @@ pub const Session = struct {
         return action.run(self, &self.coordinator.core.mtp_model, first, count, eos, false, c.DS4_THINK_HIGH, temperature, top_k, top_p, min_p, rng, accepted[0..@intCast(@min(count, c.DS41_VERIFY_ROWS))], errors);
     }
 
+    pub fn constrained(self: *const Session, first: c_int, maximum: c_int, eos: c_int, temperature: f32, top_k: c_int, top_p: f32, min_p: f32, rng: ?*u64, constraint: *const c.ds4_token_constraint, accepted: [*c]c_int, capacity: c_int, errors: []u8) c_int {
+        if (accepted == null or maximum <= 0 or capacity <= 0) return 0;
+        if (temperature > 0 and rng == null) return 0;
+        if (!self.coordinator.runtime.state.checkpoint_valid) {
+            fail(errors, "speculative decode requires a synchronized checkpoint");
+            return -1;
+        }
+        if (constraint.mask == null or constraint.accept == null or constraint.rollback == null) {
+            fail(errors, "constrained decode requires mask, accept and rollback callbacks");
+            return -1;
+        }
+        // Existing overthinking adjustment depends on the committed history.
+        // Preserve its one-token policy rather than verifying raw target rows.
+        if (self.coordinator.core.overthink.penalty > 0) return self.ordinary(first, accepted, errors);
+        const count = @min(capacity, maximum);
+        const action = self.cycle();
+        return action.runConstrained(self, &self.coordinator.core.mtp_model, first, count, eos, temperature, top_k, top_p, min_p, rng, constraint, accepted[0..@intCast(@min(count, c.DS41_VERIFY_ROWS))], errors);
+    }
+
     fn canRestore(self: *const Session, position: c_int) bool {
         const state = self.coordinator.runtime.state;
         const graph = self.coordinator.runtime.prefill.executor.graph;

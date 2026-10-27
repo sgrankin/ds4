@@ -296,6 +296,10 @@ int ds4_native_session_speculate_argmax41(const ds4_session_batch_view *, ds4_en
 int ds4_native_session_speculate_sample41(const ds4_session_batch_view *, ds4_engine_core *, ds4_engine_tp_state *,
     const ds4_model_config *, const ds4_engine_memory_inputs *, ds4_tp *verify_transport,
     int, int, int, float, int, float, float, uint64_t *, int *, int, bool, char *, size_t);
+int ds4_native_session_speculate_constrained41(const ds4_session_batch_view *, ds4_engine_core *, ds4_engine_tp_state *,
+    const ds4_model_config *, const ds4_engine_memory_inputs *, ds4_tp *verify_transport,
+    int, int, int, float, int, float, float, uint64_t *, const ds4_token_constraint *,
+    int *, int, bool, char *, size_t);
 int ds4_native_session_restore_prefix41(const ds4_session_batch_view *, ds4_engine_core *, ds4_engine_tp_state *,
     const ds4_model_config *, const ds4_engine_memory_inputs *, ds4_tp *verify_transport,
     int, bool);

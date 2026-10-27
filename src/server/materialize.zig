@@ -4,6 +4,8 @@
 const std = @import("std");
 const c = @import("server_materialize_c");
 const ModelBackend = @import("model.zig").Backend(c);
+const Contract = @import("constraint_contract.zig");
+const FlintSchema = @import("flint_schema.zig");
 const allocator = std.heap.c_allocator;
 const Invalid = error{InvalidRequest};
 
@@ -202,13 +204,13 @@ pub fn validate(runtime: ?*c.server, optional_messages: ?*const c.chat_msgs, api
     return true;
 }
 
-fn render(backend: ModelBackend, runtime: ?*c.server, req: *const c.request, messages: *const c.chat_msgs, start: c_int, schemas: [*c]const u8, live: bool, ids: ?*const c.stop_list, context: usize) [*c]u8 {
+fn render(backend: ModelBackend, runtime: ?*c.server, req: *c.request, messages: *const c.chat_msgs, start: c_int, schemas: [*c]const u8, live: bool, ids: ?*const c.stop_list, context: usize) [*c]u8 {
     if (live) {
         var order = liveOrder(runtime, req.api, ids.?);
         defer freeIds(&order);
-        return backend.render(req, messages, @intCast(start), null, true, &order, context);
+        return backend.renderTracked(req, messages, @intCast(start), null, true, &order, context);
     }
-    return backend.render(req, messages, 0, schemas, false, null, context);
+    return backend.renderTracked(req, messages, 0, schemas, false, null, context);
 }
 
 /// This only prepares evidence. Generation still rechecks the actual sampled
@@ -359,8 +361,48 @@ const Transaction = struct {
         }
     }
     fn finishPrompt(self: *Transaction, schemas: [*c]const u8) Invalid!void {
-        self.req.prompt_preserves_reasoning = historyUsesTools(&self.messages, schemas);
-        self.req.prompt_text = render(self.backend, self.runtime, &self.req, &self.messages, 0, schemas, false, null, @intCast(@max(self.context, 0)));
+        var marked = false;
+        var images = false;
+        for (messageItems(&self.messages)) |message| {
+            marked = marked or message.cache_breakpoints_len != 0;
+            images = images or message.images.len != 0;
+        }
+        if (self.req.prompt_cache_explicit or marked) {
+            if (self.req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or images)
+                return fail(self.errors, "Explicit prompt checkpoints currently support DS4.1 text only");
+            if (self.req.responses_requires_live_tool_state or self.req.anthropic_requires_live_tool_state)
+                return fail(self.errors, "Explicit cache controls need complete replay history, previous_response_id or a conversation; a call-ID-only tool result is insufficient");
+        }
+        const prepared = Contract.prepare(allocator, text(schemas), if (self.req.tool_choice_json == null) null else text(self.req.tool_choice_json), if (self.req.response_format_json == null) null else text(self.req.response_format_json), self.req.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and c.ds4_think_mode_enabled(self.req.think_mode)) catch |err|
+            return fail(self.errors, Contract.message(err));
+        defer allocator.free(prepared.prompt);
+        if (prepared.constraint != null and self.req.stops.len != 0) {
+            allocator.free(prepared.constraint.?);
+            return fail(self.errors, "Custom stop strings cannot combine with constrained output");
+        }
+        if (self.req.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT and prepared.constraint != null and
+            (FlintSchema.unsupportedStrictTools(allocator, prepared.constraint.?) catch fatal()))
+        {
+            allocator.free(prepared.constraint.?);
+            return fail(self.errors, "Strict Flint parameters mixing strings with non-null JSON types cannot combine with pattern, format or string-length constraints");
+        }
+        const native_constraints = self.req.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or self.req.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT;
+        if (native_constraints) {
+            c.free(self.req.constraint_json);
+            self.req.constraint_json = if (prepared.constraint) |value| value.ptr else null;
+        } else if (prepared.constraint) |descriptor| {
+            defer allocator.free(descriptor);
+            const parsed = std.json.parseFromSlice(std.json.Value, allocator, descriptor, .{}) catch fatal();
+            defer parsed.deinit();
+            var strict = false;
+            for (parsed.value.object.get("tools").?.array.items) |tool| strict = strict or tool.object.get("function").?.object.get("strict").?.bool;
+            if (prepared.required or strict or parsed.value.object.get("format").? != .null)
+                return fail(self.errors, "Structured output and forced tool choices currently support DS4.1 and Flint only");
+        }
+        self.req.has_tools = prepared.prompt.len != 0;
+        const active: [*c]const u8 = if (self.req.has_tools) prepared.prompt.ptr else null;
+        self.req.prompt_preserves_reasoning = if (self.req.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41) self.req.has_tools else historyUsesTools(&self.messages, active);
+        self.req.prompt_text = render(self.backend, self.runtime, &self.req, &self.messages, 0, active, false, null, @intCast(@max(self.context, 0)));
         if (!self.backend.tokenize(self.runtime, &self.req, &self.messages, self.errors)) return error.InvalidRequest;
     }
     fn conversation(self: *Transaction, incremental: bool) Invalid!void {
@@ -500,7 +542,7 @@ const Transaction = struct {
         user.content = prompt;
         appendMessage(&self.messages, user);
         self.req.prompt_text = render(self.backend, self.runtime, &self.req, &self.messages, 0, null, false, null, @intCast(@max(self.context, 0)));
-        self.backend.tokenizeText(self.req.prompt_text, &self.req.prompt);
+        if (!self.backend.tokenize(self.runtime, &self.req, &self.messages, self.errors)) return error.InvalidRequest;
     }
 };
 

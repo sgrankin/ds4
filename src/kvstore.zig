@@ -749,6 +749,9 @@ export fn ds4_kvstore_maybe_store_continued(kc: *Store, engine: ?*Engine, sessio
     return false;
 }
 export fn ds4_kvstore_find_text_prefix(kc: *Store, prompt_text: Str, model_id: c_int, quant_bits: c_int, ctx_size: c_int) c_int {
+    return findTextPrefix(kc, prompt_text, model_id, quant_bits, ctx_size, null);
+}
+fn findTextPrefix(kc: *Store, prompt_text: Str, model_id: c_int, quant_bits: c_int, ctx_size: c_int, allowed: ?*const Tokens) c_int {
     if (prompt_text == null) return -1;
     const prompt_bytes = c.strlen(prompt_text);
     refreshEntries(kc);
@@ -756,6 +759,16 @@ export fn ds4_kvstore_find_text_prefix(kc: *Store, prompt_text: Str, model_id: c
     var i: c_int = 0;
     while (i < kc.len) : (i += 1) {
         const e = entryAt(kc, i);
+        if (allowed) |positions| {
+            var marked = false;
+            for (0..countAsUsize(positions.len)) |position| {
+                if (e.tokens == unsignedBits(positions.v[position])) {
+                    marked = true;
+                    break;
+                }
+            }
+            if (!marked) continue;
+        }
         if (e.text_bytes > prompt_bytes or e.text_bytes > std.math.maxInt(usize)) continue;
         if (signedBits(e.tokens) < kc.opt.min_tokens or e.model_id != truncateByte(model_id) or unsignedBits(ctx_size) < e.ctx_size) continue;
         if (kc.reject_different_quant and e.quant_bits != truncateByte(quant_bits)) continue;
@@ -770,6 +783,12 @@ export fn ds4_kvstore_find_text_prefix(kc: *Store, prompt_text: Str, model_id: c
     return best;
 }
 export fn ds4_kvstore_try_load_text(kc: *Store, engine: ?*Engine, session: ?*Session, prompt_text: Str, effective_prompt: ?*Tokens, result: ?*LoadResult, hooks: ?*const TrailerHooks, responses_protocol: bool) c_int {
+    return loadText(kc, engine, session, prompt_text, effective_prompt, result, hooks, responses_protocol, null, null);
+}
+export fn ds4_kvstore_try_load_text_mapped(kc: *Store, engine: ?*Engine, session: ?*Session, prompt_text: Str, canonical: *const Tokens, allowed: ?*const Tokens, effective_prompt: ?*Tokens, result: ?*LoadResult, hooks: ?*const TrailerHooks, responses_protocol: bool) c_int {
+    return loadText(kc, engine, session, prompt_text, effective_prompt, result, hooks, responses_protocol, canonical, allowed);
+}
+fn loadText(kc: *Store, engine: ?*Engine, session: ?*Session, prompt_text: Str, effective_prompt: ?*Tokens, result: ?*LoadResult, hooks: ?*const TrailerHooks, responses_protocol: bool, canonical: ?*const Tokens, allowed: ?*const Tokens) c_int {
     if (result) |r| @memset(std.mem.asBytes(r), 0);
     if (effective_prompt) |p| p.len = 0;
     if (!kc.enabled or prompt_text == null) return 0;
@@ -777,7 +796,7 @@ export fn ds4_kvstore_try_load_text(kc: *Store, engine: ?*Engine, session: ?*Ses
     if (!ds4_kvstore_quant_bits_supported(quant_bits)) return 0;
     const model_id = c.ds4_engine_model_id(engine);
     const prompt_bytes = c.strlen(prompt_text);
-    const index = ds4_kvstore_find_text_prefix(kc, prompt_text, model_id, quant_bits, c.ds4_session_ctx(session));
+    const index = findTextPrefix(kc, prompt_text, model_id, quant_bits, c.ds4_session_ctx(session), allowed);
     if (index < 0) return 0;
     const e = kc.entry[countAsUsize(index)];
     const path = xstrdup(e.path);
@@ -822,17 +841,21 @@ export fn ds4_kvstore_try_load_text(kc: *Store, engine: ?*Engine, session: ?*Ses
     const proto: Str = if (responses_protocol) "RESPPROTO" else "";
     if (header_ok and c.ds4_session_load_payload(session, fp, hdr.payload_bytes, &err, err.len) == 0) {
         const loaded_tokens: ?*const Tokens = c.ds4_session_tokens(session);
-        if (loaded_tokens != null and loaded_tokens.?.len == signedBits(hdr.tokens)) {
+        const token_match = if (canonical) |prompt| loaded_tokens != null and loaded_tokens.?.len >= 0 and loaded_tokens.?.len <= prompt.len and
+            std.mem.eql(c_int, loaded_tokens.?.v[0..countAsUsize(loaded_tokens.?.len)], prompt.v[0..countAsUsize(loaded_tokens.?.len)]) else true;
+        if (loaded_tokens != null and loaded_tokens.?.len == signedBits(hdr.tokens) and token_match) {
             loaded = signedBits(hdr.tokens);
             // Lookup was by rendered bytes, but restored state owns its exact
             // token history. Retain those IDs and tokenize only the text after
             // the matched byte prefix, avoiding boundary retokenization drift.
-            if (effective_prompt) |p| ds4_kvstore_build_prompt_from_exact_prefix_and_text_suffix(engine, loaded_tokens, prompt_text + text_bytes, p);
+            if (effective_prompt) |p| {
+                if (canonical) |prompt| c.ds4_tokens_copy(p, prompt) else ds4_kvstore_build_prompt_from_exact_prefix_and_text_suffix(engine, loaded_tokens, prompt_text + text_bytes, p);
+            }
             if (hooks != null and hooks.?.load != null and hdr.ext_flags & hooks.?.ext_flag != 0) _ = hooks.?.load.?(hooks.?.ud, fp, hooks.?.load_wanted);
         } else {
             c.ds4_session_invalidate(session);
             _ = c.unlink(path);
-            logMessage(kc, c.DS4_KVSTORE_LOG_KVCACHE, "%s: kv cache discarded corrupt text-prefix payload%s%s %s", .{ logName(kc), sep, proto, path });
+            logMessage(kc, c.DS4_KVSTORE_LOG_KVCACHE, "%s: kv cache discarded incompatible text-prefix tokens%s%s %s", .{ logName(kc), sep, proto, path });
         }
     } else {
         if (header_ok) c.ds4_session_invalidate(session);
