@@ -58,22 +58,34 @@ pub const Runtime = struct {
         if (positions.len == 0 or positions.len > 16 or positions.len != outputs.len or
             !self.ready or graph.workspace_failed or graph.tp_world != 1 or graph.dspark != null or
             graph.imatrix != null or graph.quality or graph.image_count != 0 or
-            state.approximate_suffix or state.approximate_decoder_replay or state.approximate_swa_replay or
             state.sync_image_count != 0 or state.checkpoint_image_count != 0 or
             graph.predict_active or graph.predict_load.active or scheduling.replaySetting() != 0 or
             c.getenv("DS4_METAL_DISABLE_V41_BATCH_ATTN") != null or
             c.getenv("DS4_METAL_DISABLE_V41_LAYER_PREFILL") != null or
-            prompt.len <= state.checkpoint.len or prompt.len >= state.ctx_size or
-            prompt.len - state.checkpoint.len >= 8192) return -1;
+            prompt.len <= 0 or prompt.len >= state.ctx_size) return -1;
         const tokens = prompt.v[0..@as(usize, @intCast(prompt.len))];
         const frontier = Frontier{ .state = state };
-        if (state.checkpoint.len == 0 and (graph.pos != 0 or !graph.valid)) return -1;
-        if (state.checkpoint.len != 0 and (!state.checkpoint_valid or !graph.valid or
-            graph.pos != @as(u32, @intCast(state.checkpoint.len)) or !frontier.startsWithCheckpoint(tokens))) return -1;
-        var previous = state.checkpoint.len;
+        const live_prefix = state.checkpoint_valid and graph.valid and
+            graph.pos == @as(u32, @intCast(state.checkpoint.len)) and frontier.startsWithCheckpoint(tokens);
+        const approximate = state.approximate_suffix or state.approximate_decoder_replay or state.approximate_swa_replay;
+        // A genuine extension must preserve the old state's provenance. A
+        // changed transcript instead starts at zero, just as ordinary sync
+        // would, so stale approximate state need not force a semantic stop.
+        if (live_prefix and approximate) return -1;
+        const start = if (live_prefix) state.checkpoint.len else 0;
+        if (prompt.len <= start or prompt.len - start >= 8192) return -1;
+        var previous = start;
         for (positions) |position| {
             if (position <= previous or position > prompt.len) return -1;
             previous = position;
+        }
+        // Every unsupported-return gate precedes this deliberate rewrite.
+        // Empty, valid position-zero graphs retain their ordinary cold path.
+        if (!live_prefix and (state.checkpoint.len != 0 or graph.pos != 0 or !graph.valid or approximate)) {
+            resources.resetRecord(graph);
+            state.checkpoint.len = 0;
+            state.checkpoint_valid = false;
+            frontier.clearApproximation();
         }
         var collector = Collector.init(graph, self.prefill.executor.ops.config, tokens, positions, outputs) orelse {
             message(errors, "cannot allocate in-sweep checkpoint collector");

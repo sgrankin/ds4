@@ -221,17 +221,34 @@ fn run(args: std.process.Args) !void {
     c.ds4_tokens_push(&extension, prompt.v[0]);
     const before = c.ds4_session_pos(live);
     try require(c.ds4_session_is_approximate(live), "relocation creates unsupported approximate source");
-    try copyLogits(live, ordinary_final);
+    const approximate_logits = try allocator.alloc(f32, vocabulary);
+    defer allocator.free(approximate_logits);
+    try copyLogits(live, approximate_logits);
     const unsupported_end = [_]c_int{extension.len};
     var unsupported = [_]c.ds4_suffix_cache{std.mem.zeroes(c.ds4_suffix_cache)};
     defer c.ds4_suffix_cache_free(&unsupported[0]);
     try require(c.ds4_session_sync_checkpoints(live, &extension, &unsupported_end, 1, &unsupported, &errors, errors.len) == -1, "approximate state requests ordinary fallback");
     try require(c.ds4_session_pos(live) == before and c.ds4_session_checkpoint_valid(live) and c.ds4_session_is_approximate(live), "unsupported collection preserves live frontier");
     try copyLogits(live, actual);
-    try require(std.mem.eql(u8, std.mem.sliceAsBytes(ordinary_final), std.mem.sliceAsBytes(actual)), "unsupported collection preserves logits");
+    try require(std.mem.eql(u8, std.mem.sliceAsBytes(approximate_logits), std.mem.sliceAsBytes(actual)), "unsupported collection preserves logits");
     const rejected = unsupported[0];
     try require(rejected.state.ptr == null and rejected.state.len == 0 and rejected.state.cap == 0 and rejected.engine == null and rejected.ctx_size == 0 and rejected.prerope == null and rejected.prerope_bytes == 0 and !rejected.approximate, "unsupported collection publishes no endpoint");
     std.debug.print("checkpoint_fallback approximate=1 rejected_before_mutation=1 outputs=0 logits_identical=1\n", .{});
+    // Replacing that approximate transcript has no live prefix to preserve.
+    // Rebuild in the normal sweep while collecting raw-ring and odd boundaries.
+    const rewrite_ends = [_]c_int{ 128, 2247 };
+    var rewritten: [rewrite_ends.len]c.ds4_suffix_cache = @splat(std.mem.zeroes(c.ds4_suffix_cache));
+    defer for (&rewritten) |*snapshot| c.ds4_suffix_cache_free(snapshot);
+    try require(c.ds4_session_sync_checkpoints(live, &prompt, &rewrite_ends, rewrite_ends.len, &rewritten, &errors, errors.len) == 0, "collect fresh rewrite over approximate live state");
+    try require(c.ds4_session_pos(live) == prompt.len and c.ds4_session_checkpoint_valid(live) and !c.ds4_session_is_approximate(live), "rewrite restores ordinary exact frontier");
+    try copyLogits(live, actual);
+    try require(std.mem.eql(u8, std.mem.sliceAsBytes(ordinary_final), std.mem.sliceAsBytes(actual)), "rewrite preserves original ordinary final logits");
+    for (rewrite_ends, &rewritten) |position, *snapshot| {
+        try require(snapshot.state.len > 52 and snapshot.engine == engine and !snapshot.approximate, "rewrite publishes canonical endpoint");
+        try restore(live, snapshot, &prompt, position);
+        try roundtrip(live, snapshot);
+    }
+    std.debug.print("checkpoint_rewrite approximate=1 reset=1 collected=2 logits_identical=1 canonical_roundtrip=1\n", .{});
     std.debug.print("checkpoint capture: PASS endpoints={d} teacher_rows={d} relocations=2 reasoning=high\n", .{ endpoints.len, endpoints.len * (teacher_steps + 1) });
 }
 
