@@ -243,6 +243,15 @@ int ds4_native_session_request_sync41(ds4_session_frontier *,
     ds4_session_control *, const ds4_model_config *,
     const ds4_engine_memory_inputs *, const ds4_tokens *, bool exact,
     char *, size_t);
+/* Collect selected semantic frontiers within ordinary layer-major prefill.
+ * Returns -1 before inference mutation when the configuration is unsupported.
+ * Each output is caller-owned and must be freed even on a later failure. */
+int ds4_native_session_sync_checkpoints41(ds4_session_frontier *,
+    ds4_deepseek41_session_device *, ds4_engine_core *, ds4_engine_tp_state *,
+    ds4_session_control *, const ds4_model_config *,
+    const ds4_engine_memory_inputs *, const ds4_tokens *, bool exact_prefill_rows,
+    const int *positions, size_t count, ds4_suffix_cache *outputs,
+    char *error, size_t error_size);
 int ds4_native_session_multimodal_sync41(ds4_session_frontier *,
     ds4_deepseek41_session_device *, ds4_engine_core *, ds4_engine_tp_state *,
     ds4_session_control *, const ds4_model_config *,

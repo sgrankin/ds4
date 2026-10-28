@@ -15,6 +15,23 @@ copy milliseconds; count actual sweeps and inspect end-to-end time/quality.
 The prior measured binary and shaders are frozen locally before rebuilding.
 Main remains unchanged; no publication was requested.
 
+Progress18:10UTC: selection source`6b7cec74`, frozen binary/shaders in
+`.workspaces/checkpoint-capture-20261028/selection/`, runs five alternating
+recent/anchors pairs under the unchanged pressure guard (`selection-five/`,
+`selection-guard/`). Both arms keep capture segmented and boundaries/ongoing
+reuse enabled. Do not build while this final timing campaign is active.
+Collector source is implemented but has only AST/format/header review so far:
+`prefill_checkpoints.zig` saves each endpoint's rolling keys/originals, odd
+compression carry and final HC row while traversing the existing batch.
+`ds4_session_sync_checkpoints` exposes completed immutable snapshots; the
+server publishes them after the normal scheduling quantum. Its flag is
+`DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP=1`; unsupported modes return-1 before
+mutation and use ordinary stop/capture. Next build server plus
+`checkpoint-capture-test`, run that live fixture under the guard, then five
+anchors/segmented versus anchors/in-sweep pairs with identical profiling.
+`speed-bench/experiments/context-capture-20261028/` reuses the existing workload.
+No collector quality or speed result is claimed before those checks.
+
 AFK convergence batch completed,2026-10-28. Typed DSML truncation is
 fixed and qualified. DSP1 at ordinary confidence0.6 improves restored complete
 tasks18.12% in five alternating pairs; fast presets enable it with explicit0

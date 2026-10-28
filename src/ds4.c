@@ -56957,6 +56957,30 @@ uint64_t ds4_session_suffix_cache_bytes(ds4_session *s) {
 #endif
 }
 
+int ds4_session_sync_checkpoints(ds4_session *s, const ds4_tokens *prompt,
+        const int *positions, size_t count, ds4_suffix_cache *outputs,
+        char *err, size_t errlen) {
+    DS4_SESSION_SCOPE(s);
+#if defined(DS4_HAS_DEEPSEEK41_GPU)
+    if (s && !s->distributed && ds4_session_is_ds41(s) &&
+        s->engine->core.backend == DS4_BACKEND_METAL) {
+        const ds4_model_config config = ds41_native_config();
+        const ds4_engine_memory_inputs inputs = ds41_memory_inputs(s->engine);
+        int status = ds4_native_session_sync_checkpoints41(&s->frontier, &s->ds41,
+            &s->engine->core, &s->engine->tp, &s->control, &config, &inputs,
+            prompt, ds41_exact_prefill_rows, positions, count, outputs, err, errlen);
+        if (status == 0) {
+            for (size_t i = 0; i < count; ++i) outputs[i].engine = s->engine;
+        }
+        return status;
+    }
+#else
+    (void)s; (void)prompt; (void)positions; (void)count;
+    (void)outputs; (void)err; (void)errlen;
+#endif
+    return -1;
+}
+
 int ds4_session_capture_suffix_cache(ds4_session *s, ds4_suffix_cache *cache,
                                      char *err, size_t errlen) {
     DS4_SESSION_SCOPE(s);

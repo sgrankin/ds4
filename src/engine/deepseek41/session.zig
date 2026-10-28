@@ -11,6 +11,7 @@ const Policy = scheduling.Policy;
 const residency = @import("encoder_residency.zig");
 const Frontier = @import("frontier.zig").Frontier;
 const resources = @import("resources.zig");
+const Collector = @import("prefill_checkpoints.zig").Collector;
 const Memory = @import("memory.zig").Memory;
 const Graph = c.ds41_gpu_graph;
 const State = c.ds4_session_frontier;
@@ -45,6 +46,43 @@ pub const Runtime = struct {
 
     fn policy(self: *const Runtime, graph: *const Graph) Policy {
         return .{ .config = self.prefill.executor.ops.config, .graph = graph, .weights = self.prefill.executor.weights };
+    }
+
+    /// Collect semantic ends without inserting additional model sweeps. A
+    /// rejected configuration returns -1 before touching the session; callers
+    /// can retain their ordinary stop-and-capture path.
+    pub fn syncCheckpoints(self: *const Runtime, maybe_prompt: ?*const c.ds4_tokens, callbacks: Callbacks, positions: []const c_int, outputs: []c.ds4_suffix_cache, errors: []u8) c_int {
+        const prompt = maybe_prompt orelse return -1;
+        const state = self.state;
+        const graph = self.prefill.executor.graph;
+        if (positions.len == 0 or positions.len > 16 or positions.len != outputs.len or
+            !self.ready or graph.workspace_failed or graph.tp_world != 1 or graph.dspark != null or
+            graph.imatrix != null or graph.quality or graph.image_count != 0 or
+            state.approximate_suffix or state.approximate_decoder_replay or state.approximate_swa_replay or
+            state.sync_image_count != 0 or state.checkpoint_image_count != 0 or
+            graph.predict_active or graph.predict_load.active or scheduling.replaySetting() != 0 or
+            c.getenv("DS4_METAL_DISABLE_V41_BATCH_ATTN") != null or
+            c.getenv("DS4_METAL_DISABLE_V41_LAYER_PREFILL") != null or
+            prompt.len <= state.checkpoint.len or prompt.len >= state.ctx_size or
+            prompt.len - state.checkpoint.len >= 8192) return -1;
+        const tokens = prompt.v[0..@as(usize, @intCast(prompt.len))];
+        const frontier = Frontier{ .state = state };
+        if (state.checkpoint.len == 0 and (graph.pos != 0 or !graph.valid)) return -1;
+        if (state.checkpoint.len != 0 and (!state.checkpoint_valid or !graph.valid or
+            graph.pos != @as(u32, @intCast(state.checkpoint.len)) or !frontier.startsWithCheckpoint(tokens))) return -1;
+        var previous = state.checkpoint.len;
+        for (positions) |position| {
+            if (position <= previous or position > prompt.len) return -1;
+            previous = position;
+        }
+        var collector = Collector.init(graph, self.prefill.executor.ops.config, tokens, positions, outputs) orelse {
+            message(errors, "cannot allocate in-sweep checkpoint collector");
+            return 1;
+        };
+        defer collector.deinit();
+        var runtime = self.*;
+        runtime.prefill.checkpoints = &collector;
+        return runtime.sync(prompt, callbacks, errors);
     }
 
     /// Bring live state to exactly this token prefix. Exact-prefix extension
@@ -165,6 +203,21 @@ pub const Runtime = struct {
                 }
                 if (errors.len != 0) _ = c.snprintf(errors.ptr, errors.len, "V4.1 prefill failed at position %d", position);
                 return 1;
+            }
+            if (self.prefill.checkpoints) |collector| {
+                var captured = true;
+                if (!layer_major) {
+                    captured = c.ds4_gpu_begin_commands() != 0;
+                    if (captured) captured = collector.scalar(graph);
+                    if (c.ds4_gpu_commands_active() != 0 and c.ds4_gpu_end_commands() == 0) captured = false;
+                }
+                if (captured) captured = collector.finish(executor.*, errors);
+                if (!captured) {
+                    state.checkpoint_valid = false;
+                    graph.valid = false;
+                    if (errors.len != 0 and errors[0] == 0) message(errors, "in-sweep checkpoint capture failed");
+                    return 1;
+                }
             }
             for (current) |token| c.ds4_tokens_push(&state.checkpoint, token);
             position += @intCast(count);

@@ -458,6 +458,12 @@ export fn ds4_native_session_request_sync41(state: *c.ds4_session_frontier, devi
     const owner = coordinator(state, device, core, transport, control, &config, inputs, exact);
     return owner.sync(prompt, errorBuffer(errors, capacity));
 }
+export fn ds4_native_session_sync_checkpoints41(state: *c.ds4_session_frontier, device: *c.ds4_deepseek41_session_device, core: *c.ds4_engine_core, transport: *c.ds4_engine_tp_state, control: *c.ds4_session_control, raw: *const c.ds4_model_config, inputs: *const c.ds4_engine_memory_inputs, prompt: ?*const c.ds4_tokens, exact: bool, positions: [*c]const c_int, count: usize, outputs: [*c]c.ds4_suffix_cache, errors: [*c]u8, capacity: usize) c_int {
+    if (count == 0 or count > 16 or positions == null or outputs == null) return -1;
+    const config = configuration(raw);
+    const owner = coordinator(state, device, core, transport, control, &config, inputs, exact);
+    return owner.syncCheckpoints(prompt, positions[0..count], outputs[0..count], errorBuffer(errors, capacity));
+}
 export fn ds4_native_session_multimodal_sync41(state: *c.ds4_session_frontier, device: *c.ds4_deepseek41_session_device, core: *c.ds4_engine_core, transport: *c.ds4_engine_tp_state, control: *c.ds4_session_control, raw: *const c.ds4_model_config, inputs: *const c.ds4_engine_memory_inputs, prompt: ?*const c.ds4_tokens, images: [*c]const c.ds4_vision_span, count: usize, exact: bool, errors: [*c]u8, capacity: usize) c_int {
     const config = configuration(raw);
     const owner = coordinator(state, device, core, transport, control, &config, inputs, exact);

@@ -13,6 +13,7 @@ const Streaming = @import("streaming.zig").Streaming;
 const buffers = @import("prefill_buffers.zig");
 const cache = @import("expert_cache.zig");
 const support = @import("ops.zig");
+const Collector = @import("prefill_checkpoints.zig").Collector;
 const Graph = c.ds41_gpu_graph;
 const Layer = c.ds4_layer_weights;
 const Row = c.ds41_prefill_row;
@@ -59,6 +60,7 @@ const Stage = struct {
 
 pub const Prefill = struct {
     executor: Executor,
+    checkpoints: ?*Collector = null,
 
     fn attention(executor: Executor, graph: *Graph) Attention {
         return .{ .config = executor.ops.config, .model = executor.ops.model, .graph = graph };
@@ -343,6 +345,9 @@ pub const Prefill = struct {
                     if (ok) ok = executor.trace(graph.batch.qr, shape.n_lora_q, start, count, index, "1a-qr") and
                         executor.trace(graph.batch.q, shape.n_head * shape.n_head_dim / graph.tp_world, start, count, index, "1b-q") and
                         executor.trace(graph.batch.kv, shape.n_head_dim, start, count, index, "1c-kv");
+                    if (ok) {
+                        if (self.checkpoints) |collector| ok = collector.originals(index, start, count, graph.batch.kv);
+                    }
                     stage.mark(&ok, "attention projections");
                     if (ok and batch_core) ok = batch.run(layer, index, count);
                     token = 0;
@@ -351,6 +356,9 @@ pub const Prefill = struct {
                         buffers.selectRow(&row, @ptrCast(&graph.rows_view[token]));
                         const local_attention = attention(executor, &row);
                         ok = local_attention.run(layer, index, true);
+                    }
+                    if (ok) {
+                        if (self.checkpoints) |collector| ok = collector.attention(index, start, count, &graph.batch);
                     }
                     if (ok) ok = executor.trace(graph.batch.heads, shape.n_head * shape.n_head_dim / graph.tp_world, start, count, index, "1d-heads");
                     stage.mark(&ok, "attention core/index");
@@ -413,6 +421,9 @@ pub const Prefill = struct {
                     }
                 }
                 stage.mark(&ok, "hc expand");
+                if (ok and index + 1 == shape.n_layer) if (self.checkpoints) |collector| {
+                    ok = collector.finalRows(start, count, &graph.rows_view[0], batch_hc);
+                };
                 if (ok and wide and index + 1 < shape.n_layer) ok = buffers.carryCopy(config, graph, offset, count, true);
                 if (ok) ok = executor.trace(graph.batch.residual, shape.n_hc * shape.n_embd, start, count, index, "4-residual");
                 const encoded_at = if (profile) nowSeconds() else 0;

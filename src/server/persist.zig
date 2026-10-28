@@ -378,26 +378,45 @@ fn captureEndpoint(runtime: *c.server, slot: *c.server_slot, transient: bool) vo
         return;
     }
     const started = nowSeconds();
-    var status = if (runtime.context_suffix_reuse)
+    const status = if (runtime.context_suffix_reuse)
         c.ds4_session_capture_suffix_cache(slot.session, &captured, &errors, errors.len)
     else
         c.ds4_session_save_snapshot(slot.session, &captured.state, &errors, errors.len);
     const captured_at = nowSeconds();
+    publishCapture(runtime, slot, tokens.*.len, &captured, transient, status, (captured_at - started) * 1000, &errors);
+}
+
+/// The engine collected this immutable endpoint while evaluating a larger
+/// batch. Its token length belongs to the snapshot, not the later live graph.
+pub fn collected(runtime: *c.server, slot: *c.server_slot, position: c_int, captured: *const c.ds4_suffix_cache) void {
+    if (runtime.state_cache == null or cancelled(slot) or position <= 0 or captured.state.len == 0 or
+        !CachePolicy.allowsWrite(slot.prompt_cache_explicit, breakpoints(slot), position)) return;
+    var errors = std.mem.zeroes([160]u8);
+    // Copy/capture happens inside prefill and is included in its timing. -1
+    // distinguishes that from the separately timed ordinary snapshot action.
+    publishCapture(runtime, slot, position, captured, true, 0, -1, &errors);
+}
+
+fn publishCapture(runtime: *c.server, slot: *c.server_slot, position: c_int, captured: *const c.ds4_suffix_cache, transient: bool, initial_status: c_int, capture_ms: f64, errors: []u8) void {
+    const approximate = captured.approximate;
+    const captured_at = nowSeconds();
+    var status = initial_status;
+    var key: [41]u8 = undefined;
     const kind: c.ds4_state_cache_kind = if (approximate) c.DS4_STATE_CACHE_SUFFIX else c.DS4_STATE_CACHE_NATIVE;
     const put = if (transient) &c.ds4_state_cache_put_transient else &c.ds4_state_cache_put_kind;
-    if (status == 0 and !approximate) status = put(runtime.state_cache, &runtime.state_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, &errors, errors.len);
+    if (status == 0 and !approximate) status = put(runtime.state_cache, &runtime.state_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, errors.ptr, errors.len);
     if (status == 0 and runtime.context_suffix_reuse and slot.context_cache_profile[0] != 0)
-        status = put(runtime.state_cache, &slot.context_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, &errors, errors.len);
-    if (status == 0 and runtime.context_suffix_reuse and slot.context_task_profile[0] != 0 and slot.context_task_control_end > 0 and tokens.*.len >= slot.context_task_control_end)
-        status = put(runtime.state_cache, &slot.context_task_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, &errors, errors.len);
+        status = put(runtime.state_cache, &slot.context_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, errors.ptr, errors.len);
+    if (status == 0 and runtime.context_suffix_reuse and slot.context_task_profile[0] != 0 and slot.context_task_control_end > 0 and position >= slot.context_task_control_end)
+        status = put(runtime.state_cache, &slot.context_task_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, errors.ptr, errors.len);
     if (enabled("DS4_SERVER_CONTEXT_BOUNDARIES") or enabled("DS4_SERVER_CONTEXT_CAPTURE_PROFILE")) {
         const finished = nowSeconds();
         var cache_stats: c.ds4_state_cache_stats = undefined;
         c.ds4_state_cache_get_stats(runtime.state_cache, &cache_stats);
-        log(c.DS4_LOG_KVCACHE, "ds4-server: context_capture slot=%d tokens=%d transient=%d state_bytes=%llu pre_bytes=%llu capture_ms=%.3f publish_ms=%.3f hot_bytes=%llu ssd_bytes=%llu endpoints=%llu status=%d", .{ slot.id, tokens.*.len, @as(c_int, @intFromBool(transient)), captured.state.len, captured.prerope_bytes, (captured_at - started) * 1000, (finished - captured_at) * 1000, cache_stats.hot_bytes, cache_stats.ssd_bytes, cache_stats.endpoints, status });
+        log(c.DS4_LOG_KVCACHE, "ds4-server: context_capture slot=%d tokens=%d transient=%d state_bytes=%llu pre_bytes=%llu capture_ms=%.3f publish_ms=%.3f hot_bytes=%llu ssd_bytes=%llu endpoints=%llu status=%d", .{ slot.id, position, @as(c_int, @intFromBool(transient)), captured.state.len, captured.prerope_bytes, capture_ms, (finished - captured_at) * 1000, cache_stats.hot_bytes, cache_stats.ssd_bytes, cache_stats.endpoints, status });
     }
-    if (status == 0 and slot.prompt_cache_explicit) slot.cache_written_tokens = @max(slot.cache_written_tokens, tokens.*.len);
-    if (status != 0) log(c.DS4_LOG_WARNING, "ds4-server: state cache store skipped slot=%d: %s", .{ slot.id, &errors });
+    if (status == 0 and slot.prompt_cache_explicit) slot.cache_written_tokens = @max(slot.cache_written_tokens, position);
+    if (status != 0) log(c.DS4_LOG_WARNING, "ds4-server: state cache store skipped slot=%d: %s", .{ slot.id, errors.ptr });
 }
 
 /// A failed graft discards its mutated graph; ordinary prefill rebuilds it.

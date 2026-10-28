@@ -791,6 +791,14 @@ uint64_t ds4_session_suffix_cache_bytes(ds4_session *s);
  * their state retains diagnostic magic and cannot become canonical prefixes. */
 int ds4_session_capture_suffix_cache(ds4_session *s, ds4_suffix_cache *cache,
                                      char *err, size_t errlen);
+/* Capture sorted semantic endpoints during an ordinary native DS4.1 prefill
+ * sweep. The caller zeroes and owns count outputs, freeing every entry with
+ * ds4_suffix_cache_free even on failure. Returns -1 before mutation when the
+ * current model/forward mode cannot collect; the caller can use ordinary
+ * endpoint sync/capture instead. A successful call reaches prompt->len. */
+int ds4_session_sync_checkpoints(ds4_session *s, const ds4_tokens *prompt,
+    const int *positions, size_t count, ds4_suffix_cache *outputs,
+    char *err, size_t errlen);
 /* Restore an exact canonical prefix and its saved original rotary coverage.
  * Approximate sources are rejected. Missing tape stays uncovered; a partial
  * restore invalidates the session. This does not evaluate any new tokens. */

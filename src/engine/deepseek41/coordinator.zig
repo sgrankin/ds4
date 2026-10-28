@@ -146,6 +146,21 @@ pub const Coordinator = struct {
         if (result == 0 and prompt != null) state.overthink_prompt_len = prompt.?.len;
         return result;
     }
+    pub fn syncCheckpoints(self: *const Coordinator, prompt: ?*const c.ds4_tokens, positions: []const c_int, outputs: []c.ds4_suffix_cache, errors: []u8) c_int {
+        if (self.transport.active or self.core.directional_steering_dirs != null or self.core.dspark or
+            (self.core.backend != c.DS4_BACKEND_CPU and self.core.mtp_ready)) return -1;
+        const result = self.runtime.syncCheckpoints(prompt, self.callbacks(), positions, outputs, errors);
+        if (result == 0) {
+            self.beginRequest();
+            dumpPrefillLogits(self.dump_recorded, self.runtime.state.logits, self.runtime.prefill.executor.ops.config.shape.n_vocab);
+            if (!self.frontier().rememberImages()) {
+                self.invalidate();
+                return fail(errors, "unable to retain image prompt identity");
+            }
+            if (prompt) |tokens| self.runtime.state.overthink_prompt_len = tokens.len;
+        }
+        return result;
+    }
     /// Mirror public eval before local work, then merge vocabulary halves. All
     /// ordinary and speculative DS41 eval entry points use this same primitive.
     /// Distributed execution remains the existing whole transport library action.

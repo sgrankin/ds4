@@ -269,6 +269,46 @@ pub fn sync(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const c.ds
 }
 
 fn syncEndpoint(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const c.ds4_tokens, credits: [*c]c_int, errors: []u8, stop: [*c]const volatile c.sig_atomic_t, transient: bool) c_int {
+    return syncWithBoundaries(runtime, member, prompt, credits, errors, stop, transient, &.{});
+}
+
+/// Capture automatic semantic ends inside the scheduler's existing batches.
+/// Unsupported forward modes retain the old sync/capture transaction at each
+/// end; the engine's -1 result guarantees that fallback precedes mutation.
+fn syncCollecting(srv: *c.server, slot: *c.server_slot, prompt: *const c.ds4_tokens, ends: []const c_int, errors: []u8) c_int {
+    if (ends.len == 0) return c.ds4_session_sync(slot.session, prompt, errors.ptr, errors.len);
+    const live = c.ds4_session_pos(slot.session);
+    const common = c.ds4_session_common_prefix(slot.session, prompt);
+    const start = if (common == live and live <= prompt.len) live else 0;
+    var positions: [16]c_int = undefined;
+    var count: usize = 0;
+    for (ends) |position| {
+        if (position <= start or position > prompt.len) continue;
+        positions[count] = position;
+        count += 1;
+    }
+    if (count == 0) return c.ds4_session_sync(slot.session, prompt, errors.ptr, errors.len);
+    var snapshots = zero([16]c.ds4_suffix_cache);
+    defer for (snapshots[0..count]) |*snapshot| c.ds4_suffix_cache_free(snapshot);
+    const started = now();
+    const result = c.ds4_session_sync_checkpoints(slot.session, prompt, &positions, count, &snapshots, errors.ptr, errors.len);
+    log(c.DS4_LOG_KVCACHE, "ds4-server: context_sweep slot=%d start=%d end=%d checkpoints=%zu elapsed_s=%.3f status=%d", .{ slot.id, start, prompt.len, count, now() - started, result });
+    if (result == 0) {
+        for (positions[0..count], snapshots[0..count]) |position, *snapshot| c.ds4_server_persist_collected(srv, slot, position, snapshot);
+        return 0;
+    }
+    if (result != -1) return result;
+    for (positions[0..count]) |position| {
+        var prefix = prompt.*;
+        prefix.len = position;
+        const status = c.ds4_session_sync(slot.session, &prefix, errors.ptr, errors.len);
+        if (status != 0) return status;
+        c.ds4_server_persist_boundary(srv, slot);
+    }
+    return if (positions[count - 1] == prompt.len) 0 else c.ds4_session_sync(slot.session, prompt, errors.ptr, errors.len);
+}
+
+fn syncWithBoundaries(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const c.ds4_tokens, credits: [*c]c_int, errors: []u8, stop: [*c]const volatile c.sig_atomic_t, transient: bool, ends: []const c_int) c_int {
     const srv = runtime orelse return 1;
     const slot = member orelse return 1;
     if (prompt == null) return 1;
@@ -282,10 +322,10 @@ fn syncEndpoint(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const 
         if (!transient and srv.context_suffix_reuse and slot.context_cache_profile[0] != 0 and anchor > 0 and c.ds4_session_pos(slot.session) < anchor) {
             var prefix = prompt.*;
             prefix.len = anchor;
-            result = c.ds4_session_sync(slot.session, &prefix, errors.ptr, errors.len);
+            result = syncCollecting(srv, slot, &prefix, ends, errors);
             if (result == 0) c.ds4_server_persist_endpoint(srv, slot);
         }
-        if (result == 0) result = c.ds4_session_sync(slot.session, prompt, errors.ptr, errors.len);
+        if (result == 0) result = syncCollecting(srv, slot, prompt, ends, errors);
         if (result == 0) {
             if (transient) c.ds4_server_persist_boundary(srv, slot) else c.ds4_server_persist_endpoint(srv, slot);
         }
@@ -314,7 +354,7 @@ fn syncEndpoint(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const 
         if (target <= 0) target = prompt.*.len;
         var prefix = prompt.*;
         prefix.len = target;
-        const result = c.ds4_session_sync(slot.session, &prefix, errors.ptr, errors.len);
+        const result = syncCollecting(srv, slot, &prefix, ends, errors);
         if (result == 0) {
             done = c.ds4_session_pos(slot.session);
             if (transient) {
@@ -1783,6 +1823,8 @@ pub const Generation = struct {
         }
         var candidates: [16]c_int = undefined;
         const candidate_count = if (suffix_input) c.ds4_server_persist_boundaries(srv, slot, req, prompt, cached, &candidates, candidates.len) else 0;
+        const collect_setting = c.getenv("DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP");
+        const collect = collect_setting != null and same(collect_setting, "1");
         for (candidates[0..candidate_count]) |position| {
             if (CachePolicy.contains(checkpoints[0..checkpoint_count], position)) continue;
             context_checkpoints[context_count] = position;
@@ -1793,6 +1835,7 @@ pub const Generation = struct {
         std.mem.sort(c_int, checkpoints[0..checkpoint_count], {}, std.sort.asc(c_int));
         var suppressed: c_int = -1;
         for (checkpoints[0..checkpoint_count]) |checkpoint| {
+            if (collect and CachePolicy.contains(context_checkpoints[0..context_count], checkpoint)) continue;
             cold_length = checkpoint;
             // Suppress a duplicate continued write at the intentional cold stop;
             // failed cold publication restores the old continuation schedule.
@@ -1801,7 +1844,7 @@ pub const Generation = struct {
                 var prefix = zero(c.ds4_tokens);
                 c.ds4_kvstore_tokens_copy_prefix(&prefix, prompt, cold_length);
                 const semantic = CachePolicy.contains(context_checkpoints[0..context_count], cold_length);
-                const result = syncEndpoint(srv, slot, &prefix, &credits, &errors, self.stop, semantic);
+                const result = syncWithBoundaries(srv, slot, &prefix, &credits, &errors, self.stop, semantic, if (collect) context_checkpoints[0..context_count] else &.{});
                 c.ds4_tokens_free(&prefix);
                 if (result != 0) {
                     clearProgress(slot.session);
@@ -1824,7 +1867,7 @@ pub const Generation = struct {
                 suppressed = -1;
             }
         }
-        const synchronized = if (multimodal) syncMultimodal(srv, slot, prompt, req.images, req.image_count, &errors, self.stop) else sync(srv, slot, prompt, &credits, &errors, self.stop);
+        const synchronized = if (multimodal) syncMultimodal(srv, slot, prompt, req.images, req.image_count, &errors, self.stop) else syncWithBoundaries(srv, slot, prompt, &credits, &errors, self.stop, false, if (collect) context_checkpoints[0..context_count] else &.{});
         if (synchronized != 0) {
             clearProgress(slot.session);
             c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);

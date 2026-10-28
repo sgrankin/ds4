@@ -47,6 +47,9 @@ export fn ds4_server_persist_boundaries(runtime: *c.server, slot: *c.server_slot
 export fn ds4_server_persist_boundary(runtime: *c.server, slot: *c.server_slot) void {
     owner.boundary(runtime, slot);
 }
+export fn ds4_server_persist_collected(runtime: *c.server, slot: *c.server_slot, position: c_int, cache: *const c.ds4_suffix_cache) void {
+    owner.collected(runtime, slot, position, cache);
+}
 export fn ds4_server_persist_suffix(runtime: *c.server, slot: *c.server_slot, prompt: *const c.ds4_tokens, padded: *c.ds4_tokens, stats: *c.ds4_suffix_relocation_stats, stop: *const volatile c.sig_atomic_t) c_int {
     return owner.suffix(runtime, slot, prompt, padded, stats, stop);
 }

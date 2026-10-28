@@ -32,6 +32,8 @@ void ds4_server_persist_context(server *runtime, server_slot *slot, const reques
 size_t ds4_server_persist_boundaries(server *runtime, server_slot *slot,
     const request *req, const ds4_tokens *prompt, int cached, int *out, size_t capacity);
 void ds4_server_persist_boundary(server *runtime, server_slot *slot);
+void ds4_server_persist_collected(server *runtime, server_slot *slot,
+    int position, const ds4_suffix_cache *cache);
 int ds4_server_persist_suffix(server *runtime, server_slot *slot,
     const ds4_tokens *prompt, ds4_tokens *padded,
     ds4_suffix_relocation_stats *stats, const volatile sig_atomic_t *stop);
