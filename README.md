@@ -169,13 +169,15 @@ chunk 512. Later CLI arguments override those defaults. The script contains
 the environment settings explicitly and leaves thinking mode unchanged.
 
 Server `persistent-fast` also retains semantic RAM checkpoints for repeated
-client-side context edits: boundaries/ongoing reuse on, limit4, spacing512 and
-HOT512 MiB, with explicit overrides honored. The agent and other presets receive
-no new boundary defaults. Five native-route rounds show 38.0% less time for
-repeated edits, 81.8% more initial population and 2.14% more initial+two-edit time;
-all 90 answers pass. A separate eight-edit run retains the original C throughout
-and answers 18/18 correctly. The [report and Pareto plot](speed-bench/experiments/context-boundaries-20261028/RESULTS.md)
-separate that functional retention check from comparative timing. The timed
+client-side context edits: boundaries/ongoing reuse on, first/last anchor
+selection, in-sweep capture, spacing512 and HOT512 MiB. Explicit overrides win.
+The agent and other presets receive no new boundary defaults. Two separate
+five-pair comparisons pass all 120 answers: anchor selection reduces combined
+initial-plus-two-edit time 7.8%; in-sweep capture reduces it 20.6% against segmented
+anchors. In the latter comparison, ordinary setup falls 55.1→40.1s and favorable
+setup 72.8→41.4s, with repeated-edit time neutral within variation. The
+[results and Pareto plots](speed-bench/experiments/context-capture-20261028/README.md)
+separate timing from functional retention and numerical checks. The timed
 setup is native routes/32GB/configured8192/effective2048, whereas the wrapper keeps its
 existing 64GB/resident-routing/512-chunk policy. `--prefill-chunk 8192` selects
 the tested configured chunk without changing those other wrapper settings.

@@ -4,8 +4,50 @@ Design discussion captured from a side conversation, 2026-10-28. The original
 discussion proposed work; the user subsequently authorized implementation and
 evaluation in the main conversation.
 
-Current checkpoint, 2026-10-28: the first opt-in implementation is built and
-live-quality qualified at `d5b8e8a3`; final installed source `9b826389` adds
+Latest checkpoint, 2026-10-28, source `28c98fd7`: both follow-up mechanisms are
+implemented. `DS4_SERVER_CONTEXT_BOUNDARY_POLICY=anchors` retains the earliest
+and latest of the existing bounded, spaced recent candidates.
+`DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP=1` saves selected frontiers
+while an ordinary layer-major prefill is already evaluating them. Both are
+enabled by server `persistent-fast`, with explicit overrides honored; ordinary
+runtime defaults remain `recent`/`0`. The completed five-pair
+[selection comparison](../speed-bench/experiments/context-capture-20261028/SELECTION.md),
+[collector comparison](../speed-bench/experiments/context-capture-20261028/COLLECTION.md)
+measure 7.8% less whole time from selection and 20.6% from in-sweep capture against
+segmented anchors, in separate cohorts; all 120 replies pass. Ordinary setup
+falls 55.056→40.079s and favorable 72.783→41.358s in the second comparison.
+Repeated-edit time is neutral within variation. [Collector qualification](../speed-bench/experiments/context-capture-20261028/QUALIFICATION.md)
+and [reproduction](../speed-bench/experiments/context-capture-20261028/README.md)
+keep functional/numerical checks separate from those timings.
+
+For each endpoint, the collector copies the per-layer rolling raw window and
+original pre-RoPE coverage before overwrite, preserves odd compression-pair
+KV/score carries, and saves the final residual/HC PRE row for logits. Compressed
+and index histories are append-only: their live allocations are borrowed during
+the sweep and their endpoint prefixes are serialized afterwards. Once every
+layer has reached an endpoint, the engine serializes its immutable snapshot;
+after the forward call succeeds, the server publishes it synchronously to
+bounded hot storage. The live graph keeps its final frontier. Existing disk
+formats and ordinary final-endpoint durability are unchanged; full snapshot
+serialization/hash work remains.
+
+With originals enabled, fixed private GPU buffers cost approximately 10.75 MiB
+per selected endpoint, plus serialized host snapshots/staging. The native path
+supports single-GPU DeepSeek V4.1 text extensions and rewrites with fewer than 8192 new tokens
+per call. DSpark/MTP, steering, TP, images, extensions of approximate/replay state, prediction,
+quality/imatrix and disabled batch-attention/layer-prefill modes retain ordinary
+stop-and-capture. Unsupported collection returns −1 before mutation. The server
+can reset an old approximate transcript and collect a genuinely fresh rewrite,
+after validating all eligibility gates; it does not reuse that approximate state
+as a canonical prefix. The server
+still uses its ordinary 2048-token coordinator quantum; this work does not change
+scheduling or implement asynchronous/delta capture. Installed-model restore,
+ring-wrap, odd-carry and left/right relocation checks pass; final forward logits
+are byte-identical with collection off/on. Independently stopped endpoint
+teachers differ slightly with their batch shapes, as the qualification reports.
+
+Earlier first-slice checkpoint, 2026-10-28: the first opt-in implementation is
+built and live-quality qualified at `d5b8e8a3`; final installed source `9b826389` adds
 reasoning-enabled identity and padding-adjusted control-admission guards.
 It captures semantic prefill endpoints,
 retains complete bounded RAM-only sources sharing immutable chunks, and guards
@@ -43,14 +85,17 @@ reasoning. Final guards stop cleanly with no pinned cache endpoints and hot
 bytes within512 MiB. Aggregate evictions include later QA and do not identify
 which individual C was evicted. These are functional checks, not new timing
 samples; the high-reasoning, unpadded benchmark stays frozen at `d5b8e8a3`.
-No speed claim comes from the quality smokes. Full
-capture/serialization/hash work remains; there is no incremental GPU collector
-or server-hosted compaction agent. Callers materialize edits and own the archive.
+No speed claim comes from the quality smokes. That first slice stops the model
+at each semantic end and has no in-sweep collector. The later implementation
+above removes those additional stops on supported forwards, while retaining
+full serialization/hash work. There is still no server-hosted compaction agent;
+callers materialize edits and own the archive.
 See the [qualification report](../speed-bench/experiments/context-boundaries-20261028/README.md),
 [self-contained recipe](../recipes/16-semantic-context-checkpoints.md) and
 [journal](../src/JOURNAL.md). The original analysis below retains its historical
-measurements and proposals; this status block supersedes its now-implemented
-RAM-retention/freshness proposals.
+measurements and proposals; these status blocks supersede its now-implemented
+boundary selection, RAM-retention/freshness and in-sweep capture proposals.
+Historical costs below do not describe the new collector's latency.
 
 Implementation observations were checked against the local tree at
 `a9593e124f536ce7d8223a19f61f503ade77b791`. Historical measurements and calculated
@@ -351,7 +396,7 @@ Sources: [state-cache chunking](../src/state_cache.zig),
 [measured packed checkpoint size](../recipes/14-packed-index-cache.md), and
 [historical cache microbenchmark](../speed-bench/experiments/state-cache-hour9-20261003/README.md).
 
-## Proposed cheaper capture and retention
+## Original proposal: cheaper capture and retention
 
 The preferred direction discussed was frequent useful boundaries with less
 work per boundary, rather than calling the existing full-snapshot-and-fsync

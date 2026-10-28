@@ -14,6 +14,8 @@ def --wrapped main [...args: string] {
         DS4_AGENT_CONTEXT_SUFFIX_FRESH_TAIL DS4_AGENT_CONTEXT_SUFFIX_RIGHT
         DS4_SERVER_CONTEXT_SUFFIX_REUSE DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL
         DS4_SERVER_CONTEXT_SUFFIX_RIGHT DS4_STATE_CACHE_DIR DS4_STATE_CACHE_HOT_MB
+        DS4_SERVER_CONTEXT_BOUNDARIES DS4_SERVER_CONTEXT_BOUNDARY_POLICY
+        DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP
         DS4_STATE_CACHE_SSD_MB DS4_SERVER_RESPONSE_STORE_DIR
         DS4_METAL_DSV41_SOURCE DS4_V41_COMPRESSED_KV_F16 DS4_V41_INDEX_SIMD DS4_V41_INDEX_FP4
         ZIG_GLOBAL_CACHE_DIR ZIG_LOCAL_CACHE_DIR DS4_CLEF_PREFIX_CACHE]
@@ -116,13 +118,23 @@ def main [] {
     assert equal $server.args (['--host' '127.0.0.1' '--batched-session' '2'] ++ $defaults ++ ['--ctx' '1234'])
     assert equal $server.env.DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL '96'
     assert equal $server.env.DS4_SERVER_CONTEXT_SUFFIX_RIGHT '0'
-    assert equal $server.env.DS4_STATE_CACHE_HOT_MB '0'
+    assert equal $server.env.DS4_STATE_CACHE_HOT_MB '512'
     assert equal $server.env.DS4_STATE_CACHE_SSD_MB '4096'
     assert equal $server.env.DS4_METAL_DSV41_SOURCE 'shader override with spaces.metal'
     assert equal $server.env.DS4_V41_INDEX_FP4 '1'
     assert equal $server.env.DS4_V41_INDEX_SIMD '1'
+    assert equal $server.env.DS4_SERVER_CONTEXT_BOUNDARY_POLICY 'anchors'
+    assert equal $server.env.DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP '1'
     assert (($work | path join 'custom cache') | path exists)
     assert (($work | path join 'custom store') | path exists)
+
+    let overridden = (call $launcher (['--server'] ++ $leading ++ ['persistent-fast']) {
+        DS4_SERVER_CONTEXT_BOUNDARY_POLICY: 'recent' DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP: '0'
+        DS4_STATE_CACHE_HOT_MB: '0'
+    }).stdout | from json
+    assert equal $overridden.env.DS4_SERVER_CONTEXT_BOUNDARY_POLICY 'recent'
+    assert equal $overridden.env.DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP '0'
+    assert equal $overridden.env.DS4_STATE_CACHE_HOT_MB '0'
 
     let flint_args = [
         '--model'
@@ -137,6 +149,8 @@ def main [] {
         DS4_STATE_CACHE_HOT_MB: '512' DS4_STATE_CACHE_SSD_MB: '8192'
         DS4_METAL_V41_SELECTED_TILE: '128' DS4_METAL_V41_RESIDENT_ROUTE_GAP: '.90'
         DS4_SERVER_CONTEXT_SUFFIX_REUSE: '1' DS4_AGENT_CONTEXT_SUFFIX_REUSE: '1'
+        DS4_SERVER_CONTEXT_BOUNDARIES: '1' DS4_SERVER_CONTEXT_BOUNDARY_POLICY: 'anchors'
+        DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP: '1'
         DS4_V41_COMPRESSED_KV_F16: '1'
         DS4_V41_INDEX_FP4: '1' DS4_V41_INDEX_SIMD: '1'
         DS4_SERVER_RESPONSE_STORE_DIR: ($work | path join 'flint store/responses')
@@ -163,6 +177,9 @@ def main [] {
         DS4_METAL_V41_SELECTED_TILE
         DS4_METAL_V41_RESIDENT_ROUTE_GAP
         DS4_SERVER_CONTEXT_SUFFIX_REUSE
+        DS4_SERVER_CONTEXT_BOUNDARIES
+        DS4_SERVER_CONTEXT_BOUNDARY_POLICY
+        DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP
         DS4_AGENT_CONTEXT_SUFFIX_REUSE
         DS4_V41_COMPRESSED_KV_F16
         DS4_V41_INDEX_FP4

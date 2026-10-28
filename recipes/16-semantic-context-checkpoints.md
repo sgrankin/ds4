@@ -1,14 +1,30 @@
 # Semantic checkpoints for client-side context compaction
 
-**Implemented and live-quality qualified; repeated-edit savings trade against
-initial population cost.** This opt-in DeepSeek V4.1 Metal feature lets any client materialize
+**Implemented and measured: useful checkpoints are collected inside ordinary
+prefill sweeps.** This opt-in DeepSeek V4.1 Metal feature lets any client materialize
 selective context edits while the server reuses an unchanged later span. It
 adds useful checkpoint endpoints and bounded retention, not a server-hosted
 compaction agent. Server `persistent-fast` enables the selected package;
 ordinary engine defaults, the agent and other presets get no new boundary defaults.
 
-Qualification uses the 1017 IQ2_XXS/Q2_K model on the M5 Max, native expert
-routes, packed main/index KV and no DSpark/MTP. Comparative timing freezes
+The 2026-10-28 follow-up at `28c98fd7` adds **anchor selection and capture inside
+an existing prefill sweep**. `DS4_SERVER_CONTEXT_BOUNDARY_POLICY=anchors` keeps
+the first and last candidates of the existing bounded recent selection;
+`DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP=1` collects their states without introducing
+an extra streamed-weight layer sweep for each end. Server `persistent-fast`
+selects `anchors` and `1`; ordinary runtime defaults remain `recent` and `0`.
+Two separate five-pair comparisons pass 120/120 replies: selection reduces
+combined initial-plus-two-edit time 7.8%; in-sweep capture reduces it
+20.6% against segmented anchors. These are separate cohorts, not a measured
+combined percentage. See the
+[follow-up and reproduction](../speed-bench/experiments/context-capture-20261028/README.md),
+[five-pair selection result](../speed-bench/experiments/context-capture-20261028/SELECTION.md)
+and [collector timing/profile results](../speed-bench/experiments/context-capture-20261028/COLLECTION.md).
+The [live collector qualification](../speed-bench/experiments/context-capture-20261028/QUALIFICATION.md)
+covers exact snapshot round trips and the unchanged final forward.
+
+The first-slice qualification below uses the 1017 IQ2_XXS/Q2_K model on the
+M5 Max, native expert routes, packed main/index KV and no DSpark/MTP. Comparative timing freezes
 `d5b8e8a3` with high reasoning. Final installed source `9b826389` adds two
 control-admission guards and passes retention/padding/thinking-control checks;
 those guards change no rendered tokens or inference math in the measured cohort.
@@ -40,17 +56,22 @@ matcher imports one span; this is not a general message diff or multi-span plann
    `</tool_result>` and `>\n\n` must stay fresh; do not split it or insert a marker.
    Separately round the actual-controls admission end up, so no instruction is
    accidentally admitted before its final token has been evaluated.
-2. **Choose a bounded set beyond the evaluated frontier.** Prefer recent ends,
-   with a maximum count and minimum token spacing. Do not split ordinary prefill
-   merely because a boundary was already evaluated by an exact hit or graft.
+2. **Choose a bounded set beyond the evaluated frontier.** The `recent` policy
+   selects recent ends with a maximum count and minimum token spacing. `anchors`
+   keeps only the earliest and latest of that same eligible set; it preserves
+   one- and two-candidate sets. This retains an exact-prefix restart point and a
+   later suffix source without predicting which block a future edit will change.
+   Do not split ordinary prefill merely because a boundary was already evaluated
+   by an exact hit or graft.
    Explicit client cache breakpoints keep their independent policy.
 3. **Capture a complete frontier at each selected end.** Keep tokens, logits,
    compressed/index owners, raw windows and pending carries needed to restore
    that actual endpoint. Retain immutable pre-RoPE originals for relocation.
    Deduplicate immutable pages in the existing bounded hot/SSD cache. Automatic
    intermediate endpoints are RAM-only; final ordinary endpoints remain durable.
-   This implementation still captures/serializes/hashes a full snapshot, rather
-   than collecting only an appended GPU tail.
+   The first implementation stops the whole model at each selected end. The
+   optional in-sweep collector below avoids those extra stops. Both paths still
+   serialize and hash a complete snapshot; storage deduplication is separate.
 4. **Match the materialized edited prompt.** Discover sources in the same model,
    runtime policy and client cache scope. Compare token IDs and choose the longest
    eligible unchanged suffix reaching its source endpoint. Require at least 64
@@ -70,6 +91,56 @@ The resulting activations still carry influence from their original prefix.
 Pre-RoPE originals prevent accumulated rotation/requantization drift; they do
 not erase that influence. Grade changed/deleted facts and instructions, rather
 than assuming a token match establishes semantic equivalence.
+
+## Collecting several endpoints during one prefill
+
+DeepSeek prefill traverses the layers for a batch of tokens. Stopping the whole
+model at each semantic end repeats that traversal in smaller batches, reducing
+weight-streaming and matrix-batch amortization. The collector observes each
+requested position during the existing layer-major sweep instead:
+
+- Copy that layer's 128-row rolling raw window before later rows overwrite it.
+  Retain the matching original BF16 pre-RoPE rows and their coverage epochs.
+- At odd endpoints, save the unfinished compression-pair KV and score for each
+  paired owner. Borrow the append-only compressed/index histories and original
+  history tapes; serialize only their prefixes up to the requested position.
+- Save the endpoint's final residual and HC PRE row, compute its logits, and
+  assemble the complete checkpoint only after all layers have reached it.
+
+The collector never installs an earlier position in the live session. The
+ordinary final forward retains its own residual and logits. Each endpoint adds
+about **10.75 MiB of fixed GPU storage** with originals enabled: 10 MiB of raw
+windows, 0.625 MiB of raw originals, the final residual/PRE row and optional odd
+carries. Serialized snapshots and publication staging are additional host
+storage. This is a layout estimate, not a whole-process peak-RAM measurement.
+
+After all layers in a sweep finish, the engine serializes its complete
+endpoints. Once the forward call succeeds, the server synchronously publishes
+them into its bounded RAM tier. Cancellation or a failed sweep does not publish
+a partially assembled endpoint. The existing canonical and pre-RoPE disk formats
+remain unchanged; ordinary final endpoints stay durable.
+The collector does not implement asynchronous publication, delta serialization,
+raw-window page deltas or block-only recovery.
+
+The current path supports native single-GPU DeepSeek V4.1 text extensions and rewrites with
+**fewer than 8,192 new tokens per call** and at most 16 selected endpoints. The
+current server's 2,048-token ordinary scheduling quantum is unchanged. DSpark/MTP,
+steering, TP, images, extensions of approximate/replay state, active prediction, quality/imatrix
+modes and disabled batched-attention/layer-prefill modes retain the old path.
+The native API returns `-1` before mutation when collection is unsupported; the
+server then synchronizes and captures the requested endpoints normally.
+When a changed transcript requires rebuilding from zero, the collector resets
+the old graph after validating eligibility. This also covers replacing a prior
+approximate transcript; it never relabels that old state as canonical.
+
+At source `28c98fd7`, installed-model checks cover endpoints across the raw-ring
+transition, odd compressor carries, packed histories, restore/recapture and both
+left/right suffix relocation. The ordinary final logit vector is byte-identical
+with collection off/on. Separately stopped endpoint teachers use different
+batch shapes and have small nonzero distribution differences; see the complete
+[numerical qualification](../speed-bench/experiments/context-capture-20261028/QUALIFICATION.md).
+Those functional checks do not establish collector speed or all unsupported
+mode combinations.
 
 ## Ongoing-task freshness is a separate decision
 
@@ -114,23 +185,28 @@ not a per-endpoint eviction history.
 | `DS4_SERVER_CONTEXT_SUFFIX_REUSE=1` | Enable the underlying suffix feature |
 | `DS4_SERVER_CONTEXT_BOUNDARIES=1` | Enable automatic semantic capture; server `persistent-fast` enables it |
 | `DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER=1` | Enable actual-control-scoped ongoing reuse; server `persistent-fast` enables it |
-| `DS4_SERVER_CONTEXT_BOUNDARY_LIMIT` | At most 4 recent ends by default; cap 16 |
+| `DS4_SERVER_CONTEXT_BOUNDARY_POLICY` | Runtime `recent`; server `persistent-fast` selects `anchors`, the earliest/latest of the same bounded set |
+| `DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP` | Runtime `0`; server `persistent-fast` selects `1`, collecting supported endpoints inside existing sweeps, with ordinary fallback |
+| `DS4_SERVER_CONTEXT_BOUNDARY_LIMIT` | At most 4 recent candidates by default; cap 16; `anchors` retains at most 2 |
 | `DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS` | Engine default2048; server `persistent-fast` and trial512 |
 | `DS4_STATE_CACHE_HOT_MB` | Server `persistent-fast`/trial512; explicit0 disables automatic capture |
 | `DS4_SERVER_CONTEXT_SUFFIX_STAGING_MB` | Source plus original tape plus 8 MiB staging must fit; default 512 |
 
 Use a stable per-conversation `prompt_cache_key` and keep full request input
-available for fallback. The foreground [server helper](../speed-bench/experiments/context-boundaries-20261028/serve.nu)
-fixes the qualified settings, clears inherited experimental variables and uses
-frozen adjacent shaders. Caller owns its guarded lifetime:
+available for fallback. The current [five-pair driver and settings](../speed-bench/experiments/context-capture-20261028/README.md)
+reproduce the anchor/collector comparisons with frozen adjacent shaders.
+The historical foreground [server helper](../speed-bench/experiments/context-boundaries-20261028/serve.nu)
+below reproduces the first slice using ordinary stop-and-capture. It clears
+inherited experimental variables; the caller owns its guarded lifetime:
 
 ```nu
 python3 speed-bench/ideas/pressure_run.py GUARD -- nu speed-bench/experiments/context-boundaries-20261028/serve.nu FROZEN/bin/ds4-server FRESH_SERVER_DIR --ongoing 1
 nu speed-bench/experiments/context-boundaries-20261028/run.nu http://127.0.0.1:18355 deepseek-v4.1-flash CLIENT_OUTPUT --case corrected --rows 24 --edits 1 --archive-control
 ```
 
-The observed coordinator quantum is 2048 despite configured prefill 8192. Early
-semantic stops can add model passes, not just serialization cost. Keep initial
+The observed coordinator quantum is 2048 despite configured prefill 8192. With
+ordinary capture or an unsupported collector mode, early semantic stops can add
+model passes, not just serialization cost. Keep initial
 population, every edit, capture costs, generated lengths and retained coverage
 in the whole-workflow measurement. A short exact prefix anchor can amortize over
 later edits; it is not free to create.
@@ -141,14 +217,14 @@ The server preset is available with:
 ./ds4-local --server persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf --prefill-chunk 8192
 ```
 
-Explicit boundary/ongoing `0`, limit, spacing and HOT values override the new
+Explicit boundary/ongoing/capture `0`, policy, limit, spacing and HOT values override the new
 preset settings. The wrapper keeps its existing64GB expert target, resident
 substitution policies and512 default chunk; the command explicitly selects the
 8192 configured chunk used for qualification. The five-round benchmark instead
 uses native routes and32GB, so this command is not an exact measured package.
 No chunk default changes. The ordinary coordinator still splits at2048.
 
-## Completed quality and measured tradeoff
+## First-slice quality and measured tradeoff, 2026-10-28
 
 | Check | Actual evidence |
 |---|---|
@@ -189,6 +265,14 @@ python3 speed-bench/ideas/pressure_run.py PARETO_GUARD -- nu speed-bench/experim
 ```
 
 [Current status and drivers](../speed-bench/experiments/context-boundaries-20261028/README.md).
+
+These numbers compare the original off/sparse1/fuller4 policies and ordinary
+stop-and-capture implementation. The later
+[selection comparison](../speed-bench/experiments/context-capture-20261028/SELECTION.md)
+changes only `recent` versus `anchors`; the [collector comparison](../speed-bench/experiments/context-capture-20261028/COLLECTION.md)
+holds anchors fixed and changes only in-sweep capture.
+Do not attribute the historical initial-population penalty or edit savings to
+the in-sweep path.
 
 ## Credit and related mechanisms
 

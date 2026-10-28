@@ -1,5 +1,78 @@
 # Serving project journal
 
+DONE19:15UTC: both checkpoint improvements are implemented, measured and
+installed. Selection saves7.77% whole time in five alternating pairs;
+in-sweep versus segmented anchors saves20.56% in a separate five-pair campaign.
+All120 comparative replies pass. Native collector checks,25/25 longer/adverse
+serving replies, and the final approximate-to-fresh rebuild fixture pass.
+Final runtime`f74180e0` repeats all18 teacher rows/two relocations and proves
+the extra rewrite has byte-identical ordinary final logits plus two exact new
+snapshot roundtrips. Both guards stop child0; no owned model job remains.
+All five installed executables build/help; host, recovery and script checks
+pass. Named serverpersistent-fast selects anchors/in-sweep1, overrides win;
+ordinary runtime and agent/other-preset defaults remain unchanged. Raw outputs
+stay local/ignored; concise reports, arm settings and Pareto plots are tracked.
+Main remains unchanged; no push. [Follow-up results](../speed-bench/experiments/context-capture-20261028/README.md).
+
+The clock-bounded items completed selection in~42min and collector qualification
+in~56min after that, with parallel source preparation. Compilation was held
+during comparative model runs. The concrete fresh-rebuild hole found by QA was
+fixed and qualified instead of expanding the harness or starting another kernel
+experiment. Next work requires a fresh choice: ordinary idle prefill quantum
+2048/8192 (with contention/cancellation checks) remains promising and unchanged.
+
+Checkpoint timing complete,19:12UTC: source`28c98fd7` passes both five-pair
+comparisons (120/120 replies). Selection whole244.052→225.086s (−7.77%);
+in-sweep versus segmented anchors224.500→178.352s (−20.56%). These are separate
+cohorts. Initial ordinary55.056→40.079s, favorable72.783→41.358s; edited totals
+change+0.26%, within mixed variation. Profiling proves large sweeps11→8 and
+logical prefill PREAD1662.32→1208.96GiB per process, not physical SSD traffic.
+Tiny selected tiles increase; total sweep count is not the right cost proxy.
+Server `persistent-fast` now chooses anchors/in-sweep1, with explicit overrides;
+ordinary defaults and other presets stay unchanged. Extra ordinary endpoints
+add38.43MiB hot pages/38.48MiB SSD in this workload; existing budgets still apply.
+
+Longer actual serving QA on28c completes25/25 replies: ordinary/favorable each
+9/9 through8 edits, all16 retain the original RAM C; corrected/deleted facts,
+changed actual user and an actual client-archive reread pass. Corrected fact
+uses prefix_pad1 and1266 imported tokens, so padded admission is exercised.
+No capture errors, server stopped, guardchild0. Hot pages remain<=512MiB.
+All five executables build/help; host fixtures pass. The initial combined host
+run hit a localhost sandbox bind denial; the affected web check passes with
+binding allowed, and script contracts pass after updating their captured knob
+allowlist and stale HOT0 expectation to the existing512MiB default.
+
+Observed follow-up: a new transcript replacing approximate live state took an
+avoidable segmented fallback before ordinary sync reset it. Narrow fix
+`f74180e0` validates all unsupported gates, deliberately resets a changed
+transcript, then collects; a genuine approximate prefix extension still returns
+−1 without mutation. Measured cold/native-extension paths are unchanged. The
+expanded native fixture is running under`native-rewrite-guard/`, logging to
+`native-rewrite.log`, with final logits/reference and two rebuilt endpoints
+checked. No new performance claim is made for that unmeasured transition.
+After it passes, install those final binaries, append qualification evidence,
+commit concise reports/preset changes and leave main unchanged.
+
+Checkpoint follow-up18:23UTC: selector`6b7cec74` completes all five alternating
+pairs per side,60/60 replies correct. Ordinary initial71.210→55.216s and
+whole118.825→103.210s; favorable initial74.335→72.852s and
+whole125.227→121.875s (small mixed change). Combined whole244.052→225.086s,
+−7.77%, all five pairs faster. Both useful anchors/imported spans survive;
+peak hot pages257.07→231.79MiB, SSD bytes unchanged. [Selection report](../speed-bench/experiments/context-capture-20261028/SELECTION.md).
+
+Collector`28c98fd7` builds and passes14 serving cases plus the actual model
+fixture:6 endpoints127/128/129/390/985/2247, exact snapshot/originals roundtrips,
+bit-identical final logits,18 differently batched endpoint/continuation teacher
+rows (worstKL0.005389nats), two original-backed left/right relocations and
+unsupported approximate-state rejection without mutation. Raw qualification is
+`.workspaces/checkpoint-capture-20261028/native.log` / `native-guard/`.
+The second five-pair campaign runs the frozen collection binary with anchors
+fixed, toggling only`DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP`. Both sides enable
+identical prefill-layer/PREAD profiling; ordinary quantum remains2048. Artifacts
+are`collection-five/` and`collection-guard/` beneath the same workspace prefix.
+Do not build or change the measured runtime/drivers while it runs. No collector
+speed result or default promotion is claimed before all five pairs finish.
+
 Checkpoint-cost follow-up authorized,2026-10-28 17:38UTC. Implement both better
 endpoint selection and capture inside an existing layer-major prefill sweep.
 First bounded item17:38–18:38UTC: compare existing recent endpoints with only

@@ -17,7 +17,7 @@ def distribution(values):
 CAPTURE = re.compile(
     r'context_capture slot=(?P<slot>\d+) tokens=(?P<tokens>\d+) transient=(?P<transient>\d+) '
     r'state_bytes=(?P<state_bytes>\d+) pre_bytes=(?P<pre_bytes>\d+) '
-    r'capture_ms=(?P<capture_ms>[\d.]+) publish_ms=(?P<publish_ms>[\d.]+) '
+    r'capture_ms=(?P<capture_ms>-?[\d.]+) publish_ms=(?P<publish_ms>[\d.]+) '
     r'hot_bytes=(?P<hot_bytes>\d+) ssd_bytes=(?P<ssd_bytes>\d+) '
     r'endpoints=(?P<endpoints>\d+) status=(?P<status>\d+)')
 SUFFIX = re.compile(
@@ -71,7 +71,8 @@ def process_report(processes, arms):
             row = dict(pair=pair, arm=arm, log=str(log),
                        capture_count=len(captures), transient_count=len(transient),
                        failed_captures=sum(item['status'] != 0 for item in captures),
-                       capture_ms_total=sum(item['capture_ms'] for item in captures),
+                       capture_ms_total=sum(item['capture_ms'] for item in captures if item['capture_ms'] >= 0),
+                       inline_capture_count=sum(item['capture_ms'] < 0 for item in captures),
                        publish_ms_total=sum(item['publish_ms'] for item in captures),
                        hot_bytes_peak=max(item['hot_bytes'] for item in captures),
                        ssd_bytes_peak=max(item['ssd_bytes'] for item in captures),
@@ -89,7 +90,7 @@ def process_report(processes, arms):
                        fallbacks=dict(fallbacks), captures=captures, suffixes=suffixes,
                        selections=selected, exact_prefix_hits=exact_prefix_hits, settings=command['settings'])
             samples.append(row)
-    keys = ('capture_count', 'transient_count', 'failed_captures', 'capture_ms_total',
+    keys = ('capture_count', 'transient_count', 'failed_captures', 'capture_ms_total', 'inline_capture_count',
             'publish_ms_total', 'hot_bytes_peak', 'ssd_bytes_peak', 'state_bytes_peak',
             'pre_bytes_peak', 'suffix_count', 'imported_tokens_sum', 'planned_tail_tokens_sum',
             'graft_tail_tokens_sum', 'suffix_ms_total', 'ram_only_sources',
@@ -111,7 +112,9 @@ def process_report(processes, arms):
                      'destination_start prefix geometry, which may exact-restore; these do not describe total forward work. '
                      'source_ssd is endpoint durability, not the actual materialization read tier: '
                      'durable endpoints may be read from RAM; zero identifies a RAM-only transient. '
-                     'These logs do not identify per-endpoint eviction or attribute cache-read counters to grafts.')
+                     'These logs do not identify per-endpoint eviction or attribute cache-read counters to grafts. '
+                     'Negative capture_ms marks capture included in forward time; it is excluded from isolated '
+                     'capture totals and counted as inline_capture_count.')
 
 
 parser = argparse.ArgumentParser()

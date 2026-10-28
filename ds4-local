@@ -53,7 +53,7 @@ def --wrapped main [...arguments: string] {
         print $USAGE
         print 'persistent-fast combines left/right suffix reuse with decode and prefill resident substitutions for ds4-agent or ds4-server.'
         print 'DeepSeek fast profiles use packed main/index caches and compact SSD checkpoints; persistent-packed is an alias for persistent-fast.'
-        print 'Server persistent-fast prepares RAM checkpoints for repeated context edits; initial population costs more. DS4_SERVER_CONTEXT_BOUNDARIES=0 disables them.'
+        print 'Server persistent-fast captures useful prefix/suffix checkpoints during prefill for repeated context edits. DS4_SERVER_CONTEXT_BOUNDARIES=0 disables them.'
         print 'flint is server-only: native resident decoding with durable Responses JSON; provide --model DIR.'
         print 'clef-flash, clef and clef-omni are server-only decision profiles; downloaded model directories are selected by default.'
         print 'Profiles enable matching text-prefix reuse for loaded Clef/Flash helpers; DS4_CLEF_PREFIX_CACHE=0 disables it.'
@@ -91,7 +91,7 @@ def --wrapped main [...arguments: string] {
             ($key | str starts-with 'DS4_V41_') or
             ($key | str starts-with 'DS4_STATE_CACHE_') or
             ($key | str starts-with 'DS4_AGENT_CONTEXT_') or
-            ($key | str starts-with 'DS4_SERVER_CONTEXT_SUFFIX_') or
+            ($key | str starts-with 'DS4_SERVER_CONTEXT_') or
             $key == 'DS4_AGENT_COMPACT_PREFIX_CACHE'
         )
         })
@@ -166,6 +166,8 @@ def --wrapped main [...arguments: string] {
                 DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER: (env-or DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER '1')
                 DS4_SERVER_CONTEXT_BOUNDARY_LIMIT: (env-or DS4_SERVER_CONTEXT_BOUNDARY_LIMIT '4')
                 DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS: (env-or DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS '512')
+                DS4_SERVER_CONTEXT_BOUNDARY_POLICY: (env-or DS4_SERVER_CONTEXT_BOUNDARY_POLICY 'anchors')
+                DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP: (env-or DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP '1')
             })
         }
     }
