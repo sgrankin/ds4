@@ -82,7 +82,7 @@ pub const BatchAttention = struct {
             c.ds4_gpu_dsv41_rope_stride(batch.index_k, shape.n_indexer_head_dim, 1, rows, first * ratio, ratio, true, false) != 0 and
             originals.storeIndex(owner, first, batch.index_k, rows) and
             c.ds4_gpu_dsv41_rope_stride(batch.latent, shape.n_head_dim, 1, rows, first * ratio, ratio, true, false) != 0 and
-            c.ds4_gpu_dsv41_quantize(batch.latent, shape.n_head_dim, rows, c.DS4_V41_FP4_E4M3) != 0 and
+            (graph.compressed_kv_fp4 or c.ds4_gpu_dsv41_quantize(batch.latent, shape.n_head_dim, rows, c.DS4_V41_FP4_E4M3) != 0) and
             originals.storeCompressed(owner, first, batch.latent, rows);
     }
 
@@ -243,9 +243,9 @@ pub const BatchAttention = struct {
         const ok = if (compressed == 0)
             self.rawAttention(heads, sinks, previous, count)
         else if (compressed < shape.n_indexer_top_k)
-            c.ds4_gpu_attention_decode_mixed_batch_heads_tensor(batch.heads, model.map, model.size, sinks, batch.q, graph.raw_prefill, graph.compressed[owner], @intFromBool(graph.compressed_kv_f16), null, 0, count, start, raw_rows, graph.prefill_cap + 128, 0, compressed, 128, ratio, heads, shape.n_head_dim) != 0
+            c.ds4_gpu_attention_decode_mixed_batch_heads_tensor(batch.heads, model.map, model.size, sinks, batch.q, graph.raw_prefill, graph.compressed[owner], (if (graph.compressed_kv_fp4) @as(u32, 2) else @intFromBool(graph.compressed_kv_f16)), null, 0, count, start, raw_rows, graph.prefill_cap + 128, 0, compressed, 128, ratio, heads, shape.n_head_dim) != 0
         else
-            c.ds4_gpu_attention_indexed_mixed_batch_heads_tensor(batch.heads, model.map, model.size, sinks, batch.q, graph.raw_prefill, graph.compressed[owner], @intFromBool(graph.compressed_kv_f16), batch.selected_comp, count, start, raw_rows, graph.prefill_cap + 128, 0, compressed, shape.n_indexer_top_k, 128, ratio, heads, shape.n_head_dim) != 0;
+            c.ds4_gpu_attention_indexed_mixed_batch_heads_tensor(batch.heads, model.map, model.size, sinks, batch.q, graph.raw_prefill, graph.compressed[owner], (if (graph.compressed_kv_fp4) @as(u32, 2) else @intFromBool(graph.compressed_kv_f16)), batch.selected_comp, count, start, raw_rows, graph.prefill_cap + 128, 0, compressed, shape.n_indexer_top_k, 128, ratio, heads, shape.n_head_dim) != 0;
         if (!ok or c.ds4_gpu_dsv41_quantize(batch.heads, heads * shape.n_head_dim, count, c.DS4_V41_BF16) == 0 or
             c.ds4_gpu_dsv41_rope(batch.heads, shape.n_head_dim, heads, count, start, ratio != 0, true) == 0) return false;
         const kept: u32 = @min(raw_rows, 128);

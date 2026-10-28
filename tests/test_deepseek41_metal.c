@@ -554,6 +554,152 @@ static int check_sparse_gather(void) {
 }
 
 #ifdef __APPLE__
+static uint32_t main_fp4_bits(float value) {
+    uint32_t bits; memcpy(&bits, &value, sizeof(bits)); return bits;
+}
+
+static int check_main_kv_fp4(void) {
+    enum { WIDTH = 512, ROWS = 129, KEPT = 5, PREFIX = 3, N = WIDTH * ROWS };
+    const int32_t picked[KEPT] = {128, 0, -1, 37, 8};
+    const int32_t identity[KEPT] = {0, 1, 2, 3, 4};
+    float *values = malloc(N * sizeof(float));
+    float *expected = malloc(N * sizeof(float));
+    float *actual = malloc(N * sizeof(float));
+    CHECK(values && expected && actual);
+    const uint64_t row_bytes = 288, storage_bytes = (PREFIX + ROWS + 1u) * row_bytes;
+    ds4_gpu_tensor *source = upload(NULL, N * sizeof(float));
+    ds4_gpu_tensor *rounded = upload(NULL, N * sizeof(float));
+    ds4_gpu_tensor *storage = upload(NULL, storage_bytes);
+    ds4_gpu_tensor *cache = ds4_gpu_tensor_view(storage, PREFIX * row_bytes, ROWS * row_bytes);
+    ds4_gpu_tensor *repacked = upload(NULL, ROWS * row_bytes);
+    ds4_gpu_tensor *decoded = upload(NULL, N * sizeof(float));
+    ds4_gpu_tensor *ids = upload(picked, sizeof(picked));
+    ds4_gpu_tensor *identity_ids = upload(identity, sizeof(identity));
+    ds4_gpu_tensor *gathered = upload(NULL, KEPT * WIDTH * sizeof(float));
+    ds4_gpu_tensor *gathered_half = upload(NULL, KEPT * WIDTH * sizeof(uint16_t));
+    CHECK(source && rounded && storage && cache && repacked && decoded && ids && identity_ids && gathered && gathered_half);
+    CHECK(ds4_gpu_tensor_bytes(cache) == ROWS * row_bytes);
+    uint8_t *guard = ds4_gpu_tensor_contents(storage);
+    CHECK(guard); memset(guard, 0xa5, (size_t)storage_bytes);
+    const unsigned counts[] = {1, 9, 37, ROWS};
+    const float alphabet[] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
+    for (unsigned pattern = 0; pattern < 3; pattern++) {
+        for (unsigned i = 0; i < N; i++) {
+            const unsigned scale_code = 1 + (i / 16) % 126;
+            const float scale = scale_code < 8 ? ldexpf(scale_code, -9) :
+                ldexpf(1.0f + (scale_code & 7) / 8.0f, (scale_code >> 3) - 7);
+            const float v = pattern == 0 ? scale * alphabet[i % 8] :
+                pattern == 1 ? random_value() * .00001f : random_value() * ldexpf(1, (int)((i / 16) % 20) - 10);
+            values[i] = pattern == 0 ? copysignf(v, (i / 8) & 1 ? -1 : 1) : v;
+        }
+        for (unsigned group = 0; group < N / 16; group++) {
+            float maximum = 0;
+            for (unsigned j = 0; j < 16; j++) maximum = fmaxf(maximum, fabsf(bf16(values[group * 16 + j])));
+            const float scale = nearest(fmaxf(maximum, .01171875f) / 6, 0);
+            for (unsigned j = 0; j < 16; j++) {
+                const float v = bf16(values[group * 16 + j]);
+                expected[group * 16 + j] = bf16(copysignf(nearest(fabsf(v) / scale, 1), v) * scale);
+            }
+        }
+        CHECK(ds4_gpu_tensor_write(source, 0, values, N * sizeof(float)));
+        CHECK(ds4_gpu_tensor_write(rounded, 0, values, N * sizeof(float)));
+        CHECK(ds4_gpu_dsv41_quantize(rounded, WIDTH, ROWS, DS4_V41_FP4_E4M3));
+        CHECK(ds4_gpu_tensor_read(rounded, 0, actual, N * sizeof(float)));
+        if (memcmp(expected, actual, N * sizeof(float))) {
+            unsigned first = 0, mismatches = 0;
+            for (unsigned i = 0; i < N; i++) if (main_fp4_bits(expected[i]) != main_fp4_bits(actual[i])) {
+                if (!mismatches) first = i;
+                mismatches++;
+            }
+            float maximum = 0;
+            for (unsigned j = first / 16 * 16; j < first / 16 * 16 + 16; j++) maximum = fmaxf(maximum, fabsf(bf16(values[j])));
+            const float scale = nearest(fmaxf(maximum, .01171875f) / 6, 0);
+            fprintf(stderr, "MAIN_FP4_CPU_OLD_MISMATCH pattern=%u count=%u first=%u row=%u col=%u original=%a/%08x bf16=%a maximum=%a scale=%a/%08x cpu=%a/%08x old_gpu=%a/%08x\n",
+                pattern, mismatches, first, first / WIDTH, first % WIDTH, values[first], main_fp4_bits(values[first]), bf16(values[first]), maximum, scale, main_fp4_bits(scale), expected[first], main_fp4_bits(expected[first]), actual[first], main_fp4_bits(actual[first]));
+            float *decoded_values = malloc(N * sizeof(float));
+            CHECK(decoded_values && ds4_gpu_dsv41_main_pack_fp4(cache, source, ROWS) && ds4_gpu_dsv41_main_unpack_fp4(decoded, cache, ROWS));
+            CHECK(ds4_gpu_tensor_read(decoded, 0, decoded_values, N * sizeof(float)));
+            unsigned packed_first = 0, packed_mismatches = 0;
+            for (unsigned i = 0; i < N; i++) if (main_fp4_bits(actual[i]) != main_fp4_bits(decoded_values[i])) {
+                if (!packed_mismatches) packed_first = i;
+                packed_mismatches++;
+            }
+            const unsigned row = packed_first / WIDTH, col = packed_first % WIDTH;
+            const uint8_t *p = guard + (PREFIX + row) * row_bytes;
+            fprintf(stderr, "MAIN_FP4_PACKED_OLD_MISMATCH pattern=%u count=%u first=%u row=%u col=%u original=%a/%08x old_gpu=%a/%08x decoded=%a/%08x code_byte=%02x scale_byte=%02x\n",
+                pattern, packed_mismatches, packed_first, row, col, values[packed_first], main_fp4_bits(values[packed_first]), actual[packed_first], main_fp4_bits(actual[packed_first]), decoded_values[packed_first], main_fp4_bits(decoded_values[packed_first]), p[col / 2], p[256 + col / 16]);
+            free(decoded_values);
+            CHECK(!packed_mismatches);
+        }
+        // Storage must reproduce the established GPU quantizer. Its fast
+        // reciprocal can choose the other FP4 value at an exact CPU halfway
+        // point; retain that diagnostic without changing the baseline math.
+        memcpy(expected, actual, N * sizeof(float));
+        for (unsigned ci = 0; ci < sizeof(counts) / sizeof(*counts); ci++) {
+            const unsigned rows = counts[ci];
+            CHECK(ds4_gpu_dsv41_main_pack_fp4(cache, source, rows));
+            CHECK(ds4_gpu_dsv41_main_unpack_fp4(decoded, cache, rows));
+            CHECK(ds4_gpu_tensor_read(decoded, 0, actual, rows * WIDTH * sizeof(float)));
+            CHECK(!memcmp(expected, actual, rows * WIDTH * sizeof(float)));
+            CHECK(ds4_gpu_dsv41_main_repack_fp4(repacked, rounded, rows));
+            CHECK(ds4_gpu_dsv41_main_unpack_fp4(decoded, repacked, rows));
+            CHECK(ds4_gpu_tensor_read(decoded, 0, actual, rows * WIDTH * sizeof(float)));
+            CHECK(!memcmp(expected, actual, rows * WIDTH * sizeof(float)));
+        }
+        CHECK(ds4_gpu_dsv41_main_gather_fp4(gathered, cache, ids, ROWS, KEPT, false));
+        CHECK(ds4_gpu_tensor_read(gathered, 0, actual, KEPT * WIDTH * sizeof(float)));
+        for (unsigned row = 0; row < KEPT; row++) {
+            if (picked[row] < 0) for (unsigned col = 0; col < WIDTH; col++) CHECK(actual[row * WIDTH + col] == 0);
+            else CHECK(!memcmp(actual + row * WIDTH, expected + picked[row] * WIDTH, WIDTH * sizeof(float)));
+        }
+        CHECK(ds4_gpu_dsv41_main_gather_fp4(gathered_half, cache, ids, ROWS, KEPT, true));
+        CHECK(ds4_gpu_dsv41_gather_kv_f16(gathered, gathered_half, identity_ids, KEPT, KEPT));
+        CHECK(ds4_gpu_tensor_read(gathered, 0, actual, KEPT * WIDTH * sizeof(float)));
+        for (unsigned row = 0; row < KEPT; row++) {
+            if (picked[row] < 0) for (unsigned col = 0; col < WIDTH; col++) CHECK(actual[row * WIDTH + col] == 0);
+            else CHECK(!memcmp(actual + row * WIDTH, expected + picked[row] * WIDTH, WIDTH * sizeof(float)));
+        }
+    }
+    // Real checkpoint regression: original scale2/512, maximum code4. Fresh
+    // mode3 quantization of these decoded values incorrectly chooses scale1/512.
+    const float legacy_group[16] = {
+        .001953125f, -.0078125f, 0, 0, 0, 0, .001953125f, .0078125f,
+        -.001953125f, -.0078125f, .001953125f, .0078125f,
+        .015625f, .01171875f, .015625f, .015625f,
+    };
+    for (unsigned group = 0; group < N / 16; group++) {
+        const unsigned scale_code = 1 + group % 7;
+        const int max4 = (group / 7) & 1;
+        const float scale = ldexpf(scale_code, -9);
+        for (unsigned j = 0; j < 16; j++) {
+            const float magnitude = alphabet[j % (max4 ? 7 : 8)] * scale;
+            values[group * 16 + j] = copysignf(magnitude, j & 1 ? -1 : 1);
+        }
+        values[group * 16 + 15] = (max4 ? 4 : 6) * scale;
+    }
+    memcpy(values, legacy_group, sizeof(legacy_group));
+    CHECK(ds4_gpu_tensor_write(source, 0, values, N * sizeof(float)));
+    CHECK(ds4_gpu_dsv41_main_repack_fp4(cache, source, ROWS));
+    CHECK(ds4_gpu_dsv41_main_unpack_fp4(decoded, cache, ROWS));
+    CHECK(ds4_gpu_tensor_read(decoded, 0, actual, N * sizeof(float)));
+    if (memcmp(values, actual, N * sizeof(float))) {
+        unsigned first = 0;
+        while (first < N && main_fp4_bits(values[first]) == main_fp4_bits(actual[first])) first++;
+        fprintf(stderr, "MAIN_FP4_LEGACY_REPACK first=%u expected=%a/%08x actual=%a/%08x\n",
+            first, values[first], main_fp4_bits(values[first]), actual[first], main_fp4_bits(actual[first]));
+        CHECK(0);
+    }
+    fprintf(stderr, "V4.1 legacy FP4 repack: checkpoint corpus, all7 subnormal scales with max4/max6 and signed zero exact\n");
+    for (uint64_t i = 0; i < PREFIX * row_bytes; i++) CHECK(guard[i] == 0xa5);
+    for (uint64_t i = (PREFIX + ROWS) * row_bytes; i < storage_bytes; i++) CHECK(guard[i] == 0xa5);
+    ds4_gpu_tensor_free(gathered_half); ds4_gpu_tensor_free(gathered); ds4_gpu_tensor_free(identity_ids);
+    ds4_gpu_tensor_free(ids); ds4_gpu_tensor_free(decoded); ds4_gpu_tensor_free(repacked);
+    ds4_gpu_tensor_free(cache); ds4_gpu_tensor_free(storage); ds4_gpu_tensor_free(rounded); ds4_gpu_tensor_free(source);
+    free(actual); free(expected); free(values);
+    fprintf(stderr, "V4.1 main FP4: exact mode3 values/scales, legacy repack, signed zero, tails, offset guards and F32/F16 gathers\n");
+    return 1;
+}
+
 static int check_compressed_kv_f16(void) {
     enum { WIDTH = 512, ROWS = 9, KEPT = 4, PREFIX = 3, N = WIDTH * ROWS };
     const float scales[] = {0x1p-9f, 0x1p-6f, .5f, 1.0f, 64.0f, 448.0f};
@@ -1884,6 +2030,10 @@ static int check_index_fp4(int simd, uint32_t selected_rows) {
 
 int main(int argc, char **argv) {
 #ifdef __APPLE__
+    if (argc == 2 && !strcmp(argv[1], "--main-fp4")) {
+        const int ok = ds4_gpu_init() && check_main_kv_fp4();
+        ds4_gpu_cleanup(); return ok ? 0 : 1;
+    }
     if (argc == 2 && !strcmp(argv[1], "--index-fp4-batch")) {
         const int ok = ds4_gpu_init() && check_index_fp4_batch();
         ds4_gpu_cleanup(); return ok ? 0 : 1;

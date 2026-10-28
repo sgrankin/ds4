@@ -78,6 +78,11 @@ pub const Attention = struct {
     pub fn storeCompressed(self: *const Attention, owner: usize, first: u32, source: ?*Tensor, rows: u32) bool {
         const width = self.config.shape.n_head_dim;
         const values = @as(u64, rows) * width;
+        if (self.graph.compressed_kv_fp4) {
+            const destination = c.ds4_gpu_tensor_view(self.graph.compressed[owner], @as(u64, first) * 288, @as(u64, rows) * 288);
+            defer c.ds4_gpu_tensor_free(destination);
+            return destination != null and c.ds4_gpu_dsv41_main_pack_fp4(destination, source, rows) != 0;
+        }
         // Mode-3 quantization has already rounded into BF16 values exactly
         // representable in F16. Storage conversion does not requantize them.
         if (self.graph.compressed_kv_f16)
@@ -100,10 +105,15 @@ pub const Attention = struct {
 
     fn packedGather(self: *const Attention) bool {
         const value = c.getenv("DS4_METAL_V41_PACKED_F16_GATHER");
+        // Main FP4 changes storage only by default. Its half scratch/M5
+        // attention path remains an explicit experiment; F16 keeps its default.
+        if (self.graph.compressed_kv_fp4) return value != null and c.strcmp(value, "1") == 0;
         return self.graph.compressed_kv_f16 and (value == null or c.strcmp(value, "0") != 0);
     }
     fn gather(self: *const Attention, owner: usize, rows: u32, selected: u32, packed_kv: bool) bool {
         const graph = self.graph;
+        if (graph.compressed_kv_fp4)
+            return c.ds4_gpu_dsv41_main_gather_fp4(graph.selected_kv, graph.compressed[owner], graph.selected_comp, rows, selected, packed_kv) != 0;
         if (graph.compressed_kv_f16) {
             if (packed_kv)
                 return c.ds4_gpu_dsv41_gather_kv_f16_packed(graph.selected_kv, graph.compressed[owner], graph.selected_comp, rows, selected) != 0;
@@ -143,7 +153,7 @@ pub const Attention = struct {
             op.rope(graph.index_k, 1, self.config.shape.n_indexer_head_dim, index, rope_position, false) and
             self.storeIndex(owner, count - 1, graph.index_k, 1) and
             op.rope(graph.latent, 1, 512, index, rope_position, false) and
-            c.ds4_gpu_dsv41_quantize(graph.latent, 512, 1, c.DS4_V41_FP4_E4M3) != 0 and
+            (graph.compressed_kv_fp4 or c.ds4_gpu_dsv41_quantize(graph.latent, 512, 1, c.DS4_V41_FP4_E4M3) != 0) and
             self.storeCompressed(owner, count - 1, graph.latent, 1);
     }
 

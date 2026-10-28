@@ -302,3 +302,47 @@ pub fn gather(
     }
     return command.acquire() and encode(&command, &launch) and command.finish();
 }
+
+/// Physical main-cache conversion/gather. Only the selected or bounded tile is
+/// expanded; the graph owner remains 288 bytes per compressed row.
+pub fn mainFp4(out: ?*api.Tensor, source: ?*const api.Tensor, ids: ?*const api.Tensor, source_rows: u32, selected_rows: u32, kind: u32) bool {
+    const pack = kind == c.DS4_EMBED_MAIN_FP4_PACK or kind == c.DS4_EMBED_MAIN_FP4_REPACK;
+    const unpack = kind == c.DS4_EMBED_MAIN_FP4_UNPACK;
+    const convert = pack or unpack;
+    if (source_rows == 0 or selected_rows == 0 or (!convert and selected_rows > source_rows)) return false;
+    const input = Buffer.tensor(source);
+    defer input.deinit();
+    const output = Buffer.tensor(out);
+    defer output.deinit();
+    const tokens = Buffer.tensor(ids);
+    defer tokens.deinit();
+    const in_row: u64 = if (pack) 2048 else 288;
+    const out_row: u64 = if (pack) 288 else if (kind == c.DS4_EMBED_MAIN_FP4_GATHER_F16) 1024 else 2048;
+    if (!input.fits(@as(u64, source_rows) * in_row) or !output.fits(@as(u64, selected_rows) * out_row) or
+        (!convert and !tokens.fits(@as(u64, selected_rows) * 4)) or api.init() == 0) return false;
+    const pipeline = c.ds4_metal_embedding_pipeline_get(kind);
+    if (pipeline.pipeline == null or pipeline.max_threads < 128) return false;
+    var launch = plan(kind, pipeline, input.view, tokens.view, output.view);
+    launch.args.packed_rows = .{ source_rows, selected_rows };
+    launch.inline_token = convert;
+    launch.threads = 128;
+    launch.groups_x = if (pack) source_rows else 4;
+    launch.groups_y = if (pack) 1 else selected_rows;
+    var command: Command = .{ .label = if (kind == c.DS4_EMBED_MAIN_FP4_REPACK) "V4.1 main FP4 legacy repack" else if (pack) "V4.1 main FP4 publication" else if (unpack) "V4.1 main FP4 tile decode" else "V4.1 main FP4 selected gather" };
+    defer command.drop();
+    return command.acquire() and encode(&command, &launch) and command.finish();
+}
+
+pub fn decodeMainFp4(command: ?*anyopaque, source: View, output: View, rows: u32) bool {
+    if (rows == 0 or source.bytes < @as(u64, rows) * 288 or output.bytes < @as(u64, rows) * 1024) return false;
+    const kind = c.DS4_EMBED_MAIN_FP4_UNPACK_F16;
+    const pipeline = c.ds4_metal_embedding_pipeline_get(kind);
+    if (pipeline.pipeline == null or pipeline.max_threads < 128) return false;
+    var launch = plan(kind, pipeline, source, std.mem.zeroes(View), output);
+    launch.args.packed_rows = .{ rows, rows };
+    launch.inline_token = true;
+    launch.threads = 128;
+    launch.groups_x = 4;
+    launch.groups_y = rows;
+    return c.ds4_metal_embedding_encode(command, &launch) != 0;
+}

@@ -38,7 +38,7 @@ fn blockHash(graph: *c.ds41_gpu_graph, end: u32) ?u64 {
     var hash: u64 = 14695981039346656037;
     for (0..4) |owner| {
         const rows = end / @as(u32, if (owner < 3) 2 else 1);
-        if (!appendHash(&hash, @ptrCast(graph.compressed[owner]), @as(u64, rows) * 512 * @as(u64, if (graph.compressed_kv_f16) 2 else 4), scratch) or
+        if (!appendHash(&hash, @ptrCast(graph.compressed[owner]), @as(u64, rows) * @as(u64, if (graph.compressed_kv_fp4) 288 else if (graph.compressed_kv_f16) 1024 else 2048), scratch) or
             !appendHash(&hash, @ptrCast(graph.index_cache[owner]), @as(u64, rows) * @as(u64, if (graph.index_fp4) 68 else 512), scratch) or
             !appendHash(&hash, @ptrCast(graph.previous_kv[owner]), 512 * 4, scratch) or
             !appendHash(&hash, @ptrCast(graph.previous_score[owner]), 512 * 4, scratch)) return null;

@@ -186,3 +186,16 @@ export fn ds4_gpu_dsv41_gather_kv_f16_packed(
 ) c_int {
     return @intFromBool(owner.gather(out, source, ids, rows, selected, c.DS4_EMBED_PACKED_GATHER));
 }
+
+export fn ds4_gpu_dsv41_main_pack_fp4(out: ?*Tensor, source: ?*const Tensor, rows: u32) c_int {
+    return @intFromBool(owner.mainFp4(out, source, null, rows, rows, c.DS4_EMBED_MAIN_FP4_PACK));
+}
+export fn ds4_gpu_dsv41_main_repack_fp4(out: ?*Tensor, source: ?*const Tensor, rows: u32) c_int {
+    return @intFromBool(owner.mainFp4(out, source, null, rows, rows, c.DS4_EMBED_MAIN_FP4_REPACK));
+}
+export fn ds4_gpu_dsv41_main_unpack_fp4(out: ?*Tensor, source: ?*const Tensor, rows: u32) c_int {
+    return @intFromBool(owner.mainFp4(out, source, null, rows, rows, c.DS4_EMBED_MAIN_FP4_UNPACK));
+}
+export fn ds4_gpu_dsv41_main_gather_fp4(out: ?*Tensor, source: ?*const Tensor, ids: ?*const Tensor, rows: u32, selected: u32, half: bool) c_int {
+    return @intFromBool(owner.mainFp4(out, source, ids, rows, selected, if (half) c.DS4_EMBED_MAIN_FP4_GATHER_F16 else c.DS4_EMBED_MAIN_FP4_GATHER));
+}

@@ -105,6 +105,31 @@ static inline float dsv4_e2m1fn_dequant(float x) {
     return sign * dsv4_e2m1fn_values[best];
 }
 
+// V4.1 main rows: 256 E2M1 code bytes followed by 32 E4M3 scale bytes.
+// E2M1 * E4M3 products fit BF16 (and F16) exactly; this is the same value
+// published by mode3, with no additional quantization at the attention reader.
+static inline float dsv41_main_fp4_value(device const char *packed,
+                                        uint row, uint column) {
+    device const uchar *p = (device const uchar *)packed + (ulong)row * 288u;
+    const uint code = (p[column / 2u] >> ((column & 1u) * 4u)) & 15u;
+    const float scale = dsv4_e4m3fn_value(p[256u + column / 16u]);
+    return copysign(dsv4_e2m1fn_values[code & 7u],
+                    as_type<float>((code & 8u) << 28u)) * scale;
+}
+
+static inline half4 dsv41_main_fp4_half4(device const char *packed,
+                                       uint row, uint column4) {
+    device const uchar *p = (device const uchar *)packed + (ulong)row * 288u;
+    const uchar2 pair = *((device const uchar2 *)(p + column4 * 2u));
+    const uint4 code = uint4(pair.x & 15u, pair.x >> 4u, pair.y & 15u, pair.y >> 4u);
+    const float4 magnitude = float4(dsv4_e2m1fn_values[code.x & 7u],
+                                    dsv4_e2m1fn_values[code.y & 7u],
+                                    dsv4_e2m1fn_values[code.z & 7u],
+                                    dsv4_e2m1fn_values[code.w & 7u]);
+    const float scale = dsv4_e4m3fn_value(p[256u + column4 / 4u]);
+    return half4(copysign(magnitude, as_type<float4>((code & 8u) << 28u)) * scale);
+}
+
 // Quantizes the non-RoPE part of a KV row through E4M3FN and writes the
 // dequantized value back as float. DS4 uses this to match the FP8 KV-cache
 // semantics while keeping the Metal graph's cache buffers float-addressable.

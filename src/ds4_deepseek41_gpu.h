@@ -13,8 +13,8 @@ typedef struct ds4_gpu_tensor ds4_gpu_tensor;
 extern "C" {
 #endif
 
-/* V4.1 activation/cache formats. Buffers are float-addressable but the
- * rounded values follow the released BF16/FP8/FP4 inference graph. */
+/* V4.1 activation/cache numerics. Quantize operates on float-addressable
+ * scratch; physical packed cache publication uses the explicit APIs below. */
 typedef enum {
     DS4_V41_BF16 = 0,
     DS4_V41_FP8_E8M0 = 1,
@@ -23,6 +23,20 @@ typedef enum {
 } ds4_v41_activation_format;
 int ds4_gpu_dsv41_quantize(ds4_gpu_tensor *x, uint32_t width, uint32_t rows,
                           ds4_v41_activation_format format);
+/* Physical mode3 main-cache rows: 256 E2M1 code bytes + 32 E4M3 scales.
+ * Source publication preserves the original per16 scale; unpack/gather exactly
+ * reproduce the existing BF16-rounded values into a bounded working tile. */
+int ds4_gpu_dsv41_main_pack_fp4(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
+                               uint32_t rows);
+/* Repack already-decoded mode3 values without applying mode3 a second time.
+ * Legacy F32/F16 checkpoints and repaired suffix tiles use this entry point. */
+int ds4_gpu_dsv41_main_repack_fp4(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
+                                 uint32_t rows);
+int ds4_gpu_dsv41_main_unpack_fp4(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
+                                 uint32_t rows);
+int ds4_gpu_dsv41_main_gather_fp4(ds4_gpu_tensor *out, const ds4_gpu_tensor *source,
+                                 const ds4_gpu_tensor *ids, uint32_t rows,
+                                 uint32_t selected, bool half);
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD) && !defined(DS4_NO_GPU)
 /* Same reductions as the ordinary kernels, with the required BF16 store
  * folded into the operation. hc_sum reads either 4- or 24-float row weights. */

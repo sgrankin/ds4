@@ -1,13 +1,14 @@
 //! Canonical V4.1 graph payloads: fixed little-endian DSV4 header/tokens,
-//! F32 logits and live cache spans. Version 3 stores packed FP4 index rows;
-//! version 2 remains readable through bounded conversion. DRP1/DSSD wrappers
+//! F32 logits and typed live cache spans. Versions 2/3 store F32 main rows,
+//! versions 4/5 pack main FP4; odd versions also pack the index. All layouts
+//! remain readable through bounded conversion. DRP1/DSSD wrappers
 //! and session provenance remain with their callers. In particular, this
 //! numerical state owner does not decide whether an approximate session may
 //! use a canonical API.
 //!
 //! Restore copies into the graph's existing tensors; it never mmaps a cache
 //! file or allocates a second graph-sized blob. F16 compressed storage uses
-//! the same F32 wire bytes as the native cache, through one bounded scratch.
+//! F32 wire bytes; main FP4 can copy native rows without a rounded F32 owner.
 const std = @import("std");
 const c = @import("gguf_c");
 const Config = @import("../config.zig").ModelConfig;
@@ -25,6 +26,8 @@ pub const Span = struct {
     tensor: ?*Tensor,
     wire_bytes: u64,
     packed_f16: bool = false,
+    main_fp4: bool = false,
+    main_wire_fp4: bool = false,
     index_fp4: bool = false,
     wire_fp4: bool = false,
 };
@@ -88,13 +91,13 @@ const File = struct {
 pub const Payload = struct {
     graph: *Graph,
     config: *const Config,
-    // Only canonical checkpoints opt in; private suffix/replay bodies retain
-    // their existing layout and never acquire a draft-feature appendix.
+    // Only canonical checkpoints opt into a draft-feature appendix.
     include_draft: bool = false,
     allow_draft: bool = false,
-    // Private replay/diagnostic writers retain version 2. Canonical ownership
-    // opts into version 3 when its actual graph stores packed index rows.
+    // Canonical and DSSD owners select their actual physical layouts. Private
+    // DRP1/SWB1 callers leave these false and retain version2 conversion.
     index_wire_fp4: bool = false,
+    main_wire_fp4: bool = false,
 
     pub fn spans(self: *const Payload, position: u32, storage: *[54]Span) []Span {
         const graph = self.graph;
@@ -107,7 +110,13 @@ pub const Payload = struct {
         }
         for (0..4) |owner| {
             const live = position / @as(u32, if (owner < 3) 2 else 1);
-            storage[count] = .{ .tensor = graph.compressed[owner], .wire_bytes = @as(u64, live) * shape.n_head_dim * 4, .packed_f16 = graph.compressed_kv_f16 };
+            storage[count] = .{
+                .tensor = graph.compressed[owner],
+                .wire_bytes = @as(u64, live) * format.mainRowBytes(self.main_wire_fp4),
+                .packed_f16 = graph.compressed_kv_f16,
+                .main_fp4 = graph.compressed_kv_fp4,
+                .main_wire_fp4 = self.main_wire_fp4,
+            };
             storage[count + 1] = .{
                 .tensor = graph.index_cache[owner],
                 .wire_bytes = @as(u64, live) * format.indexRowBytes(self.index_wire_fp4),
@@ -162,7 +171,7 @@ pub const Payload = struct {
         const graph = self.graph;
         const shape = &self.config.shape;
         return .{
-            c.DS4_SESSION_PAYLOAD_MAGIC, if (self.index_wire_fp4) format.fp4_version else format.f32_version,
+            c.DS4_SESSION_PAYLOAD_MAGIC, format.version(self.main_wire_fp4, self.index_wire_fp4),
             graph.ctx,                   1,
             128,                         128,
             graph.ctx + 1,               graph.pos,
@@ -198,14 +207,15 @@ pub const Payload = struct {
         const shape = &self.config.shape;
         const position = saved[7];
         var source = self.*;
-        source.index_wire_fp4 = saved[1] == format.fp4_version;
+        source.index_wire_fp4 = format.indexFp4(saved[1]);
+        source.main_wire_fp4 = format.mainFp4(saved[1]);
         const base_bytes = if (blocks_only) source.blockBytes(position) else source.baseBodyBytes(position);
         const draft_bytes = draft_checkpoint.wireBytes(position, shape.n_embd);
         const has_draft = !blocks_only and self.allow_draft and body_bytes == base_bytes + draft_bytes;
         mutated.* = false;
         // The generic facade has checked magic/version before family dispatch.
         // A smaller current context is allowed when all live rows still fit.
-        if (!format.validVersion(saved[1]) or (blocks_only and source.index_wire_fp4) or
+        if (!format.validVersion(saved[1]) or (blocks_only and (source.index_wire_fp4 or source.main_wire_fp4)) or
             position == 0 or position >= graph.ctx or position >= saved[2] or saved[2] > 1048576 or
             saved[3] != 1 or saved[4] != 128 or saved[5] != 128 or saved[6] != saved[2] + 1 or
             saved[8] != shape.n_layer or saved[9] != shape.n_head_dim or saved[10] != shape.n_indexer_head_dim or
@@ -331,11 +341,15 @@ fn checkSpan(file: File, span: Span) Failure!void {
     else
         "session tensor is smaller than the payload");
     const wire_row = format.indexRowBytes(span.wire_fp4);
-    const storage_bytes = if (span.index_fp4 or span.wire_fp4)
+    const storage_bytes = if (span.main_fp4 or span.main_wire_fp4)
+        span.wire_bytes / format.mainRowBytes(span.main_wire_fp4) * @as(u64, if (span.main_fp4) 288 else if (span.packed_f16) 1024 else 2048)
+    else if (span.index_fp4 or span.wire_fp4)
         span.wire_bytes / wire_row * format.indexRowBytes(span.index_fp4)
     else if (span.packed_f16) span.wire_bytes / 2 else span.wire_bytes;
     if ((span.index_fp4 or span.wire_fp4) and span.wire_bytes % wire_row != 0)
         return file.fail(error.InvalidDimensions, "invalid packed index row size");
+    if ((span.main_fp4 or span.main_wire_fp4) and span.wire_bytes % format.mainRowBytes(span.main_wire_fp4) != 0)
+        return file.fail(error.InvalidDimensions, "invalid packed main row size");
     if (span.wire_bytes % 4 != 0 or storage_bytes > c.ds4_gpu_tensor_bytes(tensor))
         return file.fail(error.InvalidDimensions, if (span.packed_f16)
             "session tensor is smaller than the F16 payload"
@@ -346,6 +360,7 @@ fn checkSpan(file: File, span: Span) Failure!void {
 fn writeSpan(file: File, span: Span, scratch: []align(8) u8) Failure!void {
     @setFloatMode(.strict);
     try checkSpan(file, span);
+    if (span.main_fp4 != span.main_wire_fp4 or (span.packed_f16 and span.main_wire_fp4)) return transferMain(true, file, span, scratch, null);
     if (span.index_fp4 != span.wire_fp4) return transferIndex(true, file, span, scratch, null);
     if (!span.packed_f16) {
         var done: u64 = 0;
@@ -379,6 +394,7 @@ fn writeSpan(file: File, span: Span, scratch: []align(8) u8) Failure!void {
 fn readSpan(file: File, span: Span, scratch: []align(8) u8, remaining: *u64) Failure!void {
     @setFloatMode(.strict);
     try checkSpan(file, span);
+    if (span.main_fp4 != span.main_wire_fp4 or (span.packed_f16 and span.main_wire_fp4)) return transferMain(false, file, span, scratch, remaining);
     if (span.index_fp4 != span.wire_fp4) return transferIndex(false, file, span, scratch, remaining);
     if (!span.packed_f16) {
         var done: u64 = 0;
@@ -403,6 +419,65 @@ fn readSpan(file: File, span: Span, scratch: []align(8) u8, remaining: *u64) Fai
         for (0..count) |index| half[index] = @bitCast(@as(f16, @floatCast(full[index])));
         if (c.ds4_gpu_tensor_write(span.tensor, done * 2, half, count * 2) == 0)
             return file.fail(error.Device, "failed to restore Metal F16 session tensor");
+        done += count;
+    }
+}
+
+// Old F32/F16 payloads and new packed rows convert through bounded tiles.
+// Repacking decoded mode3 values is separate from fresh quantization: coarse
+// subnormal E4M3 scale rounding can leave a maximum of 4*scale, not 6*scale.
+fn transferMain(comptime writing: bool, file: File, span: Span, scratch: []align(8) u8, remaining: ?*u64) Failure!void {
+    if (span.wire_bytes == 0) return;
+    const capacity = scratch.len / 2048;
+    if (capacity == 0) return file.fail(error.ConversionBuffer, "main conversion buffer is too small");
+    const wire_row = format.mainRowBytes(span.main_wire_fp4);
+    const stored_row: u64 = if (span.main_fp4) 288 else if (span.packed_f16) 1024 else 2048;
+    const full = c.ds4_gpu_tensor_alloc(capacity * 2048) orelse return file.fail(error.Device, "cannot allocate main conversion tile");
+    defer c.ds4_gpu_tensor_free(full);
+    const packed_tile = c.ds4_gpu_tensor_alloc(capacity * 288) orelse return file.fail(error.Device, "cannot allocate packed main conversion tile");
+    defer c.ds4_gpu_tensor_free(packed_tile);
+    const rows = span.wire_bytes / wire_row;
+    var done: u64 = 0;
+    while (done < rows) {
+        const count: u32 = @intCast(@min(rows - done, capacity));
+        const bytes: usize = @intCast(@as(u64, count) * wire_row);
+        const view = c.ds4_gpu_tensor_view(span.tensor, done * stored_row, @as(u64, count) * stored_row) orelse return file.fail(error.Device, "cannot view main conversion rows");
+        defer c.ds4_gpu_tensor_free(view);
+        if (writing) {
+            var converted: c_int = 0;
+            if (span.main_wire_fp4) {
+                var source = view;
+                if (span.packed_f16) {
+                    const values = @as(usize, count) * 512;
+                    if (c.ds4_gpu_tensor_read(view, 0, scratch.ptr, values * 2) == 0) return file.fail(error.Device, "cannot read F16 main conversion rows");
+                    const halves: [*]u16 = @ptrCast(scratch.ptr);
+                    const floats: [*]f32 = @ptrCast(@alignCast(scratch.ptr));
+                    var index = values;
+                    while (index != 0) {
+                        index -= 1;
+                        floats[index] = @floatCast(@as(f16, @bitCast(halves[index])));
+                    }
+                    if (c.ds4_gpu_tensor_write(full, 0, scratch.ptr, values * 4) == 0) return file.fail(error.Device, "cannot upload F16 main conversion rows");
+                    source = full;
+                }
+                converted = c.ds4_gpu_dsv41_main_repack_fp4(packed_tile, source, count);
+            } else converted = c.ds4_gpu_dsv41_main_unpack_fp4(full, view, count);
+            if (converted == 0 or c.ds4_gpu_tensor_read(if (span.main_wire_fp4) packed_tile else full, 0, scratch.ptr, bytes) == 0)
+                return file.fail(error.Device, "failed to encode session main rows");
+            try file.write(scratch[0..bytes]);
+        } else {
+            try file.read(scratch[0..bytes], remaining.?);
+            if (c.ds4_gpu_tensor_write(if (span.main_wire_fp4) packed_tile else full, 0, scratch.ptr, bytes) == 0)
+                return file.fail(error.Device, "failed to upload session main rows");
+            const converted = if (span.main_fp4)
+                c.ds4_gpu_dsv41_main_repack_fp4(view, full, count) != 0
+            else if (span.packed_f16)
+                c.ds4_gpu_dsv41_main_unpack_fp4(full, packed_tile, count) != 0 and c.ds4_gpu_tensor_copy_f32_to_f16(view, 0, full, 0, @as(u64, count) * 512) != 0
+            else
+                c.ds4_gpu_dsv41_main_unpack_fp4(view, packed_tile, count) != 0;
+            if (!converted or c.ds4_gpu_synchronize() == 0)
+                return file.fail(error.Device, "failed to restore session main rows");
+        }
         done += count;
     }
 }

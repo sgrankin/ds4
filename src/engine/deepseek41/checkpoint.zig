@@ -1,7 +1,7 @@
 //! V4.1 canonical checkpoints, memory snapshots and private replay envelopes.
 //! The actual Frontier and Graph remain borrowed. This owner commits tokens
 //! and provenance only at the same boundaries as the original public APIs;
-//! Payload owns the numerical spans and canonical F32 wire representation.
+//! Payload owns the numerical spans and canonical typed wire representation.
 //! Distributed/TP routing and the outer legacy invalidate action remain C.
 const std = @import("std");
 const c = @import("gguf_c");
@@ -85,6 +85,7 @@ pub const Checkpoint = struct {
             .allow_draft = true,
             .include_draft = flag != null and c.strcmp(flag, "1") == 0,
             .index_wire_fp4 = self.graph.index_fp4,
+            .main_wire_fp4 = self.graph.compressed_kv_fp4,
         };
     }
     fn tokens(self: *const Checkpoint) []const c_int {

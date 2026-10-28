@@ -211,7 +211,7 @@ int main(int argc, char **argv) {
     logits = malloc((size_t)vocab * sizeof(float)); CHECK(logits);
     fprintf(csv, "case,step,target,nll,argmax\n");
     fprintf(timings, "case,rows,prompt_tokens,teacher_tokens,sync_ms,teacher_ms,greedy_sync_ms,greedy_ms,generated_tokens,stopped,exact,approximate,payload_bytes,suffix_cache_bytes\n");
-    ds4_context_memory memory = ds4_context_memory_estimate_with_prefill(DS4_BACKEND_METAL, ctx, chunk);
+    ds4_context_memory memory = ds4_engine_context_memory_estimate(e, ctx);
     fprintf(tokens, "{\"rows\":%d,\"vocab\":%d,\"context\":%d,\"chunk\":%d,\"compressed_kv_f16\":%d,"
         "\"planned_raw_bytes\":%llu,\"planned_compressed_bytes\":%llu,\"planned_total_bytes\":%llu,\"ssd_cache_gib\":%d,"
         "\"mtp\":false,\"thinking\":%s,\"max_new\":%d,\"native_routing\":true,\"logits_dtype\":\"float32_le\",\"engine_open_ms\":%.6f,\"cases\":[",

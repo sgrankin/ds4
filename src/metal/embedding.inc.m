@@ -28,6 +28,24 @@ ds4_metal_embedding_pipeline ds4_metal_embedding_pipeline_get(uint32_t kind) {
     case DS4_EMBED_PACKED_GATHER:
       pipeline = ds4_gpu_get_pipeline("kernel_dsv41_gather_kv_f16_packed");
       break;
+    case DS4_EMBED_MAIN_FP4_PACK:
+      pipeline = ds4_gpu_get_pipeline("kernel_dsv41_main_pack_fp4");
+      break;
+    case DS4_EMBED_MAIN_FP4_REPACK:
+      pipeline = ds4_gpu_get_pipeline("kernel_dsv41_main_repack_fp4");
+      break;
+    case DS4_EMBED_MAIN_FP4_UNPACK:
+      pipeline = ds4_gpu_get_pipeline("kernel_dsv41_main_unpack_fp4_f32");
+      break;
+    case DS4_EMBED_MAIN_FP4_UNPACK_F16:
+      pipeline = ds4_gpu_get_pipeline("kernel_dsv41_main_unpack_fp4_f16");
+      break;
+    case DS4_EMBED_MAIN_FP4_GATHER:
+      pipeline = ds4_gpu_get_pipeline("kernel_dsv41_main_gather_fp4_f32");
+      break;
+    case DS4_EMBED_MAIN_FP4_GATHER_F16:
+      pipeline = ds4_gpu_get_pipeline("kernel_dsv41_main_gather_fp4_f16");
+      break;
     }
     return (ds4_metal_embedding_pipeline){
         (const ds4_metal_hc_pipeline *)(__bridge void *)pipeline,
@@ -92,6 +110,12 @@ int ds4_metal_embedding_encode(void *command,
       [enc setBytes:&p->args.bf16 length:sizeof(p->args.bf16) atIndex:0];
       break;
     case DS4_EMBED_PACKED_GATHER:
+    case DS4_EMBED_MAIN_FP4_PACK:
+    case DS4_EMBED_MAIN_FP4_REPACK:
+    case DS4_EMBED_MAIN_FP4_UNPACK:
+    case DS4_EMBED_MAIN_FP4_UNPACK_F16:
+    case DS4_EMBED_MAIN_FP4_GATHER:
+    case DS4_EMBED_MAIN_FP4_GATHER_F16:
       [enc setBytes:p->args.packed_rows
              length:sizeof(p->args.packed_rows)
             atIndex:0];

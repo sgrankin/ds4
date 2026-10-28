@@ -154,6 +154,37 @@ static void check_packed_formats(const char *parent) {
     puts("state-cache: packed v3 DSP1 extents/restart and v2 compact-length rejection PASS");
 }
 
+static void check_main_packed_formats(const char *base) {
+    for (unsigned version = 4; version <= 5; version++) {
+        char dir[4096], err[256] = {0}, key[41];
+        assert(snprintf(dir, sizeof(dir), "%s/main-v%u", base, version) < (int)sizeof(dir));
+        fixture old = make_fixture(129);
+        fixture f = {.n = old.n};
+        f.bytes = 52u + ((uint64_t)f.n + 129280u) * 4u + 40u * 128u * 2048u;
+        for (unsigned i = 0; i < 4; i++) f.bytes += (uint64_t)(f.n / (i < 3 ? 2u : 1u)) * (288u + (version == 5 ? 68u : 512u)) + (i < 3 ? 4096u : 0u);
+        f.p = malloc((size_t)f.bytes); assert(f.p);
+        for (uint64_t i = 0; i < f.bytes; i++) f.p[i] = (uint8_t)(i * 17u);
+        memcpy(f.p, old.p, 52u + ((uint64_t)f.n + 129280u) * 4u);
+        ds4_kvstore_le_put32(f.p + 4u, version);
+        ds4_state_cache *cache = ds4_state_cache_open(dir, 0, 96u << 20, err, sizeof(err)); assert(cache);
+        assert(!ds4_state_cache_put(cache, "main-packed", f.p, f.bytes, NULL, 0, false, key, err, sizeof(err)));
+        equal_source(cache, key, &f, DS4_STATE_CACHE_NATIVE);
+        assert(!ds4_state_cache_close(cache, err, sizeof(err)));
+        cache = ds4_state_cache_open(dir, 0, 96u << 20, err, sizeof(err)); assert(cache);
+        equal_source(cache, key, &f, DS4_STATE_CACHE_NATIVE);
+        f.pre = old.pre; f.pre_bytes = old.pre_bytes;
+        ds4_kvstore_le_put32(f.p, 0x44535344u);
+        assert(!ds4_state_cache_put(cache, "private-main-packed", f.p, f.bytes, f.pre, f.pre_bytes, true, key, err, sizeof(err)));
+        equal_source(cache, key, &f, DS4_STATE_CACHE_SUFFIX);
+        assert(!ds4_state_cache_close(cache, err, sizeof(err)));
+        cache = ds4_state_cache_open(dir, 0, 96u << 20, err, sizeof(err)); assert(cache);
+        equal_source(cache, key, &f, DS4_STATE_CACHE_SUFFIX);
+        assert(!ds4_state_cache_close(cache, err, sizeof(err)));
+        free(old.p); free(old.pre); free(f.p);
+    }
+    puts("state-cache: packed main native/private v4/v5 odd-frontier spans and restart PASS");
+}
+
 int main(int argc, char **argv) {
     if (argc != 2 || mkdir(argv[1], 0700)) {
         fprintf(stderr, "usage: test-state-cache NEW_PERSISTENT_DIRECTORY\n"); return 2;
@@ -295,6 +326,7 @@ int main(int argc, char **argv) {
     assert(ds4_state_cache_close(c, err, sizeof(err)) == 0);
     free(ids); free(a.p); free(a.pre); free(b.p); free(b.pre); free(replay.p);
     check_packed_formats(argv[1]);
+    check_main_packed_formats(argv[1]);
     puts("state-cache: dedup, RAM spill, SSD restart, native/suffix/replay kinds, discovery and budgets PASS");
     return 0;
 }

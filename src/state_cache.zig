@@ -176,22 +176,26 @@ fn findEndpoint(cache: *Cache, key: [*c]const u8) ?*Endpoint {
     }
     return null;
 }
-fn stateBytes(n: u32, packed_index: bool) u64 {
-    return state_format.baseBytes(n, packed_index, vocab);
+fn stateBytes(n: u32, version: u32) u64 {
+    return state_format.baseBytes(n, state_format.mainFp4(version), state_format.indexFp4(version), vocab);
 }
 fn stateSizeValid(n: u32, bytes: u64, kind: c_int) bool {
-    const base = stateBytes(n, false) + @as(u64, if (kind == replay) 32 else 0);
-    if (bytes == base) return true;
-    if (kind != native) return false;
-    const packed_base = stateBytes(n, true);
-    const draft = draft_checkpoint.wireBytes(n, 5120);
-    return bytes == packed_base or bytes == base + draft or bytes == packed_base + draft;
+    const first = state_format.f32_version;
+    const end: u32 = if (kind != replay) state_format.both_fp4_version + 1 else first + 1;
+    var version = first;
+    while (version < end) : (version += 1) {
+        const base = stateBytes(n, version) + @as(u64, if (kind == replay) 32 else 0);
+        if (bytes == base or (kind == native and bytes == base + draft_checkpoint.wireBytes(n, 5120))) return true;
+    }
+    return false;
 }
 fn hasDraft(e: *const Endpoint) bool {
     if (e.kind != native) return false;
     const draft = draft_checkpoint.wireBytes(e.tokens, 5120);
-    return e.state_bytes == stateBytes(e.tokens, false) + draft or
-        e.state_bytes == stateBytes(e.tokens, true) + draft;
+    var version = state_format.f32_version;
+    while (version <= state_format.both_fp4_version) : (version += 1)
+        if (e.state_bytes == stateBytes(e.tokens, version) + draft) return true;
+    return false;
 }
 fn snapshotHeaderBytes(kind: c_int) u64 {
     // Replay adds a 32-byte DRP1 envelope before the unchanged 52-byte DSV4 header.
@@ -212,13 +216,13 @@ fn stateValid(initial: [*c]const u8, initial_bytes: u64, kind: c_int, ctx: *u32,
     }
     const version = u32at(p + 4);
     if (u32at(p) != @as(u32, if (kind == suffix) 0x44535344 else 0x34565344) or
-        !state_format.validVersion(version) or (kind != native and version != state_format.f32_version)) return false;
+        !state_format.validVersion(version) or (kind == replay and version != state_format.f32_version)) return false;
     var h: [13]u32 = undefined;
     for (&h, 0..) |*word, i| word.* = u32at(p + i * 4);
     if (h[2] == 0 or h[2] > 1048576 or h[7] == 0 or h[7] >= h[2] or h[3] != 1 or
         h[4] != 128 or h[5] != 128 or h[6] != h[2] + 1 or h[8] != 40 or h[9] != 512 or
         h[10] != 128 or h[11] != vocab or h[12] != 0x413431 or !stateSizeValid(h[7], initial_bytes, kind)) return false;
-    const base = stateBytes(h[7], version == state_format.fp4_version);
+    const base = stateBytes(h[7], version);
     if (bytes != base) {
         if (kind != native or bytes != base + draft_checkpoint.wireBytes(h[7], 5120)) return false;
         if (!draft_checkpoint.validBytes(p[@intCast(base)..@intCast(bytes)], h[7], 5120)) return false;
@@ -282,10 +286,12 @@ fn split(e: *Endpoint, p: [*c]const u8, pre: [*c]const u8) bool {
         !pages(e, p, 0, &off, vocab * 4, vocab * 4)) return false;
     const raw: u64 = @min(e.tokens, 128);
     if (!pages(e, p, 0, &off, 40 * raw * 512 * 4, raw * 512 * 4)) return false;
-    const index_row = state_format.indexRowBytes(u32at(p + (if (e.kind == replay) @as(usize, 32) else 0) + 4) == state_format.fp4_version);
+    const version = u32at(p + (if (e.kind == replay) @as(usize, 32) else 0) + 4);
+    const index_row = state_format.indexRowBytes(state_format.indexFp4(version));
+    const main_row = state_format.mainRowBytes(state_format.mainFp4(version));
     for (0..4) |i| {
         const ratio: u32 = if (i < 3) 2 else 1;
-        if (!pages(e, p, 0, &off, @as(u64, e.tokens / ratio) * 512 * 4, (page / ratio) * 512 * 4) or
+        if (!pages(e, p, 0, &off, @as(u64, e.tokens / ratio) * main_row, (page / ratio) * main_row) or
             !pages(e, p, 0, &off, @as(u64, e.tokens / ratio) * index_row, (page / ratio) * index_row)) return false;
         if (i < 3 and e.tokens & 1 != 0 and !pages(e, p, 0, &off, 2 * 512 * 4, 512 * 4)) return false;
     }

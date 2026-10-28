@@ -100,16 +100,20 @@ pub fn main(init: std.process.Init.Minimal) !void {
     var args = init.args.iterate();
     const program = args.next() orelse "test-dspark-checkpoint";
     const model = args.next() orelse {
-        std.debug.print("usage: {s} TARGET SUPPORT EMPTY_CACHE_DIR [--packed-cross]\n", .{program});
+        std.debug.print("usage: {s} TARGET SUPPORT EMPTY_CACHE_DIR [--packed-cross|--main-packed-cross|--all-packed-cross]\n", .{program});
         return error.MissingModel;
     };
     const support = args.next() orelse return error.MissingSupport;
     const cache_dir = args.next() orelse return error.MissingCacheDirectory;
     const option = args.next();
-    try require(option == null or std.mem.eql(u8, option.?, "--packed-cross"), "unknown option");
+    const cross_index = option != null and (std.mem.eql(u8, option.?, "--packed-cross") or std.mem.eql(u8, option.?, "--all-packed-cross"));
+    const cross_main = option != null and (std.mem.eql(u8, option.?, "--main-packed-cross") or std.mem.eql(u8, option.?, "--all-packed-cross"));
+    try require(option == null or cross_index or cross_main, "unknown option");
     const packed_cross = option != null;
+    const packed_version: u32 = 2 + 2 * @as(u32, @intFromBool(cross_main)) + @as(u32, @intFromBool(cross_index));
     try require(args.next() == null, "unexpected extra argument");
-    // Presence enables the existing actual GPU tensor-byte log; main KV stays F32.
+    // Presence enables the existing actual GPU tensor-byte log; physical main
+    // and index layouts are selected per graph below for cross-import cases.
     try require(setenv("DS4_V41_COMPRESSED_KV_F16", "0", 1) == 0, "request actual allocation log");
     var options = std.mem.zeroes(c.ds4_engine_options);
     options.model_path = model.ptr;
@@ -133,10 +137,16 @@ pub fn main(init: std.process.Init.Minimal) !void {
     try require(c.ds4_engine_decode_packet_size(engine) > 1, "support enables actual packets");
     var source: ?*c.ds4_session = null;
     var restored: ?*c.ds4_session = null;
-    if (packed_cross) try require(setenv("DS4_V41_INDEX_FP4", "0", 1) == 0, "allocate F32 source graph");
+    if (packed_cross) {
+        try require(setenv("DS4_V41_INDEX_FP4", "0", 1) == 0, "allocate F32 source index");
+        try require(setenv("DS4_V41_COMPRESSED_KV_FP4", "0", 1) == 0, "allocate F32 source main");
+    }
     try require(c.ds4_session_create(&source, engine, 2048) == 0, "create source");
     defer c.ds4_session_free(source);
-    if (packed_cross) try require(setenv("DS4_V41_INDEX_FP4", "1", 1) == 0, "allocate physical FP4 restore graph");
+    if (packed_cross) {
+        try require(setenv("DS4_V41_INDEX_FP4", if (cross_index) "1" else "0", 1) == 0, "select restore index layout");
+        try require(setenv("DS4_V41_COMPRESSED_KV_FP4", if (cross_main) "1" else "0", 1) == 0, "select restore main layout");
+    }
     try require(c.ds4_session_create(&restored, engine, 2048) == 0, "create restore target");
     defer c.ds4_session_free(restored);
     var tokens = std.mem.zeroes(c.ds4_tokens);
@@ -186,33 +196,96 @@ pub fn main(init: std.process.Init.Minimal) !void {
     defer c.ds4_state_cache_blob_free(&from_ssd);
     const snapshot = c.ds4_session_snapshot{ .ptr = from_ssd.state, .len = from_ssd.state_bytes, .cap = from_ssd.state_bytes };
     try require(c.ds4_session_load_snapshot(restored, &snapshot, &errors, errors.len) == 0, "restore SSD DSP1 and wrapped ring tags");
+    if (packed_cross) {
+        // Isolate physical layout conversion before any restored inference. The
+        // scalar teacher must resume from its original state after this probe.
+        var packed_before_cycle = std.mem.zeroes(c.ds4_session_snapshot);
+        defer c.ds4_session_snapshot_free(&packed_before_cycle);
+        var expanded_before_cycle = std.mem.zeroes(c.ds4_session_snapshot);
+        defer c.ds4_session_snapshot_free(&expanded_before_cycle);
+        try require(c.ds4_session_save_snapshot(restored, &packed_before_cycle, &errors, errors.len) == 0, "save pre-cycle packed checkpoint");
+        try require(c.ds4_session_load_snapshot(source, &packed_before_cycle, &errors, errors.len) == 0, "expand pre-cycle checkpoint into F32 source");
+        try require(c.ds4_session_save_snapshot(source, &expanded_before_cycle, &errors, errors.len) == 0, "resave pre-cycle F32 checkpoint with DSP1");
+        const original = saved.ptr[0..@intCast(saved.len)];
+        const expanded_wire = expanded_before_cycle.ptr[0..@intCast(expanded_before_cycle.len)];
+        var first_difference: ?usize = null;
+        for (original[0..@min(original.len, expanded_wire.len)], expanded_wire[0..@min(original.len, expanded_wire.len)], 0..) |x, y, i| {
+            if (x != y) {
+                first_difference = i;
+                break;
+            }
+        }
+        std.debug.print("draft checkpoint: pre-cycle roundtrip v2->v{d}->v2 original_bytes={d} packed_bytes={d} expanded_bytes={d}", .{ packed_version, saved.len, packed_before_cycle.len, expanded_before_cycle.len });
+        if (first_difference) |offset| {
+            std.debug.print(" first_difference={d} original=0x{x:0>2} expanded=0x{x:0>2}\n", .{ offset, original[offset], expanded_wire[offset] });
+        } else if (original.len != expanded_wire.len) {
+            std.debug.print(" first_difference={d} (length)\n", .{@min(original.len, expanded_wire.len)});
+        } else {
+            std.debug.print(" exact\n", .{});
+        }
+        try require(c.ds4_session_load_snapshot(source, &saved, &errors, errors.len) == 0, "restore original scalar teacher after roundtrip probe");
+        try require(original.len == expanded_wire.len and first_difference == null, "pre-cycle canonical roundtrip preserves every byte");
+
+        // Run the same seed once without MTP, then restore both frontiers. A
+        // scalar mismatch isolates publication/readers from batch verification.
+        const vocab: usize = @intCast(c.ds4_engine_vocab_size(engine));
+        const scalar_packed = try a.alloc(f32, vocab);
+        defer a.free(scalar_packed);
+        const scalar_plain = try a.alloc(f32, vocab);
+        defer a.free(scalar_plain);
+        try require(c.ds4_session_copy_sampling_logits(restored, scalar_packed.ptr, @intCast(vocab)) == @as(c_int, @intCast(vocab)), "pre-cycle scalar seed logits");
+        scalar_packed[@intCast(c.ds4_token_eos(engine))] = -std.math.inf(f32);
+        var scalar_rng: u64 = 0x1234ab56cd;
+        const scalar_token = c.ds4_sample_logits(scalar_packed.ptr, @intCast(vocab), 1, 0, 0.95, 0.05, &scalar_rng);
+        try require(scalar_token >= 0, "pre-cycle scalar sampled seed");
+        try require(c.ds4_session_eval(restored, scalar_token, &errors, errors.len) == 0, "pre-cycle scalar FP4 decode");
+        try require(c.ds4_session_eval(source, scalar_token, &errors, errors.len) == 0, "pre-cycle scalar F32 decode");
+        try require(c.ds4_session_copy_logits(restored, scalar_packed.ptr, @intCast(vocab)) == @as(c_int, @intCast(vocab)), "pre-cycle scalar FP4 logits");
+        try require(c.ds4_session_copy_logits(source, scalar_plain.ptr, @intCast(vocab)) == @as(c_int, @intCast(vocab)), "pre-cycle scalar F32 logits");
+        var scalar_maximum: f64 = 0;
+        var scalar_maximum_index: usize = 0;
+        var scalar_finite = true;
+        for (scalar_packed, scalar_plain, 0..) |x, y, i| {
+            scalar_finite = scalar_finite and std.math.isFinite(x) and std.math.isFinite(y);
+            const difference = @abs(@as(f64, x) - y);
+            if (difference > scalar_maximum) {
+                scalar_maximum = difference;
+                scalar_maximum_index = i;
+            }
+        }
+        std.debug.print("draft checkpoint: pre-cycle scalar token={d} max={d} logit={d} packed={d} plain={d} finite={}\n", .{ scalar_token, scalar_maximum, scalar_maximum_index, scalar_packed[scalar_maximum_index], scalar_plain[scalar_maximum_index], scalar_finite });
+        try require(c.ds4_session_load_snapshot(source, &saved, &errors, errors.len) == 0, "restore scalar teacher after one-token probe");
+        try require(c.ds4_session_load_snapshot(restored, &packed_before_cycle, &errors, errors.len) == 0, "restore packed frontier after one-token probe");
+        try require(scalar_finite and scalar_maximum < 0.01, "pre-cycle scalar cache-layout agreement");
+    }
     try cycle(restored.?, engine.?, true, source);
     if (packed_cross) {
         var packed_snapshot = std.mem.zeroes(c.ds4_session_snapshot);
         defer c.ds4_session_snapshot_free(&packed_snapshot);
         try require(c.ds4_session_save_snapshot(restored, &packed_snapshot, &errors, errors.len) == 0, "save physical FP4 canonical checkpoint");
-        try require(std.mem.readInt(u32, packed_snapshot.ptr[4..8], .little) == 3, "physical cache exports v3");
+        try require(std.mem.readInt(u32, packed_snapshot.ptr[4..8], .little) == packed_version, "physical cache exports selected v3/v4/v5");
         const live_tokens = c.ds4_session_tokens(restored);
         try require(live_tokens != null, "borrow actual committed token history");
         var packed_key: [41]u8 = undefined;
-        try require(c.ds4_state_cache_put(cache, profile, packed_snapshot.ptr, packed_snapshot.len, null, 0, false, &packed_key, &errors, errors.len) == 0, "publish complete v3 plus DSP1");
-        try require(c.ds4_state_cache_close(cache, &errors, errors.len) == 0, "close after v3 publication");
+        try require(c.ds4_state_cache_put(cache, profile, packed_snapshot.ptr, packed_snapshot.len, null, 0, false, &packed_key, &errors, errors.len) == 0, "publish complete packed state plus DSP1");
+        try require(c.ds4_state_cache_close(cache, &errors, errors.len) == 0, "close after packed publication");
         cache = null;
         cache = c.ds4_state_cache_open(cache_dir.ptr, 0, 512 << 20, &errors, errors.len);
-        try require(cache != null, "reopen v3 SSD manifest");
+        try require(cache != null, "reopen packed SSD manifest");
         var packed_ssd = try preferred(cache.?, live_tokens, &packed_snapshot);
         defer c.ds4_state_cache_blob_free(&packed_ssd);
         const packed_wire = c.ds4_session_snapshot{ .ptr = packed_ssd.state, .len = packed_ssd.state_bytes, .cap = packed_ssd.state_bytes };
-        try require(c.ds4_session_load_snapshot(source, &packed_wire, &errors, errors.len) == 0, "import v3 SSD into F32 graph");
+        try require(c.ds4_session_load_snapshot(source, &packed_wire, &errors, errors.len) == 0, "import packed SSD into F32 graph");
         var twin = std.mem.zeroes(c.ds4_session_snapshot);
         defer c.ds4_session_snapshot_free(&twin);
         try require(c.ds4_session_save_snapshot(source, &twin, &errors, errors.len) == 0, "save same-prefix F32 v2 twin");
         try require(std.mem.readInt(u32, twin.ptr[4..8], .little) == 2, "twin uses canonical v2");
         const position = std.mem.readInt(u32, packed_snapshot.ptr[28..32], .little);
-        const saved_index_bytes = (@as(u64, 3) * (position / 2) + position) * 444;
-        try require(twin.len == packed_snapshot.len + saved_index_bytes, "same-prefix v2/v3 difference is exactly packed index rows");
+        const saved_row_bytes: u64 = @as(u64, if (cross_main) 1760 else 0) + @as(u64, if (cross_index) 444 else 0);
+        const saved_cache_bytes = (@as(u64, 3) * (position / 2) + position) * saved_row_bytes;
+        try require(twin.len == packed_snapshot.len + saved_cache_bytes, "same-prefix wire difference is exactly packed main/index rows");
         try require(c.ds4_state_cache_put(cache, profile, twin.ptr, twin.len, null, 0, false, &base_key, &errors, errors.len) == 0, "publish same-prefix v2 SSD twin");
-        std.debug.print("draft checkpoint: paired prefix={d} v2_bytes={d} v3_bytes={d} index_saved_bytes={d}\n", .{ position, twin.len, packed_snapshot.len, saved_index_bytes });
+        std.debug.print("draft checkpoint: paired prefix={d} v2_bytes={d} packed_version={d} packed_bytes={d} cache_saved_bytes={d}\n", .{ position, twin.len, packed_version, packed_snapshot.len, saved_cache_bytes });
         try cycle(restored.?, engine.?, true, source);
 
         var expanded = std.mem.zeroes(c.ds4_session_snapshot);
@@ -221,7 +294,7 @@ pub fn main(init: std.process.Init.Minimal) !void {
         try require(std.mem.readInt(u32, expanded.ptr[4..8], .little) == 2, "F32 graph retains canonical v2");
         try require(c.ds4_session_load_snapshot(restored, &expanded, &errors, errors.len) == 0, "import canonical v2 back into physical FP4 graph");
         try cycle(restored.?, engine.?, true, source);
-        std.debug.print("draft checkpoint: packed v2/v3 cross-import and HOT0 SSD restart PASS\n", .{});
+        std.debug.print("draft checkpoint: v2/v{d} cross-import, both-direction MTP teacher agreement and HOT0 SSD restart PASS\n", .{packed_version});
     }
     std.debug.print("draft checkpoint: PASS old_base={d} DSP1={d} HOT0 SSD restart exact\n", .{ old.len, saved.len });
 }

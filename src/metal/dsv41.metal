@@ -297,6 +297,124 @@ kernel void kernel_dsv41_carry_copy(
 
 struct ds4_metal_args_dsv41_prerope { uint width, rows, pack; };
 
+// Preserve mode3's original per16 E4M3 scale at publication. Both input BF16
+// rounding and E2M1 ties match kernel_dsv41_quantize; only storage is different.
+kernel void kernel_dsv41_main_pack_fp4(
+        constant uint2 &args, device const float *source,
+        device const int *unused_ids, device uchar *out,
+        uint row [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]]) {
+    (void)unused_ids;
+    if (row >= args.x) return;
+    for (uint col = tid; col < 512u; col += 128u) {
+        const float value = dsv41_bf16(source[(ulong)row * 512u + col]);
+        float amax = abs(value);
+        for (uint delta = 8u; delta; delta >>= 1u)
+            amax = max(amax, simd_shuffle_xor(amax, delta));
+        const float scale = dsv4_e4m3fn_dequant(max(amax, 0.01171875f) / 6.0f);
+        const float x = min(abs(value) / scale, 6.0f);
+        uint code = 0;
+        float best = abs(x - dsv4_e2m1fn_values[0]);
+        for (uint i = 1; i < 8u; ++i) {
+            const float error = abs(x - dsv4_e2m1fn_values[i]);
+            if (error < best || (error == best && !(i & 1u) && (code & 1u))) {
+                code = i;
+                best = error;
+            }
+        }
+        code |= (as_type<uint>(value) >> 28u) & 8u;
+        const uint neighbor = simd_shuffle_xor(code, 1u);
+        if (!(col & 1u)) out[(ulong)row * 288u + col / 2u] = uchar(code | (neighbor << 4u));
+        if (!(col & 15u)) {
+            const uint bits = as_type<uint>(scale);
+            const uint encoded = scale < 0.015625f ? uint(scale * 512.0f) :
+                (((bits >> 23u) - 120u) << 3u) | ((bits >> 20u) & 7u);
+            out[(ulong)row * 288u + 256u + col / 16u] = uchar(encoded);
+        }
+    }
+}
+
+// Recover an exact physical representation of already-decoded mode3 rows.
+// Small subnormal E4M3 scales can round the original amax/6 up by 50%, so
+// decoded amax can be 4*scale. Applying the fresh quantizer again is lossy.
+// Try the usual scale, validate all16 values, then recover the 4*scale case.
+static inline uint dsv41_main_repack_code(float magnitude, float scale) {
+    const float x = min(magnitude / scale, 6.0f);
+    uint code = 0;
+    float best = abs(x - dsv4_e2m1fn_values[0]);
+    for (uint i = 1; i < 8u; ++i) {
+        const float error = abs(x - dsv4_e2m1fn_values[i]);
+        if (error < best || (error == best && !(i & 1u) && (code & 1u))) {
+            code = i;
+            best = error;
+        }
+    }
+    return code;
+}
+
+kernel void kernel_dsv41_main_repack_fp4(
+        constant uint2 &args, device const float *source,
+        device const int *unused_ids, device uchar *out,
+        uint row [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]]) {
+    (void)unused_ids;
+    if (row >= args.x) return;
+    for (uint col = tid; col < 512u; col += 128u) {
+        const float value = source[(ulong)row * 512u + col];
+        float amax = abs(value);
+        for (uint delta = 8u; delta; delta >>= 1u)
+            amax = max(amax, simd_shuffle_xor(amax, delta));
+        float scale = dsv4_e4m3fn_dequant(max(amax, 0.01171875f) / 6.0f);
+        uint code = dsv41_main_repack_code(abs(value), scale);
+        uint invalid = dsv4_e2m1fn_values[code] * scale != abs(value);
+        for (uint delta = 8u; delta; delta >>= 1u)
+            invalid |= simd_shuffle_xor(invalid, delta);
+        if (invalid) {
+            scale = max(amax * 0.25f, 0.001953125f);
+            code = dsv41_main_repack_code(abs(value), scale);
+        }
+        code |= (as_type<uint>(value) >> 28u) & 8u;
+        const uint neighbor = simd_shuffle_xor(code, 1u);
+        if (!(col & 1u)) out[(ulong)row * 288u + col / 2u] = uchar(code | (neighbor << 4u));
+        if (!(col & 15u)) {
+            const uint bits = as_type<uint>(scale);
+            const uint encoded = scale < 0.015625f ? uint(scale * 512.0f) :
+                (((bits >> 23u) - 120u) << 3u) | ((bits >> 20u) & 7u);
+            out[(ulong)row * 288u + 256u + col / 16u] = uchar(encoded);
+        }
+    }
+}
+
+template<typename T>
+kernel void kernel_dsv41_main_unpack_fp4(
+        constant uint2 &args, device const char *source,
+        device const int *unused_ids, device T *out,
+        uint2 group [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]]) {
+    (void)unused_ids;
+    const uint col = group.x * 128u + tid;
+    if (col < 512u && group.y < args.x)
+        out[(ulong)group.y * 512u + col] = T(dsv41_main_fp4_value(source, group.y, col));
+}
+template [[host_name("kernel_dsv41_main_unpack_fp4_f32")]] kernel decltype(kernel_dsv41_main_unpack_fp4<float>) kernel_dsv41_main_unpack_fp4<float>;
+template [[host_name("kernel_dsv41_main_unpack_fp4_f16")]] kernel decltype(kernel_dsv41_main_unpack_fp4<half>) kernel_dsv41_main_unpack_fp4<half>;
+
+template<typename T>
+kernel void kernel_dsv41_main_gather_fp4(
+        constant uint2 &args, device const char *source,
+        device const int *ids, device T *out,
+        uint2 group [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]]) {
+    const uint col = group.x * 128u + tid;
+    const uint row = group.y;
+    if (col >= 512u || row >= args.y) return;
+    const int id = ids[row];
+    out[(ulong)row * 512u + col] = id >= 0 && uint(id) < args.x
+        ? T(dsv41_main_fp4_value(source, uint(id), col)) : T(0);
+}
+template [[host_name("kernel_dsv41_main_gather_fp4_f32")]] kernel decltype(kernel_dsv41_main_gather_fp4<float>) kernel_dsv41_main_gather_fp4<float>;
+template [[host_name("kernel_dsv41_main_gather_fp4_f16")]] kernel decltype(kernel_dsv41_main_gather_fp4<half>) kernel_dsv41_main_gather_fp4<half>;
+
 /* Same row order as get_rows_f16, without its half-to-float conversion. */
 kernel void kernel_dsv41_gather_kv_f16_packed(
         constant uint2 &args, device const ushort *source,

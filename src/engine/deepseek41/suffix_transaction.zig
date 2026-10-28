@@ -35,7 +35,10 @@ pub const Transaction = struct {
         return .{ .graph = self.session.runtime.prefill.executor.graph, .config = self.session.runtime.prefill.executor.ops.config };
     }
     fn payload(self: *const Transaction) Payload {
-        return .{ .graph = self.session.runtime.prefill.executor.graph, .config = self.session.runtime.prefill.executor.ops.config };
+        const device = self.session.runtime.prefill.executor.graph;
+        // Private DSSD provenance lives in its magic, not an expanded layout.
+        // Repeated graft captures retain the graph's packed rows and tape.
+        return .{ .graph = device, .config = self.session.runtime.prefill.executor.ops.config, .index_wire_fp4 = device.index_fp4, .main_wire_fp4 = device.compressed_kv_fp4 };
     }
     fn checkpoint(self: *const Transaction) Checkpoint {
         return .{ .frontier = self.session.runtime.state, .graph = self.session.runtime.prefill.executor.graph, .config = self.session.runtime.prefill.executor.ops.config, .ready = self.session.runtime.ready };
@@ -79,10 +82,9 @@ pub const Transaction = struct {
     pub fn cacheBytes(self: *const Transaction) u64 {
         if (!self.supported()) return 0;
         const device = self.session.runtime.prefill.executor.graph;
-        // Exact captures use the canonical physical layout. Approximate
-        // recaptures retain the private v2 diagnostic representation.
-        var body = self.payload();
-        body.index_wire_fp4 = device.index_fp4 and !self.session.runtime.state.approximate_suffix;
+        // Exact and diagnostic captures use the same physical row sizes;
+        // their distinct magic and approximate identity remain unchanged.
+        const body = self.payload();
         return c.DS4_SESSION_PAYLOAD_U32_FIELDS * 4 + body.bodyBytes(device.pos) +
             (if (device.prerope != null) suffix.archiveBytes(device.pos) else @as(u64, 0));
     }
@@ -170,7 +172,8 @@ pub const Transaction = struct {
         const tokens: []const c_int = if (prompt.len == 0) &.{} else prompt.v[0..@intCast(prompt.len)];
         if (!(Frontier{ .state = state }).startsWithCheckpoint(tokens)) return fail(errors, message);
         var mutated = false;
-        const observed = self.graph().graft(cache, tokens, source_start, start, self.cancellation(), &mutated, errors) catch {
+        const observed = self.graph().graft(cache, tokens, source_start, start, self.cancellation(), &mutated, errors) catch |reason| {
+            std.debug.print("ds4: suffix transaction failed stage=graph-graft error={s} mutated={}\n", .{ @errorName(reason), mutated });
             if (mutated) {
                 state.checkpoint_valid = false;
                 return self.graftFailure(errors);
@@ -183,7 +186,10 @@ pub const Transaction = struct {
         state.approximate_suffix = true;
         state.mtp_draft_valid = false;
         self.session.clearCapture();
-        if (self.session.sync(prompt, errors) != 0) return self.graftFailure(errors);
+        if (self.session.sync(prompt, errors) != 0) {
+            std.debug.print("ds4: suffix transaction failed stage=fresh-tail end={d} prompt={d}\n", .{ observed.end, tokens.len });
+            return self.graftFailure(errors);
+        }
         if (statistics) |output| output.* = observed.reuse;
         if (relocation) |output| output.* = observed.relocation;
         return 0;

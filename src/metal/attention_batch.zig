@@ -49,6 +49,7 @@ pub const Problem = struct {
     heads_count: u32,
     width: u32,
     comp_half: bool = false,
+    comp_fp4: bool = false,
     use_mask: bool = false,
     visual_tokens: [*c]const i32 = null,
     vocab_size: u32 = 0,
@@ -115,7 +116,7 @@ const Inputs = struct {
         const raw_count = if (Problem.prefill(kind)) problem.raw_rows else problem.raw_cap;
         const raw_element: u64 = if (kind == .glm_compact and problem.raw_half) 2 else 4;
         const raw_bytes = @as(u64, raw_count) *% problem.width *% raw_element;
-        const comp_bytes = @as(u64, problem.comp_rows) *% problem.width *% @as(u64, if (problem.comp_half) 2 else 4);
+        const comp_bytes = @as(u64, problem.comp_rows) *% (if (problem.comp_fp4) @as(u64, 288) else @as(u64, problem.width) * @as(u64, if (problem.comp_half) 2 else 4));
         const mask_rows: u32 = if (Problem.prefill(kind)) problem.q_row0 +% problem.rows else problem.rows;
         const mask_bytes = @as(u64, problem.comp_rows) *% mask_rows *% 4;
         return self.query.fits(q_bytes) and self.raw.fits(raw_bytes) and self.comp.valid() and self.mask.valid() and self.heads.fits(q_bytes) and
@@ -498,7 +499,11 @@ fn encode(command: *Command, problem: Problem, kind: Kind, inputs: Inputs, sinks
     } else if (!Scalar.ringCopy(command, inputs.raw.view, problem.raw_cap, problem.raw_start, problem.raw_rows, problem.width, kv.view, facts)) return false;
     if (mixed) {
         const target = Scalar.at(kv.view, @as(u64, problem.raw_rows) * problem.width * 2);
-        if (!Scalar.copyHalf(command, inputs.comp.view, target, problem.comp_half, problem.comp_rows *% problem.width, facts) or !profile.stage(command, "copy_comp")) return false;
+        const copied = if (problem.comp_fp4)
+            @import("embedding.zig").decodeMainFp4(command.token, inputs.comp.view, target, problem.comp_rows)
+        else
+            Scalar.copyHalf(command, inputs.comp.view, target, problem.comp_half, problem.comp_rows *% problem.width, facts);
+        if (!copied or !profile.stage(command, "copy_comp")) return false;
     }
     if (!prefill or Problem.mixed(kind)) {
         if (cache.entry == null and !fillMask(mask.view, problem, kind)) return false;
@@ -562,12 +567,12 @@ fn indexed(problem: Problem) c_int {
         .pos0 = problem.pos0,
         .window = problem.window,
         .ratio = problem.ratio,
-        .comp_kv_f16 = @intFromBool(problem.comp_half),
+        .comp_kv_f16 = if (problem.comp_fp4) 2 else @intFromBool(problem.comp_half),
         .n_splits = splits,
         .q_token_stride = @as(u64, problem.heads_count) * row_bytes,
         .q_head_stride = row_bytes,
         .raw_row_stride = row_bytes,
-        .comp_row_stride = if (problem.comp_half) half_row else row_bytes,
+        .comp_row_stride = if (problem.comp_fp4) 288 else if (problem.comp_half) half_row else row_bytes,
         .topk_token_stride = @as(u64, problem.top_k) * 4,
         .dst_token_stride = @as(u64, problem.heads_count) * row_bytes,
         .dst_head_stride = row_bytes,

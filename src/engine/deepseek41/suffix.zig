@@ -39,6 +39,18 @@ fn fail(text: []u8, reason: Failure, message: []const u8) Failure {
     }
     return reason;
 }
+fn deviceFailure(stage: []const u8, owner: usize, offset: u32, rows: u32) Failure {
+    std.debug.print("ds4: suffix graft device failure stage={s} owner={d} tile_offset={d} rows={d}\n", .{ stage, owner, offset, rows });
+    return error.Device;
+}
+// Graft runs outside the inference batch. Tensor blits borrow an existing
+// batch, so each bounded F32 tile copy owns one and always retires it.
+fn copyTile(destination: ?*Tensor, offset: u64, source: ?*const Tensor, bytes: u64) bool {
+    if (c.ds4_gpu_begin_commands() == 0) return false;
+    const copied = c.ds4_gpu_tensor_copy(destination, offset, source, 0, bytes) != 0;
+    const finished = c.ds4_gpu_end_commands() != 0;
+    return copied and finished;
+}
 fn readU32(bytes: []const u8) u32 {
     return std.mem.readInt(u32, bytes[0..4], .little);
 }
@@ -93,6 +105,7 @@ const Originals = struct {
 const Source = struct {
     end: u32,
     index_fp4: bool,
+    main_fp4: bool,
     tokens: []const u8,
     window: [40][]const u8,
     compressed: [4][]const u8,
@@ -110,14 +123,15 @@ const Source = struct {
         const shape = &config.shape;
         const end = header[7];
         const magic: u32 = if (cache.approximate and cache.prerope != null) c.DS4_SESSION_SUFFIX_DIAGNOSTIC_MAGIC else c.DS4_SESSION_PAYLOAD_MAGIC;
-        const index_fp4 = header[1] == state_format.fp4_version;
-        const payload = Payload{ .graph = graph, .config = config, .index_wire_fp4 = index_fp4 };
+        const index_fp4 = state_format.indexFp4(header[1]);
+        const main_fp4 = state_format.mainFp4(header[1]);
+        const payload = Payload{ .graph = graph, .config = config, .index_wire_fp4 = index_fp4, .main_wire_fp4 = main_fp4 };
         if (header[0] != magic or !state_format.validVersion(header[1]) or
             header[2] != graph.ctx or header[3] != 1 or header[4] != 128 or header[5] != 128 or
             header[6] != header[2] +% 1 or end == 0 or end >= header[2] or header[8] != shape.n_layer or
             header[9] != shape.n_head_dim or header[10] != shape.n_indexer_head_dim or
             header[11] != shape.n_vocab or header[12] != 0x413431 or state.len != header_bytes + payload.bodyBytes(end)) return null;
-        var result = Source{ .end = end, .index_fp4 = index_fp4, .tokens = blob[header_bytes..][0 .. @as(usize, end) * 4], .window = undefined, .compressed = undefined, .index = undefined };
+        var result = Source{ .end = end, .index_fp4 = index_fp4, .main_fp4 = main_fp4, .tokens = blob[header_bytes..][0 .. @as(usize, end) * 4], .window = undefined, .compressed = undefined, .index = undefined };
         for (0..end) |index| if (readU32(result.tokens[index * 4 ..]) >= shape.n_vocab) return null;
         var offset: usize = header_bytes + (@as(usize, end) + shape.n_vocab) * 4; // Source logits are not reused.
         const raw: usize = @min(end, raw_rows);
@@ -128,7 +142,7 @@ const Source = struct {
         }
         for (0..4) |owner| {
             const rows: usize = end / ratio(owner);
-            const key_bytes = rows * shape.n_head_dim * 4;
+            const key_bytes: usize = @intCast(rows * state_format.mainRowBytes(main_fp4));
             const index_bytes: usize = @intCast(rows * state_format.indexRowBytes(index_fp4));
             result.compressed[owner] = blob[offset..][0..key_bytes];
             offset += key_bytes;
@@ -311,11 +325,11 @@ pub const Suffix = struct {
         // Source canonical bytes and originals remain immutable in both modes.
         var tile: ?*Tensor = null;
         defer c.ds4_gpu_tensor_free(tile);
-        if (graph.compressed_kv_f16 or graph.index_fp4 or source.index_fp4) tile = c.ds4_gpu_tensor_alloc(@as(u64, tile_rows) * shape.n_head_dim * 4) orelse
+        if (graph.compressed_kv_f16 or graph.compressed_kv_fp4 or source.main_fp4 or graph.index_fp4 or source.index_fp4) tile = c.ds4_gpu_tensor_alloc(@as(u64, tile_rows) * shape.n_head_dim * 4) orelse
             return fail(error_text, error.Allocation, "cannot allocate packed suffix repair tile");
         var packed_tile: ?*Tensor = null;
         defer c.ds4_gpu_tensor_free(packed_tile);
-        if (source.index_fp4) packed_tile = c.ds4_gpu_tensor_alloc(tile_rows * state_format.fp4_index_bytes) orelse
+        if (source.index_fp4 or source.main_fp4) packed_tile = c.ds4_gpu_tensor_alloc(tile_rows * state_format.fp4_main_bytes) orelse
             return fail(error_text, error.Allocation, "cannot allocate packed suffix source tile");
         var result = Result{
             .reuse = std.mem.zeroes(c.ds4_suffix_reuse_stats),
@@ -361,21 +375,22 @@ pub const Suffix = struct {
             const rows = source.end / compression - source_first;
             const key_offset = @as(u64, first) * shape.n_head_dim * 4;
             const index_offset = @as(u64, first) * shape.n_indexer_head_dim * 4;
-            const source_key_offset = @as(u64, source_first) * shape.n_head_dim * 4;
+            const source_key_offset = @as(u64, source_first) * state_format.mainRowBytes(source.main_fp4);
             const source_index_offset = @as(u64, source_first) * state_format.indexRowBytes(source.index_fp4);
             const tiled_index = graph.index_fp4 or source.index_fp4;
-            if (rows != 0 and ((!graph.compressed_kv_f16 and c.ds4_gpu_tensor_write(graph.compressed[owner], key_offset, source.compressed[owner].ptr + source_key_offset, @as(u64, rows) * shape.n_head_dim * 4) == 0) or
+            const tiled_main = graph.compressed_kv_f16 or graph.compressed_kv_fp4 or source.main_fp4;
+            if (rows != 0 and ((!tiled_main and c.ds4_gpu_tensor_write(graph.compressed[owner], key_offset, source.compressed[owner].ptr + source_key_offset, @as(u64, rows) * shape.n_head_dim * 4) == 0) or
                 (!tiled_index and c.ds4_gpu_tensor_write(graph.index_cache[owner], index_offset, source.index[owner].ptr + source_index_offset, @as(u64, rows) * shape.n_indexer_head_dim * 4) == 0))) return error.Device;
             if (use_originals and rows != 0) {
                 const archive: *Archive = @ptrCast(graph.prerope);
                 if (c.ds4_gpu_tensor_write(archive.compressed[owner], @as(u64, first) * tape_width, originals.compressed[owner].ptr + @as(u64, source_first) * tape_width, @as(u64, rows) * tape_width) == 0 or
                     c.ds4_gpu_tensor_write(archive.index[owner], @as(u64, first) * tape_width, originals.index[owner].ptr + @as(u64, source_first) * tape_width, @as(u64, rows) * tape_width) == 0) return error.Device;
                 @memset(archive.published[owner][first .. first + rows], 3);
-                if (displacement != 0 and ((!graph.compressed_kv_f16 and !originalKeys(graph.compressed[owner], key_offset, archive.compressed[owner], first, shape.n_head_dim, rows, first * compression, compression, true, c.DS4_V41_FP4_E4M3)) or
+                if (displacement != 0 and ((!tiled_main and !originalKeys(graph.compressed[owner], key_offset, archive.compressed[owner], first, shape.n_head_dim, rows, first * compression, compression, true, c.DS4_V41_FP4_E4M3)) or
                     (!tiled_index and !originalKeys(graph.index_cache[owner], index_offset, archive.index[owner], first, shape.n_indexer_head_dim, rows, first * compression, compression, true, c.DS4_V41_FP4_E8M0)))) return error.Device;
-            } else if (displacement != 0 and ((!graph.compressed_kv_f16 and !repairKeys(graph.compressed[owner], key_offset, shape.n_head_dim, rows, source_first * compression, first * compression, compression, true, c.DS4_V41_FP4_E4M3)) or
+            } else if (displacement != 0 and ((!tiled_main and !repairKeys(graph.compressed[owner], key_offset, shape.n_head_dim, rows, source_first * compression, first * compression, compression, true, c.DS4_V41_FP4_E4M3)) or
                 (!tiled_index and !repairKeys(graph.index_cache[owner], index_offset, shape.n_indexer_head_dim, rows, source_first * compression, first * compression, compression, true, c.DS4_V41_FP4_E8M0)))) return error.Device;
-            if (graph.compressed_kv_f16) try self.storePacked(tile, owner, source.compressed[owner][@intCast(source_key_offset)..], source_first, first, rows, compression, use_originals, cancel);
+            if (tiled_main) try self.storePacked(tile, packed_tile, owner, source.compressed[owner][@intCast(source_key_offset)..], source.main_fp4, source_first, first, rows, compression, use_originals, cancel);
             if (tiled_index) try self.storeIndex(tile, packed_tile, owner, source.index[owner][@intCast(source_index_offset)..], source.index_fp4, source_first, first, rows, compression, use_originals, cancel);
             if (displacement != 0) {
                 result.relocation.compressed_keys_repaired += rows;
@@ -383,7 +398,7 @@ pub const Suffix = struct {
             }
             result.reuse.compressed_rows += rows;
             result.reuse.index_rows += rows;
-            result.reuse.copied_bytes += @as(u64, rows) * (shape.n_head_dim * 4 + state_format.indexRowBytes(source.index_fp4));
+            result.reuse.copied_bytes += @as(u64, rows) * (state_format.mainRowBytes(source.main_fp4) + state_format.indexRowBytes(source.index_fp4));
             if (owner < 3 and source.end & 1 != 0) {
                 if (c.ds4_gpu_tensor_write(graph.previous_kv[owner], 0, source.previous_keys[owner].?.ptr, @as(u64, shape.n_head_dim) * 4) == 0 or
                     c.ds4_gpu_tensor_write(graph.previous_score[owner], 0, source.previous_scores[owner].?.ptr, @as(u64, shape.n_head_dim) * 4) == 0) return error.Device;
@@ -401,22 +416,37 @@ pub const Suffix = struct {
         return result;
     }
 
-    fn storePacked(self: *const Suffix, tile: ?*Tensor, owner: usize, source: []const u8, source_first: u32, first: u32, rows: u32, compression: u32, originals: bool, cancel: Cancel) Failure!void {
+    fn storePacked(self: *const Suffix, tile: ?*Tensor, packed_tile: ?*Tensor, owner: usize, source: []const u8, source_fp4: bool, source_first: u32, first: u32, rows: u32, compression: u32, originals: bool, cancel: Cancel) Failure!void {
         const graph = self.graph;
         const width = self.config.shape.n_head_dim;
+        const source_row = state_format.mainRowBytes(source_fp4);
+        const destination_row: u64 = if (graph.compressed_kv_fp4) 288 else if (graph.compressed_kv_f16) 1024 else 2048;
+        if (source_first == first and source_fp4 and graph.compressed_kv_fp4) {
+            if (rows != 0 and c.ds4_gpu_tensor_write(graph.compressed[owner], @as(u64, first) * destination_row, source.ptr, @as(u64, rows) * source_row) == 0) return deviceFailure("main direct upload", owner, 0, rows);
+            return;
+        }
         var offset: u32 = 0;
         while (offset < rows) : (offset += tile_rows) {
             if (cancel.requested()) return error.Interrupted;
             const count: u32 = @min(rows - offset, tile_rows);
-            if (c.ds4_gpu_tensor_write(tile, 0, source.ptr + @as(u64, offset) * width * 4, @as(u64, count) * width * 4) == 0) return error.Device;
+            if (source_fp4) {
+                if (c.ds4_gpu_tensor_write(packed_tile, 0, source.ptr + @as(u64, offset) * source_row, @as(u64, count) * source_row) == 0) return deviceFailure("main packed upload", owner, offset, count);
+                if (c.ds4_gpu_dsv41_main_unpack_fp4(tile, packed_tile, count) == 0) return deviceFailure("main decode", owner, offset, count);
+            } else if (c.ds4_gpu_tensor_write(tile, 0, source.ptr + @as(u64, offset) * source_row, @as(u64, count) * source_row) == 0) return deviceFailure("main F32 upload", owner, offset, count);
             if (source_first != first) {
                 const repaired = if (originals)
                     originalKeys(tile, 0, graph.prerope.*.compressed[owner], first + offset, width, count, (first + offset) * compression, compression, true, c.DS4_V41_FP4_E4M3)
                 else
                     repairKeys(tile, 0, width, count, (source_first + offset) * compression, (first + offset) * compression, compression, true, c.DS4_V41_FP4_E4M3);
-                if (!repaired) return error.Device;
+                if (!repaired) return deviceFailure("main rotate", owner, offset, count);
             }
-            if (c.ds4_gpu_tensor_copy_f32_to_f16(graph.compressed[owner], @as(u64, first + offset) * width * 2, tile, 0, @as(u64, count) * width) == 0) return error.Device;
+            if (graph.compressed_kv_fp4) {
+                const destination = c.ds4_gpu_tensor_view(graph.compressed[owner], @as(u64, first + offset) * destination_row, @as(u64, count) * destination_row) orelse return deviceFailure("main destination view", owner, offset, count);
+                defer c.ds4_gpu_tensor_free(destination);
+                if (c.ds4_gpu_dsv41_main_repack_fp4(destination, tile, count) == 0) return deviceFailure("main repack", owner, offset, count);
+            } else if (graph.compressed_kv_f16) {
+                if (c.ds4_gpu_tensor_copy_f32_to_f16(graph.compressed[owner], @as(u64, first + offset) * destination_row, tile, 0, @as(u64, count) * width) == 0) return deviceFailure("main F16 copy", owner, offset, count);
+            } else if (!copyTile(graph.compressed[owner], @as(u64, first + offset) * destination_row, tile, @as(u64, count) * destination_row)) return deviceFailure("main F32 copy", owner, offset, count);
         }
     }
 
@@ -427,7 +457,7 @@ pub const Suffix = struct {
         const source_row = state_format.indexRowBytes(source_fp4);
         const destination_row = state_format.indexRowBytes(graph.index_fp4);
         if (source_first == first and source_fp4 == graph.index_fp4) {
-            if (rows != 0 and c.ds4_gpu_tensor_write(graph.index_cache[owner], @as(u64, first) * destination_row, source.ptr, @as(u64, rows) * source_row) == 0) return error.Device;
+            if (rows != 0 and c.ds4_gpu_tensor_write(graph.index_cache[owner], @as(u64, first) * destination_row, source.ptr, @as(u64, rows) * source_row) == 0) return deviceFailure("index direct upload", owner, 0, rows);
             return;
         }
         var offset: u32 = 0;
@@ -435,21 +465,21 @@ pub const Suffix = struct {
             if (cancel.requested()) return error.Interrupted;
             const count: u32 = @min(rows - offset, tile_rows);
             if (source_fp4) {
-                if (c.ds4_gpu_tensor_write(packed_tile, 0, source.ptr + @as(u64, offset) * source_row, @as(u64, count) * source_row) == 0 or
-                    c.ds4_gpu_dsv41_indexer_unpack_fp4(tile, packed_tile, count) == 0) return error.Device;
-            } else if (c.ds4_gpu_tensor_write(tile, 0, source.ptr + @as(u64, offset) * source_row, @as(u64, count) * source_row) == 0) return error.Device;
+                if (c.ds4_gpu_tensor_write(packed_tile, 0, source.ptr + @as(u64, offset) * source_row, @as(u64, count) * source_row) == 0) return deviceFailure("index packed upload", owner, offset, count);
+                if (c.ds4_gpu_dsv41_indexer_unpack_fp4(tile, packed_tile, count) == 0) return deviceFailure("index decode", owner, offset, count);
+            } else if (c.ds4_gpu_tensor_write(tile, 0, source.ptr + @as(u64, offset) * source_row, @as(u64, count) * source_row) == 0) return deviceFailure("index F32 upload", owner, offset, count);
             if (source_first != first) {
                 const repaired = if (originals)
                     originalKeys(tile, 0, graph.prerope.*.index[owner], first + offset, 128, count, (first + offset) * compression, compression, true, c.DS4_V41_FP4_E8M0)
                 else
                     repairKeys(tile, 0, 128, count, (source_first + offset) * compression, (first + offset) * compression, compression, true, c.DS4_V41_FP4_E8M0);
-                if (!repaired) return error.Device;
+                if (!repaired) return deviceFailure("index rotate", owner, offset, count);
             }
             if (graph.index_fp4) {
-                const destination = c.ds4_gpu_tensor_view(graph.index_cache[owner], @as(u64, first + offset) * destination_row, @as(u64, count) * destination_row) orelse return error.Device;
+                const destination = c.ds4_gpu_tensor_view(graph.index_cache[owner], @as(u64, first + offset) * destination_row, @as(u64, count) * destination_row) orelse return deviceFailure("index destination view", owner, offset, count);
                 defer c.ds4_gpu_tensor_free(destination);
-                if (c.ds4_gpu_dsv41_indexer_pack_fp4(destination, tile, count) == 0) return error.Device;
-            } else if (c.ds4_gpu_tensor_copy(graph.index_cache[owner], @as(u64, first + offset) * destination_row, tile, 0, @as(u64, count) * destination_row) == 0) return error.Device;
+                if (c.ds4_gpu_dsv41_indexer_pack_fp4(destination, tile, count) == 0) return deviceFailure("index repack", owner, offset, count);
+            } else if (!copyTile(graph.index_cache[owner], @as(u64, first + offset) * destination_row, tile, @as(u64, count) * destination_row)) return deviceFailure("index F32 copy", owner, offset, count);
         }
     }
 };
