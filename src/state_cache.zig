@@ -73,6 +73,7 @@ const Endpoint = extern struct {
     state_bytes: u64,
     pre_bytes: u64,
     manifest_bytes: u64,
+    durable: bool,
     used: u64,
     seg: [*c]Segment,
     next: ?*Endpoint,
@@ -97,6 +98,10 @@ const Ref = extern struct { cache: *Cache, endpoint: *Endpoint, ids: [*c]c_int }
 // Public records are generated from the actual C header, not repeated here.
 pub const Blob = api.ds4_state_cache_blob;
 pub const Stats = api.ds4_state_cache_stats;
+
+export fn ds4_state_cache_ref_durable(reference: ?*const Ref) bool {
+    return if (reference) |ref| ref.endpoint.durable else false;
+}
 
 // Internal callers validate nullable C arguments before reaching string helpers.
 fn cStringBytes(p: [*c]const u8) []const u8 {
@@ -357,6 +362,7 @@ fn parseManifest(p: [*c]const u8, bytes: u64, key: [*c]const u8) ?*Endpoint {
     e.state_bytes = u64at(p + 24);
     e.pre_bytes = u64at(p + 32);
     e.manifest_bytes = bytes;
+    e.durable = true;
     e.nseg = nseg;
     e.profile = @ptrCast(calloc(1, @as(usize, plen) + 1));
     e.seg = @ptrCast(@alignCast(calloc(nseg, @sizeOf(Segment))));
@@ -441,12 +447,14 @@ fn evictEndpoint(cache: *Cache, e: *Endpoint) void {
     var link = &cache.endpoints;
     while (link.* != null and link.*.? != e) link = &link.*.?.next;
     if (link.* != null) link.* = e.next;
-    const path = pathFor(cache, &e.key, "manifest");
-    if (path != null) {
-        _ = c.unlink(@ptrCast(path));
-        freeOwned(path);
+    if (e.durable) {
+        const path = pathFor(cache, &e.key, "manifest");
+        if (path != null) {
+            _ = c.unlink(@ptrCast(path));
+            freeOwned(path);
+        }
+        cache.disk_bytes -= e.manifest_bytes;
     }
-    cache.disk_bytes -= e.manifest_bytes;
     dropSegments(cache, e, e.nseg, true);
     freeEndpoint(e);
     cache.evictions += 1;
@@ -477,6 +485,24 @@ fn makeHot(cache: *Cache, p: *Chunk, data: [*c]const u8) void {
             if (q.hot != null and q.pins == 0 and (old == null or q.used < old.?.used)) old = q;
         }
         const victim = old orelse return;
+        if (!victim.present) {
+            // RAM-only chunks have no backing file. Retire complete unpinned
+            // endpoints that depend on the victim instead of leaving holes.
+            const victim_key = victim.key;
+            while (findChunk(cache, &victim_key)) |remaining| {
+                var dependent: ?*Endpoint = null;
+                var endpoint = cache.endpoints;
+                while (endpoint) |e| : (endpoint = e.next) {
+                    for (e.seg[0..e.nseg]) |segment| if (sameCString(&segment.key, &remaining.key)) {
+                        dependent = e;
+                        break;
+                    };
+                    if (dependent != null) break;
+                }
+                if (dependent) |e| evictEndpoint(cache, e) else return;
+            }
+            continue;
+        }
         freeOwned(victim.hot);
         victim.hot = null;
         cache.hot_bytes -= victim.bytes;
@@ -490,13 +516,13 @@ fn makeHot(cache: *Cache, p: *Chunk, data: [*c]const u8) void {
 }
 fn readChunk(cache: *Cache, maybe_p: ?*Chunk, out: [*c]u8) bool {
     const p = maybe_p orelse return false;
-    if (!p.present) return false;
     p.used = tick(cache);
     if (p.hot != null) {
         copy(out, p.hot, p.bytes);
         cache.hot_reads += 1;
         return true;
     }
+    if (!p.present) return false;
     const path = pathFor(cache, &p.key, "chunk");
     const fp = if (path != null) fopen(@ptrCast(path), "rb") else null;
     const ok = if (fp) |f| fread(out, 1, @intCast(p.bytes), f) == p.bytes and fgetc(f) == -1 else false;
@@ -518,10 +544,12 @@ fn acquire(cache: *Cache, e: *Endpoint) ?*Ref {
     e.used = tick(cache);
     cache.lease_bytes += @sizeOf(Ref);
     for (e.seg[0..e.nseg]) |s| findChunk(cache, &s.key).?.pins += 1;
-    const path = pathFor(cache, &e.key, "manifest");
-    if (path != null) {
-        _ = utime(@ptrCast(path), null);
-        freeOwned(path);
+    if (e.durable) {
+        const path = pathFor(cache, &e.key, "manifest");
+        if (path != null) {
+            _ = utime(@ptrCast(path), null);
+            freeOwned(path);
+        }
     }
     return ref;
 }
@@ -623,7 +651,45 @@ export fn ds4_state_cache_open(dir: [*c]const u8, hot_bytes: u64, ssd_bytes: u64
 /// pre-RoPE blob; replay states cannot carry one or serve as suffix sources.
 /// A successful put is committed to SSD. Pages are shared by byte hash, not by
 /// mutable pointers. key is a stable 40-character identifier for this source.
-export fn ds4_state_cache_put_kind(maybe_cache: ?*Cache, profile: [*c]const u8, state: ?*const anyopaque, state_bytes: u64, pre: ?*const anyopaque, pre_bytes: u64, kind: c_int, key: [*c]u8, err: [*c]u8, errlen: usize) c_int {
+fn protect(cache: *Cache, e: *Endpoint, active: bool) void {
+    if (active) e.pins += 1 else e.pins -= 1;
+    for (e.seg[0..e.nseg]) |segment| {
+        const chunk = findChunk(cache, &segment.key).?;
+        if (active) chunk.pins += 1 else chunk.pins -= 1;
+    }
+}
+fn firstSegment(e: *const Endpoint, index: usize) bool {
+    for (e.seg[0..index]) |earlier|
+        if (sameCString(&earlier.key, &e.seg[index].key)) return false;
+    return true;
+}
+fn publish(cache: *Cache, e: *Endpoint, state: [*c]const u8, pre: [*c]const u8, data: [*c]const u8) bool {
+    var missing = e.manifest_bytes;
+    for (e.seg[0..e.nseg], 0..) |segment, i|
+        if (firstSegment(e, i) and !findChunk(cache, &segment.key).?.present) {
+            missing += segment.bytes;
+        };
+    if (!diskRoom(cache, missing)) return false;
+    for (e.seg[0..e.nseg]) |segment| {
+        const chunk = findChunk(cache, &segment.key).?;
+        if (chunk.present) continue;
+        const path = pathFor(cache, &chunk.key, "chunk");
+        const source = if (segment.blob_index == 0) state else pre;
+        const ok = path != null and atomicWrite(cache.dir, path, source + @as(usize, @intCast(segment.offset)), @intCast(segment.bytes));
+        freeOwned(path);
+        if (!ok) return false;
+        chunk.present = true;
+        cache.disk_bytes += chunk.bytes;
+    }
+    const path = pathFor(cache, &e.key, "manifest");
+    const ok = path != null and atomicWrite(cache.dir, path, data, @intCast(e.manifest_bytes));
+    freeOwned(path);
+    if (!ok) return false;
+    e.durable = true;
+    cache.disk_bytes += e.manifest_bytes;
+    return true;
+}
+fn put(maybe_cache: ?*Cache, profile: [*c]const u8, state: ?*const anyopaque, state_bytes: u64, pre: ?*const anyopaque, pre_bytes: u64, kind: c_int, durable: bool, key: [*c]u8, err: [*c]u8, errlen: usize) c_int {
     if (maybe_cache == null or profile == null or profile[0] == 0 or cStringBytes(profile).len > 255 or key == null or kind < 0 or kind > replay or
         pre_bytes > std.math.maxInt(usize) or (pre_bytes != 0 and pre == null) or (kind == suffix and pre_bytes == 0) or
         (kind == replay and pre_bytes != 0)) return scError(err, errlen, "invalid state-cache put");
@@ -631,8 +697,10 @@ export fn ds4_state_cache_put_kind(maybe_cache: ?*Cache, profile: [*c]const u8, 
     const endpoint = create(Endpoint) orelse return scError(err, errlen, "state-cache allocation failed");
     var manifest_data: [*c]u8 = null;
     var registered = false;
+    var pinned = false;
     var committed = false;
     defer if (!committed) {
+        if (pinned) protect(cache, endpoint, false);
         if (registered) dropSegments(cache, endpoint, endpoint.nseg, true);
         freeOwned(manifest_data);
         freeEndpoint(endpoint);
@@ -649,57 +717,54 @@ export fn ds4_state_cache_put_kind(maybe_cache: ?*Cache, profile: [*c]const u8, 
     manifest_data = manifest(endpoint);
     if (manifest_data == null) return scError(err, errlen, "state-cache allocation or atomic publication failed");
     if (findEndpoint(cache, &endpoint.key)) |existing| {
+        if (durable and !existing.durable) {
+            protect(cache, existing, true);
+            defer protect(cache, existing, false);
+            if (!publish(cache, existing, state_data, prerope_data, manifest_data))
+                return scError(err, errlen, "state-cache transient promotion could not publish to SSD");
+        }
         existing.used = tick(cache);
         copy(key, &endpoint.key, 41);
         return 0;
     }
-    // An endpoint must itself fit, even if all other cache entries disappear.
-    var own = endpoint.manifest_bytes;
-    for (endpoint.seg[0..endpoint.nseg], 0..) |s, i| {
-        var first = true;
-        for (endpoint.seg[0..i]) |earlier| {
-            if (sameCString(&earlier.key, &s.key)) {
-                first = false;
-                break;
-            }
-        }
-        if (first) own += s.bytes;
+    var own = if (durable) endpoint.manifest_bytes else 0;
+    for (endpoint.seg[0..endpoint.nseg], 0..) |segment, i| {
+        if (!firstSegment(endpoint, i)) continue;
+        const chunk = findChunk(cache, &segment.key);
+        if (durable or chunk == null or !chunk.?.present) own += segment.bytes;
     }
-    if (own > cache.disk_limit) return scError(err, errlen, "state-cache SSD budget is occupied or endpoint exceeds it");
-    if (!register(cache, endpoint, false)) return scError(err, errlen, "state-cache allocation or atomic publication failed");
+    if (own > (if (durable) cache.disk_limit else cache.hot_limit))
+        return scError(err, errlen, if (durable) "state-cache endpoint exceeds SSD budget" else "state-cache transient endpoint exceeds hot RAM budget");
+    if (!register(cache, endpoint, false)) return scError(err, errlen, "state-cache allocation failed");
     registered = true;
-    var missing = endpoint.manifest_bytes;
-    var it = cache.chunks;
-    while (it) |chunk| : (it = chunk.next) {
-        if (!chunk.present) missing += chunk.bytes;
+    protect(cache, endpoint, true);
+    pinned = true;
+    if (durable and !publish(cache, endpoint, state_data, prerope_data, manifest_data))
+        return scError(err, errlen, "state-cache allocation or atomic publication failed");
+    for (endpoint.seg[0..endpoint.nseg]) |segment| {
+        const chunk = findChunk(cache, &segment.key).?;
+        // Durable pages can stay cold. RAM-only pages must remain materializable.
+        if (!chunk.present or durable) makeHot(cache, chunk, (if (segment.blob_index == 0) state_data else prerope_data) + @as(usize, @intCast(segment.offset)));
+        if (!chunk.present and chunk.hot == null)
+            return scError(err, errlen, "state-cache hot RAM budget is occupied by pinned endpoints");
     }
-    // Registered references protect shared pages while old endpoints evict.
-    if (!diskRoom(cache, missing)) return scError(err, errlen, "state-cache SSD budget is occupied or endpoint exceeds it");
-    for (endpoint.seg[0..endpoint.nseg]) |s| {
-        const chunk = findChunk(cache, &s.key).?;
-        const data = if (s.blob_index != 0) prerope_data else state_data;
-        if (!chunk.present) {
-            const path = pathFor(cache, &chunk.key, "chunk");
-            const ok = path != null and atomicWrite(cache.dir, path, data + @as(usize, @intCast(s.offset)), @intCast(s.bytes));
-            freeOwned(path);
-            if (!ok) return scError(err, errlen, "state-cache allocation or atomic publication failed");
-            chunk.present = true;
-            cache.disk_bytes += chunk.bytes;
-        }
-    }
-    const path = pathFor(cache, &endpoint.key, "manifest");
-    const ok = path != null and atomicWrite(cache.dir, path, manifest_data, @intCast(endpoint.manifest_bytes));
-    freeOwned(path);
-    if (!ok) return scError(err, errlen, "state-cache allocation or atomic publication failed");
     endpoint.used = tick(cache);
     endpoint.next = cache.endpoints;
     cache.endpoints = endpoint;
-    cache.disk_bytes += endpoint.manifest_bytes;
-    for (endpoint.seg[0..endpoint.nseg]) |s| makeHot(cache, findChunk(cache, &s.key).?, (if (s.blob_index != 0) prerope_data else state_data) + @as(usize, @intCast(s.offset)));
+    protect(cache, endpoint, false);
+    pinned = false;
     copy(key, &endpoint.key, 41);
     freeOwned(manifest_data);
     committed = true;
     return 0;
+}
+export fn ds4_state_cache_put_kind(cache: ?*Cache, profile: [*c]const u8, state: ?*const anyopaque, state_bytes: u64, pre: ?*const anyopaque, pre_bytes: u64, kind: c_int, key: [*c]u8, err: [*c]u8, errlen: usize) c_int {
+    return put(cache, profile, state, state_bytes, pre, pre_bytes, kind, true, key, err, errlen);
+}
+/// RAM-only endpoints share existing immutable SSD/hot pages. They are lost at
+/// close/restart; eviction retires the complete endpoint, never a partial source.
+export fn ds4_state_cache_put_transient(cache: ?*Cache, profile: [*c]const u8, state: ?*const anyopaque, state_bytes: u64, pre: ?*const anyopaque, pre_bytes: u64, kind: c_int, key: [*c]u8, err: [*c]u8, errlen: usize) c_int {
+    return put(cache, profile, state, state_bytes, pre, pre_bytes, kind, false, key, err, errlen);
 }
 /// Compatibility entry point: false selects native, true selects suffix state.
 export fn ds4_state_cache_put(cache: ?*Cache, profile: [*c]const u8, state: ?*const anyopaque, state_bytes: u64, pre: ?*const anyopaque, pre_bytes: u64, approximate: bool, key: [*c]u8, err: [*c]u8, errlen: usize) c_int {

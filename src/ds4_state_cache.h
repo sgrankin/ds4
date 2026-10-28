@@ -57,6 +57,14 @@ int ds4_state_cache_put_kind(ds4_state_cache *cache, const char *profile,
                              const void *prerope, uint64_t prerope_bytes,
                              ds4_state_cache_kind kind, char key[41],
                              char *err, size_t errlen);
+/* RAM-only capture. Existing immutable SSD pages may be shared; new pages must
+ * fit the hot budget. Loss/eviction costs recomputation. A later durable put
+ * of the same endpoint promotes it atomically to SSD. */
+int ds4_state_cache_put_transient(ds4_state_cache *cache, const char *profile,
+                             const void *state, uint64_t state_bytes,
+                             const void *prerope, uint64_t prerope_bytes,
+                             ds4_state_cache_kind kind, char key[41],
+                             char *err, size_t errlen);
 /* Compatibility entry point: false selects native, true selects suffix state. */
 int ds4_state_cache_put(ds4_state_cache *cache, const char *profile,
                         const void *state, uint64_t state_bytes,
@@ -110,6 +118,8 @@ int ds4_state_cache_materialize(ds4_state_cache_ref *ref,
 /* Admit caller-owned allocation before materializing a source. */
 void ds4_state_cache_ref_sizes(const ds4_state_cache_ref *ref,
                                uint64_t *state_bytes, uint64_t *prerope_bytes);
+/* Distinguish RAM-only savepoints from committed SSD sources in diagnostics. */
+bool ds4_state_cache_ref_durable(const ds4_state_cache_ref *ref);
 void ds4_state_cache_blob_free(ds4_state_cache_blob *blob);
 void ds4_state_cache_release(ds4_state_cache_ref *ref);
 void ds4_state_cache_get_stats(const ds4_state_cache *cache,

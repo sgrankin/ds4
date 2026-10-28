@@ -21,6 +21,15 @@ const Text = struct {
     list: std.ArrayList(u8) = .empty,
     map: ?*types.PromptMap = null,
 
+    fn boundary(self: *Text) Allocator.Error!void {
+        if (self.map) |map| {
+            if (!map.capture_context) return;
+            const position = self.list.items.len;
+            if (map.context_boundaries.items.len == 0 or map.context_boundaries.items[map.context_boundaries.items.len - 1] != position)
+                try map.context_boundaries.append(self.allocator, position);
+        }
+    }
+
     fn append(self: *Text, value: []const u8) Allocator.Error!void {
         try self.list.appendSlice(self.allocator, value);
     }
@@ -247,6 +256,7 @@ fn calls(out: *Text, values: []const types.ToolCall, raw_tool_text: ?[]const u8,
             try out.template(parameter_close ++ "\n");
         }
         try out.template(invoke_close ++ "\n");
+        try out.boundary();
     }
     try out.template(calls_close);
 }
@@ -296,6 +306,46 @@ fn extras(out: *Text, schemas: ?[]const u8, format: types.ResponseFormat) Alloca
     try out.append(schema);
 }
 
+fn hashControl(hash: *std.crypto.hash.Sha1, role: []const u8, payload: []const u8) void {
+    var length: [8]u8 = undefined;
+    hash.update(role);
+    hash.update("\x00");
+    std.mem.writeInt(u64, &length, payload.len, .little);
+    hash.update(&length);
+    hash.update(payload);
+}
+
+/// A tool-result edit can preserve an ongoing task. Changed actual controls or
+/// declarations require ordinary freshness policy even if an older task matches.
+fn controlKey(messages: []const Message, options: Options, level: u8) ?[41]u8 {
+    var hash = std.crypto.hash.Sha1.init(.{});
+    hash.update("ongoing-controls-v3\x00");
+    var has_user = false;
+    for (messages) |message| {
+        if (!systemLike(&message) and !equal(message.role, "user")) continue;
+        has_user = has_user or equal(message.role, "user");
+        hashControl(&hash, message.role.?, message.content orelse "");
+    }
+    if (!has_user) return null;
+    hashControl(&hash, "reasoning", &.{level});
+    if (nonempty(options.schemas)) hashControl(&hash, "tools", options.schemas.?);
+    switch (options.response_format) {
+        .json_object => hashControl(&hash, "response_format", "{\"type\": \"json_object\"}"),
+        .json_schema => |schema| hashControl(&hash, "response_format", schema),
+        else => {},
+    }
+    var digest: [20]u8 = undefined;
+    hash.final(&digest);
+    var result: [41]u8 = undefined;
+    const alphabet = "0123456789abcdef";
+    for (digest, 0..) |byte, index| {
+        result[2 * index] = alphabet[byte >> 4];
+        result[2 * index + 1] = alphabet[byte & 15];
+    }
+    result[40] = 0;
+    return result;
+}
+
 pub fn render(allocator: Allocator, messages: []const Message, options: Options) Allocator.Error![:0]u8 {
     var arena = std.heap.ArenaAllocator.init(allocator);
     defer arena.deinit();
@@ -317,6 +367,11 @@ pub fn render(allocator: Allocator, messages: []const Message, options: Options)
     if (options.prompt_map) |map| {
         map.special_ranges.clearRetainingCapacity();
         map.cache_breakpoints.clearRetainingCapacity();
+        map.context_boundaries.clearRetainingCapacity();
+        map.user_ranges.clearRetainingCapacity();
+        map.last_user_begin = 0;
+        map.control_end = 0;
+        map.control_key = if (map.capture_context) controlKey(views.messages, options, level) else null;
     }
     var out = Text{ .allocator = allocator, .map = options.prompt_map };
     errdefer out.list.deinit(allocator);
@@ -342,15 +397,27 @@ pub fn render(allocator: Allocator, messages: []const Message, options: Options)
             if (!(position == 0 and initial_system)) try out.control("<｜System｜>");
             try out.content(message, false);
             if (position == 0 and !options.live_tail) try extras(&out, options.schemas, options.response_format);
+            if (out.map) |map| {
+                if (map.capture_context) map.control_end = out.list.items.len;
+            }
             pending = true;
             user_open = false;
         } else if (userLike(message)) {
+            const turn_begin = out.list.items.len;
             try out.template(if (user_open) "\n\n" else "<｜User｜>");
+            const body_begin = out.list.items.len;
             if (!equal(message.role, "user")) {
                 try out.append("<tool_result>");
                 try out.content(message, false);
                 try out.append("</tool_result>");
             } else try out.content(message, false);
+            if (equal(message.role, "user")) if (out.map) |map| {
+                if (map.capture_context) {
+                    try map.user_ranges.append(allocator, .{ .begin = body_begin, .end = out.list.items.len });
+                    map.last_user_begin = turn_begin;
+                    map.control_end = out.list.items.len;
+                }
+            };
             pending = true;
             user_open = true;
         } else if (equal(message.role, "assistant")) {
@@ -366,6 +433,7 @@ pub fn render(allocator: Allocator, messages: []const Message, options: Options)
             pending = false;
             user_open = false;
         }
+        try out.boundary();
     }
     if (pending) {
         try out.control("<｜Assistant｜>");

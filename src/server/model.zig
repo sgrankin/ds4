@@ -48,6 +48,14 @@ pub fn Backend(comptime c: type) type {
 
         pub fn renderTracked(self: Self, req: *c.request, messages: *const c.chat_msgs, start: usize, schemas: [*c]const u8, live: bool, order: ?*const c.stop_list, context: usize) [*c]u8 {
             var map: types.PromptMap = .{};
+            const boundaries = c.getenv("DS4_SERVER_CONTEXT_BOUNDARIES");
+            const suffix = c.getenv("DS4_SERVER_CONTEXT_SUFFIX_REUSE");
+            map.capture_context = !live and req.kind == c.REQ_CHAT and req.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and
+                req.prompt_cache_key != null and req.prompt_cache_key[0] != 0 and !req.prompt_cache_explicit and
+                req.previous_response_id == null and req.conversation_id == null and
+                !req.responses_requires_live_tool_state and !req.anthropic_requires_live_tool_state and
+                suffix != null and std.mem.eql(u8, std.mem.span(suffix), "1") and
+                boundaries != null and std.mem.eql(u8, std.mem.span(boundaries), "1");
             defer map.deinit(std.heap.c_allocator);
             const rendered = self.renderMapped(req, messages, start, schemas, live, order, context, &map);
             if (req.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and req.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT) return rendered;
@@ -60,6 +68,18 @@ pub fn Backend(comptime c: type) type {
                 req.prompt_special_count = ranges.len;
                 req.cache_breakpoint_bytes.len = 0;
                 for (map.cache_breakpoints.items) |position| c.ds4_tokens_push(&req.cache_breakpoint_bytes, @intCast(position));
+                req.context_boundary_bytes.len = 0;
+                req.context_control_key[0] = 0;
+                req.context_control_end_byte = 0;
+                req.context_last_user_begin_byte = 0;
+                if (map.capture_context) {
+                    for (map.context_boundaries.items) |position| c.ds4_tokens_push(&req.context_boundary_bytes, @intCast(position));
+                    if (map.control_key) |key| req.context_control_key = key;
+                    req.context_control_end_byte = @intCast(map.control_end);
+                    if (map.user_ranges.items.len != 0) {
+                        req.context_last_user_begin_byte = @intCast(map.last_user_begin);
+                    }
+                }
             } else if (req.api == c.API_RESPONSES) {
                 c.free(req.responses_live_special_ranges);
                 req.responses_live_special_ranges = pointer;

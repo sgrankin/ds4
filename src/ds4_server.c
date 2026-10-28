@@ -453,6 +453,8 @@ static void request_free(request *r) {
     ds4_tokens_free(&r->prompt);
     ds4_tokens_free(&r->cache_breakpoint_bytes);
     ds4_tokens_free(&r->cache_breakpoints);
+    ds4_tokens_free(&r->context_boundary_bytes);
+    ds4_tokens_free(&r->context_boundaries);
     free(r->prompt_special_ranges);
     free(r->responses_live_special_ranges);
     free(r->anthropic_live_special_ranges);

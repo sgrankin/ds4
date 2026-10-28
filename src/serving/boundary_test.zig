@@ -149,6 +149,108 @@ fn explicitContentEndsSurviveRendering() !void {
     }
 }
 
+fn automaticContextMetadata() !void {
+    const task = "Fix the parser. Literal <｜User｜> remains payload.";
+    const messages = [_]types.Message{
+        .{ .role = "user", .content = task },
+        .{ .role = "assistant", .calls = &.{.{ .name = "read_file", .arguments = "{}" }} },
+        .{ .role = "tool", .tool_call_id = "read-1", .content = "large dump" },
+        .{ .role = "assistant", .content = "investigation" },
+    };
+    var map: types.PromptMap = .{ .capture_context = true };
+    defer map.deinit(allocator);
+    const rendered = try prompt.render(allocator, &messages, .{ .reasoning = .none, .prompt_map = &map });
+    defer allocator.free(rendered);
+    const plain = try prompt.render(allocator, &messages, .{ .reasoning = .none });
+    defer allocator.free(plain);
+    try equal(plain, rendered);
+    if (map.cache_breakpoints.items.len != 0 or map.context_boundaries.items.len < messages.len or map.user_ranges.items.len != 1) return error.BadContextMetadata;
+    try equal(task, rendered[map.user_ranges.items[0].begin..map.user_ranges.items[0].end]);
+    var previous: usize = 0;
+    for (map.context_boundaries.items) |boundary| {
+        if (boundary <= previous or boundary > rendered.len) return error.BadContextBoundary;
+        previous = boundary;
+    }
+    const key = map.control_key.?;
+    var edited = messages;
+    edited[2].content = "short excerpt";
+    var edited_map: types.PromptMap = .{ .capture_context = true };
+    defer edited_map.deinit(allocator);
+    const edited_text = try prompt.render(allocator, &edited, .{ .reasoning = .none, .prompt_map = &edited_map });
+    defer allocator.free(edited_text);
+    if (!std.mem.eql(u8, &key, &edited_map.control_key.?)) return error.ToolEditChangedUserIdentity;
+    const changed = [_]types.Message{.{ .role = "user", .content = "Fix a different parser." }};
+    var changed_map: types.PromptMap = .{ .capture_context = true };
+    defer changed_map.deinit(allocator);
+    const changed_text = try prompt.render(allocator, &changed, .{ .reasoning = .none, .prompt_map = &changed_map });
+    defer allocator.free(changed_text);
+    if (std.mem.eql(u8, &key, &changed_map.control_key.?)) return error.ChangedUserIdentityRetained;
+    const repeated = [_]types.Message{ messages[0], messages[0] };
+    var repeated_map: types.PromptMap = .{ .capture_context = true };
+    defer repeated_map.deinit(allocator);
+    const repeated_text = try prompt.render(allocator, &repeated, .{ .reasoning = .none, .prompt_map = &repeated_map });
+    defer allocator.free(repeated_text);
+    if (std.mem.eql(u8, &key, &repeated_map.control_key.?)) return error.NewIdenticalUserTurnWasOldTask;
+
+    const controls = [_]types.Message{
+        .{ .role = "system", .content = "Keep the registry authoritative." },
+        .{ .role = "developer", .content = "Answer the task without inventing facts." },
+        .{ .role = "user", .content = task },
+    };
+    const schemas = "{\"name\":\"read_file\",\"description\":\"Read a file\"}";
+    var control_map: types.PromptMap = .{ .capture_context = true };
+    defer control_map.deinit(allocator);
+    const control_text = try prompt.render(allocator, &controls, .{ .schemas = schemas, .prompt_map = &control_map });
+    defer allocator.free(control_text);
+    const untracked = try prompt.render(allocator, &controls, .{ .schemas = schemas });
+    defer allocator.free(untracked);
+    try equal(untracked, control_text);
+    for (0..2) |index| {
+        var changed_control = controls;
+        changed_control[index].content = "Changed instruction.";
+        var instruction_map: types.PromptMap = .{ .capture_context = true };
+        defer instruction_map.deinit(allocator);
+        const instruction_text = try prompt.render(allocator, &changed_control, .{ .schemas = schemas, .prompt_map = &instruction_map });
+        defer allocator.free(instruction_text);
+        if (std.mem.eql(u8, &control_map.control_key.?, &instruction_map.control_key.?)) return error.ChangedControlIdentityRetained;
+    }
+    var schema_map: types.PromptMap = .{ .capture_context = true };
+    defer schema_map.deinit(allocator);
+    const schema_text = try prompt.render(allocator, &controls, .{ .schemas = "{\"name\":\"search\"}", .prompt_map = &schema_map });
+    defer allocator.free(schema_text);
+    if (std.mem.eql(u8, &control_map.control_key.?, &schema_map.control_key.?)) return error.ChangedToolsIdentityRetained;
+}
+
+fn lateControlFreshness() !void {
+    // Moving an actual control across assistant content does not change its
+    // ordered identity. A source ending before that control must not be tagged
+    // as if the control had already influenced the cached activations.
+    for ([_][]const u8{ "system", "developer" }) |role| {
+        const late = [_]types.Message{
+            .{ .role = "user", .content = "Continue the parser investigation." },
+            .{ .role = "assistant", .content = "Retained investigation C." },
+            .{ .role = role, .content = "A delayed authoritative control." },
+        };
+        const early = [_]types.Message{ late[0], late[2], late[1] };
+        var late_map: types.PromptMap = .{ .capture_context = true };
+        defer late_map.deinit(allocator);
+        const late_text = try prompt.render(allocator, &late, .{ .reasoning = .none, .prompt_map = &late_map });
+        defer allocator.free(late_text);
+        var early_map: types.PromptMap = .{ .capture_context = true };
+        defer early_map.deinit(allocator);
+        const early_text = try prompt.render(allocator, &early, .{ .reasoning = .none, .prompt_map = &early_map });
+        defer allocator.free(early_text);
+        if (!std.mem.eql(u8, &late_map.control_key.?, &early_map.control_key.?)) return error.MovedControlIdentityChanged;
+        const late_c_end = late_map.context_boundaries.items[1];
+        const early_c_end = early_map.context_boundaries.items[2];
+        if (late_map.control_end <= late_c_end or early_map.control_end >= early_c_end) return error.UnevaluatedControlCouldTagSource;
+        if (late_map.last_user_begin != early_map.last_user_begin) return error.ControlEndChangedUserCutoff;
+        const plain = try prompt.render(allocator, &late, .{ .reasoning = .none });
+        defer allocator.free(plain);
+        try equal(plain, late_text);
+    }
+}
+
 fn liveResultOrder() !void {
     const outputs = [_]types.Message{
         .{ .role = "tool", .tool_call_id = "b", .content = "SECOND" },
@@ -270,6 +372,8 @@ pub fn main() !void {
     try payloadControlsStayPlain();
     try answerFormatIsPlainPromptText();
     try explicitContentEndsSurviveRendering();
+    try automaticContextMetadata();
+    try lateControlFreshness();
     try flintPayloadControlsStayPlain();
-    std.debug.print("PASS: native serving/model boundary (12 cases)\n", .{});
+    std.debug.print("PASS: native serving/model boundary (14 cases)\n", .{});
 }

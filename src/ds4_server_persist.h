@@ -28,6 +28,10 @@ void ds4_server_persist_restore_tools(server *runtime,
 int ds4_server_persist_load_state(server *runtime, server_slot *slot,
     const ds4_tokens *prompt);
 void ds4_server_persist_endpoint(server *runtime, server_slot *slot);
+void ds4_server_persist_context(server *runtime, server_slot *slot, const request *req);
+size_t ds4_server_persist_boundaries(server *runtime, server_slot *slot,
+    const request *req, const ds4_tokens *prompt, int cached, int *out, size_t capacity);
+void ds4_server_persist_boundary(server *runtime, server_slot *slot);
 int ds4_server_persist_suffix(server *runtime, server_slot *slot,
     const ds4_tokens *prompt, ds4_tokens *padded,
     ds4_suffix_relocation_stats *stats, const volatile sig_atomic_t *stop);

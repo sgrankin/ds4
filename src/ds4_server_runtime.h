@@ -115,6 +115,9 @@ struct server_slot {
     int continued_last_store_tokens;
     bool prompt_cache_explicit;
     ds4_tokens cache_breakpoints;
+    char context_task_profile[41];
+    int context_task_control_end;
+    int context_task_user_begin;
     int cache_written_tokens; /* Highest successfully published explicit end. */
     /* Wall time of the last completed job on this slot, stamped by the slot
      * worker; drives the staleness tiers in job_slot_score(). */

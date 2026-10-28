@@ -162,6 +162,12 @@ typedef struct {
     bool prompt_cache_controls_set;
     ds4_tokens cache_breakpoint_bytes;
     ds4_tokens cache_breakpoints;
+    /* Automatic semantic capture candidates; never explicit cache markers. */
+    ds4_tokens context_boundary_bytes;
+    ds4_tokens context_boundaries;
+    char context_control_key[41];
+    int context_control_end_byte, context_control_end;
+    int context_last_user_begin_byte, context_last_user_begin;
     const char *responses_store_dir; /* Borrowed immutable server configuration. */
     bool responses_store;
     char *previous_response_id;

@@ -22,6 +22,18 @@ pub fn allowsWrite(explicit: bool, positions: []const c_int, tokens: c_int) bool
     return !explicit or contains(writes(positions), tokens);
 }
 
+/// Graft cache credit counts imported tokens, not their evaluated destination
+/// position. Trust the live frontier only when all of its tokens match input.
+pub fn automaticFrontier(cached: c_int, live: c_int, common: c_int, prompt: c_int) c_int {
+    return if (common == live and live <= prompt) @max(cached, live) else cached;
+}
+
+/// Call at the first decoded token that reaches the semantic byte end. Keep a
+/// straddling token fresh so the source stays wholly inside the retained block.
+pub fn semanticTokenEnd(token_index: usize, semantic_byte_end: usize, token_byte_end: usize) usize {
+    return if (semantic_byte_end == token_byte_end) token_index + 1 else token_index;
+}
+
 test "explicit caching needs a marked endpoint and retains older lookup marks" {
     const marks = [_]c_int{ 128, 256, 512, 1024, 2048, 4096 };
     try std.testing.expect(!allowsRead(true, &.{}, 128));
@@ -33,4 +45,22 @@ test "explicit caching needs a marked endpoint and retains older lookup marks" {
     try std.testing.expect(!allowsWrite(true, &marks, 300));
     try std.testing.expect(allowsRead(false, &.{}, 300));
     try std.testing.expect(allowsWrite(false, &.{}, 300));
+}
+
+test "semantic capture never rewinds an evaluated graft boundary" {
+    const evaluated = automaticFrontier(4096, 12000, 12000, 14000);
+    try std.testing.expectEqual(@as(c_int, 12000), evaluated);
+    try std.testing.expect(8192 <= evaluated); // Existing C must be skipped.
+    try std.testing.expect(13000 > evaluated); // A later end can be captured.
+    // An unrelated or longer old graph cannot suppress fresh checkpoints.
+    try std.testing.expectEqual(@as(c_int, 4096), automaticFrontier(4096, 12000, 64, 14000));
+    try std.testing.expectEqual(@as(c_int, 4096), automaticFrontier(4096, 12000, 12000, 10000));
+}
+
+test "semantic end floors a BPE straddler and preserves aligned ends" {
+    // Native token4697 is ">\n\n". A result ending after '>' cannot retain
+    // that token without also retaining bytes from the following separator.
+    try std.testing.expectEqual(@as(usize, 6), semanticTokenEnd(6, 17, 19));
+    try std.testing.expectEqual(@as(usize, 7), semanticTokenEnd(6, 19, 19));
+    try std.testing.expectEqual(@as(usize, 0), semanticTokenEnd(0, 1, 3));
 }

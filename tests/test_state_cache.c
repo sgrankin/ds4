@@ -154,6 +154,41 @@ static void check_packed_formats(const char *parent) {
     puts("state-cache: packed v3 DSP1 extents/restart and v2 compact-length rejection PASS");
 }
 
+static void check_transient(const char *base) {
+    char dir[4096], err[256] = {0}, ka[41], kb[41], promoted[41];
+    assert(snprintf(dir, sizeof(dir), "%s/transient", base) < (int)sizeof(dir));
+    fixture a = make_fixture(2048), b = make_fixture(2051);
+    uint64_t hot = b.bytes + b.pre_bytes + 65536u;
+    ds4_state_cache *cache = ds4_state_cache_open(dir, hot, 128u << 20, err, sizeof(err)); assert(cache);
+    assert(!ds4_state_cache_put_transient(cache, "ram-a", a.p, a.bytes, a.pre, a.pre_bytes, DS4_STATE_CACHE_NATIVE, ka, err, sizeof(err)));
+    ds4_state_cache_stats stats;
+    ds4_state_cache_get_stats(cache, &stats);
+    assert(stats.endpoints == 1 && stats.hot_bytes <= hot && stats.ssd_bytes == 0);
+    equal_source(cache, ka, &a, DS4_STATE_CACHE_NATIVE);
+    assert(!ds4_state_cache_close(cache, err, sizeof(err)));
+    cache = ds4_state_cache_open(dir, hot, 128u << 20, err, sizeof(err)); assert(cache);
+    assert(!ds4_state_cache_get(cache, ka)); /* RAM capture is intentionally not durable. */
+    assert(!ds4_state_cache_put_transient(cache, "ram-a", a.p, a.bytes, a.pre, a.pre_bytes, DS4_STATE_CACHE_NATIVE, ka, err, sizeof(err)));
+    ds4_state_cache_ref *pin = ds4_state_cache_get(cache, ka); assert(pin);
+    assert(ds4_state_cache_put_transient(cache, "ram-b", b.p, b.bytes, b.pre, b.pre_bytes, DS4_STATE_CACHE_NATIVE, kb, err, sizeof(err)) != 0);
+    equal_source(cache, ka, &a, DS4_STATE_CACHE_NATIVE);
+    ds4_state_cache_release(pin);
+    assert(!ds4_state_cache_put_transient(cache, "ram-b", b.p, b.bytes, b.pre, b.pre_bytes, DS4_STATE_CACHE_NATIVE, kb, err, sizeof(err)));
+    assert(!ds4_state_cache_get(cache, ka)); /* Evict whole sources, never leave missing pages. */
+    equal_source(cache, kb, &b, DS4_STATE_CACHE_NATIVE);
+    ds4_state_cache_get_stats(cache, &stats);
+    assert(stats.hot_bytes <= hot && stats.ssd_bytes == 0 && stats.endpoint_evictions > 0);
+    assert(!ds4_state_cache_put(cache, "ram-b", b.p, b.bytes, b.pre, b.pre_bytes, false, promoted, err, sizeof(err)));
+    assert(!strcmp(kb, promoted));
+    ds4_state_cache_get_stats(cache, &stats); assert(stats.ssd_bytes > 0);
+    assert(!ds4_state_cache_close(cache, err, sizeof(err)));
+    cache = ds4_state_cache_open(dir, 0, 128u << 20, err, sizeof(err)); assert(cache);
+    equal_source(cache, kb, &b, DS4_STATE_CACHE_NATIVE);
+    assert(!ds4_state_cache_close(cache, err, sizeof(err)));
+    free(a.p); free(a.pre); free(b.p); free(b.pre);
+    puts("state-cache: transient sharing, pin pressure, whole-source eviction, promotion and restart PASS");
+}
+
 static void check_main_packed_formats(const char *base) {
     for (unsigned version = 4; version <= 5; version++) {
         char dir[4096], err[256] = {0}, key[41];
@@ -327,6 +362,7 @@ int main(int argc, char **argv) {
     free(ids); free(a.p); free(a.pre); free(b.p); free(b.pre); free(replay.p);
     check_packed_formats(argv[1]);
     check_main_packed_formats(argv[1]);
+    check_transient(argv[1]);
     puts("state-cache: dedup, RAM spill, SSD restart, native/suffix/replay kinds, discovery and budgets PASS");
     return 0;
 }

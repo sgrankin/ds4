@@ -3,6 +3,7 @@
 //! the caller a private copy because prompt layout can expand it in place.
 const std = @import("std");
 const c = @import("server_images_c");
+const CachePolicy = @import("prompt_cache_policy.zig");
 const allocator = std.heap.c_allocator;
 const Input = c.server_image_input;
 const Inputs = c.server_image_inputs;
@@ -223,11 +224,44 @@ fn tokenizeSpan(engine: ?*c.ds4_engine, request: *c.request, begin: usize, end: 
 
 pub fn tokenize(engine: ?*c.ds4_engine, runtime: ?*c.server, request: *c.request, optional_messages: ?*const c.chat_msgs, errors: []u8) bool {
     request.cache_breakpoints.len = 0;
+    request.context_boundaries.len = 0;
+    request.context_control_end = 0;
+    request.context_last_user_begin = -1;
     const messages: []const c.chat_msg = if (optional_messages) |m| (if (m.len <= 0) &.{} else values(c.chat_msg, m.v, @intCast(m.len))) else &.{};
     var count: usize = 0;
     for (messages) |message| count +%= message.images.len;
     if (count == 0) {
         tokenizeSpan(engine, request, 0, text(request.prompt_text).len);
+        // Observe completed token bytes; never split ordinary BPE merely to
+        // collect automatic savepoints. Round a straddling end down to the
+        // preceding existing token end, leaving the crossing token fresh.
+        if (request.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and request.context_boundary_bytes.len != 0 and engine != null) {
+            const source = text(request.prompt_text);
+            const boundaries = values(c_int, request.context_boundary_bytes.v, @intCast(request.context_boundary_bytes.len));
+            var next: usize = 0;
+            var offset: usize = 0;
+            for (values(c_int, request.prompt.v, @intCast(request.prompt.len)), 0..) |id, index| {
+                var length: usize = 0;
+                const piece = c.ds4_token_text(engine, id, &length);
+                defer c.free(piece);
+                if (piece == null or length > source.len -| offset or !std.mem.eql(u8, source[offset..][0..length], piece[0..length])) {
+                    request.context_boundaries.len = 0;
+                    request.context_control_end = 0;
+                    request.context_last_user_begin = -1;
+                    break;
+                }
+                offset += length;
+                if (request.context_control_key[0] != 0 and request.context_last_user_begin < 0 and offset >= @as(usize, @intCast(request.context_last_user_begin_byte)))
+                    request.context_last_user_begin = @intCast(if (offset == @as(usize, @intCast(request.context_last_user_begin_byte))) index + 1 else index);
+                while (next < boundaries.len and boundaries[next] <= offset) : (next += 1) {
+                    const end: c_int = @intCast(CachePolicy.semanticTokenEnd(index, @intCast(boundaries[next]), offset));
+                    if (end != 0 and (request.context_boundaries.len == 0 or request.context_boundaries.v[@intCast(request.context_boundaries.len - 1)] != end))
+                        c.ds4_tokens_push(&request.context_boundaries, end);
+                }
+                if (request.context_control_end_byte > 0 and offset >= @as(usize, @intCast(request.context_control_end_byte)) and request.context_control_end == 0)
+                    request.context_control_end = @intCast(index + 1);
+            }
+        }
         return true;
     }
     if (count > 16) return fail(errors, "too many images; at most 16 are allowed");

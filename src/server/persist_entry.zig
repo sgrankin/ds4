@@ -38,6 +38,15 @@ export fn ds4_server_persist_load_state(runtime: *c.server, slot: *c.server_slot
 export fn ds4_server_persist_endpoint(runtime: *c.server, slot: *c.server_slot) void {
     owner.endpoint(runtime, slot);
 }
+export fn ds4_server_persist_context(runtime: *c.server, slot: *c.server_slot, request: *const c.request) void {
+    owner.configureContext(runtime, slot, request);
+}
+export fn ds4_server_persist_boundaries(runtime: *c.server, slot: *c.server_slot, request: *const c.request, prompt: *const c.ds4_tokens, cached: c_int, out: [*c]c_int, capacity: usize) usize {
+    return owner.boundaries(runtime, slot, request, prompt, cached, out, capacity);
+}
+export fn ds4_server_persist_boundary(runtime: *c.server, slot: *c.server_slot) void {
+    owner.boundary(runtime, slot);
+}
 export fn ds4_server_persist_suffix(runtime: *c.server, slot: *c.server_slot, prompt: *const c.ds4_tokens, padded: *c.ds4_tokens, stats: *c.ds4_suffix_relocation_stats, stop: *const volatile c.sig_atomic_t) c_int {
     return owner.suffix(runtime, slot, prompt, padded, stats, stop);
 }

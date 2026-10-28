@@ -265,6 +265,10 @@ pub fn assignIds(runtime: [*c]c.server, calls: [*c]c.tool_calls, api: c.api_styl
 /// Synchronize one resident slot without monopolizing the model executor.
 /// A restored endpoint is never truncated to the first scheduling quantum.
 pub fn sync(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const c.ds4_tokens, credits: [*c]c_int, errors: []u8, stop: [*c]const volatile c.sig_atomic_t) c_int {
+    return syncEndpoint(runtime, member, prompt, credits, errors, stop, false);
+}
+
+fn syncEndpoint(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const c.ds4_tokens, credits: [*c]c_int, errors: []u8, stop: [*c]const volatile c.sig_atomic_t, transient: bool) c_int {
     const srv = runtime orelse return 1;
     const slot = member orelse return 1;
     if (prompt == null) return 1;
@@ -275,14 +279,16 @@ pub fn sync(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const c.ds
         if (credits != null) credits.* += restored;
         const anchor = prompt.*.len - srv.context_suffix_fresh;
         var result: c_int = 0;
-        if (srv.context_suffix_reuse and slot.context_cache_profile[0] != 0 and anchor > 0 and c.ds4_session_pos(slot.session) < anchor) {
+        if (!transient and srv.context_suffix_reuse and slot.context_cache_profile[0] != 0 and anchor > 0 and c.ds4_session_pos(slot.session) < anchor) {
             var prefix = prompt.*;
             prefix.len = anchor;
             result = c.ds4_session_sync(slot.session, &prefix, errors.ptr, errors.len);
             if (result == 0) c.ds4_server_persist_endpoint(srv, slot);
         }
         if (result == 0) result = c.ds4_session_sync(slot.session, prompt, errors.ptr, errors.len);
-        if (result == 0) c.ds4_server_persist_endpoint(srv, slot);
+        if (result == 0) {
+            if (transient) c.ds4_server_persist_boundary(srv, slot) else c.ds4_server_persist_endpoint(srv, slot);
+        }
         return result;
     }
     _ = c.pthread_mutex_lock(&srv.inference_mu);
@@ -304,14 +310,16 @@ pub fn sync(runtime: ?*c.server, member: ?*c.server_slot, prompt: [*c]const c.ds
         var target = done +% quantum;
         if (target > prompt.*.len or target < done) target = prompt.*.len;
         const anchor = prompt.*.len - srv.context_suffix_fresh;
-        if (srv.context_suffix_reuse and slot.context_cache_profile[0] != 0 and target == prompt.*.len and anchor > done) target = anchor;
+        if (!transient and srv.context_suffix_reuse and slot.context_cache_profile[0] != 0 and target == prompt.*.len and anchor > done) target = anchor;
         if (target <= 0) target = prompt.*.len;
         var prefix = prompt.*;
         prefix.len = target;
         const result = c.ds4_session_sync(slot.session, &prefix, errors.ptr, errors.len);
         if (result == 0) {
             done = c.ds4_session_pos(slot.session);
-            c.ds4_server_persist_endpoint(srv, slot);
+            if (transient) {
+                if (done >= prompt.*.len) c.ds4_server_persist_boundary(srv, slot);
+            } else c.ds4_server_persist_endpoint(srv, slot);
         }
         c.ds4_server_coordinator_prefill_leave(srv);
         called = true;
@@ -1684,6 +1692,7 @@ pub const Generation = struct {
         if (!multimodal and srv.kv.enabled and cached == 0 and old_position >= srv.kv.opt.min_tokens) c.ds4_server_persist_store_current(srv, slot, "evict");
         slot.prompt_cache_explicit = req.prompt_cache_explicit;
         c.ds4_tokens_copy(&slot.cache_breakpoints, &req.cache_breakpoints);
+        c.ds4_server_persist_context(srv, slot, req);
         slot.cache_written_tokens = 0;
         if (!multimodal and cached == 0 and !c.ds4_server_reuse_canonical(srv, req)) {
             disk_cached = c.ds4_server_persist_load(srv, slot, req.prompt_text, &effective, &disk_path, &disk_flags, responses);
@@ -1732,7 +1741,8 @@ pub const Generation = struct {
         const kind: [*:0]const u8 = if (req.kind == c.REQ_CHAT) "chat" else "completion";
         log(c.DS4_LOG_PREFILL, "ds4-server: %s ctx=%s%s%s prompt start", .{ kind, &context, @as([*:0]const u8, if (request_flags[0] != 0) " " else ""), &request_flags });
         setProgress(slot.session, &progress_context);
-        if (!multimodal and req.previous_response_id == null and !materialized and prompt == &req.prompt and !req.responses_requires_live_tool_state and !req.anthropic_requires_live_tool_state) {
+        const suffix_input = !multimodal and req.previous_response_id == null and !materialized and prompt == &req.prompt and !req.responses_requires_live_tool_state and !req.anthropic_requires_live_tool_state;
+        if (suffix_input) {
             var stats = zero(c.ds4_suffix_relocation_stats);
             if (c.ds4_server_persist_suffix(srv, slot, prompt, &effective, &stats, self.stop) > 0) {
                 if (effective.len != 0) {
@@ -1752,7 +1762,9 @@ pub const Generation = struct {
         }
         var credits: c_int = 0;
         var cold_length: c_int = 0;
-        var checkpoints: [5]c_int = undefined;
+        var checkpoints: [21]c_int = undefined;
+        var context_checkpoints: [16]c_int = undefined;
+        var context_count: usize = 0;
         var checkpoint_count: usize = 0;
         if (!multimodal and (srv.kv.enabled or srv.state_cache != null)) {
             for (CachePolicy.writes(marked)) |position| {
@@ -1769,6 +1781,15 @@ pub const Generation = struct {
                 checkpoint_count += 1;
             }
         }
+        var candidates: [16]c_int = undefined;
+        const candidate_count = if (suffix_input) c.ds4_server_persist_boundaries(srv, slot, req, prompt, cached, &candidates, candidates.len) else 0;
+        for (candidates[0..candidate_count]) |position| {
+            if (CachePolicy.contains(checkpoints[0..checkpoint_count], position)) continue;
+            context_checkpoints[context_count] = position;
+            context_count += 1;
+            checkpoints[checkpoint_count] = position;
+            checkpoint_count += 1;
+        }
         std.mem.sort(c_int, checkpoints[0..checkpoint_count], {}, std.sort.asc(c_int));
         var suppressed: c_int = -1;
         for (checkpoints[0..checkpoint_count]) |checkpoint| {
@@ -1779,7 +1800,8 @@ pub const Generation = struct {
             if (cold_length > 0 and cold_length < prompt.len) {
                 var prefix = zero(c.ds4_tokens);
                 c.ds4_kvstore_tokens_copy_prefix(&prefix, prompt, cold_length);
-                const result = sync(srv, slot, &prefix, &credits, &errors, self.stop);
+                const semantic = CachePolicy.contains(context_checkpoints[0..context_count], cold_length);
+                const result = syncEndpoint(srv, slot, &prefix, &credits, &errors, self.stop, semantic);
                 c.ds4_tokens_free(&prefix);
                 if (result != 0) {
                     clearProgress(slot.session);
@@ -1796,7 +1818,9 @@ pub const Generation = struct {
                     self.prefillFailure(p, &context, &request_flags, &errors);
                     return;
                 }
-                if (c.ds4_server_persist_store(srv, slot, prompt, cold_length, "cold", null, 0, null)) c.ds4_server_persist_note_store(slot, cold_length) else c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);
+                if (semantic) {
+                    c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);
+                } else if (c.ds4_server_persist_store(srv, slot, prompt, cold_length, "cold", null, 0, null)) c.ds4_server_persist_note_store(slot, cold_length) else c.ds4_server_persist_restore_suppressed(slot, suppressed, cold_length);
                 suppressed = -1;
             }
         }

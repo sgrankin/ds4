@@ -8,12 +8,25 @@ pub const ByteRange = struct { begin: usize, end: usize };
 /// Rendering records explicit controls; identical spellings in payload stay
 /// ordinary text. Endpoints are byte offsets, before tokenization.
 pub const PromptMap = struct {
+    capture_context: bool = false,
     special_ranges: std.ArrayList(ByteRange) = .empty,
     cache_breakpoints: std.ArrayList(usize) = .empty,
+    /// Automatic capture candidates, independent of explicit cache policy.
+    context_boundaries: std.ArrayList(usize) = .empty,
+    user_ranges: std.ArrayList(ByteRange) = .empty,
+    last_user_begin: usize = 0,
+    /// A source receives the control identity only after every actual control
+    /// has been evaluated, including late system/developer messages.
+    control_end: usize = 0,
+    /// Ordered actual instructions and rendered declarations, excluding tool
+    /// results. This scopes approximate ongoing-task reuse, not exact state.
+    control_key: ?[41]u8 = null,
 
     pub fn deinit(self: *PromptMap, allocator: std.mem.Allocator) void {
         self.special_ranges.deinit(allocator);
         self.cache_breakpoints.deinit(allocator);
+        self.context_boundaries.deinit(allocator);
+        self.user_ranges.deinit(allocator);
         self.* = .{};
     }
 };

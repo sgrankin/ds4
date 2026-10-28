@@ -180,6 +180,8 @@ pub fn freeRequest(request: *Request) void {
     c.ds4_tokens_free(&request.prompt);
     c.ds4_tokens_free(&request.cache_breakpoint_bytes);
     c.ds4_tokens_free(&request.cache_breakpoints);
+    c.ds4_tokens_free(&request.context_boundary_bytes);
+    c.ds4_tokens_free(&request.context_boundaries);
     c.free(request.prompt_special_ranges);
     c.free(request.responses_live_special_ranges);
     c.free(request.anthropic_live_special_ranges);

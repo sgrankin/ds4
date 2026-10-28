@@ -298,7 +298,85 @@ pub fn loadState(runtime: *c.server, slot: *c.server_slot, prompt: *const c.ds4_
     log(c.DS4_LOG_WARNING, "ds4-server: state cache load fallback slot=%d: %s", .{ slot.id, @as([*c]const u8, if (errors[0] != 0) &errors else "checkpoint mismatch") });
     return 0;
 }
+fn enabled(name: [*:0]const u8) bool {
+    const value = c.getenv(name);
+    return value != null and std.mem.eql(u8, text(value), "1");
+}
+fn setting(name: [*:0]const u8, fallback: u32) u32 {
+    const value = c.getenv(name);
+    return if (value == null) fallback else std.fmt.parseInt(u32, text(value), 10) catch fallback;
+}
+pub fn configureContext(runtime: *c.server, slot: *c.server_slot, request: *const c.request) void {
+    _ = runtime;
+    slot.context_task_profile[0] = 0;
+    slot.context_task_control_end = request.context_control_end;
+    slot.context_task_user_begin = request.context_last_user_begin;
+    if (!enabled("DS4_SERVER_CONTEXT_BOUNDARIES") or slot.context_cache_profile[0] == 0 or request.context_control_key[0] == 0 or
+        request.context_last_user_begin < 0 or request.context_control_end <= request.context_last_user_begin) return;
+    var hash = std.crypto.hash.Sha1.init(.{});
+    hash.update("ongoing-controls-v3:");
+    hash.update(text(&slot.context_cache_profile));
+    hash.update(text(&request.context_control_key));
+    var digest: [20]u8 = undefined;
+    hash.final(&digest);
+    const alphabet = "0123456789abcdef";
+    for (digest, 0..) |byte, i| {
+        slot.context_task_profile[2 * i] = alphabet[byte >> 4];
+        slot.context_task_profile[2 * i + 1] = alphabet[byte & 15];
+    }
+    slot.context_task_profile[40] = 0;
+}
+pub fn boundaries(runtime: *c.server, slot: *c.server_slot, request: *const c.request, prompt: *const c.ds4_tokens, cached: c_int, out: [*c]c_int, capacity: usize) usize {
+    if (!enabled("DS4_SERVER_CONTEXT_BOUNDARIES") or runtime.state_cache == null or !runtime.context_suffix_reuse or
+        slot.context_cache_profile[0] == 0 or request.kind != c.REQ_CHAT or request.prompt_cache_explicit or
+        request.previous_response_id != null or request.conversation_id != null or
+        request.responses_requires_live_tool_state or request.anthropic_requires_live_tool_state or
+        request.image_count != 0 or prompt.len != request.prompt.len or capacity == 0 or
+        !std.mem.eql(c_int, items(c_int, prompt.v, @intCast(prompt.len)), items(c_int, request.prompt.v, @intCast(request.prompt.len)))) return 0;
+    if (setting("DS4_STATE_CACHE_HOT_MB", 512) == 0) {
+        log(c.DS4_LOG_WARNING, "ds4-server: automatic context boundaries require DS4_STATE_CACHE_HOT_MB > 0", .{});
+        return 0;
+    }
+    const step: c_int = @intCast(@min(setting("DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS", 2048), 1_048_576));
+    const limit = @min(capacity, @min(setting("DS4_SERVER_CONTEXT_BOUNDARY_LIMIT", 4), 16));
+    _ = c.pthread_mutex_lock(&runtime.inference_mu);
+    const live = c.ds4_session_pos(slot.session);
+    const common = c.ds4_session_common_prefix(slot.session, prompt);
+    _ = c.pthread_mutex_unlock(&runtime.inference_mu);
+    const evaluated = CachePolicy.automaticFrontier(cached, live, common, prompt.len);
+    var count: usize = 0;
+    var previous = evaluated;
+    // Recent semantic ends are the useful candidates for repeated local edits.
+    // Keep selection bounded independently from the explicit-marker policy.
+    var selected: [16]c_int = undefined;
+    var reverse: usize = @intCast(request.context_boundaries.len);
+    var next = prompt.len;
+    while (reverse != 0 and count < limit) {
+        reverse -= 1;
+        const position = request.context_boundaries.v[reverse];
+        if (position <= evaluated or position < 64 or position >= prompt.len or next - position < step) continue;
+        selected[count] = position;
+        count += 1;
+        next = position;
+    }
+    var kept: usize = 0;
+    while (count != 0) {
+        count -= 1;
+        if (selected[count] <= previous) continue;
+        out[kept] = selected[count];
+        previous = selected[count];
+        kept += 1;
+    }
+    if (kept != 0) log(c.DS4_LOG_KVCACHE, "ds4-server: context_boundaries slot=%d selected=%zu available=%d spacing=%d first=%d last=%d prompt=%d cached=%d evaluated=%d", .{ slot.id, kept, request.context_boundaries.len, step, out[0], out[kept - 1], prompt.len, cached, evaluated });
+    return kept;
+}
 pub fn endpoint(runtime: *c.server, slot: *c.server_slot) void {
+    captureEndpoint(runtime, slot, false);
+}
+pub fn boundary(runtime: *c.server, slot: *c.server_slot) void {
+    if (enabled("DS4_SERVER_CONTEXT_BOUNDARIES") and !c.ds4_session_is_decoder_replay(slot.session)) captureEndpoint(runtime, slot, true);
+}
+fn captureEndpoint(runtime: *c.server, slot: *c.server_slot, transient: bool) void {
     if (runtime.state_cache == null or cancelled(slot) or c.ds4_session_has_vision_state(slot.session)) return;
     if (!CachePolicy.allowsWrite(slot.prompt_cache_explicit, breakpoints(slot), c.ds4_session_pos(slot.session))) return;
     const replay = c.ds4_session_is_decoder_replay(slot.session);
@@ -320,13 +398,25 @@ pub fn endpoint(runtime: *c.server, slot: *c.server_slot) void {
         });
         return;
     }
+    const started = nowSeconds();
     var status = if (runtime.context_suffix_reuse)
         c.ds4_session_capture_suffix_cache(slot.session, &captured, &errors, errors.len)
     else
         c.ds4_session_save_snapshot(slot.session, &captured.state, &errors, errors.len);
-    if (status == 0 and !approximate) status = c.ds4_state_cache_put(runtime.state_cache, &runtime.state_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, false, &key, &errors, errors.len);
+    const captured_at = nowSeconds();
+    const kind: c.ds4_state_cache_kind = if (approximate) c.DS4_STATE_CACHE_SUFFIX else c.DS4_STATE_CACHE_NATIVE;
+    const put = if (transient) &c.ds4_state_cache_put_transient else &c.ds4_state_cache_put_kind;
+    if (status == 0 and !approximate) status = put(runtime.state_cache, &runtime.state_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, &errors, errors.len);
     if (status == 0 and runtime.context_suffix_reuse and slot.context_cache_profile[0] != 0)
-        status = c.ds4_state_cache_put(runtime.state_cache, &slot.context_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, approximate, &key, &errors, errors.len);
+        status = put(runtime.state_cache, &slot.context_cache_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, &errors, errors.len);
+    if (status == 0 and runtime.context_suffix_reuse and slot.context_task_profile[0] != 0 and slot.context_task_control_end > 0 and tokens.*.len >= slot.context_task_control_end)
+        status = put(runtime.state_cache, &slot.context_task_profile, captured.state.ptr, captured.state.len, captured.prerope, captured.prerope_bytes, kind, &key, &errors, errors.len);
+    if (enabled("DS4_SERVER_CONTEXT_BOUNDARIES") or enabled("DS4_SERVER_CONTEXT_CAPTURE_PROFILE")) {
+        const finished = nowSeconds();
+        var cache_stats: c.ds4_state_cache_stats = undefined;
+        c.ds4_state_cache_get_stats(runtime.state_cache, &cache_stats);
+        log(c.DS4_LOG_KVCACHE, "ds4-server: context_capture slot=%d tokens=%d transient=%d state_bytes=%llu pre_bytes=%llu capture_ms=%.3f publish_ms=%.3f hot_bytes=%llu ssd_bytes=%llu endpoints=%llu status=%d", .{ slot.id, tokens.*.len, @as(c_int, @intFromBool(transient)), captured.state.len, captured.prerope_bytes, (captured_at - started) * 1000, (finished - captured_at) * 1000, cache_stats.hot_bytes, cache_stats.ssd_bytes, cache_stats.endpoints, status });
+    }
     if (status == 0 and slot.prompt_cache_explicit) slot.cache_written_tokens = @max(slot.cache_written_tokens, tokens.*.len);
     if (status != 0) log(c.DS4_LOG_WARNING, "ds4-server: state cache store skipped slot=%d: %s", .{ slot.id, &errors });
 }
@@ -346,8 +436,13 @@ pub fn suffix(runtime: *c.server, slot: *c.server_slot, original_prompt: *const 
             break;
         }
     }
-    if (latest_user < 64) return 0;
-    const cutoff: u32 = @intCast(@min(original_prompt.len - runtime.context_suffix_fresh, latest_user));
+    const last_role_marker = latest_user;
+    const ongoing_requested = enabled("DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER") and enabled("DS4_SERVER_CONTEXT_BOUNDARIES");
+    if (ongoing_requested and slot.context_task_profile[0] == 0) return 0;
+    if (ongoing_requested) latest_user = slot.context_task_user_begin;
+    const ongoing = ongoing_requested and slot.context_task_profile[0] != 0;
+    if (latest_user < 64 and !ongoing) return 0;
+    const cutoff: u32 = @intCast(@min(original_prompt.len - runtime.context_suffix_fresh, @max(latest_user, 0)));
     if (!c.ds4_server_coordinator_prefill_enter(runtime, slot, stop)) return -1;
     var admitted = true;
     defer if (admitted) c.ds4_server_coordinator_prefill_leave(runtime);
@@ -357,7 +452,7 @@ pub fn suffix(runtime: *c.server, slot: *c.server_slot, original_prompt: *const 
     var pad_at: c_int = -1;
     if (runtime.context_suffix_pad and original_prompt.len + 1 < runtime.ctx_size) {
         var offset: c_int = 0;
-        while (offset + 1 < latest_user) : (offset += 1) {
+        while (offset + 1 < last_role_marker) : (offset += 1) {
             if (original_prompt.v[@intCast(offset)] != user_id) continue;
             pad_at = offset + 1;
             c.ds4_tokens_copy(&padded, original_prompt);
@@ -369,46 +464,54 @@ pub fn suffix(runtime: *c.server, slot: *c.server_slot, original_prompt: *const 
             break;
         }
     }
-    var cursor = std.mem.zeroes([41]u8);
     var chosen: ?*c.ds4_state_cache_ref = null;
     defer if (!final_cleanup) c.ds4_state_cache_release(chosen);
     var best = std.mem.zeroes(c.ds4_suffix_match_plan);
     var chosen_padded = false;
-    while (true) {
-        var ids: [*c]const c_int = null;
-        var count: u32 = 0;
-        var approximate = false;
-        const candidate_ref = c.ds4_state_cache_next_candidate(runtime.state_cache, &slot.context_cache_profile, @intCast(runtime.ctx_size), &cursor, &ids, &count, &approximate) orelse break;
-        var state_bytes: u64 = 0;
-        var pre_bytes: u64 = 0;
-        c.ds4_state_cache_ref_sizes(candidate_ref, &state_bytes, &pre_bytes);
-        var use_pad = false;
-        var local = std.mem.zeroes(c.ds4_suffix_match_plan);
-        if (pre_bytes != 0 and state_bytes +% pre_bytes +% (@as(u64, 8) << 20) < (@as(u64, 512) << 20)) {
-            _ = match.shift(c.ds4_suffix_match_plan, ids, count, original_prompt.v, @intCast(original_prompt.len), cutoff, runtime.context_suffix_right, &local);
-            var candidate: c.ds4_suffix_match_plan = undefined;
-            if (padded.len != 0 and match.shift(c.ds4_suffix_match_plan, ids, count, padded.v, @intCast(padded.len), cutoff + 1, runtime.context_suffix_right, &candidate) and
-                candidate.destination_start > @as(u32, @intCast(pad_at)) and candidate.reused_tokens > local.reused_tokens)
-            {
-                local = candidate;
-                use_pad = true;
+    var chosen_ongoing = false;
+    var chosen_durable = false;
+    const profiles = [_][*c]const u8{ &slot.context_cache_profile, &slot.context_task_profile };
+    for (profiles[0..@as(usize, if (ongoing) 2 else 1)], 0..) |profile, profile_index| {
+        var cursor = std.mem.zeroes([41]u8);
+        const source_cutoff: u32 = if (profile_index == 1) @intCast(original_prompt.len - runtime.context_suffix_fresh) else cutoff;
+        while (true) {
+            var ids: [*c]const c_int = null;
+            var count: u32 = 0;
+            var approximate = false;
+            const candidate_ref = c.ds4_state_cache_next_candidate(runtime.state_cache, profile, @intCast(runtime.ctx_size), &cursor, &ids, &count, &approximate) orelse break;
+            var state_bytes: u64 = 0;
+            var pre_bytes: u64 = 0;
+            c.ds4_state_cache_ref_sizes(candidate_ref, &state_bytes, &pre_bytes);
+            var use_pad = false;
+            var local = std.mem.zeroes(c.ds4_suffix_match_plan);
+            if (pre_bytes != 0 and state_bytes +% pre_bytes +% (@as(u64, 8) << 20) < (@as(u64, setting("DS4_SERVER_CONTEXT_SUFFIX_STAGING_MB", 512)) << 20)) {
+                _ = match.shift(c.ds4_suffix_match_plan, ids, count, original_prompt.v, @intCast(original_prompt.len), source_cutoff, runtime.context_suffix_right, &local);
+                var candidate: c.ds4_suffix_match_plan = undefined;
+                if (padded.len != 0 and match.shift(c.ds4_suffix_match_plan, ids, count, padded.v, @intCast(padded.len), source_cutoff + 1, runtime.context_suffix_right, &candidate) and
+                    candidate.destination_start > @as(u32, @intCast(pad_at)) and candidate.reused_tokens > local.reused_tokens)
+                {
+                    local = candidate;
+                    use_pad = true;
+                }
             }
+            if (local.reused_tokens > best.reused_tokens or
+                (local.reused_tokens != 0 and local.reused_tokens == best.reused_tokens and chosen_padded and !use_pad))
+            {
+                c.ds4_state_cache_release(chosen);
+                chosen = candidate_ref;
+                best = local;
+                chosen_padded = use_pad;
+                chosen_ongoing = profile_index == 1;
+                chosen_durable = c.ds4_state_cache_ref_durable(candidate_ref);
+            } else c.ds4_state_cache_release(candidate_ref);
         }
-        if (local.reused_tokens > best.reused_tokens or
-            (local.reused_tokens != 0 and local.reused_tokens == best.reused_tokens and chosen_padded and !use_pad))
-        {
-            c.ds4_state_cache_release(chosen);
-            chosen = candidate_ref;
-            best = local;
-            chosen_padded = use_pad;
-        } else c.ds4_state_cache_release(candidate_ref);
     }
     if (chosen == null) {
         log(c.DS4_LOG_KVCACHE, "ds4-server: suffix exact fallback slot=%d reason=no-aligned-source", .{slot.id});
         return 0;
     }
     const prompt = if (chosen_padded) &padded else original_prompt;
-    if (chosen_padded) latest_user += 1;
+    if (chosen_padded and pad_at <= latest_user) latest_user += 1;
     var blob = std.mem.zeroes(c.ds4_state_cache_blob);
     defer if (!final_cleanup) c.ds4_state_cache_blob_free(&blob);
     var prefix = prompt.*;
@@ -434,7 +537,7 @@ pub fn suffix(runtime: *c.server, slot: *c.server_slot, original_prompt: *const 
         if (c.ds4_session_sync(slot.session, &prefix, &errors, errors.len) != 0 or cancelled(slot) or
             c.ds4_session_reuse_suffix_relocated(slot.session, &source, &graft, best.source_start, stats, &errors, errors.len) != 0 or cancelled(slot)) break :grafting 0;
         endpoint(runtime, slot);
-        log(c.DS4_LOG_KVCACHE, "ds4-server: suffix APPROXIMATE slot=%d reused=%u fresh=%u graft_fresh=%u source=%u:%u destination=%u:%u latest_user_start=%d pre_rope=1 source_ssd=1 source_approximate=%d prefix_pad=%d right_shift=%d %.3f ms", .{ slot.id, stats.reuse.reused_tokens, best.fresh_tokens, stats.reuse.fresh_tail_tokens, stats.source_start, stats.source_end, stats.destination_start, stats.destination_end, latest_user, @as(c_int, @intFromBool(blob.approximate)), @as(c_int, @intFromBool(chosen_padded)), @as(c_int, @intFromBool(stats.destination_start > stats.source_start)), (nowSeconds() - started) * 1000 });
+        log(c.DS4_LOG_KVCACHE, "ds4-server: suffix APPROXIMATE slot=%d reused=%u fresh=%u graft_fresh=%u source=%u:%u destination=%u:%u latest_user_start=%d pre_rope=1 source_ssd=%d source_approximate=%d ongoing_user=%d prefix_pad=%d right_shift=%d %.3f ms", .{ slot.id, stats.reuse.reused_tokens, best.fresh_tokens, stats.reuse.fresh_tail_tokens, stats.source_start, stats.source_end, stats.destination_start, stats.destination_end, latest_user, @as(c_int, @intFromBool(chosen_durable)), @as(c_int, @intFromBool(blob.approximate)), @as(c_int, @intFromBool(chosen_ongoing)), @as(c_int, @intFromBool(chosen_padded)), @as(c_int, @intFromBool(stats.destination_start > stats.source_start)), (nowSeconds() - started) * 1000 });
         break :grafting 1;
     };
     if (result == 0) {
