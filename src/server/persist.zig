@@ -344,30 +344,9 @@ pub fn boundaries(runtime: *c.server, slot: *c.server_slot, request: *const c.re
     const common = c.ds4_session_common_prefix(slot.session, prompt);
     _ = c.pthread_mutex_unlock(&runtime.inference_mu);
     const evaluated = CachePolicy.automaticFrontier(cached, live, common, prompt.len);
-    var count: usize = 0;
-    var previous = evaluated;
-    // Recent semantic ends are the useful candidates for repeated local edits.
-    // Keep selection bounded independently from the explicit-marker policy.
-    var selected: [16]c_int = undefined;
-    var reverse: usize = @intCast(request.context_boundaries.len);
-    var next = prompt.len;
-    while (reverse != 0 and count < limit) {
-        reverse -= 1;
-        const position = request.context_boundaries.v[reverse];
-        if (position <= evaluated or position < 64 or position >= prompt.len or next - position < step) continue;
-        selected[count] = position;
-        count += 1;
-        next = position;
-    }
-    var kept: usize = 0;
-    while (count != 0) {
-        count -= 1;
-        if (selected[count] <= previous) continue;
-        out[kept] = selected[count];
-        previous = selected[count];
-        kept += 1;
-    }
-    if (kept != 0) log(c.DS4_LOG_KVCACHE, "ds4-server: context_boundaries slot=%d selected=%zu available=%d spacing=%d first=%d last=%d prompt=%d cached=%d evaluated=%d", .{ slot.id, kept, request.context_boundaries.len, step, out[0], out[kept - 1], prompt.len, cached, evaluated });
+    const policy: CachePolicy.BoundaryPolicy = if (std.mem.eql(u8, text(c.getenv("DS4_SERVER_CONTEXT_BOUNDARY_POLICY")), "anchors")) .anchors else .recent;
+    const kept = CachePolicy.semanticBoundaries(items(c_int, request.context_boundaries.v, @intCast(request.context_boundaries.len)), prompt.len, evaluated, step, limit, policy, items(c_int, out, capacity));
+    if (kept != 0) log(c.DS4_LOG_KVCACHE, "ds4-server: context_boundaries slot=%d selected=%zu available=%d spacing=%d first=%d last=%d prompt=%d cached=%d evaluated=%d policy=%s", .{ slot.id, kept, request.context_boundaries.len, step, out[0], out[kept - 1], prompt.len, cached, evaluated, @as([*:0]const u8, if (policy == .anchors) "anchors" else "recent") });
     return kept;
 }
 pub fn endpoint(runtime: *c.server, slot: *c.server_slot) void {

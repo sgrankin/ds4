@@ -1,5 +1,20 @@
 # Serving project journal
 
+Checkpoint-cost follow-up authorized,2026-10-28 17:38UTC. Implement both better
+endpoint selection and capture inside an existing layer-major prefill sweep.
+First bounded item17:38–18:38UTC: compare existing recent endpoints with only
+the earliest/latest of that same bounded set, preserving the exact prefix
+anchor and recent suffix source. Keep ordinary coordinator quantum2048,
+chunk8192, main/indexFP4, native routes, reasoning and cache budgets fixed;
+five alternating samples per side, ordinary and favorable initial+two edits.
+Second item gets its own one-hour budget: collect selected endpoint raw rings,
+unfinished compression inputs, original pre-RoPE values and endpoint logits
+within normal prefill sweeps, retaining existing snapshot formats. Separate
+feature gates permit one-change comparisons. Do not infer capture speed from
+copy milliseconds; count actual sweeps and inspect end-to-end time/quality.
+The prior measured binary and shaders are frozen locally before rebuilding.
+Main remains unchanged; no publication was requested.
+
 AFK convergence batch completed,2026-10-28. Typed DSML truncation is
 fixed and qualified. DSP1 at ordinary confidence0.6 improves restored complete
 tasks18.12% in five alternating pairs; fast presets enable it with explicit0

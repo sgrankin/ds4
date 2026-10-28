@@ -28,6 +28,34 @@ pub fn automaticFrontier(cached: c_int, live: c_int, common: c_int, prompt: c_in
     return if (common == live and live <= prompt) @max(cached, live) else cached;
 }
 
+pub const BoundaryPolicy = enum { recent, anchors };
+
+/// Choose spaced semantic ends after the evaluated frontier. Anchors keeps the
+/// earliest and latest of the same recent set: an exact-prefix restart point
+/// and a suffix source, without stopping for all intervening candidates.
+pub fn semanticBoundaries(ends: []const c_int, prompt: c_int, evaluated: c_int, spacing: c_int, limit: usize, policy: BoundaryPolicy, out: []c_int) usize {
+    const maximum = @min(@min(limit, out.len), 16);
+    var selected: [16]c_int = undefined;
+    var count: usize = 0;
+    var reverse = ends.len;
+    var next = prompt;
+    while (reverse != 0 and count < maximum) {
+        reverse -= 1;
+        const position = ends[reverse];
+        if (position <= evaluated or position < 64 or position >= prompt or next - position < spacing) continue;
+        selected[count] = position;
+        count += 1;
+        next = position;
+    }
+    if (policy == .anchors and count > 2) {
+        out[0] = selected[count - 1];
+        out[1] = selected[0];
+        return 2;
+    }
+    for (0..count) |index| out[index] = selected[count - 1 - index];
+    return count;
+}
+
 /// Call at the first decoded token that reaches the semantic byte end. Keep a
 /// straddling token fresh so the source stays wholly inside the retained block.
 pub fn semanticTokenEnd(token_index: usize, semantic_byte_end: usize, token_byte_end: usize) usize {
@@ -61,6 +89,32 @@ test "semantic capture never rewinds an evaluated graft boundary" {
     // An unrelated or longer old graph cannot suppress fresh checkpoints.
     try std.testing.expectEqual(@as(c_int, 4096), automaticFrontier(4096, 12000, 64, 14000));
     try std.testing.expectEqual(@as(c_int, 4096), automaticFrontier(4096, 12000, 12000, 10000));
+}
+
+test "semantic anchors retain prefix and suffix from the same recent set" {
+    const ends = [_]c_int{ 100, 150, 700, 1700, 1800, 2950 };
+    var out: [16]c_int = undefined;
+    const recent = semanticBoundaries(&ends, 3000, 0, 500, 4, .recent, &out);
+    try std.testing.expectEqualSlices(c_int, &.{ 150, 700, 1800 }, out[0..recent]);
+    const anchors = semanticBoundaries(&ends, 3000, 0, 500, 4, .anchors, &out);
+    try std.testing.expectEqualSlices(c_int, &.{ 150, 1800 }, out[0..anchors]);
+    // Existing limit1/2 behavior stays meaningful and needs no extra anchor.
+    const one = semanticBoundaries(&ends, 3000, 0, 500, 1, .anchors, &out);
+    try std.testing.expectEqualSlices(c_int, &.{1800}, out[0..one]);
+    const two = semanticBoundaries(&ends, 3000, 0, 500, 2, .anchors, &out);
+    try std.testing.expectEqualSlices(c_int, &.{ 700, 1800 }, out[0..two]);
+}
+
+test "semantic selection respects evaluated frontier, spacing and capacity" {
+    const ends = [_]c_int{ 20, 80, 250, 800, 1200, 1600, 1990, 2000 };
+    var out: [2]c_int = undefined;
+    const count = semanticBoundaries(&ends, 2000, 800, 400, 16, .anchors, &out);
+    try std.testing.expectEqualSlices(c_int, &.{ 1200, 1600 }, out[0..count]);
+    try std.testing.expectEqual(@as(usize, 0), semanticBoundaries(&ends, 2000, 2000, 400, 4, .anchors, &out));
+    try std.testing.expectEqual(@as(usize, 0), semanticBoundaries(&ends, 2000, 0, 400, 0, .anchors, &out));
+    try std.testing.expectEqual(@as(usize, 0), semanticBoundaries(&ends, 2000, 0, 400, 4, .anchors, &.{}));
+    const recent = semanticBoundaries(&ends, 2000, 0, 400, 16, .recent, &out);
+    try std.testing.expectEqualSlices(c_int, &.{ 1200, 1600 }, out[0..recent]);
 }
 
 test "semantic end floors a BPE straddler and preserves aligned ends" {
