@@ -536,6 +536,8 @@ pub fn suffix(runtime: *c.server, slot: *c.server_slot, original_prompt: *const 
         _ = loadState(runtime, slot, &prefix);
         if (c.ds4_session_sync(slot.session, &prefix, &errors, errors.len) != 0 or cancelled(slot) or
             c.ds4_session_reuse_suffix_relocated(slot.session, &source, &graft, best.source_start, stats, &errors, errors.len) != 0 or cancelled(slot)) break :grafting 0;
+        if (chosen_padded)
+            slot.context_task_control_end = CachePolicy.controlEndAfterPadding(slot.context_task_control_end, pad_at);
         endpoint(runtime, slot);
         log(c.DS4_LOG_KVCACHE, "ds4-server: suffix APPROXIMATE slot=%d reused=%u fresh=%u graft_fresh=%u source=%u:%u destination=%u:%u latest_user_start=%d pre_rope=1 source_ssd=%d source_approximate=%d ongoing_user=%d prefix_pad=%d right_shift=%d %.3f ms", .{ slot.id, stats.reuse.reused_tokens, best.fresh_tokens, stats.reuse.fresh_tail_tokens, stats.source_start, stats.source_end, stats.destination_start, stats.destination_end, latest_user, @as(c_int, @intFromBool(chosen_durable)), @as(c_int, @intFromBool(blob.approximate)), @as(c_int, @intFromBool(chosen_ongoing)), @as(c_int, @intFromBool(chosen_padded)), @as(c_int, @intFromBool(stats.destination_start > stats.source_start)), (nowSeconds() - started) * 1000 });
         break :grafting 1;

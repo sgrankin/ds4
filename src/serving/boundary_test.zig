@@ -185,6 +185,17 @@ fn automaticContextMetadata() !void {
     const changed_text = try prompt.render(allocator, &changed, .{ .reasoning = .none, .prompt_map = &changed_map });
     defer allocator.free(changed_text);
     if (std.mem.eql(u8, &key, &changed_map.control_key.?)) return error.ChangedUserIdentityRetained;
+    // Medium and disabled both emit numeric effort 0, but use different
+    // thinking controls. They must not share an ongoing-task source identity.
+    var medium_map: types.PromptMap = .{ .capture_context = true };
+    defer medium_map.deinit(allocator);
+    const medium_text = try prompt.render(allocator, &changed, .{ .reasoning = .medium, .prompt_map = &medium_map });
+    defer allocator.free(medium_text);
+    if (std.mem.eql(u8, &changed_map.control_key.?, &medium_map.control_key.?)) return error.ChangedReasoningIdentityRetained;
+    if (std.mem.eql(u8, changed_text, medium_text)) return error.ReasoningToggleDidNotChangePrompt;
+    const medium_plain = try prompt.render(allocator, &changed, .{ .reasoning = .medium });
+    defer allocator.free(medium_plain);
+    try equal(medium_plain, medium_text);
     const repeated = [_]types.Message{ messages[0], messages[0] };
     var repeated_map: types.PromptMap = .{ .capture_context = true };
     defer repeated_map.deinit(allocator);

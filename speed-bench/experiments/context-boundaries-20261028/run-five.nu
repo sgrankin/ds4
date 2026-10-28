@@ -43,9 +43,9 @@ def run-arm [binary: path, shaders: path, model: path, api_model: string, output
         DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL: '64'
         DS4_SERVER_CONTEXT_SUFFIX_STAGING_MB: '512'
         DS4_SERVER_CONTEXT_CAPTURE_PROFILE: '1'
-        DS4_SERVER_CONTEXT_BOUNDARIES: (if $arm == 'candidate' { '1' } else { '0' })
-        DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER: (if $arm == 'candidate' { '1' } else { '0' })
-        DS4_SERVER_CONTEXT_BOUNDARY_LIMIT: ($limit | into string)
+        DS4_SERVER_CONTEXT_BOUNDARIES: (if $arm != 'control' { '1' } else { '0' })
+        DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER: (if $arm != 'control' { '1' } else { '0' })
+        DS4_SERVER_CONTEXT_BOUNDARY_LIMIT: (if $arm == 'sparse' { '1' } else { $limit | into string })
         DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS: ($spacing | into string)
         DS4_V41_CHECKPOINT_DRAFT_FEATURES: '0'
         DS4_V41_INDEX_FP4: '1'
@@ -118,15 +118,17 @@ def run-arm [binary: path, shaders: path, model: path, api_model: string, output
     if not $result.ok { error make {msg: $result.message} }
 }
 
-def main [binary: path, output: path, --model: path = 'gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf', --api-model: string = 'deepseek-v4.1-flash', --port: int = 18351, --rows: int = 72, --edits: int = 8, --pairs: int = 5, --spacing: int = 2048, --limit: int = 4, --chunk: int = 8192, --case: string = '', --dry-run] {
+def main [binary: path, output: path, --model: path = 'gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf', --api-model: string = 'deepseek-v4.1-flash', --port: int = 18351, --rows: int = 72, --edits: int = 8, --pairs: int = 5, --spacing: int = 2048, --limit: int = 4, --chunk: int = 8192, --case: string = '', --include-sparse, --dry-run] {
     let binary = $binary | path expand
     let output = $output | path expand
     let shaders = $binary | path dirname | path dirname | path join shaders
     assert ($binary | path exists)
     assert ($shaders | path exists)
+    let runtime_revision = open --raw ($shaders | path dirname | path join source-revision.txt) | str trim
     assert (not ($output | path exists)) 'Use a fresh output directory.'
     assert ($pairs > 0 and $rows > 0 and $edits > 0 and $spacing >= 0 and $chunk > 0)
     assert ($limit > 0 and $limit <= 16)
+    assert (not $include_sparse or $limit == 4) 'The fixed sparse comparison uses candidate limit4 and sparse limit1.'
     let cases = if $case == '' { ['ordinary' 'favorable'] } else { [$case] }
     # These settings are the complete DS4 environment for every server child.
     let inherited = $env | columns | where {|name| $name | str starts-with 'DS4_' }
@@ -135,19 +137,24 @@ def main [binary: path, output: path, --model: path = 'gguf/DeepSeek-V4.1-Flash-
     let model = $model | path expand
     assert ($model | path exists)
     mkdir $output
-    let order = 1..$pairs | each {|pair| if $pair mod 2 == 1 { 'AB' } else { 'BA' } }
+    let forward = if $include_sparse { ['control' 'candidate' 'sparse'] } else { ['control' 'candidate'] }
+    let order = 1..$pairs | each {|pair| if $pair mod 2 == 1 { $forward } else { $forward | reverse } }
+    let limits = if $include_sparse { {control: 4, candidate: 4, sparse: 1} } else { {control: $limit, candidate: $limit} }
+    let changed = ['DS4_SERVER_CONTEXT_BOUNDARIES' 'DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER']
+    let changed = if $include_sparse { $changed | append 'DS4_SERVER_CONTEXT_BOUNDARY_LIMIT' } else { $changed }
     {pairs: $pairs, order: $order, cases: $cases, rows: $rows, edits: $edits,
-        binary: $binary, shaders: $shaders, model: $model, reasoning: 'high', temperature: 0, min_p: 0.05,
+        binary: $binary, runtime_revision: $runtime_revision, shaders: $shaders, model: $model, reasoning: 'high', temperature: 0, min_p: 0.05,
         main_fp4: true, index_fp4: true, mtp: false, hot_mb: 512, boundary_limit: $limit, spacing: $spacing, prefill_chunk: $chunk,
+        arms: $forward, per_arm_limits: $limits, include_sparse: $include_sparse,
         batched_sessions: 2, ordinary_coordinator_quantum: 2048,
-        changed_bundle: ['DS4_SERVER_CONTEXT_BOUNDARIES' 'DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER'],
+        changed_bundle: $changed,
         context_policy: 'Fixed distinct instructions per case; unique cache key per pair/arm/case. Each case starts a cold context; the second case shares warm model weights.',
-        timing: 'Startup retained separately. Initial population and all eight edits retained per case; archive retrieval excluded.',
+        timing: $'Startup retained separately. Initial population and all ($edits) edits retained per case; archive retrieval excluded.',
         dry_run: $dry_run, comparative_perf: ($pairs == 5 and not $dry_run)}
     | to json | save ($output | path join manifest.json)
     mut execution_order = []
     for pair in 1..$pairs {
-        let arms = if $pair mod 2 == 1 { ['control' 'candidate'] } else { ['candidate' 'control'] }
+        let arms = $order | get ($pair - 1)
         for arm in $arms {
             $execution_order = ($execution_order | append {event: 'started', pair: $pair, arm: $arm, at: (date now)})
             $execution_order | to json | save --force ($output | path join execution-order.json)
@@ -159,7 +166,9 @@ def main [binary: path, output: path, --model: path = 'gguf/DeepSeek-V4.1-Flash-
     }
     if $pairs == 5 and not $dry_run {
         for case in $cases {
-            python3 speed-bench/experiments/context-boundaries-20261028/analyze.py ($output | path join $case) --processes ($output | path join processes)
+            let arguments = [speed-bench/experiments/context-boundaries-20261028/analyze.py ($output | path join $case) --processes ($output | path join processes)]
+            let arguments = if $include_sparse { $arguments | append '--include-sparse' } else { $arguments }
+            python3 ...$arguments
             if $env.LAST_EXIT_CODE != 0 { error make {msg: $'Analysis failed: ($case)'} }
         }
     }

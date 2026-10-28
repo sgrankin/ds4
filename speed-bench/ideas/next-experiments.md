@@ -1,10 +1,59 @@
 # Next experiments: one hour each
 
+AFK batch COMPLETE: DSML repair; qualifiedDSP1/mainFP4; neutralHC;
+semantic checkpoints/control freshness/hot retention;15-process comparison;
+final8edit retention/guards; presets, reports and local executables installed.
+Fuller semantic capture is selected only for server persistent-fast (cap4,
+spacing512,HOT512, overrides honored), based on repeated-edit benefit and
+successful retention. Measured initial+two edits remain~2% slower; third-edit
+crossover and8edit speed figures are calculations. Main unchanged/no push.
+Next work is a fresh decision, not automatic continuation of this batch. The
+most concrete new target is the hardcoded ordinary2048 coordinator quantum;
+then the FP4 attention reader. See JOURNAL and context-boundaries RESULTS.md.
+
+Qualification update,2026-10-28: DSML truncation, confidence0.6 DSP1,
+main-FP4 full persistence/suffix integration and HC fusion are qualified.
+Main packing is an exact capacity tradeoff (~2%32K task cost); fast presets
+export it with explicit overrides. HC is neutral and stays opt-in. Semantic
+boundaries/hot retention/ongoing controls pass CPU and live geometry, changed
+facts/instructions, archive, previous_response_id and restart fallback.
+Current work is the15-process off/sparse1/fuller4 Pareto comparison: five per
+configuration, ordinary serial + favorable parallel, initial+8edits,
+spacing512/native routes/high reasoning. Main unchanged. Do not begin another
+kernel experiment before completing the campaign, decision, reports and install.
+
+## AFK convergence and compaction batch — authorized 2026-10-28
+
+Order: typed incomplete DSML repair; qualify DSP1 at ordinary confidence;
+physical main-FP4 KV producer/consumer and persistence/suffix integration;
+one profiled fusion; implement/evaluate the semantic-boundary, cheaper capture
+and ongoing-task freshness design in `docs/CONTEXT_COMPACTION_AND_CHECKPOINTS.md`.
+Use one-hour checkpoints including preparation/builds/analysis, retaining
+concrete partial progress if another checkpoint is needed for the same feature.
+Parallel source preparation is allowed; frozen qualification builds and actual
+model jobs remain sequential. Main stays unchanged. Source/measurement root:
+`.workspaces/convergence-20261028/`; keep raw logs/caches/binaries ignored.
+
+Five samples per side, alternating order, all retained. Compare paired changes
+and run-order variation; small apparent slowdowns within normal variance are
+neutral evidence. Consider useful cache coverage, bytes, output quality and
+whole-task latency together. Do not reject approximate state solely for output
+differences, and do not claim a speedup from capacity calculations alone.
+
 Performance comparisons now require at least five measured samples per side,
 alternating order and retaining all samples/variation. Single runs are smoke
 checks or diagnostics, not comparative performance evidence. Packed index
 storage is accepted and enabled in all DeepSeek fast presets; explicit0 remains
 available and `persistent-packed` is a compatibility alias for `persistent-fast`.
+
+DSP1 ordinary-policy qualification completed 2026-10-28 04:46 UTC: all five
+pairs improve the complete-task total (mean −18.12%, paired −17.65–18.85%),
+with identical measured output/reasoning/tokens and 10.3 MiB more stored files
+across three prompts. DeepSeek fast presets now enable DSP1 with explicit 0
+override; ordinary engine defaults stay unchanged. Startup/seeds are excluded,
+and cache files are OS-warm. Main stays unchanged. Next checkpoint: physical
+main-FP4 full-model, SSD/MTP and chained suffix qualification, 04:46–05:46 UTC.
+[DSP1 report](../experiments/draft-features-five-20261028/README.md).
 
 ## Compressed activations with floating-point matmul — completed, not adopted
 

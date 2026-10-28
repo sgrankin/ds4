@@ -317,7 +317,7 @@ fn hashControl(hash: *std.crypto.hash.Sha1, role: []const u8, payload: []const u
 
 /// A tool-result edit can preserve an ongoing task. Changed actual controls or
 /// declarations require ordinary freshness policy even if an older task matches.
-fn controlKey(messages: []const Message, options: Options, level: u8) ?[41]u8 {
+fn controlKey(messages: []const Message, options: Options, think: bool, level: u8) ?[41]u8 {
     var hash = std.crypto.hash.Sha1.init(.{});
     hash.update("ongoing-controls-v3\x00");
     var has_user = false;
@@ -327,7 +327,7 @@ fn controlKey(messages: []const Message, options: Options, level: u8) ?[41]u8 {
         hashControl(&hash, message.role.?, message.content orelse "");
     }
     if (!has_user) return null;
-    hashControl(&hash, "reasoning", &.{level});
+    hashControl(&hash, "reasoning", &.{ @intFromBool(think), level });
     if (nonempty(options.schemas)) hashControl(&hash, "tools", options.schemas.?);
     switch (options.response_format) {
         .json_object => hashControl(&hash, "response_format", "{\"type\": \"json_object\"}"),
@@ -371,7 +371,7 @@ pub fn render(allocator: Allocator, messages: []const Message, options: Options)
         map.user_ranges.clearRetainingCapacity();
         map.last_user_begin = 0;
         map.control_end = 0;
-        map.control_key = if (map.capture_context) controlKey(views.messages, options, level) else null;
+        map.control_key = if (map.capture_context) controlKey(views.messages, options, think, level) else null;
     }
     var out = Text{ .allocator = allocator, .map = options.prompt_map };
     errdefer out.list.deinit(allocator);

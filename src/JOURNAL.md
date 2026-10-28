@@ -1,5 +1,324 @@
 # Serving project journal
 
+AFK convergence batch completed,2026-10-28. Typed DSML truncation is
+fixed and qualified. DSP1 at ordinary confidence0.6 improves restored complete
+tasks18.12% in five alternating pairs; fast presets enable it with explicit0
+honored. Physical main-FP4 rows are85.94% smaller with exact decoded values,
+full canonical/SSD/MTP/F16/suffix/RPC coverage;8K latency is neutral and32K
+whole time costs1.98%. Fast presets choose this capacity tradeoff, respecting
+explicit main/F16 preferences. HC collapse/norm is correct but neutral (+0.10%
+whole) across five pairs, so it remains an explicit experiment.
+
+Semantic checkpoints now work at actual token ends, including BPE-straddling
+tool separators, with bounded shared RAM retention, immutable original RoPE
+values and control-scoped ongoing-task reuse. The15-process comparison retains
+five samples per off/sparse1/fuller4 configuration and90/90 correct replies.
+Fuller reduces repeated-edit time38.02%, costs81.85% more initial population,
+and costs2.14% more over measured initial+two edits (mixed paired variation).
+The calculated crossover is2.17 edits, first integer benefit at the third edit;
+calculated8edit savings are a projection, not measured five-pair evidence.
+Sparse1 gives no material repeated-edit gain. [Results/curve](../speed-bench/experiments/context-boundaries-20261028/RESULTS.md).
+
+Choose fuller4/spacing512/HOT512 only for server `persistent-fast`; preserve
+explicit overrides and leave ordinary/context-fast/resident-fast boundary
+settings unchanged. Wrapper64GB/resident policies/512chunk remain separate from
+native32GB/configured8192/effective2048 benchmark settings. No default prefill
+change was made. The first oversized rows72/8edit calibration remains excluded;
+the bounded rows24/two-edit campaign completed with unchanged guard and all15
+processes. Raw logs/snapshots remain local/ignored.
+
+Final guard-qualified build `9b826389` preserves thinking-enabled in control
+identity and translates control admission after successful prefix padding.
+CPU14 serving cases and4 policy cases pass. Installed all five executables;
+all --help checks pass and root files match zig-out bytes. On that final build,
+ordinary and favorable each pass9/9 replies across8edits, all16 imports use the
+unchanged original RAM C and no capture fails. Further actual padded fact
+correction passes2/2 with prefix_pad1; medium→high passes2/2 with high falling
+back/cached0. Model reasoning stayed enabled; none/medium is covered by CPU
+rendering/identity assertions. All owned model jobs stopped with guardchild0,
+no pins left, and bounded hot bytes below512MiB at shutdown.
+
+The main bookmark remains `be7f820f9ae5`; no push. New source/report work stays
+in the local rebaseable stack. [Recipe15](../recipes/15-packed-main-kv.md) and
+[recipe16](../recipes/16-semantic-context-checkpoints.md) are standalone.
+Future proposals, not current work: single-active-prefiller2048/8192 scheduling
+(with responsiveness tests); direct FP4 half-vector/SIMD scale reuse in indexed
+attention; actual longer paired agent/coding tasks; append-tail GPU capture only
+if long-context capture profiling justifies it. This batch adds no server-hosted
+compactor, multi-span planner or SWB1-plus-relocation composition.
+
+Measurement checkpoint, 2026-10-28 11:56 UTC:14/15 fresh processes
+complete in the bounded rows24/two-edit trial, with five control and fuller
+samples already retained; final sparse sample runs. Guard remains normal and
+measured source/drivers remain unchanged. Finish the last sample rather than
+truncate a valid comparison at the clock boundary. Then analyze all5/config,
+apply the two reviewed control-only fixes, qualify them and run separate8edit
+retention on the installed-source build. No broad kernel work remains.
+
+Review corrections prepared but UNAPPLIED during measurement: reasoning
+control identity must include thinking-enabled as well as numeric effort
+(medium and none otherwise collide); after successful prefix padding, source
+admission must use the shifted actual control end before capturing. Neither
+changes this corpus's high reasoning/early controls/inference math. Focused
+fixtures accompany both. Do not disable model reasoning in performance or live
+qualification; use CPU rendering for the none/medium collision and a live
+medium/high transition if needed. Preserve d5 as the measured baseline.
+
+Bounded campaign adjustment, 2026-10-28 10:56 UTC: the first9912-token
+control calibration established that15 fresh processes×two layouts×8edits
+would take several hours, not the intended one-hour experiment. Stopped the
+owned guard deliberately (status interrupted/signal15), preserving every
+partial request under `pareto/`. Do not mix those timings into comparisons.
+No runtime/quality failure motivated the stop.
+
+Fresh `pareto-fast/` starts10:56: five processes per off/sparse1/fuller4 setting,
+rows24/two edits, spacing512, both ordinary serial and favorable parallel;
+all other frozen d5 settings/guard unchanged. Keep all initial costs and edits.
+Afterward perform a separate8edit functional retention check. Any8edit latency
+projection from short-run statistics is a calculation, not measured five-pair
+whole-task evidence. This maintains the fixed-baseline/five-sample rule while
+bounding the first comparison. Caffeinate is scoped to this job only.
+
+First control and fuller processes pass all6 replies each. Fuller ordinary
+imports1265 RAM-only C tokens, favorable1830; exact390/451 prefix hits precede
+both edits and no capture errors occur. Sparse1 now running. No interim speed
+claim. Do not build or run another model during this campaign. Next checkpoint
+11:56UTC; finish all five samples, inspect variation, decide, run retention,
+update reports/curve/presets and install the qualified executables. Main stays
+unchanged. Pending projected workload should not cause another harness expansion.
+
+Compaction qualification checkpoint, 2026-10-28 10:49 UTC: all10
+changed/deleted-fact and new/changed/deleted-user replies are correct at frozen
+`d5b8e8a3`, plus actual client archive retrieval and READY→MAPLE
+previous_response_id continuation. Same-runtime freshness off/on both answer
+correctly; off uses exact410 with no aligned suffix source, on imports1688 C
+tokens. Reasoning remains high. Actual process restart loses transient C,
+falls back with no-aligned-source/cached0, recomputes and answers the corrected
+LARCH fact. All owned quality servers are stopped, guards normal.
+
+The quality client completed before this check-in; the long comparison had not
+started during the chat's idle interval. Begin a fresh measurement checkpoint
+now. No performance claim is derived from the one-pair smokes. Final trial:
+15 fresh processes, five samples each for off/sparse1/fuller4, alternating
+forward/reverse order; spacing512, ordinary serial + favorable parallel,
+initial population +8edits each. Normal reasoning/native routes, main/indexFP4,
+HOT512 and unchanged pressure guard. Use a job-scoped idle-sleep assertion so
+the campaign can finish unattended. Hourly checkpoints retain partial progress
+without aborting a valid campaign before all five samples finish.
+
+Integrated the qualified feature chain beneath preset/report work. Three
+owned report/driver conflicts resolved from saved `c2447362`; all src/tests
+bytes (except JOURNAL) match the frozen qualifier afterward. Main remains
+`be7f820f9ae5`; installed binaries remain unchanged until final verification.
+
+Semantic floor-mapping qualification completed 2026-10-28 07:24 UTC at
+frozen `d5b8e8a3`:14 rendering/control cases and all3 cache-policy cases pass.
+The parallel live smoke completes both arms/all4 answers, child0, normal guard.
+Candidate now selects3 semantic ends (451,1045,2872) and captures all three
+RAM-only, instead of just451. It chooses the actual C endpoint, source1042:2872
+→destination488:2318,1830 reused tokens, source_ssd0/ongoing_user1. The old
+runtime found only a1457-token partial C from an ordinary durable quantum.
+No rendered bytes or ordinary token IDs changed; the shared `>\n\n` piece stays
+fresh. These are functionality/coverage diagnostics, not five-sample speed claims.
+
+Capture/publication itself is only milliseconds per endpoint in this smoke;
+extra early model passes dominate initial cost. Preserve the short exact prefix
+anchor until whole8edit amortization is measured. Next: same-runtime off/on
+freshness, changed/deleted-fact/control and archive/protocol/restart checks;
+then five samples/config, ordinary serial and favorable parallel workflows.
+A sparse-limit1 point alongside default4 can expose the setup/amortization
+tradeoff without a generic sweep framework. Keep runtime/presets opt-in until
+whole-task evidence. Raw `.workspaces/context-compaction-20261028/`.
+
+Compaction live checkpoint, 2026-10-28 07:16 UTC at runtime `24f86d2d`:
+corrected initial one-pair smoke completes all8 replies across both arms/two
+serial cases. Candidate imports RAM-only semantic C sources (`source_ssd=0`),
+restores its390-token exact prefix anchor and uses the ongoing-control alias.
+Initial population costs extra model passes; retain that cost across8edits
+rather than rejecting a short anchor on initial time alone. These are single
+smokes/geometry evidence, not performance claims. First successful control
+run was falsely flagged by stale Nushell LAST_EXIT_CODE after redirection;
+standard `complete.exit_code` fixes the launcher, and old artifacts remain.
+
+Ordinary remains a serial tool workflow with existing partial-C quantum reuse.
+The favorable corpus now uses a valid parallel A/C/D call/result group, trims
+A, retains C and changes D (including final authority). No later tool wrapper
+moves the legacy cutoff beyond C. Its one-pair smoke completes with correct
+answers and candidate ongoing-policy partial-C grafting. Source coverage is
+measured, not inferred from the ongoing flag alone.
+
+A real missing-boundary defect surfaced: exact-offset byte→token mapping drops
+result ends when native BPE piece4697 contains `>\n\n`. It can therefore omit
+semantic A/C endpoints, while ordinary coordinator captures still supply some
+partial-C coverage. Fix by flooring semantic endpoints to the preceding existing
+completed token, deduplicating them; keep actual control admission rounded up.
+Prompt bytes and ordinary tokenization must remain unchanged. Build, repeat
+parallel smoke and control-quality checks precede the full five-pair campaign.
+
+HC five-pair comparison completed 2026-10-28 06:55 UTC at `b3b6f079`:
+three-case answer total73.483→73.556s (+0.100%), paired changes+0.138%,
++1.214%,−0.876%,−0.213%,+0.234%; AB−0.168%/BA+0.501%. Prefill+0.178%,
+normal decode−0.312%; all-phase+0.591%. Call latency neutral, not a useful
+whole-task speedup or a regression. All30 answers and generated IDs match;
+all110 teacher rows are byte-identical, delta-NLL/KL/flips0. Memory/expert
+counts unchanged. Retain the explicit experiment flag without preset promotion;
+no further kernel tuning in this checkpoint. Actual fused MTP/packed-state
+correctness is the remaining smoke, then move to compaction. [Evidence](../speed-bench/experiments/hc-collapse-norm-20261028/README.md).
+
+Combined isolated source `24f86d2d` builds server, cache, serving boundary,
+DSML output, server-host and MTP checkpoint targets. All14 rendering/control
+cases, both cache-policy tests (including graft evaluated-frontier), production
+state-cache transient/pin/eviction/promotion/restart/packed-v4-v5 fixtures,
+`ds4_test --server`, and typed DSML/Flint output fixtures pass. Frozen binary/
+27shaders live under qualifier `.workspaces/context-qualified/`.
+Compaction live/workflow qualification begins its next one-hour checkpoint
+06:57–07:57 UTC; CPU pass is not a live reuse or performance claim.
+
+Main-FP4 decision, 2026-10-28 06:35 UTC: enable physical main packing
+through the opt-in DeepSeek fast presets, accepting the measured~2%32K task
+cost for exact capacity, persistence and larger suffix-source admission. The
+ordinary engine default remains0. `ds4-local` honors explicit main0/1; an
+explicit F16-only request defaults mainFP4 to0, while explicitly setting both1
+retains the engine's documented FP4 priority. Four fake-binary wrapper checks
+pass (default1, explicit0, F16-only0, both1). Installed binaries have not yet
+been refreshed; do that after final batch qualification. No HC or compaction
+preset promotion is implied.
+
+Matching diagnostic localizes the packing cost to the indexed batch attention
+consumer:188 identical heads16-dual dispatches17.615→19.524s (+1.909s), versus
+~57ms explicit new pack/gather. Expert reads/tasks and17.81GiB pread match.
+This supports a later bounded attention-consumer optimization, not more work
+inside today's packing checkpoint. The five unprofiled samples establish the
+latency tradeoff; profile wall scheduling differs. [Report](../speed-bench/experiments/main-fp4-20261028/RESULTS_32K.md).
+
+HC corrected leaf completed 2026-10-28 06:32 UTC at frozen `b3b6f079`:
+all width5120/8192, rows1/5/17, PRE strides16/96, random/signed-zero outputs,
+input immutability and offset guards match the old GPU bit-for-bit. The fix
+keeps the existing runtime channel accumulation loop rather than canonicalizing
+zero signs. Concurrent/short-batch output heads now use the same combined hook;
+mean-only DSpark feature capture deliberately remains separate.
+
+Five fresh alternating 8K three-case full-model pairs started06:32, fixed main/
+index FP4, SIMD1, native routes, normal reasoning, chunk8192 and48GiB experts.
+Source/binary/shaders frozen under the qualifier's `.workspaces/hc-qualified/`;
+raw `.workspaces/hc-collapse-norm-20261028/full-8k/`. No concurrent builds/model
+jobs. Main-FP4 matched32K diagnostic finishes normally: attention20.846→22.823s
+across both prefills/decode; explicit packed publication/gather total~57ms.
+Use the five unprofiled pairs for the latency claim; diagnostic scheduling is
+perturbed. Detailed attribution and preset decision follow; do not promise a
+free unpack or assign a physical-unit cause without counters.
+
+Main-FP4 32K measurement completed 2026-10-28 06:25 UTC: five alternating
+pairs, favorable case, normal reasoning. Mean answer time 47.600→48.540 s
+(+1.976%), all five slower (+2.378%, +2.368%, +3.613%, +0.876%, +0.650%);
+answer prefill +2.257%, generation −1.234%. This is a small repeatable cost,
+not speed-neutral. All ten answers pass, identical generated IDs and all 40
+paired teacher rows byte-identical. Actual KV 227,172,624→46,941,584 bytes;
+canonical prompt payload 184,476,724→40,297,524 bytes. A matching diagnostic
+profile follows before the fast-preset decision. Main remains unchanged.
+
+HC fusion checkpoint begins 06:29–07:29 UTC. Frozen isolated source
+`71fc3030` builds metal-test and decoder-replay-bench. The first GPU fixture
+found signed-zero differences in collapse output (old +0, fused −0); investigate
+and repair established arithmetic before the five full-model pairs. Compaction
+source audit also removes useless splits for ineligible/full-reference requests
+and prevents selecting semantic ends already evaluated after a graft.
+
+Main-FP4 8K measurement completed 2026-10-28 05:59 UTC: five alternating
+pairs, three cases each. Mean combined answer time 75.601→74.768 s (−1.10%),
+but paired median +0.005%; call latency neutral, not a repeatable speedup.
+Paired changes −5.438%, −1.280%, +0.844%, +0.791%, +0.005%; retain the noisier
+first control. All 30 answers pass, all generated IDs match, and all 110 paired
+teacher rows are byte-identical (delta-NLL/KL/flips zero). Actual KV capacity
+97,165,584→25,068,944 bytes; canonical prompt payload 54,371,380→18,326,580.
+Expert budget/scratch/I/O stay unchanged. [All samples](../speed-bench/experiments/main-fp4-20261028/RESULTS_8K.md).
+
+Actual Responses restart also passes at `aee06ac9`: a packed native v5/DSP1
+checkpoint at 392 tokens survives clean process exit and loads into a fresh F32
+server with HOT0. Cached 392/392, writes 0; 169 output/82 reasoning tokens and
+normalized reasoning/tool arguments match. Both servers stopped cleanly.
+[Reproduction](../speed-bench/experiments/main-fp4-20261028/README.md).
+Five alternating 32K favorable pairs started 06:07 UTC, same frozen prefix and
+normal reasoning. Raw `.workspaces/main-fp4-20261028/full-32k/`. Finish this and
+the decision within the next checkpoint ending 06:46; HC fusion then compaction.
+
+Main-FP4 full correctness matrix completed 2026-10-28 05:35 UTC. Canonical
+v2↔v4/v5 and actual SSD/MTP checks pass; forward/reverse F32, F16 and FP4
+suffix conversions pass four moves each. Newly captured private DSSD v2/v3/v5
+states become subsequent sources. The fixed packed-source case also passes
+its zero-shift invariant. Original state/tapes remain immutable and reported
+capture bytes match. This completes the actual inference/cache path rather
+than only an unused packing API.
+
+Five fresh alternating full-model pairs now run ordinary/favorable/changed
+8K tasks from frozen isolated source `aee06ac9`, normal reasoning, native
+routes, packed index, chunk8192 and expert-cache48GiB. Only main FP4 differs.
+Keep builds and other model jobs paused. Raw outputs:
+`.workspaces/main-fp4-20261028/full-8k/`; concise results will go in the
+[main-FP4 report](../speed-bench/experiments/main-fp4-20261028/README.md).
+The initial 04:46–05:46 checkpoint found/fixed two real integration defects and
+qualified the full path. Finish the five samples and longer-context check in
+the following checkpoint if needed; do not stop mid-campaign or claim speed
+from single runs. HC fusion and context boundaries remain next, main unchanged.
+
+Reverse suffix checkpoint, 2026-10-28 05:22 UTC: forward F32→FP4 four-move
+chain passed. Reverse FP4→F32 exposed a second concrete defect: nonempty
+`ds4_gpu_tensor_copy` requires a caller-owned command batch. The new F32 tile
+fallback had none. A local begin/copy/end helper now protects both main and
+index fallback copies and closes the batch even on failure. Failure-only
+diagnostics identify the stage/owner; no numerical changes in this fix.
+
+Isolated source `aee06ac9` builds all main qualification targets. The reverse
+chain now passes all four moves with both main/index returning to F32 and
+recaptured legacy DSSD v2 becoming the next source. F16-owner and fixed-source
+cases remain in progress under `.workspaces/main-fp4-20261028/qualification-rest/`.
+Next remains the five-pair full-model comparison, then targeted HC fusion and
+the semantic-boundary workflow. One active guarded model job; main unchanged.
+
+Main-FP4 qualification checkpoint, 2026-10-28 05:06 UTC: the first actual
+cross-layout restore exposed a legacy encoder bug missed by the initial GPU
+corpus. Tiny E4M3 scales can produce a maximum code of 4, so reconstructing
+every scale with amax/6 changed saved values. A pre-MTP roundtrip isolated it
+from attention/MTP; the old index-only control passed. Fresh publication and
+legacy repacking now have separate kernels. The legacy path checks exact
+representability and recovers the max-code-4 case. The real failing group and
+all seven subnormal scales are in the fixture.
+
+Corrected isolated revision `907543ca` passes the expanded GPU fixture, every
+byte of F32→v4/v5→F32 checkpoint roundtrips, scalar one-token logits exactly,
+and MTP/actual HOT0 SSD reopen in both directions (teacher max 0 initially,
+2.861e-6 on reverse/import). Default FP4 scalar gathers preserve the old F32
+attention algorithm; half/M5 packed attention requires explicit flag 1.
+Chained suffix qualification is running. Five-pair performance follows; no
+main-FP4 speed/default claim yet. [Evidence](../speed-bench/experiments/main-fp4-20261028/README.md).
+
+DSP1 ordinary-policy checkpoint completed 2026-10-28 04:46 UTC. Five fresh
+alternating pairs at confidence 0.6 reduce the complete three-task HTTP total
+37.533 to 30.731 s (18.12%); every pair improves, by 17.65–18.85%. Ordinary,
+strict-tool and schema tasks improve 10.74%, 23.30% and 23.64%; the separate
+32-token capped continuation improves 25.40%. All measured output, arguments,
+reasoning and token counts match. Stored files grow by 10,845,024 bytes across
+three cached prompts. This is OS-warm restored-state performance, excluding
+seeds/startup, not a cold-SSD or non-DSpark claim. The guard remains normal.
+
+Enable `DS4_V41_CHECKPOINT_DRAFT_FEATURES=1` through the opt-in DeepSeek fast
+named presets, honoring explicit 0; ordinary engine defaults stay unchanged.
+A fake-binary wrapper smoke confirms both values without loading a model.
+[Five-pair evidence](../speed-bench/experiments/draft-features-five-20261028/README.md).
+Main remains unchanged. Main-FP4 qualification starts its next checkpoint at
+04:46 UTC: isolated revision `c54f8a7f`, build and CPU cache tests pass; frozen
+GPU pack/gather qualification passes. Full-model/SSD/MTP/chain work follows.
+
+DSP1 ordinary-policy qualification restarted 2026-10-28 04:24 UTC. The first
+attempt failed before model launch on a Nushell argument type; the second was
+stopped by the unchanged pressure guard during an excluded seed request.
+Neither produced measured samples. Preserve both attempts rather than mixing
+them into the fresh five alternating pairs. The previously bloated PDF helper
+has exited; its remaining peers have small verified footprints. Pressure is
+normal with roughly 92 GiB free before the fresh launch. The user authorized
+restarting an affected PDF helper if the problem recurs. The cause of the
+second pressure stop is not established. No unrelated builds during timing.
+
 DSML checkpoint completed 2026-10-28 04:12 UTC, within its03:36–04:36 cap.
 Typed partial function calls now retain argument prefixes, IDs and per-call
 completion at length/context limits; complete calls preceding a partial call
@@ -3378,6 +3697,24 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
   Verification inventory is local under
   `.workspaces/benchmark-tracking-cleanup-20261022/`. Runtime source is unchanged.
 - Added this journal and its resume/update instructions in `AGENTS.md`.
+
+## FUTURE — ordinary coordinator prefill quantum
+
+Read-only finding, 2026-10-28: with batched serving and no active generation,
+`Coordinator.quantumFor` hardcodes 2048 tokens independently of the engine's
+`--prefill-chunk`. `--mixed-prefill-quantum` only affects active-generation
+overlap; there is no ordinary idle-quantum option. Omitting batched mode bypasses
+that outer loop but also changes session/workspace ownership, so it is not an
+isolated setting comparison. Semantic checkpoint stops remain separate.
+
+Future bounded experiment only: retain batched 2 and fixed model/cache/boundary
+policy, compare 2048 versus 8192 outer quanta when one prefiller is runnable and
+no decode is active/pending, retaining small quanta when other work waits.
+Use five alternating samples; inspect actual forward segments/expert reads,
+initial population and whole-edit time, plus arriving decode/cancellation wait.
+Do not infer a gain from capture milliseconds or configured chunk size.
+No implementation or benchmark change is made/authorized by this note; the
+running compaction campaign remains frozen.
 
 ## Source references
 

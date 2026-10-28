@@ -52,7 +52,8 @@ def --wrapped main [...arguments: string] {
     if $requested_preset in ['--help' '-h'] {
         print $USAGE
         print 'persistent-fast combines left/right suffix reuse with decode and prefill resident substitutions for ds4-agent or ds4-server.'
-        print 'DeepSeek fast profiles use packed index caches and compact SSD checkpoints; persistent-packed is an alias for persistent-fast.'
+        print 'DeepSeek fast profiles use packed main/index caches and compact SSD checkpoints; persistent-packed is an alias for persistent-fast.'
+        print 'Server persistent-fast prepares RAM checkpoints for repeated context edits; initial population costs more. DS4_SERVER_CONTEXT_BOUNDARIES=0 disables them.'
         print 'flint is server-only: native resident decoding with durable Responses JSON; provide --model DIR.'
         print 'clef-flash, clef and clef-omni are server-only decision profiles; downloaded model directories are selected by default.'
         print 'Profiles enable matching text-prefix reuse for loaded Clef/Flash helpers; DS4_CLEF_PREFIX_CACHE=0 disables it.'
@@ -105,11 +106,16 @@ def --wrapped main [...arguments: string] {
         exec ($bin_dir | path join 'ds4-server') --host 127.0.0.1 --batched-session 2 --ctx 262144 --prefill-chunk 4096 ...$args
     }
 
+    # Physical FP4 retains the existing quantized values; an explicit F16
+    # request keeps that owner unless the main FP4 setting is also explicit.
+    let packed_main = if (env-or DS4_V41_COMPRESSED_KV_F16 '0') == '1' { '0' } else { '1' }
     mut settings = {
         DS4_METAL_V41_SELECTED_TILE: '64'
         DS4_METAL_V41_SELECTED_LIMIT: '1024'
         DS4_V41_INDEX_SIMD: (env-or DS4_V41_INDEX_SIMD '1')
         DS4_V41_INDEX_FP4: (env-or DS4_V41_INDEX_FP4 '1')
+        DS4_V41_COMPRESSED_KV_FP4: (env-or DS4_V41_COMPRESSED_KV_FP4 $packed_main)
+        DS4_V41_CHECKPOINT_DRAFT_FEATURES: (env-or DS4_V41_CHECKPOINT_DRAFT_FEATURES '1')
     }
     if $preset in ['context-fast' 'persistent-fast'] {
         $settings = ($settings | merge {
@@ -154,13 +160,21 @@ def --wrapped main [...arguments: string] {
         })
         let right = if $server { 'DS4_SERVER_CONTEXT_SUFFIX_RIGHT' } else { 'DS4_AGENT_CONTEXT_SUFFIX_RIGHT' }
         $settings = ($settings | upsert $right (env-or $right '1'))
+        if $server {
+            $settings = ($settings | merge {
+                DS4_SERVER_CONTEXT_BOUNDARIES: (env-or DS4_SERVER_CONTEXT_BOUNDARIES '1')
+                DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER: (env-or DS4_SERVER_CONTEXT_SUFFIX_ONGOING_USER '1')
+                DS4_SERVER_CONTEXT_BOUNDARY_LIMIT: (env-or DS4_SERVER_CONTEXT_BOUNDARY_LIMIT '4')
+                DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS: (env-or DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS '512')
+            })
+        }
     }
 
     # Immutable checkpoints: bounded host RAM and restartable SSD storage.
     let cache = env-or DS4_STATE_CACHE_DIR ($ROOT | path join '.workspaces/context-cache')
     $settings = ($settings | merge {
         DS4_STATE_CACHE_DIR: $cache
-        DS4_STATE_CACHE_HOT_MB: (env-or DS4_STATE_CACHE_HOT_MB (if $server { '0' } else { '512' }))
+        DS4_STATE_CACHE_HOT_MB: (env-or DS4_STATE_CACHE_HOT_MB (if $server and $preset != 'persistent-fast' { '0' } else { '512' }))
         DS4_STATE_CACHE_SSD_MB: (env-or DS4_STATE_CACHE_SSD_MB (if $server { '4096' } else { '8192' }))
     })
     mkdir ($cache | path dirname)

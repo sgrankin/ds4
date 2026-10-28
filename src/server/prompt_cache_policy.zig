@@ -34,6 +34,12 @@ pub fn semanticTokenEnd(token_index: usize, semantic_byte_end: usize, token_byte
     return if (semantic_byte_end == token_byte_end) token_index + 1 else token_index;
 }
 
+/// An inserted token belongs to a half-open control prefix only when it is
+/// strictly before that prefix's end. The caller applies this after graft success.
+pub fn controlEndAfterPadding(control_end: c_int, pad_at: c_int) c_int {
+    return if (pad_at < control_end) control_end + 1 else control_end;
+}
+
 test "explicit caching needs a marked endpoint and retains older lookup marks" {
     const marks = [_]c_int{ 128, 256, 512, 1024, 2048, 4096 };
     try std.testing.expect(!allowsRead(true, &.{}, 128));
@@ -63,4 +69,13 @@ test "semantic end floors a BPE straddler and preserves aligned ends" {
     try std.testing.expectEqual(@as(usize, 6), semanticTokenEnd(6, 17, 19));
     try std.testing.expectEqual(@as(usize, 7), semanticTokenEnd(6, 19, 19));
     try std.testing.expectEqual(@as(usize, 0), semanticTokenEnd(0, 1, 3));
+}
+
+test "successful padding keeps a not-yet-evaluated control out of source admission" {
+    const original_end: c_int = 1000 - 63;
+    const padded_graft_target: c_int = (1000 + 1) - 64;
+    try std.testing.expect(padded_graft_target >= original_end); // Old gate admitted it.
+    try std.testing.expect(padded_graft_target < controlEndAfterPadding(original_end, 410));
+    try std.testing.expectEqual(original_end, controlEndAfterPadding(original_end, original_end));
+    try std.testing.expectEqual(original_end, controlEndAfterPadding(original_end, original_end + 1));
 }

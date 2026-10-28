@@ -33,6 +33,8 @@ result blocks, not relabelled historical measurements.
 | [Bounded decoder replay](12-bounded-decoder-replay.md) | Replay a fixed decoder tail while retaining complete compressed/index state | Opt-in 128/selected1 with typed SSD restart persistence; 7.03% unbatched HTTP workflow saving includes shorter search output; separate direct fixtures save 34.32–38.17%; presets unchanged |
 | [Packed compressed KV](13-packed-compressed-kv.md) | Store existing quantized main-cache values in F16; keep canonical F32 I/O | Main allocation halves; F16 suffix/cross-layout and SSD restart pass; small graft diagnostic +6.55% time; fixture logits and odd-frontier round trip exact; latency neutral/unresolved; default GPU-suite failure reproduces on parent; presets unchanged |
 | [Packed index cache](14-packed-index-cache.md) | Retain original FP4 codes/scales in 68-byte index rows; use register scoring and compact v3 checkpoints | Enabled in DeepSeek fast profiles: index owners 86.72% smaller; v2/v3/DSP1 SSD, four suffix moves and Responses/streaming/restart pass; five fresh 32K tasks per layout are roughly speed-neutral (mean −0.76%, median paired −0.12%); F32 SIMD saves 0.523%/1.936% at 32K/64K |
+| [Packed main KV](15-packed-main-kv.md) | Retain original E2M1/E4M3 main rows at 288 bytes; distinguish fresh publication from exact legacy repacking; integrate consumers and v4/v5 persistence | Enabled in opt-in DeepSeek fast presets with explicit 0/F16-only overrides; main owners 85.94% smaller; five 8K pairs neutral, five 32K pairs cost +1.98% task time with total KV −79.34% and canonical state −78.16%; all 40 answers/150 teacher comparisons exact; SSD/MTP/repeated suffix/Responses restart pass; profile locates indexed attention cost |
+| [Semantic context checkpoints](16-semantic-context-checkpoints.md) | Capture real message/tool endpoints, retain complete RAM-only sources and scope ongoing reuse to actual controls; keep the archive client-owned | Server `persistent-fast`: fuller4/spacing512/HOT512; five rounds give repeated edits −38.0%, population +81.8%, initial+two edits +2.14%; 90/90 answers and separate 18/18 eight-edit retention pass; other defaults unchanged |
 
 [Not-adopted summary](not-adopted/README.md) collects short reasons and links
 for rejected policies and candidates that still lack serving evidence. The
@@ -68,6 +70,16 @@ Explicit `DS4_V41_INDEX_FP4=0` or
 chunk 512 and a requested 64 GB expert cache, with later CLI arguments overriding
 CLI defaults. Presets leave thinking policy unchanged. These settings are a
 tested combination, not an established startup optimum.
+
+Server `persistent-fast` additionally prepares semantic RAM checkpoints for
+repeated client-side context edits, with limit4/spacing512/HOT512. Explicit
+boundary/ongoing `0`, limit/spacing and hot-budget overrides win. The agent and
+other presets get no new boundary defaults. This preset retains its existing
+64GB/resident-routing/512-chunk settings; the [five-round semantic benchmark](../speed-bench/experiments/context-boundaries-20261028/RESULTS.md)
+instead uses native32GB/configured8192/effective2048. Pass
+`--prefill-chunk 8192` to choose that tested chunk; it does not reproduce all
+other benchmark settings. Eight-edit retention is functional evidence, while
+the comparative speed measurement includes only two edits.
 
 On the reference Apple M5 Max/128 GiB machine, a cold 1,982-token agent system
 prefill at chunk 512 took 56.38s (35.16 tokens/s). Most later package runs restored

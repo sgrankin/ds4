@@ -168,6 +168,18 @@ routing weights. All use a 64 GB expert-cache target, context 8192 and prefill
 chunk 512. Later CLI arguments override those defaults. The script contains
 the environment settings explicitly and leaves thinking mode unchanged.
 
+Server `persistent-fast` also retains semantic RAM checkpoints for repeated
+client-side context edits: boundaries/ongoing reuse on, limit4, spacing512 and
+HOT512 MiB, with explicit overrides honored. The agent and other presets receive
+no new boundary defaults. Five native-route rounds show 38.0% less time for
+repeated edits, 81.8% more initial population and 2.14% more initial+two-edit time;
+all 90 answers pass. A separate eight-edit run retains the original C throughout
+and answers 18/18 correctly. The [report and Pareto plot](speed-bench/experiments/context-boundaries-20261028/RESULTS.md)
+separate that functional retention check from comparative timing. The timed
+setup is native routes/32GB/configured8192/effective2048, whereas the wrapper keeps its
+existing 64GB/resident-routing/512-chunk policy. `--prefill-chunk 8192` selects
+the tested configured chunk without changing those other wrapper settings.
+
 The DeepSeek fast profiles use physical FP4 index caches, compact version-3 SSD
 checkpoints and SIMD index scoring above the measured small-key crossover.
 This stores the existing quantized index values in less space; repeated 32K
@@ -339,8 +351,9 @@ measurements on two tasks, with1.8% native timing drift, rather than additive
 gains or a general accuracy guarantee.
 
 The presets enable automatic checkpoint caching in `.workspaces/context-cache`.
-Server defaults are hot0 and SSD4096 MiB, matching the recent qualification;
-agent defaults remain hot512 and SSD8192 MiB. Override
+Server `persistent-fast` defaults to HOT512 MiB for semantic intermediate
+checkpoints; other server presets retain HOT0. Server SSD capacity remains
+4096 MiB; agent defaults remain HOT512 and SSD8192 MiB. Override
 `DS4_STATE_CACHE_DIR`, `DS4_STATE_CACHE_HOT_MB` and `DS4_STATE_CACHE_SSD_MB`
 to choose another directory or capacity; hot size512 enables a host RAM tier,
 and hot size0 uses SSD only. The
@@ -352,10 +365,12 @@ kept all four tested suffix sources at512 MiB, with1.2% additional whole time;
 These capacities describe this four-history workload; the default retains more
 room for other histories. Direct `ds4-agent` / `ds4-server` invocations enable
 this tier by setting the directory.
-Captured native prefixes and private pre-RoPE suffix originals survive restart.
+Durable native prefixes and private pre-RoPE suffix originals survive restart;
+automatic semantic intermediate checkpoints are RAM-only and recompute after
+restart when no durable source matches.
 Immutable compressed-attention pages share storage by content; raw sliding
-windows, logits and unfinished compression pairs remain endpoint state. Writes
-reach SSD before returning; hot and disk LRU limits evict unpinned entries.
+windows, logits and unfinished compression pairs remain endpoint state. Durable
+writes reach SSD before returning; hot and disk LRU limits evict unpinned entries.
 The manifest becomes visible after its chunks, and a directory has one process
 owner. A server's clients share that owner; independent agent processes need
 separate directories.
