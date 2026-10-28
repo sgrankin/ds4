@@ -12,6 +12,11 @@ DeepSeek on Apple Silicon and a narrative checkpoint lab entry under `docs/`.
 Existing documents and experiment folders remain in place for comparison;
 the broader migration has not been performed. Runtime experiments remain paused.
 
+Reader feedback found fact-filled paragraphs without a coherent explanation.
+The documentation guide now specifies an independent explanatory-flow reviewer
+and explicit medium-effort Terra passes. The Apple Silicon page still needs
+the structural rewrite identified in that review.
+
 ## 2026-10-28: pause and reassess
 
 The user lost track of the goal amid side experiments and repeated status

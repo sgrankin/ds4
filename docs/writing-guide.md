@@ -1,7 +1,7 @@
-# Technical documentation writing guide
+# Writing, organizing and reviewing documentation
 
-This is the preferred style for the documentation rewrite. Improve the guide
-when a real review exposes a problem; it is not a document schema.
+This guide describes how we write, organize and review technical documentation.
+Improve it when a real review exposes a problem; it is not a document schema.
 
 ## Reader and purpose
 
@@ -12,6 +12,10 @@ implementation detail. Assume neither familiarity with our abbreviations nor a
 need for introductory machine-learning lessons.
 
 ## Document responsibilities
+
+Organize current manuals around the architecture and the reader's tasks, not
+the chronology of experiments. Lab narratives preserve the context and history
+behind decisions, while manuals explain current understanding.
 
 - The architecture overview explains component boundaries, ownership and data
   flow. Its block diagrams must describe the current implementation.
@@ -42,13 +46,22 @@ need for introductory machine-learning lessons.
 
 Use descriptive lowercase filenames and meaningful headings. Follow the
 reader's questions, rather than the order in which work happened. Use normal
-sentences and paragraphs with spaces between words, numbers and units. Explain
-an unfamiliar term at its first use. Avoid terse status-code prose.
+sentences and connected paragraphs, each with one explanatory purpose. Use
+bullets for genuinely parallel facts, not as a substitute for explaining how
+ideas connect. Put spaces between words, numbers and units. Explain an
+unfamiliar term at its first use. Avoid terse status-code prose.
 
 For a mechanism, explain the problem, how data and control move, who owns the
 state, why the design helps, and its limitations. A flag name or source symbol
 alone is not an explanation. Include a concrete example when it makes a cache,
 protocol or numerical operation easier to understand.
+
+One useful order is problem, mechanism, representation, optimization and
+tradeoff. Adapt it to the reader's question rather than treating it as a required
+schema. Establish a baseline before explaining an optimized variant. Before
+giving lane counts or dispatch details for something named a "packed index
+scorer," for example, explain its purpose, inputs and outputs, and where it sits
+in the dataflow.
 
 Use tables for real comparisons and mappings. Each cell must carry enough
 information to understand the difference. A table may index detailed documents;
@@ -93,9 +106,28 @@ decision, and give readers a route from it to the current conclusion.
 Keep one home for detailed results. A later lab entry may supersede a historical
 conclusion; add a short cross-link rather than rewriting the original evidence.
 
-Review prose and organization independently from technical correctness, checking
-that explanations stand on their own and examples, diagrams and links work. Then
-read related documents together for conflicting terminology, duplicated
-explanations, missing handoffs
-and poor navigation. Correct concrete problems; do not add new abstractions,
-tests or research just to make the documentation look comprehensive.
+For a substantial document, use fresh contexts and distinct roles:
+
+- A clean-context author, scoped to that document, reads the relevant source
+  and documentation and writes the explanation.
+- An independent prose and style reviewer checks clarity, readability, examples,
+  diagrams and links.
+- An independent technical and source reviewer checks claims against the
+  implementation and evidence.
+- An independent explanatory-flow reviewer traces a representative data item
+  through the prose and diagrams, first reading as the intended engineer without
+  filling gaps from source knowledge. Flag missing explanations even when the
+  implementation would let an expert infer them. Check that conceptual prerequisites and the
+  baseline precede their use and optimized variants, that sentences and
+  paragraphs build on each other, and that lists and prose serve their subjects.
+  This is distinct from a style check; the author's self-review does not count
+  as independent review.
+- After corrections, a clean-context editorial reader reads the related area
+  together and proposes improvements to duplication, organization, terminology,
+  handoffs and navigation.
+
+For this documentation work, use GPT 6.1 Terra with reasoning effort explicitly
+set to medium for these fresh contexts. Scale review to the change: a typo or
+small correction does not need multiple review rounds. Correct concrete problems;
+do not add process machinery, abstractions, tests or research just to make the
+documentation look comprehensive.
