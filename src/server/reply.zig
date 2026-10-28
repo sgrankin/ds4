@@ -267,7 +267,7 @@ const Outputs = struct {
         var calls: std.ArrayList(c.tool_call) = .empty;
         calls.items = items(c.tool_call, self.calls.v, @intCast(self.calls.len));
         calls.capacity = @intCast(self.calls.cap);
-        calls.append(allocator, .{ .id = null, .name = name, .arguments = wrapped.take() }) catch fatal();
+        calls.append(allocator, .{ .id = null, .name = name, .arguments = wrapped.take(), .incomplete = false }) catch fatal();
         self.calls.v = calls.items.ptr;
         self.calls.len = @intCast(calls.items.len);
         self.calls.cap = @intCast(calls.capacity);
@@ -671,6 +671,19 @@ pub fn parseForResponse(syntax: c.server_model_syntax, text: [*c]const u8, has_t
     return false;
 }
 
+// A truncated argument must still be a possible JSON prefix. The standard
+// streaming scanner distinguishes unfinished input from an already-invalid
+// literal, escape or structural sequence without guessing missing bytes.
+fn jsonPrefix(raw: []const u8) bool {
+    var scanner = std.json.Scanner.initStreaming(allocator);
+    defer scanner.deinit();
+    scanner.feedInput(raw);
+    while (true) {
+        const token = scanner.next() catch |failure| return failure == error.BufferUnderrun;
+        if (token == .end_of_document) return true;
+    }
+}
+
 pub fn parseSampled(request: *const c.request, raw: [*c]const u8, saw_start: bool, finish: [*c][*c]const u8, errors: [*c]u8, error_capacity: usize, content: *[*c]u8, reasoning: *[*c]u8, calls: *c.tool_calls, recovered: [*c]bool) bool {
     if (request.model_syntax != c.SERVER_MODEL_SYNTAX_DEEPSEEK41 and request.model_syntax != c.SERVER_MODEL_SYNTAX_FLINT) return parseForResponse(request.model_syntax, raw, request.has_tools, saw_start, c.ds4_think_mode_enabled(request.think_mode), finish, errors, error_capacity, content, reasoning, calls, recovered, &request.tool_orders);
     if (recovered != null) recovered.* = false;
@@ -678,9 +691,15 @@ pub fn parseSampled(request: *const c.request, raw: [*c]const u8, saw_start: boo
     const view = DS41.View{ .raw = bytes(raw), .ranges = ranges };
     var parsed = if (request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) Flint.project(allocator, view, &request.tool_orders, true) catch fatal() else DS41.project(allocator, view, c.ds4_think_mode_enabled(request.think_mode), true) catch fatal();
     defer parsed.deinit(allocator);
-    var valid = !parsed.invalid and (parsed.tool_start == null or (parsed.tool_end != null and parsed.calls.items.len != 0));
+    const truncated = finish != null and std.mem.eql(u8, bytes(finish.*), "length");
+    var valid = !parsed.invalid and (parsed.tool_start == null or
+        (parsed.tool_end != null and parsed.calls.items.len != 0) or
+        (truncated and parsed.tool_end == null));
     for (parsed.calls.items) |call| {
-        if (!call.complete) valid = false;
+        if (!call.complete) {
+            if (!truncated or !jsonPrefix(call.arguments)) valid = false;
+            continue;
+        }
         const json = std.json.parseFromSlice(std.json.Value, allocator, call.arguments, .{}) catch {
             valid = false;
             continue;
@@ -688,8 +707,11 @@ pub fn parseSampled(request: *const c.request, raw: [*c]const u8, saw_start: boo
         json.deinit();
     }
     if (!valid) {
-        content.* = duplicate(bytes(raw));
-        reasoning.* = null;
+        // Actual control syntax never becomes visible assistant text, even on
+        // malformed output. Literal spellings remain data in the projector.
+        content.* = duplicate(parsed.content);
+        reasoning.* = if (parsed.reasoning.len != 0) duplicate(parsed.reasoning) else null;
+        if (finish != null) finish.* = "error";
         if (request.has_tools and saw_start) {
             if (recovered != null) recovered.* = true;
             if (finish != null and !std.mem.eql(u8, bytes(finish.*), "error") and !std.mem.eql(u8, bytes(finish.*), "length")) finish.* = "stop";
@@ -708,13 +730,14 @@ pub fn parseSampled(request: *const c.request, raw: [*c]const u8, saw_start: boo
         var list: std.ArrayList(c.tool_call) = .empty;
         list.items = items(c.tool_call, calls.v, @intCast(calls.len));
         list.capacity = @intCast(calls.cap);
-        list.append(allocator, .{ .id = null, .name = duplicate(call.name), .arguments = duplicate(call.arguments) }) catch fatal();
+        list.append(allocator, .{ .id = null, .name = duplicate(call.name), .arguments = duplicate(call.arguments), .incomplete = !call.complete }) catch fatal();
         calls.v = list.items.ptr;
         calls.len = @intCast(list.items.len);
         calls.cap = @intCast(list.capacity);
     }
-    if (parsed.tool_start) |start| {
-        const begin = DS41.textEnd(bytes(raw), start);
+    // Only complete turns acquire a canonical raw replay representation.
+    if (parsed.tool_start != null and parsed.tool_end != null and !truncated) {
+        const begin = DS41.textEnd(bytes(raw), parsed.tool_start.?);
         const end = parsed.tool_end.?;
         calls.raw_tool_text = duplicate(bytes(raw)[begin..end]);
         var replay: std.ArrayList(c.ds4_prompt_range) = .empty;

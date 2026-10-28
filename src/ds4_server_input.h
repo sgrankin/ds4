@@ -48,6 +48,7 @@ typedef struct {
     char *id;
     char *name;
     char *arguments;
+    bool incomplete; /* Typed output prefix; never a replayable invocation. */
 } tool_call;
 
 typedef struct {

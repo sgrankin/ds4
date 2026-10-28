@@ -1,5 +1,61 @@
 # Serving project journal
 
+DSML checkpoint completed 2026-10-28 04:12 UTC, within its03:36–04:36 cap.
+Typed partial function calls now retain argument prefixes, IDs and per-call
+completion at length/context limits; complete calls preceding a partial call
+retain their own status. Partial calls stay outside executable tool memory and
+replay. Normal stop/EOS with unfinished syntax and malformed output still fail.
+Responses/Chat retain string argument prefixes; Anthropic streaming closes each
+block once, while nonstream omits an unrepresentable partial object instead of
+fabricating `{}`. The existing400 rejection of incomplete previous_response_id
+parents remains unchanged; a safe client retry succeeds.
+
+Isolated native output/server fixtures and wire tests pass. Actual DeepSeek
+Responses+Chat stream/nonstream cap96 tests pass; a cap128 stream preserves21
+argument deltas including UTF8 and literal marker strings. Original Flint cap64
+wires validate all four paths after removing a mistaken test ban on literal
+marker text inside arguments; safe retry also passes. Its subsequent rerun
+was interrupted by the unchanged pressure guard due to external CGPDFService
+memory (~58GiB), not a runtime-output failure. The helper subsequently exited
+without intervention; pressure returned tolevel1. Failed/coverage-only attempts
+remain under `.workspaces/convergence-20261028/` and are not perf samples.
+
+Main-FP4 first source/CPU/GPU checkpoint also passes: actual288B main owners,
+scalar/batch consumers, typed canonical/private v4/v5 conversion and source
+grafting are written; the GPU pack/gather fixture matches establishedmode3
+values and checks repacking/scales/signedzero/tails/bounds. A pre-existing
+CPU-vs-GPU halfway tie remains diagnostic, not a new packing discrepancy.
+Full model/SSD/repeated-suffix qualification follows DSP1's five-pair run.
+Compaction boundary/hot retention/control-identity source is prepared, with
+CPU qualification before its last conservative identity extension; live
+workflow qualification remains pending. No default/main promotion yet.
+
+AFK implementation batch authorized 2026-10-28 03:36 UTC. User selected the
+DSML length-finalization repair, ordinary-policy DSP1 qualification, physical
+main-KV packing and a fusion pass, plus implementation/evaluation of
+`docs/CONTEXT_COMPACTION_AND_CHECKPOINTS.md`. This supersedes that design
+document's previous proposal-only status. Keep main unchanged and raw artifacts
+local. Use sequential one-hour experiment checkpoints, including preparation,
+builds and analysis; more than one checkpoint may be needed for a feature.
+
+Performance comparisons require at least five samples per side in alternating
+order with all samples/variation retained. A small apparent regression inside
+normal variance is neutral evidence, not an automatic rejection. Consider
+memory, useful reuse, output quality and whole-task time together. Keep normal
+DeepSeek reasoning and the unchanged pressure guard; one active model job.
+The reference rec service on11500 is idle/unloaded and remains untouched.
+
+Root owns builds/model scheduling, measurements, journal/queue and commits.
+Delegated source preparation: typed partial DSML; main FP4 producer/attention/
+canonical/suffix integration; semantic checkpoint boundaries/hot retention and
+per-source freshness. Qualification uses a frozen workspace at9446a21d so
+unfinished independent code does not contaminate measured binaries. First
+DSML checkpoint03:36–04:36 UTC. DSP1 then uses default Metal confidence0.6
+with explicitly enabled DSpark support/depth6; stock CLI depth1 is not silently
+described as speculative serving. Compaction initially keeps the one-span
+matcher, explicit breakpoint semantics and existing durable conversation log.
+Measure capture cost before claiming incremental or cheap per-message capture.
+
 DeepInfer convergence status refresh, 2026-10-28: reconciled the inventory's
 stale look-back table and original proposed sequence with completed work.
 Official interaction/native constrained speculation and fast-preset physical

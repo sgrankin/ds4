@@ -233,7 +233,9 @@ pub fn rememberThinking(request: [*c]const c.request, state: [*c]const c.thinkin
     return c.ds4_think_mode_enabled(request.*.think_mode) and !same(finish, "error") and !same(finish, "length") and (state == null or !state.*.inside);
 }
 pub fn canonicalizeNeeded(runtime: [*c]const c.server, calls: [*c]const c.tool_calls) bool {
-    return calls != null and calls.*.len != 0 and !(runtime != null and !runtime.*.disable_exact_dsml_tool_replay and text(calls.*.raw_tool_text).len != 0);
+    if (calls == null or calls.*.len == 0) return false;
+    for (items(c.tool_call, calls.*.v, @intCast(calls.*.len))) |call| if (call.incomplete) return false;
+    return !(runtime != null and !runtime.*.disable_exact_dsml_tool_replay and text(calls.*.raw_tool_text).len != 0);
 }
 pub fn multimodalFrontier(live: c_int, common: c_int, length: c_int, image_match: bool) c_int {
     return if (common == live and length >= live and image_match) live else 0;
@@ -1452,8 +1454,10 @@ pub const Generation = struct {
                     if (responses_chat) c.ds4_server_output_apply_ids(&calls, &output);
                     if (req.api == c.API_ANTHROPIC and req.stream) c.ds4_server_anthropic_apply_ids(&calls, &anthropic);
                     assignIds(srv, &calls, req.api);
-                    if (!srv.disable_exact_dsml_tool_replay) c.ds4_server_tool_memory_remember(&srv.tool_mem, &srv.tool_mu, &calls);
-                    final_finish = "tool_calls";
+                    if (!same(final_finish, "length") and !same(final_finish, "error")) {
+                        if (!srv.disable_exact_dsml_tool_replay) c.ds4_server_tool_memory_remember(&srv.tool_mem, &srv.tool_mu, &calls);
+                        final_finish = "tool_calls";
+                    }
                 } else if (req.api == c.API_RESPONSES) c.ds4_server_reuse_clear(srv, slot, c.API_RESPONSES);
             }
             if (cancelled(job)) {
@@ -1479,7 +1483,9 @@ pub const Generation = struct {
             if (req.api == c.API_ANTHROPIC) {
                 if (calls.len != 0 and !same(final_finish, "error") and !same(final_finish, "length")) c.ds4_server_reuse_remember(srv, slot, c.API_ANTHROPIC, null, &calls, null) else c.ds4_server_reuse_clear(srv, slot, c.API_ANTHROPIC);
             }
-            if (req.kind == c.REQ_CHAT and calls.len != 0 and req.api != c.API_RESPONSES and canonicalizeNeeded(srv, &calls)) {
+            if (same(final_finish, "length") or same(final_finish, "error")) {
+                c.ds4_server_reuse_clear(srv, slot, c.API_OPENAI);
+            } else if (req.kind == c.REQ_CHAT and calls.len != 0 and req.api != c.API_RESPONSES and canonicalizeNeeded(srv, &calls)) {
                 self.canonicalize(context, trace_id, ptr(content), reasoning, &calls);
                 c.ds4_server_reuse_clear(srv, slot, c.API_OPENAI);
             } else if (calls.len != 0) {

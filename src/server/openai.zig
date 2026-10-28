@@ -56,7 +56,7 @@ fn toolCalls(out: *Text, calls: ?*const c.tool_calls, prefix: [*c]const u8, delt
         out.append(",\"type\":\"function\",\"function\":{\"name\":");
         out.quoted(text(call.name));
         out.append(",\"arguments\":");
-        out.objectString(call.arguments);
+        if (call.incomplete) out.quoted(text(call.arguments)) else out.objectString(call.arguments);
         out.append("}}");
     }
     out.byte(']');

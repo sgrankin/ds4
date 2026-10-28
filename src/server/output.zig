@@ -161,6 +161,13 @@ fn status(finish: []const u8) []const u8 {
 fn itemStatus(finish: []const u8) []const u8 {
     return if (std.mem.eql(u8, finish, "length") or std.mem.eql(u8, finish, "error")) "incomplete" else "completed";
 }
+fn callStatus(call: *const c.tool_call, item: *const Item, finish: []const u8) []const u8 {
+    if (call.incomplete) return "incomplete";
+    // A prior invoke may already have completed before a later invoke hit the
+    // limit. Keep its earlier output_item.done status in the terminal snapshot.
+    if (item.token_aware and std.mem.eql(u8, finish, "length")) return "completed";
+    return itemStatus(finish);
+}
 fn clampUsage(value: c_int, maximum: c_int) c_int {
     return if (value < 0) 0 else if (maximum >= 0 and value > maximum) maximum else value;
 }
@@ -216,7 +223,7 @@ fn appendItem(out: *Text, call: *const c.tool_call, item: *const Item, item_stat
         out.append(text(&item.call_id));
         out.byte('"');
         out.append(",\"execution\":\"client\",\"arguments\":");
-        if (with_args) {
+        if (with_args and !call.incomplete) {
             const arguments = canonicalArguments(call.arguments, item.token_aware);
             defer c.free(arguments);
             out.append(text(arguments));
@@ -260,12 +267,12 @@ fn initializeItem(call: *const c.tool_call, item: *Item, index: c_int, prefix: [
     } else randomId(&item.call_id, "call_");
     item.output_index = index;
 }
-fn buildItems(calls: ?*const c.tool_calls, starting_index: c_int) []Item {
+fn buildItems(calls: ?*const c.tool_calls, starting_index: c_int, token_aware: bool) []Item {
     const values = callSlice(calls);
     const items = allocator.alloc(Item, values.len) catch fatal();
     for (values, items, 0..) |call, *item, index| {
         initializeItem(&call, item, starting_index + @as(c_int, @intCast(index)), "fc_");
-        item.token_aware = calls != null and calls.?.raw_special_count != 0;
+        item.token_aware = token_aware or (calls != null and calls.?.raw_special_count != 0);
         // The internal call has no custom/function discriminator. Preserve the
         // original default while retaining client IDs and stable fc_ identity.
         item.is_custom = false;
@@ -565,7 +572,7 @@ pub const Output = struct {
         out.append(",\"output_index\":");
         out.number(item.output_index);
         out.append(",\"item\":");
-        appendItem(&out, call, item, if (is_done) itemStatus(finish) else "in_progress", is_done, orders);
+        appendItem(&out, call, item, if (is_done) callStatus(call, item, finish) else "in_progress", is_done, orders);
         out.byte('}');
         return self.emit(stream, &out);
     }
@@ -621,7 +628,7 @@ pub const Output = struct {
         for (callSlice(calls), 0..) |*call, index| {
             if (items.len == 0) break;
             if (wrote) body.byte(',');
-            appendItem(&body, call, &items[index], itemStatus(finish), true, &request.tool_orders);
+            appendItem(&body, call, &items[index], callStatus(call, &items[index], finish), true, &request.tool_orders);
             wrote = true;
         }
         body.append("],\"usage\":");
@@ -689,7 +696,7 @@ pub const Output = struct {
             defer allocator.free(name);
             const arguments = allocator.dupeSentinel(u8, call.arguments, 0) catch fatal();
             defer allocator.free(arguments);
-            var transient = c.tool_call{ .id = null, .name = name.ptr, .arguments = arguments.ptr };
+            var transient = c.tool_call{ .id = null, .name = name.ptr, .arguments = arguments.ptr, .incomplete = !call.complete };
             if (index >= stream.tool_count) {
                 var list: std.ArrayList(Item) = .empty;
                 if (stream.tool_items != null) list.items = stream.tool_items[0..stream.tool_count];
@@ -848,7 +855,7 @@ pub const Output = struct {
     pub fn finishLive(self: Output, request: *Request, stream: *Stream, raw: ?[]const u8, recovered: bool, calls: ?*const c.tool_calls, finish: []const u8, input: c_int, output: c_int, created_at: c_long) bool {
         if (!self.closeVisible(request, stream, raw, recovered, finish)) return false;
         const live_tools = (request.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT) and stream.tool_count == callSlice(calls).len;
-        const items: []Item = if (live_tools) (if (stream.tool_count == 0) &.{} else stream.tool_items[0..stream.tool_count]) else buildItems(calls, stream.next_output_index);
+        const items: []Item = if (live_tools) (if (stream.tool_count == 0) &.{} else stream.tool_items[0..stream.tool_count]) else buildItems(calls, stream.next_output_index, request.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT);
         defer if (!live_tools) allocator.free(items);
         if (!live_tools and items.len != 0) stream.next_output_index += @intCast(items.len);
         for (callSlice(calls), items) |*call, *item| {
@@ -867,7 +874,7 @@ pub const Output = struct {
         randomId(&response_id, "resp_");
         randomId(&reasoning_id, "rs_");
         randomId(&message_id, "msg_");
-        const items = buildItems(calls, 0);
+        const items = buildItems(calls, 0, request.model_syntax == c.SERVER_MODEL_SYNTAX_DEEPSEEK41 or request.model_syntax == c.SERVER_MODEL_SYNTAX_FLINT);
         defer allocator.free(items);
         var body: Text = .{};
         defer body.deinit();
@@ -888,7 +895,7 @@ pub const Output = struct {
         }
         for (callSlice(calls), items) |*call, *item| {
             if (wrote) body.byte(',');
-            appendItem(&body, call, item, itemStatus(finish), true, &request.tool_orders);
+            appendItem(&body, call, item, callStatus(call, item, finish), true, &request.tool_orders);
             wrote = true;
         }
         body.append("],\"usage\":");

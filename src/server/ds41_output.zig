@@ -90,11 +90,13 @@ fn whitespace(raw: []const u8, start: usize) usize {
     return at;
 }
 pub fn safeEnd(raw: []const u8, final: bool) usize {
-    if (final or raw.len == 0) return raw.len;
+    if (raw.len == 0) return 0;
     var end = raw.len;
     // '<' and '</' can precede the next DSML special token. Hold only those
     // possible prefixes; an ordinary marker spelling is released as data.
-    if (raw[end - 1] == '<') end -= 1 else if (end >= 2 and std.mem.endsWith(u8, raw, "</")) end -= 2;
+    if (!final) {
+        if (raw[end - 1] == '<') end -= 1 else if (end >= 2 and std.mem.endsWith(u8, raw, "</")) end -= 2;
+    }
     var begin = end;
     while (begin > 0 and (raw[begin - 1] & 0xc0) == 0x80) begin -= 1;
     if (begin > 0) {
@@ -132,6 +134,10 @@ pub fn jsonBytes(out: *std.ArrayList(u8), allocator: std.mem.Allocator, raw: []c
     }
 }
 
+fn pendingTag(raw: []const u8) bool {
+    return raw.len == 0 or std.mem.eql(u8, raw, "<") or std.mem.eql(u8, raw, "</");
+}
+
 pub fn project(allocator: std.mem.Allocator, view: View, thinking: bool, final: bool) !Snapshot {
     return projectImpl(allocator, view, thinking, final, true);
 }
@@ -154,21 +160,29 @@ fn projectImpl(allocator: std.mem.Allocator, view: View, thinking: bool, final: 
     } else if (thinking) out.reasoning = view.raw[begin..text_end] else out.content = view.raw[begin..text_end];
     const opening = open orelse {
         // An incomplete actual DSML tag is control syntax, not visible text.
-        if (view.nextTag(begin)) |pending| if (pending.body.len == 0) {
+        if (view.nextTag(begin)) |pending| {
+            out.invalid = pending.body.len != 0;
             const end = textEnd(view.raw, pending.begin);
             if (thinking and !out.reasoning_closed) out.reasoning = view.raw[begin..@max(begin, end)] else {
                 const content_begin = if (close) |range| range.end else begin;
                 if (end >= content_begin) out.content = view.raw[content_begin..end];
             }
-        };
+        }
         return out;
     };
     out.tool_start = opening.begin;
     var cursor = opening.end;
     while (true) {
         cursor = whitespace(view.raw, cursor);
-        const invoke = view.nextTag(cursor) orelse return out;
-        if (invoke.begin != cursor or invoke.body.len == 0) return out;
+        const invoke = view.nextTag(cursor) orelse {
+            out.invalid = !pendingTag(view.raw[cursor..]);
+            return out;
+        };
+        if (invoke.begin != cursor) {
+            out.invalid = true;
+            return out;
+        }
+        if (invoke.body.len == 0) return out;
         if (invoke.closing and std.mem.eql(u8, invoke.body, " calls")) {
             out.tool_end = invoke.end;
             return out;
@@ -181,6 +195,10 @@ fn projectImpl(allocator: std.mem.Allocator, view: View, thinking: bool, final: 
             out.invalid = true;
             return out;
         };
+        if (name.len == 0) {
+            out.invalid = true;
+            return out;
+        }
         cursor = invoke.end;
         var arguments: std.ArrayList(u8) = .empty;
         defer arguments.deinit(allocator);
@@ -189,8 +207,15 @@ fn projectImpl(allocator: std.mem.Allocator, view: View, thinking: bool, final: 
         var members: usize = 0;
         while (true) {
             cursor = whitespace(view.raw, cursor);
-            const parameter = view.nextTag(cursor) orelse break;
-            if (parameter.begin != cursor or parameter.body.len == 0) break;
+            const parameter = view.nextTag(cursor) orelse {
+                out.invalid = !pendingTag(view.raw[cursor..]);
+                break;
+            };
+            if (parameter.begin != cursor) {
+                out.invalid = true;
+                break;
+            }
+            if (parameter.body.len == 0) break;
             if (parameter.closing and std.mem.eql(u8, parameter.body, " invoke")) {
                 cursor = parameter.end;
                 if (build_arguments) try arguments.append(allocator, '}');
@@ -207,12 +232,13 @@ fn projectImpl(allocator: std.mem.Allocator, view: View, thinking: bool, final: 
             };
             const kind = attr(parameter.body, "string") orelse "true";
             const ending = view.tag(" parameter", true, parameter.end);
+            const pending = view.nextTag(parameter.end);
+            if (pending != null and pending.?.body.len != 0 and (ending == null or pending.?.begin != ending.?.begin)) out.invalid = true;
             if (!std.mem.eql(u8, kind, "true") and !std.mem.eql(u8, kind, "false")) out.invalid = true;
             if (build_arguments) {
                 if (members != 0) try arguments.appendSlice(allocator, ",");
                 try quoted(&arguments, allocator, key, true);
                 try arguments.appendSlice(allocator, ":");
-                const pending = view.nextTag(parameter.end);
                 const value_end = if (ending) |tag| tag.begin else if (pending != null and pending.?.body.len == 0) pending.?.begin else view.visibleEnd(final);
                 if (std.mem.eql(u8, kind, "true")) try quoted(&arguments, allocator, view.raw[parameter.end..value_end], ending != null) else if (std.mem.eql(u8, kind, "false")) try jsonBytes(&arguments, allocator, view.raw[parameter.end..value_end]);
             }

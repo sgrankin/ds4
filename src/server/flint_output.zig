@@ -88,19 +88,30 @@ fn projectImpl(allocator: std.mem.Allocator, view: View, orders: anytype, final:
                 complete = true;
                 break;
             }
-            const key_open = view.special("<arg_key>", cursor) orelse break;
+            const key_open = view.special("<arg_key>", cursor) orelse {
+                out.invalid = cursor != view.raw.len;
+                break;
+            };
             if (key_open.begin != cursor) {
                 out.invalid = true;
                 break;
             }
             const key_close = view.special("</arg_key>", key_open.end) orelse break;
             const key = view.raw[key_open.end..key_close.begin];
-            const value_open = view.special("<arg_value>", key_close.end) orelse break;
+            const value_open = view.special("<arg_value>", key_close.end) orelse {
+                out.invalid = space(view.raw, key_close.end) != view.raw.len;
+                break;
+            };
             if (space(view.raw, key_close.end) != value_open.begin) {
                 out.invalid = true;
                 break;
             }
             const value_close = view.special("</arg_value>", value_open.end);
+            for (view.ranges) |range| {
+                if (range.begin < value_open.end or range.end > view.raw.len) continue;
+                if (value_close == null or range.begin != value_close.?.begin) out.invalid = true;
+                break;
+            }
             if (build_arguments) {
                 const value_end = if (value_close) |range| range.begin else view.visibleEnd(final);
                 const value = view.raw[value_open.end..value_end];

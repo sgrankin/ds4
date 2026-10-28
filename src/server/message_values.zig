@@ -425,6 +425,7 @@ fn anthropicBlock(reader: *Reader, message: *c.chat_msg, allow_tools: bool) Inva
             .id = if (block.id != null) duplicate(bytes(block.id)) else null,
             .name = duplicate(bytes(block.name)),
             .arguments = duplicate(if (block.input != null) bytes(block.input) else "{}"),
+            .incomplete = false,
         });
     } else if (equal(block.kind, "tool_result")) {
         var nested = std.mem.zeroes(c.chat_msg);

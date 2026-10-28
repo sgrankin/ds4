@@ -4,3 +4,4 @@
 #include "ds4_server_tool_memory.h"
 #include "ds4_server_generation.h"
 #include "ds4_server_decode.h"
+#include <sys/socket.h>

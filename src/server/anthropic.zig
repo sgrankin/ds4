@@ -54,6 +54,10 @@ fn content(out: *Text, answer: []const u8, reasoning: []const u8, calls: ?*const
         after_thinking = true;
     }
     for (callsSlice(calls), 0..) |*call, position| {
+        // This envelope requires an object-valued input, so an unfinished JSON
+        // prefix has no truthful nonstream tool_use representation. Streaming
+        // retains its real input_json_delta bytes and max_tokens stop reason.
+        if (call.incomplete) continue;
         if (wrote) out.byte(',');
         toolUse(out, call, id, @intCast(position));
         wrote = true;
@@ -435,7 +439,15 @@ pub const Output = struct {
                 stream.tool.index += 1;
             }
         };
-        if (final and !self.closeBlock(id, stream)) return false;
+        if (final) {
+            if (!self.closeBlock(id, stream)) return false;
+            // A partial live tool already emitted its prefix and block stop.
+            // Advance the catch-up cursor so tailTools does not duplicate it.
+            if (stream.tool.active) {
+                stream.tool.active = false;
+                stream.tool.index += 1;
+            }
+        }
         return true;
     }
     pub fn update(self: Output, request: *const c.request, id: []const u8, stream: *Stream, raw: ?[]const u8, final: bool) bool {
@@ -552,7 +564,7 @@ pub const Output = struct {
             fragment.append("{\"type\":\"content_block_delta\",\"index\":");
             fragment.number(stream.next_index);
             fragment.append(",\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":");
-            fragment.objectString(call.arguments);
+            if (call.incomplete) fragment.quoted(text(call.arguments)) else fragment.objectString(call.arguments);
             fragment.append("}}");
             if (!self.event("content_block_delta", &fragment)) return false;
             var end: Text = .{};
