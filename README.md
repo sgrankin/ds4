@@ -170,16 +170,18 @@ the environment settings explicitly and leaves thinking mode unchanged.
 
 Server `persistent-fast` also retains semantic RAM checkpoints for repeated
 client-side context edits: boundaries/ongoing reuse on, first/last anchor
-selection, in-sweep capture, spacing512 and HOT512 MiB. Explicit overrides win.
+selection, in-sweep capture, spacing 512 and HOT 512 MiB. Explicit overrides win.
 The agent and other presets receive no new boundary defaults. Two separate
 five-pair comparisons pass all 120 answers: anchor selection reduces combined
 initial-plus-two-edit time 7.8%; in-sweep capture reduces it 20.6% against segmented
-anchors. In the latter comparison, ordinary setup falls 55.1→40.1s and favorable
-setup 72.8→41.4s, with repeated-edit time neutral within variation. The
+anchors. In the latter comparison, ordinary setup falls 55.1 → 40.1 s and favorable
+setup 72.8 → 41.4 s, with repeated-edit time neutral within variation. The
 [results and Pareto plots](speed-bench/experiments/context-capture-20261028/README.md)
 separate timing from functional retention and numerical checks. The timed
-setup is native routes/32GB/configured8192/effective2048, whereas the wrapper keeps its
-existing 64GB/resident-routing/512-chunk policy. `--prefill-chunk 8192` selects
+setup uses native routes, a 32 GB expert budget, a configured prefill chunk of
+8,192 tokens and an effective scheduling quantum of 2,048 tokens. The wrapper keeps
+its existing 64 GB expert target, resident-routing policy and 512-token chunk.
+`--prefill-chunk 8192` selects
 the tested configured chunk without changing those other wrapper settings.
 
 The DeepSeek fast profiles use physical FP4 index caches, compact version-3 SSD

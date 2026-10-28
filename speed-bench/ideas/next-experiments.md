@@ -1,16 +1,19 @@
 # Next experiments: one hour each
 
-Checkpoint-cost follow-up COMPLETE,2026-10-28: `6b7cec74` anchor selection,
+Checkpoint-cost follow-up COMPLETE, 2026-10-28: `6b7cec74` anchor selection,
 `28c98fd7` in-sweep capture, and `f74180e0` fresh-rebuild coverage after an
-approximate session. Two separate five-pair campaigns pass120/120 replies;
-selection whole−7.77%, collector versus segmented anchors whole−20.56%.
-Large prefill sweeps11→8; logical PREAD−27.27%; repeated-edit time neutral.
-25/25 sustained/adverse serving replies and native roundtrip/relocation/rebuild
-invariants pass. Serverpersistent-fast enables both; overrides preserved;
-ordinary defaults/main unchanged. [Reports and curves](../experiments/context-capture-20261028/README.md).
-This supersedes the first-slice population penalty below. Next separate item,
-if selected: idle single-prefiller outer2048/8192 scheduling, preserving small
-quanta under contention and measuring five pairs plus cancellation/decode wait.
+approximate session. Two separate five-pair campaigns pass 120/120 replies.
+Selection reduces whole time by 7.77%; the collector versus segmented anchors
+reduces it by 20.56%. Large prefill sweeps fall 11 → 8, logical PREAD volume falls
+27.27%, and repeated-edit time is neutral. All 25/25 sustained/adverse serving
+replies and native round-trip/relocation/rebuild invariants pass.
+Server `persistent-fast` enables both improvements, with overrides preserved.
+Ordinary defaults and main remain unchanged.
+[Reports and curves](../experiments/context-capture-20261028/README.md).
+This supersedes the first-slice population penalty below. The next separate
+item, if selected, compares idle single-prefiller outer scheduling quanta of
+2048 and 8192 tokens. Preserve small quanta under contention, measure five
+pairs, and check cancellation/decode wait.
 No automatic continuation into that experiment is authorized by this note.
 
 AFK batch COMPLETE: DSML repair; qualifiedDSP1/mainFP4; neutralHC;

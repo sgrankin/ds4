@@ -3,12 +3,19 @@
 2026-10-28 follow-up to the [semantic checkpoint measurements](../context-boundaries-20261028/RESULTS.md).
 This experiment separates two changes: selecting useful anchors and collecting
 multiple endpoints within an existing layer sweep. The [selection comparison](SELECTION.md)
-completes five alternating pairs with60/60 correct replies and7.8% less combined
+completes five alternating pairs with 60/60 correct replies and 7.8% less combined
 initial-plus-two-edit time. The separate [collector comparison](COLLECTION.md)
-passes60/60 replies and reduces that horizon20.6% against segmented anchors.
+passes 60/60 replies and reduces that horizon 20.6% against segmented anchors.
 The [live collector fixture](QUALIFICATION.md) passes. Server `persistent-fast`
 enables both improvements with explicit overrides; ordinary runtime defaults
 and other presets remain unchanged.
+
+The separate [no-edit comparison](NO_EDITS.md) measures checkpoints disabled
+versus the new implementation, with five alternating pairs and one fresh
+request per case. It finds no clear overhead: ordinary requests average
+39.72 s off versus 38.91 s on; favorable requests average 41.59 s versus
+41.87 s. All 20 answers pass. These small differences are within the observed
+variation.
 
 The first comparison holds capture implementation fixed and changes
 `DS4_SERVER_CONTEXT_BOUNDARY_POLICY` from `recent` to `anchors`. The latter keeps
@@ -21,12 +28,14 @@ capture setting; both arms enable the same layer/PREAD profiling.
 
 `run-five.nu` reuses the original [HTTP workflow](../context-boundaries-20261028/run.nu)
 and [analyzer](../context-boundaries-20261028/analyze.py). It starts one server at
-a time beneath the existing pressure guard. Both arms enable semantic
-checkpoints and ongoing-user suffix reuse. Default settings match the previous
-campaign: ordinary/favorable cases, rows24, initial plus two edits, high
-reasoning, temperature0, min_p0.05, main/index FP4, 32GB experts, HOT512,
-SSD4096, context32768, configured chunk8192, two batched sessions, no MTP.
-The ordinary coordinator quantum remains2048. No cache directory is shared
+a time beneath the existing pressure guard. Both arms in the selection and
+collector campaigns enable semantic checkpoints and ongoing-user suffix reuse.
+Default settings match the previous
+campaign: ordinary and favorable cases, 24 rows, an initial request plus two
+edits, high reasoning, temperature 0, min_p 0.05, main/index FP4, a 32 GB expert
+budget, a 512 MiB hot cache, a 4096 MiB SSD cache, context 32768, configured
+prefill chunk 8192, two batched sessions and no MTP.
+The ordinary coordinator quantum remains 2048. No cache directory is shared
 between processes. Each arm receives its own JSON record of environment
 overrides, retained in the manifest and every process command.
 
@@ -59,7 +68,7 @@ performance evidence. The driver clears inherited `DS4_*` settings.
 ## Correctness qualification for in-sweep capture
 
 Compare completed snapshots against stop-and-save endpoints at positions that
-exercise a partially filled compressor, a rolled128-row window and both packed
+exercise a partially filled compressor, a rolled 128-row window and both packed
 main/index history. Restore each snapshot, score a continuation and perform
 repeated suffix relocation from its original pre-RoPE values. Keep MTP/drafter
 state covered when that head is loaded, or explicitly retain the existing

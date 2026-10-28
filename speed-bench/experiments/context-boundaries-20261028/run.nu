@@ -76,7 +76,7 @@ def answer [response: record] {
 
 def main [base: string, model: string, output: path, --case: string = ordinary, --rows: int = 72, --edits: int = 8, --key: string = 'context-boundary-workflow', --context-label: string = '', --fixtures-only, --archive-control] {
     if $case not-in [ordinary favorable corrected deleted new_user changed_user deleted_user] { error make {msg: 'Unknown context-edit case'} }
-    if $rows < 1 or $edits < 1 { error make {msg: 'rows and edits must be positive'} }
+    if $rows < 1 or $edits < 0 { error make {msg: 'rows must be positive; edits must be nonnegative'} }
     if ($output | path exists) { error make {msg: $'Use a fresh output directory: ($output)'} }
     mkdir $output
     {case: $case, rows: $rows, edits: $edits, model: $model, key: $key, context_label: $context_label, reasoning: high, archive_control: $archive_control,
@@ -143,7 +143,7 @@ def main [base: string, model: string, output: path, --case: string = ordinary, 
     }
     if $fixtures_only { return }
     {initial_seconds: $measurements.0.seconds,
-     edited_seconds: ($measurements | skip 1 | get seconds | math sum),
+     edited_seconds: (if $edits == 0 { 0 } else { $measurements | skip 1 | get seconds | math sum }),
      whole_seconds: ($measurements | get seconds | math sum),
      correct: ($measurements | where correct | length), responses: ($measurements | length), archive_control: $archive_result}
     | to json | save ($output | path join summary.json)

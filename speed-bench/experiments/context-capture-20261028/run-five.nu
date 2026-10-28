@@ -71,7 +71,7 @@ def run-arm [binary: path, shaders: path, overrides: record, model: path, api_mo
         '--trace' ($directory | path join trace.log)
     ]
     {binary: $binary, args: $args, settings: $settings,
-        note: 'Inherited DS4_* cleared before the server starts. Both arms enable boundaries and ongoing reuse; arm overrides are recorded verbatim. No MTP head is loaded.'}
+        note: 'Inherited DS4_* cleared before the server starts. Arm overrides are recorded verbatim and may disable semantic checkpoints. No MTP head is loaded.'}
     | to json | save ($directory | path join command.json)
     if $dry_run {
         run-workflows $base $api_model $output $pair $arm $cases $rows $edits true
@@ -137,7 +137,7 @@ def main [binary: path, output: path, --control-env: path, --candidate-env: path
     let candidate_settings = open $candidate_env
     assert (($control_settings | describe | str starts-with 'record') and ($candidate_settings | describe | str starts-with 'record'))
     assert (not ($output | path exists)) 'Use a fresh output directory.'
-    assert ($pairs > 0 and $rows > 0 and $edits > 0 and $spacing >= 0 and $chunk > 0)
+    assert ($pairs > 0 and $rows > 0 and $edits >= 0 and $spacing >= 0 and $chunk > 0)
     assert ($limit > 0 and $limit <= 16)
     let cases = if $case == '' { ['ordinary' 'favorable'] } else { [$case] }
     # These settings are the complete DS4 environment for every server child.
@@ -177,6 +177,12 @@ def main [binary: path, output: path, --control-env: path, --candidate-env: path
         }
     }
     if $pairs == 5 and not $dry_run {
+        if $edits == 0 {
+            let result = python3 speed-bench/experiments/context-capture-20261028/no-edits-report.py $output | complete
+            print $result.stdout
+            if $result.exit_code != 0 { error make {msg: $'No-edit analysis failed: ($result.stderr)'} }
+            return
+        }
         for case in $cases {
             let arguments = [speed-bench/experiments/context-boundaries-20261028/analyze.py ($output | path join $case) --processes ($output | path join processes)]
             let result = python3 ...$arguments | complete

@@ -188,8 +188,8 @@ not a per-endpoint eviction history.
 | `DS4_SERVER_CONTEXT_BOUNDARY_POLICY` | Runtime `recent`; server `persistent-fast` selects `anchors`, the earliest/latest of the same bounded set |
 | `DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP` | Runtime `0`; server `persistent-fast` selects `1`, collecting supported endpoints inside existing sweeps, with ordinary fallback |
 | `DS4_SERVER_CONTEXT_BOUNDARY_LIMIT` | At most 4 recent candidates by default; cap 16; `anchors` retains at most 2 |
-| `DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS` | Engine default2048; server `persistent-fast` and trial512 |
-| `DS4_STATE_CACHE_HOT_MB` | Server `persistent-fast`/trial512; explicit0 disables automatic capture |
+| `DS4_SERVER_CONTEXT_BOUNDARY_MIN_TOKENS` | Engine default 2048 tokens; server `persistent-fast` and trial 512 tokens |
+| `DS4_STATE_CACHE_HOT_MB` | Server `persistent-fast` and trial 512 MiB; explicit 0 disables automatic capture |
 | `DS4_SERVER_CONTEXT_SUFFIX_STAGING_MB` | Source plus original tape plus 8 MiB staging must fit; default 512 |
 
 Use a stable per-conversation `prompt_cache_key` and keep full request input
@@ -204,7 +204,7 @@ python3 speed-bench/ideas/pressure_run.py GUARD -- nu speed-bench/experiments/co
 nu speed-bench/experiments/context-boundaries-20261028/run.nu http://127.0.0.1:18355 deepseek-v4.1-flash CLIENT_OUTPUT --case corrected --rows 24 --edits 1 --archive-control
 ```
 
-The observed coordinator quantum is 2048 despite configured prefill 8192. With
+The observed coordinator quantum is 2,048 tokens despite a configured prefill chunk of 8,192. With
 ordinary capture or an unsupported collector mode, early semantic stops can add
 model passes, not just serialization cost. Keep initial
 population, every edit, capture costs, generated lengths and retained coverage
@@ -218,11 +218,11 @@ The server preset is available with:
 ```
 
 Explicit boundary/ongoing/capture `0`, policy, limit, spacing and HOT values override the new
-preset settings. The wrapper keeps its existing64GB expert target, resident
-substitution policies and512 default chunk; the command explicitly selects the
-8192 configured chunk used for qualification. The five-round benchmark instead
-uses native routes and32GB, so this command is not an exact measured package.
-No chunk default changes. The ordinary coordinator still splits at2048.
+preset settings. The wrapper keeps its existing 64 GB expert target, resident
+substitution policies and 512-token default chunk; the command explicitly selects
+the configured 8,192-token chunk used for qualification. The five-round benchmark
+uses native routes and 32 GB, so this command is not an exact measured package.
+No chunk default changes. The ordinary coordinator still splits at 2,048 tokens.
 
 ## First-slice quality and measured tradeoff, 2026-10-28
 
@@ -230,16 +230,16 @@ No chunk default changes. The ordinary coordinator still splits at2048.
 |---|---|
 | Floor mapping/control/cache fixtures | Final 14 renderer/control cases and 4 cache-policy cases pass, including reasoning-enabled identity and padding-adjusted admission; production transient/pin/eviction/promotion/restart/packed-format checks pass |
 | Same-runtime freshness off/on | Both answer CEDAR correctly; off 410 exact tokens/no aligned suffix, on imports 1,688 C tokens from a durable source |
-| Parallel semantic endpoint | C captured at 2872 as RAM-only; 1,830 tokens imported from 1042:2872→488:2318; all four replies correct |
+| Parallel semantic endpoint | C captured at 2872 as RAM-only; 1,830 tokens imported from `1042:2872` → `488:2318`; all four replies correct |
 | Changed/deleted facts and user controls | All 10 initial/edited replies pass: corrected LARCH, deleted NONE, new/changed user MAPLE, deleted user returns remaining CEDAR authority |
-| Archive/protocol | Original archived CEDAR remains retrievable while working fact is LARCH; READY→MAPLE `previous_response_id` continuation passes |
+| Archive/protocol | Original archived CEDAR remains retrievable while working fact is LARCH; READY → MAPLE `previous_response_id` continuation passes |
 | Actual restart | Transient C unavailable; cached=0/no-aligned-source, fresh evaluation correctly returns LARCH |
-| Eight-edit retention | Final installed source9b826389 passes 18/18 replies; all 16 edited grafts reuse original RAM-only C with no capture errors; functional check, not comparative timing |
-| Final admission guards | Padded CEDAR→LARCH2/2 correct with actual `prefix_pad=1`; medium→high2/2 correct with thinking on, changed high request cached0/no aligned source; CPU separately distinguishes medium/none |
+| Eight-edit retention | Final installed source `9b826389` passes 18/18 replies; all 16 edited grafts reuse original RAM-only C with no capture errors; functional check, not comparative timing |
+| Final admission guards | Padded CEDAR → LARCH: 2/2 correct with actual `prefix_pad=1`; medium → high: 2/2 correct with thinking on; the changed high request has zero cached tokens and no aligned source; CPU separately distinguishes medium/none |
 
 These smokes establish functionality and narrow practical quality, not speed
 or universal factual equivalence. They do not require identical reasoning/IDs.
-Final shutdown has no pinned endpoints, hot bytes536,007,540 within512 MiB and9
+Final shutdown has no pinned endpoints, 536,007,540 hot bytes within 512 MiB and 9
 aggregate evictions including later QA; this is not a per-C eviction history.
 The complete 15-process campaign compares off/sparse1/fuller4, five fresh samples
 per setting in alternating order, ordinary serial and favorable parallel cases,
@@ -247,8 +247,8 @@ rows=24 and initial population plus **two edits**. The preceding rows=72/eight-e
 run was stopped as runtime calibration and remains separate. The completed eight-edit
 retention diagnostic cannot establish five-pair eight-edit speed; any extension
 of the timing curve is labeled a calculated projection. Across both workflows,
-fuller4 initial population costs 80.005→145.486 s (+81.8%), the measured two edits
-158.755→98.390 s (−38.0%), and whole initial+two edits 238.761→243.876 s (+2.14%).
+fuller4 initial population costs 80.005 → 145.486 s (+81.8%), the measured two edits
+158.755 → 98.390 s (−38.0%), and whole initial + two edits 238.761 → 243.876 s (+2.14%).
 All 90 answers pass; reasoning lengths differ slightly. Sparse1 imports the same
 C spans but lacks the early exact anchors and provides no material edit-time
 gain. All five rounds, order effects, sample variation, storage and the Pareto
@@ -256,7 +256,7 @@ plot are in the [measured report](../speed-bench/experiments/context-boundaries-
 
 At a constant observed edit cost, calculated break-even is 2.17 edits: the third
 edit/fourth total request would first benefit. This assumes retention and similar
-future edits. Retention passes for this sequence, so fuller4/spacing512 is enabled
+future edits. Retention passes for this sequence, so fuller4 with spacing 512 is enabled
 only in server `persistent-fast`. This remains a scoped engineering choice,
 not a measured eight-edit speedup or a universal default.
 

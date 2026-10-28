@@ -1,40 +1,41 @@
 # In-sweep checkpoint correctness qualification
 
-2026-10-28, source `28c98fd7411e30eeb095d3382da59c685b53f5ef`, Apple M5 Max,128GiB.
-The [installed-model fixture](../../../tests/test_checkpoint_capture.zig) passes six collected endpoints,18 teacher rows,
-two suffix relocations and rejection of an unsupported approximate source.
+2026-10-28, source `28c98fd7411e30eeb095d3382da59c685b53f5ef`, Apple M5 Max, 128 GiB.
+The [installed-model fixture](../../../tests/test_checkpoint_capture.zig) passes
+six collected endpoints, 18 teacher rows, two suffix relocations and rejection
+of an unsupported approximate source.
 The ordinary final forward's entire logit vector is byte-identical with and
 without collection. This is a functional/numerical qualification, not a
 comparative performance run.
 
-Frozen server, fixture and27 shaders are under
+Frozen server, fixture and 27 shaders are under
 `.workspaces/checkpoint-capture-20261028/collection/`. Raw evidence is
 `native.log`, `native-guard/command.json`, `native-guard/pressure.jsonl` and
 `native-guard/result.json` beneath that workspace prefix. The pressure guard
-completes with child exit0; all 122 pressure samples are normal and existing
-swap stays at23.005GiB. Separately, `zig-out/bin/test-serving-boundary` passes
-all 14 host cases at18:19:56UTC; that output was observed directly in the tool
+completes with child exit status 0; all 122 pressure samples are normal and
+existing swap stays at 23.005 GiB. Separately, `zig-out/bin/test-serving-boundary` passes
+all 14 host cases at 18:19:56 UTC; that output was observed directly in the tool
 result rather than saved as a separate log.
 
 ## What was checked
 
-- One engine/session, installed1017 IQ2_XXS/Q2_K checkpoint, context8192,
-  prefill chunk2048,32GB expert budget, packed main/index KV and original
-  pre-RoPE archive. The3074-token prompt keeps high reasoning enabled.
+- One engine/session, the installed 1017 IQ2_XXS/Q2_K checkpoint, context 8192,
+  prefill chunk 2048, a 32 GB expert budget, packed main/index KV and original
+  pre-RoPE archive. The 3074-token prompt keeps high reasoning enabled.
 - Independently obtain ordinary final logits. Build endpoint teachers by
-  advancing through127,128,129,390,985,2247, with two fixed prompt-token
+  advancing through 127, 128, 129, 390, 985 and 2247, with two fixed prompt-token
   continuations each; restore before advancing to the next endpoint.
 - Collect all six endpoints while prefilling the same complete prompt.
   Every endpoint restores the correct tokens/position, remains canonical,
   and recaptures exactly the same state bytes and original rotary bytes.
-  Positions127/128/129 cover the ring transition and odd compressor carry;
+  Positions 127/128/129 cover the ring transition and odd compressor carry;
   the later positions exercise a rolled ring and larger packed histories.
-- The same immutable2247-token source supports a left relocation
+- The same immutable 2247-token source supports a left relocation
   `390:2247 → 128:1985` and a right relocation `128:2247 → 390:2509`.
   Each retains three unfinished compressor pairs, evaluates two fresh tail
   tokens, permits private approximate recapture and leaves source hashes intact.
 - After relocation, attempting collection from the approximate live state
-  returns−1 for ordinary fallback. Position, validity, approximation flag and
+  returns −1 for ordinary fallback. Position, validity, approximation flag and
   all logits remain unchanged; no output endpoint is published.
 
 Exact restore/recapture and final-forward checks protect ownership and state
@@ -47,7 +48,7 @@ unsupported drafter mode; no drafter was loaded in this run.
 ## Numerical results
 
 `ΔNLL = NLL(collected) − NLL(reference)` and
-`KL(reference || collected)`, in nats. Step0 scores at the endpoint; steps1/2
+`KL(reference || collected)`, in nats. Step 0 scores at the endpoint; steps 1/2
 score after one/two fixed teacher tokens. Every distribution is finite.
 
 | Position | Step | ΔNLL | KL | Maximum absolute logit gap |
@@ -71,15 +72,15 @@ score after one/two fixed teacher tokens. Every distribution is finite.
 | 2247 | 1 | −0.000001435 | 0.000000527 | 1.456219 |
 | 2247 | 2 | −0.000000010 | 0.000000084 | 2.889436 |
 
-Across these18 rows: meanΔNLL **−0.002516070**, range−0.034894573 to+0.000058041;
-meanKL **0.000559151**, median0.000001002, maximum **0.005389487**.
-The maximum logit gap is3.936760, at a row whose KL is0.000000854. A maximum
+Across these 18 rows: mean ΔNLL **−0.002516070**, range −0.034894573 to +0.000058041;
+mean KL **0.000559151**, median 0.000001002, maximum **0.005389487**.
+The maximum logit gap is 3.936760, at a row whose KL is 0.000000854. A maximum
 coordinate difference and a probability-weighted distribution difference
 measure different things; that logit gap is not a KL-sized degradation.
 
-The separate ordinary final-forward row at position3074 has
-**ΔNLL0, KL0, maximum logit gap0 and byte_equal1**. This row is excluded from
-the18-row endpoint summary above.
+The separate ordinary final-forward row at position 3074 has
+**ΔNLL = 0, KL = 0, maximum logit gap = 0, and byte equality = 1**. This row is
+excluded from the 18-row endpoint summary above.
 
 ## Reproduction
 
@@ -111,25 +112,27 @@ uses ordinary `zig-out/shaders` discovery; kernels are unchanged.
 
 ## Sustained serving and adverse edits
 
-A separate source28c HTTP run passes **25/25 replies** with reasoning enabled.
-Ordinary and favorable layouts each answer9/9 across eight edits. All16 edited
+A separate HTTP run using source `28c` passes **25/25 replies** with reasoning
+enabled.
+Ordinary and favorable layouts each answer 9/9 across eight edits. All 16 edited
 imports retain the original RAM-only source (`source_approximate=0`):
-ordinary `980:2245`→`426:1691`, favorable `1040:2870`→`486:2316`.
+ordinary `980:2245` → `426:1691`, favorable `1040:2870` → `486:2316`.
 The labels differ from the timing cohort, hence these token offsets.
 
-Corrected and deleted facts each pass2/2; changing the actual user instruction
-passes2/2. The corrected case performs real prefix padding (`prefix_pad=1`)
-and imports1266 tokens while answering the corrected LARCH code. An additional
+Corrected and deleted facts each pass 2/2; changing the actual user instruction
+passes 2/2. The corrected case performs real prefix padding (`prefix_pad=1`)
+and imports 1266 tokens while answering the corrected LARCH code. An additional
 request reads the original file from the actual saved initial request and
 correctly recovers CEDAR, after the current view answers LARCH.
 
-No capture fails. Hot pages reach536,836,361 bytes, within512MiB. The server
-stops and the pressure guard exits0. This demonstrates retention through the
-fixed sequence, not indefinite survival or an eight-edit comparative speedup.
+No capture fails. Hot pages reach 536,836,361 bytes, within 512 MiB. The server
+stops and the pressure guard exits with status 0. This demonstrates retention
+through the fixed sequence, not indefinite survival or an eight-edit comparative
+speedup.
 Raw requests/responses, summaries and logs remain in
 `.workspaces/checkpoint-capture-20261028/retention/` and `retention-guard/`.
 The temporary Nu driver reuses the exact final candidate command, with separate
-cache/store directories and port18359. Timing results remain the separate
+cache/store directories and port 18359. Timing results remain the separate
 five-pair initial-plus-two-edit campaigns.
 
 ## Fresh rebuild after approximate state
@@ -138,14 +141,15 @@ Serving QA exposed an avoidable fallback when an unrelated replacement prompt
 arrived while the live graph was approximate. Final runtime source
 `f74180e070516d54c6095f29ad3b9a64846e959e` validates all unsupported-return gates,
 then resets that old graph before collecting a genuinely fresh transcript.
-A real approximate prefix extension still returns−1 without mutation. Cold
+A real approximate prefix extension still returns −1 without mutation. Cold
 position-zero and ordinary native-extension paths used by the frozen timing
 cohort are unchanged; no performance claim is added for this new transition.
 
 The expanded installed-model fixture repeats the original six endpoint,
 18 teacher-row, final-forward, relocation and fallback checks, then rebuilds
-the original prompt over approximate state. It collects fresh endpoints128/2247,
+the original prompt over approximate state. It collects fresh endpoints 128/2247,
 preserves the original ordinary final logits byte-for-byte, and restores and
-recaptures both new snapshots exactly. The guard exits0. Evidence is local at
+recaptures both new snapshots exactly. The guard exits with status 0. Evidence
+is local at
 `native-rewrite.log`, `native-rewrite-guard/` and frozen binaries/shaders in
 `rewrite/`, beneath `.workspaces/checkpoint-capture-20261028/`.

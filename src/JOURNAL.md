@@ -1,106 +1,158 @@
 # Serving project journal
 
-DONE19:15UTC: both checkpoint improvements are implemented, measured and
-installed. Selection saves7.77% whole time in five alternating pairs;
-in-sweep versus segmented anchors saves20.56% in a separate five-pair campaign.
-All120 comparative replies pass. Native collector checks,25/25 longer/adverse
-serving replies, and the final approximate-to-fresh rebuild fixture pass.
-Final runtime`f74180e0` repeats all18 teacher rows/two relocations and proves
-the extra rewrite has byte-identical ordinary final logits plus two exact new
-snapshot roundtrips. Both guards stop child0; no owned model job remains.
-All five installed executables build/help; host, recovery and script checks
-pass. Named serverpersistent-fast selects anchors/in-sweep1, overrides win;
-ordinary runtime and agent/other-preset defaults remain unchanged. Raw outputs
-stay local/ignored; concise reports, arm settings and Pareto plots are tracked.
-Main remains unchanged; no push. [Follow-up results](../speed-bench/experiments/context-capture-20261028/README.md).
+2026-10-28, 20:14 UTC: the user reported missing spaces in the reports and asked
+about sessions that never edit their context. Corrected the new reports,
+recipe, design status and recent journal entries into normal prose. Write
+readable sentences with spaces between words, numbers and units; compact
+scratch-note shorthand is inappropriate for these documents.
 
-The clock-bounded items completed selection in~42min and collector qualification
-in~56min after that, with parallel source preparation. Compilation was held
-during comparative model runs. The concrete fresh-rebuild hole found by QA was
-fixed and qualified instead of expanding the harness or starting another kernel
-experiment. Next work requires a fresh choice: ordinary idle prefill quantum
-2048/8192 (with contention/cancellation checks) remains promising and unchanged.
+The earlier Initial columns already measured a complete first HTTP request,
+including generation, before any edit. Their control used segmented semantic
+checkpoints. A completed five-pair comparison measures semantic checkpoints
+disabled versus anchors plus in-sweep capture, with zero edited requests.
+Both ordinary and favorable inputs use frozen runtime `f74180e0`, native
+routes, high reasoning, a 32 GB expert budget, configured prefill chunk 8192,
+ordinary coordinator quantum 2048, packed main/index KV, a 512 MiB hot cache
+and a 4096 MiB SSD cache. Ordinary prefix/suffix caching stays on in both arms.
+The scope is a fresh request without context edits, not a long append-only
+conversation. Raw results are in
+`.workspaces/checkpoint-capture-20261028/no-edits-five/`; the unchanged pressure
+guard is in `no-edits-guard/`. Runtime code is unchanged.
 
-Checkpoint timing complete,19:12UTC: source`28c98fd7` passes both five-pair
-comparisons (120/120 replies). Selection whole244.052→225.086s (−7.77%);
-in-sweep versus segmented anchors224.500→178.352s (−20.56%). These are separate
-cohorts. Initial ordinary55.056→40.079s, favorable72.783→41.358s; edited totals
-change+0.26%, within mixed variation. Profiling proves large sweeps11→8 and
-logical prefill PREAD1662.32→1208.96GiB per process, not physical SSD traffic.
-Tiny selected tiles increase; total sweep count is not the right cost proxy.
-Server `persistent-fast` now chooses anchors/in-sweep1, with explicit overrides;
-ordinary defaults and other presets stay unchanged. Extra ordinary endpoints
-add38.43MiB hot pages/38.48MiB SSD in this workload; existing budgets still apply.
+The [no-edit report](../speed-bench/experiments/context-capture-20261028/NO_EDITS.md)
+finds no clear request-time overhead. Ordinary requests average 39.717 ± 1.358 s
+with checkpoints off and 38.908 ± 0.371 s with checkpoints on. Favorable requests
+average 41.586 ± 0.846 s off and 41.871 ± 0.712 s on. All 20 answers pass, all
+requests have zero cached input tokens, and the candidate actually captures
+four transient checkpoints per process. Paired differences vary in direction;
+treat the small changes as neutral within observed variation. All samples are
+retained, startup is separate, and the pressure guard finishes successfully.
 
-Longer actual serving QA on28c completes25/25 replies: ordinary/favorable each
-9/9 through8 edits, all16 retain the original RAM C; corrected/deleted facts,
-changed actual user and an actual client-archive reread pass. Corrected fact
-uses prefix_pad1 and1266 imported tokens, so padded admission is exercised.
-No capture errors, server stopped, guardchild0. Hot pages remain<=512MiB.
-All five executables build/help; host fixtures pass. The initial combined host
-run hit a localhost sandbox bind denial; the affected web check passes with
-binding allowed, and script contracts pass after updating their captured knob
-allowlist and stale HOT0 expectation to the existing512MiB default.
+Completed at 19:15 UTC: both checkpoint improvements are implemented, measured
+and installed. Selection saves 7.77% of whole-workflow time in five alternating
+pairs. In-sweep capture versus segmented anchors saves 20.56% in a separate
+five-pair campaign. All 120 comparative replies pass. Native collector checks,
+25/25 longer/adverse serving replies, and the final approximate-to-fresh rebuild
+fixture pass.
+
+Final runtime `f74180e0` repeats all 18 teacher rows and two relocations. It
+proves that the additional rewrite preserves the ordinary final logits
+byte-for-byte and produces two new snapshots that round-trip exactly. Both
+guards stop with child return code 0; no owned model job remains. All five
+installed executables build and pass their help checks. Host, recovery and
+script checks pass.
+
+The server's named `persistent-fast` preset selects anchors and in-sweep capture
+(`1`), with explicit overrides honored. Ordinary runtime defaults and the
+agent/other-preset defaults remain unchanged. Raw outputs stay local and ignored;
+concise reports, arm settings and Pareto plots are tracked. Main remains
+unchanged; no push. [Follow-up results](../speed-bench/experiments/context-capture-20261028/README.md).
+
+The bounded experiments completed selection in about 42 minutes and collector
+qualification in about 56 minutes after that, with parallel source preparation.
+Compilation was held during comparative model runs. QA found a concrete gap in
+fresh-rebuild coverage; that gap was fixed and qualified instead of expanding
+the harness or starting another kernel experiment. Next work requires a fresh
+choice: comparing ordinary idle prefill quanta of 2048 and 8192 tokens, with
+contention/cancellation checks, remains promising and unchanged.
+
+Checkpoint timing complete at 19:12 UTC, with collector source `28c98fd7`:
+both five-pair comparisons pass all 120/120 replies. Selection reduces whole
+time from 244.052 → 225.086 s (−7.77%). In-sweep capture versus segmented anchors
+reduces it from 224.500 → 178.352 s (−20.56%). These are separate cohorts.
+Initial ordinary time falls 55.056 → 40.079 s; favorable falls 72.783 → 41.358 s.
+Edited-request totals change +0.26%, within mixed variation.
+
+Profiling proves that large sweeps fall 11 → 8 and logical prefill PREAD volume
+falls 1662.32 → 1208.96 GiB per process. Those are logical reads, not physical
+SSD traffic. Tiny selected tiles increase, so total sweep count is not the
+right cost proxy. Server `persistent-fast` now chooses anchors and in-sweep
+capture (`1`), with explicit overrides honored. Ordinary defaults and other
+presets stay unchanged. Extra ordinary endpoints add 38.43 MiB of hot pages
+and 38.48 MiB of SSD data in this workload; existing budgets still apply.
+
+Longer actual serving QA on `28c98fd7` completes 25/25 replies. Ordinary and
+favorable each pass 9/9 through eight edits; all 16 edits retain the original
+RAM C source. Corrected/deleted facts, a changed actual user instruction and
+an actual client-archive reread pass. The corrected-fact case uses
+`prefix_pad=1` and 1266 imported tokens, exercising padded admission.
+There are no capture errors. The server stops and the guard reports child
+return code 0. Hot pages remain at or below 512 MiB.
+
+All five executables build and pass their help checks; host fixtures pass.
+The initial combined host run hit a localhost sandbox bind denial. The affected
+web check passes with binding allowed. Script contracts pass after updating
+their captured-knob allowlist and stale HOT 0 expectation to the existing
+512 MiB default.
 
 Observed follow-up: a new transcript replacing approximate live state took an
 avoidable segmented fallback before ordinary sync reset it. Narrow fix
 `f74180e0` validates all unsupported gates, deliberately resets a changed
-transcript, then collects; a genuine approximate prefix extension still returns
-−1 without mutation. Measured cold/native-extension paths are unchanged. The
-expanded native fixture is running under`native-rewrite-guard/`, logging to
-`native-rewrite.log`, with final logits/reference and two rebuilt endpoints
-checked. No new performance claim is made for that unmeasured transition.
-After it passes, install those final binaries, append qualification evidence,
-commit concise reports/preset changes and leave main unchanged.
+transcript, then collects. A genuine approximate prefix extension still returns
+−1 without mutation. Measured cold/native-extension paths are unchanged.
+At this checkpoint, the expanded native fixture is running under
+`native-rewrite-guard/`, logging to `native-rewrite.log`, with final
+logits/reference and two rebuilt endpoints checked. No new performance claim
+is made for that unmeasured transition. After it passes, install the final
+binaries, append qualification evidence, commit concise reports/preset changes
+and leave main unchanged.
 
-Checkpoint follow-up18:23UTC: selector`6b7cec74` completes all five alternating
-pairs per side,60/60 replies correct. Ordinary initial71.210→55.216s and
-whole118.825→103.210s; favorable initial74.335→72.852s and
-whole125.227→121.875s (small mixed change). Combined whole244.052→225.086s,
-−7.77%, all five pairs faster. Both useful anchors/imported spans survive;
-peak hot pages257.07→231.79MiB, SSD bytes unchanged. [Selection report](../speed-bench/experiments/context-capture-20261028/SELECTION.md).
+Checkpoint follow-up at 18:23 UTC: selector `6b7cec74` completes all five
+alternating pairs per side, with 60/60 replies correct. Ordinary initial time
+falls 71.210 → 55.216 s and whole time falls 118.825 → 103.210 s. Favorable initial
+time falls 74.335 → 72.852 s and whole time falls 125.227 → 121.875 s, a small
+mixed change. Combined whole time falls 244.052 → 225.086 s (−7.77%); all five
+pairs are faster. Both useful anchors/imported spans survive. Peak hot pages
+fall 257.07 → 231.79 MiB; SSD bytes are unchanged.
+[Selection report](../speed-bench/experiments/context-capture-20261028/SELECTION.md).
 
-Collector`28c98fd7` builds and passes14 serving cases plus the actual model
-fixture:6 endpoints127/128/129/390/985/2247, exact snapshot/originals roundtrips,
-bit-identical final logits,18 differently batched endpoint/continuation teacher
-rows (worstKL0.005389nats), two original-backed left/right relocations and
-unsupported approximate-state rejection without mutation. Raw qualification is
-`.workspaces/checkpoint-capture-20261028/native.log` / `native-guard/`.
+Collector `28c98fd7` builds and passes 14 serving cases plus the actual model
+fixture: six endpoints at 127, 128, 129, 390, 985 and 2247; exact snapshot/originals
+round trips; bit-identical final logits; 18 differently batched endpoint and
+continuation teacher rows (worst KL 0.005389 nats); two original-backed left/right
+relocations; and unsupported approximate-state rejection without mutation.
+Raw qualification is in `.workspaces/checkpoint-capture-20261028/native.log`
+and `native-guard/`.
+
 The second five-pair campaign runs the frozen collection binary with anchors
-fixed, toggling only`DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP`. Both sides enable
-identical prefill-layer/PREAD profiling; ordinary quantum remains2048. Artifacts
-are`collection-five/` and`collection-guard/` beneath the same workspace prefix.
-Do not build or change the measured runtime/drivers while it runs. No collector
-speed result or default promotion is claimed before all five pairs finish.
+fixed, toggling only `DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP`. Both sides enable
+identical prefill-layer/PREAD profiling; the ordinary quantum remains 2048 tokens.
+Artifacts are in `collection-five/` and `collection-guard/` beneath the same
+workspace prefix. Do not build or change the measured runtime/drivers while it
+runs. At this checkpoint, no collector speed result or default promotion is
+claimed before all five pairs finish.
 
-Checkpoint-cost follow-up authorized,2026-10-28 17:38UTC. Implement both better
-endpoint selection and capture inside an existing layer-major prefill sweep.
-First bounded item17:38–18:38UTC: compare existing recent endpoints with only
-the earliest/latest of that same bounded set, preserving the exact prefix
-anchor and recent suffix source. Keep ordinary coordinator quantum2048,
-chunk8192, main/indexFP4, native routes, reasoning and cache budgets fixed;
-five alternating samples per side, ordinary and favorable initial+two edits.
-Second item gets its own one-hour budget: collect selected endpoint raw rings,
-unfinished compression inputs, original pre-RoPE values and endpoint logits
-within normal prefill sweeps, retaining existing snapshot formats. Separate
-feature gates permit one-change comparisons. Do not infer capture speed from
-copy milliseconds; count actual sweeps and inspect end-to-end time/quality.
+Checkpoint-cost follow-up authorized on 2026-10-28 at 17:38 UTC: implement both
+better endpoint selection and capture inside an existing layer-major prefill
+sweep. The first bounded item runs 17:38–18:38 UTC: compare existing recent
+endpoints with only the earliest/latest of that same bounded set, preserving
+the exact prefix anchor and recent suffix source. Keep the ordinary coordinator
+quantum at 2048 tokens, the chunk at 8192, main/index FP4, native routes, reasoning
+and cache budgets fixed. Use five alternating samples per side, with ordinary
+and favorable initial-plus-two-edit workflows.
+
+The second item gets its own one-hour budget: collect selected endpoints' raw
+rings, unfinished compression inputs, original pre-RoPE values and logits within
+normal prefill sweeps, retaining existing snapshot formats. Separate feature
+gates permit one-change comparisons. Do not infer capture speed from copy
+milliseconds; count actual sweeps and inspect end-to-end time and quality.
 The prior measured binary and shaders are frozen locally before rebuilding.
 Main remains unchanged; no publication was requested.
 
-Progress18:10UTC: selection source`6b7cec74`, frozen binary/shaders in
+Progress at 18:10 UTC: selection source `6b7cec74`, with frozen binary/shaders in
 `.workspaces/checkpoint-capture-20261028/selection/`, runs five alternating
 recent/anchors pairs under the unchanged pressure guard (`selection-five/`,
 `selection-guard/`). Both arms keep capture segmented and boundaries/ongoing
 reuse enabled. Do not build while this final timing campaign is active.
-Collector source is implemented but has only AST/format/header review so far:
+
+Collector source is implemented but has only AST/format/header review so far.
 `prefill_checkpoints.zig` saves each endpoint's rolling keys/originals, odd
 compression carry and final HC row while traversing the existing batch.
-`ds4_session_sync_checkpoints` exposes completed immutable snapshots; the
-server publishes them after the normal scheduling quantum. Its flag is
-`DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP=1`; unsupported modes return-1 before
-mutation and use ordinary stop/capture. Next build server plus
-`checkpoint-capture-test`, run that live fixture under the guard, then five
+`ds4_session_sync_checkpoints` exposes completed immutable snapshots; the server
+publishes them after the normal scheduling quantum. Its flag is
+`DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP=1`. Unsupported modes return −1 before
+mutation and use ordinary stop/capture. Next, build the server plus
+`checkpoint-capture-test`, run that live fixture under the guard, then run five
 anchors/segmented versus anchors/in-sweep pairs with identical profiling.
 `speed-bench/experiments/context-capture-20261028/` reuses the existing workload.
 No collector quality or speed result is claimed before those checks.

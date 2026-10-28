@@ -15,7 +15,7 @@ runtime defaults remain `recent`/`0`. The completed five-pair
 [collector comparison](../speed-bench/experiments/context-capture-20261028/COLLECTION.md)
 measure 7.8% less whole time from selection and 20.6% from in-sweep capture against
 segmented anchors, in separate cohorts; all 120 replies pass. Ordinary setup
-falls 55.056→40.079s and favorable 72.783→41.358s in the second comparison.
+falls 55.056 → 40.079 s and favorable 72.783 → 41.358 s in the second comparison.
 Repeated-edit time is neutral within variation. [Collector qualification](../speed-bench/experiments/context-capture-20261028/QUALIFICATION.md)
 and [reproduction](../speed-bench/experiments/context-capture-20261028/README.md)
 keep functional/numerical checks separate from those timings.
@@ -33,14 +33,14 @@ serialization/hash work remains.
 
 With originals enabled, fixed private GPU buffers cost approximately 10.75 MiB
 per selected endpoint, plus serialized host snapshots/staging. The native path
-supports single-GPU DeepSeek V4.1 text extensions and rewrites with fewer than 8192 new tokens
-per call. DSpark/MTP, steering, TP, images, extensions of approximate/replay state, prediction,
-quality/imatrix and disabled batch-attention/layer-prefill modes retain ordinary
-stop-and-capture. Unsupported collection returns −1 before mutation. The server
-can reset an old approximate transcript and collect a genuinely fresh rewrite,
-after validating all eligibility gates; it does not reuse that approximate state
-as a canonical prefix. The server
-still uses its ordinary 2048-token coordinator quantum; this work does not change
+supports single-GPU DeepSeek V4.1 text extensions and rewrites with fewer than
+8,192 new tokens per call. DSpark/MTP, steering, TP, images, extensions of
+approximate/replay state, prediction, quality/imatrix and disabled
+batch-attention/layer-prefill modes retain ordinary stop-and-capture.
+Unsupported collection returns −1 before mutation. After validating eligibility,
+the server can reset an old approximate transcript and collect a fresh rewrite.
+It does not reuse that approximate state as a canonical prefix. The server
+still uses its ordinary 2,048-token coordinator quantum; this work does not change
 scheduling or implement asynchronous/delta capture. Installed-model restore,
 ring-wrap, odd-carry and left/right relocation checks pass; final forward logits
 are byte-identical with collection off/on. Independently stopped endpoint
@@ -56,7 +56,7 @@ floor to an existing completed token; control admission still rounds up. The
 parallel smoke imports 1830 unchanged C tokens from a RAM-only checkpoint.
 A same-runtime freshness off/on test answers correctly with 410 exact tokens versus
 1,688 imported C tokens. All 10 changed/deleted-fact and user-control replies
-pass, as do client archive retrieval and READY→MAPLE `previous_response_id`
+pass, as do client archive retrieval and READY → MAPLE `previous_response_id`
 continuation. Actual restart loses the transient source, falls back with
 cached=0/no-aligned-source, recomputes and answers the changed LARCH fact.
 
@@ -74,15 +74,17 @@ original RAM-only C, with no capture errors. This is functional evidence, not
 an eight-edit comparative speed measurement. Calculated break-even is 2.17
 edits, assuming retained sources and similar future costs; any eight-edit speed
 projection is calculated, not measured five-pair evidence. Server `persistent-fast`
-now enables boundaries/ongoing1, cap4, spacing512 and HOT512, with explicit
+now enables boundaries and ongoing reuse, cap 4, spacing 512 and HOT 512, with explicit
 overrides honored. Engine defaults, the agent and other presets receive no new
-boundary defaults. The wrapper retains its existing64GB/resident routing/512
-chunk policy; the timed native32GB/configured8192/effective2048 setup is distinct.
-Final padded corrected-fact and medium→high checks each pass2/2, with thinking
-on throughout; the changed high request has cached0/no aligned source. Unit
+boundary defaults. The wrapper retains its existing 64 GB expert target,
+resident-routing policy and 512-token chunk. The timed setup uses native routes,
+a 32 GB expert budget, a configured 8,192-token chunk and an effective quantum
+of 2,048 tokens. Final padded corrected-fact and medium → high checks each
+pass 2/2, with thinking on throughout; the changed high request has zero cached
+tokens and no aligned source. Unit
 rendering separately distinguishes none/medium without disabling generation
 reasoning. Final guards stop cleanly with no pinned cache endpoints and hot
-bytes within512 MiB. Aggregate evictions include later QA and do not identify
+bytes within 512 MiB. Aggregate evictions include later QA and do not identify
 which individual C was evicted. These are functional checks, not new timing
 samples; the high-reasoning, unpadded benchmark stays frozen at `d5b8e8a3`.
 No speed claim comes from the quality smokes. That first slice stops the model

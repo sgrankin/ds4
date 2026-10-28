@@ -177,6 +177,8 @@ speed-bench/ideas/artifacts/
 !/speed-bench/experiments/context-capture-20261028/selection-candidate.json
 !/speed-bench/experiments/context-capture-20261028/collection-control.json
 !/speed-bench/experiments/context-capture-20261028/collection-candidate.json
+!/speed-bench/experiments/context-capture-20261028/no-edits-control.json
+!/speed-bench/experiments/context-capture-20261028/no-edits-candidate.json
 !/speed-bench/experiments/model-family-ports-20261023/PAYLOAD.md
 !/speed-bench/experiments/qwen-glm-zig-20261024/*.md
 !/speed-bench/experiments/clef-native-20261024/*.md
