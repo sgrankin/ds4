@@ -56,8 +56,7 @@ pub const Executor = struct {
         }
         return self.capture(index, graph.pos, graph.residual, 1) and
             self.ops.hcMix(graph, layer, false) and
-            self.ops.hcSum(graph.x, graph.residual, graph.pre, false) and
-            self.ops.norm(graph.norm, graph.x, layer.attn_norm);
+            self.ops.hcNorm(graph.x, graph.norm, graph.residual, graph.pre, false, layer.attn_norm, 1);
     }
 
     /// Publish the residual first; steering acts on every complete HC stream.
@@ -81,8 +80,7 @@ pub const Executor = struct {
         const graph = self.graph;
         return self.expand(graph.after_attn, graph.block, graph.residual, graph.attn_split, index, 1, false) and
             self.ops.hcMix(graph, layer, true) and
-            self.ops.hcSum(graph.x, graph.after_attn, graph.attn_split, true) and
-            self.ops.norm(graph.norm, graph.x, layer.ffn_norm);
+            self.ops.hcNorm(graph.x, graph.norm, graph.after_attn, graph.attn_split, true, layer.ffn_norm, 1);
     }
 
     pub fn beforeMoe(self: *const Executor, layer: *const Layer, index: u32) bool {
@@ -125,8 +123,7 @@ pub const Executor = struct {
         const graph = self.graph;
         if (!graph.valid or output == null or c.ds4_gpu_begin_commands() == 0) return false;
         const device_output = if (graph.tp_logits_half != null) graph.tp_logits_half else graph.logits;
-        var ok = self.ops.hcSum(graph.x, graph.residual, graph.pre, false) and
-            self.ops.norm(graph.norm, graph.x, self.weights.output_norm) and
+        var ok = self.ops.hcNorm(graph.x, graph.norm, graph.residual, graph.pre, false, self.weights.output_norm, 1) and
             self.ops.outputProjection(graph, device_output, self.weights, graph.norm, 1);
         if (c.ds4_gpu_end_commands() == 0) ok = false;
         return ok and c.ds4_gpu_tensor_read(graph.logits, 0, output, @as(u64, self.ops.config.shape.n_vocab) * 4) != 0;

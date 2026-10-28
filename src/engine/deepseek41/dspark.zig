@@ -215,13 +215,9 @@ pub const Drafter = struct {
         const weights = draftWeights(state);
         const layer = &weights.stage[index].block;
         const past: u32 = @min(position, window);
-        const mixed = self.ops.hcMixBatch(batch, layer, false, draft_rows) and (if (index != 0)
-            c.ds4_gpu_hc_weighted_sum_split_tensor(batch.x, batch.residual, batch.ffn_split, shape.n_embd, shape.n_hc)
-        else
-            c.ds4_gpu_hc_weighted_sum_tensor(batch.x, batch.residual, batch.pre, shape.n_embd, shape.n_hc)) != 0;
+        const mixed = self.ops.hcMixBatch(batch, layer, false, draft_rows) and
+            self.ops.hcNorm(batch.x, batch.norm, batch.residual, if (index != 0) batch.ffn_split else batch.pre, index != 0, layer.attn_norm, draft_rows);
         if (!mixed or
-            c.ds4_gpu_dsv41_quantize(batch.x, shape.n_embd, draft_rows, c.DS4_V41_BF16) == 0 or
-            !self.ops.normBatch(batch.norm, batch.x, layer.attn_norm, draft_rows) or
             !self.ops.matmulBatch(batch.qr, layer.attn_q_a, batch.norm, draft_rows, true) or
             !self.ops.normBatch(batch.qr, batch.qr, layer.attn_q_a_norm, draft_rows) or
             !self.ops.matmulBatch(batch.q, layer.attn_q_b, batch.qr, draft_rows, true) or
@@ -277,9 +273,7 @@ pub const Drafter = struct {
         return c.ds4_gpu_hc_expand_split_tensor(batch.after_attn, batch.block, batch.residual, batch.attn_split, shape.n_embd, shape.n_hc) != 0 and
             c.ds4_gpu_dsv41_quantize(batch.after_attn, shape.n_embd * shape.n_hc, draft_rows, c.DS4_V41_BF16) != 0 and
             self.ops.hcMixBatch(batch, layer, true, draft_rows) and
-            c.ds4_gpu_hc_weighted_sum_split_tensor(batch.x, batch.after_attn, batch.attn_split, shape.n_embd, shape.n_hc) != 0 and
-            c.ds4_gpu_dsv41_quantize(batch.x, shape.n_embd, draft_rows, c.DS4_V41_BF16) != 0 and
-            self.ops.normBatch(batch.norm, batch.x, layer.ffn_norm, draft_rows);
+            self.ops.hcNorm(batch.x, batch.norm, batch.after_attn, batch.attn_split, true, layer.ffn_norm, draft_rows);
     }
 
     // Leave five base-logit rows and collapsed features on the GPU. Markov
@@ -308,9 +302,7 @@ pub const Drafter = struct {
             ok = self.stage(index, position);
             if (!ok) _ = c.fprintf(c.__stderrp, "ds4: V4.1 DSpark stage %u failed\n", index);
         }
-        if (ok) ok = c.ds4_gpu_hc_weighted_sum_split_tensor(state.batch.x, state.batch.residual, state.batch.ffn_split, shape.n_embd, shape.n_hc) != 0 and
-            c.ds4_gpu_dsv41_quantize(state.batch.x, shape.n_embd, draft_rows, c.DS4_V41_BF16) != 0 and
-            self.ops.normBatch(state.batch.norm, state.batch.x, draft_weights.stage[2].norm, draft_rows);
+        if (ok) ok = self.ops.hcNorm(state.batch.x, state.batch.norm, state.batch.residual, state.batch.ffn_split, true, draft_weights.stage[2].norm, draft_rows);
         const target_ops = Ops{ .config = self.ops.config, .model = target, .exact_prefill_rows = self.ops.exact_prefill_rows };
         if (ok) ok = if (target_graph) |graph|
             target_ops.outputProjection(graph, state.logits, weights, state.batch.norm, draft_rows)

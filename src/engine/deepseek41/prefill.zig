@@ -79,21 +79,13 @@ pub const Prefill = struct {
         }
         if (!executor.ops.hcMixBatch(row, layer, false, count)) return false;
         // V4.1 uses the preceding sublayer's mixer, not the newly computed one.
-        const mixed = if (index != 0)
-            c.ds4_gpu_hc_weighted_sum_split_tensor(row.x, row.residual, row.ffn_split, shape.n_embd, shape.n_hc)
-        else
-            c.ds4_gpu_hc_weighted_sum_tensor(row.x, row.residual, row.pre, shape.n_embd, shape.n_hc);
-        return mixed != 0 and c.ds4_gpu_dsv41_quantize(row.x, shape.n_embd, count, c.DS4_V41_BF16) != 0 and
-            executor.ops.normBatch(row.norm, row.x, layer.attn_norm, count);
+        return executor.ops.hcNorm(row.x, row.norm, row.residual, if (index != 0) row.ffn_split else row.pre, index != 0, layer.attn_norm, count);
     }
 
     pub fn afterBatch(executor: Executor, row: *Row, layer: *const Layer, index: u32, count: u32) bool {
-        const shape = &executor.ops.config.shape;
         return executor.expand(row.after_attn, row.block, row.residual, row.attn_split, index, count, false) and
             executor.ops.hcMixBatch(row, layer, true, count) and
-            c.ds4_gpu_hc_weighted_sum_split_tensor(row.x, row.after_attn, row.attn_split, shape.n_embd, shape.n_hc) != 0 and
-            c.ds4_gpu_dsv41_quantize(row.x, shape.n_embd, count, c.DS4_V41_BF16) != 0 and
-            executor.ops.normBatch(row.norm, row.x, layer.ffn_norm, count);
+            executor.ops.hcNorm(row.x, row.norm, row.after_attn, row.attn_split, true, layer.ffn_norm, count);
     }
 
     // Publish all encoder compressed keys, but warm only the decoder's local
@@ -115,12 +107,7 @@ pub const Prefill = struct {
             defer active.deinit();
             if (ok) ok = c.ds4_gpu_begin_commands() != 0;
             if (ok) ok = buffers.carryCopy(executor.ops.config, graph, first, count, false);
-            if (ok and batch_attention) ok = (if (split_pre)
-                c.ds4_gpu_hc_weighted_sum_split_tensor(active.row.x, active.row.residual, active.row.ffn_split, shape.n_embd, shape.n_hc)
-            else
-                c.ds4_gpu_hc_weighted_sum_tensor(active.row.x, active.row.residual, active.row.pre, shape.n_embd, shape.n_hc)) != 0;
-            if (ok and batch_attention) ok = c.ds4_gpu_dsv41_quantize(active.row.x, shape.n_embd, count, c.DS4_V41_BF16) != 0 and
-                executor.ops.normBatch(active.row.norm, active.row.x, layer.attn_norm, count);
+            if (ok and batch_attention) ok = executor.ops.hcNorm(active.row.x, active.row.norm, active.row.residual, if (split_pre) active.row.ffn_split else active.row.pre, split_pre, layer.attn_norm, count);
             const batch = BatchAttention{ .ops = executor.ops, .graph = graph };
             if (ok and batch_publish) ok = batch.publish(&active.row, layer, index, initial_start + first, count);
             if (ok and !publish and batch_attention) ok =

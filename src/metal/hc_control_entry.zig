@@ -3,6 +3,10 @@ const h = @import("hc_control.zig");
 const p = @import("hc_producer.zig");
 const Tensor = h.Tensor;
 
+export fn ds4_gpu_dsv41_hc_collapse_norm(out: ?*Tensor, norm_out: ?*Tensor, residual: ?*const Tensor, previous_pre: ?*const Tensor, model_map: ?*const anyopaque, model_size: u64, norm_offset: u64, width: u32, rows: u32, pre_stride: u32, eps: f32) callconv(.c) c_int {
+    return h.collapseNorm(.{ .out = out, .norm_out = norm_out, .residual = residual, .post = previous_pre }, .{ .map = model_map, .size = model_size, .norm = norm_offset }, width, rows, pre_stride, eps);
+}
+
 export fn ds4_gpu_hc_expand_split_steering_tensor(out: ?*Tensor, block: ?*Tensor, residual: ?*const Tensor, split: ?*const Tensor, directions: ?*const Tensor, layer: u32, width: u32, hc: u32, scale: f32, bf16: bool, mode: c_int) callconv(.c) c_int {
     return h.expandSteered(.{ .out = out, .block = block, .residual = residual, .split = split }, .{ .width = width, .hc = hc }, true, directions, layer, scale, bf16, mode);
 }

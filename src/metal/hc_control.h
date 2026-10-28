@@ -85,6 +85,10 @@ typedef struct {
   int32_t out_dim;
   float eps;
 } ds4_gpu_hc_norm_mix_args;
+typedef struct {
+  uint32_t width, rows, pre_stride, channels;
+  float eps;
+} ds4_gpu_hc_collapse_norm_args;
 /* Residual steering is opt-in; mode0 projects, mode1 adds. */
 typedef struct {
   uint32_t width, rows, hc, layer;
@@ -117,7 +121,8 @@ enum {
   DS4_HC_STEERING_QWEN_MOE,
   DS4_HC_STEERING_RESIDUAL,
   DS4_HC_STEERING_RESIDUAL_NORM,
-  DS4_HC_STEERING_PROJECT
+  DS4_HC_STEERING_PROJECT,
+  DS4_HC_V41_COLLAPSE_NORM
 };
 /* Named fixed binding sets. Native supplies every packet/PSO/grid decision. */
 typedef struct {
@@ -128,6 +133,7 @@ typedef struct {
   ds4_gpu_hc_split_weighted_sum_args split_sum_args;
   ds4_gpu_hc_split_weighted_sum_norm_args split_norm_args;
   ds4_gpu_hc_norm_mix_args norm_mix_args;
+  ds4_gpu_hc_collapse_norm_args collapse_norm_args;
   ds4_gpu_hc_expand_args expand_args;
   ds4_gpu_hc_steering_args steering_args;
   ds4_gpu_output_hc_weights4_args output4_args;

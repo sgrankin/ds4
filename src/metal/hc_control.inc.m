@@ -18,6 +18,9 @@ ds4_metal_attention_pipeline ds4_metal_hc_control_pipeline(uint32_t kind) {
       p = ds4_gpu_hot_pipeline(g_hc_split_weighted_sum_norm_pipeline,
                                "kernel_dsv4_hc_split_weighted_sum_norm4");
       break;
+    case DS4_HC_V41_COLLAPSE_NORM:
+      p = ds4_gpu_get_pipeline("kernel_dsv41_hc_collapse_norm");
+      break;
     case DS4_HC_NORM_MIX:
       p = ds4_gpu_get_pipeline("kernel_dsv4_hc_rms_norm_mix_f16");
       break;
@@ -191,6 +194,14 @@ int ds4_metal_hc_control_encode(void *command,
       B(1, residual);
       B(2, post);
       B(3, out);
+      break;
+    case DS4_HC_V41_COLLAPSE_NORM:
+      A(0, collapse_norm_args);
+      B(1, residual);
+      B(2, post);
+      B(3, norm_weights);
+      B(4, out);
+      B(5, norm_out);
       break;
     case DS4_HC_SPLIT_SUM:
       A(0, split_sum_args);

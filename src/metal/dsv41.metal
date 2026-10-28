@@ -69,6 +69,70 @@ static inline float dsv41_bf16(float x) {
     return as_type<float>(bits & 0xffff0000u);
 }
 
+struct ds4_metal_args_dsv41_hc_collapse_norm {
+    uint width, rows, pre_stride, channels;
+    float eps;
+};
+
+// Supplied PRE belongs to the preceding half-layer. Do not generate or select
+// a new mix here. Keep the BF16 collapse boundary before the usual RMS tree;
+// each thread retains at most two float4 values instead of reloading x.
+kernel void kernel_dsv41_hc_collapse_norm(
+        constant ds4_metal_args_dsv41_hc_collapse_norm &args,
+        device const float4 *residual, device const char *previous_pre,
+        device const float4 *weight, device float4 *collapsed,
+        device float4 *normalized, threadgroup float *sums [[threadgroup(0)]],
+        uint row [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]],
+        ushort threads [[threads_per_threadgroup]]) {
+    if (row >= args.rows) return;
+    if (!sg) sums[lane] = 0;
+    const uint width4 = args.width / 4u;
+    device const float *pre = (device const float *)(previous_pre + (ulong)row * args.pre_stride);
+    device const float4 *r = residual + (ulong)row * 4u * width4;
+    float4 values[2];
+    float sum = 0;
+    #pragma clang loop unroll(full)
+    for (uint slot = 0; slot < 2u; slot++) {
+        const uint col = tid + slot * threads;
+        values[slot] = 0;
+        if (col < width4) {
+            // Retain the old runtime HC loop and its positive-zero seed.
+            // A fully unrolled expression lets fast math erase that first
+            // addition and changes all-negative-zero inputs to negative zero.
+            float4 v = 0;
+            #pragma clang loop unroll(disable)
+            for (uint h = 0; h < args.channels; ++h)
+                v += r[h * width4 + col] * pre[h];
+            uint4 bits = as_type<uint4>(v);
+            const bool4 finite = (bits & 0x7f800000u) != 0x7f800000u;
+            bits += select(uint4(0), uint4(0x7fffu) + ((bits >> 16u) & 1u), finite);
+            values[slot] = as_type<float4>(bits & 0xffff0000u);
+            collapsed[(ulong)row * width4 + col] = values[slot];
+            sum += dot(values[slot], values[slot]);
+        }
+    }
+    sum = simd_sum(sum);
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    if (!lane) sums[sg] = sum;
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    sum = simd_sum(sums[lane]);
+    const float scale = 1.0f / sqrt(sum / float(args.width) + args.eps);
+    #pragma clang loop unroll(full)
+    for (uint slot = 0; slot < 2u; slot++) {
+        const uint col = tid + slot * threads;
+        if (col < width4) {
+            const float4 value = (values[slot] * scale) * weight[col];
+            uint4 bits = as_type<uint4>(value);
+            const bool4 finite = (bits & 0x7f800000u) != 0x7f800000u;
+            bits += select(uint4(0), uint4(0x7fffu) + ((bits >> 16u) & 1u), finite);
+            normalized[(ulong)row * width4 + col] = as_type<float4>(bits & 0xffff0000u);
+        }
+    }
+}
+
 static inline float dsv41_pow2_ceil(float x) {
     const uint bits = as_type<uint>(x);
     return as_type<float>((bits & 0x7f800000u) +

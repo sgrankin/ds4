@@ -554,6 +554,87 @@ static int check_sparse_gather(void) {
 }
 
 #ifdef __APPLE__
+static int check_hc_collapse_norm(void) {
+    enum { MAX_WIDTH = 8192, MAX_ROWS = 17, GUARD = 16 };
+    const unsigned widths[] = {5120, 8192}, rows_list[] = {1, 5, 17};
+    const unsigned strides[] = {16, 96};
+    const size_t page = (size_t)getpagesize();
+    const size_t model_bytes = ((MAX_WIDTH * sizeof(float) + page - 1) / page) * page;
+    float *norm_weight = NULL;
+    CHECK(posix_memalign((void **)&norm_weight, page, model_bytes) == 0);
+    CHECK(ds4_gpu_set_model_map(norm_weight, model_bytes));
+    const size_t raw_bytes = (size_t)MAX_ROWS * 4 * MAX_WIDTH * sizeof(float);
+    const size_t storage_bytes = ((size_t)MAX_ROWS * MAX_WIDTH + 2 * GUARD) * sizeof(float);
+    float *values = malloc(raw_bytes);
+    float pre[MAX_ROWS * 24];
+    CHECK(values);
+    ds4_gpu_tensor *residual = upload(NULL, raw_bytes);
+    ds4_gpu_tensor *weights = upload(NULL, sizeof(pre));
+    ds4_gpu_tensor *storage[4];
+    for (unsigned i = 0; i < 4; i++) storage[i] = upload(NULL, storage_bytes);
+    CHECK(residual && weights && storage[0] && storage[1] && storage[2] && storage[3]);
+    for (unsigned wi = 0; wi < 2; wi++) for (unsigned ri = 0; ri < 3; ri++)
+    for (unsigned si = 0; si < 2; si++) for (unsigned pattern = 0; pattern < 2; pattern++) {
+        const unsigned width = widths[wi], rows = rows_list[ri], stride = strides[si];
+        const size_t count = (size_t)width * rows, bytes = count * sizeof(float);
+        for (size_t i = 0; i < count * 4; i++)
+            values[i] = pattern ? copysignf(0, i & 1 ? -1 : 1) : bf16(random_value() * 3);
+        for (unsigned i = 0; i < width; i++) norm_weight[i] = pattern ? (i & 1 ? -1 : 1) : 1 + random_value() * .125f;
+        for (unsigned row = 0; row < rows; row++) {
+            for (unsigned j = 0; j < stride / 4; j++) pre[row * (stride / 4) + j] = 1000 + j;
+            for (unsigned h = 0; h < 4; h++)
+                pre[row * (stride / 4) + h] = row ? .125f * (h + 1) : (h == 0 ? 1 : 0);
+        }
+        CHECK(ds4_gpu_tensor_write(residual, 0, values, count * 4 * sizeof(float)));
+        CHECK(ds4_gpu_tensor_write(weights, 0, pre, rows * stride));
+        ds4_gpu_tensor *out[4];
+        for (unsigned i = 0; i < 4; i++) {
+            uint8_t *guard = ds4_gpu_tensor_contents(storage[i]);
+            CHECK(guard); memset(guard, 0xa5, storage_bytes);
+            out[i] = ds4_gpu_tensor_view(storage[i], GUARD * sizeof(float), bytes);
+            CHECK(out[i]);
+        }
+        CHECK((stride == 96 ? ds4_gpu_hc_weighted_sum_split_tensor(out[0], residual, weights, width, 4) :
+            ds4_gpu_hc_weighted_sum_tensor(out[0], residual, weights, width, 4)));
+        CHECK(ds4_gpu_dsv41_quantize(out[0], width, rows, DS4_V41_BF16));
+        CHECK(ds4_gpu_rms_norm_weight_rows_tensor(out[1], out[0], norm_weight, model_bytes, 0, width, rows, 1e-6f));
+        CHECK(ds4_gpu_dsv41_quantize(out[1], width, rows, DS4_V41_BF16));
+        CHECK(ds4_gpu_dsv41_hc_collapse_norm(out[2], out[3], residual, weights,
+            norm_weight, model_bytes, 0, width, rows, stride, 1e-6f));
+        CHECK(ds4_gpu_synchronize());
+        for (unsigned result = 0; result < 2; result++) {
+            const float *old = ds4_gpu_tensor_contents(out[result]);
+            const float *fused = ds4_gpu_tensor_contents(out[result + 2]);
+            CHECK(old && fused);
+            size_t differences = 0, first = 0, zeros = 0;
+            for (size_t i = 0; i < count; i++) {
+                uint32_t old_bits, fused_bits;
+                memcpy(&old_bits, old + i, 4); memcpy(&fused_bits, fused + i, 4);
+                CHECK(isfinite(old[i]) && isfinite(fused[i]) && !(old_bits & 0xffff) && !(fused_bits & 0xffff));
+                if (old[i] == 0) zeros++;
+                if (old_bits != fused_bits) { if (!differences) first = i; differences++; }
+            }
+            fprintf(stderr, "HC_COLLAPSE_NORM width=%u rows=%u stride=%u pattern=%u result=%s bit_differences=%zu zeros=%zu first=%zu old=%a new=%a\n",
+                width, rows, stride, pattern, result ? "norm" : "collapse", differences, zeros, first, old[first], fused[first]);
+            CHECK(!differences);
+        }
+        CHECK(!memcmp(ds4_gpu_tensor_contents(residual), values, count * 4 * sizeof(float)));
+        CHECK(!memcmp(ds4_gpu_tensor_contents(weights), pre, rows * stride));
+        for (unsigned i = 0; i < 4; i++) {
+            const uint8_t *guard = ds4_gpu_tensor_contents(storage[i]);
+            for (size_t j = 0; j < GUARD * sizeof(float); j++) CHECK(guard[j] == 0xa5);
+            for (size_t j = GUARD * sizeof(float) + bytes; j < storage_bytes; j++) CHECK(guard[j] == 0xa5);
+            ds4_gpu_tensor_free(out[i]);
+        }
+    }
+    for (unsigned i = 0; i < 4; i++) ds4_gpu_tensor_free(storage[i]);
+    ds4_gpu_tensor_free(weights); ds4_gpu_tensor_free(residual);
+    CHECK(ds4_gpu_synchronize());
+    ds4_gpu_cleanup(); free(norm_weight); free(values);
+    fprintf(stderr, "V4.1 supplied-PRE HC collapse/BF16/RMSNorm/BF16: scalar/batch, stride16/96, outputs/bounds exact\n");
+    return 1;
+}
+
 static uint32_t main_fp4_bits(float value) {
     uint32_t bits; memcpy(&bits, &value, sizeof(bits)); return bits;
 }
@@ -2030,6 +2111,10 @@ static int check_index_fp4(int simd, uint32_t selected_rows) {
 
 int main(int argc, char **argv) {
 #ifdef __APPLE__
+    if (argc == 2 && !strcmp(argv[1], "--hc-collapse-norm")) {
+        const int ok = ds4_gpu_init() && check_hc_collapse_norm();
+        ds4_gpu_cleanup(); return ok ? 0 : 1;
+    }
     if (argc == 2 && !strcmp(argv[1], "--main-fp4")) {
         const int ok = ds4_gpu_init() && check_main_kv_fp4();
         ds4_gpu_cleanup(); return ok ? 0 : 1;

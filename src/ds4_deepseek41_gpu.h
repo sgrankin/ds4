@@ -23,6 +23,13 @@ typedef enum {
 } ds4_v41_activation_format;
 int ds4_gpu_dsv41_quantize(ds4_gpu_tensor *x, uint32_t width, uint32_t rows,
                           ds4_v41_activation_format format);
+/* Apply the supplied previous-half-layer PRE, retaining the BF16 collapse
+ * boundary before weighted RMSNorm. Both outputs remain available to callers.
+ * PRE rows use 16 bytes (plain) or 96 bytes (the first4 of a full HC split). */
+int ds4_gpu_dsv41_hc_collapse_norm(ds4_gpu_tensor *out, ds4_gpu_tensor *norm_out,
+        const ds4_gpu_tensor *residual, const ds4_gpu_tensor *previous_pre,
+        const void *model_map, uint64_t model_size, uint64_t norm_offset,
+        uint32_t width, uint32_t rows, uint32_t pre_stride, float eps);
 /* Physical mode3 main-cache rows: 256 E2M1 code bytes + 32 E4M3 scales.
  * Source publication preserves the original per16 scale; unpack/gather exactly
  * reproduce the existing BF16-rounded values into a bounded working tile. */

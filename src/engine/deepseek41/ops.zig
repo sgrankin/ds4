@@ -148,6 +148,21 @@ pub const Ops = struct {
         return ok and bf16(out, shape.n_embd);
     }
 
+    /// PRE is supplied by the caller: V4.1 applies the preceding half-layer's
+    /// mix, independently of the newly computed mix. Hooks stay outside here.
+    pub fn hcNorm(self: *const Ops, out: ?*Tensor, normalized: ?*Tensor, input: ?*const Tensor, previous_pre: ?*const Tensor, split: bool, weight: *const Weight, rows: u32) bool {
+        const shape = &self.config.shape;
+        const flag = c.getenv("DS4_METAL_V41_FUSED_HC_NORM");
+        if (flag != null and c.strcmp(flag, "1") == 0 and shape.n_hc == 4 and shape.n_embd <= 8192)
+            return c.ds4_gpu_dsv41_hc_collapse_norm(out, normalized, input, previous_pre, self.model.map, self.model.size, weight.abs_offset, shape.n_embd, rows, if (split) 96 else 16, shape.rms_eps) != 0;
+        const ok = if (split)
+            c.ds4_gpu_hc_weighted_sum_split_tensor(out, input, previous_pre, shape.n_embd, shape.n_hc) != 0
+        else
+            c.ds4_gpu_hc_weighted_sum_tensor(out, input, previous_pre, shape.n_embd, shape.n_hc) != 0;
+        return ok and c.ds4_gpu_dsv41_quantize(out, shape.n_embd, rows, c.DS4_V41_BF16) != 0 and
+            (if (rows == 1) self.norm(normalized, out, weight) else self.normBatch(normalized, out, weight, rows));
+    }
+
     pub fn hcExpand(self: *const Ops, out: ?*Tensor, block: ?*const Tensor, residual: ?*const Tensor, split: ?*const Tensor) bool {
         const shape = &self.config.shape;
         return c.ds4_gpu_hc_expand_split_tensor(out, block, residual, split, shape.n_embd, shape.n_hc) != 0 and

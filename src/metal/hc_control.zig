@@ -207,6 +207,34 @@ pub fn weighted(inputs: Inputs, shape: Shape, stride: u64, label: [*:0]const u8)
     launch.gx = (elements + launch.tx - 1) / launch.tx;
     return run(launch, label);
 }
+
+pub fn collapseNorm(inputs: Inputs, model: Model, width: u32, rows: u32, pre_stride: u32, eps: f32) c_int {
+    if (!init() or width == 0 or width > 8192 or width & 3 != 0 or rows == 0 or pre_stride < 16) return 0;
+    const buffers = Buffers.from(inputs);
+    defer buffers.deinit();
+    const row = @as(u64, width) * 4;
+    if (!buffers.residual.fits(@as(u64, rows) * 4 * row) or !buffers.post.fits(@as(u64, rows - 1) * pre_stride + 16) or
+        !buffers.out.fits(@as(u64, rows) * row) or !buffers.norm_out.fits(@as(u64, rows) * row) or !model.range(model.norm, row))
+        return fail("ds4: V4.1 HC collapse/norm received undersized buffers");
+    const weights = model.buffer(model.norm, row) orelse return 0;
+    defer weights.deinit();
+    const kind = c.DS4_HC_V41_COLLAPSE_NORM;
+    const pso = pipeline(kind);
+    // Match the established RMSNorm's float4 reduction tree exactly.
+    const width4: u64 = width / 4;
+    var count: u64 = 32;
+    while (count < width4 and count < 1024) count *= 2;
+    const threads = @max(1, @min(count, width4));
+    if (pso.handle == null or pso.threads < threads) return 0;
+    var launch = plan(kind, pso);
+    buffers.fill(&launch);
+    launch.norm_weights = weights.view;
+    launch.collapse_norm_args = .{ .width = width, .rows = rows, .pre_stride = pre_stride, .channels = 4, .eps = eps };
+    launch.gx = rows;
+    launch.tx = threads;
+    launch.shared_bytes = 32 * 4;
+    return run(launch, "V4.1 supplied-PRE HC collapse/BF16/norm/BF16");
+}
 // HC-pre is a direct fused dispatch. The graph driver owns optional fallback.
 // Weighted RMSNorm preserves the established single-row and batched formulas.
 pub fn splitSum(inputs: Inputs, model: Model, shape: Shape, normalized: bool) c_int {

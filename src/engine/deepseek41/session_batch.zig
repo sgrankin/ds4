@@ -146,8 +146,7 @@ pub const SessionBatch = struct {
             ok = c.ds4_gpu_tensor_copy(session.residual, 0, graph.rows_view[index].residual, 0, @as(u64, shape.n_hc) * shape.n_embd * 4) != 0 and
                 c.ds4_gpu_tensor_copy(session.pre, 0, graph.rows_view[index].ffn_split, 0, @as(u64, shape.n_hc) * 4) != 0;
             if (!ok or prefill_only) continue;
-            ok = executor.ops.hcSum(session.x, session.residual, session.pre, false) and
-                executor.ops.norm(session.norm, session.x, weights.output_norm);
+            ok = executor.ops.hcNorm(session.x, session.norm, session.residual, session.pre, false, weights.output_norm, 1);
             if (ok) ok = if (batch_logits != null)
                 c.ds4_gpu_tensor_copy(graph.rows_view[index].norm, 0, session.norm, 0, @as(u64, shape.n_embd) * 4) != 0
             else
