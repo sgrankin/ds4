@@ -20,6 +20,8 @@ GLM 5.3 Flash, Qwen3.8 Flash Next and Flint are native Zig.
 For this local fork, start with [project direction and current status](docs/PROJECT.md).
 It records current goals, adopted features and unfinished work without requiring
 a tour of the experiment history.
+The [documentation index](docs/README.md) leads to the new architecture overview,
+DeepSeek backend explanation and narrative lab pilot.
 
 **Clef-Flash, Clef and Clef-Omni** also run as native Metal learned decision
 engines through SystemOne and OpenAI Decisions, independently alongside a

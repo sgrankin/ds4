@@ -10,6 +10,11 @@ when resuming rewrite or serving work. The project page owns current goals and
 status; the journal records short milestones with evidence links. Consult dated
 archives as needed; their old running/next instructions are historical.
 
+For technical documentation, follow [docs/writing-guide.md](docs/writing-guide.md)
+and [docs/lab/methodology.md](docs/lab/methodology.md). Update the owning manual
+when implementation or understanding changes; keep experimental reasoning in
+the lab journal rather than duplicating it across status documents.
+
 - Use a short loop: fixed baseline, one change, measure, inspect, decide.
   Record the revision, command, settings and results; reuse existing tools.
 - Performance comparisons require at least five measured samples per side.

@@ -3,6 +3,15 @@
 Read [project direction and current status](../docs/PROJECT.md) first.
 This journal records short milestones, not the active experiment queue.
 
+## 2026-10-28: source-backed documentation pilot
+
+The user rejected archiving blobs as a substitute for editorial synthesis.
+Authorized clean-context GPT 6.1 Terra authors, separate style and source reviews,
+then a cross-document editorial pass. The pilot covers architecture, methodology,
+DeepSeek on Apple Silicon and a narrative checkpoint lab entry under `docs/`.
+Existing documents and experiment folders remain in place for comparison;
+the broader migration has not been performed. Runtime experiments remain paused.
+
 ## 2026-10-28: pause and reassess
 
 The user lost track of the goal amid side experiments and repeated status
