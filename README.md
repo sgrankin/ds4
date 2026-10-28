@@ -17,6 +17,10 @@ Original DeepSeek V4 Flash and GLM 5.2 are retired. DeepSeek V4 PRO and full
 GLM 5.3 retain their legacy engines; the ordinary Metal engines for V4.1 Flash,
 GLM 5.3 Flash, Qwen3.8 Flash Next and Flint are native Zig.
 
+For this local fork, start with [project direction and current status](docs/PROJECT.md).
+It records current goals, adopted features and unfinished work without requiring
+a tour of the experiment history.
+
 **Clef-Flash, Clef and Clef-Omni** also run as native Metal learned decision
 engines through SystemOne and OpenAI Decisions, independently alongside a
 generator. See the [Clef setup, APIs and qualification](docs/CLEF.md).

@@ -1,5 +1,10 @@
 # Context compaction, suffix reuse, and checkpoints at message boundaries
 
+For the current implementation, read [the checkpoint recipe](../recipes/16-semantic-context-checkpoints.md).
+For selected work, read [the project overview](PROJECT.md). This document retains
+the design discussion and its historical implementation checkpoints; proposals
+below do not authorize further experiments.
+
 Design discussion captured from a side conversation, 2026-10-28. The original
 discussion proposed work; the user subsequently authorized implementation and
 evaluation in the main conversation.

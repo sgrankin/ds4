@@ -1,5 +1,9 @@
 ## Benchmarking
 
+For current project goals and decisions, read [the project overview](../docs/PROJECT.md).
+`experiments/` holds historical evidence; it is not an active roadmap. The
+[selected experiment](ideas/next-experiments.md) is currently paused.
+
 Here we collect prefill and generation speed obtained with different hardware.
 
 Run `ds4-bench` as:

@@ -1,5 +1,8 @@
 # DeepInfer technique inventory and local alignment
 
+This is a technique inventory, not the active work queue. See
+[project direction and current status](PROJECT.md) before choosing more work.
+
 Source audit, 2026-10-27, pinned to DeepInfer revision
 `553741557a57df44a46fb3ab72b6aafeaf945337` (upstream HEAD when audited) and
 DS4 baseline `e2a38f6e2bf4`. Local status refreshed 2026-10-28 through the
@@ -217,6 +220,7 @@ it does not substitute a different expert that happens to be resident.
 | Packed index producer/reader | Completed beyond the pilot: physical GPU owners, scalar/batch consumers, SIMD, v3 SSD, old-format imports and suffix/MTP. Enabled in fast presets with five-pair speed-neutral qualification. |
 | Useful drafter history | DSP1 raw BF16 target-feature persistence works across canonical/SSD restore. Five ordinary-confidence 0.6 pairs reduce complete restored-task time 18.12%; enabled through fast presets with explicit 0 override. Storage grows 10.343 MiB across three endpoints. |
 | Physical main producer/consumer | Qualified beyond the original proposal: 288 B GPU/v4–v5 canonical rows, legacy conversion, SSD/DSP1/MTP, repeated suffix grafts and actual Responses restart. Five 8K pairs are neutral; five 32K pairs cost 1.98% more task time. Consumer cost profiled, fast presets now enabled with overrides; raw FP8 remains separate work. |
+| Supplied-PRE HC collapse and RMSNorm fusion | Implemented and qualified in a corrected GPU fixture and five full-model pairs. Whole-task latency is neutral; `DS4_METAL_V41_FUSED_HC_NORM=1` remains opt-in. [Results and retained rounding boundaries](../speed-bench/experiments/hc-collapse-norm-20261028/README.md). |
 
 ## Next bounded candidates — proposals, not execution authorization
 
@@ -227,7 +231,9 @@ Malformed output at normal stop remains an error. See the
 [qualified wire report](../speed-bench/experiments/dsml-length-20261028/README.md).
 Ordinary-confidence DSP1 and physical main FP4 are completed functionality,
 not remaining implementation proposals, and both are enabled in the opt-in
-fast preset package. Ordinary engine defaults remain unchanged.
+fast preset package. HC collapse/RMSNorm fusion is also complete, with neutral
+whole-task results and no preset promotion. Ordinary engine defaults remain
+unchanged.
 
 After that, choose the objective and give each experiment an initial one-hour
 cap, including preparation/builds/analysis. Performance comparisons need five
@@ -237,7 +243,7 @@ samples per side, alternating order; keep normal reasoning and actual task quali
 |---|---|---|
 | More concurrent-session capacity | Physical **raw FP8** publication plus a consumer after the qualified main/index work. Existing mode1 already quantizes then expands into BF16-rounded F32; retain original per32 UE8M0 scales at publication. Raw rows2048→528B. | Preserve existing decoded values where possible, measure any deviations, demonstrate real smaller allocation and measure consumer/whole-inference cost. Main packing's measured 32K cost is not evidence that smaller storage automatically accelerates attention. |
 | Ordinary prefill latency | Extend decoder query compaction from wide≥8K sweeps to ordinary2K chunks, initially without DSpark; handle speculative rollback in a separate slice. | Full encoder/global-cache publication, explicit replay floor/approximate identity, practical tasks and ΔNLL/KL, five-pair whole-request savings. Do not infer benefit from the old wide-only branch. |
-| Fewer intermediate writes/launches | First profile direct SwiGLU→existing packed F16 down input, eliminating HALF MID→HALF PACKED copy; alternatively fuse V4.1 collapse→BF16→weighted RMSNorm→BF16 using the previous PRE mix. | Preserve rounding and old consumers. The matched activation experiment measured only~39ms total down-pack GPU time, so this one copy alone is a modest target. Legacy HC compound kernels apply the newly computed PRE and are not drop-ins. |
+| Fewer intermediate writes/launches | A separate candidate is direct SwiGLU → existing packed F16 down input, eliminating the HALF MID → HALF PACKED copy. HC collapse → BF16 → weighted RMSNorm → BF16 has already been implemented and measured neutral; it is not a remaining task. | Preserve rounding and old consumers. The matched activation experiment measured only about 39 ms total down-pack GPU time, so this one copy alone is a modest target. |
 | Better cold-cache retention | Batch the128-row SWB1 reconstruction and test block-only fallback under a bounded SSD working set. | Demonstrate that dropping disposable state actually improves retention/miss cost. Do not replace faster exact hits with recovery. Ordinary cache policy remains a separate integration step. |
 
 Later candidates remain same-input projection fusion, DS41 GPU sampling and

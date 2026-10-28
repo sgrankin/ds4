@@ -13,7 +13,9 @@ initial `c54f8a7f` leaf tests is fixed, with an expanded GPU fixture passing.
 Actual v2↔v4/v5 roundtrips, scalar decode, speculative verification and HOT0
 SSD reopen pass below. The measured 32K cost is accepted for capacity and
 persistence. Ordinary engine defaults and main bookmark remain unchanged;
-installed executables are unchanged until final installation.
+final installation completed with runtime `f74180e0` in the 2026-10-28
+convergence batch. See the [project journal](../../../src/JOURNAL.md) for that
+completed installation and the [final runtime qualification](../context-capture-20261028/QUALIFICATION.md#fresh-rebuild-after-approximate-state).
 
 ## Mechanism and bytes
 

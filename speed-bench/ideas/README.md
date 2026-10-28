@@ -1,5 +1,9 @@
 # Fast approximation experiments (2026-10-02)
 
+This is the historical experiment-method guide. Current direction lives in
+[the project overview](../../docs/PROJECT.md); the [selected experiment](next-experiments.md)
+is paused. Old experiment-track descriptions below are not current work orders.
+
 The baseline is local DeepSeek V4.1 Flash Q2 on M5 Max/128 GiB with SSD
 streaming. All experimental runtime changes remain opt-in. Start with a fixed
 baseline, change one thing, and measure practical speed and quality tradeoffs.

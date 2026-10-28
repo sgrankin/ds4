@@ -1,6 +1,7 @@
 # Handwritten Zig runtime
 
-See [JOURNAL.md](JOURNAL.md) for current project direction, decisions and next steps.
+Start with [project direction and current status](../docs/PROJECT.md).
+[JOURNAL.md](JOURNAL.md) records short milestones and links to earlier history.
 The [serving request/model boundary](serving/README.md) describes native logical
 input and the DS4.1 preparation path, including its remaining compatibility edges.
 [Stateful Responses](serving/RESPONSES.md) documents HTTP/WebSocket usage and

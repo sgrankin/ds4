@@ -5,9 +5,10 @@ Start every response with an expressive kaomoji that fits what you are saying.
 Favor the simplest implementation that lets us learn whether a change is useful.
 Write for the experiment we need now, not hypothetical future callers or mistakes.
 
-Read [src/JOURNAL.md](src/JOURNAL.md) when resuming rewrite or serving work.
-Update it at meaningful checkpoints with decisions, progress and next steps;
-distinguish completed work from proposals and retain relevant evidence links.
+Read [docs/PROJECT.md](docs/PROJECT.md), then [src/JOURNAL.md](src/JOURNAL.md)
+when resuming rewrite or serving work. The project page owns current goals and
+status; the journal records short milestones with evidence links. Consult dated
+archives as needed; their old running/next instructions are historical.
 
 - Use a short loop: fixed baseline, one change, measure, inspect, decide.
   Record the revision, command, settings and results; reuse existing tools.
@@ -17,6 +18,10 @@ distinguish completed work from proposals and retain relevant evidence links.
 - Work sequentially from `speed-bench/ideas/next-experiments.md`, with a
   one-hour budget per item. Measure ordinary and favorable cases as well as
   stress cases; plot tradeoffs for tunable features.
+- Select one outcome before starting work. Side ideas and completed experiments
+  do not authorize new experiments. Parallel preparation must serve that outcome.
+  Write one result report; update the recipe conclusion and one short journal
+  entry instead of copying detailed results across status documents.
 - Output degradation is acceptable. Measure speed and practical task quality;
   use delta-NLL and KL to describe changes, not as automatic rejection criteria.
 - Use Nushell for maintained orchestration and shell test drivers, with plain
