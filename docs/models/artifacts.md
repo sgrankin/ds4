@@ -1,8 +1,8 @@
 # Models and Vision
 
-[README](../README.md) | [Getting started](../README.md#start-here)
+[Documentation index](../README.md)
 
-DwarfStar is not a general GGUF runner. Use the download targets below: other
+The supported native build is macOS Metal. CUDA and ROCm statements below describe historical paths and qualification; the current build does not provide their old Make targets. See the [CUDA](../backends/cuda.md) and [ROCm](../backends/rocm.md) notes. DwarfStar is not a general GGUF runner. Use the download targets below: other
 GGUFs may have unsupported tensor layouts, metadata, or quantization mixes.
 Run `./download-model.nu --help` for filenames and all available targets.
 
@@ -20,14 +20,14 @@ your cached Hugging Face token or `HF_TOKEN` is used when present.
 ## Clef decision models
 
 The **Clef-Flash, Clef and Clef-Omni** learned decision models have a separate
-[native setup and API guide](models/clef/usage.md), including pinned downloads and measured
+[native setup and API guide](clef/usage.md), including pinned downloads and measured
 scope. They use decision endpoints rather than conversational generation.
 
 ## Flint
 
 Flint uses its original affine INT4 safetensors directory and a native M5 Max
 Metal backend. It serves through the shared stateful Responses server, with
-independent conversation slots. See [Flint setup, scope and measurements](models/flint/usage.md).
+independent conversation slots. See [Flint setup, scope and measurements](flint/usage.md).
 
 ## DeepSeek V4 PRO
 
@@ -44,7 +44,7 @@ independent conversation slots. See [Flint setup, scope and measurements](models
 PRO retains its legacy engine. Use sufficient memory or SSD streaming for the
 Q2 file; the split Q4 pieces are intended for pipeline execution.
 
-To build weights rather than download them, see [GGUF tools](../gguf-tools/README.md).
+To build weights rather than download them, see [GGUF tools](../../gguf-tools/README.md).
 
 ## DeepSeek V4.1 Flash
 
@@ -75,12 +75,12 @@ On one 128 GB Mac, use SSD streaming. Leave the expert cache budget automatic:
 ```
 
 Use `ds4-agent` or `ds4-server` with the same model and memory options.
-On a DGX Spark, add `--cuda`; see the [Spark guide](DGX_SPARK.md#deepseek-v41-flash).
+On a DGX Spark, add `--cuda`; see the [Spark guide](../backends/cuda.md).
 `--think-level 25` sets reasoning effort explicitly; the range is 1 to 100,
 with 0 disabling thinking. `/think 25` changes it in the CLI or native agent.
 `--think` selects 75 and `--think-max` selects 100.
 
-For two 128 GB Macs or Sparks, follow the [TP/RDMA setup](DISTRIBUTED.md), passing this
+For two 128 GB Macs or Sparks, follow the [TP/RDMA setup](../backends/distributed.md), passing this
 GGUF with `-m` on both ranks and omitting `--ssd-streaming`. Each rank holds
 about 81 GiB of main weights, plus context and runtime buffers. Both machines
 need the complete GGUF on disk. A 256 GB or larger Mac can instead hold all
@@ -116,7 +116,7 @@ partial assembly and previous default model.
 The shard identities and focused binary merger come from upstream
 [commit a1012463383a](https://github.com/antirez/ds4/commit/a1012463383a09c6d11f8164218e0ee45e267acf).
 The merger is retained unchanged at
-[`gguf-tools/merge_deepseek41_shards.py`](../gguf-tools/merge_deepseek41_shards.py);
+[`gguf-tools/merge_deepseek41_shards.py`](../../gguf-tools/merge_deepseek41_shards.py);
 download orchestration remains Nushell. Offline fixtures qualify downloading,
 alignment, checksums and resumption; the full 467 GiB MXFP4 model has not been
 downloaded or run as part of this adaptation.
@@ -126,18 +126,19 @@ with the next layer's reads; CUDA stages experts into its bounded device cache.
 Short appends keep using the expert cache.
 Resident and TP inference also batch continued prefills automatically.
 
-For concurrent serving, see [session batching](SERVER.md#multiple-sessions).
+For concurrent serving, see [session batching](../serving/overview.md#multiple-sessions).
 Each slot needs its own context memory; start with `--ctx 4096` before
 increasing both context and slot count. CUDA Q2 SSD mode batches up to eight
-decode rows; CUDA network TP currently serves sessions in order.
-[DSpark](SPECULATIVE_DECODING.md#deepseek-v41-flash-dspark) uses a
-separate V4.1 support GGUF and currently requires one host. Pipeline execution
+decode rows; Historical CUDA network TP batches five or more ready sessions; smaller groups run in order.
+[DSpark](../serving/sampling-and-speculation.md#deepseek-v41-flash-dspark) uses a
+separate V4.1 support GGUF and supports single-host and two-rank Metal TP; retained CUDA TP also implements it,
+subject to historical build and physical-pair qualification. Pipeline execution
 is not implemented for V4.1; vision requires Metal.
 
 Scalar, batched and tensor-parallel execution are not numerically identical.
 Q4 batched prefill shows a small probability-score loss on the short official
 continuation test, with unchanged overall top-token agreement. See the
-[QA results](../QA_BEFORE_RELEASES.md#17-deepseek-v41-flash) for details
+[QA results](../../QA_BEFORE_RELEASES.md#17-deepseek-v41-flash) for details
 and remaining differences.
 
 The Q2 target now downloads the October 17 checkpoint; the Q4 target still
@@ -157,8 +158,8 @@ For the earlier Q4 model, use `./download-model.nu ds41f-vision` and
 
 Vision works with SSD streaming, full residency and two-Mac TP. Pass the encoder
 on both TP ranks. Use `/read image.png` in `ds4`, `view_image` in `ds4-agent`,
-or the [server image API](SERVER.md#images). V4 Flash vision encoders do not
-work with V4.1. See [conversion](../gguf-tools/README.md#convert-deepseek-v41-flash)
+or the [server image API](../serving/overview.md#images). V4 Flash vision encoders do not
+work with V4.1. See [conversion](../../gguf-tools/README.md#convert-deepseek-v41-flash)
 to build the GGUFs from safetensors.
 
 ## Qwen3.8 Flash Next
@@ -180,7 +181,7 @@ The script links `ds4flash.gguf` to the combined GGUF:
 ```
 
 Add `--mtp` for speculation; no second file is needed.
-See [Qwen setup](models/qwen38-flash-next/usage.md)
+See [Qwen setup](qwen38-flash-next/usage.md)
 for memory, conversion, vision, and sampling details.
 
 Vision uses a separate encoder. `./download-model.nu qwen38-vision` downloads
@@ -206,8 +207,8 @@ and a built-in MTP block. The Q2 file uses imatrix-guided IQ2_XXS gate/up and
 Q2_K down experts. Q4 is the higher-precision alternative.
 
 Q2 is close enough to a 128 GB machine's memory budget that other workloads
-and context size matter. Follow the [Metal](METAL.md), [Spark](DGX_SPARK.md),
-or [Strix Halo](STRIX_HALO.md) starting configuration for your host.
+and context size matter. Follow the [Metal](../backends/apple-silicon.md), [Spark](../backends/cuda.md),
+or [Strix Halo](../backends/rocm.md) starting configuration for your host.
 
 Ordinary decode is the default. Enable the embedded draft block with `--mtp`:
 
@@ -215,7 +216,7 @@ Ordinary decode is the default. Enable the embedded draft block with `--mtp`:
 ./ds4-agent -m gguf/GLM-5.3-Flash-Q2.gguf --mtp --ctx 50000
 ```
 
-No second model file is needed. See [sampling behavior](SPECULATIVE_DECODING.md)
+No second model file is needed. See [sampling behavior](../serving/sampling-and-speculation.md)
 before choosing between the default opportunistic mode and exact sampling.
 
 ## Full GLM 5.3
@@ -262,7 +263,7 @@ be saved with `/save`.
 
 For two-Mac TP, pass the same encoder on both ranks. The coordinator encodes
 the image and sends the projected visual tokens to the worker.
-For HTTP image formats and limits, see [serving](SERVER.md#images).
+For HTTP image formats and limits, see [serving](../serving/overview.md#images).
 
 ### Qwen3.8 Flash Next
 
@@ -276,4 +277,4 @@ The text GGUF stays the same. Download and add the encoder explicitly:
 
 The encoder is llama.cpp's Q8_0 mmproj conversion of the model's Qwen3-VL
 tower. Use `/read image.png` in `ds4` or `image_url` parts over HTTP; see
-[Qwen setup](models/qwen38-flash-next/usage.md) for image limits and resize behavior.
+[Qwen setup](qwen38-flash-next/usage.md) for image limits and resize behavior.

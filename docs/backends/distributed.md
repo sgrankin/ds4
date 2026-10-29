@@ -1,6 +1,8 @@
 # Inference Across Machines
 
-[README](../README.md)
+[Documentation index](../README.md)
+
+**Qualification:** The supported native build is macOS Metal. Network transport and model-specific source paths are retained, but the CUDA and ROCm build targets in older instructions are not in the current Makefile. The configurations below describe historical setups; they are not a new hardware qualification. Use matching revisions and consult the [release QA record](../../QA_BEFORE_RELEASES.md) before reproducing them.
 
 There are two modes:
 
@@ -9,7 +11,7 @@ There are two modes:
 | Tensor parallelism | Routed experts and per-layer work across two Macs or two Sparks | Resident inference with lower per-token work on each GPU |
 | Pipeline parallelism | Complete layer ranges across several machines | Fit larger models and overlap long prefills |
 
-These are separate from [tensor parallelism across CUDA cards](CUDA_MULTI_GPU.md).
+These are separate from [CUDA layer placement](cuda.md).
 Network protocols have no authentication or encryption. Use trusted machines
 and a trusted network; run the same commit on every peer. Model paths and
 artifacts must agree. Update all TP peers together when changing versions.
@@ -89,12 +91,14 @@ The coordinator can be `ds4`, `ds4-agent`, `ds4-server`, or `ds4-bench`;
 workers run `ds4`. For models with vision support, pass the same `--vision FILE`
 to both for image input.
 For GLM MTP, enable `--mtp` on both. For DeepSeek DSpark, both need the
-matching support model and DSpark options. V4.1 supports vision but not
-speculative decoding.
+matching support model and DSpark options. V4.1 supports vision and matching DSpark in two-rank Metal TP. Put the matching
+encoder or DSpark options on both peers. The [DSpark QA](../../QA_BEFORE_RELEASES.md#dspark)
+lists the prescribed physical-pair checks; the checklist alone does not
+establish completed qualification at this revision.
 
 TP disk-cache restore currently rebuilds the exact saved token prefix on both
 ranks rather than restoring the coordinator alone. Expect prefill on restore.
-See [speculation](SPECULATIVE_DECODING.md) and [serving](SERVER.md).
+See [speculation](../serving/sampling-and-speculation.md) and [serving](../serving/overview.md).
 
 ## Tensor parallelism between two Sparks
 
@@ -103,12 +107,16 @@ split. Each Spark holds about 81 GiB of main weights, plus context and runtime
 buffers. V4.1 Engram tables stay on disk. Do not add `--ssd-streaming` or
 `--cuda-tensor-parallel`: those select different memory/execution modes.
 
-Build the same commit with `make cuda-spark` on both machines and download
-`ds41f-q2` on both. RDMA needs the libibverbs development headers at build time,
+Historically, both machines were built with `make cuda-spark` at the same commit;
+that target is absent from the current Makefile. Download `ds41f-q2` on both.
+RDMA needs the libibverbs development headers at build time,
 its runtime library, and an active RoCEv2 link. Check `ibv_devinfo -v` and use
 the addresses of the directly connected ports, not the management network.
 
 For example, with the coordinator at `172.31.250.1` on the direct link:
+
+These historical commands name the earlier Q2 file; the current `ds41f-q2`
+download selects the 1017 filename. Match the artifact to the chosen revision.
 
 ```sh
 # Worker.
@@ -130,7 +138,9 @@ The coordinator can be `ds4-agent`, `ds4-server` or `ds4-bench`. Match context
 sizes and any `--prefill-chunk` overrides on both sides. For V4.1, five or more
 ready sessions use native batched decode; smaller groups run in order.
 Use `--batched-session 8` on the server and allow memory for all eight contexts.
-CUDA network TP does not support vision, V4.1 DSpark or other model/quant layouts.
+Retained CUDA network TP implements matching V4.1 DSpark, but not vision or
+other model/quant layouts. Physical-pair qualification must be checked in the
+[DSpark QA](../../QA_BEFORE_RELEASES.md#dspark); a prescribed test is not a completed result.
 
 ## Pipeline parallelism
 
@@ -184,5 +194,5 @@ requests need a complete route before proceeding, and the coordinator can
 replay the saved token prefix to rebuild worker state. Pipeline snapshots
 serialize all layer slices into one payload and redistribute them when loaded.
 
-For protocol details, see [ds4_distributed.c](../src/ds4_distributed.c)
-and [ds4_tp.c](../src/ds4_tp.c).
+For protocol details, see [ds4_distributed.c](../../src/ds4_distributed.c)
+and [ds4_tp.c](../../src/ds4_tp.c).

@@ -1,14 +1,13 @@
 # Models Larger Than RAM
 
-[README](../README.md)
+[Serving](../serving/overview.md)
 
 Use resident inference when the model and runtime fit: it is faster.
 SSD streaming keeps a bounded cache of routed experts and reads missing
 experts from the GGUF. It trades speed for capacity; it does not remove the
 memory needed for other weights, activations, scratch, and the context.
 
-Metal supports streaming for DeepSeek and GLM. CUDA has streaming paths too,
-and ROCm supports GLM 5.3 streaming. Do not infer support for every model
+Metal supports streaming for DeepSeek and GLM. CUDA and ROCm retain streaming paths in source; they are not newly qualified by this manual. Do not infer support for every model
 and tensor layout from the existence of the flag.
 
 ## Start with the automatic budget
@@ -71,7 +70,7 @@ a remedy for insufficient RAM.
 
 Leave expert preloading enabled for normal use. `--ssd-streaming-cold` and
 `--ssd-streaming-preload-experts N` are mainly useful for controlled measurements.
-See [benchmarking](PERFORMANCE.md) and the [release QA guide](../QA_BEFORE_RELEASES.md).
+See [benchmarking](../development/benchmarking.md) and the [release QA guide](../../QA_BEFORE_RELEASES.md).
 
 ## M5 Max measurements
 

@@ -151,7 +151,7 @@ embedding with trunk residuals, runs its own attention and expert block, and
 proposes a candidate. The trunk verifies candidates before they are committed;
 ordinary decoding does not require this path. See
 [mtp.zig](../../../src/engine/qwen4/mtp.zig) and
-[speculative decoding](../../SPECULATIVE_DECODING.md) for sampling semantics.
+[speculative decoding](../../serving/sampling-and-speculation.md) for sampling semantics.
 
 For images, a separate Qwen3-VL encoder converts image patches into projected
 embeddings at the language model's width. The local tower uses transformer
@@ -174,7 +174,7 @@ possible upstream checkpoint:
 - The `qwen38-q2` and `qwen38-q4k` downloads package main, MTP and original
   BF16 n-gram weights in one GGUF. Their expert quantizations and sizes differ;
   the separate vision encoder is a Q8_0 mmproj. See
-  [model downloads](../../MODELS.md#qwen38-flash-next) and
+  [model downloads](../artifacts.md#qwen38-flash-next) and
   [conversion](../../../gguf-tools/README.md#qwen38-flash-next).
 - The synthetic mini profile is a test shape, not a smaller published model.
   Metadata and tensor checks constrain what this runtime accepts; arbitrary

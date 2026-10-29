@@ -4,7 +4,7 @@ This guide covers the local Qwen 3.8 Flash Next profile. `qwen4exp` is its GGUF 
 
 ## Build, download and run
 
-On Apple Silicon, install the [Metal build prerequisites](../../METAL.md#build-and-run), Zig and Nushell; maintained wrappers are tested with Nushell 0.116.1. From the repository root:
+On Apple Silicon, install the [Metal build prerequisites](../../development/build-and-test.md), Zig and Nushell; maintained wrappers are tested with Nushell 0.116.1. From the repository root:
 
 ```sh
 ./tools/zig-build ds4-server
@@ -12,7 +12,7 @@ On Apple Silicon, install the [Metal build prerequisites](../../METAL.md#build-a
 ./zig-out/bin/ds4-server --model gguf/Qwen3.8-Flash-Next-Q2.gguf --ctx 8192 --prefill-chunk 1024
 ```
 
-The Zig build places programs in `zig-out/bin`; `make` builds and copies the main programs to the repository root. Use the same model options with `ds4` or `ds4-agent`. The downloader also updates `ds4flash.gguf`. Downloads and exact artifact names are in the [model catalogue](../../MODELS.md#qwen38-flash-next).
+The Zig build places programs in `zig-out/bin`; `make` builds and copies the main programs to the repository root. Use the same model options with `ds4` or `ds4-agent`. The downloader also updates `ds4flash.gguf`. Downloads and exact artifact names are in the [model catalogue](../artifacts.md#qwen38-flash-next).
 
 | Download | File size | Main and MTP weights |
 | --- | ---: | ---: |
@@ -37,15 +37,15 @@ Read events through `response.completed`, which contains the answer and a respon
 {"type":"response.create","model":"qwen3.8-flash-next","store":false,"previous_response_id":"resp_FROM_COMPLETED_EVENT","reasoning":{"effort":"none"},"input":"What code did I ask you to remember?"}
 ```
 
-Read the next `response.completed` for the answer. `store=false` keeps this chain in connection-local memory; a reconnect requires replay unless the parent was durably stored. See the [Responses contract](../../../src/serving/RESPONSES.md) for HTTP, persistence and tool-result handling.
+Read the next `response.completed` for the answer. `store=false` keeps this chain in connection-local memory; a reconnect requires replay unless the parent was durably stored. See the [Responses contract](../../serving/responses.md) for HTTP, persistence and tool-result handling.
 
 ## Reasoning, tools and sampling
 
 The server exposes `qwen3.8-flash-next`, `qwen3.8-flash-next-chat` and `qwen3.8-flash-next-reasoner` aliases. `--nothink` disables thinking. Tool calls use the native `<tool_call><function=...><parameter=...>` format; the [reference](reference-manual.md#prompt-reasoning-and-tools) explains rendering and tool results.
 
-The embedded multi-token predictor proposes drafts that the target model verifies before committing tokens. Add `--mtp` to use it. Without it, ordinary decoding remains available; `ds4-bench` measures ordinary decoding and does not accept `--mtp`. Default MTP accepts matching greedy drafts even at nonzero temperature, so it does not promise ordinary sampling's distribution. With `--mtp-exact-sampling`, a sampled single session uses exact speculative sampling; sampled batched requests instead use ordinary batched decode, while temperature-zero requests can still speculate. See [sampling semantics](../../SPECULATIVE_DECODING.md).
+The embedded multi-token predictor proposes drafts that the target model verifies before committing tokens. Add `--mtp` to use it. Without it, ordinary decoding remains available; `ds4-bench` measures ordinary decoding and does not accept `--mtp`. Default MTP accepts matching greedy drafts even at nonzero temperature, so it does not promise ordinary sampling's distribution. With `--mtp-exact-sampling`, a sampled single session uses exact speculative sampling; sampled batched requests instead use ordinary batched decode, while temperature-zero requests can still speculate. See [sampling semantics](../../serving/sampling-and-speculation.md).
 
-On Metal, independent conversations can share GPU weight work while retaining separate session state. Use `ds4-server --batched-session N` to group eligible sessions. Floating-point reduction order can change replies, and a seed need not reproduce a reply across batching schedules. Speculative batches above 16 sessions, images, steering and other unsupported conditions use ordered fallback; the [runtime manual](implementation.md) describes eligibility and state. Disk checkpoints include recurrent state; an older rewind replays the retained prefix on the next evaluation. Image identity and embeddings are not stored in the session payload, so do not assume an image session can be restored from that payload alone.
+On Metal, independent conversations can share GPU weight work while retaining separate session state. Use `ds4-server --batched-session N` to group eligible sessions. Floating-point reduction order can change replies, and a seed need not reproduce a reply across batching schedules. The native selector admits at most 64 ordinary or 32 speculative members, subject to shared workspace capacity and compatible checkpoint and steering state. Images and other unsupported combinations use ordered fallback; the [runtime manual](implementation.md) describes eligibility and state. Disk checkpoints include recurrent state; an older rewind replays the retained prefix on the next evaluation. Image identity and embeddings are not stored in the session payload, so do not assume an image session can be restored from that payload alone.
 
 The native context is 262,144 tokens. Set `DS4_QWEN4_YARN_FACTOR=2` or `DS4_QWEN4_YARN_FACTOR=4` to enable static YaRN for longer contexts; this can reduce quality on shorter prompts. Context allocation still requires sufficient memory.
 
@@ -59,7 +59,7 @@ Download the separate encoder and pass it at startup:
   --vision gguf/mmproj-Qwen3.8-Flash-Next-Q8_0.gguf --ctx 8192 --prefill-chunk 1024
 ```
 
-The CLI accepts `/read image.png`; the server accepts `image_url` parts. Images are resized to multiples of 32 pixels with a minimum of 64 visual tokens and a default maximum of 1024. Set `DS4_QWEN4_IMAGE_MAX_TOKENS` to any value from 64 through 16383 to lower or raise the maximum; values outside that range silently use 1024. Live KV reuse uses image fingerprints. This is image input, not a claim of support for other modalities. See the [server image API](../../SERVER.md#images) and [runtime state limits](implementation.md#rewind-snapshots-and-reuse).
+The CLI accepts `/read image.png`; the server accepts `image_url` parts. Images are resized to multiples of 32 pixels with a minimum of 64 visual tokens and a default maximum of 1024. Set `DS4_QWEN4_IMAGE_MAX_TOKENS` to any value from 64 through 16383 to lower or raise the maximum; values outside that range silently use 1024. Live KV reuse uses image fingerprints. This is image input, not a claim of support for other modalities. See the [server image API](../../serving/overview.md#images) and [runtime state limits](implementation.md#rewind-snapshots-and-reuse).
 
 ## Conversion
 

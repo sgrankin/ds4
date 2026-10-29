@@ -1,10 +1,10 @@
 # Handwritten Zig runtime
 
-Start with [project direction and current status](../docs/PROJECT.md).
-[JOURNAL.md](JOURNAL.md) records short milestones and links to earlier history.
+Start with [project direction and current status](../docs/project.md).
+The [lab journal](../docs/lab/README.md) records research decisions and evidence.
 The [serving request/model boundary](serving/README.md) describes native logical
 input and the DS4.1 preparation path, including its remaining compatibility edges.
-[Stateful Responses](serving/RESPONSES.md) documents HTTP/WebSocket usage and
+[Stateful Responses](../docs/serving/responses.md) documents HTTP/WebSocket usage and
 the supported OpenResponses contract.
 
 `src/` contains handwritten Zig model implementations for DeepSeek V4.1 Flash,
@@ -34,7 +34,7 @@ have their own top-level directories.
 | Frontends | Complete `ds4`, `ds4-bench` and `ds4-eval` controllers; the optional Web/CDP transport and recovery client. |
 | Shared libraries | GGUF metadata/directory parsing, vocabulary/BPE/pretokenization/chat, numeric sampling, Engram, images, state cache/KV store, SSD configuration and response-file storage. Shared tokenizer/chat utilities also serve GLM and Qwen callers. |
 | [Clef](models/clef/) | Dense hybrid and Omni MoE backbones, native tokenizer/record, learned GPU joint head, image/audio towers and model-specific media placement. [Usage and qualification](../docs/models/clef/usage.md). |
-| [Shared runtime](runtime/) | Process Metal device/queue lifetime and owner-aware in-flight submission groups. Clef/Flint model resources are independent; per-GGUF DS4 globals remain a separate migration. |
+| [Shared runtime](runtime/) | Process Metal device/queue lifetime and owner-aware in-flight submission groups. Clef/Flint resources and native DS4.1 Host/Metal contexts have independent owners; retained legacy and TP admission limits differ. [Ownership qualification](../speed-bench/experiments/clef-native-20261024/OWNERSHIP.md). |
 
 Algorithms live in ordinary Zig owners with typed borrowed inputs and explicit
 allocation/resource lifetimes. Small entry modules expose each existing C ABI
@@ -51,71 +51,11 @@ independent references after the transaction's safe boundary.
 
 ## Build and run
 
-Run from the repository root with Zig **0.17**, Apple Clang and the macOS SDK on
-Apple Silicon, with Nushell **0.116.1** tested for the project scripts. The build
-detects the host macOS version and uses the matching
-Clang deployment target. Older deployment targets and other platforms are not
-qualified by this build.
-
-```sh
-# Installs all five programs in zig-out/bin.
-./tools/zig-build
-zig-out/bin/ds4 --help
-zig-out/bin/ds4-agent --help
-zig-out/bin/ds4-server --help
-
-# Optional compatibility names in the repository root, using the same build.
-make
-
-# Debug native owners and fixtures, without replacing the release installation.
-./tools/zig-build -Doptimize=Debug --prefix .workspaces/zig-debug
-```
-
-The installed programs are `ds4`, `ds4-agent`, `ds4-server`, `ds4-bench` and
-`ds4-eval`. A program name can also select an individual build target.
-The wrapper uses Zig's default CPU parallelism and workspace-local caches under
-`.workspaces/zig-build`. Apple Clang compiles residual C/Objective-C objects
-with discovered header dependencies; Zig compiles the native objects and links
-the programs. `-Dsdk=PATH` overrides SDK discovery. Debug controls native owners
-and fixtures; residual engine/Metal objects retain their established release
-and numerical flags. Assertions remain enabled.
-
-Use the existing presets with an explicit binary directory:
-
-```sh
-./ds4-local --bin-dir "$PWD/zig-out/bin" persistent-fast --model MODEL
-./ds4-local --bin-dir "$PWD/zig-out/bin" --server persistent-fast --model MODEL
-./ds4-local --bin-dir "$PWD/zig-out/bin" persistent-packed --model MODEL
-```
-
-Make delegates to this same Zig build and copies the five executables to the
-repository root for existing launchers. Model metadata selects the corresponding
-native Metal model implementation; no separate frontend is needed. Historical
-C implementations remain available in version history for comparison. Resident
-substitution, decoder replay and suffix relocation retain their existing
-preset/opt-in rules.
-
-DeepSeek fast profiles use compact index storage; `persistent-packed` aliases
-`persistent-fast`. See the
-[recipe](../recipes/14-packed-index-cache.md) for capacity, runtime tradeoffs
-and checkpoint compatibility. Fast profiles use the measured SIMD index path.
-
-## Project scripts
-
-`ds4-local` and `tools/zig-build` are executable Nushell scripts; existing commands
-keep their names and argument order. The downloader is `./download-model.nu`;
-its target catalogue is standard JSON in `tools/model-downloads.json`. Download
-verification and split-file resume remain explicit. The small binary-assembly
-helper retains Python's streaming I/O, file locking and fsync.
-
-Shell test/benchmark drivers use `.nu` names. `make test` runs the Nu host/script
-suite; `make test-scripts` runs the fast script contracts. Python remains for
-numerical/model conversion, protocol tests and binary helpers. Historical
-experiment snapshots retain the commands and languages of their revisions.
-
-Development checks use `nu-check --debug` and
-`nufmt --dry-run --shebang ds4-local tools/zig-build download-model.nu tests/*.nu`;
-`nufmt.nuon` keeps four-space indentation and readable multiline pipelines.
+The [build and test manual](../docs/development/build-and-test.md) owns native
+prerequisites, Zig targets, cache locations, script conventions and diagnostics.
+Programs install in `zig-out/bin`; Make uses the same build for root compatibility
+names. Use [the agent guide](../docs/serving/agent.md) and
+[server guide](../docs/serving/overview.md) for presets and startup.
 
 ## C, Objective-C and shader boundaries
 
@@ -191,16 +131,17 @@ trained speculative cycles and six actual vision tasks in each implementation.
 
 | Measurement | C reference | Native selection |
 | --- | ---: | ---: |
-| Full rebuild |9.221s|11.938s|
-| No-op build |0.014s|1.025s|
-| F32 controller edit |3.319s|1.092s|
-| Ordinary process, bracket mean |20.700s|21.061s|
-| Six-turn persistent Agent |229.193s|230.237s|
+| Full rebuild | 9.221 s | 11.938 s |
+| No-op build | 0.014 s | 1.025 s |
+| F32 controller edit | 3.319 s | 1.092 s |
+| Ordinary process, bracket mean | 20.700 s | 21.061 s |
+| Six-turn persistent Agent | 229.193 s | 230.237 s |
 
 The full rebuild costs 29.5% more; the measured controller edit costs 67.1% less.
 No-op overhead remains about one second. Ordinary steady decode differs by
 under 1%; the control prefill rate drifts about 7% within the bracket. Task timings
 are near neutral here, with an ordered vision point 4.73% longer. No blanket
 build or runtime speedup is claimed. Commands, individual points and limits
-belong to the final report. The qualified implementation is available on the
-condensed `zig-rewrite` branch; main remains unchanged.
+belong to the final report. These are October 22 qualification results; the old
+branch and publication state are historical. See [current direction](../docs/project.md)
+for the present stack.

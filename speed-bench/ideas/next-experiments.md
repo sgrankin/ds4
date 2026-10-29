@@ -3,7 +3,7 @@
 **Paused for reassessment, 2026-10-28. No experiment is selected.**
 The latest authorized batch and checkpoint follow-up are complete.
 
-[Project direction and current status](../../docs/PROJECT.md) records the goals,
+[Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome
 with the user before scheduling another experiment. Ideas are not work orders.
 
@@ -13,6 +13,6 @@ the completed outcome into a short journal entry rather than growing this queue.
 Performance comparisons still require at least five alternating samples per
 side and the existing pressure guard.
 
-[Historical queue through 2026-10-28](next-experiments-history-20261028.md)
-preserves prior plans and outcomes intact. It contains superseded instructions
-and is not an active queue.
+The [lab journal](../../docs/lab/README.md) records prior experiments and their
+outcomes. [Design ideas](../../docs/design/README.md) preserve unselected options;
+neither is an active queue.

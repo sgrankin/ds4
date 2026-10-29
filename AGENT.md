@@ -3,7 +3,7 @@
 The rewrite branch uses Zig for DeepSeek V4.1 and the shared serving frontends,
 with retained C engines and an Objective-C Metal driver. Current branch scope
 and experiment guidance are in [AGENTS.md](AGENTS.md) and
-[src/JOURNAL.md](src/JOURNAL.md); they supersede the broader upstream backend
+[docs/lab/README.md](docs/lab/README.md); they supersede the broader upstream backend
 assumptions in the notes below.
 
 ## Goals

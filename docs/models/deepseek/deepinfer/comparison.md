@@ -80,6 +80,6 @@ item. Some differences are local tradeoffs, some are incomplete integration,
 and others serve hardware or deployment requirements absent on one Mac. Each
 chapter states those distinctions and preserves proposed experiments with their
 scope. Selecting further work belongs to the
-[project direction](../../../PROJECT.md) and
+[project direction](../../../project.md) and
 [selected experiment](../../../../speed-bench/ideas/next-experiments.md), not to
 an old "next" label in a comparison.

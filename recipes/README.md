@@ -5,7 +5,7 @@ reproduce them, and what we tried without adopting. The algorithms are portable;
 the flags and measurements describe this DS4 checkout. Read the evidence for the
 specific workload before copying a setting.
 
-For current project goals and selected work, start with [the project overview](../docs/PROJECT.md).
+For current project goals and selected work, start with [the project overview](../docs/project.md).
 
 Historical runtime chapters 01–06 describe the pre-upgrade 2026-10-20 snapshot,
 local working revision `030ae74983d6df9526716d3add86cc05189497a8`. Experiment

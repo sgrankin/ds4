@@ -1,6 +1,6 @@
 ## Benchmarking
 
-For current project goals and decisions, read [the project overview](../docs/PROJECT.md).
+For current project goals and decisions, read [the project overview](../docs/project.md).
 `experiments/` holds historical evidence; it is not an active roadmap. The
 [selected experiment](ideas/next-experiments.md) is currently paused.
 

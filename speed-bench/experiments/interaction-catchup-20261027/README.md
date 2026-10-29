@@ -17,7 +17,7 @@ DS41/Flint input, output and replay distinguish real control tokens from literal
 spellings. Native XGrammar constrains tools and structured answers using the
 shared normalized schema. Incremental Responses arguments preserve final values.
 DS41 text cache markers select actual encoded prefix endpoints across replay and
-SSD persistence. [Policies and handoff](../../../src/JOURNAL.md),
+SSD persistence. [Policies and handoff](../../../docs/lab/README.md),
 [bounded sequence](../../ideas/next-experiments.md).
 
 Omitted `strict` remains non-strict. DeepSeek retains `min_p=0.05` and honors

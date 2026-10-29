@@ -17,7 +17,7 @@ both checkpoint and weight representation:
 - **Q4:** the listed file uses the earlier Flash release.
 - **MXFP4:** the full 1017 file has not been run in this adaptation.
 
-See the [model guide](../../MODELS.md) for the artifacts and qualification.
+See the [model guide](../artifacts.md) for the artifacts and qualification.
 These weight formats are separate from the attention-cache formats below.
 
 ## From weights to layer output
@@ -74,7 +74,7 @@ model file. Engram rows are also read on demand, including when main weights
 are resident. The cache budget is a target constrained by available memory and
 the headroom needed for prefill, not a guarantee of allocation or physical SSD
 bandwidth.
-See [SSD streaming](../../SSD_STREAMING.md), the
+See [SSD streaming](../../storage/expert-streaming.md), the
 [expert cache](../../../src/engine/deepseek41/expert_cache.zig) and
 [Metal expert I/O](../../../src/metal/expert_io.zig).
 
@@ -138,7 +138,7 @@ The M5 path includes cooperative Metal tensor `matmul2d` operations with float
 accumulation; other paths use SIMD-group matrix or scalar/vector operations.
 This does not mean every operation uses tensor hardware. The intended pre-M5
 fallback, including M1, has implementation and fixture coverage on an M5;
-M1 performance has not been measured. The [Metal overview](../../METAL.md)
+M1 performance has not been measured. The [Metal overview](../../backends/apple-silicon.md)
 explains the shared backend paths.
 
 ## Attention history and retrieval
@@ -322,5 +322,5 @@ checkpoint appendix stores target features to help rebuild draft state after
 restore. Fast presets enable DSP1 when DSpark is used; ordinary engine defaults
 do not. A [five-pair restored-continuation test](../../../speed-bench/experiments/draft-features-five-20261028/README.md)
 supported DSP1 for its warm-file, DSpark-enabled restore workload, excluding
-startup and seed requests. See [speculative decoding](../../SPECULATIVE_DECODING.md)
+startup and seed requests. See [speculative decoding](../../serving/sampling-and-speculation.md)
 for activation and limits.

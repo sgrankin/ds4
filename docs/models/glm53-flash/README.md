@@ -9,7 +9,7 @@ legacy engine. Start the packaged Q2 model with:
 ./zig-out/bin/ds4-server --model gguf/GLM-5.3-Flash-Q2.gguf --ctx 8192
 ```
 
-The [artifact catalogue](../../MODELS.md#glm-53-flash) describes the Q4
+The [artifact catalogue](../artifacts.md#glm-53-flash) describes the Q4
 alternative and matching vision encoder. The native FP8 download package does
 not yet have an inference implementation.
 

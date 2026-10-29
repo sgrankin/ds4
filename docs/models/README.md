@@ -25,7 +25,7 @@ conversation lifetimes shared by these models. Model pages describe their own
 state and eligibility rather than implying every backend supports the same
 cache, batching or media features.
 
-The [artifact catalogue](../MODELS.md) retains download targets and packaged
+The [artifact catalogue](artifacts.md) retains download targets and packaged
 checkpoint sizes. DeepSeek V4 Pro and full GLM 5.3 retain legacy C engines;
 their manuals are outside this native-model batch. Original V4 Flash and
 GLM 5.2 are retired.

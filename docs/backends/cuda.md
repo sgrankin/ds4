@@ -1,10 +1,54 @@
-# DGX Spark
+# NVIDIA CUDA GPUs
 
-[README](../README.md) | [Getting started](../README.md#start-here)
+[Documentation index](../README.md)
 
-Use the NVIDIA driver and CUDA development
-toolkit for the machine; the build needs `nvcc` and cuBLAS.
-Check that `nvidia-smi` sees the GPU before building.
+**Historical configuration:** The supported native build is macOS Metal; the current Makefile has no CUDA targets. Retained `src/cuda/` source and the setup below describe prior CUDA paths and qualification, not a validated build on this revision. Historical tests included Ada Lovelace, including 48 GB L40S cards. This is an important
+use case: a model whose other inference implementations require newer GPUs
+can still run here when DwarfStar supports its GGUF layout. Supported tensor
+layouts select an appropriate CUDA path. Support remains model-specific, not
+a promise to run arbitrary GGUFs.
+
+## Build
+
+Install the NVIDIA driver and CUDA toolkit, including `nvcc` and cuBLAS.
+Use the local GPU architecture, or select Ada explicitly:
+
+```sh
+make cuda-generic
+# For an Ada build:
+make cuda CUDA_ARCH=sm_89
+```
+
+For a GB10 machine use the [DGX Spark](cuda.md#dgx-spark) target instead.
+
+## Normal layer placement
+
+Without tensor parallelism, DwarfStar places complete layers on the selected
+GPUs. `--gpu-vram auto` uses reported free VRAM, reserving space for the graph
+and context. Explicit budgets are comma-separated GiB values, one per device.
+
+```sh
+./download-model.nu glm53-q2
+./ds4 --cuda --gpu-devices 0,1,2,3 --gpu-vram auto --ctx 32768
+```
+
+This is also the multi-GPU placement mode for GLM. Startup refuses a layout
+that would require unsupported CPU execution; reduce context or choose a
+smaller model if necessary.
+
+## Serving and network tensor parallelism
+
+Serve supported models using their admitted layer placement and session count;
+see [serving](../serving/overview.md). Original Flash's paired multi-GPU CUDA layout and its
+L40S launcher are retired. Those historical throughput measurements do not
+qualify another model or layout.
+
+For V4.1 Flash across two Sparks, use the separate
+[network tensor-parallel path](distributed.md#tensor-parallelism-between-two-sparks).
+
+## DGX Spark
+
+The following Spark commands and measurements were recorded on the earlier CUDA build. `make cuda-spark` is not a target of the current Makefile.
 
 ## Build and run
 
@@ -23,6 +67,9 @@ for memory. Restore any services you stopped when finished.
 
 Q2 needs SSD streaming on one 128 GB Spark:
 
+These historical commands name the earlier Q2 file; the current `ds41f-q2`
+download selects the 1017 filename. Match the artifact to the chosen revision.
+
 ```sh
 ./download-model.nu ds41f-q2
 ./ds4 --cuda -m gguf/DeepSeek-V4.1-Flash-Q2.gguf \
@@ -35,11 +82,13 @@ other programs and the context. Use the same options with `ds4-agent` or
 `ds4-server`.
 
 Two Sparks can instead keep half the experts each, using
-[network tensor parallelism](DISTRIBUTED.md#tensor-parallelism-between-two-sparks).
+[network tensor parallelism](distributed.md#tensor-parallelism-between-two-sparks).
 Both need the complete GGUF on their local SSD. Single-host V4.1
-[DSpark](SPECULATIVE_DECODING.md#deepseek-v41-flash-dspark) also works with SSD
-streaming; TP speculation and CUDA vision are not supported for V4.1.
-The [model guide](MODELS.md#deepseek-v41-flash) covers
+[DSpark](../serving/sampling-and-speculation.md#deepseek-v41-flash-dspark) also works with SSD
+streaming; Retained V4.1 CUDA TP also implements matching DSpark; CUDA vision remains
+unsupported. These are retained source capabilities, not a current CUDA build or
+completed physical-pair qualification. See the [DSpark QA](../../QA_BEFORE_RELEASES.md#dspark).
+The [model guide](../models/artifacts.md#deepseek-v41-flash) covers
 thinking levels and the separate Metal configurations.
 
 September 13-14, 2026, Q2 SSD with automatic cache sizing: a 3,241-token
@@ -50,7 +99,7 @@ run with 64K allocated context reached 384 t/s for a 32K initial prefill and
 V4 Flash numbers; speed depends on prompt length and the expert cache.
 The automatic-cache 256-token reply test decoded about 5% slower, but
 prefill plus the reply fell from about 87 to 59 seconds.
-See the [QA record](../QA_BEFORE_RELEASES.md#cuda-ssd-streaming) for conditions
+See the [QA record](../../QA_BEFORE_RELEASES.md#cuda-ssd-streaming) for conditions
 and longer-context measurements.
 
 On two Sparks over the direct RoCE link, Q2 measured **21.8 t/s** for one
@@ -67,7 +116,7 @@ decode at these longer contexts was about 18 t/s. Engram tables stayed on disk.
 
 Decode batching starts at five ready sessions; smaller groups run in order.
 The earlier eight-session reference is about **28 aggregate t/s**, not per
-client. See the [network TP QA record](../QA_BEFORE_RELEASES.md#cuda-network-tensor-parallelism)
+client. See the [network TP QA record](../../QA_BEFORE_RELEASES.md#cuda-network-tensor-parallelism)
 for the workloads and memory limits.
 
 ## Qwen3.8 Flash Next
@@ -82,7 +131,7 @@ Both Q2 and Q4 fit on one Spark. After building:
 Q2 keeps 41.73 GiB of weights resident; Q4 keeps 69.74 GiB. Both GGUFs also
 contain 95.37 GiB of BF16 n-grams, read directly from the SSD. Leave room
 for context and runtime buffers. Vision, the native agent, server APIs and
-text-session checkpoints work on CUDA; see [Qwen setup](models/qwen38-flash-next/usage.md).
+text-session checkpoints work on CUDA; see [Qwen setup](../models/qwen38-flash-next/usage.md).
 
 September 15, 2026, Q2 on one Spark: a 16K prefill reached 250 t/s, extending
 it to 30K reached 243 t/s, and ordinary decode stayed around 17.3 t/s.
@@ -106,17 +155,17 @@ implemented; the two-Mac RDMA instructions do not apply to GLM on CUDA.
 ## Vision and speculative decoding
 
 GLM 5.3 Flash and Qwen3.8 Flash Next use matching separate vision encoders.
-Use `/read image.png` in the CLI; see [models and vision](MODELS.md#vision).
+Use `/read image.png` in the CLI; see [models and vision](../models/artifacts.md#vision).
 Both use their built-in MTP block with `--mtp`. V4.1 uses its own matching
 DSpark support file as described above. Speculation is disabled by default.
 
 ## Larger models and serving
 
-CUDA also has [SSD streaming](SSD_STREAMING.md) paths for larger weights.
+CUDA also has [SSD streaming](../storage/expert-streaming.md) paths for larger weights.
 Memory fit and speed depend on the model layout; start with Q2 for normal use.
 
 V4.1 Q2 SSD serving batches up to eight decode rows together. An eight-session
 test reached 11.0 aggregate t/s versus 8.4 with ordered execution; this is
 total throughput, not speed per client. Other single-Spark model paths retain
 their existing scheduling.
-See [serving](SERVER.md) and the recorded [benchmarks](PERFORMANCE.md).
+See [serving](../serving/overview.md) and the recorded [benchmarks](../development/benchmarking.md).

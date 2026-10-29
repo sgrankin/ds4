@@ -53,7 +53,7 @@ partial features. It is a dependency review, not an intermediate-build result.
 | 1 | **Backend and cache foundation:** `ds4.c/.h`, `ds4_gpu.h`, `ds4_deepseek41_gpu.h`, `ds4_metal.m`, `ds4_engram.c`, `ds4_resident_route.h`, `ds4_resident_native_weights.h`, `ds4_suffix_layout.h`, `ds4_suffix_match.h`, `ds4_state_cache.c/.h`, `ds4_state_cache_runtime.h`, `ds4_response_store.h`, `ds4_conversations.h`, changed `metal/{dense,dsv41,norm}.metal`, common `ds4_cli.c`/`ds4_bench.c`/`ds4_help.c`, final `Makefile`, backend/cache tests. |
 | 2 | **Agent consumer:** complete `ds4_agent.c`, `tests/ds4_agent_test.c`, `tests/test_agent_{compact_prefix,live_context,context_frontiers,context_suffix_mock}.c`. |
 | 3 | **Server consumer:** complete `ds4_server.c` and relevant server/store/suffix tests; standalone store headers were supplied in1. |
-| 4 | **Presets and user-facing docs:** `ds4-local`, README, `docs/CLIENTS.md`, AGENTS and ignore rules. |
+| 4 | **Presets and user-facing docs:** `ds4-local`, README, `docs/serving/clients.md`, AGENTS and ignore rules. |
 | 5 | **Reusable benchmark source and frozen inputs:** non-result helpers/drivers/fixtures under `speed-bench/`. |
 | 6 | **Retained experiment evidence:** reports/results/refusals/logs/manifests/source copies and original large references under `speed-bench/experiments/` and `speed-bench/ideas/evidence/`. |
 
@@ -83,7 +83,7 @@ splitting by feature rather than assigning the whole file to one row.
 | 6 | Durable Responses and Conversations history | `ds4_response_store.h`, `ds4_conversations.h`, server endpoints, replay/previous IDs, pagination/conflict publication; `b57dd59f`, `0392c260`, `3fb450f7`. Keep public API limits documented. |
 | 7 | Server suffix reuse and scoped continuation | `ds4_suffix_match.h`, server source capture/cache/profile gates, fresh-user policy, canonical input, one-newline parity padding and approximate visible continuation; `a892cf09`, `a56347a8`, `7adb0d85`, `00da420b`, `91c9cf21`, right shifts from `4cfff6cb`. |
 | 8 | Native sampling controls and request thinking budget | Existing opt-in marker penalty/native sample accessors plus server `ds4_reasoning_budget`, one actual close/eval, reasoning usage and speculative bypass; `cffb558f`/`4d1e4fd5`, `bc6896ae`. Keep diagnostics/failed penalty evidence distinct from the request-budget feature. |
-| 9 | Supported presets and usage documentation | `ds4-local`, README, `docs/CLIENTS.md`, help: named agent/server profiles, shader paths, SSD defaults and current compatibility recipe; `f24e2272`, `0b698113`, `292cef47`, `a01c86dd`, `e203b806`. |
+| 9 | Supported presets and usage documentation | `ds4-local`, README, `docs/serving/clients.md`, help: named agent/server profiles, shader paths, SSD defaults and current compatibility recipe; `f24e2272`, `0b698113`, `292cef47`, `a01c86dd`, `e203b806`. |
 | 10 | Reusable benchmark/qualification tooling and frozen inputs | Current helpers, drivers, graders and input fixtures under `speed-bench/`, with ordinary test dependencies. This is source, not disposable output. |
 | 11 | Historical experiment results and provenance | Retain reports, raw small evidence, failures/refusals, original source copies, manifests and large-payload references. Include project ignore/experiment guidance changes here or in the tooling commit. Keep outside runtime feature diffs. |
 

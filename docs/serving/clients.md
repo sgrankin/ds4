@@ -1,6 +1,6 @@
 # Coding Agent Clients
 
-[README](../README.md) | [Server](SERVER.md)
+[Server](overview.md) | [Responses](responses.md)
 
 Start the server first:
 
@@ -68,7 +68,7 @@ PI_CODING_AGENT_DIR="$pi_config" \
 The placeholder key `local` is not server authentication. This Responses model
 configuration matches the wrapper's 8192-token context and the measured 2048
 output cap per response. `--thinking off` is a client choice; the preset does
-not force reasoning mode globally. The [actual coding qualification](../speed-bench/experiments/pi-agent-preset-hour34-20261004/README.md)
+not force reasoning mode globally. The [actual coding qualification](../../speed-bench/experiments/pi-agent-preset-hour34-20261004/README.md)
 retains the isolated model/settings files, tool events and the first
 implementation's 161-check result. It did not perform a context edit or
 establish a suffix speedup.
@@ -186,3 +186,26 @@ exec claude "$@"
 Give the wrapper a different name from `claude`. Agent clients can send large
 initial prompts, so the first prefill may take time. Disk caching helps reuse
 compatible prefixes on later sessions.
+
+## Pi SDK and edited working context
+
+The installed Responses provider in the [October 4 client qualification](../../speed-bench/experiments/server-confirmation-hour17-20261004/client-results.md)
+sent full input with `store: false`. With cache retention enabled, its
+`sessionId` became the server's `prompt_cache_key`. Its payload hook could add a
+reasoning budget chosen by the caller for that request:
+
+```js
+const budget = 128;
+const options = {
+  sessionId: "persistent-agent-1",
+  cacheRetention: "short",
+  temperature: 0,
+  onPayload: payload => ({ ...payload, ds4_reasoning_budget: budget }),
+};
+```
+
+This is the provider recipe verified at that qualification, not a new benchmark
+or a promise about every Pi release. Keep instructions and tools stable across
+turns. For context edits, preserve tool IDs and results and send the full edited
+input with the same cache identity. The [Responses manual](responses.md#editing-client-owned-history)
+explains the budget's soft closure, MTP restriction and recovery semantics.

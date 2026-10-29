@@ -21,9 +21,7 @@ defer allocator.free(rendered);
 
 The model owns reasoning defaults/aliases, effort handling, prompt separators,
 tool encoding, sampled-tool replay and parallel result ordering. DS4.1's pure
-renderer lives in `models/deepseek41/prompt.zig`. Other model families retain
-their existing runtime adapters; this does not claim native implementations of
-those models.
+renderer lives in `models/deepseek41/prompt.zig`. Other families use their own model adapters and runtime paths; native model support extends beyond this prompt renderer.
 
 The current server path is:
 
@@ -39,7 +37,7 @@ wire decoder / durable conversation resolution
 history and validates live continuation before invoking model preparation.
 `server/model.zig` contains C enum/engine detection and allocation handoff. The
 wire parser and existing execution/session records still use their established
-C ABI. HTTP and [Responses WebSocket](RESPONSES.md) now share this preparation
+C ABI. HTTP and [Responses WebSocket](../../docs/serving/responses.md) now share this preparation
 boundary and the generation/output path.
 
 The canonical bridge uses an arena for descriptor arrays and normalized tool

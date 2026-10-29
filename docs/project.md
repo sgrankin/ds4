@@ -1,7 +1,7 @@
 # Project direction and current status
 
 Updated 2026-10-28. **Runtime implementation and experiments are paused.**
-The model documentation batch is complete under the [documentation index](README.md).
+The organized manuals and lab journal are available under the [documentation index](README.md).
 The latest authorized batch is complete. No next experiment is selected.
 
 ## What we are building
@@ -36,7 +36,7 @@ The completed work is installed locally; the stack has not been published.
 | Area | Current state | Detail |
 | --- | --- | --- |
 | Native serving | Zig entry points and ordinary Metal implementations for DeepSeek V4.1 Flash, Flint, Qwen 3.8 Flash Next, GLM 5.3 Flash and Clef. Some legacy models and platform/library boundaries remain C/Objective-C. | [Source map](../src/README.md), [model manuals](models/README.md) |
-| Agent protocol | Stateful Responses HTTP/WebSocket, independent conversations, durable response ancestry, client function calls and native decision APIs. Generic server tool execution is removed. | [Responses contract](../src/serving/RESPONSES.md), [Clef](models/clef/usage.md) |
+| Agent protocol | Stateful Responses HTTP/WebSocket, independent conversations, durable response ancestry, client function calls and native decision APIs. Generic server tool execution is removed. | [Responses contract](serving/responses.md), [Clef](models/clef/usage.md) |
 | Model interaction | Official-reference prompt/tool handling, client sampling overrides, explicit cache breakpoints and native constrained decoding for DeepSeek and Flint. Typed partial tool calls survive generation limits. | [Interaction qualification](../speed-bench/experiments/interaction-catchup-20261027/README.md), [DSML limits](../speed-bench/experiments/dsml-length-20261028/README.md) |
 | Persistent inference state | RAM/SSD checkpoint storage, suffix relocation from immutable pre-RoPE originals, packed index/main KV, and useful drafter-history persistence. Packed KV and DSP1 are selected through DeepSeek fast presets; ordinary engine defaults differ. | [Recipe index](../recipes/README.md), especially chapters 02, 03, 14 and 15 |
 | Context edits | Semantic endpoints, bounded hot retention, anchor selection and capture during ordinary prefill are complete. Server `persistent-fast` enables this package; the direct agent and other presets do not gain these new boundary defaults. | [Current checkpoint recipe](../recipes/16-semantic-context-checkpoints.md) |
@@ -93,6 +93,6 @@ remain ideas. No investigation of these starts automatically.
 
 - **This page:** current goals, capability boundaries and choices.
 - **[Recipes](../recipes/README.md):** how adopted techniques work and their tradeoffs.
-- **[Journal](../src/JOURNAL.md):** short milestone history and links to older records.
+- **[Lab journal](lab/README.md):** experiment narratives, negative results and original evidence.
 - **[Experiment queue](../speed-bench/ideas/next-experiments.md):** selected work only; currently paused.
 - **`speed-bench/experiments/`:** historical measurement evidence, read through a specific link rather than as a project overview.

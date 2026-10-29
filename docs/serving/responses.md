@@ -15,6 +15,9 @@ OpenResponses capability.
 ```
 
 The preset configures the existing response store and RAM/SSD model cache.
+All server presets default to localhost, two active slots and a durable response
+store at `.workspaces/response-store`. Later CLI flags override slot/address
+defaults; `DS4_SERVER_RESPONSE_STORE_DIR` selects another store directory.
 It also selects its existing approximation settings; protocol qualification used
 F32 KV with approximation features disabled. For a manually launched server,
 set `DS4_SERVER_RESPONSE_STORE_DIR` to enable stored response/conversation
@@ -65,7 +68,7 @@ are outside this version and return explicit unsupported-feature errors. Do not
 send HTTP-only `stream`, `stream_options` or `background` fields in a WebSocket
 create message. Standalone compaction and hosted execution are unsupported.
 DS41/Flint structured output and function-tool constraints use the shared
-[request implementation](../../docs/SERVER.md#constrained-output-and-client-tools)
+[request implementation](sampling-and-speculation.md#constrained-output-and-client-tools)
 on HTTP and WebSocket alike. Stored/connection-local
 continuation currently targets text and function tools; image continuation is
 not qualified.
@@ -81,4 +84,10 @@ response IDs also identify live approximate-state lineage without requiring a
 durable response file.
 
 See the [qualification report](../../speed-bench/experiments/responses-websocket-20261023/README.md)
-and [journal](../JOURNAL.md). Raw runs remain ignored under `.workspaces/`.
+and [journal](../lab/README.md). Raw runs remain ignored under `.workspaces/`.
+
+## Editing client-owned history
+
+For an edited working view, a client can send full `input` with `store: false` and a stable `prompt_cache_key` for that history. Preserve tool call IDs, actual tool results and unchanged instructions. The key scopes cache discovery; it does not make changed prefixes equivalent. Use `previous_response_id` to append to a server-owned chain; submit full input or edit Conversation items to change its history. Conversations support create/get/delete and item append/list/get/delete; stored Responses support retrieval and deletion. See [checkpoint storage](../storage/session-cache.md) for exact-prefix and approximate suffix reuse.
+
+For native DS4.1 text, a caller can set `ds4_reasoning_budget` on an individual Responses request along with `reasoning.effort`. Zero or omission leaves thinking unrestricted. A nonzero value is a soft, once-per-request closure, not automatic task-stage detection: parser recovery or later reopening may exceed it, the forced closure counts against the output cap, and it disables MTP for that request. Keep instructions and tool definitions stable across turns to preserve prefix reuse. The [thinking screen](../../speed-bench/experiments/server-thinking-hour16-20261004/README.md) and [stable-instructions screen](../../speed-bench/experiments/stable-instructions-hour18-20261004/README.md) document their workload-specific limits.

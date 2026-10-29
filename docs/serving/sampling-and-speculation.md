@@ -1,6 +1,6 @@
 # Speculative Decoding
 
-[README](../README.md)
+[Serving](overview.md)
 
 Speculation proposes future tokens with a smaller draft block, then checks
 them with the main model. An accepted prefix advances generation by several
@@ -14,7 +14,7 @@ that a draft model always helps.
 
 V4.1 has its own 8.04 GiB support GGUF. It retains the native MXFP4 experts
 and uses a different draft graph from V4 Flash. Do not interchange the files.
-See [conversion](../gguf-tools/README.md#convert-v41-dspark) to build it.
+See [conversion](../../gguf-tools/README.md#convert-v41-dspark) to build it.
 
 ```sh
 ./ds4 -m gguf/DeepSeek-V4.1-Flash-Q2.gguf \
@@ -22,18 +22,19 @@ See [conversion](../gguf-tools/README.md#convert-v41-dspark) to build it.
   --mtp-model gguf/DeepSeek-V4.1-Flash-DSpark.gguf
 ```
 
-The same options work with `ds4-agent` and `ds4-server`. Metal, CUDA and ROCm
-support single-host execution, with either resident target weights or SSD
-streaming. The drafter stays resident, so leave another 8 GiB for it.
-Two-host tensor parallelism works on Metal and CUDA: add the same `--dspark
+The same options work with `ds4-agent` and `ds4-server`. The supported macOS Metal build supports single-host execution with either resident target weights or SSD streaming. CUDA and ROCm paths remain in source but are not newly qualified here. The drafter stays resident, so leave another 8 GiB for it.
+Native Metal and retained CUDA code implement two-rank V4.1 tensor parallel
+speculation. Add the same `--dspark
 --mtp-model FILE` options to both the coordinator and worker. Each peer keeps
 the drafter resident; the target and its verification run across both GPUs.
+This source support is distinct from completed physical-pair qualification;
+consult the DSpark QA below. ROCm remains single-host.
 
 Up to five drafts are checked together. The sampling choices below apply;
 `--mtp-exact-sampling` uses sampled proposals and the full acceptance/correction
 rule for V4.1. Without compatible saved drafter features, restored sessions warm
 the draft window with 128 ordinary tokens before speculation resumes. Supported
-canonical checkpoints can retain those features; see [drafter-history persistence](models/deepseek/deepinfer/cache-and-attention.md#restoring-useful-drafter-history-c12)
+canonical checkpoints can retain those features; see [drafter-history persistence](../models/deepseek/deepinfer/cache-and-attention.md#restoring-useful-drafter-history-c12)
 for activation conditions and the stored representation.
 Measure speed on your prompts: acceptance and SSD
 cache size both matter. V4.1 DSpark can still be slower than ordinary decoding,
@@ -41,7 +42,7 @@ including in TP mode.
 
 The maintained native Metal regression fixture is built with
 `./tools/zig-build dspark-native-oracle`; see the
-[DSpark qualification commands](../QA_BEFORE_RELEASES.md#dspark). It checks
+[DSpark qualification commands](../../QA_BEFORE_RELEASES.md#dspark). It checks
 trained draft tensors and actual runtime commits without relying on the
 retired original-Flash acceptance driver's log counters.
 
@@ -68,7 +69,7 @@ Both Qwen downloads include MTP and native BF16 n-grams in the main GGUF:
 
 Ordinary decode uses the same file with `--mtp` omitted. For non-zero
 temperature, add `--mtp-exact-sampling` to preserve the target sampling
-distribution. See [Qwen setup](models/qwen38-flash-next/usage.md) for Metal and CUDA.
+distribution. See [Qwen setup](../models/qwen38-flash-next/usage.md) for Metal and CUDA.
 
 The cycle drafts one token ahead by default and engages a **second, chained
 draft** (one extra nextn-layer step conditioned on the predictor's own
@@ -106,5 +107,43 @@ different hardware or execution configurations.
 
 Native session batches generally use ordinary target decoding. Qwen3.8 on
 Metal has a batched MTP path, and DS41 constrained requests can take bounded
-exclusive speculative turns. See [serving](SERVER.md#multiple-sessions) for
+exclusive speculative turns. See [serving](overview.md#multiple-sessions) for
 eligibility, exact-sampling behavior and fallbacks.
+
+## Constrained output and client tools
+
+DeepSeek4.1 and Flint use a native XGrammar compiler and per-generation matcher
+for declared function-tool framing. `strict:true` additionally enforces the
+supported argument schema; omitted strict and `strict:false` leave argument
+schemas non-strict. Strict normalization lists every property as required and
+forbids extra object properties. Prompting and grammar use the same normalized
+schema. Explicit namespaces map to `namespace::name` for model output while the
+Responses wire retains separate namespace and local name.
+
+Responses `text.format` and Chat `response_format` accept JSON objects and JSON
+schemas. Chat also accepts regex. Reasoning remains separate from the constrained
+answer. Unsupported schema constraints or combinations return an error before
+prefill; this is XGrammar's supported subset, not every JSON Schema feature.
+Required/named tool choices in DeepSeek thinking mode are rejected; clients can
+explicitly choose non-thinking for those requests. `parallel_tool_calls:false`
+limits the grammar to one call. Custom stop strings cannot combine with a
+constraint because they could cut a valid structure partway through.
+Flint's XML argument syntax cannot reliably distinguish a constrained string
+from a non-null JSON value in some union schemas. Strict parameters combining
+those types with pattern, format or string-length constraints are rejected;
+nullable strings and finite enum/const type selection remain supported.
+
+Grammar constraints preserve native decode acceleration: Flint encodes up to
+eight sequential forwards per packet, overlapping CPU mask preparation with the
+following GPU forward. With DS41 DSpark support loaded, draft and target masks
+apply before sampling filters and speculative verification; tentative matcher
+advances roll back before accepted tokens are committed. Unsupported Flint
+packet filters retain constrained scalar sampling. Explicit reasoning budgets
+and ignore-EOS requests retain their existing scalar path. Setting
+`DS4_MTP_SPEC_DISABLE=1` selects the scalar control for either model.
+
+Custom tool declarations, background Responses, automatic input truncation and
+nonzero presence/frequency penalties or top_logprobs are unsupported and return
+clear errors. Ordinary functions and client-executed tool_search remain usable.
+Responses, Chat and Anthropic stream DS41/Flint tool names and argument fragments;
+completed arguments preserve the same bytes as the accumulated deltas.

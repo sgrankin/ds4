@@ -1,8 +1,10 @@
 # AMD Strix Halo
 
-[README](../README.md) | [Getting started](../README.md#start-here)
+[Documentation index](../README.md)
 
-The reference system is a 128 GB Strix Halo with Radeon 8060S (`gfx1151`),
+**Historical configuration:** The supported native build is macOS Metal; the current Makefile has no `rocm` or `strix-halo` target. The retained `src/rocm/` source and the setup below describe an earlier qualified configuration, not a validation of the current native build. Use an appropriate historical revision and its QA record if reproducing it.
+
+The reference system was a 128 GB Strix Halo with Radeon 8060S (`gfx1151`),
 such as the Framework Desktop. The ROCm build uses the standard binary names
 and selects the ROCm backend by default.
 
@@ -60,6 +62,9 @@ make strix-halo
 
 Use Q2 with SSD streaming on a 128 GB machine:
 
+These historical commands name the earlier Q2 file; the current `ds41f-q2`
+download selects the 1017 filename. Match the artifact to the chosen revision.
+
 ```sh
 ./download-model.nu ds41f-q2
 ./ds4 --rocm -m gguf/DeepSeek-V4.1-Flash-Q2.gguf \
@@ -68,7 +73,7 @@ Use Q2 with SSD streaming on a 128 GB machine:
 
 The 341 GiB GGUF includes disk-only Engram tables. Keep it on a fast local
 SSD and start with automatic cache sizing. The matching
-[V4.1 DSpark](SPECULATIVE_DECODING.md#deepseek-v41-flash-dspark) support file
+[V4.1 DSpark](../serving/sampling-and-speculation.md#deepseek-v41-flash-dspark) support file
 is optional. V4.1 vision and network TP are not supported on ROCm.
 Large prefills are not yet tuned on this backend and can be slow.
 
@@ -84,10 +89,10 @@ state. Begin with automatic cache sizing and a small context:
 ```
 
 Full GLM 5.3 also retains its ROCm streaming path. See
-[SSD streaming](SSD_STREAMING.md) before adjusting the cache budget.
+[SSD streaming](../storage/expert-streaming.md) before adjusting the cache budget.
 
 GLM 5.3 Flash supports images on ROCm. Add the matching encoder with `--vision FILE`, as described in
-[models and vision](MODELS.md#vision).
+[models and vision](../models/artifacts.md#vision).
 
 For a model-free routed-kernel check, use `make test-mxfp4-rocm`.
-Full-model validation is described in [testing](TESTING.md).
+Full-model validation is described in [testing](../development/build-and-test.md).

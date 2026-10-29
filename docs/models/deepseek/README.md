@@ -11,7 +11,7 @@ For a 128 GB Mac, the Q2 model needs SSD expert streaming. The existing
 
 This preset selects approximations and packed caches; it is not the ordinary
 engine baseline. The backend manual describes its choices and override rules.
-The [artifact catalogue](../../MODELS.md#deepseek-v41-flash) covers other quants
+The [artifact catalogue](../artifacts.md#deepseek-v41-flash) covers other quants
 and checkpoint-matched vision files.
 
 ## Manuals

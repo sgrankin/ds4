@@ -10,7 +10,7 @@ and [runtime implementation](implementation.md) explain the model and its native
 
 From the repository root on supported Apple Silicon, use Zig 0.17, Apple Clang
 and the macOS SDK; project scripts use Nushell (0.116.1 is tested). See the
-[native build guide](../../../src/README.md#build-and-run) and [Metal setup](../../METAL.md#build-and-run)
+[native build guide](../../../src/README.md#build-and-run) and [Metal setup](../../development/build-and-test.md)
 for prerequisites. Download the pinned checkpoint and build the server and
 comparison executable:
 
@@ -98,7 +98,7 @@ directory is retained. Multiple sockets can use independent conversation slots;
 GPU work is serialized across sessions. Flint defaults to a mixed-prefill quantum
 of 1024 tokens; `--mixed-prefill-quantum` changes it. For request behavior,
 reasoning and tool handling, see the [runtime implementation](implementation.md)
-and [shared server contract](../../SERVER.md#constrained-output-and-client-tools).
+and [shared server contract](../../serving/sampling-and-speculation.md#constrained-output-and-client-tools).
 
 ## Reproduce the reference comparison
 

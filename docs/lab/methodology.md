@@ -10,7 +10,7 @@ schema: combine or omit sections when that makes the story clearer.
 
 Choose one outcome and a question it can answer. Follow the selected work in
 [the experiment queue](../../speed-bench/ideas/next-experiments.md); the
-[project page](../PROJECT.md) describes the current direction. Give each item
+[project page](../project.md) describes the current direction. Give each item
 one hour, including preparation, build, runs and analysis. Freeze a meaningful
 baseline, change one thing, measure, inspect and decide. Stop when the question
 is answered; a side idea or a completed experiment does not start another.
@@ -38,7 +38,7 @@ included, warm or cold, and whether an OS cache flush actually occurred. Logical
 reads are not necessarily physical SSD traffic. Profiling can change timing;
 use it to locate costs and distinguish profiled observations from final
 profile-off latency measurements. Pause unrelated work during those measurements.
-[Performance and benchmarking](../PERFORMANCE.md) describes the existing
+[Performance and benchmarking](../development/benchmarking.md) describes the existing
 context sweep and its scope.
 
 Run one heavy model job at a time under the existing
@@ -68,7 +68,7 @@ not establish whether a response is useful; partial top-token lists cannot
 supply full KL, and paired KL does not describe diverging sampled histories.
 Report relevant tails or per-case results as well as means. Neither metric is
 an automatic rejection threshold or a substitute for practical task checks.
-The [quality probe notes](../../speed-bench/ideas/README.md#paired-quality-probe)
+The [quality probe notes](../development/benchmarking.md#paired-quality-probe)
 give the project's measurement details.
 
 ## Preferred lab entry
@@ -92,8 +92,8 @@ understand the comparison without requiring a permanent archived harness.
 
 ### Findings
 
-Show absolute results, all measured samples and variation where relevant, plus
-practical quality and resource use. Keep failures, unexpected observations and
+Summarize absolute results and variation, practical quality and resource use;
+link the result report containing all measured samples. Keep failures, unexpected observations and
 order effects visible. Distinguish what was measured from a possible explanation;
 name any measurement that was not made. A compact table can make samples easy
 to compare without replacing the explanation. Larger comparisons can summarize
@@ -106,11 +106,11 @@ is an example of separating request time, startup and cache conditions.
 Say what was learned and whether the change was adopted, rejected or remains
 unresolved. Explain the tradeoffs and evidence limits, and link to the
 implementation and any updated technical manual or recipe. Avoid extrapolating
-one workload to other models, machines or tasks. The lab entry is the narrative
-result report; a linked sample record supplies detail when needed. Update the
-owning technical manual's conclusion. A project-journal milestone, when useful,
-should be only a sentence or two linking to the entry, rather than a second
-account of its results.
+one workload to other models, machines or tasks. Keep commands, complete samples
+and detailed analysis in one result report; the short lab entry explains the
+question, decision and limits and links to that report. Update the owning
+manual or recipe's conclusion. The lab entry supplies the journal record;
+there is no separate project-journal milestone to duplicate it.
 
 ## Evidence and tools
 

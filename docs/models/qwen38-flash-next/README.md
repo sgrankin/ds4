@@ -11,7 +11,7 @@ n-gram table. A conservative starting context and prefill chunk are:
 
 The file-format and source identifier `qwen4exp` refers to this supported
 profile. It does not establish compatibility with another Qwen checkpoint.
-The [artifact catalogue](../../MODELS.md#qwen38-flash-next) covers quantization
+The [artifact catalogue](../artifacts.md#qwen38-flash-next) covers quantization
 choices and the separate vision encoder.
 
 ## Manuals

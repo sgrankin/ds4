@@ -31,7 +31,7 @@ flowchart LR
 The engine is shared by its sessions; the arrows back to the request represent
 client-visible output and a later request, not server-side tool execution. The
 client executes a function call and sends its result as a subsequent tool
-message. The [Responses contract](../../../src/serving/RESPONSES.md) describes
+message. The [Responses contract](../../serving/responses.md) describes
 history and transport independently of this model.
 
 ## Loading and ownership
@@ -123,7 +123,7 @@ the following forward, synchronized by shared-event handoffs. EOS or failure
 stops further matcher advancement; an error rolls back packet advances. The last
 prediction is not accepted until it is actually fed through the model. Unsupported
 packet filters use constrained scalar sampling. Schema support and forced tool
-choices have explicit preflight limits in the [shared contract](../../SERVER.md#constrained-output-and-client-tools)
+choices have explicit preflight limits in the [shared contract](../../serving/sampling-and-speculation.md#constrained-output-and-client-tools)
 and [materialization](../../../src/server/materialize.zig).
 
 ## Persistence, cancellation and steering

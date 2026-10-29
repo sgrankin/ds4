@@ -6,9 +6,10 @@
 language models on consumer hardware (that is, hardware that people
 can actually own). To reach this goal, we are building
 a small native inference engine optimized first for
-**DeepSeek V4.1 Flash** (Metal, and text inference on CUDA),
+**DeepSeek V4.1 Flash** on Metal,
 and additionally **GLM 5.3**, **GLM 5.3 Flash**, **Flint** and
-**DeepSeek V4 PRO**, and **Qwen3.8 Flash Next** (Metal and CUDA). The code is self-contained and
+**DeepSeek V4 PRO**, and **Qwen3.8 Flash Next**. CUDA and ROCm implementations
+remain in source, but this fork currently qualifies the native Metal build. The code is self-contained and
 deliberately narrow, not a general GGUF runner: you need to use the
 GGUF files the project produces, that are part of the project
 itself.
@@ -17,7 +18,7 @@ Original DeepSeek V4 Flash and GLM 5.2 are retired. DeepSeek V4 PRO and full
 GLM 5.3 retain their legacy engines; the ordinary Metal engines for V4.1 Flash,
 GLM 5.3 Flash, Qwen3.8 Flash Next and Flint are native Zig.
 
-For this local fork, start with [project direction and current status](docs/PROJECT.md).
+For this local fork, start with [project direction and current status](docs/project.md).
 It records current goals, adopted features and unfinished work without requiring
 a tour of the experiment history.
 The [documentation index](docs/README.md) leads to the new architecture overview,
@@ -46,7 +47,7 @@ workstations. A model may be removed when a better replacement arrives.
 
 # So, what can I do with this software?
 
-* You can run a very capable models in your consumer hardware, a MacBook, a DGX Spark, or a Strix Halo for example. Even if you have not enough RAM, with SSD streaming, you can run it at a decent speed.
+* Run selected models on a Mac, using SSD streaming when their weights exceed available RAM. The retained Spark and Strix Halo guides describe historical platform work rather than current native build targets.
 * Using two 128 GB Macs connected with RDMA, you can run DeepSeek V4.1 Flash Q2 or GLM 5.3 Flash Q4 with tensor parallelism. Larger quants need larger machines or SSD streaming.
 * You can also use pipeline paralellism to glue together multiple systems to sum their RAM and run larger models.
 
@@ -96,15 +97,16 @@ git clone https://github.com/antirez/ds4.git
 cd ds4
 ```
 
-Choose your build. The platform guides cover prerequisites, memory sizing,
-and hardware-specific setups:
+The native build targets macOS Metal. The other platform guides preserve
+historical build commands and retained source paths; those targets are absent
+from the current Makefile and are not alternate qualified builds:
 
 | Platform guide | Build |
 | --- | --- |
-| [Metal on Apple Silicon](docs/METAL.md) | `make` |
-| [DGX Spark](docs/DGX_SPARK.md) | `make cuda-spark` |
-| [Strix Halo / Framework Desktop](docs/STRIX_HALO.md) | `make strix-halo` |
-| [One or more CUDA cards, including Ada/L40S](docs/CUDA_MULTI_GPU.md) | `make cuda-generic` |
+| [Metal on Apple Silicon](docs/backends/apple-silicon.md) | `./tools/zig-build` or `make` |
+| [DGX Spark](docs/backends/cuda.md) | `make cuda-spark` |
+| [Strix Halo / Framework Desktop](docs/backends/rocm.md) | `make strix-halo` |
+| [One or more CUDA cards, including Ada/L40S](docs/backends/cuda.md) | `make cuda-generic` |
 
 The Metal build uses handwritten Zig modules:
 `tools/zig-build`, with programs in `zig-out/bin`. Maintained launchers and
@@ -121,7 +123,7 @@ SSD streaming:
 
 Downloads go in `gguf/`. Repeat the command to resume an interrupted download.
 Leave memory for the context and runtime buffers as well as the model.
-See [other models](docs/MODELS.md) or use [SSD streaming](docs/SSD_STREAMING.md)
+See [other models](docs/models/artifacts.md) or use [SSD streaming](docs/storage/expert-streaming.md)
 on a smaller Mac.
 
 ## Everyday Use
@@ -139,7 +141,7 @@ The default model is `ds4flash.gguf`, a link updated by main-model downloads.
 Pass `-m FILE` to choose explicitly. Commands normally run from the repository
 root; use `--chdir /path/to/ds4` when launching elsewhere.
 
-The server listens at `http://127.0.0.1:8000` by default; see [serving](docs/SERVER.md)
+The server listens at `http://127.0.0.1:8000` by default; see [serving](docs/serving/overview.md)
 for API access and multiple sessions.
 
 The interactive CLI keeps a multi-turn conversation. Use `/help`, `/read FILE`,
@@ -148,353 +150,33 @@ Run each binary with `--help` for its full options.
 
 ### Native coding agent
 
-`ds4-agent` runs inference directly, without a separate HTTP server. It keeps
-the token history and live model state together, shows prefill progress, and
-uses the model's native tool format. DeepSeek and GLM have their own templates.
-
-Our [recipe journal](recipes/README.md) describes the local improvements, measurements,
-tradeoffs and unsuccessful experiments, with steps for adapting them to other runtimes.
-
-Local V4.1 opt-ins can be enabled with the small `ds4-local` wrapper:
+`ds4-agent` runs inference and tools in one process. The [agent manual](docs/serving/agent.md)
+covers presets, editable context, compaction, archives and saved sessions:
 
 ```sh
-./ds4-local persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
-./ds4-local persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf --live-context-file .workspaces/agent-context.txt
-./ds4-local resident-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
-./ds4-local --server context-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
-./ds4-local --server persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
-./ds4-local --server resident-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
+./tools/zig-build ds4-agent
+./ds4-local --bin-dir ./zig-out/bin persistent-fast \
+  --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf \
+  --live-context-file .workspaces/agent-context.txt
 ```
 
-`persistent-fast` combines approximate suffix reuse with resident-expert
-substitutions during decoding and selected prefill, in either the direct agent
-or the server. `context-fast` enables suffix reuse with native expert routing;
-`resident-fast` uses up to three resident-expert substitutions with native
-routing weights. All use a 64 GB expert-cache target, context 8192 and prefill
-chunk 512. Later CLI arguments override those defaults. The script contains
-the environment settings explicitly and leaves thinking mode unchanged.
-
-Server `persistent-fast` also retains semantic RAM checkpoints for repeated
-client-side context edits: boundaries/ongoing reuse on, first/last anchor
-selection, in-sweep capture, spacing 512 and HOT 512 MiB. Explicit overrides win.
-The agent and other presets receive no new boundary defaults. Two separate
-five-pair comparisons pass all 120 answers: anchor selection reduces combined
-initial-plus-two-edit time 7.8%; in-sweep capture reduces it 20.6% against segmented
-anchors. In the latter comparison, ordinary setup falls 55.1 → 40.1 s and favorable
-setup 72.8 → 41.4 s, with repeated-edit time neutral within variation. The
-[results and Pareto plots](speed-bench/experiments/context-capture-20261028/README.md)
-separate timing from functional retention and numerical checks. The timed
-setup uses native routes, a 32 GB expert budget, a configured prefill chunk of
-8,192 tokens and an effective scheduling quantum of 2,048 tokens. The wrapper keeps
-its existing 64 GB expert target, resident-routing policy and 512-token chunk.
-`--prefill-chunk 8192` selects
-the tested configured chunk without changing those other wrapper settings.
-
-The DeepSeek fast profiles use physical FP4 index caches, compact version-3 SSD
-checkpoints and SIMD index scoring above the measured small-key crossover.
-This stores the existing quantized index values in less space; repeated 32K
-tasks were roughly speed-neutral. `persistent-packed` remains an alias for
-`persistent-fast`.
-The [packed-index recipe](recipes/14-packed-index-cache.md) records the format,
-measurements and reproduction steps. Explicit `DS4_V41_INDEX_SIMD=0` and
-`DS4_V41_INDEX_FP4=0` overrides are honored. Existing version-2 checkpoints
-remain readable; older executables cannot read the new version-3 format.
-
-The direct agent compacts automatically under context pressure, or on `/compact`:
-it generates a task-state summary and keeps a recent verbatim tail. With
-`context-fast` or `persistent-fast`, it attempts suffix reuse during that rebuild
-without requiring a live context file. The latest user message and everything
-after it remain fresh. When no suitable checkpoint or aligned span exists, it
-recomputes normally. Add `--live-context-file PATH` for CLM-style editing: the
-agent receives instructions and short editing recipes, and can rewrite its
-mirrored conversation using ordinary file tools. Accepted edits update the
-active context after tool execution or before the next user turn.
-
-The mirror labels conversation spans with header lines such as
-`[[DS4_TURN a3c91e704b82d6f0 role=assistant]]`. IDs are random and stay stable
-during the running agent. Keep each ID with its turn when editing or moving it;
-the file determines conversation order. New turns receive fresh IDs.
-Restarting may assign different IDs. These headers are editing handles: they
-are removed before the conversation is evaluated by the model. The protected
-system/tool prefix stays unlabelled. Tool calls and their results can occur
-within an assistant span.
-Literal header-shaped lines in message bodies have a backslash display escape;
-preserve that escape when keeping the text.
-
-The editing workflow is to list the headers, inspect the selected older span
-with a bounded read, then archive useful facts into a checkable file before
-deleting redundant history or replacing it with a concise note. Preserve the
-protected prefix, latest user request, chat delimiters and untouched text.
-The recipes edit selected ranges in the existing file rather than printing the
-whole context or retyping retained conversation. Batch related edits to specific
-older IDs, then continue the task after the successful edit receipt.
-Built-in compaction and agent-directed edits are separate ways to shorten
-context; compaction itself does not automatically archive discarded facts into
-files.
-
-The [direct-agent qualification](speed-bench/experiments/agent-package-hour41-20261009/README.md)
-exercises left/right SSD-backed grafts, fresh inventory/archive reads, and real
-built-in compaction without a mirror file. It records a favorable edit-workflow
-timing screen and the alignment fallbacks separately.
-
-Selected-prefill resident routing is a further experimental opt-in:
-`DS4_METAL_V41_RESIDENT_PREFILL_GAP=.90` uses the existing rank, mass and
-substitution-count limits while preserving prefill's native mixture weights.
-The [prefill-only screen](speed-bench/experiments/recipe-prefill-hour37-20261008/README.md)
-measured a 10.6% warm-append saving and a 6.0% coding-task saving against bracket
-means at three substitutions, with all first-code checks passing. It also
-changes selected tails within initial prefills; full sweeps remain native.
-The `persistent-fast` preset enables this knob alongside decoder
-substitutions and suffix reuse. Set `DS4_METAL_V41_RESIDENT_PREFILL_GAP=0` to
-disable its prefill substitutions. Other presets leave it unset. See the
-screen for commands, timing drift and the likelihood tradeoff.
-The agent `context-fast` and `persistent-fast` presets also enable
-`DS4_AGENT_CONTEXT_SUFFIX_PREROPE=1` for repeated
-aligned relocations. The earlier `DS4_AGENT_CONTEXT_SUFFIX_PREROPE=0` path
-requires a live context file and native decoder routing.
-This retains the normalized rotary lanes as original BF16 values before RoPE
-and cache quantization, then applies the destination RoPE once. Private
-approximate checkpoints can become relocation sources; they remain excluded
-from exact-prefix restore and canonical KV export. This avoids accumulating
-rotation and quantization error, while retaining the original context influence
-in reused activations. The latest user message and at least 128 tail tokens are
-evaluated freshly; unsupported geometry or missing originals rebuilds normally.
-`DS4_AGENT_CONTEXT_SUFFIX_RIGHT=1` permits even right shifts after insertions
-or growing replacements. This flag is off by default, and `persistent-fast`
-enables it; set `DS4_AGENT_CONTEXT_SUFFIX_RIGHT=0` for left shifts only.
-The server `context-fast` preset uses the same pre-RoPE implementation with an
-opt-in fresh tail of 64 tokens; set `DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL=128`
-or `256` to retain more fresh context. It also keeps the complete latest user
-message fresh. Reused states retain earlier conditioning, so measure output
-quality for the intended edits. Server matching normally permits even left
-shifts. `DS4_SERVER_CONTEXT_SUFFIX_RIGHT=1` also permits even right shifts
-after insertions or growing replacements, using immutable pre-RoPE originals.
-The server flag is off by default; the `persistent-fast` preset enables
-it. Set `DS4_SERVER_CONTEXT_SUFFIX_RIGHT=0` to retain left shifts only. It uses
-a separate private context-cache identity;
-unsupported geometry or missing originals falls back to normal evaluation.
-For example:
-
-```sh
-DS4_SERVER_CONTEXT_SUFFIX_RIGHT=1 ./ds4-local --server context-fast \
-  --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
-```
-
-The [faithful-compaction measurements](speed-bench/experiments/recipe-compaction-hour38-20261008/README.md)
-saved11.7–12.4% whole-task time on two complete READ/edit/WRITE/FINAL coding
-workflows, with every first implementation passing161 checks. The
-[right-shift experiment](speed-bench/experiments/recipe-rightshift-hour39-20261008/README.md)
-records expansion tasks and the replay tradeoffs. Server reuse requires a `prompt_cache_key`
-identity hint; Conversations supplies its ID by default. `resident-fast`
-explicitly disables suffix reuse. The `persistent-fast` preset
-combines left/right suffix reuse with resident substitutions in both decoding
-and selected prefill. The
-[combined fresh-task confirmation](speed-bench/experiments/combined-fresh-hour40-20261008/README.md)
-saved 23.5% whole-task time against bracket means, or 21.5% against the faster
-control, on previously unused interval-grouping and dependency-layer tasks.
-All ten first writes passed 161 checks each. A repeated combined run matched
-code and token usage and changed time by 0.04%; native timing drift was 4.93%.
-These workflows used caller-supplied READ/WRITE/FINAL reasoning budgets 0/128/1;
-the preset leaves thinking policy to the caller. Routing added a 12.2% saving
-over suffix reuse alone on this workload. These measurements used the HTTP
-server; they do not establish the direct agent's latency. This small screen
-supports the opt-in package, not a general accuracy or speed guarantee. The
-[combined four-session screen](speed-bench/experiments/suffix-resident-package-hour26-20261004/README.md)
-passed all facts and reads; its additional whole-time saving was small relative
-to control drift. The [combined CLM coding screen](speed-bench/experiments/clm-resident-package-hour28-20261004/README.md)
-saved5.10% task time with all saved first codes passing161 checks; the ledger
-benefited while LRU was slightly slower. These are additional routing gains
-within each measured configuration, not percentages to add across reports.
-The [fresh-task substitution curve](speed-bench/experiments/fresh-resident-curve-hour33-20261004/README.md)
-qualified limits1,2,3 with all first codes passing161 checks. Limit3 repeated
-code, public output, usage and routing counters exactly; its task mean was
-187.3seconds, compared with193.2/194.2seconds for1/2. This supports the preset
-limit3 on these tasks; the1/2 difference is small relative to measured drift.
-Choose `context-fast` to keep native expert routing.
-
-Two additional server opt-ins are available for complete full-input Responses
-histories: `DS4_SERVER_CONTEXT_SUFFIX_CANONICAL=1` materializes native warming
-requests from their tokenized history, and `DS4_SERVER_CONTEXT_SUFFIX_PAD=1`
-may insert one newline in an old prefix when it enables a longer aligned graft.
-Padding keeps the latest user message fresh and changes actual input usage by
-one token. Server `context-fast` and `persistent-fast` enable both; set either
-variable to0 to compare the earlier policy. Their combination saved20.56%
-whole launcher wall in the [four-session qualification](speed-bench/experiments/parity-suffix-hour24-20261004/README.md),
-with all edited facts correct and one retained warm-format failure.
-
-All server presets default to localhost and two active slots. Later CLI flags
-override defaults, for example `--batched-session 1 --port 8001`. They also set
-`DS4_SERVER_RESPONSE_STORE_DIR` to `.workspaces/response-store`; override that
-environment variable to choose another durable store. Stored Responses support
-text/function-tool continuation through `previous_response_id`, GET and DELETE;
-Conversations supports create/get/delete and text/function/reasoning item
-append/list/get/delete. The [three-edit Conversation qualification](speed-bench/experiments/repeated-conversations-hour30-20261004/README.md)
-passed all24 real reads/replies across native brackets and suffix reuse, saving
-36.7% whole workflow and39.6% edited time. Four later grafts used approximate
-pre-RoPE originals from SSD after restart; changed archive codes were read
-correctly each round. Whole savings include an exact-cache warmup benefit.
-The [eight-deletion follow-up](speed-bench/experiments/repeated-conversations-hour31-20261004/README.md)
-used one Conversation, matched warm costs and saved58.2% whole/66.3% edited
-time. All27 reads/replies passed, including seven approximate SSD-source
-grafts and current archive codes after restart. This qualifies the measured
-eight-edit workflow; it does not guarantee unlimited error-free relocations.
-These histories survive KV eviction; they do not promise exact KV reuse after restart. See the [Responses report](speed-bench/experiments/responses-hour11-20261004/README.md),
-[Conversations report](speed-bench/experiments/conversations-hour13-20261004/README.md)
-and [installed SDK/Pi smoke](speed-bench/experiments/server-confirmation-hour17-20261004/client-results.md)
-for the supported subset and limits.
-The [actual Pi coding-agent qualification](speed-bench/experiments/pi-agent-preset-hour34-20261004/README.md)
-ran the installed CLI through the `persistent-fast` wrapper. Its real config
-read, first code write and final reply completed; the first code passed161
-checks with no retry or cap. This qualifies one client task, not a CLM edit or
-a comparative latency result.
-The [combined-preset SDK smoke](speed-bench/experiments/sdk-preset-hour36-20261004/README.md)
-also passed streamed Responses, stored-parent continuation/GET, Conversations
-CRUD and the installed Pi provider tool loop through the actual wrapper.
-
-The [fresh coding screen](speed-bench/experiments/fresh-clm-coding-hour32-20261004/README.md)
-tested previously unused deduplication and token-bucket tasks through actual
-read/edit/write/final calls. All eight first implementations passed161 checks
-each without caps. With fixed request reasoning budgets, `context-fast` settings
-saved11.6% task time and `persistent-fast` settings17.3% against native brackets;
-the latter saved6.5% against suffix-only. These are explicit-setting package
-measurements on two tasks, with1.8% native timing drift, rather than additive
-gains or a general accuracy guarantee.
-
-The presets enable automatic checkpoint caching in `.workspaces/context-cache`.
-Server `persistent-fast` defaults to HOT512 MiB for semantic intermediate
-checkpoints; other server presets retain HOT0. Server SSD capacity remains
-4096 MiB; agent defaults remain HOT512 and SSD8192 MiB. Override
-`DS4_STATE_CACHE_DIR`, `DS4_STATE_CACHE_HOT_MB` and `DS4_STATE_CACHE_SSD_MB`
-to choose another directory or capacity; hot size512 enables a host RAM tier,
-and hot size0 uses SSD only. The
-[hot-capacity screen](speed-bench/experiments/hot-cache-hour21-20261004/README.md)
-did not establish a latency benefit from the extra host tier. The
-[SSD quota curve](speed-bench/experiments/ssd-budget-hour29-20261004/README.md)
-kept all four tested suffix sources at512 MiB, with1.2% additional whole time;
-128 MiB evicted them and added20.7%. All edited facts remained correct.
-These capacities describe this four-history workload; the default retains more
-room for other histories. Direct `ds4-agent` / `ds4-server` invocations enable
-this tier by setting the directory.
-Durable native prefixes and private pre-RoPE suffix originals survive restart;
-automatic semantic intermediate checkpoints are RAM-only and recompute after
-restart when no durable source matches.
-Immutable compressed-attention pages share storage by content; raw sliding
-windows, logits and unfinished compression pairs remain endpoint state. Durable
-writes reach SSD before returning; hot and disk LRU limits evict unpinned entries.
-The manifest becomes visible after its chunks, and a directory has one process
-owner. A server's clients share that owner; independent agent processes need
-separate directories.
-
-Sessions keep their own mutable GPU graphs. `ds4-server --batched-session 2`
-can interleave two resident sessions and batch decoding while inactive
-conversation checkpoints live on SSD. This cache does not reduce the GPU memory
-needed by each active slot. Exact-prefix lookup excludes approximate suffix
-states. The cache currently supports native text V4.1 on Metal, with identity
-including model file, context and forward-policy settings.
-
-The [fresh WRITE-budget curve](speed-bench/experiments/fresh-thinking-curve-hour35-20261004/README.md)
-kept unrestricted read-stage thinking and the persistent cache/routing settings
-fixed. WRITE budgets1 and32 both passed all322 checks, saving8.5% and3.8% task
-time against128 brackets; control drift was3.0%. Budget1 is a measured post-read
-option on these two contracts, rather than a general reasoning default.
-
-Thinking mode stays unchanged by the presets. Responses callers can opt into
-`"ds4_reasoning_budget": 128` or `256` on a post-read request, alongside their
-chosen `reasoning.effort`. Omitting it or using 0 leaves thinking unrestricted
-on that request. Later thinking can consume the savings or hit the output cap,
-as the fresh-task confirmation shows.
-This is a soft, once-per-request thinking closure for native DS4.1 text, not
-automatic WRITE detection or a persistent conversation setting. Unsafe parser
-state, later reopening or recovery can exceed the budget; nonzero disables MTP
-for that request, and forced closure counts toward the output cap. The small
-[server thinking screen](speed-bench/experiments/server-thinking-hour16-20261004/README.md)
-and [fresh-task confirmation](speed-bench/experiments/server-confirmation-hour17-20261004/README.md)
-measure its scope. Keep tool definitions and task instructions stable across
-tool turns: the [stable-instructions screen](speed-bench/experiments/stable-instructions-hour18-20261004/README.md)
-saved40.49% across two completed coding tasks by preserving ordinary prefix
-reuse. This includes shorter prompts and different generated histories; it is
-not an additional percentage to add to the reasoning or suffix results. See also the
-[measurements and limits](speed-bench/experiments/20261003-idea-review.md).
-
-For a completion summary after an already successful write, the
-[FINAL policy screen](speed-bench/experiments/final-thinking-hour20-20261004/README.md)
-kept high effort and used budget1, saving24.55% whole-task time with accurate
-summaries on both tasks. Switching that request to effortnone lost prefix reuse
-and was slower. This does not establish a budget for harder final reasoning.
-With those same request budgets, the
-[resident package screen](speed-bench/experiments/resident-combined-hour22-20261004/README.md)
-saved9.70% with up to three substitutions and3.58% with one; both coding tasks
-passed161 checks in all arms. Suffix reuse was off in that comparison.
-
-An external CLM harness can send its complete edited Responses `input` with
-`store: false` and a stable `prompt_cache_key` per history. Retain tool call IDs,
-actual tool results and unchanged task instructions when removing old context.
-The server selects a compatible private suffix and evaluates the new query
-freshly; missing or unsupported sources fall back to ordinary evaluation.
-Use `previous_response_id` for appending to server-owned history. To edit that
-history, submit full input instead, or edit the corresponding Conversations
-items. A cache key scopes reuse; it does not make changed prefixes equivalent.
-
-The installed Pi Responses provider accepts the local model/base URL and sends
-full input with `store: false`. Its `sessionId` becomes `prompt_cache_key` when
-cache retention is enabled. Its `onPayload` hook can add a budget chosen by the
-caller for this request:
-
-```js
-const options = {
-  sessionId: "persistent-agent-1",
-  cacheRetention: "short",
-  temperature: 0,
-  onPayload: payload => ({ ...payload, ds4_reasoning_budget: budget }),
-};
-```
-
-Keep effort and tool definitions stable across the loop. The measured example
-uses budget0 for READ,128 after the read for WRITE, and1 only for a short
-completion summary. These are caller decisions. The installed provider's
-streaming read/tool-result path was exercised in the linked client smoke;
-the payload hook above is source-verified, not a complete Pi agent benchmark.
-
-On the actual full-input CLM coding loop, removing obsolete notes after a real
-config read and enabling suffix64 saved11.81% task time, with all six first
-implementations passing161 checks. The
-[coding report](speed-bench/experiments/clm-coding-hour27-20261004/README.md)
-keeps the original grader-path error and records pre-graft READ divergence;
-the result measures the configuration package rather than pure graft cost.
-
-Use `/hints on` for occasional, brief explanations of the programming choices
-behind the work, and `/hints off` to stop them. Changes take effect at the next
-conversation boundary without rebuilding the cached context. New and resumed
-sessions start with hints off.
-
-Sessions are stored in `~/.ds4/kvcache`:
-
-| Command | Action |
-| --- | --- |
-| `/save` | Save the current session |
-| `/list` | List saved sessions |
-| `/switch <sha>` | Resume a session |
-| `/del <sha>` | Delete a saved session |
-| `/strip <sha>` | Keep text and title, removing the large KV payload |
-
-Compatible local KV snapshots avoid rebuilding the prompt. Stripped sessions
-and network TP restores require prefill. Sessions containing images cannot yet
-be saved. Saved conversations and traces may contain private information.
-
-For Pi, OpenCode, Codex CLI, or Claude Code, use `ds4-server` instead and follow
-the [client setup guide](docs/CLIENTS.md).
+For external agents, use [stateful Responses](docs/serving/responses.md) and the
+[client guide](docs/serving/clients.md). The [lab journal](docs/lab/README.md)
+explains the cache and routing experiments; [recipes](recipes/README.md) describe
+how to reproduce techniques and choose their tradeoffs.
 
 ### Models, images, and speculation
 
-[Models and vision](docs/MODELS.md) lists the supported downloads and memory
+[Models and vision](docs/models/artifacts.md) lists the supported downloads and memory
 requirements. DeepSeek V4.1 Flash, GLM 5.3 Flash and Qwen3.8 Flash Next add
 vision through a matching separate encoder.
 
-DeepSeek V4.1 Flash text and vision run on Metal; text also runs on a DGX Spark.
-Q2 runs with SSD streaming on one 128 GB Mac or Spark, or resident across two
-Macs or two Sparks using RDMA. Q4 needs SSD streaming or a 512 GB Mac.
+DeepSeek V4.1 Flash text and vision run on Metal. The [retained CUDA guide](docs/backends/cuda.md) records the Spark text path and its historical qualification.
+Q2 runs with SSD streaming on one 128 GB Mac, or resident across two Macs using
+RDMA. Earlier CUDA builds ran it on one or two Sparks; see the historical CUDA
+account for that evidence. Q4 needs SSD streaming or a 512 GB Mac.
 Engram tables remain on disk in every mode, so use a fast
-local SSD. See the [model guide](docs/MODELS.md#deepseek-v41-flash) for downloads
+local SSD. See the [model guide](docs/models/artifacts.md#deepseek-v41-flash) for downloads
 and setup.
 
 With the matching encoder passed as `--vision FILE`, use `/read image.png`
@@ -519,7 +201,7 @@ See [Qwen setup](docs/models/qwen38-flash-next/usage.md) for details.
 
 Speculative decoding is opt-in. GLM and Qwen use `--mtp`; V4.1 Flash DSpark needs a matching
 support GGUF. It can improve generation, but not every workload benefits.
-Read [speculative decoding](docs/SPECULATIVE_DECODING.md) for setup and the
+Read [speculative decoding](docs/serving/sampling-and-speculation.md) for setup and the
 difference between default opportunistic sampling and `--mtp-exact-sampling`.
 
 ### Output and power
@@ -536,7 +218,7 @@ The normal sampling defaults are temperature 1, top-p 1, and min-p 0.05;
 For DeepSeek V4 PRO, `--power N` trades throughput for lower sustained GPU load.
 The default is 100. V4.1 and GLM currently require `--power 100`.
 
-GLM 5.3 Flash also supports directional steering. Load a
+The native models support directional steering with model-compatible vectors. Load a
 vector with `--dir-steering-file FILE`; `/steer F` adjusts its scale for
 subsequent tokens in a local CLI or agent session, without rebuilding the
 existing KV cache. See [steering documentation](dir-steering/README.md).
@@ -551,7 +233,7 @@ and the last turn must be `ASSISTANT:`.
 These are DwarfStar integration checks, not official leaderboard scores.
 
 ```sh
-./ds4-eval -m ds4flash.gguf --trace /tmp/ds4-eval.txt
+./ds4-eval -m ds4flash.gguf --trace .workspaces/ds4-eval.txt
 ./ds4-eval -m ds4flash.gguf --suite hard-smoke
 ./ds4-eval -m ds4flash.gguf --suite hard --retry-incomplete
 ```
@@ -560,7 +242,7 @@ The default suite is `core`; `--suite all` runs core and hard cases.
 `--list-cases` lists tests without loading a model. `--plain` selects
 non-interactive output, and `--regrade-trace FILE` scores an existing trace
 without generating again. Sources and licenses are in [EVAL_DATA.md](EVAL_DATA.md).
-For inference correctness and release checks, read [testing](docs/TESTING.md).
+For inference correctness and release checks, read [testing](docs/development/build-and-test.md).
 
 ## Speed
 
@@ -571,20 +253,20 @@ current-model performance.
 
 ![M5 Max Flash Q2 throughput](speed-bench/m5_max_ts.svg)
 
-See [performance and benchmarking](docs/PERFORMANCE.md) for the full numbers,
+See [performance and benchmarking](docs/development/benchmarking.md) for the full numbers,
 DGX Spark results, comparison conditions, and benchmark commands.
 
 ## Detailed Guides
 
-- [Models and vision](docs/MODELS.md): Flash, PRO, GLM, Qwen, and matching encoders.
+- [Models and vision](docs/models/artifacts.md): Flash, PRO, GLM, Qwen, and matching encoders.
 - [Qwen3.8 Flash Next](docs/models/qwen38-flash-next/usage.md): model setup, MTP, vision, and validation.
-- [SSD streaming](docs/SSD_STREAMING.md): run larger than RAM and size the cache.
-- [Inference across machines](docs/DISTRIBUTED.md): two-Mac TP/RDMA and layer pipelines.
-- [Speculative decoding](docs/SPECULATIVE_DECODING.md): DSpark, GLM and Qwen MTP, and sampling.
-- [Serving](docs/SERVER.md): APIs, images, batching, and disk KV caches.
-- [Coding agent clients](docs/CLIENTS.md): Pi, OpenCode, Codex CLI, and Claude Code.
-- [Performance](docs/PERFORMANCE.md): reproducible measurements and recorded baselines.
-- [Testing and development](docs/TESTING.md): regression tests, debugging, and model-building tools.
+- [SSD streaming](docs/storage/expert-streaming.md): run larger than RAM and size the cache.
+- [Inference across machines](docs/backends/distributed.md): two-Mac TP/RDMA and layer pipelines.
+- [Speculative decoding](docs/serving/sampling-and-speculation.md): DSpark, GLM and Qwen MTP, and sampling.
+- [Serving](docs/serving/overview.md): APIs, images, batching, and disk KV caches.
+- [Coding agent clients](docs/serving/clients.md): Pi, OpenCode, Codex CLI, and Claude Code.
+- [Performance](docs/development/benchmarking.md): reproducible measurements and recorded baselines.
+- [Testing and development](docs/development/build-and-test.md): regression tests, debugging, and model-building tools.
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before sending a pull request.
 

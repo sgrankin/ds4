@@ -5,10 +5,10 @@ Start every response with an expressive kaomoji that fits what you are saying.
 Favor the simplest implementation that lets us learn whether a change is useful.
 Write for the experiment we need now, not hypothetical future callers or mistakes.
 
-Read [docs/PROJECT.md](docs/PROJECT.md), then [src/JOURNAL.md](src/JOURNAL.md)
+Read [docs/project.md](docs/project.md), then the [lab journal](docs/lab/README.md)
 when resuming rewrite or serving work. The project page owns current goals and
-status; the journal records short milestones with evidence links. Consult dated
-archives as needed; their old running/next instructions are historical.
+status; the lab journal records questions, findings and decisions with evidence
+links. Historical result reports and proposals do not authorize new work.
 
 For technical documentation, follow [docs/writing-guide.md](docs/writing-guide.md)
 and [docs/lab/methodology.md](docs/lab/methodology.md). Update the owning manual
@@ -25,7 +25,7 @@ the lab journal rather than duplicating it across status documents.
   stress cases; plot tradeoffs for tunable features.
 - Select one outcome before starting work. Side ideas and completed experiments
   do not authorize new experiments. Parallel preparation must serve that outcome.
-  Write one result report; update the recipe conclusion and one short journal
+  Write one result report; update the recipe conclusion and one short lab journal
   entry instead of copying detailed results across status documents.
 - Output degradation is acceptable. Measure speed and practical task quality;
   use delta-NLL and KL to describe changes, not as automatic rejection criteria.

@@ -94,7 +94,7 @@ reconnect needs full replay unless the parent was durably stored. With
 conversation references can survive restart. Stored and connection-local
 continuation currently target text and function tools; image continuation is
 not qualified. An unavailable parent produces an error, rather than an
-invented history. The [Responses contract](../src/serving/RESPONSES.md) details
+invented history. The [Responses contract](serving/responses.md) details
 transport and storage behavior.
 
 **Working context** is the model-specific rendered and tokenized input, bounded
@@ -151,5 +151,5 @@ the group to drain. This protects cross-owner execution, but does not make the
 server's slot scheduler a general scheduler for two generative models. Some
 legacy and platform boundaries remain C or Objective-C, with Metal shaders
 performing GPU math. For the supported protocols and their restrictions, see
-[Responses](../src/serving/RESPONSES.md); for the broader code map, see
+[Responses](serving/responses.md); for the broader code map, see
 [src/README.md](../src/README.md).
