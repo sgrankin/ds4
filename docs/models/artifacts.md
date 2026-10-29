@@ -128,17 +128,18 @@ Resident and TP inference also batch continued prefills automatically.
 
 For concurrent serving, see [session batching](../serving/overview.md#multiple-sessions).
 Each slot needs its own context memory; start with `--ctx 4096` before
-increasing both context and slot count. CUDA Q2 SSD mode batches up to eight
-decode rows; Historical CUDA network TP batches five or more ready sessions; smaller groups run in order.
+increasing both context and slot count. Retained historical CUDA Q2 SSD mode
+batches up to eight decode rows; its network TP path batches five or more ready
+sessions, with smaller groups in order.
 [DSpark](../serving/sampling-and-speculation.md#deepseek-v41-flash-dspark) uses a
 separate V4.1 support GGUF and supports single-host and two-rank Metal TP; retained CUDA TP also implements it,
 subject to historical build and physical-pair qualification. Pipeline execution
 is not implemented for V4.1; vision requires Metal.
 
 Scalar, batched and tensor-parallel execution are not numerically identical.
-Q4 batched prefill shows a small probability-score loss on the short official
-continuation test, with unchanged overall top-token agreement. See the
-[QA results](../../QA_BEFORE_RELEASES.md#17-deepseek-v41-flash) for details
+Different schedules can change probability scores even when overall top-token
+agreement is unchanged. Compare paired case scores as well as totals; see the
+[qualification guidance](../development/qualification/deepseek.md) for details
 and remaining differences.
 
 The Q2 target now downloads the October 17 checkpoint; the Q4 target still

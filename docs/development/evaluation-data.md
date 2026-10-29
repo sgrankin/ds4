@@ -1,9 +1,9 @@
 # Evaluation data
 
-`ds4-eval` contains small, curated subsets of external benchmarks. They are
-integration tests for DwarfStar, not official benchmark distributions or
-leaderboard scores. Case IDs are retained so each prompt can be checked against
-its source.
+`ds4-eval` embeds small, curated subsets of external benchmarks as integration
+checks, not official benchmark distributions or leaderboard scores. Case IDs
+are retained so each prompt can be checked against its source. The
+[benchmarking guide](benchmarking.md) explains measurement and quality probes.
 
 ## Hard suite
 
@@ -30,7 +30,7 @@ Selected source IDs:
   `9ee37b9a04ab050936c86b2c5bb7abbaa0bc0e737d59a7bff9ba11e9b4069c1d`,
   `d7071c9ff5d9779e7ab955366d0ae8db40f785aadfe7ff0b5a7ede98c05c44ea`.
 - NIST Juliet reductions use the local IDs beginning with `juliet-` in
-  `ds4_eval_cases.c`.
+  [`src/ds4_eval_cases.c`](../../src/ds4_eval_cases.c).
 
 The MMLU-Pro choices and keys are unchanged. OlympiadBench cases are English,
 text-only rows; only their published final answers are embedded. LiveBench's
@@ -44,11 +44,17 @@ grading type and, where needed, a small list of equivalent surface forms. The
 12-case `hard-smoke` suite is a fixed subset of `hard`.
 
 Apache-2.0 terms for redistributed benchmark material are included in
-[`licenses/Apache-2.0.txt`](licenses/Apache-2.0.txt). DwarfStar's own source
+[`licenses/Apache-2.0.txt`](../../licenses/Apache-2.0.txt). DwarfStar's own source
 remains under the repository's top-level MIT license.
 
 ## Core suite
 
-The original 92-case `core` suite contains 25 GPQA Diamond, 25 SuperGPQA, 25
-AIME 2025, and 17 reduced defensive code-review cases. Its existing source IDs,
-ordering, prompts, and answer keys are unchanged by the hard-suite addition.
+The original 92-case `core` suite contains 25 GPQA Diamond cases, 25 SuperGPQA,
+25 AIME 2025 and 17 reduced defensive code-review cases. One GPQA case is marked
+modified in the embedded data. Existing IDs, ordering, prompts and answer keys
+were unchanged by the hard-suite addition.
+
+Core cases are embedded in [src/ds4_eval_data.c](../../src/ds4_eval_data.c);
+hard cases are in [src/ds4_eval_cases.c](../../src/ds4_eval_cases.c). The
+[selection code](../../src/eval/cases.zig) filters hard cases by their
+`hard-smoke` flags when that suite is requested.

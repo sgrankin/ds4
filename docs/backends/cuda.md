@@ -87,7 +87,7 @@ Both need the complete GGUF on their local SSD. Single-host V4.1
 [DSpark](../serving/sampling-and-speculation.md#deepseek-v41-flash-dspark) also works with SSD
 streaming; Retained V4.1 CUDA TP also implements matching DSpark; CUDA vision remains
 unsupported. These are retained source capabilities, not a current CUDA build or
-completed physical-pair qualification. See the [DSpark QA](../../QA_BEFORE_RELEASES.md#dspark).
+completed physical-pair qualification. See the [DSpark QA](../development/qualification/deepseek.md#dspark).
 The [model guide](../models/artifacts.md#deepseek-v41-flash) covers
 thinking levels and the separate Metal configurations.
 
@@ -99,7 +99,7 @@ run with 64K allocated context reached 384 t/s for a 32K initial prefill and
 V4 Flash numbers; speed depends on prompt length and the expert cache.
 The automatic-cache 256-token reply test decoded about 5% slower, but
 prefill plus the reply fell from about 87 to 59 seconds.
-See the [QA record](../../QA_BEFORE_RELEASES.md#cuda-ssd-streaming) for conditions
+See the [QA record](../development/qualification/cuda.md#v41-single-spark-integration-and-streaming) for conditions
 and longer-context measurements.
 
 On two Sparks over the direct RoCE link, Q2 measured **21.8 t/s** for one
@@ -116,7 +116,7 @@ decode at these longer contexts was about 18 t/s. Engram tables stayed on disk.
 
 Decode batching starts at five ready sessions; smaller groups run in order.
 The earlier eight-session reference is about **28 aggregate t/s**, not per
-client. See the [network TP QA record](../../QA_BEFORE_RELEASES.md#cuda-network-tensor-parallelism)
+client. See the [network TP QA record](../development/qualification/distributed.md#deepseek-v41-cuda-network-tp)
 for the workloads and memory limits.
 
 ## Qwen3.8 Flash Next

@@ -1,14 +1,14 @@
-# DeepSeek v4 model card synopsis
+# Historical DeepSeek V4 Flash reference
 
-Historical source synopsis: original V4 Flash is retired from this runtime.
-This document remains useful for the retained V4 PRO family; it does not
-describe the current V4.1 Flash checkpoint or serving graph.
+This is a historical synopsis of the original DeepSeek-V4-Flash model card,
+not a current verification of the upstream page. Original V4 Flash is retired
+from this runtime. The V4 Pro family remains in the runtime; the Flash
+architecture and constants below do not establish Pro geometry. They also do
+not describe the current V4.1 Flash checkpoint or serving graph; see the
+[V4.1 reference manual](reference-manual.md). The published scores below are
+upstream model-card results, not measurements of this runtime.
 
-This document extracts the most important information from the official
-DeepSeek-V4-Flash Hugging Face model card, with emphasis on facts that matter
-for local inference, DS4 development, and benchmark interpretation.
-
-Source: https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash
+Source of the original synopsis: https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash
 
 ## Model Family
 
@@ -24,9 +24,12 @@ Flash is the smaller and more efficient model. The model card says Flash-Max can
 approach Pro reasoning performance when given a larger thinking budget, while
 remaining behind Pro on pure knowledge and the most complex agentic tasks.
 
-## Architecture
+## Original Flash architecture
 
-DeepSeek-V4 uses long-context compressed attention. The model card calls the
+The layer schedule and constants in this section describe original V4 Flash,
+not V4 Pro or V4.1 Flash.
+
+Original V4 Flash uses long-context compressed attention. The model card calls the
 hybrid design Compressed Sparse Attention (CSA) plus Heavily Compressed
 Attention (HCA). In DS4 terms, each layer keeps a raw sliding-window KV cache
 for the latest 128 tokens. This is the high-resolution local context.
@@ -53,8 +56,8 @@ to 512 of them for attention. Ratio-128 layers are the heavily compressed path:
 they do not have the indexer stream and use the available ratio-128 compressed
 rows directly.
 
-DS4 validates these details from the GGUF metadata. The relevant fixed
-implementation constants are:
+The historical Flash implementation validated these details from GGUF metadata.
+Its fixed constants were:
 
 - Layers: 43
 - Raw sliding-window attention: 128 tokens
@@ -138,9 +141,9 @@ The base-model table reports these Flash-Base scores:
 The model card reports SuperGPQA for the base model table, not in the instruct
 reasoning-mode comparison table.
 
-## Chat Template And Encoding
+## Original release chat template and encoding
 
-The release does not use a Jinja chat template as the source of truth. The
+The original Flash release did not use a Jinja chat template as the source of truth. The
 official prompt renderer is the Python code in
 `encoding/encoding_dsv4.py`, with examples and tests in the same `encoding`
 directory:
@@ -216,7 +219,7 @@ as title generation, search-query generation, action selection, authority
 classification, domain classification, and URL-read decisions. Those are
 separate from normal chat/tool rendering.
 
-## Local Running Notes
+## Historical deployment recommendations
 
 The model card lists vLLM and SGLang examples for OpenAI-compatible serving.
 For local deployment, it recommends:
@@ -225,14 +228,13 @@ For local deployment, it recommends:
 - `top_p = 1.0`
 - At least 384K context for Think Max
 
-These are deployment recommendations from the model card, not necessarily the
-same settings used for deterministic benchmarking. DS4 keeps `top_p=1.0` but
-adds a local `min_p=0.05` default to avoid sampling tokens whose probability is
-far below the best token.
+These are historical deployment recommendations from the model card, not
+necessarily the settings used for deterministic benchmarking or current DS4
+defaults.
 
 ## Licensing
 
-The repository and model weights are licensed under the MIT License.
+The original model card states that its repository and model weights are licensed under the MIT License.
 
 ## Citation
 

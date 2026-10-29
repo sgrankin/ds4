@@ -1,4 +1,5 @@
-/* Original core benchmark literals, kept once as data. See EVAL_DATA.md. */
+/* Original core benchmark literals, kept once as data.
+ * See docs/development/evaluation-data.md. */
 #include "ds4_eval_frontend.h"
 
 const eval_case eval_core_cases[] = {

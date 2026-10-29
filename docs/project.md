@@ -1,6 +1,6 @@
 # Project direction and current status
 
-Updated 2026-10-28. **Runtime implementation and experiments are paused.**
+Updated 2026-10-29. **Runtime implementation and experiments are paused.**
 The organized manuals and lab journal are available under the [documentation index](README.md).
 The latest authorized batch is complete. No next experiment is selected.
 

@@ -15,6 +15,13 @@ and [docs/lab/methodology.md](docs/lab/methodology.md). Update the owning manual
 when implementation or understanding changes; keep experimental reasoning in
 the lab journal rather than duplicating it across status documents.
 
+- Keep public engine and session interfaces narrow; frontends should not depend
+  on tensor internals. Preserve model-specific mapping, packing and cache
+  ownership rather than copying whole GGUFs as an incidental loading change.
+- Explain non-obvious model mechanics, numerical boundaries and cache or resource
+  lifetimes beside the implementation as well as in the owning manual.
+- Keep CPU reference checks bounded. Preserve the admission lock and pressure
+  guard; do not bypass them to start competing heavy model processes.
 - Use a short loop: fixed baseline, one change, measure, inspect, decide.
   Record the revision, command, settings and results; reuse existing tools.
 - Performance comparisons require at least five measured samples per side.

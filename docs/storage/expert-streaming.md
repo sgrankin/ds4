@@ -70,7 +70,7 @@ a remedy for insufficient RAM.
 
 Leave expert preloading enabled for normal use. `--ssd-streaming-cold` and
 `--ssd-streaming-preload-experts N` are mainly useful for controlled measurements.
-See [benchmarking](../development/benchmarking.md) and the [release QA guide](../../QA_BEFORE_RELEASES.md).
+See [benchmarking](../development/benchmarking.md) and the [release QA guide](../development/qualification/README.md).
 
 ## M5 Max measurements
 

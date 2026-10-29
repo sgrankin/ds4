@@ -45,7 +45,7 @@ The server exposes `qwen3.8-flash-next`, `qwen3.8-flash-next-chat` and `qwen3.8-
 
 The embedded multi-token predictor proposes drafts that the target model verifies before committing tokens. Add `--mtp` to use it. Without it, ordinary decoding remains available; `ds4-bench` measures ordinary decoding and does not accept `--mtp`. Default MTP accepts matching greedy drafts even at nonzero temperature, so it does not promise ordinary sampling's distribution. With `--mtp-exact-sampling`, a sampled single session uses exact speculative sampling; sampled batched requests instead use ordinary batched decode, while temperature-zero requests can still speculate. See [sampling semantics](../../serving/sampling-and-speculation.md).
 
-On Metal, independent conversations can share GPU weight work while retaining separate session state. Use `ds4-server --batched-session N` to group eligible sessions. Floating-point reduction order can change replies, and a seed need not reproduce a reply across batching schedules. The native selector admits at most 64 ordinary or 32 speculative members, subject to shared workspace capacity and compatible checkpoint and steering state. Images and other unsupported combinations use ordered fallback; the [runtime manual](implementation.md) describes eligibility and state. Disk checkpoints include recurrent state; an older rewind replays the retained prefix on the next evaluation. Image identity and embeddings are not stored in the session payload, so do not assume an image session can be restored from that payload alone.
+On Metal, independent conversations can share GPU weight work while retaining separate session state. Use `ds4-server --batched-session N` to group eligible sessions. Floating-point reduction order can change replies, and a seed need not reproduce a reply across batching schedules. The native selector admits at most 64 ordinary or 32 speculative members, subject to workspace and compatible checkpoint and steering state. The speculative executor has a separate 16-member limit, so the selector ceiling alone does not establish an executable 32-session speculative batch. Images and other unsupported combinations use ordered fallback; the [runtime manual](implementation.md) describes eligibility and state. Disk checkpoints include recurrent state; an older rewind replays the retained prefix on the next evaluation. Image identity and embeddings are not stored in the session payload, so do not assume an image session can be restored from that payload alone.
 
 The native context is 262,144 tokens. Set `DS4_QWEN4_YARN_FACTOR=2` or `DS4_QWEN4_YARN_FACTOR=4` to enable static YaRN for longer contexts; this can reduce quality on shorter prompts. Context allocation still requires sufficient memory.
 
@@ -67,7 +67,7 @@ Follow [GGUF conversion](../../../gguf-tools/README.md#qwen38-flash-next) for th
 
 ## Validation
 
-The [release qualification](../../../QA_BEFORE_RELEASES.md#18-qwen38-flash-next) defines the model-backed gates and their scope. Model-free checks include:
+The [release qualification](../../development/qualification/qwen.md) defines the model-backed gates and their scope. Model-free checks include:
 
 ```sh
 make test-qwen4-kernels test-qwen4-ngrams test-frontends
@@ -110,7 +110,7 @@ python3 tests/test_server_story.py --url http://127.0.0.1:8000 \
 The server checkpoint regression also covers continued disk saves, cache-budget
 eviction and restart after a continuation. It exercises histories with and
 without tool schemas, including clients that omit or echo `reasoning_content`.
-The [release qualification](../../../QA_BEFORE_RELEASES.md#18-qwen38-flash-next)
+The [release qualification](../../development/qualification/qwen.md)
 also calls for a real-prompt prefill replay across the sparse-attention boundary;
 require exact replay on the same schedule, and check task quality when comparing
 different schedules.

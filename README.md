@@ -241,7 +241,7 @@ These are DwarfStar integration checks, not official leaderboard scores.
 The default suite is `core`; `--suite all` runs core and hard cases.
 `--list-cases` lists tests without loading a model. `--plain` selects
 non-interactive output, and `--regrade-trace FILE` scores an existing trace
-without generating again. Sources and licenses are in [EVAL_DATA.md](EVAL_DATA.md).
+without generating again. Sources and licenses are in [evaluation data](docs/development/evaluation-data.md).
 For inference correctness and release checks, read [testing](docs/development/build-and-test.md).
 
 ## Speed

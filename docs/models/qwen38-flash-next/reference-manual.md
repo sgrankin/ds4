@@ -186,7 +186,7 @@ The conversion tools and runtime are evidence for this GGUF representation and
 our interpretation of its operations, not an official upstream architecture
 publication. The [quality-testing fixtures and report](../../../gguf-tools/quality-testing/README.md#7-qwen38-spark-baseline)
 record comparisons with hosted continuations and their limitations; the
-[release qualification](../../../QA_BEFORE_RELEASES.md#18-qwen38-flash-next)
+[release qualification](../../development/qualification/qwen.md)
 records local tests. They do not establish universal equivalence to the original
 checkpoint, nor do image encoder parity checks alone establish task quality.
 Training details, an independent upstream specification and performance across

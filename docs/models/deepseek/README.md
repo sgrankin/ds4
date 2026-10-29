@@ -25,5 +25,11 @@ and checkpoint-matched vision files.
 - [DeepInfer comparison](deepinfer/comparison.md): official mechanisms, local
   adaptations and remaining differences.
 
+The [historical V4 Flash reference](legacy-v4-reference.md) preserves the original
+model-card synopsis and published scores. Its geometry does not describe current
+V4.1 Flash or establish the retained V4 Pro shape. The
+[qualification guide](../../development/qualification/deepseek.md) treats the
+current and retained paths separately.
+
 See the [model index](../README.md) for the other implementations and the
 [serving architecture](../../architecture.md) for shared protocol and session flow.

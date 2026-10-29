@@ -310,7 +310,7 @@ def make_source_records(root: Path, records: list[Record]) -> None:
     files = [
         "src/ds4.c", "src/ds4_server.c", "src/cli.zig", "src/metal/ds4_metal.m",
         "src/ds4.h", "src/ds4_gpu.h",
-        "README.md", "AGENT.md", "gguf-tools/README.md",
+        "README.md", "AGENTS.md", "gguf-tools/README.md",
         "gguf-tools/imatrix/README.md", "gguf-tools/imatrix/dataset/README.md",
         "gguf-tools/quality-testing/README.md",
     ]
@@ -1038,9 +1038,10 @@ def make_long_context_records(root: Path, records: list[Record]) -> None:
     """
 
     sources = [
+        ("ds4.c", read_text(root / "src/ds4.c")),
         ("README.md", read_text(root / "README.md")),
-        ("AGENT.md", read_text(root / "AGENT.md")),
-        ("METAL.md", read_text(root / "docs/METAL.md")),
+        ("AGENTS.md", read_text(root / "AGENTS.md")),
+        ("docs/backends/apple-silicon.md", read_text(root / "docs/backends/apple-silicon.md")),
         ("gguf-tools/imatrix/README.md", read_text(root / "gguf-tools/imatrix/README.md")),
         ("gguf-tools/imatrix/dataset/README.md", read_text(root / "gguf-tools/imatrix/dataset/README.md")),
         ("gguf-tools/quality-testing/README.md", read_text(root / "gguf-tools/quality-testing/README.md")),
@@ -1099,7 +1100,7 @@ def make_long_context_records(root: Path, records: list[Record]) -> None:
         block("README.md", 0),
         block("ds4_server.c", 0),
         block("ds4_server.c", 3),
-        block("AGENT.md", 0),
+        block("AGENTS.md", 0),
     ])
     add_long("codebase:eval-imatrix", (
         "Use the following excerpts to explain how the evaluation harness and the "
@@ -1244,7 +1245,7 @@ def make_long_context_records(root: Path, records: list[Record]) -> None:
         block("README.md", 3),
         block("gguf-tools/imatrix/README.md", 0),
         block("gguf-tools/quality-testing/README.md", 0),
-        block("AGENT.md", 1),
+        block("AGENTS.md", 1),
     ])
 
     # Needle-in-haystack: keep one small slice. The useful signal is the long

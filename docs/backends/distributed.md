@@ -2,7 +2,7 @@
 
 [Documentation index](../README.md)
 
-**Qualification:** The supported native build is macOS Metal. Network transport and model-specific source paths are retained, but the CUDA and ROCm build targets in older instructions are not in the current Makefile. The configurations below describe historical setups; they are not a new hardware qualification. Use matching revisions and consult the [release QA record](../../QA_BEFORE_RELEASES.md) before reproducing them.
+**Qualification:** The supported native build is macOS Metal. Network transport and model-specific source paths are retained, but the CUDA and ROCm build targets in older instructions are not in the current Makefile. The configurations below describe historical setups; they are not a new hardware qualification. Use matching revisions and consult the [release QA record](../development/qualification/README.md) before reproducing them.
 
 There are two modes:
 
@@ -92,7 +92,7 @@ workers run `ds4`. For models with vision support, pass the same `--vision FILE`
 to both for image input.
 For GLM MTP, enable `--mtp` on both. For DeepSeek DSpark, both need the
 matching support model and DSpark options. V4.1 supports vision and matching DSpark in two-rank Metal TP. Put the matching
-encoder or DSpark options on both peers. The [DSpark QA](../../QA_BEFORE_RELEASES.md#dspark)
+encoder or DSpark options on both peers. The [DSpark QA](../development/qualification/deepseek.md#dspark)
 lists the prescribed physical-pair checks; the checklist alone does not
 establish completed qualification at this revision.
 
@@ -140,7 +140,7 @@ ready sessions use native batched decode; smaller groups run in order.
 Use `--batched-session 8` on the server and allow memory for all eight contexts.
 Retained CUDA network TP implements matching V4.1 DSpark, but not vision or
 other model/quant layouts. Physical-pair qualification must be checked in the
-[DSpark QA](../../QA_BEFORE_RELEASES.md#dspark); a prescribed test is not a completed result.
+[DSpark QA](../development/qualification/deepseek.md#dspark); a prescribed test is not a completed result.
 
 ## Pipeline parallelism
 

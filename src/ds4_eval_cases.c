@@ -1,7 +1,8 @@
 #include "ds4_eval_cases.h"
 
 /* Curated hard cases. Source revisions and redistribution notes are recorded in
- * EVAL_DATA.md. Keep this table data-only; grading belongs in ds4_eval.c. */
+ * docs/development/evaluation-data.md. Keep this table data-only;
+ * grading belongs in src/eval/grading.zig. */
 
 const eval_source eval_hard_sources[] = {
     {"MMLU-Pro", "https://github.com/TIGER-AI-Lab/MMLU-Pro", "Apache-2.0"},

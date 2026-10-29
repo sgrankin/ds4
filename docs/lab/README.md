@@ -25,6 +25,7 @@ command or speed is evidence at its recorded revision, not a current-build claim
 | [Packed caches and kernels](journal/2026-10-28-packed-cache-and-kernels.md) | Storage, SIMD, compute formats, negative prefill results and neutral fusion. |
 | [Semantic checkpoints](journal/2026-10-28-deepseek-semantic-checkpoints.md) | Useful edit endpoints without extra weight sweeps; setup and no-edit costs. |
 | [Documentation reorganization](journal/2026-10-28-documentation-reorganization.md) | Replacing running status blobs with maintained manuals and discoverable research. |
+| [Root documentation cleanup](journal/2026-10-29-root-documentation-cleanup.md) | Evaluation provenance, scoped release qualification and one canonical agent guide. |
 
 The [design folder](../design/README.md) preserves unselected ideas separately from
 measured conclusions. Original concise reports under `speed-bench/` own complete

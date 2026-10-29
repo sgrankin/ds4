@@ -56,8 +56,8 @@ continuations from [test vectors](../../tests/test-vectors/README.md), and the
 GLM 5.2 vectors are historical, not gates for V4.1 or GLM 5.3. State changes
 need rewind, replay, save/load, images and multiple-session coverage where
 relevant; distributed changes need both ranks and failure cases. The
-[release QA guide](../../QA_BEFORE_RELEASES.md) owns the full matrix and records
-uncompleted checks. Run model-opening checks serially under the
+[release QA guide](qualification/README.md) guides selection and reporting of checks; a release-specific QA report owns
+results, failures and skipped checks. Run model-opening checks serially under the
 [pressure guard](benchmarking.md#guarded-execution).
 
 ## Diagnose output
@@ -73,4 +73,4 @@ Token dumps can reveal template differences; logits and continuations help
 separate sampling from graph errors. Server traces include cache and tool-parser
 decisions and may contain private conversations. Other tools include
 [GGUF conversion](../../gguf-tools/README.md), [imatrix collection](../../gguf-tools/imatrix/README.md),
-[steering](../../dir-steering/README.md), and [evaluation data](../../EVAL_DATA.md).
+[steering](../../dir-steering/README.md), and [evaluation data](evaluation-data.md).

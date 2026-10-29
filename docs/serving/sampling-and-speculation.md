@@ -42,7 +42,7 @@ including in TP mode.
 
 The maintained native Metal regression fixture is built with
 `./tools/zig-build dspark-native-oracle`; see the
-[DSpark qualification commands](../../QA_BEFORE_RELEASES.md#dspark). It checks
+[DSpark qualification commands](../development/qualification/deepseek.md#dspark). It checks
 trained draft tensors and actual runtime commits without relying on the
 retired original-Flash acceptance driver's log counters.
 

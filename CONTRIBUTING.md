@@ -1,144 +1,26 @@
 # Contributing
 
-DwarfStar4 changes should be tested against the failure mode they can realistically
-affect. The project has two regression tracks: correctness and speed. Please
-include the commands you ran, the machine/backend, the model quant, and any
-notable failures in the PR or commit notes.
+Choose checks that exercise the behavior your change can affect. In the change
+notes, record the revision, commands, machine and backend, model and
+quantization where relevant, results, failures and skipped checks. Describe
+what was actually exercised; a model-free fixture does not qualify a full
+model or a hardware backend.
 
-Do not send PRs affecting one or more inference backends without checking if the
-resulting code is still correct and fast. The only acceptable regression speed
-is when an important correctness bug is fixed and it requires some speed penalty.
+Start with [project direction](docs/project.md) and the [source map](src/README.md).
+The [build and test guide](docs/development/build-and-test.md) owns current
+prerequisites, focused checks and diagnostics. Use the matching model's test
+vectors and quality checks when changing inference, templates or quantization.
+For release work, select the applicable checks in the [qualification guide](docs/development/qualification/README.md).
 
-## Correctness Regression Tests
+For performance changes, choose a fixed baseline and workload, then use the
+[benchmarking guide](docs/development/benchmarking.md) and [lab methodology](docs/lab/methodology.md).
+Comparative performance claims require at least five measured samples per side,
+alternating order, with all samples and variation reported. Measure practical
+quality alongside speed; approximations and output degradation can be useful
+tradeoffs. Run one model-opening job at a time under the pressure guard. Keep
+raw output local and ignored, and retain concise reports and reproduction
+instructions in the repository.
 
-Build the default backend first:
-
-```sh
-make clean
-make
-```
-
-The C test runner is `ds4_test`. Running it without arguments is equivalent to
-`--all`:
-
-```sh
-make test
-```
-
-Useful narrower checks:
-
-```sh
-./ds4_test --server
-./ds4_test --long-context
-./ds4_test --tool-call-quality
-./ds4_test --metal-kernels
-```
-
-What they cover:
-
-- `--server`: request parsing, chat rendering, streaming, tool-call parsing,
-  thinking controls, KV disk-cache bookkeeping, and other server-side logic.
-  This is the best quick check for API and prompt-rendering changes.
-- Model-specific continuation fixtures catch tokenizer, template, attention
-  and logits regressions. Use the matching supported-model manifests below.
-- `--long-context`: runs a long-context story fact-recall regression from
-  `tests/long_context_story_prompt.txt`. The model must retrieve spelled-out
-  person-number assignments from a long prose prompt and return `Name=number`
-  lines that the test parses.
-- `--tool-call-quality`: exercises actual model behavior for DSML tool-call
-  emission in both fast and exact paths.
-- `--metal-kernels`: isolated Metal kernel numeric checks.
-
-The runner defaults to `ds4flash.gguf`. Override paths when needed:
-
-```sh
-DS4_TEST_MODEL=/path/to/model.gguf ./ds4_test --long-context
-DS4_TEST_LONG_PROMPT=/path/to/prompt.txt ./ds4_test --long-context
-```
-
-For CUDA-specific changes, test on a CUDA machine:
-
-```sh
-make
-make cuda-regression
-```
-
-For CPU portability, at least verify that the CPU target still builds:
-
-```sh
-make cpu
-```
-
-The CPU backend is a reference/debug path, not the production performance
-target. Remember that executing the CPU path on Metal can crash the system
-because of a kernel bug in macOS.
-
-## Quality Checks For Quantization Changes
-
-For GGUF or quantization work, use the official-continuation scorer in
-`gguf-tools/quality-testing`. The test compares how much probability a local
-GGUF assigns to matching official continuations, token by token. Original
-Flash and GLM 5.2 fixtures are historical; use the current model's manifest
-and checkpoint version. For example, the V4.1 commands below use its general
-continuation set.
-
-Build the scorer:
-
-```sh
-make -C gguf-tools quality-score
-```
-
-Then score old and new GGUFs against the same manifest and compare:
-
-```sh
-gguf-tools/quality-testing/score_official OLD.gguf \
-  gguf-tools/quality-testing/deepseek-v4.1-flash-20260910-general/manifest.tsv .workspaces/old.tsv 4096
-
-gguf-tools/quality-testing/score_official NEW.gguf \
-  gguf-tools/quality-testing/deepseek-v4.1-flash-20260910-general/manifest.tsv .workspaces/new.tsv 4096
-
-python3 gguf-tools/quality-testing/compare_scores.py .workspaces/old.tsv .workspaces/new.tsv
-```
-
-Lower `avg_nll` is better. See
-`gguf-tools/quality-testing/README.md` for collecting or refreshing official
-continuations.
-
-## Speed Regression Tests
-
-Use `ds4-bench` for throughput regressions. It reports instantaneous prefill and
-generation speed at context frontiers, not one whole-run average. Prefill is
-incremental: each row measures only the newly processed suffix since the
-previous frontier.
-
-Default linear sweep:
-
-```sh
-./ds4-bench \
-  -m ds4flash.gguf \
-  --prompt-file speed-bench/promessi_sposi.txt \
-  --ctx-start 2048 \
-  --ctx-max 65536 \
-  --step-incr 2048 \
-  --gen-tokens 128 \
-  --csv /tmp/ds4-speed.csv
-```
-
-Use the same machine, backend, model file, context sweep, power/thermal state,
-and background load when comparing two commits. For backend work, run at least
-one before/after CSV and compare both `prefill_tps` and `gen_tps`. Generation is
-greedy and skips EOS so each frontier gets the same number of generated tokens.
-
-To generate a graph for a CSV:
-
-```sh
-python3 speed-bench/plot_speed.py /tmp/ds4-speed.csv --title "Machine t/s"
-```
-
-## Reporting sessions bugs
-
-For debugging a failing generation, keep the trace:
-
-```sh
-./ds4-server --trace /tmp/ds4-trace.txt ...
-```
+Follow the [writing guide](docs/writing-guide.md) when updating documentation.
+Update the manual that owns changed behavior and record experimental reasoning
+in the lab journal. Keep contributions focused on the selected outcome.
