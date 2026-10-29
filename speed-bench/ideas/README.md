@@ -822,6 +822,6 @@ Evidence: `../experiments/ragged-native-tail-qualification-20261003/compact-summ
 `flint_reference.py --model DIR --output DIR [--quality]` measures the unchanged
 Flint harness with fixed prompts and captures optional full-vocabulary teacher
 rows. Use the original Flint Python environment only for this reference job.
-[Commands and qualification boundaries](../../docs/FLINT.md#reproduce-the-comparison)
+[Commands and qualification boundaries](../../docs/models/flint/usage.md#reproduce-the-reference-comparison)
 cover the pressure guard, native `flint-smoke` runs and numerical comparison.
 Keep its generated output local under `.workspaces/`.

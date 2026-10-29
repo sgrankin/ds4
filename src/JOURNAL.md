@@ -3,6 +3,15 @@
 Read [project direction and current status](../docs/PROJECT.md) first.
 This journal records short milestones, not the active experiment queue.
 
+## 2026-10-28: model documentation batch
+
+Completed reference, runtime and Apple Silicon manuals for DeepSeek, Flint,
+Qwen 3.8 Flash Next, GLM 5.3 Flash and Clef, plus a DeepInfer comparison and
+consolidated setup guides. Clean-context Terra authors and independent source,
+explanatory-flow and style reviewers used medium effort, followed by an area-wide
+editorial pass. [Model index](../docs/models/README.md). Source and recorded
+evidence only; no runtime changes or model experiments.
+
 ## 2026-10-28: source-backed documentation pilot
 
 The user rejected archiving blobs as a substitute for editorial synthesis.
@@ -14,8 +23,8 @@ the broader migration has not been performed. Runtime experiments remain paused.
 
 Reader feedback found fact-filled paragraphs without a coherent explanation.
 The documentation guide now specifies an independent explanatory-flow reviewer
-and explicit medium-effort Terra passes. The Apple Silicon page still needs
-the structural rewrite identified in that review.
+and explicit medium-effort Terra passes. That structural rewrite is included in the completed model documentation
+batch above.
 
 ## 2026-10-28: pause and reassess
 

@@ -1,12 +1,12 @@
 # Documentation
 
-This tree is being rewritten around the implementation rather than experiment
-chronology. The first pilot covers the architecture, lab methodology and a
-source-backed DeepSeek example. Existing manuals remain in place during review.
+The technical manuals describe the current architecture and implementation.
+The lab journal records why experiments were tried and what their evidence
+establishes. Start with the system overview, then follow the relevant model.
 
 - [Architecture and data flow](architecture.md)
-- [DeepSeek on Apple Silicon](models/deepseek/apple-silicon.md): current
-  execution, layouts, weight movement and optimization tradeoffs.
+- [Model manuals](models/README.md): reference, runtime and Apple Silicon
+  accounts for DeepSeek, Flint, Qwen, GLM Flash and Clef, with setup guides.
 - [Semantic checkpoint experiments](lab/journal/2026-10-28-deepseek-semantic-checkpoints.md):
   the historical question, comparisons, findings and decision.
 - [Documentation guide](writing-guide.md): how we organize, write and review
@@ -14,11 +14,11 @@ source-backed DeepSeek example. Existing manuals remain in place during review.
 - [Experimental methodology](lab/methodology.md): measurement conventions and
   the preferred lab-entry format.
 
-The intended areas are `serving/`, `storage/`, `backends/` and `models/`.
-Each model will have a reference manual, implementation account and relevant
-backend documents. DeepSeek's DeepInfer comparison belongs with that model.
-Date-prefixed lab narratives belong in `lab/journal/`.
+The [DeepInfer comparison](models/deepseek/deepinfer/comparison.md) belongs
+with DeepSeek's implementation. Shared serving, storage and backend topics
+will get their own focused accounts as that documentation is synthesized.
+The [artifact catalogue](MODELS.md) retains download targets and packaged sizes.
 
-New documents are reviewed for explanation, prose, technical correctness and consistency
-before replacing the material they synthesize. This pilot does not archive,
-rename or delete the existing documentation or experiment folders.
+Documents receive independent explanatory-flow, source and prose reviews,
+followed by an editorial read of the related area. Existing experiment records
+remain evidence; they are not the current technical manuals or a work queue.

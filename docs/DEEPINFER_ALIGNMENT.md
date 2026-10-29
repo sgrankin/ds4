@@ -1,5 +1,11 @@
 # DeepInfer technique inventory and local alignment
 
+This is the dated source-level audit, with subsequent evidence updates recorded
+below. For the current explanatory account, read the
+[DeepInfer comparison](models/deepseek/deepinfer/comparison.md) and model manuals.
+Historical completed/next notes here are not work orders; the
+[selected-work page](../speed-bench/ideas/next-experiments.md) owns that decision.
+
 This is a technique inventory, not the active work queue. See
 [project direction and current status](PROJECT.md) before choosing more work.
 

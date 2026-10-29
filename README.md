@@ -21,7 +21,7 @@ For this local fork, start with [project direction and current status](docs/PROJ
 It records current goals, adopted features and unfinished work without requiring
 a tour of the experiment history.
 The [documentation index](docs/README.md) leads to the new architecture overview,
-DeepSeek backend explanation and narrative lab pilot.
+the [model manuals](docs/models/README.md), and narrative lab records.
 
 **Clef-Flash, Clef and Clef-Omni** also run as native Metal learned decision
 engines through SystemOne and OpenAI Decisions, independently alongside a
