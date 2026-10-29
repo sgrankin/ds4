@@ -4,7 +4,7 @@ The Q2 GGUF includes the language model, embedded MTP weights and a disk-backed
 n-gram table. A conservative starting context and prefill chunk are:
 
 ```nu
-nu tools/zig-build ds4-server
+./tools/zig-build ds4-server
 ./download-model.nu qwen38-q2
 ./zig-out/bin/ds4-server --model gguf/Qwen3.8-Flash-Next-Q2.gguf --ctx 8192 --prefill-chunk 1024
 ```

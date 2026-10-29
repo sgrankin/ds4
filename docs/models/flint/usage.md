@@ -16,7 +16,7 @@ comparison executable:
 
 ```nu
 ./download-model.nu flint
-nu tools/zig-build ds4-server flint-smoke
+./tools/zig-build ds4-server flint-smoke
 ```
 
 The build installs `ds4-server` and `flint-smoke` in `zig-out/bin`; the

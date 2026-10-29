@@ -10,7 +10,7 @@ OpenResponses capability.
 ## Run
 
 ```sh
-tools/zig-build ds4-server
+./tools/zig-build ds4-server
 ./ds4-local --bin-dir ./zig-out/bin --server persistent-fast --model MODEL.gguf
 ```
 

@@ -59,7 +59,7 @@ qualified by this build.
 
 ```sh
 # Installs all five programs in zig-out/bin.
-tools/zig-build
+./tools/zig-build
 zig-out/bin/ds4 --help
 zig-out/bin/ds4-agent --help
 zig-out/bin/ds4-server --help
@@ -68,7 +68,7 @@ zig-out/bin/ds4-server --help
 make
 
 # Debug native owners and fixtures, without replacing the release installation.
-tools/zig-build -Doptimize=Debug --prefix .workspaces/zig-debug
+./tools/zig-build -Doptimize=Debug --prefix .workspaces/zig-debug
 ```
 
 The installed programs are `ds4`, `ds4-agent`, `ds4-server`, `ds4-bench` and
@@ -160,9 +160,9 @@ Fixture targets build the actual selected production owners. Run their binaries
 separately; targets do not automatically start models or GPU work.
 
 ```sh
-tools/zig-build server-test agent-test sampling-test session-state-test
-tools/zig-build -Doptimize=Debug server-test agent-test
-tools/zig-build graph-test metal-test dense-mpp-test ssd-experts-test
+./tools/zig-build server-test agent-test sampling-test session-state-test
+./tools/zig-build -Doptimize=Debug server-test agent-test
+./tools/zig-build graph-test metal-test dense-mpp-test ssd-experts-test
 ```
 
 Model/GPU campaigns run serially under

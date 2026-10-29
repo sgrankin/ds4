@@ -7,7 +7,7 @@ Download and start Flash with:
 
 ```nu
 nu download-model.nu clef-flash
-nu tools/zig-build ds4-server
+./tools/zig-build ds4-server
 ./ds4-local --server --bin-dir zig-out/bin clef-flash
 ```
 

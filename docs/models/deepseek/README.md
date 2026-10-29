@@ -4,7 +4,7 @@ For a 128 GB Mac, the Q2 model needs SSD expert streaming. The existing
 `persistent-fast` server preset supplies streaming and context-reuse settings:
 
 ```nu
-nu tools/zig-build ds4-server
+./tools/zig-build ds4-server
 ./download-model.nu ds41f-q2
 ./ds4-local --bin-dir ./zig-out/bin --server persistent-fast --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf --ctx 32768 --prefill-chunk 8192
 ```

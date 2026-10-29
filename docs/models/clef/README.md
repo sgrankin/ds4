@@ -4,7 +4,7 @@ Clef answers bounded questions through learned answer heads, rather than
 generating a conversation token by token. Start the Flash model with:
 
 ```nu
-nu tools/zig-build ds4-server
+./tools/zig-build ds4-server
 ./download-model.nu clef-flash
 ./ds4-local --bin-dir ./zig-out/bin --server clef-flash --ctx 8192
 ```

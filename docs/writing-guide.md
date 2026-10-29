@@ -51,6 +51,10 @@ bullets for genuinely parallel facts, not as a substitute for explaining how
 ideas connect. Put spaces between words, numbers and units. Explain an
 unfamiliar term at its first use. Avoid terse status-code prose.
 
+Show executable project launchers as direct relative commands, for example
+`./tools/zig-build`. Their shebang selects Nushell; use `nu script.nu` when an
+explicit interpreter is needed.
+
 For a mechanism, explain the problem, how data and control move, who owns the
 state, why the design helps, and its limitations. A flag name or source symbol
 alone is not an explanation. Include a concrete example when it makes a cache,

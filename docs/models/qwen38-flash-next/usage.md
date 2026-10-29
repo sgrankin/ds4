@@ -7,7 +7,7 @@ This guide covers the local Qwen 3.8 Flash Next profile. `qwen4exp` is its GGUF 
 On Apple Silicon, install the [Metal build prerequisites](../../METAL.md#build-and-run), Zig and Nushell; maintained wrappers are tested with Nushell 0.116.1. From the repository root:
 
 ```sh
-nu tools/zig-build ds4-server
+./tools/zig-build ds4-server
 ./download-model.nu qwen38-q2
 ./zig-out/bin/ds4-server --model gguf/Qwen3.8-Flash-Next-Q2.gguf --ctx 8192 --prefill-chunk 1024
 ```
@@ -83,7 +83,7 @@ uv run --with numpy --with pillow python -m unittest discover -s tests -p test_j
 The n-gram state fixture requires model weights and exercises failed disk reads and recovery through prefill, decode and MTP:
 
 ```sh
-nu tools/zig-build qwen-ngram-state-test
+./tools/zig-build qwen-ngram-state-test
 ./zig-out/bin/test-qwen4-ngram-state /path/to/MODEL.gguf
 ```
 
@@ -125,7 +125,7 @@ Repeat each scorer command with `--quality` appended after the context argument;
 For vision parity, build the encoder fixture and compare its GGUF weights with the CPU Hugging Face reference:
 
 ```sh
-nu tools/zig-build vision-encoder-test
+./tools/zig-build vision-encoder-test
 uv run --with numpy --with torch --with torchvision --with pillow \
   --with safetensors --with transformers --with gguf tests/qwen4_vision_ref.py \
   --binary ./zig-out/bin/test-qwen4-vision-encoder \

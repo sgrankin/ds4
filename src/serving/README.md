@@ -54,9 +54,9 @@ match the existing request destructor.
 The standalone fixture links no engine, C server objects or Metal:
 
 ```sh
-tools/zig-build serving-boundary-test
+./tools/zig-build serving-boundary-test
 zig-out/bin/test-serving-boundary
-tools/zig-build server-test
+./tools/zig-build server-test
 zig-out/bin/ds4_test --server
 ```
 

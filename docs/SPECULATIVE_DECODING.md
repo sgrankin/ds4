@@ -37,7 +37,7 @@ cache size both matter. V4.1 DSpark can still be slower than ordinary decoding,
 including in TP mode.
 
 The maintained native Metal regression fixture is built with
-`tools/zig-build dspark-native-oracle`; see the
+`./tools/zig-build dspark-native-oracle`; see the
 [DSpark qualification commands](../QA_BEFORE_RELEASES.md#dspark). It checks
 trained draft tensors and actual runtime commits without relying on the
 retired original-Flash acceptance driver's log counters.

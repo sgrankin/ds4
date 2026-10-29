@@ -4,7 +4,7 @@ Flint loads its safetensors directory rather than a GGUF file. Start a small
 context on a supported Metal profile with:
 
 ```nu
-nu tools/zig-build ds4-server
+./tools/zig-build ds4-server
 ./download-model.nu flint
 ./ds4-local --bin-dir ./zig-out/bin --server flint --model gguf/flint-int4 --ctx 8192 --port 8001
 ```

@@ -4,7 +4,7 @@ This is the native hybrid Flash implementation, distinct from the full GLM 5.3
 legacy engine. Start the packaged Q2 model with:
 
 ```nu
-nu tools/zig-build ds4-server
+./tools/zig-build ds4-server
 ./download-model.nu glm53-q2
 ./zig-out/bin/ds4-server --model gguf/GLM-5.3-Flash-Q2.gguf --ctx 8192
 ```
