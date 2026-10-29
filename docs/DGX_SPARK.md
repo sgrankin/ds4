@@ -82,7 +82,7 @@ Both Q2 and Q4 fit on one Spark. After building:
 Q2 keeps 41.73 GiB of weights resident; Q4 keeps 69.74 GiB. Both GGUFs also
 contain 95.37 GiB of BF16 n-grams, read directly from the SSD. Leave room
 for context and runtime buffers. Vision, the native agent, server APIs and
-text-session checkpoints work on CUDA; see [Qwen setup](QWEN38_FLASH_NEXT.md).
+text-session checkpoints work on CUDA; see [Qwen setup](models/qwen38-flash-next/usage.md).
 
 September 15, 2026, Q2 on one Spark: a 16K prefill reached 250 t/s, extending
 it to 30K reached 243 t/s, and ordinary decode stayed around 17.3 t/s.

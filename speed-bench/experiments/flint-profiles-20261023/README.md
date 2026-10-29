@@ -115,7 +115,7 @@ the earlier full-context qualification boundary.
 
 ## Reproduction and evidence
 
-Use [the Flint instructions](../../../docs/FLINT.md) to build and download.
+Use [the Flint instructions](../../../docs/models/flint/usage.md) to build and download.
 Reuse the token fixtures produced by
 [`flint_reference.py`](../../ideas/flint_reference.py), then select a profile
 before the native model argument:

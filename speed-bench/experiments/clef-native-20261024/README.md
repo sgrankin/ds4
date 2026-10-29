@@ -7,7 +7,7 @@ end-to-end media checks and mixed-model serving. Actual independent DS41 engines
 and the existing four model families pass the recorded ownership/regression
 gates. The sections below retain each experiment's boundaries and limitations.
 
-- [Setup, APIs and limits](../../../docs/CLEF.md)
+- [Setup, APIs and limits](../../../docs/models/clef/usage.md)
 - [GPU head: chosen default, numerical controls and timings](HEAD.md)
 - [Vision tower comparisons](vision.md), [CPU media/audio](MEDIA.md),
   [actual media tasks](MEDIA-TASKS.md)

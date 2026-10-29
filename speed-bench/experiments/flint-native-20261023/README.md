@@ -94,7 +94,7 @@ cache persistence. A full 262144-token model conversation has not been tested.
 
 ## Reproduction and local evidence
 
-See [Flint setup and reproduction commands](../../../docs/FLINT.md), the
+See [Flint setup and reproduction commands](../../../docs/models/flint/usage.md), the
 [portable original-harness driver](../../ideas/flint_reference.py), and
 [prefill source/attribution notes](../../../src/metal/flint/prefill/README.md).
 The native command is `flint-smoke MODEL PROMPT_JSON OUTPREFIX [default|quality]`.

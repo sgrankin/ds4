@@ -508,9 +508,9 @@ workflow qualification remains pending. No default/main promotion yet.
 
 AFK implementation batch authorized 2026-10-28 03:36 UTC. User selected the
 DSML length-finalization repair, ordinary-policy DSP1 qualification, physical
-main-KV packing and a fusion pass, plus implementation/evaluation of
-`docs/CONTEXT_COMPACTION_AND_CHECKPOINTS.md`. This supersedes that design
-document's previous proposal-only status. Keep main unchanged and raw artifacts
+main-KV packing and a fusion pass, plus implementation/evaluation of the checkpoint design now summarized in the
+[lab narrative](../docs/lab/journal/2026-10-28-deepseek-semantic-checkpoints.md).
+This supersedes the design's previous proposal-only status. Keep main unchanged and raw artifacts
 local. Use sequential one-hour experiment checkpoints, including preparation,
 builds and analysis; more than one checkpoint may be needed for a feature.
 
@@ -550,7 +550,7 @@ decoded values; consumer cost must be measured. The down-pack profile is a
 small target (~39 ms total), not a promised large gain. HC fusion must use the
 previous half-layer PRE and preserve BF16 boundaries. No builds/model runs or
 runtime changes in this review. Current summary and proposals:
-[DeepInfer alignment](../docs/DEEPINFER_ALIGNMENT.md).
+[DeepInfer alignment](../docs/models/deepseek/deepinfer/comparison.md).
 
 Commit-stack cleanup, 2026-10-28: consolidated the 21 changes above main
 (`be7f820f9ae5`) into eight coherent commits. Combined hosted-tool additions
@@ -1044,7 +1044,7 @@ source audit without runtime edits, builds or model jobs. Upstream HEAD is
 553741557a57df44a46fb3ab72b6aafeaf945337, verified read-only and matching the
 local checkout; comparison baseline is DS4e2a38f6e2bf4. The49-entry inventory,
 default/activation distinctions, source pointers and proposed bounded sequence
-are in [docs/DEEPINFER_ALIGNMENT.md](../docs/DEEPINFER_ALIGNMENT.md).
+are in [docs/models/deepseek/deepinfer/comparison.md](../docs/models/deepseek/deepinfer/comparison.md).
 
 The remembered cache recovery is **encoder SWA bounded replay**: keep compressed
 and index blocks, rebuild missing local state from the preceding128 tokens with
@@ -2189,7 +2189,7 @@ identities and22 downloader checks prevent metadata-name collisions. Production
 has no Python/MLX dependency. Flash/full share a dense hybrid executor; Omni
 has a sparse thinker, DeepStack vision and audio encoder. Record/tokenizer,
 learned GPU joint head, CPU media and actual serving are connected. See
-[setup/APIs/limits](../docs/CLEF.md) and [component sources](models/clef/README.md).
+[setup/APIs/limits](../docs/models/clef/usage.md) and [component sources](models/clef/README.md).
 
 Both `/v1/systemone` and `/v1/decisions` share one native operation. Decision
 models are stateless/non-streaming; the generator retains Responses HTTP/WS
@@ -3636,7 +3636,7 @@ measurement is possible. Large RAM usage is expected; watch pressure and swap.
   source and the original M5 Max persistent decode schedule. Source reference
   is `/Volumes/Models/flint` at `e53663b262af`; installed affine INT4 weights
   are under its `.local/share/rec/models/fdc85248...` directory (22.57 GB).
-  [Usage and reproduction](../docs/FLINT.md),
+  [Usage and reproduction](../docs/models/flint/usage.md),
   [qualification report](../speed-bench/experiments/flint-native-20261023/README.md).
 - Reference baseline completed under the pressure guard after the user stopped
   their DS4 agent. Original Python Engine, M5 Max, context 262144, 128 generated

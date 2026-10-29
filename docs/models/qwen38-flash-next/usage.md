@@ -107,6 +107,14 @@ python3 tests/test_server_story.py --url http://127.0.0.1:8000 \
   --model qwen3.8-flash-next --output .workspaces/qwen-story
 ```
 
+The server checkpoint regression also covers continued disk saves, cache-budget
+eviction and restart after a continuation. It exercises histories with and
+without tool schemas, including clients that omit or echo `reasoning_content`.
+The [release qualification](../../../QA_BEFORE_RELEASES.md#18-qwen38-flash-next)
+also calls for a real-prompt prefill replay across the sparse-attention boundary;
+require exact replay on the same schedule, and check task quality when comparing
+different schedules.
+
 ### Continuation quality
 
 For official continuation fixtures, create `.workspaces` if needed and build `make quality-score`, then run from the repository root:
@@ -163,4 +171,4 @@ make ds4_agent_test
 make test-web-recovery
 ```
 
-An agent can save a full text transcript without a KV payload, then restart with a larger `--ctx`, `/switch` to it and `/compact` to recover room. Image sessions retain their save restriction. These tests qualify only the exercised configurations, not every model, schedule or image task.
+An agent can save a full text transcript without a KV payload, then restart with a larger `--ctx`, `/switch` to it and `/compact` to recover room. Image sessions retain their save restriction. Automatic compaction reserves summary space and uses the agent's continuation path for interrupted generation. These tests qualify only the exercised configurations, not every model, schedule or image task.

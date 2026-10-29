@@ -31,8 +31,11 @@ the drafter resident; the target and its verification run across both GPUs.
 
 Up to five drafts are checked together. The sampling choices below apply;
 `--mtp-exact-sampling` uses sampled proposals and the full acceptance/correction
-rule for V4.1. Restored sessions warm the draft window with 128 ordinary tokens
-before speculation resumes. Measure speed on your prompts: acceptance and SSD
+rule for V4.1. Without compatible saved drafter features, restored sessions warm
+the draft window with 128 ordinary tokens before speculation resumes. Supported
+canonical checkpoints can retain those features; see [drafter-history persistence](models/deepseek/deepinfer/cache-and-attention.md#restoring-useful-drafter-history-c12)
+for activation conditions and the stored representation.
+Measure speed on your prompts: acceptance and SSD
 cache size both matter. V4.1 DSpark can still be slower than ordinary decoding,
 including in TP mode.
 
@@ -65,7 +68,7 @@ Both Qwen downloads include MTP and native BF16 n-grams in the main GGUF:
 
 Ordinary decode uses the same file with `--mtp` omitted. For non-zero
 temperature, add `--mtp-exact-sampling` to preserve the target sampling
-distribution. See [Qwen setup](QWEN38_FLASH_NEXT.md) for Metal and CUDA.
+distribution. See [Qwen setup](models/qwen38-flash-next/usage.md) for Metal and CUDA.
 
 The cycle drafts one token ahead by default and engages a **second, chained
 draft** (one extra nextn-layer step conditioned on the predictor's own
@@ -101,5 +104,7 @@ target-only path, use `--quality` or `--dspark-strict`; these disable the
 speculative acceptance path. They do not promise identical output across
 different hardware or execution configurations.
 
-Session-batched serving uses ordinary target decoding instead of combining
-DSpark/MTP with the session batch. See [serving](SERVER.md#multiple-sessions).
+Native session batches generally use ordinary target decoding. Qwen3.8 on
+Metal has a batched MTP path, and DS41 constrained requests can take bounded
+exclusive speculative turns. See [serving](SERVER.md#multiple-sessions) for
+eligibility, exact-sampling behavior and fallbacks.

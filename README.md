@@ -25,7 +25,7 @@ the [model manuals](docs/models/README.md), and narrative lab records.
 
 **Clef-Flash, Clef and Clef-Omni** also run as native Metal learned decision
 engines through SystemOne and OpenAI Decisions, independently alongside a
-generator. See the [Clef setup, APIs and qualification](docs/CLEF.md).
+generator. See the [Clef setup, APIs and qualification](docs/models/clef/usage.md).
 
 We test things in integration: model loading, prompt rendering,
 tool calls, KV state, the HTTP server, and the coding agent are built and tested together.
@@ -515,7 +515,7 @@ The download fetches one 137.10 GiB file and updates `ds4flash.gguf`.
 Add `--mtp` for speculative decoding. The larger
 `qwen38-q4k` target is also available. Download the optional vision encoder
 with `./download-model.nu qwen38-vision` and pass it with `--vision`.
-See [Qwen setup](docs/QWEN38_FLASH_NEXT.md) for details.
+See [Qwen setup](docs/models/qwen38-flash-next/usage.md) for details.
 
 Speculative decoding is opt-in. GLM and Qwen use `--mtp`; V4.1 Flash DSpark needs a matching
 support GGUF. It can improve generation, but not every workload benefits.
@@ -577,7 +577,7 @@ DGX Spark results, comparison conditions, and benchmark commands.
 ## Detailed Guides
 
 - [Models and vision](docs/MODELS.md): Flash, PRO, GLM, Qwen, and matching encoders.
-- [Qwen3.8 Flash Next](docs/QWEN38_FLASH_NEXT.md): model setup, MTP, vision, and validation.
+- [Qwen3.8 Flash Next](docs/models/qwen38-flash-next/usage.md): model setup, MTP, vision, and validation.
 - [SSD streaming](docs/SSD_STREAMING.md): run larger than RAM and size the cache.
 - [Inference across machines](docs/DISTRIBUTED.md): two-Mac TP/RDMA and layer pipelines.
 - [Speculative decoding](docs/SPECULATIVE_DECODING.md): DSpark, GLM and Qwen MTP, and sampling.

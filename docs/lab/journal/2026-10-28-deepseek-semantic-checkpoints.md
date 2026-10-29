@@ -6,7 +6,28 @@ The selected server `persistent-fast` package keeps anchor checkpoints and colle
 
 This matters when a client shortens tool output while preserving subsequent investigation. Imagine a request containing a large file dump A, investigation C, and an old tool result D. The client replaces A with an excerpt and changes D. A checkpoint that actually ends after C allows the server to evaluate the shortened prefix, import C, and evaluate the new D. A final checkpoint after D cannot simply be truncated to C: its rolling attention windows, compression carries and other frontier state have already advanced. The [suffix matcher](../../../src/suffix_match.zig) matches token IDs through a saved endpoint, requires at least 64 reusable tokens and currently imports one span. It is not a general message diff.
 
-The client owns the conversation archive and materializes the edited working view. A checkpoint is disposable inference state, not that archive. The [design discussion](../../CONTEXT_COMPACTION_AND_CHECKPOINTS.md) gives the motivating compaction example; the [recipe](../../../recipes/16-semantic-context-checkpoints.md) describes the implemented mechanism and configuration.
+The client owns the conversation archive and materializes the edited working view. A checkpoint is disposable inference state, not that archive. The [recipe](../../../recipes/16-semantic-context-checkpoints.md) describes the implemented mechanism and configuration.
+
+The original question was whether selective compaction like Philip Zeyliger and
+Maisem Ali's [Shelley design](https://blog.exe.dev/compaction) could work with
+suffix reuse. At its threshold, Shelley's harness nudges the model to compact.
+The model uses a message index to choose tool outputs to trim and message groups
+to summarize; a linter checks the amount of compaction and can trigger retries.
+An append-only SQLite log retains original messages and compaction events. The
+harness materializes the edited working view, omitting the compaction-control
+exchanges; summaries reference originals for later retrieval.
+Its approximately 200K-token trigger is its own
+tuning choice, not a measured DS4 target. The proposed endpoint captures were
+intended to make unchanged work after such an edit available without making the
+checkpoint the factual archive.
+
+The default latest-user cutoff matters in a long autonomous tool loop: if the
+only user instruction precedes a trimmed tool result, unchanged investigation
+after that instruction lies beyond the cutoff and cannot be grafted. This is a
+restriction on approximate suffix imports, not on ordinary exact continuation,
+which can reuse an unchanged prefix including later tool activity. The selected
+ongoing-task policy addresses that case by checking actual controls; it does not
+make the old activations exact.
 
 ## Setup
 
@@ -30,13 +51,60 @@ A separate [selection comparison](../../../speed-bench/experiments/context-captu
 
 The next [collector comparison](../../../speed-bench/experiments/context-capture-20261028/COLLECTION.md), at `28c98fd7`, held anchors fixed and compared segmented capture with capture inside the existing layer-major sweep. Combined initial time fell from 127.839 ± 1.681 to 81.437 ± 2.046 seconds; two edits were 96.661 ± 0.970 versus 96.914 ± 0.533 seconds; whole time fell from 224.500 ± 1.865 to 178.352 ± 2.269 seconds. All five whole-time pairs improved and 60/60 answers passed. Profiling was enabled on both sides: large layer sweeps fell from 11 to 8. Logical PREAD volume fell, but that is not a measurement of physical SSD traffic. Peak logical hot pages increased from 231.794 to 270.226 MiB and SSD pages/manifests from 182.168 to 220.652 MiB. The hot-page figures stayed below the configured hot budget in this cohort.
 
-The key change is collecting an endpoint's rolling state before later tokens overwrite it, while leaving the live forward at its final frontier. Snapshot serialization and hashing still cost work. The [Apple Silicon implementation](../../models/deepseek/apple-silicon.md#checkpoints-edits-and-speculation) explains the current state handling and fallback.
+The key change is collecting an endpoint's rolling state before later tokens overwrite it, while leaving the live forward at its final frontier. Snapshot serialization and hashing still cost work. The [Apple Silicon implementation](../../models/deepseek/apple-silicon.md#continuation-and-reuse) explains the current state handling and fallback.
 
 The latest [no-edit comparison](../../../speed-bench/experiments/context-capture-20261028/NO_EDITS.md), frozen at `f74180e0`, compared semantic checkpoints off with anchors and in-sweep capture on. Each case was one fresh HTTP request, with zero cached input tokens, not a long append-only session. Ordinary request time was 39.717 ± 1.358 seconds off and 38.908 ± 0.371 on; favorable was 41.586 ± 0.846 off and 41.871 ± 0.712 on. Paired changes varied in direction, so this establishes no clear speedup or penalty. All 20 answers passed. Ordinary caching and RAM/SSD tiers remained enabled in both arms; startup was recorded separately.
 
 Correctness has several distinct meanings. The [native qualification](../../../speed-bench/experiments/context-capture-20261028/QUALIFICATION.md) found the final forward's full logits byte-identical with and without collection, and restored and recaptured endpoint snapshots exactly. Separately stopped endpoint teachers used different batch shapes and showed small nonzero differences: across 18 teacher rows, mean delta-NLL was −0.002516 nats/token and mean KL was 0.000559 nats, with maximum KL 0.005389. Those comparisons do not measure the quality of an edited history. A suffix graft is itself approximate: even with immutable pre-RoPE originals preventing accumulated rotation error, saved activations retain influence from the old prefix.
 
 Practical checks of changed and deleted facts and user controls passed 10/10 initial and edited replies. A separate check retrieved an original archived dump as a fresh tool result. The ongoing-task policy identifies compatible sources using actual system, developer and user messages in their original order, along with reasoning controls, tool declarations and response schema. Changing these controls invalidates that identity. A restart lost the RAM-only source and correctly recomputed the edited answer. A separate eight-edit retention check passed 18/18 replies and reused the original source through all 16 edits; it is a functional observation, not a comparative eight-edit timing. See the [first-slice qualification](../../../speed-bench/experiments/context-boundaries-20261028/README.md) and [collector qualification](../../../speed-bench/experiments/context-capture-20261028/QUALIFICATION.md) for cases and limits.
+
+## Earlier cost model and remaining ideas
+
+Before main KV packing, the design discussion calculated full snapshot sizes at
+source `a9593e124f536ce7d8223a19f61f503ade77b791` for native DeepSeek Metal text,
+using packed index, F32 main-cache wire values, even endpoints and no optional
+drafter appendix. The 8,192-token canonical payload was also measured; the other
+entries are layout calculations, not capture timings:
+
+| Evaluated tokens | Canonical payload | Pre-RoPE originals | Combined |
+| ---: | ---: | ---: | ---: |
+| 8,192 | 51.85 MiB | 5.66 MiB | 57.52 MiB |
+| 32,768 | 175.93 MiB | 20.72 MiB | 196.65 MiB |
+| 131,072 | 672.24 MiB | 80.96 MiB | 753.20 MiB |
+| 200,000 | 1,020.24 MiB | 123.19 MiB | 1,143.44 MiB |
+
+For N evaluated tokens with N ≥ 128 under these assumptions, canonical bytes were
+`11,002,932 + 5,294 * N`; original bytes were
+`675,852 + 257 * (floor(N / 2) + floor(N / 2) + floor(N / 2) + N)`.
+These figures do not describe current packed-main snapshots or collector latency.
+Private approximate suffix payloads could use a larger index representation, and
+F16 live main storage did not imply F16 checkpoint wire values. See the
+[packed-index measurement](../../../recipes/14-packed-index-cache.md) and
+[current layout](../../models/deepseek/apple-silicon.md#representing-the-history).
+
+The earlier layout used a 256 KiB raw-window chunk for each of 40 layers: a
+changed byte could retain a new whole chunk, or roughly 10 MiB per endpoint
+before other changes. One hundred endpoints could therefore retain roughly a GiB
+of raw-window versions alone; this is a layout consequence, not a measured
+workload total. Deduplication saves stored chunks but does not remove the full
+serialization and hashing that precede it. An older
+[cache microbenchmark](../../../speed-bench/experiments/state-cache-hour9-20261003/README.md)
+published two already-captured sources totaling 63.58 MiB in about 192–199 ms,
+including synchronous SSD publication but excluding GPU capture. It is not a
+five-sample measurement of current endpoint or 200K capture latency.
+
+Further options remain unselected proposals: serialize appended compressed and
+index history incrementally, use finer raw-window chunks or deltas, and overlap
+or batch publication. These would address work that in-sweep collection still
+performs; their overhead and retention tradeoffs need measurement. Another
+possible tier retains compressed blocks and reconstructs missing local windows
+with bounded replay. The [DeepInfer comparison](../../models/deepseek/deepinfer/cache-and-attention.md#rebuilding-a-missing-recent-window-c1)
+describes the existing diagnostic and its approximation; combining it with suffix
+relocation is not implemented or qualified. Recovery of an unchanged prefix and
+reuse after an edit lose different information. A multi-span planner could reuse
+multiple unchanged regions, but is not needed by the current one-span mechanism
+and remains a separate proposal. None of these ideas selects a new experiment.
 
 ## Conclusion
 

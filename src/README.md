@@ -33,7 +33,7 @@ have their own top-level directories.
 | [Server](server/) | HTTP/input/JSON, request materialization, OpenAI/Anthropic/Responses output, conversations and tool memory, image resources, batching, cache reuse/publication, generation, routing and serving lifecycle. |
 | Frontends | Complete `ds4`, `ds4-bench` and `ds4-eval` controllers; the optional Web/CDP transport and recovery client. |
 | Shared libraries | GGUF metadata/directory parsing, vocabulary/BPE/pretokenization/chat, numeric sampling, Engram, images, state cache/KV store, SSD configuration and response-file storage. Shared tokenizer/chat utilities also serve GLM and Qwen callers. |
-| [Clef](models/clef/) | Dense hybrid and Omni MoE backbones, native tokenizer/record, learned GPU joint head, image/audio towers and model-specific media placement. [Usage and qualification](../docs/CLEF.md). |
+| [Clef](models/clef/) | Dense hybrid and Omni MoE backbones, native tokenizer/record, learned GPU joint head, image/audio towers and model-specific media placement. [Usage and qualification](../docs/models/clef/usage.md). |
 | [Shared runtime](runtime/) | Process Metal device/queue lifetime and owner-aware in-flight submission groups. Clef/Flint model resources are independent; per-GGUF DS4 globals remain a separate migration. |
 
 Algorithms live in ordinary Zig owners with typed borrowed inputs and explicit

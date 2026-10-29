@@ -1864,7 +1864,7 @@ paired comparisons, also with decode graphs disabled. Separately run the
   plus a reserve during conversion; do not fill the system disk.
 - Run ordinary and MTP decoding, including exact sampling, at small and large
   initial/continued prefixes. Follow the save/restore, rewind, checkpoint,
-  logit-dump, vision and steering tests in `docs/QWEN38_FLASH_NEXT.md`.
+  logit-dump, vision and steering tests in `docs/models/qwen38-flash-next/usage.md`.
   A table read failure must stop inference, not consume stale staging data.
 - Exercise native-agent coding and real server tool-result continuations with
   prefix reuse, then an image turn and a text follow-up. Compare quality and
@@ -1930,7 +1930,7 @@ paired comparisons, also with decode graphs disabled. Separately run the
 
 Run both official Alibaba manifests in
 `gguf-tools/quality-testing/data/qwen38-flash-alibaba-{100,long}` using the
-commands in `docs/QWEN38_FLASH_NEXT.md`. Test default and `--quality` paths,
+commands in `docs/models/qwen38-flash-next/usage.md`. Test default and `--quality` paths,
 and repeat the long set with `--continued-prefill 1` and `256`. Check complete
 case/token counts, finite results and alignment with the published tokenizer.
 The hosted model is based on Flash Next but is not a byte-pinned checkpoint;

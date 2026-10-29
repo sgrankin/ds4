@@ -293,7 +293,7 @@ python3 speed-bench/experiments/main-fp4-20261028/analyze.py .workspaces/hc-coll
 This targets a local fusion opportunity identified while comparing with
 [DeepInfer's lazy mHC](https://github.com/deepseek-ai/DeepInfer/blob/553741557a57df44a46fb3ab72b6aafeaf945337/deepinfer/model_executor/models/v4_modules/hc.py#L174-L314)
 and direct producer-to-consumer layouts; see the
-[alignment inventory](../../../docs/DEEPINFER_ALIGNMENT.md). It retains
+[alignment inventory](../../../docs/models/deepseek/deepinfer/comparison.md). It retains
 [antirez/ds4](https://github.com/antirez/ds4)'s local weighted-sum/norm math
 and the rewritten engine's V4.1 PRE convention. This is one bounded Metal
 boundary, not a port of DeepInfer's whole mega-mHC/MoE execution region.

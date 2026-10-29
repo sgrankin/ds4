@@ -9,7 +9,7 @@ passes 18/18 replies and retains the original RAM-only C through all 16 edits.
 Server `persistent-fast` now enables fuller4/spacing512 with HOT512; ordinary
 defaults and other presets receive no new boundary defaults.** See
 [five-round results and plot](RESULTS.md).
-The design is [context compaction and checkpoints](../../../docs/CONTEXT_COMPACTION_AND_CHECKPOINTS.md).
+The design is [context compaction and checkpoints](../../../docs/lab/journal/2026-10-28-deepseek-semantic-checkpoints.md).
 This slice supplies server cache support for a client/harness that materializes
 selective edits; it does not add server-hosted compaction tools or a scheduler.
 

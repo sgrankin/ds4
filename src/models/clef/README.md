@@ -1,6 +1,6 @@
 # Native Clef components
 
-The public setup and API guide is [docs/CLEF.md](../../../docs/CLEF.md).
+The public setup and API guide is [docs/models/clef/usage.md](../../../docs/models/clef/usage.md).
 `engine.zig` owns one loaded model, tokenizer, head choice and scratch mutex.
 The decision registry in `src/clef_entry.zig` keeps those engines independent;
 `src/server/decisions.zig` translates the two wire formats without model code.

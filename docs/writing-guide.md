@@ -150,6 +150,8 @@ status or planned action as current. Preserve evidence that still explains a
 decision, and give readers a route from it to the current conclusion.
 Keep one home for detailed results. A later lab entry may supersede a historical
 conclusion; add a short cross-link rather than rewriting the original evidence.
+Once a replacement covers a document's useful material, remove the superseded
+file and update its incoming links rather than keeping a redirect or duplicate.
 
 For a substantial document, use fresh contexts and distinct roles:
 

@@ -20,14 +20,14 @@ your cached Hugging Face token or `HF_TOKEN` is used when present.
 ## Clef decision models
 
 The **Clef-Flash, Clef and Clef-Omni** learned decision models have a separate
-[native setup and API guide](CLEF.md), including pinned downloads and measured
+[native setup and API guide](models/clef/usage.md), including pinned downloads and measured
 scope. They use decision endpoints rather than conversational generation.
 
 ## Flint
 
 Flint uses its original affine INT4 safetensors directory and a native M5 Max
 Metal backend. It serves through the shared stateful Responses server, with
-independent conversation slots. See [Flint setup, scope and measurements](FLINT.md).
+independent conversation slots. See [Flint setup, scope and measurements](models/flint/usage.md).
 
 ## DeepSeek V4 PRO
 
@@ -180,7 +180,7 @@ The script links `ds4flash.gguf` to the combined GGUF:
 ```
 
 Add `--mtp` for speculation; no second file is needed.
-See [Qwen setup](QWEN38_FLASH_NEXT.md)
+See [Qwen setup](models/qwen38-flash-next/usage.md)
 for memory, conversion, vision, and sampling details.
 
 Vision uses a separate encoder. `./download-model.nu qwen38-vision` downloads
@@ -276,4 +276,4 @@ The text GGUF stays the same. Download and add the encoder explicitly:
 
 The encoder is llama.cpp's Q8_0 mmproj conversion of the model's Qwen3-VL
 tower. Use `/read image.png` in `ds4` or `image_url` parts over HTTP; see
-[Qwen setup](QWEN38_FLASH_NEXT.md) for image limits and resize behavior.
+[Qwen setup](models/qwen38-flash-next/usage.md) for image limits and resize behavior.

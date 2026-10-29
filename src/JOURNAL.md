@@ -3,6 +3,15 @@
 Read [project direction and current status](../docs/PROJECT.md) first.
 This journal records short milestones, not the active experiment queue.
 
+## 2026-10-28: retire superseded documents
+
+Removed the old Clef, Flint, Qwen and DeepInfer entry points after checking their
+substantive predecessors against the new manuals. Moved remaining Qwen details
+and the checkpoint design note's useful reasoning and historical costs into the
+owning manuals and [lab narrative](../docs/lab/journal/2026-10-28-deepseek-semantic-checkpoints.md),
+then removed that note and updated incoming links. Shared and platform guides
+retain unique material and remain in place.
+
 ## 2026-10-28: reader-effort review
 
 Added paper-informed sentence review to the [documentation guide](../docs/writing-guide.md#reader-effort-within-sentences):

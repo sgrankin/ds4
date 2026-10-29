@@ -81,6 +81,19 @@ An exact prefix checkpoint represents the same preceding token sequence and exec
 
 Suffix reuse addresses a different case: a middle portion of a conversation changes while a later span remains. After evaluating the changed prefix, the runtime can import an eligible unchanged span from a stored source and recompute a fresh tail. The source activations were computed with the old left context, so this is an **approximation**, even when the imported token IDs match. [Suffix transactions](../../../src/engine/deepseek41/suffix_transaction.zig) and the [suffix recipe](../../../recipes/02-suffix-reuse.md) describe the transaction and rollback. The archive retains normalized BF16 pre-RoPE originals; relocation rotates them at the destination and repacks them, rather than repeatedly rotating already quantized rows. Position, alignment, source availability and fresh-tail requirements constrain the operation; failure falls back to exact evaluation.
 
+The [matcher](../../../src/suffix_match.zig) compares rendered token IDs, not
+JSON object identity or semantic equivalence. A cache identity scopes source
+discovery; it does not establish a token match. For each immutable source
+endpoint, it searches the new request's tokens for the source's final 64 tokens,
+allowing matches only before a freshness cutoff. Tokens at or beyond that cutoff
+must be evaluated fresh. It extends a hit backward and selects the longest
+eligible span. Both start
+positions must be even token indices; rightward relocation also requires its
+opt-in and saved pre-RoPE originals. The span must reach that source's real
+endpoint. A plan describes one span rather than a general message diff.
+Thus changing JSON formatting may
+leave the rendered tokens unchanged, while changing role or tool syntax may not.
+
 Semantic endpoints make useful source checkpoints at message, tool-call and
 result boundaries. The renderer maps ends to completed token positions and
 the selection policy bounds their count and spacing. Consider a changed tool
@@ -103,12 +116,18 @@ choices are:
 
 - Runtime defaults choose recent boundaries and leave in-sweep capture off;
   server `persistent-fast` selects anchor endpoints and enables collection.
+- Explicit cache breakpoints use a separate prefix-cache policy: reads can use
+  retained marks, but writes use only the last four marked ends per request.
+  Explicit controls disable automatic semantic-boundary capture and suffix
+  matching, so marking every message is not a substitute for those features.
+  See [cache boundaries](../../SERVER.md#prompt-cache-boundaries) and the
+  [prefix-cache policy](../../../src/server/prompt_cache_policy.zig).
 - Suffix reuse requires its configured cache and compatible native DeepSeek Metal
   mode. Steering, tensor parallelism, DSpark/MTP and decoder replay are excluded
   from semantic grafts. The recipes detail the remaining gates and overrides.
 
 ## Draft proposals and verification
 
-DSpark is an optional trained draft model, separate from the target. It uses captured target features and draft history to propose tokens; the target verifies proposals and commits only the accepted prefix. [DSpark verification and commit](../../../src/engine/deepseek41/dspark.zig) must keep the target frontier, attention state and draft history consistent after rejection or rewind. Proposals are not target outputs until verified. Session-batched serving uses ordinary target decoding; DSpark does not accelerate prompt prefill. The [speculative decoding guide](../../SPECULATIVE_DECODING.md) describes activation and limitations, including the distinct MTP path.
+DSpark is an optional trained draft model, separate from the target. It uses captured target features and draft history to propose tokens; the target verifies proposals and commits only the accepted prefix. [DSpark verification and commit](../../../src/engine/deepseek41/dspark.zig) must keep the target frontier, attention state and draft history consistent after rejection or rewind. Proposals are not target outputs until verified. Ordinary native session batches use target decoding; constrained requests can instead take bounded exclusive speculative turns. DSpark does not accelerate prompt prefill. The [speculative decoding guide](../../SPECULATIVE_DECODING.md) describes activation and limitations, including the distinct MTP path.
 
 A restored target checkpoint can continue without a saved draft history, but the drafter then needs to rebuild its window. The optional [DSP1 appendix](../../../src/engine/deepseek41/draft_checkpoint.zig) stores target feature rows for that rebuild. It is off in ordinary engine defaults and enabled by fast presets when DSpark is used. The appendix is an aid to draft restoration, not a substitute for the target checkpoint or proof that speculative decoding will help a particular workload.

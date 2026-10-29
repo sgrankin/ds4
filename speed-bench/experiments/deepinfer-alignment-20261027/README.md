@@ -2,7 +2,7 @@
 
 The user authorized four sequential, initially one-hour experiments, with
 DeepInfer as the preferred design reference unless Apple/SSD measurements or
-constraints justify a difference. Inventory: [49-entry comparison](../../../docs/DEEPINFER_ALIGNMENT.md).
+constraints justify a difference. Inventory: [49-entry comparison](../../../docs/models/deepseek/deepinfer/comparison.md).
 Reference upstream `553741557a57df44a46fb3ab72b6aafeaf945337`; fixed local runtime
 `e2a38f6e2bf4`, audit parent `aeac7ed091cf`. Main remains unchanged.
 Raw outputs live in ignored `.workspaces/deepinfer-alignment-20261027/`.

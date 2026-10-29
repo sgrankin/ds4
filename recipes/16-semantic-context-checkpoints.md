@@ -290,5 +290,6 @@ their omitted production cache controller.
 
 The local building blocks are [suffix/pre-RoPE reuse](02-suffix-reuse.md),
 [immutable hot/SSD storage](03-state-cache.md) and
-[physical main KV](15-packed-main-kv.md). The [design journal](../docs/CONTEXT_COMPACTION_AND_CHECKPOINTS.md)
-preserves the original discussion; this recipe states the implemented subset.
+[physical main KV](15-packed-main-kv.md). The [lab narrative](../docs/lab/journal/2026-10-28-deepseek-semantic-checkpoints.md)
+explains the design reasoning, experiments and remaining proposals; this recipe
+states the implemented subset.

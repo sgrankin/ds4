@@ -34,7 +34,7 @@ relative runtime files such as Metal kernels can be found.
 The generative model names are aliases within the loaded family. The GGUF or
 Flint directory passed at startup selects that engine. Add independently loaded
 Clef helpers with `--decision-model DIR`, or pass a Clef directory as `--model`
-for decisions-only serving. See the [Clef guide](CLEF.md). The decision endpoints
+for decisions-only serving. See the [Clef guide](models/clef/usage.md). The decision endpoints
 are stateless and do not stream.
 
 ```sh

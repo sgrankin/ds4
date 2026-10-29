@@ -43,7 +43,7 @@ kernel experiment before completing the campaign, decision, reports and install.
 Order: typed incomplete DSML repair; qualify DSP1 at ordinary confidence;
 physical main-FP4 KV producer/consumer and persistence/suffix integration;
 one profiled fusion; implement/evaluate the semantic-boundary, cheaper capture
-and ongoing-task freshness design in `docs/CONTEXT_COMPACTION_AND_CHECKPOINTS.md`.
+and ongoing-task freshness design in `docs/lab/journal/2026-10-28-deepseek-semantic-checkpoints.md`.
 Use one-hour checkpoints including preparation/builds/analysis, retaining
 concrete partial progress if another checkpoint is needed for the same feature.
 Parallel source preparation is allowed; frozen qualification builds and actual
@@ -169,7 +169,7 @@ matched register/SIMD F32 and physical-FP4 index scoring, separated score and
 selection timings, original score/ID oracle. No runtime/default promotion or
 whole-cache integration. This takes priority over the queued DSML repair.
 
-The [49-entry source comparison](../../docs/DEEPINFER_ALIGNMENT.md) is pinned to
+The [49-entry source comparison](../../docs/models/deepseek/deepinfer/comparison.md) is pinned to
 current upstream5537415 and local runtimee2a38f6e. The user authorized this
 sequence with DeepInfer alignment preferred unless our environment benefits
 from a difference. First budget12:50–13:50UTC, including preparation and builds.

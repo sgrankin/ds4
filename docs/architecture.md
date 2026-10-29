@@ -131,7 +131,7 @@ response store independently. It may also load independent Clef decision
 models, or run a decision-only configuration. Clef answers bounded questions
 such as choice, predicate and score with a learned decision head, rather than
 generating tokens. Clients call its decision endpoints directly, separately
-from the conversational generation flow; see [Clef](CLEF.md). The current server
+from the conversational generation flow; see [Clef](models/clef/usage.md). The current server
 does not route requests between two co-resident generative engines; that
 composition, including shared admission
 and scheduling, remains proposed.
