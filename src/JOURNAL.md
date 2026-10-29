@@ -3,6 +3,13 @@
 Read [project direction and current status](../docs/PROJECT.md) first.
 This journal records short milestones, not the active experiment queue.
 
+## 2026-10-28: reader effort in prose
+
+Added paper-informed sentence review to the [documentation guide](../docs/writing-guide.md#reader-effort-within-sentences):
+make opaque relationships explicit while retaining familiar technical terms.
+The existing prose reviewer now proposes meaning-preserving edits and explains
+the reading difficulty each addresses. The guide records the paper's limits.
+
 ## 2026-10-28: full DeepInfer comparison
 
 Expanded all 49 alignment entries into six source-backed technical chapters,

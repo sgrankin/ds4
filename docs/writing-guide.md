@@ -79,6 +79,47 @@ Keep documents focused. Link to the owner of an explanation instead of copying
 it into several documents. Avoid arbitrary word counts: split a topic when it
 contains distinct reader tasks, not merely because it is long.
 
+## Reader effort within sentences
+
+Make relationships explicit when ambiguity or unnecessary inference makes a
+sentence hard to follow.
+Unpack an opaque stack of nouns or an unfamiliar hyphenated compound with a
+verb or preposition. Restore an optional “that” or preposition when it helps
+the reader parse the sentence. Keep a subject near its verb and other related
+parts near each other when intervening detail makes the connection hard to
+follow. Replace a newly coined noun used as a verb, personification or an
+unfamiliar pairing of words when the actor or action is unclear. A few extra
+words can save inference or rereading; add them where they help, not everywhere.
+
+Keep established terms such as “expert cache,” “prefill” and “frontier,” and
+retain exact API and source-symbol names. Noun compounds, omitted “that” and
+metaphors are useful when their meaning is clear; none is a blanket error.
+These constructed examples illustrate wording choices, not paper quotations or
+claims about backend behavior:
+
+- If a budget limits retries of reads after an expert cache miss: “expert cache
+  miss retry budget” → “budget for retrying reads after a miss in the expert
+  cache.”
+- “The runner, after loading the configuration and checking the inputs, starts
+  prefill” → “After loading the configuration and checking the inputs, the
+  runner starts prefill.”
+- Keep “The expert cache eviction policy selects an entry” and “The runner
+  snapshots the configuration before prefill” when those are the intended
+  meanings: the compound and verb are familiar and clear in context.
+
+These checks are motivated by [*Why is AI-generated language so hard to
+understand?*](https://arxiv.org/abs/2610.29162v1) (Clark, Martin and Mahowald,
+2026, version 1; sections 3–4 and 7). The study compares English model outputs
+with human writing and round-trip translations using features associated with
+processing difficulty. Round-trip
+translation normalizes style and can change meaning or length, so it is not
+a perfect semantic control. The authors do not directly measure human
+comprehension, and results vary substantially by model and genre. Their
+controlled Qwen2.5-1.5B reinforcement-learning experiment
+supports a possible training mechanism: a length penalty can shift grammatical
+choices. It does not establish that asking for brevity has the same effect or
+that this mechanism causes all frontier-model style.
+
 ## Evidence and capability claims
 
 Read the relevant source, existing documentation and recorded experiment
@@ -115,7 +156,13 @@ For a substantial document, use fresh contexts and distinct roles:
 - A clean-context author, scoped to that document, reads the relevant source
   and documentation and writes the explanation.
 - An independent prose and style reviewer checks clarity, readability, examples,
-  diagrams and links.
+  diagrams and links. Select a dense paragraph and mark noun relationships the
+  reader must guess, clauses that require reparsing, long dependencies and odd
+  verbs that obscure the action. For each finding, explain the reader effort
+  and propose a clearer rewrite that preserves facts, technical terms, actors,
+  conditions and sequence. Leave familiar, clear wording alone; adding words
+  is useful only when it clarifies. Do not guess AI authorship or assign a
+  style score.
 - An independent technical and source reviewer checks claims against the
   implementation and evidence. Also compare the document's scope with the
   model's public capabilities and implementation entry points: an omitted
