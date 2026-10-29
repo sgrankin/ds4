@@ -116,6 +116,20 @@ specific layer numbers and limits are a deduction from the local profile and
 its source audit, not a general claim about all checkpoints. The released
 engine accepts a metadata-defined topology and validates its relationships.
 
+## Image representations
+
+The V4.1 language trunk can also consume projected image rows rather than text
+token embeddings. A checkpoint-matched vision encoder transforms the image
+patch grid, and an aligner groups patches into language-width rows. The rendered
+image block includes learned sentinel rows as well as the visual features;
+placeholder token IDs alone do not encode the image content. This contract is
+visible in the local [vision weights](../../../src/engine/vision_weights.zig)
+and [vision runtime](../../../src/engine/vision_runtime.zig), rather than being
+an independent account of vision training. The
+[implementation manual](implementation.md#image-input-and-live-continuation)
+traces input assembly and image-conditioned state; the
+[Apple Silicon manual](apple-silicon.md#vision-encoder-execution) explains the GPU path.
+
 ## Experts and Engram
 
 The feed-forward sublayer routes each token to a small subset of learned

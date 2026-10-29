@@ -95,12 +95,24 @@ for scheduling and the [implementation](implementation.md) for ownership.
 ## Routing and Metal execution
 
 The ordinary router selects experts from the model's scores regardless of
-which weights happen to be resident. An optional resident-route approximation
+which weights happen to be resident.
+
+### Resident expert substitution
+
+During SSD streaming, an optional resident-route approximation
 can replace up to three weaker missing choices with resident candidates, subject
 to affinity, rank and mass bounds. It keeps the original coefficients and
 protects the three strongest choices, but a substitute expert computes a
 different function. The [routing recipe](../../../recipes/01-resident-routing.md)
 explains the limits and measured quality tradeoff.
+
+For example, if a weak selected expert is absent, the policy can assign its
+original mixture coefficient to an eligible resident expert. The current token
+can then use those resident weights. "Close enough" means eligible under router
+score, rank and mixture-mass bounds; it is not a guarantee of similar expert
+outputs. The policy does not fetch the displaced ideal expert asynchronously
+and swap it back when ready. That arrival-based behavior was a
+[separate prototype that was not adopted](../../../recipes/01-resident-routing.md#what-did-not-earn-its-complexity).
 
 Activation depends on the launcher policy:
 
@@ -109,6 +121,8 @@ Activation depends on the launcher policy:
   residency once per call. Full sweeps and scalar prefill fallbacks retain
   native routing.
 - Ordinary routing remains native without these opt-in policies.
+
+### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The
 kernel unpacks a quantized weight tile and multiplies it by the corresponding
@@ -255,6 +269,24 @@ from 47.600 s to 48.540 s on average, with packed slower in all five pairs.
 Answers and measured teacher rows matched in these tests. The fast presets
 accept this measured capacity/latency tradeoff; neither comparison establishes
 performance on other workloads or machines.
+
+## Vision encoder execution
+
+An image must first become rows with the language model's hidden width. The
+optional vision sidecar provides that encoder and aligner; the language-model
+expert cache does not supply its weights. The [vision controller](../../../src/engine/vision.zig)
+allocates a per-image Metal workspace, uploads image patches and runs 32
+transformer blocks at width 1,024. The aligner groups each 3-by-3 patch region
+and projects it into the 5,120-wide V4.1 language representation.
+
+The controller uses BF16 weight multiplication and explicit BF16 rounding
+boundaries, while its workspace tensors use four-byte floating-point storage.
+Those are different memory claims. After encoding, the
+[vision runtime](../../../src/engine/vision_runtime.zig) assembles the model's
+image layout and sentinel embeddings. The language graph reads those rows at
+the image span instead of ordinary text embeddings. See
+[image input and live continuation](implementation.md#image-input-and-live-continuation)
+for sidecar matching, image identity, state ownership and reuse exclusions.
 
 ## Continuation and reuse
 

@@ -12,6 +12,11 @@ explanatory-flow and style reviewers used medium effort, followed by an area-wid
 editorial pass. [Model index](../docs/models/README.md). Source and recorded
 evidence only; no runtime changes or model experiments.
 
+Reader follow-up exposed the missing DeepSeek vision path. Added the image
+contract, runtime/state flow and Metal encoder account, and made resident expert
+substitution directly discoverable. Source review now checks capability
+coverage as well as the correctness of claims already present.
+
 ## 2026-10-28: source-backed documentation pilot
 
 The user rejected archiving blobs as a substitute for editorial synthesis.

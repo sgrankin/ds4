@@ -14,9 +14,12 @@ A session's [graph resources](../../../src/engine/deepseek41/resources.zig) incl
 
 ```mermaid
 flowchart LR
-    R[Request messages and tools] -->|canonical values| M[Materialize and render]
-    M -->|text and control boundaries| T[Tokenizer]
-    T -->|token IDs| S[Session sync]
+    R[Request messages, tools and images] -->|canonical values| M[Materialize and render]
+    R -->|encoded image bytes| I[Decode, preprocess and vision encoder]
+    I -->|projected image rows and identity| A[Assemble image spans]
+    M -->|text, image markers and control boundaries| T[Tokenizer]
+    T -->|text token IDs and markers| A
+    A -->|token IDs and image spans| S[Session sync]
     S -->|unprocessed IDs| P[Prefill or scalar step]
     P -->|mutate history and frontier| V[Live session graph]
     P -->|last activation| H[Output head]
@@ -24,18 +27,47 @@ flowchart LR
     G -->|sampled token ID| D[Decode step]
     D -->|mutate history and frontier| V
     D -->|new logits| G
-    V -->|capture| C[Stored checkpoint]
-    C -->|restore| V
+    V -->|capture eligible text state| C[Stored checkpoint]
+    C -->|restore compatible text state| V
     V -->|existing frontier| S
 ```
 
 The server [materializes](../../../src/server/materialize.zig) request and stored conversation inputs into canonical values. The DeepSeek [renderer](../../../src/models/deepseek41/prompt.zig) applies message, reasoning and tool framing before tokenization. Generated tool-call syntax is output for the caller to execute; it does not execute a tool. Rendered text and token IDs are distinct: token boundaries and sampled IDs matter when a continuation is reused. The server's [reuse probe](../../../src/server/reuse.zig) can identify a live continuation and materialize its visible suffix without retokenizing the already sampled prefix.
 
-[Runtime.sync](../../../src/engine/deepseek41/session.zig) requires a nonempty prompt with room for at least one generated token. If the valid live checkpoint is an exact token prefix and its graph position agrees, sync evaluates the remainder; otherwise it resets the graph and starts again. It schedules multi-token portions through layer-major [prefill](../../../src/engine/deepseek41/prefill.zig), or a scalar step for a single row. After the evaluated portion it runs the output head once, commits matching logits and marks the checkpoint valid. Cancellation can leave a valid evaluated prefix if its head completes; failures invalidate state that cannot safely continue.
+[Runtime.sync](../../../src/engine/deepseek41/session.zig) requires a nonempty prompt with room for at least one generated token. For an ordinary text continuation, if the valid live checkpoint is an exact token prefix and its graph position agrees, sync evaluates the remainder; otherwise it resets the graph and starts again. It schedules multi-token portions through layer-major [prefill](../../../src/engine/deepseek41/prefill.zig), or a scalar step for a single row. After the evaluated portion it runs the output head once, commits matching logits and marks the checkpoint valid. Cancellation can leave a valid evaluated prefix if its head completes; failures invalidate state that cannot safely continue. Image-bearing input also needs the multimodal identity checks described below; matching token IDs alone are insufficient.
 
 For example, a valid session at `[A, B]` synchronized to `[A, B, C, D]` evaluates `C, D` and produces logits predicting the token after `D`. If the caller samples `E`, [Runtime.eval](../../../src/engine/deepseek41/session.zig) evaluates `E`, advances both the graph and committed token list, and replaces the logits with those predicting the next token. A request `[A, X]` cannot simply append to the `[A, B, C, D, E]` graph: it needs a suitable earlier checkpoint or fresh evaluation. Sampling and output parsing belong to serving, not the model head.
 
 The scalar [executor](../../../src/engine/deepseek41/executor.zig) embeds the token, runs the layer sequence, and applies the output head. Within a layer, attention reads the recent ring and selected compressed history, while publishing owners update their rows and carries; the feed-forward path routes experts and combines their outputs. [Attention](../../../src/engine/deepseek41/attention.zig) owns the publication and selection calls. The [reference manual](reference-manual.md) explains what those operations compute, and the [backend manual](apple-silicon.md) explains how prefill batches and decode move their data. Optional steering is applied at the residual expansion hook in the executor, so it changes model activations rather than prompt text; changing steering requires treating continuation state accordingly. See [session steering](../../../src/engine/session_steering.zig).
+
+For text SSD-streaming workloads, the optional
+[resident expert substitution](apple-silicon.md#resident-expert-substitution)
+policy can use eligible experts already in memory for some weaker router
+choices. It changes the expert IDs while preserving their native mixture
+coefficients, trading model fidelity for fewer immediate weight demands.
+The backend manual owns its eligibility, preset settings and limitations.
+
+## Image input and live continuation
+
+Text normally becomes token IDs whose embeddings come from the language model. An image takes a second route: the server retains the encoded bytes and inserts a request-local marker into the rendered message. For example, “Describe [image]” becomes text tokens surrounding an image block; the block has placeholder token IDs **and** separate visual embedding rows. An image span maps those token positions to the corresponding visual rows. The IDs alone cannot reproduce the image-conditioned state.
+
+The engine opens an optional vision GGUF alongside the language model and binds its encoder weights. DeepSeek V4.1 vision runs on Metal. Use the sidecar matching the language checkpoint: the original and 1017 releases have different artifacts, and the engine checks their source revisions. Setup and filenames are in the [model guide](../../MODELS.md#deepseek-v41-flash); loading and validation are in [engine initialization](../../../src/ds4.c). Image input requires the sidecar, including on both tensor-parallel ranks.
+
+The server accepts encoded PNG or JPEG data, creates markers and canonical image values, and can reuse an embedding for identical encoded bytes in its request-serving cache. [Image resources](../../../src/server/image_resources.zig) encodes each image and replaces its marker while constructing the token prompt and spans. [Vision runtime](../../../src/engine/vision_runtime.zig) decodes and preprocesses the image into DeepSeek patches, runs the vision encoder and aligner, then permutes the natural grid into the model's image layout. It expands the block with learned start, newline and end sentinel embeddings, inserts placeholder IDs, and transfers the resulting rows to the span. The [backend manual](apple-silicon.md#vision-encoder-execution) covers execution on Apple Silicon.
+
+During both scalar execution and layer-major prefill, [embedding operations](../../../src/engine/deepseek41/ops.zig) select a visual row when the current position falls in a span and otherwise look up the ordinary token embedding. Image rows use the vision expert-routing bias; Engram text hashing and additions mask or skip them. The language graph advances through the resulting sequence using its ordinary scalar token positions and RoPE. DeepSeek's image layout is not Qwen's three-axis M-RoPE position scheme. See [prefill](../../../src/engine/deepseek41/prefill.zig), [executor](../../../src/engine/deepseek41/executor.zig), and [routing](../../../src/engine/deepseek41/moe.zig).
+
+The session borrows spans during synchronization and remembers each committed image's fingerprint, start and length in its [frontier](../../../src/engine/session_frontier.zig). Live reuse checks both token prefix and image identity; identical placeholders for a different image cannot authorize reuse. The server's [reuse path](../../../src/server/reuse.zig) also checks fingerprints when rebasing a visible continuation, and [multimodal sync](../../../src/server/generation.zig) avoids ending a scheduling chunk inside an image block. A mismatch or unavailable compatible frontier requires evaluation again.
+
+Image input is not a qualified durable image continuation. Text-keyed server disk checkpoints and state-cache persistence are gated when the session has vision state; tool checkpoint canonicalization also preserves the live image state instead of replacing it with a text key. See [persistence](../../../src/server/persist.zig).
+
+Image-bearing work also has separate optimization restrictions:
+
+- [Suffix grafts](#edited-contexts-and-semantic-endpoints) exclude image state.
+- In-sweep checkpoint collection excludes image state; the server uses multimodal synchronization rather than its text boundary collector.
+- DeepSeek's session batch transaction excludes image-bearing work.
+
+These gates use ordinary synchronization or evaluation where available; they do not make every feature combination eligible. The [suffix transactions](../../../src/engine/deepseek41/suffix_transaction.zig), [checkpoint collection](../../../src/engine/deepseek41/checkpoint.zig) and [batch transactions](../../../src/engine/deepseek41/batch_transaction.zig) contain the respective checks. [DSpark's text-oriented verification](#draft-proposals-and-verification) likewise does not establish durable image continuation or qualify every vision/speculation combination.
 
 ## Continuation and storage
 
