@@ -461,7 +461,7 @@ after a context edit. They address different missing information and can compose
 only with an explicit numerical/provenance policy.
 
 References: [DeepInfer deployment notes](../../DeepInfer/doc/inference_deployment_qa.md),
-[local alignment inventory](DEEPINFER_ALIGNMENT.md),
+[local cache and attention comparison](models/deepseek/deepinfer/cache-and-attention.md),
 [block-only experiment](../speed-bench/experiments/deepinfer-alignment-20261027/README.md),
 and [separate decoder-replay implementation](../recipes/12-bounded-decoder-replay.md).
 

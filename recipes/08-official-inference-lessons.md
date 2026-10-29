@@ -1,7 +1,7 @@
 # Official DeepSeek inference sources: transferable lessons
 
 For current component-by-component status, see the
-[2026-10-27 DeepInfer alignment inventory](../docs/DEEPINFER_ALIGNMENT.md).
+[DeepInfer comparison and technique chapters](../docs/models/deepseek/deepinfer/comparison.md).
 It distinguishes encoder cache recovery from decoder replay, physical KV
 packing from quantization math, and implemented mechanisms from dormant paths.
 This chapter retains the original research snapshot and its measured follow-ups.

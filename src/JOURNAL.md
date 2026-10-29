@@ -3,6 +3,15 @@
 Read [project direction and current status](../docs/PROJECT.md) first.
 This journal records short milestones, not the active experiment queue.
 
+## 2026-10-28: full DeepInfer comparison
+
+Expanded all 49 alignment entries into six source-backed technical chapters,
+including context, upstream and local mechanisms, differences, evidence and
+remaining proposals. Independent coverage review checked the entire former
+inventory, including material outside its tables, before replacing it with an
+entrypoint. [Comparison](../docs/models/deepseek/deepinfer/comparison.md).
+No runtime changes or new experiments.
+
 ## 2026-10-28: model documentation batch
 
 Completed reference, runtime and Apple Silicon manuals for DeepSeek, Flint,
@@ -58,7 +67,7 @@ duplicate full result tables across the journal, queue and design docs.
   [Report](../speed-bench/experiments/context-capture-20261028/NO_EDITS.md).
 - **DeepInfer convergence batch:** typed tool truncation, physical main/index KV
   and useful drafter-history persistence are complete. HC fusion is correct but
-  timing-neutral and remains experimental. [Inventory](../docs/DEEPINFER_ALIGNMENT.md).
+  timing-neutral and remains experimental. [Comparison](../docs/models/deepseek/deepinfer/comparison.md).
 - **Serving foundation:** native model engines and stateful Responses sessions
   are implemented. Generic hosted orchestration was removed; native decisions
   and client tools remain. Two-generator composition is still proposed.

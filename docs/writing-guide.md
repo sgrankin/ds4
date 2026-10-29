@@ -117,6 +117,8 @@ For a substantial document, use fresh contexts and distinct roles:
   model's public capabilities and implementation entry points: an omitted
   input path such as vision is a coverage defect even when the text present
   is correct. Give each major path an explanation or a clear link to its owner.
+  When replacing an inventory, account for every entry and the supporting
+  caveats, evidence and qualifications before retiring the old document.
 - An independent explanatory-flow reviewer traces a representative data item
   through the prose and diagrams, first reading as the intended engineer without
   filling gaps from source knowledge. Flag missing explanations even when the
